@@ -39,8 +39,8 @@ namespace Battle
 
         Units & operator=( const Units & ) = delete;
 
-        Unit * FindMode( u32 );
-        Unit * FindUID( u32 );
+        Unit * FindMode( u32 ) const;
+        Unit * FindUID( u32 ) const;
 
         void SortSlowest();
         void SortFastest();
@@ -60,7 +60,7 @@ namespace Battle
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;
 
-        bool isValid( void ) const;
+        bool isValid( bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
         u32 GetDeadHitPoints( void ) const;
         u32 GetDeadCounts( void ) const;

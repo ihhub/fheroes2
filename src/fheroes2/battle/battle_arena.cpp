@@ -505,14 +505,13 @@ void Battle::Arena::Turns( void )
     // end turn: fix result
     if ( !army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army1 |= RESULT_LOSS;
-        if ( army2->isValid() )
-            result_game.army2 = RESULT_WINS;
+        // check if any of the original troops in the army2 are still alive
+        result_game.army2 = army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
-
-    if ( !army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+    else if ( !army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army2 |= RESULT_LOSS;
-        if ( army1->isValid() )
-            result_game.army1 = RESULT_WINS;
+        // check if any of the original troops in the army1 are still alive
+        result_game.army1 = army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
 
     // fix experience and killed

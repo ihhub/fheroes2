@@ -112,16 +112,16 @@ void Battle::Units::SortArchers( void )
     std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
 
-Battle::Unit * Battle::Units::FindUID( u32 pid )
+Battle::Unit * Battle::Units::FindUID( u32 pid ) const
 {
-    iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
+    const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
 
     return it == end() ? nullptr : *it;
 }
 
-Battle::Unit * Battle::Units::FindMode( u32 mod )
+Battle::Unit * Battle::Units::FindMode( u32 mod ) const
 {
-    iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
+    const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
     return it == end() ? nullptr : *it;
 }
@@ -172,9 +172,27 @@ int Battle::Force::GetControl( void ) const
     return army.GetControl();
 }
 
-bool Battle::Force::isValid( void ) const
+bool Battle::Force::isValid( bool considerBattlefieldArmy /* = true */ ) const
 {
-    return std::any_of( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
+    // Consider the state of the army on the battlefield (including resurrected units, summoned units, etc)
+    if ( considerBattlefieldArmy ) {
+        return std::any_of( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
+    }
+
+    // Consider only the state of the original army
+    for ( u32 index = 0; index < army.Size(); ++index ) {
+        Troop * troop = army.GetTroop( index );
+
+        if ( troop && troop->isValid() ) {
+            const Unit * unit = FindUID( uids.at( index ) );
+
+            if ( unit && unit->GetDead() < troop->GetCount() ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 uint32_t Battle::Force::GetSurrenderCost( void ) const
