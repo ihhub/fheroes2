@@ -112,14 +112,14 @@ void Battle::Units::SortArchers( void )
     std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
 
-Battle::Unit * Battle::Units::FindUID( u32 pid ) const
+Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
 {
     const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
 
     return it == end() ? nullptr : *it;
 }
 
-Battle::Unit * Battle::Units::FindMode( u32 mod ) const
+Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 

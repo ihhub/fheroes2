@@ -39,8 +39,8 @@ namespace Battle
 
         Units & operator=( const Units & ) = delete;
 
-        Unit * FindMode( u32 ) const;
-        Unit * FindUID( u32 ) const;
+        Unit * FindMode( uint32_t mod ) const;
+        Unit * FindUID( uint32_t pid ) const;
 
         void SortSlowest();
         void SortFastest();
