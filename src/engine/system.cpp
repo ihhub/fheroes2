@@ -161,7 +161,7 @@ std::string System::GetDataDirectory( const std::string & prog )
 
 std::string System::GetDirname( const std::string & str )
 {
-    if ( str.size() ) {
+    if ( !str.empty() ) {
         size_t pos = str.rfind( SEPARATOR );
 
         if ( std::string::npos == pos )
@@ -179,7 +179,7 @@ std::string System::GetDirname( const std::string & str )
 
 std::string System::GetBasename( const std::string & str )
 {
-    if ( str.size() ) {
+    if ( !str.empty() ) {
         size_t pos = str.rfind( SEPARATOR );
 
         if ( std::string::npos == pos || pos == 0 )

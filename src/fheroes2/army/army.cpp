@@ -218,7 +218,7 @@ void Troops::PushBack( const Monster & mons, u32 count )
 
 void Troops::PopBack( void )
 {
-    if ( size() ) {
+    if ( !empty() ) {
         delete back();
         pop_back();
     }
@@ -639,14 +639,14 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
         // 2. Fill empty slots with best troops (if there are any)
         uint32_t count = GetCount();
-        while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
+        while ( count < ARMYMAXTROOPS && !rightPriority.empty() ) {
             JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
             ++count;
         }
 
         // 3. Swap weakest and strongest unit until there's no left
-        while ( rightPriority.size() ) {
+        while ( !rightPriority.empty() ) {
             Troop * weakest = GetWeakestTroop();
 
             if ( !weakest || Army::StrongestTroop( weakest, rightPriority.back() ) ) {
@@ -659,7 +659,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         }
 
         // 4. The rest goes back to second army
-        while ( rightPriority.size() ) {
+        while ( !rightPriority.empty() ) {
             troops2.JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
         }

@@ -217,7 +217,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    if ( res.size() )
+    if ( !res.empty() )
         res.clear();
     res.reserve( 48 );
     size_t charInsertPos = 0;

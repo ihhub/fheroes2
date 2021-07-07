@@ -87,7 +87,7 @@ int main( int argc, char ** argv )
         std::cerr << data_size << std::endl;
         std::vector<u8> buf = sf.getRaw( data_size );
 
-        if ( buf.size() ) {
+        if ( !buf.empty() ) {
             const fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );
 
             std::ostringstream os;

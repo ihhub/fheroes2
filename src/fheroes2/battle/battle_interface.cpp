@@ -2828,7 +2828,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
     const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
-    if ( !isMirror && targets.size() ) {
+    if ( !isMirror && !targets.empty() ) {
         std::string msg = _( "%{attacker} do %{damage} damage." );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
@@ -2974,7 +2974,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // Fade away animation for destroyed mirror images
-    if ( mirrorImages.size() )
+    if ( !mirrorImages.empty() )
         RedrawActionRemoveMirrorImage( mirrorImages );
 }
 
@@ -3179,7 +3179,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
 
 void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
-    Unit * target = targets.size() ? targets.front().defender : nullptr;
+    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     std::string msg;
 
@@ -3191,7 +3191,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
         msg = _( "%{name} casts %{spell}." );
     }
 
-    if ( msg.size() ) {
+    if ( !msg.empty() ) {
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
 
@@ -3202,7 +3202,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
 void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
 {
-    Unit * target = targets.size() ? targets.front().defender : nullptr;
+    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     // set spell cast animation
     if ( caster ) {
@@ -4826,7 +4826,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                             else
                                 humanturn_spell = spell;
                         }
-                        else if ( error.size() )
+                        else if ( !error.empty() )
                             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
                     }
                 }

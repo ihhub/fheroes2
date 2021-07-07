@@ -1074,7 +1074,7 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
         st.insert( center );
         abroad.push_back( center );
 
-        while ( abroad.size() && radius ) {
+        while ( !abroad.empty() && radius ) {
             std::set<s32> tm = st;
 
             for ( Indexes::const_iterator it = abroad.begin(); it != abroad.end(); ++it ) {

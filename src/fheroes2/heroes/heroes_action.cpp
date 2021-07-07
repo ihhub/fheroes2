@@ -2602,7 +2602,7 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
             hero.GetKingdom().AddFundsResource( event_maps->resources );
             Dialog::ResourceInfo( "", event_maps->message, event_maps->resources );
         }
-        else if ( event_maps->message.size() )
+        else if ( !event_maps->message.empty() )
             Dialog::Message( "", event_maps->message, Font::BIG, Dialog::OK );
 
         const Artifact & art = event_maps->artifact;
@@ -2978,7 +2978,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisited( dst_index, Visit::GLOBAL );
         MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
 
-        if ( vec_eyes.size() ) {
+        if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
             for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
                 Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );

@@ -293,7 +293,7 @@ void Interface::Basic::EventNextTown( void )
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    if ( myCastles.size() ) {
+    if ( !myCastles.empty() ) {
         if ( GetFocusCastle() ) {
             KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
             ++it;

@@ -328,7 +328,7 @@ void ShowEventDayDialog( void )
     for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
         if ( ( *it ).resource.GetValidItemsCount() )
             Dialog::ResourceInfo( "", ( *it ).message, ( *it ).resource );
-        else if ( ( *it ).message.size() )
+        else if ( !( *it ).message.empty() )
             Dialog::Message( "", ( *it ).message, Font::BIG, Dialog::OK );
     }
 }
@@ -1063,7 +1063,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
     if ( fheroes2::GameMode::END_TURN == res ) {
         // warning lost all town
-        if ( myHeroes.size() && myCastles.empty() && Game::GetLostTownDays() < myKingdom.GetLostTownDays() ) {
+        if ( !myHeroes.empty() && myCastles.empty() && Game::GetLostTownDays() < myKingdom.GetLostTownDays() ) {
             Game::DialogPlayers( conf.CurrentColor(),
                                  _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
         }

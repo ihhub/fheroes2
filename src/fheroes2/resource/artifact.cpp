@@ -610,7 +610,7 @@ int Artifact::Rand( level_t lvl )
                 v.push_back( art );
     }
 
-    int res = v.size() ? Rand::Get( v ) : Artifact::UNKNOWN;
+    int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifacts[res].bits |= ART_RNDUSED;
 
     return res;
@@ -813,11 +813,11 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
     std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );
 
     // reset and clear all current artifacts, put back the best
-    while ( combined.size() && PushArtifact( combined.back() ) ) {
+    while ( !combined.empty() && PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
 
-    while ( combined.size() && giftBag.PushArtifact( combined.back() ) ) {
+    while ( !combined.empty() && giftBag.PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
 }

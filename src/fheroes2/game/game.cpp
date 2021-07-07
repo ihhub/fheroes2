@@ -493,7 +493,7 @@ std::string Game::GetEncodeString( const std::string & str1 )
     const Settings & conf = Settings::Get();
 
     // encode name
-    if ( conf.Unicode() && conf.MapsCharset().size() )
+    if ( conf.Unicode() && !conf.MapsCharset().empty() )
         return EncodeString( str1, conf.MapsCharset().c_str() );
 
     return str1;
