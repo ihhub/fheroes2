@@ -71,15 +71,38 @@ namespace
 
         return indicies;
     }
+
+    Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes = true )
+    {
+        Maps::Indexes result;
+        for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+            if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
+                result.push_back( indexes[idx] );
+            }
+        }
+        return result;
+    }
+
+    Maps::Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true )
+    {
+        Maps::Indexes result;
+        const int32_t size = static_cast<int32_t>( world.getSize() );
+        for ( int32_t idx = 0; idx < size; ++idx ) {
+            if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
+                result.push_back( idx );
+            }
+        }
+        return result;
+    }
 }
 
-struct ComparsionDistance
+struct ComparisonDistance
 {
-    explicit ComparsionDistance( const int32_t index )
+    explicit ComparisonDistance( const int32_t index )
         : centerPoint( Maps::GetPoint( index ) )
     {}
 
-    ComparsionDistance() = delete;
+    ComparisonDistance() = delete;
 
     bool operator()( const int32_t index1, const int32_t index2 ) const
     {
@@ -96,29 +119,6 @@ struct ComparsionDistance
 
     const fheroes2::Point centerPoint;
 };
-
-Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes /* = true */ )
-{
-    Maps::Indexes result;
-    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
-            result.push_back( indexes[idx] );
-        }
-    }
-    return result;
-}
-
-Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /* = true */ )
-{
-    Maps::Indexes result;
-    const int32_t size = static_cast<int32_t>( world.getSize() );
-    for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
-            result.push_back( idx );
-        }
-    }
-    return result;
-}
 
 const char * Maps::SizeString( int s )
 {
@@ -347,7 +347,7 @@ Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t max
     }
 
     if ( sortTiles ) {
-        std::sort( results.begin(), results.end(), ComparsionDistance( tileIndex ) );
+        std::sort( results.begin(), results.end(), ComparisonDistance( tileIndex ) );
     }
 
     return results;
@@ -423,7 +423,7 @@ Maps::Indexes Maps::GetObjectPositions( int obj, bool ignoreHeroes )
 Maps::Indexes Maps::GetObjectPositions( int32_t center, int obj, bool ignoreHeroes )
 {
     Indexes results = MapsIndexesObject( obj, ignoreHeroes );
-    std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
+    std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return results;
 }
 
