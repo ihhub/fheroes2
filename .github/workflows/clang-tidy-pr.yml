@@ -1,0 +1,31 @@
+name: clang-tidy
+
+on:
+  pull_request_target:
+    paths:
+    - '**.cpp'
+    - '**.h'
+
+jobs:
+  build:
+    name: clang-tidy code review
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+    - name: Build
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        # cmake --build build -j2
+    - name: Run clang-tidy
+      uses: ZedThree/clang-tidy-review@v0.7.0
+      id: review
+      with:
+        build_dir: build
+    - name: Passed C++ style guide checks
+      if: steps.static_analysis.outputs.total_comments > 0
+      run: exit 1
