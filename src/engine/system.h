@@ -27,8 +27,6 @@
 
 namespace System
 {
-    const char * GetEnvironment( const char * name );
-
     int MakeDirectory( const std::string & );
     std::string ConcatePath( const std::string &, const std::string & );
 

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
 
 #include "difficulty.h"
@@ -804,8 +805,8 @@ ListDirs Settings::GetRootDirs()
 #endif
 
     // from env
-    if ( System::GetEnvironment( "FHEROES2_DATA" ) )
-        dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
+    if ( getenv( "FHEROES2_DATA" ) )
+        dirs.push_back( getenv( "FHEROES2_DATA" ) );
 
     // from app path
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
