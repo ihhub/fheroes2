@@ -566,6 +566,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
 void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
     const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
