@@ -253,9 +253,7 @@ bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destinat
 
     // Scan the available cells recursively in ascending order of distance
     for ( const auto & cellCost : cellCosts ) {
-        int32_t cellId;
-
-        std::tie( std::ignore, cellId ) = cellCost;
+        const int32_t cellId = cellCost.second;
 
         // Mark the cell as visited for further steps
         visitedCells.at( cellId ) = true;
@@ -335,9 +333,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
 
     // Scan the available cells recursively in ascending order of distance
     for ( const auto & cellCost : cellCosts ) {
-        int32_t headCellId;
-
-        std::tie( std::ignore, headCellId ) = cellCost;
+        const int32_t headCellId = cellCost.second;
 
         // Mark the cell as visited for further steps
         visitedCells.at( headCellId ) = true;
