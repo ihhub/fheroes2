@@ -203,7 +203,7 @@ fheroes2::GameMode Game::HighScores()
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    hgs.Load( stream.str().c_str() );
+    hgs.Load( stream.str() );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
@@ -233,7 +233,7 @@ fheroes2::GameMode Game::HighScores()
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
-        hgs.Save( stream.str().c_str() );
+        hgs.Save( stream.str() );
         hgs.RedrawList( top.x, top.y );
         buttonCampain.draw();
         buttonExit.draw();

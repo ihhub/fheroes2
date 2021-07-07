@@ -281,7 +281,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );
 
-    if ( config.Load( hotkeys.c_str() ) ) {
+    if ( config.Load( hotkeys ) ) {
         int ival = 0;
 
         for ( int evnt = EVENT_NONE; evnt < EVENT_LAST; ++evnt ) {
