@@ -288,6 +288,22 @@ namespace
 
         return false;
     }
+
+    bool isDetachedObject( const int objectId )
+    {
+        // Some objects do not take into account other objects below them.
+        switch ( objectId ) {
+        case MP2::OBJ_CASTLE:
+        case MP2::OBJN_CASTLE:
+        case MP2::OBJ_WAGONCAMP:
+        case MP2::OBJN_WAGONCAMP:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
 Maps::TilesAddon::TilesAddon()
@@ -911,13 +927,9 @@ void Maps::Tiles::updatePassability()
                 return;
             }
 
-            // For empty objects rules of the bottom are not applied as empty objects aren't connected to them.
-            // Such situation applies only for castle's sprites making them impassable under certain conditions.
-            const bool isNonEmptyObject = objId != MP2::OBJ_ZERO && objId != MP2::OBJ_COAST;
-
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( isNonEmptyObject && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
+            if ( !isDetachedObject( objId ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const int bottomTileObjId = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjId );
                 if ( isBottomTileActionObject ) {
