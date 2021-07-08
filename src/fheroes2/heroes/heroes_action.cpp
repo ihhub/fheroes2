@@ -1807,7 +1807,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
-                    Dialog::ArtifactInfo( "", msg, art() );
+                    Dialog::ArtifactInfo( "", msg, art.GetID() );
                 }
                 else {
                     BattleLose( hero, res, true );

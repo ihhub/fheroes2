@@ -90,7 +90,7 @@ void SpellStorage::Append( const BagArtifacts & bag )
 
 void SpellStorage::Append( const Artifact & art )
 {
-    switch ( art() ) {
+    switch ( art.GetID() ) {
     case Artifact::SPELL_SCROLL:
         Append( Spell( art.GetSpell() ) );
         break;
