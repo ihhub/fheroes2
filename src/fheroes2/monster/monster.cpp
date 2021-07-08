@@ -137,7 +137,7 @@ Monster::Monster( const int m )
 Monster::Monster( const Spell & sp )
     : id( UNKNOWN )
 {
-    switch ( sp() ) {
+    switch ( sp.GetID() ) {
     case Spell::SETEGUARDIAN:
     case Spell::SUMMONEELEMENT:
         id = EARTH_ELEMENT;

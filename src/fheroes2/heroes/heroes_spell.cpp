@@ -195,7 +195,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
 
     bool apply = false;
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::VIEWMINES:
         apply = ActionSpellViewMines( *this );
         break;
@@ -629,7 +629,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
     const u32 count = hero.GetPower() * spell.ExtraValue();
 
     if ( count ) {
-        tile.SetQuantity3( spell() );
+        tile.SetQuantity3( spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );

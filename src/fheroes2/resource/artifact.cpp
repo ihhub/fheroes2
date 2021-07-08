@@ -241,7 +241,7 @@ bool Artifact::operator==( const Spell & spell ) const
 {
     switch ( id ) {
     case SPELL_SCROLL:
-        return ext == spell();
+        return ext == spell.GetID();
 
     case Artifact::CRYSTAL_BALL:
         return spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS;

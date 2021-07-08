@@ -193,7 +193,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
                    current_commander->GetName() << ", color: " << Color::String( current_commander->GetColor() ) << ", spell: " << spell.GetName() );
 
         // uniq spells action
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::TELEPORT:
             ApplyActionSpellTeleport( cmd );
             break;
@@ -722,7 +722,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     Unit * target = GetTroopBoard( dest );
 
     // from spells
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
         // skip center
@@ -750,7 +750,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
     else
         // check other spells
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dest );
             targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );

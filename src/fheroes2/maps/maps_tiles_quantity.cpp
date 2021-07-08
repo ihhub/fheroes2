@@ -459,15 +459,15 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_SHRINE1:
-        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 1 )() : Spell::RandAdventure( 1 )() );
+        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 1 ).GetID() : Spell::RandAdventure( 1 ).GetID() );
         break;
 
     case MP2::OBJ_SHRINE2:
-        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 2 )() : Spell::RandAdventure( 2 )() );
+        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 2 ).GetID() : Spell::RandAdventure( 2 ).GetID() );
         break;
 
     case MP2::OBJ_SHRINE3:
-        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 3 )() : Spell::RandAdventure( 3 )() );
+        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 3 ).GetID() : Spell::RandAdventure( 3 ).GetID() );
         break;
 
     case MP2::OBJ_SKELETON: {
@@ -730,7 +730,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_PYRAMID: {
         // random spell level 5
         const Spell & spell = Rand::Get( 1 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 );
-        QuantitySetSpell( spell() );
+        QuantitySetSpell( spell.GetID() );
     } break;
 
     case MP2::OBJ_DAEMONCAVE: {

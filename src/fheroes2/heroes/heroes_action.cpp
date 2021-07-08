@@ -1248,14 +1248,14 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
         }
         else
             // already know (skip bag artifacts)
-            if ( hero.HaveSpell( spell(), true ) ) {
+            if ( hero.HaveSpell( spell.GetID(), true ) ) {
             body += _( "\nUnfortunately, you already have knowledge of this spell, so there is nothing more for them to teach you." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
         else {
             AGG::PlaySound( M82::TREASURE );
-            hero.AppendSpellToBook( spell() );
-            Dialog::SpellInfo( head, body, spell() );
+            hero.AppendSpellToBook( spell.GetID() );
+            Dialog::SpellInfo( head, body, spell.GetID() );
         }
     }
 
