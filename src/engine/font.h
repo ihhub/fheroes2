@@ -37,11 +37,6 @@ public:
     FontTTF();
     ~FontTTF();
 
-    TTF_Font * operator()( void ) const
-    {
-        return ptr;
-    }
-
     static void Init( void );
     static void Quit( void );
 
