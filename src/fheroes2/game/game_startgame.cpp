@@ -455,10 +455,12 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
         if ( nullptr != castle ) {
             if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
-                if ( from_hero.GetColor() == castle->GetColor() )
-                    return Cursor::CASTLE;
-                else
-                    return Cursor::POINTER;
+                if ( tile.GetPassable() == 0 ) {
+                    return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
+                }
+                else {
+                    return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MOVE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                }
             }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
@@ -1168,6 +1170,8 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
                 const Castle * castle = world.GetCastle( tile.GetCenter() );
                 if ( castle )
                     Dialog::QuickInfo( *castle );
+                else
+                    Dialog::QuickInfo( tile );
             } break;
 
             case MP2::OBJ_HEROES: {

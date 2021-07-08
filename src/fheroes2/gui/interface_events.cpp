@@ -98,15 +98,6 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
         bool allow = false;
 
         switch ( tile.GetObject() ) {
-        case MP2::OBJN_CASTLE: {
-            const Castle * to_castle = world.GetCastle( hero.GetCenter() );
-            if ( to_castle ) {
-                dst = to_castle->GetIndex();
-                allow = true;
-            }
-            break;
-        }
-
         case MP2::OBJ_BOAT:
         case MP2::OBJ_CASTLE:
         case MP2::OBJ_HEROES:

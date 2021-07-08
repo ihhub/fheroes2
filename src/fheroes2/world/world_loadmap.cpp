@@ -389,7 +389,6 @@ bool World::LoadMapMP2( const std::string & filename )
                     Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -412,7 +411,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
+                        Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
