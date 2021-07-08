@@ -117,6 +117,7 @@ namespace Battle
                              std::vector<bool> & visitedCells, Indexes & result ) const;
         bool GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
                                  const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const;
+        void StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const;
     };
 }
 

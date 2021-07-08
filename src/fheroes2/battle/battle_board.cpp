@@ -354,6 +354,47 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
     return false;
 }
 
+void Battle::Board::StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const
+{
+    // A path less than 2 steps long cannot contain detours, leave it as is
+    if ( path.size() < 2 ) {
+        return;
+    }
+
+    // Remember that the steps in the path are stored in reverse order
+    // Temporarily append the current cell of the unit to the end of the path
+    path.push_back( currentCellId );
+
+    for ( std::size_t curr = 0; path.size() > 2 && curr < path.size() - 2; ++curr ) {
+        const std::size_t next = curr + 1;
+
+        // Check whether we are passing through one of the neighboring cells at any of the future steps (excluding the next step)
+        for ( const int32_t cellId : GetAroundIndexes( path[curr] ) ) {
+            std::size_t pos;
+
+            // Search for the last occurence of the current neighboring cell in the path (excluding the next step)
+            // Using path.size() - 1 should be safe here, because, due to the condition in the outer loop, path should never be empty
+            assert( !path.empty() );
+            for ( pos = path.size() - 1; pos > next; --pos ) {
+                if ( path[pos] == cellId ) {
+                    break;
+                }
+            }
+
+            // If found, then remove the extra steps
+            if ( pos > next ) {
+                path.erase( path.begin() + next, path.begin() + pos );
+
+                break;
+            }
+        }
+    }
+
+    // Remove the current cell of the unit from the path
+    assert( !path.empty() );
+    path.pop_back();
+}
+
 Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & destination, const bool debug ) const
 {
     Indexes result;
@@ -375,6 +416,9 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
     }
     else {
         GetPathForUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), visitedCells, result );
+
+        // Try to straighten the unit's path by eliminating possible detours
+        StraightenPathForUnit( unit.GetHeadIndex(), result );
     }
 
     if ( !result.empty() ) {
