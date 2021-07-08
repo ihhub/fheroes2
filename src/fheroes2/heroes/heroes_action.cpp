@@ -305,7 +305,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     if ( !hero.GetArmy().CanJoinTroop( troop ) )
         Dialog::Message( msg, _( "You are unable to recruit at this time, your ranks are full." ), Font::BIG, Dialog::OK );
     else {
-        const u32 recruit = Dialog::RecruitMonster( troop(), troop.GetCount(), false ).GetCount();
+        const u32 recruit = Dialog::RecruitMonster( troop.GetMonster(), troop.GetCount(), false ).GetCount();
 
         if ( recruit ) {
             if ( remove && recruit == troop.GetCount() ) {
@@ -322,10 +322,10 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             else
                 tile.MonsterSetCount( troop.GetCount() - recruit );
 
-            const payment_t paymentCosts = troop().GetCost() * recruit;
+            const payment_t paymentCosts = troop.GetMonster().GetCost() * recruit;
             hero.GetKingdom().OddFundsResource( paymentCosts );
 
-            hero.GetArmy().JoinTroop( troop(), recruit );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
             hero.MovePointsScaleFixed();
 
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
@@ -740,7 +740,7 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost, hero ) ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
 
-            hero.GetArmy().JoinTroop( troop(), join.monsterCount );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
             I.GetStatusWindow().SetRedraw();
@@ -781,7 +781,7 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
         else {
             BattleLose( hero, res, true );
 
-            tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+            tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
 
             // reset join condition
             if ( tile.MonsterJoinConditionFree() ) {
@@ -2142,7 +2142,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         const bool readonly = tile.GetQuantity3() != 0;
 
         if ( Dialog::SetGuardian( hero, troop2, co, readonly ) )
-            troop1.Set( troop2(), troop2.GetCount() );
+            troop1.Set( troop2.GetMonster(), troop2.GetCount() );
     }
 
     if ( obj == MP2::OBJ_LIGHTHOUSE )

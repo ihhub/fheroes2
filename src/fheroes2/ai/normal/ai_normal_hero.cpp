@@ -258,13 +258,13 @@ namespace
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         case MP2::OBJ_PEASANTHUT: {
             // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
         }
 
         // recruit army
@@ -280,7 +280,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
         }
 
         // recruit army (battle)
@@ -294,7 +294,7 @@ namespace
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t & paymentCosts = troop.GetCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
             }
         }
 
@@ -303,7 +303,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         // upgrade army
