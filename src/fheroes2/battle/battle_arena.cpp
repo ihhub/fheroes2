@@ -596,7 +596,7 @@ void Battle::Arena::CatapultAction( void )
 
 Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) const
 {
-    Indexes result = board.GetAStarPath( b, dst );
+    Indexes result = board.GetPath( b, dst );
 
     if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
         std::stringstream ss;
