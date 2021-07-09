@@ -87,7 +87,7 @@ namespace fheroes2
             , value( value_ )
         {}
 
-        const bool operator==( const MonsterAbility & another ) const
+        bool operator==( const MonsterAbility & another ) const
         {
             return type == another.type;
         }
