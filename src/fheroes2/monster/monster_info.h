@@ -87,9 +87,9 @@ namespace fheroes2
             , value( value_ )
         {}
 
-        bool operator<( const MonsterAbility & another ) const
+        const bool operator==( const MonsterAbility & another ) const
         {
-            return type < another.type || ( type == another.type && value < another.value );
+            return type == another.type;
         }
 
         MonsterAbilityType type;
@@ -135,8 +135,8 @@ namespace fheroes2
         uint32_t speed;
         uint32_t shots;
 
-        std::set<MonsterAbility> abilities;
-        std::set<MonsterWeakness> weaknesses;
+        std::vector<MonsterAbility> abilities;
+        std::vector<MonsterWeakness> weaknesses;
     };
 
     struct MonsterGeneralStats
