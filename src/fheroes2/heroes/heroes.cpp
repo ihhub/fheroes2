@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <numeric>
 
 #include "agg.h"
 #include "agg_image.h"

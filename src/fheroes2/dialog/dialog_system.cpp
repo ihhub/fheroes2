@@ -30,7 +30,6 @@
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
-#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 
