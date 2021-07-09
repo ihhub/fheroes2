@@ -1210,7 +1210,7 @@ msgid "Breastplate"
 msgstr ""
 
 #: ../fheroes2/campaign/campaign_scenariodata.cpp:354
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 #: ../fheroes2/campaign/campaign_scenariodata.cpp:356

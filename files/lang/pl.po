@@ -1015,7 +1015,7 @@ msgstr "Zabójca smoków"
 msgid "Breastplate"
 msgstr "Napierśnik Andurana"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 #, fuzzy

@@ -931,7 +931,7 @@ msgstr "Drakonų miestas"
 msgid "Breastplate"
 msgstr "Turgus"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 msgid "Mage's ring"

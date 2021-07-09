@@ -911,7 +911,7 @@ msgstr ""
 msgid "Breastplate"
 msgstr ""
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 msgid "Mage's ring"

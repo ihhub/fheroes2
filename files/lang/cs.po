@@ -939,7 +939,7 @@ msgstr ""
 msgid "Breastplate"
 msgstr "Tržiště"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 msgid "Mage's ring"
