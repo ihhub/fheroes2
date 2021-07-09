@@ -21,48 +21,38 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <cstdlib>
-#include <ctime>
 #include <fstream>
-#include <locale>
 #include <sstream>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
 
-#include "logging.h"
 #include "system.h"
+#include "tools.h"
+
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
 #include <windows.h>
 #include <shellapi.h>
+#else
+#include <dirent.h>
 #endif
 
-#if !defined( _MSC_VER )
+#if defined( _MSC_VER )
+#include <io.h>
+#else
+#include <sys/stat.h>
 #include <unistd.h>
 #endif
-
-#if defined( __WIN32__ )
-#include <io.h>
-#endif
-
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #if defined( __WIN32__ )
 #define SEPARATOR '\\'
 #else
 #define SEPARATOR '/'
 #endif
-
-#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
-#include <dirent.h>
-#endif
-
-#include "tools.h"
 
 #if !defined( __LINUX__ )
 namespace
