@@ -107,11 +107,13 @@ namespace
             break;
         }
 
-        case GameOver::WINS_SIDE: {
-            body = _( "%{color} has fallen!\nAll is lost." );
-            StringReplace( body, "%{color}", Color::String( color ) );
-            break;
-        }
+            /*
+            case GameOver::WINS_SIDE: {
+                body = _( "%{color} has fallen!\nAll is lost." );
+                StringReplace( body, "%{color}", Color::String( color ) );
+                break;
+            }
+            */
 
         case GameOver::LOSS_ENEMY_WINS_GOLD: {
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
