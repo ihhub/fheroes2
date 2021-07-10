@@ -125,7 +125,7 @@ namespace
 
         case GameOver::LOSS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
-            const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+            const Castle * town = world.GetCastle( conf.LossMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
             break;
