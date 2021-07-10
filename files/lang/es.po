@@ -1041,7 +1041,7 @@ msgstr "Matadragones"
 msgid "Breastplate"
 msgstr "Peto de Anduran"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 #, fuzzy

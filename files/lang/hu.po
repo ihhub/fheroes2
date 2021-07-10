@@ -997,7 +997,7 @@ msgstr "Sárkánykard"
 msgid "Breastplate"
 msgstr "Anduran Mellvértje"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 #, fuzzy
