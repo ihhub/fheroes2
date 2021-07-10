@@ -766,7 +766,7 @@ namespace fheroes2
         }
 
         for ( const MonsterAbility & ability : abilities ) {
-            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL && ability.value == spellId ) {
+            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL && static_cast<int>( ability.value ) == spellId ) {
                 return ability.percentage;
             }
         }
