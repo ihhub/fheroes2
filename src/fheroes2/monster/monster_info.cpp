@@ -135,78 +135,78 @@ namespace
         // Monster abilities and weaknesses will be added later.
         const fheroes2::MonsterBattleStats monsterBattleStats[Monster::MONSTER_COUNT] = {
             // attack | defence | damageMin | damageMax | hp | speed | shots | abilities | weaknesses
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Unknown Monster
-            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Peasant
-            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Archer
-            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Ranger
-            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Pikeman
-            { 5, 9, 3, 4, 20, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Veteran Pikeman
-            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Swordsman
-            { 7, 9, 4, 6, 30, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Master Swordsman
-            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Cavalry
-            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Champion
-            { 11, 12, 10, 20, 50, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Paladin
-            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Crusader
-            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Goblin
-            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Orc
-            { 3, 4, 3, 4, 15, Speed::SLOW, 16, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Orc Chief
-            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Wolf
-            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Ogre
-            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Ogre Lord
-            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Troll
-            { 10, 5, 7, 9, 40, Speed::FAST, 16, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // War Troll
-            { 12, 9, 12, 24, 80, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Cyclops
-            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Sprite
-            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Dwarf
-            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Battle Dwarf
-            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Elf
-            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Grand Elf
-            { 7, 5, 5, 8, 25, Speed::FAST, 8, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Druid
-            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Greater Druid
-            { 10, 9, 7, 14, 40, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Unicorn
-            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Phoenix
-            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Centaur
-            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Gargoyle
-            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Griffin
-            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Minotaur
-            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Minotaur King
-            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Hydra
-            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Green Dragon
-            { 13, 13, 25, 50, 250, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Red Dragon
-            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Black Dragon
-            { 2, 1, 1, 3, 3, Speed::SLOW, 12, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Halfling
-            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Boar
-            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Iron Golem
-            { 7, 10, 4, 5, 35, Speed::SLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Steel Golem
-            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Roc
-            { 11, 7, 7, 9, 30, Speed::FAST, 12, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Mage
-            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Archmage
-            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Giant
-            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Titan
-            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Skeleton
-            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Zombie
-            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Mutant Zombie
-            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Mummy
-            { 6, 6, 3, 4, 30, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Royal Mummy
-            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Vampire
-            { 8, 6, 5, 7, 40, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Vampire Lord
-            { 7, 12, 8, 10, 25, Speed::FAST, 12, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Lich
-            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Power Lich
-            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Bone Dragon
-            { 6, 1, 1, 2, 4, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Rogue
-            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Nomad
-            { 8, 7, 4, 6, 20, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Ghost
-            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Genie
-            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Medusa
-            { 8, 8, 4, 5, 50, Speed::SLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Earth Elemental
-            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Air Elemental
-            { 8, 6, 4, 6, 40, Speed::FAST, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Fire Elemental
-            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Water Elemental
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Random Monster
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Random Monster 1
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Random Monster 2
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Random Monster 3
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::vector<fheroes2::MonsterAbility>(), std::vector<fheroes2::MonsterWeakness>() }, // Random Monster 4
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Unknown Monster
+            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, {}, {} }, // Peasant
+            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, {}, {} }, // Archer
+            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, {}, {} }, // Ranger
+            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, {}, {} }, // Pikeman
+            { 5, 9, 3, 4, 20, Speed::FAST, 0, {}, {} }, // Veteran Pikeman
+            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, {}, {} }, // Swordsman
+            { 7, 9, 4, 6, 30, Speed::FAST, 0, {}, {} }, // Master Swordsman
+            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, {}, {} }, // Cavalry
+            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, {}, {} }, // Champion
+            { 11, 12, 10, 20, 50, Speed::FAST, 0, {}, {} }, // Paladin
+            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, {}, {} }, // Crusader
+            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, {}, {} }, // Goblin
+            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, {}, {} }, // Orc
+            { 3, 4, 3, 4, 15, Speed::SLOW, 16, {}, {} }, // Orc Chief
+            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, {}, {} }, // Wolf
+            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, {}, {} }, // Ogre
+            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, {}, {} }, // Ogre Lord
+            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, {}, {} }, // Troll
+            { 10, 5, 7, 9, 40, Speed::FAST, 16, {}, {} }, // War Troll
+            { 12, 9, 12, 24, 80, Speed::FAST, 0, {}, {} }, // Cyclops
+            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, {}, {} }, // Sprite
+            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, {}, {} }, // Dwarf
+            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, {}, {} }, // Battle Dwarf
+            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, {}, {} }, // Elf
+            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, {}, {} }, // Grand Elf
+            { 7, 5, 5, 8, 25, Speed::FAST, 8, {}, {} }, // Druid
+            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, {}, {} }, // Greater Druid
+            { 10, 9, 7, 14, 40, Speed::FAST, 0, {}, {} }, // Unicorn
+            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, {}, {} }, // Phoenix
+            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, {}, {} }, // Centaur
+            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, {}, {} }, // Gargoyle
+            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, {}, {} }, // Griffin
+            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, {}, {} }, // Minotaur
+            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, {}, {} }, // Minotaur King
+            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, {}, {} }, // Hydra
+            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, {}, {} }, // Green Dragon
+            { 13, 13, 25, 50, 250, Speed::FAST, 0, {}, {} }, // Red Dragon
+            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, {}, {} }, // Black Dragon
+            { 2, 1, 1, 3, 3, Speed::SLOW, 12, {}, {} }, // Halfling
+            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, {}, {} }, // Boar
+            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, {}, {} }, // Iron Golem
+            { 7, 10, 4, 5, 35, Speed::SLOW, 0, {}, {} }, // Steel Golem
+            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, {}, {} }, // Roc
+            { 11, 7, 7, 9, 30, Speed::FAST, 12, {}, {} }, // Mage
+            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, {}, {} }, // Archmage
+            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, {}, {} }, // Giant
+            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, {}, {} }, // Titan
+            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, {}, {} }, // Skeleton
+            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, {}, {} }, // Zombie
+            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, {}, {} }, // Mutant Zombie
+            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, {}, {} }, // Mummy
+            { 6, 6, 3, 4, 30, Speed::FAST, 0, {}, {} }, // Royal Mummy
+            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, {}, {} }, // Vampire
+            { 8, 6, 5, 7, 40, Speed::FAST, 0, {}, {} }, // Vampire Lord
+            { 7, 12, 8, 10, 25, Speed::FAST, 12, {}, {} }, // Lich
+            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, {}, {} }, // Power Lich
+            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, {}, {} }, // Bone Dragon
+            { 6, 1, 1, 2, 4, Speed::FAST, 0, {}, {} }, // Rogue
+            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, {}, {} }, // Nomad
+            { 8, 7, 4, 6, 20, Speed::FAST, 0, {}, {} }, // Ghost
+            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, {}, {} }, // Genie
+            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, {}, {} }, // Medusa
+            { 8, 8, 4, 5, 50, Speed::SLOW, 0, {}, {} }, // Earth Elemental
+            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, {}, {} }, // Air Elemental
+            { 8, 6, 4, 6, 40, Speed::FAST, 0, {}, {} }, // Fire Elemental
+            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, {}, {} }, // Water Elemental
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 1
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 2
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 3
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 4
         };
 
         const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT]
@@ -431,15 +431,19 @@ namespace
 
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::LIGHTNINGBOLT );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::CHAINLIGHTNING );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::ELEMENTALSTORM );
 
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                                 Spell::METEORSHOWER );
 
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY );
@@ -448,6 +452,8 @@ namespace
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
+
+        // TODO: verify that no duplicates of abilities and weaknesses exist.
     }
 
     void removeDuplicateSpell( std::set<int> & sortedSpellIds, const int massSpellId, const int spellId )
