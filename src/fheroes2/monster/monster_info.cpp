@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <set>
 #include <sstream>
 
 namespace
