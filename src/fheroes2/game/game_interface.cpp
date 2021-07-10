@@ -28,7 +28,6 @@
 #include "game_interface.h"
 #include "icn.h"
 #include "maps.h"
-#include "mp2.h"
 #include "settings.h"
 #include "ui_tool.h"
 #include "world.h"

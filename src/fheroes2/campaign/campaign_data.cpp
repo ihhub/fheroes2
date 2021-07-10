@@ -24,7 +24,6 @@
 #include "monster.h"
 #include "resource.h"
 #include "spell.h"
-#include "tools.h"
 #include "translations.h"
 #include <cassert>
 

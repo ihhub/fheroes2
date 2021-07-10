@@ -25,7 +25,6 @@
 
 #include "agg.h"
 #include "audio_mixer.h"
-#include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
