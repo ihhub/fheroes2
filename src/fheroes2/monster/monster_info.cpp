@@ -765,9 +765,10 @@ namespace fheroes2
             }
         }
 
-        foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 0, spellId ) );
-        if ( foundAbility != abilities.end() ) {
-            return foundAbility->percentage;
+        for ( const MonsterAbility & ability : abilities ) {
+            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL && ability.value == spellId ) {
+                return ability.percentage;
+            }
         }
 
         if ( spell.isMindInfluence() ) {
