@@ -26,6 +26,7 @@
 #include "speed.h"
 #include "spell.h"
 
+#include <algorithm>
 #include <cassert>
 #include <sstream>
 
