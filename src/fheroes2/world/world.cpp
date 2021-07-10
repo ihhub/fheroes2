@@ -1061,16 +1061,16 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
 
-    // firs check priority: other WINS_GOLD or WINS_ARTIFACT
+    // first, check if the other players have not completed WINS_GOLD or WINS_ARTIFACT yet
     if ( conf.ConditionWins() & GameOver::WINS_GOLD ) {
         int priority = vec_kingdoms.FindWins( GameOver::WINS_GOLD );
         if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
+            return GameOver::LOSS_ENEMY_WINS_GOLD;
     }
     else if ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) {
         int priority = vec_kingdoms.FindWins( GameOver::WINS_ARTIFACT );
         if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
+            return GameOver::LOSS_ENEMY_WINS_ARTIFACT;
     }
 
     const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
