@@ -50,8 +50,6 @@ namespace
 
 namespace fheroes2
 {
-    class Sprite;
-
     namespace h2d
     {
         bool readImage( const std::string & name, Sprite & image )
