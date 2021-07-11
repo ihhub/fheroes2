@@ -22,8 +22,8 @@
 
 #include "serialize.h"
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 namespace fheroes2
@@ -42,7 +42,7 @@ namespace fheroes2
 
     private:
         // Relationship between file name in non-capital letters and its offset from the start of the archive.
-        std::map<std::string, std::pair<uint32_t, uint32_t> > _fileNameAndOffset;
+        std::map<std::string, std::pair<uint32_t, uint32_t>> _fileNameAndOffset;
 
         // Stream for reading h2d file.
         StreamFile _fileStream;
@@ -58,7 +58,7 @@ namespace fheroes2
         bool add( const std::string & name, const std::vector<uint8_t> & data );
 
     private:
-        std::map<std::string, std::vector<uint8_t> > _fileData;
+        std::map<std::string, std::vector<uint8_t>> _fileData;
     };
 
     bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image );
