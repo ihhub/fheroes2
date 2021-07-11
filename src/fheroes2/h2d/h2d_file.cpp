@@ -29,8 +29,8 @@ namespace
     // 4 bytes - number of files
     // 4 bytes - file offset
     // 4 bytes - file size
-    // 4 bytes - file name
-    const size_t minFileSize = 4 + 4 + 4 + 4;
+    // 5 bytes - file name
+    const size_t minFileSize = 4 + 4 + 4 + 4 + 5 + 1;
 }
 
 namespace fheroes2
