@@ -53,7 +53,7 @@ namespace fheroes2
     {
     public:
         // Returns true if file opening is successful.
-        bool write( const std::string & path );
+        bool write( const std::string & path ) const;
 
         bool add( const std::string & name, const std::vector<uint8_t> & data );
 

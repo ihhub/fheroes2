@@ -93,7 +93,7 @@ namespace fheroes2
         return _fileStream.getRaw( it->second.second );
     }
 
-    bool H2Writer::write( const std::string & path )
+    bool H2Writer::write( const std::string & path ) const
     {
         if ( _fileData.empty() ) {
             // Nothing to write.

@@ -953,6 +953,7 @@ namespace fheroes2
             case ICN::KNIGHT_CASTLE_LEFT_FARM:
                 _icnVsSprite[id].resize( 1 );
                 h2d::readImage( "knight_castle_left_farm", _icnVsSprite[id][0] );
+                return true;
             default:
                 break;
             }
