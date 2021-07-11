@@ -356,6 +356,11 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
             CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max, alpha );
         }
     }
+    else if ( castle.GetRace() == Race::KNGT && BUILD_WEL2 == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
+        const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
+        CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
+    }
 }
 
 bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
@@ -881,9 +886,9 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
     switch ( castle.GetRace() ) {
     case Race::KNGT:
         ordersBuildings.push_back( BUILD_TENT );
+        ordersBuildings.push_back( BUILD_WEL2 );
         ordersBuildings.push_back( BUILD_CASTLE );
         ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( BUILD_WEL2 );
         ordersBuildings.push_back( BUILD_CAPTAIN );
         ordersBuildings.push_back( BUILD_LEFTTURRET );
         ordersBuildings.push_back( BUILD_RIGHTTURRET );
