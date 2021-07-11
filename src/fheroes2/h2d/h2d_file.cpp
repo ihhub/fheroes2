@@ -21,6 +21,8 @@
 #include "h2d_file.h"
 #include "image.h"
 
+#include <cstring>
+
 namespace
 {
     // 4 bytes - file identifier
@@ -155,7 +157,7 @@ namespace fheroes2
         const int32_t height = static_cast<int32_t>( stream.getLE32() );
         const int32_t x = static_cast<int32_t>( stream.getLE32() );
         const int32_t y = static_cast<int32_t>( stream.getLE32() );
-        if ( width * height * 2 + 4 + 4 + 4 + 4 != data.size() ) {
+        if ( static_cast<size_t>( width * height * 2 + 4 + 4 + 4 + 4 ) != data.size() ) {
             return false;
         }
 
