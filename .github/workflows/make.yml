@@ -139,7 +139,7 @@ jobs:
       run: |
         cp docs/README.txt .
         cp docs/README_PSV.md .
-        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
+        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md data
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
