@@ -158,6 +158,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , current_color( Color::NONE )
     , preferredColor( -1 ) // be aware of unknown color
     , castle( nullptr )
+    , isTown( false )
     , catapult( nullptr )
     , bridge( nullptr )
     , interface( nullptr )
@@ -187,6 +188,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         // skip for town
         if ( castle && !castle->isCastle() )
             castle = nullptr;
+
+        isTown = true;
     }
 
     // init interface
@@ -522,7 +525,7 @@ void Battle::Arena::Turns( void )
         if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( ( castle || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( ( isTown || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
         }
 
