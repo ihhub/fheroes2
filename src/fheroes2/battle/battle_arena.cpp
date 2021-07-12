@@ -522,7 +522,7 @@ void Battle::Arena::Turns( void )
         if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( ( castle || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
         }
 
