@@ -441,8 +441,8 @@ namespace fheroes2
         }
 
         offsets.clear();
-        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, _fontType,
-                fontHeight, true, offsets );
+        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, _fontType, fontHeight,
+                true, offsets );
     }
 
     bool Text::empty() const
