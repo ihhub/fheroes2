@@ -419,7 +419,6 @@ namespace fheroes2
         int32_t correctedWidth = maxWidth;
         if ( offsets.size() > 1 ) {
             // This is a multi-line message. Optimize it to fit the text evenly.
-            // TODO: this optimization doesn't take into account explicit line endings - '\n'.
             int32_t startWidth = 1;
             int32_t endWidth = maxWidth;
             while ( startWidth + 1 < endWidth ) {
@@ -557,7 +556,6 @@ namespace fheroes2
         int32_t correctedWidth = maxWidth;
         if ( offsets.size() > 1 ) {
             // This is a multi-line message. Optimize it to fit the text evenly.
-            // TODO: this optimization doesn't take into account explicit line endings - '\n'.
             int32_t startWidth = 1;
             int32_t endWidth = maxWidth;
             while ( startWidth + 1 < endWidth ) {
