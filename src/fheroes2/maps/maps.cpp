@@ -399,7 +399,7 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const
 Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
-    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ) );
+    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
     return results;
 }
 
