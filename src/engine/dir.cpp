@@ -94,21 +94,23 @@ namespace
                 continue;
 
             if ( !nameAsFilter || !name.empty() ) {
-                const std::string filename( dir.d_name );
-                if ( filename.size() < name.size() ) {
+                const size_t filenameLength = strlen( dir.d_name );
+                if ( filenameLength < name.length() )
+                    continue;
+
+                if ( !nameAsFilter && filenameLength != name.length() ) {
                     continue;
                 }
 
-                if ( !nameAsFilter && filename.size() != name.size() ) {
-                    continue;
-                }
+                const char * filenamePtr = dir.d_name + filenameLength - name.length();
 
                 if ( sensitive ) {
-                    if ( std::string::npos == filename.find( name ) )
+                    if ( strcmp( filenamePtr, name.c_str() ) != 0 )
                         continue;
                 }
-                else if ( std::string::npos == StringLower( filename ).find( StringLower( name ) ) ) {
-                    continue;
+                else {
+                    if ( strcasecmp( filenamePtr, name.c_str() ) != 0 )
+                        continue;
                 }
             }
 
