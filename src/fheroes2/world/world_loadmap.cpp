@@ -48,7 +48,6 @@ namespace
 
     Artifact getUltimateArtifact()
     {
-        Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
         if ( Settings::Get().isCampaignGameType() ) {
             const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
@@ -59,15 +58,15 @@ namespace
             if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
                 const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
                 if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
-                    ultimate = Artifact::ULTIMATE_CROWN;
+                    return Artifact::ULTIMATE_CROWN;
                 }
                 else if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION ) {
-                    ultimate = Artifact::SPHERE_NEGATION;
+                    return Artifact::SPHERE_NEGATION;
                 }
             }
         }
 
-        return ultimate;
+        return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
 }
 
