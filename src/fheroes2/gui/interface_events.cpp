@@ -129,7 +129,7 @@ void Interface::Basic::EventNextHero( void )
             ++it;
             if ( it == myHeroes.end() )
                 it = myHeroes.begin();
-            if ( ( *it )->MayStillMove() ) {
+            if ( ( *it )->MayStillMove( true ) ) {
                 SetFocus( *it );
                 CalculateHeroPath( *it, -1 );
                 break;
@@ -137,11 +137,10 @@ void Interface::Basic::EventNextHero( void )
         } while ( it != currentHero );
     }
     else {
-        const size_t heroesCount = myHeroes.size();
-        for ( size_t i = 0; i < heroesCount; ++i ) {
-            if ( myHeroes[i]->MayStillMove() ) {
-                SetFocus( myHeroes[i] );
-                CalculateHeroPath( myHeroes[i], -1 );
+        for ( Heroes * hero : myHeroes ) {
+            if ( hero->MayStillMove( true ) ) {
+                SetFocus( hero );
+                CalculateHeroPath( hero, -1 );
                 break;
             }
         }
