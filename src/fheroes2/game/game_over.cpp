@@ -90,7 +90,7 @@ namespace
 
         AGG::PlayMusic( MUS::VICTORY, false );
 
-        if ( body.size() )
+        if ( !body.empty() )
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
     }
 
@@ -161,7 +161,7 @@ namespace
 
         AGG::PlayMusic( MUS::LOSTGAME, false );
 
-        if ( body.size() )
+        if ( !body.empty() )
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
     }
 }
