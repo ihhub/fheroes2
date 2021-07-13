@@ -50,10 +50,11 @@ namespace GameOver
         LOSS_TIME = 0x0800,
         LOSS_STARTHERO = 0x1000,
         // These loss conditions apply if the enemy player won because of the corresponding win condition
-        LOSS_ENEMY_WINS_ARTIFACT = 0x2000,
-        LOSS_ENEMY_WINS_GOLD = 0x4000,
+        LOSS_ENEMY_WINS_TOWN = 0x2000,
+        LOSS_ENEMY_WINS_ARTIFACT = 0x4000,
+        LOSS_ENEMY_WINS_GOLD = 0x8000,
 
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
     };
 
     const char * GetString( int );

@@ -100,6 +100,14 @@ namespace
         std::string body;
 
         switch ( cond ) {
+        case GameOver::LOSS_ENEMY_WINS_TOWN: {
+            body = _( "The enemy has captured %{name}!\nThey are triumphant." );
+            const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+            if ( town )
+                StringReplace( body, "%{name}", town->GetName() );
+            break;
+        }
+
         case GameOver::LOSS_ENEMY_WINS_ARTIFACT: {
             body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
             const Artifact art = conf.WinsFindArtifactID();
