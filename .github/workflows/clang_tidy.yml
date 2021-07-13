@@ -1,0 +1,28 @@
+name: Clang-Tidy
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths: [ '**.cpp', '**.h' ]
+
+jobs:
+  build:
+    name: Clang-Tidy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+    - name: Prepare compile_commands.json
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        # We need to fixup paths in the compile_commands.json, because clang-tidy-review doesn't work properly with nested directories in the build_dir
+        sed -i.orig 's@"directory": .*@"directory": "'"$GITHUB_WORKSPACE"'/build",@g' build/compile_commands.json
+    - name: Analyze
+      uses: ZedThree/clang-tidy-review@v0.7.0
+      with:
+        apt_packages: libsdl2-dev,libsdl2-image-dev,libsdl2-mixer-dev,libsdl2-ttf-dev
+        build_dir: build
+        clang_tidy_checks:
