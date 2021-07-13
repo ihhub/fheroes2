@@ -67,7 +67,7 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
-    Text text( spell.GetName(), Font::SMALL );
+    Text text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( nullptr ) ) + "]", Font::SMALL );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
     const int spacer = 10;

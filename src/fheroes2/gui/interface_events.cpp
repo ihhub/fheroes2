@@ -25,7 +25,6 @@
 
 #include "agg.h"
 #include "audio_mixer.h"
-#include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -98,15 +97,6 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
         bool allow = false;
 
         switch ( tile.GetObject() ) {
-        case MP2::OBJN_CASTLE: {
-            const Castle * to_castle = world.GetCastle( hero.GetCenter() );
-            if ( to_castle ) {
-                dst = to_castle->GetIndex();
-                allow = true;
-            }
-            break;
-        }
-
         case MP2::OBJ_BOAT:
         case MP2::OBJ_CASTLE:
         case MP2::OBJ_HEROES:
@@ -139,7 +129,7 @@ void Interface::Basic::EventNextHero( void )
             ++it;
             if ( it == myHeroes.end() )
                 it = myHeroes.begin();
-            if ( ( *it )->MayStillMove() ) {
+            if ( ( *it )->MayStillMove( true ) ) {
                 SetFocus( *it );
                 CalculateHeroPath( *it, -1 );
                 break;
@@ -147,11 +137,10 @@ void Interface::Basic::EventNextHero( void )
         } while ( it != currentHero );
     }
     else {
-        const size_t heroesCount = myHeroes.size();
-        for ( size_t i = 0; i < heroesCount; ++i ) {
-            if ( myHeroes[i]->MayStillMove() ) {
-                SetFocus( myHeroes[i] );
-                CalculateHeroPath( myHeroes[i], -1 );
+        for ( Heroes * hero : myHeroes ) {
+            if ( hero->MayStillMove( true ) ) {
+                SetFocus( hero );
+                CalculateHeroPath( hero, -1 );
                 break;
             }
         }

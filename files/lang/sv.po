@@ -1009,7 +1009,7 @@ msgstr "Drakdräpare"
 msgid "Breastplate"
 msgstr "Andurans bröstharnesk"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 msgid "Mage's ring"

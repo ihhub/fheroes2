@@ -218,6 +218,11 @@ std::string Battle::Unit::GetSpeedString() const
     return os.str();
 }
 
+uint32_t Battle::Unit::GetInitialCount() const
+{
+    return count0;
+}
+
 u32 Battle::Unit::GetDead( void ) const
 {
     return dead;

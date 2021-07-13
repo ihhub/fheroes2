@@ -399,7 +399,7 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const
 Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
-    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ) );
+    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
     return results;
 }
 
@@ -535,28 +535,16 @@ uint32_t Maps::GetApproximateDistance( const int32_t pos1, const int32_t pos2 )
     return std::max( sz.width, sz.height ) + std::min( sz.width, sz.height ) / 2;
 }
 
-void Maps::MinimizeAreaForCastle( const fheroes2::Point & center )
+void Maps::ReplaceRandomCastleObjectId( const fheroes2::Point & center )
 {
     // Reset castle ID
     for ( int32_t y = -3; y < 2; ++y ) {
         for ( int32_t x = -2; x < 3; ++x ) {
             Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
 
-            if ( MP2::OBJN_RNDCASTLE == tile.GetObject() || MP2::OBJN_RNDTOWN == tile.GetObject() || MP2::OBJN_CASTLE == tile.GetObject() )
-                tile.setAsEmpty();
-        }
-    }
-
-    // set minimum area castle ID
-    for ( int32_t y = -1; y < 1; ++y ) {
-        for ( int32_t x = -2; x < 3; ++x ) {
-            Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
-
-            // skip angle
-            if ( y == -1 && ( x == -2 || x == 2 ) )
-                continue;
-
-            tile.SetObject( MP2::OBJN_CASTLE );
+            if ( MP2::OBJN_RNDCASTLE == tile.GetObject() || MP2::OBJN_RNDTOWN == tile.GetObject() ) {
+                tile.SetObject( MP2::OBJN_CASTLE );
+            }
         }
     }
 

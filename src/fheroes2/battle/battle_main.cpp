@@ -183,8 +183,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena->GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
-    arena->GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
+    arena->GetForce1().SyncArmyCount();
+    arena->GetForce2().SyncArmyCount();
 
     // after battle army1
     if ( commander1 ) {

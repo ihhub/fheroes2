@@ -1014,7 +1014,7 @@ msgstr "Убить Дракона"
 msgid "Breastplate"
 msgstr "Кираса Андурана"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 #, fuzzy

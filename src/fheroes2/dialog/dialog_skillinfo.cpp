@@ -30,6 +30,7 @@
 #include "skill.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const Heroes & hero, const bool ok_button )
 {
@@ -44,21 +45,22 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     // setup cursor
     const CursorRestorer cursorRestorer( ok_button, Cursor::POINTER );
 
-    TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
-    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
+    fheroes2::Text caption( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+    fheroes2::Text messageBody( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
     const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), ok_button );
+    FrameBox box( caption.height( BOXAREA_WIDTH ) + spacer + messageBody.height( BOXAREA_WIDTH ) + spacer + border.height(), ok_button );
     fheroes2::Rect pos = box.GetArea();
 
     if ( !header.empty() )
-        box1.Blit( pos.x, pos.y );
-    pos.y += box1.h() + spacer;
+        caption.draw( pos.x, pos.y, BOXAREA_WIDTH, display );
+    pos.y += caption.height( BOXAREA_WIDTH ) + spacer;
 
     if ( !message.empty() )
-        box2.Blit( pos.x, pos.y );
-    pos.y += box2.h() + spacer;
+        messageBody.draw( pos.x, pos.y, BOXAREA_WIDTH, display );
+    pos.y += messageBody.height( BOXAREA_WIDTH ) + spacer;
 
     // blit sprite
     pos.x = box.GetArea().x + ( pos.width - border.width() ) / 2;

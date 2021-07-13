@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "luck.h"
+#include "tools.h"
 #include "translations.h"
 
 const std::string & Luck::String( int luck )
@@ -74,18 +75,5 @@ const std::string & Luck::Description( int luck )
 
 int Luck::Normalize( const int luck )
 {
-    if ( luck < Luck::AWFUL )
-        return Luck::CURSED;
-    if ( luck < Luck::BAD )
-        return Luck::AWFUL;
-    if ( luck < Luck::NORMAL )
-        return Luck::BAD;
-    if ( luck < Luck::GOOD )
-        return Luck::NORMAL;
-    if ( luck < Luck::GREAT )
-        return Luck::GOOD;
-    if ( luck < Luck::IRISH )
-        return Luck::GREAT;
-
-    return Luck::IRISH;
+    return clamp( luck, static_cast<int>( Luck::CURSED ), static_cast<int>( Luck::IRISH ) );
 }
