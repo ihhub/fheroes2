@@ -192,7 +192,7 @@ namespace Battle
         int preferredColor; // preferred color for the next unit in the battle queue
 
         const Castle * castle;
-        bool isTown; // to check if battle is in town (village or castle)
+        const bool _isTown; // If the battle is in town (village or castle).
 
         Tower * towers[3];
         Catapult * catapult;
