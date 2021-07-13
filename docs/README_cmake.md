@@ -2,7 +2,7 @@ Building with CMake
 --------------------------------
 ### Linux and macOS
 
-fheroes2 can be built with CMake buildsystem. First, you need to install dependencies. For Linux and macOS follow to instructions as described above.
+[**fheroes2**](README.md) can be built with CMake buildsystem. First, you need to install dependencies. For Linux and macOS follow to instructions as described above.
 
 Next, you can build project with following commands:
 
@@ -20,7 +20,7 @@ After configuration let's build project:
 cmake --build build
 ```
 
-After building, executable can be found in build/src/fheroes2/ directory.
+After building, executable can be found in `build` directory.
 
 ### Windows / Visual Studio
 
@@ -60,4 +60,14 @@ After configuration let's build project:
 cmake --build build --config Release
 ```
 
-After building, executable can be found in build\src\fheroes2\Release directory.
+After building, executable can be found in `build\Release` directory.
+
+### Using Demo data
+
+CMake project allows to download and install original HoMM II Demo files which used by fheroes2 project.
+To do this please add `-DGET_HOMM2_DEMO=ON` to configuration options. For example:
+
+```shell
+cmake -B build -DGET_HOMM2_DEMO=ON <some other options>
+```
+

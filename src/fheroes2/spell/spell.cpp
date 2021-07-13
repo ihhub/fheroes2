@@ -22,7 +22,6 @@
 
 #include "spell.h"
 #include "artifact.h"
-#include "game_static.h"
 #include "heroes_base.h"
 #include "race.h"
 #include "rand.h"
@@ -525,7 +524,7 @@ Spell Spell::Rand( int lvl, bool adv )
         if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() && spell.isEnabled() )
             v.push_back( spell );
     }
-    return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
+    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell Spell::RandCombat( int lvl )

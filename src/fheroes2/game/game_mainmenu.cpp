@@ -100,11 +100,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::NEW_HOT_SEAT:
             result = Game::NewHotSeat();
             break;
-#ifdef NETWORK_ENABLE
-        case fheroes2::GameMode::NEW_NETWORK:
-            result = Game::NewNetwork();
-            break;
-#endif
         case fheroes2::GameMode::NEW_BATTLE_ONLY:
             result = Game::NewBattleOnly();
             break;
@@ -120,9 +115,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::LOAD_HOT_SEAT:
             result = Game::LoadHotseat();
             break;
-        case fheroes2::GameMode::LOAD_NETWORK:
-            result = Game::LoadNetwork();
-            break;
         case fheroes2::GameMode::SCENARIO_INFO:
             result = Game::ScenarioInfo();
             break;
@@ -133,7 +125,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME );
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario();
@@ -141,7 +133,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
             result = Game::CompleteCampaignScenario();
             if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
-                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN );
+                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN, false );
             }
             break;
 

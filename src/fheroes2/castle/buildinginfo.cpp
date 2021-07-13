@@ -501,7 +501,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         }
 
     // replace end sep
-    if ( str.size() )
+    if ( !str.empty() )
         str.replace( str.size() - sep.size(), sep.size(), "" );
 
     const bool isRequired = !str.empty();

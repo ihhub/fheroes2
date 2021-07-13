@@ -195,12 +195,12 @@ void Castle::LoadFromMP2( StreamBuf st )
         Troop troops[5];
 
         // set monster id
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetMonster( st.get() + 1 );
+        for ( Troop & troop : troops )
+            troop.SetMonster( st.get() + 1 );
 
         // set count
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetCount( st.getLE16() );
+        for ( Troop & troop : troops )
+            troop.SetCount( st.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
         SetModes( CUSTOMARMY );
@@ -2679,42 +2679,27 @@ void AllCastles::AddCastle( Castle * castle )
 
     /* Register position of all castle elements on the map
     Castle element positions are:
-                -
-               ---
-              -+++-
+                +
+              +++++
+              +++++
               ++X++
+              ++ ++
 
      where
      X is the main castle position
      + are tiles that are considered part of the castle for the Get() method
-     - are tiles where there is a castle sprite, but not used in the Get() method
-
     */
 
     const size_t id = _castles.size() - 1;
     fheroes2::Point temp( castle->GetCenter().x, castle->GetCenter().y );
-    _castleTiles.emplace( temp, id );
 
-    temp.x -= 2;
-    _castleTiles.emplace( temp, id ); // (-2, 0)
+    for ( int32_t y = -2; y <= 2; ++y ) {
+        for ( int32_t x = -2; x <= 2; ++x ) {
+            _castleTiles.emplace( temp + fheroes2::Point( x, y ), id );
+        }
+    }
 
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (-1, 0)
-
-    --temp.y;
-    _castleTiles.emplace( temp, id ); // (-1, -1)
-
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (0, -1)
-
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (+1, -1)
-
-    ++temp.y;
-    _castleTiles.emplace( temp, id ); // (+1, 0)
-
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (+2, 0)
+    _castleTiles.emplace( temp + fheroes2::Point( 0, -3 ), id );
 }
 
 Castle * AllCastles::Get( const fheroes2::Point & position ) const

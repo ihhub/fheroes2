@@ -173,6 +173,8 @@ int Castle::OpenDialog( bool readonly )
     // button prev castle
     dst_pt.y += 480 - 19;
     fheroes2::Button buttonPrevCastle( dst_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
+    fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
+    buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
     // bottom small bar
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
@@ -186,6 +188,8 @@ int Castle::OpenDialog( bool readonly )
     // button next castle
     dst_pt.x += bar.width();
     fheroes2::Button buttonNextCastle( dst_pt.x, dst_pt.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
+    buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // color crest
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
@@ -368,7 +372,7 @@ int Castle::OpenDialog( bool readonly )
 
             // view guardian
             if ( !readonly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
-                Game::DisableChangeMusic( true );
+                Game::SetUpdateSoundsOnFocusUpdate( false );
                 Game::OpenHeroesDialog( *heroes.Guard(), false, false );
 
                 if ( selectArmy1.isSelected() )
@@ -381,7 +385,7 @@ int Castle::OpenDialog( bool readonly )
             else
                 // view hero
                 if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
-                Game::DisableChangeMusic( true );
+                Game::SetUpdateSoundsOnFocusUpdate( false );
                 Game::OpenHeroesDialog( *heroes.Guest(), false, false );
 
                 if ( selectArmy1.isSelected() )
@@ -392,14 +396,16 @@ int Castle::OpenDialog( bool readonly )
                 need_redraw = true;
             }
 
-            // hotkeys
-            if ( buttonPrevCastle.isEnabled() && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
-                // prev castle
+            // prev castle
+            if ( buttonPrevCastle.isEnabled()
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = Dialog::PREV;
                 break;
             }
-            else if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+            else
                 // next castle
+                if ( buttonNextCastle.isEnabled()
+                     && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = Dialog::NEXT;
                 break;
             }
@@ -689,7 +695,7 @@ int Castle::OpenDialog( bool readonly )
         BuyBuilding( build );
     }
 
-    Game::DisableChangeMusic( false );
+    Game::SetUpdateSoundsOnFocusUpdate( true );
 
     return result;
 }

@@ -290,7 +290,7 @@ private:
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void ProcessNewMap();
-    void PostLoad();
+    void PostLoad( const bool setTilePassabilities );
     void pickRumor();
 
 private:

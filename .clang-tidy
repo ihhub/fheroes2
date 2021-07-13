@@ -1,0 +1,1 @@
+Checks: '-*,bugprone-*,cppcoreguidelines-*,-cppcoreguidelines-init-variables,misc-*,modernize-*,performance-*,readability-*,-readability-avoid-const-params-in-decls'

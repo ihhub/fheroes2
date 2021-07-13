@@ -36,6 +36,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstdint>
 
 using namespace Battle;
 
@@ -154,6 +155,33 @@ namespace AI
         return targetCell;
     }
 
+    int32_t FindNearestReachableCell( const int32_t targetCell, const Unit & currentUnit )
+    {
+        const Cell * target = Board::GetCell( targetCell );
+
+        // Target cell is already reachable
+        if ( target->isPassable3( currentUnit, false ) && target->GetDirection() != UNKNOWN ) {
+            return targetCell;
+        }
+
+        int32_t nearestCell = -1;
+        uint32_t nearestCellDistance = UINT32_MAX;
+
+        // Search for the nearest reachable cell
+        for ( const Cell & cell : *Arena::GetBoard() ) {
+            if ( cell.isPassable3( currentUnit, false ) && cell.GetDirection() != UNKNOWN ) {
+                const uint32_t distance = Board::GetDistance( targetCell, cell.GetIndex() );
+
+                if ( distance < nearestCellDistance ) {
+                    nearestCell = cell.GetIndex();
+                    nearestCellDistance = distance;
+                }
+            }
+        }
+
+        return nearestCell;
+    }
+
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     {
         if ( isAttacking ) {
@@ -251,10 +279,13 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
             if ( target.cell != -1 ) {
-                if ( currentUnit.GetHeadIndex() != target.cell )
-                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
+                const int32_t reachableCell = FindNearestReachableCell( target.cell, currentUnit );
 
-                if ( target.unit ) {
+                if ( currentUnit.GetHeadIndex() != reachableCell )
+                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+
+                // Attack only if target unit is reachable
+                if ( target.unit && target.cell == reachableCell ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -437,7 +468,9 @@ namespace AI
                 target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
-                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
+                    const int32_t reachableCell = FindNearestReachableCell( target.cell, currentUnit );
+
+                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
                 }
             }
@@ -662,10 +695,15 @@ namespace AI
                     }
 
                     if ( targetCell != -1 ) {
-                        if ( currentUnit.GetHeadIndex() != targetCell )
-                            actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, targetCell );
+                        const int32_t reachableCell = FindNearestReachableCell( targetCell, currentUnit );
 
-                        actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+                        if ( currentUnit.GetHeadIndex() != reachableCell )
+                            actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+
+                        // Attack only if target unit is reachable
+                        if ( targetCell == reachableCell )
+                            actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+
                         break;
                     }
                 }
@@ -678,6 +716,11 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        Board * board = Arena::GetBoard();
+
+        board->Reset();
+        board->SetScanPassability( currentUnit );
+
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
         // Do not end the turn if we only cast a spell

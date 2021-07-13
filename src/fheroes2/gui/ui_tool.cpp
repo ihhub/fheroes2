@@ -50,7 +50,7 @@ namespace
             const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
             std::time_t rawtime = std::time( nullptr );
-            char mbstr[10] = {0};
+            char mbstr[10] = { 0 };
             std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", std::localtime( &rawtime ) );
 
             std::string info( mbstr );
@@ -159,6 +159,29 @@ namespace fheroes2
     bool MovableSprite::isHidden() const
     {
         return _isHidden;
+    }
+
+    TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
+        : _verification( verification )
+        , _delayBetweenUpdateMs( delayBetweenUpdateMs )
+        , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
+    {}
+
+    bool TimedEventValidator::isDelayPassed()
+    {
+        if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
+            _delayBetweenUpdateMs.reset();
+            return true;
+        }
+        return false;
+    }
+
+    void TimedEventValidator::senderUpdate( const ActionObject * sender )
+    {
+        if ( sender == nullptr )
+            return;
+        _delayBeforeFirstUpdateMs.reset();
+        _delayBetweenUpdateMs.reset();
     }
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()

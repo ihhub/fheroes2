@@ -45,6 +45,29 @@
 namespace
 {
     const int32_t ultimateArtifactOffset = 9;
+
+    Artifact getUltimateArtifact()
+    {
+        if ( Settings::Get().isCampaignGameType() ) {
+            const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+            const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+            const int scenarioId = campaignData.getCurrentScenarioID();
+            assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+            if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+                const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+                if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
+                    return Artifact::ULTIMATE_CROWN;
+                }
+                else if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION ) {
+                    return Artifact::SPHERE_NEGATION;
+                }
+            }
+        }
+
+        return Artifact::Rand( Artifact::ART_ULTIMATE );
+    }
 }
 
 namespace GameStatic
@@ -389,7 +412,6 @@ bool World::LoadMapMP2( const std::string & filename )
                     Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -412,7 +434,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
+                        Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -661,7 +683,44 @@ void World::ProcessNewMap()
         }
     }
 
-    PostLoad();
+    // Set Ultimate Artifact.
+    fheroes2::Point ultimate_pos;
+    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
+                                           []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
+    if ( vec_tiles.end() == it ) {
+        // generate position for ultimate
+        MapsIndexes pools;
+        pools.reserve( vec_tiles.size() / 2 );
+
+        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+            const Maps::Tiles & tile = vec_tiles[i];
+            const int32_t x = tile.GetIndex() % width;
+            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
+                continue;
+
+            const int32_t y = tile.GetIndex() / width;
+            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
+                continue;
+
+            if ( tile.GoodForUltimateArtifact() )
+                pools.emplace_back( tile.GetIndex() );
+        }
+
+        if ( !pools.empty() ) {
+            const int32_t pos = Rand::Get( pools );
+            ultimate_artifact.Set( pos, getUltimateArtifact() );
+            ultimate_pos = Maps::GetPoint( pos );
+        }
+    }
+    else {
+        // remove ultimate artifact sprite
+        it->Remove( it->GetObjectUID() );
+        it->setAsEmpty();
+        ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
+        ultimate_pos = ( *it ).GetCenter();
+    }
+
+    PostLoad( true );
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
@@ -683,62 +742,6 @@ void World::ProcessNewMap()
                 hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
             }
         }
-    }
-
-    // set ultimate
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
-                                           []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
-    fheroes2::Point ultimate_pos;
-
-    // not found
-    if ( vec_tiles.end() == it ) {
-        // generate position for ultimate
-        MapsIndexes pools;
-        pools.reserve( vec_tiles.size() / 2 );
-
-        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-            const Maps::Tiles & tile = vec_tiles[i];
-            const int32_t x = tile.GetIndex() % width;
-            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
-                continue;
-
-            const int32_t y = tile.GetIndex() / width;
-            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
-                continue;
-
-            if ( tile.GoodForUltimateArtifact() )
-                pools.emplace_back( tile.GetIndex() );
-        }
-
-        if ( !pools.empty() ) {
-            Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
-            if ( Settings::Get().isCampaignGameType() ) {
-                const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
-
-                const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-                const int scenarioId = campaignData.getCurrentScenarioID();
-                assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
-
-                if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-                    const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-                    if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
-                        ultimate = Artifact::ULTIMATE_CROWN;
-                    }
-                }
-            }
-
-            const int32_t pos = Rand::Get( pools );
-            ultimate_artifact.Set( pos, ultimate );
-            ultimate_pos = Maps::GetPoint( pos );
-        }
-    }
-    else {
-        // remove ultimate artifact sprite
-        const uint8_t objectIndex = it->GetObjectSpriteIndex();
-        it->Remove( it->GetObjectUID() );
-        it->setAsEmpty();
-        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
-        ultimate_pos = ( *it ).GetCenter();
     }
 
     vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );

@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <set>
 
 #include "agg_image.h"
 #include "army.h"
@@ -218,7 +217,7 @@ void Troops::PushBack( const Monster & mons, u32 count )
 
 void Troops::PopBack( void )
 {
-    if ( size() ) {
+    if ( !empty() ) {
         delete back();
         pop_back();
     }
@@ -297,15 +296,6 @@ bool Troops::HasMonster( const Monster & mons ) const
             return true;
     }
     return false;
-}
-
-bool Troops::AllTroopsIsRace( int race ) const
-{
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() && ( *it )->GetRace() != race )
-            return false;
-
-    return true;
 }
 
 bool Troops::AllTroopsAreUndead() const
@@ -409,17 +399,21 @@ void Troops::MoveTroops( Troops & from )
     }
 }
 
-u32 Troops::GetUniqueCount( void ) const
+// Return true when all valid troops have the same ID, or when there are no troops
+bool Troops::AllTroopsAreTheSame( void ) const
 {
-    std::set<int> monsters;
-
-    for ( size_t idx = 0; idx < size(); ++idx ) {
-        const Troop * troop = operator[]( idx );
-        if ( troop && troop->isValid() )
-            monsters.insert( troop->GetID() );
+    int firstMonsterId = Monster::UNKNOWN;
+    for ( const Troop * troop : *this ) {
+        if ( troop->isValid() ) {
+            if ( firstMonsterId == Monster::UNKNOWN ) {
+                firstMonsterId = troop->GetID();
+            }
+            else if ( troop->GetID() != firstMonsterId ) {
+                return false;
+            }
+        }
     }
-
-    return static_cast<uint32_t>( monsters.size() ); // safe to cast as usually the army has no more than 5 monsters
+    return true;
 }
 
 double Troops::GetStrength() const
@@ -644,14 +638,14 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
         // 2. Fill empty slots with best troops (if there are any)
         uint32_t count = GetCount();
-        while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
+        while ( count < ARMYMAXTROOPS && !rightPriority.empty() ) {
             JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
             ++count;
         }
 
         // 3. Swap weakest and strongest unit until there's no left
-        while ( rightPriority.size() ) {
+        while ( !rightPriority.empty() ) {
             Troop * weakest = GetWeakestTroop();
 
             if ( !weakest || Army::StrongestTroop( weakest, rightPriority.back() ) ) {
@@ -664,7 +658,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         }
 
         // 4. The rest goes back to second army
-        while ( rightPriority.size() ) {
+        while ( !rightPriority.empty() ) {
             troops2.JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
         }
@@ -1086,7 +1080,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         ++count;
         r = Race::NONE;
     }
-    const u32 uniq_count = GetUniqueCount();
+    const bool hasDifferentTroops = !AllTroopsAreTheSame();
 
     switch ( count ) {
     case 2:
@@ -1094,7 +1088,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         break;
     case 1:
         if ( 0 == count_necr && !ghost_present ) {
-            if ( 1 < uniq_count ) {
+            if ( hasDifferentTroops ) {
                 ++result;
                 if ( strs ) {
                     std::string str = _( "All %{race} troops +1" );
@@ -1132,7 +1126,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     // undead in life group
-    if ( ( 1 < uniq_count && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
+    if ( ( hasDifferentTroops && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
          // or artifact Arm Martyr
          ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
@@ -1351,7 +1345,7 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
     }
 }
 
-JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
+NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
     const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
@@ -1366,7 +1360,6 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
     if ( Settings::Get().isCampaignGameType() ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
-        int forceJoinType = JOIN_NONE;
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
@@ -1376,13 +1369,17 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
                 continue;
 
             Monster monster( campaignAwards[i]._subType );
-            bool found = false;
-
-            while ( !found ) {
+            while ( true ) {
                 if ( troop.GetID() == monster.GetID() ) {
-                    forceJoinType = isAlliance ? JOIN_FREE : JOIN_FLEE;
-                    found = true;
-                    break;
+                    if ( isAlliance ) {
+                        return { NeutralMonsterJoiningCondition::Reason::Alliance, troop.GetCount(),
+                                 Campaign::CampaignAwardData::getAllianceJoiningMessage( monster.GetID() ),
+                                 Campaign::CampaignAwardData::getAllianceFleeingMessage( monster.GetID() ) };
+                    }
+                    else {
+                        return { NeutralMonsterJoiningCondition::Reason::Bane, troop.GetCount(), nullptr,
+                                 Campaign::CampaignAwardData::getBaneFleeingMessage( monster.GetID() ) };
+                    }
                 }
 
                 // try to cycle through the creature's upgrades
@@ -1391,34 +1388,29 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
                 monster = monster.GetUpgrade();
             }
-
-            if ( found )
-                break;
-        }
-
-        if ( forceJoinType != JOIN_NONE ) {
-            return JoinCount( forceJoinType, troop.GetCount() );
         }
     }
 
     if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
-        if ( join_free || join_force )
-            return JoinCount( JOIN_FREE, troop.GetCount() );
+        if ( join_free || join_force ) {
+            return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
+        }
         else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             // skill diplomacy
             const u32 to_join = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            if ( to_join )
-                return JoinCount( JOIN_COST, to_join );
+            if ( to_join ) {
+                return { NeutralMonsterJoiningCondition::Reason::ForMoney, to_join, nullptr, nullptr };
+            }
         }
     }
 
     if ( ratios >= 5 && !hero.isControlAI() ) {
         // ... surely flee before us
-        return JoinCount( JOIN_FLEE, 0 );
+        return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
 
-    return JoinCount( JOIN_NONE, 0 );
+    return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
 }
 
 bool Army::WeakestTroop( const Troop * t1, const Troop * t2 )

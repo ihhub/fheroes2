@@ -174,7 +174,6 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
-    <ClCompile Include="src\engine\audio_cdrom.cpp" />
     <ClCompile Include="src\engine\audio_mixer.cpp" />
     <ClCompile Include="src\engine\audio_music.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
@@ -187,7 +186,6 @@
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
-    <ClCompile Include="src\engine\sdlnet.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
@@ -311,6 +309,7 @@
     <ClCompile Include="src\fheroes2\gui\skill_bar.cpp" />
     <ClCompile Include="src\fheroes2\gui\statusbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\text.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
@@ -387,7 +386,6 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
-    <ClInclude Include="src\engine\audio_cdrom.h" />
     <ClInclude Include="src\engine\audio_mixer.h" />
     <ClInclude Include="src\engine\audio_music.h" />
     <ClInclude Include="src\engine\dir.h" />
@@ -403,7 +401,6 @@
     <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\screen.h" />
-    <ClInclude Include="src\engine\sdlnet.h" />
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\system.h" />
@@ -482,6 +479,7 @@
     <ClInclude Include="src\fheroes2\gui\skill_bar.h" />
     <ClInclude Include="src\fheroes2\gui\statusbar.h" />
     <ClInclude Include="src\fheroes2\gui\text.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
