@@ -157,8 +157,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , armies_order( nullptr )
     , current_color( Color::NONE )
     , preferredColor( -1 ) // be aware of unknown color
-    , castle( nullptr )
-    , isTown( false )
+    , castle( world.GetCastle( Maps::GetPoint( index ) ) )
+    , _isTown( castle != nullptr )
     , catapult( nullptr )
     , bridge( nullptr )
     , interface( nullptr )
@@ -176,8 +176,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     army2 = new Force( a2, true );
 
     // init castle (interface ahead)
-    castle = world.GetCastle( Maps::GetPoint( index ) );
-
     if ( castle ) {
         CastleHeroes heroes = world.GetHeroes( *castle );
 
@@ -525,7 +523,7 @@ void Battle::Arena::Turns( void )
         if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( ( isTown || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( ( _isTown || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
         }
 
