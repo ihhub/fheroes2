@@ -39,8 +39,8 @@ namespace Battle
 
         Units & operator=( const Units & ) = delete;
 
-        Unit * FindMode( u32 );
-        Unit * FindUID( u32 );
+        Unit * FindMode( uint32_t mod ) const;
+        Unit * FindUID( uint32_t pid ) const;
 
         void SortSlowest();
         void SortFastest();
@@ -60,7 +60,7 @@ namespace Battle
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;
 
-        bool isValid( void ) const;
+        bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
         u32 GetDeadHitPoints( void ) const;
         u32 GetDeadCounts( void ) const;
@@ -72,7 +72,7 @@ namespace Battle
         void resetIdleAnimation();
 
         void NewTurn( void );
-        void SyncArmyCount( bool checkResurrected );
+        void SyncArmyCount();
 
         static Unit * GetCurrentUnit( const Force & army1, const Force & army2, bool part1, int preferredColor );
         static void UpdateOrderUnits( const Force & army1, const Force & army2, const Unit * activeUnit, int preferredColor, const Units & orderHistory, Units & orders );

@@ -138,6 +138,8 @@ int Castle::OpenDialog( bool readonly )
     // button prev castle
     dst_pt.y += 480 - 19;
     fheroes2::Button buttonPrevCastle( dst_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
+    fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
+    buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
     // bottom small bar
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
@@ -151,6 +153,8 @@ int Castle::OpenDialog( bool readonly )
     // button next castle
     dst_pt.x += bar.width();
     fheroes2::Button buttonNextCastle( dst_pt.x, dst_pt.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
+    buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // color crest
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
@@ -358,13 +362,15 @@ int Castle::OpenDialog( bool readonly )
             }
 
             // prev castle
-            if ( buttonPrevCastle.isEnabled() && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
+            if ( buttonPrevCastle.isEnabled()
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = Dialog::PREV;
                 break;
             }
             else
                 // next castle
-                if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+                if ( buttonNextCastle.isEnabled()
+                     && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = Dialog::NEXT;
                 break;
             }

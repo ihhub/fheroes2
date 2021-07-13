@@ -1,3 +1,69 @@
+version 0.9.5 (04 July 2021)
+- do not hire AI heroes if no tasks exist for them
+- make AI be more aggressive if no tasks exist for them
+- all scrollbars support continuous scrolling
+- fix placement of creatures during Month of Monster event
+- add an option to restart Campaign scenario
+- do not show x marker for fully built castle icon
+- fix boat summoning logic in relation to some objects on a world map
+- do not show other types of save files on while saving or loading a save file on Windows
+- improve Sorceress castle building logic for AI
+- make AI to visit Lighthouse
+- fix displayed object info in popup dialogs
+- fix places where a hero could teleport for Dimension Door spell
+- fix passabilities of objects on World Map
+- fix multiple issues with castle music
+- fix disembarkation on coast during diagonal move
+- indicate the number of Ghost guarding Haunted and Abandoned Mines
+- add extra conditions for object visiting by AI
+- make AI to use Hut of Magi and Jail objects
+- AI heroes do not block way for other heroes anymore
+- use spacebar only for activating object
+- fix missing UI update in hero meeting dialog while moving artifacts within internal hero's dialog
+- speed up campaign game menu opening time
+- fix incorrect object rendering order on World Map
+- after loading a map and starting a new game the same map will be selected in the list of maps
+- improve AI logic to capture defendless castles
+- fix black screen for loading a campaign map without files
+- allow AI hero to revisit a castle more than once
+- fix a case of splitting monster stack for 2 monsters in stack
+- add monster descriptions
+- allow to visit Artesian Spring once a week
+- allow right click on captured artifact after battle
+- fix summoning boat logic in relation to AI
+- improve fog revealing algorithm for AI
+- fix Stables movement bonus
+- fix AI heroes interaction between each other (reset meeting flag if a hero updates an army)
+- AI heroes do not visit signs anymore
+- AI do not visit shrines for useless spells
+- fix AI spellcasting and army estimates
+- do not remove Sphere of Negation artifact while visiting Alchemist's Tower
+- fix the status of visited objects for a play with ally
+- make proper rendering of some of disabled buttons
+- fix AI behavior to visit Magellan Maps only once
+- center quickinfo dialog under mouse cursor
+- add more gamepad key mapping for PlayStation Vita
+- fix the displayed text in the army bar while splitting monster stack
+- do not let nearby monsters automatically attack hero if he moved to this location using Stone Lith, Whirlpool or Dimension Door
+- fix incorrect text position insertion while creating a save file
+- fix title background for recruit dialog
+- fix hero's mobility indicator for small number of move points
+- in scenario with random players random opponents are generated so that all races are present and different when possible
+- add new UI text rendering classes
+- fix issue when abandoned mine becomes OBJ_ZERO when captured by AI-controlled hero
+- fix missing road identification on broken by editor maps
+- make per-user config file as default option
+- allow attacking another hero located on a Temple
+- fix attacking monster sprite behavior
+- fix number of choices when splitting a troop into multiple troops
+- fix incorrect trading rate during battle
+- fix missing shadow removal of objects under a boat
+- show Dwarf's resistance message in the log only after spell completion
+- correct campaign bonuses' names
+- fix case when boat could be positioned over another boat over whirlpool
+- fix case of triggerring Genie's special ability for a stack of 1 monster
+- fix the Price of Loyalty campaign missing rendering
+
 version 0.9.4 (04 June 2021)
 - add Windows executable installers
 - use user profile directories to store files to allow multi-user access to the game

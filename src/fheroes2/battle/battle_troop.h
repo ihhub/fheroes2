@@ -130,6 +130,7 @@ namespace Battle
         int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
+        uint32_t GetInitialCount() const;
         u32 GetDead( void ) const;
         u32 GetHitPoints( void ) const;
         u32 GetShots( void ) const;

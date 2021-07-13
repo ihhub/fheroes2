@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Josh Matthews  <josh@joshmatthews.net>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,18 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AUDIO_CDROM_H
-#define H2AUDIO_CDROM_H
+#include "ui_base.h"
 
-#ifdef WITH_AUDIOCD
-#include "types.h"
-
-namespace Cdrom
+namespace fheroes2
 {
-    bool isValid( void );
-    void Play( const u8 track, bool loop, bool force = false );
-    void Pause( void );
-}
+    ActionObject::ActionObject()
+        : _receiver( nullptr )
+    {}
 
-#endif
-#endif
+    void ActionObject::subscribe( ActionObject * receiver )
+    {
+        _receiver = receiver;
+    }
+
+    void ActionObject::unsubscribe()
+    {
+        _receiver = nullptr;
+    }
+
+    void ActionObject::updateSubscription()
+    {
+        if ( _receiver != nullptr ) {
+            _receiver->senderUpdate( this );
+        }
+    }
+}

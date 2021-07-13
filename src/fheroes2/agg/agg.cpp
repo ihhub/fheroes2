@@ -331,7 +331,7 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansi
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.read( key );
-        if ( buf.size() )
+        if ( !buf.empty() )
             return buf;
     }
 
@@ -352,35 +352,10 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( conf.UseAltResource() ) {
-        std::string name = StringLower( M82::GetString( m82 ) );
-        std::string prefix_sounds = System::ConcatePath( "files", "sounds" );
-
-        // ogg
-        StringReplace( name, ".82m", ".ogg" );
-        std::string sound = Settings::GetLastFile( prefix_sounds, name );
-        v = LoadFileToMem( sound );
-
-        if ( v.empty() ) {
-            // find mp3
-            StringReplace( name, ".82m", ".mp3" );
-            sound = Settings::GetLastFile( prefix_sounds, name );
-
-            v = LoadFileToMem( sound );
-        }
-
-        if ( v.size() ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_INFO, sound );
-            return;
-        }
-    }
-
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
-    if ( body.size() ) {
+    if ( !body.empty() ) {
         // create WAV format
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
@@ -449,12 +424,13 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall
 
 void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
+    const Settings & conf = Settings::Get();
 
     // set volume loop sounds
     for ( size_t i = 0; i < vols.size(); ++i ) {
@@ -524,8 +500,7 @@ void AGG::PlaySound( int m82, bool asyncronizedCall )
 
 void AGG::PlaySoundInternally( const int m82 )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -535,7 +510,7 @@ void AGG::PlaySoundInternally( const int m82 )
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
     Mixer::Pause( ch );
-    Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+    Mixer::Volume( ch, Mixer::MaxVolume() * Settings::Get().SoundVolume() / 10 );
     Mixer::Resume( ch );
 }
 
@@ -557,8 +532,7 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Music() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -569,7 +543,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     }
 
     const std::string prefix_music( "music" );
-    const MusicSource type = conf.MusicType();
+    const MusicSource type = Settings::Get().MusicType();
 
     bool isSongFound = false;
 
@@ -597,7 +571,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
             }
         }
 
-        if ( filename.size() ) {
+        if ( !filename.empty() ) {
             Music::Play( filename, loop );
             isSongFound = true;
 
@@ -605,16 +579,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
-#ifdef WITH_AUDIOCD
-    else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
-        Cdrom::Play( mus, loop );
-        isSongFound = true;
-
-        Game::SetCurrentMusic( mus );
-
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
-    }
-#endif
 
     if ( !isSongFound ) {
         // Check if music needs to be pulled from HEROES2X
@@ -629,7 +593,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
 
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() ) {
+            if ( !v.empty() ) {
                 Music::Play( v, loop );
 
                 Game::SetCurrentMusic( mus );

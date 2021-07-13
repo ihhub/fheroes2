@@ -1,7 +1,7 @@
 # For descent FetchContent()
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.4 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.5 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
@@ -12,14 +12,13 @@ set(SDL_VERSIONS SDL SDL2)
 set(USE_SDL_VERSION SDL2 CACHE STRING "SDL version")
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
-option(ENABLE_IMAGE    "Enable SDL/SDL2 Image support (requires libpng)" ON)
-option(ENABLE_UNICODE  "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
-option(ENABLE_AUDIOCD  "Enable AudioCD support" OFF)
-option(ENABLE_TOOLS    "Enable additional tools" OFF)
-option(ENABLE_RELEASE  "Release mode (disables debug options)" ON)
-option(GET_HOMM2_DEMO  "Fetch and install HoMM II demo data" OFF)
+option(ENABLE_IMAGE   "Enable SDL/SDL2 Image support (requires libpng)" ON)
+option(ENABLE_UNICODE "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
+option(ENABLE_TOOLS   "Enable additional tools" OFF)
+option(ENABLE_RELEASE "Release mode (disables debug options)" ON)
+option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
 
-option(USE_SYSTEM_LIBSMACKER     "Use system libsmacker instead bundled version" OFF)
+option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
 
 option(FHEROES2_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
 
@@ -46,7 +45,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_subdirectory(src)
 
 install(
-	FILES doc/README.txt LICENSE changelog.txt
+	FILES docs/README.txt LICENSE changelog.txt
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}
 	)
 

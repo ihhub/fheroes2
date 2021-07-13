@@ -420,11 +420,13 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                 const int newIndex = currentNodeIdx + _mapOffset[i];
-                if ( newIndex == start )
-                    continue;
-
                 if ( !tilesVisited[newIndex] ) {
                     tilesVisited[newIndex] = true;
+
+                    // Don't go onto action objects as they maybe castles or dwellings with battles.
+                    if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+                        continue;
+                    }
 
                     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
                     if ( _cache[newIndex]._cost && monsters.empty() )
@@ -448,9 +450,14 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( start, directions[i] ) ) {
-            const int newIndex = start + _mapOffset[i];
+            const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
             if ( newIndex == start )
                 continue;
+
+            // Don't go onto action objects as they maybe castles or dwellings with battles.
+            if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+                continue;
+            }
 
             const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
             if ( _cache[newIndex]._cost && monsters.empty() ) {
@@ -575,4 +582,12 @@ uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, 
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );
     return _cache[targetIndex]._cost;
+}
+
+void AIWorldPathfinder::setArmyStrengthMultplier( const double multiplier )
+{
+    if ( multiplier > 0 && std::fabs( _advantage - multiplier ) > 0.001 ) {
+        _advantage = multiplier;
+        reset();
+    }
 }

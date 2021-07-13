@@ -21,29 +21,11 @@
 #pragma once
 
 #include "screen.h"
+#include "ui_base.h"
 #include <memory>
 
 namespace fheroes2
 {
-    // Action-event class to communicate between sender and receiver (only for user actions)
-    class ActionObject
-    {
-    public:
-        ActionObject();
-        virtual ~ActionObject() = default;
-
-        void subscribe( ActionObject * receiver );
-        void unsubscribe();
-
-    protected:
-        void updateSubscription();
-
-        virtual void senderUpdate( const ActionObject * ) {}
-
-    private:
-        ActionObject * _receiver;
-    };
-
     // An abstract class for button usage
     class ButtonBase : public ActionObject
     {

@@ -103,7 +103,7 @@ void LuckIndicator::Redraw( void )
     s32 cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
     s32 cy = area.y + ( area.height - sprite.height() ) / 2;
 
-    if ( modificators.size() )
+    if ( !modificators.empty() )
         descriptions.append( modificators );
     else
         descriptions.append( _( "None" ) );

@@ -60,8 +60,6 @@ const char * Game::EventsName( int evnt )
         return "button select";
     case EVENT_BUTTON_HOTSEAT:
         return "button hotseat";
-    case EVENT_BUTTON_NETWORK:
-        return "button network";
     case EVENT_BUTTON_HOST:
         return "button host";
     case EVENT_BUTTON_GUEST:
@@ -184,7 +182,6 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_BUTTON_SETTINGS] = KEY_t;
     key_events[EVENT_BUTTON_SELECT] = KEY_s;
     key_events[EVENT_BUTTON_HOTSEAT] = KEY_h;
-    key_events[EVENT_BUTTON_NETWORK] = KEY_n;
     key_events[EVENT_BUTTON_HOST] = KEY_h;
     key_events[EVENT_BUTTON_GUEST] = KEY_g;
     key_events[EVENT_BUTTON_BATTLEONLY] = KEY_b;
@@ -284,7 +281,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );
 
-    if ( config.Load( hotkeys.c_str() ) ) {
+    if ( config.Load( hotkeys ) ) {
         int ival = 0;
 
         for ( int evnt = EVENT_NONE; evnt < EVENT_LAST; ++evnt ) {

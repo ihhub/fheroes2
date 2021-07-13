@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <numeric>
 #include <sstream>
 
 #include "army.h"

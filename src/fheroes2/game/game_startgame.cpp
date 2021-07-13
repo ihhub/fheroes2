@@ -328,7 +328,7 @@ void ShowEventDayDialog( void )
     for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
         if ( ( *it ).resource.GetValidItemsCount() )
             Dialog::ResourceInfo( "", ( *it ).message, ( *it ).resource );
-        else if ( ( *it ).message.size() )
+        else if ( !( *it ).message.empty() )
             Dialog::Message( "", ( *it ).message, Font::BIG, Dialog::OK );
     }
 }
@@ -416,7 +416,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     default:
         if ( water ) {
-            if ( MP2::isWaterObject( tile.GetObject() ) )
+            if ( MP2::isWaterActionObject( tile.GetObject() ) )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -449,10 +449,12 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
         if ( nullptr != castle ) {
             if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
-                if ( from_hero.GetColor() == castle->GetColor() )
-                    return Cursor::CASTLE;
-                else
-                    return Cursor::POINTER;
+                if ( tile.GetPassable() == 0 ) {
+                    return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
+                }
+                else {
+                    return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MOVE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                }
             }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
@@ -500,7 +502,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     default:
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
-        else if ( MP2::isGroundObject( tile.GetObject() ) ) {
+        else if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
@@ -1209,6 +1211,8 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
                 const Castle * castle = world.GetCastle( tile.GetCenter() );
                 if ( castle )
                     Dialog::QuickInfo( *castle );
+                else
+                    Dialog::QuickInfo( tile );
             } break;
 
             case MP2::OBJ_HEROES: {

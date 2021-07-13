@@ -350,7 +350,7 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Settings::Get().Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -493,8 +493,8 @@ std::string Game::GetEncodeString( const std::string & str1 )
     const Settings & conf = Settings::Get();
 
     // encode name
-    if ( conf.Unicode() && conf.MapsCharset().size() )
-        return EncodeString( str1.c_str(), conf.MapsCharset().c_str() );
+    if ( conf.Unicode() && !conf.MapsCharset().empty() )
+        return EncodeString( str1, conf.MapsCharset().c_str() );
 
     return str1;
 }

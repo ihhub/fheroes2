@@ -269,7 +269,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     return gameChoice;
 }
 
-#ifdef NETWORK_ENABLE
 fheroes2::GameMode Game::NewNetwork()
 {
     Settings & conf = Settings::Get();
@@ -313,7 +312,6 @@ fheroes2::GameMode Game::NewNetwork()
 
     return fheroes2::GameMode::MAIN_MENU;
 }
-#endif
 
 fheroes2::GameMode Game::NewGame()
 {
@@ -443,17 +441,6 @@ fheroes2::GameMode Game::NewMulti()
                              Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
-
-#ifdef NETWORK_ENABLE
-        if ( buttonNetwork.isEnabled() ) {
-            le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
-            if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
-                return fheroes2::GameMode::NEWNETWORK;
-            if ( le.MousePressRight( buttonNetwork.area() ) )
-                Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
-                                 Font::BIG );
-        }
-#endif
     }
 
     return fheroes2::GameMode::QUIT_GAME;

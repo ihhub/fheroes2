@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "morale.h"
+#include "tools.h"
 #include "translations.h"
 
 const std::string & Morale::String( int morale )
@@ -72,4 +73,9 @@ const std::string & Morale::Description( int morale )
     }
 
     return str_desc_morale[0];
+}
+
+int Morale::Normalize( const int morale )
+{
+    return clamp( morale, static_cast<int>( Morale::TREASON ), static_cast<int>( Morale::BLOOD ) );
 }

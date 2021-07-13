@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "luck.h"
+#include "tools.h"
 #include "translations.h"
 
 const std::string & Luck::String( int luck )
@@ -70,4 +71,9 @@ const std::string & Luck::Description( int luck )
     }
 
     return str_desc_luck[0];
+}
+
+int Luck::Normalize( const int luck )
+{
+    return clamp( luck, static_cast<int>( Luck::CURSED ), static_cast<int>( Luck::IRISH ) );
 }

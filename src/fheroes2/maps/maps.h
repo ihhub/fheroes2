@@ -45,9 +45,6 @@ namespace Maps
 
     using Indexes = MapsIndexes;
 
-    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const int obj, const bool ignoreHeroes = true );
-    Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true );
-
     const char * SizeString( int size );
     const char * GetMinesName( int res );
 
@@ -70,6 +67,7 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const int obj );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj );
     Indexes ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes );
+    Indexes GetFreeIndexesAroundTile( const int32_t center );
 
     Indexes GetTilesUnderProtection( int32_t center );
     bool TileIsUnderProtection( int32_t center );
@@ -88,7 +86,7 @@ namespace Maps
     uint32_t GetApproximateDistance( const int32_t pos1, const int32_t pos2 );
 
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
-    void MinimizeAreaForCastle( const fheroes2::Point & );
+    void ReplaceRandomCastleObjectId( const fheroes2::Point & );
 }
 
 #endif
