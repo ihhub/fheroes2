@@ -25,11 +25,7 @@ jobs:
         sed 's@"directory": .*@"directory": "'"$GITHUB_WORKSPACE"'/build",@g' < build/compile_commands.json.orig > build/compile_commands.json
     - name: Analyze
       uses: ZedThree/clang-tidy-review@v0.7.0
-      id: analyze
       with:
         apt_packages: libsdl2-dev,libsdl2-image-dev,libsdl2-mixer-dev,libsdl2-ttf-dev
         build_dir: build
         clang_tidy_checks:
-    - name: Check the analysis results
-      if: ${{ steps.analyze.outputs.total_comments > 0 }}
-      run: exit 1
