@@ -40,7 +40,8 @@ namespace Campaign
     {
         STANDARD = 0, // standard map's defined victory condition
         CAPTURE_DRAGON_CITY = 1,
-        OBTAIN_ULTIMATE_CROWN = 2
+        OBTAIN_ULTIMATE_CROWN = 2,
+        OBTAIN_SPHERE_NEGATION = 3
     };
 
     enum class ScenarioLossCondition : int
