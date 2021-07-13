@@ -1719,7 +1719,7 @@ AllHeroes::~AllHeroes()
 
 void AllHeroes::Init( void )
 {
-    if ( size() )
+    if ( !empty() )
         AllHeroes::clear();
 
     // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY

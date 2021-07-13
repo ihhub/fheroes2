@@ -1060,7 +1060,7 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return res.size() ? static_cast<MapEvent *>( res.front() ) : nullptr;
+    return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
 MapObjectSimple * World::GetMapObject( u32 uid )

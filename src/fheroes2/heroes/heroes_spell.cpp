@@ -188,7 +188,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         return false;
     }
     else if ( spell == Spell::NONE || spell.isCombat() || !CanCastSpell( spell, &error ) ) {
-        if ( error.size() )
+        if ( !error.empty() )
             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
         return false;
     }

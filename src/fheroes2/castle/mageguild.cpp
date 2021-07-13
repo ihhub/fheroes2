@@ -129,7 +129,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
             v.push_back( spell );
     }
 
-    return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
+    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell GetGuaranteedDamageSpellForMageGuild()

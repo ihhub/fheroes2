@@ -150,7 +150,7 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
         for ( u32 i = 0; i < 8; ++i ) {
             std::string answer = Game::GetEncodeString( st.toString( 13 ) );
 
-            if ( count-- && answer.size() )
+            if ( count-- && !answer.empty() )
                 answers.push_back( StringLower( answer ) );
         }
 

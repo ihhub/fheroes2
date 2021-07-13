@@ -54,11 +54,11 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     FrameBox box( caption.height( BOXAREA_WIDTH ) + spacer + messageBody.height( BOXAREA_WIDTH ) + spacer + border.height(), ok_button );
     fheroes2::Rect pos = box.GetArea();
 
-    if ( header.size() )
+    if ( !header.empty() )
         caption.draw( pos.x, pos.y, BOXAREA_WIDTH, display );
     pos.y += caption.height( BOXAREA_WIDTH ) + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         messageBody.draw( pos.x, pos.y, BOXAREA_WIDTH, display );
     pos.y += messageBody.height( BOXAREA_WIDTH ) + spacer;
 
@@ -165,11 +165,11 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), true );
     fheroes2::Rect pos = box.GetArea();
 
-    if ( header.size() )
+    if ( !header.empty() )
         box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 

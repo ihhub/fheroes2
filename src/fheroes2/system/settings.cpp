@@ -701,7 +701,7 @@ std::string Settings::String() const
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
        << "fonts small size = " << static_cast<int>( size_small ) << std::endl
        << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
-    if ( force_lang.size() )
+    if ( !force_lang.empty() )
         os << "lang = " << force_lang << std::endl;
 #endif
 

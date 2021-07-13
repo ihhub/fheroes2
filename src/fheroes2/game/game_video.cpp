@@ -101,7 +101,7 @@ namespace Video
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                if ( it->size() )
+                if ( !it->empty() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
         }
@@ -189,7 +189,7 @@ namespace Video
 
                     if ( hasSound ) {
                         for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                            if ( it->size() )
+                            if ( !it->empty() )
                                 Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
                         }
                     }

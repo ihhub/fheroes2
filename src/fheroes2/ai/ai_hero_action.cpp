@@ -888,7 +888,7 @@ namespace AI
         int indexTo = world.NextTeleport( index_from );
 
         const Route::Path & path = hero.GetPath();
-        if ( path.size() ) {
+        if ( !path.empty() ) {
             const int dest = path.front().GetIndex();
             while ( indexTo != dest ) {
                 indexTo = world.NextTeleport( index_from );
@@ -1695,7 +1695,7 @@ namespace AI
 
             hero.SetMove( false );
         }
-        else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
+        else if ( !path.empty() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
                 hero.Action( hero.GetIndex(), true );
         }

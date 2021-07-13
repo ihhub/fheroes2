@@ -331,7 +331,7 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansi
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.read( key );
-        if ( buf.size() )
+        if ( !buf.empty() )
             return buf;
     }
 
@@ -355,7 +355,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
-    if ( body.size() ) {
+    if ( !body.empty() ) {
         // create WAV format
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
@@ -571,7 +571,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
             }
         }
 
-        if ( filename.size() ) {
+        if ( !filename.empty() ) {
             Music::Play( filename, loop );
             isSongFound = true;
 
@@ -593,7 +593,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
 
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() ) {
+            if ( !v.empty() ) {
                 Music::Play( v, loop );
 
                 Game::SetCurrentMusic( mus );
