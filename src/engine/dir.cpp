@@ -108,9 +108,8 @@ namespace
                     if ( strcmp( filenamePtr, name.c_str() ) != 0 )
                         continue;
                 }
-                else {
-                    if ( strcasecmp( filenamePtr, name.c_str() ) != 0 )
-                        continue;
+                else if ( strcasecmp( filenamePtr, name.c_str() ) != 0 ) {
+                    continue;
                 }
             }
 
