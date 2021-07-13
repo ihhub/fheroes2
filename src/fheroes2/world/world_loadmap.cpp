@@ -714,7 +714,6 @@ void World::ProcessNewMap()
     }
     else {
         // remove ultimate artifact sprite
-        const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
         it->setAsEmpty();
         ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
