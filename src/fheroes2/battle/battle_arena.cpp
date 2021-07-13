@@ -186,8 +186,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         // skip for town
         if ( castle && !castle->isCastle() )
             castle = nullptr;
-
-        isTown = true;
     }
 
     // init interface
