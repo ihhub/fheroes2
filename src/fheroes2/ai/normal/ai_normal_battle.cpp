@@ -489,8 +489,8 @@ namespace AI
                     const Indexes around = Board::GetAroundIndexes( enemy->GetHeadIndex() );
                     std::set<const Unit *> targetedUnits;
 
-                    for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-                        const Unit * monsterOnCell = Board::GetCell( *it )->GetUnit();
+                    for ( const int32_t cellId : around ) {
+                        const Unit * monsterOnCell = Board::GetCell( cellId )->GetUnit();
                         if ( monsterOnCell != nullptr ) {
                             targetedUnits.emplace( monsterOnCell );
                         }
