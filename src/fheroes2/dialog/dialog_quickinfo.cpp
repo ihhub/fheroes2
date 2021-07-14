@@ -533,9 +533,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_CAMPFIRE:
-            name_object = ShowResourceInfo( tile, extendedScoutingOption, scoutingLevelForTile );
-            break;
-
         case MP2::OBJ_RESOURCE:
             name_object = ShowResourceInfo( tile, extendedScoutingOption, scoutingLevelForTile );
             break;

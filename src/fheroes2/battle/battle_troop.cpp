@@ -1655,11 +1655,9 @@ int Battle::Unit::M82Expl( void ) const
 {
     switch ( GetID() ) {
     case Monster::VAMPIRE:
-        return M82::VAMPEXT1;
     case Monster::VAMPIRE_LORD:
         return M82::VAMPEXT1;
     case Monster::LICH:
-        return M82::LICHEXPL;
     case Monster::POWER_LICH:
         return M82::LICHEXPL;
 
