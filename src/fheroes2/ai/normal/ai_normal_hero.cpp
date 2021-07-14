@@ -830,7 +830,7 @@ namespace AI
                 }
             }
             hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
-            if ( !hero->MayStillMove() ) {
+            if ( !hero->MayStillMove( false ) ) {
                 hero->SetModes( Heroes::MOVED );
             }
             else {
@@ -929,7 +929,7 @@ namespace AI
             }
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
-                if ( !availableHeroes[i].hero->MayStillMove() ) {
+                if ( !availableHeroes[i].hero->MayStillMove( false ) ) {
                     availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
@@ -944,7 +944,7 @@ namespace AI
         const bool allHeroesMoved = availableHeroes.empty();
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
-            if ( !heroInfo.hero->MayStillMove() ) {
+            if ( !heroInfo.hero->MayStillMove( false ) ) {
                 heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }
