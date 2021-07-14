@@ -233,17 +233,9 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellVisions( *this );
         break;
     case Spell::HAUNT:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETEGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETAGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETFGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETWGUARDIAN:
         apply = ActionSpellSetGuardian( *this, spell );
         break;

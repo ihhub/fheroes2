@@ -856,17 +856,15 @@ u32 GoldInsteadArtifact( int obj )
 {
     switch ( obj ) {
     case MP2::OBJ_SKELETON:
-        return 1000;
+    case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_SHIPWRECKSURVIROR:
         return 1000;
     case MP2::OBJ_WATERCHEST:
         return 1500;
-    case MP2::OBJ_TREASURECHEST:
-        return 1000;
-    case MP2::OBJ_SHIPWRECK:
-        return 5000;
     case MP2::OBJ_GRAVEYARD:
         return 2000;
+    case MP2::OBJ_SHIPWRECK:
+        return 5000;
     default:
         break;
     }

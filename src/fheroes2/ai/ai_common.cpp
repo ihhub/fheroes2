@@ -118,8 +118,6 @@ namespace AI
             slotOrder = {0, 2, 1, 3, 4};
             break;
         case 2:
-            slotOrder = {0, 4, 2, 1, 3};
-            break;
         case 3:
             slotOrder = {0, 4, 2, 1, 3};
             break;
