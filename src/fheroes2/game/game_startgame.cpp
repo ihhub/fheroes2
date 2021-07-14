@@ -584,6 +584,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
         // check if the game is over at the beginning of a new day
         res = gameResult.LocalCheckGameOver();
+        assert( res != fheroes2::GameMode::END_TURN );
 
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
@@ -667,6 +668,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     // check if the game is over after each player's turn
                     res = gameResult.LocalCheckGameOver();
+                    assert( res != fheroes2::GameMode::END_TURN );
 
                     if ( res != fheroes2::GameMode::CANCEL ) {
                         break;
@@ -684,12 +686,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
         fheroes2::delayforMs( 10 );
     }
 
-    if ( res == fheroes2::GameMode::END_TURN )
-        display.fill( 0 );
-    else if ( conf.ExtGameUseFade() )
+    // if we are here, the res value should never be fheroes2::GameMode::END_TURN
+    assert( res != fheroes2::GameMode::END_TURN );
+
+    if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    return res == fheroes2::GameMode::END_TURN ? fheroes2::GameMode::QUIT_GAME : res;
+    return res;
 }
 
 fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
