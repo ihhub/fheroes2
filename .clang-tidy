@@ -1,1 +1,12 @@
-Checks: '-*,bugprone-*,cppcoreguidelines-*,-cppcoreguidelines-init-variables,misc-*,modernize-*,performance-*,readability-*,-readability-avoid-const-params-in-decls'
+Checks: >-
+  -*,
+  bugprone-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-init-variables,
+  misc-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  performance-*,
+  readability-*,
+  -readability-avoid-const-params-in-decls,
+  -readability-implicit-bool-conversion
