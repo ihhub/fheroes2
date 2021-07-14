@@ -452,7 +452,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );
+    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
 }
 
 u32 Kingdom::GetCountCapital( void ) const

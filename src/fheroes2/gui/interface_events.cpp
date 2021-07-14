@@ -80,7 +80,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() && hero->MayStillMove() ) {
+    else if ( path.isValid() && hero->MayStillMove( false ) ) {
         SetFocus( hero );
         RedrawFocus();
 
