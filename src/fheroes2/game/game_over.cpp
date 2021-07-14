@@ -212,7 +212,7 @@ void GameOver::DialogWins( int cond )
 
     AGG::PlayMusic( MUS::VICTORY, false );
 
-    if ( body.size() )
+    if ( !body.empty() )
         Dialog::Message( "", body, Font::BIG, Dialog::OK );
 }
 
@@ -281,7 +281,7 @@ void GameOver::DialogLoss( int cond )
 
     AGG::PlayMusic( MUS::LOSTGAME, false );
 
-    if ( body.size() )
+    if ( !body.empty() )
         Dialog::Message( "", body, Font::BIG, Dialog::OK );
 }
 

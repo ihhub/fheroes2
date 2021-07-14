@@ -2558,11 +2558,29 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
-    if ( _currentUnit )
+    if ( _currentUnit ) {
+        auto fixupTargetIndex = []( const Unit * unit, const int32_t dst ) {
+            if ( unit->isWide() ) {
+                Position pos = Position::GetCorrect( *unit, dst );
+
+                // destination cell is on the border of the cell space available to the unit
+                // and it should be the tail cell of the unit, return the head cell instead
+                if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
+                    int headDirection = unit->isReflect() ? LEFT : RIGHT;
+
+                    if ( Board::isValidDirection( dst, headDirection ) ) {
+                        return Board::GetIndexDirection( dst, headDirection );
+                    }
+                }
+            }
+
+            return dst;
+        };
+
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), index ) );
+            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupTargetIndex( _currentUnit, index ) ) );
             a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
@@ -2580,7 +2598,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
                 const s32 move = Board::GetIndexDirection( index, dir );
 
                 if ( _currentUnit->GetHeadIndex() != move )
-                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );
+                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupTargetIndex( _currentUnit, move ) ) );
                 a.push_back( Command( MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                 humanturn_exit = true;
@@ -2611,6 +2629,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         default:
             break;
         }
+    }
 }
 
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
@@ -2828,7 +2847,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
     const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
-    if ( !isMirror && targets.size() ) {
+    if ( !isMirror && !targets.empty() ) {
         std::string msg = _( "%{attacker} do %{damage} damage." );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
@@ -2974,7 +2993,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // Fade away animation for destroyed mirror images
-    if ( mirrorImages.size() )
+    if ( !mirrorImages.empty() )
         RedrawActionRemoveMirrorImage( mirrorImages );
 }
 
@@ -3179,7 +3198,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
 
 void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
-    Unit * target = targets.size() ? targets.front().defender : nullptr;
+    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     std::string msg;
 
@@ -3191,7 +3210,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
         msg = _( "%{name} casts %{spell}." );
     }
 
-    if ( msg.size() ) {
+    if ( !msg.empty() ) {
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
 
@@ -3202,7 +3221,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
 void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
 {
-    Unit * target = targets.size() ? targets.front().defender : nullptr;
+    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     // set spell cast animation
     if ( caster ) {
@@ -4826,7 +4845,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                             else
                                 humanturn_spell = spell;
                         }
-                        else if ( error.size() )
+                        else if ( !error.empty() )
                             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
                     }
                 }

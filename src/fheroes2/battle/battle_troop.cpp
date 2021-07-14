@@ -218,6 +218,11 @@ std::string Battle::Unit::GetSpeedString() const
     return os.str();
 }
 
+uint32_t Battle::Unit::GetInitialCount() const
+{
+    return count0;
+}
+
 u32 Battle::Unit::GetDead( void ) const
 {
     return dead;
@@ -1560,8 +1565,8 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
 
 int Battle::Unit::GetSpellMagic() const
 {
-    const std::set<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
-    const auto foundAbility = abilities.find( fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
+    const auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
     if ( foundAbility == abilities.end() ) {
         // Not a spell caster.
         return Spell::NONE;

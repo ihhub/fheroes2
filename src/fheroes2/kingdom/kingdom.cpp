@@ -126,11 +126,11 @@ void Kingdom::LossPostActions( void )
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
 
-        if ( heroes.size() ) {
+        if ( !heroes.empty() ) {
             std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) ); } );
             heroes.clear();
         }
-        if ( castles.size() ) {
+        if ( !castles.empty() ) {
             castles.ChangeColors( GetColor(), Color::NONE );
             castles.clear();
         }
@@ -452,7 +452,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );
+    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
 }
 
 u32 Kingdom::GetCountCapital( void ) const
@@ -676,7 +676,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
 Heroes * Kingdom::GetBestHero()
 {
-    return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
+    return !heroes.empty() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }
 
 Monster Kingdom::GetStrongestMonster() const

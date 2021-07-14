@@ -407,7 +407,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                     const int nodeIdx = nodesToExplore[lastProcessedNode];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
-                    if ( maxTilesToReveal < tilesToReveal ) {
+                    if ( maxTilesToReveal < tilesToReveal || ( maxTilesToReveal == tilesToReveal && _cache[nodeIdx]._cost < _cache[bestIndex]._cost ) ) {
                         maxTilesToReveal = tilesToReveal;
                         bestIndex = nodeIdx;
                     }
@@ -423,7 +423,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 if ( !tilesVisited[newIndex] ) {
                     tilesVisited[newIndex] = true;
 
-                    // Don't go onto action objects as they maybe castles or dwellings with battles.
+                    // Don't go onto action objects as they might be castles or dwellings with guards.
                     if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
                         continue;
                     }

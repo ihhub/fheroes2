@@ -80,7 +80,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() && hero->MayStillMove() ) {
+    else if ( path.isValid() && hero->MayStillMove( false ) ) {
         SetFocus( hero );
         RedrawFocus();
 
@@ -129,7 +129,7 @@ void Interface::Basic::EventNextHero( void )
             ++it;
             if ( it == myHeroes.end() )
                 it = myHeroes.begin();
-            if ( ( *it )->MayStillMove() ) {
+            if ( ( *it )->MayStillMove( true ) ) {
                 SetFocus( *it );
                 CalculateHeroPath( *it, -1 );
                 break;
@@ -137,11 +137,10 @@ void Interface::Basic::EventNextHero( void )
         } while ( it != currentHero );
     }
     else {
-        const size_t heroesCount = myHeroes.size();
-        for ( size_t i = 0; i < heroesCount; ++i ) {
-            if ( myHeroes[i]->MayStillMove() ) {
-                SetFocus( myHeroes[i] );
-                CalculateHeroPath( myHeroes[i], -1 );
+        for ( Heroes * hero : myHeroes ) {
+            if ( hero->MayStillMove( true ) ) {
+                SetFocus( hero );
+                CalculateHeroPath( hero, -1 );
                 break;
             }
         }
@@ -283,7 +282,7 @@ void Interface::Basic::EventNextTown( void )
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    if ( myCastles.size() ) {
+    if ( !myCastles.empty() ) {
         if ( GetFocusCastle() ) {
             KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
             ++it;
