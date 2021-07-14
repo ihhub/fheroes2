@@ -420,9 +420,9 @@ bool Monster::isUndead() const
 
 bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
 {
-    const std::set<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-    return abilities.find( fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+    return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
 }
 
 bool Monster::isFlying() const
