@@ -588,9 +588,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
-        else {
-            res = fheroes2::GameMode::END_TURN;
-        }
+
+        res = fheroes2::GameMode::END_TURN;
 
         for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
             if ( *it ) {
@@ -672,9 +671,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     if ( res != fheroes2::GameMode::CANCEL ) {
                         break;
                     }
-                    else {
-                        res = fheroes2::GameMode::END_TURN;
-                    }
+
+                    res = fheroes2::GameMode::END_TURN;
                 }
 
                 // reset this after potential HumanTurn() call, but regardless of whether current kingdom
