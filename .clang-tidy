@@ -2,6 +2,7 @@ Checks: >-
   -*,
   bugprone-*,
   cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-init-variables,
   misc-*,
   modernize-*,
@@ -9,4 +10,6 @@ Checks: >-
   performance-*,
   readability-*,
   -readability-avoid-const-params-in-decls,
-  -readability-implicit-bool-conversion
+  -readability-braces-around-statements,
+  -readability-implicit-bool-conversion,
+  -readability-magic-numbers
