@@ -65,7 +65,7 @@ namespace GameOver
     public:
         static Result & Get( void );
 
-        void Reset( void ); // Resets everything
+        void Reset(); // Resets everything
         void ResetResult(); // Resets just the result
 
         int GetResult( void ) const;

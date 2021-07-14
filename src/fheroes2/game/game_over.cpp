@@ -310,7 +310,7 @@ GameOver::Result::Result()
     , continueAfterVictory( false )
 {}
 
-void GameOver::Result::Reset( void )
+void GameOver::Result::Reset()
 {
     colors = Game::GetKingdomColors();
     result = GameOver::COND_NONE;
