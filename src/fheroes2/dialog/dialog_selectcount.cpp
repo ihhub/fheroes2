@@ -356,7 +356,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             ++spriteIconIdx;
 
             const int spriteWidth = sprites[i].width();
-            const int offset = spriteWidth * ( i - freeSlots / 2 ) + spriteWidth / 2;
+            const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
             vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
         }
 
