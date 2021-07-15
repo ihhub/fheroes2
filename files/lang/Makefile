@@ -18,7 +18,7 @@ fr.mo: fr.po
 ru.mo: ru.po
 	msgmerge -U --no-location $< fheroes2.pot
 	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
+	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
