@@ -353,11 +353,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             if ( sw > 1 ) {
                 fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
             }
-            // We can use fheroes2::SetPixel function but calling it so many times is much slower than doing the same logic here.
-            else if ( dstx < display.width() && dsty < display.height() && dstx >= 0 && dsty >= 0 ) {
-                const int32_t displayOffset = dsty * display.width() + dstx;
-                *( display.image() + displayOffset ) = fillColor;
-                *( display.transform() + displayOffset ) = 0;
+            else {
+                fheroes2::SetPixel( display, dstx, dsty, fillColor );
             }
         }
     }
