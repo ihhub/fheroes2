@@ -25,6 +25,8 @@
 
 namespace fheroes2
 {
+    // IMPORTANT!!! According to https://en.cppreference.com/w/cpp/chrono/high_resolution_clock we should never use high_resolution_clock for time internal measurements.
+
     class Time
     {
     public:
@@ -35,7 +37,7 @@ namespace fheroes2
         uint64_t getMs() const; // returns rounded time in milliseconds
 
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        std::chrono::time_point<std::chrono::steady_clock> _startTime;
     };
 
     class TimeDelay
@@ -57,7 +59,7 @@ namespace fheroes2
         void pass();
 
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _prevTime;
+        std::chrono::time_point<std::chrono::steady_clock> _prevTime;
         uint64_t _delayMs;
     };
 

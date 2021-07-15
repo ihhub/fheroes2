@@ -38,7 +38,7 @@ namespace
     {
     public:
         SystemInfoRenderer()
-            : _startTime( std::chrono::high_resolution_clock::now() )
+            : _startTime( std::chrono::steady_clock::now() )
         {}
 
         void preRender()
@@ -55,7 +55,7 @@ namespace
 
             std::string info( mbstr );
 
-            std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+            std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
             const std::chrono::duration<double> time = endTime - _startTime;
             _startTime = endTime;
 
@@ -76,7 +76,7 @@ namespace
             info += ", FPS: ";
             info += std::to_string( currentFps );
             if ( averageFps < 10 ) {
-                info += ".";
+                info += '.';
                 info += std::to_string( static_cast<int>( ( averageFps - currentFps ) * 10 ) );
             }
 
@@ -92,7 +92,7 @@ namespace
         }
 
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        std::chrono::time_point<std::chrono::steady_clock> _startTime;
         TextSprite _text;
         std::deque<double> _fps;
     };
