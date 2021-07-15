@@ -468,7 +468,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             }
             else if ( from_hero.isFriends( castle->GetColor() ) ) {
                 return Settings::Get().ExtUnionsAllowCastleVisiting()
-                    ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) ) : Cursor::POINTER;
+                           ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
+                           : Cursor::POINTER;
             }
             else if ( castle->GetActualArmy().isValid() ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
