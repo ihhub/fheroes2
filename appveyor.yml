@@ -1,6 +1,5 @@
 skip_commits:
   files:
-  - .travis.yml
   - '**/*.md'
   - .gitignore
   - .github/workflows/*
