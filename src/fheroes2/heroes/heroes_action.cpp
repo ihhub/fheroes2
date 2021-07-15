@@ -1108,7 +1108,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
         }
         else {
             const Artifact & art = tile.QuantityArtifact();
-            message.append( "\n" );
+            message += '\n';
             message.append( _( "Searching through the tattered clothing, you find %{artifact}." ) );
             StringReplace( message, "%{artifact}", art.GetName() );
             Dialog::ArtifactInfo( "", message, art );
@@ -1118,7 +1118,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
         tile.QuantityReset();
     }
     else {
-        message.append( "\n" );
+        message += '\n';
         message.append( _( "Searching through the tattered clothing, you find nothing." ) );
         Dialog::Message( "", message, Font::BIG, Dialog::OK );
     }
@@ -1138,13 +1138,13 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
 
         if ( art.isValid() ) {
             if ( hero.IsFullBagArtifacts() ) {
-                message.append( "\n" );
+                message += '\n';
                 message.append( _( "Unfortunately, others have found it first, and the wagon is empty." ) );
                 Dialog::Message( "", message, Font::BIG, Dialog::OK );
             }
             else {
                 AGG::PlaySound( M82::EXPERNCE );
-                message.append( "\n" );
+                message += '\n';
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
                 Dialog::ArtifactInfo( "", message, art );
@@ -1154,7 +1154,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
         else {
             const Funds & funds = tile.QuantityFunds();
             AGG::PlaySound( M82::EXPERNCE );
-            message.append( "\n" );
+            message += '\n';
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
             Dialog::ResourceInfo( "", message, funds );
             hero.GetKingdom().AddFundsResource( funds );
@@ -1163,7 +1163,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
         tile.QuantityReset();
     }
     else {
-        message.append( "\n" );
+        message += '\n';
         message.append( _( "Unfortunately, others have found it first, and the wagon is empty." ) );
         Dialog::Message( "", message, Font::BIG, Dialog::OK );
     }
@@ -1736,7 +1736,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
             }
             StringReplace( msg, "%{art}", art.GetName() );
-            msg.append( "\n" );
+            msg += '\n';
             msg.append( _( "Do you wish to buy this artifact?" ) );
 
             AGG::PlaySound( M82::EXPERNCE );
@@ -1822,7 +1822,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 msg = Artifact::GetScenario( art );
             else {
                 msg = _( "You've found the artifact: " );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( art.GetName() );
             }
 
@@ -2671,9 +2671,9 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
 
             if ( hero.GetKingdom().AllowPayment( funds ) ) {
                 msg = _( "Upon your approach, the tree opens its eyes in delight." );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "\"Ahh, an adventurer! I will be happy to teach you a little of what I have learned over the ages for a mere %{count} %{res}.\"" ) );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "(Just bury it around my roots.)" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
@@ -2681,9 +2681,9 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
             }
             else {
                 msg = _( "Tears brim in the eyes of the tree." );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "\"I need %{count} %{res}.\"" ) );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "it whispers. (sniff) \"Well, come back when you can pay me.\"" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
@@ -2834,11 +2834,11 @@ void ActionToAlchemistsTower( Heroes & hero )
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             std::string msg = "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you.";
-            msg.append( "\n" );
+            msg += '\n';
             msg.append(
                 _n( "He checks your pack, and sees that you have 1 cursed item.", "He checks your pack, and sees that you have %{count} cursed items.", cursed ) );
             StringReplace( msg, "%{count}", cursed );
-            msg.append( "\n" );
+            msg += '\n';
             msg.append( _( "For %{gold} gold, the alchemist will remove it for you. Do you pay?" ) );
             StringReplace( msg, "%{gold}", payment.gold );
 

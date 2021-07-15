@@ -1094,7 +1094,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
                     std::string str = _( "All %{race} troops +1" );
                     StringReplace( str, "%{race}", Race::String( r ) );
                     strs->append( str );
-                    strs->append( "\n" );
+                    *strs += '\n';
                 }
             }
         }
@@ -1106,21 +1106,21 @@ int Army::GetMoraleModificator( std::string * strs ) const
         result -= 1;
         if ( strs ) {
             strs->append( _( "Troops of 3 alignments -1" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
         break;
     case 4:
         result -= 2;
         if ( strs ) {
             strs->append( _( "Troops of 4 alignments -2" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
         break;
     default:
         result -= 3;
         if ( strs ) {
             strs->append( _( "Troops of 5 alignments -3" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
         break;
     }
@@ -1132,7 +1132,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in groups -1" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
     }
 

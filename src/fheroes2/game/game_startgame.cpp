@@ -435,8 +435,6 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
 int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps::Tiles & tile )
 {
-    const Settings & conf = Settings::Get();
-
     if ( from_hero.Modes( Heroes::ENABLEMOVE ) )
         return Cursor::Get().Themes();
     else if ( from_hero.isShipMaster() )
@@ -469,8 +467,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
             else if ( from_hero.isFriends( castle->GetColor() ) ) {
-                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
-                                                           : Cursor::POINTER;
+                return Settings::Get().ExtUnionsAllowCastleVisiting()
+                    ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) ) : Cursor::POINTER;
             }
             else if ( castle->GetActualArmy().isValid() ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
@@ -495,7 +493,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             }
             else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
                 int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-                return conf.ExtUnionsAllowHeroesMeetings() ? newcur : Cursor::POINTER;
+                return Settings::Get().ExtUnionsAllowHeroesMeetings() ? newcur : Cursor::POINTER;
             }
             else
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
