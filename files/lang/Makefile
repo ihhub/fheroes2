@@ -30,4 +30,4 @@ ru.mo: ru.po
 	msgfmt $<.2.tmp -o $@
 
 clean:
-	rm -f *.mo *.tmp
+	rm -f *.mo *.po~ *.tmp
