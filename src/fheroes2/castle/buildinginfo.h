@@ -33,7 +33,7 @@ class BuildingInfo
 public:
     BuildingInfo( const Castle &, building_t );
 
-    u32 operator()( void ) const;
+    uint32_t getBuilding( void ) const;
     void SetPos( s32, s32 );
     const fheroes2::Rect & GetArea( void ) const;
     const char * GetName( void ) const;

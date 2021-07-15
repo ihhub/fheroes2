@@ -156,11 +156,6 @@ bool Spell::isValid( void ) const
     return id != Spell::NONE;
 }
 
-int Spell::operator()( void ) const
-{
-    return id;
-}
-
 int Spell::GetID( void ) const
 {
     return id;

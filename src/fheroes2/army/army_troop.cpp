@@ -47,11 +47,6 @@ bool Troop::isMonster( int mons ) const
     return GetID() == mons;
 }
 
-Monster Troop::operator()( void ) const
-{
-    return Monster( id );
-}
-
 Monster Troop::GetMonster( void ) const
 {
     return Monster( id );

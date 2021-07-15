@@ -341,7 +341,7 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
 
 bool Troops::JoinTroop( const Troop & troop )
 {
-    return troop.isValid() ? JoinTroop( troop(), troop.GetCount() ) : false;
+    return troop.isValid() ? JoinTroop( troop.GetMonster(), troop.GetCount() ) : false;
 }
 
 bool Troops::CanJoinTroops( const Troops & troops2 ) const
@@ -927,9 +927,9 @@ void Army::setFromTile( const Maps::Tiles & tile )
                 if ( 3 > troop.GetCount() )
                     at( 0 )->Set( co.GetTroop() );
                 else {
-                    at( 0 )->Set( troop(), troop.GetCount() / 3 );
-                    at( 4 )->Set( troop(), troop.GetCount() / 3 );
-                    at( 2 )->Set( troop(), troop.GetCount() - at( 4 )->GetCount() - at( 0 )->GetCount() );
+                    at( 0 )->Set( troop.GetMonster(), troop.GetCount() / 3 );
+                    at( 4 )->Set( troop.GetMonster(), troop.GetCount() / 3 );
+                    at( 2 )->Set( troop.GetMonster(), troop.GetCount() - at( 4 )->GetCount() - at( 0 )->GetCount() );
                 }
                 break;
 
@@ -937,11 +937,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
                 if ( 5 > troop.GetCount() )
                     at( 0 )->Set( co.GetTroop() );
                 else {
-                    at( 0 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 1 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 3 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 4 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 2 )->Set( troop(), troop.GetCount() - at( 0 )->GetCount() - at( 1 )->GetCount() - at( 3 )->GetCount() - at( 4 )->GetCount() );
+                    at( 0 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 1 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 3 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 4 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 2 )->Set( troop.GetMonster(), troop.GetCount() - at( 0 )->GetCount() - at( 1 )->GetCount() - at( 3 )->GetCount() - at( 4 )->GetCount() );
                 }
                 break;
 

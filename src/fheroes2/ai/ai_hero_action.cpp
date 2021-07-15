@@ -657,7 +657,7 @@ namespace AI
             const int32_t joiningCost = troop.GetCost().gold;
             if ( hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) && hero.GetArmy().CanJoinTroop( troop ) ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
-                hero.GetArmy().JoinTroop( troop(), join.monsterCount );
+                hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
                 hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
                 destroy = true;
             }
@@ -680,7 +680,7 @@ namespace AI
             }
             else {
                 AIBattleLose( hero, res, true, Color::NONE );
-                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+                tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }

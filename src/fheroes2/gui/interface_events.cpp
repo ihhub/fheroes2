@@ -381,7 +381,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
-                    Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate() );
+                    Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate.GetID() );
 
                     // set all obelisks visited
                     Kingdom & kingdom = world.GetKingdom( hero->GetColor() );

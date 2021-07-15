@@ -764,7 +764,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
 
     // check artifact
     Artifact guard_art( Artifact::UNKNOWN );
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::CURSE:
     case Spell::MASSCURSE:
         guard_art = Artifact::HOLY_PENDANT;
@@ -811,7 +811,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
 
 bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 {
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::BLESS:
     case Spell::MASSBLESS:
         return Modes( SP_BLESS );
@@ -871,7 +871,7 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
     // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
-    const bool isForceApply = ( spell() == Spell::CHAINLIGHTNING );
+    const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
     if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
         return false;
@@ -1165,7 +1165,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
             duration += acount * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
     }
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::BLESS:
     case Spell::MASSBLESS:
         if ( Modes( SP_CURSE ) ) {
@@ -1301,7 +1301,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
     case Monster::STEEL_GOLEM:
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
             // 50% damage
         case Spell::COLDRAY:
         case Spell::COLDRING:
@@ -1319,7 +1319,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         break;
 
     case Monster::WATER_ELEMENT:
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
             // 200% damage
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
@@ -1331,7 +1331,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         break;
 
     case Monster::AIR_ELEMENT:
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
             // 200% damage
         case Spell::ELEMENTALSTORM:
         case Spell::LIGHTNINGBOLT:
@@ -1344,7 +1344,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         break;
 
     case Monster::FIRE_ELEMENT:
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
             // 200% damage
         case Spell::COLDRAY:
         case Spell::COLDRING:
@@ -1363,7 +1363,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
     if ( hero ) {
         const HeroBase * defendingHero = GetCommander();
 
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING:
             // +50%
@@ -1459,7 +1459,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
 
 void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const HeroBase * hero )
 {
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
         // clear bad magic
@@ -1532,7 +1532,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         return spellImmunity;
     }
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
         if ( !isHaveDamage() && !( modes & IS_MAGIC ) )

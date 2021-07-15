@@ -819,7 +819,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
             bool affect = true;
 
             if ( elem )
-                switch ( spell() ) {
+                switch ( spell.GetID() ) {
                 case Spell::SUMMONEELEMENT:
                     if ( elem->GetID() != Monster::EARTH_ELEMENT )
                         affect = false;
@@ -1063,7 +1063,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     bool affect = true;
 
     if ( elem )
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::SUMMONEELEMENT:
             if ( elem->GetID() != Monster::EARTH_ELEMENT )
                 affect = false;

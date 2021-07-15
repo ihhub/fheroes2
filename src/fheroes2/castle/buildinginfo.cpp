@@ -312,7 +312,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     }
 }
 
-u32 BuildingInfo::operator()( void ) const
+uint32_t BuildingInfo::getBuilding( void ) const
 {
     return building;
 }

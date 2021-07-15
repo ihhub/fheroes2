@@ -73,9 +73,9 @@ namespace
         size_t toIdx = 0;
 
         for ( size_t fromIdx = 0; fromIdx < bagFrom.size(); ++fromIdx ) {
-            if ( bagFrom[fromIdx]() != Artifact::UNKNOWN && bagFrom[fromIdx]() != Artifact::MAGIC_BOOK ) {
+            if ( bagFrom[fromIdx].GetID() != Artifact::UNKNOWN && bagFrom[fromIdx].GetID() != Artifact::MAGIC_BOOK ) {
                 while ( toIdx < bagTo.size() ) {
-                    if ( bagTo[toIdx]() == Artifact::UNKNOWN )
+                    if ( bagTo[toIdx].GetID() == Artifact::UNKNOWN )
                         break;
 
                     ++toIdx;
