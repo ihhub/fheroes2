@@ -68,7 +68,10 @@ jobs:
       run: |
         brew install ${{ matrix.config.dependencies }}
     - name: Build
-      run: make -j 2
+      run: |
+        make -j 2
+        cd files/lang
+        make -j 2
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.package_files != '' }}
@@ -125,6 +128,8 @@ jobs:
       run: |
         export PATH=$VITASDK/bin:$PATH
         make -f Makefile.vita -j 2
+        cd files/lang
+        make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
