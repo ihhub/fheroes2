@@ -1,17 +1,17 @@
 # translation of fheroes2.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@gmail.com>, 2009.
-# dimag0g <dmitry.grigoryev@outlook.com>, 2021.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 15:11+0200\n"
 "PO-Revision-Date: 2021-07-12 20:18+0200\n"
-"Last-Translator: dimag0g <dmitry.grigoryev@outlook.com>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"

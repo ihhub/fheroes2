@@ -1,7 +1,7 @@
 # French translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# dimag0g <dmitry.grigoryev@outlook.com>, 2021.
+# fheroes2 team <fhomm2@gmail.com>, 2021
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 15:11+0200\n"
 "PO-Revision-Date: 2021-07-12 20:50+0200\n"
-"Last-Translator: dimag0g <dmitry.grigoryev@outlook.com>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
