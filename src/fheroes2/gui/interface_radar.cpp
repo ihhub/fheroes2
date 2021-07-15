@@ -375,8 +375,8 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
         const fheroes2::Rect & rect = GetArea();
         const fheroes2::Rect & rectMaps = roiRectangle == nullptr ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
 
-        const int32_t areaw = ( offset.x ? rect.width - 2 * offset.x : rect.width );
-        const int32_t areah = ( offset.y ? rect.height - 2 * offset.y : rect.height );
+        const int32_t areaw = rect.width - 2 * offset.x;
+        const int32_t areah = rect.height - 2 * offset.y;
 
         int32_t xStart = rectMaps.x;
         int32_t xEnd = rectMaps.x + rectMaps.width;
