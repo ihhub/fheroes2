@@ -387,7 +387,7 @@ const fheroes2::Sprite & SpriteFroth( const Heroes & hero, int index )
 bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
 {
     if ( next.GetObject() == MP2::OBJ_CASTLE ) {
-        const Castle * castle = world.GetCastle( next.GetCenter() );
+        const Castle * castle = world.GetCastle( next.GetCenter(), true );
 
         return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }

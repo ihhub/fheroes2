@@ -191,11 +191,12 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    const Castle * GetCastle( const fheroes2::Point & ) const;
-    Castle * GetCastle( const fheroes2::Point & );
+    // Get castle from index maps.
+    const Castle * GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance ) const;
+    Castle * GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance );
 
-    const Heroes * GetHeroes( int /* hero id */ ) const;
-    Heroes * GetHeroes( int /* hero id */ );
+    const Heroes * GetHeroes( int id ) const;
+    Heroes * GetHeroes( int id );
 
     const Heroes * GetHeroes( const fheroes2::Point & ) const;
     Heroes * GetHeroes( const fheroes2::Point & );

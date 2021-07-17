@@ -855,7 +855,7 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
 
 void ActionToCastle( Heroes & hero, s32 dst_index )
 {
-    Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ) );
+    Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ), true );
     const Settings & conf = Settings::Get();
 
     if ( !castle ) {

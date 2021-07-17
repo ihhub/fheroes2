@@ -225,7 +225,7 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
         focus.second = world.GetHeroes( Maps::GetPoint( index ) );
         break;
     case FOCUS_CASTLE:
-        focus.second = world.GetCastle( Maps::GetPoint( index ) );
+        focus.second = world.GetCastle( Maps::GetPoint( index ), true );
         break;
     default:
         focus.second = nullptr;

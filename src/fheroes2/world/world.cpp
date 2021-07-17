@@ -480,14 +480,33 @@ const Kingdom & World::GetKingdom( int color ) const
     return vec_kingdoms.GetKingdom( color );
 }
 
-/* get castle from index maps */
-Castle * World::GetCastle( const fheroes2::Point & center )
+Castle * World::GetCastle( const fheroes2::Point & center, const bool checkForCastleEntrance )
 {
+    if ( checkForCastleEntrance ) {
+        if ( !Maps::isValidAbsPoint( center.x, center.y ) ) {
+            return nullptr;
+        }
+
+        if ( GetTiles( center.x, center.y ).GetObject( false ) != MP2::OBJ_CASTLE ) {
+            return nullptr;
+        }
+    }
+
     return vec_castles.Get( center );
 }
 
-const Castle * World::GetCastle( const fheroes2::Point & center ) const
+const Castle * World::GetCastle( const fheroes2::Point & center, const bool checkForCastleEntrance ) const
 {
+    if ( checkForCastleEntrance ) {
+        if ( !Maps::isValidAbsPoint( center.x, center.y ) ) {
+            return nullptr;
+        }
+
+        if ( GetTiles( center.x, center.y ).GetObjectUID() != MP2::OBJ_CASTLE ) {
+            return nullptr;
+        }
+    }
+
     return vec_castles.Get( center );
 }
 
@@ -927,11 +946,9 @@ void World::CaptureObject( s32 index, int color )
     int obj = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, obj, color );
 
-    if ( MP2::OBJ_CASTLE == obj ) {
-        Castle * castle = GetCastle( Maps::GetPoint( index ) );
-        if ( castle && castle->GetColor() != color )
-            castle->ChangeColor( color );
-    }
+    Castle * castle = GetCastle( Maps::GetPoint( index ), true );
+    if ( castle && castle->GetColor() != color )
+        castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
         GetTiles( index ).CaptureFlags32( obj, color );
@@ -1102,7 +1119,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
-        const Castle * town = GetCastle( conf.WinsMapsPositionObject() );
+        const Castle * town = GetCastle( conf.WinsMapsPositionObject(), false );
         // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
@@ -1160,7 +1177,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
         return kingdom.isLoss();
 
     case GameOver::LOSS_TOWN: {
-        const Castle * town = GetCastle( conf.LossMapsPositionObject() );
+        const Castle * town = GetCastle( conf.LossMapsPositionObject(), false );
         return ( town && town->GetColor() != kingdom.GetColor() );
     }
 

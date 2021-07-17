@@ -36,7 +36,7 @@ namespace
 {
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
     {
-        const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
+        const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ), true );
         if ( castle ) {
             if ( hero.GetColor() == castle->GetColor() ) {
                 return castle->GetHeroes().Guest() == nullptr;
@@ -499,7 +499,7 @@ namespace AI
         const int objectID = tile.GetObject();
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            const Castle * castle = world.GetCastle( Maps::GetPoint( index ), true );
             if ( !castle )
                 return valueToIgnore;
 
@@ -769,7 +769,7 @@ namespace AI
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
 
                 if ( heroStrength < regionStats.highestThreat ) {
-                    const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
+                    const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ), true );
 
                     if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
                         value -= dangerousTaskPenalty / 2;

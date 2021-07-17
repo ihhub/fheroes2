@@ -409,7 +409,7 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
+                    Castle * castle = GetCastle( Maps::GetPoint( findobject ), true );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
@@ -430,7 +430,7 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
+                    Castle * castle = GetCastle( Maps::GetPoint( findobject ), true );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );

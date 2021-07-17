@@ -1519,7 +1519,7 @@ std::string Maps::Tiles::String( void ) const
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * castle = world.GetCastle( GetCenter() );
+        const Castle * castle = world.GetCastle( GetCenter(), false );
         if ( castle )
             os << castle->String();
     } break;
@@ -1816,7 +1816,7 @@ bool Maps::Tiles::CaptureObjectIsProtection( void ) const
 
     if ( MP2::isCaptureObject( object ) ) {
         if ( MP2::OBJ_CASTLE == object ) {
-            Castle * castle = world.GetCastle( GetCenter() );
+            Castle * castle = world.GetCastle( GetCenter(), true );
             if ( castle )
                 return castle->GetArmy().isValid();
         }

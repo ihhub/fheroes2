@@ -2770,7 +2770,7 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
     for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
-        *it = ( index < 0 ? nullptr : world.GetCastle( Maps::GetPoint( index ) ) );
+        *it = ( index < 0 ? nullptr : world.GetCastle( Maps::GetPoint( index ), true ) );
     }
 
     return msg;
