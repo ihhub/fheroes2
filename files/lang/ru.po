@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 15:11+0200\n"
-"PO-Revision-Date: 2021-07-12 20:18+0200\n"
+"PO-Revision-Date: 2021-07-17 12:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -149,10 +149,10 @@ msgid "%{name} half the enemy troops!"
 msgstr "%{name} убивает половину вражеской армии!"
 
 msgid "Set auto battle off"
-msgstr "Выключить Авто-Битву"
+msgstr "Выключить автобитву"
 
 msgid "Set auto battle on"
-msgstr "Включить Авто-Битву"
+msgstr "Включить автобитву"
 
 msgid "spell failed!"
 msgstr "неудачный вызов магии!"
@@ -189,7 +189,7 @@ msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
 msgid "Auto Spell Casting"
-msgstr "Магия в авто-битве"
+msgstr "Магия в автобитве"
 
 msgid "Grid"
 msgstr "Сетка"
@@ -201,10 +201,10 @@ msgid "Shadow Cursor"
 msgstr "Тень-курсор"
 
 msgid "On"
-msgstr "Вкл"
+msgstr "Вкл."
 
 msgid "Off"
-msgstr "Выкл"
+msgstr "Выкл."
 
 msgid "The enemy has surrendered!"
 msgstr "Враг капитулировал!"
@@ -378,7 +378,7 @@ msgid "Ballista"
 msgstr "Баллиста"
 
 msgid "Auto combat"
-msgstr "Авто-Битва"
+msgstr "Автобитва"
 
 msgid "Customize system options."
 msgstr "Изменить настройки системы."
@@ -476,13 +476,13 @@ msgid "%{tower} does %{damage} damage."
 msgstr "Башня \"%{tower}\" наносит %{damage} урона."
 
 msgid "MirrorImage created"
-msgstr "Отражение создано"
+msgstr "Фантомный отряд создан"
 
 msgid "The mirror image is destroyed!"
-msgstr "Фантом уничтожен!"
+msgstr "Фантомный отряд уничтожен!"
 
 msgid "Break auto battle?"
-msgstr "Остановить Авто-Битву?"
+msgstr "Остановить автобитву?"
 
 msgid "No spells to cast."
 msgstr "Нет заклинаний."
@@ -958,7 +958,7 @@ msgstr ""
 "свои города, затем завоюйте варварские."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr "Верните замок Ivory Gates, который пал из-за предательства."
+msgstr "Верните замок Ворота Слоновой Кости, который пал из-за предательства."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
@@ -1064,7 +1064,7 @@ msgid "Breastplate"
 msgstr "Божественный Доспех"
 
 msgid "Fibzin Medal"
-msgstr "Медаль за Отвагу"
+msgstr "Символ неудачи"
 
 msgid "Mage's ring"
 msgstr "Кольцо Мага"
@@ -2142,7 +2142,7 @@ msgid "Exit this menu."
 msgstr "Выход из меню."
 
 msgid "off"
-msgstr "Выкл"
+msgstr "выкл."
 
 msgid "MIDI"
 msgstr "MIDI"
@@ -2175,7 +2175,7 @@ msgid "Show"
 msgstr "Показать"
 
 msgid "Auto Resolve"
-msgstr "Авто-Битва"
+msgstr "Автобитва"
 
 msgid "Auto, No Spells"
 msgstr "Авто без Магии"
