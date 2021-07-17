@@ -481,34 +481,34 @@ const Kingdom & World::GetKingdom( int color ) const
     return vec_kingdoms.GetKingdom( color );
 }
 
-Castle * World::GetCastle( const fheroes2::Point & center, const bool checkForCastleEntrance )
+Castle * World::GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance )
 {
     if ( checkForCastleEntrance ) {
-        if ( !Maps::isValidAbsPoint( center.x, center.y ) ) {
+        if ( !Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) ) {
             return nullptr;
         }
 
-        if ( GetTiles( center.x, center.y ).GetObject( false ) != MP2::OBJ_CASTLE ) {
+        if ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) != MP2::OBJ_CASTLE ) {
             return nullptr;
         }
     }
 
-    return vec_castles.Get( center );
+    return vec_castles.Get( tilePosition );
 }
 
-const Castle * World::GetCastle( const fheroes2::Point & center, const bool checkForCastleEntrance ) const
+const Castle * World::GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance ) const
 {
     if ( checkForCastleEntrance ) {
-        if ( !Maps::isValidAbsPoint( center.x, center.y ) ) {
+        if ( !Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) ) {
             return nullptr;
         }
 
-        if ( GetTiles( center.x, center.y ).GetObjectUID() != MP2::OBJ_CASTLE ) {
+        if ( GetTiles( tilePosition.x, tilePosition.y ).GetObjectUID() != MP2::OBJ_CASTLE ) {
             return nullptr;
         }
     }
 
-    return vec_castles.Get( center );
+    return vec_castles.Get( tilePosition );
 }
 
 Heroes * World::GetHeroes( int id )
