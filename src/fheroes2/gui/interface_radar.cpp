@@ -268,8 +268,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
-    const int areaw = ( offset.x ? rect.width - 2 * offset.x : rect.width );
-    const int areah = ( offset.y ? rect.height - 2 * offset.y : rect.height );
+    const int areaw = rect.width - 2 * offset.x;
+    const int areah = rect.height - 2 * offset.y;
 
     int stepx = worldWidth / rect.width;
     int stepy = worldHeight / rect.height;
