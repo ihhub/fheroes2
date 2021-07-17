@@ -37,6 +37,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <set>
 
 using namespace Battle;
 
@@ -481,9 +482,29 @@ namespace AI
             double highestStrength = 0;
 
             for ( const Unit * enemy : enemies ) {
-                const double attackPriority = enemy->GetScoreQuality( currentUnit );
+                double attackPriority = enemy->GetScoreQuality( currentUnit );
 
-                if ( highestStrength < attackPriority ) {
+                if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+                    // TODO: update logic to handle tail case as well. Right now archers always shoot to head.
+                    const Indexes around = Board::GetAroundIndexes( enemy->GetHeadIndex() );
+                    std::set<const Unit *> targetedUnits;
+
+                    for ( const int32_t cellId : around ) {
+                        const Unit * monsterOnCell = Board::GetCell( cellId )->GetUnit();
+                        if ( monsterOnCell != nullptr ) {
+                            targetedUnits.emplace( monsterOnCell );
+                        }
+                    }
+
+                    for ( const Unit * monster : targetedUnits ) {
+                        if ( enemy != monster ) {
+                            // No need to recalculate for the same monster.
+                            attackPriority += monster->GetScoreQuality( currentUnit );
+                        }
+                    }
+                }
+
+                if ( highestStrength < attackPriority && attackPriority > 0 ) {
                     highestStrength = attackPriority;
                     target.unit = enemy;
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );
