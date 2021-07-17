@@ -25,7 +25,8 @@
 
 namespace fheroes2
 {
-    // IMPORTANT!!! According to https://en.cppreference.com/w/cpp/chrono/high_resolution_clock we should never use high_resolution_clock for time internal measurements.
+    // IMPORTANT!!! According to https://en.cppreference.com/w/cpp/chrono/high_resolution_clock we should never use high_resolution_clock for time internal measurements
+    // because for high_resolution_clock the time may go backwards.
 
     class Time
     {
