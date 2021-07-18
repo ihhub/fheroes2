@@ -36,6 +36,7 @@ Source: "..\demo\demo_windows.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
+Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
 
 [Tasks]
 Name: desktopicon; Description: "Desktop shortcut"

@@ -18,8 +18,8 @@ fr.mo: fr.po
 ru.mo: ru.po
 	msgmerge -U --no-location $< fheroes2.pot
 	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	sed -i 's/UTF-8/CP1251/' $<.tmp
-	msgfmt $<.tmp -o $@
+	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
@@ -30,4 +30,4 @@ ru.mo: ru.po
 	msgfmt $<.2.tmp -o $@
 
 clean:
-	rm -f *.mo *.tmp
+	rm -f *.mo *.po~ *.tmp

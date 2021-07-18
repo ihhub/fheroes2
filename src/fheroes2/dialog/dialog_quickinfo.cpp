@@ -49,11 +49,11 @@ std::string GetMinesIncomeString( int type )
     std::string res;
 
     if ( value ) {
-        res.append( " " );
-        res.append( "(" );
-        res.append( value > 0 ? "+" : "-" );
+        res += ' ';
+        res += '(';
+        res += ( value > 0 ? '+' : '-' );
         res.append( std::to_string( value ) );
-        res.append( ")" );
+        res += ')';
     }
 
     return res;
@@ -133,7 +133,7 @@ std::string ShowArtifactInfo( const Maps::Tiles & tile, bool extendedScoutingOpt
     if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
         str.append( "\n(" );
         str.append( tile.QuantityArtifact().GetName() );
-        str.append( ")" );
+        str += ')';
     }
 
     return str;
@@ -161,14 +161,14 @@ std::string ShowResourceInfo( const Maps::Tiles & tile, bool extendedScoutingOpt
 
             str.append( ": " );
             str.append( Game::CountScoute( funds.gold, scoutingLevel ) );
-            str.append( "\n" );
+            str += '\n';
 
             const ResourceCount & rc = tile.QuantityResourceCount();
             str.append( Resource::String( rc.first ) );
 
             str.append( ": " );
             str.append( Game::CountScoute( rc.second, scoutingLevel ) );
-            str.append( ")" );
+            str += ')';
         }
     }
 
@@ -180,7 +180,7 @@ std::string ShowDwellingInfo( const Maps::Tiles & tile, bool owned, bool extende
     std::string str = MP2::StringObject( tile.GetObject() );
 
     if ( owned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
-        str.append( "\n" );
+        str += '\n';
         const Troop & troop = tile.QuantityTroop();
         if ( troop.isValid() ) {
             str.append( _( "(available: %{count})" ) );
@@ -222,11 +222,11 @@ std::string ShowShrineInfo( const Maps::Tiles & tile, const Heroes * hero, bool 
         const Spell & spell = tile.QuantitySpell();
         str.append( "\n(" );
         str.append( spell.GetName() );
-        str.append( ")" );
+        str += ')';
         if ( hero && hero->HaveSpell( spell ) ) {
             str.append( "\n(" );
             str.append( _( "already learned" ) );
-            str.append( ")" );
+            str += ')';
         }
     }
 
@@ -243,18 +243,18 @@ std::string ShowWitchHutInfo( const Maps::Tiles & tile, const Heroes * hero, boo
         const Skill::Secondary & skill = tile.QuantitySkill();
         str.append( "\n(" );
         str.append( Skill::Secondary::String( skill.Skill() ) );
-        str.append( ")" );
+        str += ')';
 
         if ( hero ) {
             if ( hero->HasSecondarySkill( skill.Skill() ) ) {
                 str.append( "\n(" );
                 str.append( _( "already knows this skill" ) );
-                str.append( ")" );
+                str += ')';
             }
             else if ( hero->HasMaxSecondarySkill() ) {
                 str.append( "\n(" );
                 str.append( _( "already has max skills" ) );
-                str.append( ")" );
+                str += ')';
             }
         }
     }
@@ -337,7 +337,7 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPena
     if ( showTerrainPenaltyOption && hero ) {
         const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
         if ( cost > 0 ) {
-            str.append( "\n" );
+            str += '\n';
             str.append( _( "penalty: %{cost}" ) );
             StringReplace( str, "%{cost}", cost );
         }
