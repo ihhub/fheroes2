@@ -525,7 +525,6 @@ u32 Heroes::GetMaxSpellPoints( void ) const
 u32 Heroes::GetMaxMovePoints( void ) const
 {
     int point = 0;
-    int acount = 0;
 
     // start point
     if ( isShipMaster() ) {
@@ -535,9 +534,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        acount = HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY );
-        if ( acount )
-            point += acount * 1000;
+        point += HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -576,22 +573,15 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        acount = HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY );
-        if ( acount )
-            point += acount * 600;
-
-        acount = HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY );
-        if ( acount )
-            point += acount * 300;
+        point += HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
+        point += HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
 
-    acount = HasArtifact( Artifact::TRUE_COMPASS_MOBILITY );
-    if ( acount )
-        point += acount * 500;
+    point += HasArtifact( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );

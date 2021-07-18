@@ -20,37 +20,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "direction.h"
 
 std::string Direction::String( int direct )
 {
     const char * str_direct[] = {"unknown", "center", "top", "top right", "right", "bottom right", "bottom", "bottom left", "left", "top left"};
-    std::ostringstream os;
+    std::string temp;
 
-    if ( direct & CENTER )
-        os << str_direct[1] << ",";
-    if ( direct & TOP )
-        os << str_direct[2] << ",";
-    if ( direct & TOP_RIGHT )
-        os << str_direct[3] << ",";
-    if ( direct & RIGHT )
-        os << str_direct[4] << ",";
-    if ( direct & BOTTOM_RIGHT )
-        os << str_direct[5] << ",";
-    if ( direct & BOTTOM )
-        os << str_direct[6] << ",";
-    if ( direct & BOTTOM_LEFT )
-        os << str_direct[7] << ",";
-    if ( direct & LEFT )
-        os << str_direct[8] << ",";
-    if ( direct & TOP_LEFT )
-        os << str_direct[9] << ",";
+    if ( direct & CENTER ) {
+        temp += str_direct[1];
+        temp += ',';
+    }
+    if ( direct & TOP ) {
+        temp += str_direct[2];
+        temp += ',';
+    }
+    if ( direct & TOP_RIGHT ) {
+        temp += str_direct[3];
+        temp += ',';
+    }
+    if ( direct & RIGHT ) {
+        temp += str_direct[4];
+        temp += ',';
+    }
+    if ( direct & BOTTOM_RIGHT ) {
+        temp += str_direct[5];
+        temp += ',';
+    }
+    if ( direct & BOTTOM ) {
+        temp += str_direct[6];
+        temp += ',';
+    }
+    if ( direct & BOTTOM_LEFT ) {
+        temp += str_direct[7];
+        temp += ',';
+    }
+    if ( direct & LEFT ) {
+        temp += str_direct[8];
+        temp += ',';
+    }
+    if ( direct & TOP_LEFT ) {
+        temp += str_direct[9];
+        temp += ',';
+    }
 
-    const std::string & res = os.str();
+    if ( !temp.empty() && temp.back() == ',' ) {
+        temp.pop_back();
+    }
 
-    return res.empty() ? str_direct[0] : res;
+    return temp.empty() ? str_direct[0] : temp;
 }
 
 bool Direction::isDiagonal( int direction )
