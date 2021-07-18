@@ -230,11 +230,12 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         fz >> MonsterStaticData::Get();
     }
 
-    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
+    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() ) {
+        std::string warningMessage( "This is a saved game is localized for '" );
         warningMessage.append( conf.loadedFileLanguage() );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
+        warningMessage.append( "' language while current language is '" );
+        warningMessage.append( conf.ForceLang() );
+        warningMessage += '\'' ;
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 
