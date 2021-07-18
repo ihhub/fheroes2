@@ -49,34 +49,47 @@ void CastleRedrawTownName( const Castle & castle, const fheroes2::Point & dst );
 
 namespace
 {
-    building_t getPressedBuildingHotkey()
+    auto getPressedBuildingHotkey() -> building_t
     {
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_1 ) )
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_1 ) ) {
             return DWELLING_MONSTER1;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_2 ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_2 ) ) {
             return DWELLING_MONSTER2;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_3 ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_3 ) ) {
             return DWELLING_MONSTER3;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_4 ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_4 ) ) {
             return DWELLING_MONSTER4;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_5 ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_5 ) ) {
             return DWELLING_MONSTER5;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_6 ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_6 ) ) {
             return DWELLING_MONSTER6;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
             return BUILD_MARKETPLACE;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
             return BUILD_WELL;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
             return BUILD_MAGEGUILD;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
             return BUILD_SHIPYARD;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
             return BUILD_THIEVESGUILD;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
             return BUILD_TAVERN;
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) )
+        }
+        else if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
             return BUILD_CASTLE;
+        }
 
         return BUILD_NOTHING;
     }
@@ -578,8 +591,9 @@ int Castle::OpenDialog( bool readonly )
                             // animate fade in for hero army bar
                             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
                             const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
-                            if ( !port.empty() )
+                            if ( !port.empty() ) {
                                 fheroes2::Blit( port, surfaceHero, 5, 5 );
+                            }
 
                             const fheroes2::Point savept = selectArmy2.GetPos();
                             selectArmy2.SetPos( 112, 5 );
