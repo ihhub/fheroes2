@@ -69,7 +69,7 @@ public:
     void ActionAfterBattle() override;
 
     void PortraitRedraw( s32 px_, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
-    fheroes2::Sprite GetPortrait( const PortraitType type ) const;
+    fheroes2::Sprite GetPortrait( const PortraitType type_ ) const;
 
 private:
     int GetManaIndexSprite() const;

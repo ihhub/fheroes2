@@ -179,7 +179,7 @@ const Castle * Captain::inCastle( void ) const
     return &home;
 }
 
-fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
+fheroes2::Sprite Captain::GetPortrait( const PortraitType _type ) const
 {
     switch ( type ) {
     case PORT_BIG: {
