@@ -348,7 +348,6 @@ void ShowWarningLostTownsDialog()
     }
 }
 
-/* return changee cursor */
 int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
@@ -1150,7 +1149,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
             break;
 
-        Castle * to_castle = world.GetCastle( tile.GetCenter(), true );
+        Castle * to_castle = world.GetCastle( tile.GetCenter(), false );
         if ( to_castle == nullptr )
             break;
 

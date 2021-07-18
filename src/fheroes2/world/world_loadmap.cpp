@@ -430,7 +430,7 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ), true );
+                    Castle * castle = GetCastle( Maps::GetPoint( findobject ), false );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
