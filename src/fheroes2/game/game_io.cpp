@@ -235,7 +235,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         warningMessage.append( conf.loadedFileLanguage() );
         warningMessage.append( "' language while current language is '" );
         warningMessage.append( conf.ForceLang() );
-        warningMessage += '\'' ;
+        warningMessage += '\'';
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 
