@@ -307,15 +307,25 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( hero->GetDirection() == Direction::BOTTOM_RIGHT ) {
             const Maps::Tiles & tileNeighborHero = world.GetTiles( Maps::GetDirectionIndex( tileMovingHero->GetIndex(), Direction::RIGHT ) );
             if ( tileNeighborHero.GetHeroes() != nullptr || tileNeighborHero.GetObject() == MP2::OBJ_BOAT ) {
-                const auto it = std::find( drawList.begin(), drawList.end(), tileMovingHero );
-                std::iter_swap( it, it + 1 );
+                const auto currentHeroTile = std::find( drawList.begin(), drawList.end(), tileMovingHero );
+                assert( currentHeroTile != drawList.end() );
+                const auto nextHeroTile = currentHeroTile + 1;
+                if ( nextHeroTile != drawList.end() && ( ( *nextHeroTile )->GetIndex() == ( *currentHeroTile )->GetIndex() + 1 )
+                     && ( ( *nextHeroTile )->GetObject() == MP2::OBJ_HEROES || ( *nextHeroTile )->GetObject() == MP2::OBJ_BOAT ) ) {
+                    std::iter_swap( currentHeroTile, nextHeroTile );
+                }
             }
         }
         else {
             const Maps::Tiles & tileNeighborHero = world.GetTiles( Maps::GetDirectionIndex( tileMovingHero->GetIndex(), Direction::LEFT ) );
             if ( tileNeighborHero.GetHeroes() != nullptr || tileNeighborHero.GetObject() == MP2::OBJ_BOAT ) {
-                const auto it = std::find( drawList.begin(), drawList.end(), tileMovingHero );
-                std::iter_swap( it, it - 1 );
+                const auto currentHeroTile = std::find( drawList.begin(), drawList.end(), tileMovingHero );
+                assert( currentHeroTile != drawList.end() );
+                const auto prevHeroTile = currentHeroTile - 1;
+                if ( prevHeroTile != drawList.begin() && ( ( *prevHeroTile )->GetIndex() == ( *currentHeroTile )->GetIndex() - 1 )
+                     && ( ( *prevHeroTile )->GetObject() == MP2::OBJ_HEROES || ( *prevHeroTile )->GetObject() == MP2::OBJ_BOAT ) ) {
+                    std::iter_swap( currentHeroTile, prevHeroTile );
+                }
             }
         }
     }
