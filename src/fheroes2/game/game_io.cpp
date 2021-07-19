@@ -231,11 +231,11 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     }
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() ) {
-        std::string warningMessage( "This is a saved game is localized for '" );
+        std::string warningMessage( "This saved game is localized to '" );
         warningMessage.append( conf.loadedFileLanguage() );
-        warningMessage.append( "' language while current language is '" );
+        warningMessage.append( "' language, but the current language of the game is '" );
         warningMessage.append( conf.ForceLang() );
-        warningMessage += '\'';
+        warningMessage += "'.";
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 

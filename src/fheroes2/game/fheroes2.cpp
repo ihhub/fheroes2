@@ -120,7 +120,7 @@ namespace
             System::SetLocale( LC_ALL, "" );
             System::SetLocale( LC_NUMERIC, "C" );
 
-            const std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
+            const std::string mofile = std::string( conf.ForceLang() ).append( ".mo" );
 
             const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
