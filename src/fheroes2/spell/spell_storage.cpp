@@ -29,57 +29,66 @@
 
 SpellStorage::SpellStorage()
 {
-    reserve( 67 );
+    spells.reserve( 67 );
 }
 
-SpellStorage SpellStorage::GetSpells( int lvl ) const
+SpellStorage::const_iterator SpellStorage::begin() const
 {
-    SpellStorage result;
-    result.reserve( 20 );
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( lvl == -1 || ( *it ).isLevel( lvl ) )
-            result.push_back( *it );
-    return result;
+    return spells.begin();
 }
 
-void SpellStorage::Append( const Spell & sp )
+SpellStorage::const_iterator SpellStorage::end() const
 {
-    if ( sp != Spell::NONE && end() == std::find( begin(), end(), sp ) )
-        push_back( sp );
+    return spells.end();
 }
 
-void SpellStorage::Append( const SpellStorage & st )
+int SpellStorage::Size() const
 {
-    for ( const Spell & sp : st ) {
-        if ( std::find( begin(), end(), sp ) == end() ) {
-            push_back( sp );
-        }
-    }
+    return static_cast<int>( spells.size() );
 }
 
-bool SpellStorage::isPresentSpell( const Spell & spell ) const
+bool SpellStorage::HasSpell( const Spell & spell ) const
 {
-    return end() != std::find( begin(), end(), spell );
+    return std::find( spells.begin(), spells.end(), spell ) != spells.end();
 }
 
-bool SpellStorage::hasAdventureSpell( const int lvl ) const
+bool SpellStorage::HasAdventureSpellAtLevel( const int spellLevel ) const
 {
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it ).Level() == lvl && ( *it ).isAdventure() )
+    for ( auto it : spells ) {
+        if ( it.isLevel( spellLevel ) && it.isAdventure() )
             return true;
     }
 
     return false;
 }
 
-std::string SpellStorage::String( void ) const
+std::vector<Spell> SpellStorage::GetSpells( const int spellLevel ) const
 {
-    std::ostringstream os;
+    if ( spellLevel == -1 ) {
+        return spells;
+    }
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << ( *it ).GetName() << ", ";
+    std::vector<Spell> result;
+    result.reserve( 20 );
+    for ( auto it : spells )
+        if ( it.isLevel( spellLevel ) )
+            result.push_back( it );
+    return result;
+}
 
-    return os.str();
+void SpellStorage::Append( const SpellStorage & spellStorage )
+{
+    for ( const Spell & spell : spellStorage.spells ) {
+        if ( std::find( spells.begin(), spells.end(), spell ) == spells.end() ) {
+            spells.push_back( spell );
+        }
+    }
+}
+
+void SpellStorage::Append( const Spell & spell )
+{
+    if ( spell != Spell::NONE && spells.end() == std::find( spells.begin(), spells.end(), spell ) )
+        spells.push_back( spell );
 }
 
 void SpellStorage::Append( const BagArtifacts & bag )
@@ -88,11 +97,11 @@ void SpellStorage::Append( const BagArtifacts & bag )
         Append( *it );
 }
 
-void SpellStorage::Append( const Artifact & art )
+void SpellStorage::Append( const Artifact & artifact )
 {
-    switch ( art.GetID() ) {
+    switch ( artifact.GetID() ) {
     case Artifact::SPELL_SCROLL:
-        Append( Spell( art.GetSpell() ) );
+        Append( Spell( artifact.GetSpell() ) );
         break;
 
     case Artifact::CRYSTAL_BALL:
@@ -109,4 +118,24 @@ void SpellStorage::Append( const Artifact & art )
     default:
         break;
     }
+}
+
+std::string SpellStorage::String( void ) const
+{
+    std::ostringstream os;
+
+    for ( auto it : spells )
+        os << it.GetName() << ", ";
+
+    return os.str();
+}
+
+StreamBase & operator<<( StreamBase & msg, const SpellStorage & spellStorage )
+{
+    return msg << spellStorage.spells;
+}
+
+StreamBase & operator>>( StreamBase & msg, SpellStorage & spellStorage )
+{
+    return msg >> spellStorage.spells;
 }

@@ -31,19 +31,38 @@
 class Artifact;
 class BagArtifacts;
 
-class SpellStorage : public std::vector<Spell>
+class SpellStorage
 {
 public:
     SpellStorage();
 
-    SpellStorage GetSpells( int lvl = -1 ) const;
-    void Append( const SpellStorage & );
-    void Append( const Spell & );
-    void Append( const BagArtifacts & );
-    void Append( const Artifact & );
-    bool isPresentSpell( const Spell & ) const;
-    bool hasAdventureSpell( const int lvl ) const;
+    // used to allow iteration over this object
+    typedef std::vector<Spell>::const_iterator const_iterator;
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    int Size() const;
+
+    bool HasSpell( const Spell & spell ) const;
+    bool HasAdventureSpellAtLevel( const int spellLevel ) const;
+    std::vector<Spell> GetSpells( const int spellLevel = -1 ) const;
+
+    void Append( const SpellStorage & spellStorage );
+    void Append( const Spell & spell );
+    void Append( const BagArtifacts & artifacts );
+    void Append( const Artifact & artifact );
+
     std::string String( void ) const;
+
+protected:
+    std::vector<Spell> spells;
+
+private:
+    friend StreamBase & operator<<( StreamBase &, const SpellStorage & );
+    friend StreamBase & operator>>( StreamBase &, SpellStorage & );
 };
+
+StreamBase & operator<<( StreamBase &, const SpellStorage & );
+StreamBase & operator>>( StreamBase &, SpellStorage & );
 
 #endif

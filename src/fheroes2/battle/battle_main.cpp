@@ -264,17 +264,15 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
 
 void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local )
 {
-    if ( spells.empty() || !hero.HaveSpellBook() )
+    if ( !hero.HaveSpellBook() )
         return;
 
-    SpellStorage new_spells;
-    new_spells.reserve( 10 );
+    std::vector<Spell> new_spells;
 
     const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
 
     // filter spells
-    for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it ) {
-        const Spell & sp = *it;
+    for ( auto sp : spells ) {
         if ( !hero.HaveSpell( sp ) ) {
             switch ( eagleeye.Level() ) {
             case Skill::Level::BASIC:

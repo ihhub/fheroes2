@@ -168,7 +168,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , end_turn( false )
 {
     const Settings & conf = Settings::Get();
-    usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;

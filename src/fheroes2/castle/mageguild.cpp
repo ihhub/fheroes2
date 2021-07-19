@@ -32,8 +32,8 @@ Spell GetGuaranteedNonDamageSpellForMageGuild();
 
 void MageGuild::initialize( int race, bool libraryCap )
 {
-    general.clear();
-    library.clear();
+    general = SpellStorage();
+    library = SpellStorage();
 
     int spellCountByLevel[] = {3, 3, 2, 2, 1};
 
@@ -76,22 +76,27 @@ void MageGuild::initialize( int race, bool libraryCap )
     }
 }
 
-SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLevel ) const
+std::vector<Spell> MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLevel ) const
 {
-    SpellStorage result;
+    std::vector<Spell> result;
 
     if ( spellLevel == -1 ) {
         // get all available spells
         for ( int level = 1; level <= guildLevel; ++level ) {
-            result.Append( general.GetSpells( level ) );
-            if ( hasLibrary )
-                result.Append( library.GetSpells( level ) );
+            auto spells = general.GetSpells( level );
+            result.insert( result.end(), spells.begin(), spells.end() );
+            if ( hasLibrary ) {
+                spells = library.GetSpells( level );
+                result.insert( result.end(), spells.begin(), spells.end() );
+            }
         }
     }
     else if ( spellLevel <= guildLevel ) {
         result = general.GetSpells( spellLevel );
-        if ( hasLibrary )
-            result.Append( library.GetSpells( spellLevel ) );
+        if ( hasLibrary ) {
+            auto spells = library.GetSpells( spellLevel );
+            result.insert( result.end(), spells.begin(), spells.end() );
+        }
     }
 
     return result;
@@ -107,7 +112,7 @@ void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) 
 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
 {
-    const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
+    const bool hasAdventureSpell = spells.HasAdventureSpellAtLevel( lvl );
     const bool lookForAdv = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
 
     std::vector<Spell> v;
@@ -116,7 +121,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
     for ( int sp = Spell::NONE; sp < Spell::STONE; ++sp ) {
         const Spell spell( sp );
 
-        if ( spells.isPresentSpell( spell ) )
+        if ( spells.HasSpell( spell ) )
             continue;
 
         if ( !spell.isRaceCompatible( race ) )

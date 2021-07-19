@@ -231,7 +231,7 @@ std::vector<Spell> HeroBase::GetSpells( int lvl ) const
 
 bool HeroBase::HaveSpell( const Spell & spell, bool skip_bag ) const
 {
-    return HaveSpellBook() && ( spell_book.isPresentSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );
+    return HaveSpellBook() && ( spell_book.HasSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );
 }
 
 void HeroBase::AppendSpellToBook( const Spell & spell, bool without_wisdom )
@@ -240,7 +240,7 @@ void HeroBase::AppendSpellToBook( const Spell & spell, bool without_wisdom )
         spell_book.Append( spell );
 }
 
-void HeroBase::AppendSpellsToBook( const SpellStorage & spells, bool without_wisdom )
+void HeroBase::AppendSpellsToBook( const std::vector<Spell> & spells, bool without_wisdom )
 {
     for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it )
         AppendSpellToBook( *it, without_wisdom );

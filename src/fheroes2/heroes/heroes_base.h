@@ -112,8 +112,8 @@ public:
     Spell OpenSpellBook( const SpellBook::Filter filter, bool canSelect, std::function<void( const std::string & )> * statusCallback ) const;
     bool HaveSpellBook( void ) const;
     bool HaveSpell( const Spell &, bool skip_bag = false ) const;
-    void AppendSpellToBook( const Spell &, bool without_wisdom = false );
-    void AppendSpellsToBook( const SpellStorage &, bool without_wisdom = false );
+    void AppendSpellToBook( const Spell & spell, bool without_wisdom = false );
+    void AppendSpellsToBook( const std::vector<Spell> & spells, bool without_wisdom = false );
     bool SpellBookActivate( void );
 
     BagArtifacts & GetBagArtifacts( void );
