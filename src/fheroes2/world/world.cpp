@@ -1120,7 +1120,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
-        const Castle * town = GetCastle( conf.WinsMapsPositionObject(), false );
+        const Castle * town = GetCastle( conf.WinsMapsPositionObject(), true );
         // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
@@ -1178,7 +1178,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
         return kingdom.isLoss();
 
     case GameOver::LOSS_TOWN: {
-        const Castle * town = GetCastle( conf.LossMapsPositionObject(), false );
+        const Castle * town = GetCastle( conf.LossMapsPositionObject(), true );
         return ( town && town->GetColor() != kingdom.GetColor() );
     }
 
