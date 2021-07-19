@@ -61,11 +61,11 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     fheroes2::Rect pos = box.GetArea();
 
-    if ( header.size() )
+    if ( !header.empty() )
         box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 

@@ -188,14 +188,14 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         return false;
     }
     else if ( spell == Spell::NONE || spell.isCombat() || !CanCastSpell( spell, &error ) ) {
-        if ( error.size() )
+        if ( !error.empty() )
             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
         return false;
     }
 
     bool apply = false;
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::VIEWMINES:
         apply = ActionSpellViewMines( *this );
         break;
@@ -233,17 +233,9 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellVisions( *this );
         break;
     case Spell::HAUNT:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETEGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETAGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETFGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETWGUARDIAN:
         apply = ActionSpellSetGuardian( *this, spell );
         break;
@@ -629,7 +621,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
     const u32 count = hero.GetPower() * spell.ExtraValue();
 
     if ( count ) {
-        tile.SetQuantity3( spell() );
+        tile.SetQuantity3( spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );

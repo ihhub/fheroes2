@@ -73,9 +73,9 @@ namespace
         size_t toIdx = 0;
 
         for ( size_t fromIdx = 0; fromIdx < bagFrom.size(); ++fromIdx ) {
-            if ( bagFrom[fromIdx]() != Artifact::UNKNOWN && bagFrom[fromIdx]() != Artifact::MAGIC_BOOK ) {
+            if ( bagFrom[fromIdx].GetID() != Artifact::UNKNOWN && bagFrom[fromIdx].GetID() != Artifact::MAGIC_BOOK ) {
                 while ( toIdx < bagTo.size() ) {
-                    if ( bagTo[toIdx]() == Artifact::UNKNOWN )
+                    if ( bagTo[toIdx].GetID() == Artifact::UNKNOWN )
                         break;
 
                     ++toIdx;
@@ -643,23 +643,23 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     SpellStorage learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
 
     // remove_if for learn spells
-    if ( learn.size() ) {
+    if ( !learn.empty() ) {
         SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
-    if ( learn.size() ) {
+    if ( !learn.empty() ) {
         SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     // remove_if for teach spells
-    if ( teach.size() ) {
+    if ( !teach.empty() ) {
         SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 
-    if ( teach.size() ) {
+    if ( !teach.empty() ) {
         SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
@@ -669,7 +669,7 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     // learning
     for ( SpellStorage::const_iterator it = learn.begin(); it != learn.end(); ++it ) {
         teacher->AppendSpellToBook( *it );
-        if ( spells1.size() )
+        if ( !spells1.empty() )
             spells1.append( it + 1 == learn.end() ? _( " and " ) : ", " );
         spells1.append( ( *it ).GetName() );
     }
@@ -677,20 +677,20 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     // teacher
     for ( SpellStorage::const_iterator it = teach.begin(); it != teach.end(); ++it ) {
         learner->AppendSpellToBook( *it );
-        if ( spells2.size() )
+        if ( !spells2.empty() )
             spells2.append( it + 1 == teach.end() ? _( " and " ) : ", " );
         spells2.append( ( *it ).GetName() );
     }
 
     if ( teacher->isControlHuman() || learner->isControlHuman() ) {
-        if ( spells1.size() && spells2.size() )
+        if ( !spells1.empty() && !spells2.empty() )
             message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns %{spells1} from %{learner}, and teaches %{spells2} to %{learner}." );
-        else if ( spells1.size() )
+        else if ( !spells1.empty() )
             message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns %{spells1} from %{learner}." );
-        else if ( spells2.size() )
+        else if ( !spells2.empty() )
             message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches %{spells2} to %{learner}." );
 
-        if ( message.size() ) {
+        if ( !message.empty() ) {
             StringReplace( message, "%{teacher}", teacher->GetName() );
             StringReplace( message, "%{learner}", learner->GetName() );
             StringReplace( message, "%{level}", Skill::Level::String( scholar ) );

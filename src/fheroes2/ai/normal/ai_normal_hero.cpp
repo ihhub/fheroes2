@@ -258,13 +258,13 @@ namespace
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         case MP2::OBJ_PEASANTHUT: {
             // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
         }
 
         // recruit army
@@ -280,7 +280,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
         }
 
         // recruit army (battle)
@@ -294,7 +294,7 @@ namespace
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t & paymentCosts = troop.GetCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
             }
         }
 
@@ -303,7 +303,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         // upgrade army
@@ -830,7 +830,7 @@ namespace AI
                 }
             }
             hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
-            if ( !hero->MayStillMove() ) {
+            if ( !hero->MayStillMove( false ) ) {
                 hero->SetModes( Heroes::MOVED );
             }
             else {
@@ -929,7 +929,7 @@ namespace AI
             }
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
-                if ( !availableHeroes[i].hero->MayStillMove() ) {
+                if ( !availableHeroes[i].hero->MayStillMove( false ) ) {
                     availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
@@ -944,7 +944,7 @@ namespace AI
         const bool allHeroesMoved = availableHeroes.empty();
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
-            if ( !heroInfo.hero->MayStillMove() ) {
+            if ( !heroInfo.hero->MayStillMove( false ) ) {
                 heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }

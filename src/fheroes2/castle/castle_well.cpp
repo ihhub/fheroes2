@@ -147,7 +147,7 @@ void Castle::OpenWell( void )
                     str.append( ms.GetPluralName( canRecruit ) );
                     str.append( " - " );
                     str.append( std::to_string( canRecruit ) );
-                    str.append( "\n" );
+                    str += '\n';
                 }
             }
 

@@ -92,7 +92,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    u32 operator()( void ) const
+    uint32_t getCur( void ) const
     {
         return vcur;
     }
@@ -203,7 +203,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
         result = btnGroups.processEvents();
     }
 
-    cur = result == Dialog::OK ? sel() : 0;
+    cur = result == Dialog::OK ? sel.getCur() : 0;
 
     return result == Dialog::OK;
 }
@@ -217,7 +217,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    if ( res.size() )
+    if ( !res.empty() )
         res.clear();
     res.reserve( 48 );
     size_t charInsertPos = 0;
@@ -356,7 +356,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             ++spriteIconIdx;
 
             const int spriteWidth = sprites[i].width();
-            const int offset = spriteWidth * ( i - freeSlots / 2 ) + spriteWidth / 2;
+            const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
             vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
         }
 
@@ -453,7 +453,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     int result = 0;
 
     if ( bres == Dialog::OK ) {
-        redistributeCount = sel();
+        redistributeCount = sel.getCur();
 
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );

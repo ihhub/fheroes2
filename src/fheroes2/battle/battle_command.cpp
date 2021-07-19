@@ -36,7 +36,7 @@ Battle::Command & Battle::Command::operator<<( const int val )
 
 Battle::Command & Battle::Command::operator>>( int & val )
 {
-    if ( size() ) {
+    if ( !empty() ) {
         val = back();
         pop_back();
     }

@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <set>
 
 #include "agg_image.h"
 #include "army.h"
@@ -218,7 +217,7 @@ void Troops::PushBack( const Monster & mons, u32 count )
 
 void Troops::PopBack( void )
 {
-    if ( size() ) {
+    if ( !empty() ) {
         delete back();
         pop_back();
     }
@@ -342,7 +341,7 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
 
 bool Troops::JoinTroop( const Troop & troop )
 {
-    return troop.isValid() ? JoinTroop( troop(), troop.GetCount() ) : false;
+    return troop.isValid() ? JoinTroop( troop.GetMonster(), troop.GetCount() ) : false;
 }
 
 bool Troops::CanJoinTroops( const Troops & troops2 ) const
@@ -639,14 +638,14 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
         // 2. Fill empty slots with best troops (if there are any)
         uint32_t count = GetCount();
-        while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
+        while ( count < ARMYMAXTROOPS && !rightPriority.empty() ) {
             JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
             ++count;
         }
 
         // 3. Swap weakest and strongest unit until there's no left
-        while ( rightPriority.size() ) {
+        while ( !rightPriority.empty() ) {
             Troop * weakest = GetWeakestTroop();
 
             if ( !weakest || Army::StrongestTroop( weakest, rightPriority.back() ) ) {
@@ -659,7 +658,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         }
 
         // 4. The rest goes back to second army
-        while ( rightPriority.size() ) {
+        while ( !rightPriority.empty() ) {
             troops2.JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
         }
@@ -928,9 +927,9 @@ void Army::setFromTile( const Maps::Tiles & tile )
                 if ( 3 > troop.GetCount() )
                     at( 0 )->Set( co.GetTroop() );
                 else {
-                    at( 0 )->Set( troop(), troop.GetCount() / 3 );
-                    at( 4 )->Set( troop(), troop.GetCount() / 3 );
-                    at( 2 )->Set( troop(), troop.GetCount() - at( 4 )->GetCount() - at( 0 )->GetCount() );
+                    at( 0 )->Set( troop.GetMonster(), troop.GetCount() / 3 );
+                    at( 4 )->Set( troop.GetMonster(), troop.GetCount() / 3 );
+                    at( 2 )->Set( troop.GetMonster(), troop.GetCount() - at( 4 )->GetCount() - at( 0 )->GetCount() );
                 }
                 break;
 
@@ -938,11 +937,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
                 if ( 5 > troop.GetCount() )
                     at( 0 )->Set( co.GetTroop() );
                 else {
-                    at( 0 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 1 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 3 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 4 )->Set( troop(), troop.GetCount() / 5 );
-                    at( 2 )->Set( troop(), troop.GetCount() - at( 0 )->GetCount() - at( 1 )->GetCount() - at( 3 )->GetCount() - at( 4 )->GetCount() );
+                    at( 0 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 1 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 3 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 4 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
+                    at( 2 )->Set( troop.GetMonster(), troop.GetCount() - at( 0 )->GetCount() - at( 1 )->GetCount() - at( 3 )->GetCount() - at( 4 )->GetCount() );
                 }
                 break;
 
@@ -1095,7 +1094,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
                     std::string str = _( "All %{race} troops +1" );
                     StringReplace( str, "%{race}", Race::String( r ) );
                     strs->append( str );
-                    strs->append( "\n" );
+                    *strs += '\n';
                 }
             }
         }
@@ -1107,21 +1106,21 @@ int Army::GetMoraleModificator( std::string * strs ) const
         result -= 1;
         if ( strs ) {
             strs->append( _( "Troops of 3 alignments -1" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
         break;
     case 4:
         result -= 2;
         if ( strs ) {
             strs->append( _( "Troops of 4 alignments -2" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
         break;
     default:
         result -= 3;
         if ( strs ) {
             strs->append( _( "Troops of 5 alignments -3" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
         break;
     }
@@ -1133,7 +1132,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in groups -1" ) );
-            strs->append( "\n" );
+            *strs += '\n';
         }
     }
 

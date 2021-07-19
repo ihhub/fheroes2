@@ -312,7 +312,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     }
 }
 
-u32 BuildingInfo::operator()( void ) const
+uint32_t BuildingInfo::getBuilding( void ) const
 {
     return building;
 }
@@ -501,7 +501,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         }
 
     // replace end sep
-    if ( str.size() )
+    if ( !str.empty() )
         str.replace( str.size() - sep.size(), sep.size(), "" );
 
     const bool isRequired = !str.empty();

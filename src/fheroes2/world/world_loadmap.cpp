@@ -45,6 +45,29 @@
 namespace
 {
     const int32_t ultimateArtifactOffset = 9;
+
+    Artifact getUltimateArtifact()
+    {
+        if ( Settings::Get().isCampaignGameType() ) {
+            const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+            const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+            const int scenarioId = campaignData.getCurrentScenarioID();
+            assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+            if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+                const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+                if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
+                    return Artifact::ULTIMATE_CROWN;
+                }
+                else if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION ) {
+                    return Artifact::SPHERE_NEGATION;
+                }
+            }
+        }
+
+        return Artifact::Rand( Artifact::ART_ULTIMATE );
+    }
 }
 
 namespace GameStatic
@@ -389,7 +412,6 @@ bool World::LoadMapMP2( const std::string & filename )
                     Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -412,7 +434,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
+                        Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -685,33 +707,16 @@ void World::ProcessNewMap()
         }
 
         if ( !pools.empty() ) {
-            Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
-            if ( Settings::Get().isCampaignGameType() ) {
-                const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
-
-                const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-                const int scenarioId = campaignData.getCurrentScenarioID();
-                assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
-
-                if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-                    const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-                    if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
-                        ultimate = Artifact::ULTIMATE_CROWN;
-                    }
-                }
-            }
-
             const int32_t pos = Rand::Get( pools );
-            ultimate_artifact.Set( pos, ultimate );
+            ultimate_artifact.Set( pos, getUltimateArtifact() );
             ultimate_pos = Maps::GetPoint( pos );
         }
     }
     else {
         // remove ultimate artifact sprite
-        const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
         it->setAsEmpty();
-        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
+        ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
         ultimate_pos = ( *it ).GetCenter();
     }
 

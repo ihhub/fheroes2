@@ -2090,12 +2090,12 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
             StringReplace( statusMsg, "%{monster}", b_stats->GetName() );
-            return GetCursorFromSpell( spell() );
+            return GetCursorFromSpell( spell.GetID() );
         }
         else if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
             statusMsg = _( "Cast %{spell}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
-            return GetCursorFromSpell( spell() );
+            return GetCursorFromSpell( spell.GetID() );
         }
     }
 
@@ -2431,7 +2431,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
                 humanturn_exit = true;
             }
             else {
-                a.push_back( Command( MSG_BATTLE_CAST, humanturn_spell(), index_pos ) );
+                a.push_back( Command( MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos ) );
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
@@ -2558,11 +2558,29 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
-    if ( _currentUnit )
+    if ( _currentUnit ) {
+        auto fixupTargetIndex = []( const Unit * unit, const int32_t dst ) {
+            if ( unit->isWide() ) {
+                Position pos = Position::GetCorrect( *unit, dst );
+
+                // destination cell is on the border of the cell space available to the unit
+                // and it should be the tail cell of the unit, return the head cell instead
+                if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
+                    int headDirection = unit->isReflect() ? LEFT : RIGHT;
+
+                    if ( Board::isValidDirection( dst, headDirection ) ) {
+                        return Board::GetIndexDirection( dst, headDirection );
+                    }
+                }
+            }
+
+            return dst;
+        };
+
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), index ) );
+            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupTargetIndex( _currentUnit, index ) ) );
             a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
@@ -2580,7 +2598,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
                 const s32 move = Board::GetIndexDirection( index, dir );
 
                 if ( _currentUnit->GetHeadIndex() != move )
-                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );
+                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupTargetIndex( _currentUnit, move ) ) );
                 a.push_back( Command( MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                 humanturn_exit = true;
@@ -2611,6 +2629,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         default:
             break;
         }
+    }
 }
 
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
@@ -2828,7 +2847,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
     const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
-    if ( !isMirror && targets.size() ) {
+    if ( !isMirror && !targets.empty() ) {
         std::string msg = _( "%{attacker} do %{damage} damage." );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
@@ -2974,7 +2993,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // Fade away animation for destroyed mirror images
-    if ( mirrorImages.size() )
+    if ( !mirrorImages.empty() )
         RedrawActionRemoveMirrorImage( mirrorImages );
 }
 
@@ -3179,7 +3198,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
 
 void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
-    Unit * target = targets.size() ? targets.front().defender : nullptr;
+    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     std::string msg;
 
@@ -3191,7 +3210,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
         msg = _( "%{name} casts %{spell}." );
     }
 
-    if ( msg.size() ) {
+    if ( !msg.empty() ) {
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
 
@@ -3202,7 +3221,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
 void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
 {
-    Unit * target = targets.size() ? targets.front().defender : nullptr;
+    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     // set spell cast animation
     if ( caster ) {
@@ -3214,40 +3233,40 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     }
 
     // without object
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::FIREBALL:
-        RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBALL, M82::FromSpell( spell() ) );
+        RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBALL, M82::FromSpell( spell.GetID() ) );
         break;
     case Spell::FIREBLAST:
-        RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBAL2, M82::FromSpell( spell() ) );
+        RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBAL2, M82::FromSpell( spell.GetID() ) );
         break;
     case Spell::METEORSHOWER:
-        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ), 1 );
+        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell.GetID() ), 1 );
         break;
     case Spell::COLDRING:
         RedrawActionColdRingSpell( dst, targets );
         break;
 
     case Spell::MASSSHIELD:
-        RedrawTargetsWithFrameAnimation( targets, ICN::SHIELD, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::SHIELD, M82::FromSpell( spell.GetID() ), false );
         break;
     case Spell::MASSCURE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC01, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC01, M82::FromSpell( spell.GetID() ), false );
         break;
     case Spell::MASSHASTE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::HASTE, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::HASTE, M82::FromSpell( spell.GetID() ), false );
         break;
     case Spell::MASSSLOW:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC02, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC02, M82::FromSpell( spell.GetID() ), false );
         break;
     case Spell::MASSBLESS:
-        RedrawTargetsWithFrameAnimation( targets, ICN::BLESS, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::BLESS, M82::FromSpell( spell.GetID() ), false );
         break;
     case Spell::MASSCURSE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::CURSE, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::CURSE, M82::FromSpell( spell.GetID() ), false );
         break;
     case Spell::MASSDISPEL:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC07, M82::FromSpell( spell() ), false );
+        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC07, M82::FromSpell( spell.GetID() ), false );
         break;
 
     case Spell::DEATHRIPPLE:
@@ -3280,52 +3299,52 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         if ( spell.isResurrect() )
             RedrawActionResurrectSpell( *target, spell );
         else
-            switch ( spell() ) {
+            switch ( spell.GetID() ) {
             // simple spell animation
             case Spell::BLESS:
-                RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::BLIND:
-                RedrawTroopWithFrameAnimation( *target, ICN::BLIND, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::BLIND, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::CURE:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC01, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC01, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::SLOW:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC02, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC02, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::SHIELD:
-                RedrawTroopWithFrameAnimation( *target, ICN::SHIELD, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::SHIELD, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::HASTE:
-                RedrawTroopWithFrameAnimation( *target, ICN::HASTE, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::HASTE, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::CURSE:
-                RedrawTroopWithFrameAnimation( *target, ICN::CURSE, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::CURSE, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::ANTIMAGIC:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC06, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC06, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::DISPEL:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC07, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC07, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::STONESKIN:
-                RedrawTroopWithFrameAnimation( *target, ICN::STONSKIN, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::STONSKIN, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::STEELSKIN:
-                RedrawTroopWithFrameAnimation( *target, ICN::STELSKIN, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::STELSKIN, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::PARALYZE:
-                RedrawTroopWithFrameAnimation( *target, ICN::PARALYZE, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::PARALYZE, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::HYPNOTIZE:
-                RedrawTroopWithFrameAnimation( *target, ICN::HYPNOTIZ, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::HYPNOTIZ, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::DRAGONSLAYER:
-                RedrawTroopWithFrameAnimation( *target, ICN::DRAGSLAY, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::DRAGSLAY, M82::FromSpell( spell.GetID() ), NONE );
                 break;
             case Spell::BERSERKER:
-                RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell() ), NONE );
+                RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell.GetID() ), NONE );
                 break;
 
             // uniq spell animation
@@ -4082,7 +4101,7 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
         }
     }
 
-    AGG::PlaySound( M82::FromSpell( spell() ) );
+    AGG::PlaySound( M82::FromSpell( spell.GetID() ) );
 
     RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, target.GetHitPoints() == 0 ? RESURRECT : NONE );
 }
@@ -4819,14 +4838,14 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                             Dialog::Message( "", msg, Font::BIG, Dialog::OK );
                         else if ( hero->CanCastSpell( spell, &error ) ) {
                             if ( spell.isApplyWithoutFocusObject() ) {
-                                a.push_back( Command( MSG_BATTLE_CAST, spell(), -1 ) );
+                                a.push_back( Command( MSG_BATTLE_CAST, spell.GetID(), -1 ) );
                                 humanturn_redraw = true;
                                 humanturn_exit = true;
                             }
                             else
                                 humanturn_spell = spell;
                         }
-                        else if ( error.size() )
+                        else if ( !error.empty() )
                             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
                     }
                 }

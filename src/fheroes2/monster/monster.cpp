@@ -78,11 +78,9 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
 {
     switch ( monsterID ) {
     case Monster::ARCHER:
-        return ICN::ARCH_MSL;
     case Monster::RANGER:
         return ICN::ARCH_MSL;
     case Monster::ORC:
-        return ICN::ORC__MSL;
     case Monster::ORC_CHIEF:
         return ICN::ORC__MSL;
     case Monster::TROLL:
@@ -90,11 +88,9 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::WAR_TROLL:
         return ICN::TROLL2MSL;
     case Monster::ELF:
-        return ICN::ELF__MSL;
     case Monster::GRAND_ELF:
         return ICN::ELF__MSL;
     case Monster::DRUID:
-        return ICN::DRUIDMSL;
     case Monster::GREATER_DRUID:
         return ICN::DRUIDMSL;
     case Monster::CENTAUR:
@@ -105,7 +101,6 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::TITAN:
         return ICN::TITANMSL;
     case Monster::LICH:
-        return ICN::LICH_MSL;
     case Monster::POWER_LICH:
         return ICN::LICH_MSL;
 
@@ -137,7 +132,7 @@ Monster::Monster( const int m )
 Monster::Monster( const Spell & sp )
     : id( UNKNOWN )
 {
-    switch ( sp() ) {
+    switch ( sp.GetID() ) {
     case Spell::SETEGUARDIAN:
     case Spell::SUMMONEELEMENT:
         id = EARTH_ELEMENT;
@@ -420,9 +415,9 @@ bool Monster::isUndead() const
 
 bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
 {
-    const std::set<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-    return abilities.find( fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+    return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
 }
 
 bool Monster::isFlying() const

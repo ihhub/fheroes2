@@ -46,13 +46,10 @@
 #include "objdirt.h"
 #include "objdsrt.h"
 #include "objgras.h"
-#include "objlava.h"
 #include "objmult.h"
 #include "objsnow.h"
 #include "objswmp.h"
-#include "objtown.h"
 #include "objwatr.h"
-#include "objxloc.h"
 #include "race.h"
 #include "save_format_version.h"
 #include "settings.h"
@@ -281,6 +278,22 @@ namespace
         case MP2::OBJN_FAERIERING:
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_MAGICWELL:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isDetachedObject( const int objectId )
+    {
+        // Some objects do not take into account other objects below them.
+        switch ( objectId ) {
+        case MP2::OBJ_CASTLE:
+        case MP2::OBJN_CASTLE:
+        case MP2::OBJ_WAGONCAMP:
+        case MP2::OBJN_WAGONCAMP:
             return true;
         default:
             break;
@@ -913,7 +926,7 @@ void Maps::Tiles::updatePassability()
 
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && isBottomTileObject ) {
+            if ( !isDetachedObject( objId ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const int bottomTileObjId = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjId );
                 if ( isBottomTileActionObject ) {
@@ -1513,7 +1526,7 @@ std::string Maps::Tiles::String( void ) const
 
     default: {
         const MapsIndexes & v = Maps::GetTilesUnderProtection( _index );
-        if ( v.size() ) {
+        if ( !v.empty() ) {
             os << "protection      : ";
             for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it )
                 os << *it << ", ";

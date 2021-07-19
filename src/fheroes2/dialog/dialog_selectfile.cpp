@@ -116,7 +116,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
     std::string savname( System::GetBasename( info.file ) );
 
-    if ( savname.size() ) {
+    if ( !savname.empty() ) {
         Text text;
 
         const std::string saveExtension = Game::GetSaveFileExtension();
@@ -196,7 +196,7 @@ std::string Dialog::SelectFileSave( void )
     const Settings & conf = Settings::Get();
     const std::string & name = conf.CurrentFileInfo().name;
 
-    std::string base = name.size() ? name : "newgame";
+    std::string base = !name.empty() ? name : "newgame";
     base.resize( std::distance( base.begin(), std::find_if( base.begin(), base.end(), ::ispunct ) ) );
     std::replace_if( base.begin(), base.end(), ::isspace, '_' );
     std::ostringstream os;
@@ -211,7 +211,7 @@ std::string Dialog::SelectFileSave( void )
 std::string Dialog::SelectFileLoad( void )
 {
     const std::string & lastfile = Game::GetLastSavename();
-    return SelectFileListSimple( _( "File to Load:" ), ( lastfile.size() ? lastfile : "" ), false );
+    return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );
 }
 
 std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, const bool editor )
@@ -254,7 +254,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     std::string filename;
     size_t charInsertPos = 0;
 
-    if ( lastfile.size() ) {
+    if ( !lastfile.empty() ) {
         filename = ResizeToShortName( lastfile );
         charInsertPos = filename.size();
 
@@ -304,7 +304,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         bool needRedraw = false;
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
-            if ( filename.size() )
+            if ( !filename.empty() )
                 result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( listbox.isSelected() )
                 result = listbox.GetCurrent().file;
@@ -375,7 +375,7 @@ bool RedrawExtraInfo( const fheroes2::Point & dst, const std::string & header, c
     Text text( header, Font::BIG );
     text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
 
-    if ( filename.size() ) {
+    if ( !filename.empty() ) {
         text.Set( filename, Font::BIG );
         text.Blit( field.x, field.y + 1, field.width );
     }

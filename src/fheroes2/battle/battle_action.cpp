@@ -111,7 +111,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
             if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
                 validSpell = false;
 
-            if ( targets.size() && validSpell ) {
+            if ( !targets.empty() && validSpell ) {
                 if ( interface ) {
                     interface->RedrawActionSpellCastStatus( spell, defender.GetHeadIndex(), name, targets );
                     interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), nullptr, targets );
@@ -193,7 +193,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
                    current_commander->GetName() << ", color: " << Color::String( current_commander->GetColor() ) << ", spell: " << spell.GetName() );
 
         // uniq spells action
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::TELEPORT:
             ApplyActionSpellTeleport( cmd );
             break;
@@ -722,7 +722,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     Unit * target = GetTroopBoard( dest );
 
     // from spells
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
         // skip center
@@ -750,7 +750,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
     else
         // check other spells
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dest );
             targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );

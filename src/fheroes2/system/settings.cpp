@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
 
 #include "difficulty.h"
@@ -700,7 +701,7 @@ std::string Settings::String() const
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
        << "fonts small size = " << static_cast<int>( size_small ) << std::endl
        << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
-    if ( force_lang.size() )
+    if ( !force_lang.empty() )
         os << "lang = " << force_lang << std::endl;
 #endif
 
@@ -804,8 +805,8 @@ ListDirs Settings::GetRootDirs()
 #endif
 
     // from env
-    if ( System::GetEnvironment( "FHEROES2_DATA" ) )
-        dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
+    if ( getenv( "FHEROES2_DATA" ) )
+        dirs.push_back( getenv( "FHEROES2_DATA" ) );
 
     // from app path
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );

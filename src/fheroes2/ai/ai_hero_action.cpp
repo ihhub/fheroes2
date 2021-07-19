@@ -34,9 +34,7 @@
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "luck.h"
 #include "maps_tiles.h"
-#include "morale.h"
 #include "mus.h"
 #include "payment.h"
 #include "race.h"
@@ -659,7 +657,7 @@ namespace AI
             const int32_t joiningCost = troop.GetCost().gold;
             if ( hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) && hero.GetArmy().CanJoinTroop( troop ) ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
-                hero.GetArmy().JoinTroop( troop(), join.monsterCount );
+                hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
                 hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
                 destroy = true;
             }
@@ -682,7 +680,7 @@ namespace AI
             }
             else {
                 AIBattleLose( hero, res, true, Color::NONE );
-                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+                tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
@@ -890,7 +888,7 @@ namespace AI
         int indexTo = world.NextTeleport( index_from );
 
         const Route::Path & path = hero.GetPath();
-        if ( path.size() ) {
+        if ( !path.empty() ) {
             const int dest = path.front().GetIndex();
             while ( indexTo != dest ) {
                 indexTo = world.NextTeleport( index_from );
@@ -1697,7 +1695,7 @@ namespace AI
 
             hero.SetMove( false );
         }
-        else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
+        else if ( !path.empty() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
                 hero.Action( hero.GetIndex(), true );
         }

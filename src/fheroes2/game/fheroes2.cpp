@@ -125,7 +125,7 @@ namespace
 
             ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
-            if ( translations.size() ) {
+            if ( !translations.empty() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
                     Translation::setDomain( "fheroes2" );
             }

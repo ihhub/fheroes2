@@ -275,10 +275,10 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( std::to_string( troop().GetDamageMin() ) + "-" + std::to_string( troop().GetDamageMax() ) );
+    if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() )
+        text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ) );
     else
-        text.Set( std::to_string( troop().GetDamageMin() ) );
+        text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -288,7 +288,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    text.Set( std::to_string( troop().GetHitPoints() ) );
+    text.Set( std::to_string( troop.GetMonster().GetHitPoints() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 

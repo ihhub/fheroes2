@@ -37,7 +37,7 @@ void Dialog::SpellInfo( const Spell & spell, bool ok_button )
     std::string msg = spell.GetDescription();
     u32 extra = spell.ExtraValue();
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::HASTE:
     case Spell::MASSHASTE:
         if ( 0 == extra )
@@ -67,7 +67,7 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
-    Text text( spell.GetName(), Font::SMALL );
+    Text text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( nullptr ) ) + "]", Font::SMALL );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
     const int spacer = 10;
@@ -75,11 +75,11 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height() + 2 + text.h(), ok_button );
     fheroes2::Rect pos = box.GetArea();
 
-    if ( header.size() )
+    if ( !header.empty() )
         box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 

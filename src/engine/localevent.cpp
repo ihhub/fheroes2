@@ -374,15 +374,12 @@ KeySym GetKeySym( int key )
     case SDLK_UNDERSCORE:
         return KEY_UNDERSCORE;
     case SDLK_LALT:
-        return KEY_ALT;
     case SDLK_RALT:
         return KEY_ALT;
     case SDLK_LCTRL:
-        return KEY_CONTROL;
     case SDLK_RCTRL:
         return KEY_CONTROL;
     case SDLK_LSHIFT:
-        return KEY_SHIFT;
     case SDLK_RSHIFT:
         return KEY_SHIFT;
     case SDLK_TAB:
@@ -576,61 +573,41 @@ bool PressIntKey( u32 max, u32 & result )
             result *= 10;
             switch ( le.KeyValue() ) {
             case KEY_1:
-                result += 1;
-                break;
-            case KEY_2:
-                result += 2;
-                break;
-            case KEY_3:
-                result += 3;
-                break;
-            case KEY_4:
-                result += 4;
-                break;
-            case KEY_5:
-                result += 5;
-                break;
-            case KEY_6:
-                result += 6;
-                break;
-            case KEY_7:
-                result += 7;
-                break;
-            case KEY_8:
-                result += 8;
-                break;
-            case KEY_9:
-                result += 9;
-                break;
-
             case KEY_KP1:
                 result += 1;
                 break;
+            case KEY_2:
             case KEY_KP2:
                 result += 2;
                 break;
+            case KEY_3:
             case KEY_KP3:
                 result += 3;
                 break;
+            case KEY_4:
             case KEY_KP4:
                 result += 4;
                 break;
+            case KEY_5:
             case KEY_KP5:
                 result += 5;
                 break;
+            case KEY_6:
             case KEY_KP6:
                 result += 6;
                 break;
+            case KEY_7:
             case KEY_KP7:
                 result += 7;
                 break;
+            case KEY_8:
             case KEY_KP8:
                 result += 8;
                 break;
+            case KEY_9:
             case KEY_KP9:
                 result += 9;
                 break;
-
             default:
                 break;
             }
@@ -921,7 +898,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 #else
     switch ( sym ) {
     case KEY_BACKSPACE: {
-        if ( res.size() && pos ) {
+        if ( !res.empty() && pos ) {
             if ( pos >= res.size() )
                 res.resize( res.size() - 1 );
             else
@@ -930,7 +907,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         }
     } break;
     case KEY_DELETE: {
-        if ( res.size() ) {
+        if ( !res.empty() ) {
             if ( pos < res.size() )
                 res.erase( pos, 1 );
         }

@@ -960,7 +960,7 @@ msgstr ""
 msgid "Breastplate"
 msgstr "Mercado"
 
-msgid "Fibzin Medal"
+msgid "Fizbin Medal"
 msgstr ""
 
 msgid "Mage's ring"

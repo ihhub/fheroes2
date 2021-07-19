@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 
 #include "ai.h"
@@ -1060,7 +1061,7 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return res.size() ? static_cast<MapEvent *>( res.front() ) : nullptr;
+    return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
 MapObjectSimple * World::GetMapObject( u32 uid )
@@ -1217,16 +1218,19 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
 
-    // firs check priority: other WINS_GOLD or WINS_ARTIFACT
-    if ( conf.ConditionWins() & GameOver::WINS_GOLD ) {
-        int priority = vec_kingdoms.FindWins( GameOver::WINS_GOLD );
-        if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
-    }
-    else if ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) {
-        int priority = vec_kingdoms.FindWins( GameOver::WINS_ARTIFACT );
-        if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
+    // first, check if the other players have not completed WINS_TOWN, WINS_ARTIFACT or WINS_GOLD yet
+    const std::array<std::pair<int, int>, 3> enemy_wins = { std::make_pair<int, int>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
+                                                            std::make_pair<int, int>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
+                                                            std::make_pair<int, int>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
+
+    for ( const auto & item : enemy_wins ) {
+        if ( conf.ConditionWins() & item.first ) {
+            const int color = vec_kingdoms.FindWins( item.first );
+
+            if ( color && color != kingdom.GetColor() ) {
+                return item.second;
+            }
+        }
     }
 
     const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };

@@ -31,7 +31,6 @@
 
 #include <memory>
 
-class PrimarySkillsBar;
 class ArtifactsBar;
 
 namespace Battle

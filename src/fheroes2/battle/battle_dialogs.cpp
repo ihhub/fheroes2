@@ -503,7 +503,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 continue;
             }
 
-            if ( art() == Artifact::UNKNOWN || art() == Artifact::MAGIC_BOOK ) {
+            if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
                 continue;
             }
 
