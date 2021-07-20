@@ -116,25 +116,23 @@ namespace
 
     void SetLangEnvPath( const Settings & conf )
     {
-#ifdef WITH_TTF
-        if ( conf.Unicode() ) {
+        if ( !conf.ForceLang().empty() ) {
             System::SetLocale( LC_ALL, "" );
             System::SetLocale( LC_NUMERIC, "C" );
 
-            std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
+            const std::string mofile = std::string( conf.ForceLang() ).append( ".mo" );
 
-            ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
+            const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
             if ( !translations.empty() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
                     Translation::setDomain( "fheroes2" );
             }
-            else
+            else {
                 ERROR_LOG( "translation not found: " << mofile );
+            }
         }
-#else
-        (void)conf;
-#endif
+
         Translation::setStripContext( '|' );
     }
 }

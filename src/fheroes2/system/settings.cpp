@@ -373,6 +373,10 @@ bool Settings::Read( const std::string & filename )
 
     Logging::SetDebugLevel( debug );
 
+    sval = config.StrParams( "lang" );
+    if ( !sval.empty() )
+        force_lang = sval;
+
     // unicode
     if ( config.Exists( "unicode" ) ) {
         SetUnicode( config.StrParams( "unicode" ) == "on" );
@@ -382,10 +386,6 @@ bool Settings::Read( const std::string & filename )
         sval = config.StrParams( "maps charset" );
         if ( !sval.empty() )
             maps_charset = sval;
-
-        sval = config.StrParams( "lang" );
-        if ( !sval.empty() )
-            force_lang = sval;
 
         sval = config.StrParams( "fonts normal" );
         if ( !sval.empty() )
@@ -701,9 +701,10 @@ std::string Settings::String() const
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
        << "fonts small size = " << static_cast<int>( size_small ) << std::endl
        << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
+#endif
+
     if ( !force_lang.empty() )
         os << "lang = " << force_lang << std::endl;
-#endif
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
