@@ -439,7 +439,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
 {
     double spellValue = 0;
     std::vector<Spell> guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
-    for ( auto spell : guildSpells ) {
+    for ( const Spell & spell : guildSpells ) {
         if ( spell.isAdventure() ) {
             // AI is stupid to use Adventure spells.
             continue;

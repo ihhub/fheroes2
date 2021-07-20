@@ -29,90 +29,87 @@
 
 SpellStorage::SpellStorage()
 {
-    spells.reserve( 67 );
+    _spells.reserve( 67 );
 }
 
 SpellStorage::const_iterator SpellStorage::begin() const
 {
-    return spells.begin();
+    return _spells.begin();
 }
 
 SpellStorage::const_iterator SpellStorage::end() const
 {
-    return spells.end();
+    return _spells.end();
 }
 
-int SpellStorage::Size() const
+bool SpellStorage::hasSpell( const Spell & spell ) const
 {
-    return static_cast<int>( spells.size() );
+    return std::find( _spells.begin(), _spells.end(), spell ) != _spells.end();
 }
 
-bool SpellStorage::HasSpell( const Spell & spell ) const
+bool SpellStorage::hasAdventureSpellAtLevel( const int spellLevel ) const
 {
-    return std::find( spells.begin(), spells.end(), spell ) != spells.end();
-}
-
-bool SpellStorage::HasAdventureSpellAtLevel( const int spellLevel ) const
-{
-    for ( auto it : spells ) {
-        if ( it.isLevel( spellLevel ) && it.isAdventure() )
+    for ( const Spell & spell : _spells ) {
+        if ( spell.isLevel( spellLevel ) && spell.isAdventure() )
             return true;
     }
 
     return false;
 }
 
-std::vector<Spell> SpellStorage::GetSpells( const int spellLevel ) const
+std::vector<Spell> SpellStorage::getSpells( const int spellLevel ) const
 {
     if ( spellLevel == -1 ) {
-        return spells;
+        return _spells;
     }
 
     std::vector<Spell> result;
     result.reserve( 20 );
-    for ( auto it : spells )
-        if ( it.isLevel( spellLevel ) )
-            result.push_back( it );
+    for ( const Spell & spell : _spells )
+        if ( spell.isLevel( spellLevel ) ) {
+            result.push_back( spell );
+        }
+
     return result;
 }
 
-void SpellStorage::Append( const SpellStorage & spellStorage )
+void SpellStorage::append( const SpellStorage & spellStorage )
 {
-    for ( const Spell & spell : spellStorage.spells ) {
-        if ( std::find( spells.begin(), spells.end(), spell ) == spells.end() ) {
-            spells.push_back( spell );
+    for ( const Spell & spell : spellStorage._spells ) {
+        if ( std::find( _spells.begin(), _spells.end(), spell ) == _spells.end() ) {
+            _spells.push_back( spell );
         }
     }
 }
 
-void SpellStorage::Append( const Spell & spell )
+void SpellStorage::append( const Spell & spell )
 {
-    if ( spell != Spell::NONE && spells.end() == std::find( spells.begin(), spells.end(), spell ) )
-        spells.push_back( spell );
+    if ( spell != Spell::NONE && _spells.end() == std::find( _spells.begin(), _spells.end(), spell ) )
+        _spells.push_back( spell );
 }
 
-void SpellStorage::Append( const BagArtifacts & bag )
+void SpellStorage::append( const BagArtifacts & bag )
 {
     for ( BagArtifacts::const_iterator it = bag.begin(); it != bag.end(); ++it )
-        Append( *it );
+        append( *it );
 }
 
-void SpellStorage::Append( const Artifact & artifact )
+void SpellStorage::append( const Artifact & artifact )
 {
     switch ( artifact.GetID() ) {
     case Artifact::SPELL_SCROLL:
-        Append( Spell( artifact.GetSpell() ) );
+        append( Spell( artifact.GetSpell() ) );
         break;
 
     case Artifact::CRYSTAL_BALL:
         if ( Settings::Get().ExtWorldArtifactCrystalBall() ) {
-            Append( Spell( Spell::IDENTIFYHERO ) );
-            Append( Spell( Spell::VISIONS ) );
+            append( Spell( Spell::IDENTIFYHERO ) );
+            append( Spell( Spell::VISIONS ) );
         }
         break;
 
     case Artifact::BATTLE_GARB:
-        Append( Spell( Spell::TOWNPORTAL ) );
+        append( Spell( Spell::TOWNPORTAL ) );
         break;
 
     default:
@@ -120,22 +117,26 @@ void SpellStorage::Append( const Artifact & artifact )
     }
 }
 
-std::string SpellStorage::String( void ) const
+std::string SpellStorage::string() const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( auto it : spells )
-        os << it.GetName() << ", ";
+    for ( const Spell & spell : _spells ) {
+        if ( !output.empty() ) {
+            output += ", ";
+        }
+        output += spell.GetName();
+    }
 
-    return os.str();
+    return output;
 }
 
 StreamBase & operator<<( StreamBase & msg, const SpellStorage & spellStorage )
 {
-    return msg << spellStorage.spells;
+    return msg << spellStorage._spells;
 }
 
 StreamBase & operator>>( StreamBase & msg, SpellStorage & spellStorage )
 {
-    return msg >> spellStorage.spells;
+    return msg >> spellStorage._spells;
 }

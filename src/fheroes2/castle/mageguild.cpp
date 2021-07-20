@@ -43,8 +43,8 @@ void MageGuild::initialize( int race, bool libraryCap )
     const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
     const int guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
 
-    general.Append( guaranteedDamageSpell );
-    general.Append( guaranteedNonDamageSpell );
+    general.append( guaranteedDamageSpell );
+    general.append( guaranteedNonDamageSpell );
 
     if ( libraryCap ) {
         for ( int i = 0; i < 5; ++i )
@@ -65,13 +65,13 @@ void MageGuild::initialize( int race, bool libraryCap )
             }
 
             if ( libraryCap && j == spellCountByLevel[i] - 1 ) {
-                library.Append( spell );
+                library.append( spell );
             }
             else {
-                general.Append( spell );
+                general.append( spell );
             }
 
-            all.Append( spell );
+            all.append( spell );
         }
     }
 }
@@ -83,18 +83,18 @@ std::vector<Spell> MageGuild::GetSpells( int guildLevel, bool hasLibrary, int sp
     if ( spellLevel == -1 ) {
         // get all available spells
         for ( int level = 1; level <= guildLevel; ++level ) {
-            auto spells = general.GetSpells( level );
+            const auto spells = general.getSpells( level );
             result.insert( result.end(), spells.begin(), spells.end() );
             if ( hasLibrary ) {
-                spells = library.GetSpells( level );
-                result.insert( result.end(), spells.begin(), spells.end() );
+                const auto libarySpells = library.getSpells( level );
+                result.insert( result.end(), libarySpells.begin(), libarySpells.end() );
             }
         }
     }
     else if ( spellLevel <= guildLevel ) {
-        result = general.GetSpells( spellLevel );
+        result = general.getSpells( spellLevel );
         if ( hasLibrary ) {
-            auto spells = library.GetSpells( spellLevel );
+            const auto spells = library.getSpells( spellLevel );
             result.insert( result.end(), spells.begin(), spells.end() );
         }
     }
@@ -112,7 +112,7 @@ void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) 
 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
 {
-    const bool hasAdventureSpell = spells.HasAdventureSpellAtLevel( lvl );
+    const bool hasAdventureSpell = spells.hasAdventureSpellAtLevel( lvl );
     const bool lookForAdv = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
 
     std::vector<Spell> v;
@@ -121,7 +121,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
     for ( int sp = Spell::NONE; sp < Spell::STONE; ++sp ) {
         const Spell spell( sp );
 
-        if ( spells.HasSpell( spell ) )
+        if ( spells.hasSpell( spell ) )
             continue;
 
         if ( !spell.isRaceCompatible( race ) )

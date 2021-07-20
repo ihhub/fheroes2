@@ -161,14 +161,14 @@ void HeroBase::LoadDefaults( int type, int race )
 
             Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() )
-                spell_book.Append( spell );
+                spell_book.append( spell );
         } break;
 
         case HeroBase::HEROES: {
             Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() ) {
                 SpellBookActivate();
-                spell_book.Append( spell );
+                spell_book.append( spell );
             }
         } break;
 
@@ -226,18 +226,18 @@ bool HeroBase::HaveSpellBook( void ) const
 
 std::vector<Spell> HeroBase::GetSpells( int lvl ) const
 {
-    return spell_book.GetSpells( lvl );
+    return spell_book.getSpells( lvl );
 }
 
 bool HeroBase::HaveSpell( const Spell & spell, bool skip_bag ) const
 {
-    return HaveSpellBook() && ( spell_book.HasSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );
+    return HaveSpellBook() && ( spell_book.hasSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );
 }
 
 void HeroBase::AppendSpellToBook( const Spell & spell, bool without_wisdom )
 {
     if ( without_wisdom || CanLearnSpell( spell ) )
-        spell_book.Append( spell );
+        spell_book.append( spell );
 }
 
 void HeroBase::AppendSpellsToBook( const std::vector<Spell> & spells, bool without_wisdom )
@@ -499,7 +499,7 @@ void HeroBase::TranscribeScroll( const Artifact & art )
 
     if ( spell.isValid() ) {
         // add spell
-        spell_book.Append( spell );
+        spell_book.append( spell );
 
         // remove art
         bag_artifacts.RemoveScroll( art );

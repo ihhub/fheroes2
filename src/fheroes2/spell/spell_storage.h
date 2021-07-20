@@ -37,25 +37,23 @@ public:
     SpellStorage();
 
     // used to allow iteration over this object
-    typedef std::vector<Spell>::const_iterator const_iterator;
+    using const_iterator = std::vector<Spell>::const_iterator;
     const_iterator begin() const;
     const_iterator end() const;
 
-    int Size() const;
+    bool hasSpell( const Spell & spell ) const;
+    bool hasAdventureSpellAtLevel( const int spellLevel ) const;
+    std::vector<Spell> getSpells( const int spellLevel = -1 ) const;
 
-    bool HasSpell( const Spell & spell ) const;
-    bool HasAdventureSpellAtLevel( const int spellLevel ) const;
-    std::vector<Spell> GetSpells( const int spellLevel = -1 ) const;
+    void append( const SpellStorage & spellStorage );
+    void append( const Spell & spell );
+    void append( const BagArtifacts & bag );
+    void append( const Artifact & artifact );
 
-    void Append( const SpellStorage & spellStorage );
-    void Append( const Spell & spell );
-    void Append( const BagArtifacts & artifacts );
-    void Append( const Artifact & artifact );
-
-    std::string String( void ) const;
+    std::string string() const;
 
 protected:
-    std::vector<Spell> spells;
+    std::vector<Spell> _spells;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const SpellStorage & );

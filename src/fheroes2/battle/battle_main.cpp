@@ -272,7 +272,7 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
     const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
 
     // filter spells
-    for ( auto sp : spells ) {
+    for ( const Spell & sp : spells ) {
         if ( !hero.HaveSpell( sp ) ) {
             switch ( eagleeye.Level() ) {
             case Skill::Level::BASIC:

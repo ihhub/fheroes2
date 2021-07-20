@@ -406,7 +406,7 @@ void SpellBook::Edit( const HeroBase & hero )
             current_index -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( next_list ) && spells.size() > ( current_index + spellsPerPage * 2 ) ) {
+        else if ( le.MouseClickLeft( next_list ) && _spells.size() > ( current_index + spellsPerPage * 2 ) ) {
             current_index += spellsPerPage * 2;
             redraw = true;
         }
@@ -425,7 +425,7 @@ void SpellBook::Edit( const HeroBase & hero )
             }
             else {
                 Spell spell = Dialog::SelectSpell();
-                Append( spell );
+                append( spell );
                 displayedSpells = SetFilter( Filter::ALL, &hero );
                 redraw = true;
             }
@@ -463,26 +463,25 @@ std::vector<Spell> SpellBook::SetFilter( const Filter filter, const HeroBase * h
 
     // add heroes spell scrolls
     if ( hero != nullptr )
-        storage.Append( hero->GetBagArtifacts() );
+        storage.append( hero->GetBagArtifacts() );
 
     if ( filter != SpellBook::Filter::ALL ) {
-        storage.spells.resize( std::distance( storage.spells.begin(), std::remove_if( storage.spells.begin(), storage.spells.end(), [filter]( const Spell & s ) {
-                                                  return ( ( SpellBook::Filter::ADVN == filter ) && s.isCombat() )
-                                                         || ( ( SpellBook::Filter::CMBT == filter ) && !s.isCombat() );
-                                              } ) ) );
+        storage._spells.erase( std::remove_if( storage._spells.begin(), storage._spells.end(),
+                                               [filter]( const Spell & s ) {
+                                                   return ( ( SpellBook::Filter::ADVN == filter ) && s.isCombat() )
+                                                          || ( ( SpellBook::Filter::CMBT == filter ) && !s.isCombat() );
+                                               } ),
+                               storage._spells.end() );
     }
 
     // check on water: disable portal spells
     if ( hero != nullptr && hero->Modes( Heroes::SHIPMASTER ) ) {
-        auto itend = storage.spells.end();
-        itend = std::remove( storage.spells.begin(), itend, Spell( Spell::TOWNGATE ) );
-        itend = std::remove( storage.spells.begin(), itend, Spell( Spell::TOWNPORTAL ) );
-        if ( storage.spells.end() != itend )
-            storage.spells.resize( std::distance( storage.spells.begin(), itend ) );
+        storage._spells.erase( std::remove( storage._spells.begin(), storage._spells.end(), Spell( Spell::TOWNGATE ) ), storage._spells.end() );
+        storage._spells.erase( std::remove( storage._spells.begin(), storage._spells.end(), Spell( Spell::TOWNPORTAL ) ), storage._spells.end() );
     }
 
     // sorting results
-    std::sort( storage.spells.begin(), storage.spells.end() );
+    std::sort( storage._spells.begin(), storage._spells.end() );
 
-    return storage.spells;
+    return storage._spells;
 }
