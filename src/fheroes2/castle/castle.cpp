@@ -2771,6 +2771,7 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
     for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
         *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
+        assert( *it != nullptr );
     }
 
     return msg;
