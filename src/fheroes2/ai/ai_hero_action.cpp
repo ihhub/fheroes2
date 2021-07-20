@@ -235,7 +235,7 @@ namespace AI
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
-        const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        const int object = tile.GetObject( dst_index != hero.GetIndex() );
         bool isAction = true;
 
         const bool isActionObject = MP2::isActionObject( object, hero.isShipMaster() );
