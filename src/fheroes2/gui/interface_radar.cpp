@@ -314,7 +314,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
-                    const Castle * castle = world.GetCastle( tile.GetCenter() );
+                    const Castle * castle = world.getCastle( tile.GetCenter() );
                     if ( castle )
                         fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 }

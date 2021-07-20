@@ -549,10 +549,12 @@ namespace AI
     void AIToCastle( Heroes & hero, s32 dst_index )
     {
         const Settings & conf = Settings::Get();
-        Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ) );
-
-        if ( !castle )
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
+        if ( castle == nullptr ) {
+            // Something is wrong while calling this function for incorrect tile.
+            assert( 0 );
             return;
+        }
 
         if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );

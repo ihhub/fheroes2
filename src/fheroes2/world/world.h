@@ -191,11 +191,16 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    const Castle * GetCastle( const fheroes2::Point & ) const;
-    Castle * GetCastle( const fheroes2::Point & );
+    // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
+    const Castle * getCastle( const fheroes2::Point & tilePosition ) const;
+    Castle * getCastle( const fheroes2::Point & tilePosition );
 
-    const Heroes * GetHeroes( int /* hero id */ ) const;
-    Heroes * GetHeroes( int /* hero id */ );
+    // Get castle based on its entrance tile. If the tile is not castle's entrance return nullptr.
+    const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
+    Castle * getCastleEntrance( const fheroes2::Point & tilePosition );
+
+    const Heroes * GetHeroes( int id ) const;
+    Heroes * GetHeroes( int id );
 
     const Heroes * GetHeroes( const fheroes2::Point & ) const;
     Heroes * GetHeroes( const fheroes2::Point & );
@@ -293,7 +298,8 @@ private:
     void PostLoad( const bool setTilePassabilities );
     void pickRumor();
 
-private:
+    bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
+
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
     friend StreamBase & operator>>( StreamBase &, World & );

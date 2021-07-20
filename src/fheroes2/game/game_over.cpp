@@ -50,7 +50,7 @@ namespace
 
         case GameOver::WINS_TOWN: {
             body = _( "You captured %{name}!\nYou are victorious." );
-            const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
         } break;
@@ -102,7 +102,7 @@ namespace
         switch ( cond ) {
         case GameOver::LOSS_ENEMY_WINS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
-            const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
             break;
@@ -135,7 +135,7 @@ namespace
 
         case GameOver::LOSS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
-            const Castle * town = world.GetCastle( conf.LossMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
             break;
@@ -226,10 +226,9 @@ std::string GameOver::GetActualDescription( int cond )
     if ( WINS_ALL == cond || WINS_SIDE == cond )
         msg = GetString( WINS_ALL );
     else if ( WINS_TOWN & cond ) {
-        const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+        const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
         if ( town ) {
             msg = town->isCastle() ? _( "Capture the castle '%{name}'" ) : _( "Capture the town '%{name}'" );
-            ;
             StringReplace( msg, "%{name}", town->GetName() );
         }
     }
@@ -260,7 +259,7 @@ std::string GameOver::GetActualDescription( int cond )
     if ( LOSS_ALL == cond )
         msg = GetString( LOSS_ALL );
     else if ( LOSS_TOWN & cond ) {
-        const Castle * town = world.GetCastle( conf.LossMapsPositionObject() );
+        const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
             StringReplace( msg, "%{name}", town->GetName() );

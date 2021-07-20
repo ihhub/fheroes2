@@ -784,13 +784,13 @@ void Heroes::RescanPath( void )
 /* if hero in castle */
 const Castle * Heroes::inCastle( void ) const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    const Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 Castle * Heroes::inCastle( void )
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 

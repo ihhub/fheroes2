@@ -409,7 +409,7 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
+                    Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
@@ -430,7 +430,8 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
+                    // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
+                    Castle * castle = getCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
