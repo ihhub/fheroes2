@@ -240,7 +240,7 @@ void World::ComputeStaticAnalysis()
     const size_t totalMapTiles = vec_tiles.size();
     for ( const TileData & castleTile : castleCenters ) {
         // Check if a lot of players next to each other? (Slugfest map)
-        // GetCastle( fheroes2::Point( val % width, val / width ), false )->GetColor();
+        // getCastle( fheroes2::Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
         AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }

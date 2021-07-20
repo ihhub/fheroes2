@@ -511,15 +511,7 @@ Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
 
 bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
-    if ( !Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) ) {
-        return false;
-    }
-
-    if ( GetTiles( tilePosition.x, tilePosition.y ).GetObjectUID() != MP2::OBJ_CASTLE ) {
-        return false;
-    }
-
-    return true;
+    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObjectUID() == MP2::OBJ_CASTLE );
 }
 
 Heroes * World::GetHeroes( int id )
