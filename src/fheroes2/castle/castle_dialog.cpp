@@ -425,10 +425,10 @@ int Castle::OpenDialog( bool readonly )
 
             // buildings event
             for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-                const uint32_t buildingID = GetActualDwelling( ( *it ).id );
-                const bool isBuildingHotkeyPressed = buildingID == GetActualDwelling( getPressedBuildingHotkey() );
+                const uint32_t actualBuildingID = GetActualDwelling( ( *it ).id );
+                const bool isBuildingHotkeyPressed = actualBuildingID == GetActualDwelling( getPressedBuildingHotkey() );
 
-                if ( ( *it ).id == buildingID && isBuild( ( *it ).id ) ) {
+                if ( ( *it ).id == actualBuildingID && isBuild( ( *it ).id ) ) {
                     if ( !readonly && ( le.MouseClickLeft( ( *it ).coord ) || isBuildingHotkeyPressed ) ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
                         if ( Castle::RecruitMonster(
