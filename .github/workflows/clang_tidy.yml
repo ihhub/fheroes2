@@ -6,7 +6,7 @@ on:
     paths: [ '**.cpp', '**.h' ]
 
 jobs:
-  build:
+  tidy:
     name: Clang-Tidy
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
