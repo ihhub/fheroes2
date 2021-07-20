@@ -465,20 +465,15 @@ std::vector<Spell> SpellBook::SetFilter( const Filter filter, const HeroBase * h
     if ( hero != nullptr )
         storage.append( hero->GetBagArtifacts() );
 
-    if ( filter != SpellBook::Filter::ALL ) {
-        storage._spells.erase( std::remove_if( storage._spells.begin(), storage._spells.end(),
-                                               [filter]( const Spell & s ) {
-                                                   return ( ( SpellBook::Filter::ADVN == filter ) && s.isCombat() )
-                                                          || ( ( SpellBook::Filter::CMBT == filter ) && !s.isCombat() );
-                                               } ),
-                               storage._spells.end() );
-    }
+    const bool isHeroOnBoat = hero != nullptr && hero->Modes( Heroes::SHIPMASTER );
 
-    // check on water: disable portal spells
-    if ( hero != nullptr && hero->Modes( Heroes::SHIPMASTER ) ) {
-        storage._spells.erase( std::remove( storage._spells.begin(), storage._spells.end(), Spell( Spell::TOWNGATE ) ), storage._spells.end() );
-        storage._spells.erase( std::remove( storage._spells.begin(), storage._spells.end(), Spell( Spell::TOWNPORTAL ) ), storage._spells.end() );
-    }
+    // disable non-filtered spells and portal spells on water
+    storage._spells.erase( std::remove_if( storage._spells.begin(), storage._spells.end(),
+                                           [filter, isHeroOnBoat]( const Spell & s ) {
+                                               return ( filter == SpellBook::Filter::ADVN && s.isCombat() ) || ( filter == SpellBook::Filter::CMBT && !s.isCombat() )
+                                                      || ( isHeroOnBoat && ( s.GetID() == Spell::TOWNGATE || s.GetID() == Spell::TOWNPORTAL ) );
+                                           } ),
+                           storage._spells.end() );
 
     // sorting results
     std::sort( storage._spells.begin(), storage._spells.end() );
