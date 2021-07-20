@@ -284,7 +284,7 @@ namespace
                                 break;
                             case MP2::OBJ_CASTLE:
                                 if ( revealTowns || !tile.isFog( color ) ) { // draw hero now, castle flag on top later
-                                    const Castle * castle = world.GetCastle( tile.GetCenter(), true );
+                                    const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
                                     if ( castle ) {
                                         const fheroes2::Sprite & heroIcon = fheroes2::AGG::GetICN( icnBase, index );
                                         fheroes2::Blit( heroIcon, display, dstx, dsty );
@@ -301,7 +301,7 @@ namespace
 
                 case MP2::OBJ_CASTLE: {
                     if ( revealTowns || !tile.isFog( color ) ) {
-                        const Castle * castle = world.GetCastle( tile.GetCenter(), true );
+                        const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
                         if ( castle ) {
                             icn = icnFlagsBase;
                             index = colorToOffsetICN( castle->GetColor() );

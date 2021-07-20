@@ -353,7 +353,7 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     switch ( tile.GetObject() ) {
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * to_castle = world.GetCastle( tile.GetCenter(), false );
+        const Castle * to_castle = world.getCastleEntrance( tile.GetCenter() );
 
         if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
@@ -387,7 +387,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * castle = world.GetCastle( tile.GetCenter(), false );
+        const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle )
             return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
@@ -442,7 +442,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * castle = world.GetCastle( tile.GetCenter(), false );
+        const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( nullptr != castle ) {
             if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
@@ -1149,7 +1149,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
             break;
 
-        Castle * to_castle = world.GetCastle( tile.GetCenter(), false );
+        Castle * to_castle = world.getCastle( tile.GetCenter() );
         if ( to_castle == nullptr )
             break;
 
@@ -1207,7 +1207,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
             switch ( tile.GetObject() ) {
             case MP2::OBJN_CASTLE:
             case MP2::OBJ_CASTLE: {
-                const Castle * castle = world.GetCastle( tile.GetCenter(), false );
+                const Castle * castle = world.getCastle( tile.GetCenter() );
                 if ( castle )
                     Dialog::QuickInfo( *castle );
                 else

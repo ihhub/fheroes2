@@ -191,9 +191,13 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    // Get castle from index maps.
-    const Castle * GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance ) const;
-    Castle * GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance );
+    // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
+    const Castle * getCastle( const fheroes2::Point & tilePosition ) const;
+    Castle * getCastle( const fheroes2::Point & tilePosition );
+
+    // Get castle based on its entrance tile. If the tile is not castle's entrance return nullptr.
+    const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
+    Castle * getCastleEntrance( const fheroes2::Point & tilePosition );
 
     const Heroes * GetHeroes( int id ) const;
     Heroes * GetHeroes( int id );
@@ -294,7 +298,8 @@ private:
     void PostLoad( const bool setTilePassabilities );
     void pickRumor();
 
-private:
+    bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
+
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
     friend StreamBase & operator>>( StreamBase &, World & );

@@ -481,34 +481,45 @@ const Kingdom & World::GetKingdom( int color ) const
     return vec_kingdoms.GetKingdom( color );
 }
 
-Castle * World::GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance )
+Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
-    if ( checkForCastleEntrance ) {
-        if ( !Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) ) {
-            return nullptr;
-        }
+    return vec_castles.Get( tilePosition );
+}
 
-        if ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) != MP2::OBJ_CASTLE ) {
-            return nullptr;
-        }
+const Castle * World::getCastle( const fheroes2::Point & tilePosition ) const
+{
+    return vec_castles.Get( tilePosition );
+}
+
+const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
+{
+    if ( !isValidCastleEntrance( tilePosition ) ) {
+        return nullptr;
     }
 
     return vec_castles.Get( tilePosition );
 }
 
-const Castle * World::GetCastle( const fheroes2::Point & tilePosition, const bool checkForCastleEntrance ) const
+Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
 {
-    if ( checkForCastleEntrance ) {
-        if ( !Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) ) {
-            return nullptr;
-        }
-
-        if ( GetTiles( tilePosition.x, tilePosition.y ).GetObjectUID() != MP2::OBJ_CASTLE ) {
-            return nullptr;
-        }
+    if ( !isValidCastleEntrance( tilePosition ) ) {
+        return nullptr;
     }
 
     return vec_castles.Get( tilePosition );
+}
+
+bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
+{
+    if ( !Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) ) {
+        return false;
+    }
+
+    if ( GetTiles( tilePosition.x, tilePosition.y ).GetObjectUID() != MP2::OBJ_CASTLE ) {
+        return false;
+    }
+
+    return true;
 }
 
 Heroes * World::GetHeroes( int id )
@@ -947,7 +958,7 @@ void World::CaptureObject( s32 index, int color )
     int obj = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, obj, color );
 
-    Castle * castle = GetCastle( Maps::GetPoint( index ), true );
+    Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
     if ( castle && castle->GetColor() != color )
         castle->ChangeColor( color );
 
@@ -1120,7 +1131,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
-        const Castle * town = GetCastle( conf.WinsMapsPositionObject(), true );
+        const Castle * town = getCastleEntrance( conf.WinsMapsPositionObject() );
         // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
@@ -1178,7 +1189,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
         return kingdom.isLoss();
 
     case GameOver::LOSS_TOWN: {
-        const Castle * town = GetCastle( conf.LossMapsPositionObject(), true );
+        const Castle * town = getCastleEntrance( conf.LossMapsPositionObject() );
         return ( town && town->GetColor() != kingdom.GetColor() );
     }
 

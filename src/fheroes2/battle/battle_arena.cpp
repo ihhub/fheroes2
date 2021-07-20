@@ -157,7 +157,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , armies_order( nullptr )
     , current_color( Color::NONE )
     , preferredColor( -1 ) // be aware of unknown color
-    , castle( world.GetCastle( Maps::GetPoint( index ), true ) )
+    , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
     , _isTown( castle != nullptr )
     , catapult( nullptr )
     , bridge( nullptr )

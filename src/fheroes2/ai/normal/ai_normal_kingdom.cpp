@@ -100,7 +100,7 @@ namespace AI
                     }
                 }
                 else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
-                    const Castle * castle = world.GetCastle( Maps::GetPoint( idx ), true );
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
                     if ( !castle )
                         continue;
 
