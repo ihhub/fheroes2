@@ -240,7 +240,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 2 );
         }
+    }
 
+    for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
