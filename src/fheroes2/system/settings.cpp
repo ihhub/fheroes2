@@ -1135,6 +1135,11 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
+bool Settings::isStandardGameType() const
+{
+    return ( game_type & Game::TYPE_STANDARD ) != 0;
+}
+
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;

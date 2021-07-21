@@ -1292,9 +1292,10 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    if ( conf.ExtWorldStartHeroLossCond4Humans() ) {
-        if ( kingdom.GetFirstHeroStartCondLoss() )
+    if ( conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
+        if ( kingdom.GetFirstHeroStartCondLoss() ) {
             return GameOver::LOSS_STARTHERO;
+        }
     }
 
     return GameOver::COND_NONE;
