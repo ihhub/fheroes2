@@ -65,8 +65,8 @@ namespace Maps
 
         int KingdomRace( int color ) const;
 
-        uint32_t ConditionWins( void ) const;
-        uint32_t ConditionLoss( void ) const;
+        uint32_t ConditionWins() const;
+        uint32_t ConditionLoss() const;
         bool WinsCompAlsoWins( void ) const;
         bool WinsAllowNormalVictory( void ) const;
         int WinsFindArtifactID( void ) const;

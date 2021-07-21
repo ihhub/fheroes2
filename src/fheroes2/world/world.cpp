@@ -1225,12 +1225,14 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
         }
     }
 
-    const uint32_t wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
-    const uint32_t mapWinCondition = conf.ConditionWins();
+    const std::array<uint32_t, 6> wins
+        = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
 
-    for ( u32 ii = 0; wins[ii]; ++ii )
-        if ( ( mapWinCondition & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
-            return wins[ii];
+    for ( const uint32_t cond : wins ) {
+        if ( ( conf.ConditionWins() & cond ) && KingdomIsWins( kingdom, cond ) ) {
+            return cond;
+        }
+    }
 
     return GameOver::COND_NONE;
 }
@@ -1282,11 +1284,13 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    const uint32_t loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
+    const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
-    for ( u32 ii = 0; loss[ii]; ++ii )
-        if ( ( conf.ConditionLoss() & loss[ii] ) && KingdomIsLoss( kingdom, loss[ii] ) )
-            return loss[ii];
+    for ( const uint32_t cond : loss ) {
+        if ( ( conf.ConditionLoss() & cond ) && KingdomIsLoss( kingdom, cond ) ) {
+            return cond;
+        }
+    }
 
     if ( conf.ExtWorldStartHeroLossCond4Humans() ) {
         if ( kingdom.GetFirstHeroStartCondLoss() )
