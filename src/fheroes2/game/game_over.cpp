@@ -419,8 +419,8 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         }
     }
     else {
-        // Either there are no active human-controlled players left, or there is only one of such kind, game over
-        if ( activeHumanColors == 0 || ( activeHumanColors == 1 && activeHumanColors == activeColors ) ) {
+        // There are no active human-controlled players left, game over
+        if ( activeHumanColors == 0 ) {
             res = fheroes2::GameMode::MAIN_MENU;
         }
         // Check the regular win/loss conditions
