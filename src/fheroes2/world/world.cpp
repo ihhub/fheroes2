@@ -1510,7 +1510,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
             colors |= Color::PURPLE;
 
         // message
-        message = Game::GetEncodeString( st.toString() );
+        message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
                        << ": " << message );

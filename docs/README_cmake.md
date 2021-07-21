@@ -8,10 +8,10 @@ Next, you can build project with following commands:
 
 ```shell
 # SDL1
-cmake -B build -DUSE_SDL_VERSION=SDL -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON
+cmake -B build -DUSE_SDL_VERSION=SDL -DENABLE_IMAGE=ON
 # OR
 # SDL2
-cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON
+cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON
 ```
 
 After configuration let's build project:
@@ -37,7 +37,7 @@ git clone https://github.com/microsoft/vcpkg.git
 Your vcpkg is ready to install external libraries. Assuming that you use x64 system, let's install all needed dependencies:
 
 ```shell
-.\vcpkg\vcpkg --triplet x64-windows install libiconv sdl2 sdl2-image sdl2-mixer sdl2-ttf zlib
+.\vcpkg\vcpkg --triplet x64-windows install sdl2 sdl2-image sdl2-mixer zlib
 ```
 
 If you planning to develop fheroes2 with Visual Studio, you may want to integrate vcpkg with it (requires elevated admin privileges).
@@ -51,7 +51,7 @@ Now you ready to compile project. cd to fheroes2 directory and run `cmake` comma
 
 ```shell
 # SDL2
-cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON 
+cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_MIXER=ON
 ```
 
 After configuration let's build project:
