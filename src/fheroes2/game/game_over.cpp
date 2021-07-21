@@ -115,14 +115,6 @@ namespace
             break;
         }
 
-            /*
-            case GameOver::WINS_SIDE: {
-                body = _( "%{color} has fallen!\nAll is lost." );
-                StringReplace( body, "%{color}", Color::String( color ) );
-                break;
-            }
-            */
-
         case GameOver::LOSS_ENEMY_WINS_GOLD: {
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
             StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
@@ -368,6 +360,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 else {
                     AGG::ResetMixer();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+
                     res = fheroes2::GameMode::HIGHSCORES;
 
                     if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
@@ -418,8 +411,89 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         }
     }
     else {
+        // Either there are no active human-controlled players left, or there is only one of such kind, game over
         if ( activeHumanColors == 0 || ( activeHumanColors == 1 && activeHumanColors == activeColors ) ) {
             res = fheroes2::GameMode::MAIN_MENU;
+        }
+        // Check the regular win/loss conditions
+        else {
+            auto checkWinLossConditions = []( const int color ) -> int {
+                const Kingdom & kingdom = world.GetKingdom( color );
+
+                // Check the win/loss conditions for active players only
+                if ( !kingdom.isPlay() ) {
+                    return GameOver::COND_NONE;
+                }
+
+                // Check the win conditions for local human-controlled players only
+                if ( kingdom.isControlHuman() && kingdom.isControlLocal() ) {
+                    int condition = world.CheckKingdomWins( kingdom );
+
+                    if ( condition != GameOver::COND_NONE ) {
+                        return condition;
+                    }
+                }
+
+                // Check the loss conditions for local or remote human-controlled players
+                if ( kingdom.isControlHuman() ) {
+                    int condition = world.CheckKingdomLoss( kingdom );
+
+                    // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
+                    // LOSS_TOWN apparently is not intended to be used in multiplayer
+                    // LOSS_HERO may be used in multiplayer (usually in combination with WINS_SIDE), if the hero is lost - everyone loses
+                    // LOSS_TIME is widely used in multiplayer
+                    // LOSS_STARTHERO is an extension and is not intended to be used in multiplayer
+                    if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
+                        return condition;
+                    }
+                }
+
+                return GameOver::COND_NONE;
+            };
+
+            // The color for which the win/loss condition was triggered
+            int resultForColor = Color::NONE;
+
+            // Check the win/loss conditions for the current player first
+            const int currentColor = Settings::Get().CurrentColor();
+
+            result = checkWinLossConditions( currentColor );
+
+            if ( result != GameOver::COND_NONE ) {
+                resultForColor = currentColor;
+            }
+            else {
+                // Check the win/loss conditions for other players
+                for ( const int color : Colors( colors & ( ~currentColor ) ) ) {
+                    result = checkWinLossConditions( color );
+
+                    if ( result != GameOver::COND_NONE ) {
+                        resultForColor = color;
+
+                        break;
+                    }
+                }
+            }
+
+            if ( result & GameOver::WINS ) {
+                DialogWins( result );
+
+                AGG::ResetMixer();
+                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+
+                // The results of multiplayer games shouldn't be saved in high scores
+                ResetResult();
+
+                res = fheroes2::GameMode::MAIN_MENU;
+            }
+            else if ( result & GameOver::LOSS ) {
+                DialogLoss( result, resultForColor );
+
+                AGG::ResetMixer();
+                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+
+                res = fheroes2::GameMode::MAIN_MENU;
+            }
         }
     }
 
