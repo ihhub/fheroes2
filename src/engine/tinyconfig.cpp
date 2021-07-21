@@ -37,8 +37,7 @@ std::string ModifyKey( const std::string & str )
     std::string key = StringTrim( StringLower( str ) );
 
     // remove multiple space
-    std::string::iterator it = std::unique( key.begin(), key.end(), SpaceCompare );
-    key.resize( it - key.begin() );
+    key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
 
     // change space
     std::replace_if( key.begin(), key.end(), ::isspace, 0x20 );
