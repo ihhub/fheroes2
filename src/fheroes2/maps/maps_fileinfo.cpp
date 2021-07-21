@@ -595,18 +595,15 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     lists.erase( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ), lists.end() );
 
     if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
-        if ( it != lists.begin() )
-            lists.erase( it, lists.end() );
+        lists.erase( std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } ), lists.end() );
     }
 
     // set preferably count filter
     const int prefPlayerCount = conf.PreferablyCountPlayers();
     if ( prefPlayerCount > 0 ) {
-        MapsFileInfoList::iterator it
-            = std::remove_if( lists.begin(), lists.end(), [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } );
-        if ( it != lists.begin() )
-            lists.erase( it, lists.end() );
+        lists.erase( std::remove_if( lists.begin(), lists.end(),
+                                     [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } ),
+                     lists.end() );
     }
 
     return !lists.empty();
