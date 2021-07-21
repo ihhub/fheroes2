@@ -11,11 +11,17 @@ target_link_libraries(extractor
 	)
 
 add_executable(icn2img icn2img.cpp)
+target_compile_definitions(icn2img PRIVATE
+        $<$<BOOL:${ENABLE_IMAGE}>:WITH_IMAGE>
+        )
 target_link_libraries(icn2img
 	engine
 	)
 
 add_executable(til2img til2img.cpp)
+target_compile_definitions(til2img PRIVATE
+        $<$<BOOL:${ENABLE_IMAGE}>:WITH_IMAGE>
+        )
 target_link_libraries(til2img
 	engine
 	)
