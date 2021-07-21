@@ -46,7 +46,7 @@ namespace
 
     private:
         std::vector<fheroes2::Rect> coords;
-        SpellStorage spells;
+        std::vector<Spell> spells;
     };
 }
 
@@ -85,7 +85,6 @@ RowSpells::RowSpells( const fheroes2::Point & pos, const Castle & castle, const 
             coords.emplace_back( pos.x + count * 110 - roll_hide.width() / 2, pos.y, roll_hide.width(), roll_hide.height() );
     }
 
-    spells.reserve( 6 );
     spells = castle.GetMageGuild().GetSpells( castle.GetLevelMageGuild(), castle.isLibraryBuild(), lvl );
     spells.resize( coords.size(), Spell::NONE );
 }

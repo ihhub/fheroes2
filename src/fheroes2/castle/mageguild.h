@@ -36,7 +36,7 @@ public:
 
     void initialize( int race, bool libraryCap );
     void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
-    SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
+    std::vector<Spell> GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const MageGuild & );

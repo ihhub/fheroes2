@@ -639,28 +639,28 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     }
 
     // skip bag artifacts
-    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::Filter::ALL );
-    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
+    std::vector<Spell> teach = teacher->spell_book.SetFilter( SpellBook::Filter::ALL );
+    std::vector<Spell> learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
 
     // remove_if for learn spells
     if ( !learn.empty() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
+        auto res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     if ( !learn.empty() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
+        auto res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     // remove_if for teach spells
     if ( !teach.empty() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
+        auto res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 
     if ( !teach.empty() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
+        auto res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 

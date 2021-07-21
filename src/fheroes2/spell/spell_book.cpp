@@ -71,8 +71,8 @@ namespace
         return fheroes2::Size( bookPage.width() * 2, maximumHeight );
     }
 
-    void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero,
-                                bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
+    void SpellBookRedrawSpells( const std::vector<Spell> & spells, std::vector<fheroes2::Rect> & coords, const size_t index, int32_t px, int32_t py,
+                                const HeroBase & hero, bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
     {
         const uint32_t heroSpellPoints = hero.GetSpellPoints();
 
@@ -124,8 +124,8 @@ namespace
         text.Blit( tp.x - text.w() / 2, tp.y, output );
     }
 
-    void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const fheroes2::Point & pt, uint32_t manaPoints,
-                               const SpellBook::Filter displayableSpells, const HeroBase & hero )
+    void SpellBookRedrawLists( const std::vector<Spell> & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const fheroes2::Point & pt,
+                               uint32_t manaPoints, const SpellBook::Filter displayableSpells, const HeroBase & hero )
     {
         const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
         const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
@@ -171,7 +171,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
     }
 
     Filter currentFilter = displayableSpells == Filter::ALL ? Filter::ADVN : displayableSpells;
-    SpellStorage displayedSpells = SetFilter( currentFilter, &hero );
+    std::vector<Spell> displayedSpells = SetFilter( currentFilter, &hero );
 
     if ( canCastSpell && displayedSpells.empty() ) {
         Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
@@ -373,7 +373,7 @@ void SpellBook::Edit( const HeroBase & hero )
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     size_t current_index = 0;
-    SpellStorage displayedSpells = SetFilter( Filter::ALL, &hero );
+    std::vector<Spell> displayedSpells = SetFilter( Filter::ALL, &hero );
 
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
@@ -406,7 +406,7 @@ void SpellBook::Edit( const HeroBase & hero )
             current_index -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( next_list ) && size() > ( current_index + spellsPerPage * 2 ) ) {
+        else if ( le.MouseClickLeft( next_list ) && _spells.size() > ( current_index + spellsPerPage * 2 ) ) {
             current_index += spellsPerPage * 2;
             redraw = true;
         }
@@ -425,7 +425,7 @@ void SpellBook::Edit( const HeroBase & hero )
             }
             else {
                 Spell spell = Dialog::SelectSpell();
-                Append( spell );
+                append( spell );
                 displayedSpells = SetFilter( Filter::ALL, &hero );
                 redraw = true;
             }
@@ -457,31 +457,26 @@ void SpellBook::Edit( const HeroBase & hero )
     display.render();
 }
 
-SpellStorage SpellBook::SetFilter( const Filter filter, const HeroBase * hero ) const
+std::vector<Spell> SpellBook::SetFilter( const Filter filter, const HeroBase * hero ) const
 {
-    SpellStorage res( *this );
+    SpellBook storage( *this );
 
     // add heroes spell scrolls
     if ( hero != nullptr )
-        res.Append( hero->GetBagArtifacts() );
+        storage.append( hero->GetBagArtifacts() );
 
-    if ( filter != SpellBook::Filter::ALL ) {
-        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), [filter]( const Spell & s ) {
-                                       return ( ( SpellBook::Filter::ADVN == filter ) && s.isCombat() ) || ( ( SpellBook::Filter::CMBT == filter ) && !s.isCombat() );
-                                   } ) ) );
-    }
+    const bool isHeroOnBoat = hero != nullptr && hero->Modes( Heroes::SHIPMASTER );
 
-    // check on water: disable portal spells
-    if ( hero != nullptr && hero->Modes( Heroes::SHIPMASTER ) ) {
-        SpellStorage::iterator itend = res.end();
-        itend = std::remove( res.begin(), itend, Spell( Spell::TOWNGATE ) );
-        itend = std::remove( res.begin(), itend, Spell( Spell::TOWNPORTAL ) );
-        if ( res.end() != itend )
-            res.resize( std::distance( res.begin(), itend ) );
-    }
+    // disable non-filtered spells and portal spells on water
+    storage._spells.erase( std::remove_if( storage._spells.begin(), storage._spells.end(),
+                                           [filter, isHeroOnBoat]( const Spell & s ) {
+                                               return ( filter == SpellBook::Filter::ADVN && s.isCombat() ) || ( filter == SpellBook::Filter::CMBT && !s.isCombat() )
+                                                      || ( isHeroOnBoat && ( s.GetID() == Spell::TOWNGATE || s.GetID() == Spell::TOWNPORTAL ) );
+                                           } ),
+                           storage._spells.end() );
 
     // sorting results
-    std::sort( res.begin(), res.end() );
+    std::sort( storage._spells.begin(), storage._spells.end() );
 
-    return res;
+    return storage._spells;
 }

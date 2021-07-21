@@ -222,7 +222,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         current_commander->SpellCasted( spell );
 
         // save spell for "eagle eye" capability
-        usage_spells.Append( spell );
+        usage_spells.append( spell );
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_INFO,

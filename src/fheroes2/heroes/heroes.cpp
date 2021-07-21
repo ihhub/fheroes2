@@ -1678,7 +1678,7 @@ std::string Heroes::String( void ) const
     if ( isControlAI() ) {
         os << "skills          : " << secondary_skills.String() << std::endl
            << "artifacts       : " << bag_artifacts.String() << std::endl
-           << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
+           << "spell book      : " << ( HaveSpellBook() ? spell_book.string() : "disabled" ) << std::endl
            << "army dump       : " << army.String() << std::endl;
 
         os << AI::Get().HeroesString( *this );
