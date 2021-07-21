@@ -365,7 +365,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+    const int object = tile.GetObject( tileIndex != GetIndex() );
 
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
