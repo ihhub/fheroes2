@@ -465,17 +465,18 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             // Check the win/loss conditions for the current player first
             const int currentColor = Settings::Get().CurrentColor();
 
-            result = checkWinLossConditions( currentColor );
+            // The result of the multiplayer game shouldn't be stored by this class
+            uint32_t multiplayerResult = checkWinLossConditions( currentColor );
 
-            if ( result != GameOver::COND_NONE ) {
+            if ( multiplayerResult != GameOver::COND_NONE ) {
                 resultForColor = currentColor;
             }
             else {
                 // Check the win/loss conditions for other players
                 for ( const int color : Colors( colors & ( ~currentColor ) ) ) {
-                    result = checkWinLossConditions( color );
+                    multiplayerResult = checkWinLossConditions( color );
 
-                    if ( result != GameOver::COND_NONE ) {
+                    if ( multiplayerResult != GameOver::COND_NONE ) {
                         resultForColor = color;
 
                         break;
@@ -483,19 +484,16 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
             }
 
-            if ( result & GameOver::WINS ) {
-                DialogWins( result );
+            if ( multiplayerResult & GameOver::WINS ) {
+                DialogWins( multiplayerResult );
 
                 AGG::ResetMixer();
                 Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
 
-                // The results of multiplayer games shouldn't be saved in high scores
-                ResetResult();
-
                 res = fheroes2::GameMode::MAIN_MENU;
             }
-            else if ( result & GameOver::LOSS ) {
-                DialogLoss( result, resultForColor );
+            else if ( multiplayerResult & GameOver::LOSS ) {
+                DialogLoss( multiplayerResult, resultForColor );
 
                 AGG::ResetMixer();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
