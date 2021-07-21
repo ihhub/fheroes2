@@ -421,6 +421,9 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     else {
         // There are no active human-controlled players left, game over
         if ( activeHumanColors == 0 ) {
+            AGG::ResetMixer();
+            Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+
             res = fheroes2::GameMode::MAIN_MENU;
         }
         // Check the regular win/loss conditions
@@ -428,61 +431,36 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             auto checkWinLossConditions = []( const int color ) -> uint32_t {
                 const Kingdom & kingdom = world.GetKingdom( color );
 
-                // Check the win/loss conditions for active players only
-                if ( !kingdom.isPlay() ) {
+                // Check the win/loss conditions for active human-controlled players only
+                if ( !kingdom.isPlay() || !kingdom.isControlHuman() ) {
                     return GameOver::COND_NONE;
                 }
 
-                // Check the win conditions for local human-controlled players only
-                if ( kingdom.isControlHuman() && kingdom.isControlLocal() ) {
-                    uint32_t condition = world.CheckKingdomWins( kingdom );
+                uint32_t condition = world.CheckKingdomWins( kingdom );
 
-                    if ( condition != GameOver::COND_NONE ) {
-                        return condition;
-                    }
+                if ( condition != GameOver::COND_NONE ) {
+                    return condition;
                 }
 
-                // Check the loss conditions for local or remote human-controlled players
-                if ( kingdom.isControlHuman() ) {
-                    uint32_t condition = world.CheckKingdomLoss( kingdom );
+                condition = world.CheckKingdomLoss( kingdom );
 
-                    // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
-                    // LOSS_TOWN apparently is not intended to be used in multiplayer
-                    // LOSS_HERO may be used in multiplayer (usually in combination with WINS_SIDE), if the hero is lost - everyone loses
-                    // LOSS_TIME is widely used in multiplayer
-                    // LOSS_STARTHERO is an extension and is not intended to be used in multiplayer
-                    if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
-                        return condition;
-                    }
+                // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
+                // LOSS_TOWN apparently is not intended to be used in multiplayer
+                // LOSS_HERO may be used in multiplayer (usually in combination with WINS_SIDE), if the hero is lost - everyone loses
+                // LOSS_TIME is widely used in multiplayer
+                // LOSS_STARTHERO is an extension and apparently is not intended to be used in multiplayer
+                if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
+                    return condition;
                 }
 
                 return GameOver::COND_NONE;
             };
 
-            // The color for which the win/loss condition was triggered
-            int resultForColor = Color::NONE;
-
-            // Check the win/loss conditions for the current player first
+            // Check the win/loss conditions for the current player
             const int currentColor = Settings::Get().CurrentColor();
 
             // The result of the multiplayer game shouldn't be stored by this class
             uint32_t multiplayerResult = checkWinLossConditions( currentColor );
-
-            if ( multiplayerResult != GameOver::COND_NONE ) {
-                resultForColor = currentColor;
-            }
-            else {
-                // Check the win/loss conditions for other players
-                for ( const int color : Colors( colors & ( ~currentColor ) ) ) {
-                    multiplayerResult = checkWinLossConditions( color );
-
-                    if ( multiplayerResult != GameOver::COND_NONE ) {
-                        resultForColor = color;
-
-                        break;
-                    }
-                }
-            }
 
             if ( multiplayerResult & GameOver::WINS ) {
                 DialogWins( multiplayerResult );
@@ -493,7 +471,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 res = fheroes2::GameMode::MAIN_MENU;
             }
             else if ( multiplayerResult & GameOver::LOSS ) {
-                DialogLoss( multiplayerResult, resultForColor );
+                DialogLoss( multiplayerResult, currentColor );
 
                 AGG::ResetMixer();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
