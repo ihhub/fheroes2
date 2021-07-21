@@ -263,6 +263,23 @@ void Game::HotKeysDefaults( void )
 
     key_events[EVENT_UPGRADE_TROOP] = KEY_u;
     key_events[EVENT_DISMISS_TROOP] = KEY_d;
+
+    // town + build screen
+    key_events[EVENT_TOWN_CREATURE_1] = KEY_1;
+    key_events[EVENT_TOWN_CREATURE_2] = KEY_2;
+    key_events[EVENT_TOWN_CREATURE_3] = KEY_3;
+    key_events[EVENT_TOWN_CREATURE_4] = KEY_4;
+    key_events[EVENT_TOWN_CREATURE_5] = KEY_5;
+    key_events[EVENT_TOWN_CREATURE_6] = KEY_6;
+    key_events[EVENT_TOWN_WELL] = KEY_w;
+    key_events[EVENT_TOWN_MAGE_GUILD] = KEY_s;
+    key_events[EVENT_TOWN_MARKETPLACE] = KEY_m;
+    key_events[EVENT_TOWN_THIEVES_GUILD] = KEY_t;
+    key_events[EVENT_TOWN_SHIPYARD] = KEY_n;
+
+    // town screen only
+    key_events[EVENT_TOWN_TAVERN] = KEY_r;
+    key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
 }
 
 bool Game::HotKeyPressEvent( int evnt )
