@@ -54,40 +54,40 @@ namespace
         if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_1 ) ) {
             return DWELLING_MONSTER1;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_2 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_2 ) ) {
             return DWELLING_MONSTER2;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_3 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_3 ) ) {
             return DWELLING_MONSTER3;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_4 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_4 ) ) {
             return DWELLING_MONSTER4;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_5 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_5 ) ) {
             return DWELLING_MONSTER5;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_6 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_6 ) ) {
             return DWELLING_MONSTER6;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
             return BUILD_MARKETPLACE;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
             return BUILD_WELL;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
             return BUILD_MAGEGUILD;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
             return BUILD_SHIPYARD;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
             return BUILD_THIEVESGUILD;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
             return BUILD_TAVERN;
         }
-        else if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
             return BUILD_CASTLE;
         }
 
