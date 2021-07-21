@@ -283,7 +283,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         StringReplace( msg, "%{month}", month + 1 );
     }
 
-    if ( conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
+    if ( ( cond & LOSS ) && conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
         const std::string names = world.GetKingdom( conf.CurrentColor() ).GetNamesHeroStartCondLoss();
 
         if ( !names.empty() ) {
