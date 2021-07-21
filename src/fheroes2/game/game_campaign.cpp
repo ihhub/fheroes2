@@ -489,7 +489,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
                 if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
                     continue;
 
-                artifactAwardIDs.emplace( awardData._subType, awardData );
+                artifactAwardIDs.emplace( awardData._subType, awardData._id );
             }
 
             bagArtifacts.assembleArtifactSetIfPossible();
