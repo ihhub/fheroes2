@@ -215,6 +215,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const int friendColors = Players::FriendColors();
 
+    const Maps::Tiles * tileMovingHero = nullptr;
+
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
@@ -275,8 +277,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawHeroes ) {
                     drawList.emplace_back( &tile );
                     Heroes * hero = tile.GetHeroes();
-                    if ( hero && ( drawTop || drawBottom ) ) {
-                        hero->SetRedrawIndexes();
+                    if ( hero ) {
+                        if ( drawTop || drawBottom ) {
+                            hero->SetRedrawIndexes();
+                        }
+                        if ( hero->isMoveEnabled() && ( hero->GetDirection() == Direction::BOTTOM_RIGHT || hero->GetDirection() == Direction::TOP_LEFT ) ) {
+                            tileMovingHero = &tile;
+                        }
                     }
                 }
                 else if ( drawTop ) {
@@ -294,6 +301,34 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     topList.emplace_back( &tile );
                 }
             } break;
+            }
+        }
+    }
+
+    if ( drawList.size() > 1 && tileMovingHero != nullptr ) {
+        const Heroes * hero = tileMovingHero->GetHeroes();
+        if ( hero->GetDirection() == Direction::BOTTOM_RIGHT ) {
+            const Maps::Tiles & tileNeighborHero = world.GetTiles( Maps::GetDirectionIndex( tileMovingHero->GetIndex(), Direction::RIGHT ) );
+            if ( tileNeighborHero.GetHeroes() != nullptr || tileNeighborHero.GetObject() == MP2::OBJ_BOAT ) {
+                const auto currentHeroTile = std::find( drawList.begin(), drawList.end(), tileMovingHero );
+                assert( currentHeroTile != drawList.end() );
+                const auto nextHeroTile = currentHeroTile + 1;
+                if ( nextHeroTile != drawList.end() && ( ( *nextHeroTile )->GetIndex() == ( *currentHeroTile )->GetIndex() + 1 )
+                     && ( ( *nextHeroTile )->GetObject() == MP2::OBJ_HEROES || ( *nextHeroTile )->GetObject() == MP2::OBJ_BOAT ) ) {
+                    std::iter_swap( currentHeroTile, nextHeroTile );
+                }
+            }
+        }
+        else {
+            const Maps::Tiles & tileNeighborHero = world.GetTiles( Maps::GetDirectionIndex( tileMovingHero->GetIndex(), Direction::LEFT ) );
+            if ( tileNeighborHero.GetHeroes() != nullptr || tileNeighborHero.GetObject() == MP2::OBJ_BOAT ) {
+                const auto currentHeroTile = std::find( drawList.begin(), drawList.end(), tileMovingHero );
+                assert( currentHeroTile != drawList.end() );
+                const auto prevHeroTile = currentHeroTile - 1;
+                if ( prevHeroTile != drawList.begin() && ( ( *prevHeroTile )->GetIndex() == ( *currentHeroTile )->GetIndex() - 1 )
+                     && ( ( *prevHeroTile )->GetObject() == MP2::OBJ_HEROES || ( *prevHeroTile )->GetObject() == MP2::OBJ_BOAT ) ) {
+                    std::iter_swap( currentHeroTile, prevHeroTile );
+                }
             }
         }
     }
