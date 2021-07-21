@@ -20,36 +20,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cctype>
+#include <algorithm>
 #include <cstdlib>
-#include <ctime>
 #include <fstream>
-#include <locale>
 #include <sstream>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
 
-#include "logging.h"
 #include "system.h"
+#include "tools.h"
+
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
 #include <windows.h>
 #include <shellapi.h>
+#else
+#include <dirent.h>
 #endif
 
-#if !defined( _MSC_VER )
+#if defined( _MSC_VER )
+#include <io.h>
+#else
+#include <sys/stat.h>
 #include <unistd.h>
 #endif
-
-#if defined( __WIN32__ )
-#include <io.h>
-#endif
-
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #if defined( __WIN32__ )
 #define SEPARATOR '\\'
@@ -57,16 +54,38 @@
 #define SEPARATOR '/'
 #endif
 
-#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
-#include <dirent.h>
+#if !defined( __LINUX__ )
+namespace
+{
+    std::string GetHomeDirectory( const std::string & prog )
+    {
+#if defined( FHEROES2_VITA )
+        return "ux0:data/fheroes2";
 #endif
 
-#include "tools.h"
+        if ( getenv( "HOME" ) )
+            return System::ConcatePath( getenv( "HOME" ), std::string( "." ).append( prog ) );
+
+        if ( getenv( "APPDATA" ) )
+            return System::ConcatePath( getenv( "APPDATA" ), prog );
+
+        std::string res;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        char * path = SDL_GetPrefPath( "", prog.c_str() );
+        if ( path ) {
+            res = path;
+            SDL_free( path );
+        }
+#endif
+        return res;
+    }
+}
+#endif
 
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( __WIN32__ ) && defined( _MSC_VER )
-    return CreateDirectoryA( path.c_str(), NULL );
+    return CreateDirectoryA( path.c_str(), nullptr );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
 #elif defined( FHEROES2_VITA )
@@ -81,88 +100,58 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return std::string( str1 + SEPARATOR + str2 );
 }
 
-std::string System::GetHomeDirectory( const std::string & prog )
-{
-#if defined( FHEROES2_VITA )
-    return "ux0:data/fheroes2";
-#endif
-
-    std::string res;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    char * path = SDL_GetPrefPath( "", prog.c_str() );
-    if ( path ) {
-        res = path;
-        SDL_free( path );
-    }
-#endif
-
-    if ( System::GetEnvironment( "HOME" ) )
-        res = System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
-    else if ( System::GetEnvironment( "APPDATA" ) )
-        res = System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
-
-    return res;
-}
-
-ListDirs System::GetDataDirectories( const std::string & prog )
+ListDirs System::GetOSSpecificDirectories()
 {
     ListDirs dirs;
 
-#if defined( ANDROID )
-    const char * internal = SDL_AndroidGetInternalStoragePath();
-    if ( internal )
-        dirs.push_back( System::ConcatePath( internal, prog ) );
-
-    if ( SDL_ANDROID_EXTERNAL_STORAGE_READ && SDL_AndroidGetExternalStorageState() ) {
-        const char * external = SDL_AndroidGetExternalStoragePath();
-        if ( external )
-            dirs.push_back( System::ConcatePath( external, prog ) );
-    }
-
-    dirs.push_back( System::ConcatePath( "/storage/sdcard0", prog ) );
-    dirs.push_back( System::ConcatePath( "/storage/sdcard1", prog ) );
-#else
-    (void)prog;
+#if defined( FHEROES2_VITA )
+    dirs.emplace_back( "ux0:app/FHOMM0002" );
 #endif
 
     return dirs;
 }
 
-ListFiles System::GetListFiles( const std::string & prog, const std::string & prefix, const std::string & filter )
+std::string System::GetConfigDirectory( const std::string & prog )
 {
-    ListFiles res;
-
-#if defined( ANDROID )
-    VERBOSE_LOG( prefix << ", " << filter );
-
-    // check assets
-    StreamFile sf;
-    if ( sf.open( "assets.list", "rb" ) ) {
-        std::list<std::string> rows = StringSplit( GetString( sf.getRaw( sf.size() ) ), "\n" );
-        for ( std::list<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it )
-            if ( prefix.empty() || ( ( prefix.size() <= ( *it ).size() && 0 == prefix.compare( ( *it ).substr( 0, prefix.size() ) ) ) ) ) {
-                if ( filter.empty() || ( 0 == filter.compare( ( *it ).substr( ( *it ).size() - filter.size(), filter.size() ) ) ) )
-                    res.push_back( *it );
-            }
+#if defined( __LINUX__ )
+    const char * configEnv = getenv( "XDG_CONFIG_HOME" );
+    if ( configEnv ) {
+        return System::ConcatePath( configEnv, prog );
     }
 
-    ListDirs dirs = GetDataDirectories( prog );
-
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        res.ReadDir( prefix.size() ? System::ConcatePath( *it, prefix ) : *it, filter, false );
+    const char * homeEnv = getenv( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
     }
+
+    return std::string();
 #else
-    (void)prog;
-    (void)prefix;
-    (void)filter;
+    return GetHomeDirectory( prog );
 #endif
-    return res;
+}
+
+std::string System::GetDataDirectory( const std::string & prog )
+{
+#if defined( __LINUX__ )
+    const char * dataEnv = getenv( "XDG_DATA_HOME" );
+    if ( dataEnv ) {
+        return System::ConcatePath( dataEnv, prog );
+    }
+
+    const char * homeEnv = getenv( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
+    }
+
+    return std::string();
+#else
+    return GetHomeDirectory( prog );
+#endif
 }
 
 std::string System::GetDirname( const std::string & str )
 {
-    if ( str.size() ) {
+    if ( !str.empty() ) {
         size_t pos = str.rfind( SEPARATOR );
 
         if ( std::string::npos == pos )
@@ -180,7 +169,7 @@ std::string System::GetDirname( const std::string & str )
 
 std::string System::GetBasename( const std::string & str )
 {
-    if ( str.size() ) {
+    if ( !str.empty() ) {
         size_t pos = str.rfind( SEPARATOR );
 
         if ( std::string::npos == pos || pos == 0 )
@@ -194,30 +183,13 @@ std::string System::GetBasename( const std::string & str )
     return str;
 }
 
-const char * System::GetEnvironment( const char * name )
+std::string System::GetUniversalBasename( const std::string & str )
 {
-#if defined( __MINGW32__ )
-    return SDL_getenv( name );
-#else
-    return getenv( name );
-#endif
-}
+    std::string path = str;
 
-int System::SetEnvironment( const char * name, const char * value )
-{
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    std::string str( std::string( name ) + "=" + std::string( value ) );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return _putenv( str.c_str() );
-#else
-    // SDL 1.2.12 (char *)
-    return SDL_putenv( &str[0] );
-#endif
-#elif defined( __SWITCH__ ) || defined( FHEROES2_VITA )
-    return SDL_setenv( name, value, 1 );
-#else
-    return setenv( name, value, 1 );
-#endif
+    std::replace( path.begin(), path.end(), ( SEPARATOR == '/' ) ? '\\' : '/', SEPARATOR );
+
+    return GetBasename( path );
 }
 
 void System::SetLocale( int category, const char * locale )
@@ -233,11 +205,11 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-    char * clocale = std::setlocale( LC_MONETARY, NULL );
+    char * clocale = std::setlocale( LC_MONETARY, nullptr );
 #elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    char * clocale = setlocale( LC_MESSAGES, NULL );
+    char * clocale = setlocale( LC_MESSAGES, nullptr );
 #else
-    char * clocale = std::setlocale( LC_MESSAGES, NULL );
+    char * clocale = std::setlocale( LC_MESSAGES, nullptr );
 #endif
 
     if ( clocale ) {
@@ -269,7 +241,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 char * System::GetOptionsArgument( void )
 {
 #if defined( _MSC_VER )
-    return NULL;
+    return nullptr;
 #else
     return optarg;
 #endif

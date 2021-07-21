@@ -24,7 +24,6 @@
 #define H2BATTLE_TOWER_H
 
 #include "battle_troop.h"
-#include "gamedefs.h"
 
 class Castle;
 

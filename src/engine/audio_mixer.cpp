@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "audio.h"
-#include "audio_cdrom.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "engine.h"
@@ -186,7 +185,7 @@ int Mixer::Volume( int channel, int vol /* = -1 */ )
             }
 
             // return the average volume
-            const int prevVolume = std::accumulate( savedVolumes.begin(), savedVolumes.end(), 0 ) / savedVolumes.size();
+            const int prevVolume = std::accumulate( savedVolumes.begin(), savedVolumes.end(), 0 ) / static_cast<int>( savedVolumes.size() );
 
             if ( vol >= 0 ) {
                 std::fill( savedVolumes.begin(), savedVolumes.end(), vol );
@@ -215,37 +214,42 @@ int Mixer::Volume( int channel, int vol /* = -1 */ )
 
 void Mixer::Pause( int channel /* = -1 */ )
 {
-    Mix_Pause( channel );
+    if ( valid ) {
+        Mix_Pause( channel );
+    }
 }
 
 void Mixer::Resume( int channel /* = -1 */ )
 {
-    Mix_Resume( channel );
+    if ( valid ) {
+        Mix_Resume( channel );
+    }
 }
 
 void Mixer::Stop( int channel /* = -1 */ )
 {
-    Mix_HaltChannel( channel );
+    if ( valid ) {
+        Mix_HaltChannel( channel );
+    }
 }
 
 void Mixer::Reset()
 {
     Music::Reset();
-#ifdef WITH_AUDIOCD
-    if ( Cdrom::isValid() )
-        Cdrom::Pause();
-#endif
-    Mix_HaltChannel( -1 );
+
+    if ( valid ) {
+        Mix_HaltChannel( -1 );
+    }
 }
 
 bool Mixer::isPlaying( int channel )
 {
-    return Mix_Playing( channel ) > 0;
+    return valid && Mix_Playing( channel ) > 0;
 }
 
 bool Mixer::isPaused( int channel )
 {
-    return Mix_Paused( channel ) > 0;
+    return valid && Mix_Paused( channel ) > 0;
 }
 
 bool Mixer::isValid()

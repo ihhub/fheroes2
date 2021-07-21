@@ -35,14 +35,14 @@
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "mus.h"
 #include "player_info.h"
-#include "race.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -325,9 +325,6 @@ fheroes2::GameMode Game::ScenarioInfo()
             if ( ext == "mp2" || ext == "mx2" ) {
                 result = world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
-            else if ( ext == "map" ) {
-                result = world.LoadMapMAP( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
-            }
             else {
                 result = fheroes2::GameMode::MAIN_MENU;
                 DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -346,9 +343,9 @@ fheroes2::GameMode Game::ScenarioInfo()
     return result;
 }
 
-u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
+int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )
 {
-    return current * width * KINGDOMMAX / count + ( width * ( KINGDOMMAX - count ) / ( 2 * count ) );
+    return currentId * width * KINGDOMMAX / totalCount + ( width * ( KINGDOMMAX - totalCount ) / ( 2 * totalCount ) );
 }
 
 void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw )

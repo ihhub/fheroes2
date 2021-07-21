@@ -22,6 +22,7 @@
 #include "image.h"
 
 #include <memory>
+#include <string>
 
 namespace fheroes2
 {
@@ -123,7 +124,7 @@ namespace fheroes2
         void release(); // to release all allocated resources. Should be used at the end of the application
 
         // Change whole color representation on the screen. Make sure that palette exists all the time!!!
-        // NULL input parameters means to set to default value
+        // nullptr input parameters means to set to default value
         void changePalette( const uint8_t * palette = nullptr ) const;
 
         friend BaseRenderEngine & engine();

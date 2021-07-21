@@ -22,8 +22,12 @@
 #ifndef H2RESOURCE_H
 #define H2RESOURCE_H
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include <string>
+
+#include "math_base.h"
+#include "types.h"
+
+class StreamBase;
 
 struct cost_t
 {
@@ -42,11 +46,6 @@ struct cost_t
     }
 
 class ResourceCount;
-
-#ifdef WITH_XML
-class TiXmlElement;
-void LoadCostFromXMLElement( cost_t &, const TiXmlElement & );
-#endif
 
 namespace Resource
 {

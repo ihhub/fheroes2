@@ -24,7 +24,6 @@
 #include "font.h"
 #include "localevent.h"
 #include "logging.h"
-#include "sdlnet.h"
 
 #if defined( FHEROES2_VITA )
 #include <psp2/kernel/processmgr.h>
@@ -39,14 +38,6 @@ namespace Mixer
     void Init();
     void Quit();
 }
-
-#ifdef WITH_AUDIOCD
-namespace Cdrom
-{
-    void Open( void );
-    void Close( void );
-}
-#endif
 
 bool SDL::Init( const uint32_t system )
 {
@@ -63,15 +54,8 @@ bool SDL::Init( const uint32_t system )
     }
     LocalEvent::Get().OpenTouchpad();
 #endif
-#ifdef WITH_AUDIOCD
-    if ( SDL_INIT_CDROM & system )
-        Cdrom::Open();
-#endif
 #ifdef WITH_TTF
     FontTTF::Init();
-#endif
-#ifdef WITH_NET
-    Network::Init();
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -84,15 +68,8 @@ bool SDL::Init( const uint32_t system )
 
 void SDL::Quit()
 {
-#ifdef WITH_NET
-    Network::Quit();
-#endif
 #ifdef WITH_TTF
     FontTTF::Quit();
-#endif
-#ifdef WITH_AUDIOCD
-    if ( SubSystem( SDL_INIT_CDROM ) )
-        Cdrom::Close();
 #endif
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) ) {

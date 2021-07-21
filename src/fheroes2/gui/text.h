@@ -23,12 +23,14 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
+#include <list>
 #include <string>
 #include <vector>
 
 #include "gamedefs.h"
 #include "screen.h"
 #include "translations.h"
+#include "types.h"
 #include "ui_tool.h"
 
 namespace Font
@@ -162,6 +164,8 @@ public:
 
     static u32 width( const std::string &, int ft, u32 start = 0, u32 count = 0 );
     static u32 height( const std::string &, int ft, u32 width = 0 );
+
+    static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 
     // Use this method when you need to find the maximum width of of a string to be fit within given width
     static int32_t getFitWidth( const std::string & text, const int fontId, const int32_t width_ );

@@ -30,10 +30,6 @@
 #include "army_troop.h"
 #include "players.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Castle;
 class HeroBase;
 class Heroes;
@@ -65,13 +61,14 @@ public:
     void UpgradeMonsters( const Monster & );
     u32 GetCountMonsters( const Monster & ) const;
 
+    double getReinforcementValue( const Troops & reinforcement ) const;
+
     u32 GetCount( void ) const;
     bool isValid( void ) const;
     bool HasMonster( const Monster & ) const;
 
-    bool AllTroopsIsRace( int ) const;
-    bool AllTroopsAreUndead() const;
-    u32 GetUniqueCount( void ) const;
+    bool AllTroopsAreUndead( void ) const;
+    bool AllTroopsAreTheSame( void ) const;
 
     bool JoinTroop( const Troop & );
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
@@ -108,19 +105,24 @@ public:
     void JoinAllTroopsOfType( const Troop & targetTroop );
 };
 
-enum
+struct NeutralMonsterJoiningCondition
 {
-    JOIN_NONE,
-    JOIN_FREE,
-    JOIN_COST,
-    JOIN_FLEE
-};
+    enum class Reason : int
+    {
+        None,
+        Free,
+        ForMoney,
+        RunAway,
+        Alliance,
+        Bane
+    };
 
-struct JoinCount : std::pair<int, u32>
-{
-    JoinCount( int reason, u32 count )
-        : std::pair<int, u32>( reason, count )
-    {}
+    Reason reason;
+    uint32_t monsterCount;
+
+    // These messages are used only for Alliance and Bane reasons.
+    const char * joiningMessage;
+    const char * fleeingMessage;
 };
 
 class Army : public Troops, public Control
@@ -136,8 +138,7 @@ public:
     static bool FastestTroop( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
 
-    // 0: fight, 1: free join, 2: join with gold, 3: flee
-    static JoinCount GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
+    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
@@ -156,9 +157,9 @@ public:
 
     int GetColor( void ) const;
     int GetControl( void ) const override;
+    uint32_t getTotalCount() const;
 
     double GetStrength() const override;
-    double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
@@ -191,9 +192,6 @@ public:
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Army & );
-#endif
 
     HeroBase * commander;
     bool combat_format;

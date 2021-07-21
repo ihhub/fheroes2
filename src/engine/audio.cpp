@@ -36,8 +36,8 @@ Audio::Spec::Spec()
     silence = 0;
     samples = 0;
     size = 0;
-    callback = NULL;
-    userdata = NULL;
+    callback = nullptr;
+    userdata = nullptr;
 }
 
 Audio::CVT::CVT()
@@ -46,21 +46,21 @@ Audio::CVT::CVT()
     src_format = 0;
     dst_format = 0;
     rate_incr = 0;
-    buf = NULL;
+    buf = nullptr;
     len = 0;
     len_cvt = 0;
     len_mult = 0;
     len_ratio = 0;
-    filters[0] = NULL;
-    filters[1] = NULL;
-    filters[2] = NULL;
-    filters[3] = NULL;
-    filters[4] = NULL;
-    filters[5] = NULL;
-    filters[6] = NULL;
-    filters[7] = NULL;
-    filters[8] = NULL;
-    filters[9] = NULL;
+    filters[0] = nullptr;
+    filters[1] = nullptr;
+    filters[2] = nullptr;
+    filters[3] = nullptr;
+    filters[4] = nullptr;
+    filters[5] = nullptr;
+    filters[6] = nullptr;
+    filters[7] = nullptr;
+    filters[8] = nullptr;
+    filters[9] = nullptr;
     filter_index = 0;
 }
 

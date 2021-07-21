@@ -58,10 +58,10 @@ namespace Game
         TYPE_NETWORK = 0x08,
         TYPE_BATTLEONLY = 0x10,
 
-        // TYPE_LOADTYPE used in the Settings::LoadedGameVersion, if you change that value,
+        // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.
         TYPE_LOADFILE = 0x80,
-        TYPE_MULTI = TYPE_HOTSEAT | TYPE_NETWORK
+        TYPE_MULTI = TYPE_HOTSEAT
     };
     // distance_t
     enum
@@ -87,7 +87,6 @@ namespace Game
         EVENT_BUTTON_SETTINGS,
         EVENT_BUTTON_SELECT,
         EVENT_BUTTON_HOTSEAT,
-        EVENT_BUTTON_NETWORK,
         EVENT_BUTTON_HOST,
         EVENT_BUTTON_GUEST,
         EVENT_BUTTON_BATTLEONLY,
@@ -141,6 +140,22 @@ namespace Game
         EVENT_JOINSTACKS,
         EVENT_UPGRADE_TROOP,
         EVENT_DISMISS_TROOP,
+        EVENT_TOWN_CREATURE_1,
+        EVENT_TOWN_CREATURE_2,
+        EVENT_TOWN_CREATURE_3,
+        EVENT_TOWN_CREATURE_4,
+        EVENT_TOWN_CREATURE_5,
+        EVENT_TOWN_CREATURE_6,
+        EVENT_TOWN_WELL,
+        EVENT_TOWN_MARKETPLACE,
+        EVENT_TOWN_MAGE_GUILD,
+        EVENT_TOWN_SHIPYARD,
+        EVENT_TOWN_THIEVES_GUILD,
+
+        // town screen exclusive, not applied to build screen!
+        EVENT_TOWN_TAVERN,
+        EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
+
         EVENT_LAST,
     };
 
@@ -161,13 +176,13 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
+    fheroes2::GameMode NewNetwork();
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();
     fheroes2::GameMode LoadHotseat();
-    fheroes2::GameMode LoadNetwork();
     fheroes2::GameMode ScenarioInfo();
-    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode );
+    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
     fheroes2::GameMode SelectScenario();
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();
@@ -193,8 +208,8 @@ namespace Game
     u32 SelectCountPlayers( void );
     void ShowMapLoadingText( void );
     void PlayPickupSound( void );
-    void DisableChangeMusic( bool );
-    bool ChangeMusicDisabled( void );
+    bool UpdateSoundsOnFocusUpdate();
+    void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
@@ -234,7 +249,7 @@ namespace Game
         void PerformFadeTask();
     }
 
-    u32 GetStep4Player( u32, u32, u32 );
+    int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }

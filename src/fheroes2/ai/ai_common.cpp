@@ -64,10 +64,16 @@ namespace AI
         }
 
         Army & heroArmy = hero.GetArmy();
+        const double armyStrength = heroArmy.GetStrength();
+
         heroArmy.UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
         heroArmy.JoinStrongestFromArmy( castle.GetArmy() );
         OptimizeTroopsOrder( heroArmy );
+
+        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
+            hero.unmarkHeroMeeting();
+        }
     }
 
     void OptimizeTroopsOrder( Army & army )
@@ -112,8 +118,6 @@ namespace AI
             slotOrder = {0, 2, 1, 3, 4};
             break;
         case 2:
-            slotOrder = {0, 4, 2, 1, 3};
-            break;
         case 3:
             slotOrder = {0, 4, 2, 1, 3};
             break;

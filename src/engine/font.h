@@ -31,18 +31,11 @@
 #ifdef WITH_TTF
 #include <SDL_ttf.h>
 
-class RGBA;
-
 class FontTTF
 {
 public:
     FontTTF();
     ~FontTTF();
-
-    TTF_Font * operator()( void ) const
-    {
-        return ptr;
-    }
 
     static void Init( void );
     static void Quit( void );

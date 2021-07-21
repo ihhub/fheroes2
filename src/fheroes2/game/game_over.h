@@ -26,7 +26,8 @@
 #include <string>
 
 #include "game_mode.h"
-#include "serialize.h"
+
+class StreamBase;
 
 namespace GameOver
 {
@@ -40,6 +41,7 @@ namespace GameOver
         WINS_ARTIFACT = 0x0008,
         WINS_SIDE = 0x0010,
         WINS_GOLD = 0x0020,
+
         WINS = WINS_ALL | WINS_TOWN | WINS_HERO | WINS_ARTIFACT | WINS_SIDE | WINS_GOLD,
 
         LOSS_ALL = 0x0100,
@@ -47,21 +49,25 @@ namespace GameOver
         LOSS_HERO = 0x0400,
         LOSS_TIME = 0x0800,
         LOSS_STARTHERO = 0x1000,
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO
+        // These loss conditions apply if the enemy player won because of the corresponding win condition
+        LOSS_ENEMY_WINS_TOWN = 0x2000,
+        LOSS_ENEMY_WINS_ARTIFACT = 0x4000,
+        LOSS_ENEMY_WINS_GOLD = 0x8000,
+
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
     };
 
     const char * GetString( int );
     std::string GetActualDescription( int );
-    void DialogWins( int );
-    void DialogLoss( int );
 
     class Result
     {
     public:
         static Result & Get( void );
 
-        void Reset( void );
-        void SetResult( int );
+        void Reset(); // Resets everything
+        void ResetResult(); // Resets just the result
+
         int GetResult( void ) const;
         fheroes2::GameMode LocalCheckGameOver();
 
@@ -73,7 +79,7 @@ namespace GameOver
 
         int colors;
         int result;
-        bool continue_game;
+        bool continueAfterVictory;
     };
 
     StreamBase & operator<<( StreamBase &, const Result & );

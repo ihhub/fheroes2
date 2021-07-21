@@ -22,6 +22,7 @@
 
 #include "agg.h"
 #include "agg_image.h"
+#include "battle.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
@@ -31,12 +32,9 @@
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
-#include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -75,7 +73,8 @@ namespace
         fheroes2::Blit( icon, fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
-    void DrawCampaignScenarioIcons( fheroes2::ButtonGroup & buttonGroup, const Campaign::CampaignData & campaignData, const fheroes2::Point & top )
+    void DrawCampaignScenarioIcons( fheroes2::ButtonGroup & buttonGroup, const Campaign::CampaignData & campaignData, const fheroes2::Point & top,
+                                    const int chosenScenarioId )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -140,8 +139,13 @@ namespace
 
         std::vector<int> prevScenarioNextMaps;
         const std::vector<int> & clearedMaps = saveData.getFinishedMaps();
-        const std::vector<int> & availableMaps
-            = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
+        std::vector<int> availableMaps;
+        if ( chosenScenarioId >= 0 ) {
+            availableMaps.emplace_back( chosenScenarioId );
+        }
+        else {
+            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
+        }
 
         assert( iconOffsets.size() == scenarios.size() );
 
@@ -211,7 +215,12 @@ namespace
             else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
                 award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
 
-            award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
+            if ( award.w() > textAwardWidth ) {
+                award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
+            }
+            else {
+                award.Blit( top.x + 425 + ( textAwardWidth - award.w() ) / 2, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2 );
+            }
         }
     }
 
@@ -298,7 +307,8 @@ namespace
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
-                            kingdom.RemoveHeroes( heroes[j] );
+                            heroes[j]->SetKillerColor( humanKingdom.GetColor() );
+                            heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
                     }
@@ -509,7 +519,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
-fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMode )
+fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     display.fill( 0 );
@@ -527,7 +537,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[chosenScenarioID];
 
-    playCurrentScenarioVideo();
+    if ( !allowToRestart ) {
+        playCurrentScenarioVideo();
+    }
 
     int backgroundIconID = ICN::UNKNOWN;
 
@@ -559,6 +571,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     const int buttonIconID = getCampaignButtonId( chosenCampaignID );
     fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
+    fheroes2::Button buttonRestart( top.x + 195, top.y + 431, buttonIconID, 2, 3 );
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
 
@@ -591,6 +604,18 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     buttonViewIntro.draw();
 
+    if ( !scenario.isMapFilePresent() ) {
+        buttonOk.disable();
+    }
+
+    if ( allowToRestart ) {
+        buttonOk.disable();
+        buttonRestart.draw();
+    }
+    else {
+        buttonRestart.hide();
+    }
+
     buttonOk.draw();
     buttonCancel.draw();
 
@@ -603,12 +628,21 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     DrawCampaignScenarioDescription( scenario, top );
     drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
 
-    const std::vector<int> & selectableScenarios
-        = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
+    std::vector<int> selectableScenarios;
+    if ( allowToRestart ) {
+        selectableScenarios.emplace_back( chosenScenarioID );
+    }
+    else {
+        selectableScenarios
+            = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
+    }
+
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
 
     fheroes2::ButtonGroup selectableScenarioButtons;
-    DrawCampaignScenarioIcons( selectableScenarioButtons, campaignData, top );
+
+    const int highlightedScenarioId = allowToRestart ? chosenScenarioID : -1;
+    DrawCampaignScenarioIcons( selectableScenarioButtons, campaignData, top, highlightedScenarioId );
 
     for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
         if ( chosenScenarioID == selectableScenarios[i] )
@@ -624,7 +658,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
+
+        if ( allowToRestart ) {
+            le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
+        }
+        else {
+            le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
+        }
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
@@ -637,7 +677,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-            if ( le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
+            if ( chosenScenarioID != selectableScenarios[i] && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioID( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
@@ -646,7 +686,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         if ( le.MouseClickLeft( buttonCancel.area() ) ) {
             return prevMode;
         }
-        else if ( le.MouseClickLeft( buttonOk.area() ) ) {
+        else if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
 
@@ -658,14 +698,18 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();
+
+            fheroes2::ImageRestorer restorer( display );
             Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
-                Dialog::Message( _( "Campaign Game loading failure" ), _( "Please make sure that campaign files are correct and present" ), Font::SMALL, Dialog::OK );
+                Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
+
+            restorer.reset();
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )

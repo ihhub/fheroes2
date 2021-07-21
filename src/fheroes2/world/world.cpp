@@ -21,16 +21,16 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
-#include <functional>
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -39,8 +39,90 @@
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
-#include "text.h"
+#include "save_format_version.h"
+#include "settings.h"
 #include "world.h"
+
+namespace
+{
+    bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    {
+        const MapsIndexes & indexes = Maps::GetAroundIndexes( tileId, radius, false );
+        for ( const int32_t indexId : indexes ) {
+            if ( excludeTiles.count( indexId ) > 0 ) {
+                return true;
+            }
+
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            if ( indexedTile.isWater() ) {
+                continue;
+            }
+
+            const int indexedObjectId = indexedTile.GetObject( true );
+            if ( indexedObjectId == MP2::OBJ_CASTLE || indexedObjectId == MP2::OBJ_HEROES || indexedObjectId == MP2::OBJ_MONSTER ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    int32_t findSuitableNeighbouringTile( const MapsTiles & mapTiles, const int32_t tileId, const bool allDirections )
+    {
+        std::vector<int32_t> suitableIds;
+
+        if ( allDirections ) {
+            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
+            for ( const int32_t indexId : tiles ) {
+                const Maps::Tiles & indexedTile = mapTiles[indexId];
+                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                    continue;
+                }
+
+                suitableIds.emplace_back( indexId );
+            }
+        }
+        else {
+            const int32_t width = world.w();
+            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
+            for ( const int32_t indexId : tiles ) {
+                if ( indexId < tileId + width - 2 ) {
+                    // Only tiles which are lower than current object.
+                    continue;
+                }
+
+                const Maps::Tiles & indexedTile = mapTiles[indexId];
+                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                    continue;
+                }
+
+                suitableIds.emplace_back( indexId );
+            }
+        }
+
+        if ( suitableIds.empty() ) {
+            return -1;
+        }
+
+        return Rand::Get( suitableIds );
+    }
+
+    int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
+    {
+        int32_t count = 0;
+        const MapsIndexes & suitableIds = Maps::GetAroundIndexes( tileId );
+        for ( const int32_t indexId : suitableIds ) {
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                continue;
+            }
+
+            ++count;
+        }
+
+        return count;
+    }
+}
 
 namespace GameStatic
 {
@@ -84,7 +166,7 @@ void MapObjects::add( MapObjectSimple * obj )
 MapObjectSimple * MapObjects::get( u32 uid )
 {
     iterator it = find( uid );
-    return it != end() ? ( *it ).second : NULL;
+    return it != end() ? ( *it ).second : nullptr;
 }
 
 std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
@@ -300,12 +382,26 @@ void World::Reset( void )
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
+
+    width = sw;
+    height = sh;
+
+    Maps::FileInfo fi;
+
+    fi.size_w = static_cast<uint16_t>( width );
+    fi.size_h = static_cast<uint16_t>( height );
+
+    Settings & conf = Settings::Get();
+
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        fi._version = GameVersion::PRICE_OF_LOYALTY;
+    }
+
+    conf.SetCurrentFileInfo( fi );
+
     Defaults();
 
-    fheroes2::Size::width = sw;
-    fheroes2::Size::height = sh;
-
-    vec_tiles.resize( static_cast<size_t>( fheroes2::Size::width ) * fheroes2::Size::height );
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     // init all tiles
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
@@ -320,19 +416,12 @@ void World::NewMaps( int32_t sw, int32_t sh )
         mp2tile.indexName2 = 0xff; // index sprite level 2
         mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObject = MP2::OBJ_ZERO;
-        mp2tile.indexAddon = 0;
-        mp2tile.editorObjectLink = 0;
-        mp2tile.editorObjectOverlay = 0;
+        mp2tile.nextAddonIndex = 0;
+        mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
+        mp2tile.level2ObjectUID = 0;
 
         vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
-
-    // reset current maps info
-    Maps::FileInfo fi;
-    fi.size_w = static_cast<uint16_t>( width );
-    fi.size_h = static_cast<uint16_t>( height );
-
-    Settings::Get().SetCurrentFileInfo( fi );
 }
 
 void World::InitKingdoms( void )
@@ -392,15 +481,37 @@ const Kingdom & World::GetKingdom( int color ) const
     return vec_kingdoms.GetKingdom( color );
 }
 
-/* get castle from index maps */
-Castle * World::GetCastle( const fheroes2::Point & center )
+Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
-    return vec_castles.Get( center );
+    return vec_castles.Get( tilePosition );
 }
 
-const Castle * World::GetCastle( const fheroes2::Point & center ) const
+const Castle * World::getCastle( const fheroes2::Point & tilePosition ) const
 {
-    return vec_castles.Get( center );
+    return vec_castles.Get( tilePosition );
+}
+
+const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
+{
+    if ( !isValidCastleEntrance( tilePosition ) ) {
+        return nullptr;
+    }
+
+    return vec_castles.Get( tilePosition );
+}
+
+Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
+{
+    if ( !isValidCastleEntrance( tilePosition ) ) {
+        return nullptr;
+    }
+
+    return vec_castles.Get( tilePosition );
+}
+
+bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
+{
+    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
 Heroes * World::GetHeroes( int id )
@@ -610,43 +721,118 @@ void World::MonthOfMonstersAction( const Monster & mons )
         return;
     }
 
-    MapsIndexes tiles, excld;
-    tiles.reserve( vec_tiles.size() / 2 );
-    excld.reserve( vec_tiles.size() / 2 );
+    // Find all tiles which are useful for monsters such as resources, artifacts, mines, other capture objects. Exclude heroes, monsters and castles.
+    std::vector<int32_t> primaryTargetTiles;
 
-    const int32_t dist = 2;
-    const std::vector<uint8_t> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
+    // Sometimes monsters appear on roads so find all road tiles.
+    std::vector<int32_t> secondaryTargetTiles;
 
-    // create exclude list
-    const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
+    // Lastly monster occasionally appear on empty tiles.
+    std::vector<int32_t> tetriaryTargetTiles;
 
-    for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
-        const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
-        excld.insert( excld.end(), obja.begin(), obja.end() );
-    }
+    std::set<int32_t> excludeTiles;
 
-    // create valid points
     for ( const Maps::Tiles & tile : vec_tiles ) {
-        if ( tile.isWater() || MP2::OBJ_ZERO != tile.GetObject() || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
+        if ( tile.isWater() ) {
+            // Monsters are not placed on water.
             continue;
         }
 
-        // Cell should have at least 2 empty neighbor cells
-        if ( Maps::ScanAroundObject( tile.GetIndex(), MP2::OBJ_ZERO ).size() > 2 && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
-            tiles.push_back( tile.GetIndex() );
-            const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
-            excld.insert( excld.end(), obja.begin(), obja.end() );
+        const int32_t tileId = tile.GetIndex();
+        const int objectId = tile.GetObject( true );
+
+        if ( objectId == MP2::OBJ_CASTLE || objectId == MP2::OBJ_HEROES || objectId == MP2::OBJ_MONSTER ) {
+            excludeTiles.emplace( tileId );
+            continue;
+        }
+
+        if ( MP2::isActionObject( objectId ) ) {
+            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
+                continue;
+            }
+
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, ( tile.GetPassable() == DIRECTION_ALL ) );
+            if ( tileToSet >= 0 ) {
+                primaryTargetTiles.emplace_back( tileToSet );
+                excludeTiles.emplace( tileId );
+            }
+        }
+        else if ( tile.isRoad() ) {
+            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+                continue;
+            }
+
+            if ( getNeighbouringEmptyTileCount( vec_tiles, tileId ) < 2 ) {
+                continue;
+            }
+
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            if ( tileToSet >= 0 ) {
+                secondaryTargetTiles.emplace_back( tileToSet );
+                excludeTiles.emplace( tileId );
+            }
+        }
+        else if ( tile.isClearGround() ) {
+            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+                continue;
+            }
+
+            if ( getNeighbouringEmptyTileCount( vec_tiles, tileId ) < 4 ) {
+                continue;
+            }
+
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            if ( tileToSet >= 0 ) {
+                tetriaryTargetTiles.emplace_back( tileToSet );
+                excludeTiles.emplace( tileId );
+            }
         }
     }
 
-    const int32_t area = 12;
-    const int32_t maxc = ( width / area ) * ( height / area );
-    Rand::Shuffle( tiles );
-    if ( tiles.size() > static_cast<size_t>( maxc ) )
-        tiles.resize( maxc );
+    // Shuffle all found tile IDs.
+    Rand::Shuffle( primaryTargetTiles );
+    Rand::Shuffle( secondaryTargetTiles );
+    Rand::Shuffle( tetriaryTargetTiles );
 
-    for ( MapsIndexes::const_iterator it = tiles.begin(); it != tiles.end(); ++it )
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[*it], mons, 0 /* random */ );
+    // Calculate the number of monsters to be placed.
+    uint32_t monstersToBePlaced = 0;
+    if ( primaryTargetTiles.size() < static_cast<size_t>( height ) ) {
+        monstersToBePlaced = static_cast<uint32_t>( height );
+    }
+    else {
+        monstersToBePlaced
+            = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ), static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+    }
+
+    // 85% of positions are for primary targets
+    // 10% of positions are for roads
+    // 5% of positions are for empty tiles
+    uint32_t primaryTileCount = monstersToBePlaced * 85 / 100;
+    if ( primaryTileCount > primaryTargetTiles.size() ) {
+        primaryTileCount = static_cast<uint32_t>( primaryTargetTiles.size() );
+    }
+
+    for ( uint32_t i = 0; i < primaryTileCount; ++i ) {
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[primaryTargetTiles[i]], mons, 0 /* random */ );
+    }
+
+    uint32_t secondaryTileCount = monstersToBePlaced * 10 / 100;
+    if ( secondaryTileCount > secondaryTargetTiles.size() ) {
+        secondaryTileCount = static_cast<uint32_t>( secondaryTargetTiles.size() );
+    }
+
+    for ( uint32_t i = 0; i < secondaryTileCount; ++i ) {
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[secondaryTargetTiles[i]], mons, 0 /* random */ );
+    }
+
+    uint32_t tetriaryTileCount = monstersToBePlaced * 5 / 100;
+    if ( tetriaryTileCount > tetriaryTargetTiles.size() ) {
+        tetriaryTileCount = static_cast<uint32_t>( tetriaryTargetTiles.size() );
+    }
+
+    for ( uint32_t i = 0; i < tetriaryTileCount; ++i ) {
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[tetriaryTargetTiles[i]], mons, 0 /* random */ );
+    }
 }
 
 const std::string & World::GetRumors( void )
@@ -693,7 +879,12 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
+            const Maps::Tiles & tile = GetTiles( *it );
+            if ( tile.GetHeroes() != nullptr ) {
+                continue;
+            }
+
+            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
         }
 
         if ( 2 > uniq_whirlpools.size() ) {
@@ -759,11 +950,9 @@ void World::CaptureObject( s32 index, int color )
     int obj = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, obj, color );
 
-    if ( MP2::OBJ_CASTLE == obj ) {
-        Castle * castle = GetCastle( Maps::GetPoint( index ) );
-        if ( castle && castle->GetColor() != color )
-            castle->ChangeColor( color );
-    }
+    Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
+    if ( castle && castle->GetColor() != color )
+        castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
         GetTiles( index ).CaptureFlags32( obj, color );
@@ -778,7 +967,7 @@ int World::ColorCapturedObject( s32 index ) const
 ListActions * World::GetListActions( s32 index )
 {
     MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : NULL;
+    return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
 CapturedObject & World::GetCapturedObject( s32 index )
@@ -892,12 +1081,12 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return res.size() ? static_cast<MapEvent *>( res.front() ) : NULL;
+    return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
 MapObjectSimple * World::GetMapObject( u32 uid )
 {
-    return uid ? map_objects.get( uid ) : NULL;
+    return uid ? map_objects.get( uid ) : nullptr;
 }
 
 void World::RemoveMapObject( const MapObjectSimple * obj )
@@ -912,7 +1101,7 @@ void World::UpdateRecruits( Recruits & recruits ) const
         while ( recruits.GetID1() == recruits.GetID2() )
             recruits.SetHero2( GetFreemanHeroes() );
     else
-        recruits.SetHero2( NULL );
+        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const
@@ -934,7 +1123,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
-        const Castle * town = GetCastle( conf.WinsMapsPositionObject() );
+        const Castle * town = getCastleEntrance( conf.WinsMapsPositionObject() );
         // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
@@ -947,11 +1136,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     case GameOver::WINS_ARTIFACT: {
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } ) );
+            return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
+            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } );
         }
     }
 
@@ -971,6 +1160,18 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     return false;
 }
 
+bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
+{
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, obj ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 {
     const Settings & conf = Settings::Get();
@@ -980,7 +1181,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
         return kingdom.isLoss();
 
     case GameOver::LOSS_TOWN: {
-        const Castle * town = GetCastle( conf.LossMapsPositionObject() );
+        const Castle * town = getCastleEntrance( conf.LossMapsPositionObject() );
         return ( town && town->GetColor() != kingdom.GetColor() );
     }
 
@@ -1002,7 +1203,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
-    const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
     const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
@@ -1037,19 +1238,22 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
 
-    // firs check priority: other WINS_GOLD or WINS_ARTIFACT
-    if ( conf.ConditionWins() & GameOver::WINS_GOLD ) {
-        int priority = vec_kingdoms.FindWins( GameOver::WINS_GOLD );
-        if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
-    }
-    else if ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) {
-        int priority = vec_kingdoms.FindWins( GameOver::WINS_ARTIFACT );
-        if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
+    // first, check if the other players have not completed WINS_TOWN, WINS_ARTIFACT or WINS_GOLD yet
+    const std::array<std::pair<int, int>, 3> enemy_wins = { std::make_pair<int, int>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
+                                                            std::make_pair<int, int>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
+                                                            std::make_pair<int, int>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
+
+    for ( const auto & item : enemy_wins ) {
+        if ( conf.ConditionWins() & item.first ) {
+            const int color = vec_kingdoms.FindWins( item.first );
+
+            if ( color && color != kingdom.GetColor() ) {
+                return item.second;
+            }
+        }
     }
 
-    const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
+    const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
@@ -1113,10 +1317,20 @@ void World::resetPathfinder()
     AI::Get().resetPathfinder();
 }
 
-void World::PostLoad()
+void World::PostLoad( const bool setTilePassabilities )
 {
-    // update tile passable
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdatePassable(); } );
+    if ( setTilePassabilities ) {
+        // update tile passable
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            tile.updateEmpty();
+            tile.setInitialPassability();
+        }
+
+        // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            tile.updatePassability();
+        }
+    }
 
     // cache data that's accessed often
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
@@ -1162,18 +1376,6 @@ StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
                 msg << static_cast<const MapSign &>( obj );
                 break;
 
-            case MP2::OBJ_RESOURCE:
-                msg << static_cast<const MapResource &>( obj );
-                break;
-
-            case MP2::OBJ_ARTIFACT:
-                msg << static_cast<const MapArtifact &>( obj );
-                break;
-
-            case MP2::OBJ_MONSTER:
-                msg << static_cast<const MapMonster &>( obj );
-                break;
-
             default:
                 msg << obj;
                 break;
@@ -1214,23 +1416,12 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             objs[index] = ptr;
         } break;
 
-        case MP2::OBJ_RESOURCE: {
-            MapResource * ptr = new MapResource();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
-
-        case MP2::OBJ_ARTIFACT: {
-            MapArtifact * ptr = new MapArtifact();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
-
-        case MP2::OBJ_MONSTER: {
-            MapMonster * ptr = new MapMonster();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_MONSTER:
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
+            assert( 0 );
+            break;
 
         default: {
             MapObjectSimple * ptr = new MapObjectSimple();
@@ -1265,17 +1456,9 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
+        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        msg >> w._seed;
-    }
-    else {
-        // For old versions, generate a different seed at each map loading
-        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
-    }
-
-    w.PostLoad();
+    w.PostLoad( false );
 
     return msg;
 }

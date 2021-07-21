@@ -20,18 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "maps.h"
-#include "mp2.h"
 #include "settings.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -264,7 +260,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( spellROI & mp ) && MP2::isClearGroundObject( tile.GetObject() ) && water == world.GetTiles( dst ).isWater() );
+                valid = ( ( spellROI & mp ) && tile.isClearGround() && water == tile.isWater() );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )

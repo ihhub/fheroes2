@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cstring>
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -34,10 +33,12 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_over.h"
-#include "gamedefs.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
 #include "logging.h"
+#endif
 #include "mus.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
@@ -134,7 +135,7 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 
     h.player = p;
     h.land = m;
-    h.localtime = std::time( NULL );
+    h.localtime = std::time( nullptr );
     h.days = r;
     h.rating = s;
 
@@ -202,7 +203,7 @@ fheroes2::GameMode Game::HighScores()
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    hgs.Load( stream.str().c_str() );
+    hgs.Load( stream.str() );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
@@ -232,12 +233,12 @@ fheroes2::GameMode Game::HighScores()
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
-        hgs.Save( stream.str().c_str() );
+        hgs.Save( stream.str() );
         hgs.RedrawList( top.x, top.y );
         buttonCampain.draw();
         buttonExit.draw();
         display.render();
-        gameResult.Reset();
+        gameResult.ResetResult();
     }
 
     LocalEvent & le = LocalEvent::Get();

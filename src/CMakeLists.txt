@@ -1,10 +1,18 @@
+if (MSVC)
+	add_compile_options(/W4)
+else()
+	add_compile_options(-Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized)
+endif()
+
 if(FHEROES2_STRICT_COMPILATION)
 	if (MSVC)
-		add_compile_options(/W4 /WX)
+		add_compile_options(/WX)
 	else()
-		add_compile_options(-Wall -Wextra -pedantic -Werror)
+		add_compile_options(-Werror)
 	endif()
 endif()
+
+add_compile_definitions($<$<CONFIG:Debug>:WITH_DEBUG>)
 
 add_subdirectory(thirdparty)
 add_subdirectory(engine)

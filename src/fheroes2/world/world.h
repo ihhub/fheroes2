@@ -166,7 +166,6 @@ public:
     }
 
     bool LoadMapMP2( const std::string & );
-    bool LoadMapMAP( const std::string & );
 
     void NewMaps( int32_t, int32_t );
 
@@ -192,11 +191,16 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    const Castle * GetCastle( const fheroes2::Point & ) const;
-    Castle * GetCastle( const fheroes2::Point & );
+    // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
+    const Castle * getCastle( const fheroes2::Point & tilePosition ) const;
+    Castle * getCastle( const fheroes2::Point & tilePosition );
 
-    const Heroes * GetHeroes( int /* hero id */ ) const;
-    Heroes * GetHeroes( int /* hero id */ );
+    // Get castle based on its entrance tile. If the tile is not castle's entrance return nullptr.
+    const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
+    Castle * getCastleEntrance( const fheroes2::Point & tilePosition );
+
+    const Heroes * GetHeroes( int id ) const;
+    Heroes * GetHeroes( int id );
 
     const Heroes * GetHeroes( const fheroes2::Point & ) const;
     Heroes * GetHeroes( const fheroes2::Point & );
@@ -279,6 +283,8 @@ public:
 
     uint32_t GetMapSeed() const;
 
+    bool isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const;
+
 private:
     World()
         : fheroes2::Size( 0, 0 )
@@ -289,16 +295,14 @@ private:
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void ProcessNewMap();
-    void PostLoad();
+    void PostLoad( const bool setTilePassabilities );
     void pickRumor();
 
-private:
+    bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
+
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
     friend StreamBase & operator>>( StreamBase &, World & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, World & );
-#endif
 
     MapsTiles vec_tiles;
     AllHeroes vec_heroes;

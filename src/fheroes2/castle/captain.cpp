@@ -88,23 +88,23 @@ bool Captain::isValid( void ) const
 
 int Captain::GetAttack( void ) const
 {
-    return attack + GetAttackModificator( NULL );
+    return attack + GetAttackModificator( nullptr );
 }
 
 int Captain::GetDefense( void ) const
 {
-    return defense + GetDefenseModificator( NULL );
+    return defense + GetDefenseModificator( nullptr );
 }
 
 int Captain::GetPower( void ) const
 {
-    const int finalPower = power + GetPowerModificator( NULL );
+    const int finalPower = power + GetPowerModificator( nullptr );
     return finalPower < 1 ? 1 : ( finalPower > 255 ? 255 : finalPower );
 }
 
 int Captain::GetKnowledge( void ) const
 {
-    return knowledge + GetKnowledgeModificator( NULL );
+    return knowledge + GetKnowledgeModificator( nullptr );
 }
 
 int Captain::GetMorale( void ) const
@@ -112,23 +112,10 @@ int Captain::GetMorale( void ) const
     int result = Morale::NORMAL;
 
     // global modificator
-    result += GetMoraleModificator( NULL );
+    result += GetMoraleModificator( nullptr );
 
     // result
-    if ( result < Morale::AWFUL )
-        return Morale::TREASON;
-    else if ( result < Morale::POOR )
-        return Morale::AWFUL;
-    else if ( result < Morale::NORMAL )
-        return Morale::POOR;
-    else if ( result < Morale::GOOD )
-        return Morale::NORMAL;
-    else if ( result < Morale::GREAT )
-        return Morale::GOOD;
-    else if ( result < Morale::BLOOD )
-        return Morale::GREAT;
-
-    return Morale::BLOOD;
+    return Morale::Normalize( result );
 }
 
 int Captain::GetLuck( void ) const
@@ -136,23 +123,10 @@ int Captain::GetLuck( void ) const
     int result = Luck::NORMAL;
 
     // global modificator
-    result += GetLuckModificator( NULL );
+    result += GetLuckModificator( nullptr );
 
     // result
-    if ( result < Luck::AWFUL )
-        return Luck::CURSED;
-    else if ( result < Luck::BAD )
-        return Luck::AWFUL;
-    else if ( result < Luck::NORMAL )
-        return Luck::BAD;
-    else if ( result < Luck::GOOD )
-        return Luck::NORMAL;
-    else if ( result < Luck::GREAT )
-        return Luck::GOOD;
-    else if ( result < Luck::IRISH )
-        return Luck::GREAT;
-
-    return Luck::IRISH;
+    return Luck::Normalize( result );
 }
 
 int Captain::GetRace( void ) const

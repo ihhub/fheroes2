@@ -20,12 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <ctime>
-
 #include "game.h"
-#include "game_interface.h"
 #include "localevent.h"
 #include "logging.h"
+#include "screen.h"
 #include "settings.h"
 #include "tinyconfig.h"
 
@@ -62,8 +60,6 @@ const char * Game::EventsName( int evnt )
         return "button select";
     case EVENT_BUTTON_HOTSEAT:
         return "button hotseat";
-    case EVENT_BUTTON_NETWORK:
-        return "button network";
     case EVENT_BUTTON_HOST:
         return "button host";
     case EVENT_BUTTON_GUEST:
@@ -168,7 +164,7 @@ const char * Game::EventsName( int evnt )
     default:
         break;
     }
-    return NULL;
+    return nullptr;
 }
 
 void Game::HotKeysDefaults( void )
@@ -186,7 +182,6 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_BUTTON_SETTINGS] = KEY_t;
     key_events[EVENT_BUTTON_SELECT] = KEY_s;
     key_events[EVENT_BUTTON_HOTSEAT] = KEY_h;
-    key_events[EVENT_BUTTON_NETWORK] = KEY_n;
     key_events[EVENT_BUTTON_HOST] = KEY_h;
     key_events[EVENT_BUTTON_GUEST] = KEY_g;
     key_events[EVENT_BUTTON_BATTLEONLY] = KEY_b;
@@ -268,6 +263,23 @@ void Game::HotKeysDefaults( void )
 
     key_events[EVENT_UPGRADE_TROOP] = KEY_u;
     key_events[EVENT_DISMISS_TROOP] = KEY_d;
+
+    // town + build screen
+    key_events[EVENT_TOWN_CREATURE_1] = KEY_1;
+    key_events[EVENT_TOWN_CREATURE_2] = KEY_2;
+    key_events[EVENT_TOWN_CREATURE_3] = KEY_3;
+    key_events[EVENT_TOWN_CREATURE_4] = KEY_4;
+    key_events[EVENT_TOWN_CREATURE_5] = KEY_5;
+    key_events[EVENT_TOWN_CREATURE_6] = KEY_6;
+    key_events[EVENT_TOWN_WELL] = KEY_w;
+    key_events[EVENT_TOWN_MAGE_GUILD] = KEY_s;
+    key_events[EVENT_TOWN_MARKETPLACE] = KEY_m;
+    key_events[EVENT_TOWN_THIEVES_GUILD] = KEY_t;
+    key_events[EVENT_TOWN_SHIPYARD] = KEY_n;
+
+    // town screen only
+    key_events[EVENT_TOWN_TAVERN] = KEY_r;
+    key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
 }
 
 bool Game::HotKeyPressEvent( int evnt )
@@ -286,7 +298,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );
 
-    if ( config.Load( hotkeys.c_str() ) ) {
+    if ( config.Load( hotkeys ) ) {
         int ival = 0;
 
         for ( int evnt = EVENT_NONE; evnt < EVENT_LAST; ++evnt ) {

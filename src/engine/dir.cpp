@@ -29,7 +29,10 @@
 
 #include "dir.h"
 #include "system.h"
+#if defined( FHEROES2_VITA )
 #include "tools.h"
+#endif
+
 #include <cstring>
 #if defined( __SWITCH__ )
 #include <strings.h> // for strcasecmp
@@ -50,7 +53,26 @@ namespace
         }
 
         do {
-            files.emplace_back( path + "\\" + data.cFileName );
+            std::string fullname = System::ConcatePath( path, data.cFileName );
+
+            // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
+            if ( !nameAsFilter || !name.empty() ) {
+                const size_t filenameLength = strlen( data.cFileName );
+                if ( filenameLength < name.length() )
+                    continue;
+
+                if ( !nameAsFilter && filenameLength != name.length() ) {
+                    continue;
+                }
+
+                const char * filenamePtr = data.cFileName + filenameLength - name.length();
+
+                if ( _stricmp( filenamePtr, name.c_str() ) != 0 ) {
+                    continue;
+                }
+            }
+
+            files.emplace_back( std::move( fullname ) );
         } while ( FindNextFile( hFind, &data ) != 0 );
 
         FindClose( hFind );
@@ -72,20 +94,21 @@ namespace
                 continue;
 
             if ( !nameAsFilter || !name.empty() ) {
-                const std::string filename( dir.d_name );
-                if ( filename.size() < name.size() ) {
+                const size_t filenameLength = strlen( dir.d_name );
+                if ( filenameLength < name.length() )
+                    continue;
+
+                if ( !nameAsFilter && filenameLength != name.length() ) {
                     continue;
                 }
 
-                if ( !nameAsFilter && filename.size() != name.size() ) {
-                    continue;
-                }
+                const char * filenamePtr = dir.d_name + filenameLength - name.length();
 
                 if ( sensitive ) {
-                    if ( std::string::npos == filename.find( name ) )
+                    if ( strcmp( filenamePtr, name.c_str() ) != 0 )
                         continue;
                 }
-                else if ( std::string::npos == StringLower( filename ).find( StringLower( name ) ) ) {
+                else if ( strcasecmp( filenamePtr, name.c_str() ) != 0 ) {
                     continue;
                 }
             }
@@ -107,7 +130,7 @@ namespace
         }
 
         struct dirent * ep;
-        while ( NULL != ( ep = readdir( dp ) ) ) {
+        while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 
             // if not regular file
@@ -167,17 +190,4 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
 void ListDirs::Append( const std::list<std::string> & dirs )
 {
     insert( end(), dirs.begin(), dirs.end() );
-}
-
-namespace fheroes2
-{
-    void AddOSSpecificDirectories( ListDirs & dirs )
-    {
-#if defined( FHEROES2_VITA )
-        dirs.emplace_back( "ux0:app/FHOMM0002" );
-        dirs.emplace_back( "ux0:data/fheroes2" );
-#else
-        (void)dirs;
-#endif
-    }
 }

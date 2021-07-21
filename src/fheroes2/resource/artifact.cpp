@@ -29,15 +29,15 @@
 #include "artifact.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
+#include "settings.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
-#include "world.h"
+#include "tools.h"
 
 namespace
 {
@@ -184,7 +184,7 @@ artifactstats_t artifacts[] = {
 
 const char * GetPluralDescription( const Artifact & art, u32 count )
 {
-    switch ( art() ) {
+    switch ( art.GetID() ) {
     case Artifact::ENCHANTED_HOURGLASS:
         return _n( "The %{name} extends the duration of all your spells by %{count} turn.", "The %{name} extends the duration of all your spells by %{count} turns.",
                    count );
@@ -207,7 +207,7 @@ const char * GetPluralDescription( const Artifact & art, u32 count )
     default:
         break;
     }
-    return _( artifacts[art()].description );
+    return _( artifacts[art.GetID()].description );
 }
 
 bool SkipExtra( int art )
@@ -240,38 +240,6 @@ bool SkipExtra( int art )
     return false;
 }
 
-void Artifact::UpdateStats( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse artifacts.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_artifacts = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_artifacts = doc.FirstChildElement( "artifacts" ) ) ) {
-        size_t index = 0;
-        const TiXmlElement * xml_artifact = xml_artifacts->FirstChildElement( "artifact" );
-        for ( ; xml_artifact && index < UNKNOWN; xml_artifact = xml_artifact->NextSiblingElement( "artifact" ), ++index ) {
-            int value;
-            artifactstats_t * ptr = &artifacts[index];
-
-            xml_artifact->Attribute( "disable", &value );
-            if ( value )
-                ptr->bits |= ART_DISABLED;
-
-            xml_artifact->Attribute( "extra", &value );
-            if ( value && !SkipExtra( index ) )
-                ptr->extra = value;
-
-            Artifact art( index );
-        }
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
 Artifact::Artifact( int art )
     : id( art < UNKNOWN ? art : UNKNOWN )
     , ext( 0 )
@@ -281,7 +249,7 @@ bool Artifact::operator==( const Spell & spell ) const
 {
     switch ( id ) {
     case SPELL_SCROLL:
-        return ext == spell();
+        return ext == spell.GetID();
 
     case Artifact::CRYSTAL_BALL:
         return spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS;
@@ -304,11 +272,6 @@ bool Artifact::operator==( const Artifact & art ) const
 bool Artifact::operator!=( const Artifact & art ) const
 {
     return id != art.id;
-}
-
-int Artifact::operator()( void ) const
-{
-    return id;
 }
 
 int Artifact::GetID( void ) const
@@ -370,7 +333,6 @@ bool Artifact::isAlchemistRemove( void ) const
     case HEART_FIRE:
     case HEART_ICE:
     case BROACH_SHIELDING:
-    case SPHERE_NEGATION:
         return true;
     }
 
@@ -651,7 +613,7 @@ int Artifact::Rand( level_t lvl )
                 v.push_back( art );
     }
 
-    int res = v.size() ? Rand::Get( v ) : Artifact::UNKNOWN;
+    int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifacts[res].bits |= ART_RNDUSED;
 
     return res;
@@ -681,7 +643,7 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
 
 const char * Artifact::GetScenario( const Artifact & art )
 {
-    switch ( art() ) {
+    switch ( art.GetID() ) {
     case SPELL_SCROLL:
         return _(
             "You find an elaborate aontainer which housesan old vellum scroll. The runes on the container are very old, and the artistry with whitch it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." );
@@ -737,7 +699,7 @@ const char * Artifact::GetScenario( const Artifact & art )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Artifact & art )
@@ -767,7 +729,7 @@ bool BagArtifacts::isPresentArtifact( const Artifact & art ) const
 bool BagArtifacts::PushArtifact( const Artifact & art )
 {
     if ( art.isValid() ) {
-        if ( art() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) )
+        if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) )
             return false;
 
         iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
@@ -777,7 +739,7 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
         *it = art;
 
         // book insert first
-        if ( art() == Artifact::MAGIC_BOOK )
+        if ( art.GetID() == Artifact::MAGIC_BOOK )
             std::swap( *it, front() );
 
         return true;
@@ -836,18 +798,18 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
     std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );
 
     // reset and clear all current artifacts, put back the best
-    while ( combined.size() && PushArtifact( combined.back() ) ) {
+    while ( !combined.empty() && PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
 
-    while ( combined.size() && giftBag.PushArtifact( combined.back() ) ) {
+    while ( !combined.empty() && giftBag.PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
 }
 
 bool BagArtifacts::ContainUltimateArtifact( void ) const
 {
-    return end() != std::find_if( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
+    return std::any_of( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
 }
 
 void BagArtifacts::RemoveScroll( const Artifact & art )
@@ -879,17 +841,15 @@ u32 GoldInsteadArtifact( int obj )
 {
     switch ( obj ) {
     case MP2::OBJ_SKELETON:
-        return 1000;
+    case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_SHIPWRECKSURVIROR:
         return 1000;
     case MP2::OBJ_WATERCHEST:
         return 1500;
-    case MP2::OBJ_TREASURECHEST:
-        return 1000;
-    case MP2::OBJ_SHIPWRECK:
-        return 5000;
     case MP2::OBJ_GRAVEYARD:
         return 2000;
+    case MP2::OBJ_SHIPWRECK:
+        return 5000;
     default:
         break;
     }
@@ -1021,7 +981,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
 bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
-    if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
+    if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
@@ -1096,7 +1056,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         if ( &art == art2 ) {
             if ( isMagicBook( art ) )
                 msg = _( "View Spells" );
-            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) )
+            else if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) )
                 msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );
@@ -1170,7 +1130,7 @@ bool ArtifactsBar::QueueEventProcessing( ArtifactsBar & bar, std::string * str )
 
 bool ArtifactsBar::isMagicBook( const Artifact & artifact )
 {
-    return artifact() == Artifact::MAGIC_BOOK;
+    return artifact.GetID() == Artifact::MAGIC_BOOK;
 }
 
 void ArtifactsBar::messageMagicBookAbortTrading() const

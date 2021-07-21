@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
+
 #include "image_tool.h"
 #include "palette_h2.h"
 
@@ -53,7 +55,7 @@ namespace
 #else
         SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
 #endif
-        if ( surface == NULL )
+        if ( surface == nullptr )
             return false;
 
         const uint32_t width = image.width();

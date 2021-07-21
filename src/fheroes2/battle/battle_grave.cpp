@@ -22,7 +22,7 @@
 
 #include <algorithm>
 
-#include "battle_board.h"
+#include "battle_arena.h"
 #include "battle_grave.h"
 #include "battle_troop.h"
 
@@ -68,7 +68,7 @@ void Battle::Graveyard::RemoveTroop( const Unit & b )
 u32 Battle::Graveyard::GetLastTroopUID( s32 index ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
-        if ( index == ( *it ).first && ( *it ).second.size() )
+        if ( index == ( *it ).first && !( *it ).second.empty() )
             return ( *it ).second.back();
 
     return 0;

@@ -29,6 +29,7 @@
 #include "icn.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -63,11 +64,12 @@ struct SelectRecipientsColors
     {
         positions.reserve( colors.size() );
 
-        for ( size_t i = 0; i < colors.size(); ++i ) {
+        const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
+
+        for ( int32_t i = 0; i < colorCount; ++i ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.emplace_back( pos.x + Game::GetStep4Player( static_cast<uint32_t>( i ), sprite.width() + 15, colors.size() ), pos.y, sprite.width(),
-                                    sprite.height() );
+            positions.emplace_back( pos.x + Game::GetStep4Player( i, sprite.width() + 15, colorCount ), pos.y, sprite.width(), sprite.height() );
         }
     }
 
@@ -139,7 +141,7 @@ struct ResourceBar
         text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
     }
 
-    void Redraw( const Funds * res = NULL ) const
+    void Redraw( const Funds * res = nullptr ) const
     {
         if ( !res )
             res = &resource;

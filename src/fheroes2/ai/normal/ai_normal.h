@@ -122,14 +122,14 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom ) override;
         void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
-        void HeroesTurn( VecHeroes & heroes ) override;
+        bool HeroesTurn( VecHeroes & heroes ) override;
 
         void revealFog( const Maps::Tiles & tile ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero ) override;
 
-        double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
+        double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder() override;
 

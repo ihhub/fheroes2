@@ -24,9 +24,7 @@
 
 #include "heroes_base.h"
 #include "mageguild.h"
-#include "race.h"
 #include "rand.h"
-#include "settings.h"
 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
 Spell GetGuaranteedDamageSpellForMageGuild();
@@ -131,7 +129,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
             v.push_back( spell );
     }
 
-    return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
+    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell GetGuaranteedDamageSpellForMageGuild()

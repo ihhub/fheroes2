@@ -27,11 +27,9 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
-#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -69,15 +67,12 @@ int Dialog::SystemOptions( void )
     const fheroes2::Point optionStep( 92, 110 );
 
     std::vector<fheroes2::Rect> rects;
-    rects.emplace_back( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
+
+    for ( int32_t y = 0; y < 3; ++y ) {
+        for ( int32_t x = 0; x < 3; ++x ) {
+            rects.emplace_back( optionOffset.x + x * optionStep.x, optionOffset.y + y * optionStep.y, optionSprite.width(), optionSprite.height() );
+        }
+    }
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
@@ -103,8 +98,6 @@ int Dialog::SystemOptions( void )
     bool redraw = false;
     bool saveConfig = false;
 
-    const bool externalMusicSupported = System::IsDirectory( "music" );
-
     // dialog menu loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -113,7 +106,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music volume
-        if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
+        if ( Mixer::isValid() && le.MouseClickLeft( rect1 ) ) {
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
             Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
@@ -121,7 +114,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set sound volume
-        if ( conf.Sound() && le.MouseClickLeft( rect2 ) ) {
+        if ( Mixer::isValid() && le.MouseClickLeft( rect2 ) ) {
             conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
             redraw = true;
             Game::EnvironmentSoundMixer();
@@ -134,13 +127,8 @@ int Dialog::SystemOptions( void )
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
                 ++type;
-            if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
-                ++type;
-            // CD music is currently not implemented correctly even on SDL1; remove this when done
-            if ( type == MUSIC_CDROM )
-                ++type;
 
-            conf.SetMusicType( type > MUSIC_CDROM ? 0 : type );
+            conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
             result |= 0x02;
             redraw = true;
             saveConfig = true;
@@ -209,6 +197,27 @@ int Dialog::SystemOptions( void )
             saveConfig = true;
         }
 
+        if ( le.MousePressRight( rect1 ) )
+            Dialog::Message( _( "Music" ), _( "Toggle ambient music level." ), Font::BIG );
+        else if ( le.MousePressRight( rect2 ) )
+            Dialog::Message( _( "Effects" ), _( "Toggle foreground sounds level." ), Font::BIG );
+        else if ( le.MousePressRight( rect3 ) )
+            Dialog::Message( _( "Music Type" ), _( "Change the type of music." ), Font::BIG );
+        else if ( le.MousePressRight( rect4 ) )
+            Dialog::Message( _( "Hero Speed" ), _( "Change the speed at which your heroes move on the main screen." ), Font::BIG );
+        else if ( le.MousePressRight( rect5 ) )
+            Dialog::Message( _( "Enemy Speed" ), _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), Font::BIG );
+        else if ( le.MousePressRight( rect6 ) )
+            Dialog::Message( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), Font::BIG );
+        else if ( le.MousePressRight( rect7 ) )
+            Dialog::Message( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), Font::BIG );
+        else if ( le.MousePressRight( rect8 ) )
+            Dialog::Message( _( "Interface" ), _( "Toggle interface visibility." ), Font::BIG );
+        else if ( le.MousePressRight( rect9 ) )
+            Dialog::Message( _( "Battles" ), _( "Toggle instant battle mode." ), Font::BIG );
+        else if ( le.MousePressRight( buttonOkay.area() ) )
+            Dialog::Message( _( "OK" ), _( "Exit this menu." ), Font::BIG );
+
         if ( redraw ) {
             fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
             DrawSystemInfo( rects );
@@ -236,14 +245,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     const int textOffset = 2;
 
     // music
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 1 : 0 );
     const fheroes2::Rect & rect1 = rects[0];
     fheroes2::Blit( sprite1, display, rect1.x, rect1.y );
     str = _( "Music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
-    if ( conf.Music() && conf.MusicVolume() )
+    if ( Mixer::isValid() && conf.MusicVolume() )
         str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );
@@ -251,14 +260,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y + rect1.height + textOffset );
 
     // sound
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 3 : 2 );
     const fheroes2::Rect & rect2 = rects[1];
     fheroes2::Blit( sprite2, display, rect2.x, rect2.y );
     str = _( "Effects" );
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.width - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
-    if ( conf.Sound() && conf.SoundVolume() )
+    if ( Mixer::isValid() && conf.SoundVolume() )
         str = std::to_string( conf.SoundVolume() );
     else
         str = _( "off" );
@@ -267,7 +276,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 
     // Music Type
     const MusicSource musicType = conf.MusicType();
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, ( musicType == MUSIC_CDROM || musicType == MUSIC_EXTERNAL ) ? 11 : 10 );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, musicType == MUSIC_EXTERNAL ? 11 : 10 );
     const fheroes2::Rect & rect3 = rects[2];
     fheroes2::Blit( sprite3, display, rect3.x, rect3.y );
     str = _( "Music Type" );
@@ -279,9 +288,6 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else if ( musicType == MUSIC_MIDI_EXPANSION ) {
         str = _( "MIDI Expansion" );
-    }
-    else if ( musicType == MUSIC_CDROM ) {
-        str = _( "CD Stereo" );
     }
     else if ( musicType == MUSIC_EXTERNAL ) {
         str = _( "External" );
@@ -299,10 +305,13 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect4.x + ( rect4.width - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
-    if ( heroSpeed )
+    if ( heroSpeed == 10 ) {
+        str = _( "Jump" );
+    }
+    else {
         str = std::to_string( heroSpeed );
-    else
-        str = _( "off" );
+    }
+
     text.Set( str );
     text.Blit( rect4.x + ( rect4.width - text.w() ) / 2, rect4.y + rect4.height + textOffset );
 
@@ -316,10 +325,16 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
-    if ( aiSpeed )
-        str = std::to_string( aiSpeed );
-    else
+    if ( aiSpeed == 0 ) {
         str = _( "Don't Show" );
+    }
+    else if ( aiSpeed == 10 ) {
+        str = _( "Jump" );
+    }
+    else {
+        str = std::to_string( aiSpeed );
+    }
+
     text.Set( str );
     text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y + rect5.height + textOffset );
 
@@ -342,7 +357,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( isEvilInterface ? 17 : 16 ) );
     const fheroes2::Rect & rect7 = rects[6];
     fheroes2::Blit( sprite7, display, rect7.x, rect7.y );
-    str = _( "Interface" );
+    str = _( "Interface Type" );
     text.Set( str );
     text.Blit( rect7.x + ( rect7.width - text.w() ) / 2, rect7.y - text.h() - textOffset );
 

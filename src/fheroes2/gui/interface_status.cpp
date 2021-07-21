@@ -20,13 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
 
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
-#include "cursor.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
@@ -35,6 +33,7 @@
 #include "resource.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

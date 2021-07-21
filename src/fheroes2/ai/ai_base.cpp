@@ -20,17 +20,15 @@
 
 #include "agg.h"
 #include "ai.h"
-#include "battle.h"
 #include "battle_arena.h"
 #include "battle_command.h"
 #include "battle_troop.h"
-#include "castle.h"
-#include "dialog.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "mus.h"
+#include "settings.h"
 
 namespace AI
 {
@@ -116,7 +114,7 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove() && !hero.Modes( Heroes::MOVED );
+        return hero.MayStillMove( false ) && !hero.Modes( Heroes::MOVED );
     }
 
     void Base::HeroTurn( Heroes & hero )

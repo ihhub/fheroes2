@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-
 #include "localevent.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
@@ -221,11 +219,9 @@ namespace
 LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( KEY_NONE )
-    , mouse_state( 0 )
     , mouse_button( 0 )
-    , mouse_st( 0, 0 )
-    , redraw_cursor_func( NULL )
-    , keyboard_filter_func( NULL )
+    , redraw_cursor_func( nullptr )
+    , keyboard_filter_func( nullptr )
     , loop_delay( 1 )
 {}
 
@@ -285,18 +281,6 @@ const fheroes2::Point & LocalEvent::GetMousePressLeft( void ) const
     return mouse_pl;
 }
 
-void LocalEvent::SetMouseOffsetX( int32_t x )
-{
-    SetModes( MOUSE_OFFSET );
-    mouse_st.x = x;
-}
-
-void LocalEvent::SetMouseOffsetY( int32_t y )
-{
-    SetModes( MOUSE_OFFSET );
-    mouse_st.y = y;
-}
-
 void LocalEvent::SetModes( flag_t f )
 {
     modes |= f;
@@ -305,11 +289,6 @@ void LocalEvent::SetModes( flag_t f )
 void LocalEvent::ResetModes( flag_t f )
 {
     modes &= ~f;
-}
-
-void LocalEvent::SetGlobalFilter( bool f )
-{
-    f ? SetModes( GLOBAL_FILTER ) : ResetModes( GLOBAL_FILTER );
 }
 
 const char * KeySymGetName( KeySym sym )
@@ -395,15 +374,12 @@ KeySym GetKeySym( int key )
     case SDLK_UNDERSCORE:
         return KEY_UNDERSCORE;
     case SDLK_LALT:
-        return KEY_ALT;
     case SDLK_RALT:
         return KEY_ALT;
     case SDLK_LCTRL:
-        return KEY_CONTROL;
     case SDLK_RCTRL:
         return KEY_CONTROL;
     case SDLK_LSHIFT:
-        return KEY_SHIFT;
     case SDLK_RSHIFT:
         return KEY_SHIFT;
     case SDLK_TAB:
@@ -597,61 +573,41 @@ bool PressIntKey( u32 max, u32 & result )
             result *= 10;
             switch ( le.KeyValue() ) {
             case KEY_1:
-                result += 1;
-                break;
-            case KEY_2:
-                result += 2;
-                break;
-            case KEY_3:
-                result += 3;
-                break;
-            case KEY_4:
-                result += 4;
-                break;
-            case KEY_5:
-                result += 5;
-                break;
-            case KEY_6:
-                result += 6;
-                break;
-            case KEY_7:
-                result += 7;
-                break;
-            case KEY_8:
-                result += 8;
-                break;
-            case KEY_9:
-                result += 9;
-                break;
-
             case KEY_KP1:
                 result += 1;
                 break;
+            case KEY_2:
             case KEY_KP2:
                 result += 2;
                 break;
+            case KEY_3:
             case KEY_KP3:
                 result += 3;
                 break;
+            case KEY_4:
             case KEY_KP4:
                 result += 4;
                 break;
+            case KEY_5:
             case KEY_KP5:
                 result += 5;
                 break;
+            case KEY_6:
             case KEY_KP6:
                 result += 6;
                 break;
+            case KEY_7:
             case KEY_KP7:
                 result += 7;
                 break;
+            case KEY_8:
             case KEY_KP8:
                 result += 8;
                 break;
+            case KEY_9:
             case KEY_KP9:
                 result += 9;
                 break;
-
             default:
                 break;
             }
@@ -942,7 +898,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 #else
     switch ( sym ) {
     case KEY_BACKSPACE: {
-        if ( res.size() && pos ) {
+        if ( !res.empty() && pos ) {
             if ( pos >= res.size() )
                 res.resize( res.size() - 1 );
             else
@@ -951,7 +907,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         }
     } break;
     case KEY_DELETE: {
-        if ( res.size() ) {
+        if ( !res.empty() ) {
             if ( pos < res.size() )
                 res.erase( pos, 1 );
         }
@@ -1087,7 +1043,7 @@ void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRend
 void LocalEvent::PauseCycling() const
 {
     colorCycling.pause();
-    fheroes2::Display::instance().subscribe( NULL, NULL );
+    fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
 void LocalEvent::ResumeCycling() const
@@ -1324,10 +1280,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            if ( modes & MOUSE_OFFSET )
-                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
-            else
-                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
         }
 
         if ( event.type == SDL_FINGERDOWN ) {
@@ -1434,8 +1387,23 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             _dpadScrollActive = false;
         }
 
-        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+#if defined( FHEROES2_VITA )
+        if ( dpadInputActive && ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) ) {
             key_value = KEY_SHIFT;
+            return;
+        }
+#endif
+        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+            key_value = KEY_h;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+            key_value = KEY_t;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_X ) {
+            key_value = KEY_e;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_Y ) {
+            key_value = KEY_c;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_BACK ) {
             key_value = KEY_f;
@@ -1476,10 +1444,7 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            if ( modes & MOUSE_OFFSET )
-                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
-            else
-                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
         }
     }
 
@@ -1557,14 +1522,11 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 
 void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 {
-    mouse_state = motion.state;
     SetModes( MOUSE_MOTION );
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
-    if ( modes & MOUSE_OFFSET )
-        mouse_cu += mouse_st;
 }
 
 void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
@@ -1584,8 +1546,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
     mouse_cu.y = button.y;
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
-    if ( modes & MOUSE_OFFSET )
-        mouse_cu += mouse_st;
 
     if ( modes & MOUSE_PRESSED )
         switch ( button.button ) {
@@ -1827,24 +1787,17 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 {
     const LocalEvent & le = LocalEvent::Get();
 
-    // motion
-    if ( ( le.modes & GLOBAL_FILTER ) && SDL_MOUSEMOTION == event->type ) {
-        // redraw cursor
+    if ( SDL_MOUSEMOTION == event->type ) {
+        // Redraw cursor.
         if ( le.redraw_cursor_func ) {
-            if ( le.modes & MOUSE_OFFSET )
-                ( *( le.redraw_cursor_func ) )( event->motion.x + le.mouse_st.x, event->motion.y + le.mouse_st.y );
-            else
-                ( *( le.redraw_cursor_func ) )( event->motion.x, event->motion.y );
+            ( *( le.redraw_cursor_func ) )( event->motion.x, event->motion.y );
         }
     }
-
-    // key
-    if ( ( le.modes & GLOBAL_FILTER ) && SDL_KEYDOWN == event->type )
-
-    {
-        // key event
-        if ( le.keyboard_filter_func )
+    else if ( SDL_KEYDOWN == event->type ) {
+        // Process key press event.
+        if ( le.keyboard_filter_func ) {
             ( *( le.keyboard_filter_func ) )( event->key.keysym.sym, event->key.keysym.mod );
+        }
     }
 
     return 1;
@@ -1893,7 +1846,7 @@ void LocalEvent::SetStateDefaults( void )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );
 
-    SDL_SetEventFilter( GlobalFilterEvents, NULL );
+    SDL_SetEventFilter( GlobalFilterEvents, nullptr );
 #else
     SetState( SDL_ACTIVEEVENT, true );
 

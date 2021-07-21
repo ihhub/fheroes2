@@ -450,7 +450,7 @@ struct MidTrack
         : mtrk( TAG_MTRK, 0 )
         , events( t )
     {
-        mtrk.length = events.size();
+        mtrk.length = static_cast<uint32_t>( events.size() );
     }
 
     size_t size( void ) const
@@ -525,7 +525,7 @@ StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
 {
     sb << st.mthd;
     sb.putBE16( st.format );
-    sb.putBE16( st.tracks.count() );
+    sb.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
     sb.putBE16( st.ppqn );
     sb << st.tracks;
     return sb;

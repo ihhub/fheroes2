@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "game_video.h"
-#include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "game_delays.h"
@@ -33,14 +32,23 @@
 
 namespace
 {
-    const std::vector<std::string> videoDir = {"anim", System::ConcatePath( "heroes2", "anim" )};
+    const std::vector<std::string> videoDir = { "anim", System::ConcatePath( "heroes2", "anim" ), "data" };
 
-    bool IsFile( const std::string & fileName, std::string & path )
+    void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color )
+    {
+        fheroes2::DrawRect( image, roi, color );
+        fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
+    }
+}
+
+namespace Video
+{
+    bool isVideoFile( const std::string & fileName, std::string & path )
     {
         std::string temp;
 
         for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            ListFiles files = Settings::FindFiles( videoDir[i], fileName );
+            ListFiles files = Settings::FindFiles( videoDir[i], fileName, true );
             for ( std::string & name : files ) {
                 if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
                     path.swap( name );
@@ -52,22 +60,13 @@ namespace
         return false;
     }
 
-    void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color )
-    {
-        fheroes2::DrawRect( image, roi, color );
-        fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
-    }
-}
-
-namespace Video
-{
     int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
     {
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::string videoPath;
-        if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
+        if ( !isVideoFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
             DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
             return 0;
         }
@@ -98,11 +97,11 @@ namespace Video
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
-        const bool hasSound = Settings::Get().Sound();
+        const bool hasSound = Mixer::isValid();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                if ( it->size() )
+                if ( !it->empty() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
         }
@@ -190,7 +189,7 @@ namespace Video
 
                     if ( hasSound ) {
                         for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                            if ( it->size() )
+                            if ( !it->empty() )
                                 Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
                         }
                     }

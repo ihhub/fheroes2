@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -39,7 +38,11 @@
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
+#include "settings.h"
 #include "system.h"
+#ifndef BUILD_RELEASE
+#include "tools.h"
+#endif
 #include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
@@ -53,11 +56,6 @@ namespace
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
     }
 
-    void SetVideoDriver( const std::string & driver )
-    {
-        System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
-    }
-
     int PrintHelp( const char * basename )
     {
         COUT( "Usage: " << basename << " [OPTIONS]" );
@@ -69,83 +67,72 @@ namespace
         return EXIT_SUCCESS;
     }
 
-    bool ReadConfigs()
+    void ReadConfigs()
     {
         Settings & conf = Settings::Get();
-        const ListFiles & files = Settings::GetListFiles( "", configurationFileName );
 
-        bool isValidConfigurationFile = false;
-        for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-            if ( System::IsFile( *it ) && conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+        if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
+
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
-
-        if ( !isValidConfigurationFile )
+        else {
             conf.Save( configurationFileName );
-
-        return !isValidConfigurationFile;
-    }
-
-    void InitHomeDir()
-    {
-        const std::string home = System::GetHomeDirectory( "fheroes2" );
-
-        if ( !home.empty() ) {
-            const std::string home_maps = System::ConcatePath( home, "maps" );
-            const std::string home_files = System::ConcatePath( home, "files" );
-            const std::string home_files_save = System::ConcatePath( home_files, "save" );
-
-            if ( !System::IsDirectory( home ) )
-                System::MakeDirectory( home );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
-                System::MakeDirectory( home_maps );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
-                System::MakeDirectory( home_files );
-
-            if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
-                System::MakeDirectory( home_files_save );
         }
     }
 
-    void SetTimidityEnvPath()
+    void InitConfigDir()
     {
-        const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
-        const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );
+        const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( System::IsFile( result ) )
-            System::SetEnvironment( "TIMIDITY_PATH", System::GetDirname( result ).c_str() );
+        if ( !configDir.empty() && !System::IsDirectory( configDir ) ) {
+            System::MakeDirectory( configDir );
+        }
+    }
+
+    void InitDataDir()
+    {
+        const std::string dataDir = System::GetDataDirectory( "fheroes2" );
+
+        if ( dataDir.empty() )
+            return;
+
+        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
+        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+
+        if ( !System::IsDirectory( dataDir ) )
+            System::MakeDirectory( dataDir );
+
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
+            System::MakeDirectory( dataFiles );
+
+        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
+            System::MakeDirectory( dataFilesSave );
     }
 
     void SetLangEnvPath( const Settings & conf )
     {
-#ifdef WITH_TTF
-        if ( conf.Unicode() ) {
+        if ( !conf.ForceLang().empty() ) {
             System::SetLocale( LC_ALL, "" );
             System::SetLocale( LC_NUMERIC, "C" );
 
-            std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
+            const std::string mofile = std::string( conf.ForceLang() ).append( ".mo" );
 
-            ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
+            const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
-            if ( translations.size() ) {
+            if ( !translations.empty() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
                     Translation::setDomain( "fheroes2" );
             }
-            else
+            else {
                 ERROR_LOG( "translation not found: " << mofile );
+            }
         }
-#else
-        (void)conf;
-#endif
+
         Translation::setStripContext( '|' );
     }
 }
@@ -164,8 +151,9 @@ int main( int argc, char ** argv )
     Settings & conf = Settings::Get();
     conf.SetProgramPath( argv[0] );
 
-    InitHomeDir();
-    const bool isFirstGameRun = ReadConfigs();
+    InitConfigDir();
+    InitDataDir();
+    ReadConfigs();
 
     // getopt
     {
@@ -186,25 +174,12 @@ int main( int argc, char ** argv )
             }
     }
 
-    if ( conf.SelectVideoDriver().size() )
-        SetVideoDriver( conf.SelectVideoDriver() );
-
-    // random init
-    if ( conf.Music() )
-        SetTimidityEnvPath();
-
-    u32 subsystem = INIT_VIDEO;
+    u32 subsystem = INIT_VIDEO | INIT_AUDIO;
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
-    if ( conf.Sound() || conf.Music() )
-        subsystem |= INIT_AUDIO;
-#ifdef WITH_AUDIOCD
-    if ( conf.MusicCD() )
-        subsystem |= INIT_CDROM | INIT_AUDIO;
-#endif
     if ( SDL::Init( subsystem ) ) {
         try
         {
@@ -215,14 +190,9 @@ int main( int argc, char ** argv )
             if ( Mixer::isValid() ) {
                 Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-                if ( conf.Music() ) {
-                    Music::SetFadeIn( 900 );
-                }
-            }
-            else if ( conf.Sound() || conf.Music() ) {
-                conf.ResetSound();
-                conf.ResetMusic();
+                Music::SetFadeIn( 900 );
             }
 
             fheroes2::Display & display = fheroes2::Display::instance();
@@ -242,20 +212,13 @@ int main( int argc, char ** argv )
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
-#ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
-#endif
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
 
             // read data dir
             if ( !AGG::Init() ) {
-                // Since it is a fresh start we should delete newly created configuration file.
-                if ( isFirstGameRun ) {
-                    remove( configurationFileName );
-                }
-
                 fheroes2::Display::instance().release();
                 return EXIT_FAILURE;
             }
@@ -268,14 +231,16 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            fheroes2::showTeamInfo();
+            if ( conf.isShowIntro() ) {
+                fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            }
 
             // init cursor
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-            Game::mainGameLoop( isFirstGameRun );
+            Game::mainGameLoop( conf.isFirstGameRun() );
         }
         catch ( const std::exception & ex ) {
             ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );

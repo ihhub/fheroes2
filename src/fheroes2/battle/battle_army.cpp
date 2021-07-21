@@ -25,6 +25,7 @@
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"
+#include "monster_anim.h"
 #include "settings.h"
 #include "speed.h"
 
@@ -47,7 +48,7 @@ namespace Battle
         auto allowPartFunc = part1 ? AllowPart1 : AllowPart2;
         Units::iterator it1 = std::find_if( units1.begin(), units1.end(), allowPartFunc );
         Units::iterator it2 = std::find_if( units2.begin(), units2.end(), allowPartFunc );
-        Unit * result = NULL;
+        Unit * result = nullptr;
 
         if ( it1 != units1.end() && it2 != units2.end() ) {
             if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
@@ -111,18 +112,18 @@ void Battle::Units::SortArchers( void )
     std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
 
-Battle::Unit * Battle::Units::FindUID( u32 pid )
+Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
 {
-    iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
+    const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
 
-    return it == end() ? NULL : *it;
+    return it == end() ? nullptr : *it;
 }
 
-Battle::Unit * Battle::Units::FindMode( u32 mod )
+Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
 {
-    iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
+    const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
-    return it == end() ? NULL : *it;
+    return it == end() ? nullptr : *it;
 }
 
 Battle::Force::Force( Army & parent, bool opposite )
@@ -171,9 +172,27 @@ int Battle::Force::GetControl( void ) const
     return army.GetControl();
 }
 
-bool Battle::Force::isValid( void ) const
+bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) const
 {
-    return end() != std::find_if( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
+    // Consider the state of the army on the battlefield (including resurrected units, summoned units, etc)
+    if ( considerBattlefieldArmy ) {
+        return std::any_of( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
+    }
+
+    // Consider only the state of the original army
+    for ( uint32_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+
+        if ( troop && troop->isValid() ) {
+            const Unit * unit = FindUID( uids.at( index ) );
+
+            if ( unit && unit->GetDead() < unit->GetInitialCount() ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 uint32_t Battle::Force::GetSurrenderCost( void ) const
@@ -343,7 +362,7 @@ void Battle::Force::resetIdleAnimation()
 
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
+    return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
 u32 Battle::Force::GetDeadCounts( void ) const
@@ -367,43 +386,8 @@ u32 Battle::Force::GetDeadHitPoints( void ) const
     return res;
 }
 
-void Battle::Force::SyncArmyCount( bool checkResurrected )
+void Battle::Force::SyncArmyCount()
 {
-    // A special case: when every creature was resurrected by Ressurection
-    // In this case we have to find the weakest troop and set it to 1
-    Troop * restoredTroop = nullptr;
-    if ( checkResurrected ) {
-        bool isAllDead = true;
-        std::vector<Troop *> armyMonsters;
-        for ( u32 index = 0; index < army.Size(); ++index ) {
-            Troop * troop = army.GetTroop( index );
-
-            if ( troop && troop->isValid() ) {
-                const Unit * unit = FindUID( uids.at( index ) );
-                if ( unit ) {
-                    if ( unit->GetDead() > 0 ) {
-                        if ( unit->GetDead() < troop->GetCount() ) {
-                            isAllDead = false;
-                            break;
-                        }
-                    }
-                    else {
-                        isAllDead = false;
-                        break;
-                    }
-                }
-
-                armyMonsters.push_back( troop );
-            }
-        }
-
-        if ( isAllDead && !armyMonsters.empty() ) {
-            std::sort( armyMonsters.begin(), armyMonsters.end(), []( const Troop * one, const Troop * two ) { return one->GetStrength() < two->GetStrength(); } );
-
-            restoredTroop = armyMonsters.front();
-        }
-    }
-
     for ( u32 index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
 
@@ -411,15 +395,8 @@ void Battle::Force::SyncArmyCount( bool checkResurrected )
             const Unit * unit = FindUID( uids.at( index ) );
 
             if ( unit ) {
-                if ( unit->GetDead() )
-                    troop->SetCount( unit->GetDead() > troop->GetCount() ? 0 : troop->GetCount() - unit->GetDead() );
-                else if ( unit->GetID() == Monster::GHOST )
-                    troop->SetCount( unit->GetCount() );
+                troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
             }
         }
-    }
-
-    if ( restoredTroop != nullptr ) {
-        restoredTroop->SetCount( 1 );
     }
 }

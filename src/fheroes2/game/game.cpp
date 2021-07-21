@@ -23,13 +23,9 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <map>
 
 #include "agg.h"
 #include "audio_mixer.h"
-#include "battle.h"
-#include "buildinginfo.h"
-#include "castle.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -38,44 +34,53 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "icn.h"
-#include "kingdom.h"
-#include "logging.h"
+#include "m82.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
 #include "mus.h"
-#include "payment.h"
-#include "profit.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
-#include "spell.h"
-#include "system.h"
 #include "text.h"
-#include "tinyconfig.h"
 #include "tools.h"
 #include "world.h"
 
+namespace
+{
+    std::string lastMapFileName;
+    std::vector<Player> savedPlayers;
+
+    int save_version = CURRENT_FORMAT_VERSION;
+
+    std::string last_name;
+
+    bool updateSoundsOnFocusUpdate = true;
+    int current_music = MUS::UNKNOWN;
+
+    u32 castle_animation_frame = 0;
+    u32 maps_animation_frame = 0;
+
+    std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+
+    u32 GetMixerChannelFromObject( const Maps::Tiles & tile )
+    {
+        // force: check stream
+        if ( tile.isStream() )
+            return 13;
+
+        return M82::GetIndexLOOP00XXFromObject( tile.GetObject( false ) );
+    }
+}
+
 namespace Game
 {
-    u32 GetMixerChannelFromObject( const Maps::Tiles & );
     void AnimateDelaysInitialize( void );
     void KeyboardGlobalFilter( int, int );
-    void UpdateGlobalDefines( const std::string & );
-    void LoadExternalResource();
 
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
-
-    bool disable_change_music = false;
-    int current_music = MUS::UNKNOWN;
-    u32 castle_animation_frame = 0;
-    u32 maps_animation_frame = 0;
-    std::string last_name;
-    int save_version = CURRENT_FORMAT_VERSION;
-    std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
-    std::string lastMapFileName;
-    std::vector<Player> savedPlayers;
 
     namespace ObjectFadeAnimation
     {
@@ -189,32 +194,25 @@ fheroes2::GameMode Game::Credits()
     return fheroes2::GameMode::MAIN_MENU;
 }
 
-bool Game::ChangeMusicDisabled( void )
+bool Game::UpdateSoundsOnFocusUpdate()
 {
-    return disable_change_music;
+    return updateSoundsOnFocusUpdate;
 }
 
-void Game::DisableChangeMusic( bool /*f*/ )
+void Game::SetUpdateSoundsOnFocusUpdate( bool update )
 {
-    // disable_change_music = f;
+    updateSoundsOnFocusUpdate = update;
 }
 
 void Game::Init( void )
 {
-    const Settings & conf = Settings::Get();
-    LocalEvent & le = LocalEvent::Get();
-
-    // update all global defines
-    if ( conf.UseAltResource() )
-        LoadExternalResource();
-
     // default events
     LocalEvent::SetStateDefaults();
 
     // set global events
+    LocalEvent & le = LocalEvent::Get();
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
-    le.SetGlobalFilter( true );
 
     Game::AnimateDelaysInitialize();
 
@@ -265,7 +263,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
 
         if ( tile.GetObject() == fadeTask.object ) {
             tile.RemoveObjectSprite();
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.setAsEmpty();
         }
     };
     auto addObject = []() {
@@ -352,7 +350,7 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Settings::Get().Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -377,15 +375,6 @@ void Game::EnvironmentSoundMixer( void )
     }
 
     AGG::LoadLOOPXXSounds( reserved_vols, true );
-}
-
-u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
-{
-    // force: check stream
-    if ( tile.isStream() )
-        return 13;
-
-    return M82::GetIndexLOOP00XXFromObject( tile.GetObject( false ) );
 }
 
 u32 Game::GetRating( void )
@@ -494,95 +483,9 @@ u32 Game::GetViewDistance( u32 d )
     return GameStatic::GetOverViewDistance( d );
 }
 
-void Game::UpdateGlobalDefines( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse profits.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_globals = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_globals = doc.FirstChildElement( "globals" ) ) ) {
-        // starting_resource
-        KingdomUpdateStartingResource( xml_globals->FirstChildElement( "starting_resource" ) );
-        // view_distance
-        OverViewUpdateStatic( xml_globals->FirstChildElement( "view_distance" ) );
-        // kingdom
-        KingdomUpdateStatic( xml_globals->FirstChildElement( "kingdom" ) );
-        // game_over
-        GameOverUpdateStatic( xml_globals->FirstChildElement( "game_over" ) );
-        // whirlpool
-        WhirlpoolUpdateStatic( xml_globals->FirstChildElement( "whirlpool" ) );
-        // heroes
-        HeroesUpdateStatic( xml_globals->FirstChildElement( "heroes" ) );
-        // castle_extra_growth
-        CastleUpdateGrowth( xml_globals->FirstChildElement( "castle_extra_growth" ) );
-        // monster upgrade ratio
-        MonsterUpdateStatic( xml_globals->FirstChildElement( "monster_upgrade" ) );
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
 u32 Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
-}
-
-void Game::LoadExternalResource()
-{
-    std::string spec;
-    const std::string prefix_stats = System::ConcatePath( "files", "stats" );
-
-    // globals.xml
-    spec = Settings::GetLastFile( prefix_stats, "globals.xml" );
-
-    if ( System::IsFile( spec ) )
-        Game::UpdateGlobalDefines( spec );
-
-    // monsters.xml
-    spec = Settings::GetLastFile( prefix_stats, "monsters.xml" );
-
-    if ( System::IsFile( spec ) )
-        Monster::UpdateStats( spec );
-
-    // spells.xml
-    spec = Settings::GetLastFile( prefix_stats, "spells.xml" );
-
-    if ( System::IsFile( spec ) )
-        Spell::UpdateStats( spec );
-
-    // artifacts.xml
-    spec = Settings::GetLastFile( prefix_stats, "artifacts.xml" );
-
-    if ( System::IsFile( spec ) )
-        Artifact::UpdateStats( spec );
-
-    // buildings.xml
-    spec = Settings::GetLastFile( prefix_stats, "buildings.xml" );
-
-    if ( System::IsFile( spec ) )
-        BuildingInfo::UpdateCosts( spec );
-
-    // payments.xml
-    spec = Settings::GetLastFile( prefix_stats, "payments.xml" );
-
-    if ( System::IsFile( spec ) )
-        PaymentConditions::UpdateCosts( spec );
-
-    // profits.xml
-    spec = Settings::GetLastFile( prefix_stats, "profits.xml" );
-
-    if ( System::IsFile( spec ) )
-        ProfitConditions::UpdateCosts( spec );
-
-    // skills.xml
-    spec = Settings::GetLastFile( prefix_stats, "skills.xml" );
-
-    if ( System::IsFile( spec ) )
-        Skill::UpdateStats( spec );
 }
 
 std::string Game::GetEncodeString( const std::string & str1 )
@@ -590,8 +493,8 @@ std::string Game::GetEncodeString( const std::string & str1 )
     const Settings & conf = Settings::Get();
 
     // encode name
-    if ( conf.Unicode() && conf.MapsCharset().size() )
-        return EncodeString( str1.c_str(), conf.MapsCharset().c_str() );
+    if ( conf.Unicode() && !conf.MapsCharset().empty() )
+        return EncodeString( str1, conf.MapsCharset().c_str() );
 
     return str1;
 }

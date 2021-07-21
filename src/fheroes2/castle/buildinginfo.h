@@ -33,7 +33,7 @@ class BuildingInfo
 public:
     BuildingInfo( const Castle &, building_t );
 
-    u32 operator()( void ) const;
+    uint32_t getBuilding( void ) const;
     void SetPos( s32, s32 );
     const fheroes2::Rect & GetArea( void ) const;
     const char * GetName( void ) const;
@@ -43,7 +43,6 @@ public:
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
-    static void UpdateCosts( const std::string & );
     static payment_t GetCost( u32, int );
 
 private:

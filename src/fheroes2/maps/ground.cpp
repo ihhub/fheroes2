@@ -21,9 +21,8 @@
  ***************************************************************************/
 
 #include "ground.h"
-#include "direction.h"
+#include "maps_tiles.h"
 #include "translations.h"
-#include "world.h"
 
 const char * Maps::Ground::String( int ground )
 {

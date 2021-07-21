@@ -32,16 +32,6 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-#define FORMAT_VERSION_094_RELEASE 9400
-#define FORMAT_VERSION_093_RELEASE 9300
-#define FORMAT_VERSION_091_RELEASE 9100
-#define FORMAT_VERSION_090_RELEASE 9001
-
-// TODO: once FORMAT_VERSION_094_RELEASE version becomes minimal supported please remove game version handling in HeaderSAV class and FileInfo structure.
-#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_090_RELEASE
-
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_094_RELEASE // TODO: update this value for a new release
-
 enum
 {
     SCROLL_SLOW = 4,
@@ -54,8 +44,7 @@ enum MusicSource
 {
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
-    MUSIC_EXTERNAL,
-    MUSIC_CDROM
+    MUSIC_EXTERNAL
 };
 
 class Settings
@@ -82,7 +71,7 @@ public:
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
-        WORLD_ONLY_FIRST_MONSTER_ATTACK = 0x20000080,
+        // UNUSED = 0x20000080,
         WORLD_EYE_EAGLE_AS_SCHOLAR = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         WORLD_BAN_WEEKOF = 0x20000400,
@@ -103,7 +92,7 @@ public:
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
-        WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
+        // UNUSED = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
         WORLD_USE_UNIQUE_ARTIFACTS_PS = 0x30000400,
         WORLD_USE_UNIQUE_ARTIFACTS_SS = 0x30000800,
@@ -114,8 +103,7 @@ public:
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
-        BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
-        BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000
+        BATTLE_REVERSE_WAIT_ORDER = 0x40020000
     };
 
     Settings( const Settings & ) = delete;
@@ -139,8 +127,6 @@ public:
     int BattleSpeed() const;
     int ScrollSpeed() const;
 
-    const std::string & SelectVideoDriver() const;
-
     int GameDifficulty() const;
 
     const std::string & MapsCharset() const;
@@ -162,8 +148,6 @@ public:
     void SetPosStatus( const fheroes2::Point & );
 
     bool FullScreen() const;
-    bool Sound() const;
-    bool Music() const;
     bool ShowControlPanel() const;
     bool ShowRadar() const;
     bool ShowIcons() const;
@@ -175,12 +159,15 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool UseAltResource() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
     bool MusicExt() const;
     bool MusicMIDI() const;
-    bool MusicCD() const;
+    bool isShowIntro() const;
+
+    bool isFirstGameRun() const;
+    void resetFirstGameRun();
+
     void BinarySave() const;
     void BinaryLoad();
 
@@ -202,7 +189,6 @@ public:
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;
     bool ExtWorldArtifactCrystalBall() const;
-    bool ExtWorldOnlyFirstMonsterAttack() const;
     bool ExtWorldEyeEagleAsScholar() const;
     bool ExtWorldBanMonthOfMonsters() const;
     bool ExtWorldBanWeekOf() const;
@@ -210,7 +196,6 @@ public:
     bool ExtWorldStartHeroLossCond4Humans() const;
     bool ExtWorldOneHeroHiredEveryWeek() const;
     bool ExtWorldNeutralArmyDifficultyScaling() const;
-    bool ExtWorldUseUniqueArtifactsML() const;
     bool ExtWorldUseUniqueArtifactsRS() const;
     bool ExtWorldUseUniqueArtifactsPS() const;
     bool ExtWorldUseUniqueArtifactsSS() const;
@@ -222,7 +207,6 @@ public:
     bool ExtBattleShowDamage() const;
     bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
-    bool ExtBattleSkipIncreaseDefense() const;
     bool ExtBattleReverseWaitOrder() const;
     bool ExtGameRememberLastFocus() const;
     bool ExtGameContinueAfterVictory() const;
@@ -261,8 +245,6 @@ public:
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
     void SetMusicType( int v );
-    void ResetSound();
-    void ResetMusic();
 
     int SoundVolume() const;
     int MusicVolume() const;
@@ -301,6 +283,8 @@ public:
     u32 LossCountDays() const;
     int controllerPointerSpeed() const;
 
+    void SetMapsFile( const std::string & file );
+
     std::string GetProgramPath() const
     {
         return path_program;
@@ -309,23 +293,11 @@ public:
 
     static std::string GetVersion();
 
-    static ListFiles GetListFiles( const std::string & prefix, const std::string & filter );
     static ListDirs GetRootDirs();
-    static std::string GetLastFile( const std::string & prefix, const std::string & name );
-    static std::string GetWriteableDir( const char * );
     static std::string GetLangDir();
 
-    static ListFiles FindFiles( const std::string & directory, const std::string & fileName );
-
-    // deprecated
-    const std::string & GetDataParams() const
-    {
-        return data_params;
-    }
-    ListDirs GetMapsParams() const
-    {
-        return maps_params;
-    }
+    static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
+    static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 protected:
     void PostLoad();
@@ -348,8 +320,6 @@ private:
     int game_difficulty;
 
     std::string path_program;
-    std::string data_params;
-    ListDirs maps_params;
 
     std::string font_normal;
     std::string font_small;
@@ -373,8 +343,6 @@ private:
 
     int game_type;
     int preferably_count_players;
-
-    std::string video_driver;
 
     fheroes2::Point pos_radr;
     fheroes2::Point pos_bttn;

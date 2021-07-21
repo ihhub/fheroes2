@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 #include <iterator>
 #include <set>
 
@@ -34,9 +33,10 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_tiles.h"
 #include "rand.h"
+#include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 namespace
 {
@@ -187,7 +187,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); i++ ) {
-            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( i, unit ) ) ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).SetDirection( CENTER );
             }
         }
@@ -204,261 +204,240 @@ void Battle::Board::SetScanPassability( const Unit & unit )
 
         // Set passable cells.
         for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it )
-            GetAStarPath( unit, Position::GetCorrect( unit, *it ), false );
+            GetPath( unit, Position::GetCorrect( unit, *it ), false );
     }
 }
 
-struct CellNode
+bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentCellId,
+                                    std::vector<bool> & visitedCells, Indexes & result ) const
 {
-    int32_t cost;
-    int32_t parentCellId;
-    bool open;
-    bool leftDirection; // this is used for a wide unit movement to know the current position of tail
+    if ( remainingSteps == 0 ) {
+        return false;
+    }
 
-    CellNode()
-        : cost( MAXU16 )
-        , parentCellId( -1 )
-        , open( true )
-        , leftDirection( false )
-    {}
-};
+    const Castle * castle = Arena::GetCastle();
+    const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
 
-Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position & destination, const bool debug ) const
+    const int32_t dstCellId = destination.GetHead()->GetIndex();
+
+    // Upper distance limit
+    if ( Board::GetDistance( currentCellId, dstCellId ) > remainingSteps ) {
+        return false;
+    }
+
+    std::multimap<uint32_t, int32_t> cellCosts;
+
+    for ( const int32_t cellId : GetAroundIndexes( currentCellId ) ) {
+        const Cell & cell = at( cellId );
+
+        // Ignore already visited or impassable cell
+        if ( visitedCells.at( cellId ) || !cell.isPassable4( unit, at( currentCellId ) ) ) {
+            continue;
+        }
+
+        // Unit is already at its destination
+        if ( cellId == dstCellId ) {
+            result.push_back( cellId );
+
+            return true;
+        }
+
+        // Unit steps into the moat, do not let it pass through the moat
+        if ( isMoatBuilt && Board::isMoatIndex( cellId, unit ) ) {
+            continue;
+        }
+
+        // Calculate the distance from the cell in question to the destination, sort cells by distance
+        cellCosts.emplace( Board::GetDistance( cellId, dstCellId ), cellId );
+    }
+
+    // Scan the available cells recursively in ascending order of distance
+    for ( const auto & cellCost : cellCosts ) {
+        const int32_t cellId = cellCost.second;
+
+        // Mark the cell as visited for further steps
+        visitedCells.at( cellId ) = true;
+
+        if ( GetPathForUnit( unit, destination, remainingSteps - 1, cellId, visitedCells, result ) ) {
+            result.push_back( cellId );
+
+            return true;
+        }
+
+        // Unmark the cell as visited
+        visitedCells.at( cellId ) = false;
+    }
+
+    return false;
+}
+
+bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
+                                        const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const
+{
+    if ( remainingSteps == 0 ) {
+        return false;
+    }
+
+    const Castle * castle = Arena::GetCastle();
+    const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+
+    const int32_t dstHeadCellId = destination.GetHead()->GetIndex();
+    const int32_t dstTailCellId = destination.GetTail()->GetIndex();
+
+    const bool isCurrentLeftDirection = prevHeadCellId < 0 ? unit.isReflect() : ( ( GetDirection( prevHeadCellId, currentHeadCellId ) & LEFT_SIDE ) != 0 );
+    const int32_t currentTailCellId = isCurrentLeftDirection ? currentHeadCellId + 1 : currentHeadCellId - 1;
+
+    // Upper distance limit
+    if ( Board::GetDistance( currentHeadCellId, dstHeadCellId ) > remainingSteps && Board::GetDistance( currentTailCellId, dstHeadCellId ) > remainingSteps ) {
+        return false;
+    }
+
+    std::multimap<uint32_t, int32_t> cellCosts;
+
+    for ( const int32_t headCellId : GetMoveWideIndexes( currentHeadCellId, isCurrentLeftDirection ) ) {
+        const Cell & cell = at( headCellId );
+
+        // Ignore already visited or impassable cell
+        if ( visitedCells.at( headCellId ) || !cell.isPassable4( unit, at( currentHeadCellId ) ) ) {
+            continue;
+        }
+
+        const int32_t tailCellId = ( GetDirection( currentHeadCellId, headCellId ) & LEFT_SIDE ) ? headCellId + 1 : headCellId - 1;
+
+        // Unit is already at its destination
+        if ( ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) || ( headCellId == dstTailCellId && tailCellId == dstHeadCellId ) ) {
+            result.push_back( headCellId );
+
+            return true;
+        }
+
+        // Unit steps into the moat
+        if ( isMoatBuilt && ( Board::isMoatIndex( headCellId, unit ) || Board::isMoatIndex( tailCellId, unit ) ) ) {
+            // Moat is a part of the unit's destination
+            if ( headCellId == dstHeadCellId ) {
+                result.push_back( headCellId );
+
+                return true;
+            }
+
+            // In the moat it is only allowed to turn back, do not let the unit pass through the moat
+            if ( ( tailCellId != currentHeadCellId || !Board::isMoatIndex( tailCellId, unit ) )
+                 && ( headCellId != currentTailCellId || !Board::isMoatIndex( headCellId, unit ) ) ) {
+                continue;
+            }
+        }
+
+        // Calculate the distance from the cell in question to the destination, sort cells by distance
+        cellCosts.emplace( Board::GetDistance( headCellId, dstHeadCellId ) + Board::GetDistance( tailCellId, dstTailCellId ), headCellId );
+    }
+
+    // Scan the available cells recursively in ascending order of distance
+    for ( const auto & cellCost : cellCosts ) {
+        const int32_t headCellId = cellCost.second;
+
+        // Mark the cell as visited for further steps
+        visitedCells.at( headCellId ) = true;
+
+        // Turning back is not a movement
+        const uint32_t steps = headCellId == currentTailCellId ? remainingSteps : remainingSteps - 1;
+
+        if ( GetPathForWideUnit( unit, destination, steps, headCellId, currentHeadCellId, visitedCells, result ) ) {
+            result.push_back( headCellId );
+
+            return true;
+        }
+
+        // Unmark the cell as visited
+        visitedCells.at( headCellId ) = false;
+    }
+
+    return false;
+}
+
+void Battle::Board::StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const
+{
+    // A path less than 2 steps long cannot contain detours, leave it as is
+    if ( path.size() < 2 ) {
+        return;
+    }
+
+    // Remember that the steps in the path are stored in reverse order
+    // Temporarily append the current cell of the unit to the end of the path
+    path.push_back( currentCellId );
+
+    for ( std::size_t curr = 0; path.size() > 2 && curr < path.size() - 2; ++curr ) {
+        const std::size_t next = curr + 1;
+
+        // Check whether we are passing through one of the neighboring cells at any of the future steps (excluding the next step)
+        for ( const int32_t cellId : GetAroundIndexes( path[curr] ) ) {
+            std::size_t pos;
+
+            // Search for the last occurence of the current neighboring cell in the path (excluding the next step)
+            // Using path.size() - 1 should be safe here, because, due to the condition in the outer loop, path should never be empty
+            assert( !path.empty() );
+            for ( pos = path.size() - 1; pos > next; --pos ) {
+                if ( path[pos] == cellId ) {
+                    break;
+                }
+            }
+
+            // If found, then remove the extra steps
+            if ( pos > next ) {
+                path.erase( path.begin() + next, path.begin() + pos );
+
+                break;
+            }
+        }
+    }
+
+    // Remove the current cell of the unit from the path
+    assert( !path.empty() );
+    path.pop_back();
+}
+
+Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & destination, const bool debug ) const
 {
     Indexes result;
+
     const bool isWideUnit = unit.isWide();
 
-    // check if target position is valid
+    // Check if destination is valid
     if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
-        ERROR_LOG( "Board::GetAStarPath invalid destination for unit " + unit.String() );
+        ERROR_LOG( "Board::GetPath invalid destination for unit " + unit.String() );
         return result;
     }
 
-    const int32_t startCellId = unit.GetHeadIndex();
-    int32_t currentCellId = startCellId;
+    result.reserve( 15 );
 
-    const Bridge * bridge = Arena::GetBridge();
-    const Castle * castle = Arena::GetCastle();
-    const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
-    const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-
-    std::map<int32_t, CellNode> cellMap;
-    cellMap[currentCellId].parentCellId = -1;
-    cellMap[currentCellId].cost = 0;
-    cellMap[currentCellId].open = false;
-    cellMap[currentCellId].leftDirection = unit.isReflect(); // used only for wide (2-hex) creatures
-
-    bool reachedDestination = true;
-
-    const int32_t targetHeadCellId = destination.GetHead()->GetIndex();
-    const int32_t targetTailCellId = isWideUnit ? destination.GetTail()->GetIndex() : targetHeadCellId;
+    std::vector<bool> visitedCells( ARENASIZE, false );
 
     if ( isWideUnit ) {
-        int32_t currentTailCellId = unit.isReflect() ? currentCellId + 1 : currentCellId - 1;
-
-        while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId )
-                && !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
-            const Cell & center = at( currentCellId );
-
-            CellNode & currentCellNode = cellMap[currentCellId];
-            Indexes aroundCellIds;
-
-            if ( currentCellNode.parentCellId < 0 )
-                aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
-            else
-                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) != 0 );
-
-            for ( const int32_t cellId : aroundCellIds ) {
-                const Cell & cell = at( cellId );
-
-                if ( cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId, unit ) ) ) {
-                    const bool isLeftDirection = IsLeftDirection( currentCellId, cellId, currentCellNode.leftDirection );
-                    const int32_t tailCellId = isLeftDirection ? cellId + 1 : cellId - 1;
-
-                    int32_t cost = Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId );
-
-                    // Turn back. No movement at all.
-                    if ( isLeftDirection != currentCellNode.leftDirection ) {
-                        cost = 0;
-                    }
-                    // Moat penalty. Not applied if one of the target cells is located in the moat.
-                    else if ( isMoatBuilt && cellId != targetHeadCellId && cellId != targetTailCellId ) {
-                        // Don't apply the moat penalty to the unit's tail if the head cell was also in the moat at the previous stage.
-                        if ( Board::isMoatIndex( cellId, unit ) || ( Board::isMoatIndex( tailCellId, unit ) && !Board::isMoatIndex( currentCellId, unit ) ) ) {
-                            cost += ARENASIZE;
-                        }
-                    }
-
-                    if ( cellMap[cellId].parentCellId < 0 ) {
-                        // It is a new cell (node).
-                        cellMap[cellId].parentCellId = currentCellId;
-                        cellMap[cellId].cost = cost + currentCellNode.cost;
-                        cellMap[cellId].leftDirection = isLeftDirection;
-                    }
-                    else if ( cellMap[cellId].cost > cost + currentCellNode.cost ) {
-                        // Found a better path. Update the existing node.
-                        cellMap[cellId].parentCellId = currentCellId;
-                        cellMap[cellId].cost = cost + currentCellNode.cost;
-                        cellMap[cellId].leftDirection = isLeftDirection;
-                    }
-                }
-            }
-
-            currentCellNode.open = false;
-            int32_t cost = MAXU16;
-
-            const int32_t prevCellId = currentCellId;
-
-            // Find unused nodes by minimum cost.
-            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
-                const CellNode & cellNode = cellInfoIt->second;
-                if ( cellNode.open && cost > cellNode.cost ) {
-                    currentCellId = cellInfoIt->first;
-                    cost = cellNode.cost;
-                }
-            }
-
-            // Find alternative path if there is any.
-            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
-                const CellNode & cellNode = cellInfoIt->second;
-                if ( cellNode.open && cost == cellNode.cost && cellInfoIt->first != currentCellId && cellNode.parentCellId == prevCellId ) {
-                    currentCellId = cellInfoIt->first;
-                    break;
-                }
-            }
-
-            if ( MAXU16 == cost ) {
-                reachedDestination = false;
-                break;
-            }
-
-            currentTailCellId = IsLeftDirection( prevCellId, currentCellId, currentCellNode.leftDirection ) ? currentCellId + 1 : currentCellId - 1;
-        }
+        GetPathForWideUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), -1, visitedCells, result );
     }
     else {
-        while ( currentCellId != targetHeadCellId ) {
-            const Cell & center = at( currentCellId );
-            const Indexes aroundCellIds = GetAroundIndexes( currentCellId );
+        GetPathForUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), visitedCells, result );
 
-            for ( const int32_t cellId : aroundCellIds ) {
-                const Cell & cell = at( cellId );
-
-                if ( cellMap[cellId].open && cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId, unit ) ) ) {
-                    int32_t cost = Board::GetDistance( cellId, targetHeadCellId );
-
-                    // Moat penalty. Not applied if the target cell is located in the moat.
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit ) && cellId != targetHeadCellId ) {
-                        cost += ARENASIZE;
-                    }
-
-                    if ( cellMap[cellId].parentCellId < 0 ) {
-                        // It is a new cell (node).
-                        cellMap[cellId].parentCellId = currentCellId;
-                        cellMap[cellId].cost = cost + cellMap[currentCellId].cost;
-                    }
-                    else if ( cellMap[cellId].cost > cost + cellMap[currentCellId].cost ) {
-                        // Found a better path. Update the existing node.
-                        cellMap[cellId].parentCellId = currentCellId;
-                        cellMap[cellId].cost = cost + cellMap[currentCellId].cost;
-                    }
-                }
-            }
-
-            cellMap[currentCellId].open = false;
-            int32_t cost = MAXU16;
-
-            // Find unused nodes by minimum cost.
-            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
-                const CellNode & cellNode = cellInfoIt->second;
-                if ( cellNode.open && cost > cellNode.cost ) {
-                    currentCellId = cellInfoIt->first;
-                    cost = cellNode.cost;
-                }
-            }
-
-            if ( MAXU16 == cost ) {
-                reachedDestination = false;
-                break;
-            }
-        }
+        // Try to straighten the unit's path by eliminating possible detours
+        StraightenPathForUnit( unit.GetHeadIndex(), result );
     }
 
-    // save path
-    if ( reachedDestination ) {
-        result.reserve( 15 );
-        while ( currentCellId != startCellId && isValidIndex( currentCellId ) ) {
-            if ( isWideUnit && !isValidDirection( currentCellId, cellMap[currentCellId].leftDirection ? RIGHT : LEFT ) )
-                break;
-
-            result.push_back( currentCellId );
-            currentCellId = cellMap[currentCellId].parentCellId;
-        }
-
+    if ( !result.empty() ) {
         std::reverse( result.begin(), result.end() );
 
-        // Correct wide creature position.
-        if ( isWideUnit && !result.empty() ) {
-            const int32_t prev = 1 < result.size() ? result[result.size() - 2] : startCellId;
+        // Set direction info for cells
+        for ( std::size_t i = 0; i < result.size(); i++ ) {
+            const int32_t cellId = result[i];
 
-            if ( result.back() == targetHeadCellId ) {
-                const int side = RIGHT == GetDirection( targetHeadCellId, targetTailCellId ) ? RIGHT_SIDE : LEFT_SIDE;
+            Cell * cell = GetCell( cellId );
 
-                if ( !( side & GetDirection( targetHeadCellId, prev ) ) ) {
-                    result.push_back( targetTailCellId );
-                }
-            }
-            else if ( result.back() == targetTailCellId ) {
-                const int side = RIGHT == GetDirection( targetHeadCellId, targetTailCellId ) ? LEFT_SIDE : RIGHT_SIDE;
-
-                if ( !( side & GetDirection( targetTailCellId, prev ) ) ) {
-                    result.push_back( targetHeadCellId );
-                }
-            }
-        }
-
-        if ( isWideUnit ) {
-            uint32_t cellToMoveLeft = unit.GetSpeed();
-            bool prevIsLeftDirection = unit.isReflect();
-            for ( size_t i = 0; i < result.size(); ++i ) {
-                if ( prevIsLeftDirection == cellMap[result[i]].leftDirection ) {
-                    --cellToMoveLeft;
-                    if ( cellToMoveLeft == 0 ) {
-                        result.resize( i + 1 );
-                        break;
-                    }
-                }
-                else {
-                    prevIsLeftDirection = cellMap[result[i]].leftDirection;
-                }
-            }
-        }
-        else {
-            if ( result.size() > unit.GetSpeed() )
-                result.resize( unit.GetSpeed() );
-        }
-
-        // Skip moat position.
-        if ( isMoatBuilt ) {
-            for ( size_t i = 0; i < result.size(); ++i ) {
-                if ( isWideUnit && result[i] == unit.GetTailIndex() )
-                    continue;
-
-                if ( Board::isMoatIndex( result[i], unit ) ) {
-                    result.resize( i + 1 );
-                    break;
-                }
-            }
-        }
-
-        // set passable info
-        for ( Indexes::iterator it = result.begin(); it != result.end(); ++it ) {
-            Cell * cell = GetCell( *it );
             assert( cell != nullptr );
-            cell->SetDirection( cell->GetDirection() | GetDirection( *it, it == result.begin() ? startCellId : *( it - 1 ) ) );
+
+            cell->SetDirection( cell->GetDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );
 
             if ( isWideUnit ) {
-                const int32_t head = *it;
-                const int32_t prev = it != result.begin() ? *( it - 1 ) : startCellId;
+                const int32_t head = cellId;
+                const int32_t prev = i == 0 ? unit.GetHeadIndex() : result[i - 1];
+
                 Cell * tail = GetCell( head, LEFT_SIDE & GetDirection( head, prev ) ? LEFT : RIGHT );
 
                 if ( tail && UNKNOWN == tail->GetDirection() )
@@ -470,7 +449,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     if ( debug && result.empty() ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "Path is not found for " << unit.String() << ", destination: "
-                                            << "(head cell ID: " << targetHeadCellId << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
+                                            << "(head cell ID: " << destination.GetHead()->GetIndex()
+                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" );
     }
 
     return result;
@@ -994,7 +974,7 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
             return &board->at( GetIndexDirection( position, dir ) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
@@ -1074,7 +1054,7 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
         st.insert( center );
         abroad.push_back( center );
 
-        while ( abroad.size() && radius ) {
+        while ( !abroad.empty() && radius ) {
             std::set<s32> tm = st;
 
             for ( Indexes::const_iterator it = abroad.begin(); it != abroad.end(); ++it ) {
@@ -1102,11 +1082,11 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
 
 bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
 {
-    if ( troop == NULL )
+    if ( troop == nullptr )
         return false;
 
     const Cell * cell = GetCell( index );
-    if ( cell == NULL )
+    if ( cell == nullptr )
         return false;
 
     const bool doubleHex = troop->isWide();
@@ -1120,7 +1100,7 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
         const bool isReflected = troop->GetHeadIndex() < troop->GetTailIndex();
         const int32_t tailIndex = isReflected ? index + 1 : index - 1;
         const Cell * tailCell = GetCell( tailIndex );
-        if ( tailCell == NULL || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
+        if ( tailCell == nullptr || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
             return false;
 
         if ( !tailCell->isPassable3( *troop, true ) )

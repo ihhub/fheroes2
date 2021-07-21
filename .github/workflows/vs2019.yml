@@ -1,0 +1,28 @@
+name: VS2019
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config_type: [Release-SDL1, Release-SDL2]
+        platform_type: [x86, x64]
+    name: VS2019 (${{ matrix.config_type }} ${{ matrix.platform_type }})
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: Install dependencies
+      run: |
+        cd script/windows
+        ./install_packages.bat
+        cd ../..
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Build
+      run: MSBuild.exe fheroes2-vs2019.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}

@@ -33,9 +33,10 @@
 #include "logging.h"
 #include "m82.h"
 #include "monster.h"
-#include "rand.h"
+#include "settings.h"
 #include "spell.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -91,7 +92,7 @@ public:
 
     void ActionListPressRight( int32_t & index ) override
     {
-        const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
         if ( castle != nullptr ) {
             Dialog::QuickInfo( *castle );
@@ -107,7 +108,7 @@ private:
 
 void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool current )
 {
-    const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
     if ( castle ) {
         fheroes2::Blit( fheroes2::AGG::GetICN( _townFrameIcnId, 0 ), 481, 177, fheroes2::Display::instance(), dstx, dsty, 54, 30 );
@@ -187,14 +188,14 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         return false;
     }
     else if ( spell == Spell::NONE || spell.isCombat() || !CanCastSpell( spell, &error ) ) {
-        if ( error.size() )
+        if ( !error.empty() )
             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
         return false;
     }
 
     bool apply = false;
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::VIEWMINES:
         apply = ActionSpellViewMines( *this );
         break;
@@ -232,17 +233,9 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellVisions( *this );
         break;
     case Spell::HAUNT:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETEGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETAGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETFGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETWGUARDIAN:
         apply = ActionSpellSetGuardian( *this, spell );
         break;
@@ -364,7 +357,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
     // find water
     int32_t dst_water = -1;
-    MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    MapsIndexes freeTiles = Maps::GetFreeIndexesAroundTile( center );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const fheroes2::Point & leftPoint = Maps::GetPoint( left );
         const fheroes2::Point & rightPoint = Maps::GetPoint( right );
@@ -407,7 +400,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
 bool ActionSpellDimensionDoor( Heroes & hero )
 {
-    const u32 distance = Spell::CalculateDimensionDoorDistance( hero.GetPower(), hero.GetArmy().GetHitPoints() );
+    const u32 distance = Spell::CalculateDimensionDoorDistance();
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -438,9 +431,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-
-        // No action is being made. Uncomment this code if the logic will be changed
-        // hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         I.ResetFocus( GameFocus::HEROES );
 
@@ -456,7 +447,7 @@ bool ActionSpellTownGate( Heroes & hero )
     const KingdomCastles & castles = kingdom.GetCastles();
     KingdomCastles::const_iterator it;
 
-    const Castle * castle = NULL;
+    const Castle * castle = nullptr;
     const s32 center = hero.GetIndex();
     s32 min = -1;
 
@@ -550,7 +541,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     frameborder.reset();
     // store
     if ( result == Dialog::OK )
-        return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( listbox.GetCurrent() ) ) );
+        return HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( listbox.GetCurrent() ) ) );
 
     return false;
 }
@@ -558,7 +549,7 @@ bool ActionSpellTownPortal( Heroes & hero )
 bool ActionSpellVisions( Heroes & hero )
 {
     const u32 dist = hero.GetVisionsDistance();
-    MapsIndexes monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+    MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const int32_t heroColor = hero.GetColor();
     monsters.resize( std::distance( monsters.begin(), std::remove_if( monsters.begin(), monsters.end(),
@@ -573,42 +564,40 @@ bool ActionSpellVisions( Heroes & hero )
 
     for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
         const Maps::Tiles & tile = world.GetTiles( *it );
-        const MapMonster * map_troop = NULL;
-        if ( tile.GetObject() == MP2::OBJ_MONSTER )
-            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-        const JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+        Troop troop = tile.QuantityTroop();
+        const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
         std::string hdr;
         std::string msg;
 
-        hdr = std::string( "%{count} " ) + troop.GetPluralName( join.second );
+        hdr = std::string( "%{count} " ) + troop.GetPluralName( join.monsterCount );
         StringReplace( hdr, "%{count}", troop.GetCount() );
 
-        switch ( join.first ) {
-        default:
-            msg = _( "I fear these creatures are in the mood for a fight." );
-            break;
-
-        case JOIN_FREE:
+        switch ( join.reason ) {
+        case NeutralMonsterJoiningCondition::Reason::Free:
+        case NeutralMonsterJoiningCondition::Reason::Alliance:
             msg = _( "The creatures are willing to join us!" );
             break;
 
-        case JOIN_COST:
-            if ( join.second == troop.GetCount() )
+        case NeutralMonsterJoiningCondition::Reason::ForMoney:
+            if ( join.monsterCount == troop.GetCount() )
                 msg = _( "All the creatures will join us..." );
             else {
-                msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.second );
-                StringReplace( msg, "%{count}", join.second );
+                msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.monsterCount );
+                StringReplace( msg, "%{count}", join.monsterCount );
             }
             msg.append( "\n" );
             msg.append( "\n for a fee of %{gold} gold." );
             StringReplace( msg, "%{gold}", troop.GetCost().gold );
             break;
 
-        case JOIN_FLEE:
+        case NeutralMonsterJoiningCondition::Reason::RunAway:
+        case NeutralMonsterJoiningCondition::Reason::Bane:
             msg = _( "These weak creatures will surely flee before us." );
+            break;
+        default:
+            msg = _( "I fear these creatures are in the mood for a fight." );
             break;
         }
 
@@ -632,10 +621,11 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
     const u32 count = hero.GetPower() * spell.ExtraValue();
 
     if ( count ) {
-        tile.SetQuantity3( spell() );
+        tile.SetQuantity3( spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );
+            tile.removeFlags();
             hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }
 

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "rand.h"
+#include "settings.h"
 #include "world.h"
 
 bool Maps::Tiles::QuantityIsValid( void ) const
@@ -424,6 +425,7 @@ Troop Maps::Tiles::QuantityTroop( void ) const
 
 void Maps::Tiles::QuantityReset( void )
 {
+    // TODO: don't modify first 2 bits of quantity1.
     quantity1 = 0;
     quantity2 = 0;
 
@@ -445,26 +447,27 @@ void Maps::Tiles::QuantityReset( void )
     }
 
     if ( MP2::isPickupObject( mp2_object ) )
-        SetObject( MP2::OBJ_ZERO );
+        setAsEmpty();
 }
 
 void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 {
+    // TODO: don't modify first 2 bits of quantity1.
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WITCHSHUT:
         QuantitySetSkill( Skill::Secondary::RandForWitchsHut() );
         break;
 
     case MP2::OBJ_SHRINE1:
-        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 1 )() : Spell::RandAdventure( 1 )() );
+        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 1 ).GetID() : Spell::RandAdventure( 1 ).GetID() );
         break;
 
     case MP2::OBJ_SHRINE2:
-        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 2 )() : Spell::RandAdventure( 2 )() );
+        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 2 ).GetID() : Spell::RandAdventure( 2 ).GetID() );
         break;
 
     case MP2::OBJ_SHRINE3:
-        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 3 )() : Spell::RandAdventure( 3 )() );
+        QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 3 ).GetID() : Spell::RandAdventure( 3 ).GetID() );
         break;
 
     case MP2::OBJ_SKELETON: {
@@ -727,7 +730,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_PYRAMID: {
         // random spell level 5
         const Spell & spell = Rand::Get( 1 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 );
-        QuantitySetSpell( spell() );
+        QuantitySetSpell( spell.GetID() );
     } break;
 
     case MP2::OBJ_DAEMONCAVE: {

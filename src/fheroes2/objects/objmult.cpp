@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 #include "objmult.h"
 
@@ -36,7 +35,7 @@ int ObjMult::GetPassable( u32 index )
     else if ( isAction( index ) )
         return 0;
 
-    return ARRAY_COUNT_END( restricted ) != std::find( restricted, ARRAY_COUNT_END( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
+    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
 bool ObjMult::isAction( u32 index )
@@ -48,7 +47,7 @@ bool ObjMult::isShadow( u32 index )
 {
     const u8 shadows2[] = {1, 3, 15, 25, 45, 54, 57, 61, 67, 68, 75, 77, 79, 81, 83, 97, 98, 105, 113, 115, 121, 122, 124};
 
-    return ARRAY_COUNT_END( shadows2 ) != std::find( shadows2, ARRAY_COUNT_END( shadows2 ), index );
+    return std::end( shadows2 ) != std::find( shadows2, std::end( shadows2 ), index );
 }
 
 int ObjMul2::GetPassable( u32 index )
@@ -58,10 +57,10 @@ int ObjMul2::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || ARRAY_COUNT_END( disabled ) != std::find( disabled, ARRAY_COUNT_END( disabled ), index ) )
+    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
-    return ARRAY_COUNT_END( restricted ) != std::find( restricted, ARRAY_COUNT_END( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
+    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
 bool ObjMul2::isAction( u32 index )
@@ -73,7 +72,7 @@ bool ObjMul2::isShadow( u32 index )
 {
     const u8 shadows1[] = {14, 17, 20, 24, 34, 36, 42, 43, 49, 50, 60, 71, 72, 113, 115, 118, 121, 123, 127, 161, 164, 180, 181, 189, 199, 200, 202, 206};
 
-    return ARRAY_COUNT_END( shadows1 ) != std::find( shadows1, ARRAY_COUNT_END( shadows1 ), index );
+    return std::end( shadows1 ) != std::find( shadows1, std::end( shadows1 ), index );
 }
 
 int ObjMul2::GetActionObject( u32 index )

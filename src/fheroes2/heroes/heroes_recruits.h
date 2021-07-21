@@ -25,10 +25,8 @@
 
 #include <utility>
 
-#include "gamedefs.h"
-#include "serialize.h"
-
 class Heroes;
+class StreamBase;
 
 class Recruits : public std::pair<int, int>
 {

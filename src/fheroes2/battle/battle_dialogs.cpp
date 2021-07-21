@@ -33,13 +33,14 @@
 #include "game.h"
 #include "heroes.h"
 #include "icn.h"
+#include "kingdom.h"
 #include "luck.h"
 #include "morale.h"
 #include "mus.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
-#include "world.h"
+#include "tools.h"
 
 namespace
 {
@@ -344,23 +345,19 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLEWIN, false );
+        AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLEWIN, false );
+        AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLELOSE, false );
+        AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLELOSE, false );
+        AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else
         // AI move
@@ -485,8 +482,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     }
 
     if ( transferArtifacts ) {
-        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : NULL ) );
-        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : NULL ) );
+        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
+        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
         if ( hero1 == nullptr || hero2 == nullptr )
@@ -506,7 +503,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 continue;
             }
 
-            if ( art() == Artifact::UNKNOWN || art() == Artifact::MAGIC_BOOK ) {
+            if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
                 continue;
             }
 
@@ -527,17 +524,24 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+                const fheroes2::Point artifactOffset( pos_rt.x + 119, pos_rt.y + 310 );
 
                 fheroes2::Sprite image = border;
-                fheroes2::Blit( artifact, image, 5, 5 );
-
-                fheroes2::Blit( image, display, pos_rt.x + 119, pos_rt.y + 310 );
+                const int32_t borderSize = 5;
+                fheroes2::Blit( artifact, image, borderSize, borderSize );
+                fheroes2::Blit( image, display, artifactOffset.x, artifactOffset.y );
 
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
-                artName.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + 310 + image.height() + 5 );
+                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + image.height() + borderSize );
+
+                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
 
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
+
+                    // display captured artifact info on right click
+                    if ( le.MousePressRight( artifactArea ) )
+                        Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
                     if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
@@ -562,6 +566,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
 void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
     const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
@@ -789,25 +796,33 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
+            LocalEvent::GetClean();
             const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
         }
 
-        if ( le.MousePressRight( btnCast.area() ) )
+        if ( le.MousePressRight( btnCast.area() ) ) {
             Dialog::Message( _( "Cast Spell" ),
                              _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
-        else if ( le.MousePressRight( btnRetreat.area() ) )
+        }
+        else if ( le.MousePressRight( btnRetreat.area() ) ) {
             Dialog::Message(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnSurrender.area() ) )
+        }
+        else if ( le.MousePressRight( btnSurrender.area() ) ) {
             Dialog::Message(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnClose.area() ) )
+        }
+        else if ( le.MousePressRight( portraitArea ) ) {
+            Dialog::Message( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( btnClose.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
+        }
 
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )

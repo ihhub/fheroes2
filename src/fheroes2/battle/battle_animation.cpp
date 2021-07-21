@@ -21,6 +21,7 @@
 #include "battle_animation.h"
 #include "logging.h"
 #include "monster.h"
+#include "monster_anim.h"
 #include "rand.h"
 #include <algorithm>
 
@@ -232,7 +233,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
             Rand::Queue picker;
 
             for ( size_t i = 0; i < _idle.size(); ++i ) {
-                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
+                picker.Push( static_cast<int32_t>( i ), static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
             }
             // picker is expected to return at least 0
             const size_t id = static_cast<size_t>( picker.Get() );
