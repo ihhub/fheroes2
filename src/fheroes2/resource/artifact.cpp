@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -37,6 +38,13 @@
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
+
+namespace
+{
+    const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
+        = { { ArtifactSetData( Artifact::BATTLE_GARB, _( "The three Anduran artifacts magically combine into one." ) ),
+              { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+}
 
 enum
 {
@@ -752,24 +760,6 @@ bool BagArtifacts::isFull( void ) const
     return end() == std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
 }
 
-bool BagArtifacts::MakeBattleGarb( void )
-{
-    iterator it1, it2, it3;
-    it1 = std::find( begin(), end(), Artifact( Artifact::BREASTPLATE_ANDURAN ) );
-    it2 = std::find( begin(), end(), Artifact( Artifact::HELMET_ANDURAN ) );
-    it3 = std::find( begin(), end(), Artifact( Artifact::SWORD_ANDURAN ) );
-    if ( it1 == end() || it2 == end() || it3 == end() )
-        return false;
-
-    *it1 = Artifact::UNKNOWN;
-    *it2 = Artifact::UNKNOWN;
-    *it3 = Artifact::UNKNOWN;
-
-    PushArtifact( Artifact::BATTLE_GARB );
-
-    return true;
-}
-
 u32 BagArtifacts::CountArtifacts( void ) const
 {
     // no way that we have more than 4 billion artifacts so static_cast is totally valid
@@ -1146,4 +1136,50 @@ bool ArtifactsBar::isMagicBook( const Artifact & artifact )
 void ArtifactsBar::messageMagicBookAbortTrading() const
 {
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
+}
+
+ArtifactSetData::ArtifactSetData()
+    : _assembledArtifactID( Artifact::ART_NONE )
+    , _assembleMessage()
+{}
+
+ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
+    : _assembledArtifactID( artifactID )
+    , _assembleMessage( assembleMessage )
+{}
+
+const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
+{
+    std::set<ArtifactSetData> assembledArtifactSets;
+
+    for ( const auto & setData : artifactSets ) {
+        while ( true ) {
+            bool foundAllArtifacts = true;
+
+            for ( const int artifactId : setData.second ) {
+                if ( std::find( begin(), end(), Artifact( artifactId ) ) == end() ) {
+                    foundAllArtifacts = false;
+                    break;
+                }
+            }
+
+            if ( !foundAllArtifacts )
+                break;
+
+            // At this point, we have confirmed that all the artifact parts are present
+            // so remove the parts and then add the assembled artifact to BagArtifacts
+            for ( const int artifactId : setData.second )
+                RemoveArtifact( artifactId );
+
+            assembledArtifactSets.insert( setData.first );
+            PushArtifact( setData.first._assembledArtifactID );
+        }
+    }
+
+    return assembledArtifactSets;
+}
+
+bool ArtifactSetData::operator<( const ArtifactSetData & other ) const
+{
+    return _assembledArtifactID == other._assembledArtifactID;
 }
