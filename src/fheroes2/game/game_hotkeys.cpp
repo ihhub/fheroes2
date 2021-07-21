@@ -161,6 +161,32 @@ const char * Game::EventsName( int evnt )
         return "show status";
     case EVENT_SHOWICONS:
         return "show icons";
+    case EVENT_TOWN_CREATURE_1:
+        return "town creature1";
+    case EVENT_TOWN_CREATURE_2:
+        return "town creature2";
+    case EVENT_TOWN_CREATURE_3:
+        return "town creature3";
+    case EVENT_TOWN_CREATURE_4:
+        return "town creature4";
+    case EVENT_TOWN_CREATURE_5:
+        return "town creature5";
+    case EVENT_TOWN_CREATURE_6:
+        return "town creature6";
+    case EVENT_TOWN_WELL:
+        return "town well";
+    case EVENT_TOWN_MARKETPLACE:
+        return "town marketplace";
+    case EVENT_TOWN_MAGE_GUILD:
+        return "town mageguild";
+    case EVENT_TOWN_SHIPYARD:
+        return "town shipyard";
+    case EVENT_TOWN_THIEVES_GUILD:
+        return "town guild";
+    case EVENT_TOWN_TAVERN:
+        return "town tavern";
+    case EVENT_TOWN_JUMP_TO_BUILD_SELECTION:
+        return "town build";
     default:
         break;
     }
