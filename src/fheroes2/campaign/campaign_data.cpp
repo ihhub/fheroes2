@@ -508,29 +508,6 @@ namespace Campaign
         , _scenarios()
     {}
 
-    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const int campaignID, const int scenarioID )
-    {
-        assert( campaignID >= 0 && scenarioID >= 0 );
-
-        switch ( campaignID ) {
-        case ROLAND_CAMPAIGN:
-            return getRolandCampaignAwardData( scenarioID );
-        case ARCHIBALD_CAMPAIGN:
-            return getArchibaldCampaignAwardData( scenarioID );
-        case PRICE_OF_LOYALTY_CAMPAIGN:
-            return getPriceOfLoyaltyCampaignAwardData( scenarioID );
-        case DESCENDANTS_CAMPAIGN:
-            return getDescendantsCampaignAwardData( scenarioID );
-        case WIZARDS_ISLE_CAMPAIGN:
-            return getWizardsIsleCampaignAwardData( scenarioID );
-            // no campaign award for voyage home!
-        case VOYAGE_HOME_CAMPAIGN:
-            break;
-        }
-
-        return std::vector<Campaign::CampaignAwardData>();
-    }
-
     // this is used to get awards that are not directly obtainable via scenario clear, such as assembling artifacts
     std::vector<Campaign::CampaignAwardData> CampaignAwardData::getExtraCampaignAwardData( const int campaignID )
     {
