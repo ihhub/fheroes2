@@ -462,14 +462,14 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
         // after adding an artifact award, check whether the artifacts can be assembled into something else
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
             const std::vector<Campaign::CampaignAwardData> obtainedAwards = saveData.getObtainedCampaignAwards();
-            std::map<uint32_t, Campaign::CampaignAwardData> artifactAwards;
+            std::map<uint32_t, int> artifactAwardIDs;
             BagArtifacts bagArtifacts;
 
             for ( const Campaign::CampaignAwardData & awardData : obtainedAwards ) {
                 if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
                     continue;
 
-                artifactAwards.emplace( awardData._subType, awardData );
+                artifactAwardIDs.emplace( awardData._subType, awardData._id );
                 bagArtifacts.PushArtifact( awardData._subType );
                 saveData.removeCampaignAward( awardData._id );
             }
@@ -479,7 +479,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
                 if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
                     continue;
 
-                artifactAwards.emplace( awardData._subType, awardData );
+                artifactAwardIDs.emplace( awardData._subType, awardData );
             }
 
             bagArtifacts.assembleArtifactSetIfPossible();
@@ -488,9 +488,9 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
                 if ( !artifact.isValid() )
                     continue;
 
-                const auto foundArtifact = artifactAwards.find( artifact.GetID() );
-                if ( foundArtifact != artifactAwards.end() )
-                    saveData.addCampaignAward( foundArtifact->second._id );
+                const auto foundArtifact = artifactAwardIDs.find( artifact.GetID() );
+                if ( foundArtifact != artifactAwardIDs.end() )
+                    saveData.addCampaignAward( foundArtifact->second );
             }
         }
     }

@@ -39,6 +39,13 @@
 #include "text.h"
 #include "world.h"
 
+namespace
+{
+    const std::map<ArtifactSetData, std::vector<uint32_t> > artifactSets
+        = { { ArtifactSetData( Artifact::BATTLE_GARB, _( "The three Anduran artifacts magically combine into one." ) ),
+              { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+}
+
 enum
 {
     ART_DISABLED = 0x01,
@@ -61,10 +68,6 @@ struct artifactstats_t
     const char * name;
     const char * description;
 };
-
-const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
-    = { { ArtifactSetData( Artifact::BATTLE_GARB, _( "The three Anduran artifacts magically combine into one." ) ),
-          { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
 artifactstats_t artifacts[] = {
     {0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." )},
@@ -1189,7 +1192,7 @@ const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
     std::set<ArtifactSetData> assembledArtifactSets;
 
-    for ( const std::pair<ArtifactSetData, std::vector<uint32_t>> setData : artifactSets ) {
+    for ( const std::pair<ArtifactSetData, std::vector<uint32_t> > & setData : artifactSets ) {
         while ( true ) {
             bool foundAllArtifacts = true;
 
