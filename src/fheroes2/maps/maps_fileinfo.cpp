@@ -434,7 +434,7 @@ int Maps::FileInfo::KingdomRace( int color ) const
     return 0;
 }
 
-int Maps::FileInfo::ConditionWins( void ) const
+uint32_t Maps::FileInfo::ConditionWins() const
 {
     switch ( conditions_wins ) {
     case 0:
@@ -456,7 +456,7 @@ int Maps::FileInfo::ConditionWins( void ) const
     return GameOver::COND_NONE;
 }
 
-int Maps::FileInfo::ConditionLoss( void ) const
+uint32_t Maps::FileInfo::ConditionLoss() const
 {
     switch ( conditions_loss ) {
     case 0:
