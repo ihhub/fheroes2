@@ -590,95 +590,94 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
-        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
-            if ( *it ) {
-                const Player & player = ( **it );
-                Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+        for ( const Player * player : sortedPlayers ) {
+            assert( player != nullptr );
 
-                if ( skipTurns && !player.isColor( conf.CurrentColor() ) ) {
-                    continue;
-                }
+            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
 
-                // player with conf.CurrentColor() was found, there is no need for further skips
-                skipTurns = false;
+            if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
+                continue;
+            }
 
-                if ( kingdom.isPlay() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_INFO,
-                               std::endl
-                                   << world.DateString() << ", "
-                                   << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+            // player with conf.CurrentColor() was found, there is no need for further skips
+            skipTurns = false;
 
-                    radar.SetHide( true );
-                    radar.SetRedraw();
+            if ( kingdom.isPlay() ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO,
+                           std::endl
+                               << world.DateString() << ", "
+                               << "color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
-                    switch ( kingdom.GetControl() ) {
-                    case CONTROL_HUMAN:
-                        if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                            conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+                radar.SetHide( true );
+                radar.SetRedraw();
 
-                            iconsPanel.HideIcons();
-                            statusWindow.Reset();
+                switch ( kingdom.GetControl() ) {
+                case CONTROL_HUMAN:
+                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+                        conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
 
-                            SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
-                            Redraw();
-                            display.render();
+                        iconsPanel.HideIcons();
+                        statusWindow.Reset();
 
-                            Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn." ) );
-                        }
+                        SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
+                        Redraw();
+                        display.render();
 
-                        conf.SetCurrentColor( player.GetColor() );
+                        Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
+                    }
 
-                        world.ClearFog( player.GetColor() );
+                    conf.SetCurrentColor( player->GetColor() );
+
+                    world.ClearFog( player->GetColor() );
+
+                    kingdom.ActionBeforeTurn();
+
+                    iconsPanel.ShowIcons();
+                    iconsPanel.SetRedraw();
+
+                    res = HumanTurn( loadedFromSave );
+                    break;
+
+                // CONTROL_AI turn
+                default:
+                    if ( res == fheroes2::GameMode::END_TURN ) {
+                        Cursor::Get().SetThemes( Cursor::WAIT );
+
+                        conf.SetCurrentColor( player->GetColor() );
+
+                        statusWindow.Reset();
+                        statusWindow.SetState( StatusType::STATUS_AITURN );
+
+                        Redraw();
+                        display.render();
+
+                        world.ClearFog( player->GetColor() );
 
                         kingdom.ActionBeforeTurn();
 
-                        iconsPanel.ShowIcons();
-                        iconsPanel.SetRedraw();
-
-                        res = HumanTurn( loadedFromSave );
-                        break;
-
-                    // CONTROL_AI turn
-                    default:
-                        if ( res == fheroes2::GameMode::END_TURN ) {
-                            Cursor::Get().SetThemes( Cursor::WAIT );
-
-                            conf.SetCurrentColor( player.GetColor() );
-
-                            statusWindow.Reset();
-                            statusWindow.SetState( StatusType::STATUS_AITURN );
-
-                            Redraw();
-                            display.render();
-
-                            world.ClearFog( player.GetColor() );
-
-                            kingdom.ActionBeforeTurn();
-
-                            AI::Get().KingdomTurn( kingdom );
-                        }
-                        break;
+                        AI::Get().KingdomTurn( kingdom );
                     }
-
-                    if ( res != fheroes2::GameMode::END_TURN ) {
-                        break;
-                    }
-
-                    // check if the game is over after each player's turn
-                    res = gameResult.LocalCheckGameOver();
-                    assert( res != fheroes2::GameMode::END_TURN );
-
-                    if ( res != fheroes2::GameMode::CANCEL ) {
-                        break;
-                    }
-
-                    res = fheroes2::GameMode::END_TURN;
+                    break;
                 }
 
-                // reset this after potential HumanTurn() call, but regardless of whether current kingdom
-                // is vanquished - next alive kingdom should start a new day from scratch
-                loadedFromSave = false;
+                if ( res != fheroes2::GameMode::END_TURN ) {
+                    break;
+                }
+
+                // check if the game is over after each player's turn
+                res = gameResult.LocalCheckGameOver();
+                assert( res != fheroes2::GameMode::END_TURN );
+
+                if ( res != fheroes2::GameMode::CANCEL ) {
+                    break;
+                }
+
+                res = fheroes2::GameMode::END_TURN;
             }
+
+            // reset this after potential HumanTurn() call, but regardless of whether current kingdom
+            // is vanquished - next alive kingdom should start a new day from scratch
+            loadedFromSave = false;
         }
 
         fheroes2::delayforMs( 10 );
