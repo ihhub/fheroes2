@@ -272,8 +272,8 @@ public:
     int MapsDifficulty() const;
     fheroes2::Size MapsSize() const;
     bool GameStartWithHeroes() const;
-    int ConditionWins() const;
-    int ConditionLoss() const;
+    uint32_t ConditionWins() const;
+    uint32_t ConditionLoss() const;
     bool WinsCompAlsoWins() const;
     int WinsFindArtifactID() const;
     bool WinsFindUltimateArtifact() const;

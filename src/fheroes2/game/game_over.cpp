@@ -39,7 +39,7 @@
 
 namespace
 {
-    void DialogWins( int cond )
+    void DialogWins( uint32_t cond )
     {
         const Settings & conf = Settings::Get();
         std::string body;
@@ -94,7 +94,7 @@ namespace
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
     }
 
-    void DialogLoss( int cond, int color )
+    void DialogLoss( uint32_t cond, int color )
     {
         const Settings & conf = Settings::Get();
         std::string body;
@@ -105,6 +105,14 @@ namespace
             const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
+            break;
+        }
+
+        case GameOver::LOSS_ENEMY_WINS_HERO: {
+            body = _( "The enemy has captured the hero %{name}!\nYour quest is a failure." );
+            const Heroes * hero = world.GetHeroesCondWins();
+            if ( hero )
+                StringReplace( body, "%{name}", hero->GetName() );
             break;
         }
 
@@ -166,7 +174,7 @@ namespace
     }
 }
 
-const char * GameOver::GetString( int cond )
+const char * GameOver::GetString( uint32_t cond )
 {
     const char * cond_str[] = {"None",
                                _( "Defeat all enemy heroes and capture all enemy towns and castles." ),
@@ -210,7 +218,7 @@ const char * GameOver::GetString( int cond )
     return cond_str[0];
 }
 
-std::string GameOver::GetActualDescription( int cond )
+std::string GameOver::GetActualDescription( uint32_t cond )
 {
     const Settings & conf = Settings::Get();
     std::string msg;
@@ -313,7 +321,7 @@ void GameOver::Result::ResetResult()
     result = GameOver::COND_NONE;
 }
 
-int GameOver::Result::GetResult( void ) const
+uint32_t GameOver::Result::GetResult() const
 {
     return result;
 }
@@ -417,7 +425,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         }
         // Check the regular win/loss conditions
         else {
-            auto checkWinLossConditions = []( const int color ) -> int {
+            auto checkWinLossConditions = []( const int color ) -> uint32_t {
                 const Kingdom & kingdom = world.GetKingdom( color );
 
                 // Check the win/loss conditions for active players only
@@ -427,7 +435,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                 // Check the win conditions for local human-controlled players only
                 if ( kingdom.isControlHuman() && kingdom.isControlLocal() ) {
-                    int condition = world.CheckKingdomWins( kingdom );
+                    uint32_t condition = world.CheckKingdomWins( kingdom );
 
                     if ( condition != GameOver::COND_NONE ) {
                         return condition;
@@ -436,7 +444,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                 // Check the loss conditions for local or remote human-controlled players
                 if ( kingdom.isControlHuman() ) {
-                    int condition = world.CheckKingdomLoss( kingdom );
+                    uint32_t condition = world.CheckKingdomLoss( kingdom );
 
                     // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
                     // LOSS_TOWN apparently is not intended to be used in multiplayer
