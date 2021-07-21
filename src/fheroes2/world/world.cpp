@@ -1187,7 +1187,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 
     case GameOver::LOSS_HERO: {
         const Heroes * hero = GetHeroesCondLoss();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() && hero->GetKillerColor() != kingdom.GetColor() );
+        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
     }
 
     case GameOver::LOSS_TIME:
