@@ -200,7 +200,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
             filteredIndexed.insert( tailIndexes.begin(), tailIndexes.end() );
             indexes = std::vector<int32_t>( filteredIndexed.begin(), filteredIndexed.end() );
         }
-        indexes.resize( std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), isImpassableIndex ) ) );
+        indexes.erase( std::remove_if( indexes.begin(), indexes.end(), isImpassableIndex ), indexes.end() );
 
         // Set passable cells.
         for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it )

@@ -777,7 +777,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             }
 
             // unique
-            targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
@@ -807,7 +807,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             }
 
             // unique
-            targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
@@ -939,7 +939,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
         }
     }
 
-    targets.resize( std::distance( targets.begin(), std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ) ) );
+    targets.erase( std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ), targets.end() );
 
     if ( interface ) {
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );

@@ -644,24 +644,20 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 
     // remove_if for learn spells
     if ( !learn.empty() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
-        learn.resize( std::distance( learn.begin(), res ) );
+        learn.erase( std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } ), learn.end() );
     }
 
     if ( !learn.empty() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
-        learn.resize( std::distance( learn.begin(), res ) );
+        learn.erase( std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } ), learn.end() );
     }
 
     // remove_if for teach spells
     if ( !teach.empty() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
-        teach.resize( std::distance( teach.begin(), res ) );
+        teach.erase( std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } ), teach.end() );
     }
 
     if ( !teach.empty() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
-        teach.resize( std::distance( teach.begin(), res ) );
+        teach.erase( std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } ), teach.end() );
     }
 
     std::string message, spells1, spells2;
