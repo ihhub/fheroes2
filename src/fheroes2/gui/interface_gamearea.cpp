@@ -192,17 +192,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         return;
     }
 
-    std::vector<const Maps::Tiles *> drawList;
-    std::vector<const Maps::Tiles *> monsterList;
-    std::vector<const Maps::Tiles *> topList;
-    std::vector<const Maps::Tiles *> objectList;
-    std::vector<const Maps::Tiles *> fogList;
-
-    const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
-    topList.reserve( areaSize );
-    objectList.reserve( areaSize );
-
-    // Bottom layer and objects.
     const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
@@ -214,6 +203,144 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
 
     const int friendColors = Players::FriendColors();
+
+    // for ( int32_t y = minY; y < maxY; ++y ) {
+    //     for ( int32_t x = minX; x < maxX; ++x ) {
+    //         const Maps::Tiles & tile = world.GetTiles( x, y );
+    // 
+    //         const bool isFog = drawFog && tile.isFog( friendColors );
+    // 
+    //         if ( isFog && tile.isFogAllAround( friendColors ) ) {
+    //             // Don't draw other objects under complete fog.
+    //             tile.RedrawFogs( dst, friendColors, *this );
+    //         }
+    //     }
+    // }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            // Draw roads and cracks.
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 3 );
+        }
+    }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 1 );
+        }
+    }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 2 );
+        }
+    }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 0 );
+
+            if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+                tile.RedrawMonster( dst, tileROI, *this );
+            }
+        }
+
+        // Draw heroes on the same row.
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            if ( tile.GetObject() == MP2::OBJ_HEROES ) {
+                Heroes * hero = tile.GetHeroes();
+                if ( hero != nullptr ) {
+                    const fheroes2::Point & pos = GetRelativeTilePosition( tile.GetCenter() );
+                    hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
+                    hero->Redraw( dst, pos.x, pos.y - 1, tileROI, *this );
+                }
+            }
+        }
+
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+            tile.RedrawTop( dst, tileROI, *this );
+        }
+    }
+
+    // Route
+    const Heroes * hero = drawHeroes ? GetFocusHeroes() : nullptr;
+    const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
+
+    if ( hero && hero->GetPath().isShow() && drawRoutes ) {
+        const Route::Path & path = hero->GetPath();
+        int green = path.GetAllowedSteps();
+
+        const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
+        const int heroSpriteIndex = hero->GetSpriteIndex();
+        const bool skipfirst = hero->isMoveEnabled() && 45 > heroSpriteIndex && 2 < ( heroSpriteIndex % 9 );
+
+        Route::Path::const_iterator pathEnd = path.end();
+        Route::Path::const_iterator currentStep = path.begin();
+        Route::Path::const_iterator nextStep = currentStep;
+
+        for ( ; currentStep != pathEnd; ++currentStep ) {
+            const int32_t from = ( *currentStep ).GetIndex();
+            const fheroes2::Point & mp = Maps::GetPoint( from );
+
+            ++nextStep;
+            --green;
+
+            // is visible
+            if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
+                uint32_t index = 0;
+                if ( pathEnd != nextStep ) {
+                    const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
+                    uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
+
+                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
+                        cost = Maps::Ground::roadPenalty;
+
+                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
+                }
+
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
+                BlitOnTile( dst, sprite, sprite.x() - 12, sprite.y() + 2, mp );
+            }
+        }
+    }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            const bool isFog = drawFog && tile.isFog( friendColors );
+            if ( isFog ) {
+                tile.RedrawFogs( dst, friendColors, *this );
+            }
+        }
+    }
+
+    /*
+    std::vector<const Maps::Tiles *> drawList;
+    std::vector<const Maps::Tiles *> monsterList;
+    std::vector<const Maps::Tiles *> topList;
+    std::vector<const Maps::Tiles *> objectList;
+    std::vector<const Maps::Tiles *> fogList;
+
+    const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
+    topList.reserve( areaSize );
+    objectList.reserve( areaSize );
+
+    // Bottom layer and objects.
+
+
+    
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -507,6 +634,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile->RedrawFogs( dst, friendColors, *this );
         }
     }
+
+    */
 }
 
 void Interface::GameArea::Scroll( void )
