@@ -644,20 +644,16 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 
     // remove_if for learn spells
     if ( !learn.empty() ) {
-        learn.erase( std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } ), learn.end() );
-    }
-
-    if ( !learn.empty() ) {
-        learn.erase( std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } ), learn.end() );
+        learn.erase( std::remove_if( learn.begin(), learn.end(),
+                                     [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ) || !teacher->CanTeachSpell( spell ); } ),
+                     learn.end() );
     }
 
     // remove_if for teach spells
     if ( !teach.empty() ) {
-        teach.erase( std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } ), teach.end() );
-    }
-
-    if ( !teach.empty() ) {
-        teach.erase( std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } ), teach.end() );
+        teach.erase( std::remove_if( teach.begin(), teach.end(),
+                                     [learner, teacher]( const Spell & spell ) { return learner->HaveSpell( spell ) || !teacher->CanTeachSpell( spell ); } ),
+                     teach.end() );
     }
 
     std::string message, spells1, spells2;

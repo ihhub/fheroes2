@@ -594,15 +594,13 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
     lists.erase( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ), lists.end() );
 
-    if ( multi == false ) {
-        lists.erase( std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } ), lists.end() );
-    }
-
     // set preferably count filter
     const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( prefPlayerCount > 0 ) {
+    if ( multi == false || prefPlayerCount > 0 ) {
         lists.erase( std::remove_if( lists.begin(), lists.end(),
-                                     [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } ),
+                                     [multi, prefPlayerCount]( const Maps::FileInfo & info ) {
+                                         return ( !multi && info.isMultiPlayerMap() ) || ( prefPlayerCount > 0 && !info.isAllowCountPlayers( prefPlayerCount ) );
+                                     } ),
                      lists.end() );
     }
 
