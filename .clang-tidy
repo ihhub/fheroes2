@@ -6,6 +6,7 @@ Checks: >-
   -cppcoreguidelines-init-variables,
   -cppcoreguidelines-non-private-member-variables-in-classes,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-type-union-access,
   misc-*,
   -misc-non-private-member-variables-in-classes,
   modernize-*,
