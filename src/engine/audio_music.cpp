@@ -151,8 +151,6 @@ bool Music::isPaused( void )
     return music && Mix_PausedMusic();
 }
 
-void Music::SetExtCommand( const std::string & ) {}
-
 void Music::Mute()
 {
     if ( muted || !Mixer::isValid() ) {

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
@@ -30,12 +31,6 @@
 
 #include "logging.h"
 #include "tools.h"
-
-#ifdef WITH_ICONV
-#include <iconv.h>
-#else
-#include <array>
-#endif
 
 #include <SDL.h>
 
@@ -283,33 +278,6 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     return data;
 }
 
-#ifdef WITH_ICONV
-std::string EncodeString( const std::string & str, const char * charset )
-{
-    iconv_t cd;
-
-    if ( !charset || ( iconv_t )( -1 ) == ( cd = iconv_open( "utf-8", charset ) ) )
-        return str;
-
-    std::string res( str );
-    size_t inbytesleft = str.size();
-    size_t outbytesleft = inbytesleft * 2 + 1;
-    const char * inbuf = str.c_str();
-    char * outbuf1 = new char[outbytesleft];
-    char * outbuf2 = outbuf1;
-
-    size_t reslen = iconv( cd, const_cast<char **>( &inbuf ), &inbytesleft, &outbuf1, &outbytesleft );
-
-    iconv_close( cd );
-
-    if ( reslen != ( size_t )( -1 ) )
-        res = std::string( outbuf2, outbuf1 - outbuf2 );
-
-    delete[] outbuf2;
-
-    return res;
-}
-#else
 std::string cp1251_to_utf8( const std::string & in )
 {
     const std::array<uint32_t, 128> table_1251
@@ -353,7 +321,6 @@ std::string EncodeString( const std::string & str, const char * charset )
 
     return str;
 }
-#endif
 
 u32 decodeChar( int v )
 {

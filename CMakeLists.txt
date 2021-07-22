@@ -13,7 +13,6 @@ set(USE_SDL_VERSION SDL2 CACHE STRING "SDL version")
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE   "Enable SDL/SDL2 Image support (requires libpng)" ON)
-option(ENABLE_UNICODE "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
 option(ENABLE_TOOLS   "Enable additional tools" OFF)
 option(ENABLE_RELEASE "Release mode (disables debug options)" ON)
 option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
@@ -35,10 +34,6 @@ if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
 endif(ENABLE_IMAGE)
-if(ENABLE_UNICODE)
-	find_package(${USE_SDL_VERSION}_ttf REQUIRED)
-	find_package(Iconv REQUIRED)
-endif(ENABLE_UNICODE)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 

@@ -352,11 +352,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // name
     fs.seek( 0x3A );
-    name = Game::GetEncodeString( fs.toString( mapNameLength ) );
+    name = fs.toString( mapNameLength );
 
     // description
     fs.seek( 0x76 );
-    description = Game::GetEncodeString( fs.toString( mapDescriptionLength ) );
+    description = fs.toString( mapDescriptionLength );
 
     // fill unions
     if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {

@@ -77,19 +77,11 @@ namespace AGG
     std::vector<loop_sound_t> loop_sounds;
     // std::map<u32, fnt_cache_t> fnt_cache;
 
-#ifdef WITH_TTF
-    FontTTF * fonts; /* small, medium */
-
-    // void LoadTTFChar( u32 );
-#endif
-
     const std::vector<u8> & GetWAV( int m82 );
     const std::vector<u8> & GetMID( int xmi );
 
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
-
-    void LoadFNT( void );
 
     bool ReadDataDir( void );
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
@@ -97,31 +89,6 @@ namespace AGG
     void PlayMusicInternally( const int mus, const bool loop );
     void PlaySoundInternally( const int m82 );
     void LoadLOOPXXSoundsInternally( const std::vector<int> & vols );
-
-    /* return letter sprite */
-    // Surface GetUnicodeLetter( u32 ch, u32 ft )
-    // {
-    //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-    //
-    //     if ( !ttf_valid )
-    //         return Surface();
-    //
-    //     if ( !fnt_cache[ch].sfs[0].isValid() )
-    //         LoadTTFChar( ch );
-    //
-    //     switch ( ft ) {
-    //     case Font::YELLOW_SMALL:
-    //         return fnt_cache[ch].sfs[1];
-    //     case Font::BIG:
-    //         return fnt_cache[ch].sfs[2];
-    //     case Font::YELLOW_BIG:
-    //         return fnt_cache[ch].sfs[3];
-    //     default:
-    //         break;
-    //     }
-    //
-    //     return fnt_cache[ch].sfs[0];
-    // }
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -603,61 +570,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     }
 }
 
-#ifdef WITH_TTF
-// void AGG::LoadTTFChar( u32 ch )
-// {
-//     const Settings & conf = Settings::Get();
-//      const RGBA white( 0xFF, 0xFF, 0xFF );
-//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
-//
-//      small
-//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-//
-//      medium
-//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-//
-//     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-// }
-
-void AGG::LoadFNT( void )
-{
-    // const Settings & conf = Settings::Get();
-    //
-    // if ( !conf.Unicode() ) {
-    //     DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    // }
-    // else if ( fnt_cache.empty() ) {
-    //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-    //
-    //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
-    //         LoadTTFChar( *it );
-    //
-    //     if ( fnt_cache.empty() ) {
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    //     }
-    //     else {
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
-    //     }
-    // }
-}
-
-u32 AGG::GetFontHeight( bool small )
-{
-    return small ? fonts[0].Height() : fonts[1].Height();
-}
-
-#else
-void AGG::LoadFNT( void )
-{
-    DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-}
-#endif
-
 // This exists to avoid exposing AGG::ReadChunk
 std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
 {
@@ -695,24 +607,6 @@ bool AGG::Init( void )
         return false;
     }
 
-#ifdef WITH_TTF
-    Settings & conf = Settings::Get();
-    const std::string prefix_fonts = System::ConcatePath( "files", "fonts" );
-    const std::string font1 = Settings::GetLastFile( prefix_fonts, conf.FontsNormal() );
-    const std::string font2 = Settings::GetLastFile( prefix_fonts, conf.FontsSmall() );
-
-    fonts = new FontTTF[2];
-
-    if ( conf.Unicode() ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "fonts: " << font1 << ", " << font2 );
-        if ( !fonts[1].Open( font1, conf.FontsNormalSize() ) || !fonts[0].Open( font2, conf.FontsSmallSize() ) )
-            conf.SetUnicode( false );
-    }
-#endif
-
-    // load font
-    LoadFNT();
-
     return true;
 }
 
@@ -721,9 +615,4 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    // fnt_cache.clear();
-
-#ifdef WITH_TTF
-    delete[] fonts;
-#endif
 }

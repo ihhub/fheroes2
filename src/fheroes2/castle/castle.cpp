@@ -214,7 +214,7 @@ void Castle::LoadFromMP2( StreamBuf st )
 
     // custom name
     st.skip( 1 );
-    name = Game::GetEncodeString( st.toString( 13 ) );
+    name = st.toString( 13 );
 
     // race
     u32 kingdom_race = Players::GetPlayerRace( GetColor() );

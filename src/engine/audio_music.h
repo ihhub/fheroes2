@@ -38,8 +38,6 @@ namespace Music
     void SetFadeIn( int );
     void SetFadeOut( int );
 
-    void SetExtCommand( const std::string & );
-
     void Pause( void );
     void Resume( void );
     void Reset( void );

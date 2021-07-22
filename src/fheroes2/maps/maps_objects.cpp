@@ -96,7 +96,7 @@ void MapEvent::LoadFromMP2( s32 index, StreamBuf st )
             colors |= Color::PURPLE;
 
         // message
-        message = Game::GetEncodeString( st.toString() );
+        message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
                        << ": " << message );
@@ -148,14 +148,14 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
 
         // answers
         for ( u32 i = 0; i < 8; ++i ) {
-            std::string answer = Game::GetEncodeString( st.toString( 13 ) );
+            std::string answer = st.toString( 13 );
 
             if ( count-- && !answer.empty() )
                 answers.push_back( StringLower( answer ) );
         }
 
         // message
-        message = Game::GetEncodeString( st.toString() );
+        message = st.toString();
 
         valid = true;
         DEBUG_LOG( DBG_GAME, DBG_INFO,
@@ -212,7 +212,6 @@ void MapSign::LoadFromMP2( s32 index, StreamBuf st )
 
     SetIndex( index );
     SetUID( index );
-    message = Game::GetEncodeString( message );
     DEBUG_LOG( DBG_GAME, DBG_INFO,
                "sign"
                    << ": " << message );

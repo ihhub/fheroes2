@@ -553,7 +553,7 @@ bool World::LoadMapMP2( const std::string & filename )
             // add rumors
             else if ( SIZEOFMP2RUMOR - 1 < pblock.size() ) {
                 if ( pblock[8] ) {
-                    vec_rumors.push_back( Game::GetEncodeString( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() ) );
+                    vec_rumors.push_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
                     DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << vec_rumors.back() );
                 }
             }

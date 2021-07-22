@@ -34,9 +34,7 @@ namespace AGG
     void Quit( void );
 
     std::vector<uint8_t> LoadBINFRM( const char * frm_file );
-#ifdef WITH_TTF
-    uint32_t GetFontHeight( bool small );
-#endif
+
     void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );

@@ -308,7 +308,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     // custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
-        name = Game::GetEncodeString( st.toString( 13 ) );
+        name = st.toString( 13 );
     }
     else {
         st.skip( 13 );

@@ -2,8 +2,6 @@
 # makefile
 #
 
-# TODO: remove the iconv/konwert line once unicode support is there
-
 all: $(patsubst %.po, %.mo, $(wildcard *.po))
 
 # In French, accented characters are mapped to unused ASCII characters

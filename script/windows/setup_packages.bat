@@ -38,16 +38,6 @@ xcopy /Y /Q "temp\sdl_mixer\SDL2_mixer-2.0.4\lib\x64\libogg-0.dll"        "sdl2\
 xcopy /Y /Q "temp\sdl_mixer\SDL2_mixer-2.0.4\lib\x64\libvorbis-0.dll"     "sdl2\lib\x64"
 xcopy /Y /Q "temp\sdl_mixer\SDL2_mixer-2.0.4\lib\x64\libvorbisfile-3.dll" "sdl2\lib\x64"
 
-xcopy /Y /s /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\include"                "sdl2\include"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x86\libfreetype-6.dll" "sdl2\lib\x86"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x86\SDL2_ttf.dll"      "sdl2\lib\x86"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x86\zlib1.dll"         "sdl2\lib\x86"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x86\SDL2_ttf.lib"      "sdl2\lib\x86"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x64\libfreetype-6.dll" "sdl2\lib\x64"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x64\SDL2_ttf.dll"      "sdl2\lib\x64"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x64\zlib1.dll"         "sdl2\lib\x64"
-xcopy /Y /Q "temp\sdl_ttf\SDL2_ttf-2.0.15\lib\x64\SDL2_ttf.lib"      "sdl2\lib\x64"
-
 xcopy /Y /s /Q "temp\sdl_image\SDL2_image-2.0.5\include"              "sdl2\include"
 xcopy /Y /Q "temp\sdl_image\SDL2_image-2.0.5\lib\x86\libjpeg-9.dll"   "sdl2\lib\x86"
 xcopy /Y /Q "temp\sdl_image\SDL2_image-2.0.5\lib\x86\libpng16-16.dll" "sdl2\lib\x86"

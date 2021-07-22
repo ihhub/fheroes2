@@ -153,7 +153,6 @@ public:
     bool ShowIcons() const;
     bool ShowButtons() const;
     bool ShowStatus() const;
-    bool Unicode() const;
     bool BattleShowGrid() const;
     bool BattleShowMouseShadow() const;
     bool BattleShowMoveShadow() const;
@@ -221,7 +220,6 @@ public:
     const fheroes2::Size & VideoMode() const;
 
     void SetDebug( int );
-    void SetUnicode( bool );
     void EnablePriceOfLoyaltySupport( const bool set );
     void SetGameDifficulty( int );
     void SetEvilInterface( bool );
@@ -268,7 +266,6 @@ public:
     const std::string & MapsFile() const;
     const std::string & MapsName() const;
     const std::string & MapsDescription() const;
-    const std::string & externalMusicCommand() const;
     int MapsDifficulty() const;
     fheroes2::Size MapsSize() const;
     bool GameStartWithHeroes() const;
@@ -321,14 +318,8 @@ private:
 
     std::string path_program;
 
-    std::string font_normal;
-    std::string font_small;
     std::string force_lang;
     std::string _loadedFileLanguage; // not a part of save or configuration file
-    std::string _externalMusicCommand;
-    std::string maps_charset;
-    int size_normal;
-    int size_small;
 
     Maps::FileInfo current_maps_file;
 

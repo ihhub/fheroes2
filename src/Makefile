@@ -64,15 +64,6 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
 endif
 
-ifndef WITHOUT_UNICODE
-CFLAGS := $(CFLAGS) -DWITH_TTF
-ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
-else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
-endif
-endif
-
 ifdef RELEASE
 CFLAGS := $(CFLAGS) -DBUILD_RELEASE
 endif
@@ -97,7 +88,6 @@ PLATFORM := all
 endif
 ifeq ($(OS),Haiku)
 PLATFORM := all
-LIBS := -liconv
 endif
 endif
 
@@ -121,9 +111,7 @@ all:
 ifdef WITH_TOOLS
 	$(MAKE) -C tools
 endif
-ifndef WITHOUT_UNICODE
 	$(MAKE) -C dist pot
-endif
 
 clean:
 	$(MAKE) -C thirdparty/libsmacker clean
