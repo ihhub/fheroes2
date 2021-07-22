@@ -24,6 +24,7 @@
 #include <sstream>
 
 #include "army.h"
+#include "artifact_effect.h"
 #include "castle.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -54,20 +55,6 @@ int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const Her
                 case Artifact::BROACH_SHIELDING:
                     if ( type == MDF_POWER )
                         mod = -2;
-                    break;
-                // morale/luck
-                case Artifact::BATTLE_GARB:
-                    if ( type == MDF_MORALE || type == MDF_LUCK )
-                        mod = 10;
-                    break;
-                case Artifact::MASTHEAD:
-                    if ( type == MDF_MORALE || type == MDF_LUCK )
-                        mod = base.Modes( Heroes::SHIPMASTER ) ? art.ExtraValue() : 0;
-                    break;
-                // morale
-                case Artifact::FIZBIN_MISFORTUNE:
-                    if ( type == MDF_MORALE )
-                        mod = -static_cast<s32>( art.ExtraValue() );
                     break;
                 default:
                     break;
@@ -124,18 +111,48 @@ int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
 
 int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[] = {Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
-                       Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE};
+    const auto & effects = ArtifactEffects::GetEffectTypesFromArtifacts( base.GetBagArtifacts(), ArtifactEffects::ArtifactEffectType::CHANGE_MORALE );
 
-    return ArtifactsModifiersResult( MDF_MORALE, arts, base, strs );
+    int moraleModifier = 0;
+
+    for ( const auto & effect : effects ) {
+        const auto & params = effect.effect->getMoraleModifiersParams();
+
+        if ( base.Modes( Heroes::SHIPMASTER ) || !params.onlyAppliesOnBoat ) {
+            moraleModifier += params.modifier;
+
+            if ( strs != nullptr && params.modifier != 0 ) {
+                strs->append( effect.sourceArtifact->GetName() );
+                StringAppendModifiers( *strs, params.modifier );
+                strs->append( "\n" );
+            }
+        }
+    }
+
+    return moraleModifier;
 }
 
 int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[]
-        = {Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD};
+    const auto & effects = ArtifactEffects::GetEffectTypesFromArtifacts( base.GetBagArtifacts(), ArtifactEffects::ArtifactEffectType::CHANGE_LUCK );
 
-    return ArtifactsModifiersResult( MDF_LUCK, arts, base, strs );
+    int luckModifier = 0;
+
+    for ( const auto & effect : effects ) {
+        const auto & params = effect.effect->getLuckModifiersParams();
+
+        if ( base.Modes( Heroes::SHIPMASTER ) || !params.onlyAppliesOnBoat ) {
+            luckModifier += params.modifier;
+
+            if ( strs != nullptr && params.modifier != 0 ) {
+                strs->append( effect.sourceArtifact->GetName() );
+                StringAppendModifiers( *strs, params.modifier );
+                strs->append( "\n" );
+            }
+        }
+    }
+
+    return luckModifier;
 }
 
 HeroBase::HeroBase( int type, int race )
