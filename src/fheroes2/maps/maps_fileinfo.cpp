@@ -592,21 +592,16 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
         return false;
 
     std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-    lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
-
-    if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
-    }
+    lists.erase( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ), lists.end() );
 
     // set preferably count filter
     const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( prefPlayerCount > 0 ) {
-        MapsFileInfoList::iterator it
-            = std::remove_if( lists.begin(), lists.end(), [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
+    if ( !multi || prefPlayerCount > 0 ) {
+        lists.erase( std::remove_if( lists.begin(), lists.end(),
+                                     [multi, prefPlayerCount]( const Maps::FileInfo & info ) {
+                                         return ( !multi && info.isMultiPlayerMap() ) || ( prefPlayerCount > 0 && !info.isAllowCountPlayers( prefPlayerCount ) );
+                                     } ),
+                     lists.end() );
     }
 
     return !lists.empty();
