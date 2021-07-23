@@ -613,7 +613,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                        conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+                        // we need to hide the world map in hot seat mode
+                        conf.SetCurrentColor( -1 );
 
                         iconsPanel.HideIcons();
                         statusWindow.Reset();
@@ -678,7 +679,18 @@ fheroes2::GameMode Interface::Basic::StartGame()
             loadedFromSave = false;
         }
 
-        fheroes2::delayforMs( 10 );
+        // we went through all the players, but the current player from the save file is still not found,
+        // something is clearly wrong here
+        if ( skipTurns ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "the current player from the save file was not found"
+                           << ", player color: " << Color::String( conf.CurrentColor() ) );
+
+            res = fheroes2::GameMode::MAIN_MENU;
+        }
+
+        // don't carry the current color from the last player to the next turn
+        conf.SetCurrentColor( -1 );
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
