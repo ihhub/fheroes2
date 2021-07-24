@@ -25,7 +25,6 @@
 
 #include <list>
 #include <string>
-#include <vector>
 
 #include "gamedefs.h"
 #include "screen.h"
@@ -54,31 +53,7 @@ enum
     ALIGN_RIGHT
 };
 
-class TextAscii
-{
-public:
-    TextAscii() = default;
-    TextAscii( const std::string &, int = Font::BIG );
-
-    void SetText( const std::string & msg );
-    void SetFont( int ft );
-    void Clear();
-
-    int w() const;
-    int h() const;
-    size_t Size() const;
-
-    int w( size_t s, size_t c ) const;
-    int h( int ) const;
-
-    void Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() );
-    static int CharWidth( const uint8_t character, const int ft );
-    static int FontHeight( const int ft );
-
-private:
-    int font;
-    std::string message;
-};
+class TextAscii;
 
 class Text
 {
