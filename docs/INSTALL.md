@@ -127,7 +127,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 
   * **openSUSE**: openSUSE supports the One-Click-Install using the `SDL_mixer.ymp` file from the `script/linux` subdirectory.
 
-  * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
+  * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer`.
 
 * After all dependencies are installed, copy all files belonging to the original game to the fheroes2 installation directory if you have a legally purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
 

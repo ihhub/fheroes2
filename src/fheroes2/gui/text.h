@@ -99,44 +99,11 @@ private:
     std::string message;
 };
 
-#ifdef WITH_TTF
-class TextUnicode : public TextInterface
-{
-public:
-    TextUnicode() = default;
-    TextUnicode( const std::string &, int ft = Font::BIG );
-    TextUnicode( const u16 *, size_t, int ft = Font::BIG );
-
-    void SetText( const std::string & ) override;
-    void SetFont( int ) override;
-    void Clear( void ) override;
-
-    int w() const override;
-    int h() const override;
-    size_t Size( void ) const override;
-
-    int w( size_t s, size_t c ) const;
-    int h( int ) const;
-
-    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
-
-    static bool isspace( int );
-    static int CharWidth( int, int ft );
-    static int CharHeight( int ft );
-
-private:
-    std::vector<u16> message;
-};
-#endif
-
 class Text
 {
 public:
     Text();
     Text( const std::string &, int ft = Font::BIG );
-#ifdef WITH_TTF
-    Text( const u16 *, size_t, int ft = Font::BIG );
-#endif
     Text( const Text & );
     ~Text();
 
@@ -242,9 +209,6 @@ public:
 
 private:
     void Append( const std::string &, int, u32 );
-#ifdef WITH_TTF
-    void Append( const std::vector<u16> &, int, u32 );
-#endif
 
     std::list<Text> messages;
     int align;
