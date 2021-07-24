@@ -161,18 +161,19 @@ const char * Game::EventsName( int evnt )
         return "show status";
     case EVENT_SHOWICONS:
         return "show icons";
-    case EVENT_TOWN_CREATURE_1:
-        return "town creature1";
-    case EVENT_TOWN_CREATURE_2:
-        return "town creature2";
-    case EVENT_TOWN_CREATURE_3:
-        return "town creature3";
-    case EVENT_TOWN_CREATURE_4:
-        return "town creature4";
-    case EVENT_TOWN_CREATURE_5:
-        return "town creature5";
-    case EVENT_TOWN_CREATURE_6:
-        return "town creature6";
+
+    case EVENT_TOWN_DWELLING_LEVEL_1:
+        return "town dwelling level 1";
+    case EVENT_TOWN_DWELLING_LEVEL_2:
+        return "town dwelling level 2";
+    case EVENT_TOWN_DWELLING_LEVEL_3:
+        return "town dwelling level 3";
+    case EVENT_TOWN_DWELLING_LEVEL_4:
+        return "town dwelling level 4";
+    case EVENT_TOWN_DWELLING_LEVEL_5:
+        return "town dwelling level 5";
+    case EVENT_TOWN_DWELLING_LEVEL_6:
+        return "town dwelling level 6";
     case EVENT_TOWN_WELL:
         return "town well";
     case EVENT_TOWN_MARKETPLACE:
@@ -291,12 +292,12 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_DISMISS_TROOP] = KEY_d;
 
     // town + build screen
-    key_events[EVENT_TOWN_CREATURE_1] = KEY_1;
-    key_events[EVENT_TOWN_CREATURE_2] = KEY_2;
-    key_events[EVENT_TOWN_CREATURE_3] = KEY_3;
-    key_events[EVENT_TOWN_CREATURE_4] = KEY_4;
-    key_events[EVENT_TOWN_CREATURE_5] = KEY_5;
-    key_events[EVENT_TOWN_CREATURE_6] = KEY_6;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_1] = KEY_1;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_2] = KEY_2;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_3] = KEY_3;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_4] = KEY_4;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_5] = KEY_5;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_6] = KEY_6;
     key_events[EVENT_TOWN_WELL] = KEY_w;
     key_events[EVENT_TOWN_MAGE_GUILD] = KEY_s;
     key_events[EVENT_TOWN_MARKETPLACE] = KEY_m;
