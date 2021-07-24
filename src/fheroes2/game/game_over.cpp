@@ -458,7 +458,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             const int currentColor = Settings::Get().CurrentColor();
 
             // The result of the multiplayer game shouldn't be stored by this class
-            uint32_t multiplayerResult = checkWinLossConditions( currentColor );
+            const uint32_t multiplayerResult = checkWinLossConditions( currentColor );
 
             if ( multiplayerResult & GameOver::WINS ) {
                 DialogWins( multiplayerResult );

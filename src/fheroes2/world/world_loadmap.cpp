@@ -665,13 +665,13 @@ void World::ProcessNewMap()
         }
     }
 
-    const Settings & conf = Settings::Get();
-
     // add heroes to kingdoms
     vec_kingdoms.AddHeroes( vec_heroes );
 
     // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
+
+    const Settings & conf = Settings::Get();
 
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & conf.ConditionWins() ) {

@@ -1229,7 +1229,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
         = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
 
     for ( const uint32_t cond : wins ) {
-        if ( ( conf.ConditionWins() & cond ) && KingdomIsWins( kingdom, cond ) ) {
+        if ( ( ( conf.ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
             return cond;
         }
     }
@@ -1287,7 +1287,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
     for ( const uint32_t cond : loss ) {
-        if ( ( conf.ConditionLoss() & cond ) && KingdomIsLoss( kingdom, cond ) ) {
+        if ( ( ( conf.ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
             return cond;
         }
     }
