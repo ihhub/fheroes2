@@ -68,6 +68,7 @@ jobs:
         mkdir clang-tidy-result
         unzip clang-tidy-result.zip -d clang-tidy-result
     - uses: fheroes2/clang-tidy-pr-comments@master
+      if: ${{ hashFiles( 'clang-tidy-result/fixes.yml' ) != '' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         clang_tidy_fixes: clang-tidy-result/fixes.yml
