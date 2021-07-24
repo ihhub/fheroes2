@@ -43,12 +43,8 @@ namespace
     }
 }
 
-TextInterface::TextInterface( int ft )
-    : font( ft )
-{}
-
 TextAscii::TextAscii( const std::string & msg, int ft )
-    : TextInterface( ft )
+    : font( ft )
     , message( msg )
 {}
 
@@ -62,12 +58,12 @@ void TextAscii::SetFont( int ft )
     font = ft;
 }
 
-void TextAscii::Clear( void )
+void TextAscii::Clear()
 {
     message.clear();
 }
 
-size_t TextAscii::Size( void ) const
+size_t TextAscii::Size() const
 {
     return message.size();
 }
@@ -170,7 +166,7 @@ int TextAscii::h( int width ) const
     return res;
 }
 
-void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
+void TextAscii::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst )
 {
     if ( message.empty() )
         return;
@@ -231,7 +227,7 @@ Text::~Text()
 Text::Text( const Text & t )
 {
     assert( t.message != nullptr );
-    message = new TextAscii( dynamic_cast<TextAscii &>( *t.message ) );
+    message = new TextAscii( *t.message );
 
     gw = t.gw;
     gh = t.gh;
