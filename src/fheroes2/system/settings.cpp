@@ -1135,6 +1135,11 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
+bool Settings::isStandardGameType() const
+{
+    return ( game_type & Game::TYPE_STANDARD ) != 0;
+}
+
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
@@ -1200,12 +1205,12 @@ bool Settings::GameStartWithHeroes() const
     return current_maps_file.startWithHeroInEachCastle;
 }
 
-int Settings::ConditionWins() const
+uint32_t Settings::ConditionWins() const
 {
     return current_maps_file.ConditionWins();
 }
 
-int Settings::ConditionLoss() const
+uint32_t Settings::ConditionLoss() const
 {
     return current_maps_file.ConditionLoss();
 }

@@ -671,13 +671,15 @@ void World::ProcessNewMap()
     // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
+    const Settings & conf = Settings::Get();
+
     // update wins, loss conditions
-    if ( GameOver::WINS_HERO & Settings::Get().ConditionWins() ) {
-        const Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
+    if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
+        const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
-    if ( GameOver::LOSS_HERO & Settings::Get().ConditionLoss() ) {
-        Heroes * hero = GetHeroes( Settings::Get().LossMapsPositionObject() );
+    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
+        Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
         if ( hero ) {
             heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
@@ -726,8 +728,9 @@ void World::ProcessNewMap()
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    if ( Settings::Get().ExtWorldStartHeroLossCond4Humans() )
+    if ( conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
         vec_kingdoms.AddCondLossHeroes( vec_heroes );
+    }
 
     // play with debug hero
     if ( IS_DEVEL() ) {

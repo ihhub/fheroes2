@@ -258,10 +258,10 @@ public:
     void ClearFog( int color );
     void UpdateRecruits( Recruits & ) const;
 
-    int CheckKingdomWins( const Kingdom & ) const;
-    bool KingdomIsWins( const Kingdom &, int wins ) const;
-    int CheckKingdomLoss( const Kingdom & ) const;
-    bool KingdomIsLoss( const Kingdom &, int loss ) const;
+    uint32_t CheckKingdomWins( const Kingdom & ) const;
+    bool KingdomIsWins( const Kingdom &, uint32_t wins ) const;
+    uint32_t CheckKingdomLoss( const Kingdom & ) const;
+    bool KingdomIsLoss( const Kingdom &, uint32_t loss ) const;
 
     void AddEventDate( const EventDate & );
     EventsDate GetEventsDate( int color ) const;
