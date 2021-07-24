@@ -65,7 +65,7 @@ public:
     static int fontHeight( const int ft );
 
 private:
-    int _font;
+    int _font = 0;
     std::string _message;
 };
 
@@ -201,11 +201,11 @@ void TextAscii::blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst )
 
     const uint32_t maxSupportedCharacter = fheroes2::AGG::ASCIILastSupportedCharacter( _font );
 
-    for ( std::string::const_iterator it = _message.begin(); it != _message.end(); ++it ) {
+    for ( const char ch : _message ) {
         if ( maxw && ( ax - sx ) >= maxw )
             break;
 
-        const uint8_t character = static_cast<uint8_t>( *it );
+        const uint8_t character = static_cast<uint8_t>( ch );
 
         // space or unknown letter
         if ( character < 0x21 || character > maxSupportedCharacter ) {
