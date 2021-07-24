@@ -1,0 +1,91 @@
+/***************************************************************************
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include "ui_language.h"
+#include "agg.h"
+#include "icn.h"
+#include "tools.h"
+
+#include <cassert>
+#include <map>
+
+namespace
+{
+    const std::map<uint32_t, fheroes2::SupportedLanguage> languageCRC32 = { { 0x406967B9, fheroes2::SupportedLanguage::French } };
+}
+
+namespace fheroes2
+{
+    SupportedLanguage getSupportedLanguage()
+    {
+        const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
+        if ( data.empty() ) {
+            return SupportedLanguage::English;
+        }
+
+        const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
+        auto iter = languageCRC32.find( crc32 );
+        if ( iter == languageCRC32.end() ) {
+            return SupportedLanguage::English;
+        }
+
+        return iter->second;
+    }
+
+    const char * getLanguageEnglishName( const SupportedLanguage language )
+    {
+        switch ( language ) {
+        case SupportedLanguage::English:
+            return "English";
+        case SupportedLanguage::French:
+            return "French";
+        case SupportedLanguage::Polish:
+            return "Polish";
+        case SupportedLanguage::German:
+            return "German";
+        case SupportedLanguage::Russian:
+            return "Russian";
+        default:
+            // Did you add a new language? Please add the code to handle it.
+            assert( 0 );
+            return nullptr;
+        }
+    }
+
+    const char * getLanguageAbbreviation( const SupportedLanguage language )
+    {
+        switch ( language ) {
+        case SupportedLanguage::English:
+            return ""; // English is a special case. It always returns an empty string as it's a default language.
+        case SupportedLanguage::French:
+            return "fr";
+        case SupportedLanguage::Polish:
+            return "pl";
+        case SupportedLanguage::German:
+            return "de";
+        case SupportedLanguage::Russian:
+            return "ru";
+        default:
+            // Did you add a new language? Please add the code to handle it.
+            assert( 0 );
+            return nullptr;
+        }
+    }
+}

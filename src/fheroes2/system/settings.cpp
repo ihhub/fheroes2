@@ -703,8 +703,8 @@ std::string Settings::String() const
        << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
 #endif
 
-    if ( !force_lang.empty() )
-        os << "lang = " << force_lang << std::endl;
+    os << std::endl << "# game language (empty field is for English)" << std::endl;
+    os << "lang = " << force_lang << std::endl;
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
@@ -764,10 +764,34 @@ const std::string & Settings::FontsSmall() const
 {
     return font_small;
 }
+
 const std::string & Settings::ForceLang() const
 {
     return force_lang;
 }
+
+void Settings::setGameLanguage( const std::string & language )
+{
+    force_lang = language;
+
+    if ( force_lang.empty() ) {
+        Translation::reset();
+        return;
+    }
+
+    const std::string mofile = std::string( force_lang ).append( ".mo" );
+
+    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
+
+    if ( !translations.empty() ) {
+        if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
+            Translation::setDomain( "fheroes2" );
+    }
+    else {
+        ERROR_LOG( "translation not found: " << mofile );
+    }
+}
+
 const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;

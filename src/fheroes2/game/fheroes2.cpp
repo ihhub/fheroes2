@@ -114,23 +114,13 @@ namespace
             System::MakeDirectory( dataFilesSave );
     }
 
-    void SetLangEnvPath( const Settings & conf )
+    void SetLangEnvPath( Settings & conf )
     {
         if ( !conf.ForceLang().empty() ) {
             System::SetLocale( LC_ALL, "" );
             System::SetLocale( LC_NUMERIC, "C" );
 
-            const std::string mofile = std::string( conf.ForceLang() ).append( ".mo" );
-
-            const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
-
-            if ( !translations.empty() ) {
-                if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
-                    Translation::setDomain( "fheroes2" );
-            }
-            else {
-                ERROR_LOG( "translation not found: " << mofile );
-            }
+            conf.setGameLanguage( conf.ForceLang() );
         }
 
         Translation::setStripContext( '|' );

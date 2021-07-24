@@ -246,6 +246,8 @@ public:
     void SetMusicVolume( int v );
     void SetMusicType( int v );
 
+    void setGameLanguage( const std::string & language );
+
     int SoundVolume() const;
     int MusicVolume() const;
     MusicSource MusicType() const;
