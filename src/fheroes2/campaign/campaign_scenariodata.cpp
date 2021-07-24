@@ -327,7 +327,7 @@ namespace
         case Artifact::DIVINE_BREASTPLATE:
             return _( "Breastplate" );
         case Artifact::FIZBIN_MISFORTUNE:
-            return _( "Fizbin Medal" );
+            return _( "Fizbin of Misfortune" );
         case Artifact::MAGE_RING:
             return _( "Mage's ring" );
         case Artifact::DEFENDER_HELM:

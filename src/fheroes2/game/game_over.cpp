@@ -228,28 +228,28 @@ std::string GameOver::GetActualDescription( int cond )
     else if ( WINS_TOWN & cond ) {
         const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
         if ( town ) {
-            msg = town->isCastle() ? _( "Capture the castle '%{name}'" ) : _( "Capture the town '%{name}'" );
+            msg = town->isCastle() ? _( "Capture the castle '%{name}'." ) : _( "Capture the town '%{name}'." );
             StringReplace( msg, "%{name}", town->GetName() );
         }
     }
     else if ( WINS_HERO & cond ) {
         const Heroes * hero = world.GetHeroesCondWins();
         if ( hero ) {
-            msg = _( "Defeat the hero '%{name}'" );
+            msg = _( "Defeat the hero '%{name}'." );
             StringReplace( msg, "%{name}", hero->GetName() );
         }
     }
     else if ( WINS_ARTIFACT & cond ) {
         if ( conf.WinsFindUltimateArtifact() )
-            msg = _( "Find the ultimate artifact" );
+            msg = _( "Find the ultimate artifact." );
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            msg = _( "Find the '%{name}' artifact" );
+            msg = _( "Find the '%{name}' artifact." );
             StringReplace( msg, "%{name}", art.GetName() );
         }
     }
     else if ( WINS_GOLD & cond ) {
-        msg = _( "Accumulate %{count} gold" );
+        msg = _( "Accumulate %{count} gold." );
         StringReplace( msg, "%{count}", conf.WinsAccumulateGold() );
     }
 

@@ -933,7 +933,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
     const Kingdom & myKingdom = GetKingdom();
     if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
         if ( msg )
-            *msg = _( "Cannot recruit - you already recruit hero in current week." );
+            *msg = _( "Cannot recruit - you have already recruited a hero in the current week." );
         return false;
     }
 
