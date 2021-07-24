@@ -414,10 +414,32 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        le.MousePressLeft( moveArmyToHero2.area() ) ? moveArmyToHero2.drawOnPress() : moveArmyToHero2.drawOnRelease();
-        le.MousePressLeft( moveArmyToHero1.area() ) ? moveArmyToHero1.drawOnPress() : moveArmyToHero1.drawOnRelease();
-        le.MousePressLeft( moveArtifactsToHero2.area() ) ? moveArtifactsToHero2.drawOnPress() : moveArtifactsToHero2.drawOnRelease();
-        le.MousePressLeft( moveArtifactsToHero1.area() ) ? moveArtifactsToHero1.drawOnPress() : moveArtifactsToHero1.drawOnRelease();
+
+        if ( le.MousePressLeft( moveArmyToHero2.area() ) ) {
+            moveArmyToHero2.drawOnPress();
+            moveArmyToHero1.drawOnRelease();
+        }
+        else if ( le.MousePressLeft( moveArmyToHero1.area() ) ) {
+            moveArmyToHero1.drawOnPress();
+            moveArmyToHero2.drawOnRelease();
+        }
+        else {
+            moveArmyToHero1.drawOnRelease();
+            moveArmyToHero2.drawOnRelease();
+        }
+
+        if ( le.MousePressLeft( moveArtifactsToHero2.area() ) ) {
+            moveArtifactsToHero2.drawOnPress();
+            moveArtifactsToHero1.drawOnRelease();
+        }
+        else if ( le.MousePressLeft( moveArtifactsToHero1.area() ) ) {
+            moveArtifactsToHero1.drawOnPress();
+            moveArtifactsToHero2.drawOnRelease();
+        }
+        else {
+            moveArtifactsToHero1.drawOnRelease();
+            moveArtifactsToHero2.drawOnRelease();
+        }
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
