@@ -1229,6 +1229,9 @@ void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
 
         ResumeSounds();
     }
+    else if ( event.window.event == SDL_WINDOWEVENT_RESIZED ) {
+        fheroes2::Display::instance().render();
+    }
 }
 #else
 void LocalEvent::OnActiveEvent( const SDL_Event & event )
