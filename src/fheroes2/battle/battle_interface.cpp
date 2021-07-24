@@ -2405,7 +2405,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
             }
 
             if ( listlog ) {
-                std::string str = _( "%{color} cast spell: %{spell}" );
+                std::string str = _( "%{color} casts a spell: %{spell}" );
                 const HeroBase * current_commander = arena.GetCurrentCommander();
                 if ( current_commander )
                     StringReplace( str, "%{color}", Color::String( current_commander->GetColor() ) );
@@ -2689,10 +2689,10 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
     std::string msg;
     if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skipping turn" );
+        msg = _( "%{name} skip the turn" );
     }
     else {
-        msg = _( "%{name} waiting turn" );
+        msg = _( "%{name} wait their turn" );
     }
 
     StringReplace( msg, "%{name}", attacker.GetName() );
@@ -3845,7 +3845,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         }
     }
 
-    status.SetMessage( _( "MirrorImage created" ), true );
+    status.SetMessage( _( "The mirror image is created" ), true );
 }
 
 void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )

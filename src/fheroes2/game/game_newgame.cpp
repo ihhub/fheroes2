@@ -496,13 +496,13 @@ u32 Game::SelectCountPlayers( void )
 
         // right info
         if ( le.MousePressRight( button2Players.area() ) )
-            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up, to 4 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button3Players.area() ) )
-            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up, to 3 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button4Players.area() ) )
-            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up, to 2 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button5Players.area() ) )
-            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up, to 1 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ), Font::BIG );
         if ( le.MousePressRight( button6Players.area() ) )
             Dialog::Message( _( "6 Players" ), _( "Play with 6 human players." ), Font::BIG );
         if ( le.MousePressRight( buttonCancel.area() ) )
