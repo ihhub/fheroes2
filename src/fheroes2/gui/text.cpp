@@ -231,7 +231,7 @@ Text::~Text()
 Text::Text( const Text & t )
 {
     assert( t.message != nullptr );
-    message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
+    message = new TextAscii( dynamic_cast<TextAscii &>( *t.message ) );
 
     gw = t.gw;
     gh = t.gh;
