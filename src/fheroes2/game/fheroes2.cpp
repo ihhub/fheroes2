@@ -74,10 +74,6 @@ namespace
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
         if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
-            const std::string & externalCommand = conf.externalMusicCommand();
-            if ( !externalCommand.empty() )
-                Music::SetExtCommand( externalCommand );
-
             LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
         else {

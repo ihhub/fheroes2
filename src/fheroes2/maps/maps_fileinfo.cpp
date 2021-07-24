@@ -352,11 +352,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // name
     fs.seek( 0x3A );
-    name = Game::GetEncodeString( fs.toString( mapNameLength ) );
+    name = fs.toString( mapNameLength );
 
     // description
     fs.seek( 0x76 );
-    description = Game::GetEncodeString( fs.toString( mapDescriptionLength ) );
+    description = fs.toString( mapDescriptionLength );
 
     // fill unions
     if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
@@ -434,7 +434,7 @@ int Maps::FileInfo::KingdomRace( int color ) const
     return 0;
 }
 
-int Maps::FileInfo::ConditionWins( void ) const
+uint32_t Maps::FileInfo::ConditionWins() const
 {
     switch ( conditions_wins ) {
     case 0:
@@ -456,7 +456,7 @@ int Maps::FileInfo::ConditionWins( void ) const
     return GameOver::COND_NONE;
 }
 
-int Maps::FileInfo::ConditionLoss( void ) const
+uint32_t Maps::FileInfo::ConditionLoss() const
 {
     switch ( conditions_loss ) {
     case 0:

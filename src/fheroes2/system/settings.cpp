@@ -58,7 +58,7 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
-        GLOBAL_USEUNICODE = 0x00010000,
+        // UNUSED = 0x00010000,
 
         GLOBAL_MUSIC_EXT = 0x00020000,
         GLOBAL_MUSIC_MIDI = 0x00040000,
@@ -263,10 +263,6 @@ Settings::Settings()
     : debug( 0 )
     , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
-    , font_normal( "dejavusans.ttf" )
-    , font_small( "dejavusans.ttf" )
-    , size_normal( 15 )
-    , size_small( 10 )
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
@@ -373,44 +369,11 @@ bool Settings::Read( const std::string & filename )
 
     Logging::SetDebugLevel( debug );
 
+    // game language
     sval = config.StrParams( "lang" );
-    if ( !sval.empty() )
+    if ( !sval.empty() ) {
         force_lang = sval;
-
-    // unicode
-    if ( config.Exists( "unicode" ) ) {
-        SetUnicode( config.StrParams( "unicode" ) == "on" );
     }
-
-    if ( Unicode() ) {
-        sval = config.StrParams( "maps charset" );
-        if ( !sval.empty() )
-            maps_charset = sval;
-
-        sval = config.StrParams( "fonts normal" );
-        if ( !sval.empty() )
-            font_normal = sval;
-
-        sval = config.StrParams( "fonts small" );
-        if ( !sval.empty() )
-            font_small = sval;
-
-        ival = config.IntParams( "fonts normal size" );
-        if ( 0 < ival )
-            size_normal = ival;
-
-        ival = config.IntParams( "fonts small size" );
-        if ( 0 < ival )
-            size_small = ival;
-    }
-
-#ifdef WITH_TTF
-    if ( font_normal.empty() || font_small.empty() ) {
-        opt_global.ResetModes( GLOBAL_USEUNICODE );
-    }
-#else
-    opt_global.ResetModes( GLOBAL_USEUNICODE );
-#endif
 
     // music source
     _musicType = MUSIC_EXTERNAL;
@@ -518,9 +481,6 @@ bool Settings::Read( const std::string & filename )
     if ( config.Exists( "auto spell casting" ) ) {
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
-
-    // playmus command
-    _externalMusicCommand = config.StrParams( "playmus command" );
 
     // videomode
     sval = config.StrParams( "videomode" );
@@ -694,15 +654,6 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-#ifdef WITH_TTF
-    os << std::endl << "# options below are experimental and are currently disabled in the game" << std::endl;
-    os << "fonts normal = " << font_normal << std::endl
-       << "fonts small = " << font_small << std::endl
-       << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
-       << "fonts small size = " << static_cast<int>( size_small ) << std::endl
-       << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
-#endif
-
     os << std::endl << "# game language (empty field is for English)" << std::endl;
     os << "lang = " << force_lang << std::endl;
 
@@ -755,16 +706,6 @@ int Settings::CurrentColor() const
     return players.current_color;
 }
 
-/* return fontname */
-const std::string & Settings::FontsNormal() const
-{
-    return font_normal;
-}
-const std::string & Settings::FontsSmall() const
-{
-    return font_small;
-}
-
 const std::string & Settings::ForceLang() const
 {
     return force_lang;
@@ -795,18 +736,6 @@ void Settings::setGameLanguage( const std::string & language )
 const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;
-}
-const std::string & Settings::MapsCharset() const
-{
-    return maps_charset;
-}
-int Settings::FontsNormalSize() const
-{
-    return size_normal;
-}
-int Settings::FontsSmallSize() const
-{
-    return size_small;
 }
 
 void Settings::SetMapsFile( const std::string & file )
@@ -1058,12 +987,6 @@ bool Settings::ShowStatus() const
     return opt_global.Modes( GLOBAL_SHOWSTATUS );
 }
 
-/* unicode support */
-bool Settings::Unicode() const
-{
-    return opt_global.Modes( GLOBAL_USEUNICODE );
-}
-
 bool Settings::BattleShowGrid() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
@@ -1159,6 +1082,11 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
+bool Settings::isStandardGameType() const
+{
+    return ( game_type & Game::TYPE_STANDARD ) != 0;
+}
+
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
@@ -1199,11 +1127,6 @@ const std::string & Settings::MapsDescription() const
     return current_maps_file.description;
 }
 
-const std::string & Settings::externalMusicCommand() const
-{
-    return _externalMusicCommand;
-}
-
 int Settings::MapsDifficulty() const
 {
     return current_maps_file.difficulty;
@@ -1224,12 +1147,12 @@ bool Settings::GameStartWithHeroes() const
     return current_maps_file.startWithHeroInEachCastle;
 }
 
-int Settings::ConditionWins() const
+uint32_t Settings::ConditionWins() const
 {
     return current_maps_file.ConditionWins();
 }
 
-int Settings::ConditionLoss() const
+uint32_t Settings::ConditionLoss() const
 {
     return current_maps_file.ConditionLoss();
 }
@@ -1272,11 +1195,6 @@ u32 Settings::LossCountDays() const
 int Settings::controllerPointerSpeed() const
 {
     return _controllerPointerSpeed;
-}
-
-void Settings::SetUnicode( bool f )
-{
-    f ? opt_global.SetModes( GLOBAL_USEUNICODE ) : opt_global.ResetModes( GLOBAL_USEUNICODE );
 }
 
 void Settings::EnablePriceOfLoyaltySupport( const bool set )

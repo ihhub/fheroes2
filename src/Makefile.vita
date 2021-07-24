@@ -36,7 +36,3 @@ SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL2
 ifndef WITHOUT_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image -ljpeg -lpng
 endif
-
-ifndef WITHOUT_UNICODE
-SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf -lfreetype
-endif

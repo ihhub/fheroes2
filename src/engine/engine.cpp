@@ -54,9 +54,6 @@ bool SDL::Init( const uint32_t system )
     }
     LocalEvent::Get().OpenTouchpad();
 #endif
-#ifdef WITH_TTF
-    FontTTF::Init();
-#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
@@ -68,9 +65,6 @@ bool SDL::Init( const uint32_t system )
 
 void SDL::Quit()
 {
-#ifdef WITH_TTF
-    FontTTF::Quit();
-#endif
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) ) {
         LocalEvent::Get().CloseController();
