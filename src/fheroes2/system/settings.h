@@ -245,6 +245,7 @@ public:
     void SetMusicType( int v );
 
     void setGameLanguage( const std::string & language );
+    bool isTranslationFilePresent( const std::string & language ) const;
 
     int SoundVolume() const;
     int MusicVolume() const;

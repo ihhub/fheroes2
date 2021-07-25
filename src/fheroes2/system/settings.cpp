@@ -735,6 +735,17 @@ void Settings::setGameLanguage( const std::string & language )
     }
 }
 
+bool Settings::isTranslationFilePresent( const std::string & language ) const
+{
+    if ( language.empty() ) {
+        return true;
+    }
+
+    const std::string fileName = std::string( force_lang ).append( ".mo" );
+    const ListFiles translationFiles = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+    return !translationFiles.empty();
+}
+
 const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;

@@ -162,7 +162,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
         fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
-        if ( supportedLanguage != fheroes2::SupportedLanguage::English ) {
+        if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.isTranslationFilePresent( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
             supportedLanguage = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage } );
             conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
         }
