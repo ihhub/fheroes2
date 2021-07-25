@@ -2,7 +2,7 @@ file(GLOB_RECURSE LIBENGINE_SOURCES CONFIGURE_DEPENDS *.cpp)
 
 add_library(engine STATIC ${LIBENGINE_SOURCES})
 target_compile_definitions(engine PRIVATE
-	$<$<BOOL:${ENABLE_IMAGE}>:WITH_IMAGE>
+	$<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
 	)
 target_include_directories(engine PUBLIC
 	${${USE_SDL_VERSION}_INCLUDE_DIR}
