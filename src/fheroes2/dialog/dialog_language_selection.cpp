@@ -23,6 +23,7 @@
 #include "icn.h"
 #include "localevent.h"
 #include "screen.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_text.h"
 #include "ui_window.h"
@@ -81,12 +82,11 @@ namespace fheroes2
         buttonGroup.button( 0 ).press();
         optionButtonGroup.draw();
 
-        // This text MUST be in English. No translation is applied for it.
-        const Text title( "Choose game language:", { FontSize::NORMAL, FontColor::YELLOW } );
+        const Text title( _( "Choose game language:" ), { FontSize::NORMAL, FontColor::YELLOW } );
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {
-            const Text languageName( getLanguageEnglishName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
+            const Text languageName( getLanguageName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
             languageName.draw( windowRoi.x + offsetFromBorders + languageAreaWidth * i + languageAreaWidth / 2 - languageName.width() / 2, windowRoi.y + 40, display );
         }
 

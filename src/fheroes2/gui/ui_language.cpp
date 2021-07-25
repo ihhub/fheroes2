@@ -21,7 +21,9 @@
 #include "ui_language.h"
 #include "agg.h"
 #include "icn.h"
+#include "settings.h"
 #include "tools.h"
+#include "translations.h"
 
 #include <cassert>
 #include <map>
@@ -30,6 +32,24 @@ namespace
 {
     const std::map<uint32_t, fheroes2::SupportedLanguage> languageCRC32
         = { { 0x406967B9, fheroes2::SupportedLanguage::French }, { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } };
+
+    class LanguageSwitcher
+    {
+    public:
+        LanguageSwitcher( const fheroes2::SupportedLanguage language )
+            : _currentLanguage( Settings::Get().getGameLanguage() )
+        {
+            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( language ) );
+        }
+
+        ~LanguageSwitcher()
+        {
+            Settings::Get().setGameLanguage( _currentLanguage );
+        }
+
+    private:
+        const std::string _currentLanguage;
+    };
 }
 
 namespace fheroes2
@@ -50,19 +70,21 @@ namespace fheroes2
         return iter->second;
     }
 
-    const char * getLanguageEnglishName( const SupportedLanguage language )
+    const char * getLanguageName( const SupportedLanguage language )
     {
+        LanguageSwitcher languageSwitcher( language );
+
         switch ( language ) {
         case SupportedLanguage::English:
-            return "English";
+            return _( "English" );
         case SupportedLanguage::French:
-            return "French";
+            return _( "French" );
         case SupportedLanguage::Polish:
-            return "Polish";
+            return _( "Polish" );
         case SupportedLanguage::German:
-            return "German";
+            return _( "German" );
         case SupportedLanguage::Russian:
-            return "Russian";
+            return _( "Russian" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );

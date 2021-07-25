@@ -706,7 +706,7 @@ int Settings::CurrentColor() const
     return players.current_color;
 }
 
-const std::string & Settings::ForceLang() const
+const std::string & Settings::getGameLanguage() const
 {
     return force_lang;
 }

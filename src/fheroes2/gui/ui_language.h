@@ -35,8 +35,8 @@ namespace fheroes2
     // This function returns supported from resources language except English, otherwise English language will be returned.
     SupportedLanguage getSupportedLanguage();
 
-    // Return English name of the language.
-    const char * getLanguageEnglishName( const SupportedLanguage language );
+    // Return name of the language.
+    const char * getLanguageName( const SupportedLanguage language );
 
     const char * getLanguageAbbreviation( const SupportedLanguage language );
 }

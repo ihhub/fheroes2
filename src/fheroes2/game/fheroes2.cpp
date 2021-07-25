@@ -158,7 +158,7 @@ int main( int argc, char ** argv )
         {
             std::atexit( SDL::Quit );
 
-            conf.setGameLanguage( conf.ForceLang() );
+            conf.setGameLanguage( conf.getGameLanguage() );
 
             if ( Mixer::isValid() ) {
                 Mixer::SetChannels( 16 );

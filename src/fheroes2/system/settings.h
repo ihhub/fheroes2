@@ -130,7 +130,7 @@ public:
     int GameDifficulty() const;
 
     const std::string & MapsCharset() const;
-    const std::string & ForceLang() const;
+    const std::string & getGameLanguage() const;
     const std::string & loadedFileLanguage() const;
     const std::string & FontsNormal() const;
     const std::string & FontsSmall() const;
