@@ -51,22 +51,22 @@ namespace
 {
     building_t getPressedBuildingHotkey()
     {
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_1 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_1 ) ) {
             return DWELLING_MONSTER1;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_2 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_2 ) ) {
             return DWELLING_MONSTER2;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_3 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_3 ) ) {
             return DWELLING_MONSTER3;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_4 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_4 ) ) {
             return DWELLING_MONSTER4;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_5 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_5 ) ) {
             return DWELLING_MONSTER5;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_6 ) ) {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_6 ) ) {
             return DWELLING_MONSTER6;
         }
         if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
