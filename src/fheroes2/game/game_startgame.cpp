@@ -287,11 +287,15 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
 void ShowNewWeekDialog( void )
 {
+    // restore the original music on exit
+    const Game::MusicRestorer musicRestorer;
+
+    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+
     const Week & week = world.GetWeekType();
 
     // head
     std::string message = world.BeginMonth() ? _( "Astrologers proclaim Month of the %{name}." ) : _( "Astrologers proclaim Week of the %{name}." );
-    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
@@ -741,9 +745,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     if ( !isload ) {
         // new week dialog
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
-            const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
-            AGG::PlayMusic( currentMusic, true, true );
         }
 
         // show event day
