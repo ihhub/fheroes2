@@ -244,8 +244,7 @@ public:
     void SetMusicVolume( int v );
     void SetMusicType( int v );
 
-    void setGameLanguage( const std::string & language );
-    bool isTranslationFilePresent( const std::string & language ) const;
+    bool setGameLanguage( const std::string & language );
 
     int SoundVolume() const;
     int MusicVolume() const;
@@ -322,7 +321,7 @@ private:
 
     std::string path_program;
 
-    std::string force_lang;
+    std::string _gameLanguage;
     std::string _loadedFileLanguage; // not a part of save or configuration file
 
     Maps::FileInfo current_maps_file;

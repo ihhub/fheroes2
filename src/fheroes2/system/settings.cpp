@@ -372,7 +372,7 @@ bool Settings::Read( const std::string & filename )
     // game language
     sval = config.StrParams( "lang" );
     if ( !sval.empty() ) {
-        force_lang = sval;
+        _gameLanguage = sval;
     }
 
     // music source
@@ -655,7 +655,7 @@ std::string Settings::String() const
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
-    os << "lang = " << force_lang << std::endl;
+    os << "lang = " << _gameLanguage << std::endl;
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
@@ -708,42 +708,29 @@ int Settings::CurrentColor() const
 
 const std::string & Settings::getGameLanguage() const
 {
-    return force_lang;
+    return _gameLanguage;
 }
 
-void Settings::setGameLanguage( const std::string & language )
+bool Settings::setGameLanguage( const std::string & language )
 {
     Translation::setStripContext( '|' );
 
-    force_lang = language;
+    _gameLanguage = language;
 
-    if ( force_lang.empty() ) {
+    if ( _gameLanguage.empty() ) {
         Translation::reset();
-        return;
-    }
-
-    const std::string mofile = std::string( force_lang ).append( ".mo" );
-
-    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
-
-    if ( !translations.empty() ) {
-        if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
-            Translation::setDomain( "fheroes2" );
-    }
-    else {
-        ERROR_LOG( "translation not found: " << mofile );
-    }
-}
-
-bool Settings::isTranslationFilePresent( const std::string & language ) const
-{
-    if ( language.empty() ) {
         return true;
     }
 
-    const std::string fileName = std::string( force_lang ).append( ".mo" );
-    const ListFiles translationFiles = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
-    return !translationFiles.empty();
+    const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
+    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+
+    if ( !translations.empty() ) {
+        return Translation::bindDomain( "fheroes2", translations.back().c_str() ) && Translation::setDomain( "fheroes2" );
+    }
+
+    ERROR_LOG( "Translation file " << fileName << " is not found." )
+    return false;
 }
 
 const std::string & Settings::loadedFileLanguage() const
@@ -1635,7 +1622,7 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
+    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
         << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
 
     return msg;
