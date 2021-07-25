@@ -353,7 +353,7 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     switch ( tile.GetObject() ) {
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * to_castle = world.getCastleEntrance( tile.GetCenter() );
+        const Castle * to_castle = world.getCastle( tile.GetCenter() );
 
         if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
