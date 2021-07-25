@@ -654,7 +654,7 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# game language (empty field is for English)" << std::endl;
+    os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << force_lang << std::endl;
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
@@ -713,6 +713,8 @@ const std::string & Settings::ForceLang() const
 
 void Settings::setGameLanguage( const std::string & language )
 {
+    Translation::setStripContext( '|' );
+
     force_lang = language;
 
     if ( force_lang.empty() ) {

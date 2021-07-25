@@ -27,5 +27,5 @@
 namespace fheroes2
 {
     // UI window to select a language by user.
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languagues );
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages );
 }

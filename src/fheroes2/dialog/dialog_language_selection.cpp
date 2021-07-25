@@ -31,22 +31,22 @@
 
 namespace fheroes2
 {
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languagues )
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages )
     {
-        if ( languagues.empty() ) {
+        if ( languages.empty() ) {
             // Why do you even call this function having 0 languages?
             assert( 0 );
             return SupportedLanguage::English;
         }
 
-        if ( languagues.size() == 1 ) {
-            return languagues.front();
+        if ( languages.size() == 1 ) {
+            return languages.front();
         }
 
         const int32_t languageAreaWidth = 100;
         const int32_t offsetFromBorders = 10;
 
-        const int32_t languageCount = static_cast<int32_t>( languagues.size() );
+        const int32_t languageCount = static_cast<int32_t>( languages.size() );
 
         Display & display = Display::instance();
 
@@ -71,7 +71,7 @@ namespace fheroes2
         }
 
         OptionButtonGroup optionButtonGroup;
-        for ( size_t i = 0; i < languagues.size(); ++i ) {
+        for ( size_t i = 0; i < languages.size(); ++i ) {
             optionButtonGroup.addButton( &buttonGroup.button( i ) );
         }
 
@@ -86,13 +86,13 @@ namespace fheroes2
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {
-            const Text languageName( getLanguageEnglishName( languagues[i] ), { FontSize::NORMAL, FontColor::WHITE } );
+            const Text languageName( getLanguageEnglishName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
             languageName.draw( windowRoi.x + offsetFromBorders + languageAreaWidth * i + languageAreaWidth / 2 - languageName.width() / 2, windowRoi.y + 40, display );
         }
 
         display.render();
 
-        SupportedLanguage chosenLanguage = languagues.front();
+        SupportedLanguage chosenLanguage = languages.front();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -107,11 +107,11 @@ namespace fheroes2
                 break;
             }
 
-            for ( size_t i = 0; i < languagues.size(); ++i ) {
+            for ( size_t i = 0; i < languages.size(); ++i ) {
                 if ( le.MousePressLeft( buttonGroup.button( i ).area() ) ) {
                     buttonGroup.button( i ).press();
                     optionButtonGroup.draw();
-                    chosenLanguage = languagues[i];
+                    chosenLanguage = languages[i];
                     break;
                 }
             }

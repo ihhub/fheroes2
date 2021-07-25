@@ -43,7 +43,6 @@
 #ifndef BUILD_RELEASE
 #include "tools.h"
 #endif
-#include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -109,18 +108,6 @@ namespace
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
     }
-
-    void SetLangEnvPath( Settings & conf )
-    {
-        if ( !conf.ForceLang().empty() ) {
-            System::SetLocale( LC_ALL, "" );
-            System::SetLocale( LC_NUMERIC, "C" );
-
-            conf.setGameLanguage( conf.ForceLang() );
-        }
-
-        Translation::setStripContext( '|' );
-    }
 }
 
 #if defined( _MSC_VER )
@@ -171,7 +158,7 @@ int main( int argc, char ** argv )
         {
             std::atexit( SDL::Quit );
 
-            SetLangEnvPath( conf );
+            conf.setGameLanguage( conf.ForceLang() );
 
             if ( Mixer::isValid() ) {
                 Mixer::SetChannels( 16 );
