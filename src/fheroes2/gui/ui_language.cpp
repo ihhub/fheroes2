@@ -41,6 +41,7 @@ namespace
         LanguageSwitcher( const LanguageSwitcher & ) = delete;
         LanguageSwitcher( const LanguageSwitcher && ) = delete;
         LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
 
         explicit LanguageSwitcher( const fheroes2::SupportedLanguage language )
             : _currentLanguage( Settings::Get().getGameLanguage() )
