@@ -372,7 +372,7 @@ bool Settings::Read( const std::string & filename )
     // game language
     sval = config.StrParams( "lang" );
     if ( !sval.empty() ) {
-        force_lang = sval;
+        _gameLanguage = sval;
     }
 
     // music source
@@ -654,8 +654,8 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# game language" << std::endl;
-    os << "lang = " << force_lang << std::endl;
+    os << std::endl << "# game language (an empty value means English)" << std::endl;
+    os << "lang = " << _gameLanguage << std::endl;
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
@@ -706,10 +706,33 @@ int Settings::CurrentColor() const
     return players.current_color;
 }
 
-const std::string & Settings::ForceLang() const
+const std::string & Settings::getGameLanguage() const
 {
-    return force_lang;
+    return _gameLanguage;
 }
+
+bool Settings::setGameLanguage( const std::string & language )
+{
+    Translation::setStripContext( '|' );
+
+    _gameLanguage = language;
+
+    if ( _gameLanguage.empty() ) {
+        Translation::reset();
+        return true;
+    }
+
+    const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
+    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+
+    if ( !translations.empty() ) {
+        return Translation::bindDomain( "fheroes2", translations.back().c_str() ) && Translation::setDomain( "fheroes2" );
+    }
+
+    ERROR_LOG( "Translation file " << fileName << " is not found." )
+    return false;
+}
+
 const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;
@@ -1599,7 +1622,7 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
+    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
         << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
 
     return msg;

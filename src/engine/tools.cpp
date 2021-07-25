@@ -531,4 +531,19 @@ namespace fheroes2
 
         return rt3;
     }
+
+    uint32_t calculateCRC32( const uint8_t * data, const size_t length )
+    {
+        uint32_t crc = 0xFFFFFFFF;
+        for ( size_t i = 0; i < length; ++i ) {
+            crc ^= static_cast<uint32_t>( data[i] );
+
+            for ( int bit = 0; bit < 8; ++bit ) {
+                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
+                crc = ( crc >> 1 ) ^ poly;
+            }
+        }
+
+        return ~crc;
+    }
 }

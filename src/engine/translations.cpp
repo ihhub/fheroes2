@@ -333,6 +333,11 @@ namespace Translation
         return true;
     }
 
+    void reset()
+    {
+        current = nullptr;
+    }
+
     const char * gettext( const std::string & str )
     {
         const char * data = str.data();
