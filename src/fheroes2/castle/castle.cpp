@@ -2571,7 +2571,7 @@ u32 Castle::GetGrownMonthOf( void )
 
 void Castle::Scoute( void ) const
 {
-    Maps::ClearFog( GetIndex(), Game::GetViewDistance( isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN ), GetColor() );
+    Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
 }
 
 void Castle::JoinRNDArmy( void )

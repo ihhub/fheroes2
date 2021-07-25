@@ -66,7 +66,7 @@ namespace Game
     // distance_t
     enum
     {
-        VIEW_TOWN = 0,
+        // UNUSED = 0,
         VIEW_CASTLE = 1,
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
