@@ -28,13 +28,10 @@
 #include <vector>
 
 #include "army.h"
-#include "gamedefs.h"
 #include "heroes_base.h"
 #include "pairs.h"
 #include "route.h"
 #include "visit.h"
-
-class Recruits;
 
 namespace Battle
 {
@@ -45,6 +42,8 @@ namespace Interface
 {
     class GameArea;
 }
+
+class StreamBuf;
 
 struct HeroSeedsForLevelUp
 {

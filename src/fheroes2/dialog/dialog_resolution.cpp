@@ -23,11 +23,13 @@
 #include "cursor.h"
 #include "embedded_image.h"
 #include "game.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "screen.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "zzlib.h"
 

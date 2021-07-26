@@ -26,6 +26,7 @@
 #include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -37,6 +38,7 @@
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 
 namespace

@@ -22,14 +22,12 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
-#include <functional>
 #include <list>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
-#include "gamedefs.h"
 #include "resource.h"
 #include "skill.h"
 

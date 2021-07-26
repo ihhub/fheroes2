@@ -42,15 +42,18 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "maps_objects.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace

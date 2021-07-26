@@ -32,11 +32,13 @@
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
+#include "serialize.h"
 #include "settings.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 enum
 {

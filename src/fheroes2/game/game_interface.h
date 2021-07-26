@@ -23,8 +23,6 @@
 #ifndef H2GAMEINTERFACE_H
 #define H2GAMEINTERFACE_H
 
-#include "gamedefs.h"
-#include "interface_border.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
@@ -35,7 +33,6 @@
 
 class Castle;
 class Heroes;
-class Army;
 
 namespace Maps
 {

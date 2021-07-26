@@ -36,6 +36,7 @@
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "visit.h"
 #include "world.h"

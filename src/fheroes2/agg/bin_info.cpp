@@ -18,8 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <map>
+
 #include "bin_info.h"
 #include "agg.h"
+#include "battle_animation.h"
 #include "battle_cell.h"
 #include "logging.h"
 #include "monster.h"

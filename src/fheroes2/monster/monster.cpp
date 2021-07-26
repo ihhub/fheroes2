@@ -32,6 +32,7 @@
 #include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "translations.h"

@@ -30,9 +30,11 @@
 #include "gamedefs.h"
 #include "kingdom.h"
 #include "mus.h"
+#include "serialize.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 #include <cassert>

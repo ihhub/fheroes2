@@ -30,6 +30,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )

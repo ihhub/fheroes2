@@ -25,10 +25,10 @@
 #include <list>
 
 #include "direction.h"
-#include "gamedefs.h"
-#include "skill.h"
+#include "types.h"
 
 class Heroes;
+class StreamBase;
 
 namespace Route
 {

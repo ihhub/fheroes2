@@ -22,10 +22,14 @@
 #ifndef H2MAPSFILEINFO_H
 #define H2MAPSFILEINFO_H
 
+#include <string>
 #include <vector>
 
 #include "gamedefs.h"
-#include "serialize.h"
+#include "math_base.h"
+#include "types.h"
+
+class StreamBase;
 
 enum class GameVersion : int
 {

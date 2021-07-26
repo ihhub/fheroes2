@@ -28,6 +28,7 @@
 #include "heroes.h"
 #include "race.h"
 #include "rand.h"
+#include "serialize.h"
 #include "skill.h"
 #include "skill_static.h"
 #include "tools.h"

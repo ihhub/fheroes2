@@ -22,6 +22,7 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -29,11 +30,14 @@
 #include "bitmodes.h"
 #include "captain.h"
 #include "castle_heroes.h"
-#include "heroes.h"
 #include "mageguild.h"
-#include "monster_anim.h"
 #include "position.h"
 #include "ui_button.h"
+
+namespace fheroes2
+{
+    class RandomMonsterAnimation;
+}
 
 class Heroes;
 

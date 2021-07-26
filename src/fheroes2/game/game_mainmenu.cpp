@@ -37,6 +37,7 @@
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"

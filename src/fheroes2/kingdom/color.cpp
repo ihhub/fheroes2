@@ -24,6 +24,7 @@
 
 #include "color.h"
 #include "players.h"
+#include "serialize.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
