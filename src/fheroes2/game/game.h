@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "agg.h"
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "types.h"
@@ -221,6 +222,27 @@ namespace Game
     std::string GetSaveDir();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
+
+    // Useful for restoring background music after playing short-term music effects
+    class MusicRestorer
+    {
+    public:
+        MusicRestorer()
+            : _music( CurrentMusic() )
+        {}
+
+        MusicRestorer( const MusicRestorer & ) = delete;
+
+        ~MusicRestorer()
+        {
+            AGG::PlayMusic( _music, true, true );
+        }
+
+        MusicRestorer & operator=( const MusicRestorer & ) = delete;
+
+    private:
+        const int _music;
+    };
 
     namespace ObjectFadeAnimation
     {
