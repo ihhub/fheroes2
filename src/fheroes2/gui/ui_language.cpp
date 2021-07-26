@@ -30,8 +30,11 @@
 
 namespace
 {
-    const std::map<uint32_t, fheroes2::SupportedLanguage> languageCRC32
-        = { { 0x406967B9, fheroes2::SupportedLanguage::French }, { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } };
+    const std::map<uint32_t, fheroes2::SupportedLanguage> languageCRC32 = { { 0x406967B9, fheroes2::SupportedLanguage::French }, // GoG version
+                                                                            { 0x04745D1D, fheroes2::SupportedLanguage::German }, // GoG version
+                                                                            { 0x88774771, fheroes2::SupportedLanguage::Polish }, // GoG version
+                                                                            { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
+                                                                            { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } }; // Buka version
 
     class LanguageSwitcher
     {
