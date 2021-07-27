@@ -40,10 +40,10 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
-        SpellSeletion bestSpell;
+        SpellSelection bestSpell;
 
         // Commander must be set before calling this function! Check both debug/release version
         assert( _commander != nullptr );
