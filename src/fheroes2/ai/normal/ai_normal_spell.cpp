@@ -172,6 +172,10 @@ namespace AI
 
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 for ( const Unit * enemy : enemies ) {
+                    if ( !enemy->AllowApplySpell( spell, _commander ) ) {
+                        continue;
+                    }
+
                     const int32_t index = enemy->GetHeadIndex();
                     areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
                 }
