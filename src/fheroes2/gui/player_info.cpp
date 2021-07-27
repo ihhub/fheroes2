@@ -188,22 +188,11 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
             index = 9 + Color::GetIndex( player.GetColor() );
         else
             // comp only
-            if ( fi.ComputerOnlyColors() & player.GetColor() ) {
-            if ( show_play_info ) {
-                index = ( player.isPlay() ? 15 : 3 ) + Color::GetIndex( player.GetColor() );
-            }
-            else
-                index = 15 + Color::GetIndex( player.GetColor() );
-        }
+            if ( fi.ComputerOnlyColors() & player.GetColor() )
+            index = 15 + Color::GetIndex( player.GetColor() );
         else
-        // comp/human
-        {
-            if ( show_play_info ) {
-                index = ( player.isPlay() ? 3 : 15 ) + Color::GetIndex( player.GetColor() );
-            }
-            else
-                index = 3 + Color::GetIndex( player.GetColor() );
-        }
+            // comp/human
+            index = 3 + Color::GetIndex( player.GetColor() );
 
         // wide sprite offset
         if ( show_name )
