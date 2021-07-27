@@ -2938,36 +2938,39 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     int deathColor = Color::UNUSED;
 
     std::vector<Unit *> mirrorImages;
+    std::set<Unit *> resistantTarget;
 
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
         Unit * defender = it->defender;
-        if ( defender ) {
-            if ( defender->isModes( CAP_MIRRORIMAGE ) )
-                mirrorImages.push_back( defender );
+        if ( defender == nullptr ) {
+            continue;
+        }
 
-            // kill animation
-            if ( !defender->isValid() ) {
-                // destroy linked mirror
-                if ( defender->isModes( CAP_MIRROROWNER ) )
-                    mirrorImages.push_back( defender->GetMirror() );
+        if ( defender->isModes( CAP_MIRRORIMAGE ) )
+            mirrorImages.push_back( defender );
 
-                defender->SwitchAnimation( Monster_Info::KILL );
-                AGG::PlaySound( defender->M82Kill() );
-                ++finish;
+        // kill animation
+        if ( !defender->isValid() ) {
+            // destroy linked mirror
+            if ( defender->isModes( CAP_MIRROROWNER ) )
+                mirrorImages.push_back( defender->GetMirror() );
 
-                deathColor = defender->GetArmyColor();
-            }
-            else if ( it->damage ) {
-                // wince animation
-                defender->SwitchAnimation( Monster_Info::WNCE );
-                AGG::PlaySound( defender->M82Wnce() );
-                ++finish;
-            }
-            else
+            defender->SwitchAnimation( Monster_Info::KILL );
+            AGG::PlaySound( defender->M82Kill() );
+            ++finish;
+
+            deathColor = defender->GetArmyColor();
+        }
+        else if ( it->damage ) {
+            // wince animation
+            defender->SwitchAnimation( Monster_Info::WNCE );
+            AGG::PlaySound( defender->M82Wnce() );
+            ++finish;
+        }
+        else {
             // have immunity
-            {
-                AGG::PlaySound( M82::RSBRYFZL );
-            }
+            resistantTarget.insert( it->defender );
+            AGG::PlaySound( M82::RSBRYFZL );
         }
     }
 
@@ -3017,7 +3020,24 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 RedrawPartialFinish();
             }
 
-            finishedAnimation = ( finish == std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) );
+            const int finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
+                if ( info.defender == nullptr ) {
+                    return false;
+                }
+
+                if ( resistantTarget.count( info.defender ) > 0 ) {
+                    return false;
+                }
+
+                const int animationState = info.defender->GetAnimationState();
+                if ( animationState != Monster_Info::WNCE && animationState != Monster_Info::KILL ) {
+                    return true;
+                }
+
+                return TargetInfo::isFinishAnimFrame( info );
+            } );
+
+            finishedAnimation = ( finish == finishedAnimationCount );
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
