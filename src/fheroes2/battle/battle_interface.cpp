@@ -1646,12 +1646,11 @@ void Battle::Interface::RedrawCover()
             highlightCells.emplace( attackerCell );
 
             if ( _currentUnit->GetTailIndex() != -1 ) {
-                if ( _currentUnit->isReflect() ) {
-                    highlightCells.emplace( Board::GetCell( attackerCell->GetIndex(), RIGHT ) );
-                }
-                else {
-                    highlightCells.emplace( Board::GetCell( attackerCell->GetIndex(), LEFT ) );
-                }
+                const int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
+                const Cell * tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
+                assert( tailAttackerCell != nullptr );
+
+                highlightCells.emplace( tailAttackerCell );
             }
         }
         else {
