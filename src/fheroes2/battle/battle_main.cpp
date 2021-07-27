@@ -183,8 +183,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena->GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
-    arena->GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
+    arena->GetForce1().SyncArmyCount();
+    arena->GetForce2().SyncArmyCount();
 
     // after battle army1
     if ( commander1 ) {
@@ -252,7 +252,7 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
         if ( art.isUltimate() ) {
             art = Artifact::UNKNOWN;
         }
-        else if ( art() != Artifact::UNKNOWN && art() != Artifact::MAGIC_BOOK ) {
+        else if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK ) {
             BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
             if ( bag1.end() != it ) {
                 *it = art;

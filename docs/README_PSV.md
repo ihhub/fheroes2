@@ -1,4 +1,4 @@
-# PlayStation Vita port of [fheroes2](https://github.com/ihhub/fheroes2) project
+# PlayStation Vita port of [**fheroes2**](README.md) project
 
 ## Install
 Install fheroes2.vpk to your Vita.

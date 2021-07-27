@@ -44,8 +44,7 @@ enum MusicSource
 {
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
-    MUSIC_EXTERNAL,
-    MUSIC_CDROM
+    MUSIC_EXTERNAL
 };
 
 class Settings
@@ -128,12 +127,10 @@ public:
     int BattleSpeed() const;
     int ScrollSpeed() const;
 
-    const std::string & SelectVideoDriver() const;
-
     int GameDifficulty() const;
 
     const std::string & MapsCharset() const;
-    const std::string & ForceLang() const;
+    const std::string & getGameLanguage() const;
     const std::string & loadedFileLanguage() const;
     const std::string & FontsNormal() const;
     const std::string & FontsSmall() const;
@@ -151,25 +148,20 @@ public:
     void SetPosStatus( const fheroes2::Point & );
 
     bool FullScreen() const;
-    bool Sound() const;
-    bool Music() const;
     bool ShowControlPanel() const;
     bool ShowRadar() const;
     bool ShowIcons() const;
     bool ShowButtons() const;
     bool ShowStatus() const;
-    bool Unicode() const;
     bool BattleShowGrid() const;
     bool BattleShowMouseShadow() const;
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool UseAltResource() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
     bool MusicExt() const;
     bool MusicMIDI() const;
-    bool MusicCD() const;
     bool isShowIntro() const;
 
     bool isFirstGameRun() const;
@@ -228,7 +220,6 @@ public:
     const fheroes2::Size & VideoMode() const;
 
     void SetDebug( int );
-    void SetUnicode( bool );
     void EnablePriceOfLoyaltySupport( const bool set );
     void SetGameDifficulty( int );
     void SetEvilInterface( bool );
@@ -248,13 +239,12 @@ public:
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
-    void setShowIntro( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
     void SetMusicType( int v );
-    void ResetSound();
-    void ResetMusic();
+
+    bool setGameLanguage( const std::string & language );
 
     int SoundVolume() const;
     int MusicVolume() const;
@@ -263,6 +253,7 @@ public:
     bool IsGameType( int type ) const;
     int GameType() const;
     void SetGameType( int );
+    bool isStandardGameType() const;
     bool isCampaignGameType() const;
 
     Players & GetPlayers();
@@ -278,12 +269,11 @@ public:
     const std::string & MapsFile() const;
     const std::string & MapsName() const;
     const std::string & MapsDescription() const;
-    const std::string & externalMusicCommand() const;
     int MapsDifficulty() const;
     fheroes2::Size MapsSize() const;
     bool GameStartWithHeroes() const;
-    int ConditionWins() const;
-    int ConditionLoss() const;
+    uint32_t ConditionWins() const;
+    uint32_t ConditionLoss() const;
     bool WinsCompAlsoWins() const;
     int WinsFindArtifactID() const;
     bool WinsFindUltimateArtifact() const;
@@ -331,14 +321,8 @@ private:
 
     std::string path_program;
 
-    std::string font_normal;
-    std::string font_small;
-    std::string force_lang;
+    std::string _gameLanguage;
     std::string _loadedFileLanguage; // not a part of save or configuration file
-    std::string _externalMusicCommand;
-    std::string maps_charset;
-    int size_normal;
-    int size_small;
 
     Maps::FileInfo current_maps_file;
 
@@ -353,8 +337,6 @@ private:
 
     int game_type;
     int preferably_count_players;
-
-    std::string video_driver;
 
     fheroes2::Point pos_radr;
     fheroes2::Point pos_bttn;

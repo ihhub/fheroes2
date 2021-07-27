@@ -89,7 +89,8 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
+template <std::size_t size>
+int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -230,12 +231,12 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         Troop troops[5];
 
         // set monster id
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetMonster( st.get() + 1 );
+        for ( Troop & troop : troops )
+            troop.SetMonster( st.get() + 1 );
 
         // set count
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetCount( st.getLE16() );
+        for ( Troop & troop : troops )
+            troop.SetCount( st.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
     }
@@ -307,7 +308,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     // custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
-        name = Game::GetEncodeString( st.toString( 13 ) );
+        name = st.toString( 13 );
     }
     else {
         st.skip( 13 );
@@ -524,7 +525,6 @@ u32 Heroes::GetMaxSpellPoints( void ) const
 u32 Heroes::GetMaxMovePoints( void ) const
 {
     int point = 0;
-    int acount = 0;
 
     // start point
     if ( isShipMaster() ) {
@@ -534,9 +534,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        acount = HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY );
-        if ( acount )
-            point += acount * 1000;
+        point += HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -575,22 +573,15 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        acount = HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY );
-        if ( acount )
-            point += acount * 600;
-
-        acount = HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY );
-        if ( acount )
-            point += acount * 300;
+        point += HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
+        point += HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
 
-    acount = HasArtifact( Artifact::TRUE_COMPASS_MOBILITY );
-    if ( acount )
-        point += acount * 500;
+    point += HasArtifact( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
@@ -616,23 +607,10 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, ARRAY_COUNT( objs ), *this, strs );
+    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, *this, strs );
 
     // result
-    if ( result < Morale::AWFUL )
-        return Morale::TREASON;
-    else if ( result < Morale::POOR )
-        return Morale::AWFUL;
-    else if ( result < Morale::NORMAL )
-        return Morale::POOR;
-    else if ( result < Morale::GOOD )
-        return Morale::NORMAL;
-    else if ( result < Morale::GREAT )
-        return Morale::GOOD;
-    else if ( result < Morale::BLOOD )
-        return Morale::GREAT;
-
-    return Morale::BLOOD;
+    return Morale::Normalize( result );
 }
 
 int Heroes::GetLuck( void ) const
@@ -652,22 +630,9 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, ARRAY_COUNT( objs ), *this, strs );
+    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, *this, strs );
 
-    if ( result < Luck::AWFUL )
-        return Luck::CURSED;
-    else if ( result < Luck::BAD )
-        return Luck::AWFUL;
-    else if ( result < Luck::NORMAL )
-        return Luck::BAD;
-    else if ( result < Luck::GOOD )
-        return Luck::NORMAL;
-    else if ( result < Luck::GREAT )
-        return Luck::GOOD;
-    else if ( result < Luck::IRISH )
-        return Luck::GREAT;
-
-    return Luck::IRISH;
+    return Luck::Normalize( result );
 }
 
 /* recrut hero */
@@ -819,13 +784,13 @@ void Heroes::RescanPath( void )
 /* if hero in castle */
 const Castle * Heroes::inCastle( void ) const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    const Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 Castle * Heroes::inCastle( void )
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
@@ -971,12 +936,12 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art() == Artifact::MAGIC_BOOK ? Dialog::Message(
+            art.GetID() == Artifact::MAGIC_BOOK ? Dialog::Message(
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
-                                          : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
-                                                             Dialog::OK );
+                                                : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
+                                                                   Dialog::OK );
         }
         return false;
     }
@@ -1434,12 +1399,16 @@ void Heroes::ResetMovePoints( void )
     move_point = 0;
 }
 
-bool Heroes::MayStillMove( void ) const
+bool Heroes::MayStillMove( const bool ignorePath ) const
 {
-    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
+    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() ) {
         return false;
+    }
 
-    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
+    if ( path.isValid() && !ignorePath ) {
+        return move_point >= path.getLastMovePenalty();
+    }
+    return CanMove();
 }
 
 bool Heroes::MayCastAdventureSpells() const
@@ -1740,7 +1709,7 @@ AllHeroes::~AllHeroes()
 
 void AllHeroes::Init( void )
 {
-    if ( size() )
+    if ( !empty() )
         AllHeroes::clear();
 
     // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY

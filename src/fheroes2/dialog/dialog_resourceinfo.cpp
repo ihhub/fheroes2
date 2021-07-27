@@ -43,11 +43,11 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
     FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().height, buttons != 0 );
     fheroes2::Point pos( box.GetArea().x, box.GetArea().y );
 
-    if ( header.size() )
+    if ( !header.empty() )
         box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 

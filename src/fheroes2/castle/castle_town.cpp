@@ -435,19 +435,19 @@ u32 Castle::OpenTown( void )
 
         // click left
         if ( le.MouseCursor( dwelling1.GetArea() ) && dwelling1.QueueEventProcessing( buttonExit ) )
-            return dwelling1();
+            return dwelling1.getBuilding();
         else if ( le.MouseCursor( dwelling2.GetArea() ) && dwelling2.QueueEventProcessing( buttonExit ) )
-            return dwelling2();
+            return dwelling2.getBuilding();
         else if ( le.MouseCursor( dwelling3.GetArea() ) && dwelling3.QueueEventProcessing( buttonExit ) )
-            return dwelling3();
+            return dwelling3.getBuilding();
         else if ( le.MouseCursor( dwelling4.GetArea() ) && dwelling4.QueueEventProcessing( buttonExit ) )
-            return dwelling4();
+            return dwelling4.getBuilding();
         else if ( le.MouseCursor( dwelling5.GetArea() ) && dwelling5.QueueEventProcessing( buttonExit ) )
-            return dwelling5();
+            return dwelling5.getBuilding();
         else if ( le.MouseCursor( dwelling6.GetArea() ) && dwelling6.QueueEventProcessing( buttonExit ) )
-            return dwelling6();
+            return dwelling6.getBuilding();
         else if ( le.MouseCursor( buildingMageGuild.GetArea() ) && buildingMageGuild.QueueEventProcessing( buttonExit ) )
-            return buildingMageGuild();
+            return buildingMageGuild.getBuilding();
         else if ( !isSkipTavernInteraction && le.MouseCursor( buildingTavern.GetArea() ) && buildingTavern.QueueEventProcessing( buttonExit ) )
             return ( Race::NECR == race ? BUILD_SHRINE : BUILD_TAVERN );
         else if ( le.MouseCursor( buildingThievesGuild.GetArea() ) && buildingThievesGuild.QueueEventProcessing( buttonExit ) )
@@ -509,10 +509,12 @@ u32 Castle::OpenTown( void )
         else if ( le.MousePressRight( rectGroupedArmyFormat ) && isCaptainBuilt )
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
+            LocalEvent::GetClean();
             hero1->OpenDialog( true );
             display.render();
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
+            LocalEvent::GetClean();
             hero2->OpenDialog( true );
             display.render();
         }

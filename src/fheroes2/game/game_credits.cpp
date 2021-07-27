@@ -225,8 +225,8 @@ namespace
                                         "vincent-grosbois\n"
                                         "Andrii Kurdiumov\n"
                                         "Vasilenko Alexey\n"
+                                        "Arkadiy Illarionov\n"
                                         "Andrey Starodubtsev\n"
-                                        "tau3\n"
                                         "and many other contributors!" );
 
         name.Set( contributors, Font::BIG, textWidth );

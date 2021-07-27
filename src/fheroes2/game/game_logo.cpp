@@ -31,7 +31,7 @@ void fheroes2::showTeamInfo()
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    TextBox text( "fheroes2 Resurrection Team presents", Font::WHITE_LARGE, 500 );
+    TextBox text( _( "fheroes2 Resurrection Team presents" ), Font::WHITE_LARGE, 500 );
     const Rect roi( ( display.width() - text.w() ) / 2, ( display.height() - text.h() ) / 2, text.w(), text.h() );
 
     Image textImage( roi.width, roi.height );

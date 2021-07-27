@@ -22,7 +22,6 @@
 
 #include "spell.h"
 #include "artifact.h"
-#include "game_static.h"
 #include "heroes_base.h"
 #include "race.h"
 #include "rand.h"
@@ -155,11 +154,6 @@ bool Spell::operator!=( const Spell & s ) const
 bool Spell::isValid( void ) const
 {
     return id != Spell::NONE;
-}
-
-int Spell::operator()( void ) const
-{
-    return id;
 }
 
 int Spell::GetID( void ) const
@@ -525,7 +519,7 @@ Spell Spell::Rand( int lvl, bool adv )
         if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() && spell.isEnabled() )
             v.push_back( spell );
     }
-    return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
+    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell Spell::RandCombat( int lvl )

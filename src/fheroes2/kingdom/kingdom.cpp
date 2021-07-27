@@ -77,7 +77,7 @@ void Kingdom::clear( void )
 
     color = Color::NONE;
     visited_tents_colors = 0;
-    lost_town_days = Game::GetLostTownDays();
+    lost_town_days = Game::GetLostTownDays() + 1;
 
     heroes.clear();
     castles.clear();
@@ -126,11 +126,11 @@ void Kingdom::LossPostActions( void )
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
 
-        if ( heroes.size() ) {
+        if ( !heroes.empty() ) {
             std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) ); } );
             heroes.clear();
         }
-        if ( castles.size() ) {
+        if ( !castles.empty() ) {
             castles.ChangeColors( GetColor(), Color::NONE );
             castles.clear();
         }
@@ -146,6 +146,12 @@ void Kingdom::ActionBeforeTurn( void )
 
 void Kingdom::ActionNewDay( void )
 {
+    // countdown of days since the loss of the last town, first day isn't counted
+    if ( world.CountDay() > 1 && castles.empty() && lost_town_days > 0 ) {
+        --lost_town_days;
+    }
+
+    // check the conditions of the loss
     if ( isLoss() || 0 == lost_town_days ) {
         LossPostActions();
         return;
@@ -153,10 +159,6 @@ void Kingdom::ActionNewDay( void )
 
     // modes
     ResetModes( IDENTIFYHERO );
-
-    // check lost town
-    if ( castles.empty() )
-        --lost_town_days;
 
     // castle New Day
     std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
@@ -310,7 +312,7 @@ void Kingdom::AddCastle( const Castle * castle )
         AI::Get().CastleAdd( *castle );
     }
 
-    lost_town_days = Game::GetLostTownDays();
+    lost_town_days = Game::GetLostTownDays() + 1;
 }
 
 void Kingdom::RemoveCastle( const Castle * castle )
@@ -419,7 +421,7 @@ void Kingdom::SetVisited( s32 index, int object )
 
 bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const
 {
-    if ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST )
+    if ( !MP2::isActionObject( objectID ) && objectID != MP2::OBJ_COAST )
         return false;
 
     if ( isVisited( tile.GetIndex(), objectID ) )
@@ -452,7 +454,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );
+    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
 }
 
 u32 Kingdom::GetCountCapital( void ) const
@@ -676,7 +678,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
 Heroes * Kingdom::GetBestHero()
 {
-    return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
+    return !heroes.empty() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }
 
 Monster Kingdom::GetStrongestMonster() const

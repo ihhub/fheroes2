@@ -1,16 +1,3 @@
 AR := ar
 CXX := g++
 LIBS := $(LIBS) -L/usr/local/lib
-
-ifndef WITHOUT_UNICODE
-CFLAGS := $(CFLAGS) -DWITH_ICONV
-# A bit of might'n'magic required to link against base iconv in presence of
-# libiconv port installed -- the include path most likely already contains
-# LOCALBASE, so force /usr/include/iconv.h inclusion explicitly.
-ifneq (,$(wildcard /usr/include/iconv.h))
-CFLAGS := -include /usr/include/iconv.h -D_LIBICONV_H $(CFLAGS)
-LIBS := $(LIBS)
-else
-LIBS := $(LIBS) -liconv
-endif
-endif

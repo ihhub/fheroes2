@@ -43,7 +43,6 @@
 #ifndef BUILD_RELEASE
 #include "tools.h"
 #endif
-#include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -54,11 +53,6 @@ namespace
     std::string GetCaption()
     {
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
-    }
-
-    void SetVideoDriver( const std::string & driver )
-    {
-        System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
     }
 
     int PrintHelp( const char * basename )
@@ -79,10 +73,6 @@ namespace
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
         if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
-            const std::string & externalCommand = conf.externalMusicCommand();
-            if ( !externalCommand.empty() )
-                Music::SetExtCommand( externalCommand );
-
             LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
         else {
@@ -117,39 +107,6 @@ namespace
 
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
-    }
-
-    void SetTimidityEnvPath()
-    {
-        const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
-        const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );
-
-        if ( System::IsFile( result ) )
-            System::SetEnvironment( "TIMIDITY_PATH", System::GetDirname( result ).c_str() );
-    }
-
-    void SetLangEnvPath( const Settings & conf )
-    {
-#ifdef WITH_TTF
-        if ( conf.Unicode() ) {
-            System::SetLocale( LC_ALL, "" );
-            System::SetLocale( LC_NUMERIC, "C" );
-
-            std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
-
-            ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
-
-            if ( translations.size() ) {
-                if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
-                    Translation::setDomain( "fheroes2" );
-            }
-            else
-                ERROR_LOG( "translation not found: " << mofile );
-        }
-#else
-        (void)conf;
-#endif
-        Translation::setStripContext( '|' );
     }
 }
 
@@ -190,43 +147,25 @@ int main( int argc, char ** argv )
             }
     }
 
-    if ( conf.SelectVideoDriver().size() )
-        SetVideoDriver( conf.SelectVideoDriver() );
-
-    // random init
-    if ( conf.Music() )
-        SetTimidityEnvPath();
-
-    u32 subsystem = INIT_VIDEO;
+    u32 subsystem = INIT_VIDEO | INIT_AUDIO;
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
-    if ( conf.Sound() || conf.Music() )
-        subsystem |= INIT_AUDIO;
-#ifdef WITH_AUDIOCD
-    if ( conf.MusicCD() )
-        subsystem |= INIT_CDROM | INIT_AUDIO;
-#endif
     if ( SDL::Init( subsystem ) ) {
         try
         {
             std::atexit( SDL::Quit );
 
-            SetLangEnvPath( conf );
+            conf.setGameLanguage( conf.getGameLanguage() );
 
             if ( Mixer::isValid() ) {
                 Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-                if ( conf.Music() ) {
-                    Music::SetFadeIn( 900 );
-                }
-            }
-            else if ( conf.Sound() || conf.Music() ) {
-                conf.ResetSound();
-                conf.ResetMusic();
+                Music::SetFadeIn( 900 );
             }
 
             fheroes2::Display & display = fheroes2::Display::instance();

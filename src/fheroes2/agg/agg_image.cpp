@@ -164,7 +164,7 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 15;
+                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
                 if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
@@ -1105,12 +1105,6 @@ namespace fheroes2
             }
 
             return GetICN( ICN::SMALFONT, character - 0x20 );
-        }
-
-        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType )
-        {
-            // TODO: Add Unicode character support
-            return GetLetter( character, fontType );
         }
 
         uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )

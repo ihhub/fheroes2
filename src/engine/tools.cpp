@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
@@ -65,13 +66,6 @@ std::string StringTrim( std::string str )
 std::string StringLower( std::string str )
 {
     std::transform( str.begin(), str.end(), str.begin(), ::tolower );
-    return str;
-}
-
-/* convert to upper case */
-std::string StringUpper( std::string str )
-{
-    std::transform( str.begin(), str.end(), str.begin(), ::toupper );
     return str;
 }
 
@@ -243,29 +237,6 @@ std::vector<u16> StringUTF8_to_UNICODE( const std::string & utf8 )
     return unicode;
 }
 
-std::string StringUNICODE_to_UTF8( const std::vector<u16> & unicode )
-{
-    std::string utf8;
-    utf8.reserve( 2 * unicode.size() );
-
-    for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it ) {
-        if ( *it < 128 ) {
-            utf8.append( 1, static_cast<char>( *it ) );
-        }
-        else if ( *it < 2048 ) {
-            utf8.append( 1, static_cast<char>( 192 + ( ( *it - ( *it % 64 ) ) / 64 ) ) );
-            utf8.append( 1, static_cast<char>( 128 + ( *it % 64 ) ) );
-        }
-        else {
-            utf8.append( 1, static_cast<char>( 224 + ( ( *it - ( *it % 4096 ) ) / 4096 ) ) );
-            utf8.append( 1, static_cast<char>( 128 + ( ( ( *it % 4096 ) - ( *it % 64 ) ) / 64 ) ) );
-            utf8.append( 1, static_cast<char>( 128 + ( *it % 64 ) ) );
-        }
-    }
-
-    return utf8;
-}
-
 int Sign( int s )
 {
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
@@ -307,45 +278,17 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     return data;
 }
 
-#ifdef WITH_ICONV
-#include <iconv.h>
-std::string EncodeString( const std::string & str, const char * charset )
-{
-    iconv_t cd;
-
-    if ( !charset || ( iconv_t )( -1 ) == ( cd = iconv_open( "utf-8", charset ) ) )
-        return str;
-
-    std::string res( str );
-    size_t inbytesleft = str.size();
-    size_t outbytesleft = inbytesleft * 2 + 1;
-    const char * inbuf = str.c_str();
-    char * outbuf1 = new char[outbytesleft];
-    char * outbuf2 = outbuf1;
-
-    size_t reslen = iconv( cd, const_cast<char **>( &inbuf ), &inbytesleft, &outbuf1, &outbytesleft );
-
-    iconv_close( cd );
-
-    if ( reslen != ( size_t )( -1 ) )
-        res = std::string( outbuf2, outbuf1 - outbuf2 );
-
-    delete[] outbuf2;
-
-    return res;
-}
-#else
 std::string cp1251_to_utf8( const std::string & in )
 {
-    const u32 table_1251[]
-        = {0x82D0, 0x83D0,   0x9A80E2, 0x93D1,   0x9E80E2, 0xA680E2, 0xA080E2, 0xA180E2, 0xAC82E2, 0xB080E2, 0x89D0, 0xB980E2, 0x8AD0, 0x8CD0, 0x8BD0, 0x8FD0,
-           0x92D1, 0x9880E2, 0x9980E2, 0x9C80E2, 0x9D80E2, 0xA280E2, 0x9380E2, 0x9480E2, 0,        0xA284E2, 0x99D1, 0xBA80E2, 0x9AD1, 0x9CD1, 0x9BD1, 0x9FD1,
-           0xA0C2, 0x8ED0,   0x9ED1,   0x88D0,   0xA4C2,   0x90D2,   0xA6C2,   0xA7C2,   0x81D0,   0xA9C2,   0x84D0, 0xABC2,   0xACC2, 0xADC2, 0xAEC2, 0x87D0,
-           0xB0C2, 0xB1C2,   0x86D0,   0x96D1,   0x91D2,   0xB5C2,   0xB6C2,   0xB7C2,   0x91D1,   0x9684E2, 0x94D1, 0xBBC2,   0x98D1, 0x85D0, 0x95D1, 0x97D1,
-           0x90D0, 0x91D0,   0x92D0,   0x93D0,   0x94D0,   0x95D0,   0x96D0,   0x97D0,   0x98D0,   0x99D0,   0x9AD0, 0x9BD0,   0x9CD0, 0x9DD0, 0x9ED0, 0x9FD0,
-           0xA0D0, 0xA1D0,   0xA2D0,   0xA3D0,   0xA4D0,   0xA5D0,   0xA6D0,   0xA7D0,   0xA8D0,   0xA9D0,   0xAAD0, 0xABD0,   0xACD0, 0xADD0, 0xAED0, 0xAFD0,
-           0xB0D0, 0xB1D0,   0xB2D0,   0xB3D0,   0xB4D0,   0xB5D0,   0xB6D0,   0xB7D0,   0xB8D0,   0xB9D0,   0xBAD0, 0xBBD0,   0xBCD0, 0xBDD0, 0xBED0, 0xBFD0,
-           0x80D1, 0x81D1,   0x82D1,   0x83D1,   0x84D1,   0x85D1,   0x86D1,   0x87D1,   0x88D1,   0x89D1,   0x8AD1, 0x8BD1,   0x8CD1, 0x8DD1, 0x8ED1, 0x8FD1};
+    const std::array<uint32_t, 128> table_1251
+        = { 0x82D0, 0x83D0,   0x9A80E2, 0x93D1,   0x9E80E2, 0xA680E2, 0xA080E2, 0xA180E2, 0xAC82E2, 0xB080E2, 0x89D0, 0xB980E2, 0x8AD0, 0x8CD0, 0x8BD0, 0x8FD0,
+            0x92D1, 0x9880E2, 0x9980E2, 0x9C80E2, 0x9D80E2, 0xA280E2, 0x9380E2, 0x9480E2, 0,        0xA284E2, 0x99D1, 0xBA80E2, 0x9AD1, 0x9CD1, 0x9BD1, 0x9FD1,
+            0xA0C2, 0x8ED0,   0x9ED1,   0x88D0,   0xA4C2,   0x90D2,   0xA6C2,   0xA7C2,   0x81D0,   0xA9C2,   0x84D0, 0xABC2,   0xACC2, 0xADC2, 0xAEC2, 0x87D0,
+            0xB0C2, 0xB1C2,   0x86D0,   0x96D1,   0x91D2,   0xB5C2,   0xB6C2,   0xB7C2,   0x91D1,   0x9684E2, 0x94D1, 0xBBC2,   0x98D1, 0x85D0, 0x95D1, 0x97D1,
+            0x90D0, 0x91D0,   0x92D0,   0x93D0,   0x94D0,   0x95D0,   0x96D0,   0x97D0,   0x98D0,   0x99D0,   0x9AD0, 0x9BD0,   0x9CD0, 0x9DD0, 0x9ED0, 0x9FD0,
+            0xA0D0, 0xA1D0,   0xA2D0,   0xA3D0,   0xA4D0,   0xA5D0,   0xA6D0,   0xA7D0,   0xA8D0,   0xA9D0,   0xAAD0, 0xABD0,   0xACD0, 0xADD0, 0xAED0, 0xAFD0,
+            0xB0D0, 0xB1D0,   0xB2D0,   0xB3D0,   0xB4D0,   0xB5D0,   0xB6D0,   0xB7D0,   0xB8D0,   0xB9D0,   0xBAD0, 0xBBD0,   0xBCD0, 0xBDD0, 0xBED0, 0xBFD0,
+            0x80D1, 0x81D1,   0x82D1,   0x83D1,   0x84D1,   0x85D1,   0x86D1,   0x87D1,   0x88D1,   0x89D1,   0x8AD1, 0x8BD1,   0x8CD1, 0x8DD1, 0x8ED1, 0x8FD1 };
 
     std::string res;
     res.reserve( in.size() * 2 + 1 );
@@ -354,7 +297,7 @@ std::string cp1251_to_utf8( const std::string & in )
         if ( *it & 0x80 ) {
             const size_t index = *it & 0x7f;
 
-            if ( index < ARRAY_COUNT( table_1251 ) ) {
+            if ( index < table_1251.size() ) {
                 const uint32_t v = table_1251[index];
                 res.append( 1, v );
                 res.append( 1, v >> 8 );
@@ -378,7 +321,6 @@ std::string EncodeString( const std::string & str, const char * charset )
 
     return str;
 }
-#endif
 
 u32 decodeChar( int v )
 {
@@ -432,28 +374,6 @@ std::vector<u8> decodeBase64( const std::string & src )
     }
 
     return res;
-}
-
-int CheckSum( const std::vector<u8> & v )
-{
-    u32 ret = 0;
-    std::vector<u8>::const_iterator it = v.begin();
-
-    do {
-        u32 b1 = it < v.end() ? *it++ : 0;
-        u32 b2 = it < v.end() ? *it++ : 0;
-        u32 b3 = it < v.end() ? *it++ : 0;
-        u32 b4 = it < v.end() ? *it++ : 0;
-
-        ret += ( b1 << 24 ) | ( b2 << 16 ) | ( b3 << 8 ) | b4;
-    } while ( it != v.end() );
-
-    return ret;
-}
-
-int CheckSum( const std::string & str )
-{
-    return CheckSum( std::vector<u8>( str.begin(), str.end() ) );
 }
 
 namespace fheroes2
@@ -600,44 +520,30 @@ namespace fheroes2
         return res;
     }
 
-    Rect GetCommonRect( const Rect & rt1, const Rect & rt2, const bool intersect )
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
     {
         Rect rt3;
 
-        if ( intersect ) {
-            if ( rt1 & rt2 ) {
-                rt3.x = std::max( rt1.x, rt2.x );
-                rt3.y = std::max( rt1.y, rt2.y );
-                rt3.width = std::min( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
-                rt3.height = std::min( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
-            }
-        }
-        else
-        // max
-        {
-            rt3.x = rt1.x < rt2.x ? rt1.x : rt2.x;
-            rt3.y = rt1.y < rt2.y ? rt1.y : rt2.y;
-            rt3.width = rt1.x + rt1.width > rt2.x + rt2.width ? rt1.x + rt1.width - rt3.x : rt2.x + rt2.width - rt3.x;
-            rt3.height = rt1.y + rt1.height > rt2.y + rt2.height ? rt1.y + rt1.height - rt3.y : rt2.y + rt2.height - rt3.y;
-        }
+        rt3.x = std::min( rt1.x, rt2.x );
+        rt3.y = std::min( rt1.y, rt2.y );
+        rt3.width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
+        rt3.height = std::max( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
 
         return rt3;
     }
 
-    Rect GetBoundaryRect( const std::vector<Rect> & rects )
+    uint32_t calculateCRC32( const uint8_t * data, const size_t length )
     {
-        Rect res;
+        uint32_t crc = 0xFFFFFFFF;
+        for ( size_t i = 0; i < length; ++i ) {
+            crc ^= static_cast<uint32_t>( data[i] );
 
-        if ( rects.empty() ) {
-            return res;
+            for ( int bit = 0; bit < 8; ++bit ) {
+                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
+                crc = ( crc >> 1 ) ^ poly;
+            }
         }
 
-        res = rects[0];
-
-        for ( size_t i = 1; i < rects.size(); ++i ) {
-            res = GetCommonRect( rects[i], res, false );
-        }
-
-        return res;
+        return ~crc;
     }
 }

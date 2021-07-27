@@ -59,11 +59,11 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height(), buttons != 0 );
     fheroes2::Rect pos = box.GetArea();
 
-    if ( header.size() )
+    if ( !header.empty() )
         box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 

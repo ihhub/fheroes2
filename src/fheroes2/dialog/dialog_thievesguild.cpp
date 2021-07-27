@@ -213,7 +213,7 @@ void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos,
 
 void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
 {
-    if ( v.size() ) {
+    if ( !v.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         for ( u32 ii = 0; ii < v.size(); ++ii ) {

@@ -30,12 +30,13 @@ Source: "{#BuildDir}\zlib*.dll"; DestDir: "{app}"
 Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll"; DestDir: "{app}"
 Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll"; DestDir: "{app}"
 #endif
-Source: "..\..\doc\README.txt"; DestDir: "{app}"; Flags: isreadme
+Source: "..\..\docs\README.txt"; DestDir: "{app}"; Flags: isreadme
 Source: "..\demo\demo_windows.bat"; DestDir: "{app}"
 Source: "..\demo\demo_windows.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
+Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
 
 [Tasks]
 Name: desktopicon; Description: "Desktop shortcut"

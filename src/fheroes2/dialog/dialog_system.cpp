@@ -30,7 +30,6 @@
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
-#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -99,8 +98,6 @@ int Dialog::SystemOptions( void )
     bool redraw = false;
     bool saveConfig = false;
 
-    const bool externalMusicSupported = System::IsDirectory( "music" );
-
     // dialog menu loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -109,7 +106,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music volume
-        if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
+        if ( Mixer::isValid() && le.MouseClickLeft( rect1 ) ) {
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
             Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
@@ -117,7 +114,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set sound volume
-        if ( conf.Sound() && le.MouseClickLeft( rect2 ) ) {
+        if ( Mixer::isValid() && le.MouseClickLeft( rect2 ) ) {
             conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
             redraw = true;
             Game::EnvironmentSoundMixer();
@@ -130,13 +127,8 @@ int Dialog::SystemOptions( void )
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
                 ++type;
-            if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
-                ++type;
-            // CD music is currently not implemented correctly even on SDL1; remove this when done
-            if ( type == MUSIC_CDROM )
-                ++type;
 
-            conf.SetMusicType( type > MUSIC_CDROM ? 0 : type );
+            conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
             result |= 0x02;
             redraw = true;
             saveConfig = true;
@@ -253,14 +245,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     const int textOffset = 2;
 
     // music
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 1 : 0 );
     const fheroes2::Rect & rect1 = rects[0];
     fheroes2::Blit( sprite1, display, rect1.x, rect1.y );
     str = _( "Music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
-    if ( conf.Music() && conf.MusicVolume() )
+    if ( Mixer::isValid() && conf.MusicVolume() )
         str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );
@@ -268,14 +260,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y + rect1.height + textOffset );
 
     // sound
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 3 : 2 );
     const fheroes2::Rect & rect2 = rects[1];
     fheroes2::Blit( sprite2, display, rect2.x, rect2.y );
     str = _( "Effects" );
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.width - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
-    if ( conf.Sound() && conf.SoundVolume() )
+    if ( Mixer::isValid() && conf.SoundVolume() )
         str = std::to_string( conf.SoundVolume() );
     else
         str = _( "off" );
@@ -284,7 +276,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 
     // Music Type
     const MusicSource musicType = conf.MusicType();
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, ( musicType == MUSIC_CDROM || musicType == MUSIC_EXTERNAL ) ? 11 : 10 );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, musicType == MUSIC_EXTERNAL ? 11 : 10 );
     const fheroes2::Rect & rect3 = rects[2];
     fheroes2::Blit( sprite3, display, rect3.x, rect3.y );
     str = _( "Music Type" );
@@ -296,9 +288,6 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else if ( musicType == MUSIC_MIDI_EXPANSION ) {
         str = _( "MIDI Expansion" );
-    }
-    else if ( musicType == MUSIC_CDROM ) {
-        str = _( "CD Stereo" );
     }
     else if ( musicType == MUSIC_EXTERNAL ) {
         str = _( "External" );

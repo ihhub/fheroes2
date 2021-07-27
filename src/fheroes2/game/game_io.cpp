@@ -221,7 +221,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
 
     // Settings should contain the full path to the current map file, if this map is available
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove the System::GetUniversalBasename()" );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove the System::GetUniversalBasename()" );
     conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetUniversalBasename( conf.MapsFile() ) ) );
 
     // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
@@ -230,11 +230,12 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         fz >> MonsterStaticData::Get();
     }
 
-    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
+    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
+        std::string warningMessage( "This saved game is localized to '" );
         warningMessage.append( conf.loadedFileLanguage() );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
+        warningMessage.append( "' language, but the current language of the game is '" );
+        warningMessage.append( conf.getGameLanguage() );
+        warningMessage += "'.";
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 

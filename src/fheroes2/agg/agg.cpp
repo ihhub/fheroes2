@@ -77,19 +77,11 @@ namespace AGG
     std::vector<loop_sound_t> loop_sounds;
     // std::map<u32, fnt_cache_t> fnt_cache;
 
-#ifdef WITH_TTF
-    FontTTF * fonts; /* small, medium */
-
-    // void LoadTTFChar( u32 );
-#endif
-
     const std::vector<u8> & GetWAV( int m82 );
     const std::vector<u8> & GetMID( int xmi );
 
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
-
-    void LoadFNT( void );
 
     bool ReadDataDir( void );
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
@@ -97,31 +89,6 @@ namespace AGG
     void PlayMusicInternally( const int mus, const bool loop );
     void PlaySoundInternally( const int m82 );
     void LoadLOOPXXSoundsInternally( const std::vector<int> & vols );
-
-    /* return letter sprite */
-    // Surface GetUnicodeLetter( u32 ch, u32 ft )
-    // {
-    //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-    //
-    //     if ( !ttf_valid )
-    //         return Surface();
-    //
-    //     if ( !fnt_cache[ch].sfs[0].isValid() )
-    //         LoadTTFChar( ch );
-    //
-    //     switch ( ft ) {
-    //     case Font::YELLOW_SMALL:
-    //         return fnt_cache[ch].sfs[1];
-    //     case Font::BIG:
-    //         return fnt_cache[ch].sfs[2];
-    //     case Font::YELLOW_BIG:
-    //         return fnt_cache[ch].sfs[3];
-    //     default:
-    //         break;
-    //     }
-    //
-    //     return fnt_cache[ch].sfs[0];
-    // }
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -331,7 +298,7 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansi
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.read( key );
-        if ( buf.size() )
+        if ( !buf.empty() )
             return buf;
     }
 
@@ -352,35 +319,10 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( conf.UseAltResource() ) {
-        std::string name = StringLower( M82::GetString( m82 ) );
-        std::string prefix_sounds = System::ConcatePath( "files", "sounds" );
-
-        // ogg
-        StringReplace( name, ".82m", ".ogg" );
-        std::string sound = Settings::GetLastFile( prefix_sounds, name );
-        v = LoadFileToMem( sound );
-
-        if ( v.empty() ) {
-            // find mp3
-            StringReplace( name, ".82m", ".mp3" );
-            sound = Settings::GetLastFile( prefix_sounds, name );
-
-            v = LoadFileToMem( sound );
-        }
-
-        if ( v.size() ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_INFO, sound );
-            return;
-        }
-    }
-
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
-    if ( body.size() ) {
+    if ( !body.empty() ) {
         // create WAV format
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
@@ -449,12 +391,13 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall
 
 void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
+    const Settings & conf = Settings::Get();
 
     // set volume loop sounds
     for ( size_t i = 0; i < vols.size(); ++i ) {
@@ -524,8 +467,7 @@ void AGG::PlaySound( int m82, bool asyncronizedCall )
 
 void AGG::PlaySoundInternally( const int m82 )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -535,7 +477,7 @@ void AGG::PlaySoundInternally( const int m82 )
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
     Mixer::Pause( ch );
-    Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+    Mixer::Volume( ch, Mixer::MaxVolume() * Settings::Get().SoundVolume() / 10 );
     Mixer::Resume( ch );
 }
 
@@ -557,8 +499,7 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Music() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -569,7 +510,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     }
 
     const std::string prefix_music( "music" );
-    const MusicSource type = conf.MusicType();
+    const MusicSource type = Settings::Get().MusicType();
 
     bool isSongFound = false;
 
@@ -597,7 +538,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
             }
         }
 
-        if ( filename.size() ) {
+        if ( !filename.empty() ) {
             Music::Play( filename, loop );
             isSongFound = true;
 
@@ -605,16 +546,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
-#ifdef WITH_AUDIOCD
-    else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
-        Cdrom::Play( mus, loop );
-        isSongFound = true;
-
-        Game::SetCurrentMusic( mus );
-
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
-    }
-#endif
 
     if ( !isSongFound ) {
         // Check if music needs to be pulled from HEROES2X
@@ -629,7 +560,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
 
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() ) {
+            if ( !v.empty() ) {
                 Music::Play( v, loop );
 
                 Game::SetCurrentMusic( mus );
@@ -638,61 +569,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     }
 }
-
-#ifdef WITH_TTF
-// void AGG::LoadTTFChar( u32 ch )
-// {
-//     const Settings & conf = Settings::Get();
-//      const RGBA white( 0xFF, 0xFF, 0xFF );
-//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
-//
-//      small
-//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-//
-//      medium
-//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-//
-//     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-// }
-
-void AGG::LoadFNT( void )
-{
-    // const Settings & conf = Settings::Get();
-    //
-    // if ( !conf.Unicode() ) {
-    //     DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    // }
-    // else if ( fnt_cache.empty() ) {
-    //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-    //
-    //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
-    //         LoadTTFChar( *it );
-    //
-    //     if ( fnt_cache.empty() ) {
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    //     }
-    //     else {
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
-    //     }
-    // }
-}
-
-u32 AGG::GetFontHeight( bool small )
-{
-    return small ? fonts[0].Height() : fonts[1].Height();
-}
-
-#else
-void AGG::LoadFNT( void )
-{
-    DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-}
-#endif
 
 // This exists to avoid exposing AGG::ReadChunk
 std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
@@ -731,24 +607,6 @@ bool AGG::Init( void )
         return false;
     }
 
-#ifdef WITH_TTF
-    Settings & conf = Settings::Get();
-    const std::string prefix_fonts = System::ConcatePath( "files", "fonts" );
-    const std::string font1 = Settings::GetLastFile( prefix_fonts, conf.FontsNormal() );
-    const std::string font2 = Settings::GetLastFile( prefix_fonts, conf.FontsSmall() );
-
-    fonts = new FontTTF[2];
-
-    if ( conf.Unicode() ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "fonts: " << font1 << ", " << font2 );
-        if ( !fonts[1].Open( font1, conf.FontsNormalSize() ) || !fonts[0].Open( font2, conf.FontsSmallSize() ) )
-            conf.SetUnicode( false );
-    }
-#endif
-
-    // load font
-    LoadFNT();
-
     return true;
 }
 
@@ -757,9 +615,4 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    // fnt_cache.clear();
-
-#ifdef WITH_TTF
-    delete[] fonts;
-#endif
 }

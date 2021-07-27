@@ -165,7 +165,6 @@ public:
     bool operator==( const Spell & ) const;
     bool operator==( const Artifact & ) const;
     bool operator!=( const Artifact & ) const;
-    int operator()( void ) const;
     int GetID( void ) const;
 
     bool isUltimate( void ) const;

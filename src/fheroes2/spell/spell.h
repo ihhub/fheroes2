@@ -117,7 +117,6 @@ public:
     bool operator==( const Spell & ) const;
     bool operator!=( const Spell & ) const;
 
-    int operator()( void ) const;
     int GetID( void ) const;
 
     const char * GetName( void ) const;

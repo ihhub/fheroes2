@@ -38,7 +38,7 @@ namespace
     {
     public:
         SystemInfoRenderer()
-            : _startTime( std::chrono::high_resolution_clock::now() )
+            : _startTime( std::chrono::steady_clock::now() )
         {}
 
         void preRender()
@@ -50,12 +50,12 @@ namespace
             const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
             std::time_t rawtime = std::time( nullptr );
-            char mbstr[10] = {0};
+            char mbstr[10] = { 0 };
             std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", std::localtime( &rawtime ) );
 
             std::string info( mbstr );
 
-            std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+            std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
             const std::chrono::duration<double> time = endTime - _startTime;
             _startTime = endTime;
 
@@ -76,7 +76,7 @@ namespace
             info += ", FPS: ";
             info += std::to_string( currentFps );
             if ( averageFps < 10 ) {
-                info += ".";
+                info += '.';
                 info += std::to_string( static_cast<int>( ( averageFps - currentFps ) * 10 ) );
             }
 
@@ -92,7 +92,7 @@ namespace
         }
 
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        std::chrono::time_point<std::chrono::steady_clock> _startTime;
         TextSprite _text;
         std::deque<double> _fps;
     };
@@ -159,6 +159,29 @@ namespace fheroes2
     bool MovableSprite::isHidden() const
     {
         return _isHidden;
+    }
+
+    TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
+        : _verification( verification )
+        , _delayBetweenUpdateMs( delayBetweenUpdateMs )
+        , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
+    {}
+
+    bool TimedEventValidator::isDelayPassed()
+    {
+        if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
+            _delayBetweenUpdateMs.reset();
+            return true;
+        }
+        return false;
+    }
+
+    void TimedEventValidator::senderUpdate( const ActionObject * sender )
+    {
+        if ( sender == nullptr )
+            return;
+        _delayBeforeFirstUpdateMs.reset();
+        _delayBetweenUpdateMs.reset();
     }
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()

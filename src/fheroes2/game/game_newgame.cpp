@@ -269,7 +269,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     return gameChoice;
 }
 
-#ifdef NETWORK_ENABLE
 fheroes2::GameMode Game::NewNetwork()
 {
     Settings & conf = Settings::Get();
@@ -313,7 +312,6 @@ fheroes2::GameMode Game::NewNetwork()
 
     return fheroes2::GameMode::MAIN_MENU;
 }
-#endif
 
 fheroes2::GameMode Game::NewGame()
 {
@@ -443,17 +441,6 @@ fheroes2::GameMode Game::NewMulti()
                              Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
-
-#ifdef NETWORK_ENABLE
-        if ( buttonNetwork.isEnabled() ) {
-            le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
-            if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
-                return fheroes2::GameMode::NEWNETWORK;
-            if ( le.MousePressRight( buttonNetwork.area() ) )
-                Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
-                                 Font::BIG );
-        }
-#endif
     }
 
     return fheroes2::GameMode::QUIT_GAME;
@@ -509,13 +496,13 @@ u32 Game::SelectCountPlayers( void )
 
         // right info
         if ( le.MousePressRight( button2Players.area() ) )
-            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up, to 4 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button3Players.area() ) )
-            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up, to 3 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button4Players.area() ) )
-            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up, to 2 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button5Players.area() ) )
-            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up, to 1 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ), Font::BIG );
         if ( le.MousePressRight( button6Players.area() ) )
             Dialog::Message( _( "6 Players" ), _( "Play with 6 human players." ), Font::BIG );
         if ( le.MousePressRight( buttonCancel.area() ) )

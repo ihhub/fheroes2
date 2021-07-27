@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -87,7 +86,7 @@ int main( int argc, char ** argv )
         std::cerr << data_size << std::endl;
         std::vector<u8> buf = sf.getRaw( data_size );
 
-        if ( buf.size() ) {
+        if ( !buf.empty() ) {
             const fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );
 
             std::ostringstream os;
@@ -96,7 +95,7 @@ int main( int argc, char ** argv )
             std::string dstfile = System::ConcatePath( prefix, os.str() );
             std::string shortdstfile( os.str() ); // the name of destfile without the path
 
-#ifndef WITH_IMAGE
+#ifndef FHEROES2_IMAGE_SUPPORT
             dstfile += ".bmp";
             shortdstfile += ".bmp";
 #else

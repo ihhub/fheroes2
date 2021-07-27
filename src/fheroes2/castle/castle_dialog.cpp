@@ -47,6 +47,54 @@
 
 void CastleRedrawTownName( const Castle & castle, const fheroes2::Point & dst );
 
+namespace
+{
+    building_t getPressedBuildingHotkey()
+    {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_1 ) ) {
+            return DWELLING_MONSTER1;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_2 ) ) {
+            return DWELLING_MONSTER2;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_3 ) ) {
+            return DWELLING_MONSTER3;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_4 ) ) {
+            return DWELLING_MONSTER4;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_5 ) ) {
+            return DWELLING_MONSTER5;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_6 ) ) {
+            return DWELLING_MONSTER6;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
+            return BUILD_MARKETPLACE;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
+            return BUILD_WELL;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
+            return BUILD_MAGEGUILD;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
+            return BUILD_SHIPYARD;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
+            return BUILD_THIEVESGUILD;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
+            return BUILD_TAVERN;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
+            return BUILD_CASTLE;
+        }
+
+        return BUILD_NOTHING;
+    }
+}
+
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const fheroes2::Point & pt )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -138,6 +186,8 @@ int Castle::OpenDialog( bool readonly )
     // button prev castle
     dst_pt.y += 480 - 19;
     fheroes2::Button buttonPrevCastle( dst_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
+    fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
+    buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
     // bottom small bar
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
@@ -151,6 +201,8 @@ int Castle::OpenDialog( bool readonly )
     // button next castle
     dst_pt.x += bar.width();
     fheroes2::Button buttonNextCastle( dst_pt.x, dst_pt.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
+    buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // color crest
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
@@ -333,7 +385,7 @@ int Castle::OpenDialog( bool readonly )
 
             // view guardian
             if ( !readonly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
-                Game::DisableChangeMusic( true );
+                Game::SetUpdateSoundsOnFocusUpdate( false );
                 Game::OpenHeroesDialog( *heroes.Guard(), false, false );
 
                 if ( selectArmy1.isSelected() )
@@ -346,7 +398,7 @@ int Castle::OpenDialog( bool readonly )
             else
                 // view hero
                 if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
-                Game::DisableChangeMusic( true );
+                Game::SetUpdateSoundsOnFocusUpdate( false );
                 Game::OpenHeroesDialog( *heroes.Guest(), false, false );
 
                 if ( selectArmy1.isSelected() )
@@ -358,21 +410,26 @@ int Castle::OpenDialog( bool readonly )
             }
 
             // prev castle
-            if ( buttonPrevCastle.isEnabled() && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
+            if ( buttonPrevCastle.isEnabled()
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = Dialog::PREV;
                 break;
             }
             else
                 // next castle
-                if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+                if ( buttonNextCastle.isEnabled()
+                     && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = Dialog::NEXT;
                 break;
             }
 
             // buildings event
             for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-                if ( ( *it ).id == GetActualDwelling( ( *it ).id ) && isBuild( ( *it ).id ) ) {
-                    if ( !readonly && le.MouseClickLeft( ( *it ).coord ) ) {
+                const uint32_t actualBuildingID = GetActualDwelling( ( *it ).id );
+                const bool isBuildingHotkeyPressed = actualBuildingID == GetActualDwelling( getPressedBuildingHotkey() );
+
+                if ( ( *it ).id == actualBuildingID && isBuild( ( *it ).id ) ) {
+                    if ( !readonly && ( le.MouseClickLeft( ( *it ).coord ) || isBuildingHotkeyPressed ) ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
                         if ( Castle::RecruitMonster(
                                  Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), getMonstersInDwelling( ( *it ).id ), true ) ) ) {
@@ -392,7 +449,7 @@ int Castle::OpenDialog( bool readonly )
                 if ( BUILD_MAGEGUILD & ( *it ).id ) {
                     const int mageGuildLevel = GetLevelMageGuild();
                     if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
-                        if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                        if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             bool noFreeSpaceForMagicBook = false;
 
@@ -435,7 +492,7 @@ int Castle::OpenDialog( bool readonly )
                     }
                 }
                 else if ( isBuild( ( *it ).id ) ) {
-                    if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                    if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == ( *it ).id ) {
                         if ( selectArmy1.isSelected() )
                             selectArmy1.ResetSelected();
                         if ( selectArmy2.isValid() && selectArmy2.isSelected() )
@@ -649,7 +706,7 @@ int Castle::OpenDialog( bool readonly )
         BuyBuilding( build );
     }
 
-    Game::DisableChangeMusic( false );
+    Game::SetUpdateSoundsOnFocusUpdate( true );
 
     return result;
 }

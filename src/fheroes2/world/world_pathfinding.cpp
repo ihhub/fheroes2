@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cmath>
 #include <set>
 
@@ -85,26 +86,42 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
     if ( fromWater ) {
         const int mapWidth = world.w();
         switch ( direction ) {
-        case Direction::TOP_LEFT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+        case Direction::TOP_LEFT: {
+            assert( index >= mapWidth + 1 );
+            if ( GetTiles( index - mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::TOP_RIGHT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+            break;
+        }
+        case Direction::TOP_RIGHT: {
+            assert( index >= mapWidth && index + 1 < mapWidth * world.h() );
+            if ( GetTiles( index - mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+            break;
+        }
+        case Direction::BOTTOM_RIGHT: {
+            assert( index + mapWidth + 1 < mapWidth * world.h() );
+            if ( GetTiles( index + mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+            break;
+        }
+        case Direction::BOTTOM_LEFT: {
+            assert( index >= 1 && index + mapWidth - 1 < mapWidth * world.h() );
+            if ( GetTiles( index + mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
+            break;
+        }
         default:
             break;
         }
@@ -390,7 +407,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                     const int nodeIdx = nodesToExplore[lastProcessedNode];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
-                    if ( maxTilesToReveal < tilesToReveal ) {
+                    if ( maxTilesToReveal < tilesToReveal || ( maxTilesToReveal == tilesToReveal && _cache[nodeIdx]._cost < _cache[bestIndex]._cost ) ) {
                         maxTilesToReveal = tilesToReveal;
                         bestIndex = nodeIdx;
                     }
@@ -403,11 +420,13 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                 const int newIndex = currentNodeIdx + _mapOffset[i];
-                if ( newIndex == start )
-                    continue;
-
                 if ( !tilesVisited[newIndex] ) {
                     tilesVisited[newIndex] = true;
+
+                    // Don't go onto action objects as they might be castles or dwellings with guards.
+                    if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+                        continue;
+                    }
 
                     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
                     if ( _cache[newIndex]._cost && monsters.empty() )
@@ -431,9 +450,14 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( start, directions[i] ) ) {
-            const int newIndex = start + _mapOffset[i];
+            const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
             if ( newIndex == start )
                 continue;
+
+            // Don't go onto action objects as they maybe castles or dwellings with battles.
+            if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+                continue;
+            }
 
             const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
             if ( _cache[newIndex]._cost && monsters.empty() ) {
@@ -558,4 +582,12 @@ uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, 
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );
     return _cache[targetIndex]._cost;
+}
+
+void AIWorldPathfinder::setArmyStrengthMultplier( const double multiplier )
+{
+    if ( multiplier > 0 && std::fabs( _advantage - multiplier ) > 0.001 ) {
+        _advantage = multiplier;
+        reset();
+    }
 }

@@ -93,6 +93,13 @@ public:
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
 
+    double getCurrentArmyStrengthMultiplier() const
+    {
+        return _advantage;
+    }
+
+    void setArmyStrengthMultplier( const double multiplier );
+
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
 

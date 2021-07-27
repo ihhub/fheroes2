@@ -77,7 +77,7 @@ const Battle::Cell * Battle::Position::GetTail( void ) const
 fheroes2::Rect Battle::Position::GetRect( void ) const
 {
     if ( first )
-        return second ? GetCommonRect( first->GetPos(), second->GetPos(), false ) : first->GetPos();
+        return second ? getBoundaryRect( first->GetPos(), second->GetPos() ) : first->GetPos();
 
     return fheroes2::Rect();
 }

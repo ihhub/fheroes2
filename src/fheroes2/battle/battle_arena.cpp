@@ -157,7 +157,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , armies_order( nullptr )
     , current_color( Color::NONE )
     , preferredColor( -1 ) // be aware of unknown color
-    , castle( nullptr )
+    , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
+    , _isTown( castle != nullptr )
     , catapult( nullptr )
     , bridge( nullptr )
     , interface( nullptr )
@@ -175,8 +176,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     army2 = new Force( a2, true );
 
     // init castle (interface ahead)
-    castle = world.GetCastle( Maps::GetPoint( index ) );
-
     if ( castle ) {
         CastleHeroes heroes = world.GetHeroes( *castle );
 
@@ -194,8 +193,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         interface = new Interface( *this, index );
         board.SetArea( interface->GetArea() );
 
-        if ( conf.Sound() )
-            AGG::PlaySound( M82::PREBATTL );
+        AGG::PlaySound( M82::PREBATTL );
 
         armies_order = new Units();
         armies_order->reserve( 25 );
@@ -267,9 +265,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         display.render();
 
         // pause for play M82::PREBATTL
-        if ( conf.Sound() )
-            while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
-                ;
+        while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
+            ;
     }
 }
 
@@ -330,7 +327,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
 
         // apply task
-        while ( actions.size() ) {
+        while ( !actions.empty() ) {
             // apply action
             ApplyAction( actions.front() );
             actions.pop_front();
@@ -383,7 +380,7 @@ void Battle::Arena::Turns( void )
     if ( interface ) {
         interface->RedrawActionNewTurn();
 
-        if ( conf.Music() && !Music::isPlaying() ) {
+        if ( !Music::isPlaying() ) {
             AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
         }
     }
@@ -507,14 +504,13 @@ void Battle::Arena::Turns( void )
     // end turn: fix result
     if ( !army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army1 |= RESULT_LOSS;
-        if ( army2->isValid() )
-            result_game.army2 = RESULT_WINS;
+        // check if any of the original troops in the army2 are still alive
+        result_game.army2 = army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
-
-    if ( !army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+    else if ( !army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army2 |= RESULT_LOSS;
-        if ( army1->isValid() )
-            result_game.army1 = RESULT_WINS;
+        // check if any of the original troops in the army1 are still alive
+        result_game.army1 = army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
 
     // fix experience and killed
@@ -525,7 +521,7 @@ void Battle::Arena::Turns( void )
         if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( ( _isTown || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
         }
 
@@ -598,7 +594,7 @@ void Battle::Arena::CatapultAction( void )
 
 Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) const
 {
-    Indexes result = board.GetAStarPath( b, dst );
+    Indexes result = board.GetPath( b, dst );
 
     if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
         std::stringstream ss;
@@ -823,7 +819,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
             bool affect = true;
 
             if ( elem )
-                switch ( spell() ) {
+                switch ( spell.GetID() ) {
                 case Spell::SUMMONEELEMENT:
                     if ( elem->GetID() != Monster::EARTH_ELEMENT )
                         affect = false;
@@ -1067,7 +1063,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     bool affect = true;
 
     if ( elem )
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::SUMMONEELEMENT:
             if ( elem->GetID() != Monster::EARTH_ELEMENT )
                 affect = false;
