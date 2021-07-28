@@ -1892,6 +1892,23 @@ void Maps::Tiles::RemoveObjectSprite( void )
         RemoveJailSprite();
         tilePassable = DIRECTION_ALL;
         break;
+    case MP2::OBJ_ARTIFACT: {
+        const uint32_t uidArtifact = getObjectIdByICNType( ICN::OBJNARTI );
+        Remove( uidArtifact );
+
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidArtifact );
+        break;
+    }
+    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_RESOURCE: {
+        const uint32_t uidResource = getObjectIdByICNType( ICN::OBJNRSRC );
+        Remove( uidResource );
+
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidResource );
+        break;
+    }
     case MP2::OBJ_BARRIER:
         tilePassable = DIRECTION_ALL;
         // fall-through
@@ -2018,22 +2035,36 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     tile.SetObject( MP2::OBJ_ARTIFACT );
-    tile.objectIndex = art.IndexSprite();
+
+    uint32_t uidArtifact = tile.getObjectIdByICNType( ICN::OBJNARTI );
+    if ( uidArtifact == 0 ) {
+        uidArtifact = tile.uniq;
+    }
+
+    updateTileById( tile, uidArtifact, art.IndexSprite() );
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, art.IndexSprite() - 1 );
     }
 }
 
 void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 {
     tile.SetObject( MP2::OBJ_RESOURCE );
-    tile.objectIndex = Resource::GetIndexSprite( Resource::Rand() );
 
-    // replace shadow artifact
+    const uint32_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
+
+    uint32_t uidResource = tile.getObjectIdByICNType( ICN::OBJNRSRC );
+    if ( uidResource == 0 ) {
+        uidResource = tile.uniq;
+    }
+
+    updateTileById( tile, uidResource, resourceSprite );
+
+    // Replace shadow of the resource.
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidResource, resourceSprite - 1 );
     }
 }
 
@@ -2436,6 +2467,21 @@ void Maps::Tiles::setAsEmpty()
     }
 
     SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_ZERO );
+}
+
+uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
+{
+    if ( MP2::GetICNObject( objectTileset ) == icnId ) {
+        return uniq;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( MP2::GetICNObject( addon.object ) == icnId ) {
+            return addon.uniq;
+        }
+    }
+
+    return 0;
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )

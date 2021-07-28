@@ -291,6 +291,8 @@ namespace Maps
         // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
         void setAsEmpty();
 
+        uint32_t getObjectIdByICNType( const int icnId ) const;
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );

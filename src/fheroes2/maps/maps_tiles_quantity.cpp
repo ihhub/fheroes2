@@ -499,7 +499,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL1 : Artifact::ART_LEVEL2 ) );
             break;
         case 2:
-            QuantitySetResource( Resource::Rand(), Rand::Get( 2, 5 ) );
+            QuantitySetResource( Resource::Rand( false ), Rand::Get( 2, 5 ) );
             break;
         default:
             QuantityReset();
@@ -528,7 +528,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 QuantitySetArtifact( art );
 
                 if ( cond == 2 || cond == 3 )
-                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand() ) + 1 );
+                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand( false ) ) + 1 );
             }
         }
     } break;
@@ -555,7 +555,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_CAMPFIRE: {
         // 4-6 rnd resource and + 400-600 gold
-        QuantitySetResource( Resource::Rand(), Rand::Get( 4, 6 ) );
+        QuantitySetResource( Resource::Rand( false ), Rand::Get( 4, 6 ) );
     } break;
 
     case MP2::OBJ_MAGICGARDEN:
@@ -573,9 +573,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_WINDMILL: {
         int res = Resource::WOOD;
-        // except: wood, bugs: #3117478
-        while ( res == Resource::WOOD )
-            res = Resource::Rand();
+        while ( res == Resource::WOOD ) {
+            res = Resource::Rand( false );
+        }
 
         // 2 rnd resource
         QuantitySetResource( res, 2 );
@@ -583,7 +583,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_LEANTO:
         // 1-4 rnd resource
-        QuantitySetResource( Resource::Rand(), Rand::Get( 1, 4 ) );
+        QuantitySetResource( Resource::Rand( false ), Rand::Get( 1, 4 ) );
         break;
 
     case MP2::OBJ_FLOTSAM: {
