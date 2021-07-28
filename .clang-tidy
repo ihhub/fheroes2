@@ -18,3 +18,7 @@ Checks: >-
   -readability-braces-around-statements,
   -readability-implicit-bool-conversion,
   -readability-magic-numbers
+
+CheckOptions:
+  - key: cppcoreguidelines-special-member-functions.AllowMissingMoveFunctionsWhenCopyIsDeleted
+    value: true

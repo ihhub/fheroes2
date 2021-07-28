@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "agg.h"
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "types.h"
@@ -66,7 +67,7 @@ namespace Game
     // distance_t
     enum
     {
-        VIEW_TOWN = 0,
+        // UNUSED = 0,
         VIEW_CASTLE = 1,
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
@@ -140,12 +141,12 @@ namespace Game
         EVENT_JOINSTACKS,
         EVENT_UPGRADE_TROOP,
         EVENT_DISMISS_TROOP,
-        EVENT_TOWN_CREATURE_1,
-        EVENT_TOWN_CREATURE_2,
-        EVENT_TOWN_CREATURE_3,
-        EVENT_TOWN_CREATURE_4,
-        EVENT_TOWN_CREATURE_5,
-        EVENT_TOWN_CREATURE_6,
+        EVENT_TOWN_DWELLING_LEVEL_1,
+        EVENT_TOWN_DWELLING_LEVEL_2,
+        EVENT_TOWN_DWELLING_LEVEL_3,
+        EVENT_TOWN_DWELLING_LEVEL_4,
+        EVENT_TOWN_DWELLING_LEVEL_5,
+        EVENT_TOWN_DWELLING_LEVEL_6,
         EVENT_TOWN_WELL,
         EVENT_TOWN_MARKETPLACE,
         EVENT_TOWN_MAGE_GUILD,
@@ -221,6 +222,27 @@ namespace Game
     std::string GetSaveDir();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
+
+    // Useful for restoring background music after playing short-term music effects
+    class MusicRestorer
+    {
+    public:
+        MusicRestorer()
+            : _music( CurrentMusic() )
+        {}
+
+        MusicRestorer( const MusicRestorer & ) = delete;
+
+        ~MusicRestorer()
+        {
+            AGG::PlayMusic( _music, true, true );
+        }
+
+        MusicRestorer & operator=( const MusicRestorer & ) = delete;
+
+    private:
+        const int _music;
+    };
 
     namespace ObjectFadeAnimation
     {

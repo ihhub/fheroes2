@@ -130,7 +130,7 @@ public:
     int GameDifficulty() const;
 
     const std::string & MapsCharset() const;
-    const std::string & ForceLang() const;
+    const std::string & getGameLanguage() const;
     const std::string & loadedFileLanguage() const;
     const std::string & FontsNormal() const;
     const std::string & FontsSmall() const;
@@ -244,6 +244,8 @@ public:
     void SetMusicVolume( int v );
     void SetMusicType( int v );
 
+    bool setGameLanguage( const std::string & language );
+
     int SoundVolume() const;
     int MusicVolume() const;
     MusicSource MusicType() const;
@@ -319,7 +321,7 @@ private:
 
     std::string path_program;
 
-    std::string force_lang;
+    std::string _gameLanguage;
     std::string _loadedFileLanguage; // not a part of save or configuration file
 
     Maps::FileInfo current_maps_file;

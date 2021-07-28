@@ -257,6 +257,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp" />
@@ -311,6 +312,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
@@ -448,6 +450,7 @@
     <ClInclude Include="src\fheroes2\castle\castle_ui.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
@@ -481,6 +484,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />

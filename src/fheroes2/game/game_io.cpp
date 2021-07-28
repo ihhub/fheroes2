@@ -230,11 +230,11 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         fz >> MonsterStaticData::Get();
     }
 
-    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() ) {
+    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( "This saved game is localized to '" );
         warningMessage.append( conf.loadedFileLanguage() );
         warningMessage.append( "' language, but the current language of the game is '" );
-        warningMessage.append( conf.ForceLang() );
+        warningMessage.append( conf.getGameLanguage() );
         warningMessage += "'.";
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }

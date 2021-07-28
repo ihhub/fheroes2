@@ -287,11 +287,15 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
 void ShowNewWeekDialog( void )
 {
+    // restore the original music on exit
+    const Game::MusicRestorer musicRestorer;
+
+    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+
     const Week & week = world.GetWeekType();
 
     // head
     std::string message = world.BeginMonth() ? _( "Astrologers proclaim Month of the %{name}." ) : _( "Astrologers proclaim Week of the %{name}." );
-    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
@@ -353,7 +357,7 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     switch ( tile.GetObject() ) {
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * to_castle = world.getCastleEntrance( tile.GetCenter() );
+        const Castle * to_castle = world.getCastle( tile.GetCenter() );
 
         if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
@@ -741,9 +745,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     if ( !isload ) {
         // new week dialog
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
-            const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
-            AGG::PlayMusic( currentMusic, true, true );
         }
 
         // show event day

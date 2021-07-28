@@ -74,6 +74,8 @@ namespace fheroes2
     std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt );
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
+
+    uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 }
 
 #endif

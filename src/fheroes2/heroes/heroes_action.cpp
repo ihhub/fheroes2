@@ -367,6 +367,9 @@ void Heroes::Action( int tileIndex, bool isDestination )
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const int object = tile.GetObject( tileIndex != GetIndex() );
 
+    // restore the original music after the action is completed
+    const Game::MusicRestorer musicRestorer;
+
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
 
@@ -2816,8 +2819,6 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
-
-    AGG::PlayMusic( MUS::FromGround( tile.GetGround() ) );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
