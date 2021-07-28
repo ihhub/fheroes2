@@ -42,5 +42,6 @@ namespace Translation
 
 #define _( s ) Translation::gettext( s )
 #define _n( a, b, c ) Translation::ngettext( a, b, c )
+constexpr const char * gettext_noop( const char * s ) { return s; }
 
 #endif
