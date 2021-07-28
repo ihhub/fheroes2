@@ -1376,7 +1376,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect
     }
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
@@ -1398,7 +1398,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
         }
     }
 
-    RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
+    RedrawAddon( dst, addons_level2, visibleTileROI, isPuzzleDraw, area );
 }
 
 void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const
