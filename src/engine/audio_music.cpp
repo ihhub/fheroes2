@@ -87,11 +87,6 @@ void Music::SetFadeIn( int f )
     fadein = f;
 }
 
-void Music::SetFadeOut( int f )
-{
-    fadeout = f;
-}
-
 int Music::Volume( int vol )
 {
     if ( !Mixer::isValid() ) {
@@ -121,12 +116,6 @@ void Music::Pause( void )
         Mix_PauseMusic();
 }
 
-void Music::Resume( void )
-{
-    if ( music )
-        Mix_ResumeMusic();
-}
-
 void Music::Reset( void )
 {
     if ( music ) {
@@ -144,11 +133,6 @@ void Music::Reset( void )
 bool Music::isPlaying( void )
 {
     return music && Mix_PlayingMusic();
-}
-
-bool Music::isPaused( void )
-{
-    return music && Mix_PausedMusic();
 }
 
 void Music::Mute()

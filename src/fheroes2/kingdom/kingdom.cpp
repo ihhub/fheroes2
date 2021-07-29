@@ -438,11 +438,6 @@ bool Kingdom::HeroesMayStillMove( void ) const
     return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
 }
 
-u32 Kingdom::GetCountCapital( void ) const
-{
-    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCapital ) );
-}
-
 void Kingdom::AddFundsResource( const Funds & funds )
 {
     resource = resource + funds;

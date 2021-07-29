@@ -228,15 +228,6 @@ Text::~Text()
     delete message;
 }
 
-Text::Text( const Text & t )
-{
-    assert( t.message != nullptr );
-    message = new TextAscii( dynamic_cast<TextAscii &>( *t.message ) );
-
-    gw = t.gw;
-    gh = t.gh;
-}
-
 void Text::Set( const std::string & msg, int ft )
 {
     message->SetText( msg );
@@ -284,25 +275,6 @@ void Text::Blit( s32 ax, s32 ay, fheroes2::Image & dst ) const
 void Text::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst ) const
 {
     return message->Blit( ax, ay, maxw, dst );
-}
-
-u32 Text::width( const std::string & str, int ft, u32 start, u32 count )
-{
-    if ( !str.empty() ) {
-        TextAscii text( str, ft );
-        return text.w( start, count );
-    }
-    return 0;
-}
-
-u32 Text::height( const std::string & str, int ft, u32 width )
-{
-    if ( !str.empty() ) {
-        TextAscii text( str, ft );
-        return text.h( width );
-    }
-
-    return 0;
 }
 
 int32_t Text::getCharacterWidth( const uint8_t character, const int fontType )
@@ -517,11 +489,6 @@ int TextSprite::w( void ) const
 int TextSprite::h( void ) const
 {
     return gh + 5;
-}
-
-bool TextSprite::isHide( void ) const
-{
-    return hide;
 }
 
 bool TextSprite::isShow( void ) const

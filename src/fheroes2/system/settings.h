@@ -155,7 +155,6 @@ public:
     bool BattleAutoSpellcast() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
-    bool MusicExt() const;
     bool MusicMIDI() const;
     bool isShowIntro() const;
 
@@ -281,7 +280,6 @@ public:
     static std::string GetVersion();
 
     static ListDirs GetRootDirs();
-    static std::string GetLangDir();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
     static std::string GetLastFile( const std::string & prefix, const std::string & name );

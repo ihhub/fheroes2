@@ -247,11 +247,6 @@ bool Mixer::isPlaying( int channel )
     return valid && Mix_Playing( channel ) > 0;
 }
 
-bool Mixer::isPaused( int channel )
-{
-    return valid && Mix_Paused( channel ) > 0;
-}
-
 bool Mixer::isValid()
 {
     return valid;

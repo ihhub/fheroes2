@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "engine.h"
-#include "font.h"
 #include "localevent.h"
 #include "logging.h"
 

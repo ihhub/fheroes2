@@ -88,7 +88,6 @@ namespace AI
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
-        virtual bool HeroesSkipFog();
         virtual std::string HeroesString( const Heroes & hero );
 
         virtual void CastleAdd( const Castle & castle );
@@ -97,8 +96,6 @@ namespace AI
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
         virtual const char * Type() const;
-        virtual const char * License() const;
-        virtual int GetPersonality() const;
         virtual std::string GetPersonalityString() const;
 
         virtual void Reset();

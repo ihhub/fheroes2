@@ -36,14 +36,11 @@ namespace Music
     int Volume( int vol );
 
     void SetFadeIn( int );
-    void SetFadeOut( int );
 
     void Pause( void );
-    void Resume( void );
     void Reset( void );
 
     bool isPlaying( void );
-    bool isPaused( void );
 
     void Mute();
     void Unmute();

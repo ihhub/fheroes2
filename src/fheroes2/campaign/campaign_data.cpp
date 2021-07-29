@@ -497,24 +497,6 @@ namespace Campaign
         , _scenarios()
     {}
 
-    std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
-    {
-        std::vector<int> scenarioIDs;
-
-        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            if ( _scenarios[i].getScenarioID() >= scenarioID )
-                break;
-
-            const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
-
-            // if any of this scenario's next maps is the one passed as param, then this scenario is a previous scenario
-            if ( std::find( nextMaps.begin(), nextMaps.end(), scenarioID ) != nextMaps.end() )
-                scenarioIDs.emplace_back( _scenarios[i].getScenarioID() );
-        }
-
-        return scenarioIDs;
-    }
-
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
     {
         for ( size_t i = 0; i < _scenarios.size(); ++i ) {
@@ -615,15 +597,6 @@ namespace Campaign
         }
         }
     }
-
-    CampaignAwardData::CampaignAwardData()
-        : _id( 0 )
-        , _type( 0 )
-        , _subType( 0 )
-        , _amount( 0 )
-        , _startScenarioID( 0 )
-        , _customName()
-    {}
 
     // default amount to 1 for initialized campaign award data
     CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType )

@@ -786,28 +786,6 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-std::string Settings::GetLangDir()
-{
-#ifdef CONFIGURE_FHEROES2_LOCALEDIR
-    return std::string( EXPANDDEF( CONFIGURE_FHEROES2_LOCALEDIR ) );
-#else
-    std::string res;
-    const ListDirs dirs = GetRootDirs();
-
-    for ( ListDirs::const_reverse_iterator it = dirs.rbegin(); it != dirs.rend(); ++it ) {
-        res = System::ConcatePath( System::ConcatePath( *it, "files" ), "lang" );
-        if ( System::IsDirectory( res ) )
-            return res;
-    }
-#endif
-
-    return "";
-}
-
-bool Settings::MusicExt() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC_EXT );
-}
 bool Settings::MusicMIDI() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_MIDI );

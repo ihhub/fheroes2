@@ -427,30 +427,6 @@ Maps::Indexes Maps::GetObjectPositions( int32_t center, int obj, bool ignoreHero
     return results;
 }
 
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<uint8_t> & objs )
-{
-    if ( objs.size() == 1 ) {
-        return MapsIndexesObject( objs[0], true );
-    }
-
-    Maps::Indexes result;
-    if ( objs.empty() )
-        return result;
-
-    const int32_t size = static_cast<int32_t>( world.getSize() );
-    for ( int32_t idx = 0; idx < size; ++idx ) {
-        const int objectID = world.GetTiles( idx ).GetObject( true );
-
-        for ( const uint8_t obj : objs ) {
-            if ( obj == objectID ) {
-                result.push_back( idx );
-                break;
-            }
-        }
-    }
-    return result;
-}
-
 bool MapsTileIsUnderProtection( int32_t from, int32_t index ) /* from: center, index: monster */
 {
     const Maps::Tiles & tile1 = world.GetTiles( from );
@@ -636,29 +612,12 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     }
 }
 
-int Maps::TileIsCoast( int32_t center, int filter )
-{
-    int result = 0;
-    const Directions & directions = Direction::All();
-
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( ( *it & filter ) && isValidDirection( center, *it ) && world.GetTiles( GetDirectionIndex( center, *it ) ).isWater() )
-            result |= *it;
-
-    return result;
-}
-
 StreamBase & operator>>( StreamBase & sb, IndexObject & st )
 {
     return sb >> st.first >> st.second;
 }
 
 StreamBase & operator>>( StreamBase & sb, ObjectColor & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & operator>>( StreamBase & sb, ResourceCount & st )
 {
     return sb >> st.first >> st.second;
 }

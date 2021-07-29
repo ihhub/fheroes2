@@ -20,49 +20,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SDLTHREAD_H
-#define SDLTHREAD_H
+#include "timer.h"
 
-#include "types.h"
-#include <SDL.h>
-#include <SDL_thread.h>
+using namespace SDL;
 
-namespace SDL
+Timer::Timer()
+    : id( 0 )
+{}
+
+void Timer::Run( u32 interval, u32 ( *fn )( u32, void * ), void * param )
 {
-    class Thread
-    {
-    public:
-        Thread();
-        ~Thread();
-        Thread( const Thread & );
+    if ( id )
+        Remove();
 
-        Thread & operator=( const Thread & );
-
-        void Create( int ( * )( void * ), void * param = nullptr );
-        int Wait( void );
-        void Kill( void );
-
-        bool IsRun( void ) const;
-
-        u32 GetID( void ) const;
-
-    private:
-        SDL_Thread * thread;
-    };
-
-    class Timer
-    {
-    public:
-        Timer();
-
-        bool IsValid( void ) const;
-
-        void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
-        void Remove( void );
-
-    private:
-        SDL_TimerID id;
-    };
+    id = SDL_AddTimer( interval, fn, param );
 }
 
-#endif
+void Timer::Remove( void )
+{
+    if ( id ) {
+        SDL_RemoveTimer( id );
+        id = 0;
+    }
+}
+
+bool Timer::IsValid( void ) const
+{
+    return id != 0;
+}

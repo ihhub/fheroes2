@@ -32,14 +32,6 @@ namespace Audio
         Spec();
     };
 
-    struct CVT : public SDL_AudioCVT
-    {
-        CVT();
-
-        bool Build( const Spec & src, const Spec & dst );
-        bool Convert( void );
-    };
-
     Spec & GetHardwareSpec( void );
 }
 

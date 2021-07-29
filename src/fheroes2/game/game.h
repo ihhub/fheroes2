@@ -177,7 +177,6 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
-    fheroes2::GameMode NewNetwork();
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();

@@ -1487,16 +1487,6 @@ bool LocalEvent::MouseReleaseLeft( void ) const
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MousePressMiddle( void ) const
-{
-    return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_MIDDLE == mouse_button;
-}
-
-bool LocalEvent::MouseReleaseMiddle( void ) const
-{
-    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_MIDDLE == mouse_button;
-}
-
 bool LocalEvent::MousePressRight( void ) const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
@@ -1647,18 +1637,6 @@ bool LocalEvent::MouseClickMiddle( void )
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle( const fheroes2::Rect & rt )
-{
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button && ( rt & mouse_pm ) && ( rt & mouse_rm ) ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
-    }
-
-    return false;
-}
-
 bool LocalEvent::MouseClickRight( void )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
@@ -1706,11 +1684,6 @@ bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
     return MousePressLeft() && ( rt & mouse_pl );
 }
 
-bool LocalEvent::MousePressMiddle( const fheroes2::Rect & rt ) const
-{
-    return MousePressMiddle() && ( rt & mouse_pm );
-}
-
 bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 {
     return MousePressRight() && ( rt & mouse_pr );
@@ -1719,11 +1692,6 @@ bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
 {
     return MouseReleaseLeft() && ( rt & mouse_rl );
-}
-
-bool LocalEvent::MouseReleaseMiddle( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseMiddle() && ( rt & mouse_rm );
 }
 
 bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
@@ -1809,11 +1777,6 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 void LocalEvent::SetState( u32 type, bool enable )
 {
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
-}
-
-int LocalEvent::GetState( u32 type )
-{
-    return SDL_EventState( type, SDL_QUERY );
 }
 
 void LocalEvent::SetStateDefaults( void )
