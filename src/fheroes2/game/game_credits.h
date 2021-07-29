@@ -22,5 +22,4 @@
 
 namespace Game
 {
-    void ShowCredits();
 }
