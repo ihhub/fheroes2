@@ -435,7 +435,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                 // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
                 // LOSS_TOWN is currently not supported in multiplayer
-                // LOSS_STARTHERO is an extension and apparently is not intended to be used in multiplayer
                 if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
                     return condition;
                 }
