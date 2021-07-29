@@ -525,7 +525,6 @@ u32 * Castle::GetDwelling( u32 dw )
 
 void Castle::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
@@ -930,13 +929,6 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
 
 bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 {
-    const Kingdom & myKingdom = GetKingdom();
-    if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
-        if ( msg )
-            *msg = _( "Cannot recruit - you have already recruited a hero in the current week." );
-        return false;
-    }
-
     CastleHeroes heroes = world.GetHeroes( *this );
 
     if ( heroes.Guest() ) {
@@ -955,6 +947,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
         }
     }
 
+    const Kingdom & myKingdom = GetKingdom();
     if ( !myKingdom.AllowRecruitHero( false, hero.GetLevel() ) ) {
         if ( msg )
             *msg = _( "Cannot recruit - you have too many Heroes." );
@@ -1002,12 +995,6 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     // update spell book
     if ( GetLevelMageGuild() )
         MageGuildEducateHero( *hero );
-
-    if ( Settings::Get().ExtWorldOneHeroHiredEveryWeek() )
-        kingdom.SetModes( Kingdom::DISABLEHIRES );
-
-    if ( Settings::Get().ExtCastleOneHeroHiredEveryWeek() )
-        SetModes( DISABLEHIRES );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() );
 

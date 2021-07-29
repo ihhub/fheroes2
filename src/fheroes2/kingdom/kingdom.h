@@ -62,7 +62,7 @@ public:
     {
         // UNDEF      = 0x0001,
         IDENTIFYHERO = 0x0002,
-        DISABLEHIRES = 0x0004,
+        // UNUSED = 0x0004,
         OVERVIEWCSTL = 0x0008
     };
 
@@ -82,8 +82,6 @@ public:
 
     void SetLastLostHero( const Heroes & );
     void ResetLastLostHero( void );
-    void AddHeroStartCondLoss( Heroes * );
-    std::string GetNamesHeroStartCondLoss( void ) const;
 
     void SetLastBattleWinHero( const Heroes & hero );
 
@@ -224,7 +222,6 @@ public:
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
 
-    void AddCondLossHeroes( const AllHeroes & );
     void AddTributeEvents( CapturedObjects &, u32 day, int obj );
 
     u32 size( void ) const;

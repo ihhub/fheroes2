@@ -728,10 +728,6 @@ void World::ProcessNewMap()
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    if ( conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
-        vec_kingdoms.AddCondLossHeroes( vec_heroes );
-    }
-
     // play with debug hero
     if ( IS_DEVEL() ) {
         // get first castle position

@@ -195,8 +195,6 @@ void Kingdom::ActionNewDay( void )
 
 void Kingdom::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
-
     // skip first day
     if ( 1 < world.CountDay() ) {
         // castle New Week
@@ -248,29 +246,12 @@ void Kingdom::AddHeroes( Heroes * hero )
     }
 }
 
-void Kingdom::AddHeroStartCondLoss( Heroes * hero )
-{
-    // see: Settings::ExtWorldStartHeroLossCond4Humans
-    heroes_cond_loss.push_back( hero );
-}
-
 const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
 {
     for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
         if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
             return *it;
     return nullptr;
-}
-
-std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
-{
-    std::string result;
-    for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it ) {
-        result.append( ( *it )->GetName() );
-        if ( it + 1 != heroes_cond_loss.end() )
-            result.append( ", " );
-    }
-    return result;
 }
 
 void Kingdom::RemoveHeroes( const Heroes * hero )
@@ -855,20 +836,6 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
         // skip gray color
         if ( ( *it )->GetColor() )
             GetKingdom( ( *it )->GetColor() ).AddHeroes( *it );
-}
-
-void Kingdoms::AddCondLossHeroes( const AllHeroes & heroes )
-{
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        // skip gray color
-        if ( ( *it )->GetColor() ) {
-            Kingdom & kingdom = GetKingdom( ( *it )->GetColor() );
-
-            if ( kingdom.isControlHuman() ) {
-                ( *it )->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
-                kingdom.AddHeroStartCondLoss( *it );
-            }
-        }
 }
 
 void Kingdoms::AddCastles( const AllCastles & castles )
