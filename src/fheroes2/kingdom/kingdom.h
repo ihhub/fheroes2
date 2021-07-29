@@ -82,7 +82,6 @@ public:
 
     void SetLastLostHero( const Heroes & );
     void ResetLastLostHero( void );
-    std::string GetNamesHeroStartCondLoss( void ) const;
 
     void SetLastBattleWinHero( const Heroes & hero );
 

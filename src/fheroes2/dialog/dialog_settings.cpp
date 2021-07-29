@@ -108,16 +108,8 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
     if ( !readonly || conf.CanChangeInGame( item ) ) {
         conf.ExtModes( item ) ? conf.ExtResetModes( item ) : conf.ExtSetModes( item );
 
-        // depends
-        switch ( item ) {
-        case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
-                conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-            }
-            break;
-
-        default:
-            break;
+        if ( item == Settings::GAME_AUTOSAVE_BEGIN_DAY && conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
+            conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
         }
     }
 }

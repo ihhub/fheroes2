@@ -254,17 +254,6 @@ const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
     return nullptr;
 }
 
-std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
-{
-    std::string result;
-    for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it ) {
-        result.append( ( *it )->GetName() );
-        if ( it + 1 != heroes_cond_loss.end() )
-            result.append( ", " );
-    }
-    return result;
-}
-
 void Kingdom::RemoveHeroes( const Heroes * hero )
 {
     if ( hero ) {
