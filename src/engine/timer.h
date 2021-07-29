@@ -33,10 +33,10 @@ namespace SDL
     public:
         Timer();
 
-        bool IsValid( void ) const;
+        bool IsValid() const;
 
         void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
-        void Remove( void );
+        void Remove();
 
     private:
         SDL_TimerID id;
