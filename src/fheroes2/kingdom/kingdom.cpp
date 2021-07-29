@@ -195,8 +195,6 @@ void Kingdom::ActionNewDay( void )
 
 void Kingdom::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
-
     // skip first day
     if ( 1 < world.CountDay() ) {
         // castle New Week
@@ -246,12 +244,6 @@ void Kingdom::AddHeroes( Heroes * hero )
 
         AI::Get().HeroesAdd( *hero );
     }
-}
-
-void Kingdom::AddHeroStartCondLoss( Heroes * hero )
-{
-    // see: Settings::ExtWorldStartHeroLossCond4Humans
-    heroes_cond_loss.push_back( hero );
 }
 
 const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
@@ -855,20 +847,6 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
         // skip gray color
         if ( ( *it )->GetColor() )
             GetKingdom( ( *it )->GetColor() ).AddHeroes( *it );
-}
-
-void Kingdoms::AddCondLossHeroes( const AllHeroes & heroes )
-{
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        // skip gray color
-        if ( ( *it )->GetColor() ) {
-            Kingdom & kingdom = GetKingdom( ( *it )->GetColor() );
-
-            if ( kingdom.isControlHuman() ) {
-                ( *it )->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
-                kingdom.AddHeroStartCondLoss( *it );
-            }
-        }
 }
 
 void Kingdoms::AddCastles( const AllCastles & castles )

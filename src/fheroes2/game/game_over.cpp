@@ -283,17 +283,6 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         StringReplace( msg, "%{month}", month + 1 );
     }
 
-    if ( ( cond & LOSS ) && conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
-        const std::string names = world.GetKingdom( conf.CurrentColor() ).GetNamesHeroStartCondLoss();
-
-        if ( !names.empty() ) {
-            std::string str = std::string::npos == names.find( ',' ) ? _( "Lose the hero: %{name}." ) : _( "Lose the heroes: %{name}." );
-            StringReplace( str, "%{name}", names );
-            msg.append( "\n" );
-            msg.append( str );
-        }
-    }
-
     return msg;
 }
 

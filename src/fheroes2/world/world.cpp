@@ -706,7 +706,7 @@ void World::NewWeek( void )
 void World::NewMonth( void )
 {
     // skip first month
-    if ( 1 < week && week_current.GetType() == Week::MONSTERS && !Settings::Get().ExtWorldBanMonthOfMonsters() )
+    if ( 1 < week && week_current.GetType() == Week::MONSTERS )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns
@@ -1289,12 +1289,6 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     for ( const uint32_t cond : loss ) {
         if ( ( ( conf.ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
             return cond;
-        }
-    }
-
-    if ( conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
-        if ( kingdom.GetFirstHeroStartCondLoss() ) {
-            return GameOver::LOSS_STARTHERO;
         }
     }
 
