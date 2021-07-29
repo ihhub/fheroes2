@@ -493,9 +493,6 @@ namespace AI
         // ignore empty tiles
         if ( isAction )
             AI::Get().HeroesActionComplete( hero );
-
-        // reset if during an action music was stopped
-        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
     }
 
     void AIToHeroes( Heroes & hero, s32 dst_index )
