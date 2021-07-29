@@ -175,7 +175,6 @@
     <ClCompile Include="..\engine\audio_music.cpp" />
     <ClCompile Include="..\engine\dir.cpp" />
     <ClCompile Include="..\engine\engine.cpp" />
-    <ClCompile Include="..\engine\font.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
     <ClCompile Include="..\engine\image_tool.cpp" />
     <ClCompile Include="..\engine\localevent.cpp" />
