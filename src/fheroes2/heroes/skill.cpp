@@ -453,8 +453,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case SCOUTING: {
-        str = _n( "%{skill} increases your hero's viewable area by one square.",
-                  "%{skill} increases your hero's viewable area by %{count} squares.", count );
+        str = _n( "%{skill} increases your hero's viewable area by one square.", "%{skill} increases your hero's viewable area by %{count} squares.", count );
         break;
     }
     case DIPLOMACY:
@@ -496,8 +495,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case MYSTICISM: {
-        str = _n( "%{skill} regenerates one of your hero's spell points per day.",
-                  "%{skill} regenerates %{count} of your hero's spell points per day.", count );
+        str = _n( "%{skill} regenerates one of your hero's spell points per day.", "%{skill} regenerates %{count} of your hero's spell points per day.", count );
         break;
     }
     case LUCK: {

@@ -544,7 +544,7 @@ namespace fheroes2
                 return std::to_string( ability.percentage ) + _( "% chance to Petrify" );
             }
             else if ( ability.value == Spell::BLIND ) {
-                return std::to_string( ability.percentage ) + _("% chance to Blind" );
+                return std::to_string( ability.percentage ) + _( "% chance to Blind" );
             }
             else if ( ability.value == Spell::CURSE ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Curse" );
@@ -601,12 +601,11 @@ namespace fheroes2
             return _( "200% damage from Fire spells" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL:
             return _( "200% damage from Cold spells" );
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL:
-            {
-                std::string str = _( "% damage from %{spell} spell" );
-                StringReplace( str, "%{spell}", Spell( weakness.value ).GetName() );
-                return std::to_string( weakness.percentage + 100 ) + str;
-            }
+        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL: {
+            std::string str = _( "% damage from %{spell} spell" );
+            StringReplace( str, "%{spell}", Spell( weakness.value ).GetName() );
+            return std::to_string( weakness.percentage + 100 ) + str;
+        }
         default:
             break;
         }
