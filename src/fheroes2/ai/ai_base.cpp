@@ -29,6 +29,7 @@
 #include "logging.h"
 #include "mus.h"
 #include "settings.h"
+#include "translations.h"
 
 namespace AI
 {
@@ -51,11 +52,11 @@ namespace AI
     {
         switch ( _personality ) {
         case WARRIOR:
-            return "Warrior";
+            return _( "Warrior" );
         case BUILDER:
-            return "Builder";
+            return _( "Builder" );
         case EXPLORER:
-            return "Explorer";
+            return _( "Explorer" );
         default:
             break;
         }
