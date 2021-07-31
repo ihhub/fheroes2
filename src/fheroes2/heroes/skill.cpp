@@ -606,10 +606,10 @@ Skill::SecSkills::SecSkills( int race )
                 AddSkill( Secondary( Secondary::NAVIGATION, ptr->initial_secondary.navigation ) );
             if ( ptr->initial_secondary.scouting )
                 AddSkill( Secondary( Secondary::SCOUTING, ptr->initial_secondary.scouting ) );
-            if ( ptr->initial_secondary.wisdom )
-                AddSkill( Secondary( Secondary::WISDOM, ptr->initial_secondary.wisdom ) );
             if ( ptr->initial_secondary.necromancy )
                 AddSkill( Secondary( Secondary::NECROMANCY, ptr->initial_secondary.necromancy ) );
+            if ( ptr->initial_secondary.wisdom )
+                AddSkill( Secondary( Secondary::WISDOM, ptr->initial_secondary.wisdom ) );
         }
     }
 }
