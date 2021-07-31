@@ -2619,17 +2619,21 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 
     if ( _currentUnit ) {
         auto fixupTargetIndex = []( const Unit * unit, const int32_t dst ) {
-            if ( unit->isWide() ) {
-                Position pos = Position::GetCorrect( *unit, dst );
+            // only wide units may need this fixup
+            if ( !unit->isWide() ) {
+                return dst;
+            }
 
-                // destination cell is on the border of the cell space available to the unit
-                // and it should be the tail cell of the unit, return the head cell instead
-                if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
-                    int headDirection = unit->isReflect() ? LEFT : RIGHT;
+            const Position pos = Position::GetCorrect( *unit, dst );
+            assert( pos.GetTail() != nullptr );
 
-                    if ( Board::isValidDirection( dst, headDirection ) ) {
-                        return Board::GetIndexDirection( dst, headDirection );
-                    }
+            // destination cell is on the border of the cell space available to the unit
+            // and it should be the tail cell of the unit, return the head cell instead
+            if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
+                const int headDirection = unit->isReflect() ? LEFT : RIGHT;
+
+                if ( Board::isValidDirection( dst, headDirection ) ) {
+                    return Board::GetIndexDirection( dst, headDirection );
                 }
             }
 

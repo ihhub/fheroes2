@@ -193,18 +193,10 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         }
     }
     else {
-        Indexes indexes = GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() );
-        if ( unit.isWide() ) {
-            const Indexes & tailIndexes = GetDistanceIndexes( unit.GetTailIndex(), unit.GetSpeed() );
-            std::set<int32_t> filteredIndexed( indexes.begin(), indexes.end() );
-            filteredIndexed.insert( tailIndexes.begin(), tailIndexes.end() );
-            indexes = std::vector<int32_t>( filteredIndexed.begin(), filteredIndexed.end() );
-        }
-        indexes.erase( std::remove_if( indexes.begin(), indexes.end(), isImpassableIndex ), indexes.end() );
-
         // Set passable cells.
-        for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it )
-            GetPath( unit, Position::GetCorrect( unit, *it ), false );
+        for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
+            GetPath( unit, Position::GetCorrect( unit, idx ), false );
+        }
     }
 }
 
@@ -682,12 +674,6 @@ bool Battle::Board::isOutOfWallsIndex( s32 index )
 {
     return ( ( index <= 8 ) || ( 11 <= index && index <= 19 ) || ( 22 <= index && index <= 29 ) || ( 33 <= index && index <= 40 ) || ( 44 <= index && index <= 50 )
              || ( 55 <= index && index <= 62 ) || ( 66 <= index && index <= 73 ) || ( 77 <= index && index <= 85 ) || ( 88 <= index && index <= 96 ) );
-}
-
-bool Battle::Board::isImpassableIndex( s32 index )
-{
-    const Cell * cell = Board::GetCell( index );
-    return !cell || !cell->isPassable1( true );
 }
 
 bool Battle::Board::isBridgeIndex( s32 index, const Unit & b )
