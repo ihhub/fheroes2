@@ -1643,14 +1643,23 @@ void Battle::Interface::RedrawCover()
 
             const Cell * attackerCell = Board::GetCell( cell->GetIndex(), direction );
             assert( attackerCell != nullptr );
-            highlightCells.emplace( attackerCell );
 
-            if ( _currentUnit->GetTailIndex() != -1 ) {
-                const int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
-                const Cell * tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
-                assert( tailAttackerCell != nullptr );
+            Position attackerPos;
 
-                highlightCells.emplace( tailAttackerCell );
+            if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                // The attacking unit is already there and shouldn't move
+                attackerPos = _currentUnit->GetPosition();
+            }
+            else {
+                attackerPos = Position::GetCorrect( *_currentUnit, attackerCell->GetIndex() );
+            }
+
+            assert( attackerPos.GetHead() != nullptr );
+            highlightCells.emplace( attackerPos.GetHead() );
+
+            if ( _currentUnit->isWide() ) {
+                assert( attackerPos.GetTail() != nullptr );
+                highlightCells.emplace( attackerPos.GetTail() );
             }
         }
         else {
