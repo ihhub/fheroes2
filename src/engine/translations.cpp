@@ -348,12 +348,6 @@ namespace Translation
         return current ? current->ngettext( str, 0 ) : stripContext( str );
     }
 
-    const char * dgettext( const char * domain, const char * str )
-    {
-        setDomain( domain );
-        return gettext( str );
-    }
-
     const char * ngettext( const char * str, const char * plural, size_t n )
     {
         if ( current )
@@ -407,11 +401,5 @@ namespace Translation
             }
 
         return stripContext( n == 1 ? str : plural );
-    }
-
-    const char * dngettext( const char * domain, const char * str, const char * plural, size_t num )
-    {
-        setDomain( domain );
-        return ngettext( str, plural, num );
     }
 }

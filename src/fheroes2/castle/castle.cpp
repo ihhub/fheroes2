@@ -2269,11 +2269,6 @@ u32 Castle::GetUpgradeBuilding( u32 build ) const
     return build;
 }
 
-bool Castle::PredicateIsCapital( const Castle * castle )
-{
-    return castle && castle->Modes( CAPITAL );
-}
-
 bool Castle::PredicateIsCastle( const Castle * castle )
 {
     return castle && castle->isCastle();

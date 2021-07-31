@@ -479,11 +479,6 @@ bool Maps::FileInfo::WinsCompAlsoWins( void ) const
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-bool Maps::FileInfo::WinsAllowNormalVictory( void ) const
-{
-    return allow_normal_victory && ( ( GameOver::WINS_TOWN | GameOver::WINS_ARTIFACT | GameOver::WINS_GOLD ) & ConditionWins() );
-}
-
 int Maps::FileInfo::WinsFindArtifactID( void ) const
 {
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
@@ -522,11 +517,6 @@ int Maps::FileInfo::AllowCompHumanColors( void ) const
 int Maps::FileInfo::AllowHumanColors( void ) const
 {
     return allow_human_colors;
-}
-
-int Maps::FileInfo::AllowComputerColors( void ) const
-{
-    return allow_comp_colors;
 }
 
 int Maps::FileInfo::HumanOnlyColors( void ) const

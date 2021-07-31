@@ -106,23 +106,3 @@ int Speed::GetOriginalFast( int speed )
 
     return STANDING;
 }
-
-int Speed::FromInt( int speed )
-{
-    switch ( speed ) {
-    case CRAWLING:
-    case VERYSLOW:
-    case SLOW:
-    case AVERAGE:
-    case FAST:
-    case VERYFAST:
-    case ULTRAFAST:
-    case BLAZING:
-    case INSTANT:
-        return speed;
-    default:
-        break;
-    }
-
-    return STANDING;
-}

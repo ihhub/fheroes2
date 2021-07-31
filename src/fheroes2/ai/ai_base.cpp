@@ -38,11 +38,6 @@ namespace AI
         return "base";
     }
 
-    const char * Base::License() const
-    {
-        return "GPL-2.0";
-    }
-
     int Base::GetPersonality() const
     {
         return _personality;
@@ -100,11 +95,6 @@ namespace AI
     void Base::HeroesLevelUp( Heroes & ) {}
 
     void Base::HeroesPostLoad( Heroes & ) {}
-
-    bool Base::HeroesSkipFog()
-    {
-        return false;
-    }
 
     bool Base::HeroesGetTask( Heroes & hero )
     {

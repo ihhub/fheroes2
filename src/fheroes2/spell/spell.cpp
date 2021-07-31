@@ -420,51 +420,6 @@ u32 Spell::IndexSprite( void ) const
     return spells[id].sprite;
 }
 
-u32 Spell::InlIndexSprite( void ) const
-{
-    switch ( id ) {
-    case HASTE:
-    case MASSHASTE:
-        return 0;
-    case SLOW:
-    case MASSSLOW:
-        return 1;
-    case BLIND:
-        return 2;
-    case BLESS:
-    case MASSBLESS:
-        return 3;
-    case CURSE:
-    case MASSCURSE:
-        return 4;
-    case BERSERKER:
-        return 5;
-    case PARALYZE:
-        return 6;
-    case HYPNOTIZE:
-        return 7;
-    case DRAGONSLAYER:
-        return 8;
-    case BLOODLUST:
-        return 9;
-    case SHIELD:
-    case MASSSHIELD:
-        return 10;
-    case STONE:
-        return 11;
-    case ANTIMAGIC:
-        return 12;
-    case STONESKIN:
-        return 13;
-    case STEELSKIN:
-        return 14;
-    default:
-        break;
-    }
-
-    return 0;
-}
-
 u32 Spell::Restore( void ) const
 {
     switch ( id ) {

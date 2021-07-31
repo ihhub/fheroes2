@@ -75,16 +75,6 @@ namespace GameStatic
     extern u32 uniq;
 }
 
-std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
-{
-    std::vector<u8> zdata = decodeBase64( base64 );
-    StreamBuf sb( zdata );
-    sb.skip( 4 ); // editor: version
-    u32 realsz = sb.getLE32();
-    sb.skip( 4 ); // qt uncompress size
-    return zlibDecompress( sb.data(), sb.size(), realsz + 1 );
-}
-
 bool World::LoadMapMP2( const std::string & filename )
 {
     Reset();

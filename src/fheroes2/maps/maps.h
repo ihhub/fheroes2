@@ -74,9 +74,6 @@ namespace Maps
 
     Indexes GetObjectPositions( int obj, bool ignoreHeroes );
     Indexes GetObjectPositions( int32_t center, int obj, bool ignoreHeroes );
-    Indexes GetObjectsPositions( const std::vector<uint8_t> & objs );
-
-    int TileIsCoast( int32_t center, int direct = DIRECTION_ALL );
 
     void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
 

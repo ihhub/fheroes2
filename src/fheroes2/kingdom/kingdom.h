@@ -111,7 +111,6 @@ public:
     u32 GetCountCastle( void ) const;
     u32 GetCountTown( void ) const;
     u32 GetCountMarketplace( void ) const;
-    u32 GetCountCapital( void ) const;
     u32 GetLostTownDays( void ) const;
     u32 GetCountNecromancyShrineBuild( void ) const;
     u32 GetCountBuilding( u32 ) const;

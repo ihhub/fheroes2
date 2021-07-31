@@ -220,7 +220,6 @@ public:
     bool MakeBattleGarb( void );
     bool ContainUltimateArtifact( void ) const;
 
-    void RemoveArtifact( const Artifact & );
     void RemoveScroll( const Artifact & );
     void exchangeArtifacts( BagArtifacts & giftBag );
 

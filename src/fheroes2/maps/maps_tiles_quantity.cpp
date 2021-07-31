@@ -908,11 +908,6 @@ bool Maps::Tiles::MonsterJoinConditionSkip( void ) const
     return Monster::JOIN_CONDITION_SKIP == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionMoney( void ) const
-{
-    return Monster::JOIN_CONDITION_MONEY == MonsterJoinCondition();
-}
-
 bool Maps::Tiles::MonsterJoinConditionFree( void ) const
 {
     return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();

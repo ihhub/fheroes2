@@ -75,8 +75,6 @@ namespace Maps
         }
 
         bool isRoad() const;
-        bool hasRoadFlag() const;
-        bool isICN( int ) const;
         bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
@@ -245,7 +243,6 @@ namespace Maps
 
         /* monster operation */
         bool MonsterJoinConditionSkip( void ) const;
-        bool MonsterJoinConditionMoney( void ) const;
         bool MonsterJoinConditionFree( void ) const;
         bool MonsterJoinConditionForce( void ) const;
         int MonsterJoinCondition( void ) const;

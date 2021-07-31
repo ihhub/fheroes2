@@ -34,19 +34,13 @@ public:
     TinyConfig( char sep = '=', char com = ';' );
 
     bool Load( const std::string & );
-    bool Save( const std::string & ) const;
-    void Clear( void );
 
     void AddEntry( const std::string &, const std::string &, bool uniq = true );
-    void AddEntry( const std::string &, int, bool uniq = true );
 
     bool Exists( const std::string & ) const;
 
     int IntParams( const std::string & ) const;
     std::string StrParams( const std::string & ) const;
-
-    std::list<std::string> ListStr( const std::string & ) const;
-    std::list<int> ListInt( const std::string & ) const;
 
 protected:
     char separator;

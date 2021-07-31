@@ -157,8 +157,6 @@ public:
 
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;
-    /* return index in spellinl.icn */
-    u32 InlIndexSprite( void ) const;
 
     static Spell RandCombat( int lvl );
     static Spell RandAdventure( int lvl );

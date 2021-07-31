@@ -20,47 +20,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "font.h"
-#include "logging.h"
-#include "tools.h"
+#include "timer.h"
 
-FontPSF::FontPSF( const std::string & filePath, const fheroes2::Size & size )
-    : _data( LoadFileToMem( filePath ) )
-    , _size( size )
+using namespace SDL;
+
+Timer::Timer()
+    : id( 0 )
+{}
+
+void Timer::Run( u32 interval, u32 ( *fn )( u32, void * ), void * param )
 {
-    if ( _data.empty() )
-        ERROR_LOG( "empty buffer" );
+    if ( id )
+        Remove();
+
+    id = SDL_AddTimer( interval, fn, param );
 }
 
-fheroes2::Image FontPSF::RenderText( const std::string & text, const uint8_t color ) const
+void Timer::Remove( void )
 {
-    if ( text.empty() )
-        return fheroes2::Image();
-
-    fheroes2::Image output( static_cast<int32_t>( text.size() ) * _size.width, _size.height );
-    output.reset();
-
-    int32_t posX = 0;
-
-    for ( std::string::const_iterator it = text.begin(); it != text.end(); ++it ) {
-        // render char
-        int32_t offsetX = ( *it ) * _size.width * _size.height / 8; // bits -> byte
-
-        for ( int32_t y = 0; y < _size.height; ++y ) {
-            // It's safe to cast as all values are >= 0
-            const size_t offset = static_cast<size_t>( ( y * _size.width / 8 ) + offsetX ); // bits -> byte
-
-            if ( offset < _data.size() ) {
-                const int32_t line = _data[offset];
-                for ( int32_t x = 0; x < _size.width; ++x ) {
-                    if ( 0x80 & ( line << x ) )
-                        fheroes2::SetPixel( output, posX + x, y, color );
-                }
-            }
-        }
-
-        posX += _size.width;
+    if ( id ) {
+        SDL_RemoveTimer( id );
+        id = 0;
     }
+}
 
-    return output;
+bool Timer::IsValid( void ) const
+{
+    return id != 0;
 }

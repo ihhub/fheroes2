@@ -33,7 +33,6 @@
 #include "audio_music.h"
 #include "dir.h"
 #include "embedded_image.h"
-#include "font.h"
 #include "game.h"
 #include "localevent.h"
 #include "logging.h"

@@ -335,11 +335,6 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , index( ta.index )
 {}
 
-bool Maps::TilesAddon::isICN( int icn ) const
-{
-    return icn == MP2::GetICNObject( object );
-}
-
 bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
 {
     return ( ( ta1.level % 4 ) > ( ta2.level % 4 ) );
@@ -446,13 +441,6 @@ bool Maps::TilesAddon::isRoad() const
     }
 
     return false;
-}
-
-bool Maps::TilesAddon::hasRoadFlag() const
-{
-    // This MP2 "object" is a bitfield
-    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    return ( object >> 1 ) & 1;
 }
 
 bool Maps::TilesAddon::hasSpriteAnimation() const
