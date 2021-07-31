@@ -20,12 +20,7 @@
 
 #pragma once
 
-#include "ui_language.h"
-
-#include <vector>
-
 namespace fheroes2
 {
-    // UI window to select a language by user.
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, size_t selectionId );
+    void openGameSettings();
 }
