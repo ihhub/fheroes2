@@ -154,7 +154,7 @@ void Castle::OpenWell( void )
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
             break;
         }
-        else if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::EVENT_WELL_BUY_ALL ) ) {
+        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::EVENT_WELL_BUY_ALL_CREATURES ) ) {
             std::vector<Troop> results;
             Funds cur;
             Funds total;
