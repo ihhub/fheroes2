@@ -1647,11 +1647,23 @@ void Battle::Interface::RedrawCover()
 
             if ( _currentUnit->GetTailIndex() != -1 ) {
                 int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
-                const Cell * tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
+                const Cell * tailAttackerCell = nullptr;
+
+                if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
+                    tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
+                    if ( tailAttackerCell != nullptr && ( tailAttackerCell->GetUnit() || !tailAttackerCell->isPassable1( false ) ) ) {
+                        tailAttackerCell = nullptr;
+                    }
+                }
                 if ( tailAttackerCell == nullptr ) {
                     // A monster doesn't move.
                     tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
-                    tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
+                    if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
+                        tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
+                        if ( tailAttackerCell != nullptr && ( tailAttackerCell->GetUnit() || !tailAttackerCell->isPassable1( false ) ) ) {
+                            tailAttackerCell = nullptr;
+                        }
+                    }
                 }
                 assert( tailAttackerCell != nullptr );
 
