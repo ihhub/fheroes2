@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_mixer.h"
@@ -28,7 +29,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
-#include "game.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "icn.h"

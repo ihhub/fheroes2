@@ -40,14 +40,10 @@ namespace
                                                                             { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } }; // Buka version
 
     // Strings in this map must in lower case and non translatable.
-    const std::map<std::string, fheroes2::SupportedLanguage> languageName = { { "pl", fheroes2::SupportedLanguage::Polish },
-                                                                              { "polish", fheroes2::SupportedLanguage::Polish },
-                                                                              { "de", fheroes2::SupportedLanguage::German },
-                                                                              { "german", fheroes2::SupportedLanguage::German },
-                                                                              { "fr", fheroes2::SupportedLanguage::French },
-                                                                              { "french", fheroes2::SupportedLanguage::French },
-                                                                              { "ru", fheroes2::SupportedLanguage::Russian },
-                                                                              { "russian", fheroes2::SupportedLanguage::Russian } };
+    const std::map<std::string, fheroes2::SupportedLanguage> languageName
+        = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },  { "de", fheroes2::SupportedLanguage::German },
+            { "german", fheroes2::SupportedLanguage::German }, { "fr", fheroes2::SupportedLanguage::French },      { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian } };
 
     class LanguageSwitcher
     {
@@ -142,7 +138,7 @@ namespace fheroes2
         }
 
         std::string name( abbreviation );
-        std::transform( name.begin(), name.end(), name.begin(), []( const unsigned char c ){ return std::tolower(c); });
+        std::transform( name.begin(), name.end(), name.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
 
         auto iter = languageName.find( name );
         if ( iter == languageName.end() ) {
