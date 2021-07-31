@@ -170,8 +170,8 @@ jobs:
         sudo apt-get install -y gettext
     - name: Build
       run: |
-        export PATH=$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
-        make -j 2 PLATFORM=switch
+        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        make -f Makefile.switch -j 2
         cd files/lang
         make -j 2
       env:
@@ -181,7 +181,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       run: |
         cp docs/README.txt .
-        zip fheroes2_switch_sdl2.zip fheroes2 LICENSE fheroes2.key changelog.txt README.txt files/lang/*.mo
+        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE fheroes2.key changelog.txt README.txt files/lang/*.mo
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
