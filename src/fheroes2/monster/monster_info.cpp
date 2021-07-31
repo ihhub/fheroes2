@@ -605,6 +605,54 @@ namespace fheroes2
         return "";
     }
 
+    std::string getMonsterDescription( const int monsterId )
+    {
+        if ( monsterData.empty() ) {
+            populateMonsterData();
+        }
+
+        assert( monsterId >= 0 && static_cast<size_t>( monsterId ) < monsterData.size() );
+        if ( monsterId < 0 || static_cast<size_t>( monsterId ) >= monsterData.size() ) {
+            return "";
+        }
+
+        const MonsterData & monster = monsterData[monsterId];
+
+        std::ostringstream os;
+        os << "----------" << std::endl;
+        os << "Name: " << monster.generalStats.name << std::endl;
+        os << "Plural name: " << monster.generalStats.pluralName << std::endl;
+        os << "Base growth: " << monster.generalStats.baseGrowth << std::endl;
+        os << "Race: " << Race::String( monster.generalStats.race ) << std::endl;
+        os << "Level: " << monster.generalStats.level << std::endl;
+        os << "Cost: " << Funds( monster.generalStats.cost ).String() << std::endl;
+        os << std::endl;
+        os << "Attack: " << monster.battleStats.attack << std::endl;
+        os << "Defense: " << monster.battleStats.defense << std::endl;
+        os << "Min damage: " << monster.battleStats.damageMin << std::endl;
+        os << "Max damage: " << monster.battleStats.damageMax << std::endl;
+        os << "Hit Points: " << monster.battleStats.hp << std::endl;
+        os << "Speed: " << Speed::String( monster.battleStats.speed ) << std::endl;
+        os << "Number of shots: " << monster.battleStats.shots << std::endl;
+        if ( !monster.battleStats.abilities.empty() ) {
+            os << std::endl;
+            os << "Abilities:" << std::endl;
+            for ( const MonsterAbility & ability : monster.battleStats.abilities ) {
+                os << "   " << getMonsterAbilityDescription( ability, false ) << std::endl;
+            }
+        }
+
+        if ( !monster.battleStats.weaknesses.empty() ) {
+            os << std::endl;
+            os << "Weaknesses:" << std::endl;
+            for ( const MonsterWeakness & weakness : monster.battleStats.weaknesses ) {
+                os << "   " << getMonsterWeaknessDescription( weakness, false ) << std::endl;
+            }
+        }
+
+        return os.str();
+    }
+
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId )
     {
         std::vector<std::string> output;

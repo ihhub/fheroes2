@@ -186,6 +186,8 @@ namespace fheroes2
     std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility );
     std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility );
 
+    std::string getMonsterDescription( const int monsterId ); // To be utilized in future.
+
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );

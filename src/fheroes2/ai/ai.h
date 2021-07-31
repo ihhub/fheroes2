@@ -96,6 +96,7 @@ namespace AI
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
         virtual const char * Type() const;
+        virtual int GetPersonality() const; // To be utilized in future.
         virtual std::string GetPersonalityString() const;
 
         virtual void Reset();

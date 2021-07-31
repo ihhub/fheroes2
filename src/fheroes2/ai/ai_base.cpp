@@ -37,6 +37,11 @@ namespace AI
         return "base";
     }
 
+    int Base::GetPersonality() const
+    {
+        return _personality;
+    }
+
     std::string Base::GetPersonalityString() const
     {
         switch ( _personality ) {
