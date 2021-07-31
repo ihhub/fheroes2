@@ -26,7 +26,6 @@
 
 #include "logging.h"
 #include "serialize.h"
-#include "system.h"
 #include "tools.h"
 
 struct chunk
@@ -249,13 +248,13 @@ namespace Translation
         return *pos ? pos : str;
     }
 
-    bool bindDomain( const char * domain, const char * file )
+    bool bindDomain( const char * domain, const char * file, const char * language )
     {
         std::map<std::string, mofile>::const_iterator it = domains.find( domain );
         if ( it != domains.end() )
             return true;
 
-        std::string str = System::GetMessageLocale( 1 );
+        std::string str( language );
 
         if ( str == "af" || str == "afrikaans" )
             locale = LOCALE_AF;
@@ -341,12 +340,12 @@ namespace Translation
     const char * gettext( const std::string & str )
     {
         const char * data = str.data();
-        return stripContext( current ? current->ngettext( data, 0 ) : data );
+        return current ? current->ngettext( data, 0 ) : stripContext( data );
     }
 
     const char * gettext( const char * str )
     {
-        return stripContext( current ? current->ngettext( str, 0 ) : str );
+        return current ? current->ngettext( str, 0 ) : stripContext( str );
     }
 
     const char * dgettext( const char * domain, const char * str )
@@ -364,10 +363,9 @@ namespace Translation
             case LOCALE_ID:
             case LOCALE_LA:
             case LOCALE_TR:
-                return stripContext( current->ngettext( str, 0 ) );
+                return current->ngettext( str, 0 );
             case LOCALE_AR:
-                return stripContext(
-                    current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) ) );
+                return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
             case LOCALE_BG:
             case LOCALE_DA:
             case LOCALE_DE:
@@ -379,31 +377,31 @@ namespace Translation
             case LOCALE_IT:
             case LOCALE_NL:
             case LOCALE_SV:
-                return stripContext( current->ngettext( str, ( n != 1 ) ) );
+                return current->ngettext( str, ( n != 1 ) );
             case LOCALE_SK:
-                return stripContext( current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) ) );
+                return current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) );
             case LOCALE_SL:
-                return stripContext( current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) ) );
+                return current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
             case LOCALE_SR:
-                return stripContext(
-                    current->ngettext( str,
-                                       ( n == 1 ? 3 : n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) ) );
+                return current->ngettext( str, ( n == 1                                                            ? 3
+                                                 : n % 10 == 1 && n % 100 != 11                                    ? 0
+                                                 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1
+                                                                                                                   : 2 ) );
             case LOCALE_CS:
-                return stripContext( current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) ) );
+                return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
             case LOCALE_EL:
             case LOCALE_FR:
             case LOCALE_PT:
-                return stripContext( current->ngettext( str, ( n > 1 ) ) );
+                return current->ngettext( str, ( n > 1 ) );
             case LOCALE_HR:
             case LOCALE_RU:
             case LOCALE_LT:
             case LOCALE_LV:
-                return stripContext(
-                    current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) ) );
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LOCALE_MK:
-                return stripContext( current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) ) );
+                return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
             case LOCALE_PL:
-                return stripContext( current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) ) );
+                return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             default:
                 break;
             }

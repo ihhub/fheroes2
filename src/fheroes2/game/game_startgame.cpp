@@ -305,11 +305,10 @@ void ShowNewWeekDialog( void )
 
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )
-                message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, population of %{monster} is doubled!" )
-                                                            : _n( "After regular growth, population of %{monter} increase on %{count} percent!",
-                                                                  "After regular growth, population of %{monter} increase on %{count} percent!", count );
+                message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                            : _( "After regular growth, the population of %{monter} increases by %{count} percent!" );
             else
-                message += _n( "%{monster} population increases by +%{count}.", "%{monster} population increases by +%{count}.", count );
+                message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
             message += "\n";

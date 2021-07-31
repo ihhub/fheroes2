@@ -427,6 +427,7 @@ std::string Skill::Secondary::GetNameWithBonus( const Heroes & hero ) const
 std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
 {
     u32 count = GetValues();
+    std::string name = GetName();
     std::string str = "unknown";
 
     switch ( Skill() ) {
@@ -434,39 +435,33 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         switch ( Level() ) {
         case Level::BASIC:
         case Level::ADVANCED: {
-            const std::string tmpDescription( std::string( GetName() ) + std::string( " reduces the movement penalty for rough terrain by %{count} percent." ) );
-            str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+            str = _( "%{skill} reduces the movement penalty for rough terrain by %{count} percent." );
         } break;
         case Level::EXPERT:
-            str = _( GetName() + std::string( " eliminates the movement penalty for rough terrain." ) );
+            str = _( "%{skill} eliminates the movement penalty for rough terrain." );
             break;
         default:
             break;
         }
         break;
     case ARCHERY: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases the damage done by range attacking creatures by %{count} percent." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _( "%{skill} increases the damage done by range attacking creatures by %{count} percent." );
         break;
     }
     case LOGISTICS: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's movement points by %{count} percent." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _( "%{skill} increases your hero's movement points by %{count} percent." );
         break;
     }
     case SCOUTING: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's viewable area by %{count} square." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _n( "%{skill} increases your hero's viewable area by one square.", "%{skill} increases your hero's viewable area by %{count} squares.", count );
         break;
     }
     case DIPLOMACY:
-        str = std::string( GetName() ) + _( " allows you to negotiate with monsters who are weaker than your group." );
-        str.append( " " );
+        str = _( "%{skill} allows you to negotiate with monsters who are weaker than your group. " );
         switch ( Level() ) {
         case Level::BASIC:
         case Level::ADVANCED: {
-            str.append( _n( "Approximately %{count} percent of the creatures may offer to join you.",
-                            "Approximately %{count} percent of the creatures may offer to join you.", count ) );
+            str.append( _( "Approximately %{count} percent of the creatures may offer to join you." ) );
         } break;
         case Level::EXPERT:
             str.append( _( "All of the creatures may offer to join you." ) );
@@ -476,26 +471,23 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         break;
     case NAVIGATION: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's movement points over water by %{count} percent." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _( "%{skill} increases your hero's movement points over water by %{count} percent." );
         break;
     }
     case LEADERSHIP: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's troops morale by %{count}." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _( "%{skill} increases your hero's troops morale by %{count}." );
         break;
     }
     case WISDOM: {
-        str = GetName();
         switch ( Level() ) {
         case Level::BASIC:
-            str += _( " allows your hero to learn third level spells." );
+            str = _( "%{skill} allows your hero to learn third level spells." );
             break;
         case Level::ADVANCED:
-            str += _( " allows your hero to learn fourth level spells." );
+            str = _( "%{skill} allows your hero to learn fourth level spells." );
             break;
         case Level::EXPERT:
-            str += _( " allows your hero to learn fifth level spells." );
+            str = _( "%{skill} allows your hero to learn fifth level spells." );
             break;
         default:
             break;
@@ -503,67 +495,57 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case MYSTICISM: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " regenerates %{count} of your hero's spell point per day." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _n( "%{skill} regenerates one of your hero's spell points per day.", "%{skill} regenerates %{count} of your hero's spell points per day.", count );
         break;
     }
     case LUCK: {
-        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's luck by %{count}." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        str = _( "%{skill} increases your hero's luck by %{count}." );
         break;
     }
     case BALLISTICS:
-        str = GetName();
         switch ( Level() ) {
         case Level::BASIC:
-            str += _( " gives your hero's catapult shots a greater chance to hit and do damage to castle walls." );
+            str = _( "%{skill} gives your hero's catapult shots a greater chance to hit and do damage to castle walls." );
             break;
         case Level::ADVANCED:
-            str += _( " gives your hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
+            str = _( "%{skill} gives your hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
             break;
         case Level::EXPERT:
-            str += _( " gives your hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight town." );
+            str = _( "%{skill} gives your hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight castle." );
             break;
         default:
             break;
         }
         break;
     case EAGLEEYE:
-        str = GetName();
         switch ( Level() ) {
         case Level::BASIC:
-            str += _n( " gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat.",
-                       " gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat.", count );
+            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat." );
             break;
         case Level::ADVANCED:
-            str += _n( " gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat.",
-                       " gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat.", count );
+            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat." );
             break;
         case Level::EXPERT:
-            str += _n( " gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat.",
-                       " gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat.", count );
+            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat." );
             break;
         default:
             break;
         }
         break;
     case NECROMANCY: {
-        const uint32_t necroCount = Skill::GetNecromancyPercent( hero ) - hero.GetSecondaryValues( Skill::Secondary::NECROMANCY ) + count;
-        const std::string tmpDescription(
-            std::string( GetNameWithBonus( hero ) )
-            + std::string( " allows %{necrocount} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), necroCount );
-        StringReplace( str, "%{necrocount}", necroCount );
+        count += Skill::GetNecromancyPercent( hero ) - hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
+        name = GetNameWithBonus( hero );
+        str = _( "%{skill} allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." );
         break;
     }
     case ESTATES:
-        str = _n( "Your hero produces %{count} gold pieces per turn as tax revenue from estates.",
-                  "Your hero produces %{count} gold pieces per turn as tax revenue from estates.", count );
+        str = _( "Your hero produces %{count} gold pieces per turn as tax revenue from estates." );
         break;
     default:
         break;
     }
 
+    StringReplace( str, "%{skill}", name );
     StringReplace( str, "%{count}", count );
 
     return str;

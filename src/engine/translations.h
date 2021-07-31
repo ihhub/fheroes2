@@ -25,7 +25,7 @@
 
 namespace Translation
 {
-    bool bindDomain( const char * domain, const char * file );
+    bool bindDomain( const char * domain, const char * file, const char * language );
     bool setDomain( const char * domain );
 
     // Reset any translation to the default language - English.
@@ -42,5 +42,9 @@ namespace Translation
 
 #define _( s ) Translation::gettext( s )
 #define _n( a, b, c ) Translation::ngettext( a, b, c )
+constexpr const char * gettext_noop( const char * s )
+{
+    return s;
+}
 
 #endif

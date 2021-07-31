@@ -87,7 +87,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
         str.append( "\n \n" );
         const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
         if ( scoutingLevel == Skill::Level::NONE ) {
-            str.append( "guarded by " ).append( StringLower( Army::TroopSizeString( troop ) ) );
+            str.append( _( "guarded by " ) ).append( StringLower( Army::TroopSizeString( troop ) ) );
         }
         else {
             str.append( _( "guarded by %{count} %{monster}" ) );

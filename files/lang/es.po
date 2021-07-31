@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-01 15:11+0200\n"
+"POT-Creation-Date: 2021-07-30 11:21+0200\n"
 "PO-Revision-Date: 2013-06-03 16:38+0000\n"
 "Last-Translator: elhoir <jfarroyo82@hotmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -18,6 +18,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Launchpad (build 16799)\n"
+
+#, fuzzy
+msgid "Warrior"
+msgstr "Barrera"
+
+msgid "Builder"
+msgstr ""
+
+msgid "Explorer"
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -85,29 +95,29 @@ msgstr ""
 msgid "army|Few"
 msgstr "ejército|Pocos"
 
-msgid "army|Several"
-msgstr "ejército|Unos cuantos"
-
-msgid "army|Pack"
-msgstr "ejército|Grupo"
+msgid "army|Horde"
+msgstr "ejército|Horda"
 
 msgid "army|Lots"
 msgstr "ejército|Muchos"
 
-msgid "army|Horde"
-msgstr "ejército|Horda"
+msgid "army|Pack"
+msgstr "ejército|Grupo"
 
-msgid "army|Throng"
-msgstr "ejército|Muchedumbre"
+msgid "army|Several"
+msgstr "ejército|Unos cuantos"
+
+msgid "army|Legion"
+msgstr "ejército|Legión"
 
 msgid "army|Swarm"
 msgstr "ejército|Enjambre"
 
+msgid "army|Throng"
+msgstr "ejército|Muchedumbre"
+
 msgid "army|Zounds"
 msgstr "ejército|Demasiados"
-
-msgid "army|Legion"
-msgstr "ejército|Legión"
 
 msgid "All %{race} troops +1"
 msgstr "Toda la tropa %{race +1"
@@ -121,7 +131,8 @@ msgstr "Tropas de 4 líneas -2"
 msgid "Troops of 5 alignments -3"
 msgstr "Tropas de 5 líneas -3"
 
-msgid "Some undead in groups -1"
+#, fuzzy
+msgid "Some undead in group -1"
 msgstr "Tienes algunos caídos en tu ejercito -1"
 
 msgid "View %{name}"
@@ -200,12 +211,12 @@ msgstr "Continuar movimento"
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "On"
-msgstr ""
-
 #, fuzzy
 msgid "Off"
 msgstr "apagado"
+
+msgid "On"
+msgstr ""
 
 msgid "The enemy has surrendered!"
 msgstr "¡El enemigo se ha rendido!"
@@ -354,6 +365,11 @@ msgstr ""
 "Muchos\n"
 "%{monster}"
 
+msgid "(1 shot left)"
+msgid_plural "(%{count} shots left)"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Attack %{monster}"
 msgstr "Atacar a %{monster}"
 
@@ -408,17 +424,32 @@ msgstr "Ocultar registro"
 msgid "Show logs"
 msgstr "Mostrar registros"
 
-msgid "%{color} cast spell: %{spell}"
+#, fuzzy
+msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} lanzó el hechizo: %{spell}"
 
-msgid "%{name} skipping turn"
+#, fuzzy
+msgid "%{name} skip the turn"
 msgstr "%{name} pasa turno"
 
-msgid "%{name} waiting turn"
+#, fuzzy
+msgid "%{name} wait their turn"
 msgstr "%{name} esperando turno"
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} hace %{damage} de daño."
+
+#, fuzzy
+msgid "1 creature perishes."
+msgid_plural "%{count} creatures perish."
+msgstr[0] "una criatura murió."
+msgstr[1] "%{count} criaturas murieron."
+
+#, fuzzy
+msgid "1 %{defender} perishes."
+msgid_plural "%{count} %{defender} perish."
+msgstr[0] "un %{defender} murió."
+msgstr[1] "%{count} %{defender} murieron."
 
 msgid "Moved %{monster}: %{src}, %{dst}"
 msgstr ""
@@ -484,12 +515,12 @@ msgstr "¡El %{name} es paralizado por los Cíclopes!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "¡El Archimago dispersó todos los hechizos buenos en tu %{name}!"
 
+msgid "Bad luck descends on the %{attacker}"
+msgstr "La mala suerte desciende sobre %{attacker}"
+
 #, fuzzy
 msgid "Good luck shines on the %{attacker}"
 msgstr "La buena suerte brilla sobre %{attacker}"
-
-msgid "Bad luck descends on the %{attacker}"
-msgstr "La mala suerte desciende sobre %{attacker}"
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "La alta moral permite a %{monster} atacar otra vez."
@@ -501,7 +532,8 @@ msgstr "La baja moral provoca que %{monster} se paralice por el pánico."
 msgid "%{tower} does %{damage} damage."
 msgstr "La torre ha causado %{damage} de daño."
 
-msgid "MirrorImage created"
+#, fuzzy
+msgid "The mirror image is created"
 msgstr "Reflejo creado"
 
 msgid "The mirror image is destroyed!"
@@ -567,6 +599,10 @@ msgid "%{count} %{name} rise(s) from the dead!"
 msgstr "¡%{count} %{name} se eleva(n) de la muerte!"
 
 #, fuzzy
+msgid "Dwarven Alliance"
+msgstr "Alianza Rota"
+
+#, fuzzy
 msgid "Sorceress Guild"
 msgstr "Hechicera"
 
@@ -589,32 +625,24 @@ msgid "Uncle Ivan"
 msgstr "Uncle Ivan"
 
 #, fuzzy
-msgid "Force of Arms"
-msgstr "\"La Fuerza de las Armas\""
-
-#, fuzzy
 msgid "Annexation"
 msgstr "\"Anexión\""
-
-#, fuzzy
-msgid "Save the Dwarves"
-msgstr "\"Salva a los Enanos\""
 
 #, fuzzy
 msgid "Carator Mines"
 msgstr "\"Minas Carator\""
 
 #, fuzzy
+msgid "Force of Arms"
+msgstr "\"La Fuerza de las Armas\""
+
+#, fuzzy
+msgid "Save the Dwarves"
+msgstr "\"Salva a los Enanos\""
+
+#, fuzzy
 msgid "Turning Point"
 msgstr "\"Punto de retorno\""
-
-#, fuzzy
-msgid "The Gauntlet"
-msgstr "\"El Guantelete\""
-
-#, fuzzy
-msgid "The Crown"
-msgstr "\"La Corona\""
 
 #, fuzzy
 msgid "Corlagon's Defense"
@@ -624,124 +652,12 @@ msgid "Final Justice"
 msgstr ""
 
 #, fuzzy
-msgid "First Blood"
-msgstr "\"Primera Sangre\""
+msgid "The Crown"
+msgstr "\"La Corona\""
 
 #, fuzzy
-msgid "Barbarian Wars"
-msgstr "\"Guerras Barbaras\""
-
-#, fuzzy
-msgid "Necromancers"
-msgstr "Nigromante"
-
-#, fuzzy
-msgid "Slay the Dwarves"
-msgstr "\"Da muerte a los Enanos\""
-
-msgid "Rebellion"
-msgstr ""
-
-#, fuzzy
-msgid "Dragon Master"
-msgstr "\"Maestro Dragón\""
-
-#, fuzzy
-msgid "Country Lords"
-msgstr "\"Señores del Pais\""
-
-#, fuzzy
-msgid "Greater Glory"
-msgstr "\"Gloria Mayor\""
-
-#, fuzzy
-msgid "Apocalypse"
-msgstr "\"Apocalipsis\""
-
-msgid "Uprising"
-msgstr ""
-
-#, fuzzy
-msgid "Island of Chaos"
-msgstr "Isla de los Elfos"
-
-msgid "Arrow's Flight"
-msgstr ""
-
-msgid "The Abyss"
-msgstr ""
-
-#, fuzzy
-msgid "The Giant's Pass"
-msgstr "Los yermos reales"
-
-msgid "Aurora Borealis"
-msgstr ""
-
-#, fuzzy
-msgid "Betrayal's End"
-msgstr "\"¡Traición!\""
-
-#, fuzzy
-msgid "Corruption's Heart"
-msgstr "Alojamiento del Capitán"
-
-msgid "Conquer and Unify"
-msgstr ""
-
-#, fuzzy
-msgid "Border Towns"
-msgstr "Tierras fronterizas"
-
-msgid "The Wayward Son"
-msgstr ""
-
-#, fuzzy
-msgid "Crazy Uncle Ivan"
-msgstr "Uncle Ivan"
-
-#, fuzzy
-msgid "The Southern War"
-msgstr "El Otro Lado"
-
-msgid "Ivory Gates"
-msgstr "Puertas de Marfil"
-
-#, fuzzy
-msgid "The Elven Lands"
-msgstr "Siete Lagos"
-
-msgid "The Epic Battle"
-msgstr ""
-
-#, fuzzy
-msgid "The Shrouded Isles"
-msgstr "La Isla Esmeralda"
-
-#, fuzzy
-msgid "The Eternal Scrolls"
-msgstr "La Isla Esmeralda"
-
-#, fuzzy
-msgid "Power's End"
-msgstr "Anillo de Poder"
-
-#, fuzzy
-msgid "Fount of Wizardry"
-msgstr "El Cayado de Brujería"
-
-msgid "Stranded"
-msgstr ""
-
-#, fuzzy
-msgid "Pirate Isles"
-msgstr "Ensenada Pirata"
-
-msgid "King and Country"
-msgstr ""
-
-msgid "Blood is Thicker"
-msgstr ""
+msgid "The Gauntlet"
+msgstr "\"El Guantelete\""
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -804,6 +720,41 @@ msgid ""
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
 
+#, fuzzy
+msgid "Barbarian Wars"
+msgstr "\"Guerras Barbaras\""
+
+#, fuzzy
+msgid "First Blood"
+msgstr "\"Primera Sangre\""
+
+#, fuzzy
+msgid "Necromancers"
+msgstr "Nigromante"
+
+msgid "Rebellion"
+msgstr ""
+
+#, fuzzy
+msgid "Slay the Dwarves"
+msgstr "\"Da muerte a los Enanos\""
+
+#, fuzzy
+msgid "Apocalypse"
+msgstr "\"Apocalipsis\""
+
+#, fuzzy
+msgid "Country Lords"
+msgstr "\"Señores del Pais\""
+
+#, fuzzy
+msgid "Dragon Master"
+msgstr "\"Maestro Dragón\""
+
+#, fuzzy
+msgid "Greater Glory"
+msgstr "\"Gloria Mayor\""
+
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
 "They are not allied with one another, so they will spend most of their "
@@ -862,6 +813,34 @@ msgid ""
 "not to lose Archibald in the fight!"
 msgstr ""
 
+msgid "Arrow's Flight"
+msgstr ""
+
+#, fuzzy
+msgid "Island of Chaos"
+msgstr "Isla de los Elfos"
+
+msgid "The Abyss"
+msgstr ""
+
+msgid "Uprising"
+msgstr ""
+
+msgid "Aurora Borealis"
+msgstr ""
+
+#, fuzzy
+msgid "Betrayal's End"
+msgstr "\"¡Traición!\""
+
+#, fuzzy
+msgid "Corruption's Heart"
+msgstr "Alojamiento del Capitán"
+
+#, fuzzy
+msgid "The Giant's Pass"
+msgstr "Los yermos reales"
+
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
@@ -904,6 +883,34 @@ msgid ""
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+
+#, fuzzy
+msgid "Border Towns"
+msgstr "Tierras fronterizas"
+
+msgid "Conquer and Unify"
+msgstr ""
+
+#, fuzzy
+msgid "Crazy Uncle Ivan"
+msgstr "Uncle Ivan"
+
+msgid "The Wayward Son"
+msgstr ""
+
+msgid "Ivory Gates"
+msgstr "Puertas de Marfil"
+
+#, fuzzy
+msgid "The Elven Lands"
+msgstr "Siete Lagos"
+
+msgid "The Epic Battle"
+msgstr ""
+
+#, fuzzy
+msgid "The Southern War"
+msgstr "El Otro Lado"
 
 #, fuzzy
 msgid ""
@@ -962,6 +969,22 @@ msgid ""
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
 
+#, fuzzy
+msgid "Fount of Wizardry"
+msgstr "El Cayado de Brujería"
+
+#, fuzzy
+msgid "Power's End"
+msgstr "Anillo de Poder"
+
+#, fuzzy
+msgid "The Eternal Scrolls"
+msgstr "La Isla Esmeralda"
+
+#, fuzzy
+msgid "The Shrouded Isles"
+msgstr "La Isla Esmeralda"
+
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
 "The completion of this task will give you a fighting chance against your "
@@ -983,6 +1006,19 @@ msgstr ""
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
+msgstr ""
+
+msgid "Blood is Thicker"
+msgstr ""
+
+msgid "King and Country"
+msgstr ""
+
+#, fuzzy
+msgid "Pirate Isles"
+msgstr "Ensenada Pirata"
+
+msgid "Stranded"
 msgstr ""
 
 #, fuzzy
@@ -1025,6 +1061,48 @@ msgstr "Bonificación del Rojo"
 msgid " defeated"
 msgstr ""
 
+msgid "The dwarves recognize their allies and gladly join your forces."
+msgstr ""
+
+msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
+msgstr ""
+
+msgid ""
+"The dragons, snarling and growling, agree to join forces with you, their "
+"'Ally'."
+msgstr ""
+
+msgid ""
+"As you approach the group of elves, their leader calls them all to "
+"attention.  He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"your ranks."
+msgstr ""
+
+msgid ""
+"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"pass.\""
+msgstr ""
+
+msgid ""
+"The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
+msgstr ""
+
+msgid ""
+"The dragons see you and call out.  \"Our alliance with Archibald compels us "
+"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
+"scatter."
+msgstr ""
+
+msgid ""
+"The elves stand at attention as you approach.  Their leader calls to you and "
+"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"yours.\""
+msgstr ""
+
+msgid "\"The Dwarfbane!!!!, run for your lives.\""
+msgstr ""
+
 #, fuzzy
 msgid "Thunder Mace"
 msgstr "Maza del Trueno de Dominio"
@@ -1041,8 +1119,8 @@ msgstr "Matadragones"
 msgid "Breastplate"
 msgstr "Peto de Anduran"
 
-msgid "Fizbin Medal"
-msgstr ""
+msgid "Fizbin of Misfortune"
+msgstr "El Fizbin de la Mala Suerte"
 
 #, fuzzy
 msgid "Mage's ring"
@@ -1138,17 +1216,14 @@ msgstr "Torre Mágica, Nivel 4"
 msgid "Mage Guild, Level 5"
 msgstr "Torre Mágica, Nivel 5"
 
+msgid "Crystal Garden"
+msgstr "Jardín de Cristales"
+
 msgid "Farm"
 msgstr "Granja"
 
 msgid "Garbage Heap"
 msgstr "Vertedero"
-
-msgid "Crystal Garden"
-msgstr "Jardín de Cristales"
-
-msgid "Waterfall"
-msgstr "Cascada"
 
 msgid "Orchard"
 msgstr "Huerta"
@@ -1156,47 +1231,47 @@ msgstr "Huerta"
 msgid "Skull Pile"
 msgstr "Pila de Calaveras"
 
-msgid "Fortifications"
-msgstr "Fortificación"
+msgid "Waterfall"
+msgstr "Cascada"
 
 msgid "Coliseum"
 msgstr "Coliseo"
 
-msgid "Rainbow"
-msgstr "Arcoíris"
-
 msgid "Dungeon"
 msgstr "Mazmorra"
+
+msgid "Fortifications"
+msgstr "Fortificación"
 
 msgid "Library"
 msgstr "Biblioteca"
 
+msgid "Rainbow"
+msgstr "Arcoíris"
+
 msgid "Storm"
 msgstr "Tormenta"
-
-msgid "Thatched Hut"
-msgstr "Cobertizo"
-
-msgid "Hut"
-msgstr "Choza"
-
-msgid "Treehouse"
-msgstr "Casa en los Árboles"
 
 msgid "Cave"
 msgstr "Cueva"
 
-msgid "Habitat"
-msgstr "Hábitat"
-
 msgid "Excavation"
 msgstr "Excavación"
 
+msgid "Habitat"
+msgstr "Hábitat"
+
+msgid "Hut"
+msgstr "Choza"
+
+msgid "Thatched Hut"
+msgstr "Cobertizo"
+
+msgid "Treehouse"
+msgstr "Casa en los Árboles"
+
 msgid "Archery Range"
 msgstr "Campo de Tiro"
-
-msgid "Stick Hut"
-msgstr "Chamizo"
 
 msgid "Cottage"
 msgstr "Casa de Campo"
@@ -1204,11 +1279,14 @@ msgstr "Casa de Campo"
 msgid "Crypt"
 msgstr "Cripta"
 
+msgid "Graveyard"
+msgstr "Cementerio"
+
 msgid "Pen"
 msgstr "Corral"
 
-msgid "Graveyard"
-msgstr "Cementerio"
+msgid "Stick Hut"
+msgstr "Chamizo"
 
 msgid "Blacksmith"
 msgstr "Herrero"
@@ -1216,26 +1294,20 @@ msgstr "Herrero"
 msgid "Den"
 msgstr "Lobera"
 
-msgid "Nest"
-msgstr "Nido"
-
 msgid "Foundry"
 msgstr "Fundición"
+
+msgid "Nest"
+msgstr "Nido"
 
 msgid "Pyramid"
 msgstr "Pirámide"
 
-msgid "Armory"
-msgstr "Armería"
-
 msgid "Adobe"
 msgstr "Adobe"
 
-msgid "Stonehenge"
-msgstr "Stonehenge"
-
-msgid "Maze"
-msgstr "Laberinto"
+msgid "Armory"
+msgstr "Armería"
 
 msgid "Cliff Nest"
 msgstr "Nido del acantilado"
@@ -1243,8 +1315,11 @@ msgstr "Nido del acantilado"
 msgid "Mansion"
 msgstr "Mansión"
 
-msgid "Jousting Arena"
-msgstr "Campo de Justa"
+msgid "Maze"
+msgstr "Laberinto"
+
+msgid "Stonehenge"
+msgstr "Stonehenge"
 
 msgid "Bridge"
 msgstr "Puente"
@@ -1252,29 +1327,32 @@ msgstr "Puente"
 msgid "Fenced Meadow"
 msgstr "Prado Vallado"
 
-msgid "Swamp"
-msgstr "Ciénaga"
-
 msgid "Ivory Tower"
 msgstr "Torre de Marfil"
+
+msgid "Jousting Arena"
+msgstr "Campo de Justa"
 
 msgid "Mausoleum"
 msgstr "Mausoleo"
 
+msgid "Swamp"
+msgstr "Ciénaga"
+
 msgid "Cathedral"
 msgstr "Catedral"
-
-msgid "Red Tower"
-msgstr "Torre Roja"
-
-msgid "Green Tower"
-msgstr "Torre Verde"
 
 msgid "Cloud Castle"
 msgstr "Castillo de las Nubes"
 
+msgid "Green Tower"
+msgstr "Torre Verde"
+
 msgid "Laboratory"
 msgstr "Laboratorio"
+
+msgid "Red Tower"
+msgstr "Torre Roja"
 
 msgid "Upg. Archery Range"
 msgstr "Mej. Campo de Tiro"
@@ -1477,7 +1555,8 @@ msgid ""
 "percent."
 msgstr "El Santuario incrementa la habilidad de nigromancia."
 
-msgid "Cannot recruit - you already recruit hero in current week."
+#, fuzzy
+msgid "Cannot recruit - you have already recruited a hero in the current week."
 msgstr "No se puede reclutar - Ya has reclutado un héroe esta semana"
 
 #, fuzzy
@@ -1506,12 +1585,12 @@ msgstr "Mes: %{month}, Semana: %{week}, Día: %{day}"
 msgid "Income"
 msgstr "Ingresos:"
 
+msgid "Army is full"
+msgstr ""
+
 #, fuzzy
 msgid "Join Error"
 msgstr "Error"
-
-msgid "Army is full"
-msgstr ""
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
@@ -1521,11 +1600,11 @@ msgstr ""
 "actualmente no tienes espacio para un libro de hechizos. Prueba dando uno de "
 "tus artefactos a otro héroe."
 
-msgid "Town"
-msgstr "Pueblo"
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Este pueblo no se puede actualizar a castillo."
+
+msgid "Town"
+msgstr "Pueblo"
 
 #, fuzzy
 msgid "Exit Castle"
@@ -1691,11 +1770,11 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "¿Estás seguro de que desea descartar este ejército?"
 
-msgid "Shots Left"
-msgstr "Disparos restantes"
-
 msgid "Shots"
 msgstr "Disparos"
+
+msgid "Shots Left"
+msgstr "Disparos restantes"
 
 msgid "Hit Points"
 msgstr "Puntos de daño"
@@ -1847,6 +1926,9 @@ msgstr "Establecer Guardián"
 msgid "Your army too big!"
 msgstr "¡Tu ejército es demasiado grande!"
 
+msgid "Choose game language:"
+msgstr ""
+
 msgid "%{name} has gained a level."
 msgstr "%{name} ha ganado un nivel."
 
@@ -1898,6 +1980,9 @@ msgstr "Tratos Disponibles"
 
 msgid "n/a"
 msgstr "No disponible"
+
+msgid "guarded by "
+msgstr ""
 
 #, fuzzy
 msgid "guarded by %{count} %{monster}"
@@ -1959,6 +2044,10 @@ msgstr "Disponible: %{count}"
 
 msgid "Number to buy:"
 msgstr "NÚMERO"
+
+#, fuzzy
+msgid "Select Game Resolution"
+msgstr "Descripción seleccionada"
 
 msgid "How many troops to move?"
 msgstr "¿Cuántas tropas deseas mover?"
@@ -2030,9 +2119,6 @@ msgstr ""
 "Indica cuantos jugadores hay en total en el editor de escenario. Cualquier "
 "posición no ocupada por humanos, será ocupada por jugadores virtuales."
 
-msgid "Size Icon"
-msgstr "Icono del tamaño"
-
 #, fuzzy
 msgid ""
 "Indicates whether the map\n"
@@ -2042,6 +2128,9 @@ msgid ""
 msgstr ""
 "Indica si los mapas son pequeños (36x36), medianos (72x72), grandes "
 "(108x108) o extra grandes (144x144)."
+
+msgid "Size Icon"
+msgstr "Icono del tamaño"
 
 msgid "Selected Name"
 msgstr "Nombre elegido"
@@ -2071,11 +2160,11 @@ msgstr "Descripción seleccionada"
 msgid "The description of the currently selected map."
 msgstr "La descripción del mapa actualmente elegido"
 
-msgid "Okay"
-msgstr ""
-
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
+
+msgid "Okay"
+msgstr ""
 
 msgid "Lose all your heroes and towns."
 msgstr "Perder todos tus héroes y ciudades."
@@ -2132,18 +2221,18 @@ msgstr ""
 msgid "Toggle foreground sounds level."
 msgstr ""
 
+msgid "Change the type of music."
+msgstr ""
+
 msgid "Music Type"
 msgstr ""
 
-msgid "Change the type of music."
+msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 #, fuzzy
 msgid "Hero Speed"
 msgstr "Velocidad del héroe"
-
-msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
 
 #, fuzzy
 msgid "Enemy Speed"
@@ -2181,12 +2270,12 @@ msgstr "Botella"
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Exit this menu."
 msgstr "Esta unidad espera"
+
+msgid "OK"
+msgstr "OK"
 
 msgid "off"
 msgstr "apagado"
@@ -2197,9 +2286,6 @@ msgstr ""
 #, fuzzy
 msgid "MIDI Expansion"
 msgstr "Mansión"
-
-msgid "CD Stereo"
-msgstr ""
 
 msgid "External"
 msgstr ""
@@ -2319,17 +2405,17 @@ msgstr "Mejor monstruo:"
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
-msgid "difficulty|Normal"
-msgstr "Normal"
+msgid "difficulty|Expert"
+msgstr "Experto"
 
 msgid "difficulty|Hard"
 msgstr "Difícil"
 
-msgid "difficulty|Expert"
-msgstr "Experto"
-
 msgid "difficulty|Impossible"
 msgstr "Imposible"
+
+msgid "difficulty|Normal"
+msgstr "Normal"
 
 #, fuzzy
 msgid "Map is loading..."
@@ -2373,31 +2459,18 @@ msgstr ""
 msgid "Cancel back to the main menu."
 msgstr "Cancelar y volver al menú principal."
 
-msgid "Network"
-msgstr "Red"
-
-msgid ""
-"Play a network game, where 2 players use their own computers connected "
-"through a LAN (Local Area Network)."
-msgstr ""
-"Jugar una partida de red donde 2 jugadores usan sus propios PCs conectados "
-"en una LAN. (Red de Área Local)."
-
-msgid "Standard Game"
-msgstr "Juego estandar"
-
 msgid "A single player game playing out a single map."
 msgstr "Un solo jugador jugando un único mapa."
 
-msgid "Campaign Game"
-msgstr "Partida de Campaña."
+msgid "Standard Game"
+msgstr "Juego estandar"
 
 #, fuzzy
 msgid "A single player game playing through a series of maps."
 msgstr "Un solo jugador jugando un único mapa."
 
-msgid "Multi-Player Game"
-msgstr "Juego multi-jugador"
+msgid "Campaign Game"
+msgstr "Partida de Campaña."
 
 msgid ""
 "A multi-player game, with several human players completing against each "
@@ -2405,6 +2478,12 @@ msgid ""
 msgstr ""
 "Una partida multijugador con varios jugadores humanos compitiendo entre "
 "ellos en un mapa."
+
+msgid "Multi-Player Game"
+msgstr "Juego multi-jugador"
+
+msgid "fheroes2 Resurrection Team presents"
+msgstr ""
 
 #, fuzzy
 msgid "Greetings!"
@@ -2455,19 +2534,15 @@ msgstr "Puntuaciones más altas"
 msgid "View the high score screen."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-#, fuzzy
-msgid "Select Game Resolution"
-msgstr "Descripción seleccionada"
-
 msgid "Change resolution of the game."
-msgstr ""
-
-msgid "Original Campaign"
 msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
+msgstr ""
+
+msgid "Original Campaign"
 msgstr ""
 
 msgid "Expansion Campaign"
@@ -2504,18 +2579,19 @@ msgstr "Enano de Combate"
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
-msgid "Settings"
-msgstr "Ajustes"
-
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
+msgid "Settings"
+msgstr "Ajustes"
+
 msgid "2 Players"
 msgstr "2 jugadores"
 
+#, fuzzy
 msgid ""
-"Play with 2 human players, and optionally, up, to 4 additional computer "
+"Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
 msgstr ""
 "Jugar con 2 jugadores humanos y opcionalmente, hasta con 4 jugadores "
@@ -2524,8 +2600,9 @@ msgstr ""
 msgid "3 Players"
 msgstr "3 Jugadores"
 
+#, fuzzy
 msgid ""
-"Play with 3 human players, and optionally, up, to 3 additional computer "
+"Play with 3 human players, and optionally, up to 3 additional computer "
 "players."
 msgstr ""
 "Jugar con 3 jugadores humanos y, opcionalmente, hasta con 3 jugadores "
@@ -2534,8 +2611,9 @@ msgstr ""
 msgid "4 Players"
 msgstr "4 Jugadores"
 
+#, fuzzy
 msgid ""
-"Play with 4 human players, and optionally, up, to 2 additional computer "
+"Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
 msgstr ""
 "Jugar con 4 jugadores humanos y ,opcionalmente, hasta 2 jugadores virtuales."
@@ -2543,9 +2621,10 @@ msgstr ""
 msgid "5 Players"
 msgstr "5 Jugadores"
 
+#, fuzzy
 msgid ""
-"Play with 5 human players, and optionally, up, to 1 additional computer "
-"players."
+"Play with 5 human players, and optionally, up to 1 additional computer "
+"player."
 msgstr ""
 "Jugar con 5 jugadores humanos y, opcionalmente, con un jugador virtual "
 "adicional."
@@ -2555,54 +2634,6 @@ msgstr "6 Jugadores"
 
 msgid "Play with 6 human players."
 msgstr "Jugar con 6 jugadores humanos."
-
-msgid "Defeat all enemy heroes and capture all enemy towns and castles."
-msgstr ""
-
-msgid "Run out of time. (Fail to win by a certain point.)"
-msgstr "Agotarse el tiempo. (Fracasando sin ganar por alguna condición.)"
-
-msgid "Capture the castle '%{name}'"
-msgstr "Captura el castillo de '%{name}'"
-
-msgid "Capture the town '%{name}'"
-msgstr "Captura la ciudad de '%{name}'"
-
-msgid "Defeat the hero '%{name}'"
-msgstr "Derrota el héroe '%{name}"
-
-msgid "Find the ultimate artifact"
-msgstr "Encuentra el artefacto definitivo"
-
-msgid "Find the '%{name}' artifact"
-msgstr "Encuentra el artefacto '%{name}"
-
-msgid "Accumulate %{count} gold"
-msgstr "Acumula %{count} oro"
-
-msgid ""
-", or you may win by defeating all enemy heroes and capturing all enemy towns "
-"and castles."
-msgstr ""
-", o puedes ganar derrotando a todos los héroes enemigos y capturando todas "
-"las ciudades y castillos enemigos."
-
-msgid "Lose the castle '%{name}'."
-msgstr "Pierde el castillo '%{name}'."
-
-msgid "Lose the town '%{name}'."
-msgstr "Pierde la ciudad de '%{name}'."
-
-msgid "Lose the hero: %{name}."
-msgstr "Pierdes el héroe: %{name}."
-
-msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
-msgstr ""
-"No consigas ganar para el final del mes &{month}, semana %{semana}, día "
-"%{day}."
-
-msgid "Lose the heroes: %{name}."
-msgstr "Piérdes los Héroes: %{name}."
 
 msgid ""
 "You captured %{name}!\n"
@@ -2640,18 +2671,26 @@ msgstr ""
 "Todos los enemigos te reverencia ante tu riqueza y poder."
 
 msgid ""
-"The enemy has found the %{name}.\n"
+"The enemy has captured %{name}!\n"
+"They are triumphant."
+msgstr ""
+"¡El enemigo ha capturado %{name}!\n"
+"Son los triunfadores."
+
+#, fuzzy
+msgid ""
+"The enemy has captured the hero %{name}!\n"
 "Your quest is a failure."
 msgstr ""
 "El enemigo ha encontrado %{name}.\n"
 "Tu búsqueda ha fallado."
 
 msgid ""
-"%{color} has fallen!\n"
-"All is lost."
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
 msgstr ""
-"¡%{color} ha sido eliminado!\n"
-"Todo está perdido."
+"El enemigo ha encontrado %{name}.\n"
+"Tu búsqueda ha fallado."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -2662,13 +2701,6 @@ msgstr ""
 
 msgid "You have been eliminated from the game!!!"
 msgstr "¡¡¡Has sido eliminado del juego!!!"
-
-msgid ""
-"The enemy has captured %{name}!\n"
-"They are triumphant."
-msgstr ""
-"¡El enemigo ha capturado %{name}!\n"
-"Son los triunfadores."
 
 msgid ""
 "You have lost the hero %{name}.\n"
@@ -2684,21 +2716,75 @@ msgstr ""
 "Has fallado en completar tu búsqueda a tiempo.\n"
 "Todo está perdido."
 
+msgid "Defeat all enemy heroes and capture all enemy towns and castles."
+msgstr ""
+
+msgid "Run out of time. (Fail to win by a certain point.)"
+msgstr "Agotarse el tiempo. (Fracasando sin ganar por alguna condición.)"
+
+#, fuzzy
+msgid "Capture the castle '%{name}'."
+msgstr "Captura el castillo de '%{name}'"
+
+#, fuzzy
+msgid "Capture the town '%{name}'."
+msgstr "Captura la ciudad de '%{name}'"
+
+#, fuzzy
+msgid "Defeat the hero '%{name}'."
+msgstr "Derrota el héroe '%{name}"
+
+#, fuzzy
+msgid "Find the ultimate artifact."
+msgstr "Encuentra el artefacto definitivo"
+
+#, fuzzy
+msgid "Find the '%{name}' artifact."
+msgstr "Encuentra el artefacto '%{name}"
+
+#, fuzzy
+msgid "Accumulate %{count} gold."
+msgstr "Acumula %{count} oro"
+
+msgid ""
+", or you may win by defeating all enemy heroes and capturing all enemy towns "
+"and castles."
+msgstr ""
+", o puedes ganar derrotando a todos los héroes enemigos y capturando todas "
+"las ciudades y castillos enemigos."
+
+msgid "Lose the castle '%{name}'."
+msgstr "Pierde el castillo '%{name}'."
+
+msgid "Lose the town '%{name}'."
+msgstr "Pierde la ciudad de '%{name}'."
+
+msgid "Lose the hero: %{name}."
+msgstr "Pierdes el héroe: %{name}."
+
+msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
+msgstr ""
+"No consigas ganar para el final del mes &{month}, semana %{semana}, día "
+"%{day}."
+
+msgid "Lose the heroes: %{name}."
+msgstr "Piérdes los Héroes: %{name}."
+
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
 
-msgid "Warning"
-msgstr "Advertencia"
-
 msgid "No maps available!"
 msgstr "¡Ningún mapa disponible!"
 
-msgid "Scenario"
-msgstr "Escenario"
+msgid "Warning"
+msgstr "Advertencia"
 
 msgid "Click here to select which scenario to play."
 msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+msgid "Scenario"
+msgstr "Escenario"
 
 msgid "Game Difficulty"
 msgstr "Dificultad del juego"
@@ -2750,20 +2836,25 @@ msgstr "Los Astrólogos proclaman el Mes de  %{name}."
 msgid "Astrologers proclaim Week of the %{name}."
 msgstr "Los Astrólogos proclaman la Semana de  %{name}."
 
-msgid "After regular growth, population of %{monster} is doubled!"
+#, fuzzy
+msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
+
+#, fuzzy
+msgid ""
+"After regular growth, the population of %{monter} increases by %{count} "
+"percent!"
+msgstr "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
+
+#, fuzzy
+msgid "%{monster} population increases by +%{count}."
+msgstr "Aumenta la velocidad de cualquier criatura en %{count}."
 
 msgid " All populations are halved."
 msgstr " El crecimiento de las poblaciones se reduce a la mitad."
 
 msgid " All dwellings increase population."
 msgstr " Todas las moradas aumentan su población."
-
-msgid ""
-"%{color} player, your heroes abandon you, and you are banished from this "
-"land."
-msgstr ""
-"Jugador %{color}, tus héroes te abandonan y eres desterrado de estas tierras."
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -2789,6 +2880,12 @@ msgid ""
 msgstr ""
 "Jugador %{color}, has perdido tu última ciudad. Si no conquistas ótra la "
 "próxima semana serás eliminado."
+
+msgid ""
+"%{color} player, your heroes abandon you, and you are banished from this "
+"land."
+msgstr ""
+"Jugador %{color}, tus héroes te abandonan y eres desterrado de estas tierras."
 
 msgid "Next Hero"
 msgstr "Siguiente Héroe"
@@ -2823,20 +2920,20 @@ msgstr "Opciones de la Aventura"
 msgid "Bring up the adventure options menu."
 msgstr "Desplegar el menú de opciones de aventura."
 
-msgid "File Options"
-msgstr "Opciones de archivo"
-
 msgid "Bring up the file options menu, alloving you to load menu, save etc."
 msgstr ""
 "Desplegar el menú de opciones de archivo, permiéndote cargar, grabar etc."
 
-msgid "System Options"
-msgstr "Opciones del Sistema"
+msgid "File Options"
+msgstr "Opciones de archivo"
 
 msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr ""
 "Desplegar el menú de opciones de sistema, permitiéndote personalizar tu "
 "partida."
+
+msgid "System Options"
+msgstr "Opciones del Sistema"
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -2889,13 +2986,13 @@ msgstr "Prueba buscando en terreno despejado"
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr "Excavar artefactos requiere un día entero, inténtalo mañana."
 
-msgid "World Map"
-msgstr "Mapa del mundo"
-
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Una vista en minatura del mundo explorado. Cliquea con el botón izquierdo "
 "para ver dicha área."
+
+msgid "World Map"
+msgstr "Mapa del mundo"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mes: %{month} Semana: %{week}"
@@ -2957,12 +3054,27 @@ msgstr "%{color} jugador"
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
 
-msgid "Lord Kilburn"
-msgstr "Lord Kilburn"
+msgid "English"
+msgstr ""
+
+msgid "French"
+msgstr ""
+
+msgid "Polish"
+msgstr ""
 
 #, fuzzy
-msgid "Sir Gallant"
-msgstr "Sir Gallanth"
+msgid "German"
+msgstr "Sherman"
+
+msgid "Russian"
+msgstr ""
+
+msgid "Ambrose"
+msgstr "Ambrose"
+
+msgid "Dimitry"
+msgstr "Dimitry"
 
 msgid "Ector"
 msgstr "Ector"
@@ -2970,53 +3082,69 @@ msgstr "Ector"
 msgid "Gwenneth"
 msgstr "Gwenneth"
 
-msgid "Tyro"
-msgstr "Tyro"
-
-msgid "Ambrose"
-msgstr "Ambrose"
-
-msgid "Ruby"
-msgstr "Ruby"
+msgid "Lord Kilburn"
+msgstr "Lord Kilburn"
 
 msgid "Maximus"
 msgstr "Maximus"
 
-msgid "Dimitry"
-msgstr "Dimitry"
+msgid "Ruby"
+msgstr "Ruby"
 
-msgid "Thundax"
-msgstr "Thundax"
+#, fuzzy
+msgid "Sir Gallant"
+msgstr "Sir Gallanth"
 
-msgid "Fineous"
-msgstr "Fineous"
-
-msgid "Jojosh"
-msgstr "Jojosh"
-
-msgid "Crag Hack"
-msgstr "Crag Hack"
-
-msgid "Jezebel"
-msgstr "Jezebel"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
-
-msgid "Ergon"
-msgstr "Ergon"
-
-msgid "Tsabu"
-msgstr "Tsabu"
+msgid "Tyro"
+msgstr "Tyro"
 
 msgid "Atlas"
 msgstr "Atlas"
 
+msgid "Crag Hack"
+msgstr "Crag Hack"
+
+msgid "Ergon"
+msgstr "Ergon"
+
+msgid "Fineous"
+msgstr "Fineous"
+
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
+msgid "Jezebel"
+msgstr "Jezebel"
+
+msgid "Jojosh"
+msgstr "Jojosh"
+
+msgid "Thundax"
+msgstr "Thundax"
+
+msgid "Tsabu"
+msgstr "Tsabu"
+
+msgid "Ariel"
+msgstr "Ariel"
+
 msgid "Astra"
 msgstr "Astra"
 
+msgid "Carlawn"
+msgstr "Carlawn"
+
+msgid "Gem"
+msgstr "Gem"
+
+msgid "Luna"
+msgstr "Luna"
+
 msgid "Natasha"
 msgstr "Natasha"
+
+msgid "Rebecca"
+msgstr "Rebecca"
 
 msgid "Troyan"
 msgstr "Troyan"
@@ -3024,68 +3152,41 @@ msgstr "Troyan"
 msgid "Vatawna"
 msgstr "Vatawna"
 
-msgid "Rebecca"
-msgstr "Rebecca"
-
-msgid "Gem"
-msgstr "Gem"
-
-msgid "Ariel"
-msgstr "Ariel"
-
-msgid "Carlawn"
-msgstr "Carlawn"
-
-msgid "Luna"
-msgstr "Luna"
-
-msgid "Arie"
-msgstr "Arie"
+msgid "Agar"
+msgstr "Agar"
 
 msgid "Alamar"
 msgstr "Alamar"
 
-msgid "Vesper"
-msgstr "Vesper"
-
-msgid "Crodo"
-msgstr "Crodo"
+msgid "Arie"
+msgstr "Arie"
 
 msgid "Barok"
 msgstr "Barok"
 
-msgid "Kastore"
-msgstr "Katore"
-
-msgid "Agar"
-msgstr "Agar"
+msgid "Crodo"
+msgstr "Crodo"
 
 msgid "Falagar"
 msgstr "Falagar"
 
+msgid "Kastore"
+msgstr "Katore"
+
+msgid "Vesper"
+msgstr "Vesper"
+
 msgid "Wrathmont"
 msgstr "Wrathmont"
-
-msgid "Myra"
-msgstr "Myra"
-
-msgid "Flint"
-msgstr "Flint"
 
 msgid "Dawn"
 msgstr "Dawn"
 
+msgid "Flint"
+msgstr "Flint"
+
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Myrini"
-msgstr "Myrini"
-
-msgid "Wilfrey"
-msgstr "Wilfrey"
-
-msgid "Sarakin"
-msgstr "Sarakin"
 
 msgid "Kalindra"
 msgstr "Kalindra"
@@ -3093,20 +3194,29 @@ msgstr "Kalindra"
 msgid "Mandigal"
 msgstr "Mandigal"
 
-msgid "Zom"
-msgstr "Zom"
+msgid "Myra"
+msgstr "Myra"
+
+msgid "Myrini"
+msgstr "Myrini"
+
+msgid "Sarakin"
+msgstr "Sarakin"
+
+msgid "Wilfrey"
+msgstr "Wilfrey"
+
+msgid "Celia"
+msgstr "Celia"
+
+msgid "Charity"
+msgstr "Charity"
 
 msgid "Darlana"
 msgstr "Darlana"
 
-msgid "Zam"
-msgstr "Zam"
-
 msgid "Ranloo"
 msgstr "Ranloo"
-
-msgid "Charity"
-msgstr "Charity"
 
 msgid "Rialdo"
 msgstr "Rialdo"
@@ -3117,57 +3227,60 @@ msgstr "Roxana"
 msgid "Sandro"
 msgstr "Sandro"
 
-msgid "Celia"
-msgstr "Celia"
+msgid "Zam"
+msgstr "Zam"
 
-msgid "Roland"
-msgstr "Roland"
-
-msgid "Lord Corlagon"
-msgstr "Lord Corlagon"
-
-msgid "Sister Eliza"
-msgstr "Hermana Eliza"
+msgid "Zom"
+msgstr "Zom"
 
 msgid "Archibald"
 msgstr "Archibald"
-
-msgid "Lord Halton"
-msgstr "Lord Halton"
 
 #, fuzzy
 msgid "Brother Brax"
 msgstr "Hermano Bax"
 
-msgid "Solmyr"
-msgstr "Solmyr"
+msgid "Lord Corlagon"
+msgstr "Lord Corlagon"
 
-msgid "Dainwin"
-msgstr "Dainwin"
+msgid "Lord Halton"
+msgstr "Lord Halton"
 
-msgid "Mog"
-msgstr "Mog"
+msgid "Roland"
+msgstr "Roland"
 
-msgid "Joseph"
-msgstr "Joseph"
-
-msgid "Gallavant"
-msgstr "Gallavant"
-
-msgid "Elderian"
-msgstr "Elderian"
+msgid "Sister Eliza"
+msgstr "Hermana Eliza"
 
 msgid "Ceallach"
 msgstr "Ceallach"
 
+msgid "Dainwin"
+msgstr "Dainwin"
+
 msgid "Drakonia"
 msgstr "Drakonia"
 
-msgid "Martine"
-msgstr "Martine"
+msgid "Elderian"
+msgstr "Elderian"
+
+msgid "Gallavant"
+msgstr "Gallavant"
+
+msgid "Joseph"
+msgstr "Joseph"
+
+msgid "Mog"
+msgstr "Mog"
+
+msgid "Solmyr"
+msgstr "Solmyr"
 
 msgid "Jarkonas"
 msgstr "Jarkonas"
+
+msgid "Martine"
+msgstr "Martine"
 
 msgid "%{object} robber"
 msgstr ""
@@ -3416,15 +3529,12 @@ msgstr ""
 "Una antigua e inmortal bruja que vive en una cabaña rodeada de zancos de "
 "aves te enseña %{skill}, para sus inescrutables propósitos."
 
-msgid "You drink from the enchanted fountain, but nothing happens."
-msgstr "Bebes de una fuente encantada pero nada sucede."
-
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
 "Mientras bebes la dulce agua adquieres suerte para tu siguiente batalla."
 
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Entras en el anillo místico de hadas pero nada sucede."
+msgid "You drink from the enchanted fountain, but nothing happens."
+msgstr "Bebes de una fuente encantada pero nada sucede."
 
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
@@ -3432,6 +3542,9 @@ msgid ""
 msgstr ""
 "Justo al entrar el anillo místico de las hadas tu ejército adquiere suerte "
 "para su próxima batalla"
+
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Entras en el anillo místico de hadas pero nada sucede."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -4339,6 +4452,12 @@ msgstr ""
 msgid "Except for evidence of a terrible battle, the cave is empty."
 msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
 
+msgid "He checks your pack, and sees that you have 1 cursed item."
+msgid_plural ""
+"He checks your pack, and sees that you have %{count} cursed items."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
 msgstr ""
 
@@ -4698,17 +4817,22 @@ msgstr ""
 "Debes estar a %{count} casillas  de un monstruo para que el hechizo Visiones "
 "funcione."
 
-msgid "I fear these creatures are in the mood for a fight."
-msgstr "Me temo que esas criaturas tienen ganas de luchar."
-
 msgid "The creatures are willing to join us!"
 msgstr "¡Las criaturas quieren unirse a nosotros!"
 
 msgid "All the creatures will join us..."
 msgstr "Todas las criaturas se nos unirán..."
 
+msgid "The creature will join us..."
+msgid_plural "%{count} of the creatures will join us..."
+msgstr[0] "La criatura se unirá a nosotros..."
+msgstr[1] "%{count} de las criaturas se unirán a nosotros..."
+
 msgid "These weak creatures will surely flee before us."
 msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
+
+msgid "I fear these creatures are in the mood for a fight."
+msgstr "Me temo que esas criaturas tienen ganas de luchar."
 
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemists "
@@ -4744,41 +4868,38 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr "Modificadores actuales:"
 
-msgid "skill|Basic"
-msgstr "habilidad|Básica"
-
 msgid "skill|Advanced"
 msgstr "habilidad|Avanzada"
+
+msgid "skill|Basic"
+msgstr "habilidad|Básica"
 
 msgid "skill|Expert"
 msgstr "habilidad|Experta"
 
-msgid "Pathfinding"
-msgstr "Orientación"
-
 msgid "Archery"
 msgstr "Puntería"
-
-msgid "Logistics"
-msgstr "Logística"
-
-msgid "Scouting"
-msgstr "Exploración"
 
 msgid "Diplomacy"
 msgstr "Diplomacia"
 
-msgid "Navigation"
-msgstr "Navegación"
-
 msgid "Leadership"
 msgstr "Liderazgo"
 
+msgid "Logistics"
+msgstr "Logística"
+
+msgid "Navigation"
+msgstr "Navegación"
+
+msgid "Pathfinding"
+msgstr "Orientación"
+
+msgid "Scouting"
+msgstr "Exploración"
+
 msgid "Wisdom"
 msgstr "Sabiduría"
-
-msgid "Mysticism"
-msgstr "Misticismo"
 
 msgid "Ballistics"
 msgstr "Balística"
@@ -4786,131 +4907,134 @@ msgstr "Balística"
 msgid "Eagle Eye"
 msgstr "Ojo de Águila"
 
-msgid "Necromancy"
-msgstr "Nigromancia"
-
 msgid "Estates"
 msgstr "Patrimonio"
 
-msgid "Basic Pathfinding"
-msgstr ""
+msgid "Mysticism"
+msgstr "Misticismo"
+
+msgid "Necromancy"
+msgstr "Nigromancia"
+
+msgid "Advanced Archery"
+msgstr "Tiro con Arco Avanzado"
 
 msgid "Advanced Pathfinding"
-msgstr ""
-
-msgid "Expert Pathfinding"
 msgstr ""
 
 msgid "Basic Archery"
 msgstr "Tiro con Arco Básico"
 
-msgid "Advanced Archery"
-msgstr "Tiro con Arco Avanzado"
+msgid "Basic Pathfinding"
+msgstr ""
 
-msgid "Expert Archery"
-msgstr "Tiro con Arco Experto"
-
-msgid "Basic Logistics"
-msgstr "Logística Básica"
+msgid "Expert Pathfinding"
+msgstr ""
 
 msgid "Advanced Logistics"
 msgstr "Logística Avanzada"
 
-msgid "Expert Logistics"
-msgstr "Logística Experta"
+msgid "Basic Logistics"
+msgstr "Logística Básica"
 
 msgid "Basic Scouting"
 msgstr "Exploración Básica"
 
-msgid "Advanced Scouting"
-msgstr "Exploración Avanzada"
+msgid "Expert Archery"
+msgstr "Tiro con Arco Experto"
 
-msgid "Expert Scouting"
-msgstr "Exploración Experta"
-
-msgid "Basic Diplomacy"
-msgstr "Diplomacia Básica"
+msgid "Expert Logistics"
+msgstr "Logística Experta"
 
 msgid "Advanced Diplomacy"
 msgstr "Diplomacia Avanzada"
 
+msgid "Advanced Scouting"
+msgstr "Exploración Avanzada"
+
+msgid "Basic Diplomacy"
+msgstr "Diplomacia Básica"
+
 msgid "Expert Diplomacy"
 msgstr "Diplomacia Experta"
 
-msgid "Basic Navigation"
-msgstr "Navegación Básica"
-
-msgid "Advanced Navigation"
-msgstr "Navegación Avanzada"
-
-msgid "Expert Navigation"
-msgstr "Navegación Experta"
-
-msgid "Basic Leadership"
-msgstr "Liderazgo Básico"
+msgid "Expert Scouting"
+msgstr "Exploración Experta"
 
 msgid "Advanced Leadership"
 msgstr "Liderazgo Avanzado"
 
-msgid "Expert Leadership"
-msgstr "Liderazgo Experto"
+msgid "Advanced Navigation"
+msgstr "Navegación Avanzada"
 
-msgid "Basic Wisdom"
-msgstr "Sabiduría Básica"
+msgid "Basic Leadership"
+msgstr "Liderazgo Básico"
+
+msgid "Basic Navigation"
+msgstr "Navegación Básica"
+
+msgid "Expert Navigation"
+msgstr "Navegación Experta"
 
 msgid "Advanced Wisdom"
 msgstr "Sabiduría Avanzada"
 
-msgid "Expert Wisdom"
-msgstr "Sabiduría Experta"
-
 msgid "Basic Mysticism"
 msgstr "Misticismo Básico"
 
-msgid "Advanced Mysticism"
-msgstr "Misticismo Avanzado"
+msgid "Basic Wisdom"
+msgstr "Sabiduría Básica"
 
-msgid "Expert Mysticism"
-msgstr "Misticismo Experto"
+msgid "Expert Leadership"
+msgstr "Liderazgo Experto"
 
-msgid "Basic Luck"
-msgstr "Suerte Básica"
+msgid "Expert Wisdom"
+msgstr "Sabiduría Experta"
 
 msgid "Advanced Luck"
 msgstr "Suerte Avanzada"
 
+msgid "Advanced Mysticism"
+msgstr "Misticismo Avanzado"
+
+msgid "Basic Luck"
+msgstr "Suerte Básica"
+
 msgid "Expert Luck"
 msgstr "Suerte Experta"
 
-msgid "Basic Ballistics"
-msgstr "Balística Básica"
+msgid "Expert Mysticism"
+msgstr "Misticismo Experto"
 
 msgid "Advanced Ballistics"
 msgstr "Balística Avanzada"
 
-msgid "Expert Ballistics"
-msgstr "Balística Experta"
+msgid "Advanced Eagle Eye"
+msgstr "Ojo de águila avanzado"
+
+msgid "Basic Ballistics"
+msgstr "Balística Básica"
 
 msgid "Basic Eagle Eye"
 msgstr "Ojo de águila básico"
 
-msgid "Advanced Eagle Eye"
-msgstr "Ojo de águila avanzado"
-
-msgid "Expert Eagle Eye"
-msgstr "Ojo de águila experto"
-
-msgid "Basic Necromancy"
-msgstr "Necromancia Básica"
+msgid "Expert Ballistics"
+msgstr "Balística Experta"
 
 msgid "Advanced Necromancy"
 msgstr "Necromancia Avanzada"
 
-msgid "Expert Necromancy"
-msgstr "Necromancia Experta"
-
 msgid "Basic Estates"
 msgstr ""
+
+msgid "Basic Necromancy"
+msgstr "Necromancia Básica"
+
+msgid "Expert Eagle Eye"
+msgstr "Ojo de águila experto"
+
+msgid "Expert Necromancy"
+msgstr "Necromancia Experta"
 
 msgid "Advanced Estates"
 msgstr ""
@@ -4919,48 +5043,132 @@ msgid "Expert Estates"
 msgstr ""
 
 #, fuzzy
-msgid " allows you to negotiate with monsters who are weaker than your group."
+msgid ""
+"%{skill} reduces the movement penalty for rough terrain by %{count} percent."
+msgstr ""
+"Reduce la penalización al movimiento debida a terreno agreste en un %{count} "
+"por ciento."
+
+#, fuzzy
+msgid "%{skill} eliminates the movement penalty for rough terrain."
+msgstr ""
+"Reduce la penalización al movimiento debida a terreno agreste en un %{count} "
+"por ciento."
+
+#, fuzzy
+msgid ""
+"%{skill} increases the damage done by range attacking creatures by %{count} "
+"percent."
+msgstr "Aumenta la velocidad de cualquier criatura en %{count}."
+
+#, fuzzy
+msgid "%{skill} increases your hero's movement points by %{count} percent."
+msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
+
+msgid "%{skill} increases your hero's viewable area by one square."
+msgid_plural ""
+"%{skill} increases your hero's viewable area by %{count} squares."
+msgstr[0] ""
+msgstr[1] ""
+
+#, fuzzy
+msgid ""
+"%{skill} allows you to negotiate with monsters who are weaker than your "
+"group. "
 msgstr "Te permite negociar con monstruos que sean más débiles que tu grupo."
+
+#, fuzzy
+msgid "Approximately %{count} percent of the creatures may offer to join you."
+msgstr "Todas las criaturas se nos unirán..."
 
 #, fuzzy
 msgid "All of the creatures may offer to join you."
 msgstr "Todas las criaturas se nos unirán..."
 
 #, fuzzy
-msgid " allows your hero to learn third level spells."
+msgid ""
+"%{skill} increases your hero's movement points over water by %{count} "
+"percent."
+msgstr ""
+"Reduce la penalización al movimiento debida a terreno agreste en un %{count} "
+"por ciento."
+
+#, fuzzy
+msgid "%{skill} increases your hero's troops morale by %{count}."
+msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
+
+#, fuzzy
+msgid "%{skill} allows your hero to learn third level spells."
 msgstr "Permite a tu héroe aprender hechizos de tercer nivel."
 
 #, fuzzy
-msgid " allows your hero to learn fourth level spells."
+msgid "%{skill} allows your hero to learn fourth level spells."
 msgstr "Permite a tu héroe aprender hechizos de cuarto nivel."
 
 #, fuzzy
-msgid " allows your hero to learn fifth level spells."
+msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "Permite a tu héroe aprender hechizos de quinto nivel."
+
+msgid "%{skill} regenerates one of your hero's spell points per day."
+msgid_plural ""
+"%{skill} regenerates %{count} of your hero's spell points per day."
+msgstr[0] ""
+msgstr[1] ""
+
+#, fuzzy
+msgid "%{skill} increases your hero's luck by %{count}."
+msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 #, fuzzy
 msgid ""
-" gives your hero's catapult shots a greater chance to hit and do damage to "
-"castle walls."
+"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"damage to castle walls."
 msgstr ""
 "Le otorga a los disparos de las catapultas de tu héroe mayores "
 "probabilidades de dañar las murallas de los castillos."
 
 #, fuzzy
 msgid ""
-" gives your hero's catapult an extra shot, and each shot has a greater "
-"chance to hit and do damage to castle walls."
+"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"greater chance to hit and do damage to castle walls."
 msgstr ""
 "Le otorga a la catapulta de tu héroe un disparo adicional y cada disparo "
 "tiene mayores opciones de golpear y dañar las murallas de los castillos."
 
 #, fuzzy
 msgid ""
-" gives your hero's catapult an extra shot, and each shot automatically "
-"destroys any wall, except a fortified wall in a Knight town."
+"%{skill} gives your hero's catapult an extra shot, and each shot "
+"automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "Le otorga a la catapulta de tu héroe un disparo adicional y cada disparo "
 "tiene mayores opciones de golpear y dañar las murallas de los castillos."
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"2nd level enemy spell used against him in a combat."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"level spell (or below) used against him in combat."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"level spell (or below) used against him in combat."
+msgstr ""
+
+msgid ""
+"%{skill} allows %{count} percent of the creatures killed in combat to be "
+"brought back from the dead as Skeletons."
+msgstr ""
+
+msgid ""
+"Your hero produces %{count} gold pieces per turn as tax revenue from estates."
+msgstr ""
 
 msgid "Blue"
 msgstr "Azul"
@@ -4968,17 +5176,17 @@ msgstr "Azul"
 msgid "Green"
 msgstr "Verde"
 
-msgid "Red"
-msgstr "Rojo"
-
-msgid "Yellow"
-msgstr "Amarillo"
-
 msgid "Orange"
 msgstr "Naranja"
 
 msgid "Purple"
 msgstr "Morado"
+
+msgid "Red"
+msgstr "Rojo"
+
+msgid "Yellow"
+msgstr "Amarillo"
 
 msgid "Aqua"
 msgstr "Agua"
@@ -5007,17 +5215,14 @@ msgstr ""
 msgid "Gold Per Day:"
 msgstr "Oro por día:"
 
-msgid "luck|Cursed"
-msgstr "suerte|Maldito"
-
 msgid "luck|Awful"
 msgstr "suerte|Horrible"
 
 msgid "luck|Bad"
 msgstr "suerte|Malo"
 
-msgid "luck|Normal"
-msgstr "suerte|Normal"
+msgid "luck|Cursed"
+msgstr "suerte|Maldito"
 
 msgid "luck|Good"
 msgstr "suerte|bueno"
@@ -5027,6 +5232,9 @@ msgstr "suerte|Grande"
 
 msgid "luck|Irish"
 msgstr "suerte|Irlandés"
+
+msgid "luck|Normal"
+msgstr "suerte|Normal"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5049,26 +5257,26 @@ msgstr ""
 "Con Buena Suerte a veces tus tropas consegirán ataques afortunados "
 "duplicando su daño."
 
-msgid "morale|Treason"
-msgstr "moral|Traición"
-
 msgid "morale|Awful"
 msgstr "moral|Horrible"
+
+msgid "morale|Normal"
+msgstr "moral|Normal"
 
 msgid "morale|Poor"
 msgstr "moral|Pobre"
 
-msgid "morale|Normal"
-msgstr "moral|Normal"
+msgid "morale|Treason"
+msgstr "moral|Traición"
+
+msgid "morale|Blood!"
+msgstr "moral|¡Sangre!"
 
 msgid "morale|Good"
 msgstr "moral|Bueno"
 
 msgid "morale|Great"
 msgstr "moral|Grande"
-
-msgid "morale|Blood!"
-msgstr "moral|¡Sangre!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr "Con Baja Moral tus tropas puede paralizarse en combate."
@@ -5083,11 +5291,17 @@ msgstr ""
 msgid "Good morale may give your armies extra attacks in combat."
 msgstr "Con Moral Alta tus tropas podrán lograr ataques extra en combate."
 
+msgid "Barbarian"
+msgstr "Bárbaro"
+
 msgid "Knight"
 msgstr "Caballero"
 
-msgid "Barbarian"
-msgstr "Bárbaro"
+msgid "Multi"
+msgstr "Multi"
+
+msgid "Necromancer"
+msgstr "Nigromante"
 
 msgid "Sorceress"
 msgstr "Hechicera"
@@ -5098,41 +5312,35 @@ msgstr "Brujo"
 msgid "Wizard"
 msgstr "Mago"
 
-msgid "Necromancer"
-msgstr "Nigromante"
-
-msgid "Multi"
-msgstr "Multi"
-
-msgid "speed|Standing"
-msgstr "velocidad|Fijo"
+msgid "speed|Average"
+msgstr "velocidad|Media"
 
 msgid "speed|Crawling"
 msgstr "velocidad|Arrastrando"
 
-msgid "speed|Very Slow"
-msgstr "velocidad|Muy lento"
+msgid "speed|Fast"
+msgstr "velocidad|Rápido"
 
 msgid "speed|Slow"
 msgstr "velocidad|Lento"
 
-msgid "speed|Average"
-msgstr "velocidad|Media"
-
-msgid "speed|Fast"
-msgstr "velocidad|Rápido"
+msgid "speed|Standing"
+msgstr "velocidad|Fijo"
 
 msgid "speed|Very Fast"
 msgstr "velocidad|Muy rápido"
 
-msgid "speed|Ultra Fast"
-msgstr "velocidad|Ultra rápido"
+msgid "speed|Very Slow"
+msgstr "velocidad|Muy lento"
 
 msgid "speed|Blazing"
 msgstr "velocidad|fugaz"
 
 msgid "speed|Instant"
 msgstr "velocidad|Instantáneo"
+
+msgid "speed|Ultra Fast"
+msgstr "velocidad|Ultra rápido"
 
 msgid "week|PLAGUE"
 msgstr "semana|PLAGA"
@@ -5206,20 +5414,11 @@ msgstr "semana|Puercoespín"
 msgid "week|Condor"
 msgstr "semana|Cóndor"
 
-msgid "Desert"
-msgstr "Desierto"
-
-msgid "Snow"
-msgstr "Nieve"
-
-msgid "Wasteland"
-msgstr "Paraje baldio"
-
 msgid "Beach"
 msgstr "Playa"
 
-msgid "Lava"
-msgstr "Zona Volcánica"
+msgid "Desert"
+msgstr "Desierto"
 
 msgid "Dirt"
 msgstr "Terreno arcilloso"
@@ -5227,23 +5426,32 @@ msgstr "Terreno arcilloso"
 msgid "Grass"
 msgstr "Pastos"
 
+msgid "Lava"
+msgstr "Zona Volcánica"
+
 msgid "Ocean"
 msgstr ""
 
-msgid "maps|Small"
-msgstr "mapas|Pequeño"
+msgid "Snow"
+msgstr "Nieve"
 
-msgid "maps|Medium"
-msgstr "mapas|Mediano"
+msgid "Wasteland"
+msgstr "Paraje baldio"
 
-msgid "maps|Large"
-msgstr "mapas|Grande"
+msgid "maps|Custom Size"
+msgstr ""
 
 msgid "maps|Extra Large"
 msgstr "mapas|Extra grande"
 
-msgid "maps|Custom Size"
-msgstr ""
+msgid "maps|Large"
+msgstr "mapas|Grande"
+
+msgid "maps|Medium"
+msgstr "mapas|Mediano"
+
+msgid "maps|Small"
+msgstr "mapas|Pequeño"
 
 msgid "Ore Mine"
 msgstr "MIna de Hierro."
@@ -5576,47 +5784,685 @@ msgstr "Sirenas"
 msgid "Reefs"
 msgstr "Arrecifes"
 
+#, fuzzy
+msgid "Unknown Monster"
+msgstr "Monstruo"
+
+#, fuzzy
+msgid "Unknown Monsters"
+msgstr "Monstruos"
+
+#, fuzzy
+msgid "Peasant"
+msgstr "Campesino"
+
+msgid "Peasants"
+msgstr "Campesinos"
+
+#, fuzzy
+msgid "Archer"
+msgstr "Arquero"
+
+msgid "Archers"
+msgstr "Arqueros"
+
+#, fuzzy
+msgid "Ranger"
+msgstr "Montaraz"
+
+msgid "Rangers"
+msgstr "Arqueros Expertos"
+
+#, fuzzy
+msgid "Pikeman"
+msgstr "Piquero"
+
+msgid "Pikemen"
+msgstr "Piqueros"
+
+#, fuzzy
+msgid "Veteran Pikeman"
+msgstr "Piquero veterano"
+
+msgid "Veteran Pikemen"
+msgstr "Alabarderos"
+
+#, fuzzy
+msgid "Swordsman"
+msgstr "Espadachín"
+
+msgid "Swordsmen"
+msgstr "Espadachín"
+
+#, fuzzy
+msgid "Master Swordsman"
+msgstr "Maestro Espadachín"
+
+msgid "Master Swordsmen"
+msgstr "Maestros Espadachines"
+
+msgid "Cavalries"
+msgstr "Caballerías"
+
+#, fuzzy
+msgid "Cavalry"
+msgstr "Caballería"
+
+#, fuzzy
+msgid "Champion"
+msgstr "Campeón"
+
+msgid "Champions"
+msgstr "Caballeros"
+
+#, fuzzy
+msgid "Paladin"
+msgstr "Paladín"
+
+msgid "Paladins"
+msgstr "Paladines"
+
+#, fuzzy
+msgid "Crusader"
+msgstr "Cruzado"
+
+msgid "Crusaders"
+msgstr "Cruzados"
+
+#, fuzzy
+msgid "Goblin"
+msgstr "Trasgo"
+
+msgid "Goblins"
+msgstr "Trasgos"
+
+#, fuzzy
+msgid "Orc"
+msgstr "Orco"
+
+msgid "Orcs"
+msgstr "Orcos"
+
+#, fuzzy
+msgid "Orc Chief"
+msgstr "Jefe Orco"
+
+msgid "Orc Chiefs"
+msgstr "Jefes Orcos"
+
+#, fuzzy
+msgid "Wolf"
+msgstr "Lobo"
+
+msgid "Wolves"
+msgstr "Lobos"
+
+#, fuzzy
+msgid "Ogre"
+msgstr "Ogro"
+
+msgid "Ogres"
+msgstr "Ogros"
+
+#, fuzzy
+msgid "Ogre Lord"
+msgstr "Ogro de Combate"
+
+msgid "Ogre Lords"
+msgstr "Ogros de Combate"
+
+#, fuzzy
+msgid "Troll"
+msgstr "Troll"
+
+msgid "Trolls"
+msgstr "Trolls"
+
+#, fuzzy
+msgid "War Troll"
+msgstr "Trol de Guerra"
+
+msgid "War Trolls"
+msgstr "Troll de Guerra"
+
+msgid "Cyclopes"
+msgstr "Cíclopes"
+
+#, fuzzy
+msgid "Cyclops"
+msgstr "Cíclope"
+
+#, fuzzy
+msgid "Sprite"
+msgstr "Hada"
+
+msgid "Sprites"
+msgstr "Hadas"
+
+#, fuzzy
+msgid "Dwarf"
+msgstr "Enano"
+
+msgid "Dwarves"
+msgstr "Enanos"
+
+#, fuzzy
+msgid "Battle Dwarf"
+msgstr "Enanos de Combate"
+
+msgid "Battle Dwarves"
+msgstr "Enanos de Combate"
+
+#, fuzzy
+msgid "Elf"
+msgstr "Elfo"
+
+msgid "Elves"
+msgstr "Elfos"
+
+#, fuzzy
+msgid "Grand Elf"
+msgstr "Gran Elfo"
+
+msgid "Grand Elves"
+msgstr "Grandes Elfos"
+
+#, fuzzy
+msgid "Druid"
+msgstr "Druida"
+
+msgid "Druids"
+msgstr "Druidas"
+
+#, fuzzy
+msgid "Greater Druid"
+msgstr "Gran Druida"
+
+msgid "Greater Druids"
+msgstr "Grandes Druidas"
+
+#, fuzzy
+msgid "Unicorn"
+msgstr "Unicornio"
+
+msgid "Unicorns"
+msgstr "Unicornios"
+
+#, fuzzy
+msgid "Phoenix"
+msgstr "Fénix"
+
+#, fuzzy
+msgid "Phoenixes"
+msgstr "Fénix"
+
+#, fuzzy
+msgid "Centaur"
+msgstr "Centauro"
+
+msgid "Centaurs"
+msgstr "Centauros"
+
+#, fuzzy
+msgid "Gargoyle"
+msgstr "Gárgola"
+
+msgid "Gargoyles"
+msgstr "Gárgolas"
+
+#, fuzzy
+msgid "Griffin"
+msgstr "Grifo"
+
+msgid "Griffins"
+msgstr "Grifos"
+
+#, fuzzy
+msgid "Minotaur"
+msgstr "Minotauro"
+
+msgid "Minotaurs"
+msgstr "Minotauros"
+
+#, fuzzy
+msgid "Minotaur King"
+msgstr "Minotauro Rey"
+
+msgid "Minotaur Kings"
+msgstr "Minotauros Reyes"
+
+#, fuzzy
+msgid "Hydra"
+msgstr "Hidra"
+
+msgid "Hydras"
+msgstr "Hidras"
+
+#, fuzzy
+msgid "Green Dragon"
+msgstr "Dragón Verde"
+
+msgid "Green Dragons"
+msgstr "Dragones Verdes"
+
+#, fuzzy
+msgid "Red Dragon"
+msgstr "Dragón rojo"
+
+msgid "Red Dragons"
+msgstr "Dragones Rojos"
+
+#, fuzzy
+msgid "Black Dragon"
+msgstr "Dragón Negro"
+
+msgid "Black Dragons"
+msgstr "Dragones Negros"
+
+#, fuzzy
+msgid "Halfling"
+msgstr "Mediano"
+
+msgid "Halflings"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Boar"
+msgstr "Jabalí"
+
+msgid "Boars"
+msgstr "Jabalíes"
+
+#, fuzzy
+msgid "Iron Golem"
+msgstr "Golem de Hierro"
+
+msgid "Iron Golems"
+msgstr "Golems de Hierro"
+
+#, fuzzy
+msgid "Steel Golem"
+msgstr "Golem de Acero"
+
+msgid "Steel Golems"
+msgstr "Golems de Acero"
+
+#, fuzzy
+msgid "Roc"
+msgstr "Roc"
+
+msgid "Rocs"
+msgstr "Rocs"
+
+#, fuzzy
+msgid "Mage"
+msgstr "Mago"
+
+msgid "Magi"
+msgstr "Magos"
+
+#, fuzzy
+msgid "Archmage"
+msgstr "Archimago"
+
+msgid "Archmagi"
+msgstr "Archimagos"
+
+#, fuzzy
+msgid "Giant"
+msgstr "Gigante"
+
+msgid "Giants"
+msgstr "Gigantes"
+
+#, fuzzy
+msgid "Titan"
+msgstr "Titán"
+
+msgid "Titans"
+msgstr "Titanes"
+
+msgid "Skeletons"
+msgstr "Esqueletos"
+
+#, fuzzy
+msgid "Zombie"
+msgstr "Zombi"
+
+msgid "Zombies"
+msgstr "Zombis"
+
+#, fuzzy
+msgid "Mutant Zombie"
+msgstr "Zombi Mutante"
+
+msgid "Mutant Zombies"
+msgstr "Zombis Mutantes"
+
+msgid "Mummies"
+msgstr "Momia"
+
+#, fuzzy
+msgid "Mummy"
+msgstr "Momia"
+
+msgid "Royal Mummies"
+msgstr "Momias Reales"
+
+#, fuzzy
+msgid "Royal Mummy"
+msgstr "Momia Real"
+
+#, fuzzy
+msgid "Vampire"
+msgstr "Vampiro"
+
+msgid "Vampires"
+msgstr "Vampiros"
+
+#, fuzzy
+msgid "Vampire Lord"
+msgstr "Maestro Vampiro"
+
+msgid "Vampire Lords"
+msgstr "Maestros Vampiros"
+
+#, fuzzy
+msgid "Lich"
+msgstr "Liche"
+
+msgid "Liches"
+msgstr "Liches"
+
+#, fuzzy
+msgid "Power Lich"
+msgstr "Gran Liche"
+
+msgid "Power Liches"
+msgstr "Grandes Liches"
+
+#, fuzzy
+msgid "Bone Dragon"
+msgstr "Dragón de Hueso"
+
+msgid "Bone Dragons"
+msgstr "Dragones de Hueso"
+
+#, fuzzy
+msgid "Rogue"
+msgstr "Bandido"
+
+msgid "Rogues"
+msgstr "Bandidos"
+
+#, fuzzy
+msgid "Nomad"
+msgstr "Nómada"
+
+msgid "Nomads"
+msgstr "Nómadas"
+
+#, fuzzy
+msgid "Ghost"
+msgstr "Fantasma"
+
+msgid "Ghosts"
+msgstr "Fantasmas"
+
+#, fuzzy
+msgid "Genie"
+msgstr "Genio"
+
+msgid "Genies"
+msgstr "Genios"
+
+#, fuzzy
+msgid "Medusa"
+msgstr "Medusa"
+
+msgid "Medusas"
+msgstr "Medusa"
+
+#, fuzzy
+msgid "Earth Elemental"
+msgstr "Elemental de la Tierra"
+
+msgid "Earth Elementals"
+msgstr "Elementales de la Tierra"
+
+#, fuzzy
+msgid "Air Elemental"
+msgstr "Elemental del Aire"
+
+msgid "Air Elementals"
+msgstr "Elementales del Aire"
+
+#, fuzzy
+msgid "Fire Elemental"
+msgstr "Elemental del Fuego"
+
+msgid "Fire Elementals"
+msgstr "Elementales del Fuego"
+
+#, fuzzy
+msgid "Water Elemental"
+msgstr "Elemental del Agua"
+
+msgid "Water Elementals"
+msgstr "Elementales del Agua"
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monsters"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster 1"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monsters 1"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster 2"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monsters 2"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster 3"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monsters 3"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster 4"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monsters 4"
+msgstr "Cualquier castillo"
+
+msgid "Double shot"
+msgstr ""
+
+#, fuzzy
+msgid "2-hex monster"
+msgstr ""
+"Muchos\n"
+"%{monster}"
+
+msgid "Double strike"
+msgstr ""
+
+msgid "Double damage to Undead"
+msgstr ""
+
+#, c-format
+msgid "% magic resistance"
+msgstr ""
+
+msgid "Immune to Mind spells"
+msgstr ""
+
+#, fuzzy
+msgid "Immune to Elemental spells"
+msgstr "LLamar al Elemental de la Tierra"
+
+msgid "Immune to Fire spells"
+msgstr ""
+
+msgid "Immune to Cold spells"
+msgstr ""
+
+msgid "Immune to "
+msgstr ""
+
+msgid "% immunity to %{spell} spell"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "% damage from Elemental spells"
+msgstr "Elementales del Agua"
+
+#, c-format
+msgid "% chance to Dispel beneficial spells"
+msgstr ""
+
+#, c-format
+msgid "% chance to Paralyze"
+msgstr ""
+
+#, c-format
+msgid "% chance to Petrify"
+msgstr ""
+
+#, c-format
+msgid "% chance to Blind"
+msgstr ""
+
+#, c-format
+msgid "% chance to Curse"
+msgstr ""
+
+#, fuzzy
+msgid "% chance to cast %{spell} spell"
+msgstr "%{color} lanzó el hechizo: %{spell}"
+
+msgid "HP regeneration"
+msgstr ""
+
+msgid "Two hexes attack"
+msgstr ""
+
+msgid "Flyer"
+msgstr ""
+
+msgid "Always retaliates"
+msgstr ""
+
+msgid "Attacks all adjacent enemies"
+msgstr ""
+
+msgid "No melee penalty"
+msgstr ""
+
+#, fuzzy
+msgid "Dragon"
+msgstr "Dragón rojo"
+
+#, fuzzy
+msgid "Undead"
+msgstr "Ejércitos No-muertos"
+
+msgid "No enemy retaliation"
+msgstr ""
+
+msgid "HP drain"
+msgstr ""
+
+#, fuzzy
+msgid "Cloud attack"
+msgstr "Castillo de las Nubes"
+
+msgid "Decreases enemy's morale by "
+msgstr ""
+
+#, c-format
+msgid "% chance to halve enemy"
+msgstr ""
+
+msgid "Soul Eater"
+msgstr ""
+
+#, fuzzy
+msgid "Elemental"
+msgstr "Elemental del Aire"
+
+#, fuzzy
+msgid "No Morale"
+msgstr "Moral"
+
+#, c-format
+msgid "200% damage from Fire spells"
+msgstr ""
+
+#, c-format
+msgid "200% damage from Cold spells"
+msgstr ""
+
+msgid "% damage from %{spell} spell"
+msgstr ""
+
+msgid "The %{name} increases your knowledge by %{count}."
+msgstr ""
+
 msgid "Ultimate Book of Knowledge"
 msgstr "Libro Definitivo del Conocimiento"
 
-msgid "The %{name} increases your knowledge by %{count}."
+msgid "The %{name} increases your attack skill by %{count}."
 msgstr ""
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Espada Final de la Dominación"
 
-msgid "The %{name} increases your attack skill by %{count}."
+msgid "The %{name} increases your defense skill by %{count}."
 msgstr ""
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Capa Final de la Protección"
 
-msgid "The %{name} increases your defense skill by %{count}."
+msgid "The %{name} increases your spell power by %{count}."
 msgstr ""
 
 msgid "Ultimate Wand of Magic"
 msgstr "Varíta Final de la Magia"
 
-msgid "The %{name} increases your spell power by %{count}."
+msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
 
 msgid "Ultimate Shield"
 msgstr "El Escudo Supremo"
 
-msgid "The %{name} increases your attack and defense skills by %{count} each."
+msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
 
 msgid "Ultimate Staff"
 msgstr "El Cayado Supremo"
 
-msgid "The %{name} increases your spell power and knowledge by %{count} each."
+msgid "The %{name} increases each of your basic skills by %{count} points."
 msgstr ""
 
 msgid "Ultimate Crown"
 msgstr "La Corona Suprema"
-
-msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
 
 msgid "Golden Goose"
 msgstr "Ganso Dorado"
@@ -5650,9 +6496,6 @@ msgstr "La Medalla de Honor."
 
 msgid "Medal of Distinction"
 msgstr "La Medalla de Distinción."
-
-msgid "Fizbin of Misfortune"
-msgstr "El Fizbin de la Mala Suerte"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr ""
@@ -5738,11 +6581,11 @@ msgstr "Moneda de la Suerte del Jugador"
 msgid "Four-Leaf Clover"
 msgstr "Trebol de 4 Hojas"
 
-msgid "True Compass of Mobility"
-msgstr "Brújula de la Verdera Movilidad"
-
 msgid "The %{name} increases your movement on land and sea."
 msgstr ""
+
+msgid "True Compass of Mobility"
+msgstr "Brújula de la Verdera Movilidad"
 
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Astrolabio del Marinero  de la Movilidad"
@@ -5884,11 +6727,11 @@ msgstr "Colgante de la Muerte"
 msgid "The %{name} makes all your troops immune to holy spells."
 msgstr ""
 
-msgid "Wand of Negation"
-msgstr "Varita de la Negación"
-
 msgid "The %{name} protects your troops from the Dispel Magic spell."
 msgstr ""
+
+msgid "Wand of Negation"
+msgstr "Varita de la Negación"
 
 msgid "Golden Bow"
 msgstr "El Arco Dorado."
@@ -5914,11 +6757,11 @@ msgid ""
 "cost of troops you have in your army."
 msgstr ""
 
-msgid "Wizard's Hat"
-msgstr "Sombrero de Mago"
-
 msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr ""
+
+msgid "Wizard's Hat"
+msgstr "Sombrero de Mago"
 
 msgid "Power Ring"
 msgstr "Anillo de Poder"
@@ -5948,31 +6791,41 @@ msgid "Endless Pouch of Sulfur"
 msgstr "Bolsa Inagotable de Sulfuro"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of sulfur per day."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Endless Vial of Mercury"
 msgstr "Frasco Inagotable de Mercurio"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of mercury per day."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Endless Pouch of Gems"
 msgstr "Bolsa Inagotable de Gemas"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of gems per day."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Endless Cord of Wood"
 msgstr "Cuerda Interminable de Madera"
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of wood per day."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Endless Cart of Ore"
 msgstr "Carro de Piedra Inagotable"
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of ore per day."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Endless Pouch of Crystal"
 msgstr "Bolsa Inagotable de Cristal"
@@ -6102,6 +6955,42 @@ msgstr "Pica de Nigromancia"
 
 msgid "The %{name} gives you increased necromancy skill."
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} extends the duration of all your spells by %{count} turn."
+msgid_plural ""
+"The %{name} extends the duration of all your spells by %{count} turns."
+msgstr[0] ""
+"El Pozo incrementa el ritmo de crecimiento de todas las moradas en %{count} "
+"criaturas por semana."
+msgstr[1] ""
+"El Pozo incrementa el ritmo de crecimiento de todas las moradas en %{count} "
+"criaturas por semana."
+
+#, fuzzy
+msgid "The %{name} increases the duration of your spells by %{count} turn."
+msgid_plural ""
+"The %{name} increases the duration of your spells by %{count} turns."
+msgstr[0] ""
+"La Granja incrementa la producción de Campesinos en %{count} por semana."
+msgstr[1] ""
+"La Granja incrementa la producción de Campesinos en %{count} por semana."
+
+msgid "The %{name} returns %{count} extra power point/turn to your hero."
+msgid_plural ""
+"The %{name} returns %{count} extra power points/turn to your hero."
+msgstr[0] ""
+msgstr[1] ""
+
+#, fuzzy
+msgid "The %{name} provides %{count} unit of crystal per day."
+msgid_plural "The %{name} provides %{count} units of crystal per day."
+msgstr[0] ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
+msgstr[1] ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 
 msgid ""
 "You find an elaborate aontainer which housesan old vellum scroll. The runes "
@@ -6324,8 +7213,11 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
-msgid "Wood"
-msgstr "Madera"
+msgid "Crystal"
+msgstr "Cristal"
+
+msgid "Gems"
+msgstr "Gemas"
 
 msgid "Mercury"
 msgstr "Mercurio"
@@ -6336,14 +7228,8 @@ msgstr "Hierro"
 msgid "Sulfur"
 msgstr "Azufre"
 
-msgid "Crystal"
-msgstr "Cristal"
-
-msgid "Gems"
-msgstr "Gemas"
-
-msgid "Fireball"
-msgstr "Bola de Fuego"
+msgid "Wood"
+msgstr "Madera"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -6351,6 +7237,9 @@ msgid ""
 msgstr ""
 "Origina una Bola de Fuego gigante dañándo las criaturas del area "
 "seleccionada."
+
+msgid "Fireball"
+msgstr "Bola de Fuego"
 
 msgid "Fireblast"
 msgstr "Explosión"
@@ -6362,11 +7251,11 @@ msgstr ""
 "Una versión mejorada de Bola de Fuego, Explosión afecta a dos cuadrados "
 "alrededor del punto central del Hechizo, en vez de uno."
 
-msgid "Lightning Bolt"
-msgstr "Rayo"
-
 msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr "Hace que un rayo de energía alcance a la criatura seleccionada."
+
+msgid "Lightning Bolt"
+msgstr "Rayo"
 
 msgid "Chain Lightning"
 msgstr "Cadena de Rayos"
@@ -6432,17 +7321,17 @@ msgstr "Prisa"
 msgid "Increases the speed of any creature by %{count}."
 msgstr "Aumenta la velocidad de cualquier criatura en %{count}."
 
-msgid "Mass Haste"
-msgstr "Prisa en Masas"
-
 msgid "Increases the speed of all of your creatures by %{count}."
 msgstr "Aumenta la velocidad de todas tus criaturas en %{count}."
 
-msgid "spell|Slow"
-msgstr "hechizo|ralentizar"
+msgid "Mass Haste"
+msgstr "Prisa en Masas"
 
 msgid "Slows target to half movement rate."
 msgstr "Ralentiza el objetivo a la mitad del movimiento."
+
+msgid "spell|Slow"
+msgstr "hechizo|ralentizar"
 
 msgid "Mass Slow"
 msgstr "Ralentizar en Masas"
@@ -6450,12 +7339,12 @@ msgstr "Ralentizar en Masas"
 msgid "Slows all enemies to half movement rate."
 msgstr "Ralentiza a todos los enemigas a la mitad del movimiento."
 
+msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgstr "Cubre los ojos de la criatura afectada, previniendo que se mueva."
+
 #, fuzzy
 msgid "spell|Blind"
 msgstr "hechizo|ralentizar"
-
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Cubre los ojos de la criatura afectada, previniendo que se mueva."
 
 msgid "Bless"
 msgstr "Bendecir"
@@ -6463,22 +7352,19 @@ msgstr "Bendecir"
 msgid "Causes the selected creatures to inflict maximum damage."
 msgstr "Hace que las criaturas seleccionadas inflijan daños máximos."
 
-msgid "Mass Bless"
-msgstr "Bendición en Masa"
-
 msgid "Causes all of your units to inflict maximum damage."
 msgstr "Hace que todas tus unidades inflijan daños máximos."
 
-msgid "Stoneskin"
-msgstr "Piel de Roca"
+msgid "Mass Bless"
+msgstr "Bendición en Masa"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr ""
 "Magicamente incrementa la habilidad de Defensa de las criaturas "
 "seleccionadas."
 
-msgid "Steelskin"
-msgstr "Piel de Acero"
+msgid "Stoneskin"
+msgstr "Piel de Roca"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
@@ -6487,32 +7373,35 @@ msgstr ""
 "Incrementa la habilidad de Defensa de las criaturas seleccionadas. Ésta es "
 "una versión mejorada de Piel de Roca."
 
-msgid "Curse"
-msgstr "Maldición"
+msgid "Steelskin"
+msgstr "Piel de Acero"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Hace que las criaturas seleccionadas inflijan daños mínimos."
 
-msgid "Mass Curse"
-msgstr "Maldición en Masa."
+msgid "Curse"
+msgstr "Maldición"
 
 msgid "Causes all enemy troops to inflict minimum damage."
 msgstr "Hace que todas las tropas enemigas inflijan daños mínimos."
 
-msgid "Holy Word"
-msgstr "Palabra Sagrada"
+msgid "Mass Curse"
+msgstr "Maldición en Masa."
 
 msgid "Damages all undead in the battle."
 msgstr "Daña a todos los Nomuertos en combate."
 
-msgid "Holy Shout"
-msgstr "Grito Sagrado"
+msgid "Holy Word"
+msgstr "Palabra Sagrada"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
 "Daña a todos los nomuertos en la batalla. Es una versión mejorada de la "
 "Palabra Sagrada."
+
+msgid "Holy Shout"
+msgstr "Grito Sagrado"
 
 msgid "Anti-Magic"
 msgstr "Anti-Magia"
@@ -6534,11 +7423,11 @@ msgstr "Disipar en Masa"
 msgid "Removes all magic spells from all creatures."
 msgstr "Elimina todos los hechizos mágicos que afectan a todas las criaturas."
 
-msgid "Magic Arrow"
-msgstr "Flecha Mágica"
-
 msgid "Causes a magic arrow to strike the selected target."
 msgstr "Hace que una flecha mágica alcance al objetivo seleccionado."
+
+msgid "Magic Arrow"
+msgstr "Flecha Mágica"
 
 msgid "Berserker"
 msgstr "Berserker"
@@ -6563,15 +7452,15 @@ msgstr ""
 "Elementos mágicos caen sobre el campo de batalla, dañando a todas las "
 "criaturas."
 
-msgid "Meteor Shower"
-msgstr "Lluvia de Meteoritos"
-
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
 "Una lluvia de piedras se abate sobre el campo de batalla, dañando a todas "
 "criaturas cercanas."
+
+msgid "Meteor Shower"
+msgstr "Lluvia de Meteoritos"
 
 msgid "Paralyze"
 msgstr "Paralizar"
@@ -6611,14 +7500,11 @@ msgstr "Rayo Pertubador"
 msgid "Reduces the defense rating of an enemy unit by three."
 msgstr "Reduce la defensa de una unidad enemiga en 3."
 
-msgid "Death Ripple"
-msgstr "Onda de la Muerte"
-
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Daña todas las unidades Vivientes (no Nomuertas) en la batalla."
 
-msgid "Death Wave"
-msgstr "Ola de la Muerte"
+msgid "Death Ripple"
+msgstr "Onda de la Muerte"
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
@@ -6626,6 +7512,9 @@ msgid ""
 msgstr ""
 "Daña todas las unidades Vivientes (no Nomuertas) en la batalla. Es una "
 "versión mejorada de Onda de la Muerte."
+
+msgid "Death Wave"
+msgstr "Ola de la Muerte"
 
 msgid "Dragon Slayer"
 msgstr "Matadragones"
@@ -6659,20 +7548,20 @@ msgstr ""
 "causará los mismos daños que la original, pero se esfumará si recibe algún "
 "daño."
 
-msgid "Shield"
-msgstr "Escudo"
-
 msgid "Halves damage received from ranged attacks for a single unit."
 msgstr ""
 "Reduce a la midad los daños recibidos en ataques a distancia por una unidad."
 
-msgid "Mass Shield"
-msgstr "Escudo en Masa"
+msgid "Shield"
+msgstr "Escudo"
 
 msgid "Halves damage received from ranged attacks for all of your units."
 msgstr ""
 "Reduce a la midad los daños recibidos en ataques a distancia por todas tus "
 "unidades."
+
+msgid "Mass Shield"
+msgstr "Escudo en Masa"
 
 msgid "Summon Earth Elemental"
 msgstr "LLamar al Elemental de la Tierra"
@@ -6698,53 +7587,53 @@ msgstr "LLamar Elemental del Agua."
 msgid "Summons Water Elementals to fight for your army."
 msgstr "LLama a los Elementales del Agua para luchar en tu ejercito."
 
-msgid "Earthquake"
-msgstr "Terremoto"
-
 msgid "Damages castle walls."
 msgstr "Daña los muros del castillo."
 
-msgid "View Mines"
-msgstr "Ver minas"
+msgid "Earthquake"
+msgstr "Terremoto"
 
 msgid "Causes all mines across the land to become visible."
 msgstr "Hace que todas las minas del territorio sean visibles."
 
-msgid "View Resources"
-msgstr "Ver Recursos"
+msgid "View Mines"
+msgstr "Ver minas"
 
 msgid "Causes all resources across the land to become visible."
 msgstr "Hace que todos los recursos del territorio sean visibles."
 
-msgid "View Artifacts"
-msgstr "Ver Artefactos"
+msgid "View Resources"
+msgstr "Ver Recursos"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr "Hace que todos los Artefactos del territorio sean visibles."
 
-msgid "View Towns"
-msgstr "Ver Ciudades"
+msgid "View Artifacts"
+msgstr "Ver Artefactos"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr "Hace que todas las ciudades y castillos del territorio sean visibles."
 
-msgid "View Heroes"
-msgstr "Ver Heroes"
+msgid "View Towns"
+msgstr "Ver Ciudades"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr "Hace que todos los Héroes del territorio sean visibles."
 
-msgid "View All"
-msgstr "Ver Todo"
+msgid "View Heroes"
+msgstr "Ver Heroes"
 
 msgid "Causes the entire land to become visible."
 msgstr "Hace que todo el territorio sea visible."
 
-msgid "Identify Hero"
-msgstr "Identificar Héroe"
+msgid "View All"
+msgstr "Ver Todo"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Permite al lanzador ver información detallada de los héroes enemigos."
+
+msgid "Identify Hero"
+msgstr "Identificar Héroe"
 
 msgid "Summon Boat"
 msgstr "LLamar Barco"
@@ -6757,19 +7646,19 @@ msgstr ""
 "LLama a un barco amigo desocupado al punto de costa más cercano. Un barco "
 "amigo es aquel que has contruido o has sido el último jugador en ocupar."
 
-msgid "Dimension Door"
-msgstr "Puerta Dimensional"
-
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
 "Permite al lanzador del hechizo ser magicamente transportado a un punto "
 "cercano."
 
-msgid "Town Gate"
-msgstr "Puerta de la Ciudad"
+msgid "Dimension Door"
+msgstr "Puerta Dimensional"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr "LLeva al Héroe a cualquier ciudad o castillo que posea."
+
+msgid "Town Gate"
+msgstr "Puerta de la Ciudad"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -7048,6 +7937,23 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "http://sf.net/projects/fheroes2"
 
+#~ msgid "Network"
+#~ msgstr "Red"
+
+#~ msgid ""
+#~ "Play a network game, where 2 players use their own computers connected "
+#~ "through a LAN (Local Area Network)."
+#~ msgstr ""
+#~ "Jugar una partida de red donde 2 jugadores usan sus propios PCs "
+#~ "conectados en una LAN. (Red de Área Local)."
+
+#~ msgid ""
+#~ "%{color} has fallen!\n"
+#~ "All is lost."
+#~ msgstr ""
+#~ "¡%{color} ha sido eliminado!\n"
+#~ "Todo está perdido."
+
 #~ msgid "Hero %{name} also got a %{count} experience."
 #~ msgstr "El héroe %{name} también obtubo %{count} de experiencia."
 
@@ -7127,461 +8033,6 @@ msgstr ""
 
 #~ msgid "Coast"
 #~ msgstr "Costa"
-
-#, fuzzy
-#~ msgid "Peasant"
-#~ msgstr "Campesino"
-
-#~ msgid "Peasants"
-#~ msgstr "Campesinos"
-
-#, fuzzy
-#~ msgid "Archer"
-#~ msgstr "Arquero"
-
-#~ msgid "Archers"
-#~ msgstr "Arqueros"
-
-#, fuzzy
-#~ msgid "Ranger"
-#~ msgstr "Montaraz"
-
-#~ msgid "Rangers"
-#~ msgstr "Arqueros Expertos"
-
-#, fuzzy
-#~ msgid "Pikeman"
-#~ msgstr "Piquero"
-
-#~ msgid "Pikemen"
-#~ msgstr "Piqueros"
-
-#, fuzzy
-#~ msgid "Veteran Pikeman"
-#~ msgstr "Piquero veterano"
-
-#~ msgid "Veteran Pikemen"
-#~ msgstr "Alabarderos"
-
-#, fuzzy
-#~ msgid "Swordsman"
-#~ msgstr "Espadachín"
-
-#~ msgid "Swordsmen"
-#~ msgstr "Espadachín"
-
-#, fuzzy
-#~ msgid "Master Swordsman"
-#~ msgstr "Maestro Espadachín"
-
-#~ msgid "Master Swordsmen"
-#~ msgstr "Maestros Espadachines"
-
-#, fuzzy
-#~ msgid "Cavalry"
-#~ msgstr "Caballería"
-
-#~ msgid "Cavalries"
-#~ msgstr "Caballerías"
-
-#, fuzzy
-#~ msgid "Champion"
-#~ msgstr "Campeón"
-
-#~ msgid "Champions"
-#~ msgstr "Caballeros"
-
-#, fuzzy
-#~ msgid "Paladin"
-#~ msgstr "Paladín"
-
-#~ msgid "Paladins"
-#~ msgstr "Paladines"
-
-#, fuzzy
-#~ msgid "Crusader"
-#~ msgstr "Cruzado"
-
-#~ msgid "Crusaders"
-#~ msgstr "Cruzados"
-
-#, fuzzy
-#~ msgid "Goblin"
-#~ msgstr "Trasgo"
-
-#~ msgid "Goblins"
-#~ msgstr "Trasgos"
-
-#, fuzzy
-#~ msgid "Orc"
-#~ msgstr "Orco"
-
-#~ msgid "Orcs"
-#~ msgstr "Orcos"
-
-#, fuzzy
-#~ msgid "Orc Chief"
-#~ msgstr "Jefe Orco"
-
-#~ msgid "Orc Chiefs"
-#~ msgstr "Jefes Orcos"
-
-#, fuzzy
-#~ msgid "Wolf"
-#~ msgstr "Lobo"
-
-#~ msgid "Wolves"
-#~ msgstr "Lobos"
-
-#, fuzzy
-#~ msgid "Ogre"
-#~ msgstr "Ogro"
-
-#~ msgid "Ogres"
-#~ msgstr "Ogros"
-
-#, fuzzy
-#~ msgid "Ogre Lord"
-#~ msgstr "Ogro de Combate"
-
-#~ msgid "Ogre Lords"
-#~ msgstr "Ogros de Combate"
-
-#, fuzzy
-#~ msgid "Troll"
-#~ msgstr "Troll"
-
-#~ msgid "Trolls"
-#~ msgstr "Trolls"
-
-#, fuzzy
-#~ msgid "War Troll"
-#~ msgstr "Trol de Guerra"
-
-#~ msgid "War Trolls"
-#~ msgstr "Troll de Guerra"
-
-#, fuzzy
-#~ msgid "Cyclops"
-#~ msgstr "Cíclope"
-
-#~ msgid "Cyclopes"
-#~ msgstr "Cíclopes"
-
-#, fuzzy
-#~ msgid "Sprite"
-#~ msgstr "Hada"
-
-#~ msgid "Sprites"
-#~ msgstr "Hadas"
-
-#, fuzzy
-#~ msgid "Dwarf"
-#~ msgstr "Enano"
-
-#~ msgid "Dwarves"
-#~ msgstr "Enanos"
-
-#~ msgid "Battle Dwarves"
-#~ msgstr "Enanos de Combate"
-
-#, fuzzy
-#~ msgid "Elf"
-#~ msgstr "Elfo"
-
-#~ msgid "Elves"
-#~ msgstr "Elfos"
-
-#, fuzzy
-#~ msgid "Grand Elf"
-#~ msgstr "Gran Elfo"
-
-#~ msgid "Grand Elves"
-#~ msgstr "Grandes Elfos"
-
-#, fuzzy
-#~ msgid "Druid"
-#~ msgstr "Druida"
-
-#~ msgid "Druids"
-#~ msgstr "Druidas"
-
-#, fuzzy
-#~ msgid "Greater Druid"
-#~ msgstr "Gran Druida"
-
-#~ msgid "Greater Druids"
-#~ msgstr "Grandes Druidas"
-
-#, fuzzy
-#~ msgid "Unicorn"
-#~ msgstr "Unicornio"
-
-#~ msgid "Unicorns"
-#~ msgstr "Unicornios"
-
-#, fuzzy
-#~ msgid "Phoenix"
-#~ msgstr "Fénix"
-
-#, fuzzy
-#~ msgid "Phoenixes"
-#~ msgstr "Fénix"
-
-#, fuzzy
-#~ msgid "Centaur"
-#~ msgstr "Centauro"
-
-#~ msgid "Centaurs"
-#~ msgstr "Centauros"
-
-#, fuzzy
-#~ msgid "Gargoyle"
-#~ msgstr "Gárgola"
-
-#~ msgid "Gargoyles"
-#~ msgstr "Gárgolas"
-
-#, fuzzy
-#~ msgid "Griffin"
-#~ msgstr "Grifo"
-
-#~ msgid "Griffins"
-#~ msgstr "Grifos"
-
-#, fuzzy
-#~ msgid "Minotaur"
-#~ msgstr "Minotauro"
-
-#~ msgid "Minotaurs"
-#~ msgstr "Minotauros"
-
-#, fuzzy
-#~ msgid "Minotaur King"
-#~ msgstr "Minotauro Rey"
-
-#~ msgid "Minotaur Kings"
-#~ msgstr "Minotauros Reyes"
-
-#, fuzzy
-#~ msgid "Hydra"
-#~ msgstr "Hidra"
-
-#~ msgid "Hydras"
-#~ msgstr "Hidras"
-
-#, fuzzy
-#~ msgid "Green Dragon"
-#~ msgstr "Dragón Verde"
-
-#~ msgid "Green Dragons"
-#~ msgstr "Dragones Verdes"
-
-#, fuzzy
-#~ msgid "Red Dragon"
-#~ msgstr "Dragón rojo"
-
-#~ msgid "Red Dragons"
-#~ msgstr "Dragones Rojos"
-
-#, fuzzy
-#~ msgid "Black Dragon"
-#~ msgstr "Dragón Negro"
-
-#~ msgid "Black Dragons"
-#~ msgstr "Dragones Negros"
-
-#, fuzzy
-#~ msgid "Halfling"
-#~ msgstr "Mediano"
-
-#~ msgid "Halflings"
-#~ msgstr "Medianos"
-
-#, fuzzy
-#~ msgid "Boar"
-#~ msgstr "Jabalí"
-
-#~ msgid "Boars"
-#~ msgstr "Jabalíes"
-
-#, fuzzy
-#~ msgid "Iron Golem"
-#~ msgstr "Golem de Hierro"
-
-#~ msgid "Iron Golems"
-#~ msgstr "Golems de Hierro"
-
-#, fuzzy
-#~ msgid "Steel Golem"
-#~ msgstr "Golem de Acero"
-
-#~ msgid "Steel Golems"
-#~ msgstr "Golems de Acero"
-
-#, fuzzy
-#~ msgid "Roc"
-#~ msgstr "Roc"
-
-#~ msgid "Rocs"
-#~ msgstr "Rocs"
-
-#, fuzzy
-#~ msgid "Mage"
-#~ msgstr "Mago"
-
-#~ msgid "Magi"
-#~ msgstr "Magos"
-
-#, fuzzy
-#~ msgid "Archmage"
-#~ msgstr "Archimago"
-
-#~ msgid "Archmagi"
-#~ msgstr "Archimagos"
-
-#, fuzzy
-#~ msgid "Giant"
-#~ msgstr "Gigante"
-
-#~ msgid "Giants"
-#~ msgstr "Gigantes"
-
-#, fuzzy
-#~ msgid "Titan"
-#~ msgstr "Titán"
-
-#~ msgid "Titans"
-#~ msgstr "Titanes"
-
-#~ msgid "Skeletons"
-#~ msgstr "Esqueletos"
-
-#, fuzzy
-#~ msgid "Zombie"
-#~ msgstr "Zombi"
-
-#~ msgid "Zombies"
-#~ msgstr "Zombis"
-
-#, fuzzy
-#~ msgid "Mutant Zombie"
-#~ msgstr "Zombi Mutante"
-
-#~ msgid "Mutant Zombies"
-#~ msgstr "Zombis Mutantes"
-
-#, fuzzy
-#~ msgid "Mummy"
-#~ msgstr "Momia"
-
-#~ msgid "Mummies"
-#~ msgstr "Momia"
-
-#, fuzzy
-#~ msgid "Royal Mummy"
-#~ msgstr "Momia Real"
-
-#~ msgid "Royal Mummies"
-#~ msgstr "Momias Reales"
-
-#, fuzzy
-#~ msgid "Vampire"
-#~ msgstr "Vampiro"
-
-#~ msgid "Vampires"
-#~ msgstr "Vampiros"
-
-#, fuzzy
-#~ msgid "Vampire Lord"
-#~ msgstr "Maestro Vampiro"
-
-#~ msgid "Vampire Lords"
-#~ msgstr "Maestros Vampiros"
-
-#, fuzzy
-#~ msgid "Lich"
-#~ msgstr "Liche"
-
-#~ msgid "Liches"
-#~ msgstr "Liches"
-
-#, fuzzy
-#~ msgid "Power Lich"
-#~ msgstr "Gran Liche"
-
-#~ msgid "Power Liches"
-#~ msgstr "Grandes Liches"
-
-#, fuzzy
-#~ msgid "Bone Dragon"
-#~ msgstr "Dragón de Hueso"
-
-#~ msgid "Bone Dragons"
-#~ msgstr "Dragones de Hueso"
-
-#, fuzzy
-#~ msgid "Rogue"
-#~ msgstr "Bandido"
-
-#~ msgid "Rogues"
-#~ msgstr "Bandidos"
-
-#, fuzzy
-#~ msgid "Nomad"
-#~ msgstr "Nómada"
-
-#~ msgid "Nomads"
-#~ msgstr "Nómadas"
-
-#, fuzzy
-#~ msgid "Ghost"
-#~ msgstr "Fantasma"
-
-#~ msgid "Ghosts"
-#~ msgstr "Fantasmas"
-
-#, fuzzy
-#~ msgid "Genie"
-#~ msgstr "Genio"
-
-#~ msgid "Genies"
-#~ msgstr "Genios"
-
-#, fuzzy
-#~ msgid "Medusa"
-#~ msgstr "Medusa"
-
-#~ msgid "Medusas"
-#~ msgstr "Medusa"
-
-#, fuzzy
-#~ msgid "Earth Elemental"
-#~ msgstr "Elemental de la Tierra"
-
-#~ msgid "Earth Elementals"
-#~ msgstr "Elementales de la Tierra"
-
-#, fuzzy
-#~ msgid "Air Elemental"
-#~ msgstr "Elemental del Aire"
-
-#~ msgid "Air Elementals"
-#~ msgstr "Elementales del Aire"
-
-#, fuzzy
-#~ msgid "Fire Elemental"
-#~ msgstr "Elemental del Fuego"
-
-#~ msgid "Fire Elementals"
-#~ msgstr "Elementales del Fuego"
-
-#, fuzzy
-#~ msgid "Water Elemental"
-#~ msgstr "Elemental del Agua"
-
-#~ msgid "Water Elementals"
-#~ msgstr "Elementales del Agua"
 
 #~ msgid "buy"
 #~ msgstr "comprar"
@@ -9866,9 +10317,6 @@ msgstr ""
 #~ msgid "Sheltemburg"
 #~ msgstr "Sheltemburg"
 
-#~ msgid "Sherman"
-#~ msgstr "Sherman"
-
 #~ msgid ""
 #~ "Should this message ever reach home, please know that this has become a "
 #~ "hostile place since the King's death.  No less than six factions are at "
@@ -10657,9 +11105,6 @@ msgstr ""
 #~ msgid "Uncle Milty"
 #~ msgstr "Tío Milty"
 
-#~ msgid "Undead Armies"
-#~ msgstr "Ejércitos No-muertos"
-
 #~ msgid "Unholy Alliance"
 #~ msgstr "Alianza Impía"
 
@@ -11250,16 +11695,6 @@ msgstr ""
 #~ msgid "pocketpc: low memory"
 #~ msgstr "tap: poca memoria"
 
-#~ msgid "one creature perishes."
-#~ msgid_plural "%{count} creatures perish."
-#~ msgstr[0] "una criatura murió."
-#~ msgstr[1] "%{count} criaturas murieron."
-
-#~ msgid "one %{defender} perishes."
-#~ msgid_plural "%{count} %{defender} perish."
-#~ msgstr[0] "un %{defender} murió."
-#~ msgstr[1] "%{count} %{defender} murieron."
-
 #~ msgid "New Map"
 #~ msgstr "Nuevo mapa"
 
@@ -11461,9 +11896,6 @@ msgstr ""
 #~ msgid "Used to place a town or castle."
 #~ msgstr "Úsalo para situar una ciudad o castillo."
 
-#~ msgid "Monsters"
-#~ msgstr "Monstruos"
-
 #~ msgid "Used to place a monster group."
 #~ msgstr "Úsalo para situar un grupo de monstruos."
 
@@ -11478,21 +11910,6 @@ msgstr ""
 
 #~ msgid "Used to place a resource or treasure."
 #~ msgstr "Úsalo para situar un recurso o tesoro."
-
-#~ msgid "The creature will join us..."
-#~ msgid_plural "%{count} of the creatures will join us..."
-#~ msgstr[0] "La criatura se unirá a nosotros..."
-#~ msgstr[1] "%{count} de las criaturas se unirán a nosotros..."
-
-#~ msgid "Reduces the movement penalty for rough terrain by %{count} percent."
-#~ msgid_plural ""
-#~ "Reduces the movement penalty for rough terrain by %{count} percent."
-#~ msgstr[0] ""
-#~ "Reduce la penalización al movimiento debida a terreno agreste en un "
-#~ "%{count} por ciento."
-#~ msgstr[1] ""
-#~ "Reduce la penalización al movimiento debida a terreno agreste en un "
-#~ "%{count} por ciento."
 
 #~ msgid "Stone"
 #~ msgstr "Piedra"

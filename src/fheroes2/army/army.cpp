@@ -1131,7 +1131,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
          ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
         if ( strs ) {
-            strs->append( _( "Some undead in groups -1" ) );
+            strs->append( _( "Some undead in group -1" ) );
             *strs += '\n';
         }
     }

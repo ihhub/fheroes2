@@ -697,7 +697,7 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
 
     if ( !translations.empty() ) {
-        return Translation::bindDomain( "fheroes2", translations.back().c_str() ) && Translation::setDomain( "fheroes2" );
+        return Translation::bindDomain( "fheroes2", translations.back().c_str(), language.c_str() ) && Translation::setDomain( "fheroes2" );
     }
 
     ERROR_LOG( "Translation file " << fileName << " is not found." )
