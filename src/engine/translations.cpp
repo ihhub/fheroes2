@@ -340,12 +340,12 @@ namespace Translation
     const char * gettext( const std::string & str )
     {
         const char * data = str.data();
-        return current ? current->ngettext( data, 0 ) : data;
+        return current ? current->ngettext( data, 0 ) : stripContext( data );
     }
 
     const char * gettext( const char * str )
     {
-        return current ? current->ngettext( str, 0 ) : str;
+        return current ? current->ngettext( str, 0 ) : stripContext( str );
     }
 
     const char * dgettext( const char * domain, const char * str )
