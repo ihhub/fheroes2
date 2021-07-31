@@ -238,7 +238,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
     fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
 
-    bool edit_mode = true;
+    bool edit_mode = editor;
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
     FileInfoListBox listbox( rt.getPosition(), edit_mode );
