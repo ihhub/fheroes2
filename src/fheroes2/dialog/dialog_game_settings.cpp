@@ -219,7 +219,7 @@ namespace fheroes2
                 else {
                     fheroes2::Text header( _( "Attention" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
                     fheroes2::Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ),
-                                        { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                                         { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
                     fheroes2::showMessage( header, body, Dialog::OK );
                 }
