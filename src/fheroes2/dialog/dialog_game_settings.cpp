@@ -230,7 +230,6 @@ namespace fheroes2
                 Dialog::ExtSettings( false );
                 windowType = SelectedWindow::Configuration;
                 break;
-            case SelectedWindow::Exit:
             default:
                 return;
             }
