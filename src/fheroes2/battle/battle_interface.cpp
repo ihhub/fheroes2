@@ -1643,31 +1643,23 @@ void Battle::Interface::RedrawCover()
 
             const Cell * attackerCell = Board::GetCell( cell->GetIndex(), direction );
             assert( attackerCell != nullptr );
-            highlightCells.emplace( attackerCell );
 
-            if ( _currentUnit->GetTailIndex() != -1 ) {
-                int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
-                const Cell * tailAttackerCell = nullptr;
+            Position attackerPos;
 
-                if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
-                    tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
-                    if ( tailAttackerCell != nullptr && ( tailAttackerCell->GetUnit() || !tailAttackerCell->isPassable1( false ) ) ) {
-                        tailAttackerCell = nullptr;
-                    }
-                }
-                if ( tailAttackerCell == nullptr ) {
-                    // A monster doesn't move.
-                    tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
-                    if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
-                        tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
-                        if ( tailAttackerCell != nullptr && ( tailAttackerCell->GetUnit() || !tailAttackerCell->isPassable1( false ) ) ) {
-                            tailAttackerCell = nullptr;
-                        }
-                    }
-                }
-                assert( tailAttackerCell != nullptr );
+            if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                // The attacking unit is already there and shouldn't move
+                attackerPos = _currentUnit->GetPosition();
+            }
+            else {
+                attackerPos = Position::GetCorrect( *_currentUnit, attackerCell->GetIndex() );
+            }
 
-                highlightCells.emplace( tailAttackerCell );
+            assert( attackerPos.GetHead() != nullptr );
+            highlightCells.emplace( attackerPos.GetHead() );
+
+            if ( _currentUnit->isWide() ) {
+                assert( attackerPos.GetTail() != nullptr );
+                highlightCells.emplace( attackerPos.GetTail() );
             }
         }
         else {
