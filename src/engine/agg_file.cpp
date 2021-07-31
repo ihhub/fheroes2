@@ -29,7 +29,7 @@ namespace fheroes2
         return !_stream.fail() && !_files.empty();
     }
 
-    bool AGGFile::open( const std::string & fileName )
+    bool AGGFile::open( const std::string & fileName)
     {
         if ( !_stream.open( fileName, "rb" ) )
             return false;
