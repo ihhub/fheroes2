@@ -47,7 +47,7 @@ namespace
 {
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
-        const MapsIndexes & indexes = Maps::GetAroundIndexes( tileId, radius, false );
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
