@@ -676,12 +676,6 @@ bool Battle::Board::isOutOfWallsIndex( s32 index )
              || ( 55 <= index && index <= 62 ) || ( 66 <= index && index <= 73 ) || ( 77 <= index && index <= 85 ) || ( 88 <= index && index <= 96 ) );
 }
 
-bool Battle::Board::isImpassableIndex( s32 index )
-{
-    const Cell * cell = Board::GetCell( index );
-    return !cell || !cell->isPassable1( true );
-}
-
 bool Battle::Board::isBridgeIndex( s32 index, const Unit & b )
 {
     const Bridge * bridge = Arena::GetBridge();
