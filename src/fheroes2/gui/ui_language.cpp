@@ -25,9 +25,7 @@
 #include "tools.h"
 #include "translations.h"
 
-#include <algorithm>
 #include <cassert>
-#include <cctype>
 #include <map>
 #include <string>
 
@@ -137,8 +135,7 @@ namespace fheroes2
             return SupportedLanguage::English;
         }
 
-        std::string name( abbreviation );
-        std::transform( name.begin(), name.end(), name.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
+        const std::string name( StringLower( abbreviation ) );
 
         auto iter = languageName.find( name );
         if ( iter == languageName.end() ) {
