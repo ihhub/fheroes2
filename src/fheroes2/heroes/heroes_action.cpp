@@ -361,14 +361,14 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
 // action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
+    // restore the original music after the action is completed
+    const Game::MusicRestorer musicRestorer;
+
     if ( GetKingdom().isControlAI() )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const int object = tile.GetObject( tileIndex != GetIndex() );
-
-    // restore the original music after the action is completed
-    const Game::MusicRestorer musicRestorer;
 
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );

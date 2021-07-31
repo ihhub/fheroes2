@@ -160,8 +160,8 @@ namespace AI
             return;
         }
 
-        if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
+        AGG::ResetMixer();
+        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
