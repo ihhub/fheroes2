@@ -383,7 +383,10 @@ namespace Translation
             case LOCALE_SL:
                 return current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
             case LOCALE_SR:
-                return current->ngettext( str, ( n == 1 ? 3 : n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+                return current->ngettext( str, ( n == 1                                                            ? 3
+                                                 : n % 10 == 1 && n % 100 != 11                                    ? 0
+                                                 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1
+                                                                                                                   : 2 ) );
             case LOCALE_CS:
                 return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
             case LOCALE_EL:
