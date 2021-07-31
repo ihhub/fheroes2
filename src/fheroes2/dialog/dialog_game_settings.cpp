@@ -214,6 +214,7 @@ namespace fheroes2
                     supportedLanguage = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage },
                                                                   currentLanguage == supportedLanguage ? 1 : 0 );
                     conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
+                    Settings::Get().Save( "fheroes2.cfg" );
                 }
                 else {
                     fheroes2::Text header( _( "Attention" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
