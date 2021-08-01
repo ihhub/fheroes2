@@ -737,22 +737,25 @@ const SpellStorage & Battle::Arena::GetUsageSpells( void ) const
     return usage_spells;
 }
 
-s32 Battle::Arena::GetFreePositionNearHero( int color ) const
+int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
 {
-    const int cells1[] = {11, 22, 33};
-    const int cells2[] = {21, 32, 43};
-    const int * cells = nullptr;
+    std::vector<int> cellIds;
+    if ( army1->GetColor() == heroColor ) {
+        cellIds = { 11, 22, 33 };
+    }
+    else if ( army2->GetColor() == heroColor ) {
+        cellIds = { 21, 32, 43 };
+    }
+    else {
+        // Some third color?
+        return -1;
+    }
 
-    if ( army1->GetColor() == color )
-        cells = cells1;
-    else if ( army2->GetColor() == color )
-        cells = cells2;
+    assert( !cellIds.empty() );
 
-    if ( cells ) {
-        for ( u32 ii = 0; ii < 3; ++ii ) {
-            if ( board[cells[ii]].isPassable1( true ) && nullptr == board[cells[ii]].GetUnit() ) {
-                return cells[ii];
-            }
+    for ( const int cellId : cellIds ) {
+        if ( board[cellId].isPassable1( true ) && board[cellId].GetUnit() == nullptr ) {
+            return cellId;
         }
     }
 
@@ -1043,9 +1046,9 @@ const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
     const HeroBase * hero = GetCurrentCommander();
-    const s32 pos = GetFreePositionNearHero( current_color );
+    const int32_t pos = GetFreePositionNearHero( current_color );
 
-    if ( 0 > pos || !hero ) {
+    if ( pos < 0 || !hero ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
         return nullptr;
     }
