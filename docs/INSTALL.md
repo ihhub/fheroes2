@@ -18,7 +18,7 @@ Precompiled binaries of the release version are currently available for the foll
   * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
 
-Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots).
+Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots-latest-builds).
 
 <a name="windows"></a>
 ## Windows
@@ -131,8 +131,8 @@ If you have a legally purchased copy of the original game, copy all files belong
 
 * After all dependencies are installed, copy all files belonging to the original game to the fheroes2 installation directory if you have a legally purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
 
-<a name="snapshots"></a>
-## Snapshots
+<a name="snapshots-latest-builds"></a>
+## Snapshots (latest builds)
 
 You can download the precompiled binaries of the latest commit (snapshot) for
 **Windows** (
