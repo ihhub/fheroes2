@@ -42,6 +42,8 @@
 #include "system.h"
 #include "tools.h"
 
+#include <cassert>
+
 namespace
 {
     const size_t mapNameLength = 16;
@@ -364,6 +366,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         int side2 = 0;
 
         const Colors availableColors( kingdom_colors );
+
+        assert( !availableColors.empty() );
+        wins1 += Color::GetIndex( availableColors.front() );
 
         for ( const int color : availableColors ) {
             if ( Color::GetIndex( color ) < wins1 )
