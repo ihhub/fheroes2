@@ -150,7 +150,7 @@ void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & )
     _isDoubleClicked = true;
 }
 
-void FileInfoListBox::ActionListSingleClick( Maps::FileInfo &  /*unused*/) {}
+void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ ) {}
 
 std::string ResizeToShortName( const std::string & str )
 {
