@@ -3,6 +3,12 @@ description: Something is not working or is going wrong
 labels: [ bug ]
 
 body:
+- type: checkboxes
+  attributes:
+    label: Check for duplicates
+    options:
+    - label: I checked that there aren't other open issues on the same topic
+      required: true
 - type: dropdown
   attributes:
     label: Platform

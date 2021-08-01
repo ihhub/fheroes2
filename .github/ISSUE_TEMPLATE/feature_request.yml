@@ -3,6 +3,12 @@ description: New feature, request or improvement
 labels: [ improvement ]
 
 body:
+- type: checkboxes
+  attributes:
+    label: Check for duplicates
+    options:
+    - label: I checked that there aren't other open issues on the same topic
+      required: true
 - type: textarea
   attributes:
     label: Describe the problem requiring a solution
