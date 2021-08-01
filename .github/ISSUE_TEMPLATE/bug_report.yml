@@ -17,6 +17,8 @@ body:
     - Windows
     - macOS
     - Linux
+    - PlayStation Vita
+    - Nintendo Switch
     - Other
   validations:
     required: true
