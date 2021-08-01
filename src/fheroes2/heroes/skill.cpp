@@ -566,30 +566,30 @@ Skill::SecSkills::SecSkills( int race )
         if ( ptr ) {
             if ( ptr->initial_secondary.archery )
                 AddSkill( Secondary( Secondary::ARCHERY, ptr->initial_secondary.archery ) );
-            if ( ptr->initial_secondary.ballistics )
-                AddSkill( Secondary( Secondary::BALLISTICS, ptr->initial_secondary.ballistics ) );
             if ( ptr->initial_secondary.diplomacy )
                 AddSkill( Secondary( Secondary::DIPLOMACY, ptr->initial_secondary.diplomacy ) );
             if ( ptr->initial_secondary.eagleeye )
                 AddSkill( Secondary( Secondary::EAGLEEYE, ptr->initial_secondary.eagleeye ) );
             if ( ptr->initial_secondary.estates )
                 AddSkill( Secondary( Secondary::ESTATES, ptr->initial_secondary.estates ) );
-            if ( ptr->initial_secondary.leadership )
-                AddSkill( Secondary( Secondary::LEADERSHIP, ptr->initial_secondary.leadership ) );
             if ( ptr->initial_secondary.logistics )
                 AddSkill( Secondary( Secondary::LOGISTICS, ptr->initial_secondary.logistics ) );
             if ( ptr->initial_secondary.luck )
                 AddSkill( Secondary( Secondary::LUCK, ptr->initial_secondary.luck ) );
             if ( ptr->initial_secondary.mysticism )
                 AddSkill( Secondary( Secondary::MYSTICISM, ptr->initial_secondary.mysticism ) );
-            if ( ptr->initial_secondary.navigation )
-                AddSkill( Secondary( Secondary::NAVIGATION, ptr->initial_secondary.navigation ) );
-            if ( ptr->initial_secondary.necromancy )
-                AddSkill( Secondary( Secondary::NECROMANCY, ptr->initial_secondary.necromancy ) );
             if ( ptr->initial_secondary.pathfinding )
                 AddSkill( Secondary( Secondary::PATHFINDING, ptr->initial_secondary.pathfinding ) );
+            if ( ptr->initial_secondary.leadership )
+                AddSkill( Secondary( Secondary::LEADERSHIP, ptr->initial_secondary.leadership ) );
+            if ( ptr->initial_secondary.ballistics )
+                AddSkill( Secondary( Secondary::BALLISTICS, ptr->initial_secondary.ballistics ) );
+            if ( ptr->initial_secondary.navigation )
+                AddSkill( Secondary( Secondary::NAVIGATION, ptr->initial_secondary.navigation ) );
             if ( ptr->initial_secondary.scouting )
                 AddSkill( Secondary( Secondary::SCOUTING, ptr->initial_secondary.scouting ) );
+            if ( ptr->initial_secondary.necromancy )
+                AddSkill( Secondary( Secondary::NECROMANCY, ptr->initial_secondary.necromancy ) );
             if ( ptr->initial_secondary.wisdom )
                 AddSkill( Secondary( Secondary::WISDOM, ptr->initial_secondary.wisdom ) );
         }
