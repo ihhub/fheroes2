@@ -45,21 +45,34 @@
 namespace
 {
     const int32_t ultimateArtifactOffset = 9;
+
+    Artifact getUltimateArtifact()
+    {
+        if ( Settings::Get().isCampaignGameType() ) {
+            const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+            const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+            const int scenarioId = campaignData.getCurrentScenarioID();
+            assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+            if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+                const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+                if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
+                    return Artifact::ULTIMATE_CROWN;
+                }
+                else if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION ) {
+                    return Artifact::SPHERE_NEGATION;
+                }
+            }
+        }
+
+        return Artifact::Rand( Artifact::ART_ULTIMATE );
+    }
 }
 
 namespace GameStatic
 {
     extern u32 uniq;
-}
-
-std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
-{
-    std::vector<u8> zdata = decodeBase64( base64 );
-    StreamBuf sb( zdata );
-    sb.skip( 4 ); // editor: version
-    u32 realsz = sb.getLE32();
-    sb.skip( 4 ); // qt uncompress size
-    return zlibDecompress( sb.data(), sb.size(), realsz + 1 );
 }
 
 bool World::LoadMapMP2( const std::string & filename )
@@ -386,10 +399,9 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
+                    Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -408,11 +420,12 @@ bool World::LoadMapMP2( const std::string & filename )
                                    << "incorrect size block: " << pblock.size() );
                 }
                 else {
-                    Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
+                    // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
+                    Castle * castle = getCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
-                        Maps::MinimizeAreaForCastle( castle->GetCenter() );
+                        Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -530,7 +543,7 @@ bool World::LoadMapMP2( const std::string & filename )
             // add rumors
             else if ( SIZEOFMP2RUMOR - 1 < pblock.size() ) {
                 if ( pblock[8] ) {
-                    vec_rumors.push_back( Game::GetEncodeString( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() ) );
+                    vec_rumors.push_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
                     DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << vec_rumors.back() );
                 }
             }
@@ -648,13 +661,15 @@ void World::ProcessNewMap()
     // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
+    const Settings & conf = Settings::Get();
+
     // update wins, loss conditions
-    if ( GameOver::WINS_HERO & Settings::Get().ConditionWins() ) {
-        const Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
+    if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
+        const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
-    if ( GameOver::LOSS_HERO & Settings::Get().ConditionLoss() ) {
-        Heroes * hero = GetHeroes( Settings::Get().LossMapsPositionObject() );
+    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
+        Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
         if ( hero ) {
             heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
@@ -685,43 +700,23 @@ void World::ProcessNewMap()
         }
 
         if ( !pools.empty() ) {
-            Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
-            if ( Settings::Get().isCampaignGameType() ) {
-                const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
-
-                const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-                const int scenarioId = campaignData.getCurrentScenarioID();
-                assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
-
-                if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-                    const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-                    if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
-                        ultimate = Artifact::ULTIMATE_CROWN;
-                    }
-                }
-            }
-
             const int32_t pos = Rand::Get( pools );
-            ultimate_artifact.Set( pos, ultimate );
+            ultimate_artifact.Set( pos, getUltimateArtifact() );
             ultimate_pos = Maps::GetPoint( pos );
         }
     }
     else {
         // remove ultimate artifact sprite
-        const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
         it->setAsEmpty();
-        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
+        ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
         ultimate_pos = ( *it ).GetCenter();
     }
 
-    PostLoad();
+    PostLoad( true );
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
-
-    if ( Settings::Get().ExtWorldStartHeroLossCond4Humans() )
-        vec_kingdoms.AddCondLossHeroes( vec_heroes );
 
     // play with debug hero
     if ( IS_DEVEL() ) {

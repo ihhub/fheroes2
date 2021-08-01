@@ -417,7 +417,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Top layer.
     for ( const Maps::Tiles * tile : topList ) {
-        tile->RedrawTop( dst, tileROI, *this );
+        tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
     }
 
     // Heroes and boats.
@@ -440,7 +440,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
                 tile->RedrawBoat( dst, tileROI, *this );
                 if ( drawTop ) {
-                    tile->RedrawTop( dst, tileROI, *this );
+                    tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
                 }
             }
         }

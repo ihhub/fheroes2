@@ -305,7 +305,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     if ( !hero.GetArmy().CanJoinTroop( troop ) )
         Dialog::Message( msg, _( "You are unable to recruit at this time, your ranks are full." ), Font::BIG, Dialog::OK );
     else {
-        const u32 recruit = Dialog::RecruitMonster( troop(), troop.GetCount(), false ).GetCount();
+        const u32 recruit = Dialog::RecruitMonster( troop.GetMonster(), troop.GetCount(), false ).GetCount();
 
         if ( recruit ) {
             if ( remove && recruit == troop.GetCount() ) {
@@ -322,10 +322,10 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             else
                 tile.MonsterSetCount( troop.GetCount() - recruit );
 
-            const payment_t paymentCosts = troop().GetCost() * recruit;
+            const payment_t paymentCosts = troop.GetMonster().GetCost() * recruit;
             hero.GetKingdom().OddFundsResource( paymentCosts );
 
-            hero.GetArmy().JoinTroop( troop(), recruit );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
             hero.MovePointsScaleFixed();
 
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
@@ -361,11 +361,14 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
 // action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
+    // restore the original music after the action is completed
+    const Game::MusicRestorer musicRestorer;
+
     if ( GetKingdom().isControlAI() )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+    const int object = tile.GetObject( tileIndex != GetIndex() );
 
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
@@ -699,55 +702,68 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
 
     Interface::Basic & I = Interface::Basic::Get();
 
-    JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+    bool destroy = false;
 
-    // free join
-    if ( JOIN_FREE == join.first ) {
+    const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
+
+    if ( join.reason == NeutralMonsterJoiningCondition::Reason::Alliance ) {
+        if ( hero.GetArmy().CanJoinTroop( troop ) ) {
+            assert( join.joiningMessage != nullptr );
+            Dialog::Message( "", join.joiningMessage, Font::BIG, Dialog::OK );
+            hero.GetArmy().JoinTroop( troop );
+        }
+        else {
+            assert( join.fleeingMessage != nullptr );
+            Dialog::Message( "", join.fleeingMessage, Font::BIG, Dialog::OK );
+        }
+
+        destroy = true;
+    }
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Bane ) {
+        assert( join.fleeingMessage != nullptr );
+        Dialog::Message( "", join.fleeingMessage, Font::BIG, Dialog::OK );
+        destroy = true;
+    }
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
 
         if ( Dialog::YES == Dialog::ArmyJoinFree( troop, hero ) ) {
             hero.GetArmy().JoinTroop( troop );
 
             I.GetStatusWindow().SetRedraw();
+            destroy = true;
         }
         else {
             Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
-
-            join.first = JOIN_NONE;
         }
     }
-    // join with cost
-    else if ( JOIN_COST == join.first ) {
-        const u32 gold = troop.GetCost().gold;
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
+        const int32_t joiningCost = troop.GetCost().gold;
 
-        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
+        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost, hero ) ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
 
-            hero.GetArmy().JoinTroop( troop(), join.second );
-            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
             I.GetStatusWindow().SetRedraw();
+            destroy = true;
         }
         else {
             Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
-
-            join.first = JOIN_NONE;
         }
     }
-    // flee
-    else if ( JOIN_FLEE == join.first ) {
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
         StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
 
-        if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-            join.first = JOIN_NONE;
+        if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+            destroy = true;
         }
     }
 
-    bool destroy = false;
-
     // fight
-    if ( JOIN_NONE == join.first ) {
+    if ( !destroy ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
 
         // set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
@@ -768,17 +784,13 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
         else {
             BattleLose( hero, res, true );
 
-            tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+            tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
 
             // reset join condition
             if ( tile.MonsterJoinConditionFree() ) {
                 tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
         }
-    }
-    // just remove group of monsters
-    else {
-        destroy = true;
     }
 
     if ( destroy ) {
@@ -846,7 +858,7 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
 
 void ActionToCastle( Heroes & hero, s32 dst_index )
 {
-    Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ) );
+    Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
     const Settings & conf = Settings::Get();
 
     if ( !castle ) {
@@ -1099,7 +1111,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
         }
         else {
             const Artifact & art = tile.QuantityArtifact();
-            message.append( "\n" );
+            message += '\n';
             message.append( _( "Searching through the tattered clothing, you find %{artifact}." ) );
             StringReplace( message, "%{artifact}", art.GetName() );
             Dialog::ArtifactInfo( "", message, art );
@@ -1109,7 +1121,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
         tile.QuantityReset();
     }
     else {
-        message.append( "\n" );
+        message += '\n';
         message.append( _( "Searching through the tattered clothing, you find nothing." ) );
         Dialog::Message( "", message, Font::BIG, Dialog::OK );
     }
@@ -1129,13 +1141,13 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
 
         if ( art.isValid() ) {
             if ( hero.IsFullBagArtifacts() ) {
-                message.append( "\n" );
+                message += '\n';
                 message.append( _( "Unfortunately, others have found it first, and the wagon is empty." ) );
                 Dialog::Message( "", message, Font::BIG, Dialog::OK );
             }
             else {
                 AGG::PlaySound( M82::EXPERNCE );
-                message.append( "\n" );
+                message += '\n';
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
                 Dialog::ArtifactInfo( "", message, art );
@@ -1145,7 +1157,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
         else {
             const Funds & funds = tile.QuantityFunds();
             AGG::PlaySound( M82::EXPERNCE );
-            message.append( "\n" );
+            message += '\n';
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
             Dialog::ResourceInfo( "", message, funds );
             hero.GetKingdom().AddFundsResource( funds );
@@ -1154,7 +1166,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
         tile.QuantityReset();
     }
     else {
-        message.append( "\n" );
+        message += '\n';
         message.append( _( "Unfortunately, others have found it first, and the wagon is empty." ) );
         Dialog::Message( "", message, Font::BIG, Dialog::OK );
     }
@@ -1239,14 +1251,14 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
         }
         else
             // already know (skip bag artifacts)
-            if ( hero.HaveSpell( spell(), true ) ) {
+            if ( hero.HaveSpell( spell.GetID(), true ) ) {
             body += _( "\nUnfortunately, you already have knowledge of this spell, so there is nothing more for them to teach you." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
         else {
             AGG::PlaySound( M82::TREASURE );
-            hero.AppendSpellToBook( spell() );
-            Dialog::SpellInfo( head, body, spell() );
+            hero.AppendSpellToBook( spell.GetID() );
+            Dialog::SpellInfo( head, body, spell.GetID() );
         }
     }
 
@@ -1727,7 +1739,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
             }
             StringReplace( msg, "%{art}", art.GetName() );
-            msg.append( "\n" );
+            msg += '\n';
             msg.append( _( "Do you wish to buy this artifact?" ) );
 
             AGG::PlaySound( M82::EXPERNCE );
@@ -1798,7 +1810,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
-                    Dialog::ArtifactInfo( "", msg, art() );
+                    Dialog::ArtifactInfo( "", msg, art.GetID() );
                 }
                 else {
                     BattleLose( hero, res, true );
@@ -1813,7 +1825,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 msg = Artifact::GetScenario( art );
             else {
                 msg = _( "You've found the artifact: " );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( art.GetName() );
             }
 
@@ -2133,7 +2145,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         const bool readonly = tile.GetQuantity3() != 0;
 
         if ( Dialog::SetGuardian( hero, troop2, co, readonly ) )
-            troop1.Set( troop2(), troop2.GetCount() );
+            troop1.Set( troop2.GetMonster(), troop2.GetCount() );
     }
 
     if ( obj == MP2::OBJ_LIGHTHOUSE )
@@ -2593,7 +2605,7 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
             hero.GetKingdom().AddFundsResource( event_maps->resources );
             Dialog::ResourceInfo( "", event_maps->message, event_maps->resources );
         }
-        else if ( event_maps->message.size() )
+        else if ( !event_maps->message.empty() )
             Dialog::Message( "", event_maps->message, Font::BIG, Dialog::OK );
 
         const Artifact & art = event_maps->artifact;
@@ -2662,9 +2674,9 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
 
             if ( hero.GetKingdom().AllowPayment( funds ) ) {
                 msg = _( "Upon your approach, the tree opens its eyes in delight." );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "\"Ahh, an adventurer! I will be happy to teach you a little of what I have learned over the ages for a mere %{count} %{res}.\"" ) );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "(Just bury it around my roots.)" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
@@ -2672,9 +2684,9 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
             }
             else {
                 msg = _( "Tears brim in the eyes of the tree." );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "\"I need %{count} %{res}.\"" ) );
-                msg.append( "\n" );
+                msg += '\n';
                 msg.append( _( "it whispers. (sniff) \"Well, come back when you can pay me.\"" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
@@ -2808,8 +2820,6 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
-    AGG::PlayMusic( MUS::FromGround( tile.GetGround() ) );
-
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
@@ -2825,11 +2835,11 @@ void ActionToAlchemistsTower( Heroes & hero )
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             std::string msg = "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you.";
-            msg.append( "\n" );
+            msg += '\n';
             msg.append(
                 _n( "He checks your pack, and sees that you have 1 cursed item.", "He checks your pack, and sees that you have %{count} cursed items.", cursed ) );
             StringReplace( msg, "%{count}", cursed );
-            msg.append( "\n" );
+            msg += '\n';
             msg.append( _( "For %{gold} gold, the alchemist will remove it for you. Do you pay?" ) );
             StringReplace( msg, "%{gold}", payment.gold );
 
@@ -2969,7 +2979,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisited( dst_index, Visit::GLOBAL );
         MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
 
-        if ( vec_eyes.size() ) {
+        if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
             for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
                 Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );

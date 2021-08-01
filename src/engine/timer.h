@@ -20,68 +20,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SDLNET_H
-#define SDLNET_H
-
-#include <iostream>
-#include <string>
+#ifndef SDLTIMER_H
+#define SDLTIMER_H
 
 #include "types.h"
+#include <SDL.h>
 
-#ifdef WITH_NET
-#include <SDL_net.h>
-
-namespace Network
+namespace SDL
 {
-    bool Init( void );
-    void Quit( void );
-    bool ResolveHost( IPaddress &, const char *, u16 );
-    const char * GetError( void );
-
-    class Socket
+    class Timer
     {
     public:
-        Socket();
-        Socket( const TCPsocket );
-        ~Socket();
+        Timer();
 
-        void Assign( const TCPsocket );
+        bool IsValid() const;
 
-        bool Ready( void ) const;
+        void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
+        void Remove();
 
-        bool Recv( char *, int );
-        bool Send( const char *, int );
-
-        bool Recv32( u32 & );
-        bool Send32( const uint32_t );
-
-        bool Recv16( u16 & );
-        bool Send16( const uint16_t );
-
-        u32 Host( void ) const;
-        u16 Port( void ) const;
-
-        bool Open( IPaddress & );
-        bool isValid( void ) const;
-        void Close( void );
-
-    protected:
-        Socket( const Socket & );
-        Socket & operator=( const Socket & );
-
-        TCPsocket sd;
-        SDLNet_SocketSet sdset;
-        size_t status;
-    };
-
-    class Server : public Socket
-    {
-    public:
-        Server();
-
-        TCPsocket Accept( void );
+    private:
+        SDL_TimerID id;
     };
 }
-#endif
 
 #endif

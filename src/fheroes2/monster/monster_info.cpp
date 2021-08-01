@@ -25,8 +25,12 @@
 #include "race.h"
 #include "speed.h"
 #include "spell.h"
+#include "tools.h"
+#include "translations.h"
 
+#include <algorithm>
 #include <cassert>
+#include <set>
 #include <sstream>
 
 namespace
@@ -134,154 +138,154 @@ namespace
         // Monster abilities and weaknesses will be added later.
         const fheroes2::MonsterBattleStats monsterBattleStats[Monster::MONSTER_COUNT] = {
             // attack | defence | damageMin | damageMax | hp | speed | shots | abilities | weaknesses
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Unknown Monster
-            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Peasant
-            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Archer
-            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ranger
-            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Pikeman
-            { 5, 9, 3, 4, 20, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Veteran Pikeman
-            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Swordsman
-            { 7, 9, 4, 6, 30, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Master Swordsman
-            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Cavalry
-            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Champion
-            { 11, 12, 10, 20, 50, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Paladin
-            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Crusader
-            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Goblin
-            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Orc
-            { 3, 4, 3, 4, 15, Speed::SLOW, 16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Orc Chief
-            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Wolf
-            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ogre
-            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ogre Lord
-            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Troll
-            { 10, 5, 7, 9, 40, Speed::FAST, 16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // War Troll
-            { 12, 9, 12, 24, 80, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Cyclops
-            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Sprite
-            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Dwarf
-            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Battle Dwarf
-            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Elf
-            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Grand Elf
-            { 7, 5, 5, 8, 25, Speed::FAST, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Druid
-            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Greater Druid
-            { 10, 9, 7, 14, 40, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Unicorn
-            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Phoenix
-            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Centaur
-            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Gargoyle
-            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Griffin
-            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Minotaur
-            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Minotaur King
-            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Hydra
-            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Green Dragon
-            { 13, 13, 25, 50, 250, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Red Dragon
-            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Black Dragon
-            { 2, 1, 1, 3, 3, Speed::SLOW, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Halfling
-            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Boar
-            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Iron Golem
-            { 7, 10, 4, 5, 35, Speed::SLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Steel Golem
-            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Roc
-            { 11, 7, 7, 9, 30, Speed::FAST, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mage
-            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Archmage
-            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Giant
-            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Titan
-            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Skeleton
-            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Zombie
-            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mutant Zombie
-            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mummy
-            { 6, 6, 3, 4, 30, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Royal Mummy
-            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Vampire
-            { 8, 6, 5, 7, 40, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Vampire Lord
-            { 7, 12, 8, 10, 25, Speed::FAST, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Lich
-            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Power Lich
-            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Bone Dragon
-            { 6, 1, 1, 2, 4, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Rogue
-            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Nomad
-            { 8, 7, 4, 6, 20, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ghost
-            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Genie
-            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Medusa
-            { 8, 8, 4, 5, 50, Speed::SLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Earth Elemental
-            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Air Elemental
-            { 8, 6, 4, 6, 40, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Fire Elemental
-            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Water Elemental
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 1
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 2
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 3
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 4
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Unknown Monster
+            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, {}, {} }, // Peasant
+            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, {}, {} }, // Archer
+            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, {}, {} }, // Ranger
+            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, {}, {} }, // Pikeman
+            { 5, 9, 3, 4, 20, Speed::FAST, 0, {}, {} }, // Veteran Pikeman
+            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, {}, {} }, // Swordsman
+            { 7, 9, 4, 6, 30, Speed::FAST, 0, {}, {} }, // Master Swordsman
+            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, {}, {} }, // Cavalry
+            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, {}, {} }, // Champion
+            { 11, 12, 10, 20, 50, Speed::FAST, 0, {}, {} }, // Paladin
+            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, {}, {} }, // Crusader
+            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, {}, {} }, // Goblin
+            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, {}, {} }, // Orc
+            { 3, 4, 3, 4, 15, Speed::SLOW, 16, {}, {} }, // Orc Chief
+            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, {}, {} }, // Wolf
+            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, {}, {} }, // Ogre
+            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, {}, {} }, // Ogre Lord
+            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, {}, {} }, // Troll
+            { 10, 5, 7, 9, 40, Speed::FAST, 16, {}, {} }, // War Troll
+            { 12, 9, 12, 24, 80, Speed::FAST, 0, {}, {} }, // Cyclops
+            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, {}, {} }, // Sprite
+            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, {}, {} }, // Dwarf
+            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, {}, {} }, // Battle Dwarf
+            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, {}, {} }, // Elf
+            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, {}, {} }, // Grand Elf
+            { 7, 5, 5, 8, 25, Speed::FAST, 8, {}, {} }, // Druid
+            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, {}, {} }, // Greater Druid
+            { 10, 9, 7, 14, 40, Speed::FAST, 0, {}, {} }, // Unicorn
+            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, {}, {} }, // Phoenix
+            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, {}, {} }, // Centaur
+            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, {}, {} }, // Gargoyle
+            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, {}, {} }, // Griffin
+            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, {}, {} }, // Minotaur
+            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, {}, {} }, // Minotaur King
+            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, {}, {} }, // Hydra
+            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, {}, {} }, // Green Dragon
+            { 13, 13, 25, 50, 250, Speed::FAST, 0, {}, {} }, // Red Dragon
+            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, {}, {} }, // Black Dragon
+            { 2, 1, 1, 3, 3, Speed::SLOW, 12, {}, {} }, // Halfling
+            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, {}, {} }, // Boar
+            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, {}, {} }, // Iron Golem
+            { 7, 10, 4, 5, 35, Speed::SLOW, 0, {}, {} }, // Steel Golem
+            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, {}, {} }, // Roc
+            { 11, 7, 7, 9, 30, Speed::FAST, 12, {}, {} }, // Mage
+            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, {}, {} }, // Archmage
+            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, {}, {} }, // Giant
+            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, {}, {} }, // Titan
+            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, {}, {} }, // Skeleton
+            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, {}, {} }, // Zombie
+            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, {}, {} }, // Mutant Zombie
+            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, {}, {} }, // Mummy
+            { 6, 6, 3, 4, 30, Speed::FAST, 0, {}, {} }, // Royal Mummy
+            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, {}, {} }, // Vampire
+            { 8, 6, 5, 7, 40, Speed::FAST, 0, {}, {} }, // Vampire Lord
+            { 7, 12, 8, 10, 25, Speed::FAST, 12, {}, {} }, // Lich
+            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, {}, {} }, // Power Lich
+            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, {}, {} }, // Bone Dragon
+            { 6, 1, 1, 2, 4, Speed::FAST, 0, {}, {} }, // Rogue
+            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, {}, {} }, // Nomad
+            { 8, 7, 4, 6, 20, Speed::FAST, 0, {}, {} }, // Ghost
+            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, {}, {} }, // Genie
+            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, {}, {} }, // Medusa
+            { 8, 8, 4, 5, 50, Speed::SLOW, 0, {}, {} }, // Earth Elemental
+            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, {}, {} }, // Air Elemental
+            { 8, 6, 4, 6, 40, Speed::FAST, 0, {}, {} }, // Fire Elemental
+            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, {}, {} }, // Water Elemental
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 1
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 2
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 3
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 4
         };
 
         const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT]
             = { // name | plural name | growth | race | level | cost
-                { "Unknown Monster", "Unknown Monsters", 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Peasant", "Peasants", 12, Race::KNGT, 1, { 20, 0, 0, 0, 0, 0, 0 } },
-                { "Archer", "Archers", 8, Race::KNGT, 2, { 150, 0, 0, 0, 0, 0, 0 } },
-                { "Ranger", "Rangers", 8, Race::KNGT, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Pikeman", "Pikemen", 5, Race::KNGT, 3, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Veteran Pikeman", "Veteran Pikemen", 5, Race::KNGT, 3, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Swordsman", "Swordsmen", 4, Race::KNGT, 4, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Master Swordsman", "Master Swordsmen", 4, Race::KNGT, 4, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Cavalry", "Cavalries", 3, Race::KNGT, 5, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Champion", "Champions", 3, Race::KNGT, 5, { 375, 0, 0, 0, 0, 0, 0 } },
-                { "Paladin", "Paladins", 2, Race::KNGT, 6, { 600, 0, 0, 0, 0, 0, 0 } },
-                { "Crusader", "Crusaders", 2, Race::KNGT, 6, { 1000, 0, 0, 0, 0, 0, 0 } },
-                { "Goblin", "Goblins", 10, Race::BARB, 1, { 40, 0, 0, 0, 0, 0, 0 } },
-                { "Orc", "Orcs", 8, Race::BARB, 2, { 140, 0, 0, 0, 0, 0, 0 } },
-                { "Orc Chief", "Orc Chiefs", 8, Race::BARB, 2, { 175, 0, 0, 0, 0, 0, 0 } },
-                { "Wolf", "Wolves", 5, Race::BARB, 3, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Ogre", "Ogres", 4, Race::BARB, 4, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Ogre Lord", "Ogre Lords", 4, Race::BARB, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Troll", "Trolls", 3, Race::BARB, 5, { 600, 0, 0, 0, 0, 0, 0 } },
-                { "War Troll", "War Trolls", 3, Race::BARB, 5, { 700, 0, 0, 0, 0, 0, 0 } },
-                { "Cyclops", "Cyclopes", 2, Race::BARB, 6, { 750, 0, 0, 0, 0, 1, 0 } },
-                { "Sprite", "Sprites", 8, Race::SORC, 1, { 50, 0, 0, 0, 0, 0, 0 } },
-                { "Dwarf", "Dwarves", 6, Race::SORC, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Battle Dwarf", "Battle Dwarves", 6, Race::SORC, 2, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Elf", "Elves", 4, Race::SORC, 3, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Grand Elf", "Grand Elves", 4, Race::SORC, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Druid", "Druids", 3, Race::SORC, 4, { 350, 0, 0, 0, 0, 0, 0 } },
-                { "Greater Druid", "Greater Druids", 3, Race::SORC, 4, { 400, 0, 0, 0, 0, 0, 0 } },
-                { "Unicorn", "Unicorns", 2, Race::SORC, 5, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Phoenix", "Phoenixes", 1, Race::SORC, 6, { 1500, 0, 1, 0, 0, 0, 0 } },
-                { "Centaur", "Centaurs", 8, Race::WRLK, 1, { 60, 0, 0, 0, 0, 0, 0 } },
-                { "Gargoyle", "Gargoyles", 6, Race::WRLK, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Griffin", "Griffins", 4, Race::WRLK, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Minotaur", "Minotaurs", 3, Race::WRLK, 4, { 400, 0, 0, 0, 0, 0, 0 } },
-                { "Minotaur King", "Minotaur Kings", 3, Race::WRLK, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Hydra", "Hydras", 2, Race::WRLK, 5, { 800, 0, 0, 0, 0, 0, 0 } },
-                { "Green Dragon", "Green Dragons", 1, Race::WRLK, 6, { 3000, 0, 0, 0, 1, 0, 0 } },
-                { "Red Dragon", "Red Dragons", 1, Race::WRLK, 6, { 3500, 0, 0, 0, 1, 0, 0 } },
-                { "Black Dragon", "Black Dragons", 1, Race::WRLK, 6, { 4000, 0, 0, 0, 2, 0, 0 } },
-                { "Halfling", "Halflings", 8, Race::WZRD, 1, { 50, 0, 0, 0, 0, 0, 0 } },
-                { "Boar", "Boars", 6, Race::WZRD, 2, { 150, 0, 0, 0, 0, 0, 0 } },
-                { "Iron Golem", "Iron Golems", 4, Race::WZRD, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Steel Golem", "Steel Golems", 4, Race::WZRD, 3, { 350, 0, 0, 0, 0, 0, 0 } },
-                { "Roc", "Rocs", 3, Race::WZRD, 4, { 400, 0, 0, 0, 0, 0, 0 } },
-                { "Mage", "Magi", 2, Race::WZRD, 5, { 600, 0, 0, 0, 0, 0, 0 } },
-                { "Archmage", "Archmagi", 2, Race::WZRD, 5, { 700, 0, 0, 0, 0, 0, 0 } },
-                { "Giant", "Giants", 1, Race::WZRD, 6, { 2000, 0, 0, 0, 0, 0, 1 } },
-                { "Titan", "Titans", 1, Race::WZRD, 6, { 5000, 0, 0, 0, 0, 0, 2 } },
-                { "Skeleton", "Skeletons", 8, Race::NECR, 1, { 75, 0, 0, 0, 0, 0, 0 } },
-                { "Zombie", "Zombies", 6, Race::NECR, 2, { 150, 0, 0, 0, 0, 0, 0 } },
-                { "Mutant Zombie", "Mutant Zombies", 6, Race::NECR, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Mummy", "Mummies", 4, Race::NECR, 3, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Royal Mummy", "Royal Mummies", 4, Race::NECR, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Vampire", "Vampires", 3, Race::NECR, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Vampire Lord", "Vampire Lords", 3, Race::NECR, 4, { 650, 0, 0, 0, 0, 0, 0 } },
-                { "Lich", "Liches", 2, Race::NECR, 5, { 750, 0, 0, 0, 0, 0, 0 } },
-                { "Power Lich", "Power Liches", 2, Race::NECR, 5, { 900, 0, 0, 0, 0, 0, 0 } },
-                { "Bone Dragon", "Bone Dragons", 1, Race::NECR, 6, { 1500, 0, 0, 0, 0, 0, 0 } },
-                { "Rogue", "Rogues", 8, Race::NONE, 1, { 50, 0, 0, 0, 0, 0, 0 } },
-                { "Nomad", "Nomads", 4, Race::NONE, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Ghost", "Ghosts", 3, Race::NONE, 3, { 1000, 0, 0, 0, 0, 0, 0 } },
-                { "Genie", "Genies", 2, Race::NONE, 6, { 650, 0, 0, 0, 0, 0, 1 } },
-                { "Medusa", "Medusas", 5, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Earth Elemental", "Earth Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Air Elemental", "Air Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Fire Elemental", "Fire Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Water Elemental", "Water Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster", "Random Monsters", 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 1", "Random Monsters 1", 0, Race::NONE, 1, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 2", "Random Monsters 2", 0, Race::NONE, 2, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 3", "Random Monsters 3", 0, Race::NONE, 3, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 4", "Random Monsters 4", 0, Race::NONE, 4, { 0, 0, 0, 0, 0, 0, 0 } } };
+                { gettext_noop( "Unknown Monster" ), gettext_noop( "Unknown Monsters" ), 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Peasant" ), gettext_noop( "Peasants" ), 12, Race::KNGT, 1, { 20, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Archer" ), gettext_noop( "Archers" ), 8, Race::KNGT, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ranger" ), gettext_noop( "Rangers" ), 8, Race::KNGT, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Pikeman" ), gettext_noop( "Pikemen" ), 5, Race::KNGT, 3, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Veteran Pikeman" ), gettext_noop( "Veteran Pikemen" ), 5, Race::KNGT, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Swordsman" ), gettext_noop( "Swordsmen" ), 4, Race::KNGT, 4, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Master Swordsman" ), gettext_noop( "Master Swordsmen" ), 4, Race::KNGT, 4, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Cavalry" ), gettext_noop( "Cavalries" ), 3, Race::KNGT, 5, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Champion" ), gettext_noop( "Champions" ), 3, Race::KNGT, 5, { 375, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Paladin" ), gettext_noop( "Paladins" ), 2, Race::KNGT, 6, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Crusader" ), gettext_noop( "Crusaders" ), 2, Race::KNGT, 6, { 1000, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Goblin" ), gettext_noop( "Goblins" ), 10, Race::BARB, 1, { 40, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Orc" ), gettext_noop( "Orcs" ), 8, Race::BARB, 2, { 140, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Orc Chief" ), gettext_noop( "Orc Chiefs" ), 8, Race::BARB, 2, { 175, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Wolf" ), gettext_noop( "Wolves" ), 5, Race::BARB, 3, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ogre" ), gettext_noop( "Ogres" ), 4, Race::BARB, 4, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ogre Lord" ), gettext_noop( "Ogre Lords" ), 4, Race::BARB, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Troll" ), gettext_noop( "Trolls" ), 3, Race::BARB, 5, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "War Troll" ), gettext_noop( "War Trolls" ), 3, Race::BARB, 5, { 700, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Cyclops" ), gettext_noop( "Cyclopes" ), 2, Race::BARB, 6, { 750, 0, 0, 0, 0, 1, 0 } },
+                { gettext_noop( "Sprite" ), gettext_noop( "Sprites" ), 8, Race::SORC, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Dwarf" ), gettext_noop( "Dwarves" ), 6, Race::SORC, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Battle Dwarf" ), gettext_noop( "Battle Dwarves" ), 6, Race::SORC, 2, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Elf" ), gettext_noop( "Elves" ), 4, Race::SORC, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Grand Elf" ), gettext_noop( "Grand Elves" ), 4, Race::SORC, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Druid" ), gettext_noop( "Druids" ), 3, Race::SORC, 4, { 350, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Greater Druid" ), gettext_noop( "Greater Druids" ), 3, Race::SORC, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Unicorn" ), gettext_noop( "Unicorns" ), 2, Race::SORC, 5, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Phoenix" ), gettext_noop( "Phoenixes" ), 1, Race::SORC, 6, { 1500, 0, 1, 0, 0, 0, 0 } },
+                { gettext_noop( "Centaur" ), gettext_noop( "Centaurs" ), 8, Race::WRLK, 1, { 60, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Gargoyle" ), gettext_noop( "Gargoyles" ), 6, Race::WRLK, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Griffin" ), gettext_noop( "Griffins" ), 4, Race::WRLK, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Minotaur" ), gettext_noop( "Minotaurs" ), 3, Race::WRLK, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Minotaur King" ), gettext_noop( "Minotaur Kings" ), 3, Race::WRLK, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Hydra" ), gettext_noop( "Hydras" ), 2, Race::WRLK, 5, { 800, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Green Dragon" ), gettext_noop( "Green Dragons" ), 1, Race::WRLK, 6, { 3000, 0, 0, 0, 1, 0, 0 } },
+                { gettext_noop( "Red Dragon" ), gettext_noop( "Red Dragons" ), 1, Race::WRLK, 6, { 3500, 0, 0, 0, 1, 0, 0 } },
+                { gettext_noop( "Black Dragon" ), gettext_noop( "Black Dragons" ), 1, Race::WRLK, 6, { 4000, 0, 0, 0, 2, 0, 0 } },
+                { gettext_noop( "Halfling" ), gettext_noop( "Halflings" ), 8, Race::WZRD, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Boar" ), gettext_noop( "Boars" ), 6, Race::WZRD, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Iron Golem" ), gettext_noop( "Iron Golems" ), 4, Race::WZRD, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Steel Golem" ), gettext_noop( "Steel Golems" ), 4, Race::WZRD, 3, { 350, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Roc" ), gettext_noop( "Rocs" ), 3, Race::WZRD, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Mage" ), gettext_noop( "Magi" ), 2, Race::WZRD, 5, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Archmage" ), gettext_noop( "Archmagi" ), 2, Race::WZRD, 5, { 700, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Giant" ), gettext_noop( "Giants" ), 1, Race::WZRD, 6, { 2000, 0, 0, 0, 0, 0, 1 } },
+                { gettext_noop( "Titan" ), gettext_noop( "Titans" ), 1, Race::WZRD, 6, { 5000, 0, 0, 0, 0, 0, 2 } },
+                { gettext_noop( "Skeleton" ), gettext_noop( "Skeletons" ), 8, Race::NECR, 1, { 75, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Zombie" ), gettext_noop( "Zombies" ), 6, Race::NECR, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Mutant Zombie" ), gettext_noop( "Mutant Zombies" ), 6, Race::NECR, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Mummy" ), gettext_noop( "Mummies" ), 4, Race::NECR, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Royal Mummy" ), gettext_noop( "Royal Mummies" ), 4, Race::NECR, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Vampire" ), gettext_noop( "Vampires" ), 3, Race::NECR, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Vampire Lord" ), gettext_noop( "Vampire Lords" ), 3, Race::NECR, 4, { 650, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Lich" ), gettext_noop( "Liches" ), 2, Race::NECR, 5, { 750, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Power Lich" ), gettext_noop( "Power Liches" ), 2, Race::NECR, 5, { 900, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Bone Dragon" ), gettext_noop( "Bone Dragons" ), 1, Race::NECR, 6, { 1500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Rogue" ), gettext_noop( "Rogues" ), 8, Race::NONE, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Nomad" ), gettext_noop( "Nomads" ), 4, Race::NONE, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ghost" ), gettext_noop( "Ghosts" ), 3, Race::NONE, 3, { 1000, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Genie" ), gettext_noop( "Genies" ), 2, Race::NONE, 6, { 650, 0, 0, 0, 0, 0, 1 } },
+                { gettext_noop( "Medusa" ), gettext_noop( "Medusas" ), 5, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Earth Elemental" ), gettext_noop( "Earth Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Air Elemental" ), gettext_noop( "Air Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Fire Elemental" ), gettext_noop( "Fire Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Water Elemental" ), gettext_noop( "Water Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster" ), gettext_noop( "Random Monsters" ), 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 1" ), gettext_noop( "Random Monsters 1" ), 0, Race::NONE, 1, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 2" ), gettext_noop( "Random Monsters 2" ), 0, Race::NONE, 2, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 3" ), gettext_noop( "Random Monsters 3" ), 0, Race::NONE, 3, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 4" ), gettext_noop( "Random Monsters 4" ), 0, Race::NONE, 4, { 0, 0, 0, 0, 0, 0, 0 } } };
 
         monsterData.reserve( Monster::MONSTER_COUNT );
 
@@ -290,163 +294,169 @@ namespace
         }
 
         // Add monster abilities and weaknesses.
-        monsterData[Monster::RANGER].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
+        monsterData[Monster::RANGER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
 
-        monsterData[Monster::CAVALRY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::CAVALRY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::CHAMPION].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::CHAMPION].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::PALADIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
+        monsterData[Monster::PALADIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
 
-        monsterData[Monster::CRUSADER].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
-        monsterData[Monster::CRUSADER].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD );
-        monsterData[Monster::CRUSADER].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CURSE );
-        monsterData[Monster::CRUSADER].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::MASSCURSE );
+        monsterData[Monster::CRUSADER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
+        monsterData[Monster::CRUSADER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD );
+        monsterData[Monster::CRUSADER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CURSE );
+        monsterData[Monster::CRUSADER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::MASSCURSE );
 
-        monsterData[Monster::WOLF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::WOLF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
+        monsterData[Monster::WOLF].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::WOLF].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
 
-        monsterData[Monster::TROLL].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::HP_REGENERATION );
+        monsterData[Monster::TROLL].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::HP_REGENERATION );
 
-        monsterData[Monster::WAR_TROLL].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::HP_REGENERATION );
+        monsterData[Monster::WAR_TROLL].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::HP_REGENERATION );
 
-        monsterData[Monster::CYCLOPS].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
-        monsterData[Monster::CYCLOPS].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::PARALYZE );
+        monsterData[Monster::CYCLOPS].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+        monsterData[Monster::CYCLOPS].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::PARALYZE );
 
-        monsterData[Monster::SPRITE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
-        monsterData[Monster::SPRITE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::SPRITE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
+        monsterData[Monster::SPRITE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
-        monsterData[Monster::DWARF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 25, 0 );
+        monsterData[Monster::DWARF].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 25, 0 );
 
-        monsterData[Monster::BATTLE_DWARF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 25, 0 );
+        monsterData[Monster::BATTLE_DWARF].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 25, 0 );
 
-        monsterData[Monster::ELF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
+        monsterData[Monster::ELF].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
 
-        monsterData[Monster::GRAND_ELF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
+        monsterData[Monster::GRAND_ELF].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
 
-        monsterData[Monster::UNICORN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::UNICORN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::BLIND );
+        monsterData[Monster::UNICORN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::UNICORN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::BLIND );
 
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY );
+        monsterData[Monster::PHOENIX].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::PHOENIX].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+        monsterData[Monster::PHOENIX].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::PHOENIX].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY );
 
-        monsterData[Monster::CENTAUR].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::CENTAUR].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::GARGOYLE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::GARGOYLE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
-        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE );
+        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE );
 
-        monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
-        monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
+        monsterData[Monster::HYDRA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::HYDRA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
+        monsterData[Monster::HYDRA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
 
-        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
-        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
-        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DRAGON );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
-        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
-        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
-        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DRAGON );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
-        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
-        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
-        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DRAGON );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
-        monsterData[Monster::BOAR].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::BOAR].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
+        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
 
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
+        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
 
-        monsterData[Monster::ROC].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::ROC].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::ROC].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::ROC].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
-        monsterData[Monster::MAGE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
+        monsterData[Monster::MAGE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
 
-        monsterData[Monster::ARCHMAGE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
-        monsterData[Monster::ARCHMAGE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::DISPEL );
+        monsterData[Monster::ARCHMAGE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
+        monsterData[Monster::ARCHMAGE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::DISPEL );
 
-        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
+        monsterData[Monster::GIANT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
 
-        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
-        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
+        monsterData[Monster::TITAN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
+        monsterData[Monster::TITAN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
 
-        monsterData[Monster::SKELETON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::SKELETON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::ZOMBIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::ZOMBIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::MUTANT_ZOMBIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::MUTANT_ZOMBIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::CURSE );
+        monsterData[Monster::MUMMY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::MUMMY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::CURSE );
 
-        monsterData[Monster::ROYAL_MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::ROYAL_MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 30, Spell::CURSE );
+        monsterData[Monster::ROYAL_MUMMY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::ROYAL_MUMMY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 30, Spell::CURSE );
 
-        monsterData[Monster::VAMPIRE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::VAMPIRE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::VAMPIRE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
+        monsterData[Monster::VAMPIRE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::VAMPIRE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::VAMPIRE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
 
-        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
-        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::HP_DRAIN );
+        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
+        monsterData[Monster::VAMPIRE_LORD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::HP_DRAIN );
 
-        monsterData[Monster::LICH].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::LICH].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::AREA_SHOT );
+        monsterData[Monster::LICH].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::LICH].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::AREA_SHOT );
 
-        monsterData[Monster::POWER_LICH].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::POWER_LICH].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::AREA_SHOT );
+        monsterData[Monster::POWER_LICH].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::POWER_LICH].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::AREA_SHOT );
 
-        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
-        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MORAL_DECREMENT, 100, 1 );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DRAGON );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::MORAL_DECREMENT, 100, 1 );
 
-        monsterData[Monster::ROGUE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
+        monsterData[Monster::ROGUE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
 
-        monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SOUL_EATER );
-        monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SOUL_EATER );
+        monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ENEMY_HALFING, 10, 0 );
-        monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALFING, 10, 0 );
+        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
-        monsterData[Monster::MEDUSA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::MEDUSA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::STONE );
+        monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::STONE );
 
-        monsterData[Monster::NOMAD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::NOMAD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::LIGHTNINGBOLT );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::CHAINLIGHTNING );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::ELEMENTALSTORM );
 
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                                 Spell::METEORSHOWER );
 
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL );
 
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
-        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
+        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
+
+        // TODO: verify that no duplicates of abilities and weaknesses exist.
     }
 
     void removeDuplicateSpell( std::set<int> & sortedSpellIds, const int massSpellId, const int spellId )
@@ -493,83 +503,87 @@ namespace fheroes2
     {
         switch ( ability.type ) {
         case MonsterAbilityType::NONE:
-            return ignoreBasicAbility ? "" : "None";
+            return ignoreBasicAbility ? "" : _( "None" );
         case MonsterAbilityType::DOUBLE_SHOOTING:
-            return "Double shot";
+            return _( "Double shot" );
         case MonsterAbilityType::DOUBLE_HEX_SIZE:
-            return ignoreBasicAbility ? "" : "2-hex monster";
+            return ignoreBasicAbility ? "" : _( "2-hex monster" );
         case MonsterAbilityType::DOUBLE_MELEE_ATTACK:
-            return "Double strike";
+            return _( "Double strike" );
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
-            return "Double damage to Undead";
+            return _( "Double damage to Undead" );
         case MonsterAbilityType::MAGIC_RESISTANCE:
-            return std::to_string( ability.percentage ) + "% magic resistance";
+            return std::to_string( ability.percentage ) + _( "% magic resistance" );
         case MonsterAbilityType::MIND_SPELL_IMMUNITY:
-            return "Immune to Mind spells";
+            return _( "Immune to Mind spells" );
         case MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY:
-            return "Immune to Elemental spells";
+            return _( "Immune to Elemental spells" );
         case MonsterAbilityType::FIRE_SPELL_IMMUNITY:
-            return "Immune to Fire spells";
+            return _( "Immune to Fire spells" );
         case MonsterAbilityType::COLD_SPELL_IMMUNITY:
-            return "Immune to Cold spells";
+            return _( "Immune to Cold spells" );
         case MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL:
             if ( ability.percentage == 100 ) {
-                return std::string( "Immune to " ) + Spell( ability.value ).GetName();
+                return std::string( _( "Immune to " ) ) + Spell( ability.value ).GetName();
             }
             else {
-                return std::to_string( ability.percentage ) + "% immunity to " + Spell( ability.value ).GetName() + " spell";
+                std::string str = _( "% immunity to %{spell} spell" );
+                StringReplace( str, "%{spell}", Spell( ability.value ).GetName() );
+                return std::to_string( ability.percentage ) + str;
             }
         case MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION:
-            return std::to_string( ability.percentage ) + "% damage from Elemental spells";
+            return std::to_string( ability.percentage ) + _( "% damage from Elemental spells" );
         case MonsterAbilityType::SPELL_CASTER:
             if ( ability.value == Spell::DISPEL ) {
-                return std::to_string( ability.percentage ) + "% chance to Dispel beneficial spells";
+                return std::to_string( ability.percentage ) + _( "% chance to Dispel beneficial spells" );
             }
             else if ( ability.value == Spell::PARALYZE ) {
-                return std::to_string( ability.percentage ) + "% chance to Paralyze";
+                return std::to_string( ability.percentage ) + _( "% chance to Paralyze" );
             }
             else if ( ability.value == Spell::STONE ) {
-                return std::to_string( ability.percentage ) + "% chance to Petrify";
+                return std::to_string( ability.percentage ) + _( "% chance to Petrify" );
             }
             else if ( ability.value == Spell::BLIND ) {
-                return std::to_string( ability.percentage ) + "% chance to Blind";
+                return std::to_string( ability.percentage ) + _( "% chance to Blind" );
             }
             else if ( ability.value == Spell::CURSE ) {
-                return std::to_string( ability.percentage ) + "% chance to Curse";
+                return std::to_string( ability.percentage ) + _( "% chance to Curse" );
             }
             else {
-                return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";
+                std::string str = _( "% chance to cast %{spell} spell" );
+                StringReplace( str, "%{spell}", Spell( ability.value ).GetName() );
+                return std::to_string( ability.percentage ) + str;
             }
         case MonsterAbilityType::HP_REGENERATION:
-            return "HP regeneration";
+            return _( "HP regeneration" );
         case MonsterAbilityType::TWO_CELL_MELEE_ATTACK:
-            return "Two hexes attack";
+            return _( "Two hexes attack" );
         case MonsterAbilityType::FLYING:
-            return ignoreBasicAbility ? "" : "Flyer";
+            return ignoreBasicAbility ? "" : _( "Flyer" );
         case MonsterAbilityType::ALWAYS_RETALIATE:
-            return "Always retaliates";
+            return _( "Always retaliates" );
         case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
-            return "Attacks all adjacent enemies";
+            return _( "Attacks all adjacent enemies" );
         case MonsterAbilityType::NO_MELEE_PENALTY:
-            return "No melee penalty";
+            return _( "No melee penalty" );
         case MonsterAbilityType::DRAGON:
-            return ignoreBasicAbility ? "" : "Dragon";
+            return ignoreBasicAbility ? "" : _( "Dragon" );
         case MonsterAbilityType::UNDEAD:
-            return "Undead";
+            return _( "Undead" );
         case MonsterAbilityType::NO_ENEMY_RETALIATION:
-            return "No enemy retaliation";
+            return _( "No enemy retaliation" );
         case MonsterAbilityType::HP_DRAIN:
-            return "HP drain";
+            return _( "HP drain" );
         case MonsterAbilityType::AREA_SHOT:
-            return "Cloud attack";
+            return _( "Cloud attack" );
         case MonsterAbilityType::MORAL_DECREMENT:
-            return "Decreases enemy's morale by " + std::to_string( ability.value );
+            return _( "Decreases enemy's morale by " ) + std::to_string( ability.value );
         case MonsterAbilityType::ENEMY_HALFING:
-            return std::to_string( ability.percentage ) + "% chance to halve enemy";
+            return std::to_string( ability.percentage ) + _( "% chance to halve enemy" );
         case MonsterAbilityType::SOUL_EATER:
-            return "Soul Eater";
+            return _( "Soul Eater" );
         case MonsterAbilityType::ELEMENTAL:
-            return ignoreBasicAbility ? "No Morale" : "Elemental";
+            return ignoreBasicAbility ? _( "No Morale" ) : _( "Elemental" );
         default:
             break;
         }
@@ -582,13 +596,16 @@ namespace fheroes2
     {
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
-            return ignoreBasicAbility ? "" : "None";
+            return ignoreBasicAbility ? "" : _( "None" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL:
-            return "200% damage from Fire spells";
+            return _( "200% damage from Fire spells" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL:
-            return "200% damage from Cold spells";
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL:
-            return std::to_string( weakness.percentage + 100 ) + "% damage from " + Spell( weakness.value ).GetName() + " spell";
+            return _( "200% damage from Cold spells" );
+        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL: {
+            std::string str = _( "% damage from %{spell} spell" );
+            StringReplace( str, "%{spell}", Spell( weakness.value ).GetName() );
+            return std::to_string( weakness.percentage + 100 ) + str;
+        }
         default:
             break;
         }
@@ -651,7 +668,7 @@ namespace fheroes2
 
         const MonsterBattleStats & battleStats = getMonsterData( monsterId ).battleStats;
 
-        const std::set<MonsterAbility> & abilities = battleStats.abilities;
+        const std::vector<MonsterAbility> & abilities = battleStats.abilities;
 
         std::map<uint32_t, std::vector<int>> immuneToSpells;
         for ( const MonsterAbility & ability : abilities ) {
@@ -697,7 +714,7 @@ namespace fheroes2
         }
 
         std::map<uint32_t, std::vector<int>> extraDamageSpells;
-        const std::set<MonsterWeakness> & weaknesses = battleStats.weaknesses;
+        const std::vector<MonsterWeakness> & weaknesses = battleStats.weaknesses;
         for ( const MonsterWeakness & weakness : weaknesses ) {
             if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
                 extraDamageSpells[weakness.percentage].emplace_back( weakness.value );
@@ -741,12 +758,12 @@ namespace fheroes2
 
     uint32_t getSpellResistance( const int monsterId, const int spellId )
     {
-        const std::set<MonsterAbility> & abilities = getMonsterData( monsterId ).battleStats.abilities;
+        const std::vector<MonsterAbility> & abilities = getMonsterData( monsterId ).battleStats.abilities;
 
         Spell spell( spellId );
 
         // Find magic immunity for every spell.
-        auto foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::MAGIC_RESISTANCE ) );
+        auto foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::MAGIC_RESISTANCE ) );
         if ( foundAbility != abilities.end() ) {
             if ( foundAbility->percentage == 100 ) {
                 // Immune to everything.
@@ -757,58 +774,59 @@ namespace fheroes2
             }
         }
 
-        foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 0, spellId ) );
-        if ( foundAbility != abilities.end() ) {
-            return foundAbility->percentage;
+        for ( const MonsterAbility & ability : abilities ) {
+            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL && static_cast<int>( ability.value ) == spellId ) {
+                return ability.percentage;
+            }
         }
 
         if ( spell.isMindInfluence() ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::MIND_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::MIND_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isALiveOnly() ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isUndeadOnly() ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
             if ( foundAbility == abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell == Spell::RESURRECT || spell == Spell::RESURRECTTRUE || spell == Spell::ANIMATEDEAD ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isCold() ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::COLD_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::COLD_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isFire() ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::FIRE_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::FIRE_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
@@ -816,7 +834,7 @@ namespace fheroes2
 
         if ( spell == Spell::COLDRAY || spell == Spell::COLDRING || spell == Spell::FIREBALL || spell == Spell::FIREBLAST || spell == Spell::LIGHTNINGBOLT
              || spell == Spell::CHAINLIGHTNING || spell == Spell::ELEMENTALSTORM ) {
-            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }

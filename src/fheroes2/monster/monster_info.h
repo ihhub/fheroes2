@@ -23,7 +23,6 @@
 
 #include "resource.h"
 
-#include <set>
 #include <string>
 #include <vector>
 
@@ -87,9 +86,9 @@ namespace fheroes2
             , value( value_ )
         {}
 
-        bool operator<( const MonsterAbility & another ) const
+        bool operator==( const MonsterAbility & another ) const
         {
-            return type < another.type || ( type == another.type && value < another.value );
+            return type == another.type;
         }
 
         MonsterAbilityType type;
@@ -135,8 +134,8 @@ namespace fheroes2
         uint32_t speed;
         uint32_t shots;
 
-        std::set<MonsterAbility> abilities;
-        std::set<MonsterWeakness> weaknesses;
+        std::vector<MonsterAbility> abilities;
+        std::vector<MonsterWeakness> weaknesses;
     };
 
     struct MonsterGeneralStats
@@ -187,7 +186,7 @@ namespace fheroes2
     std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility );
     std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility );
 
-    std::string getMonsterDescription( const int monsterId );
+    std::string getMonsterDescription( const int monsterId ); // To be utilized in future.
 
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 

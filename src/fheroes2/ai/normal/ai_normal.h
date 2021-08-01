@@ -47,7 +47,7 @@ namespace AI
         const Battle::Unit * unit = nullptr;
     };
 
-    struct SpellSeletion
+    struct SpellSelection
     {
         int spellID = -1;
         int32_t cell = -1;
@@ -89,12 +89,12 @@ namespace AI
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
+        SpellSelection selectBestSpell( Battle::Arena & arena, bool retreating ) const;
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
                                            bool retreating ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
-        SpellcastOutcome spellSummonValue( const Spell & spell ) const;
+        SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
         uint32_t spellDurationMultiplier( const Battle::Unit & target ) const;
@@ -122,7 +122,7 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom ) override;
         void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
-        void HeroesTurn( VecHeroes & heroes ) override;
+        bool HeroesTurn( VecHeroes & heroes ) override;
 
         void revealFog( const Maps::Tiles & tile ) override;
 

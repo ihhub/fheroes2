@@ -43,7 +43,6 @@ namespace Speed
     const std::string & String( int );
     int GetOriginalSlow( int );
     int GetOriginalFast( int );
-    int FromInt( int );
 }
 
 #endif

@@ -91,7 +91,7 @@ namespace
 #if defined( FHEROES2_ENABLE_PNG )
         int res = 0;
         const std::string pngExtension( ".png" );
-        if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) ) {
+        if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 ) {
             res = IMG_SavePNG( surface, path.c_str() );
         }
         else {

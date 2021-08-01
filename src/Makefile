@@ -34,8 +34,8 @@ LIBS := -pthread -lz
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual flags back once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized -Wextra-semi
+# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual -Wextra-semi flags back once we fix all other warnings!
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
 
 ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror
@@ -56,20 +56,11 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT
-CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
+CFLAGS := $(CFLAGS) -DFHEROES2_IMAGE_SUPPORT $(shell libpng-config --cflags)
 ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
-endif
-endif
-
-ifndef WITHOUT_UNICODE
-CFLAGS := $(CFLAGS) -DWITH_TTF
-ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
-else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
 endif
 endif
 
@@ -97,7 +88,6 @@ PLATFORM := all
 endif
 ifeq ($(OS),Haiku)
 PLATFORM := all
-LIBS := -liconv
 endif
 endif
 
@@ -121,9 +111,7 @@ all:
 ifdef WITH_TOOLS
 	$(MAKE) -C tools
 endif
-ifndef WITHOUT_UNICODE
 	$(MAKE) -C dist pot
-endif
 
 clean:
 	$(MAKE) -C thirdparty/libsmacker clean

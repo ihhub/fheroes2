@@ -25,6 +25,7 @@
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_delays.h"
@@ -100,11 +101,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::NEW_HOT_SEAT:
             result = Game::NewHotSeat();
             break;
-#ifdef NETWORK_ENABLE
-        case fheroes2::GameMode::NEW_NETWORK:
-            result = Game::NewNetwork();
-            break;
-#endif
         case fheroes2::GameMode::NEW_BATTLE_ONLY:
             result = Game::NewBattleOnly();
             break;
@@ -120,9 +116,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::LOAD_HOT_SEAT:
             result = Game::LoadHotseat();
             break;
-        case fheroes2::GameMode::LOAD_NETWORK:
-            result = Game::LoadNetwork();
-            break;
         case fheroes2::GameMode::SCENARIO_INFO:
             result = Game::ScenarioInfo();
             break;
@@ -133,7 +126,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME );
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario();
@@ -141,7 +134,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
             result = Game::CompleteCampaignScenario();
             if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
-                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN );
+                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN, false );
             }
             break;
 
@@ -168,6 +161,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
+        if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
+            supportedLanguage = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage }, 0 );
+            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
+        }
+
         Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
                          Dialog::OK );
 

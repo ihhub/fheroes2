@@ -180,12 +180,6 @@ StreamBase & StreamBase::operator<<( const u8 v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const int8_t v )
-{
-    put8( v );
-    return *this;
-}
-
 StreamBase & StreamBase::operator<<( const u16 v )
 {
     put16( v );
@@ -367,11 +361,6 @@ void StreamBuf::reallocbuf( size_t sz )
     }
 }
 
-void StreamBuf::setfail( void )
-{
-    flags |= 0x00000001;
-}
-
 void StreamBuf::copy( const StreamBuf & sb )
 {
     if ( capacity() < sb.size() )
@@ -509,12 +498,6 @@ void StreamBuf::seek( size_t sz )
 StreamFile::StreamFile()
     : _file( nullptr )
 {}
-
-StreamFile::StreamFile( const std::string & fn, const char * mode )
-{
-    open( fn, mode );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
-}
 
 StreamFile::~StreamFile()
 {

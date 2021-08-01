@@ -2,10 +2,7 @@ file(GLOB_RECURSE LIBENGINE_SOURCES CONFIGURE_DEPENDS *.cpp)
 
 add_library(engine STATIC ${LIBENGINE_SOURCES})
 target_compile_definitions(engine PRIVATE
-	$<$<BOOL:${ENABLE_AUDIOCD}>:WITH_AUDIOCD>
-	$<$<BOOL:${ENABLE_IMAGE}>:WITH_IMAGE>
-	$<$<BOOL:${ENABLE_UNICODE}>:WITH_TTF>
-	$<$<BOOL:${ENABLE_UNICODE}>:WITH_ICONV>
+	$<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
 	)
 target_include_directories(engine PUBLIC
 	${${USE_SDL_VERSION}_INCLUDE_DIR}
@@ -20,7 +17,5 @@ target_link_libraries(engine
 	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_LIBRARIES}>
 	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
 	ZLIB::ZLIB
-	$<$<BOOL:${ENABLE_UNICODE}>:Iconv::Iconv>
-	$<$<BOOL:${ENABLE_UNICODE}>:${${USE_SDL_VERSION}_TTF_LIBRARIES}>
 	)
 export(TARGETS engine FILE EngineConfig.cmake)

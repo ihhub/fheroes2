@@ -111,7 +111,6 @@ public:
     StreamBase & operator<<( const bool );
     StreamBase & operator<<( const char );
     StreamBase & operator<<( const u8 );
-    StreamBase & operator<<( const int8_t );
     StreamBase & operator<<( const u16 );
     StreamBase & operator<<( const int16_t );
     StreamBase & operator<<( const u32 );
@@ -240,7 +239,6 @@ protected:
 
     void copy( const StreamBuf & );
     void reallocbuf( size_t );
-    void setfail( void );
 
     u8 get8() override;
     void put8( const uint8_t v ) override;
@@ -259,7 +257,6 @@ class StreamFile : public StreamBase
 
 public:
     StreamFile();
-    StreamFile( const std::string &, const char * mode );
     ~StreamFile() override;
 
     size_t size( void ) const;

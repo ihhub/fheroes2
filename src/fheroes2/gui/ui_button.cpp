@@ -29,27 +29,6 @@
 
 namespace fheroes2
 {
-    ActionObject::ActionObject()
-        : _receiver( nullptr )
-    {}
-
-    void ActionObject::subscribe( ActionObject * receiver )
-    {
-        _receiver = receiver;
-    }
-
-    void ActionObject::unsubscribe()
-    {
-        _receiver = nullptr;
-    }
-
-    void ActionObject::updateSubscription()
-    {
-        if ( _receiver != nullptr ) {
-            _receiver->senderUpdate( this );
-        }
-    }
-
     ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
         : _offsetX( offsetX )
         , _offsetY( offsetY )

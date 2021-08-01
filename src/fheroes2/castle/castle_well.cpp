@@ -63,6 +63,30 @@ namespace
 
         return count;
     }
+
+    building_t getPressedBuildingHotkey()
+    {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_1 ) ) {
+            return DWELLING_MONSTER1;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_2 ) ) {
+            return DWELLING_MONSTER2;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_3 ) ) {
+            return DWELLING_MONSTER3;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_4 ) ) {
+            return DWELLING_MONSTER4;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_5 ) ) {
+            return DWELLING_MONSTER5;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_6 ) ) {
+            return DWELLING_MONSTER6;
+        }
+
+        return BUILD_NOTHING;
+    }
 }
 
 void Castle::OpenWell( void )
@@ -125,11 +149,12 @@ void Castle::OpenWell( void )
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+        const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
             break;
         }
-        else if ( le.MouseClickLeft( buttonMax.area() ) ) {
+        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::EVENT_WELL_BUY_ALL_CREATURES ) ) {
             std::vector<Troop> results;
             Funds cur;
             Funds total;
@@ -147,7 +172,7 @@ void Castle::OpenWell( void )
                     str.append( ms.GetPluralName( canRecruit ) );
                     str.append( " - " );
                     str.append( std::to_string( canRecruit ) );
-                    str.append( "\n" );
+                    str += '\n';
                 }
             }
 
@@ -172,17 +197,17 @@ void Castle::OpenWell( void )
                 }
             }
         }
-        else if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
+        else if ( ( building & DWELLING_MONSTER1 ) && ( le.MouseClickLeft( rectMonster1 ) || pressedHotkeyBuildingID == DWELLING_MONSTER1 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
-        else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
+        else if ( ( building & DWELLING_MONSTER2 ) && ( le.MouseClickLeft( rectMonster2 ) || pressedHotkeyBuildingID == DWELLING_MONSTER2 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
-        else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 ) )
+        else if ( ( building & DWELLING_MONSTER3 ) && ( le.MouseClickLeft( rectMonster3 ) || pressedHotkeyBuildingID == DWELLING_MONSTER3 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) );
-        else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 ) )
+        else if ( ( building & DWELLING_MONSTER4 ) && ( le.MouseClickLeft( rectMonster4 ) || pressedHotkeyBuildingID == DWELLING_MONSTER4 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) );
-        else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 ) )
+        else if ( ( building & DWELLING_MONSTER5 ) && ( le.MouseClickLeft( rectMonster5 ) || pressedHotkeyBuildingID == DWELLING_MONSTER5 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
-        else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
+        else if ( ( building & DWELLING_MONSTER6 ) && ( le.MouseClickLeft( rectMonster6 ) || pressedHotkeyBuildingID == DWELLING_MONSTER6 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {

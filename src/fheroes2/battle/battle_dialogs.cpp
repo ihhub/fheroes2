@@ -345,23 +345,19 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLEWIN, false );
+        AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLEWIN, false );
+        AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLELOSE, false );
+        AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
-        if ( conf.Music() )
-            AGG::PlayMusic( MUS::BATTLELOSE, false );
+        AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else
         // AI move
@@ -507,7 +503,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 continue;
             }
 
-            if ( art() == Artifact::UNKNOWN || art() == Artifact::MAGIC_BOOK ) {
+            if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
                 continue;
             }
 
@@ -570,6 +566,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
 void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
     const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
@@ -797,6 +796,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
+            LocalEvent::GetClean();
             const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
         }
 

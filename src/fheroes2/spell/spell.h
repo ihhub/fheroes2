@@ -117,7 +117,6 @@ public:
     bool operator==( const Spell & ) const;
     bool operator!=( const Spell & ) const;
 
-    int operator()( void ) const;
     int GetID( void ) const;
 
     const char * GetName( void ) const;
@@ -158,8 +157,6 @@ public:
 
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;
-    /* return index in spellinl.icn */
-    u32 InlIndexSprite( void ) const;
 
     static Spell RandCombat( int lvl );
     static Spell RandAdventure( int lvl );

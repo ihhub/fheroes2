@@ -94,6 +94,4 @@ public:
     }
 };
 
-StreamBase & operator>>( StreamBase &, ResourceCount & );
-
 #endif

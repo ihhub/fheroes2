@@ -139,6 +139,8 @@ namespace Battle
 
         u32 GetCastleTargetValue( int ) const;
 
+        int32_t GetFreePositionNearHero( const int heroColor ) const;
+
         static Board * GetBoard( void );
         static Tower * GetTower( int );
         static Bridge * GetBridge( void );
@@ -162,7 +164,6 @@ namespace Battle
         void SetCastleTargetValue( int, u32 );
         void CatapultAction( void );
 
-        s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
@@ -192,6 +193,7 @@ namespace Battle
         int preferredColor; // preferred color for the next unit in the battle queue
 
         const Castle * castle;
+        const bool _isTown; // If the battle is in town (village or castle).
 
         Tower * towers[3];
         Catapult * catapult;
