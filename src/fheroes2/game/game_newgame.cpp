@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_mixer.h"
@@ -27,7 +28,7 @@
 #include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "dialog_game_settings.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "icn.h"
@@ -374,8 +375,8 @@ fheroes2::GameMode Game::NewGame()
         if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
             return fheroes2::GameMode::NEW_MULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
-            Dialog::ExtSettings( false );
-            display.render();
+            fheroes2::openGameSettings();
+            return fheroes2::GameMode::MAIN_MENU;
         }
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
@@ -392,7 +393,7 @@ fheroes2::GameMode Game::NewGame()
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
             Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
         else if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
         else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }

@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace fheroes2
 {
     enum class SupportedLanguage : int
@@ -28,7 +30,7 @@ namespace fheroes2
         French, // GoG version
         Polish, // GoG version
         German, // GoG version
-        Russian // Buka version
+        Russian // Buka and XXI Vek versions
     };
 
     // Game resources can support up to 2 languages. One of them is always English.
@@ -39,4 +41,6 @@ namespace fheroes2
     const char * getLanguageName( const SupportedLanguage language );
 
     const char * getLanguageAbbreviation( const SupportedLanguage language );
+
+    SupportedLanguage getLanguageFromAbbreviation( const std::string & abbreviation );
 }

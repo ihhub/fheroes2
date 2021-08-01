@@ -248,13 +248,13 @@ namespace Translation
         return *pos ? pos : str;
     }
 
-    bool bindDomain( const char * domain, const char * file, const char * language )
+    bool bindDomain( const char * domain, const char * file )
     {
         std::map<std::string, mofile>::const_iterator it = domains.find( domain );
         if ( it != domains.end() )
             return true;
 
-        std::string str( language );
+        std::string str( domain );
 
         if ( str == "af" || str == "afrikaans" )
             locale = LOCALE_AF;

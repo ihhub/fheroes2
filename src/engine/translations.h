@@ -25,7 +25,7 @@
 
 namespace Translation
 {
-    bool bindDomain( const char * domain, const char * file, const char * language );
+    bool bindDomain( const char * domain, const char * file );
     bool setDomain( const char * domain );
 
     // Reset any translation to the default language - English.
