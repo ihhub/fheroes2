@@ -913,8 +913,10 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
-    if ( interface )
+    if ( interface ) {
+        assert( elem != nullptr );
         interface->RedrawActionSummonElementalSpell( *elem );
+    }
 }
 
 void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
