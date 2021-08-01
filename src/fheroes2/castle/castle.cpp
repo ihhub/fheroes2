@@ -982,15 +982,19 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     if ( !hero->Recruit( *this ) )
         return nullptr;
 
-    Kingdom & kingdom = GetKingdom();
-
-    if ( kingdom.GetLastLostHero() == hero )
-        kingdom.ResetLastLostHero();
-
     // actually update available heroes to recruit
-    kingdom.GetRecruits();
+    const Colors colors( Settings::Get().GetPlayers().GetActualColors() );
 
-    kingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
+    for ( const int kingdomColor : colors ) {
+        Kingdom & kingdom = world.GetKingdom( kingdomColor );
+        if ( kingdom.GetLastLostHero() == hero )
+            kingdom.ResetLastLostHero();
+
+        kingdom.GetRecruits();
+    }
+
+    Kingdom & currentKingdom = GetKingdom();
+    currentKingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
 
     // update spell book
     if ( GetLevelMageGuild() )
