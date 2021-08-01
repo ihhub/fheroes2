@@ -2441,7 +2441,7 @@ void Maps::Tiles::setAsEmpty()
 
     bool isCoast = false;
 
-    const Indexes tileIndices = Maps::GetAroundIndexes( _index, 1 );
+    const Indexes tileIndices = Maps::getAroundIndexes( _index, 1 );
     for ( const int tileIndex : tileIndices ) {
         if ( tileIndex < 0 ) {
             // Invalid tile index.

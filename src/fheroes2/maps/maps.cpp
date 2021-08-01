@@ -328,7 +328,7 @@ Maps::Indexes Maps::GetAroundIndexes( int32_t center )
     return result;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles )
+Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile )
 {
     Indexes results;
     results.reserve( maxDistanceFromTile * 12 );
@@ -344,10 +344,6 @@ Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t max
                 results.push_back( tileId );
             }
         }
-    }
-
-    if ( sortTiles ) {
-        std::sort( results.begin(), results.end(), ComparisonDistance( tileIndex ) );
     }
 
     return results;
@@ -411,7 +407,8 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 
 Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj )
 {
-    Indexes results = Maps::GetAroundIndexes( center, dist, true );
+    Indexes results = Maps::getAroundIndexes( center, dist );
+    std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return MapsIndexesFilteredObject( results, obj );
 }
 
