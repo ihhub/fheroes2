@@ -608,7 +608,7 @@ const char * Artifact::GetScenario( const Artifact & art )
     switch ( art.GetID() ) {
     case SPELL_SCROLL:
         return _(
-            "You find an elaborate aontainer which housesan old vellum scroll. The runes on the container are very old, and the artistry with whitch it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." );
+            "You find an elaborate container which houses an old vellum scroll. The runes on the container are very old, and the artistry with which it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." );
     case ARM_MARTYR:
         return _(
             "One of the less intelligent members of your party picks up an arm off of the ground. Despite its missing a body, it is still moving. Your troops find the dismembered arm repulsive, but you cannot bring yourself to drop it: it seems to hold some sort of magical power that influences your decision making." );
