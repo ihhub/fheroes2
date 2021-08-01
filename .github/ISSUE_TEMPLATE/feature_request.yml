@@ -5,9 +5,9 @@ labels: [ improvement ]
 body:
 - type: checkboxes
   attributes:
-    label: Check for duplicates
+    label: Preliminary checks
     options:
-    - label: I checked that there aren't other open issues on the same topic
+    - label: I have checked that there aren't [**other open issues**](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue) on the same topic
       required: true
 - type: textarea
   attributes:
