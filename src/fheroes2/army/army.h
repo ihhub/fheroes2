@@ -85,8 +85,6 @@ public:
 
     virtual double GetStrength() const;
 
-    u32 GetHitPoints( void ) const;
-
     void Clean( void );
     void UpgradeTroops( const Castle & );
 

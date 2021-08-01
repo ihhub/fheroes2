@@ -60,7 +60,6 @@ class Text
 public:
     Text();
     Text( const std::string &, int ft = Font::BIG );
-    Text( const Text & );
     ~Text();
 
     Text & operator=( const Text & ) = delete;
@@ -84,9 +83,6 @@ public:
     void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
     void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
     void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-
-    static u32 width( const std::string &, int ft, u32 start = 0, u32 count = 0 );
-    static u32 height( const std::string &, int ft, u32 width = 0 );
 
     static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 
@@ -113,7 +109,6 @@ public:
     void Show( void );
     void Hide( void );
 
-    bool isHide( void ) const;
     bool isShow( void ) const;
 
     int w() const;

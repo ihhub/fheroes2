@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_mixer.h"
+#include "audio_music.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
@@ -40,6 +41,7 @@
 #include "icn.h"
 #include "interface_list.h"
 #include "logging.h"
+#include "mus.h"
 #include "pal.h"
 #include "race.h"
 #include "rand.h"
@@ -992,10 +994,15 @@ Battle::Interface::Interface( Arena & a, s32 center )
     if ( listlog )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
     status.SetLogs( listlog );
+
+    AGG::ResetMixer();
+    AGG::PlaySound( M82::PREBATTL );
 }
 
 Battle::Interface::~Interface()
 {
+    AGG::ResetMixer();
+
     if ( listlog )
         delete listlog;
     if ( opponent1 )
@@ -1643,14 +1650,23 @@ void Battle::Interface::RedrawCover()
 
             const Cell * attackerCell = Board::GetCell( cell->GetIndex(), direction );
             assert( attackerCell != nullptr );
-            highlightCells.emplace( attackerCell );
 
-            if ( _currentUnit->GetTailIndex() != -1 ) {
-                const int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
-                const Cell * tailAttackerCell = Board::GetCell( attackerCell->GetIndex(), tailDirection );
-                assert( tailAttackerCell != nullptr );
+            Position attackerPos;
 
-                highlightCells.emplace( tailAttackerCell );
+            if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                // The attacking unit is already there and shouldn't move
+                attackerPos = _currentUnit->GetPosition();
+            }
+            else {
+                attackerPos = Position::GetCorrect( *_currentUnit, attackerCell->GetIndex() );
+            }
+
+            assert( attackerPos.GetHead() != nullptr );
+            highlightCells.emplace( attackerPos.GetHead() );
+
+            if ( _currentUnit->isWide() ) {
+                assert( attackerPos.GetTail() != nullptr );
+                highlightCells.emplace( attackerPos.GetTail() );
             }
         }
         else {
@@ -2484,7 +2500,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
 void Battle::Interface::FadeArena( bool clearMessageLog )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    AGG::ResetMixer();
 
     if ( clearMessageLog ) {
         status.clear();
@@ -2495,8 +2511,11 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
+
     display.render();
 }
 
@@ -2600,17 +2619,21 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 
     if ( _currentUnit ) {
         auto fixupTargetIndex = []( const Unit * unit, const int32_t dst ) {
-            if ( unit->isWide() ) {
-                Position pos = Position::GetCorrect( *unit, dst );
+            // only wide units may need this fixup
+            if ( !unit->isWide() ) {
+                return dst;
+            }
 
-                // destination cell is on the border of the cell space available to the unit
-                // and it should be the tail cell of the unit, return the head cell instead
-                if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
-                    int headDirection = unit->isReflect() ? LEFT : RIGHT;
+            const Position pos = Position::GetCorrect( *unit, dst );
+            assert( pos.GetTail() != nullptr );
 
-                    if ( Board::isValidDirection( dst, headDirection ) ) {
-                        return Board::GetIndexDirection( dst, headDirection );
-                    }
+            // destination cell is on the border of the cell space available to the unit
+            // and it should be the tail cell of the unit, return the head cell instead
+            if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
+                const int headDirection = unit->isReflect() ? LEFT : RIGHT;
+
+                if ( Board::isValidDirection( dst, headDirection ) ) {
+                    return Board::GetIndexDirection( dst, headDirection );
                 }
             }
 
@@ -2781,6 +2804,10 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 
 void Battle::Interface::RedrawActionNewTurn() const
 {
+    if ( !Music::isPlaying() ) {
+        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+    }
+
     if ( listlog == nullptr ) {
         return;
     }

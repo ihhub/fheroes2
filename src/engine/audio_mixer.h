@@ -41,7 +41,6 @@ namespace Mixer
     void Reset();
 
     bool isPlaying( int channel );
-    bool isPaused( int channel );
     bool isValid();
 
     void Reduce();

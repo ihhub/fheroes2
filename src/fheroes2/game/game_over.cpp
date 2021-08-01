@@ -283,17 +283,6 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         StringReplace( msg, "%{month}", month + 1 );
     }
 
-    if ( ( cond & LOSS ) && conf.ExtWorldStartHeroLossCond4Humans() && conf.isStandardGameType() ) {
-        const std::string names = world.GetKingdom( conf.CurrentColor() ).GetNamesHeroStartCondLoss();
-
-        if ( !names.empty() ) {
-            std::string str = std::string::npos == names.find( ',' ) ? _( "Lose the hero: %{name}." ) : _( "Lose the heroes: %{name}." );
-            StringReplace( str, "%{name}", names );
-            msg.append( "\n" );
-            msg.append( str );
-        }
-    }
-
     return msg;
 }
 
@@ -446,7 +435,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                 // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
                 // LOSS_TOWN is currently not supported in multiplayer
-                // LOSS_STARTHERO is an extension and apparently is not intended to be used in multiplayer
                 if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
                     return condition;
                 }

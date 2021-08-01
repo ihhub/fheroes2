@@ -49,11 +49,6 @@ namespace Battle
         }
     }
 
-    bool ArenaPathfinder::hexIsAccessible( int targetCell ) const
-    {
-        return _cache[targetCell]._from != -1;
-    }
-
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
         const size_t index = static_cast<size_t>( targetCell );

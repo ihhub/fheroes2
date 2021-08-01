@@ -28,7 +28,6 @@
 #include "army.h"
 #include "army_troop.h"
 #include "audio_mixer.h"
-#include "audio_music.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -42,7 +41,6 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
-#include "mus.h"
 #include "race.h"
 #include "settings.h"
 #include "tools.h"
@@ -192,8 +190,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     if ( local ) {
         interface = new Interface( *this, index );
         board.SetArea( interface->GetArea() );
-
-        AGG::PlaySound( M82::PREBATTL );
 
         armies_order = new Units();
         armies_order->reserve( 25 );
@@ -379,10 +375,6 @@ void Battle::Arena::Turns( void )
 
     if ( interface ) {
         interface->RedrawActionNewTurn();
-
-        if ( !Music::isPlaying() ) {
-            AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
-        }
     }
 
     army1->NewTurn();

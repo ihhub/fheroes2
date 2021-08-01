@@ -25,6 +25,8 @@
 #include "race.h"
 #include "speed.h"
 #include "spell.h"
+#include "tools.h"
+#include "translations.h"
 
 #include <algorithm>
 #include <cassert>
@@ -212,78 +214,78 @@ namespace
 
         const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT]
             = { // name | plural name | growth | race | level | cost
-                { "Unknown Monster", "Unknown Monsters", 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Peasant", "Peasants", 12, Race::KNGT, 1, { 20, 0, 0, 0, 0, 0, 0 } },
-                { "Archer", "Archers", 8, Race::KNGT, 2, { 150, 0, 0, 0, 0, 0, 0 } },
-                { "Ranger", "Rangers", 8, Race::KNGT, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Pikeman", "Pikemen", 5, Race::KNGT, 3, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Veteran Pikeman", "Veteran Pikemen", 5, Race::KNGT, 3, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Swordsman", "Swordsmen", 4, Race::KNGT, 4, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Master Swordsman", "Master Swordsmen", 4, Race::KNGT, 4, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Cavalry", "Cavalries", 3, Race::KNGT, 5, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Champion", "Champions", 3, Race::KNGT, 5, { 375, 0, 0, 0, 0, 0, 0 } },
-                { "Paladin", "Paladins", 2, Race::KNGT, 6, { 600, 0, 0, 0, 0, 0, 0 } },
-                { "Crusader", "Crusaders", 2, Race::KNGT, 6, { 1000, 0, 0, 0, 0, 0, 0 } },
-                { "Goblin", "Goblins", 10, Race::BARB, 1, { 40, 0, 0, 0, 0, 0, 0 } },
-                { "Orc", "Orcs", 8, Race::BARB, 2, { 140, 0, 0, 0, 0, 0, 0 } },
-                { "Orc Chief", "Orc Chiefs", 8, Race::BARB, 2, { 175, 0, 0, 0, 0, 0, 0 } },
-                { "Wolf", "Wolves", 5, Race::BARB, 3, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Ogre", "Ogres", 4, Race::BARB, 4, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Ogre Lord", "Ogre Lords", 4, Race::BARB, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Troll", "Trolls", 3, Race::BARB, 5, { 600, 0, 0, 0, 0, 0, 0 } },
-                { "War Troll", "War Trolls", 3, Race::BARB, 5, { 700, 0, 0, 0, 0, 0, 0 } },
-                { "Cyclops", "Cyclopes", 2, Race::BARB, 6, { 750, 0, 0, 0, 0, 1, 0 } },
-                { "Sprite", "Sprites", 8, Race::SORC, 1, { 50, 0, 0, 0, 0, 0, 0 } },
-                { "Dwarf", "Dwarves", 6, Race::SORC, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Battle Dwarf", "Battle Dwarves", 6, Race::SORC, 2, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Elf", "Elves", 4, Race::SORC, 3, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Grand Elf", "Grand Elves", 4, Race::SORC, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Druid", "Druids", 3, Race::SORC, 4, { 350, 0, 0, 0, 0, 0, 0 } },
-                { "Greater Druid", "Greater Druids", 3, Race::SORC, 4, { 400, 0, 0, 0, 0, 0, 0 } },
-                { "Unicorn", "Unicorns", 2, Race::SORC, 5, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Phoenix", "Phoenixes", 1, Race::SORC, 6, { 1500, 0, 1, 0, 0, 0, 0 } },
-                { "Centaur", "Centaurs", 8, Race::WRLK, 1, { 60, 0, 0, 0, 0, 0, 0 } },
-                { "Gargoyle", "Gargoyles", 6, Race::WRLK, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Griffin", "Griffins", 4, Race::WRLK, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Minotaur", "Minotaurs", 3, Race::WRLK, 4, { 400, 0, 0, 0, 0, 0, 0 } },
-                { "Minotaur King", "Minotaur Kings", 3, Race::WRLK, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Hydra", "Hydras", 2, Race::WRLK, 5, { 800, 0, 0, 0, 0, 0, 0 } },
-                { "Green Dragon", "Green Dragons", 1, Race::WRLK, 6, { 3000, 0, 0, 0, 1, 0, 0 } },
-                { "Red Dragon", "Red Dragons", 1, Race::WRLK, 6, { 3500, 0, 0, 0, 1, 0, 0 } },
-                { "Black Dragon", "Black Dragons", 1, Race::WRLK, 6, { 4000, 0, 0, 0, 2, 0, 0 } },
-                { "Halfling", "Halflings", 8, Race::WZRD, 1, { 50, 0, 0, 0, 0, 0, 0 } },
-                { "Boar", "Boars", 6, Race::WZRD, 2, { 150, 0, 0, 0, 0, 0, 0 } },
-                { "Iron Golem", "Iron Golems", 4, Race::WZRD, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Steel Golem", "Steel Golems", 4, Race::WZRD, 3, { 350, 0, 0, 0, 0, 0, 0 } },
-                { "Roc", "Rocs", 3, Race::WZRD, 4, { 400, 0, 0, 0, 0, 0, 0 } },
-                { "Mage", "Magi", 2, Race::WZRD, 5, { 600, 0, 0, 0, 0, 0, 0 } },
-                { "Archmage", "Archmagi", 2, Race::WZRD, 5, { 700, 0, 0, 0, 0, 0, 0 } },
-                { "Giant", "Giants", 1, Race::WZRD, 6, { 2000, 0, 0, 0, 0, 0, 1 } },
-                { "Titan", "Titans", 1, Race::WZRD, 6, { 5000, 0, 0, 0, 0, 0, 2 } },
-                { "Skeleton", "Skeletons", 8, Race::NECR, 1, { 75, 0, 0, 0, 0, 0, 0 } },
-                { "Zombie", "Zombies", 6, Race::NECR, 2, { 150, 0, 0, 0, 0, 0, 0 } },
-                { "Mutant Zombie", "Mutant Zombies", 6, Race::NECR, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Mummy", "Mummies", 4, Race::NECR, 3, { 250, 0, 0, 0, 0, 0, 0 } },
-                { "Royal Mummy", "Royal Mummies", 4, Race::NECR, 3, { 300, 0, 0, 0, 0, 0, 0 } },
-                { "Vampire", "Vampires", 3, Race::NECR, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Vampire Lord", "Vampire Lords", 3, Race::NECR, 4, { 650, 0, 0, 0, 0, 0, 0 } },
-                { "Lich", "Liches", 2, Race::NECR, 5, { 750, 0, 0, 0, 0, 0, 0 } },
-                { "Power Lich", "Power Liches", 2, Race::NECR, 5, { 900, 0, 0, 0, 0, 0, 0 } },
-                { "Bone Dragon", "Bone Dragons", 1, Race::NECR, 6, { 1500, 0, 0, 0, 0, 0, 0 } },
-                { "Rogue", "Rogues", 8, Race::NONE, 1, { 50, 0, 0, 0, 0, 0, 0 } },
-                { "Nomad", "Nomads", 4, Race::NONE, 2, { 200, 0, 0, 0, 0, 0, 0 } },
-                { "Ghost", "Ghosts", 3, Race::NONE, 3, { 1000, 0, 0, 0, 0, 0, 0 } },
-                { "Genie", "Genies", 2, Race::NONE, 6, { 650, 0, 0, 0, 0, 0, 1 } },
-                { "Medusa", "Medusas", 5, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Earth Elemental", "Earth Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Air Elemental", "Air Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Fire Elemental", "Fire Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Water Elemental", "Water Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster", "Random Monsters", 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 1", "Random Monsters 1", 0, Race::NONE, 1, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 2", "Random Monsters 2", 0, Race::NONE, 2, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 3", "Random Monsters 3", 0, Race::NONE, 3, { 0, 0, 0, 0, 0, 0, 0 } },
-                { "Random Monster 4", "Random Monsters 4", 0, Race::NONE, 4, { 0, 0, 0, 0, 0, 0, 0 } } };
+                { gettext_noop( "Unknown Monster" ), gettext_noop( "Unknown Monsters" ), 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Peasant" ), gettext_noop( "Peasants" ), 12, Race::KNGT, 1, { 20, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Archer" ), gettext_noop( "Archers" ), 8, Race::KNGT, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ranger" ), gettext_noop( "Rangers" ), 8, Race::KNGT, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Pikeman" ), gettext_noop( "Pikemen" ), 5, Race::KNGT, 3, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Veteran Pikeman" ), gettext_noop( "Veteran Pikemen" ), 5, Race::KNGT, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Swordsman" ), gettext_noop( "Swordsmen" ), 4, Race::KNGT, 4, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Master Swordsman" ), gettext_noop( "Master Swordsmen" ), 4, Race::KNGT, 4, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Cavalry" ), gettext_noop( "Cavalries" ), 3, Race::KNGT, 5, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Champion" ), gettext_noop( "Champions" ), 3, Race::KNGT, 5, { 375, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Paladin" ), gettext_noop( "Paladins" ), 2, Race::KNGT, 6, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Crusader" ), gettext_noop( "Crusaders" ), 2, Race::KNGT, 6, { 1000, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Goblin" ), gettext_noop( "Goblins" ), 10, Race::BARB, 1, { 40, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Orc" ), gettext_noop( "Orcs" ), 8, Race::BARB, 2, { 140, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Orc Chief" ), gettext_noop( "Orc Chiefs" ), 8, Race::BARB, 2, { 175, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Wolf" ), gettext_noop( "Wolves" ), 5, Race::BARB, 3, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ogre" ), gettext_noop( "Ogres" ), 4, Race::BARB, 4, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ogre Lord" ), gettext_noop( "Ogre Lords" ), 4, Race::BARB, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Troll" ), gettext_noop( "Trolls" ), 3, Race::BARB, 5, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "War Troll" ), gettext_noop( "War Trolls" ), 3, Race::BARB, 5, { 700, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Cyclops" ), gettext_noop( "Cyclopes" ), 2, Race::BARB, 6, { 750, 0, 0, 0, 0, 1, 0 } },
+                { gettext_noop( "Sprite" ), gettext_noop( "Sprites" ), 8, Race::SORC, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Dwarf" ), gettext_noop( "Dwarves" ), 6, Race::SORC, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Battle Dwarf" ), gettext_noop( "Battle Dwarves" ), 6, Race::SORC, 2, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Elf" ), gettext_noop( "Elves" ), 4, Race::SORC, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Grand Elf" ), gettext_noop( "Grand Elves" ), 4, Race::SORC, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Druid" ), gettext_noop( "Druids" ), 3, Race::SORC, 4, { 350, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Greater Druid" ), gettext_noop( "Greater Druids" ), 3, Race::SORC, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Unicorn" ), gettext_noop( "Unicorns" ), 2, Race::SORC, 5, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Phoenix" ), gettext_noop( "Phoenixes" ), 1, Race::SORC, 6, { 1500, 0, 1, 0, 0, 0, 0 } },
+                { gettext_noop( "Centaur" ), gettext_noop( "Centaurs" ), 8, Race::WRLK, 1, { 60, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Gargoyle" ), gettext_noop( "Gargoyles" ), 6, Race::WRLK, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Griffin" ), gettext_noop( "Griffins" ), 4, Race::WRLK, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Minotaur" ), gettext_noop( "Minotaurs" ), 3, Race::WRLK, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Minotaur King" ), gettext_noop( "Minotaur Kings" ), 3, Race::WRLK, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Hydra" ), gettext_noop( "Hydras" ), 2, Race::WRLK, 5, { 800, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Green Dragon" ), gettext_noop( "Green Dragons" ), 1, Race::WRLK, 6, { 3000, 0, 0, 0, 1, 0, 0 } },
+                { gettext_noop( "Red Dragon" ), gettext_noop( "Red Dragons" ), 1, Race::WRLK, 6, { 3500, 0, 0, 0, 1, 0, 0 } },
+                { gettext_noop( "Black Dragon" ), gettext_noop( "Black Dragons" ), 1, Race::WRLK, 6, { 4000, 0, 0, 0, 2, 0, 0 } },
+                { gettext_noop( "Halfling" ), gettext_noop( "Halflings" ), 8, Race::WZRD, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Boar" ), gettext_noop( "Boars" ), 6, Race::WZRD, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Iron Golem" ), gettext_noop( "Iron Golems" ), 4, Race::WZRD, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Steel Golem" ), gettext_noop( "Steel Golems" ), 4, Race::WZRD, 3, { 350, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Roc" ), gettext_noop( "Rocs" ), 3, Race::WZRD, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Mage" ), gettext_noop( "Magi" ), 2, Race::WZRD, 5, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Archmage" ), gettext_noop( "Archmagi" ), 2, Race::WZRD, 5, { 700, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Giant" ), gettext_noop( "Giants" ), 1, Race::WZRD, 6, { 2000, 0, 0, 0, 0, 0, 1 } },
+                { gettext_noop( "Titan" ), gettext_noop( "Titans" ), 1, Race::WZRD, 6, { 5000, 0, 0, 0, 0, 0, 2 } },
+                { gettext_noop( "Skeleton" ), gettext_noop( "Skeletons" ), 8, Race::NECR, 1, { 75, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Zombie" ), gettext_noop( "Zombies" ), 6, Race::NECR, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Mutant Zombie" ), gettext_noop( "Mutant Zombies" ), 6, Race::NECR, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Mummy" ), gettext_noop( "Mummies" ), 4, Race::NECR, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Royal Mummy" ), gettext_noop( "Royal Mummies" ), 4, Race::NECR, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Vampire" ), gettext_noop( "Vampires" ), 3, Race::NECR, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Vampire Lord" ), gettext_noop( "Vampire Lords" ), 3, Race::NECR, 4, { 650, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Lich" ), gettext_noop( "Liches" ), 2, Race::NECR, 5, { 750, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Power Lich" ), gettext_noop( "Power Liches" ), 2, Race::NECR, 5, { 900, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Bone Dragon" ), gettext_noop( "Bone Dragons" ), 1, Race::NECR, 6, { 1500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Rogue" ), gettext_noop( "Rogues" ), 8, Race::NONE, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Nomad" ), gettext_noop( "Nomads" ), 4, Race::NONE, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Ghost" ), gettext_noop( "Ghosts" ), 3, Race::NONE, 3, { 1000, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Genie" ), gettext_noop( "Genies" ), 2, Race::NONE, 6, { 650, 0, 0, 0, 0, 0, 1 } },
+                { gettext_noop( "Medusa" ), gettext_noop( "Medusas" ), 5, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Earth Elemental" ), gettext_noop( "Earth Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Air Elemental" ), gettext_noop( "Air Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Fire Elemental" ), gettext_noop( "Fire Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Water Elemental" ), gettext_noop( "Water Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster" ), gettext_noop( "Random Monsters" ), 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 1" ), gettext_noop( "Random Monsters 1" ), 0, Race::NONE, 1, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 2" ), gettext_noop( "Random Monsters 2" ), 0, Race::NONE, 2, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 3" ), gettext_noop( "Random Monsters 3" ), 0, Race::NONE, 3, { 0, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Random Monster 4" ), gettext_noop( "Random Monsters 4" ), 0, Race::NONE, 4, { 0, 0, 0, 0, 0, 0, 0 } } };
 
         monsterData.reserve( Monster::MONSTER_COUNT );
 
@@ -501,83 +503,87 @@ namespace fheroes2
     {
         switch ( ability.type ) {
         case MonsterAbilityType::NONE:
-            return ignoreBasicAbility ? "" : "None";
+            return ignoreBasicAbility ? "" : _( "None" );
         case MonsterAbilityType::DOUBLE_SHOOTING:
-            return "Double shot";
+            return _( "Double shot" );
         case MonsterAbilityType::DOUBLE_HEX_SIZE:
-            return ignoreBasicAbility ? "" : "2-hex monster";
+            return ignoreBasicAbility ? "" : _( "2-hex monster" );
         case MonsterAbilityType::DOUBLE_MELEE_ATTACK:
-            return "Double strike";
+            return _( "Double strike" );
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
-            return "Double damage to Undead";
+            return _( "Double damage to Undead" );
         case MonsterAbilityType::MAGIC_RESISTANCE:
-            return std::to_string( ability.percentage ) + "% magic resistance";
+            return std::to_string( ability.percentage ) + _( "% magic resistance" );
         case MonsterAbilityType::MIND_SPELL_IMMUNITY:
-            return "Immune to Mind spells";
+            return _( "Immune to Mind spells" );
         case MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY:
-            return "Immune to Elemental spells";
+            return _( "Immune to Elemental spells" );
         case MonsterAbilityType::FIRE_SPELL_IMMUNITY:
-            return "Immune to Fire spells";
+            return _( "Immune to Fire spells" );
         case MonsterAbilityType::COLD_SPELL_IMMUNITY:
-            return "Immune to Cold spells";
+            return _( "Immune to Cold spells" );
         case MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL:
             if ( ability.percentage == 100 ) {
-                return std::string( "Immune to " ) + Spell( ability.value ).GetName();
+                return std::string( _( "Immune to " ) ) + Spell( ability.value ).GetName();
             }
             else {
-                return std::to_string( ability.percentage ) + "% immunity to " + Spell( ability.value ).GetName() + " spell";
+                std::string str = _( "% immunity to %{spell} spell" );
+                StringReplace( str, "%{spell}", Spell( ability.value ).GetName() );
+                return std::to_string( ability.percentage ) + str;
             }
         case MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION:
-            return std::to_string( ability.percentage ) + "% damage from Elemental spells";
+            return std::to_string( ability.percentage ) + _( "% damage from Elemental spells" );
         case MonsterAbilityType::SPELL_CASTER:
             if ( ability.value == Spell::DISPEL ) {
-                return std::to_string( ability.percentage ) + "% chance to Dispel beneficial spells";
+                return std::to_string( ability.percentage ) + _( "% chance to Dispel beneficial spells" );
             }
             else if ( ability.value == Spell::PARALYZE ) {
-                return std::to_string( ability.percentage ) + "% chance to Paralyze";
+                return std::to_string( ability.percentage ) + _( "% chance to Paralyze" );
             }
             else if ( ability.value == Spell::STONE ) {
-                return std::to_string( ability.percentage ) + "% chance to Petrify";
+                return std::to_string( ability.percentage ) + _( "% chance to Petrify" );
             }
             else if ( ability.value == Spell::BLIND ) {
-                return std::to_string( ability.percentage ) + "% chance to Blind";
+                return std::to_string( ability.percentage ) + _( "% chance to Blind" );
             }
             else if ( ability.value == Spell::CURSE ) {
-                return std::to_string( ability.percentage ) + "% chance to Curse";
+                return std::to_string( ability.percentage ) + _( "% chance to Curse" );
             }
             else {
-                return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";
+                std::string str = _( "% chance to cast %{spell} spell" );
+                StringReplace( str, "%{spell}", Spell( ability.value ).GetName() );
+                return std::to_string( ability.percentage ) + str;
             }
         case MonsterAbilityType::HP_REGENERATION:
-            return "HP regeneration";
+            return _( "HP regeneration" );
         case MonsterAbilityType::TWO_CELL_MELEE_ATTACK:
-            return "Two hexes attack";
+            return _( "Two hexes attack" );
         case MonsterAbilityType::FLYING:
-            return ignoreBasicAbility ? "" : "Flyer";
+            return ignoreBasicAbility ? "" : _( "Flyer" );
         case MonsterAbilityType::ALWAYS_RETALIATE:
-            return "Always retaliates";
+            return _( "Always retaliates" );
         case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
-            return "Attacks all adjacent enemies";
+            return _( "Attacks all adjacent enemies" );
         case MonsterAbilityType::NO_MELEE_PENALTY:
-            return "No melee penalty";
+            return _( "No melee penalty" );
         case MonsterAbilityType::DRAGON:
-            return ignoreBasicAbility ? "" : "Dragon";
+            return ignoreBasicAbility ? "" : _( "Dragon" );
         case MonsterAbilityType::UNDEAD:
-            return "Undead";
+            return _( "Undead" );
         case MonsterAbilityType::NO_ENEMY_RETALIATION:
-            return "No enemy retaliation";
+            return _( "No enemy retaliation" );
         case MonsterAbilityType::HP_DRAIN:
-            return "HP drain";
+            return _( "HP drain" );
         case MonsterAbilityType::AREA_SHOT:
-            return "Cloud attack";
+            return _( "Cloud attack" );
         case MonsterAbilityType::MORAL_DECREMENT:
-            return "Decreases enemy's morale by " + std::to_string( ability.value );
+            return _( "Decreases enemy's morale by " ) + std::to_string( ability.value );
         case MonsterAbilityType::ENEMY_HALFING:
-            return std::to_string( ability.percentage ) + "% chance to halve enemy";
+            return std::to_string( ability.percentage ) + _( "% chance to halve enemy" );
         case MonsterAbilityType::SOUL_EATER:
-            return "Soul Eater";
+            return _( "Soul Eater" );
         case MonsterAbilityType::ELEMENTAL:
-            return ignoreBasicAbility ? "No Morale" : "Elemental";
+            return ignoreBasicAbility ? _( "No Morale" ) : _( "Elemental" );
         default:
             break;
         }
@@ -590,13 +596,16 @@ namespace fheroes2
     {
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
-            return ignoreBasicAbility ? "" : "None";
+            return ignoreBasicAbility ? "" : _( "None" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL:
-            return "200% damage from Fire spells";
+            return _( "200% damage from Fire spells" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL:
-            return "200% damage from Cold spells";
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL:
-            return std::to_string( weakness.percentage + 100 ) + "% damage from " + Spell( weakness.value ).GetName() + " spell";
+            return _( "200% damage from Cold spells" );
+        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL: {
+            std::string str = _( "% damage from %{spell} spell" );
+            StringReplace( str, "%{spell}", Spell( weakness.value ).GetName() );
+            return std::to_string( weakness.percentage + 100 ) + str;
+        }
         default:
             break;
         }

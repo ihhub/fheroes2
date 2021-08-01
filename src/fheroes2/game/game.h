@@ -157,6 +157,8 @@ namespace Game
         EVENT_TOWN_TAVERN,
         EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
 
+        EVENT_WELL_BUY_ALL_CREATURES,
+
         EVENT_LAST,
     };
 
@@ -177,7 +179,7 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
-    fheroes2::GameMode NewNetwork();
+    fheroes2::GameMode NewNetwork(); // To be utilized in future.
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();

@@ -426,17 +426,6 @@ double Troops::GetStrength() const
     return strength;
 }
 
-u32 Troops::GetHitPoints( void ) const
-{
-    u32 res = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            res += ( *it )->GetHitPoints();
-
-    return res;
-}
-
 void Troops::Clean( void )
 {
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
@@ -1131,7 +1120,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
          ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
         if ( strs ) {
-            strs->append( _( "Some undead in groups -1" ) );
+            strs->append( _( "Some undead in group -1" ) );
             *strs += '\n';
         }
     }

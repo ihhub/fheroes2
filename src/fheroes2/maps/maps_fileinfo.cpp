@@ -479,11 +479,6 @@ bool Maps::FileInfo::WinsCompAlsoWins( void ) const
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-bool Maps::FileInfo::WinsAllowNormalVictory( void ) const
-{
-    return allow_normal_victory && ( ( GameOver::WINS_TOWN | GameOver::WINS_ARTIFACT | GameOver::WINS_GOLD ) & ConditionWins() );
-}
-
 int Maps::FileInfo::WinsFindArtifactID( void ) const
 {
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
@@ -522,11 +517,6 @@ int Maps::FileInfo::AllowCompHumanColors( void ) const
 int Maps::FileInfo::AllowHumanColors( void ) const
 {
     return allow_human_colors;
-}
-
-int Maps::FileInfo::AllowComputerColors( void ) const
-{
-    return allow_comp_colors;
 }
 
 int Maps::FileInfo::HumanOnlyColors( void ) const
@@ -592,21 +582,16 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
         return false;
 
     std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-    lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
-
-    if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
-    }
+    lists.erase( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ), lists.end() );
 
     // set preferably count filter
     const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( prefPlayerCount > 0 ) {
-        MapsFileInfoList::iterator it
-            = std::remove_if( lists.begin(), lists.end(), [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
+    if ( !multi || prefPlayerCount > 0 ) {
+        lists.erase( std::remove_if( lists.begin(), lists.end(),
+                                     [multi, prefPlayerCount]( const Maps::FileInfo & info ) {
+                                         return ( !multi && info.isMultiPlayerMap() ) || ( prefPlayerCount > 0 && !info.isAllowCountPlayers( prefPlayerCount ) );
+                                     } ),
+                     lists.end() );
     }
 
     return !lists.empty();

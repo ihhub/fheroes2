@@ -40,10 +40,10 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
-        SpellSeletion bestSpell;
+        SpellSelection bestSpell;
 
         // Commander must be set before calling this function! Check both debug/release version
         assert( _commander != nullptr );
@@ -172,6 +172,10 @@ namespace AI
 
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 for ( const Unit * enemy : enemies ) {
+                    if ( !enemy->AllowApplySpell( spell, _commander ) ) {
+                        continue;
+                    }
+
                     const int32_t index = enemy->GetHeadIndex();
                     areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
                 }

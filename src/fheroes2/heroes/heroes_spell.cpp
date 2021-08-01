@@ -552,8 +552,8 @@ bool ActionSpellVisions( Heroes & hero )
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const int32_t heroColor = hero.GetColor();
-    monsters.resize( std::distance( monsters.begin(), std::remove_if( monsters.begin(), monsters.end(),
-                                                                      [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ) ) );
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
+                    monsters.end() );
 
     if ( monsters.empty() ) {
         std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );

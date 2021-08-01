@@ -1359,24 +1359,6 @@ namespace fheroes2
         _engine->updatePalette( StandardPaletteIndexes() );
     }
 
-    void Display::setEngine( std::unique_ptr<BaseRenderEngine> & engine )
-    {
-        assert( engine.get() != nullptr );
-        if ( engine.get() == nullptr ) {
-            return;
-        }
-        std::swap( engine, _engine );
-    }
-
-    void Display::setCursor( std::unique_ptr<Cursor> & cursor )
-    {
-        assert( cursor.get() != nullptr );
-        if ( cursor.get() == nullptr ) {
-            return;
-        }
-        std::swap( cursor, _cursor );
-    }
-
     bool Cursor::isFocusActive() const
     {
         return engine().isMouseCursorActive();

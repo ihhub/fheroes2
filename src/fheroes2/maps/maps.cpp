@@ -328,7 +328,7 @@ Maps::Indexes Maps::GetAroundIndexes( int32_t center )
     return result;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles )
+Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile )
 {
     Indexes results;
     results.reserve( maxDistanceFromTile * 12 );
@@ -344,10 +344,6 @@ Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t max
                 results.push_back( tileId );
             }
         }
-    }
-
-    if ( sortTiles ) {
-        std::sort( results.begin(), results.end(), ComparisonDistance( tileIndex ) );
     }
 
     return results;
@@ -411,7 +407,8 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 
 Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj )
 {
-    Indexes results = Maps::GetAroundIndexes( center, dist, true );
+    Indexes results = Maps::getAroundIndexes( center, dist );
+    std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return MapsIndexesFilteredObject( results, obj );
 }
 
@@ -425,30 +422,6 @@ Maps::Indexes Maps::GetObjectPositions( int32_t center, int obj, bool ignoreHero
     Indexes results = MapsIndexesObject( obj, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return results;
-}
-
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<uint8_t> & objs )
-{
-    if ( objs.size() == 1 ) {
-        return MapsIndexesObject( objs[0], true );
-    }
-
-    Maps::Indexes result;
-    if ( objs.empty() )
-        return result;
-
-    const int32_t size = static_cast<int32_t>( world.getSize() );
-    for ( int32_t idx = 0; idx < size; ++idx ) {
-        const int objectID = world.GetTiles( idx ).GetObject( true );
-
-        for ( const uint8_t obj : objs ) {
-            if ( obj == objectID ) {
-                result.push_back( idx );
-                break;
-            }
-        }
-    }
-    return result;
 }
 
 bool MapsTileIsUnderProtection( int32_t from, int32_t index ) /* from: center, index: monster */
@@ -636,29 +609,12 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     }
 }
 
-int Maps::TileIsCoast( int32_t center, int filter )
-{
-    int result = 0;
-    const Directions & directions = Direction::All();
-
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( ( *it & filter ) && isValidDirection( center, *it ) && world.GetTiles( GetDirectionIndex( center, *it ) ).isWater() )
-            result |= *it;
-
-    return result;
-}
-
 StreamBase & operator>>( StreamBase & sb, IndexObject & st )
 {
     return sb >> st.first >> st.second;
 }
 
 StreamBase & operator>>( StreamBase & sb, ObjectColor & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & operator>>( StreamBase & sb, ResourceCount & st )
 {
     return sb >> st.first >> st.second;
 }

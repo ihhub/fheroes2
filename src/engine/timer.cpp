@@ -20,23 +20,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2FONT_H
-#define H2FONT_H
+#include "timer.h"
 
-#include <string>
-#include <vector>
+using namespace SDL;
 
-#include "image.h"
+Timer::Timer()
+    : id( 0 )
+{}
 
-class FontPSF
+void Timer::Run( u32 interval, u32 ( *fn )( u32, void * ), void * param )
 {
-public:
-    FontPSF( const std::string & filePath, const fheroes2::Size & size );
+    if ( id )
+        Remove();
 
-    fheroes2::Image RenderText( const std::string & text, const uint8_t color ) const;
+    id = SDL_AddTimer( interval, fn, param );
+}
 
-private:
-    const std::vector<uint8_t> _data;
-    const fheroes2::Size _size;
-};
-#endif
+void Timer::Remove( void )
+{
+    if ( id ) {
+        SDL_RemoveTimer( id );
+        id = 0;
+    }
+}
+
+bool Timer::IsValid( void ) const
+{
+    return id != 0;
+}

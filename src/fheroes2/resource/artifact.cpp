@@ -202,36 +202,6 @@ const char * GetPluralDescription( const Artifact & art, u32 count )
     return _( artifacts[art.GetID()].description );
 }
 
-bool SkipExtra( int art )
-{
-    switch ( art ) {
-    case Artifact::BALLISTA:
-    case Artifact::NOMAD_BOOTS_MOBILITY:
-    case Artifact::TRAVELER_BOOTS_MOBILITY:
-    case Artifact::RABBIT_FOOT:
-    case Artifact::GOLDEN_HORSESHOE:
-    case Artifact::GAMBLER_LUCKY_COIN:
-    case Artifact::FOUR_LEAF_CLOVER:
-    case Artifact::TRUE_COMPASS_MOBILITY:
-    case Artifact::SAILORS_ASTROLABE_MOBILITY:
-    case Artifact::EVIL_EYE:
-    case Artifact::GOLD_WATCH:
-    case Artifact::SKULLCAP:
-    case Artifact::ICE_CLOAK:
-    case Artifact::FIRE_CLOAK:
-    case Artifact::LIGHTNING_HELM:
-    case Artifact::GOLDEN_BOW:
-    case Artifact::TELESCOPE:
-
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
 Artifact::Artifact( int art )
     : id( art < UNKNOWN ? art : UNKNOWN )
     , ext( 0 )
@@ -738,13 +708,6 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     }
 
     return false;
-}
-
-void BagArtifacts::RemoveArtifact( const Artifact & art )
-{
-    iterator it = std::find( begin(), end(), art );
-    if ( it != end() )
-        ( *it ).Reset();
 }
 
 bool BagArtifacts::isFull( void ) const

@@ -32,7 +32,7 @@
 
 namespace fheroes2
 {
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages )
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, size_t selectionId )
     {
         if ( languages.empty() ) {
             // Why do you even call this function having 0 languages?
@@ -42,6 +42,10 @@ namespace fheroes2
 
         if ( languages.size() == 1 ) {
             return languages.front();
+        }
+
+        if ( selectionId >= languages.size() ) {
+            selectionId = 0;
         }
 
         const int32_t languageAreaWidth = 100;
@@ -79,7 +83,7 @@ namespace fheroes2
         window.render();
         okayButton.draw();
 
-        buttonGroup.button( 0 ).press();
+        buttonGroup.button( selectionId ).press();
         optionButtonGroup.draw();
 
         const Text title( _( "Choose game language:" ), { FontSize::NORMAL, FontColor::YELLOW } );
@@ -92,7 +96,7 @@ namespace fheroes2
 
         display.render();
 
-        SupportedLanguage chosenLanguage = languages.front();
+        SupportedLanguage chosenLanguage = languages[selectionId];
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {

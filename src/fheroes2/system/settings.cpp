@@ -102,10 +102,6 @@ namespace
             _( "battle: show damage info" ),
         },
         {
-            Settings::WORLD_SHOW_VISITED_CONTENT,
-            _( "world: show visited content from objects" ),
-        },
-        {
             Settings::WORLD_SHOW_TERRAIN_PENALTY,
             _( "world: show terrain penalty" ),
         },
@@ -122,32 +118,8 @@ namespace
             _( "world: Eagle Eye also works like Scholar in H3." ),
         },
         {
-            Settings::WORLD_BAN_WEEKOF,
-            _( "world: ban for WeekOf/MonthOf Monsters" ),
-        },
-        {
-            Settings::WORLD_BAN_PLAGUES,
-            _( "world: ban plagues months" ),
-        },
-        {
-            Settings::WORLD_BAN_MONTHOF_MONSTERS,
-            _( "world: Months Of Monsters do not place creatures on map" ),
-        },
-        {
             Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
             _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-        },
-        {
-            Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
-            _( "world: Starting heroes as Loss Conditions for Human Players" ),
-        },
-        {
-            Settings::WORLD_1HERO_HIRED_EVERY_WEEK,
-            _( "world: Only 1 hero can be hired by the one player every week" ),
-        },
-        {
-            Settings::CASTLE_1HERO_HIRED_EVERY_WEEK,
-            _( "world: Each castle allows one hero to be recruited every week" ),
         },
         {
             Settings::WORLD_SCALE_NEUTRAL_ARMIES,
@@ -275,7 +247,6 @@ Settings::Settings()
     , preferably_count_players( 0 )
 {
     ExtSetModes( GAME_AUTOSAVE_ON );
-    ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
 
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
@@ -726,7 +697,7 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
 
     if ( !translations.empty() ) {
-        return Translation::bindDomain( "fheroes2", translations.back().c_str() ) && Translation::setDomain( "fheroes2" );
+        return Translation::bindDomain( language.c_str(), translations.back().c_str() ) && Translation::setDomain( language.c_str() );
     }
 
     ERROR_LOG( "Translation file " << fileName << " is not found." )
@@ -815,28 +786,6 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-std::string Settings::GetLangDir()
-{
-#ifdef CONFIGURE_FHEROES2_LOCALEDIR
-    return std::string( EXPANDDEF( CONFIGURE_FHEROES2_LOCALEDIR ) );
-#else
-    std::string res;
-    const ListDirs dirs = GetRootDirs();
-
-    for ( ListDirs::const_reverse_iterator it = dirs.rbegin(); it != dirs.rend(); ++it ) {
-        res = System::ConcatePath( System::ConcatePath( *it, "files" ), "lang" );
-        if ( System::IsDirectory( res ) )
-            return res;
-    }
-#endif
-
-    return "";
-}
-
-bool Settings::MusicExt() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC_EXT );
-}
 bool Settings::MusicMIDI() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_MIDI );
@@ -1080,11 +1029,6 @@ int Settings::GameType() const
 void Settings::SetGameType( int type )
 {
     game_type = type;
-}
-
-bool Settings::isStandardGameType() const
-{
-    return ( game_type & Game::TYPE_STANDARD ) != 0;
 }
 
 bool Settings::isCampaignGameType() const
@@ -1341,11 +1285,6 @@ bool Settings::ExtCastleAllowGuardians() const
     return ExtModes( CASTLE_ALLOW_GUARDIANS );
 }
 
-bool Settings::ExtWorldShowVisitedContent() const
-{
-    return ExtModes( WORLD_SHOW_VISITED_CONTENT );
-}
-
 bool Settings::ExtWorldShowTerrainPenalty() const
 {
     return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
@@ -1456,39 +1395,9 @@ bool Settings::ExtGameHideInterface() const
     return ExtModes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::ExtWorldBanWeekOf() const
-{
-    return ExtModes( WORLD_BAN_WEEKOF );
-}
-
-bool Settings::ExtWorldBanMonthOfMonsters() const
-{
-    return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
-}
-
-bool Settings::ExtWorldBanPlagues() const
-{
-    return ExtModes( WORLD_BAN_PLAGUES );
-}
-
 bool Settings::ExtBattleReverseWaitOrder() const
 {
     return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
-}
-
-bool Settings::ExtWorldStartHeroLossCond4Humans() const
-{
-    return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtWorldOneHeroHiredEveryWeek() const
-{
-    return ExtModes( WORLD_1HERO_HIRED_EVERY_WEEK );
-}
-
-bool Settings::ExtCastleOneHeroHiredEveryWeek() const
-{
-    return ExtModes( CASTLE_1HERO_HIRED_EVERY_WEEK );
 }
 
 bool Settings::ExtWorldNeutralArmyDifficultyScaling() const

@@ -36,6 +36,12 @@ namespace
                                                                             { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
                                                                             { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } }; // Buka version
 
+    // Strings in this map must in lower case and non translatable.
+    const std::map<std::string, fheroes2::SupportedLanguage> languageName
+        = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },  { "de", fheroes2::SupportedLanguage::German },
+            { "german", fheroes2::SupportedLanguage::German }, { "fr", fheroes2::SupportedLanguage::French },      { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian } };
+
     class LanguageSwitcher
     {
     public:
@@ -120,5 +126,22 @@ namespace fheroes2
             assert( 0 );
             return nullptr;
         }
+    }
+
+    SupportedLanguage getLanguageFromAbbreviation( const std::string & abbreviation )
+    {
+        if ( abbreviation.empty() ) {
+            return SupportedLanguage::English;
+        }
+
+        const std::string name( StringLower( abbreviation ) );
+
+        auto iter = languageName.find( name );
+        if ( iter == languageName.end() ) {
+            // Unsupported language. Fallback to English.
+            return SupportedLanguage::English;
+        }
+
+        return iter->second;
     }
 }

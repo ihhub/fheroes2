@@ -29,17 +29,13 @@
 #include "logging.h"
 #include "mus.h"
 #include "settings.h"
+#include "translations.h"
 
 namespace AI
 {
     const char * Base::Type() const
     {
         return "base";
-    }
-
-    const char * Base::License() const
-    {
-        return "GPL-2.0";
     }
 
     int Base::GetPersonality() const
@@ -51,11 +47,11 @@ namespace AI
     {
         switch ( _personality ) {
         case WARRIOR:
-            return "Warrior";
+            return _( "Warrior" );
         case BUILDER:
-            return "Builder";
+            return _( "Builder" );
         case EXPLORER:
-            return "Explorer";
+            return _( "Explorer" );
         default:
             break;
         }
@@ -99,11 +95,6 @@ namespace AI
     void Base::HeroesLevelUp( Heroes & ) {}
 
     void Base::HeroesPostLoad( Heroes & ) {}
-
-    bool Base::HeroesSkipFog()
-    {
-        return false;
-    }
 
     bool Base::HeroesGetTask( Heroes & hero )
     {
@@ -159,8 +150,8 @@ namespace AI
             return;
         }
 
-        if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
+        AGG::ResetMixer();
+        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 

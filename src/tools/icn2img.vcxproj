@@ -175,7 +175,6 @@
     <ClCompile Include="..\engine\audio_music.cpp" />
     <ClCompile Include="..\engine\dir.cpp" />
     <ClCompile Include="..\engine\engine.cpp" />
-    <ClCompile Include="..\engine\font.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
     <ClCompile Include="..\engine\image_tool.cpp" />
     <ClCompile Include="..\engine\localevent.cpp" />
@@ -186,7 +185,7 @@
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\smk_decoder.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
-    <ClCompile Include="..\engine\thread.cpp" />
+    <ClCompile Include="..\engine\timer.cpp" />
     <ClCompile Include="..\engine\timing.cpp" />
     <ClCompile Include="..\engine\tinyconfig.cpp" />
     <ClCompile Include="..\engine\tools.cpp" />
@@ -205,7 +204,6 @@
     <ClInclude Include="..\engine\audio_music.h" />
     <ClInclude Include="..\engine\dir.h" />
     <ClInclude Include="..\engine\engine.h" />
-    <ClInclude Include="..\engine\font.h" />
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_tool.h" />
     <ClInclude Include="..\engine\localevent.h" />
@@ -219,7 +217,7 @@
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\smk_decoder.h" />
     <ClInclude Include="..\engine\system.h" />
-    <ClInclude Include="..\engine\thread.h" />
+    <ClInclude Include="..\engine\timer.h" />
     <ClInclude Include="..\engine\timing.h" />
     <ClInclude Include="..\engine\tinyconfig.h" />
     <ClInclude Include="..\engine\tools.h" />
