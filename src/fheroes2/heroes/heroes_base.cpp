@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <numeric>
 #include <sstream>
 
 #include "army.h"
@@ -46,7 +45,7 @@ int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const Her
             if ( acount ) {
                 s32 mod = art.ExtraValue();
 
-                switch ( art() ) {
+                switch ( art.GetID() ) {
                 case Artifact::SWORD_BREAKER:
                     if ( type == MDF_ATTACK )
                         mod = 1;

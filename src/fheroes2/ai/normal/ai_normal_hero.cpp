@@ -36,7 +36,7 @@ namespace
 {
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
     {
-        const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
+        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
         if ( castle ) {
             if ( hero.GetColor() == castle->GetColor() ) {
                 return castle->GetHeroes().Guest() == nullptr;
@@ -258,13 +258,13 @@ namespace
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         case MP2::OBJ_PEASANTHUT: {
             // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
         }
 
         // recruit army
@@ -280,7 +280,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
         }
 
         // recruit army (battle)
@@ -294,7 +294,7 @@ namespace
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t & paymentCosts = troop.GetCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
             }
         }
 
@@ -303,7 +303,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         // upgrade army
@@ -499,7 +499,7 @@ namespace AI
         const int objectID = tile.GetObject();
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
             if ( !castle )
                 return valueToIgnore;
 
@@ -768,12 +768,14 @@ namespace AI
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
 
-                const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
-                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
-                    value -= dangerousTaskPenalty / 2;
+                if ( heroStrength < regionStats.highestThreat ) {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( node.first ) );
 
-                else if ( heroStrength < regionStats.highestThreat )
-                    value -= dangerousTaskPenalty;
+                    if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                        value -= dangerousTaskPenalty / 2;
+                    else
+                        value -= dangerousTaskPenalty;
+                }
 
                 if ( dist > leftMovePoints ) {
                     // Distant object which is out of reach for the current turn must have lower priority.
@@ -815,7 +817,7 @@ namespace AI
         }
     }
 
-    void Normal::HeroesTurn( VecHeroes & heroes )
+    bool Normal::HeroesTurn( VecHeroes & heroes )
     {
         std::vector<HeroToMove> availableHeroes;
 
@@ -828,7 +830,7 @@ namespace AI
                 }
             }
             hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
-            if ( !hero->MayStillMove() ) {
+            if ( !hero->MayStillMove( false ) ) {
                 hero->SetModes( Heroes::MOVED );
             }
             else {
@@ -843,18 +845,44 @@ namespace AI
             }
         }
 
+        const double originalMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+
+        const int monsterStrengthMultiplierCount = 2;
+        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDUIM, ARMY_STRENGTH_ADVANTAGE_SMALL };
+
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
             double maxPriority = 0;
             int bestTargetIndex = -1;
 
-            for ( HeroToMove & heroInfo : availableHeroes ) {
-                double priority = -1;
-                const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
-                if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
-                    maxPriority = priority;
-                    bestTargetIndex = targetIndex;
-                    bestHero = heroInfo.hero;
+            while ( true ) {
+                for ( const HeroToMove & heroInfo : availableHeroes ) {
+                    double priority = -1;
+                    const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
+                    if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
+                        maxPriority = priority;
+                        bestTargetIndex = targetIndex;
+                        bestHero = heroInfo.hero;
+                    }
+                }
+
+                if ( bestTargetIndex != -1 ) {
+                    break;
+                }
+
+                // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
+                const double currentMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+                bool setNewMultipler = false;
+                for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
+                    if ( currentMonsterStrengthMultipler > monsterStrengthMultipliers[i] ) {
+                        _pathfinder.setArmyStrengthMultplier( monsterStrengthMultipliers[i] );
+                        setNewMultipler = true;
+                        break;
+                    }
+                }
+
+                if ( !setNewMultipler ) {
+                    break;
                 }
             }
 
@@ -882,6 +910,7 @@ namespace AI
 
                 if ( bestTargetIndex == -1 ) {
                     // Nothing to do. Stop everything
+                    _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
                     break;
                 }
             }
@@ -900,7 +929,7 @@ namespace AI
             }
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
-                if ( !availableHeroes[i].hero->MayStillMove() ) {
+                if ( !availableHeroes[i].hero->MayStillMove( false ) ) {
                     availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
@@ -908,12 +937,20 @@ namespace AI
 
                 ++i;
             }
+
+            _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
         }
 
+        const bool allHeroesMoved = availableHeroes.empty();
+
         for ( HeroToMove & heroInfo : availableHeroes ) {
-            if ( !heroInfo.hero->MayStillMove() ) {
+            if ( !heroInfo.hero->MayStillMove( false ) ) {
                 heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }
+
+        _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+
+        return allHeroesMoved;
     }
 }

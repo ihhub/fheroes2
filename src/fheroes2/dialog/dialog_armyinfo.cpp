@@ -275,10 +275,10 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( std::to_string( troop().GetDamageMin() ) + "-" + std::to_string( troop().GetDamageMax() ) );
+    if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() )
+        text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ) );
     else
-        text.Set( std::to_string( troop().GetDamageMin() ) );
+        text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -288,7 +288,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    text.Set( std::to_string( troop().GetHitPoints() ) );
+    text.Set( std::to_string( troop.GetMonster().GetHitPoints() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -376,9 +376,9 @@ fheroes2::Sprite GetModesSprite( u32 mod )
 
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
-    const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                              Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                              Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
+    const uint32_t modes[] = { Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+                               Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                               Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE };
 
     int32_t ow = 0;
     int32_t spritesWidth = 0;
@@ -606,6 +606,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         result = btnGroup.processEvents();
 
         if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
+            LocalEvent::GetClean();
             hero.OpenDialog( false, false, true, true );
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
@@ -782,6 +783,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
+            LocalEvent::GetClean();
             hero.OpenDialog( false, false, true, true );
 
             needRedraw = true;

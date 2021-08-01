@@ -158,7 +158,7 @@ namespace
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( "Project Coordination and Core Development", Font::YELLOW_BIG, textWidth );
+        TextBox title( _( "Project Coordination and Core Development" ), Font::YELLOW_BIG, textWidth );
         TextBox name( "Ihar Hubchyk", Font::BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
@@ -168,7 +168,7 @@ namespace
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
         offsetY += blackDragon.height();
 
-        title.Set( "QA and Support", Font::YELLOW_BIG, textWidth );
+        title.Set( _( "QA and Support" ), Font::YELLOW_BIG, textWidth );
         name.Set( "Igor Tsivilko", Font::BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
@@ -178,7 +178,7 @@ namespace
         fheroes2::Blit( cyclop, output, ( columnStep - cyclop.width() ) / 2, offsetY );
         offsetY += cyclop.height();
 
-        title.Set( "Development", Font::YELLOW_BIG, textWidth );
+        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
         name.Set( "Ivan Shibanov", Font::BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
@@ -202,7 +202,7 @@ namespace
 
         offsetY = bottomOffset + 10;
 
-        const Text websiteInto( "Visit us at ", Font::BIG );
+        const Text websiteInto( _( "Visit us at " ), Font::BIG );
         const Text website( "https://github.com/ihhub/fheroes2", Font::YELLOW_BIG );
         const int32_t websiteOffsetX = ( output.width() - websiteInto.w() - website.w() ) / 2;
         websiteInto.Blit( websiteOffsetX, offsetY, output );
@@ -214,7 +214,7 @@ namespace
 
         offsetY = textInitialOffsetY;
 
-        title.Set( "Special Thanks to", Font::YELLOW_BIG, textWidth );
+        title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, textWidth );
         title.Blit( 2 * columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
         offsetY += title.h();
 
@@ -225,8 +225,8 @@ namespace
                                         "vincent-grosbois\n"
                                         "Andrii Kurdiumov\n"
                                         "Vasilenko Alexey\n"
+                                        "Arkadiy Illarionov\n"
                                         "Andrey Starodubtsev\n"
-                                        "tau3\n"
                                         "and many other contributors!" );
 
         name.Set( contributors, Font::BIG, textWidth );
@@ -237,7 +237,7 @@ namespace
         fheroes2::Blit( hydra, output, 2 * columnStep + ( columnStep - hydra.width() ) / 2, offsetY );
         offsetY += hydra.height();
 
-        title.Set( "Original project before 0.7", Font::YELLOW_SMALL, textWidth );
+        title.Set( _( "Original project before 0.7" ), Font::YELLOW_SMALL, textWidth );
         title.Blit( 2 * columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
         offsetY += title.h();
 
@@ -261,7 +261,7 @@ namespace
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( "Support us at", Font::BIG, textWidth );
+        TextBox title( _( "Support us at" ), Font::BIG, textWidth );
         TextBox name( "https://www.patreon.com/fheroes2", Font::YELLOW_BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
@@ -271,7 +271,7 @@ namespace
         fheroes2::Blit( wizard, output, ( columnStep - wizard.width() ) / 2, offsetY );
         offsetY += wizard.height();
 
-        title.Set( "Connect with us at", Font::BIG, textWidth );
+        title.Set( _( "Connect with us at" ), Font::BIG, textWidth );
         name.Set( "https://www.facebook.com/groups/fheroes2", Font::YELLOW_BIG, textWidth - 10 ); // special case to properly split the string
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
@@ -281,7 +281,7 @@ namespace
         fheroes2::Blit( vampireLord, output, ( columnStep - vampireLord.width() ) / 2, offsetY );
         offsetY += vampireLord.height();
 
-        title.Set( "Need help with the game?", Font::BIG, textWidth );
+        title.Set( _( "Need help with the game?" ), Font::BIG, textWidth );
         name.Set( "https://discord.gg/xF85vbZ", Font::YELLOW_BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
@@ -293,7 +293,7 @@ namespace
 
         offsetY = textInitialOffsetY + 70;
 
-        title.Set( "Special Thanks to", Font::YELLOW_BIG, output.width() - columnStep );
+        title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, output.width() - columnStep );
         title.Blit( columnStep + ( output.width() - columnStep - title.w() ) / 2, offsetY, output );
         offsetY += title.h();
 

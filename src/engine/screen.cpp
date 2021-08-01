@@ -20,6 +20,7 @@
 
 #include "screen.h"
 #include "palette_h2.h"
+#include "tools.h"
 
 #include <SDL_version.h>
 #include <SDL_video.h>
@@ -172,17 +173,6 @@ namespace
         }
 
         return true;
-    }
-
-    fheroes2::Rect getCommonRoi( const fheroes2::Rect & roi1, const fheroes2::Rect & roi2 )
-    {
-        fheroes2::Rect common;
-        common.x = roi1.x < roi2.x ? roi1.x : roi2.x;
-        common.y = roi1.y < roi2.y ? roi1.y : roi2.y;
-        common.width = roi1.x + roi1.width > roi2.x + roi2.width ? roi1.x + roi1.width - common.x : roi2.x + roi2.width - common.x;
-        common.height = roi1.y + roi1.height > roi2.y + roi2.height ? roi1.y + roi1.height - common.y : roi2.y + roi2.height - common.y;
-
-        return common;
     }
 
     const uint8_t * currentPalette = PALPAlette();
@@ -1286,12 +1276,12 @@ namespace fheroes2
                 // ROI must include cursor's area as well, otherwise cursor won't be rendered.
                 Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
                 if ( getActiveArea( cursorROI, width(), height() ) ) {
-                    temp = getCommonRoi( temp, cursorROI );
+                    temp = getBoundaryRect( temp, cursorROI );
                 }
             }
 
             // Previous position of cursor must be updated as well to avoid ghost effect.
-            _renderFrame( getCommonRoi( temp, _prevRoi ) );
+            _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
             if ( _postprocessing != nullptr ) {
                 _postprocessing();
@@ -1300,7 +1290,7 @@ namespace fheroes2
             Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
-            _renderFrame( getCommonRoi( temp, _prevRoi ) );
+            _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
             if ( _postprocessing != nullptr ) {
                 _postprocessing();
@@ -1367,24 +1357,6 @@ namespace fheroes2
         currentPalette = ( palette == nullptr ) ? PALPAlette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
-    }
-
-    void Display::setEngine( std::unique_ptr<BaseRenderEngine> & engine )
-    {
-        assert( engine.get() != nullptr );
-        if ( engine.get() == nullptr ) {
-            return;
-        }
-        std::swap( engine, _engine );
-    }
-
-    void Display::setCursor( std::unique_ptr<Cursor> & cursor )
-    {
-        assert( cursor.get() != nullptr );
-        if ( cursor.get() == nullptr ) {
-            return;
-        }
-        std::swap( cursor, _cursor );
     }
 
     bool Cursor::isFocusActive() const

@@ -374,15 +374,12 @@ KeySym GetKeySym( int key )
     case SDLK_UNDERSCORE:
         return KEY_UNDERSCORE;
     case SDLK_LALT:
-        return KEY_ALT;
     case SDLK_RALT:
         return KEY_ALT;
     case SDLK_LCTRL:
-        return KEY_CONTROL;
     case SDLK_RCTRL:
         return KEY_CONTROL;
     case SDLK_LSHIFT:
-        return KEY_SHIFT;
     case SDLK_RSHIFT:
         return KEY_SHIFT;
     case SDLK_TAB:
@@ -576,61 +573,41 @@ bool PressIntKey( u32 max, u32 & result )
             result *= 10;
             switch ( le.KeyValue() ) {
             case KEY_1:
-                result += 1;
-                break;
-            case KEY_2:
-                result += 2;
-                break;
-            case KEY_3:
-                result += 3;
-                break;
-            case KEY_4:
-                result += 4;
-                break;
-            case KEY_5:
-                result += 5;
-                break;
-            case KEY_6:
-                result += 6;
-                break;
-            case KEY_7:
-                result += 7;
-                break;
-            case KEY_8:
-                result += 8;
-                break;
-            case KEY_9:
-                result += 9;
-                break;
-
             case KEY_KP1:
                 result += 1;
                 break;
+            case KEY_2:
             case KEY_KP2:
                 result += 2;
                 break;
+            case KEY_3:
             case KEY_KP3:
                 result += 3;
                 break;
+            case KEY_4:
             case KEY_KP4:
                 result += 4;
                 break;
+            case KEY_5:
             case KEY_KP5:
                 result += 5;
                 break;
+            case KEY_6:
             case KEY_KP6:
                 result += 6;
                 break;
+            case KEY_7:
             case KEY_KP7:
                 result += 7;
                 break;
+            case KEY_8:
             case KEY_KP8:
                 result += 8;
                 break;
+            case KEY_9:
             case KEY_KP9:
                 result += 9;
                 break;
-
             default:
                 break;
             }
@@ -921,7 +898,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 #else
     switch ( sym ) {
     case KEY_BACKSPACE: {
-        if ( res.size() && pos ) {
+        if ( !res.empty() && pos ) {
             if ( pos >= res.size() )
                 res.resize( res.size() - 1 );
             else
@@ -930,7 +907,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         }
     } break;
     case KEY_DELETE: {
-        if ( res.size() ) {
+        if ( !res.empty() ) {
             if ( pos < res.size() )
                 res.erase( pos, 1 );
         }
@@ -1252,6 +1229,9 @@ void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
 
         ResumeSounds();
     }
+    else if ( event.window.event == SDL_WINDOWEVENT_RESIZED ) {
+        fheroes2::Display::instance().render();
+    }
 }
 #else
 void LocalEvent::OnActiveEvent( const SDL_Event & event )
@@ -1507,16 +1487,6 @@ bool LocalEvent::MouseReleaseLeft( void ) const
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MousePressMiddle( void ) const
-{
-    return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_MIDDLE == mouse_button;
-}
-
-bool LocalEvent::MouseReleaseMiddle( void ) const
-{
-    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_MIDDLE == mouse_button;
-}
-
 bool LocalEvent::MousePressRight( void ) const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
@@ -1667,18 +1637,6 @@ bool LocalEvent::MouseClickMiddle( void )
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle( const fheroes2::Rect & rt )
-{
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button && ( rt & mouse_pm ) && ( rt & mouse_rm ) ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
-    }
-
-    return false;
-}
-
 bool LocalEvent::MouseClickRight( void )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
@@ -1726,11 +1684,6 @@ bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
     return MousePressLeft() && ( rt & mouse_pl );
 }
 
-bool LocalEvent::MousePressMiddle( const fheroes2::Rect & rt ) const
-{
-    return MousePressMiddle() && ( rt & mouse_pm );
-}
-
 bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 {
     return MousePressRight() && ( rt & mouse_pr );
@@ -1739,11 +1692,6 @@ bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
 {
     return MouseReleaseLeft() && ( rt & mouse_rl );
-}
-
-bool LocalEvent::MouseReleaseMiddle( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseMiddle() && ( rt & mouse_rm );
 }
 
 bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
@@ -1829,11 +1777,6 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 void LocalEvent::SetState( u32 type, bool enable )
 {
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
-}
-
-int LocalEvent::GetState( u32 type )
-{
-    return SDL_EventState( type, SDL_QUERY );
 }
 
 void LocalEvent::SetStateDefaults( void )

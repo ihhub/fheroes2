@@ -20,8 +20,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
-    - name: initialize SonarCloud
+        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+    - name: Initialize SonarCloud
       run: |
         mkdir -p ~/.sonarcloud
         wget -P ~/.sonarcloud https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip

@@ -165,7 +165,6 @@ public:
     bool operator==( const Spell & ) const;
     bool operator==( const Artifact & ) const;
     bool operator!=( const Artifact & ) const;
-    int operator()( void ) const;
     int GetID( void ) const;
 
     bool isUltimate( void ) const;
@@ -221,7 +220,6 @@ public:
     bool MakeBattleGarb( void );
     bool ContainUltimateArtifact( void ) const;
 
-    void RemoveArtifact( const Artifact & );
     void RemoveScroll( const Artifact & );
     void exchangeArtifacts( BagArtifacts & giftBag );
 

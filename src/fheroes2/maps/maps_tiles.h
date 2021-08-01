@@ -75,8 +75,6 @@ namespace Maps
         }
 
         bool isRoad() const;
-        bool hasRoadFlag() const;
-        bool isICN( int ) const;
         bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
@@ -198,7 +196,7 @@ namespace Maps
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
         void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
         void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
@@ -245,7 +243,6 @@ namespace Maps
 
         /* monster operation */
         bool MonsterJoinConditionSkip( void ) const;
-        bool MonsterJoinConditionMoney( void ) const;
         bool MonsterJoinConditionFree( void ) const;
         bool MonsterJoinConditionForce( void ) const;
         int MonsterJoinCondition( void ) const;
@@ -290,6 +287,8 @@ namespace Maps
 
         // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
         void setAsEmpty();
+
+        uint32_t getObjectIdByICNType( const int icnId ) const;
 
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );

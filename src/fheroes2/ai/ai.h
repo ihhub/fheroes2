@@ -70,7 +70,10 @@ namespace AI
         virtual void CastleTurn( Castle & castle, bool defensive );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
-        virtual void HeroesTurn( VecHeroes & ) {}
+        virtual bool HeroesTurn( VecHeroes & )
+        {
+            return true;
+        }
 
         virtual void revealFog( const Maps::Tiles & tile );
 
@@ -85,7 +88,6 @@ namespace AI
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
-        virtual bool HeroesSkipFog();
         virtual std::string HeroesString( const Heroes & hero );
 
         virtual void CastleAdd( const Castle & castle );
@@ -94,8 +96,7 @@ namespace AI
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
         virtual const char * Type() const;
-        virtual const char * License() const;
-        virtual int GetPersonality() const;
+        virtual int GetPersonality() const; // To be utilized in future.
         virtual std::string GetPersonalityString() const;
 
         virtual void Reset();

@@ -60,8 +60,6 @@ const char * Game::EventsName( int evnt )
         return "button select";
     case EVENT_BUTTON_HOTSEAT:
         return "button hotseat";
-    case EVENT_BUTTON_NETWORK:
-        return "button network";
     case EVENT_BUTTON_HOST:
         return "button host";
     case EVENT_BUTTON_GUEST:
@@ -163,6 +161,33 @@ const char * Game::EventsName( int evnt )
         return "show status";
     case EVENT_SHOWICONS:
         return "show icons";
+
+    case EVENT_TOWN_DWELLING_LEVEL_1:
+        return "town dwelling level 1";
+    case EVENT_TOWN_DWELLING_LEVEL_2:
+        return "town dwelling level 2";
+    case EVENT_TOWN_DWELLING_LEVEL_3:
+        return "town dwelling level 3";
+    case EVENT_TOWN_DWELLING_LEVEL_4:
+        return "town dwelling level 4";
+    case EVENT_TOWN_DWELLING_LEVEL_5:
+        return "town dwelling level 5";
+    case EVENT_TOWN_DWELLING_LEVEL_6:
+        return "town dwelling level 6";
+    case EVENT_TOWN_WELL:
+        return "town well";
+    case EVENT_TOWN_MARKETPLACE:
+        return "town marketplace";
+    case EVENT_TOWN_MAGE_GUILD:
+        return "town mageguild";
+    case EVENT_TOWN_SHIPYARD:
+        return "town shipyard";
+    case EVENT_TOWN_THIEVES_GUILD:
+        return "town guild";
+    case EVENT_TOWN_TAVERN:
+        return "town tavern";
+    case EVENT_TOWN_JUMP_TO_BUILD_SELECTION:
+        return "town build";
     default:
         break;
     }
@@ -184,7 +209,6 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_BUTTON_SETTINGS] = KEY_t;
     key_events[EVENT_BUTTON_SELECT] = KEY_s;
     key_events[EVENT_BUTTON_HOTSEAT] = KEY_h;
-    key_events[EVENT_BUTTON_NETWORK] = KEY_n;
     key_events[EVENT_BUTTON_HOST] = KEY_h;
     key_events[EVENT_BUTTON_GUEST] = KEY_g;
     key_events[EVENT_BUTTON_BATTLEONLY] = KEY_b;
@@ -266,6 +290,23 @@ void Game::HotKeysDefaults( void )
 
     key_events[EVENT_UPGRADE_TROOP] = KEY_u;
     key_events[EVENT_DISMISS_TROOP] = KEY_d;
+
+    // town + build screen
+    key_events[EVENT_TOWN_DWELLING_LEVEL_1] = KEY_1;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_2] = KEY_2;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_3] = KEY_3;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_4] = KEY_4;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_5] = KEY_5;
+    key_events[EVENT_TOWN_DWELLING_LEVEL_6] = KEY_6;
+    key_events[EVENT_TOWN_WELL] = KEY_w;
+    key_events[EVENT_TOWN_MAGE_GUILD] = KEY_s;
+    key_events[EVENT_TOWN_MARKETPLACE] = KEY_m;
+    key_events[EVENT_TOWN_THIEVES_GUILD] = KEY_t;
+    key_events[EVENT_TOWN_SHIPYARD] = KEY_n;
+
+    // town screen only
+    key_events[EVENT_TOWN_TAVERN] = KEY_r;
+    key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
 }
 
 bool Game::HotKeyPressEvent( int evnt )
@@ -284,7 +325,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );
 
-    if ( config.Load( hotkeys.c_str() ) ) {
+    if ( config.Load( hotkeys ) ) {
         int ival = 0;
 
         for ( int evnt = EVENT_NONE; evnt < EVENT_LAST; ++evnt ) {

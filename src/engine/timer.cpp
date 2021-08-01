@@ -20,65 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "thread.h"
+#include "timer.h"
 
 using namespace SDL;
-
-Thread::Thread()
-    : thread( nullptr )
-{}
-
-Thread::~Thread()
-{
-    Kill();
-}
-
-Thread::Thread( const Thread & )
-    : thread( nullptr )
-{}
-
-Thread & Thread::operator=( const Thread & )
-{
-    return *this;
-}
-
-void Thread::Create( int ( *fn )( void * ), void * param )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    thread = SDL_CreateThread( fn, "", param );
-#else
-    thread = SDL_CreateThread( fn, param );
-#endif
-}
-
-int Thread::Wait( void )
-{
-    int status = 0;
-    if ( thread )
-        SDL_WaitThread( thread, &status );
-    thread = nullptr;
-    return status;
-}
-
-void Thread::Kill( void )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#else
-    if ( thread )
-        SDL_KillThread( thread );
-    thread = nullptr;
-#endif
-}
-
-bool Thread::IsRun( void ) const
-{
-    return GetID() != 0;
-}
-
-u32 Thread::GetID( void ) const
-{
-    return thread ? SDL_GetThreadID( thread ) : 0;
-}
 
 Timer::Timer()
     : id( 0 )

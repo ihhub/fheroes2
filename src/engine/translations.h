@@ -27,16 +27,22 @@ namespace Translation
 {
     bool bindDomain( const char * domain, const char * file );
     bool setDomain( const char * domain );
+
+    // Reset any translation to the default language - English.
+    void reset();
+
     void setStripContext( char strip );
 
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );
-    const char * dgettext( const char * domain, const char * str );
     const char * ngettext( const char * str, const char * plural, size_t num );
-    const char * dngettext( const char * domain, const char * str, const char * plural, size_t num );
 }
 
 #define _( s ) Translation::gettext( s )
 #define _n( a, b, c ) Translation::ngettext( a, b, c )
+constexpr const char * gettext_noop( const char * s )
+{
+    return s;
+}
 
 #endif

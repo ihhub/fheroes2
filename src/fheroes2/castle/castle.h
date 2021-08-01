@@ -110,7 +110,7 @@ public:
         ALLOWCASTLE = 0x0002,
         CUSTOMARMY = 0x0004,
         ALLOWBUILD = 0x0008,
-        DISABLEHIRES = 0x0010,
+        // UNUSED = 0x0010,
         CAPITAL = 0x0020
     };
 
@@ -211,7 +211,6 @@ public:
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
-    static bool PredicateIsCapital( const Castle * );
     static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
     static u32 GetGrownWell( void );

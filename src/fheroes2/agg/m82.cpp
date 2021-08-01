@@ -103,7 +103,6 @@ int M82::FromSpell( int spell )
 {
     switch ( spell ) {
     case Spell::FIREBALL:
-        return FIREBALL;
     case Spell::FIREBLAST:
         return FIREBALL;
     case Spell::LIGHTNINGBOLT:
@@ -145,7 +144,6 @@ int M82::FromSpell( int spell )
     case Spell::ANTIMAGIC:
         return ANTIMAGK;
     case Spell::DISPEL:
-        return DIPMAGK;
     case Spell::MASSDISPEL:
         return DIPMAGK;
     case Spell::ARROW:
@@ -169,7 +167,6 @@ int M82::FromSpell( int spell )
     case Spell::DISRUPTINGRAY:
         return DISRUPTR;
     case Spell::DEATHRIPPLE:
-        return MNRDEATH;
     case Spell::DEATHWAVE:
         return MNRDEATH;
     case Spell::DRAGONSLAYER:
@@ -185,11 +182,8 @@ int M82::FromSpell( int spell )
     case Spell::MASSSHIELD:
         return MASSSHIE;
     case Spell::SUMMONEELEMENT:
-        return SUMNELM;
     case Spell::SUMMONAELEMENT:
-        return SUMNELM;
     case Spell::SUMMONFELEMENT:
-        return SUMNELM;
     case Spell::SUMMONWELEMENT:
         return SUMNELM;
     case Spell::EARTHQUAKE:

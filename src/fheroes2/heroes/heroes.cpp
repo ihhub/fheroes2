@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <numeric>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -309,7 +308,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     // custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
-        name = Game::GetEncodeString( st.toString( 13 ) );
+        name = st.toString( 13 );
     }
     else {
         st.skip( 13 );
@@ -526,7 +525,6 @@ u32 Heroes::GetMaxSpellPoints( void ) const
 u32 Heroes::GetMaxMovePoints( void ) const
 {
     int point = 0;
-    int acount = 0;
 
     // start point
     if ( isShipMaster() ) {
@@ -536,9 +534,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        acount = HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY );
-        if ( acount )
-            point += acount * 1000;
+        point += HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -577,22 +573,15 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        acount = HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY );
-        if ( acount )
-            point += acount * 600;
-
-        acount = HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY );
-        if ( acount )
-            point += acount * 300;
+        point += HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
+        point += HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
 
-    acount = HasArtifact( Artifact::TRUE_COMPASS_MOBILITY );
-    if ( acount )
-        point += acount * 500;
+    point += HasArtifact( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
@@ -795,13 +784,13 @@ void Heroes::RescanPath( void )
 /* if hero in castle */
 const Castle * Heroes::inCastle( void ) const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    const Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 Castle * Heroes::inCastle( void )
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
@@ -947,12 +936,12 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art() == Artifact::MAGIC_BOOK ? Dialog::Message(
+            art.GetID() == Artifact::MAGIC_BOOK ? Dialog::Message(
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
-                                          : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
-                                                             Dialog::OK );
+                                                : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
+                                                                   Dialog::OK );
         }
         return false;
     }
@@ -1410,12 +1399,16 @@ void Heroes::ResetMovePoints( void )
     move_point = 0;
 }
 
-bool Heroes::MayStillMove( void ) const
+bool Heroes::MayStillMove( const bool ignorePath ) const
 {
-    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
+    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() ) {
         return false;
+    }
 
-    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
+    if ( path.isValid() && !ignorePath ) {
+        return move_point >= path.getLastMovePenalty();
+    }
+    return CanMove();
 }
 
 bool Heroes::MayCastAdventureSpells() const
@@ -1716,7 +1709,7 @@ AllHeroes::~AllHeroes()
 
 void AllHeroes::Init( void )
 {
-    if ( size() )
+    if ( !empty() )
         AllHeroes::clear();
 
     // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY

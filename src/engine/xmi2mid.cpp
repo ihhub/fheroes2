@@ -503,11 +503,6 @@ struct MidData
     int ppqn;
     MidTracks tracks;
 
-    MidData()
-        : mthd( TAG_MTHD, 6 )
-        , format( 0 )
-        , ppqn( 0 )
-    {}
     explicit MidData( const XMITracks & t )
         : mthd( TAG_MTHD, 6 )
         , format( 0 )

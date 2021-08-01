@@ -58,17 +58,15 @@ namespace Maps
         bool isAllowCountPlayers( int playerCount ) const;
         bool isMultiPlayerMap( void ) const;
         int AllowCompHumanColors( void ) const;
-        int AllowComputerColors( void ) const;
         int AllowHumanColors( void ) const;
         int HumanOnlyColors( void ) const;
         int ComputerOnlyColors( void ) const;
 
         int KingdomRace( int color ) const;
 
-        int ConditionWins( void ) const;
-        int ConditionLoss( void ) const;
+        uint32_t ConditionWins() const;
+        uint32_t ConditionLoss() const;
         bool WinsCompAlsoWins( void ) const;
-        bool WinsAllowNormalVictory( void ) const;
         int WinsFindArtifactID( void ) const;
         bool WinsFindUltimateArtifact( void ) const;
         u32 WinsAccumulateGold( void ) const;

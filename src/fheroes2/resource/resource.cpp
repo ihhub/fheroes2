@@ -111,9 +111,9 @@ Funds::Funds( const ResourceCount & rs )
         *ptr = rs.second;
 }
 
-int Resource::Rand( bool with_gold )
+int Resource::Rand( const bool includeGold )
 {
-    switch ( Rand::Get( 1, ( with_gold ? 7 : 6 ) ) ) {
+    switch ( Rand::Get( 1, ( includeGold ? 7 : 6 ) ) ) {
     case 1:
         return Resource::WOOD;
     case 2:

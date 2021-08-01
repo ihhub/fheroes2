@@ -61,7 +61,6 @@ namespace Battle
         void calculate( const Unit & unit );
         Indexes buildPath( int targetCell ) const;
         Indexes findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const;
-        bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
 

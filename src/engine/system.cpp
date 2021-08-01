@@ -21,48 +21,38 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <cstdlib>
-#include <ctime>
 #include <fstream>
-#include <locale>
 #include <sstream>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
 
-#include "logging.h"
 #include "system.h"
+#include "tools.h"
+
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
 #include <windows.h>
 #include <shellapi.h>
+#else
+#include <dirent.h>
 #endif
 
-#if !defined( _MSC_VER )
+#if defined( _MSC_VER )
+#include <io.h>
+#else
+#include <sys/stat.h>
 #include <unistd.h>
 #endif
-
-#if defined( __WIN32__ )
-#include <io.h>
-#endif
-
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #if defined( __WIN32__ )
 #define SEPARATOR '\\'
 #else
 #define SEPARATOR '/'
 #endif
-
-#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
-#include <dirent.h>
-#endif
-
-#include "tools.h"
 
 #if !defined( __LINUX__ )
 namespace
@@ -73,11 +63,11 @@ namespace
         return "ux0:data/fheroes2";
 #endif
 
-        if ( System::GetEnvironment( "HOME" ) )
-            return System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
+        if ( getenv( "HOME" ) )
+            return System::ConcatePath( getenv( "HOME" ), std::string( "." ).append( prog ) );
 
-        if ( System::GetEnvironment( "APPDATA" ) )
-            return System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
+        if ( getenv( "APPDATA" ) )
+            return System::ConcatePath( getenv( "APPDATA" ), prog );
 
         std::string res;
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -124,12 +114,12 @@ ListDirs System::GetOSSpecificDirectories()
 std::string System::GetConfigDirectory( const std::string & prog )
 {
 #if defined( __LINUX__ )
-    const char * configEnv = System::GetEnvironment( "XDG_CONFIG_HOME" );
+    const char * configEnv = getenv( "XDG_CONFIG_HOME" );
     if ( configEnv ) {
         return System::ConcatePath( configEnv, prog );
     }
 
-    const char * homeEnv = System::GetEnvironment( "HOME" );
+    const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
         return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
     }
@@ -143,12 +133,12 @@ std::string System::GetConfigDirectory( const std::string & prog )
 std::string System::GetDataDirectory( const std::string & prog )
 {
 #if defined( __LINUX__ )
-    const char * dataEnv = System::GetEnvironment( "XDG_DATA_HOME" );
+    const char * dataEnv = getenv( "XDG_DATA_HOME" );
     if ( dataEnv ) {
         return System::ConcatePath( dataEnv, prog );
     }
 
-    const char * homeEnv = System::GetEnvironment( "HOME" );
+    const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
         return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
     }
@@ -161,7 +151,7 @@ std::string System::GetDataDirectory( const std::string & prog )
 
 std::string System::GetDirname( const std::string & str )
 {
-    if ( str.size() ) {
+    if ( !str.empty() ) {
         size_t pos = str.rfind( SEPARATOR );
 
         if ( std::string::npos == pos )
@@ -179,7 +169,7 @@ std::string System::GetDirname( const std::string & str )
 
 std::string System::GetBasename( const std::string & str )
 {
-    if ( str.size() ) {
+    if ( !str.empty() ) {
         size_t pos = str.rfind( SEPARATOR );
 
         if ( std::string::npos == pos || pos == 0 )
@@ -200,41 +190,6 @@ std::string System::GetUniversalBasename( const std::string & str )
     std::replace( path.begin(), path.end(), ( SEPARATOR == '/' ) ? '\\' : '/', SEPARATOR );
 
     return GetBasename( path );
-}
-
-const char * System::GetEnvironment( const char * name )
-{
-#if defined( __MINGW32__ )
-    return SDL_getenv( name );
-#else
-    return getenv( name );
-#endif
-}
-
-int System::SetEnvironment( const char * name, const char * value )
-{
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    std::string str( std::string( name ) + "=" + std::string( value ) );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return _putenv( str.c_str() );
-#else
-    // SDL 1.2.12 (char *)
-    return SDL_putenv( &str[0] );
-#endif
-#elif defined( __SWITCH__ ) || defined( FHEROES2_VITA )
-    return SDL_setenv( name, value, 1 );
-#else
-    return setenv( name, value, 1 );
-#endif
-}
-
-void System::SetLocale( int category, const char * locale )
-{
-#if defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    setlocale( category, locale );
-#else
-    std::setlocale( category, locale );
-#endif
 }
 
 std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
@@ -280,33 +235,6 @@ char * System::GetOptionsArgument( void )
     return nullptr;
 #else
     return optarg;
-#endif
-}
-
-size_t System::GetMemoryUsage( void )
-{
-#if defined( __WIN32__ )
-    static MEMORYSTATUS ms;
-
-    ZeroMemory( &ms, sizeof( ms ) );
-    ms.dwLength = sizeof( MEMORYSTATUS );
-    GlobalMemoryStatus( &ms );
-
-    return ( ms.dwTotalVirtual - ms.dwAvailVirtual );
-#elif defined( __LINUX__ )
-    unsigned int size = 0;
-    std::ostringstream os;
-    os << "/proc/" << getpid() << "/statm";
-
-    std::ifstream fs( os.str().c_str() );
-    if ( fs.is_open() ) {
-        fs >> size;
-        fs.close();
-    }
-
-    return size * getpagesize();
-#else
-    return 0;
 #endif
 }
 

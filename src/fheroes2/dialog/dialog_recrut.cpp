@@ -266,6 +266,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.y = pos.y + 169;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
 
+    fheroes2::TimedEventValidator timedButtonUp( [&buttonUp]() { return buttonUp.isPressed(); } );
+    fheroes2::TimedEventValidator timedButtonDn( [&buttonDn]() { return buttonDn.isPressed(); } );
+
+    buttonDn.subscribe( &timedButtonDn );
+    buttonUp.subscribe( &timedButtonUp );
+
     const fheroes2::Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
 
     // Create monster switching arrows
@@ -313,7 +319,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     display.render();
 
-    std::vector<Monster> upgrades = {monster0};
+    std::vector<Monster> upgrades = { monster0 };
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
         upgrades.emplace_back( upgrades.back().GetDowngrade() );
     }
@@ -401,7 +407,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) ) && result < max ) {
+        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) || timedButtonUp.isDelayPassed() ) && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
             redraw = true;
@@ -414,7 +420,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) ) && result ) {
+        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) || timedButtonDn.isDelayPassed() ) && result ) {
             --result;
             paymentCosts -= paymentMonster;
             redraw = true;

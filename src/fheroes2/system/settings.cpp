@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
 
 #include "difficulty.h"
@@ -57,23 +58,22 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
-        GLOBAL_USESWSURFACE = 0x00010000,
+        // UNUSED = 0x00010000,
 
-        GLOBAL_SOUND = 0x00020000,
-        GLOBAL_MUSIC_EXT = 0x00040000,
-        GLOBAL_MUSIC_CD = 0x00080000,
-        GLOBAL_MUSIC_MIDI = 0x00100000,
+        GLOBAL_MUSIC_EXT = 0x00020000,
+        GLOBAL_MUSIC_MIDI = 0x00040000,
+        GLOBAL_MUSIC = GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
 
-        GLOBAL_USEUNICODE = 0x00200000,
-        GLOBAL_ALTRESOURCE = 0x00400000,
+        // UNUSED = 0x00080000,
+        // UNUSED = 0x00100000,
+        // UNUSED = 0x00200000,
+        // UNUSED = 0x00400000,
 
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
-        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
-
-        GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
+        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000
     };
 
     struct settings_t
@@ -85,38 +85,6 @@ namespace
         {
             return id && id == i;
         }
-    };
-
-    // external settings
-    const settings_t settingsGeneral[] = {
-        {
-            GLOBAL_SOUND,
-            "sound",
-        },
-        {
-            GLOBAL_MUSIC_MIDI,
-            "music",
-        },
-        {
-            GLOBAL_FULLSCREEN,
-            "fullscreen",
-        },
-        {
-            GLOBAL_USEUNICODE,
-            "unicode",
-        },
-        {
-            GLOBAL_ALTRESOURCE,
-            "alt resource",
-        },
-        {
-            GLOBAL_USESWSURFACE,
-            "use swsurface only",
-        },
-        {
-            0,
-            nullptr,
-        },
     };
 
     // internal settings
@@ -132,10 +100,6 @@ namespace
         {
             Settings::GAME_BATTLE_SHOW_DAMAGE,
             _( "battle: show damage info" ),
-        },
-        {
-            Settings::WORLD_SHOW_VISITED_CONTENT,
-            _( "world: show visited content from objects" ),
         },
         {
             Settings::WORLD_SHOW_TERRAIN_PENALTY,
@@ -154,32 +118,8 @@ namespace
             _( "world: Eagle Eye also works like Scholar in H3." ),
         },
         {
-            Settings::WORLD_BAN_WEEKOF,
-            _( "world: ban for WeekOf/MonthOf Monsters" ),
-        },
-        {
-            Settings::WORLD_BAN_PLAGUES,
-            _( "world: ban plagues months" ),
-        },
-        {
-            Settings::WORLD_BAN_MONTHOF_MONSTERS,
-            _( "world: Months Of Monsters do not place creatures on map" ),
-        },
-        {
             Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
             _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-        },
-        {
-            Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
-            _( "world: Starting heroes as Loss Conditions for Human Players" ),
-        },
-        {
-            Settings::WORLD_1HERO_HIRED_EVERY_WEEK,
-            _( "world: Only 1 hero can be hired by the one player every week" ),
-        },
-        {
-            Settings::CASTLE_1HERO_HIRED_EVERY_WEEK,
-            _( "world: Each castle allows one hero to be recruited every week" ),
         },
         {
             Settings::WORLD_SCALE_NEUTRAL_ARMIES,
@@ -284,17 +224,6 @@ namespace
 
         { 0, nullptr },
     };
-
-    const char * GetGeneralSettingDescription( int settingId )
-    {
-        const settings_t * ptr = settingsGeneral;
-        while ( ptr->id != 0 ) {
-            if ( ptr->id == static_cast<uint32_t>( settingId ) )
-                return ptr->str;
-            ++ptr;
-        }
-        return nullptr;
-    }
 }
 
 std::string Settings::GetVersion()
@@ -306,10 +235,6 @@ Settings::Settings()
     : debug( 0 )
     , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
-    , font_normal( "dejavusans.ttf" )
-    , font_small( "dejavusans.ttf" )
-    , size_normal( 15 )
-    , size_small( 10 )
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
@@ -322,7 +247,6 @@ Settings::Settings()
     , preferably_count_players( 0 )
 {
     ExtSetModes( GAME_AUTOSAVE_ON );
-    ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
 
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
@@ -331,7 +255,6 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_EXT );
-    opt_global.SetModes( GLOBAL_SOUND );
 
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -358,6 +281,7 @@ Settings & Settings::Get()
 bool Settings::Read( const std::string & filename )
 {
     TinyConfig config( '=', '#' );
+
     std::string sval;
     int ival;
 
@@ -409,45 +333,17 @@ bool Settings::Read( const std::string & filename )
         break;
     }
 
+#ifdef BUILD_RELEASE
+    // reset devel
+    debug &= ~( DBG_DEVEL );
+#endif
+
     Logging::SetDebugLevel( debug );
 
-    // opt_globals
-    const settings_t * ptr = settingsGeneral;
-    while ( ptr->id ) {
-        if ( config.Exists( ptr->str ) ) {
-            if ( 0 == config.IntParams( ptr->str ) )
-                opt_global.ResetModes( ptr->id );
-            else
-                opt_global.SetModes( ptr->id );
-        }
-
-        ++ptr;
-    }
-
-    if ( Unicode() ) {
-        sval = config.StrParams( "maps charset" );
-        if ( !sval.empty() )
-            maps_charset = sval;
-
-        sval = config.StrParams( "lang" );
-        if ( !sval.empty() )
-            force_lang = sval;
-
-        sval = config.StrParams( "fonts normal" );
-        if ( !sval.empty() )
-            font_normal = sval;
-
-        sval = config.StrParams( "fonts small" );
-        if ( !sval.empty() )
-            font_small = sval;
-
-        ival = config.IntParams( "fonts normal size" );
-        if ( 0 < ival )
-            size_normal = ival;
-
-        ival = config.IntParams( "fonts small size" );
-        if ( 0 < ival )
-            size_small = ival;
+    // game language
+    sval = config.StrParams( "lang" );
+    if ( !sval.empty() ) {
+        _gameLanguage = sval;
     }
 
     // music source
@@ -465,11 +361,6 @@ bool Settings::Read( const std::string & filename )
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             if ( isPriceOfLoyaltySupported() )
                 _musicType = MUSIC_MIDI_EXPANSION;
-        }
-        else if ( sval == "cd" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_CD );
-            _musicType = MUSIC_CDROM;
         }
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
@@ -562,14 +453,6 @@ bool Settings::Read( const std::string & filename )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
-    // playmus command
-    _externalMusicCommand = config.StrParams( "playmus command" );
-
-    // videodriver
-    sval = config.StrParams( "videodriver" );
-    if ( !sval.empty() )
-        video_driver = sval;
-
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -592,6 +475,11 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    // full screen
+    if ( config.Exists( "fullscreen" ) ) {
+        setFullScreen( config.StrParams( "fullscreen" ) == "on" );
+    }
+
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
         if ( _controllerPointerSpeed > 100 )
@@ -605,27 +493,19 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "show game intro" ) ) {
-        setShowIntro( config.StrParams( "show game intro" ) == "on" );
+        if ( config.StrParams( "show game intro" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_SHOW_INTRO );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_SHOW_INTRO );
+        }
     }
 
-#ifndef WITH_TTF
-    opt_global.ResetModes( GLOBAL_USEUNICODE );
-#endif
-
-    if ( font_normal.empty() || font_small.empty() )
-        opt_global.ResetModes( GLOBAL_USEUNICODE );
-
-#ifdef BUILD_RELEASE
-    // reset devel
-    debug &= ~( DBG_DEVEL );
-#endif
     BinaryLoad();
 
-    if ( video_driver.size() )
-        video_driver = StringLower( video_driver );
-
-    if ( video_mode.width > 0 && video_mode.height > 0 )
+    if ( video_mode.width > 0 && video_mode.height > 0 ) {
         PostLoad();
+    }
 
     return true;
 }
@@ -666,12 +546,10 @@ bool Settings::Save( const std::string & filename ) const
 std::string Settings::String() const
 {
     std::ostringstream os;
+
     std::string musicType;
     if ( MusicType() == MUSIC_EXTERNAL ) {
         musicType = "external";
-    }
-    else if ( MusicType() == MUSIC_CDROM ) {
-        musicType = "cd";
     }
     else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
         musicType = "expansion";
@@ -685,10 +563,7 @@ std::string Settings::String() const
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << std::endl << "# sound: on/off" << std::endl;
-    os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
-
-    os << std::endl << "# music: original, expansion, cd, external" << std::endl;
+    os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
 
     os << std::endl << "# sound volume: 0 - 10" << std::endl;
@@ -698,10 +573,7 @@ std::string Settings::String() const
     os << "music volume = " << music_volume << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
-
-    os << std::endl << "# use alternative resources (no longer used)" << std::endl;
-    os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
+    os << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << debug << std::endl;
@@ -753,21 +625,8 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    if ( video_driver.size() ) {
-        os << std::endl << "# sdl video driver, windows: windib, directx; wince: gapi, raw; linux: x11; other: see sdl manual (will be deprecated)" << std::endl;
-        os << "videodriver = " << video_driver << std::endl;
-    }
-
-#ifdef WITH_TTF
-    os << std::endl << "# options below are experimental and are currently disabled in the game" << std::endl;
-    os << "fonts normal = " << font_normal << std::endl
-       << "fonts small = " << font_small << std::endl
-       << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
-       << "fonts small size = " << static_cast<int>( size_small ) << std::endl
-       << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
-    if ( force_lang.size() )
-        os << "lang = " << force_lang << std::endl;
-#endif
+    os << std::endl << "# game language (an empty value means English)" << std::endl;
+    os << "lang = " << _gameLanguage << std::endl;
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
@@ -818,39 +677,36 @@ int Settings::CurrentColor() const
     return players.current_color;
 }
 
-const std::string & Settings::SelectVideoDriver() const
+const std::string & Settings::getGameLanguage() const
 {
-    return video_driver;
+    return _gameLanguage;
 }
 
-/* return fontname */
-const std::string & Settings::FontsNormal() const
+bool Settings::setGameLanguage( const std::string & language )
 {
-    return font_normal;
+    Translation::setStripContext( '|' );
+
+    _gameLanguage = language;
+
+    if ( _gameLanguage.empty() ) {
+        Translation::reset();
+        return true;
+    }
+
+    const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
+    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+
+    if ( !translations.empty() ) {
+        return Translation::bindDomain( language.c_str(), translations.back().c_str() ) && Translation::setDomain( language.c_str() );
+    }
+
+    ERROR_LOG( "Translation file " << fileName << " is not found." )
+    return false;
 }
-const std::string & Settings::FontsSmall() const
-{
-    return font_small;
-}
-const std::string & Settings::ForceLang() const
-{
-    return force_lang;
-}
+
 const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;
-}
-const std::string & Settings::MapsCharset() const
-{
-    return maps_charset;
-}
-int Settings::FontsNormalSize() const
-{
-    return size_normal;
-}
-int Settings::FontsSmallSize() const
-{
-    return size_small;
 }
 
 void Settings::SetMapsFile( const std::string & file )
@@ -874,8 +730,8 @@ ListDirs Settings::GetRootDirs()
 #endif
 
     // from env
-    if ( System::GetEnvironment( "FHEROES2_DATA" ) )
-        dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
+    if ( getenv( "FHEROES2_DATA" ) )
+        dirs.push_back( getenv( "FHEROES2_DATA" ) );
 
     // from app path
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
@@ -930,47 +786,9 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-std::string Settings::GetLangDir()
-{
-#ifdef CONFIGURE_FHEROES2_LOCALEDIR
-    return std::string( EXPANDDEF( CONFIGURE_FHEROES2_LOCALEDIR ) );
-#else
-    std::string res;
-    const ListDirs dirs = GetRootDirs();
-
-    for ( ListDirs::const_reverse_iterator it = dirs.rbegin(); it != dirs.rend(); ++it ) {
-        res = System::ConcatePath( System::ConcatePath( *it, "files" ), "lang" );
-        if ( System::IsDirectory( res ) )
-            return res;
-    }
-#endif
-
-    return "";
-}
-
-bool Settings::MusicExt() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC_EXT );
-}
 bool Settings::MusicMIDI() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_MIDI );
-}
-bool Settings::MusicCD() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC_CD );
-}
-
-/* return sound */
-bool Settings::Sound() const
-{
-    return opt_global.Modes( GLOBAL_SOUND );
-}
-
-/* return music */
-bool Settings::Music() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC );
 }
 
 /* return move speed */
@@ -1059,16 +877,6 @@ void Settings::setFullScreen( const bool enable )
     }
 }
 
-void Settings::setShowIntro( const bool enable )
-{
-    if ( enable ) {
-        opt_global.SetModes( GLOBAL_SHOW_INTRO );
-    }
-    else {
-        opt_global.ResetModes( GLOBAL_SHOW_INTRO );
-    }
-}
-
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -1089,11 +897,6 @@ void Settings::SetScrollSpeed( int speed )
         scroll_speed = SCROLL_NORMAL;
         break;
     }
-}
-
-bool Settings::UseAltResource() const
-{
-    return opt_global.Modes( GLOBAL_ALTRESOURCE );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
@@ -1133,12 +936,6 @@ bool Settings::ShowStatus() const
     return opt_global.Modes( GLOBAL_SHOWSTATUS );
 }
 
-/* unicode support */
-bool Settings::Unicode() const
-{
-    return opt_global.Modes( GLOBAL_USEUNICODE );
-}
-
 bool Settings::BattleShowGrid() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
@@ -1176,7 +973,6 @@ void Settings::SetDebug( int d )
     Logging::SetDebugLevel( debug );
 }
 
-/**/
 void Settings::SetGameDifficulty( int d )
 {
     game_difficulty = d;
@@ -1215,7 +1011,7 @@ void Settings::SetMusicVolume( int v )
 /* Set music type: check MusicSource enum */
 void Settings::SetMusicType( int v )
 {
-    _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>( v );
+    _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
 }
 
 /* check game type */
@@ -1275,11 +1071,6 @@ const std::string & Settings::MapsDescription() const
     return current_maps_file.description;
 }
 
-const std::string & Settings::externalMusicCommand() const
-{
-    return _externalMusicCommand;
-}
-
 int Settings::MapsDifficulty() const
 {
     return current_maps_file.difficulty;
@@ -1300,12 +1091,12 @@ bool Settings::GameStartWithHeroes() const
     return current_maps_file.startWithHeroInEachCastle;
 }
 
-int Settings::ConditionWins() const
+uint32_t Settings::ConditionWins() const
 {
     return current_maps_file.ConditionWins();
 }
 
-int Settings::ConditionLoss() const
+uint32_t Settings::ConditionLoss() const
 {
     return current_maps_file.ConditionLoss();
 }
@@ -1350,11 +1141,6 @@ int Settings::controllerPointerSpeed() const
     return _controllerPointerSpeed;
 }
 
-void Settings::SetUnicode( bool f )
-{
-    f ? opt_global.SetModes( GLOBAL_USEUNICODE ) : opt_global.ResetModes( GLOBAL_USEUNICODE );
-}
-
 void Settings::EnablePriceOfLoyaltySupport( const bool set )
 {
     if ( set ) {
@@ -1390,16 +1176,6 @@ void Settings::SetBattleMovementShaded( bool f )
 void Settings::SetBattleMouseShaded( bool f )
 {
     f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
-}
-
-void Settings::ResetSound()
-{
-    opt_global.ResetModes( GLOBAL_SOUND );
-}
-
-void Settings::ResetMusic()
-{
-    opt_global.ResetModes( GLOBAL_MUSIC );
 }
 
 void Settings::SetShowPanel( bool f )
@@ -1507,11 +1283,6 @@ bool Settings::ExtCastleGuildRestorePointsTurn() const
 bool Settings::ExtCastleAllowGuardians() const
 {
     return ExtModes( CASTLE_ALLOW_GUARDIANS );
-}
-
-bool Settings::ExtWorldShowVisitedContent() const
-{
-    return ExtModes( WORLD_SHOW_VISITED_CONTENT );
 }
 
 bool Settings::ExtWorldShowTerrainPenalty() const
@@ -1624,39 +1395,9 @@ bool Settings::ExtGameHideInterface() const
     return ExtModes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::ExtWorldBanWeekOf() const
-{
-    return ExtModes( WORLD_BAN_WEEKOF );
-}
-
-bool Settings::ExtWorldBanMonthOfMonsters() const
-{
-    return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
-}
-
-bool Settings::ExtWorldBanPlagues() const
-{
-    return ExtModes( WORLD_BAN_PLAGUES );
-}
-
 bool Settings::ExtBattleReverseWaitOrder() const
 {
     return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
-}
-
-bool Settings::ExtWorldStartHeroLossCond4Humans() const
-{
-    return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtWorldOneHeroHiredEveryWeek() const
-{
-    return ExtModes( WORLD_1HERO_HIRED_EVERY_WEEK );
-}
-
-bool Settings::ExtCastleOneHeroHiredEveryWeek() const
-{
-    return ExtModes( CASTLE_1HERO_HIRED_EVERY_WEEK );
 }
 
 bool Settings::ExtWorldNeutralArmyDifficultyScaling() const
@@ -1790,7 +1531,7 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
+    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
         << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
 
     return msg;

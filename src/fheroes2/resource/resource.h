@@ -111,7 +111,7 @@ StreamBase & operator>>( StreamBase &, Funds & );
 namespace Resource
 {
     const char * String( int resource );
-    int Rand( bool with_gold = false );
+    int Rand( const bool includeGold );
 
     /* return index sprite objnrsrc.icn */
     u32 GetIndexSprite( int resource );

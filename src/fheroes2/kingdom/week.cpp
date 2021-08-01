@@ -114,14 +114,12 @@ const char * Week::GetName( void ) const
 
 int Week::WeekRand( void )
 {
-    return ( ( 0 == ( world.CountWeek() + 1 ) % 3 ) && ( !Settings::Get().ExtWorldBanWeekOf() ) ) ? static_cast<int>( MONSTERS ) : Rand::Get( ANT, CONDOR );
+    return ( 0 == ( world.CountWeek() + 1 ) % 3 ) ? static_cast<int>( MONSTERS ) : Rand::Get( ANT, CONDOR );
 }
 
 int Week::MonthRand( void )
 {
-    return ( ( 0 == ( world.GetMonth() + 1 ) % 3 ) && ( !Settings::Get().ExtWorldBanWeekOf() ) )
-               ? static_cast<int>( MONSTERS )
-               : Rand::Get( Settings::Get().ExtWorldBanPlagues() ? ANT : PLAGUE, CONDOR );
+    return ( 0 == ( world.GetMonth() + 1 ) % 3 ) ? static_cast<int>( MONSTERS ) : Rand::Get( PLAGUE, CONDOR );
 }
 
 StreamBase & operator>>( StreamBase & sb, Week & st )

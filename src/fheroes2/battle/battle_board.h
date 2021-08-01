@@ -57,7 +57,7 @@ namespace Battle
 
         s32 GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
-        Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
+        Indexes GetPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
         void SetEnemyQuality( const Unit & ) const;
         void SetPositionQuality( const Unit & ) const;
@@ -74,7 +74,6 @@ namespace Battle
         static bool isCastleIndex( s32 );
         static bool isMoatIndex( s32 index, const Unit & b );
         static bool isBridgeIndex( s32 index, const Unit & b );
-        static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
@@ -112,6 +111,12 @@ namespace Battle
 
     private:
         void SetCobjObject( const int icn, const int32_t dst );
+
+        bool GetPathForUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentCellId,
+                             std::vector<bool> & visitedCells, Indexes & result ) const;
+        bool GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
+                                 const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const;
+        void StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const;
     };
 }
 

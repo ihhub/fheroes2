@@ -34,9 +34,7 @@
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "luck.h"
 #include "maps_tiles.h"
-#include "morale.h"
 #include "mus.h"
 #include "payment.h"
 #include "race.h"
@@ -237,7 +235,7 @@ namespace AI
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
-        const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        const int object = tile.GetObject( dst_index != hero.GetIndex() );
         bool isAction = true;
 
         const bool isActionObject = MP2::isActionObject( object, hero.isShipMaster() );
@@ -480,6 +478,7 @@ namespace AI
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_SIRENS:
+        case MP2::OBJ_ALCHEMYTOWER:
             // AI has no advantage or knowledge to use this object.
             break;
         default:
@@ -494,9 +493,6 @@ namespace AI
         // ignore empty tiles
         if ( isAction )
             AI::Get().HeroesActionComplete( hero );
-
-        // reset if during an action music was stopped
-        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
     }
 
     void AIToHeroes( Heroes & hero, s32 dst_index )
@@ -550,10 +546,12 @@ namespace AI
     void AIToCastle( Heroes & hero, s32 dst_index )
     {
         const Settings & conf = Settings::Get();
-        Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ) );
-
-        if ( !castle )
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
+        if ( castle == nullptr ) {
+            // Something is wrong while calling this function for incorrect tile.
+            assert( 0 );
             return;
+        }
 
         if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
@@ -630,38 +628,47 @@ namespace AI
         Maps::Tiles & tile = world.GetTiles( dst_index );
         Troop troop = tile.QuantityTroop();
 
-        JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+        const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
-        // free join
-        if ( JOIN_FREE == join.first ) {
-            // join if ranged or flying monsters present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
+        if ( join.reason == NeutralMonsterJoiningCondition::Reason::Alliance ) {
+            if ( hero.GetArmy().CanJoinTroop( troop ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << " as a part of alliance." );
+                hero.GetArmy().JoinTroop( troop );
+            }
+            else {
+                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " unblock way for " << hero.GetName() << " as a part of alliance." );
+            }
+
+            destroy = true;
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Bane ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() << " as a part of bane." );
+            destroy = true;
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
+            if ( hero.GetArmy().CanJoinTroop( troop ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << "." );
                 hero.GetArmy().JoinTroop( troop );
                 destroy = true;
             }
-            else
-                join.first = JOIN_NONE;
         }
-        else
-            // join with cost
-            if ( JOIN_COST == join.first ) {
-            // join if archers or fly or present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
-                u32 gold = troop.GetCost().gold;
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
-                hero.GetArmy().JoinTroop( troop(), join.second );
-                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
+            const int32_t joiningCost = troop.GetCost().gold;
+            if ( hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) && hero.GetArmy().CanJoinTroop( troop ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
+                hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
                 destroy = true;
             }
-            else
-                join.first = JOIN_NONE;
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
+            // TODO: AI should still chase monsters which it can defeat without losses to get extra experience.
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() << "." );
+            destroy = true;
         }
 
-        // bool allow_move = false;
-
         // fight
-        if ( JOIN_NONE == join.first ) {
+        if ( !destroy ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() );
             Army army( tile );
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -669,18 +676,14 @@ namespace AI
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 destroy = true;
-                // allow_move = true;
             }
             else {
                 AIBattleLose( hero, res, true, Color::NONE );
-                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+                tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
         }
-        // unknown
-        else
-            destroy = true;
 
         if ( destroy ) {
             tile.RemoveObjectSprite();
@@ -884,7 +887,7 @@ namespace AI
         int indexTo = world.NextTeleport( index_from );
 
         const Route::Path & path = hero.GetPath();
-        if ( path.size() ) {
+        if ( !path.empty() ) {
             const int dest = path.front().GetIndex();
             while ( indexTo != dest ) {
                 indexTo = world.NextTeleport( index_from );
@@ -1691,7 +1694,7 @@ namespace AI
 
             hero.SetMove( false );
         }
-        else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
+        else if ( !path.empty() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
                 hero.Action( hero.GetIndex(), true );
         }

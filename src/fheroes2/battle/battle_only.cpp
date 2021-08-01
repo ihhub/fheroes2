@@ -91,7 +91,6 @@ Battle::Only::Only()
 bool Battle::Only::ChangeSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
@@ -115,15 +114,6 @@ bool Battle::Only::ChangeSettings( void )
 
     const fheroes2::Rect rtKnowledge1( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
     const fheroes2::Rect rtKnowledge2( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
-
-    if ( conf.IsGameType( Game::TYPE_NETWORK ) ) {
-        player2.SetColor( Color::RED );
-
-        player1.SetControl( CONTROL_REMOTE );
-        player2.SetControl( CONTROL_REMOTE );
-
-        hero2 = world.GetHeroes( Heroes::ZOM );
-    }
 
     hero1 = world.GetHeroes( Heroes::LORDKILBURN );
     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );

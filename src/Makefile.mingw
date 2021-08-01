@@ -1,18 +1,5 @@
-# ifndef WITHOUT_AUDIOCD
-# CFLAGS := $(CFLAGS) -DWITH_AUDIOCD
-# endif
-
-# ifndef WITHOUT_NETWORK
-# LIBS := $(LIBS) -lwsock32
-# endif
-
 AR := ar
 CXX := g++
 WINDRES := windres
 LIBS := $(LIBS) -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
 # Static winpthread linking https://stackoverflow.com/a/28001261
-
-ifndef WITHOUT_UNICODE
-CFLAGS := $(CFLAGS) -DWITH_ICONV
-LIBS := $(LIBS) -liconv
-endif

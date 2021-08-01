@@ -71,15 +71,38 @@ namespace
 
         return indicies;
     }
+
+    Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes = true )
+    {
+        Maps::Indexes result;
+        for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+            if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
+                result.push_back( indexes[idx] );
+            }
+        }
+        return result;
+    }
+
+    Maps::Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true )
+    {
+        Maps::Indexes result;
+        const int32_t size = static_cast<int32_t>( world.getSize() );
+        for ( int32_t idx = 0; idx < size; ++idx ) {
+            if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
+                result.push_back( idx );
+            }
+        }
+        return result;
+    }
 }
 
-struct ComparsionDistance
+struct ComparisonDistance
 {
-    explicit ComparsionDistance( const int32_t index )
+    explicit ComparisonDistance( const int32_t index )
         : centerPoint( Maps::GetPoint( index ) )
     {}
 
-    ComparsionDistance() = delete;
+    ComparisonDistance() = delete;
 
     bool operator()( const int32_t index1, const int32_t index2 ) const
     {
@@ -97,32 +120,9 @@ struct ComparsionDistance
     const fheroes2::Point centerPoint;
 };
 
-Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes /* = true */ )
-{
-    Maps::Indexes result;
-    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
-            result.push_back( indexes[idx] );
-        }
-    }
-    return result;
-}
-
-Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /* = true */ )
-{
-    Maps::Indexes result;
-    const int32_t size = static_cast<int32_t>( world.getSize() );
-    for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
-            result.push_back( idx );
-        }
-    }
-    return result;
-}
-
 const char * Maps::SizeString( int s )
 {
-    const char * mapsize[] = {"Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" )};
+    const char * mapsize[] = { "Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" ) };
 
     switch ( s ) {
     case SMALL:
@@ -347,7 +347,7 @@ Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t max
     }
 
     if ( sortTiles ) {
-        std::sort( results.begin(), results.end(), ComparsionDistance( tileIndex ) );
+        std::sort( results.begin(), results.end(), ComparisonDistance( tileIndex ) );
     }
 
     return results;
@@ -396,6 +396,13 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const
     return MapsIndexesFilteredObject( results, obj, ignoreHeroes );
 }
 
+Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
+{
+    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
+    return results;
+}
+
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
@@ -416,32 +423,8 @@ Maps::Indexes Maps::GetObjectPositions( int obj, bool ignoreHeroes )
 Maps::Indexes Maps::GetObjectPositions( int32_t center, int obj, bool ignoreHeroes )
 {
     Indexes results = MapsIndexesObject( obj, ignoreHeroes );
-    std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
+    std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return results;
-}
-
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<uint8_t> & objs )
-{
-    if ( objs.size() == 1 ) {
-        return MapsIndexesObject( objs[0], true );
-    }
-
-    Maps::Indexes result;
-    if ( objs.empty() )
-        return result;
-
-    const int32_t size = static_cast<int32_t>( world.getSize() );
-    for ( int32_t idx = 0; idx < size; ++idx ) {
-        const int objectID = world.GetTiles( idx ).GetObject( true );
-
-        for ( const uint8_t obj : objs ) {
-            if ( obj == objectID ) {
-                result.push_back( idx );
-                break;
-            }
-        }
-    }
-    return result;
 }
 
 bool MapsTileIsUnderProtection( int32_t from, int32_t index ) /* from: center, index: monster */
@@ -528,28 +511,16 @@ uint32_t Maps::GetApproximateDistance( const int32_t pos1, const int32_t pos2 )
     return std::max( sz.width, sz.height ) + std::min( sz.width, sz.height ) / 2;
 }
 
-void Maps::MinimizeAreaForCastle( const fheroes2::Point & center )
+void Maps::ReplaceRandomCastleObjectId( const fheroes2::Point & center )
 {
     // Reset castle ID
     for ( int32_t y = -3; y < 2; ++y ) {
         for ( int32_t x = -2; x < 3; ++x ) {
             Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
 
-            if ( MP2::OBJN_RNDCASTLE == tile.GetObject() || MP2::OBJN_RNDTOWN == tile.GetObject() || MP2::OBJN_CASTLE == tile.GetObject() )
-                tile.setAsEmpty();
-        }
-    }
-
-    // set minimum area castle ID
-    for ( int32_t y = -1; y < 1; ++y ) {
-        for ( int32_t x = -2; x < 3; ++x ) {
-            Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
-
-            // skip angle
-            if ( y == -1 && ( x == -2 || x == 2 ) )
-                continue;
-
-            tile.SetObject( MP2::OBJN_CASTLE );
+            if ( MP2::OBJN_RNDCASTLE == tile.GetObject() || MP2::OBJN_RNDTOWN == tile.GetObject() ) {
+                tile.SetObject( MP2::OBJN_CASTLE );
+            }
         }
     }
 
@@ -608,10 +579,10 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
         const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
 
-        static const int castleCoordinates[16][2]
-            = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
-        static const int shadowCoordinates[16][2]
-            = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1}, {-1, -1}, {-4, 0}, {-3, 0}, {-2, 0}, {-1, 0}, {-3, 1}, {-2, 1}, {-1, 1}};
+        static const int castleCoordinates[16][2] = { { 0, -3 }, { -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 }, { -2, -1 }, { -1, -1 },
+                                                      { 0, -1 }, { 1, -1 },  { 2, -1 },  { -2, 0 }, { -1, 0 }, { 0, 0 },  { 1, 0 },   { 2, 0 } };
+        static const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
+                                                      { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
@@ -641,29 +612,12 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     }
 }
 
-int Maps::TileIsCoast( int32_t center, int filter )
-{
-    int result = 0;
-    const Directions & directions = Direction::All();
-
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( ( *it & filter ) && isValidDirection( center, *it ) && world.GetTiles( GetDirectionIndex( center, *it ) ).isWater() )
-            result |= *it;
-
-    return result;
-}
-
 StreamBase & operator>>( StreamBase & sb, IndexObject & st )
 {
     return sb >> st.first >> st.second;
 }
 
 StreamBase & operator>>( StreamBase & sb, ObjectColor & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & operator>>( StreamBase & sb, ResourceCount & st )
 {
     return sb >> st.first >> st.second;
 }
