@@ -195,7 +195,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
             // Computer or human.
             index = 3 + Color::GetIndex( player.GetColor() );
         }
-            
+
         // wide sprite offset
         if ( show_name )
             index += 24;
