@@ -156,3 +156,40 @@ jobs:
         allowUpdates: true
         prerelease: true
         replacesArtifacts: true
+  build-switch:
+    name: Make (Nintendo Switch)
+    runs-on: ubuntu-latest
+    container: devkitpro/devkita64:latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gettext
+    - name: Build
+      run: |
+        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        make -f Makefile.switch -j 2
+        cd files/lang
+        make -j 2
+      env:
+        FHEROES2_STRICT_COMPILATION: ON
+        DEVKITPRO: /opt/devkitpro
+    - name: Create package
+      if: ${{ github.event_name == 'push' }}
+      run: |
+        cp docs/README.txt .
+        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE fheroes2.key changelog.txt README.txt files/lang/*.mo
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: fheroes2_switch_sdl2.zip
+        body: ${{ github.event.commits[0].message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Nintendo Switch build with SDL 2.0 support (latest commit)
+        tag: fheroes2-switch-sdl2_dev
+        allowUpdates: true
+        prerelease: true
+        replacesArtifacts: true
