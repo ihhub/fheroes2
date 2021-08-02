@@ -1545,17 +1545,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     u32 opt_game = 0; // skip: settings
 
     // map file
-    msg >> conf.current_maps_file;
-
-    // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE remove this check.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove the check below" );
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_094_RELEASE ) {
-        msg >> conf.current_maps_file._version;
-    }
-
-    msg >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle >> conf.opt_addons
-        >> conf.players;
+    msg >> conf.current_maps_file >> conf.current_maps_file._version >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game
+        >> conf.opt_world >> conf.opt_battle >> conf.opt_addons >> conf.players;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

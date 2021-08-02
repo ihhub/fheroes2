@@ -221,7 +221,7 @@ public:
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
 
-    void AddTributeEvents( CapturedObjects &, u32 day, int obj );
+    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const int objectType );
 
     u32 size( void ) const;
 

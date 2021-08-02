@@ -842,28 +842,29 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const int objectType )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() ) {
-            const int color = kingdoms[ii].GetColor();
-            const Funds & funds = captureobj.TributeCapturedObject( color, obj );
+    for ( uint32_t i = 0; i < size(); ++i ) {
+        if ( kingdoms[i].isPlay() ) {
+            const int color = kingdoms[i].GetColor();
+            const Funds & funds = captureobj.TributeCapturedObject( color, objectType );
 
-            kingdoms[ii].AddFundsResource( funds );
+            kingdoms[i].AddFundsResource( funds );
 
             // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdoms[ii].isControlHuman() ) {
+            if ( funds.GetValidItemsCount() && kingdoms[i].isControlHuman() ) {
                 EventDate event;
 
                 event.computer = true;
                 event.first = day;
                 event.colors = color;
                 event.resource = funds;
-                event.message = MP2::StringObject( obj );
+                event.title = MP2::StringObject( objectType );
 
                 world.AddEventDate( event );
             }
         }
+    }
 }
 
 // Check if tile is visible from any crystal ball of any hero
