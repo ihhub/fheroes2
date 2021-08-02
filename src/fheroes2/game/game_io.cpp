@@ -195,17 +195,17 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     // check version: false
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION ) {
-        std::string warningMessage( _( "Usupported save format: " ) );
-        warningMessage += std::to_string( binver );
-        warningMessage += ".\n";
-        warningMessage += _( "Current game version: " );
-        warningMessage += std::to_string( CURRENT_FORMAT_VERSION );
-        warningMessage += ".\n";
-        warningMessage += _( "Last supported version: " );
-        warningMessage += std::to_string( LAST_SUPPORTED_FORMAT_VERSION );
-        warningMessage += ".\n";
+        std::string errorMessage( _( "Usupported save format: " ) );
+        errorMessage += std::to_string( binver );
+        errorMessage += ".\n";
+        errorMessage += _( "Current game version: " );
+        errorMessage += std::to_string( CURRENT_FORMAT_VERSION );
+        errorMessage += ".\n";
+        errorMessage += _( "Last supported version: " );
+        errorMessage += std::to_string( LAST_SUPPORTED_FORMAT_VERSION );
+        errorMessage += ".\n";
 
-        Dialog::Message( _( "Error" ), warningMessage, Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Error" ), errorMessage, Font::BIG, Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
