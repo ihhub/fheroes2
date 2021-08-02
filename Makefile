@@ -32,6 +32,8 @@
 
 TARGET	:= fheroes2
 
+.PHONY: all clean
+
 all:
 	$(MAKE) -C src
 	@cp src/dist/$(TARGET) .
