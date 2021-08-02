@@ -3,6 +3,18 @@ description: New feature, request or improvement
 labels: [ improvement ]
 
 body:
+- type: markdown
+  attributes:
+    value: >
+      ## Please note
+
+      The current project improvement policy is mainly focused on making
+      the gameplay more user-friendly and easier to interact with, while
+      keeping the spirit of the original game intact. Make sure the feature
+      you are about to request will be the most useful for the majority of
+      users. We do not accept feature requests related to the overall game
+      balance (such as creating new monsters or castles) or various
+      "improvements" to the appearance of existing game monsters or objects.
 - type: checkboxes
   attributes:
     label: Preliminary checks
