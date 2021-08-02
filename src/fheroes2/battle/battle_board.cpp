@@ -403,6 +403,9 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
 
     std::vector<bool> visitedCells( ARENASIZE, false );
 
+    // Mark the current cell of the unit as visited
+    visitedCells.at( unit.GetHeadIndex() ) = true;
+
     if ( isWideUnit ) {
         GetPathForWideUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), -1, visitedCells, result );
     }
