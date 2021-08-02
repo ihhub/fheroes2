@@ -230,12 +230,17 @@ namespace
 #define SDL_CONTROLLER_BUTTON_DPAD_RIGHT 14
 #define SDL_CONTROLLER_BUTTON_DPAD_UP 11
 #define SDL_CONTROLLER_BUTTON_DPAD_DOWN 12
-#define BTN_Y 2
-#define BTN_X 3
-#define BTN_L 9
-#define BTN_R 10
-#define BTN_PLUS 6
-#define BTN_MINUS 4
+
+enum SwitchJoyconKeys
+{
+    SWITCH_BUTTON_Y = 2,
+    SWITCH_BUTTON_X = 3,
+    SWITCH_BUTTON_MINUS = 4,
+    SWITCH_BUTTON_PLUS = 6,
+    SWITCH_BUTTON_L = 9,
+    SWITCH_BUTTON_R = 10
+};
+
 #endif
 
 LocalEvent::LocalEvent()
@@ -1438,22 +1443,22 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         }
 #if defined( __SWITCH__ )
         // Custom button mapping for Nintendo Switch
-        if ( button.button == BTN_Y ) {
+        if ( button.button == SWITCH_BUTTON_Y ) {
             key_value = KEY_RETURN;
         }
-        else if ( button.button == BTN_X ) {
+        else if ( button.button == SWITCH_BUTTON_X ) {
             key_value = KEY_ESCAPE;
         }
-        else if ( button.button == BTN_R ) {
+        else if ( button.button == SWITCH_BUTTON_R ) {
             key_value = KEY_t;
         }
-        else if ( button.button == BTN_L ) {
+        else if ( button.button == SWITCH_BUTTON_L ) {
             key_value = KEY_h;
         }
-        else if ( button.button == BTN_MINUS ) {
+        else if ( button.button == SWITCH_BUTTON_MINUS ) {
             key_value = KEY_e;
         }
-        else if ( button.button == BTN_PLUS ) {
+        else if ( button.button == SWITCH_BUTTON_PLUS ) {
             key_value = KEY_c;
         }
 #endif

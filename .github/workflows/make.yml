@@ -180,8 +180,8 @@ jobs:
     - name: Create package
       if: ${{ github.event_name == 'push' }}
       run: |
-        cp docs/README.txt .
-        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE fheroes2.key changelog.txt README.txt files/lang/*.mo
+        cp docs/README.txt docs/README_switch.md .
+        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE fheroes2.key changelog.txt README.txt README_switch.md files/lang/*.mo
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
