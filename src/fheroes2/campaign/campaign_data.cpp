@@ -414,7 +414,7 @@ namespace
         const std::string wizardsIsleCampaignScenarioNames[4] = { _( "The Shrouded Isles" ), _( "The Eternal Scrolls" ), _( "Power's End" ), _( "Fount of Wizardry" ) };
         const std::string wizardsIsleCampaignDescription[4] = {
             _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
-            _( "The location of the great library has been dicovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
+            _( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
             _( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
             _( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
