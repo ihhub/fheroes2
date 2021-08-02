@@ -32,10 +32,6 @@
 #include "serialize.h"
 #include "spell_storage.h"
 
-#define ARENAW 11
-#define ARENAH 9
-#define ARENASIZE ARENAW * ARENAH
-
 class Castle;
 class HeroBase;
 
