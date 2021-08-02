@@ -216,6 +216,28 @@ namespace
 #endif
 }
 
+// Custom button mapping for Nintendo Switch
+#if defined( __SWITCH__ )
+#undef SDL_CONTROLLER_BUTTON_A
+#undef SDL_CONTROLLER_BUTTON_B
+#undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
+#undef SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+#undef SDL_CONTROLLER_BUTTON_DPAD_UP
+#undef SDL_CONTROLLER_BUTTON_DPAD_DOWN
+#define SDL_CONTROLLER_BUTTON_A 1
+#define SDL_CONTROLLER_BUTTON_B 0
+#define SDL_CONTROLLER_BUTTON_DPAD_LEFT 13
+#define SDL_CONTROLLER_BUTTON_DPAD_RIGHT 14
+#define SDL_CONTROLLER_BUTTON_DPAD_UP 11
+#define SDL_CONTROLLER_BUTTON_DPAD_DOWN 12
+#define BTN_Y 2
+#define BTN_X 3
+#define BTN_L 9
+#define BTN_R 10
+#define BTN_PLUS 6
+#define BTN_MINUS 4
+#endif
+
 LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( KEY_NONE )
@@ -1414,6 +1436,27 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = KEY_RETURN;
         }
+#if defined( __SWITCH__ )
+        // Custom button mapping for Nintendo Switch
+        if ( button.button == BTN_Y ) {
+            key_value = KEY_RETURN;
+        }
+        else if ( button.button == BTN_X ) {
+            key_value = KEY_ESCAPE;
+        }
+        else if ( button.button == BTN_R ) {
+            key_value = KEY_t;
+        }
+        else if ( button.button == BTN_L ) {
+            key_value = KEY_h;
+        }
+        else if ( button.button == BTN_MINUS ) {
+            key_value = KEY_e;
+        }
+        else if ( button.button == BTN_PLUS ) {
+            key_value = KEY_c;
+        }
+#endif
     }
 }
 
