@@ -26,9 +26,6 @@
 
 std::string Luck::String( int luck )
 {
-    static const std::string str_luck[]
-        = {, , , , , , , };
-
     switch ( luck ) {
     case Luck::CURSED:
         return _( "luck|Cursed" );
