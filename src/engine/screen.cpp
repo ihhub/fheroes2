@@ -745,7 +745,7 @@ namespace
 #if defined( __SWITCH__ )
                 // Nintendo Switch supports arbitrary resolutions via the HW scaler
                 // 848x480 is the smallest resolution supported by Free Heroes 2
-                resolutionSet.emplace( fheroes2::Size( 848, 480 ) );
+                resolutionSet.emplace( 848, 480 );
 #endif
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
