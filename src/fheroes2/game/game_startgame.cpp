@@ -327,13 +327,15 @@ void ShowNewWeekDialog( void )
 void ShowEventDayDialog( void )
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
+    const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
 
-    for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
-        if ( ( *it ).resource.GetValidItemsCount() )
-            Dialog::ResourceInfo( "", ( *it ).message, ( *it ).resource );
-        else if ( !( *it ).message.empty() )
-            Dialog::Message( "", ( *it ).message, Font::BIG, Dialog::OK );
+    for ( const EventDate & event : events ) {
+        if ( event.resource.GetValidItemsCount() ) {
+            Dialog::ResourceInfo( event.title, event.message, event.resource );
+        }
+        else if ( !event.message.empty() ) {
+            Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
+        }
     }
 }
 

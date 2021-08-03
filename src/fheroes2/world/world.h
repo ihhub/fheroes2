@@ -144,6 +144,8 @@ struct EventDate
     int colors;
     bool computer;
     std::string message;
+
+    std::string title;
 };
 
 StreamBase & operator<<( StreamBase &, const EventDate & );
