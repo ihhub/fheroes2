@@ -59,7 +59,7 @@ namespace Color
         ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
     };
 
-    const std::string & String( int );
+    std::string String( int );
     int Count( int );
     int GetIndex( int );
     int GetFirst( int );
