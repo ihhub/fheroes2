@@ -102,7 +102,7 @@ LIBS := $(SDL_LIBS) $(LIBS)
 
 export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 
-.PHONY: clean
+.PHONY: all clean
 
 all:
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
