@@ -956,10 +956,12 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 {
     if ( isValidIndex( position ) && dir != UNKNOWN ) {
         Board * board = Arena::GetBoard();
-        if ( dir == CENTER )
+        if ( dir == CENTER ) {
             return &board->at( position );
-        else if ( isValidDirection( position, dir ) )
+        }
+        if ( isValidDirection( position, dir ) ) {
             return &board->at( GetIndexDirection( position, dir ) );
+        }
     }
 
     return nullptr;
