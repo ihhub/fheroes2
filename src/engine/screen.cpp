@@ -742,6 +742,11 @@ namespace
                     }
                 }
 
+#if defined( __SWITCH__ )
+                // Nintendo Switch supports arbitrary resolutions via the HW scaler
+                // 848x480 is the smallest resolution supported by Free Heroes 2
+                resolutionSet.emplace( 848, 480 );
+#endif
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
 
@@ -1002,8 +1007,13 @@ namespace
             _currentScreenResolution.width = displayMode.w;
             _currentScreenResolution.height = displayMode.h;
 
+#if defined( __SWITCH__ )
+            // On a Nintendo Switch the game is always fullscreen
+            _activeWindowROI = fheroes2::Rect( 0, 0, _currentScreenResolution.width, _currentScreenResolution.height );
+#else
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
+#endif
         }
     };
 #else
