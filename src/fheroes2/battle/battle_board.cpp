@@ -313,8 +313,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
             }
 
             // In the moat it is only allowed to turn back, do not let the unit pass through the moat
-            if ( ( tailCellId != currentHeadCellId || !isMoatIndex( tailCellId, unit ) )
-                 && ( headCellId != currentTailCellId || !isMoatIndex( headCellId, unit ) ) ) {
+            if ( ( tailCellId != currentHeadCellId || !isMoatIndex( tailCellId, unit ) ) && ( headCellId != currentTailCellId || !isMoatIndex( headCellId, unit ) ) ) {
                 continue;
             }
         }
