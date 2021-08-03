@@ -35,7 +35,7 @@ namespace Difficulty
         IMPOSSIBLE
     };
 
-    const std::string & String( int );
+    std::string String( int );
 
     int GetScoutingBonus( int difficulty );
     double GetGoldIncomeBonus( int difficulty );

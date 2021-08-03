@@ -23,27 +23,24 @@
 #include "difficulty.h"
 #include "translations.h"
 
-const std::string & Difficulty::String( int difficulty )
+std::string Difficulty::String( int difficulty )
 {
-    static const std::string str_difficulty[]
-        = {_( "difficulty|Easy" ), _( "difficulty|Normal" ), _( "difficulty|Hard" ), _( "difficulty|Expert" ), _( "difficulty|Impossible" ), "Unknown"};
-
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return str_difficulty[0];
+        return _( "difficulty|Easy" );
     case Difficulty::NORMAL:
-        return str_difficulty[1];
+        return _( "difficulty|Normal" );
     case Difficulty::HARD:
-        return str_difficulty[2];
+        return _( "difficulty|Hard" );
     case Difficulty::EXPERT:
-        return str_difficulty[3];
+        return _( "difficulty|Expert" );
     case Difficulty::IMPOSSIBLE:
-        return str_difficulty[4];
+        return _( "difficulty|Impossible" );
     default:
         break;
     }
 
-    return str_difficulty[5];
+    return "Unknown";
 }
 
 int Difficulty::GetScoutingBonus( int difficulty )
