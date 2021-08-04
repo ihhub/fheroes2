@@ -17,6 +17,8 @@ Precompiled binaries of the release version are currently available for the foll
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
+* [**PlayStation Vita**](README_PSV.md)
+* [**Nintendo Switch**](README_switch.md)
 
 Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots-latest-builds).
 
@@ -149,6 +151,6 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 [**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev)
 ),
-[**PS Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
+[**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
 [**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch-sdl2_dev).
 **These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers. DON'T EXPECT THEM TO WORK PROPERLY.**
