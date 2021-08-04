@@ -475,10 +475,10 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         }
         else if ( le.MouseWheelUp() ) {
-            return roi.ChangeZoom( true );
+            return roi.zoomIn();
         }
         else if ( le.MouseWheelDn() ) {
-            return roi.ChangeZoom( false );
+            return roi.zoomOut();
         }
     }
     return false;

@@ -420,14 +420,23 @@ bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
     return true;
 }
 
-bool ViewWorld::ZoomROIs::ChangeZoom( const bool zoomIn, const bool cycle )
+bool ViewWorld::ZoomROIs::changeZoom( const ZoomLevel newLevel )
 {
-    ViewWorld::ZoomLevel newLevel = zoomIn ? GetNextZoomLevel( _zoomLevel, cycle ) : GetPreviousZoomLevel( _zoomLevel, cycle );
-    if ( newLevel == _zoomLevel ) {
-        return false;
-    }
+    bool changed = ( newLevel != _zoomLevel );
     _zoomLevel = newLevel;
-    return true;
+    return changed;
+}
+
+bool ViewWorld::ZoomROIs::zoomIn( const bool cycle )
+{
+    const ZoomLevel newLevel = GetNextZoomLevel( _zoomLevel, cycle );
+    return changeZoom( newLevel );
+}
+
+bool ViewWorld::ZoomROIs::zoomOut( const bool cycle )
+{
+    const ZoomLevel newLevel = GetPreviousZoomLevel( _zoomLevel, cycle );
+    return changeZoom( newLevel );
 }
 
 const fheroes2::Rect & ViewWorld::ZoomROIs::GetROIinPixels() const
@@ -517,7 +526,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {
-            changed = currentROI.ChangeZoom( false, true );
+            changed = currentROI.zoomOut( true );
         }
         else if ( le.MouseCursor( radar.GetRect() ) ) {
             changed = radar.QueueEventProcessingForWorldView( currentROI );
@@ -537,10 +546,10 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             }
         }
         else if ( le.MouseWheelUp() ) {
-            changed = currentROI.ChangeZoom( true );
+            changed = currentROI.zoomIn();
         }
         else if ( le.MouseWheelDn() ) {
-            changed = currentROI.ChangeZoom( false );
+            changed = currentROI.zoomOut();
         }
 
         if ( !le.MousePressLeft( visibleScreenInPixels ) || !le.MouseCursor( visibleScreenInPixels ) ) {
