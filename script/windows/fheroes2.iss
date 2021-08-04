@@ -19,6 +19,20 @@ OutputDir={#BuildDir}
 ArchitecturesInstallIn64BitMode=x64
 #endif
 
+[Components]
+Name: "lang"; Description: "Localizations"; Types: full
+Name: "lang\pt"; Description: "Brazilian Portuguese"; Types: full
+Name: "lang\cs"; Description: "Czech"; Types: full
+Name: "lang\nl"; Description: "Dutch"; Types: full
+Name: "lang\fr"; Description: "French"; Types: full
+Name: "lang\hu"; Description: "Hungarian"; Types: full
+Name: "lang\lt"; Description: "Lithuanian"; Types: full
+Name: "lang\pl"; Description: "Polish"; Types: full
+Name: "lang\ru"; Description: "Russian"; Types: full
+Name: "lang\es"; Description: "Spanish"; Types: full
+Name: "lang\sv"; Description: "Swedish"; Types: full
+Name: "lang\tr"; Description: "Turkish"; Types: full
+
 [Files]
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"
 Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
@@ -36,7 +50,17 @@ Source: "..\demo\demo_windows.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
-Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
+Source: "..\..\files\lang\cs.mo"; DestDir: "{app}\files\lang"; Components: "lang\cs"
+Source: "..\..\files\lang\es.mo"; DestDir: "{app}\files\lang"; Components: "lang\es"
+Source: "..\..\files\lang\fr.mo"; DestDir: "{app}\files\lang"; Components: "lang\fr"
+Source: "..\..\files\lang\hu.mo"; DestDir: "{app}\files\lang"; Components: "lang\hu"
+Source: "..\..\files\lang\lt.mo"; DestDir: "{app}\files\lang"; Components: "lang\lt"
+Source: "..\..\files\lang\nl.mo"; DestDir: "{app}\files\lang"; Components: "lang\nl"
+Source: "..\..\files\lang\pl.mo"; DestDir: "{app}\files\lang"; Components: "lang\pl"
+Source: "..\..\files\lang\pt.mo"; DestDir: "{app}\files\lang"; Components: "lang\pt"
+Source: "..\..\files\lang\ru.mo"; DestDir: "{app}\files\lang"; Components: "lang\ru"
+Source: "..\..\files\lang\sv.mo"; DestDir: "{app}\files\lang"; Components: "lang\sv"
+Source: "..\..\files\lang\tr.mo"; DestDir: "{app}\files\lang"; Components: "lang\tr"
 
 [Tasks]
 Name: desktopicon; Description: "Desktop shortcut"
