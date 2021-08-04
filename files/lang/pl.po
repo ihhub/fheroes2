@@ -2696,7 +2696,7 @@ msgstr "Przejmij zamek '%{name}'."
 
 #, fuzzy
 msgid "Capture the town '%{name}'."
-msgstr "Przejmij miasto '%{name}'.
+msgstr "Przejmij miasto '%{name}'."
 
 #, fuzzy
 msgid "Defeat the hero '%{name}'."
