@@ -185,7 +185,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             }
             // dismiss
             if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::EVENT_DISMISS_TROOP ) )
-                 && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                 && Dialog::YES
+                        == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
+                                            Dialog::YES | Dialog::NO ) ) {
                 result = Dialog::DISMISS;
                 break;
             }
