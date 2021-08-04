@@ -913,11 +913,6 @@ bool Maps::Tiles::MonsterJoinConditionFree( void ) const
     return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionForce( void ) const
-{
-    return Monster::JOIN_CONDITION_FORCE == MonsterJoinCondition();
-}
-
 u32 Maps::Tiles::MonsterCount( void ) const
 {
     return ( static_cast<u32>( quantity1 ) << 8 ) | quantity2;
@@ -950,15 +945,14 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         tile.MonsterSetCount( mons.GetRNDSize( true ) );
     }
 
-    // skip join
-    if ( mons.GetID() == Monster::GHOST || mons.isElemental() )
+    if ( mons.GetID() == Monster::GHOST || mons.isElemental() ) {
+        // Ghosts and elementals never join hero's army.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
-    else
-        // fixed count: for money
-        if ( tile.MonsterFixedCount() ||
-             // month of monster
-             ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) )
+    }
+    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+        // Monsters will be willing to join for some amount of money.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+    }
     else {
         // 20% chance for join
         if ( 3 > Rand::Get( 1, 10 ) )

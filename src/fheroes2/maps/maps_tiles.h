@@ -244,7 +244,6 @@ namespace Maps
         /* monster operation */
         bool MonsterJoinConditionSkip( void ) const;
         bool MonsterJoinConditionFree( void ) const;
-        bool MonsterJoinConditionForce( void ) const;
         int MonsterJoinCondition( void ) const;
         void MonsterSetJoinCondition( int );
         void MonsterSetFixedCount( void );
