@@ -27,6 +27,8 @@ PROJECT_VERSION := 0.9.5
 
 PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
 
+.PHONY: all clean
+
 all:
 	$(MAKE) -f Makefile -C src PLATFORM=switch RELEASE=true
 	@cp src/dist/$(TARGET) $(TARGET).elf

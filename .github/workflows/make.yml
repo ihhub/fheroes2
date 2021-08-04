@@ -142,8 +142,7 @@ jobs:
     - name: Create package
       if: ${{ github.event_name == 'push' }}
       run: |
-        cp docs/README.txt .
-        cp docs/README_PSV.md .
+        cp docs/README.txt docs/README_PSV.md .
         zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md files/lang/*.mo
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
