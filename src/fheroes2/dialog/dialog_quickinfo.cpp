@@ -186,8 +186,9 @@ std::string ShowDwellingInfo( const Maps::Tiles & tile, bool owned, bool extende
             str.append( _( "(available: %{count})" ) );
             StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
         }
-        else
-            str.append( "(empty)" );
+        else {
+            str.append( _( "(empty)" ) );
+        }
     }
 
     return str;

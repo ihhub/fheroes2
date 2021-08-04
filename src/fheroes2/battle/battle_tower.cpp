@@ -146,8 +146,9 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
                 msg.append( addn );
                 StringReplace( msg, "%{attack}", twr.GetBonus() );
             }
-            else
-                msg.append( "." );
+            else {
+                msg += '.';
+            }
 
             if ( ( it + 1 ) != towers.end() )
                 msg.append( "\n \n" );

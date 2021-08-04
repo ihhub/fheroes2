@@ -169,7 +169,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    text.Set( "MAX", Font::SMALL );
+    text.Set( _( "MAX" ), Font::SMALL );
     const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
     text.Blit( rectMax.x, rectMax.y );
 
