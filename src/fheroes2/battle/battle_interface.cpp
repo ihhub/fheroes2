@@ -3729,7 +3729,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     StringReplace( msg, "%{tower}", tower.GetName() );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
-        msg.append( " " );
+        msg += ' ';
         msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
         StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
@@ -4933,7 +4933,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                                 humanturn_spell = spell;
                         }
                         else if ( !error.empty() )
-                            Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
+                            Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
                     }
                 }
             }

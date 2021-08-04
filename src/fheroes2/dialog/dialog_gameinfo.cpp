@@ -103,7 +103,7 @@ void Dialog::GameInfo( void )
     text.Set( GameOver::GetActualDescription( conf.ConditionLoss() ), Font::SMALL, 272 );
     text.Blit( pt.x + 130, pt.y + 396 );
 
-    text.Set( "score: " + std::to_string( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
+    text.Set( _( "score: " ) + std::to_string( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
     text.Blit( pt.x + 415 - text.w(), pt.y + 434 );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );

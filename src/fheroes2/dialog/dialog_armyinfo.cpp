@@ -258,7 +258,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     // shot
     if ( troop.isArchers() ) {
         std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
-        message.append( ":" );
+        message += ':';
         text.Set( message );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;
