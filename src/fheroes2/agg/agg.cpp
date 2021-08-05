@@ -47,11 +47,6 @@
 
 namespace AGG
 {
-    // struct fnt_cache_t
-    // {
-    //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
-    // };
-
     struct loop_sound_t
     {
         loop_sound_t( int w, int c )
@@ -74,7 +69,6 @@ namespace AGG
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
     std::vector<loop_sound_t> loop_sounds;
-    // std::map<u32, fnt_cache_t> fnt_cache;
 
     const std::vector<u8> & GetWAV( int m82 );
     const std::vector<u8> & GetMID( int xmi );
