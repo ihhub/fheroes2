@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <cstdlib>
+#include <mutex>
 
 #include "audio_mixer.h"
 #include "audio_music.h"
@@ -40,6 +41,8 @@ namespace
     bool muted = false;
     int savedVolume = 0;
 
+    std::recursive_mutex mutex;
+
     void PlayMusic( Mix_Music * mix, bool loop )
     {
         Music::Reset();
@@ -49,13 +52,16 @@ namespace
         if ( res < 0 ) {
             ERROR_LOG( Mix_GetError() );
         }
-        else
+        else {
             music = mix;
+        }
     }
 }
 
 void Music::Play( const std::vector<u8> & v, bool loop )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( Mixer::isValid() && !v.empty() ) {
         SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -71,24 +77,31 @@ void Music::Play( const std::vector<u8> & v, bool loop )
 
 void Music::Play( const std::string & file, bool loop )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( Mixer::isValid() ) {
         Mix_Music * mix = Mix_LoadMUS( file.c_str() );
 
         if ( !mix ) {
             ERROR_LOG( Mix_GetError() );
         }
-        else
+        else {
             PlayMusic( mix, loop );
+        }
     }
 }
 
 void Music::SetFadeIn( int f )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     fadein = f;
 }
 
 int Music::Volume( int vol )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( !Mixer::isValid() ) {
         return 0;
     }
@@ -112,18 +125,26 @@ int Music::Volume( int vol )
 
 void Music::Pause( void )
 {
-    if ( music )
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
+    if ( music ) {
         Mix_PauseMusic();
+    }
 }
 
 void Music::Reset( void )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( music ) {
-        if ( fadeout )
-            while ( !Mix_FadeOutMusic( fadeout ) && Mix_PlayingMusic() )
+        if ( fadeout ) {
+            while ( !Mix_FadeOutMusic( fadeout ) && Mix_PlayingMusic() ) {
                 SDL_Delay( 50 );
-        else
+            }
+        }
+        else {
             Mix_HaltMusic();
+        }
 
         Mix_FreeMusic( music );
         music = nullptr;
@@ -132,11 +153,15 @@ void Music::Reset( void )
 
 bool Music::isPlaying( void )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     return music && Mix_PlayingMusic();
 }
 
 void Music::Mute()
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( muted || !Mixer::isValid() ) {
         return;
     }
@@ -148,6 +173,8 @@ void Music::Mute()
 
 void Music::Unmute()
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( !muted || !Mixer::isValid() ) {
         return;
     }

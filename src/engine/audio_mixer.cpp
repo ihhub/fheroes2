@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <mutex>
 #include <numeric>
 #include <vector>
 
@@ -44,6 +45,8 @@ namespace
 
     bool muted = false;
     std::vector<int> savedVolumes;
+
+    std::recursive_mutex mutex;
 
     void FreeChannel( int channel )
     {
@@ -79,6 +82,8 @@ namespace
 
 void Mixer::Init( void )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( SDL::SubSystem( SDL_INIT_AUDIO ) ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         Mix_Init( MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD );
@@ -109,6 +114,8 @@ void Mixer::Init( void )
 
 void Mixer::Quit( void )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( SDL::SubSystem( SDL_INIT_AUDIO ) && valid ) {
         Music::Reset();
         Mixer::Reset();
@@ -122,6 +129,8 @@ void Mixer::Quit( void )
 
 void Mixer::SetChannels( int num )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( !valid ) {
         return;
     }
@@ -141,6 +150,8 @@ void Mixer::SetChannels( int num )
 
 int Mixer::Play( const char * file, int channel, bool loop )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( valid ) {
         Mix_Chunk * sample = LoadWAV( file );
         if ( sample ) {
@@ -148,11 +159,14 @@ int Mixer::Play( const char * file, int channel, bool loop )
             return PlayChunk( sample, channel, loop );
         }
     }
+
     return -1;
 }
 
 int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( valid && ptr ) {
         Mix_Chunk * sample = LoadWAV( ptr, size );
         if ( sample ) {
@@ -160,6 +174,7 @@ int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
             return PlayChunk( sample, channel, loop );
         }
     }
+
     return -1;
 }
 
@@ -170,6 +185,8 @@ int Mixer::MaxVolume()
 
 int Mixer::Volume( int channel, int vol /* = -1 */ )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( !valid ) {
         return 0;
     }
@@ -214,6 +231,8 @@ int Mixer::Volume( int channel, int vol /* = -1 */ )
 
 void Mixer::Pause( int channel /* = -1 */ )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( valid ) {
         Mix_Pause( channel );
     }
@@ -221,6 +240,8 @@ void Mixer::Pause( int channel /* = -1 */ )
 
 void Mixer::Resume( int channel /* = -1 */ )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( valid ) {
         Mix_Resume( channel );
     }
@@ -228,6 +249,8 @@ void Mixer::Resume( int channel /* = -1 */ )
 
 void Mixer::Stop( int channel /* = -1 */ )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( valid ) {
         Mix_HaltChannel( channel );
     }
@@ -235,6 +258,8 @@ void Mixer::Stop( int channel /* = -1 */ )
 
 void Mixer::Reset()
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     Music::Reset();
 
     if ( valid ) {
@@ -244,11 +269,15 @@ void Mixer::Reset()
 
 bool Mixer::isPlaying( int channel )
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     return valid && Mix_Playing( channel ) > 0;
 }
 
 bool Mixer::isValid()
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     return valid;
 }
 
@@ -258,6 +287,8 @@ void Mixer::Enhance() {}
 
 void Mixer::Mute()
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( muted || !valid ) {
         return;
     }
@@ -275,6 +306,8 @@ void Mixer::Mute()
 
 void Mixer::Unmute()
 {
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
     if ( !muted || !valid ) {
         return;
     }
