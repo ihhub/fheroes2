@@ -646,23 +646,21 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 // CONTROL_AI turn
                 default:
-                    if ( res == fheroes2::GameMode::END_TURN ) {
-                        Cursor::Get().SetThemes( Cursor::WAIT );
+                    Cursor::Get().SetThemes( Cursor::WAIT );
 
-                        conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( player->GetColor() );
 
-                        statusWindow.Reset();
-                        statusWindow.SetState( StatusType::STATUS_AITURN );
+                    statusWindow.Reset();
+                    statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        Redraw();
-                        display.render();
+                    Redraw();
+                    display.render();
 
-                        world.ClearFog( player->GetColor() );
+                    world.ClearFog( player->GetColor() );
 
-                        kingdom.ActionBeforeTurn();
+                    kingdom.ActionBeforeTurn();
 
-                        AI::Get().KingdomTurn( kingdom );
-                    }
+                    AI::Get().KingdomTurn( kingdom );
                     break;
                 }
 
