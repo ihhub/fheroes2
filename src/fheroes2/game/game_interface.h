@@ -112,7 +112,7 @@ namespace Interface
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;
         void EventGameInfo( void ) const;
-        void EventSystemDialog( void );
+        void EventSystemDialog() const;
         void EventNextHero( void );
         void EventNextTown( void );
         void EventContinueMovement( void ) const;

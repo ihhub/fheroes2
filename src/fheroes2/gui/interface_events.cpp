@@ -244,7 +244,7 @@ fheroes2::GameMode Interface::Basic::EventFileDialog() const
     return Dialog::FileOptions();
 }
 
-void Interface::Basic::EventSystemDialog( void )
+void Interface::Basic::EventSystemDialog() const
 {
     fheroes2::showSystemOptionsDialog();
 }

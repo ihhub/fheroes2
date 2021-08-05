@@ -107,7 +107,14 @@ namespace
 
         // Hero's movement speed.
         const int heroSpeed = conf.HeroesMoveSpeed();
-        const uint32_t heroSpeedIconId = heroSpeed ? ( heroSpeed < 4 ? 4 : 3 + heroSpeed / 2 ) : 9;
+        uint32_t heroSpeedIconId = 9;
+        if ( heroSpeed >= 4 ) {
+            heroSpeedIconId = 3 + heroSpeed / 2;
+        }
+        else if ( heroSpeed > 0 ) {
+            heroSpeedIconId = 4;
+        }
+
         const fheroes2::Sprite & heroSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, heroSpeedIconId );
         if ( heroSpeed == 10 ) {
             value = _( "Jump" );
@@ -120,7 +127,14 @@ namespace
 
         // AI's movement speed.
         const int aiSpeed = conf.AIMoveSpeed();
-        const uint32_t aiSpeedIconId = ( aiSpeed > 0 ) ? ( aiSpeed < 4 ? 4 : 3 + aiSpeed / 2 ) : 9;
+        uint32_t aiSpeedIconId = 9;
+        if ( aiSpeed >= 4 ) {
+            aiSpeedIconId = 3 + aiSpeed / 2;
+        }
+        else if ( aiSpeed > 0 ) {
+            aiSpeedIconId = 4;
+        }
+
         const fheroes2::Sprite & aiSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, aiSpeedIconId );
         if ( aiSpeed == 0 ) {
             value = _( "Don't Show" );
@@ -136,8 +150,17 @@ namespace
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
+        uint32_t scrollSpeedIconId = 7;
+        if ( scrollSpeed < SCROLL_NORMAL ) {
+            scrollSpeedIconId = 4;
+        }
+        else if ( scrollSpeed < SCROLL_FAST1 ) {
+            scrollSpeedIconId = 5;
+        }
+        else if ( scrollSpeed < SCROLL_FAST2 ) {
+            scrollSpeedIconId = 6;
+        }
 
-        const uint32_t scrollSpeedIconId = ( scrollSpeed < SCROLL_FAST2 ? ( scrollSpeed < SCROLL_FAST1 ? ( scrollSpeed < SCROLL_NORMAL ? 4 : 5 ) : 6 ) : 7 );
         const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, scrollSpeedIconId );
         drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), std::to_string( scrollSpeed ) );
 
