@@ -2520,7 +2520,7 @@ msgid "Expansion Campaign"
 msgstr "Kampania z rozszerzenia"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "Jedna z czterech kampani z rozszerzenia Cena lojalności"
+msgstr "Jedna z czterech kampani z rozszerzenia Cena lojalności."
 
 msgid "Host"
 msgstr "Gospodarz"
@@ -6279,7 +6279,7 @@ msgid "% magic resistance"
 msgstr "% odporności magicznej"
 
 msgid "Immune to Mind spells"
-msgstr "Odporny na czary umysłu"
+msgstr "Odporny na czary Umysłu"
 
 #, fuzzy
 msgid "Immune to Elemental spells"
