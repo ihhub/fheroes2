@@ -423,7 +423,6 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
             const int32_t cellId = result[i];
 
             Cell * cell = GetCell( cellId );
-
             assert( cell != nullptr );
 
             cell->SetDirection( cell->GetDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );

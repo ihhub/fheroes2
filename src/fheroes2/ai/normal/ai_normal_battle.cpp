@@ -161,31 +161,32 @@ namespace AI
         return targetCell;
     }
 
-    int32_t FindNearestReachableCell( const int32_t targetCell, const Unit & currentUnit )
+    int32_t FindNearestReachableCell( const int32_t target, const Unit & currentUnit )
     {
-        const Cell * target = Board::GetCell( targetCell );
+        const Cell * targetCell = Board::GetCell( target );
+        assert( targetCell != nullptr );
 
         // Target cell is already reachable
-        if ( target->isPassable3( currentUnit, false ) && target->GetDirection() != UNKNOWN ) {
-            return targetCell;
+        if ( targetCell->isPassable3( currentUnit, false ) && targetCell->GetDirection() != UNKNOWN ) {
+            return target;
         }
 
-        int32_t nearestCell = -1;
-        uint32_t nearestCellDistance = UINT32_MAX;
+        int32_t nearest = -1;
+        uint32_t nearestDistance = UINT32_MAX;
 
         // Search for the nearest reachable cell
         for ( const Cell & cell : *Arena::GetBoard() ) {
             if ( cell.isPassable3( currentUnit, false ) && cell.GetDirection() != UNKNOWN ) {
-                const uint32_t distance = Board::GetDistance( targetCell, cell.GetIndex() );
+                const uint32_t distance = Board::GetDistance( target, cell.GetIndex() );
 
-                if ( distance < nearestCellDistance ) {
-                    nearestCell = cell.GetIndex();
-                    nearestCellDistance = distance;
+                if ( distance < nearestDistance ) {
+                    nearest = cell.GetIndex();
+                    nearestDistance = distance;
                 }
             }
         }
 
-        return nearestCell;
+        return nearest;
     }
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
