@@ -588,7 +588,7 @@ bool ActionSpellVisions( Heroes & hero )
                 StringReplace( msg, "%{count}", join.monsterCount );
             }
             msg.append( "\n" );
-            msg.append( "\n for a fee of %{gold} gold." );
+            msg.append( _( "\n for a fee of %{gold} gold." ) );
             StringReplace( msg, "%{gold}", troop.GetCost().gold );
             break;
 

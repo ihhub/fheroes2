@@ -361,7 +361,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     res = fheroes2::GameMode::HIGHSCORES;
 
                     if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
-                        if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                        if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
                             // Game::HighScores() calls ResetResult()

@@ -187,7 +187,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); i++ ) {
-            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).SetDirection( CENTER );
             }
         }
@@ -213,7 +213,7 @@ bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destinat
     const int32_t dstCellId = destination.GetHead()->GetIndex();
 
     // Upper distance limit
-    if ( Board::GetDistance( currentCellId, dstCellId ) > remainingSteps ) {
+    if ( GetDistance( currentCellId, dstCellId ) > remainingSteps ) {
         return false;
     }
 
@@ -235,12 +235,12 @@ bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destinat
         }
 
         // Unit steps into the moat, do not let it pass through the moat
-        if ( isMoatBuilt && Board::isMoatIndex( cellId, unit ) ) {
+        if ( isMoatBuilt && isMoatIndex( cellId, unit ) ) {
             continue;
         }
 
         // Calculate the distance from the cell in question to the destination, sort cells by distance
-        cellCosts.emplace( Board::GetDistance( cellId, dstCellId ), cellId );
+        cellCosts.emplace( GetDistance( cellId, dstCellId ), cellId );
     }
 
     // Scan the available cells recursively in ascending order of distance
@@ -280,7 +280,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
     const int32_t currentTailCellId = isCurrentLeftDirection ? currentHeadCellId + 1 : currentHeadCellId - 1;
 
     // Upper distance limit
-    if ( Board::GetDistance( currentHeadCellId, dstHeadCellId ) > remainingSteps && Board::GetDistance( currentTailCellId, dstHeadCellId ) > remainingSteps ) {
+    if ( GetDistance( currentHeadCellId, dstHeadCellId ) > remainingSteps && GetDistance( currentTailCellId, dstHeadCellId ) > remainingSteps ) {
         return false;
     }
 
@@ -304,7 +304,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
         }
 
         // Unit steps into the moat
-        if ( isMoatBuilt && ( Board::isMoatIndex( headCellId, unit ) || Board::isMoatIndex( tailCellId, unit ) ) ) {
+        if ( isMoatBuilt && ( isMoatIndex( headCellId, unit ) || isMoatIndex( tailCellId, unit ) ) ) {
             // Moat is a part of the unit's destination
             if ( headCellId == dstHeadCellId ) {
                 result.push_back( headCellId );
@@ -313,14 +313,13 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
             }
 
             // In the moat it is only allowed to turn back, do not let the unit pass through the moat
-            if ( ( tailCellId != currentHeadCellId || !Board::isMoatIndex( tailCellId, unit ) )
-                 && ( headCellId != currentTailCellId || !Board::isMoatIndex( headCellId, unit ) ) ) {
+            if ( ( tailCellId != currentHeadCellId || !isMoatIndex( tailCellId, unit ) ) && ( headCellId != currentTailCellId || !isMoatIndex( headCellId, unit ) ) ) {
                 continue;
             }
         }
 
         // Calculate the distance from the cell in question to the destination, sort cells by distance
-        cellCosts.emplace( Board::GetDistance( headCellId, dstHeadCellId ) + Board::GetDistance( tailCellId, dstTailCellId ), headCellId );
+        cellCosts.emplace( GetDistance( headCellId, dstHeadCellId ) + GetDistance( tailCellId, dstTailCellId ), headCellId );
     }
 
     // Scan the available cells recursively in ascending order of distance
@@ -395,7 +394,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
 
     // Check if destination is valid
     if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
-        ERROR_LOG( "Board::GetPath invalid destination for unit " + unit.String() );
+        ERROR_LOG( "Invalid destination for unit " + unit.String() );
         return result;
     }
 
@@ -957,10 +956,12 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 {
     if ( isValidIndex( position ) && dir != UNKNOWN ) {
         Board * board = Arena::GetBoard();
-        if ( dir == CENTER )
+        if ( dir == CENTER ) {
             return &board->at( position );
-        else if ( Board::isValidDirection( position, dir ) )
+        }
+        if ( isValidDirection( position, dir ) ) {
             return &board->at( GetIndexDirection( position, dir ) );
+        }
     }
 
     return nullptr;

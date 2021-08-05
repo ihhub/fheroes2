@@ -114,6 +114,8 @@ namespace Interface
 
         void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
 
+        fheroes2::Point getCurrentCenterInPixels() const;
+
     private:
         Basic & interface;
 

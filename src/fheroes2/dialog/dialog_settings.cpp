@@ -125,7 +125,7 @@ void Dialog::ExtSettings( bool readonly )
     const fheroes2::StandardWindow frameborder( 320, 400 );
     const fheroes2::Rect area( frameborder.activeArea() );
 
-    Text text( "Experimental Game Settings", Font::YELLOW_BIG );
+    Text text( _( "Experimental Game Settings" ), Font::YELLOW_BIG );
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
