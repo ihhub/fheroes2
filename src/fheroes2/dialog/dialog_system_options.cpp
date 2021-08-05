@@ -429,5 +429,4 @@ namespace fheroes2
             Settings::Get().Save( "fheroes2.cfg" );
         }
     }
-
 }
