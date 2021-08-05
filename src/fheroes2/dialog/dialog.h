@@ -83,7 +83,6 @@ namespace Dialog
 
     int AdventureOptions( bool enabledig );
     fheroes2::GameMode FileOptions();
-    int SystemOptions( void );
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
     // show info cell maps
