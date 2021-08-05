@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 
@@ -57,7 +58,7 @@ namespace
     std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
-    int current_music = MUS::UNKNOWN;
+    std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
     u32 castle_animation_frame = 0;
     u32 maps_animation_frame = 0;
@@ -222,14 +223,14 @@ void Game::Init( void )
     Game::HotKeysLoad( hotkeys );
 }
 
-int Game::CurrentMusic( void )
+int Game::CurrentMusic()
 {
-    return current_music;
+    return currentMusic;
 }
 
-void Game::SetCurrentMusic( int mus )
+void Game::SetCurrentMusic( const int mus )
 {
-    current_music = mus;
+    currentMusic = mus;
 }
 
 void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )

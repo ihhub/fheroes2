@@ -199,8 +199,8 @@ namespace Game
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusic( int );
-    int CurrentMusic( void );
+    void SetCurrentMusic( const int mus );
+    int CurrentMusic();
     u32 & CastleAnimationFrame( void );
     u32 & MapsAnimationFrame( void );
     u32 GetRating( void );
