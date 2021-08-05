@@ -717,8 +717,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    // current music will be set along with the focus, reset music from the previous turn
+    // current music will be set along with the focus, reset environment sounds
+    // and terrain music theme from the previous turn
     Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetMixer();
 
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
