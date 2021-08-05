@@ -119,8 +119,8 @@ namespace Battle
                                  const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const;
         void StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const;
 
-        static bool isIndexToTheLeftOfTheMoat( int32_t index );
-        static bool isIndexToTheRightOfTheMoat( int32_t index );
+        static bool isIndexToTheLeftOfTheMoat( const int32_t index );
+        static bool isIndexToTheRightOfTheMoat( const int32_t index );
     };
 }
 

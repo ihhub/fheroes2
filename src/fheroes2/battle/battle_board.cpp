@@ -708,13 +708,13 @@ bool Battle::Board::isMoatIndex( s32 index, const Unit & b )
     return false;
 }
 
-bool Battle::Board::isIndexToTheLeftOfTheMoat( int32_t index )
+bool Battle::Board::isIndexToTheLeftOfTheMoat( const int32_t index )
 {
     return ( ( index <= 6 ) || ( 11 <= index && index <= 17 ) || ( 22 <= index && index <= 27 ) || ( 33 <= index && index <= 38 ) || ( 44 <= index && index <= 48 )
              || ( 55 <= index && index <= 60 ) || ( 66 <= index && index <= 71 ) || ( 77 <= index && index <= 83 ) || ( 88 <= index && index <= 94 ) );
 }
 
-bool Battle::Board::isIndexToTheRightOfTheMoat( int32_t index )
+bool Battle::Board::isIndexToTheRightOfTheMoat( const int32_t index )
 {
     return ( ( 8 <= index && index <= 10 ) || ( 19 <= index && index <= 21 ) || ( 29 <= index && index <= 32 ) || ( 40 <= index && index <= 43 )
              || ( 50 <= index && index <= 54 ) || ( 62 <= index && index <= 65 ) || ( 73 <= index && index <= 76 ) || ( 85 <= index && index <= 87 )
