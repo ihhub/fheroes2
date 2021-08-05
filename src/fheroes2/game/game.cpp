@@ -39,7 +39,6 @@
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
-#include "mus.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "settings.h"

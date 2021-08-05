@@ -28,6 +28,7 @@
 #include "agg.h"
 #include "game_mode.h"
 #include "gamedefs.h"
+#include "mus.h"
 #include "types.h"
 
 class Players;
@@ -237,7 +238,12 @@ namespace Game
 
         ~MusicRestorer()
         {
-            AGG::PlayMusic( _music, true, true );
+            if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
+                SetCurrentMusic( _music );
+            }
+            else {
+                AGG::PlayMusic( _music, true, true );
+            }
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;
