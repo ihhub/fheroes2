@@ -26,7 +26,7 @@
 #include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog_system_options.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
@@ -246,27 +246,7 @@ fheroes2::GameMode Interface::Basic::EventFileDialog() const
 
 void Interface::Basic::EventSystemDialog( void )
 {
-    const Settings & conf = Settings::Get();
-
-    // Change and save system settings
-    const int changes = Dialog::SystemOptions();
-
-    // interface themes
-    if ( 0x08 & changes ) {
-        Interface::Basic::Get().Reset();
-        SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-        ResetFocus( GameFocus::HEROES );
-        Redraw();
-    }
-
-    // interface hide/show
-    if ( 0x04 & changes ) {
-        GetRadar().ResetAreaSize();
-        SetHideInterface( conf.ExtGameHideInterface() );
-        SetRedraw( REDRAW_ALL );
-        ResetFocus( GameFocus::HEROES );
-        Redraw();
-    }
+    fheroes2::showSystemOptionsDialog();
 }
 
 fheroes2::GameMode Interface::Basic::EventExit()
