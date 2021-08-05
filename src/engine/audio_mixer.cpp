@@ -281,10 +281,6 @@ bool Mixer::isValid()
     return valid;
 }
 
-void Mixer::Reduce() {}
-
-void Mixer::Enhance() {}
-
 void Mixer::Mute()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );

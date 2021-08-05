@@ -866,10 +866,8 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
     }
     else if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
-        Mixer::Reduce();
         castle->MageGuildEducateHero( hero );
         Game::OpenCastleDialog( *castle );
-        Mixer::Enhance();
     }
     else if ( hero.isFriends( castle->GetColor() ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" );
@@ -929,10 +927,8 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
 
-            Mixer::Reduce();
             castle->MageGuildEducateHero( hero );
             Game::OpenCastleDialog( *castle );
-            Mixer::Enhance();
         }
     }
 }

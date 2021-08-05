@@ -43,9 +43,6 @@ namespace Mixer
     bool isPlaying( int channel );
     bool isValid();
 
-    void Reduce();
-    void Enhance();
-
     void Mute();
     void Unmute();
 }
