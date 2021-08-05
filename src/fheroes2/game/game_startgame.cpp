@@ -1137,6 +1137,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             Game::AutoSave();
     }
 
+    // reset environment sounds and terrain music theme at the end of the human turn
+    Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetMixer();
+
     return res;
 }
 
