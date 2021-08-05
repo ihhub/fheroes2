@@ -725,3 +725,8 @@ fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Po
 {
     return fheroes2::Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
 }
+
+fheroes2::Point Interface::GameArea::getCurrentCenterInPixels() const
+{
+    return _topLeftTileOffset + _middlePoint();
+}

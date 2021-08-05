@@ -648,6 +648,14 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
+    // Update radar.
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
+
+    gamearea.SetCenter( castle.GetCenter() );
+    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    radar.Redraw();
+
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
 
@@ -785,6 +793,11 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
     // restore background
     back.restore();
+
+    // Restore radar.
+    gamearea.SetCenterInPixels( prevCenter );
+    radar.Redraw();
+
     display.render();
 }
 
@@ -794,6 +807,14 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
+
+    // Update radar.
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
+
+    gamearea.SetCenter( hero.GetCenter() );
+    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    radar.Redraw();
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -980,5 +1001,10 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
 
     // restore background
     restorer.restore();
+
+    // Restore radar.
+    gamearea.SetCenterInPixels( prevCenter );
+    radar.Redraw();
+
     display.render();
 }
