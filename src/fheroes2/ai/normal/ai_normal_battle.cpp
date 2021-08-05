@@ -290,8 +290,8 @@ namespace AI
                 if ( currentUnit.GetHeadIndex() != reachableCell )
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
 
-                // Attack only if target unit is reachable
-                if ( target.unit && target.cell == reachableCell ) {
+                // Attack only if target unit is reachable and can be attacked from the target cell
+                if ( target.unit && target.cell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, *target.unit, target.cell ) ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -703,16 +703,16 @@ namespace AI
 
         const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
         if ( !nearestUnits.empty() ) {
-            for ( size_t i = 0; i < nearestUnits.size(); ++i ) {
-                const uint32_t targetUnitUID = nearestUnits[i]->GetUID();
-                const int32_t targetUnitHead = nearestUnits[i]->GetHeadIndex();
+            for ( const Unit * targetUnit : nearestUnits ) {
+                const uint32_t targetUnitUID = targetUnit->GetUID();
+                const int32_t targetUnitHead = targetUnit->GetHeadIndex();
                 if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
                     break;
                 }
                 else {
                     int targetCell = -1;
-                    const Indexes & around = Board::GetAroundIndexes( *nearestUnits[i] );
+                    const Indexes & around = Board::GetAroundIndexes( *targetUnit );
                     for ( const int cell : around ) {
                         if ( arena.hexIsPassable( cell ) ) {
                             targetCell = cell;
@@ -726,8 +726,8 @@ namespace AI
                         if ( currentUnit.GetHeadIndex() != reachableCell )
                             actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
 
-                        // Attack only if target unit is reachable
-                        if ( targetCell == reachableCell )
+                        // Attack only if target unit is reachable and can be attacked from the target cell
+                        if ( targetCell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, *targetUnit, targetCell ) )
                             actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
 
                         break;
