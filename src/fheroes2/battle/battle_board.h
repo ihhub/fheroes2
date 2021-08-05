@@ -75,8 +75,6 @@ namespace Battle
         static bool isMoatIndex( s32 index, const Unit & b );
         static bool isBridgeIndex( s32 index, const Unit & b );
         static bool isOutOfWallsIndex( s32 );
-        static bool isIndexToTheLeftOfTheMoat( int32_t index );
-        static bool isIndexToTheRightOfTheMoat( int32_t index );
         static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
         static bool isNegativeDistance( s32 index1, s32 index2 );
@@ -120,6 +118,9 @@ namespace Battle
         bool GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
                                  const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const;
         void StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const;
+
+        static bool isIndexToTheLeftOfTheMoat( int32_t index );
+        static bool isIndexToTheRightOfTheMoat( int32_t index );
     };
 }
 
