@@ -420,15 +420,14 @@ namespace fheroes2
             case DialogAction::SaveConfiguration:
                 Settings::Get().Save( "fheroes2.cfg" );
                 return;
-            case DialogAction::Close: {
-                if ( saveConfiguration ) {
-                    Settings::Get().Save( "fheroes2.cfg" );
-                }
-                return;
-            }
             default:
                 break;
             }
         }
+
+        if ( saveConfiguration ) {
+            Settings::Get().Save( "fheroes2.cfg" );
+        }
     }
+
 }
