@@ -366,9 +366,7 @@ msgstr "Informacje o jednostce: {monster}."
 
 #, fuzzy
 msgid "Shoot %{monster}"
-msgstr ""
-"Strzelaj\n"
-"%{monster}"
+msgstr "Strzelaj %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
@@ -540,7 +538,7 @@ msgid "The mirror image is created"
 msgstr "Stworzono lustrzane odbicie"
 
 msgid "The mirror image is destroyed!"
-msgstr "Zniszczono lustrzane odbicie"
+msgstr "Zniszczono lustrzane odbicie!"
 
 #, fuzzy
 msgid "Break auto battle?"
@@ -602,7 +600,7 @@ msgstr "%{count} %{name} powstaje z martwych!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
-msgstr "Sprzymierzenie krasnoludów"
+msgstr "Przymierze krasnoludów"
 
 #, fuzzy
 msgid "Sorceress Guild"
@@ -614,11 +612,11 @@ msgstr "Nekromanta"
 
 #, fuzzy
 msgid "Dragon Alliance"
-msgstr "Sprzymierzenie smoków"
+msgstr "Przymierze smoków"
 
 #, fuzzy
 msgid "Elven Alliance"
-msgstr "Sprzymierzenie elfów"
+msgstr "Przymierze elfów"
 
 msgid "Wayward Son"
 msgstr ""
@@ -1540,7 +1538,7 @@ msgid "There is no room in the garrison for this army."
 msgstr "W garnizonie nie ma miejsca na dla tej jednostki."
 
 msgid "Recruit %{name}"
-msgstr "Rekrutuj: %{name}"
+msgstr "Rekrutuj %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Miesiąc: %{month}, Tydzień: %{week}, Dzień: %{day}"
@@ -1626,7 +1624,7 @@ msgstr " z jednym artefaktem."
 
 #, fuzzy
 msgid "without artifacts."
-msgstr " bez artefaktów"
+msgstr "bez artefaktów."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
@@ -1831,7 +1829,7 @@ msgid "Save Game"
 msgstr "Zapisz grę"
 
 msgid "Save the current game."
-msgstr "Zapisz bieżącą grę"
+msgstr "Zapisz bieżącą grę."
 
 msgid "Quit"
 msgstr "Wyjście"
@@ -1892,7 +1890,7 @@ msgid "Your army too big!"
 msgstr "Twoja armia jest za duża!"
 
 msgid "Choose game language:"
-msgstr "Zmień język gry"
+msgstr "Zmień język gry:"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} zyskuje poziom."
@@ -2090,9 +2088,9 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
-"Wskazuje czy mapa jest mała (36 x 36), średnia\n"
-"(72 x 72), duża (108 x 108),\n"
-"czy też bardzo duża (144 x 144)."
+"Wskazuje czy mapa jest mała (36 x 36), średnia"
+" (72 x 72), duża (108 x 108),"
+" czy też bardzo duża (144 x 144)."
 
 msgid "Size Icon"
 msgstr "Ikona wielkości"
@@ -2408,7 +2406,7 @@ msgstr ""
 msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
-msgstr "Ten plik jest zapisany w wersji dodatku \"Price of Loyalty\"."
+msgstr "Ten plik jest zapisany w wersji rozszerzenia \"Price of Loyalty\"."
 
 msgid "Hot Seat"
 msgstr "Na zmianę"
@@ -2477,7 +2475,7 @@ msgstr ""
 " po lewej stronie menu.\n"
 "\n"
 "Aby zmienić tryb okienkowy na pełny ekran\n"
-"naciśnij"
+"naciśnij "
 
 msgid "F4"
 msgstr "F4"
@@ -2519,10 +2517,10 @@ msgid "Original Campaign"
 msgstr "Oryginalna kampania"
 
 msgid "Expansion Campaign"
-msgstr "Kampania z dodatku"
+msgstr "Kampania z rozszerzenia"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "Jedna z czterech kampani z dodatku Cena lojalności"
+msgstr "Jedna z czterech kampani z rozszerzenia Cena lojalności"
 
 msgid "Host"
 msgstr "Gospodarz"
@@ -2700,11 +2698,11 @@ msgstr "Przejmij miasto '%{name}'."
 
 #, fuzzy
 msgid "Defeat the hero '%{name}'."
-msgstr "Bohater '%{name}' został pokonany"
+msgstr "Bohater '%{name}' został pokonany."
 
 #, fuzzy
 msgid "Find the ultimate artifact."
-msgstr "Znajdź najpotężniejszy artefakt"
+msgstr "Znajdź najpotężniejszy artefakt."
 
 #, fuzzy
 msgid "Find the '%{name}' artifact."
@@ -3020,20 +3018,20 @@ msgid "View %{skill} Info"
 msgstr "Wyświetl informacje o %{skill}"
 
 msgid "English"
-msgstr "angielski"
+msgstr "Angielski"
 
 msgid "French"
-msgstr "francuski"
+msgstr "Francuski"
 
 msgid "Polish"
-msgstr "polski"
+msgstr "Polski"
 
 #, fuzzy
 msgid "German"
-msgstr "niemiecki"
+msgstr "Niemiecki"
 
 msgid "Russian"
-msgstr "rosyjski"
+msgstr "Rosyjski"
 
 msgid "Ambrose"
 msgstr "Ambrose"
@@ -4656,10 +4654,10 @@ msgstr "Wysokie morale"
 
 #, fuzzy
 msgid "%{morale} Morale"
-msgstr "%{morale} morale"
+msgstr "%{morale} Morale"
 
 msgid "%{luck} Luck"
-msgstr "%{luck} szczęście"
+msgstr "%{luck} Szczęście"
 
 #, fuzzy
 msgid "Current Luck Modifiers:"
@@ -4825,15 +4823,14 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr "Aktualne modyfikatory:"
 
-#, fuzzy po prostu zaawansowana?
 msgid "skill|Advanced"
-msgstr "umiejętność | zawaansowana"
+msgstr "Zawaansowana"
 
 msgid "skill|Basic"
-msgstr "umiejętność | podstawowa"
+msgstr "Podstawowa"
 
 msgid "skill|Expert"
-msgstr "umiejętność | ekspert"
+msgstr "Ekspert"
 
 msgid "Archery"
 msgstr "Łucznictwo"
@@ -6269,13 +6266,13 @@ msgstr "Podwójny strzał"
 
 #, fuzzy
 msgid "2-hex monster"
-msgstr "2-hex"
+msgstr "2-hex poczwara"
 
 msgid "Double strike"
 msgstr "Podwójny strzał"
 
 msgid "Double damage to Undead"
-msgstr "Podwójne obrażenia umarłym"
+msgstr "Podwójne obrażenia Umarłym"
 
 #, c-format
 msgid "% magic resistance"
@@ -6289,17 +6286,17 @@ msgid "Immune to Elemental spells"
 msgstr "Przywołanie żywiołaka ziemi"
 
 msgid "Immune to Fire spells"
-msgstr "Odporny na czary ognia"
+msgstr "Odporny na czary Ognia"
 
 #, fuzzy
 msgid "Immune to Cold spells"
-msgstr "Odporny na czary zimna"
+msgstr "Odporny na czary Lodu"
 
 msgid "Immune to "
-msgstr "Odporny na"
+msgstr "Odporny na "
 
 msgid "% immunity to %{spell} spell"
-msgstr "% odporności na zaklęcie %{spell}"
+msgstr "% odporności na czar %{spell}"
 
 #, fuzzy, c-format
 msgid "% damage from Elemental spells"
