@@ -2082,9 +2082,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
                         const s32 from = Board::GetIndexDirection( index_pos, dir );
 
-                        // if free cell or it is b_current
-                        if ( UNKNOWN != Board::GetCell( from )->GetDirection() || from == _currentUnit->GetHeadIndex()
-                             || ( _currentUnit->isWide() && from == _currentUnit->GetTailIndex() ) ) {
+                        if ( Board::CanAttackUnitFromCell( *_currentUnit, *b_enemy, from ) ) {
                             statusMsg = _( "Attack %{monster}" );
                             StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
 
