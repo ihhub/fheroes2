@@ -90,7 +90,7 @@ namespace
         if ( uid <= 0 )
             return;
 
-        StrCmp strCmp = sensitive ? strcmp : strcasecmp;
+        const StrCmp strCmp = sensitive ? strcmp : strcasecmp;
 
         // iterate over the directory for files, print name and size of array (always 256)
         // this means you use strlen() to get length of file name
@@ -121,7 +121,7 @@ namespace
             return;
         }
 
-        StrCmp strCmp = sensitive ? strcmp : strcasecmp;
+        const StrCmp strCmp = sensitive ? strcmp : strcasecmp;
 
         struct dirent * ep;
         while ( nullptr != ( ep = readdir( dp ) ) ) {
