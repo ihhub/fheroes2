@@ -355,6 +355,8 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
         else {
             troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
+
+        Interface::Basic::Get().GetStatusWindow().SetRedraw();
     }
 }
 
