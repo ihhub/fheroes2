@@ -1,4 +1,5 @@
 version 0.9.6 (06 August 2021)
+- update status window if troops has fallen overboard
 - add direct preview of changes in system options dialog
 - update Polish translation
 - display the position of a hero or a castle on radar while right clicking on them
