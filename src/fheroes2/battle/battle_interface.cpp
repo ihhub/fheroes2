@@ -25,8 +25,7 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"

@@ -26,7 +26,7 @@
 #include <cmath>
 
 #include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -350,7 +350,7 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Mixer::isValid() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 

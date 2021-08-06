@@ -26,7 +26,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"

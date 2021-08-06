@@ -28,7 +28,7 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"

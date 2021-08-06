@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "audio.h"
 #include "engine.h"
 #include "localevent.h"
 #include "logging.h"
@@ -32,12 +33,6 @@
 int _newlib_heap_size_user = 192 * 1024 * 1024;
 #endif
 
-namespace Mixer
-{
-    void Init();
-    void Quit();
-}
-
 bool SDL::Init( const uint32_t system )
 {
     if ( 0 > SDL_Init( system ) ) {
@@ -46,7 +41,7 @@ bool SDL::Init( const uint32_t system )
     }
 
     if ( SDL_INIT_AUDIO & system )
-        Mixer::Init();
+        Audio::Init();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SDL_INIT_GAMECONTROLLER & system ) {
         LocalEvent::Get().OpenController();
@@ -70,7 +65,7 @@ void SDL::Quit()
     }
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
-        Mixer::Quit();
+        Audio::Quit();
 
     SDL_Quit();
 }

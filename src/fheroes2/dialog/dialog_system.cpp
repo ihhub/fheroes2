@@ -21,8 +21,7 @@
  ***************************************************************************/
 
 #include "agg_image.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -106,7 +105,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music volume
-        if ( Mixer::isValid() && le.MouseClickLeft( rect1 ) ) {
+        if ( Audio::isValid() && le.MouseClickLeft( rect1 ) ) {
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
             Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
@@ -114,7 +113,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set sound volume
-        if ( Mixer::isValid() && le.MouseClickLeft( rect2 ) ) {
+        if ( Audio::isValid() && le.MouseClickLeft( rect2 ) ) {
             conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
             redraw = true;
             Game::EnvironmentSoundMixer();
@@ -245,14 +244,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     const int textOffset = 2;
 
     // music
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 1 : 0 );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 1 : 0 );
     const fheroes2::Rect & rect1 = rects[0];
     fheroes2::Blit( sprite1, display, rect1.x, rect1.y );
     str = _( "Music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
-    if ( Mixer::isValid() && conf.MusicVolume() )
+    if ( Audio::isValid() && conf.MusicVolume() )
         str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );
@@ -260,14 +259,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y + rect1.height + textOffset );
 
     // sound
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 3 : 2 );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
     const fheroes2::Rect & rect2 = rects[1];
     fheroes2::Blit( sprite2, display, rect2.x, rect2.y );
     str = _( "Effects" );
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.width - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
-    if ( Mixer::isValid() && conf.SoundVolume() )
+    if ( Audio::isValid() && conf.SoundVolume() )
         str = std::to_string( conf.SoundVolume() );
     else
         str = _( "off" );

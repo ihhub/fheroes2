@@ -29,8 +29,7 @@
 
 #include "agg.h"
 #include "agg_file.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "dir.h"
 #include "embedded_image.h"
 #include "game.h"
@@ -353,7 +352,7 @@ void AGG::LoadMID( int xmi, std::vector<u8> & v )
 const std::vector<u8> & AGG::GetWAV( int m82 )
 {
     std::vector<u8> & v = wav_cache[m82];
-    if ( Mixer::isValid() && v.empty() )
+    if ( Audio::isValid() && v.empty() )
         LoadWAV( m82, v );
     return v;
 }
@@ -362,7 +361,7 @@ const std::vector<u8> & AGG::GetWAV( int m82 )
 const std::vector<u8> & AGG::GetMID( int xmi )
 {
     std::vector<u8> & v = mid_cache[xmi];
-    if ( Mixer::isValid() && v.empty() )
+    if ( Audio::isValid() && v.empty() )
         LoadMID( xmi, v );
     return v;
 }
@@ -384,7 +383,7 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall
 
 void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 {
-    if ( !Mixer::isValid() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
@@ -460,7 +459,7 @@ void AGG::PlaySound( int m82, bool asyncronizedCall )
 
 void AGG::PlaySoundInternally( const int m82 )
 {
-    if ( !Mixer::isValid() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
@@ -492,7 +491,7 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
-    if ( !Mixer::isValid() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 

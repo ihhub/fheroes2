@@ -27,7 +27,7 @@
 #include <utility>
 #include <vector>
 
-#include "audio_music.h"
+#include "audio.h"
 #include "logging.h"
 #include "serialize.h"
 
@@ -526,7 +526,7 @@ StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
     return sb;
 }
 
-std::vector<u8> Music::Xmi2Mid( const std::vector<u8> & buf )
+std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
 {
     XMIData xmi( buf );
     StreamBuf sb( 16 * 4096 );
