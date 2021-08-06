@@ -20,10 +20,10 @@
 
 #include <map>
 
-#include "bin_info.h"
 #include "agg.h"
 #include "battle_animation.h"
 #include "battle_cell.h"
+#include "bin_info.h"
 #include "logging.h"
 #include "monster.h"
 

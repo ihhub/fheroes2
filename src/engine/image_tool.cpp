@@ -23,6 +23,7 @@
 #include "image_tool.h"
 #include "palette_h2.h"
 
+#include <SDL_surface.h>
 #include <SDL_version.h>
 
 #if defined( FHEROES2_IMAGE_SUPPORT )
