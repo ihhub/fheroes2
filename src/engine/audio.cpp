@@ -275,7 +275,7 @@ int Mixer::MaxVolume()
     return MIX_MAX_VOLUME;
 }
 
-int Mixer::Volume( const int channel, int vol /* = -1 */ )
+int Mixer::Volume( const int channel, int vol )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 

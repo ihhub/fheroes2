@@ -46,7 +46,7 @@ namespace Mixer
     int Play( const uint8_t * ptr, const uint32_t size, const int channel = -1, const bool loop = false );
 
     int MaxVolume();
-    int Volume( const int channel, int vol = -1 );
+    int Volume( const int channel, int vol );
 
     void Pause( const int channel = -1 );
     void Resume( const int channel = -1 );
