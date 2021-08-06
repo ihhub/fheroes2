@@ -36,6 +36,7 @@ namespace
     struct Spec : public SDL_AudioSpec
     {
         Spec()
+            : SDL_AudioSpec()
         {
             freq = 0;
             format = 0;
