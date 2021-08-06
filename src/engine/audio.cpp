@@ -239,7 +239,7 @@ void Mixer::SetChannels( const int num )
     }
 }
 
-int Mixer::Play( const char * file, const int channel /* = -1 */ , const bool loop /* = false */ )
+int Mixer::Play( const char * file, const int channel /* = -1 */, const bool loop /* = false */ )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 

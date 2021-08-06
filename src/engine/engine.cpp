@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "audio.h"
 #include "engine.h"
+#include "audio.h"
 #include "localevent.h"
 #include "logging.h"
 
