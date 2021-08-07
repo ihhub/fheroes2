@@ -27,18 +27,11 @@
 
 #include "agg.h"
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "types.h"
 
 class Players;
 class Heroes;
 class Castle;
-
-namespace Campaign
-{
-    struct CampaignAwardData;
-    class CampaignSaveData;
-}
 
 namespace Game
 {

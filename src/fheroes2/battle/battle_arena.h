@@ -25,11 +25,10 @@
 
 #include <list>
 
+#include "battle.h"
 #include "battle_board.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "gamedefs.h"
-#include "serialize.h"
 #include "spell_storage.h"
 
 class Castle;

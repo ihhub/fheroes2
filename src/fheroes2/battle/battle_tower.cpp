@@ -21,6 +21,8 @@
  ***************************************************************************/
 
 #include "battle_tower.h"
+#include "battle.h"
+#include "battle_board.h"
 #include "battle_cell.h"
 #include "castle.h"
 #include "tools.h"

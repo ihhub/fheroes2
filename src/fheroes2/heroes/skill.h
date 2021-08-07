@@ -24,14 +24,15 @@
 #define H2SKILL_H
 
 #include <string>
+#include <vector>
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include "types.h"
 
 void StringAppendModifiers( std::string &, int );
 
 class Heroes;
 class HeroBase;
+class StreamBase;
 
 namespace Skill
 {

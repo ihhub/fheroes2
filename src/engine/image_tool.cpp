@@ -24,7 +24,11 @@
 #include "palette_h2.h"
 
 #include <SDL_version.h>
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_surface.h>
+#else
 #include <SDL_video.h>
+#endif
 
 #if defined( FHEROES2_IMAGE_SUPPORT )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
@@ -44,6 +43,7 @@
 #include "race.h"
 #include "settings.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace Battle

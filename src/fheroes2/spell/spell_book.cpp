@@ -34,6 +34,7 @@
 #include "spell_book.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace
 {

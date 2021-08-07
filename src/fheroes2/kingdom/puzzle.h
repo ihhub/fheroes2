@@ -24,11 +24,13 @@
 #define H2PUZZLE_H
 
 #include <bitset>
+#include <vector>
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include "types.h"
 
 #define PUZZLETILES 48
+
+class StreamBase;
 
 class Puzzle : public std::bitset<PUZZLETILES>
 {

@@ -32,10 +32,6 @@
 #include "math_base.h"
 #include "types.h"
 
-struct Point;
-struct Rect;
-struct Size;
-
 class StreamBase
 {
 protected:
@@ -192,8 +188,6 @@ public:
         return *this;
     }
 };
-
-class ZStreamBuf;
 
 class StreamBuf : public StreamBase
 {

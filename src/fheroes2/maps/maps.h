@@ -22,8 +22,8 @@
 #ifndef H2MAPS_H
 #define H2MAPS_H
 
-#include "direction.h"
-#include "gamedefs.h"
+#include <vector>
+
 #include "math_base.h"
 #include "types.h"
 

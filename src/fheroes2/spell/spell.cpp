@@ -26,6 +26,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "serialize.h"
 #include "translations.h"
 
 enum

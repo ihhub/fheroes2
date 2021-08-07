@@ -24,14 +24,13 @@
 
 #include <vector>
 
-#include "gamedefs.h"
 #include "interface_itemsbar.h"
-#include "serialize.h"
 #include "ui_tool.h"
 
 class Spell;
 class Heroes;
 class StatusBar;
+class StreamBase;
 
 class Artifact
 {

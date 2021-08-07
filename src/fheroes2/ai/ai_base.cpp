@@ -28,7 +28,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "mus.h"
-#include "settings.h"
+#include "serialize.h"
 #include "translations.h"
 
 namespace AI

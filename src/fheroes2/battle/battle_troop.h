@@ -26,18 +26,19 @@
 #include <utility>
 #include <vector>
 
-#include "battle.h"
+#include "army_troop.h"
 #include "battle_animation.h"
-#include "battle_arena.h"
-#include "battle_army.h"
+#include "battle_cell.h"
 #include "bitmodes.h"
-#include "game_delays.h"
+#include "players.h"
 
 class Spell;
 class HeroBase;
 
 namespace Battle
 {
+    struct TargetInfo;
+
     struct ModeDuration : public std::pair<u32, u32>
     {
         ModeDuration( u32, u32 );

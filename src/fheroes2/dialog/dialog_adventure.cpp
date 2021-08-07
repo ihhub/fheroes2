@@ -28,6 +28,7 @@
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 int Dialog::AdventureOptions( bool enabledig )

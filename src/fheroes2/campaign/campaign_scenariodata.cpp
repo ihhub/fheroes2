@@ -24,6 +24,7 @@
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "serialize.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"

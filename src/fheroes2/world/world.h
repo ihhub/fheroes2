@@ -22,27 +22,22 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <string>
 #include <vector>
 
 #include "artifact_ultimate.h"
 #include "castle_heroes.h"
-#include "gamedefs.h"
 #include "kingdom.h"
 #include "maps.h"
-#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "week.h"
 #include "world_pathfinding.h"
 #include "world_regions.h"
-#include <string>
 
-class Heroes;
-class Castle;
-class Kingdom;
 class Recruits;
-class Radar;
 class MapObjectSimple;
 class ActionSimple;
+struct MapEvent;
 
 struct ListActions : public std::list<ActionSimple *>
 {

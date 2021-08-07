@@ -26,6 +26,7 @@
 #include <map>
 #include <vector>
 
+#include "battle_board.h"
 #include "types.h"
 
 namespace Battle

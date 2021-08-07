@@ -23,10 +23,10 @@
 #include <algorithm>
 
 #include "color.h"
-#include "game.h"
 #include "logging.h"
 #include "maps_objects.h"
 #include "mp2.h"
+#include "serialize.h"
 #include "tools.h"
 
 #define SIZEMESSAGE 400

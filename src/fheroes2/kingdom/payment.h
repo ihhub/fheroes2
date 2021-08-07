@@ -23,8 +23,6 @@
 #ifndef H2PAYMENT_H
 #define H2PAYMENT_H
 
-#include <string>
-
 #include "resource.h"
 
 using payment_t = Funds;

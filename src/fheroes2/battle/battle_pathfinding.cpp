@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "battle_pathfinding.h"
+#include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"

@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <memory>
 
-#include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
