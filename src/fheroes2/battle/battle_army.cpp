@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+#include "battle.h"
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"

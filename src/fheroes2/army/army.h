@@ -24,15 +24,15 @@
 #define H2ARMY_H
 
 #include <string>
-#include <utility>
 #include <vector>
 
-#include "army_troop.h"
+#include "monster.h"
 #include "players.h"
 
 class Castle;
 class HeroBase;
 class Heroes;
+class Troop;
 
 namespace Maps
 {

@@ -52,6 +52,7 @@
 #include "objwatr.h"
 #include "race.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "spell.h"
 #ifdef WITH_DEBUG

@@ -26,21 +26,21 @@
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "game.h"
 #include "game_over.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "race.h"
 #include "rand.h"
+#include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
-#include "zzlib.h"
 
 namespace
 {

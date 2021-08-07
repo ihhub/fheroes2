@@ -31,6 +31,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 #include <cassert>

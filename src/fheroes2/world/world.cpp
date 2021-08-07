@@ -35,11 +35,13 @@
 #include "heroes.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_objects.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "world.h"
 

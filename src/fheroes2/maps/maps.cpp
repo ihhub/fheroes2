@@ -31,6 +31,7 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "race.h"
+#include "serialize.h"
 #include "translations.h"
 #include "world.h"
 

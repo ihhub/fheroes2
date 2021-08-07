@@ -43,6 +43,7 @@
 #include "system.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"

@@ -24,6 +24,7 @@
 #include "dialog.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "serialize.h"
 #include "text.h"
 #include "world.h"
 

@@ -29,6 +29,7 @@
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 
 fheroes2::GameMode Dialog::FileOptions()
 {

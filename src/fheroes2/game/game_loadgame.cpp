@@ -34,6 +34,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 fheroes2::GameMode Game::LoadCampaign()

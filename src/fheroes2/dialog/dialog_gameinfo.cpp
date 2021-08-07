@@ -32,6 +32,7 @@
 #include "player_info.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void Dialog::GameInfo( void )

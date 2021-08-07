@@ -25,6 +25,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "heroes_base.h"
+#include "serialize.h"
 #include "speed.h"
 
 Troop::Troop()

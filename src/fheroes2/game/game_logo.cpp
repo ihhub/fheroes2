@@ -23,6 +23,7 @@
 #include "localevent.h"
 #include "screen.h"
 #include "text.h"
+#include "translations.h"
 
 void fheroes2::showTeamInfo()
 {

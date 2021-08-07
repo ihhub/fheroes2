@@ -23,7 +23,7 @@
 #ifndef H2OBJMULT_H
 #define H2OBJMULT_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjMult
 {

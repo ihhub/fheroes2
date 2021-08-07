@@ -28,6 +28,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "translations.h"
 #include "world.h"

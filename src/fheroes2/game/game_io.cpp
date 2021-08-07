@@ -34,6 +34,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 #include "zzlib.h"
 

@@ -27,7 +27,9 @@
 #include "logging.h"
 #include "pairs.h"
 #include "rand.h"
+#include "serialize.h"
 #include "text.h"
+#include "translations.h"
 
 Funds::Funds()
     : wood( 0 )

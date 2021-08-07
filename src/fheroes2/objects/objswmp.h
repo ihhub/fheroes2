@@ -23,7 +23,7 @@
 #ifndef H2OBJSWMP_H
 #define H2OBJSWMP_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjSwmp
 {

@@ -31,6 +31,7 @@
 #include "battle_interface.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -41,6 +42,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace
 {
