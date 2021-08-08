@@ -58,8 +58,8 @@ public:
     {
         ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
 
-        bool zoomIn( const bool cycle = false );
-        bool zoomOut( const bool cycle = false );
+        bool zoomIn( const bool cycle );
+        bool zoomOut( const bool cycle );
         bool ChangeCenter( const fheroes2::Point & centerInPixels );
 
         const fheroes2::Rect & GetROIinPixels() const;

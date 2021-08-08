@@ -422,7 +422,7 @@ bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 
 bool ViewWorld::ZoomROIs::changeZoom( const ZoomLevel newLevel )
 {
-    bool changed = ( newLevel != _zoomLevel );
+    const bool changed = ( newLevel != _zoomLevel );
     _zoomLevel = newLevel;
     return changed;
 }
@@ -546,10 +546,10 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             }
         }
         else if ( le.MouseWheelUp() ) {
-            changed = currentROI.zoomIn();
+            changed = currentROI.zoomIn( false );
         }
         else if ( le.MouseWheelDn() ) {
-            changed = currentROI.zoomOut();
+            changed = currentROI.zoomOut( false );
         }
 
         if ( !le.MousePressLeft( visibleScreenInPixels ) || !le.MouseCursor( visibleScreenInPixels ) ) {
