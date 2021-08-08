@@ -646,6 +646,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 // CONTROL_AI turn
                 default:
+                    // TODO: remove this temporary assertion
+                    assert( res == fheroes2::GameMode::END_TURN );
+
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
                     conf.SetCurrentColor( player->GetColor() );
