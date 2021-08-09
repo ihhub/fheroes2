@@ -243,7 +243,7 @@ Settings::Settings()
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
-    , battle_speed( DEFAULT_SPEED_DELAY )
+    , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
@@ -372,66 +372,28 @@ bool Settings::Read( const std::string & filename )
 
     // sound volume
     if ( config.Exists( "sound volume" ) ) {
-        sound_volume = config.IntParams( "sound volume" );
-        if ( sound_volume > 10 )
-            sound_volume = 10;
+        SetSoundVolume( config.IntParams( "sound volume" ) );
     }
 
     // music volume
     if ( config.Exists( "music volume" ) ) {
-        music_volume = config.IntParams( "music volume" );
-        if ( music_volume > 10 )
-            music_volume = 10;
+        SetMusicVolume( config.IntParams( "music volume" ) );
     }
 
     // move speed
     if ( config.Exists( "ai speed" ) ) {
-        ai_speed = config.IntParams( "ai speed" );
-        if ( ai_speed > 10 ) {
-            ai_speed = 10;
-        }
-        if ( ai_speed < 0 ) {
-            ai_speed = 0;
-        }
+        SetAIMoveSpeed( config.IntParams( "ai speed" ) );
     }
 
     if ( config.Exists( "heroes speed" ) ) {
-        heroes_speed = config.IntParams( "heroes speed" );
-        if ( heroes_speed > 10 ) {
-            heroes_speed = 10;
-        }
-        if ( heroes_speed < 1 ) {
-            heroes_speed = 1;
-        }
+        SetHeroesMoveSpeed( config.IntParams( "heroes speed" ) );
     }
 
     // scroll speed
-    switch ( config.IntParams( "scroll speed" ) ) {
-    case 1:
-        scroll_speed = SCROLL_SLOW;
-        break;
-    case 2:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    case 3:
-        scroll_speed = SCROLL_FAST1;
-        break;
-    case 4:
-        scroll_speed = SCROLL_FAST2;
-        break;
-    default:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    }
+    SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
     if ( config.Exists( "battle speed" ) ) {
-        battle_speed = config.IntParams( "battle speed" );
-        if ( battle_speed > 10 ) {
-            battle_speed = 10;
-        }
-        if ( battle_speed < 1 ) {
-            battle_speed = 1;
-        }
+        SetBattleSpeed( config.IntParams( "battle speed" ) );
     }
 
     if ( config.Exists( "battle grid" ) ) {
@@ -482,11 +444,7 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "controller pointer speed" ) ) {
-        _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
-        if ( _controllerPointerSpeed > 100 )
-            _controllerPointerSpeed = 100;
-        else if ( _controllerPointerSpeed < 0 )
-            _controllerPointerSpeed = 0;
+        _controllerPointerSpeed = clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
     }
 
     if ( config.Exists( "first time game run" ) && config.StrParams( "first time game run" ) == "off" ) {
@@ -589,27 +547,7 @@ std::string Settings::String() const
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
-    os << "scroll speed = ";
-
-    switch ( scroll_speed ) {
-    case SCROLL_SLOW:
-        os << 1;
-        break;
-    case SCROLL_NORMAL:
-        os << 2;
-        break;
-    case SCROLL_FAST1:
-        os << 3;
-        break;
-    case SCROLL_FAST2:
-        os << 4;
-        break;
-    default:
-        os << 2;
-        break;
-    }
-
-    os << std::endl;
+    os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
@@ -812,40 +750,27 @@ int Settings::ScrollSpeed() const
     return scroll_speed;
 }
 
+int Settings::ScrollShift() const
+{
+    return 2 << scroll_speed;
+}
+
 /* set ai speed: 1 - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
-    if ( speed < 0 ) {
-        speed = 0;
-    }
-    if ( speed > 10 ) {
-        speed = 10;
-    }
-    ai_speed = speed;
+    ai_speed = clamp( speed, 0, 10 );
 }
 
 /* set hero speed: 1 - 10 */
 void Settings::SetHeroesMoveSpeed( int speed )
 {
-    if ( speed < 1 ) {
-        speed = 1;
-    }
-    if ( speed > 10 ) {
-        speed = 10;
-    }
-    heroes_speed = speed;
+    heroes_speed = clamp( speed, 1, 10 );
 }
 
 /* set battle speed: 1 - 10 */
 void Settings::SetBattleSpeed( int speed )
 {
-    if ( speed < 1 ) {
-        speed = 1;
-    }
-    if ( speed > 10 ) {
-        speed = 10;
-    }
-    battle_speed = speed;
+    battle_speed = clamp( speed, 1, 10 );
 }
 
 void Settings::setBattleAutoResolve( bool enable )
@@ -883,16 +808,10 @@ void Settings::SetScrollSpeed( int speed )
 {
     switch ( speed ) {
     case SCROLL_SLOW:
-        scroll_speed = SCROLL_SLOW;
-        break;
     case SCROLL_NORMAL:
-        scroll_speed = SCROLL_NORMAL;
-        break;
     case SCROLL_FAST1:
-        scroll_speed = SCROLL_FAST1;
-        break;
     case SCROLL_FAST2:
-        scroll_speed = SCROLL_FAST2;
+        scroll_speed = speed;
         break;
     default:
         scroll_speed = SCROLL_NORMAL;
@@ -1000,13 +919,13 @@ MusicSource Settings::MusicType() const
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
-    sound_volume = 10 <= v ? 10 : v;
+    sound_volume = std::min( v, 10 );
 }
 
 /* music volume: 0 - 10 */
 void Settings::SetMusicVolume( int v )
 {
-    music_volume = 10 <= v ? 10 : v;
+    music_volume = std::min( v, 10 );
 }
 
 /* Set music type: check MusicSource enum */
@@ -1049,7 +968,7 @@ Players & Settings::GetPlayers()
 
 void Settings::SetPreferablyCountPlayers( int c )
 {
-    preferably_count_players = 6 < c ? 6 : c;
+    preferably_count_players = std::min( c, 6 );
 }
 
 int Settings::PreferablyCountPlayers() const

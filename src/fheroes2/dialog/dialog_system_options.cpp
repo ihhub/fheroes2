@@ -313,7 +313,7 @@ namespace
 
             // set scroll speed
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( SCROLL_FAST2 > conf.ScrollSpeed() ? conf.ScrollSpeed() << 1 : SCROLL_SLOW );
+                conf.SetScrollSpeed( SCROLL_FAST2 > conf.ScrollSpeed() ? conf.ScrollSpeed() + 1 : SCROLL_SLOW );
                 redraw = true;
                 saveConfig = true;
             }
