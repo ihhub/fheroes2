@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "audio.h"
-#include "logging.h"
 
 namespace Audio
 {
@@ -38,48 +37,6 @@ Audio::Spec::Spec()
     size = 0;
     callback = nullptr;
     userdata = nullptr;
-}
-
-Audio::CVT::CVT()
-{
-    needed = 0;
-    src_format = 0;
-    dst_format = 0;
-    rate_incr = 0;
-    buf = nullptr;
-    len = 0;
-    len_cvt = 0;
-    len_mult = 0;
-    len_ratio = 0;
-    filters[0] = nullptr;
-    filters[1] = nullptr;
-    filters[2] = nullptr;
-    filters[3] = nullptr;
-    filters[4] = nullptr;
-    filters[5] = nullptr;
-    filters[6] = nullptr;
-    filters[7] = nullptr;
-    filters[8] = nullptr;
-    filters[9] = nullptr;
-    filter_index = 0;
-}
-
-bool Audio::CVT::Build( const Audio::Spec & src, const Audio::Spec & dst )
-{
-    if ( 1 == SDL_BuildAudioCVT( this, src.format, src.channels, src.freq, dst.format, dst.channels, dst.freq ) )
-        return true;
-
-    ERROR_LOG( SDL_GetError() );
-    return false;
-}
-
-bool Audio::CVT::Convert( void )
-{
-    if ( 0 == SDL_ConvertAudio( this ) )
-        return true;
-
-    ERROR_LOG( SDL_GetError() );
-    return false;
 }
 
 Audio::Spec & Audio::GetHardwareSpec( void )

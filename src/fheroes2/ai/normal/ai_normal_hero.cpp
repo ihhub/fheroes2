@@ -36,7 +36,7 @@ namespace
 {
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
     {
-        const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
+        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
         if ( castle ) {
             if ( hero.GetColor() == castle->GetColor() ) {
                 return castle->GetHeroes().Guest() == nullptr;
@@ -258,13 +258,13 @@ namespace
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         case MP2::OBJ_PEASANTHUT: {
             // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
         }
 
         // recruit army
@@ -280,7 +280,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
         }
 
         // recruit army (battle)
@@ -294,7 +294,7 @@ namespace
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t & paymentCosts = troop.GetCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
             }
         }
 
@@ -303,7 +303,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             const payment_t & paymentCosts = troop.GetCost();
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }
 
         // upgrade army
@@ -499,7 +499,7 @@ namespace AI
         const int objectID = tile.GetObject();
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
             if ( !castle )
                 return valueToIgnore;
 
@@ -769,7 +769,7 @@ namespace AI
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
 
                 if ( heroStrength < regionStats.highestThreat ) {
-                    const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( node.first ) );
 
                     if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
                         value -= dangerousTaskPenalty / 2;

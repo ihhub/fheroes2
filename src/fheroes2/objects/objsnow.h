@@ -23,7 +23,7 @@
 #ifndef H2OBJSNOW_H
 #define H2OBJSNOW_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjSnow
 {

@@ -25,6 +25,7 @@
 #include <iomanip>
 
 #include "battle_arena.h"
+#include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_command.h"
@@ -36,6 +37,7 @@
 #include "rand.h"
 #include "spell.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -193,7 +195,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
                    current_commander->GetName() << ", color: " << Color::String( current_commander->GetColor() ) << ", spell: " << spell.GetName() );
 
         // uniq spells action
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::TELEPORT:
             ApplyActionSpellTeleport( cmd );
             break;
@@ -722,7 +724,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     Unit * target = GetTroopBoard( dest );
 
     // from spells
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
         // skip center
@@ -750,7 +752,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
     else
         // check other spells
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dest );
             targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
@@ -777,7 +779,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             }
 
             // unique
-            targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
@@ -807,7 +809,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             }
 
             // unique
-            targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
@@ -913,8 +915,10 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
-    if ( interface )
+    if ( interface ) {
+        assert( elem != nullptr );
         interface->RedrawActionSummonElementalSpell( *elem );
+    }
 }
 
 void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
@@ -939,7 +943,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
         }
     }
 
-    targets.resize( std::distance( targets.begin(), std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ) ) );
+    targets.erase( std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ), targets.end() );
 
     if ( interface ) {
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );

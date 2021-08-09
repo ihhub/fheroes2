@@ -23,6 +23,7 @@
 #include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -35,6 +36,7 @@
 #include "settings.h"
 #include "statusbar.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace
 {
@@ -312,7 +314,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     }
 }
 
-u32 BuildingInfo::operator()( void ) const
+uint32_t BuildingInfo::getBuilding( void ) const
 {
     return building;
 }

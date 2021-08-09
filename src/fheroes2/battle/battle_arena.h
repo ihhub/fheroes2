@@ -25,16 +25,11 @@
 
 #include <list>
 
+#include "battle.h"
 #include "battle_board.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "gamedefs.h"
-#include "serialize.h"
 #include "spell_storage.h"
-
-#define ARENAW 11
-#define ARENAH 9
-#define ARENASIZE ARENAW * ARENAH
 
 class Castle;
 class HeroBase;
@@ -139,6 +134,8 @@ namespace Battle
 
         u32 GetCastleTargetValue( int ) const;
 
+        int32_t GetFreePositionNearHero( const int heroColor ) const;
+
         static Board * GetBoard( void );
         static Tower * GetTower( int );
         static Bridge * GetBridge( void );
@@ -162,7 +159,6 @@ namespace Battle
         void SetCastleTargetValue( int, u32 );
         void CatapultAction( void );
 
-        s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );

@@ -417,7 +417,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Top layer.
     for ( const Maps::Tiles * tile : topList ) {
-        tile->RedrawTop( dst, tileROI, *this );
+        tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
     }
 
     // Heroes and boats.
@@ -440,7 +440,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
                 tile->RedrawBoat( dst, tileROI, *this );
                 if ( drawTop ) {
-                    tile->RedrawTop( dst, tileROI, *this );
+                    tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
                 }
             }
         }
@@ -724,4 +724,9 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & po
 fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Point & tileId ) const
 {
     return fheroes2::Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
+}
+
+fheroes2::Point Interface::GameArea::getCurrentCenterInPixels() const
+{
+    return _topLeftTileOffset + _middlePoint();
 }

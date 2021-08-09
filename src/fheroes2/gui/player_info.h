@@ -20,7 +20,12 @@
 
 #pragma once
 
-#include "players.h"
+#include <vector>
+
+#include "math_base.h"
+
+class Player;
+class Players;
 
 namespace Interface
 {

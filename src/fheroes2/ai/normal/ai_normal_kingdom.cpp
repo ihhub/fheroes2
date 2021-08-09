@@ -44,7 +44,9 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
+        AGG::ResetMixer();
         AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
+
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 
@@ -100,7 +102,7 @@ namespace AI
                     }
                 }
                 else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
-                    const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
                     if ( !castle )
                         continue;
 

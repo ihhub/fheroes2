@@ -22,9 +22,10 @@
 
 #include "army.h"
 #include "color.h"
-#include "pairs.h"
 #include "pathfinding.h"
-#include "route.h"
+#include "skill.h"
+
+class IndexObject;
 
 // Abstract class that provides base functionality to path through World map
 class WorldPathfinder : public Pathfinder<PathfindingNode>

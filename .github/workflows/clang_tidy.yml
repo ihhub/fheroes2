@@ -1,31 +1,42 @@
 name: Clang-Tidy
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ master ]
     paths: [ '**.cpp', '**.h' ]
 
 jobs:
-  build:
+  tidy:
     name: Clang-Tidy
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
     - uses: actions/checkout@v2
       with:
-        repository: ${{ github.event.pull_request.head.repo.full_name }}
-        ref: ${{ github.event.pull_request.head.ref }}
-    - name: Install dependencies
+        fetch-depth: 50
+    - name: Install dependencies and clang-tidy
       run: |
         sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tidy-11
+    - name: Setup clang-tidy
+      run: |
+        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-11 100
+        sudo update-alternatives --install /usr/bin/clang-tidy-diff clang-tidy-diff /usr/bin/clang-tidy-diff-11.py 100
     - name: Prepare compile_commands.json
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-        # We need to fixup paths in the compile_commands.json, because clang-tidy-review doesn't work properly with nested directories in the build_dir
-        sed -i.orig 's@"directory": .*@"directory": "'"$GITHUB_WORKSPACE"'/build",@g' build/compile_commands.json
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - name: Create results directory
+      run: |
+        mkdir clang-tidy-result
     - name: Analyze
-      uses: ZedThree/clang-tidy-review@v0.7.0
+      run: |
+        git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes clang-tidy-result/fixes.yml
+    - name: Save PR metadata
+      run: |
+        echo ${{ github.event.number }} > clang-tidy-result/pr-id.txt
+        echo ${{ github.event.pull_request.head.repo.full_name }} > clang-tidy-result/pr-head-repo.txt
+        echo ${{ github.event.pull_request.head.ref }} > clang-tidy-result/pr-head-ref.txt
+    - uses: actions/upload-artifact@v2
       with:
-        apt_packages: libsdl2-dev,libsdl2-image-dev,libsdl2-mixer-dev,libsdl2-ttf-dev
-        build_dir: build
-        clang_tidy_checks:
+        name: clang-tidy-result
+        path: clang-tidy-result/

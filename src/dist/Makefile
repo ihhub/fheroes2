@@ -47,6 +47,7 @@ POT        := $(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
+.PHONY: all clean pot
 
 all: $(TARGET)
 
@@ -56,7 +57,7 @@ $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 
 pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
-	@xgettext -d $(TARGET) -C -k_ -o $(POT) $(wildcard $(SEARCH))
+	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(wildcard $(SEARCH)))
 
 $(RES): $(RC)
 	@echo "gen: $@"
@@ -68,8 +69,6 @@ VPATH := $(SOURCEDIR)
 	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
 
 include $(wildcard *.d)
-
-.PHONY: clean
 
 clean:
 	rm -f *.pot *.o *.d *.rc *.res *.exe $(TARGET)

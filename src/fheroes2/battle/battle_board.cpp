@@ -26,6 +26,8 @@
 #include <set>
 
 #include "battle_arena.h"
+#include "battle_army.h"
+#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
@@ -187,24 +189,16 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); i++ ) {
-            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).SetDirection( CENTER );
             }
         }
     }
     else {
-        Indexes indexes = GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() );
-        if ( unit.isWide() ) {
-            const Indexes & tailIndexes = GetDistanceIndexes( unit.GetTailIndex(), unit.GetSpeed() );
-            std::set<int32_t> filteredIndexed( indexes.begin(), indexes.end() );
-            filteredIndexed.insert( tailIndexes.begin(), tailIndexes.end() );
-            indexes = std::vector<int32_t>( filteredIndexed.begin(), filteredIndexed.end() );
-        }
-        indexes.resize( std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), isImpassableIndex ) ) );
-
         // Set passable cells.
-        for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it )
-            GetPath( unit, Position::GetCorrect( unit, *it ), false );
+        for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
+            GetPath( unit, Position::GetCorrect( unit, idx ), false );
+        }
     }
 }
 
@@ -221,7 +215,7 @@ bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destinat
     const int32_t dstCellId = destination.GetHead()->GetIndex();
 
     // Upper distance limit
-    if ( Board::GetDistance( currentCellId, dstCellId ) > remainingSteps ) {
+    if ( GetDistance( currentCellId, dstCellId ) > remainingSteps ) {
         return false;
     }
 
@@ -243,12 +237,12 @@ bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destinat
         }
 
         // Unit steps into the moat, do not let it pass through the moat
-        if ( isMoatBuilt && Board::isMoatIndex( cellId, unit ) ) {
+        if ( isMoatBuilt && isMoatIndex( cellId, unit ) ) {
             continue;
         }
 
         // Calculate the distance from the cell in question to the destination, sort cells by distance
-        cellCosts.emplace( Board::GetDistance( cellId, dstCellId ), cellId );
+        cellCosts.emplace( GetDistance( cellId, dstCellId ), cellId );
     }
 
     // Scan the available cells recursively in ascending order of distance
@@ -288,7 +282,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
     const int32_t currentTailCellId = isCurrentLeftDirection ? currentHeadCellId + 1 : currentHeadCellId - 1;
 
     // Upper distance limit
-    if ( Board::GetDistance( currentHeadCellId, dstHeadCellId ) > remainingSteps && Board::GetDistance( currentTailCellId, dstHeadCellId ) > remainingSteps ) {
+    if ( GetDistance( currentHeadCellId, dstHeadCellId ) > remainingSteps && GetDistance( currentTailCellId, dstHeadCellId ) > remainingSteps ) {
         return false;
     }
 
@@ -312,7 +306,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
         }
 
         // Unit steps into the moat
-        if ( isMoatBuilt && ( Board::isMoatIndex( headCellId, unit ) || Board::isMoatIndex( tailCellId, unit ) ) ) {
+        if ( isMoatBuilt && ( isMoatIndex( headCellId, unit ) || isMoatIndex( tailCellId, unit ) ) ) {
             // Moat is a part of the unit's destination
             if ( headCellId == dstHeadCellId ) {
                 result.push_back( headCellId );
@@ -321,14 +315,13 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
             }
 
             // In the moat it is only allowed to turn back, do not let the unit pass through the moat
-            if ( ( tailCellId != currentHeadCellId || !Board::isMoatIndex( tailCellId, unit ) )
-                 && ( headCellId != currentTailCellId || !Board::isMoatIndex( headCellId, unit ) ) ) {
+            if ( ( tailCellId != currentHeadCellId || !isMoatIndex( tailCellId, unit ) ) && ( headCellId != currentTailCellId || !isMoatIndex( headCellId, unit ) ) ) {
                 continue;
             }
         }
 
         // Calculate the distance from the cell in question to the destination, sort cells by distance
-        cellCosts.emplace( Board::GetDistance( headCellId, dstHeadCellId ) + Board::GetDistance( tailCellId, dstTailCellId ), headCellId );
+        cellCosts.emplace( GetDistance( headCellId, dstHeadCellId ) + GetDistance( tailCellId, dstTailCellId ), headCellId );
     }
 
     // Scan the available cells recursively in ascending order of distance
@@ -403,13 +396,16 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
 
     // Check if destination is valid
     if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
-        ERROR_LOG( "Board::GetPath invalid destination for unit " + unit.String() );
+        ERROR_LOG( "Invalid destination for unit " + unit.String() );
         return result;
     }
 
     result.reserve( 15 );
 
     std::vector<bool> visitedCells( ARENASIZE, false );
+
+    // Mark the current cell of the unit as visited
+    visitedCells.at( unit.GetHeadIndex() ) = true;
 
     if ( isWideUnit ) {
         GetPathForWideUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), -1, visitedCells, result );
@@ -682,12 +678,6 @@ bool Battle::Board::isOutOfWallsIndex( s32 index )
 {
     return ( ( index <= 8 ) || ( 11 <= index && index <= 19 ) || ( 22 <= index && index <= 29 ) || ( 33 <= index && index <= 40 ) || ( 44 <= index && index <= 50 )
              || ( 55 <= index && index <= 62 ) || ( 66 <= index && index <= 73 ) || ( 77 <= index && index <= 85 ) || ( 88 <= index && index <= 96 ) );
-}
-
-bool Battle::Board::isImpassableIndex( s32 index )
-{
-    const Cell * cell = Board::GetCell( index );
-    return !cell || !cell->isPassable1( true );
 }
 
 bool Battle::Board::isBridgeIndex( s32 index, const Unit & b )
@@ -968,10 +958,12 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 {
     if ( isValidIndex( position ) && dir != UNKNOWN ) {
         Board * board = Arena::GetBoard();
-        if ( dir == CENTER )
+        if ( dir == CENTER ) {
             return &board->at( position );
-        else if ( Board::isValidDirection( position, dir ) )
+        }
+        if ( isValidDirection( position, dir ) ) {
             return &board->at( GetIndexDirection( position, dir ) );
+        }
     }
 
     return nullptr;

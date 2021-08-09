@@ -37,6 +37,7 @@
 #include "spell.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -92,7 +93,7 @@ public:
 
     void ActionListPressRight( int32_t & index ) override
     {
-        const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
         if ( castle != nullptr ) {
             Dialog::QuickInfo( *castle );
@@ -108,7 +109,7 @@ private:
 
 void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool current )
 {
-    const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
     if ( castle ) {
         fheroes2::Blit( fheroes2::AGG::GetICN( _townFrameIcnId, 0 ), 481, 177, fheroes2::Display::instance(), dstx, dsty, 54, 30 );
@@ -195,7 +196,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
 
     bool apply = false;
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::VIEWMINES:
         apply = ActionSpellViewMines( *this );
         break;
@@ -233,17 +234,9 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellVisions( *this );
         break;
     case Spell::HAUNT:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETEGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETAGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETFGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell );
-        break;
     case Spell::SETWGUARDIAN:
         apply = ActionSpellSetGuardian( *this, spell );
         break;
@@ -549,7 +542,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     frameborder.reset();
     // store
     if ( result == Dialog::OK )
-        return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( listbox.GetCurrent() ) ) );
+        return HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( listbox.GetCurrent() ) ) );
 
     return false;
 }
@@ -560,8 +553,8 @@ bool ActionSpellVisions( Heroes & hero )
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const int32_t heroColor = hero.GetColor();
-    monsters.resize( std::distance( monsters.begin(), std::remove_if( monsters.begin(), monsters.end(),
-                                                                      [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ) ) );
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
+                    monsters.end() );
 
     if ( monsters.empty() ) {
         std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
@@ -596,7 +589,7 @@ bool ActionSpellVisions( Heroes & hero )
                 StringReplace( msg, "%{count}", join.monsterCount );
             }
             msg.append( "\n" );
-            msg.append( "\n for a fee of %{gold} gold." );
+            msg.append( _( "\n for a fee of %{gold} gold." ) );
             StringReplace( msg, "%{gold}", troop.GetCost().gold );
             break;
 
@@ -629,7 +622,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
     const u32 count = hero.GetPower() * spell.ExtraValue();
 
     if ( count ) {
-        tile.SetQuantity3( spell() );
+        tile.SetQuantity3( spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );

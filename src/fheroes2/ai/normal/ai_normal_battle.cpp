@@ -37,6 +37,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <set>
 
 using namespace Battle;
 
@@ -109,13 +110,18 @@ namespace AI
 
         for ( const int moveIndex : moves ) {
             // Skip if this cell has adjacent enemies
-            if ( !Board::GetCell( moveIndex )->GetQuality() )
+            if ( Board::GetCell( moveIndex )->GetQuality() )
                 continue;
 
             double cellThreatLevel = 0.0;
 
             for ( const Unit * enemy : enemies ) {
-                const uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
+                uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
+                if ( enemy->isWide() ) {
+                    const uint32_t distanceFromTail = Board::GetDistance( moveIndex, enemy->GetTailIndex() );
+                    dist = std::min( dist, distanceFromTail );
+                }
+
                 const uint32_t range = std::max( 1u, enemy->GetMoveRange() );
                 cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - static_cast<double>( dist ) / range );
             }
@@ -233,7 +239,7 @@ namespace AI
         if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
             if ( isCommanderCanSpellcast( arena, _commander ) ) {
                 // Cast maximum damage spell
-                const SpellSeletion & bestSpell = selectBestSpell( arena, true );
+                const SpellSelection & bestSpell = selectBestSpell( arena, true );
 
                 if ( bestSpell.spellID != -1 ) {
                     actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
@@ -247,7 +253,7 @@ namespace AI
 
         // Step 3. Calculate spell heuristics
         if ( isCommanderCanSpellcast( arena, _commander ) ) {
-            const SpellSeletion & bestSpell = selectBestSpell( arena, false );
+            const SpellSelection & bestSpell = selectBestSpell( arena, false );
 
             if ( bestSpell.spellID != -1 ) {
                 actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
@@ -481,9 +487,29 @@ namespace AI
             double highestStrength = 0;
 
             for ( const Unit * enemy : enemies ) {
-                const double attackPriority = enemy->GetScoreQuality( currentUnit );
+                double attackPriority = enemy->GetScoreQuality( currentUnit );
 
-                if ( highestStrength < attackPriority ) {
+                if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+                    // TODO: update logic to handle tail case as well. Right now archers always shoot to head.
+                    const Indexes around = Board::GetAroundIndexes( enemy->GetHeadIndex() );
+                    std::set<const Unit *> targetedUnits;
+
+                    for ( const int32_t cellId : around ) {
+                        const Unit * monsterOnCell = Board::GetCell( cellId )->GetUnit();
+                        if ( monsterOnCell != nullptr ) {
+                            targetedUnits.emplace( monsterOnCell );
+                        }
+                    }
+
+                    for ( const Unit * monster : targetedUnits ) {
+                        if ( enemy != monster ) {
+                            // No need to recalculate for the same monster.
+                            attackPriority += monster->GetScoreQuality( currentUnit );
+                        }
+                    }
+                }
+
+                if ( highestStrength < attackPriority && attackPriority > 0 ) {
                     highestStrength = attackPriority;
                     target.unit = enemy;
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );

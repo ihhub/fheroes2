@@ -22,6 +22,7 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -29,11 +30,14 @@
 #include "bitmodes.h"
 #include "captain.h"
 #include "castle_heroes.h"
-#include "heroes.h"
 #include "mageguild.h"
-#include "monster_anim.h"
 #include "position.h"
 #include "ui_button.h"
+
+namespace fheroes2
+{
+    class RandomMonsterAnimation;
+}
 
 class Heroes;
 
@@ -110,7 +114,7 @@ public:
         ALLOWCASTLE = 0x0002,
         CUSTOMARMY = 0x0004,
         ALLOWBUILD = 0x0008,
-        DISABLEHIRES = 0x0010,
+        // UNUSED = 0x0010,
         CAPITAL = 0x0020
     };
 
@@ -211,7 +215,6 @@ public:
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
-    static bool PredicateIsCapital( const Castle * );
     static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
     static u32 GetGrownWell( void );

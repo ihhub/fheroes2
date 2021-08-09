@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdlib>
-
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "logging.h"
@@ -87,11 +85,6 @@ void Music::SetFadeIn( int f )
     fadein = f;
 }
 
-void Music::SetFadeOut( int f )
-{
-    fadeout = f;
-}
-
 int Music::Volume( int vol )
 {
     if ( !Mixer::isValid() ) {
@@ -121,12 +114,6 @@ void Music::Pause( void )
         Mix_PauseMusic();
 }
 
-void Music::Resume( void )
-{
-    if ( music )
-        Mix_ResumeMusic();
-}
-
 void Music::Reset( void )
 {
     if ( music ) {
@@ -145,13 +132,6 @@ bool Music::isPlaying( void )
 {
     return music && Mix_PlayingMusic();
 }
-
-bool Music::isPaused( void )
-{
-    return music && Mix_PausedMusic();
-}
-
-void Music::SetExtCommand( const std::string & ) {}
 
 void Music::Mute()
 {

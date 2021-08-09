@@ -31,12 +31,6 @@
 #include "logging.h"
 #include "tools.h"
 
-#ifdef WITH_ICONV
-#include <iconv.h>
-#else
-#include <array>
-#endif
-
 #include <SDL.h>
 
 /* trim left right space */
@@ -199,49 +193,6 @@ std::string InsertString( const std::string & src, size_t pos, const char * c )
     return res;
 }
 
-// from SDL_ttf
-std::vector<u16> StringUTF8_to_UNICODE( const std::string & utf8 )
-{
-    std::vector<u16> unicode;
-    unicode.reserve( utf8.size() );
-
-    for ( std::string::const_iterator it = utf8.begin(); it < utf8.end(); ++it ) {
-        u16 ch = static_cast<u8>( *it );
-
-        if ( ch >= 0xF0 ) {
-            if ( utf8.end() - it > 3 ) {
-                ch = static_cast<u16>( *it++ & 0x07 ) << 18;
-                ch |= static_cast<u16>( *it++ & 0x3F ) << 12;
-                ch |= static_cast<u16>( *it++ & 0x3F ) << 6;
-                ch |= static_cast<u16>( *it & 0x3F );
-            }
-            else
-                break;
-        }
-        else if ( ch >= 0xE0 ) {
-            if ( utf8.end() - it > 2 ) {
-                ch = static_cast<u16>( *it++ & 0x0F ) << 12;
-                ch |= static_cast<u16>( *it++ & 0x3F ) << 6;
-                ch |= static_cast<u16>( *it & 0x3F );
-            }
-            else
-                break;
-        }
-        else if ( ch >= 0xC0 ) {
-            if ( utf8.end() - it > 1 ) {
-                ch = static_cast<u16>( *it++ & 0x1F ) << 6;
-                ch |= static_cast<u16>( *it & 0x3F );
-            }
-            else
-                break;
-        }
-
-        unicode.push_back( ch );
-    }
-
-    return unicode;
-}
-
 int Sign( int s )
 {
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
@@ -281,132 +232,6 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     SDL_RWclose( rw );
 
     return data;
-}
-
-#ifdef WITH_ICONV
-std::string EncodeString( const std::string & str, const char * charset )
-{
-    iconv_t cd;
-
-    if ( !charset || ( iconv_t )( -1 ) == ( cd = iconv_open( "utf-8", charset ) ) )
-        return str;
-
-    std::string res( str );
-    size_t inbytesleft = str.size();
-    size_t outbytesleft = inbytesleft * 2 + 1;
-    const char * inbuf = str.c_str();
-    char * outbuf1 = new char[outbytesleft];
-    char * outbuf2 = outbuf1;
-
-    size_t reslen = iconv( cd, const_cast<char **>( &inbuf ), &inbytesleft, &outbuf1, &outbytesleft );
-
-    iconv_close( cd );
-
-    if ( reslen != ( size_t )( -1 ) )
-        res = std::string( outbuf2, outbuf1 - outbuf2 );
-
-    delete[] outbuf2;
-
-    return res;
-}
-#else
-std::string cp1251_to_utf8( const std::string & in )
-{
-    const std::array<uint32_t, 128> table_1251
-        = { 0x82D0, 0x83D0,   0x9A80E2, 0x93D1,   0x9E80E2, 0xA680E2, 0xA080E2, 0xA180E2, 0xAC82E2, 0xB080E2, 0x89D0, 0xB980E2, 0x8AD0, 0x8CD0, 0x8BD0, 0x8FD0,
-            0x92D1, 0x9880E2, 0x9980E2, 0x9C80E2, 0x9D80E2, 0xA280E2, 0x9380E2, 0x9480E2, 0,        0xA284E2, 0x99D1, 0xBA80E2, 0x9AD1, 0x9CD1, 0x9BD1, 0x9FD1,
-            0xA0C2, 0x8ED0,   0x9ED1,   0x88D0,   0xA4C2,   0x90D2,   0xA6C2,   0xA7C2,   0x81D0,   0xA9C2,   0x84D0, 0xABC2,   0xACC2, 0xADC2, 0xAEC2, 0x87D0,
-            0xB0C2, 0xB1C2,   0x86D0,   0x96D1,   0x91D2,   0xB5C2,   0xB6C2,   0xB7C2,   0x91D1,   0x9684E2, 0x94D1, 0xBBC2,   0x98D1, 0x85D0, 0x95D1, 0x97D1,
-            0x90D0, 0x91D0,   0x92D0,   0x93D0,   0x94D0,   0x95D0,   0x96D0,   0x97D0,   0x98D0,   0x99D0,   0x9AD0, 0x9BD0,   0x9CD0, 0x9DD0, 0x9ED0, 0x9FD0,
-            0xA0D0, 0xA1D0,   0xA2D0,   0xA3D0,   0xA4D0,   0xA5D0,   0xA6D0,   0xA7D0,   0xA8D0,   0xA9D0,   0xAAD0, 0xABD0,   0xACD0, 0xADD0, 0xAED0, 0xAFD0,
-            0xB0D0, 0xB1D0,   0xB2D0,   0xB3D0,   0xB4D0,   0xB5D0,   0xB6D0,   0xB7D0,   0xB8D0,   0xB9D0,   0xBAD0, 0xBBD0,   0xBCD0, 0xBDD0, 0xBED0, 0xBFD0,
-            0x80D1, 0x81D1,   0x82D1,   0x83D1,   0x84D1,   0x85D1,   0x86D1,   0x87D1,   0x88D1,   0x89D1,   0x8AD1, 0x8BD1,   0x8CD1, 0x8DD1, 0x8ED1, 0x8FD1 };
-
-    std::string res;
-    res.reserve( in.size() * 2 + 1 );
-
-    for ( std::string::const_iterator it = in.begin(); it != in.end(); ++it ) {
-        if ( *it & 0x80 ) {
-            const size_t index = *it & 0x7f;
-
-            if ( index < table_1251.size() ) {
-                const uint32_t v = table_1251[index];
-                res.append( 1, v );
-                res.append( 1, v >> 8 );
-                if ( v & 0xFFFF0000 )
-                    res.append( 1, v >> 16 );
-            }
-        }
-        else
-            res.append( 1, *it );
-    }
-
-    return res;
-}
-
-std::string EncodeString( const std::string & str, const char * charset )
-{
-    if ( charset ) {
-        if ( 0 == std::strcmp( charset, "cp1251" ) )
-            return cp1251_to_utf8( str );
-    }
-
-    return str;
-}
-#endif
-
-u32 decodeChar( int v )
-{
-    if ( 'A' <= v && v <= 'Z' )
-        return v - 'A';
-
-    if ( 'a' <= v && v <= 'z' )
-        return v - 'a' + 26;
-
-    if ( '0' <= v && v <= '9' )
-        return v - '0' + 52;
-
-    if ( v == '+' )
-        return 62;
-
-    if ( v == '/' )
-        return 63;
-
-    return 0;
-}
-
-std::vector<u8> decodeBase64( const std::string & src )
-{
-    std::vector<u8> res;
-
-    if ( src.size() % 4 == 0 ) {
-        size_t size = 3 * src.size() / 4;
-
-        if ( src[src.size() - 1] == '=' )
-            --size;
-        if ( src[src.size() - 2] == '=' )
-            --size;
-
-        res.reserve( size );
-
-        for ( u32 ii = 0; ii < src.size(); ii += 4 ) {
-            u32 sextet_a = decodeChar( src[ii] );
-            u32 sextet_b = decodeChar( src[ii + 1] );
-            u32 sextet_c = decodeChar( src[ii + 2] );
-            u32 sextet_d = decodeChar( src[ii + 3] );
-
-            u32 triple = ( sextet_a << 18 ) + ( sextet_b << 12 ) + ( sextet_c << 6 ) + sextet_d;
-
-            if ( res.size() < size )
-                res.push_back( ( triple >> 16 ) & 0xFF );
-            if ( res.size() < size )
-                res.push_back( ( triple >> 8 ) & 0xFF );
-            if ( res.size() < size )
-                res.push_back( triple & 0xFF );
-        }
-    }
-
-    return res;
 }
 
 namespace fheroes2
@@ -563,5 +388,20 @@ namespace fheroes2
         rt3.height = std::max( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
 
         return rt3;
+    }
+
+    uint32_t calculateCRC32( const uint8_t * data, const size_t length )
+    {
+        uint32_t crc = 0xFFFFFFFF;
+        for ( size_t i = 0; i < length; ++i ) {
+            crc ^= static_cast<uint32_t>( data[i] );
+
+            for ( int bit = 0; bit < 8; ++bit ) {
+                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
+                crc = ( crc >> 1 ) ^ poly;
+            }
+        }
+
+        return ~crc;
     }
 }

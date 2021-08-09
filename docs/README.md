@@ -1,6 +1,8 @@
 # fheroes2
 
-Free implementation of **Heroes of Might and Magic II** game engine.
+**Free Heroes of Might and Magic II** (fheroes2) is a recreation of HoMM2 game engine.
+
+This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.
 
 <p align="center">
     <img src="images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="images/screenshots/screenshot_castle.png?raw=true" width="410">

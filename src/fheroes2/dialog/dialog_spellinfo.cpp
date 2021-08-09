@@ -30,6 +30,7 @@
 #include "spell.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void Dialog::SpellInfo( const Spell & spell, bool ok_button )
@@ -37,7 +38,7 @@ void Dialog::SpellInfo( const Spell & spell, bool ok_button )
     std::string msg = spell.GetDescription();
     u32 extra = spell.ExtraValue();
 
-    switch ( spell() ) {
+    switch ( spell.GetID() ) {
     case Spell::HASTE:
     case Spell::MASSHASTE:
         if ( 0 == extra )

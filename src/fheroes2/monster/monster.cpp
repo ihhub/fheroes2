@@ -32,6 +32,7 @@
 #include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "translations.h"
@@ -78,11 +79,9 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
 {
     switch ( monsterID ) {
     case Monster::ARCHER:
-        return ICN::ARCH_MSL;
     case Monster::RANGER:
         return ICN::ARCH_MSL;
     case Monster::ORC:
-        return ICN::ORC__MSL;
     case Monster::ORC_CHIEF:
         return ICN::ORC__MSL;
     case Monster::TROLL:
@@ -90,11 +89,9 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::WAR_TROLL:
         return ICN::TROLL2MSL;
     case Monster::ELF:
-        return ICN::ELF__MSL;
     case Monster::GRAND_ELF:
         return ICN::ELF__MSL;
     case Monster::DRUID:
-        return ICN::DRUIDMSL;
     case Monster::GREATER_DRUID:
         return ICN::DRUIDMSL;
     case Monster::CENTAUR:
@@ -105,7 +102,6 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::TITAN:
         return ICN::TITANMSL;
     case Monster::LICH:
-        return ICN::LICH_MSL;
     case Monster::POWER_LICH:
         return ICN::LICH_MSL;
 
@@ -137,7 +133,7 @@ Monster::Monster( const int m )
 Monster::Monster( const Spell & sp )
     : id( UNKNOWN )
 {
-    switch ( sp() ) {
+    switch ( sp.GetID() ) {
     case Spell::SETEGUARDIAN:
     case Spell::SUMMONEELEMENT:
         id = EARTH_ELEMENT;
@@ -1216,7 +1212,7 @@ const char * Monster::GetMultiName( void ) const
 const char * Monster::GetPluralName( u32 count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
-    return _n( generalStats.name, generalStats.pluralName, count );
+    return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
 }
 
 u32 Monster::GetSpriteIndex( void ) const

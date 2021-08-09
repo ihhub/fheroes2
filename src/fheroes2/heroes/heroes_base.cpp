@@ -28,6 +28,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "translations.h"
 #include "world.h"
@@ -45,7 +46,7 @@ int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const Her
             if ( acount ) {
                 s32 mod = art.ExtraValue();
 
-                switch ( art() ) {
+                switch ( art.GetID() ) {
                 case Artifact::SWORD_BREAKER:
                     if ( type == MDF_ATTACK )
                         mod = 1;

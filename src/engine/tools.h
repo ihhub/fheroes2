@@ -45,11 +45,6 @@ void StringReplace( std::string &, const char *, int );
 
 int CountBits( u32 );
 
-std::string EncodeString( const std::string &, const char * charset );
-std::vector<u16> StringUTF8_to_UNICODE( const std::string & );
-
-std::vector<u8> decodeBase64( const std::string & );
-
 std::string InsertString( const std::string &, size_t, const char * );
 
 bool SaveMemToFile( const std::vector<u8> &, const std::string & );
@@ -74,6 +69,8 @@ namespace fheroes2
     std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt );
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
+
+    uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 }
 
 #endif

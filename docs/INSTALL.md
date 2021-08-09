@@ -17,8 +17,10 @@ Precompiled binaries of the release version are currently available for the foll
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
+* [**PlayStation Vita**](#playstation-vita)
+* [**Nintendo Switch**](#nintendo-switch)
 
-Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots).
+Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots-latest-builds).
 
 <a name="windows"></a>
 ## Windows
@@ -127,12 +129,30 @@ If you have a legally purchased copy of the original game, copy all files belong
 
   * **openSUSE**: openSUSE supports the One-Click-Install using the `SDL_mixer.ymp` file from the `script/linux` subdirectory.
 
-  * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
+  * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer`.
 
 * After all dependencies are installed, copy all files belonging to the original game to the fheroes2 installation directory if you have a legally purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
 
-<a name="snapshots"></a>
-## Snapshots
+<a name="playstation-vita"></a>
+## PlayStation Vita
+
+Please note: you need to be running custom firmware for it to work.
+
+* Download the [**PlayStation Vita ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_psv_sdl2.zip).
+
+* Follow the [**instructions**](README_PSV.md).
+
+<a name="nintendo-switch"></a>
+## Nintendo Switch
+
+Please note: you need to be running custom firmware for it to work.
+
+* Download the [**Nintendo Switch ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_switch_sdl2.zip).
+
+* Follow the [**instructions**](README_switch.md).
+
+<a name="snapshots-latest-builds"></a>
+## Snapshots (latest builds)
 
 You can download the precompiled binaries of the latest commit (snapshot) for
 **Windows** (
@@ -148,6 +168,7 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 **Ubuntu** (
 [**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev)
-) and
-[**PS Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev).
+),
+[**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
+[**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch-sdl2_dev).
 **These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers. DON'T EXPECT THEM TO WORK PROPERLY.**

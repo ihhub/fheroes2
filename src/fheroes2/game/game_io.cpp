@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <ctime>
-#include <sstream>
 
 #include "campaign_savedata.h"
 #include "dialog.h"
@@ -35,6 +34,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -85,18 +85,7 @@ namespace
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove version handling in HeaderSAV class." );
-
-        if ( hdr._saveFileVersion < FORMAT_VERSION_094_RELEASE ) {
-            msg >> hdr.status >> hdr.info >> hdr.gameType;
-        }
-        else {
-            msg >> hdr.status >> hdr.info;
-            msg >> hdr.info._version;
-            msg >> hdr.gameType;
-        }
-
-        return msg;
+        return msg >> hdr.status >> hdr.info >> hdr.info._version >> hdr.gameType;
     }
 }
 
@@ -187,7 +176,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     Settings & conf = Settings::Get();
     if ( ( conf.GameType() & fileGameType ) == 0 ) {
-        Dialog::Message( "Warning", _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Warning" ), _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -200,18 +189,24 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     }
 
     if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() ) {
-        Dialog::Message( "Warning", _( "This file is saved in the \"The Price of Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Warning" ), _( "This file is saved in the \"The Price of Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
     }
 
     fz >> binver;
 
     // check version: false
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION ) {
-        std::ostringstream os;
-        os << "usupported save format: " << binver << std::endl
-           << "game version: " << CURRENT_FORMAT_VERSION << std::endl
-           << "last supported version: " << LAST_SUPPORTED_FORMAT_VERSION;
-        Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
+        std::string errorMessage( _( "Usupported save format: " ) );
+        errorMessage += std::to_string( binver );
+        errorMessage += ".\n";
+        errorMessage += _( "Current game version: " );
+        errorMessage += std::to_string( CURRENT_FORMAT_VERSION );
+        errorMessage += ".\n";
+        errorMessage += _( "Last supported version: " );
+        errorMessage += std::to_string( LAST_SUPPORTED_FORMAT_VERSION );
+        errorMessage += ".\n";
+
+        Dialog::Message( _( "Error" ), errorMessage, Font::BIG, Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -230,12 +225,13 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         fz >> MonsterStaticData::Get();
     }
 
-    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
+    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
+        std::string warningMessage( _( "This saved game is localized to '" ) );
         warningMessage.append( conf.loadedFileLanguage() );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
-        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
+        warningMessage.append( _( "' language, but the current language of the game is '" ) );
+        warningMessage.append( conf.getGameLanguage() );
+        warningMessage += "'.";
+        Dialog::Message( _( "Warning" ), warningMessage, Font::BIG, Dialog::OK );
     }
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;

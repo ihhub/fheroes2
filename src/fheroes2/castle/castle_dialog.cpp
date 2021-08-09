@@ -41,11 +41,60 @@
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
 void CastleRedrawTownName( const Castle & castle, const fheroes2::Point & dst );
+
+namespace
+{
+    building_t getPressedBuildingHotkey()
+    {
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_1 ) ) {
+            return DWELLING_MONSTER1;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_2 ) ) {
+            return DWELLING_MONSTER2;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_3 ) ) {
+            return DWELLING_MONSTER3;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_4 ) ) {
+            return DWELLING_MONSTER4;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_5 ) ) {
+            return DWELLING_MONSTER5;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_6 ) ) {
+            return DWELLING_MONSTER6;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
+            return BUILD_MARKETPLACE;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
+            return BUILD_WELL;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
+            return BUILD_MAGEGUILD;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
+            return BUILD_SHIPYARD;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
+            return BUILD_THIEVESGUILD;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
+            return BUILD_TAVERN;
+        }
+        if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
+            return BUILD_CASTLE;
+        }
+
+        return BUILD_NOTHING;
+    }
+}
 
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const fheroes2::Point & pt )
 {
@@ -377,8 +426,11 @@ int Castle::OpenDialog( bool readonly )
 
             // buildings event
             for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-                if ( ( *it ).id == GetActualDwelling( ( *it ).id ) && isBuild( ( *it ).id ) ) {
-                    if ( !readonly && le.MouseClickLeft( ( *it ).coord ) ) {
+                const uint32_t actualBuildingID = GetActualDwelling( ( *it ).id );
+                const bool isBuildingHotkeyPressed = actualBuildingID == GetActualDwelling( getPressedBuildingHotkey() );
+
+                if ( ( *it ).id == actualBuildingID && isBuild( ( *it ).id ) ) {
+                    if ( !readonly && ( le.MouseClickLeft( ( *it ).coord ) || isBuildingHotkeyPressed ) ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
                         if ( Castle::RecruitMonster(
                                  Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), getMonstersInDwelling( ( *it ).id ), true ) ) ) {
@@ -398,7 +450,7 @@ int Castle::OpenDialog( bool readonly )
                 if ( BUILD_MAGEGUILD & ( *it ).id ) {
                     const int mageGuildLevel = GetLevelMageGuild();
                     if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
-                        if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                        if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             bool noFreeSpaceForMagicBook = false;
 
@@ -441,7 +493,7 @@ int Castle::OpenDialog( bool readonly )
                     }
                 }
                 else if ( isBuild( ( *it ).id ) ) {
-                    if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                    if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == ( *it ).id ) {
                         if ( selectArmy1.isSelected() )
                             selectArmy1.ResetSelected();
                         if ( selectArmy2.isValid() && selectArmy2.isSelected() )

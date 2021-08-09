@@ -31,6 +31,7 @@
 #endif
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -122,7 +123,6 @@ uint8_t GetPaletteIndexFromColor( int color )
     return COLOR_GRAY;
 }
 
-/* constructor */
 Interface::Radar::Radar( Basic & basic )
     : BorderWindow( fheroes2::Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
     , radarType( RadarType::WorldMap )
@@ -269,8 +269,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
-    const int areaw = ( offset.x ? rect.width - 2 * offset.x : rect.width );
-    const int areah = ( offset.y ? rect.height - 2 * offset.y : rect.height );
+    const int areaw = rect.width - 2 * offset.x;
+    const int areah = rect.height - 2 * offset.y;
 
     int stepx = worldWidth / rect.width;
     int stepy = worldHeight / rect.height;
@@ -315,7 +315,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
-                    const Castle * castle = world.GetCastle( tile.GetCenter() );
+                    const Castle * castle = world.getCastle( tile.GetCenter() );
                     if ( castle )
                         fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 }
@@ -373,8 +373,8 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
         const fheroes2::Rect & rect = GetArea();
         const fheroes2::Rect & rectMaps = roiRectangle == nullptr ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
 
-        s32 areaw = ( offset.x ? rect.width - 2 * offset.x : rect.width );
-        s32 areah = ( offset.y ? rect.height - 2 * offset.y : rect.height );
+        const int32_t areaw = rect.width - 2 * offset.x;
+        const int32_t areah = rect.height - 2 * offset.y;
 
         int32_t xStart = rectMaps.x;
         int32_t xEnd = rectMaps.x + rectMaps.width;
@@ -416,15 +416,14 @@ void Interface::Radar::QueueEventProcessing( void )
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         RedrawCursor();
     }
-    else
-        // move cursor
-        if ( le.MouseCursor( rect ) ) {
+    // move cursor
+    else if ( le.MouseCursor( rect ) ) {
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
-            fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
-            const fheroes2::Point prev( visibleROI.x, visibleROI.y );
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
+                fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
+                const fheroes2::Point prev( visibleROI.x, visibleROI.y );
                 gamearea.SetCenter( fheroes2::Point( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height ) );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
@@ -460,11 +459,11 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
     // move cursor
     if ( le.MouseCursor( rect ) ) {
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
-            const fheroes2::Rect initROI = roi.GetROIinPixels();
-            const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
+                const fheroes2::Rect initROI = roi.GetROIinPixels();
+                const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
                 const fheroes2::Point newCoordsCenter( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height );
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
@@ -485,6 +484,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
     }
     return false;
 }
+
 void Interface::Radar::ResetAreaSize( void )
 {
     ChangeAreaSize( fheroes2::Size( RADARWIDTH, RADARWIDTH ) );

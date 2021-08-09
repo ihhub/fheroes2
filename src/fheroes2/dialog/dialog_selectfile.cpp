@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cctype>
 #include <ctime>
+#include <iomanip>
 #include <iterator>
 #include <sstream>
 #include <string>
@@ -39,6 +40,7 @@
 #include "system.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "world.h"
 
@@ -197,7 +199,7 @@ std::string Dialog::SelectFileSave( void )
     const std::string & name = conf.CurrentFileInfo().name;
 
     std::string base = !name.empty() ? name : "newgame";
-    base.resize( std::distance( base.begin(), std::find_if( base.begin(), base.end(), ::ispunct ) ) );
+    base.erase( std::find_if( base.begin(), base.end(), ::ispunct ), base.end() );
     std::replace_if( base.begin(), base.end(), ::isspace, '_' );
     std::ostringstream os;
 

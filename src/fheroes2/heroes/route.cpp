@@ -26,6 +26,7 @@
 #include "heroes.h"
 #include "maps.h"
 #include "route.h"
+#include "serialize.h"
 #include "world.h"
 
 s32 Route::Step::GetIndex( void ) const

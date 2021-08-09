@@ -21,7 +21,9 @@
  ***************************************************************************/
 
 #include "battle_bridge.h"
+#include "battle_arena.h"
 #include "battle_cell.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "castle.h"

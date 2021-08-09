@@ -216,6 +216,33 @@ namespace
 #endif
 }
 
+// Custom button mapping for Nintendo Switch
+#if defined( __SWITCH__ )
+#undef SDL_CONTROLLER_BUTTON_A
+#undef SDL_CONTROLLER_BUTTON_B
+#undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
+#undef SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+#undef SDL_CONTROLLER_BUTTON_DPAD_UP
+#undef SDL_CONTROLLER_BUTTON_DPAD_DOWN
+#define SDL_CONTROLLER_BUTTON_A 1
+#define SDL_CONTROLLER_BUTTON_B 0
+#define SDL_CONTROLLER_BUTTON_DPAD_LEFT 13
+#define SDL_CONTROLLER_BUTTON_DPAD_RIGHT 14
+#define SDL_CONTROLLER_BUTTON_DPAD_UP 11
+#define SDL_CONTROLLER_BUTTON_DPAD_DOWN 12
+
+enum SwitchJoyconKeys
+{
+    SWITCH_BUTTON_Y = 2,
+    SWITCH_BUTTON_X = 3,
+    SWITCH_BUTTON_MINUS = 4,
+    SWITCH_BUTTON_PLUS = 6,
+    SWITCH_BUTTON_L = 9,
+    SWITCH_BUTTON_R = 10
+};
+
+#endif
+
 LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( KEY_NONE )
@@ -374,15 +401,12 @@ KeySym GetKeySym( int key )
     case SDLK_UNDERSCORE:
         return KEY_UNDERSCORE;
     case SDLK_LALT:
-        return KEY_ALT;
     case SDLK_RALT:
         return KEY_ALT;
     case SDLK_LCTRL:
-        return KEY_CONTROL;
     case SDLK_RCTRL:
         return KEY_CONTROL;
     case SDLK_LSHIFT:
-        return KEY_SHIFT;
     case SDLK_RSHIFT:
         return KEY_SHIFT;
     case SDLK_TAB:
@@ -576,61 +600,41 @@ bool PressIntKey( u32 max, u32 & result )
             result *= 10;
             switch ( le.KeyValue() ) {
             case KEY_1:
-                result += 1;
-                break;
-            case KEY_2:
-                result += 2;
-                break;
-            case KEY_3:
-                result += 3;
-                break;
-            case KEY_4:
-                result += 4;
-                break;
-            case KEY_5:
-                result += 5;
-                break;
-            case KEY_6:
-                result += 6;
-                break;
-            case KEY_7:
-                result += 7;
-                break;
-            case KEY_8:
-                result += 8;
-                break;
-            case KEY_9:
-                result += 9;
-                break;
-
             case KEY_KP1:
                 result += 1;
                 break;
+            case KEY_2:
             case KEY_KP2:
                 result += 2;
                 break;
+            case KEY_3:
             case KEY_KP3:
                 result += 3;
                 break;
+            case KEY_4:
             case KEY_KP4:
                 result += 4;
                 break;
+            case KEY_5:
             case KEY_KP5:
                 result += 5;
                 break;
+            case KEY_6:
             case KEY_KP6:
                 result += 6;
                 break;
+            case KEY_7:
             case KEY_KP7:
                 result += 7;
                 break;
+            case KEY_8:
             case KEY_KP8:
                 result += 8;
                 break;
+            case KEY_9:
             case KEY_KP9:
                 result += 9;
                 break;
-
             default:
                 break;
             }
@@ -1252,6 +1256,9 @@ void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
 
         ResumeSounds();
     }
+    else if ( event.window.event == SDL_WINDOWEVENT_RESIZED ) {
+        fheroes2::Display::instance().render();
+    }
 }
 #else
 void LocalEvent::OnActiveEvent( const SDL_Event & event )
@@ -1434,6 +1441,27 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = KEY_RETURN;
         }
+#if defined( __SWITCH__ )
+        // Custom button mapping for Nintendo Switch
+        if ( button.button == SWITCH_BUTTON_Y ) {
+            key_value = KEY_RETURN;
+        }
+        else if ( button.button == SWITCH_BUTTON_X ) {
+            key_value = KEY_ESCAPE;
+        }
+        else if ( button.button == SWITCH_BUTTON_R ) {
+            key_value = KEY_t;
+        }
+        else if ( button.button == SWITCH_BUTTON_L ) {
+            key_value = KEY_h;
+        }
+        else if ( button.button == SWITCH_BUTTON_MINUS ) {
+            key_value = KEY_e;
+        }
+        else if ( button.button == SWITCH_BUTTON_PLUS ) {
+            key_value = KEY_c;
+        }
+#endif
     }
 }
 
@@ -1505,16 +1533,6 @@ bool LocalEvent::MousePressLeft( void ) const
 bool LocalEvent::MouseReleaseLeft( void ) const
 {
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_LEFT == mouse_button;
-}
-
-bool LocalEvent::MousePressMiddle( void ) const
-{
-    return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_MIDDLE == mouse_button;
-}
-
-bool LocalEvent::MouseReleaseMiddle( void ) const
-{
-    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_MIDDLE == mouse_button;
 }
 
 bool LocalEvent::MousePressRight( void ) const
@@ -1667,18 +1685,6 @@ bool LocalEvent::MouseClickMiddle( void )
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle( const fheroes2::Rect & rt )
-{
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button && ( rt & mouse_pm ) && ( rt & mouse_rm ) ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
-    }
-
-    return false;
-}
-
 bool LocalEvent::MouseClickRight( void )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
@@ -1726,11 +1732,6 @@ bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
     return MousePressLeft() && ( rt & mouse_pl );
 }
 
-bool LocalEvent::MousePressMiddle( const fheroes2::Rect & rt ) const
-{
-    return MousePressMiddle() && ( rt & mouse_pm );
-}
-
 bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 {
     return MousePressRight() && ( rt & mouse_pr );
@@ -1739,11 +1740,6 @@ bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
 {
     return MouseReleaseLeft() && ( rt & mouse_rl );
-}
-
-bool LocalEvent::MouseReleaseMiddle( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseMiddle() && ( rt & mouse_rm );
 }
 
 bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
@@ -1829,11 +1825,6 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 void LocalEvent::SetState( u32 type, bool enable )
 {
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
-}
-
-int LocalEvent::GetState( u32 type )
-{
-    return SDL_EventState( type, SDL_QUERY );
 }
 
 void LocalEvent::SetStateDefaults( void )

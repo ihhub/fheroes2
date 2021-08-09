@@ -20,87 +20,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "thread.h"
+#ifndef SDLTIMER_H
+#define SDLTIMER_H
 
-using namespace SDL;
+#include "types.h"
+#include <SDL.h>
 
-Thread::Thread()
-    : thread( nullptr )
-{}
-
-Thread::~Thread()
+namespace SDL
 {
-    Kill();
+    class Timer
+    {
+    public:
+        Timer();
+
+        bool IsValid() const;
+
+        void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
+        void Remove();
+
+    private:
+        SDL_TimerID id;
+    };
 }
 
-Thread::Thread( const Thread & )
-    : thread( nullptr )
-{}
-
-Thread & Thread::operator=( const Thread & )
-{
-    return *this;
-}
-
-void Thread::Create( int ( *fn )( void * ), void * param )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    thread = SDL_CreateThread( fn, "", param );
-#else
-    thread = SDL_CreateThread( fn, param );
 #endif
-}
-
-int Thread::Wait( void )
-{
-    int status = 0;
-    if ( thread )
-        SDL_WaitThread( thread, &status );
-    thread = nullptr;
-    return status;
-}
-
-void Thread::Kill( void )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#else
-    if ( thread )
-        SDL_KillThread( thread );
-    thread = nullptr;
-#endif
-}
-
-bool Thread::IsRun( void ) const
-{
-    return GetID() != 0;
-}
-
-u32 Thread::GetID( void ) const
-{
-    return thread ? SDL_GetThreadID( thread ) : 0;
-}
-
-Timer::Timer()
-    : id( 0 )
-{}
-
-void Timer::Run( u32 interval, u32 ( *fn )( u32, void * ), void * param )
-{
-    if ( id )
-        Remove();
-
-    id = SDL_AddTimer( interval, fn, param );
-}
-
-void Timer::Remove( void )
-{
-    if ( id ) {
-        SDL_RemoveTimer( id );
-        id = 0;
-    }
-}
-
-bool Timer::IsValid( void ) const
-{
-    return id != 0;
-}

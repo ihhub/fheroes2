@@ -29,6 +29,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void InfoSkillClear( const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );

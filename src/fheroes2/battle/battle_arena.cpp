@@ -23,12 +23,10 @@
 #include <algorithm>
 #include <cassert>
 
-#include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
 #include "audio_mixer.h"
-#include "audio_music.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -42,10 +40,10 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
-#include "mus.h"
 #include "race.h"
 #include "settings.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace Battle
@@ -157,7 +155,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , armies_order( nullptr )
     , current_color( Color::NONE )
     , preferredColor( -1 ) // be aware of unknown color
-    , castle( world.GetCastle( Maps::GetPoint( index ) ) )
+    , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
     , _isTown( castle != nullptr )
     , catapult( nullptr )
     , bridge( nullptr )
@@ -192,8 +190,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     if ( local ) {
         interface = new Interface( *this, index );
         board.SetArea( interface->GetArea() );
-
-        AGG::PlaySound( M82::PREBATTL );
 
         armies_order = new Units();
         armies_order->reserve( 25 );
@@ -379,10 +375,6 @@ void Battle::Arena::Turns( void )
 
     if ( interface ) {
         interface->RedrawActionNewTurn();
-
-        if ( !Music::isPlaying() ) {
-            AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
-        }
     }
 
     army1->NewTurn();
@@ -745,22 +737,25 @@ const SpellStorage & Battle::Arena::GetUsageSpells( void ) const
     return usage_spells;
 }
 
-s32 Battle::Arena::GetFreePositionNearHero( int color ) const
+int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
 {
-    const int cells1[] = {11, 22, 33};
-    const int cells2[] = {21, 32, 43};
-    const int * cells = nullptr;
+    std::vector<int> cellIds;
+    if ( army1->GetColor() == heroColor ) {
+        cellIds = { 11, 22, 33 };
+    }
+    else if ( army2->GetColor() == heroColor ) {
+        cellIds = { 21, 32, 43 };
+    }
+    else {
+        // Some third color?
+        return -1;
+    }
 
-    if ( army1->GetColor() == color )
-        cells = cells1;
-    else if ( army2->GetColor() == color )
-        cells = cells2;
+    assert( !cellIds.empty() );
 
-    if ( cells ) {
-        for ( u32 ii = 0; ii < 3; ++ii ) {
-            if ( board[cells[ii]].isPassable1( true ) && nullptr == board[cells[ii]].GetUnit() ) {
-                return cells[ii];
-            }
+    for ( const int cellId : cellIds ) {
+        if ( board[cellId].isPassable1( true ) && board[cellId].GetUnit() == nullptr ) {
+            return cellId;
         }
     }
 
@@ -819,7 +814,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
             bool affect = true;
 
             if ( elem )
-                switch ( spell() ) {
+                switch ( spell.GetID() ) {
                 case Spell::SUMMONEELEMENT:
                     if ( elem->GetID() != Monster::EARTH_ELEMENT )
                         affect = false;
@@ -1051,9 +1046,9 @@ const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
     const HeroBase * hero = GetCurrentCommander();
-    const s32 pos = GetFreePositionNearHero( current_color );
+    const int32_t pos = GetFreePositionNearHero( current_color );
 
-    if ( 0 > pos || !hero ) {
+    if ( pos < 0 || !hero ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
         return nullptr;
     }
@@ -1063,7 +1058,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     bool affect = true;
 
     if ( elem )
-        switch ( spell() ) {
+        switch ( spell.GetID() ) {
         case Spell::SUMMONEELEMENT:
             if ( elem->GetID() != Monster::EARTH_ELEMENT )
                 affect = false;

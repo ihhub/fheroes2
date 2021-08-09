@@ -29,6 +29,7 @@
 #include "morale.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace fheroes2
 {

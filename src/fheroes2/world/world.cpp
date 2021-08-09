@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 
 #include "ai.h"
@@ -34,11 +35,13 @@
 #include "heroes.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_objects.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "world.h"
 
@@ -46,7 +49,7 @@ namespace
 {
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
-        const MapsIndexes & indexes = Maps::GetAroundIndexes( tileId, radius, false );
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
@@ -480,15 +483,37 @@ const Kingdom & World::GetKingdom( int color ) const
     return vec_kingdoms.GetKingdom( color );
 }
 
-/* get castle from index maps */
-Castle * World::GetCastle( const fheroes2::Point & center )
+Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
-    return vec_castles.Get( center );
+    return vec_castles.Get( tilePosition );
 }
 
-const Castle * World::GetCastle( const fheroes2::Point & center ) const
+const Castle * World::getCastle( const fheroes2::Point & tilePosition ) const
 {
-    return vec_castles.Get( center );
+    return vec_castles.Get( tilePosition );
+}
+
+const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
+{
+    if ( !isValidCastleEntrance( tilePosition ) ) {
+        return nullptr;
+    }
+
+    return vec_castles.Get( tilePosition );
+}
+
+Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
+{
+    if ( !isValidCastleEntrance( tilePosition ) ) {
+        return nullptr;
+    }
+
+    return vec_castles.Get( tilePosition );
+}
+
+bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
+{
+    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
 Heroes * World::GetHeroes( int id )
@@ -683,7 +708,7 @@ void World::NewWeek( void )
 void World::NewMonth( void )
 {
     // skip first month
-    if ( 1 < week && week_current.GetType() == Week::MONSTERS && !Settings::Get().ExtWorldBanMonthOfMonsters() )
+    if ( 1 < week && week_current.GetType() == Week::MONSTERS )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns
@@ -927,11 +952,9 @@ void World::CaptureObject( s32 index, int color )
     int obj = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, obj, color );
 
-    if ( MP2::OBJ_CASTLE == obj ) {
-        Castle * castle = GetCastle( Maps::GetPoint( index ) );
-        if ( castle && castle->GetColor() != color )
-            castle->ChangeColor( color );
-    }
+    Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
+    if ( castle && castle->GetColor() != color )
+        castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
         GetTiles( index ).CaptureFlags32( obj, color );
@@ -1093,7 +1116,7 @@ const Heroes * World::GetHeroesCondLoss( void ) const
     return GetHeroes( heroes_cond_loss );
 }
 
-bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
+bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -1102,7 +1125,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
-        const Castle * town = GetCastle( conf.WinsMapsPositionObject() );
+        const Castle * town = getCastleEntrance( conf.WinsMapsPositionObject() );
         // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
@@ -1151,7 +1174,7 @@ bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) co
     return false;
 }
 
-bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
+bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -1160,13 +1183,13 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
         return kingdom.isLoss();
 
     case GameOver::LOSS_TOWN: {
-        const Castle * town = GetCastle( conf.LossMapsPositionObject() );
+        const Castle * town = getCastleEntrance( conf.LossMapsPositionObject() );
         return ( town && town->GetColor() != kingdom.GetColor() );
     }
 
     case GameOver::LOSS_HERO: {
         const Heroes * hero = GetHeroesCondLoss();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() && hero->GetKillerColor() != kingdom.GetColor() );
+        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
     }
 
     case GameOver::LOSS_TIME:
@@ -1179,11 +1202,9 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
     return false;
 }
 
-int World::CheckKingdomWins( const Kingdom & kingdom ) const
+uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
-    const int wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
-    const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
@@ -1206,30 +1227,37 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
         }
     }
 
-    for ( u32 ii = 0; wins[ii]; ++ii )
-        if ( ( mapWinCondition & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
-            return wins[ii];
+    const std::array<uint32_t, 6> wins
+        = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
+
+    for ( const uint32_t cond : wins ) {
+        if ( ( ( conf.ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
+            return cond;
+        }
+    }
 
     return GameOver::COND_NONE;
 }
 
-int World::CheckKingdomLoss( const Kingdom & kingdom ) const
+uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
 
-    // firs check priority: other WINS_GOLD or WINS_ARTIFACT
-    if ( conf.ConditionWins() & GameOver::WINS_GOLD ) {
-        int priority = vec_kingdoms.FindWins( GameOver::WINS_GOLD );
-        if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
-    }
-    else if ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) {
-        int priority = vec_kingdoms.FindWins( GameOver::WINS_ARTIFACT );
-        if ( priority && priority != kingdom.GetColor() )
-            return GameOver::LOSS_ALL;
-    }
+    // first, check if the other players have not completed WINS_TOWN, WINS_HERO, WINS_ARTIFACT or WINS_GOLD yet
+    const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
+                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_HERO, GameOver::LOSS_ENEMY_WINS_HERO ),
+                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
+                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
-    const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
+    for ( const auto & item : enemy_wins ) {
+        if ( conf.ConditionWins() & item.first ) {
+            const int color = vec_kingdoms.FindWins( item.first );
+
+            if ( color && color != kingdom.GetColor() ) {
+                return item.second;
+            }
+        }
+    }
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
@@ -1258,13 +1286,12 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    for ( u32 ii = 0; loss[ii]; ++ii )
-        if ( ( conf.ConditionLoss() & loss[ii] ) && KingdomIsLoss( kingdom, loss[ii] ) )
-            return loss[ii];
+    const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
-    if ( conf.ExtWorldStartHeroLossCond4Humans() ) {
-        if ( kingdom.GetFirstHeroStartCondLoss() )
-            return GameOver::LOSS_STARTHERO;
+    for ( const uint32_t cond : loss ) {
+        if ( ( ( conf.ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
+            return cond;
+        }
     }
 
     return GameOver::COND_NONE;
@@ -1486,7 +1513,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
             colors |= Color::PURPLE;
 
         // message
-        message = Game::GetEncodeString( st.toString() );
+        message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
                        << ": " << message );
@@ -1508,10 +1535,17 @@ bool EventDate::isAllow( int col, u32 date ) const
 
 StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 {
-    return msg << obj.resource << obj.computer << obj.first << obj.subsequent << obj.colors << obj.message;
+    return msg << obj.resource << obj.computer << obj.first << obj.subsequent << obj.colors << obj.message << obj.title;
 }
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    return msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
+    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_096_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_096_RELEASE ) {
+        msg >> obj.title;
+    }
+
+    return msg;
 }

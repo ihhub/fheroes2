@@ -29,7 +29,9 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 #include <cassert>
 
 namespace
@@ -92,7 +94,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    u32 operator()( void ) const
+    uint32_t getCur( void ) const
     {
         return vcur;
     }
@@ -169,7 +171,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    text.Set( "MAX", Font::SMALL );
+    text.Set( _( "MAX" ), Font::SMALL );
     const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
     text.Blit( rectMax.x, rectMax.y );
 
@@ -203,7 +205,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
         result = btnGroups.processEvents();
     }
 
-    cur = result == Dialog::OK ? sel() : 0;
+    cur = result == Dialog::OK ? sel.getCur() : 0;
 
     return result == Dialog::OK;
 }
@@ -453,7 +455,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     int result = 0;
 
     if ( bres == Dialog::OK ) {
-        redistributeCount = sel();
+        redistributeCount = sel.getCur();
 
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );

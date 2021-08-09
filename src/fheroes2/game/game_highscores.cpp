@@ -41,6 +41,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
@@ -238,7 +239,7 @@ fheroes2::GameMode Game::HighScores()
         buttonCampain.draw();
         buttonExit.draw();
         display.render();
-        gameResult.Reset();
+        gameResult.ResetResult();
     }
 
     LocalEvent & le = LocalEvent::Get();
