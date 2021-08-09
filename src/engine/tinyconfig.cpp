@@ -71,7 +71,7 @@ bool TinyConfig::Load( const std::string & cfile )
             left = StringTrim( left );
             right = StringTrim( right );
 
-            insert( { ModifyKey( left ), right } );
+            emplace( ModifyKey( left ), right );
         }
     }
 
