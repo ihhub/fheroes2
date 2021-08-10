@@ -56,11 +56,11 @@ enum
 
 struct artifactstats_t
 {
-    u8 bits;
-    u8 extra;
-    u8 type;
-    const char * name;
-    const char * description;
+    uint8_t bits;
+    const uint8_t extra;
+    const uint8_t type;
+    const char * const name;
+    const char * const description;
 };
 
 artifactstats_t artifacts[] = {
