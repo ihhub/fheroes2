@@ -295,7 +295,7 @@ msgid "Luck"
 msgstr "Szczęście"
 
 msgid "Spell Points"
-msgstr "Punkty magii"
+msgstr "Ptk. magii"
 
 msgid "Hero's Options"
 msgstr "Opcje bohatera"
@@ -1543,7 +1543,6 @@ msgstr "Rekrutuj %{name}"
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Miesiąc: %{month}, Tydzień: %{week}, Dzień: %{day}"
 
-#, fuzzy
 msgid "Income"
 msgstr "Przychód"
 
@@ -1576,7 +1575,6 @@ msgstr "Wyjście z zamku"
 msgid "Exit Town"
 msgstr "Wyjście z miasta"
 
-#, fuzzy
 msgid "Show Income"
 msgstr "Pokaż przychód"
 
@@ -1999,7 +1997,7 @@ msgid "%{name} (Level %{level})"
 msgstr "%{name} ( Poziom %{level} )"
 
 msgid "Move Points"
-msgstr "Przenieś punkty"
+msgstr "Ptk. ruchu"
 
 msgid "Available: %{count}"
 msgstr "Dostępne: %{count}"
@@ -2688,7 +2686,6 @@ msgstr "Pokonaj wszystkich bohaterów przeciwnika i zajmij wszystkie miasta i za
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Upływ czasu (nieukończenie gry w określonym czasie.)"
 
-#, fuzzy
 msgid "Capture the castle '%{name}'."
 msgstr "Przejmij zamek '%{name}'."
 
@@ -2729,9 +2726,7 @@ msgid "Lose the hero: %{name}."
 msgstr "Przegrywa bohater: %{name}."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
-msgstr ""
-"Nie udało Ci się wygrać przed końcem miesiąca %{month}, tygodnia %{week}, "
-"dnia %{day}."
+msgstr "Brak zwycięstwa do końca miesiąca %{month}, tygodnia %{week}, dnia %{day}."
 
 msgid "Lose the heroes: %{name}."
 msgstr "Tracisz bohaterów: %{name}."
@@ -4610,9 +4605,8 @@ msgstr ""
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Czy na pewno chcesz zwolnić tego bohatera?"
 
-#, fuzzy
 msgid "View Stats"
-msgstr "Pokaż artefakty"
+msgstr "Ekran bohatera"
 
 msgid "View Experience Info"
 msgstr "Doświadczenie - informacje"
@@ -4671,7 +4665,6 @@ msgstr "Aktualne modyfikatory:"
 msgid "Entire army is undead, so morale does not apply."
 msgstr "Wszystkie oddziały są nieumarłe, więc morale nie mają znaczenia."
 
-#, fuzzy
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
@@ -4810,7 +4803,6 @@ msgid "Your spell power determines the length or power of a spell."
 msgstr ""
 "Od twojej mocy zaklęć zależy długość i moc rzucanych przez ciebie czarów."
 
-#, fuzzy
 msgid ""
 "Your knowledge determines how many spell points your hero may have. Under "
 "normal circumstances, a hero is limited to 10 spell points per level of "
@@ -4997,71 +4989,60 @@ msgstr "Zaawansowany Majątek"
 msgid "Expert Estates"
 msgstr "Ekspert Majątek"
 
-#, fuzzy
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
-msgstr "Zmniejsza karę ruchu na trudnym terenie o %{count} procent."
+msgstr ""
+"O %{count} procent zmniejsza ograniczenie ruchu podczas poruszania się po trudnym terenie."
 
-#, fuzzy
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr "Zmniejsza karę ruchu na trudnym terenie o %{count} procent."
+msgstr "Eliminuje ograniczenie ruchu podczas poruszania się po trudnym terenie."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
-"Zwiększa uszkodzenia zadane przez jednostki dalekosiężne o %{count} procent."
+"O %{count} procent zwiększa obrażenia zadawane przez jednostki atakujące na odległość."
 
-#, fuzzy
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr "Zwiększa punkty ruchu bohatera o %{count} procent."
+msgstr "Powiększa ilość punktów ruchu bohatera o %{count} percent."
 
-#, fuzzy
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] "Zwiększa pole widzenia bohatera o %{count} kwadrat."
-msgstr[1] "Zwiększa pole widzenia bohatera o %{count} kwadraty."
-msgstr[2] "Zwiększa pole widzenia bohatera o %{count} kwadratów."
+msgstr[0] "Zwiększa pole widzenia bohatera o %{count}."
+msgstr[1] "Zwiększa pole widzenia bohatera o %{count}."
+msgstr[2] "Zwiększa pole widzenia bohatera o %{count}."
 
-#, fuzzy
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
-msgstr "Pozwala na negocjacje z potworami, które są słabsze niż twoja grupa."
+msgstr "Pozwala negocjować ze słabszymi przeciwnikami. "
 
-#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr "Około %{count} procent stworzeń może zaoferować dołączenie do ciebie."
+msgstr "Około %{count} procent stworzeń zaproponuje dołączenie do twojej armii."
 
-#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr "Około %{count} procent stworzeń może zaoferować dołączenie do ciebie."
+msgstr "Wszystkie stworzenia mogą zaproponować dołączenie do twojej armii."
 
-#, fuzzy
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
-msgstr "Zwiększa punkty ruchu bohatera na wodzie o %{count} procent."
+msgstr "Powiększa ilość punktów ruchu bohatera na wodzie o %{count} "
+"procent."
 
-#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "Zwiększa szczęście Twojego bohatera o %{count}."
+msgstr "Zwiększa morale wszystkich oddziałów bohatera o %{count}."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr "Pozwala nauczyć się twojemu bohaterowi trzeci poziom czarów."
+msgstr "Pozwala twojemu bohaterowi na zrozumienie i poznanie zaklęć trzeciego poziomu."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr "Pozwala nauczyć się twojemu bohaterowi czwarty poziom czarów."
+msgstr "Pozwala twojemu bohaterowi na zrozumienie i poznanie zaklęć czwartego poziomu."
 
 #, fuzzy
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "Pozwala nauczyć się twojemu bohaterowi piąty poziom czarów."
 
-#, fuzzy
 msgid "%{skill} regenerates one of your hero's spell points per day."
 msgid_plural ""
 "%{skill} regenerates %{count} of your hero's spell points per day."
@@ -5069,70 +5050,60 @@ msgstr[0] "Regeneruje %{count} punkt magii Twojego bohatera na dzień."
 msgstr[1] "Regeneruje %{count} punkty magii Twojego bohatera na dzień."
 msgstr[2] "Regeneruje %{count} punktów magii Twojego bohatera na dzień."
 
-#, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "Zwiększa szczęście Twojego bohatera o %{count}."
+msgstr "Zwiększa szczęście bohatera o %{count}."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
-msgstr "Zwiększa szanse na uszkodzenie murów zamkowych przez katapultę."
+msgstr "Strzały z katapultu mają większą szansą na trafienie i "
+"uszkodzenie zamkowych murów."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"Daje twojej katapulcie dodatkowy strzał, każdy strzał ma większą szansę na "
-"zniszczenie murów obronnych zamku."
+"Katapulta otrzymuje dodatkowy strzał, a każdy ma "
+"większą szansę na trafienie i uszkodzenie zamkowych murów."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
-"Dodaje dodatkowy strzał dla Twojej katapulty, a każdy strzał automatycznie "
-"niszczy dowolną ścianę, z wyjątkiem murów obronnych zamku Rycerza."
+"Katapulta otrzymuje dodatkowy strzał, a każdy "
+"automatycznie niszczy wszelkie mury, za wyjątkiem fortyfikacji w zamku Rycerza."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
 "Daje Twojemu bohaterowi %{count} procent szans na nauczenie się dowolnego "
-"czaru 1-go i 2-go poziomu użytego przez wroga na Twojego bohatera."
+"czaru 1-go i 2-go poziomu rzucanego przez przeciwnika."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
 "Daje Twojemu bohaterowi %{count} procent szans na nauczenie się dowolnego "
-"czaru 3-go (lub poniżej) poziomu użytego przez wroga na Twojego bohatera."
+"czaru 3-go (lub poniżej) poziomu rzucanego przez przeciwnika."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
 "Daje Twojemu bohaterowi %{count} procent szans na nauczenie się dowolnego "
-"czaru 4-go poziomu (lub poniżej) użytego przez wroga w kierunku Twojego "
-"bohatera."
+"czaru 4-go poziomu (lub poniżej)  rzucanego przez przeciwnika. "
 
-#, fuzzy
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"Umożliwia przywrócenie %{count} procent zabitych w walce wojsk w postaci "
-"Szkieletów."
+"Pozwala wskrzesić w postaci szkieletów %{count} procent poległych w walce stworzeń."
 
-#, fuzzy
 msgid ""
 "Your hero produces %{count} gold pieces per turn as tax revenue from estates."
 msgstr ""
-"Twój bohater produkuje %{count} złota na turę zbierając należny podatek."
+"Każdej tury twój bohater dostarcza królestwu %{count} sztuk złota jako dochód z nieruchomości."
 
 msgid "Blue"
 msgstr "Niebieski"
@@ -5266,7 +5237,7 @@ msgid "Knight"
 msgstr "Rycerz"
 
 msgid "Multi"
-msgstr "Multi"
+msgstr "Różne"
 
 msgid "Necromancer"
 msgstr "Nekromanta"
@@ -5546,9 +5517,8 @@ msgstr "Mapy Magellana"
 msgid "Derelict Ship"
 msgstr "Opuszczony statek"
 
-#, fuzzy
 msgid "Shipwreck"
-msgstr "Rozbitkowie!"
+msgstr "Wrak"
 
 msgid "Observation Tower"
 msgstr "Wieża obserwacyjna"
@@ -9304,3 +9274,6 @@ msgstr ""
 
 #~ msgid "pocketpc: low display resolution (needs restart)"
 #~ msgstr "pocketpc: niska rozdzielczość ekranu (wymaga restartu)"
+
+msgid "score: "
+msgstr "wynik: "
