@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <string>
 #include <vector>
 
@@ -42,7 +43,7 @@
 
 enum
 {
-    ART_DISABLED = 0x01,
+    ART_RNDDISABLED = 0x01,
     ART_RNDUSED = 0x02
 };
 enum
@@ -63,7 +64,7 @@ struct artifactstats_t
     const char * const description;
 };
 
-artifactstats_t artifacts[] = {
+std::array<artifactstats_t, 104> artifacts = {{
     {0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." )},
     {0, 12, TYPE3, _( "Ultimate Sword of Dominion" ), _( "The %{name} increases your attack skill by %{count}." )},
     {0, 12, TYPE3, _( "Ultimate Cloak of Protection" ), _( "The %{name} increases your defense skill by %{count}." )},
@@ -174,7 +175,7 @@ artifactstats_t artifacts[] = {
     {0, 0, TYPE4, _( "Spade of Necromancy" ), _( "The %{name} gives you increased necromancy skill." )},
 
     {0, 0, TYPE0, "Unknown", "Unknown"},
-};
+}};
 
 const char * GetPluralDescription( const Artifact & art, u32 count )
 {
@@ -205,7 +206,7 @@ const char * GetPluralDescription( const Artifact & art, u32 count )
 }
 
 Artifact::Artifact( int art )
-    : id( art < UNKNOWN ? art : UNKNOWN )
+    : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
     , ext( 0 )
 {}
 
@@ -568,12 +569,12 @@ int Artifact::Rand( level_t lvl )
 
     // if possibly: make unique on map
     for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-        if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_DISABLED ) && !( artifacts[art].bits & ART_RNDUSED ) )
+        if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_RNDDISABLED ) && !( artifacts[art].bits & ART_RNDUSED ) )
             v.push_back( art );
 
     if ( v.empty() ) {
         for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-            if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_DISABLED ) )
+            if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_RNDDISABLED ) )
                 v.push_back( art );
     }
 
@@ -829,6 +830,22 @@ u32 GoldInsteadArtifact( int obj )
         break;
     }
     return 0;
+}
+
+void ResetArtifactStats()
+{
+    for ( artifactstats_t & item : artifacts ) {
+        item.bits = 0;
+    }
+}
+
+void ExcludeArtifactFromRandom( int art )
+{
+    const size_t id = static_cast<size_t>( art );
+
+    assert( id < artifacts.size() );
+
+    artifacts[id].bits |= ART_RNDDISABLED;
 }
 
 ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )

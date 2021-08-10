@@ -205,7 +205,11 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
+
 u32 GoldInsteadArtifact( int );
+
+void ResetArtifactStats();
+void ExcludeArtifactFromRandom( int art );
 
 class BagArtifacts : public std::vector<Artifact>
 {

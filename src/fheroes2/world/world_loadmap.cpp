@@ -80,6 +80,18 @@ bool World::LoadMapMP2( const std::string & filename )
     Reset();
     Defaults();
 
+    // clear artifact flags to correctly generate random artifacts
+    ResetArtifactStats();
+
+    const Settings & conf = Settings::Get();
+
+    // do not let the player get a random artifact that allows him to win the game
+    if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
+        const Artifact art = conf.WinsFindArtifactID();
+
+        ExcludeArtifactFromRandom( art.GetID() );
+    }
+
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
         DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() );
