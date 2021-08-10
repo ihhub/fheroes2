@@ -123,7 +123,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 
   * **Debian-based**: run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux` subdirectory.
 
-  * **Pacman-based (e.g. Arch Linux)**: run the following command: `sudo pacman -S sdl sdl_mixer`.
+  * **Pacman-based (e.g. Arch Linux)**: run one of the following commands: `sudo pacman -S sdl sdl_mixer` or `sudo pacman -S sdl2 sdl2_mixer` (depending on the downloaded build).
 
   * **RedHat-based**: for RPM-based distributions (such as Fedora or RedHat) use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
 
