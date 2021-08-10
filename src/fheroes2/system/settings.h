@@ -122,7 +122,6 @@ public:
     int AIMoveSpeed() const;
     int BattleSpeed() const;
     int ScrollSpeed() const;
-    int ScrollShift() const;
 
     int GameDifficulty() const;
 

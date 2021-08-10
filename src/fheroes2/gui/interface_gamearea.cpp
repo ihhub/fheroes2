@@ -511,7 +511,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll( void )
 {
-    const int32_t shift = Settings::Get().ScrollShift();
+    const int32_t shift = 2 << Settings::Get().ScrollSpeed();
     fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {

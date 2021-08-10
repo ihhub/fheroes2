@@ -750,11 +750,6 @@ int Settings::ScrollSpeed() const
     return scroll_speed;
 }
 
-int Settings::ScrollShift() const
-{
-    return 2 << scroll_speed;
-}
-
 /* set ai speed: 1 - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
