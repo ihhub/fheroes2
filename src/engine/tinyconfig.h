@@ -33,8 +33,6 @@ public:
 
     bool Load( const std::string & );
 
-    void AddEntry( const std::string &, const std::string &, bool uniq = true );
-
     bool Exists( const std::string & ) const;
 
     int IntParams( const std::string & ) const;

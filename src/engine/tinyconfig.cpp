@@ -71,21 +71,11 @@ bool TinyConfig::Load( const std::string & cfile )
             left = StringTrim( left );
             right = StringTrim( right );
 
-            AddEntry( left, right, false );
+            emplace( ModifyKey( left ), right );
         }
     }
 
     return true;
-}
-
-void TinyConfig::AddEntry( const std::string & key, const std::string & val, bool uniq )
-{
-    iterator it = end();
-
-    if ( uniq && ( end() != ( it = find( ModifyKey( key ) ) ) ) )
-        it->second = val;
-    else
-        insert( std::pair<std::string, std::string>( ModifyKey( key ), val ) );
 }
 
 int TinyConfig::IntParams( const std::string & key ) const
