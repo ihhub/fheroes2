@@ -328,8 +328,8 @@ int Castle::OpenDialog( bool readonly )
         }
 
         if ( conf.ExtCastleAllowGuardians() && !readonly ) {
-            Army * army1 = NULL;
-            Army * army2 = NULL;
+            Army * army1 = nullptr;
+            Army * army2 = nullptr;
 
             // swap guest <-> guardian
             if ( heroes.Guest() && heroes.Guard() ) {
@@ -374,7 +374,7 @@ int Castle::OpenDialog( bool readonly )
                 }
                 else if ( army1 ) {
                     selectArmy1.SetArmy( army1 );
-                    selectArmy2.SetArmy( NULL );
+                    selectArmy2.SetArmy( nullptr );
                 }
                 else if ( army2 ) {
                     selectArmy1.SetArmy( &army );
@@ -416,37 +416,37 @@ int Castle::OpenDialog( bool readonly )
             result = Dialog::PREV;
             break;
         }
-        else
-            // next castle
-            if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+
+        // next castle
+        if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             result = Dialog::NEXT;
             break;
         }
 
         // buildings event
-        for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-            if ( ( *it ).id == GetActualDwelling( ( *it ).id ) && isBuild( ( *it ).id ) ) {
-                if ( !readonly && le.MouseClickLeft( ( *it ).coord ) ) {
+        for ( const auto & cacheBuilding : cacheBuildings ) {
+            if ( cacheBuilding.id == GetActualDwelling( cacheBuilding.id ) && isBuild( cacheBuilding.id ) ) {
+                if ( !readonly && le.MouseClickLeft( cacheBuilding.coord ) ) {
                     fheroes2::ButtonRestorer exitRestorer( buttonExit );
                     if ( Castle::RecruitMonster(
-                             Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), getMonstersInDwelling( ( *it ).id ), true ) ) ) {
+                             Dialog::RecruitMonster( Monster( race, GetActualDwelling( cacheBuilding.id ) ), getMonstersInDwelling( cacheBuilding.id ), true ) ) ) {
                         need_redraw = true;
                     }
                 }
-                else if ( le.MousePressRight( ( *it ).coord ) ) {
-                    Dialog::DwellingInfo( Monster( race, GetActualDwelling( ( *it ).id ) ), getMonstersInDwelling( ( *it ).id ) );
+                else if ( le.MousePressRight( cacheBuilding.coord ) ) {
+                    Dialog::DwellingInfo( Monster( race, GetActualDwelling( cacheBuilding.id ) ), getMonstersInDwelling( cacheBuilding.id ) );
                 }
 
-                if ( le.MouseCursor( ( *it ).coord ) )
-                    msg_status = Monster( race, ( *it ).id ).GetName();
+                if ( le.MouseCursor( cacheBuilding.coord ) )
+                    msg_status = Monster( race, cacheBuilding.id ).GetName();
             }
         }
 
-        for ( auto it = cacheBuildings.cbegin(); it != cacheBuildings.cend(); ++it ) {
-            if ( BUILD_MAGEGUILD & ( *it ).id ) {
+        for ( const auto & cacheBuilding : cacheBuildings ) {
+            if ( BUILD_MAGEGUILD & cacheBuilding.id ) {
                 const int mageGuildLevel = GetLevelMageGuild();
-                if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
-                    if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
+                if ( cacheBuilding.id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
+                    if ( le.MouseClickLeft( cacheBuilding.coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
                         bool noFreeSpaceForMagicBook = false;
                         if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
@@ -480,24 +480,24 @@ int Castle::OpenDialog( bool readonly )
 
                         OpenMageGuild( heroes );
                     }
-                    else if ( le.MousePressRight( ( *it ).coord ) )
-                        Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
+                    else if ( le.MousePressRight( cacheBuilding.coord ) )
+                        Dialog::Message( GetStringBuilding( cacheBuilding.id ), GetDescriptionBuilding( cacheBuilding.id ), Font::BIG );
 
-                    if ( le.MouseCursor( ( *it ).coord ) )
-                        msg_status = GetStringBuilding( ( *it ).id );
+                    if ( le.MouseCursor( cacheBuilding.coord ) )
+                        msg_status = GetStringBuilding( cacheBuilding.id );
                 }
             }
-            else if ( isBuild( ( *it ).id )  || getPressedBuildingHotkey() == ( *it ).id ) {
-                if ( le.MouseClickLeft( ( *it ).coord ) ) {
+            else if ( isBuild( cacheBuilding.id ) || getPressedBuildingHotkey() == cacheBuilding.id ) {
+                if ( le.MouseClickLeft( cacheBuilding.coord ) ) {
                     if ( selectArmy1.isSelected() )
                         selectArmy1.ResetSelected();
                     if ( selectArmy2.isValid() && selectArmy2.isSelected() )
                         selectArmy2.ResetSelected();
 
-                    if ( readonly && ( ( *it ).id & ( BUILD_SHIPYARD | BUILD_MARKETPLACE | BUILD_WELL | BUILD_TENT | BUILD_CASTLE ) ) )
-                        Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG, Dialog::OK );
+                    if ( readonly && ( cacheBuilding.id & ( BUILD_SHIPYARD | BUILD_MARKETPLACE | BUILD_WELL | BUILD_TENT | BUILD_CASTLE ) ) )
+                        Dialog::Message( GetStringBuilding( cacheBuilding.id ), GetDescriptionBuilding( cacheBuilding.id ), Font::BIG, Dialog::OK );
                     else
-                        switch ( ( *it ).id ) {
+                        switch ( cacheBuilding.id ) {
                         case BUILD_THIEVESGUILD:
                             Dialog::ThievesGuild( false );
                             break;
@@ -515,7 +515,7 @@ int Castle::OpenDialog( bool readonly )
                         case BUILD_SPEC:
                         case BUILD_SHRINE: {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG, Dialog::OK );
+                            Dialog::Message( GetStringBuilding( cacheBuilding.id ), GetDescriptionBuilding( cacheBuilding.id ), Font::BIG, Dialog::OK );
                             break;
                         }
 
@@ -574,8 +574,8 @@ int Castle::OpenDialog( bool readonly )
                             if ( buyhero ) {
                                 if ( prev ) {
                                     selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
-                                    selectArmy2.SetArmy( NULL );
-                                    RedrawIcons( *this, CastleHeroes( NULL, heroes.Guard() ), cur_pt );
+                                    selectArmy2.SetArmy( nullptr );
+                                    RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
                                     selectArmy1.Redraw();
                                     if ( selectArmy2.isValid() )
                                         selectArmy2.Redraw();
@@ -604,11 +604,11 @@ int Castle::OpenDialog( bool readonly )
                             break;
                         }
                 }
-                else if ( le.MousePressRight( ( *it ).coord ) )
-                    Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
+                else if ( le.MousePressRight( cacheBuilding.coord ) )
+                    Dialog::Message( GetStringBuilding( cacheBuilding.id ), GetDescriptionBuilding( cacheBuilding.id ), Font::BIG );
 
-                if ( le.MouseCursor( ( *it ).coord ) ) {
-                    msg_status = buildingStatusMessage( ( *it ).id );
+                if ( le.MouseCursor( cacheBuilding.coord ) ) {
+                    msg_status = buildingStatusMessage( cacheBuilding.id );
                 }
             }
         }
