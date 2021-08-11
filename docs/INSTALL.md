@@ -161,7 +161,7 @@ the `/usr/share/fheroes2/demo_unix.sh` script.
 <a name="playstation-vita"></a>
 ## PlayStation Vita
 
-Please note: you need to be running custom firmware for it to work.
+**Please note**: you need to be running custom firmware for it to work.
 
 * Download the [**PlayStation Vita ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_psv_sdl2.zip).
 
@@ -170,7 +170,7 @@ Please note: you need to be running custom firmware for it to work.
 <a name="nintendo-switch"></a>
 ## Nintendo Switch
 
-Please note: you need to be running custom firmware for it to work.
+**Please note**: you need to be running custom firmware for it to work.
 
 * Download the [**Nintendo Switch ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_switch_sdl2.zip).
 
