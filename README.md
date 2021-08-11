@@ -2,7 +2,9 @@
 
 **Free Heroes of Might and Magic II** (fheroes2) is a recreation of HoMM2 game engine.
 
-This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.
+This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant
+improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
+and UI improvements), breathing new life into one of the most addictive turn-based strategies.
 
 <p align="center">
     <img src="docs/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410">
@@ -19,7 +21,10 @@ To download and install fheroes2 please follow the [**installation guide**](docs
 
 ## Copyright
 
-All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of the original game. We strongly advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms. Alternatively, you can download a free demo version of the game.
+All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft.
+We do not encourage and do not support any form of illegal usage of the original game. We strongly advise to purchase the original
+game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms. Alternatively, you can download a
+free demo version of the game.
 
 ## License
 
@@ -40,14 +45,16 @@ To build the project from source or contribute please follow [**this guide**](do
 
 ## Donation
 
-We accept donations via **Patreon** or **PayPal**. All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
+We accept donations via **Patreon** or **PayPal**. All donations will be used only for the future project development as we do not
+consider this project as a source of income by any means.
 
 [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
 
 ## Contacts
 
-Follow us on social networks: [**Facebook**](https://www.facebook.com/groups/fheroes2) or [**VK**](https://vk.com/fheroes2). We also have a [**Discord**](https://discord.gg/xF85vbZ) channel to discuss the development of the project.
+Follow us on social networks: [**Facebook**](https://www.facebook.com/groups/fheroes2) or [**VK**](https://vk.com/fheroes2).
+We also have a [**Discord**](https://discord.gg/xF85vbZ) channel to discuss the development of the project.
 
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2)
