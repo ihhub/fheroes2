@@ -1555,7 +1555,7 @@ msgstr "Le Verger augmente la production de galopins de %{count} par semaine."
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "Les crânes empilés augmentent la production de Squelettes de %{count} par "
-"semaine.
+"semaine."
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
