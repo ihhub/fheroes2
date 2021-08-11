@@ -8,8 +8,8 @@ Please note: the Windows version of the original game is preferable for purchase
 because fheroes2 cannot play some introductory videos from the DOSBOX version yet.
 However, with the exception of this, the DOSBOX version can also be used quite well.
 
-Alternatively, you can download a free demo version of the game using one of the
-bundled scripts.
+Alternatively, you can download a free demo version of the game (in English only)
+using one of the bundled scripts.
 
 --- Installation and Requirements ---
 You will need to have a demo version or the full version of Heroes of Might and

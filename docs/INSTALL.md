@@ -9,7 +9,8 @@ advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubi
 introductory videos from the DOSBOX version yet. However, with the exception of this, the DOSBOX version can also be used
 quite well.
 
-Alternatively, you can **download a free demo version of the game using the bundled script**. See detailed instructions below.
+Alternatively, you can **download a free demo version of the game (in English only) using the bundled script**. See detailed
+instructions below.
 
 ## Installation
 
