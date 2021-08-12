@@ -2710,11 +2710,16 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
             Redraw();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
+        }
+        else if (redrawNeeded) {
+            Redraw();
         }
     }
 }
@@ -2743,11 +2748,16 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             Redraw();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 }
@@ -2788,6 +2798,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
             RedrawPartialStart();
             if ( isMage ) {
@@ -2802,6 +2814,9 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
             }
             RedrawPartialFinish();
             ++pnt;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 }
@@ -3024,6 +3039,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     while ( le.HandleEvents() && !finishedAnimation ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             bool redrawBattleField = false;
 
@@ -3080,6 +3097,9 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                     }
                 }
             }
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -3644,6 +3664,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
+            const bool redrawNeeded = IdleTroopsAnimation( false );
+
             if ( width < luckSprite.width() && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
@@ -3655,6 +3677,9 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 src.x = ( luckSprite.width() - src.width ) / 2;
 
                 width += 3;
+            }
+            else if ( redrawNeeded ) {
+                Redraw();
             }
         }
     }
@@ -3672,6 +3697,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
+            const bool redrawNeeded = IdleTroopsAnimation( false );
+
             if ( frameId < 8 && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
@@ -3681,6 +3708,9 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 RedrawPartialFinish();
 
                 ++frameId;
+            }
+            else if ( redrawNeeded ) {
+                Redraw();
             }
         }
     }
@@ -3760,9 +3790,14 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
             Redraw();
             ++catapult_frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -3784,6 +3819,8 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_BOULDER_DELAY ) ) {
             if ( catapult_frame < 9 )
                 ++catapult_frame;
@@ -3792,6 +3829,9 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
             fheroes2::Blit( missile, _mainSurface, pnt->x, pnt->y );
             RedrawPartialFinish();
             ++pnt;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -3804,6 +3844,8 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_CLOUD_DELAY ) ) {
             if ( catapult_frame < 9 )
                 ++catapult_frame;
@@ -3814,6 +3856,9 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
             RedrawPartialFinish();
 
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -3853,9 +3898,14 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( currentAlpha > 0 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             currentAlpha -= 15;
             target.SetCustomAlpha( currentAlpha );
+            Redraw();
+        }
+        else if (redrawNeeded) {
             Redraw();
         }
     }
@@ -3869,9 +3919,14 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( currentAlpha <= 240 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             currentAlpha += 15;
             target.SetCustomAlpha( currentAlpha );
+            Redraw();
+        }
+        else if (redrawNeeded) {
             Redraw();
         }
     }
@@ -3894,9 +3949,14 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
     while ( le.HandleEvents() && currentAlpha < 220 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             currentAlpha += 20;
             target.SetCustomAlpha( currentAlpha );
+            Redraw();
+        }
+        else if ( redrawNeeded ) {
             Redraw();
         }
     }
@@ -3925,6 +3985,8 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     while ( le.HandleEvents() && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             const fheroes2::Point & sp = GetTroopPosition( target, sprite );
 
@@ -3933,6 +3995,9 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
             RedrawPartialFinish();
 
             ++pnt;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -3986,6 +4051,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
         }
 
         while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.width < drawRoi.width ) || ( !isHorizontalBolt && roi.height < drawRoi.height ) ) ) {
+
+            const bool redrawNeeded = IdleTroopsAnimation( false );
+
             if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
                 if ( isHorizontalBolt ) {
                     if ( isForwardDirection ) {
@@ -4024,6 +4092,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
 
                 RedrawPartialFinish();
             }
+            else if ( redrawNeeded ) {
+                Redraw();
+            }
         }
     }
 
@@ -4033,6 +4104,8 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
         CheckGlobalEvents( le );
+
+        const bool redrawNeeded = IdleTroopsAnimation( false );
 
         if ( ( frame == 0 ) || Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             RedrawPartialStart();
@@ -4046,6 +4119,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
             RedrawPartialFinish();
 
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 }
@@ -4124,6 +4200,8 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( frame < 20 && Game::validateCustomAnimationDelay( bloodlustDelay ) ) {
             mixSprite = unitSprite;
             fheroes2::AlphaBlit( bloodlustEffect, mixSprite, static_cast<uint8_t>( alpha ) );
@@ -4131,6 +4209,9 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
             alpha += ( frame < 10 ) ? 20 : -20;
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4161,6 +4242,8 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( frame < 25 && Game::validateCustomAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             mixSprite = fheroes2::Sprite( unitSprite );
             fheroes2::AlphaBlit( stoneEffect, mixSprite, static_cast<uint8_t>( alpha ) );
@@ -4168,6 +4251,9 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 
             alpha += 10;
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4185,9 +4271,14 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
         while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
             CheckGlobalEvents( le );
 
+            const bool redrawNeeded = IdleTroopsAnimation( false );
+
             if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
                 Redraw();
                 target.IncreaseAnimFrame();
+            }
+            else if ( redrawNeeded ) {
+                Redraw();
             }
         }
     }
@@ -4222,12 +4313,17 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     while ( le.HandleEvents() && i < path.size() ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
             fheroes2::Blit( sprite, _mainSurface, path[i].x - sprite.width() / 2, path[i].y - sprite.height() / 2 );
             RedrawPartialFinish();
             ++i;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 }
@@ -4250,6 +4346,8 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
     while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             rippleSprite = fheroes2::CreateRippleEffect( unitSprite, frame );
             rippleSprite.setPosition( unitSprite.x(), unitSprite.y() );
@@ -4258,6 +4356,9 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
             Redraw();
 
             frame += 2;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4284,11 +4385,16 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     while ( le.HandleEvents() && position < area.width + waveLength ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
             RedrawPartialFinish();
 
             position += 3;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4320,6 +4426,8 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
@@ -4333,6 +4441,9 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4363,6 +4474,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     while ( le.HandleEvents() && frame < 20 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // stay at maximum blur for 2 frames
             if ( frame < 9 || frame > 10 ) {
@@ -4373,6 +4486,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
                 alpha += ( frame < 10 ) ? 25 : -25;
             }
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4410,6 +4526,8 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
@@ -4430,6 +4548,9 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4464,12 +4585,17 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     while ( le.HandleEvents() && alpha < 100 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             fheroes2::ApplyPalette( spriteWhitening, 9 );
             fheroes2::Blit( spriteWhitening, _mainSurface, area.x, area.y );
             RedrawPartialFinish();
 
             alpha += 10;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4478,6 +4604,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
+
+        const bool redrawNeeded = IdleTroopsAnimation( false );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
@@ -4504,6 +4632,9 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
             RedrawPartialFinish();
         }
+        else if ( redrawNeeded ) {
+            Redraw();
+        }
     }
 }
 
@@ -4529,6 +4660,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {
         CheckGlobalEvents( le );
+
+        const bool redrawNeeded = IdleTroopsAnimation( false );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
@@ -4557,6 +4690,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             RedrawPartialFinish();
             ++frame;
         }
+        else if ( redrawNeeded ) {
+            Redraw();
+        }
     }
 
     // draw cloud
@@ -4569,6 +4705,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
+
+        const bool redrawNeeded = IdleTroopsAnimation( false );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
@@ -4587,6 +4725,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
             ++frame;
         }
+        else if ( redrawNeeded ) {
+            Redraw();
+        }
     }
 }
 
@@ -4601,6 +4742,8 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     while ( le.HandleEvents() && frame > 0 ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
             for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
@@ -4611,6 +4754,9 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
             Redraw();
 
             --frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
     status.SetMessage( _( "The mirror image is destroyed!" ), true );
@@ -4640,6 +4786,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
     while ( le.HandleEvents() && frame < frameCount ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
@@ -4656,6 +4804,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
                 --repeatCount;
                 frame = 0;
             }
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4734,6 +4885,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
@@ -4751,6 +4904,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                     if ( ( *it ).defender && ( *it ).damage )
                         ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4788,6 +4944,8 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
@@ -4804,6 +4962,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
                 b.IncreaseAnimFrame( false );
             }
             ++frame;
+        }
+        else if ( redrawNeeded ) {
+            Redraw();
         }
     }
 
@@ -4837,6 +4998,8 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
         CheckGlobalEvents( le );
 
+        const bool redrawNeeded = IdleTroopsAnimation( false );
+
         if ( Game::validateAnimationDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
             RedrawPartialStart();
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
@@ -4848,17 +5011,20 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
             else
                 ++frame;
         }
+        else if ( redrawNeeded ) {
+            Redraw();
+        }
     }
 
     if ( !down )
         AGG::PlaySound( M82::DRAWBRG );
 }
 
-bool Battle::Interface::IdleTroopsAnimation( void )
+bool Battle::Interface::IdleTroopsAnimation( const bool restart )
 {
     if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        const bool redrawNeeded = arena.GetForce1().animateIdleUnits();
-        return arena.GetForce2().animateIdleUnits() || redrawNeeded;
+        const bool redrawNeeded = arena.GetForce1().animateIdleUnits( restart );
+        return arena.GetForce2().animateIdleUnits( restart ) || redrawNeeded;
     }
 
     return false;
