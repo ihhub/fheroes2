@@ -2718,7 +2718,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
                 break;
             unit.IncreaseAnimFrame();
         }
-        else if (redrawNeeded) {
+        else if ( redrawNeeded ) {
             Redraw();
         }
     }
@@ -3905,7 +3905,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
-        else if (redrawNeeded) {
+        else if ( redrawNeeded ) {
             Redraw();
         }
     }
@@ -3926,7 +3926,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
-        else if (redrawNeeded) {
+        else if ( redrawNeeded ) {
             Redraw();
         }
     }
@@ -4051,7 +4051,6 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
         }
 
         while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.width < drawRoi.width ) || ( !isHorizontalBolt && roi.height < drawRoi.height ) ) ) {
-
             const bool redrawNeeded = IdleTroopsAnimation( false );
 
             if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
