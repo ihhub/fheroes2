@@ -5039,7 +5039,6 @@ msgstr "Pozwala twojemu bohaterowi na zrozumienie i poznanie zaklęć trzeciego 
 msgid "%{skill} allows your hero to learn fourth level spells."
 msgstr "Pozwala twojemu bohaterowi na zrozumienie i poznanie zaklęć czwartego poziomu."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "Pozwala nauczyć się twojemu bohaterowi piąty poziom czarów."
 
@@ -5092,7 +5091,7 @@ msgid ""
 "level spell (or below) used against him in combat."
 msgstr ""
 "Daje Twojemu bohaterowi %{count} procent szans na nauczenie się dowolnego "
-"czaru 4-go poziomu (lub poniżej)  rzucanego przez przeciwnika. "
+"czaru 4-go poziomu (lub poniżej) rzucanego przez przeciwnika."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
