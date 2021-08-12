@@ -26,6 +26,7 @@
 #include <map>
 #include <queue>
 #include <thread>
+#include <utility>
 
 #include "agg.h"
 #include "agg_file.h"
@@ -199,8 +200,8 @@ namespace AGG
 
         struct LoopSoundTask
         {
-            LoopSoundTask( const std::vector<int> & vols_, const int soundVolume_ )
-                : vols( vols_ )
+            LoopSoundTask( std::vector<int> vols_, const int soundVolume_ )
+                : vols( std::move( vols_ ) )
                 , soundVolume( soundVolume_ )
             {}
 
