@@ -26,7 +26,6 @@
 #include <map>
 #include <queue>
 #include <thread>
-#include <tuple>
 
 #include "agg.h"
 #include "agg_file.h"
@@ -174,15 +173,50 @@ namespace AGG
         }
 
     private:
+        struct MusicTask
+        {
+            MusicTask( const int musicId_, const MusicSource musicType_, const bool isLooped_ )
+                : musicId( musicId_ )
+                , musicType( musicType_ )
+                , isLooped( isLooped_ )
+            {}
+
+            int musicId;
+            MusicSource musicType;
+            bool isLooped;
+        };
+
+        struct SoundTask
+        {
+            SoundTask( const int m82Sound_, const int soundVolume_ )
+                : m82Sound( m82Sound_ )
+                , soundVolume( soundVolume_ )
+            {}
+
+            int m82Sound;
+            int soundVolume;
+        };
+
+        struct LoopSoundTask
+        {
+            LoopSoundTask( const std::vector<int> & vols_, const int soundVolume_ )
+                : vols( vols_ )
+                , soundVolume( soundVolume_ )
+            {}
+
+            std::vector<int> vols;
+            int soundVolume;
+        };
+
         std::unique_ptr<std::thread> _worker;
         std::mutex _mutex;
 
         std::condition_variable _workerNotification;
         std::condition_variable _masterNotification;
 
-        std::queue<std::tuple<int, MusicSource, bool>> _musicTasks;
-        std::queue<std::tuple<int, int>> _soundTasks;
-        std::queue<std::tuple<std::vector<int>, int>> _loopSoundTasks;
+        std::queue<MusicTask> _musicTasks;
+        std::queue<SoundTask> _soundTasks;
+        std::queue<LoopSoundTask> _loopSoundTasks;
 
         uint8_t _exitFlag;
         uint8_t _runFlag;
@@ -220,23 +254,23 @@ namespace AGG
                 manager->_mutex.lock();
 
                 if ( !manager->_soundTasks.empty() ) {
-                    const std::tuple<int, int> soundInfo = manager->_soundTasks.back();
+                    const SoundTask soundTask = manager->_soundTasks.back();
                     manager->_soundTasks.pop();
 
                     manager->_mutex.unlock();
 
-                    PlaySoundInternally( std::get<0>( soundInfo ), std::get<1>( soundInfo ) );
+                    PlaySoundInternally( soundTask.m82Sound, soundTask.soundVolume );
                 }
                 else if ( !manager->_loopSoundTasks.empty() ) {
-                    const std::tuple<std::vector<int>, int> loopSoundInfo = manager->_loopSoundTasks.back();
+                    const LoopSoundTask loopSoundTask = manager->_loopSoundTasks.back();
                     manager->_loopSoundTasks.pop();
 
                     manager->_mutex.unlock();
 
-                    LoadLOOPXXSoundsInternally( std::get<0>( loopSoundInfo ), std::get<1>( loopSoundInfo ) );
+                    LoadLOOPXXSoundsInternally( loopSoundTask.vols, loopSoundTask.soundVolume );
                 }
                 else if ( !manager->_musicTasks.empty() ) {
-                    const std::tuple<int, MusicSource, bool> musicInfo = manager->_musicTasks.back();
+                    const MusicTask musicTask = manager->_musicTasks.back();
 
                     while ( !manager->_musicTasks.empty() ) {
                         manager->_musicTasks.pop();
@@ -244,7 +278,7 @@ namespace AGG
 
                     manager->_mutex.unlock();
 
-                    PlayMusicInternally( std::get<0>( musicInfo ), std::get<1>( musicInfo ), std::get<2>( musicInfo ) );
+                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
                 }
                 else {
                     manager->_runFlag = 0;
