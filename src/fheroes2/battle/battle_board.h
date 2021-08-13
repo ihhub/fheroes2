@@ -23,15 +23,18 @@
 #ifndef H2BATTLE_BOARD_H
 #define H2BATTLE_BOARD_H
 
-#include <functional>
 #include <random>
 
-#include "battle.h"
 #include "battle_cell.h"
 
 #define ARENAW 11
 #define ARENAH 9
 #define ARENASIZE ARENAW * ARENAH
+
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace Battle
 {

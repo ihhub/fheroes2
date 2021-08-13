@@ -25,15 +25,20 @@
 #include <iomanip>
 
 #include "agg_image.h"
+#include "battle.h"
+#include "battle_arena.h"
+#include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "game_static.h"
 #include "logging.h"
+#include "monster_anim.h"
 #include "morale.h"
 #include "rand.h"
 #include "speed.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 Battle::ModeDuration::ModeDuration( u32 mode, u32 duration )

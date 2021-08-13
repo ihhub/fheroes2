@@ -26,6 +26,8 @@
 #include <set>
 
 #include "battle_arena.h"
+#include "battle_army.h"
+#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"

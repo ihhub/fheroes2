@@ -22,7 +22,7 @@
 
 #include "week.h"
 #include "rand.h"
-#include "settings.h"
+#include "serialize.h"
 #include "translations.h"
 #include "world.h"
 

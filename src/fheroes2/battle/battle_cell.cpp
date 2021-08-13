@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "battle_cell.h"
+#include "battle_board.h"
 #include "battle_troop.h"
 #include "logging.h"
 #include "tools.h"

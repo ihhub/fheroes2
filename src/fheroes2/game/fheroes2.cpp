@@ -29,7 +29,6 @@
 #include "audio_music.h"
 #include "bin_info.h"
 #include "cursor.h"
-#include "dir.h"
 #include "embedded_image.h"
 #include "engine.h"
 #include "game.h"

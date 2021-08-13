@@ -23,7 +23,7 @@
 #ifndef H2MOUNTS_H
 #define H2MOUNTS_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjMnts1
 {

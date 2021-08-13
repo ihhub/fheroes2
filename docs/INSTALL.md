@@ -17,8 +17,8 @@ Precompiled binaries of the release version are currently available for the foll
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
-* [**PlayStation Vita**](README_PSV.md)
-* [**Nintendo Switch**](README_switch.md)
+* [**PlayStation Vita**](#playstation-vita)
+* [**Nintendo Switch**](#nintendo-switch)
 
 Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots-latest-builds).
 
@@ -123,7 +123,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 
   * **Debian-based**: run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux` subdirectory.
 
-  * **Pacman-based (e.g. Arch Linux)**: run the following command: `sudo pacman -S sdl sdl_mixer`.
+  * **Pacman-based (e.g. Arch Linux)**: run one of the following commands: `sudo pacman -S sdl sdl_mixer` or `sudo pacman -S sdl2 sdl2_mixer` (depending on the downloaded build).
 
   * **RedHat-based**: for RPM-based distributions (such as Fedora or RedHat) use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
 
@@ -132,6 +132,24 @@ If you have a legally purchased copy of the original game, copy all files belong
   * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer`.
 
 * After all dependencies are installed, copy all files belonging to the original game to the fheroes2 installation directory if you have a legally purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
+
+<a name="playstation-vita"></a>
+## PlayStation Vita
+
+Please note: you need to be running custom firmware for it to work.
+
+* Download the [**PlayStation Vita ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_psv_sdl2.zip).
+
+* Follow the [**instructions**](README_PSV.md).
+
+<a name="nintendo-switch"></a>
+## Nintendo Switch
+
+Please note: you need to be running custom firmware for it to work.
+
+* Download the [**Nintendo Switch ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_switch_sdl2.zip).
+
+* Follow the [**instructions**](README_switch.md).
 
 <a name="snapshots-latest-builds"></a>
 ## Snapshots (latest builds)

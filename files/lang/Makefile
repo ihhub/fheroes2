@@ -25,11 +25,10 @@ fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
 	msgfmt $<.tmp -o $@
 
-# Polish language: drop accents transliterated with `"` (which breaks translation file format)
-# and transliterate the rest using the pl.UTF-8 locale
+# Polish version uses CP1250
 pl.mo: pl.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< > $<.tmp
-	LANG=pl.UTF-8 LC_ALL=pl.UTF-8 LC_CTYPE=pl.UTF-8 iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1250 $< > $<.tmp
+	LANG=pl.CP1250 LC_ALL=pl.CP1250 LC_CTYPE=pl.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)

@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cctype>
 #include <ctime>
+#include <iomanip>
 #include <iterator>
 #include <sstream>
 #include <string>
@@ -39,6 +40,7 @@
 #include "system.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "world.h"
 

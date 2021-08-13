@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdlib>
-
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "logging.h"

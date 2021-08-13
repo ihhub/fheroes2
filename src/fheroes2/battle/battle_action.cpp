@@ -25,6 +25,7 @@
 #include <iomanip>
 
 #include "battle_arena.h"
+#include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_command.h"
@@ -36,6 +37,7 @@
 #include "rand.h"
 #include "spell.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace

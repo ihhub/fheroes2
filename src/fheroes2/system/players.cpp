@@ -29,6 +29,7 @@
 #include "normal/ai_normal.h"
 #include "players.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "world.h"
 

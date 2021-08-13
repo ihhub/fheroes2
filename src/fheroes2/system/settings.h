@@ -23,12 +23,8 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
-#include <iomanip>
-#include <list>
-
 #include "bitmodes.h"
 #include "dir.h"
-#include "gamedefs.h"
 #include "maps_fileinfo.h"
 #include "players.h"
 

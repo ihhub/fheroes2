@@ -31,6 +31,7 @@
 #include "icn.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 void Castle::OpenTavern( void ) const

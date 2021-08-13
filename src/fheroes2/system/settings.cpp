@@ -29,6 +29,7 @@
 #include "logging.h"
 #include "save_format_version.h"
 #include "screen.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"

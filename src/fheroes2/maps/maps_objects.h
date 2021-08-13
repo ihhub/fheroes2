@@ -23,14 +23,12 @@
 #define H2MAPS_OBJECTS_H
 
 #include <string>
-#include <vector>
 
 #include "artifact.h"
-#include "gamedefs.h"
-#include "monster.h"
-#include "pairs.h"
 #include "position.h"
 #include "resource.h"
+
+class StreamBuf;
 
 class MapObjectSimple : public MapPosition
 {

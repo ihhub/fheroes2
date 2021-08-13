@@ -36,6 +36,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_objects.h"
 #include "monster.h"
 #include "mp2.h"
 #include "mus.h"
@@ -46,6 +47,7 @@
 #include "skill.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
@@ -355,6 +357,8 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
         else {
             troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
+
+        Interface::Basic::Get().GetStatusWindow().SetRedraw();
     }
 }
 

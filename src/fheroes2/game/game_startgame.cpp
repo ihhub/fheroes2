@@ -47,6 +47,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -646,23 +647,24 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 // CONTROL_AI turn
                 default:
-                    if ( res == fheroes2::GameMode::END_TURN ) {
-                        Cursor::Get().SetThemes( Cursor::WAIT );
+                    // TODO: remove this temporary assertion
+                    assert( res == fheroes2::GameMode::END_TURN );
 
-                        conf.SetCurrentColor( player->GetColor() );
+                    Cursor::Get().SetThemes( Cursor::WAIT );
 
-                        statusWindow.Reset();
-                        statusWindow.SetState( StatusType::STATUS_AITURN );
+                    conf.SetCurrentColor( player->GetColor() );
 
-                        Redraw();
-                        display.render();
+                    statusWindow.Reset();
+                    statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        world.ClearFog( player->GetColor() );
+                    Redraw();
+                    display.render();
 
-                        kingdom.ActionBeforeTurn();
+                    world.ClearFog( player->GetColor() );
 
-                        AI::Get().KingdomTurn( kingdom );
-                    }
+                    kingdom.ActionBeforeTurn();
+
+                    AI::Get().KingdomTurn( kingdom );
                     break;
                 }
 

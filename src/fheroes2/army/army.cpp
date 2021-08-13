@@ -43,9 +43,11 @@
 #include "race.h"
 #include "rand.h"
 #include "screen.h"
+#include "serialize.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 enum armysize_t

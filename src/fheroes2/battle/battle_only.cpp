@@ -36,6 +36,7 @@
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_window.h"
 #include "world.h"
 
