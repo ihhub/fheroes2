@@ -95,7 +95,7 @@ namespace Battle
         static Indexes GetAroundIndexes( const Unit & );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
-        static bool CanAttackUnitFromCell( const Unit & attacker, const Unit & target, const int32_t from );
+        static bool CanAttackUnitFromCell( const Unit & attacker, const int32_t from );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
@@ -121,9 +121,6 @@ namespace Battle
         bool GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
                                  const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const;
         void StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const;
-
-        static bool isIndexToTheLeftOfTheMoat( const int32_t index );
-        static bool isIndexToTheRightOfTheMoat( const int32_t index );
     };
 }
 

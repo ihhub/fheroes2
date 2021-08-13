@@ -292,7 +292,7 @@ namespace AI
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
 
                 // Attack only if target unit is reachable and can be attacked from the target cell
-                if ( target.unit && target.cell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, *target.unit, target.cell ) ) {
+                if ( target.unit && target.cell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, target.cell ) ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -728,7 +728,7 @@ namespace AI
                             actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
 
                         // Attack only if target unit is reachable and can be attacked from the target cell
-                        if ( targetCell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, *targetUnit, targetCell ) )
+                        if ( targetCell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, targetCell ) )
                             actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
 
                         break;

@@ -2086,7 +2086,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
                         const s32 from = Board::GetIndexDirection( index_pos, dir );
 
-                        if ( Board::CanAttackUnitFromCell( *_currentUnit, *b_enemy, from ) ) {
+                        if ( Board::CanAttackUnitFromCell( *_currentUnit, from ) ) {
                             statusMsg = _( "Attack %{monster}" );
                             StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
 

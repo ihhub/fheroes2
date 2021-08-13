@@ -710,21 +710,6 @@ bool Battle::Board::isMoatIndex( s32 index, const Unit & b )
     return false;
 }
 
-bool Battle::Board::isIndexToTheLeftOfTheMoat( const int32_t index )
-{
-    return ( ( index <= 6 ) || ( 11 <= index && index <= 17 ) || ( 22 <= index && index <= 27 ) || ( 33 <= index && index <= 38 ) || ( 44 <= index && index <= 48 )
-             || ( 55 <= index && index <= 60 ) || ( 66 <= index && index <= 71 ) || ( CATAPULT_POS <= index && index <= 83 ) || ( 88 <= index && index <= 94 ) );
-}
-
-bool Battle::Board::isIndexToTheRightOfTheMoat( const int32_t index )
-{
-    return ( ( CASTLE_FIRST_TOP_WALL_POS <= index && index <= 10 ) || ( CASTLE_TOP_ARCHER_TOWER_POS <= index && index <= 21 )
-             || ( CASTLE_SECOND_TOP_WALL_POS <= index && index <= 32 ) || ( CASTLE_TOP_GATE_TOWER_POS <= index && index <= 43 )
-             || ( CASTLE_GATE_POS <= index && index <= 54 ) || ( CASTLE_BOTTOM_GATE_TOWER_POS <= index && index <= 65 )
-             || ( CASTLE_THIRD_TOP_WALL_POS <= index && index <= 76 ) || ( CASTLE_BOTTOM_ARCHER_TOWER_POS <= index && index <= 87 )
-             || ( CASTLE_FORTH_TOP_WALL_POS <= index && index <= 98 ) );
-}
-
 void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
 {
     //    bool trees = Maps::ScanAroundObject(center, MP2::OBJ_TREES).size();
@@ -1116,7 +1101,7 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
     return true;
 }
 
-bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const Unit & target, const int32_t from )
+bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t from )
 {
     const Cell * fromCell = GetCell( from );
     assert( fromCell != nullptr );
@@ -1143,23 +1128,13 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const Unit & t
         return true;
     }
 
-    // The attacking unit is entirely to the left of the moat
-    if ( isIndexToTheLeftOfTheMoat( attacker.GetHeadIndex() ) && ( !attacker.isWide() || isIndexToTheLeftOfTheMoat( attacker.GetTailIndex() ) ) ) {
-        // And the target unit is entirely to the right of the moat
-        if ( isIndexToTheRightOfTheMoat( target.GetHeadIndex() ) && ( !target.isWide() || isIndexToTheRightOfTheMoat( target.GetTailIndex() ) ) ) {
-            return false;
-        }
-    }
-    // The attacking unit is entirely to the right of the moat
-    else if ( isIndexToTheRightOfTheMoat( attacker.GetHeadIndex() ) && ( !attacker.isWide() || isIndexToTheRightOfTheMoat( attacker.GetTailIndex() ) ) ) {
-        // And the target unit is entirely to the left of the moat
-        if ( isIndexToTheLeftOfTheMoat( target.GetHeadIndex() ) && ( !target.isWide() || isIndexToTheLeftOfTheMoat( target.GetTailIndex() ) ) ) {
-            return false;
-        }
+    // Attacker is already near the target
+    if ( from == attacker.GetHeadIndex() || ( attacker.isWide() && from == attacker.GetTailIndex() ) ) {
+        return true;
     }
 
-    // In all other cases, the attack is permitted
-    return true;
+    // In all other cases, the attack is prohibited
+    return false;
 }
 
 Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
