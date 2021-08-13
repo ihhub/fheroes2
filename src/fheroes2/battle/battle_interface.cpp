@@ -1652,25 +1652,46 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Cell * attackerCell = Board::GetCell( cell->GetIndex(), direction );
+            const Cell * attackerCell = Board::GetCell( index_pos, direction );
             assert( attackerCell != nullptr );
-
-            Position attackerPos;
 
             if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
                 // The attacking unit is already there and shouldn't move
-                attackerPos = _currentUnit->GetPosition();
+                highlightCells.emplace( _currentUnit->GetPosition().GetHead() );
+
+                if ( _currentUnit->isWide() ) {
+                    highlightCells.emplace( _currentUnit->GetPosition().GetTail() );
+                }
             }
             else {
-                attackerPos = Position::GetCorrect( *_currentUnit, attackerCell->GetIndex() );
-            }
+                highlightCells.emplace( attackerCell );
 
-            assert( attackerPos.GetHead() != nullptr );
-            highlightCells.emplace( attackerPos.GetHead() );
+                if ( _currentUnit->isWide() ) {
+                    int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
 
-            if ( _currentUnit->isWide() ) {
-                assert( attackerPos.GetTail() != nullptr );
-                highlightCells.emplace( attackerPos.GetTail() );
+                    if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
+                        const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
+
+                        if ( attackerTailCell != nullptr && attackerTailCell->GetDirection() != UNKNOWN
+                             && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
+                            highlightCells.emplace( attackerTailCell );
+                        }
+                    }
+
+                    if ( highlightCells.size() == 2 ) {
+                        // Try opposite direction
+                        tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
+
+                        if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
+                            const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
+
+                            if ( attackerTailCell != nullptr && attackerTailCell->GetDirection() != UNKNOWN
+                                 && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
+                                highlightCells.emplace( attackerTailCell );
+                            }
+                        }
+                    }
+                }
             }
         }
         else {
