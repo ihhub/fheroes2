@@ -308,7 +308,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
         // Unit steps into the moat
         if ( isMoatBuilt && ( isMoatIndex( headCellId, unit ) || isMoatIndex( tailCellId, unit ) ) ) {
             // Moat is a part of the unit's destination
-            if ( headCellId == dstHeadCellId ) {
+            if ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) {
                 result.push_back( headCellId );
 
                 return true;
