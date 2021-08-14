@@ -313,7 +313,7 @@ namespace AI
     void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
     {
         _myColor = currentUnit.GetCurrentColor();
-        _commander = arena.GetCommander( _myColor );
+        _commander = arena.getCommander( _myColor );
 
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
@@ -419,7 +419,7 @@ namespace AI
         if ( _commander && _myShooterStr > 1 ) {
             _myShooterStr += _commander->GetSpellcastStrength( _myArmyStrength );
         }
-        const HeroBase * enemyCommander = arena.GetEnemyCommander( _myColor );
+        const HeroBase * enemyCommander = arena.getEnemyCommander( _myColor );
         if ( enemyCommander ) {
             _enemySpellStrength = enemyCommander->GetSpellcastStrength( _enemyArmyStrength );
             _enemyShooterStr += _enemySpellStrength;

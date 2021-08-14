@@ -65,8 +65,8 @@ namespace Battle
         u32 GetCurrentTurn( void ) const;
         Result & GetResult( void );
 
-        const HeroBase * GetCommander( const int color ) const;
-        const HeroBase * GetEnemyCommander( const int color ) const;
+        const HeroBase * getCommander( const int color ) const;
+        const HeroBase * getEnemyCommander( const int color ) const;
         const HeroBase * GetCommander1( void ) const;
         const HeroBase * GetCommander2( void ) const;
         const HeroBase * GetCurrentCommander( void ) const;

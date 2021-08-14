@@ -4961,7 +4961,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     // surrender
     case 3: {
         if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
-            const HeroBase * enemy = arena.GetEnemyCommander( arena.GetCurrentColor() );
+            const HeroBase * enemy = arena.getEnemyCommander( arena.GetCurrentColor() );
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();

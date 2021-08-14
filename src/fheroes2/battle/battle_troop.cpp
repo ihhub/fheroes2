@@ -1754,5 +1754,5 @@ const HeroBase * Battle::Unit::GetCommander( void ) const
 
 const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
 {
-    return GetArena()->GetCommander( GetCurrentOrArmyColor() );
+    return GetArena()->getCommander( GetCurrentOrArmyColor() );
 }
