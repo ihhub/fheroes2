@@ -211,7 +211,7 @@ u32 GoldInsteadArtifact( int );
 namespace fheroes2
 {
     void ResetArtifactStats();
-    void ExcludeArtifactFromRandom( int art );
+    void ExcludeArtifactFromRandom( const int artifactID );
 }
 
 class BagArtifacts : public std::vector<Artifact>

@@ -846,9 +846,9 @@ void fheroes2::ResetArtifactStats()
     }
 }
 
-void fheroes2::ExcludeArtifactFromRandom( int art )
+void fheroes2::ExcludeArtifactFromRandom( const int artifactID )
 {
-    const size_t id = static_cast<size_t>( art );
+    const size_t id = static_cast<size_t>( artifactID );
 
     assert( id < artifacts.size() );
 
