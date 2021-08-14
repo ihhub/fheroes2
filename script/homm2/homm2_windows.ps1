@@ -33,13 +33,16 @@ try {
             throw
         }
 
-        $randName = [System.IO.Path]::GetRandomFileName()
+        while ($true) {
+            $randName = [System.IO.Path]::GetRandomFileName()
 
-        if (-Not (Test-Path -Path "$destPath\$randName" -PathType Container)) {
-            [void](New-Item -Path "$destPath\$randName" -ItemType "directory")
+            if (-Not (Test-Path -Path "$destPath\$randName")) {
+                [void](New-Item -Path "$destPath\$randName" -ItemType "directory")
+                Remove-Item -Path "$destPath\$randName"
+
+                break
+            }
         }
-
-        Remove-Item -Path "$destPath\$randName"
     } catch {
         if ($null -Eq $Env:APPDATA) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine destination directory"
