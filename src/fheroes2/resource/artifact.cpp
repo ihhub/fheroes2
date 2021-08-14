@@ -839,14 +839,14 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-void ResetArtifactStats()
+void fheroes2::ResetArtifactStats()
 {
     for ( artifactstats_t & item : artifacts ) {
         item.bits = 0;
     }
 }
 
-void ExcludeArtifactFromRandom( int art )
+void fheroes2::ExcludeArtifactFromRandom( int art )
 {
     const size_t id = static_cast<size_t>( art );
 

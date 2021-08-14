@@ -81,7 +81,7 @@ bool World::LoadMapMP2( const std::string & filename )
     Defaults();
 
     // clear artifact flags to correctly generate random artifacts
-    ResetArtifactStats();
+    fheroes2::ResetArtifactStats();
 
     const Settings & conf = Settings::Get();
 
@@ -89,7 +89,7 @@ bool World::LoadMapMP2( const std::string & filename )
     if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
         const Artifact art = conf.WinsFindArtifactID();
 
-        ExcludeArtifactFromRandom( art.GetID() );
+        fheroes2::ExcludeArtifactFromRandom( art.GetID() );
     }
 
     StreamFile fs;

@@ -208,8 +208,11 @@ StreamBase & operator>>( StreamBase &, Artifact & );
 
 u32 GoldInsteadArtifact( int );
 
-void ResetArtifactStats();
-void ExcludeArtifactFromRandom( int art );
+namespace fheroes2
+{
+    void ResetArtifactStats();
+    void ExcludeArtifactFromRandom( int art );
+}
 
 class BagArtifacts : public std::vector<Artifact>
 {
