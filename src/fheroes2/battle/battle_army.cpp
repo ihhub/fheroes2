@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+#include "battle.h"
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"
@@ -94,7 +95,7 @@ Battle::Units::Units( const Units & units, bool filter )
     reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
     assign( units.begin(), units.end() );
     if ( filter )
-        resize( std::distance( begin(), std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ) ) );
+        erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );
 }
 
 void Battle::Units::SortSlowest()

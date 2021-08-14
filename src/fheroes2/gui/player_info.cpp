@@ -30,6 +30,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )
@@ -183,26 +184,17 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
 
         // 1. redraw opponents
 
-        // current human
-        if ( humans_colors & player.GetColor() )
+        if ( humans_colors & player.GetColor() ) {
+            // Current human.
             index = 9 + Color::GetIndex( player.GetColor() );
-        else
-            // comp only
-            if ( fi.ComputerOnlyColors() & player.GetColor() ) {
-            if ( show_play_info ) {
-                index = ( player.isPlay() ? 3 : 15 ) + Color::GetIndex( player.GetColor() );
-            }
-            else
-                index = 15 + Color::GetIndex( player.GetColor() );
         }
-        else
-        // comp/human
-        {
-            if ( show_play_info ) {
-                index = ( player.isPlay() ? 3 : 15 ) + Color::GetIndex( player.GetColor() );
-            }
-            else
-                index = 3 + Color::GetIndex( player.GetColor() );
+        else if ( fi.ComputerOnlyColors() & player.GetColor() ) {
+            // Computer only.
+            index = 15 + Color::GetIndex( player.GetColor() );
+        }
+        else {
+            // Computer or human.
+            index = 3 + Color::GetIndex( player.GetColor() );
         }
 
         // wide sprite offset

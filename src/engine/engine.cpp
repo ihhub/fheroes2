@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include "engine.h"
-#include "font.h"
+#include "audio.h"
 #include "localevent.h"
 #include "logging.h"
 
@@ -33,12 +33,6 @@
 int _newlib_heap_size_user = 192 * 1024 * 1024;
 #endif
 
-namespace Mixer
-{
-    void Init();
-    void Quit();
-}
-
 bool SDL::Init( const uint32_t system )
 {
     if ( 0 > SDL_Init( system ) ) {
@@ -47,15 +41,12 @@ bool SDL::Init( const uint32_t system )
     }
 
     if ( SDL_INIT_AUDIO & system )
-        Mixer::Init();
+        Audio::Init();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SDL_INIT_GAMECONTROLLER & system ) {
         LocalEvent::Get().OpenController();
     }
     LocalEvent::Get().OpenTouchpad();
-#endif
-#ifdef WITH_TTF
-    FontTTF::Init();
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -68,16 +59,13 @@ bool SDL::Init( const uint32_t system )
 
 void SDL::Quit()
 {
-#ifdef WITH_TTF
-    FontTTF::Quit();
-#endif
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) ) {
         LocalEvent::Get().CloseController();
     }
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
-        Mixer::Quit();
+        Audio::Quit();
 
     SDL_Quit();
 }

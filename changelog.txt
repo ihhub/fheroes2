@@ -1,3 +1,61 @@
+version 0.9.6 (06 August 2021)
+- update status window if troops has fallen overboard
+- add direct preview of changes in system options dialog
+- update Polish translation
+- display the position of a hero or a castle on radar while right clicking on them
+- add titles to some dialogs
+- add translation support for missing places
+- fix monster joining logic with and without diplomacy
+- add Nintendo Switch build
+- make captured object event messages to contain yellow titles
+- fix a crash while AI uses Summon Elemental spell during battle
+- fix incorrect Alliance conditions for certain maps
+- fix a case when a hero in castle's tavern always changes after reloading a save file
+- fix incorrect icons for scenario information dialog
+- update skill order for new heroes
+- add normal Game settings dialog
+- fix inability to attack during battle
+- do not play ambient sounds during AI turn
+- add monster names, abilities and hero skills to translations
+- fix AI archer avoiding hand battle logic
+- fix UI defects in Kingdom castle view dialog
+- properly update resource and artifact sprites on World map
+- fix infinite loop after chain lightning spell
+- do not draw flags for puzzle image
+- highlight cells from where a monster will attack
+- restore background music after playing short-term music effects
+- add language selection window
+- fix Town's fog area unveiling
+- implement regular win/loss conditions for multiplayer mode
+- update View World while resizing the application
+- fix English phrasing and punctuation
+- fix simultaneous activation of buttons in hero meeting screen
+- add Town Screen and Well hotkeys
+- fix incorrect logic nearby castles when an attacking hero was actually defending the castle
+- improve win/loss checks of scenarios
+- make AI to use Lich's ability properly
+- update Russian and French translations
+- make fog discovery by AI more efficient
+- fix missing monster spell casting during battles
+- center fast separation buttons in Monster separation dialog
+- remove required spell points from scrolls in Mage Guilds
+- fix Next Hero selection logic
+- fix Wizards campaign scenario 3 with custom Ultimate Artifact
+- add 500 experience for conquering a town regardless of defending hero existence
+- change battlefield pathfinding algorithm to more stable version avoiding AI skipping some moves
+- align text evenly inside secondary skill window
+- display translated text in campaign dialog
+- fix a crash during Summon Boat spell usage
+- if the hero's army does not have any of the original troops left alive at the end of the battle, then the hero should lose
+- fix typo in Fizbin Medal
+- fix small font for Russian localization
+- fix town/castle passability for some cases
+- fix incorrect mouse cursor appearance during AI turn after a battle with Necromancy outcome
+- fix attacking monster sprite on World map
+- AI should check if an object is guarded while unveiling fog
+- add Alchemist Tower to the list of objects to be avoided by AI
+- fix a case when AI heroes did not ever capture empty castles
+
 version 0.9.5 (04 July 2021)
 - do not hire AI heroes if no tasks exist for them
 - make AI be more aggressive if no tasks exist for them

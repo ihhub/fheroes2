@@ -22,8 +22,8 @@
 #ifndef H2MAPS_H
 #define H2MAPS_H
 
-#include "direction.h"
-#include "gamedefs.h"
+#include <vector>
+
 #include "math_base.h"
 #include "types.h"
 
@@ -62,7 +62,7 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes GetAroundIndexes( s32 );
-    Indexes GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles = false ); // sorting distance
+    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile );
 
     Indexes ScanAroundObject( const int32_t center, const int obj );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj );
@@ -74,9 +74,6 @@ namespace Maps
 
     Indexes GetObjectPositions( int obj, bool ignoreHeroes );
     Indexes GetObjectPositions( int32_t center, int obj, bool ignoreHeroes );
-    Indexes GetObjectsPositions( const std::vector<uint8_t> & objs );
-
-    int TileIsCoast( int32_t center, int direct = DIRECTION_ALL );
 
     void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
 

@@ -31,6 +31,7 @@
 #endif
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -314,7 +315,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
-                    const Castle * castle = world.GetCastle( tile.GetCenter() );
+                    const Castle * castle = world.getCastle( tile.GetCenter() );
                     if ( castle )
                         fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 }
@@ -475,10 +476,10 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         }
         else if ( le.MouseWheelUp() ) {
-            return roi.ChangeZoom( true );
+            return roi.zoomIn( false );
         }
         else if ( le.MouseWheelDn() ) {
-            return roi.ChangeZoom( false );
+            return roi.zoomOut( false );
         }
     }
     return false;

@@ -43,9 +43,11 @@
 #include "race.h"
 #include "rand.h"
 #include "screen.h"
+#include "serialize.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 enum armysize_t
@@ -424,17 +426,6 @@ double Troops::GetStrength() const
             strength += troop->GetStrength();
     }
     return strength;
-}
-
-u32 Troops::GetHitPoints( void ) const
-{
-    u32 res = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            res += ( *it )->GetHitPoints();
-
-    return res;
 }
 
 void Troops::Clean( void )
@@ -1131,7 +1122,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
          ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
         if ( strs ) {
-            strs->append( _( "Some undead in groups -1" ) );
+            strs->append( _( "Some undead in group -1" ) );
             *strs += '\n';
         }
     }
@@ -1139,7 +1130,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     return result;
 }
 
-double Army::GetStrength( void ) const
+double Army::GetStrength() const
 {
     double result = 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
@@ -1347,14 +1338,6 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 
 NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
-    const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
-
-    const bool join_skip = tile.MonsterJoinConditionSkip();
-    const bool join_free = tile.MonsterJoinConditionFree();
-    // force join for campain and others...
-    const bool join_force = tile.MonsterJoinConditionForce();
-
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
@@ -1391,21 +1374,31 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         }
     }
 
-    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
-        if ( join_free || join_force ) {
+    if ( hero.HasArtifact( Artifact::HIDEOUS_MASK ) > 0 ) {
+        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
+    }
+
+    if ( tile.MonsterJoinConditionSkip() || !troop.isValid() ) {
+        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
+    }
+
+    // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
+    const double armyStrengthRatio = static_cast<const Troops &>( hero.GetArmy() ).GetStrength() / troop.GetStrength();
+
+    if ( armyStrengthRatio > 2 ) {
+        if ( tile.MonsterJoinConditionFree() ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
-        else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
-            // skill diplomacy
-            const u32 to_join = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            if ( to_join ) {
-                return { NeutralMonsterJoiningCondition::Reason::ForMoney, to_join, nullptr, nullptr };
+        if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
+            const uint32_t amountToJoin = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
+            if ( amountToJoin > 0 ) {
+                return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
         }
     }
 
-    if ( ratios >= 5 && !hero.isControlAI() ) {
+    if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
         // ... surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }

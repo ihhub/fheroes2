@@ -25,8 +25,9 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "battle_arena.h"
+#include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
 #include "battle_cell.h"
@@ -36,15 +37,19 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "game.h"
+#include "game_delays.h"
 #include "ground.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "logging.h"
+#include "monster_anim.h"
+#include "mus.h"
 #include "pal.h"
 #include "race.h"
 #include "rand.h"
 #include "settings.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -992,10 +997,15 @@ Battle::Interface::Interface( Arena & a, s32 center )
     if ( listlog )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
     status.SetLogs( listlog );
+
+    AGG::ResetMixer();
+    AGG::PlaySound( M82::PREBATTL );
 }
 
 Battle::Interface::~Interface()
 {
+    AGG::ResetMixer();
+
     if ( listlog )
         delete listlog;
     if ( opponent1 )
@@ -1529,8 +1539,9 @@ void Battle::Interface::RedrawCover()
 
     // cursor
     const Cell * cell = Board::GetCell( index_pos );
+    const int cursorType = Cursor::Get().Themes();
 
-    if ( cell && _currentUnit && conf.BattleShowMouseShadow() && Cursor::Get().Themes() != Cursor::WAR_NONE ) {
+    if ( cell && _currentUnit && conf.BattleShowMouseShadow() && cursorType != Cursor::WAR_NONE ) {
         std::set<const Cell *> highlightCells;
 
         if ( humanturn_spell.isValid() ) {
@@ -1581,7 +1592,7 @@ void Battle::Interface::RedrawCover()
             }
         }
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
-                  && ( Cursor::Get().Themes() == Cursor::WAR_ARROW || Cursor::Get().Themes() == Cursor::WAR_BROKENARROW ) ) {
+                  && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
             highlightCells.emplace( cell );
             const Indexes around = Board::GetAroundIndexes( index_pos );
             for ( size_t i = 0; i < around.size(); ++i ) {
@@ -1591,7 +1602,7 @@ void Battle::Interface::RedrawCover()
                 }
             }
         }
-        else if ( _currentUnit->GetTailIndex() != -1 && ( Cursor::Get().Themes() == Cursor::WAR_MOVE || Cursor::Get().Themes() == Cursor::WAR_FLY ) ) {
+        else if ( _currentUnit->GetTailIndex() != -1 && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
             highlightCells.emplace( cell );
             int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
 
@@ -1611,6 +1622,54 @@ void Battle::Interface::RedrawCover()
                         highlightCells.emplace( tailCell );
                     }
                 }
+            }
+        }
+        else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
+                  || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
+            highlightCells.emplace( cell );
+
+            int direction = 0;
+            if ( cursorType == Cursor::SWORD_TOPLEFT ) {
+                direction = BOTTOM_RIGHT;
+            }
+            else if ( cursorType == Cursor::SWORD_TOPRIGHT ) {
+                direction = BOTTOM_LEFT;
+            }
+            else if ( cursorType == Cursor::SWORD_BOTTOMLEFT ) {
+                direction = TOP_RIGHT;
+            }
+            else if ( cursorType == Cursor::SWORD_BOTTOMRIGHT ) {
+                direction = TOP_LEFT;
+            }
+            else if ( cursorType == Cursor::SWORD_LEFT ) {
+                direction = RIGHT;
+            }
+            else if ( cursorType == Cursor::SWORD_RIGHT ) {
+                direction = LEFT;
+            }
+            else {
+                assert( 0 );
+            }
+
+            const Cell * attackerCell = Board::GetCell( cell->GetIndex(), direction );
+            assert( attackerCell != nullptr );
+
+            Position attackerPos;
+
+            if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                // The attacking unit is already there and shouldn't move
+                attackerPos = _currentUnit->GetPosition();
+            }
+            else {
+                attackerPos = Position::GetCorrect( *_currentUnit, attackerCell->GetIndex() );
+            }
+
+            assert( attackerPos.GetHead() != nullptr );
+            highlightCells.emplace( attackerPos.GetHead() );
+
+            if ( _currentUnit->isWide() ) {
+                assert( attackerPos.GetTail() != nullptr );
+                highlightCells.emplace( attackerPos.GetTail() );
             }
         }
         else {
@@ -2405,7 +2464,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
             }
 
             if ( listlog ) {
-                std::string str = _( "%{color} cast spell: %{spell}" );
+                std::string str = _( "%{color} casts a spell: %{spell}" );
                 const HeroBase * current_commander = arena.GetCurrentCommander();
                 if ( current_commander )
                     StringReplace( str, "%{color}", Color::String( current_commander->GetColor() ) );
@@ -2444,7 +2503,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
 void Battle::Interface::FadeArena( bool clearMessageLog )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    AGG::ResetMixer();
 
     if ( clearMessageLog ) {
         status.clear();
@@ -2455,8 +2514,11 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
+
     display.render();
 }
 
@@ -2560,17 +2622,21 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 
     if ( _currentUnit ) {
         auto fixupTargetIndex = []( const Unit * unit, const int32_t dst ) {
-            if ( unit->isWide() ) {
-                Position pos = Position::GetCorrect( *unit, dst );
+            // only wide units may need this fixup
+            if ( !unit->isWide() ) {
+                return dst;
+            }
 
-                // destination cell is on the border of the cell space available to the unit
-                // and it should be the tail cell of the unit, return the head cell instead
-                if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
-                    int headDirection = unit->isReflect() ? LEFT : RIGHT;
+            const Position pos = Position::GetCorrect( *unit, dst );
+            assert( pos.GetTail() != nullptr );
 
-                    if ( Board::isValidDirection( dst, headDirection ) ) {
-                        return Board::GetIndexDirection( dst, headDirection );
-                    }
+            // destination cell is on the border of the cell space available to the unit
+            // and it should be the tail cell of the unit, return the head cell instead
+            if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
+                const int headDirection = unit->isReflect() ? LEFT : RIGHT;
+
+                if ( Board::isValidDirection( dst, headDirection ) ) {
+                    return Board::GetIndexDirection( dst, headDirection );
                 }
             }
 
@@ -2689,10 +2755,10 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
     std::string msg;
     if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skipping turn" );
+        msg = _( "%{name} skip the turn" );
     }
     else {
-        msg = _( "%{name} waiting turn" );
+        msg = _( "%{name} wait their turn" );
     }
 
     StringReplace( msg, "%{name}", attacker.GetName() );
@@ -2741,6 +2807,10 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 
 void Battle::Interface::RedrawActionNewTurn() const
 {
+    if ( !Music::isPlaying() ) {
+        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+    }
+
     if ( listlog == nullptr ) {
         return;
     }
@@ -2898,36 +2968,39 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     int deathColor = Color::UNUSED;
 
     std::vector<Unit *> mirrorImages;
+    std::set<Unit *> resistantTarget;
 
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
         Unit * defender = it->defender;
-        if ( defender ) {
-            if ( defender->isModes( CAP_MIRRORIMAGE ) )
-                mirrorImages.push_back( defender );
+        if ( defender == nullptr ) {
+            continue;
+        }
 
-            // kill animation
-            if ( !defender->isValid() ) {
-                // destroy linked mirror
-                if ( defender->isModes( CAP_MIRROROWNER ) )
-                    mirrorImages.push_back( defender->GetMirror() );
+        if ( defender->isModes( CAP_MIRRORIMAGE ) )
+            mirrorImages.push_back( defender );
 
-                defender->SwitchAnimation( Monster_Info::KILL );
-                AGG::PlaySound( defender->M82Kill() );
-                ++finish;
+        // kill animation
+        if ( !defender->isValid() ) {
+            // destroy linked mirror
+            if ( defender->isModes( CAP_MIRROROWNER ) )
+                mirrorImages.push_back( defender->GetMirror() );
 
-                deathColor = defender->GetArmyColor();
-            }
-            else if ( it->damage ) {
-                // wince animation
-                defender->SwitchAnimation( Monster_Info::WNCE );
-                AGG::PlaySound( defender->M82Wnce() );
-                ++finish;
-            }
-            else
+            defender->SwitchAnimation( Monster_Info::KILL );
+            AGG::PlaySound( defender->M82Kill() );
+            ++finish;
+
+            deathColor = defender->GetArmyColor();
+        }
+        else if ( it->damage ) {
+            // wince animation
+            defender->SwitchAnimation( Monster_Info::WNCE );
+            AGG::PlaySound( defender->M82Wnce() );
+            ++finish;
+        }
+        else {
             // have immunity
-            {
-                AGG::PlaySound( M82::RSBRYFZL );
-            }
+            resistantTarget.insert( it->defender );
+            AGG::PlaySound( M82::RSBRYFZL );
         }
     }
 
@@ -2977,7 +3050,24 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 RedrawPartialFinish();
             }
 
-            finishedAnimation = ( finish == std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) );
+            const int finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
+                if ( info.defender == nullptr ) {
+                    return false;
+                }
+
+                if ( resistantTarget.count( info.defender ) > 0 ) {
+                    return false;
+                }
+
+                const int animationState = info.defender->GetAnimationState();
+                if ( animationState != Monster_Info::WNCE && animationState != Monster_Info::KILL ) {
+                    return true;
+                }
+
+                return TargetInfo::isFinishAnimFrame( info );
+            } );
+
+            finishedAnimation = ( finish == finishedAnimationCount );
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
@@ -3642,7 +3732,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     StringReplace( msg, "%{tower}", tower.GetName() );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
-        msg.append( " " );
+        msg += ' ';
         msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
         StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
@@ -3845,7 +3935,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         }
     }
 
-    status.SetMessage( _( "MirrorImage created" ), true );
+    status.SetMessage( _( "The mirror image is created" ), true );
 }
 
 void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )
@@ -4846,7 +4936,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                                 humanturn_spell = spell;
                         }
                         else if ( !error.empty() )
-                            Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
+                            Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
                     }
                 }
             }

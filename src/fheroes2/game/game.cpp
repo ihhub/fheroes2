@@ -21,11 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 
 #include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -38,13 +39,13 @@
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
-#include "mus.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -57,7 +58,7 @@ namespace
     std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
-    int current_music = MUS::UNKNOWN;
+    std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
     u32 castle_animation_frame = 0;
     u32 maps_animation_frame = 0;
@@ -222,14 +223,14 @@ void Game::Init( void )
     Game::HotKeysLoad( hotkeys );
 }
 
-int Game::CurrentMusic( void )
+int Game::CurrentMusic()
 {
-    return current_music;
+    return currentMusic;
 }
 
-void Game::SetCurrentMusic( int mus )
+void Game::SetCurrentMusic( const int mus )
 {
-    current_music = mus;
+    currentMusic = mus;
 }
 
 void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
@@ -350,7 +351,7 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Mixer::isValid() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
@@ -486,17 +487,6 @@ u32 Game::GetViewDistance( u32 d )
 u32 Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
-}
-
-std::string Game::GetEncodeString( const std::string & str1 )
-{
-    const Settings & conf = Settings::Get();
-
-    // encode name
-    if ( conf.Unicode() && !conf.MapsCharset().empty() )
-        return EncodeString( str1, conf.MapsCharset().c_str() );
-
-    return str1;
 }
 
 int Game::GetKingdomColors( void )

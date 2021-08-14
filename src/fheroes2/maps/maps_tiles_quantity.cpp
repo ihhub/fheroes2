@@ -499,7 +499,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL1 : Artifact::ART_LEVEL2 ) );
             break;
         case 2:
-            QuantitySetResource( Resource::Rand(), Rand::Get( 2, 5 ) );
+            QuantitySetResource( Resource::Rand( false ), Rand::Get( 2, 5 ) );
             break;
         default:
             QuantityReset();
@@ -528,7 +528,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 QuantitySetArtifact( art );
 
                 if ( cond == 2 || cond == 3 )
-                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand() ) + 1 );
+                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand( false ) ) + 1 );
             }
         }
     } break;
@@ -555,7 +555,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_CAMPFIRE: {
         // 4-6 rnd resource and + 400-600 gold
-        QuantitySetResource( Resource::Rand(), Rand::Get( 4, 6 ) );
+        QuantitySetResource( Resource::Rand( false ), Rand::Get( 4, 6 ) );
     } break;
 
     case MP2::OBJ_MAGICGARDEN:
@@ -573,9 +573,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_WINDMILL: {
         int res = Resource::WOOD;
-        // except: wood, bugs: #3117478
-        while ( res == Resource::WOOD )
-            res = Resource::Rand();
+        while ( res == Resource::WOOD ) {
+            res = Resource::Rand( false );
+        }
 
         // 2 rnd resource
         QuantitySetResource( res, 2 );
@@ -583,7 +583,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_LEANTO:
         // 1-4 rnd resource
-        QuantitySetResource( Resource::Rand(), Rand::Get( 1, 4 ) );
+        QuantitySetResource( Resource::Rand( false ), Rand::Get( 1, 4 ) );
         break;
 
     case MP2::OBJ_FLOTSAM: {
@@ -908,19 +908,9 @@ bool Maps::Tiles::MonsterJoinConditionSkip( void ) const
     return Monster::JOIN_CONDITION_SKIP == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionMoney( void ) const
-{
-    return Monster::JOIN_CONDITION_MONEY == MonsterJoinCondition();
-}
-
 bool Maps::Tiles::MonsterJoinConditionFree( void ) const
 {
     return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();
-}
-
-bool Maps::Tiles::MonsterJoinConditionForce( void ) const
-{
-    return Monster::JOIN_CONDITION_FORCE == MonsterJoinCondition();
 }
 
 u32 Maps::Tiles::MonsterCount( void ) const
@@ -955,15 +945,14 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         tile.MonsterSetCount( mons.GetRNDSize( true ) );
     }
 
-    // skip join
-    if ( mons.GetID() == Monster::GHOST || mons.isElemental() )
+    if ( mons.GetID() == Monster::GHOST || mons.isElemental() ) {
+        // Ghosts and elementals never join hero's army.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
-    else
-        // fixed count: for money
-        if ( tile.MonsterFixedCount() ||
-             // month of monster
-             ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) )
+    }
+    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+        // Monsters will be willing to join for some amount of money.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+    }
     else {
         // 20% chance for join
         if ( 3 > Rand::Get( 1, 10 ) )

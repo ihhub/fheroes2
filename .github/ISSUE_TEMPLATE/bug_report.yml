@@ -1,0 +1,53 @@
+name: Bug report
+description: Something is not working or is going wrong
+labels: [ bug ]
+
+body:
+- type: checkboxes
+  attributes:
+    label: Preliminary checks
+    options:
+    - label: I've checked that there aren't [**other open issues**](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue) on the same topic.
+      required: true
+    - label: I've checked that this issue is reproducible on the [**latest snapshot build**](https://ihhub.github.io/fheroes2/INSTALL.html#snapshots-latest-builds).
+      required: true
+- type: dropdown
+  attributes:
+    label: Platform
+    description: Choose your platform
+    options:
+    - Windows
+    - macOS
+    - Linux
+    - PlayStation Vita
+    - Nintendo Switch
+    - Other
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Describe the bug
+    placeholder: >
+      Provide a clear and concise description of what the bug is, including
+      the list of steps to reproduce the bug. If possible, provide screenshots
+      to illustrate the issue. You can add screenshots by dragging and dropping
+      the image file to this section.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Save file
+    placeholder: >
+      If possible, provide a save file to make it easier for developers to
+      reproduce the issue. You can add it by placing your save file into a
+      ZIP archive and then dragging and dropping the resulting archive file
+      into this section. If you do not want to provide a save file (for example,
+      because it is not required to reproduce the issue or is not available),
+      please indicate here the reason why the save file cannot be attached to
+      this bug report.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Additional info
+    placeholder: Submit any additional info (game console output, crash logs, etc) in this section.

@@ -38,6 +38,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 #include <cassert>
@@ -87,7 +88,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
         str.append( "\n \n" );
         const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
         if ( scoutingLevel == Skill::Level::NONE ) {
-            str.append( "guarded by " ).append( StringLower( Army::TroopSizeString( troop ) ) );
+            str.append( _( "guarded by " ) ).append( StringLower( Army::TroopSizeString( troop ) ) );
         }
         else {
             str.append( _( "guarded by %{count} %{monster}" ) );
@@ -186,20 +187,21 @@ std::string ShowDwellingInfo( const Maps::Tiles & tile, bool owned, bool extende
             str.append( _( "(available: %{count})" ) );
             StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
         }
-        else
-            str.append( "(empty)" );
+        else {
+            str.append( _( "(empty)" ) );
+        }
     }
 
     return str;
 }
 
-std::string ShowShrineInfo( const Maps::Tiles & tile, const Heroes * hero, bool showVisitedOption, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
+std::string ShowShrineInfo( const Maps::Tiles & tile, const Heroes * hero, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
 
     bool showSpellDetails = false;
 
-    if ( showVisitedOption && isVisited ) {
+    if ( isVisited ) {
         showSpellDetails = true;
     }
     else if ( extendedScoutingOption ) {
@@ -233,11 +235,11 @@ std::string ShowShrineInfo( const Maps::Tiles & tile, const Heroes * hero, bool 
     return str;
 }
 
-std::string ShowWitchHutInfo( const Maps::Tiles & tile, const Heroes * hero, bool showVisitedOption, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
+std::string ShowWitchHutInfo( const Maps::Tiles & tile, const Heroes * hero, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
 
-    const bool show = ( showVisitedOption && isVisited ) || ( extendedScoutingOption && scoutingLevel == Skill::Level::EXPERT );
+    const bool show = isVisited || ( extendedScoutingOption && scoutingLevel == Skill::Level::EXPERT );
 
     if ( show ) {
         const Skill::Secondary & skill = tile.QuantitySkill();
@@ -284,14 +286,12 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
     return str;
 }
 
-std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom, bool showVisitedOption )
+std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
 
-    if ( showVisitedOption ) {
-        str.append( "\n \n" );
-        str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
-    }
+    str.append( "\n \n" );
+    str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
 
     return str;
 }
@@ -492,7 +492,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     // This value is only relevant for the "Extended Scouting" option
     const uint32_t scoutingLevelForTile = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : GetHeroScoutingLevelForTile( from_hero, tile.GetIndex() );
 
-    const bool showVisitedOption = settings.ExtWorldShowVisitedContent();
     const bool showTerrainPenaltyOption = settings.ExtWorldShowTerrainPenalty();
     const bool extendedScoutingOption = settings.ExtWorldScouteExtended();
 
@@ -523,13 +522,13 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_LEANTO:
-            name_object = ShowGlobalVisitInfo( tile, kingdom, showVisitedOption );
+            name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
-            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( objectType ) : ShowGlobalVisitInfo( tile, kingdom, showVisitedOption );
+            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( objectType ) : ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_CAMPFIRE:
@@ -588,7 +587,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_ARTESIANSPRING:
-            name_object = ShowGlobalVisitInfo( tile, kingdom, true );
+            name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_MAGICWELL:
@@ -609,15 +608,15 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
-            name_object = ShowShrineInfo( tile, from_hero, showVisitedOption, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
+            name_object = ShowShrineInfo( tile, from_hero, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
             break;
 
         case MP2::OBJ_WITCHSHUT:
-            name_object = ShowWitchHutInfo( tile, from_hero, showVisitedOption, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
+            name_object = ShowWitchHutInfo( tile, from_hero, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
             break;
 
         case MP2::OBJ_OBELISK:
-            name_object = ShowGlobalVisitInfo( tile, kingdom, true );
+            name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_BARRIER:
@@ -649,6 +648,14 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Update radar.
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
+
+    gamearea.SetCenter( castle.GetCenter() );
+    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    radar.Redraw();
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
@@ -787,6 +794,11 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
     // restore background
     back.restore();
+
+    // Restore radar.
+    gamearea.SetCenterInPixels( prevCenter );
+    radar.Redraw();
+
     display.render();
 }
 
@@ -796,6 +808,14 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
+
+    // Update radar.
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
+
+    gamearea.SetCenter( hero.GetCenter() );
+    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    radar.Redraw();
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -982,5 +1002,10 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
 
     // restore background
     restorer.restore();
+
+    // Restore radar.
+    gamearea.SetCenterInPixels( prevCenter );
+    radar.Redraw();
+
     display.render();
 }

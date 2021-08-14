@@ -31,11 +31,13 @@
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"
+#include "monster_anim.h"
 #include "morale.h"
 #include "payment.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_text.h"
 #include "world.h"
@@ -185,7 +187,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             }
             // dismiss
             if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::EVENT_DISMISS_TROOP ) )
-                 && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                 && Dialog::YES
+                        == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
+                                            Dialog::YES | Dialog::NO ) ) {
                 result = Dialog::DISMISS;
                 break;
             }
@@ -258,7 +262,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     // shot
     if ( troop.isArchers() ) {
         std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
-        message.append( ":" );
+        message += ':';
         text.Set( message );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;

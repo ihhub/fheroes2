@@ -414,7 +414,7 @@ namespace
         const std::string wizardsIsleCampaignScenarioNames[4] = { _( "The Shrouded Isles" ), _( "The Eternal Scrolls" ), _( "Power's End" ), _( "Fount of Wizardry" ) };
         const std::string wizardsIsleCampaignDescription[4] = {
             _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
-            _( "The location of the great library has been dicovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
+            _( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
             _( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
             _( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
@@ -496,24 +496,6 @@ namespace Campaign
         , _campaignDescription()
         , _scenarios()
     {}
-
-    std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
-    {
-        std::vector<int> scenarioIDs;
-
-        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            if ( _scenarios[i].getScenarioID() >= scenarioID )
-                break;
-
-            const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
-
-            // if any of this scenario's next maps is the one passed as param, then this scenario is a previous scenario
-            if ( std::find( nextMaps.begin(), nextMaps.end(), scenarioID ) != nextMaps.end() )
-                scenarioIDs.emplace_back( _scenarios[i].getScenarioID() );
-        }
-
-        return scenarioIDs;
-    }
 
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
     {
@@ -615,15 +597,6 @@ namespace Campaign
         }
         }
     }
-
-    CampaignAwardData::CampaignAwardData()
-        : _id( 0 )
-        , _type( 0 )
-        , _subType( 0 )
-        , _amount( 0 )
-        , _startScenarioID( 0 )
-        , _customName()
-    {}
 
     // default amount to 1 for initialized campaign award data
     CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType )

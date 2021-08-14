@@ -23,15 +23,18 @@
 #ifndef H2BATTLE_BOARD_H
 #define H2BATTLE_BOARD_H
 
-#include <functional>
 #include <random>
 
-#include "battle.h"
 #include "battle_cell.h"
 
 #define ARENAW 11
 #define ARENAH 9
 #define ARENASIZE ARENAW * ARENAH
+
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace Battle
 {
@@ -74,7 +77,6 @@ namespace Battle
         static bool isCastleIndex( s32 );
         static bool isMoatIndex( s32 index, const Unit & b );
         static bool isBridgeIndex( s32 index, const Unit & b );
-        static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );

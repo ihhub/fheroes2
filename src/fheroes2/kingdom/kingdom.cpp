@@ -36,6 +36,7 @@
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "visit.h"
 #include "world.h"
@@ -195,8 +196,6 @@ void Kingdom::ActionNewDay( void )
 
 void Kingdom::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
-
     // skip first day
     if ( 1 < world.CountDay() ) {
         // castle New Week
@@ -248,29 +247,12 @@ void Kingdom::AddHeroes( Heroes * hero )
     }
 }
 
-void Kingdom::AddHeroStartCondLoss( Heroes * hero )
-{
-    // see: Settings::ExtWorldStartHeroLossCond4Humans
-    heroes_cond_loss.push_back( hero );
-}
-
 const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
 {
     for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
         if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
             return *it;
     return nullptr;
-}
-
-std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
-{
-    std::string result;
-    for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it ) {
-        result.append( ( *it )->GetName() );
-        if ( it + 1 != heroes_cond_loss.end() )
-            result.append( ", " );
-    }
-    return result;
 }
 
 void Kingdom::RemoveHeroes( const Heroes * hero )
@@ -455,11 +437,6 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
 bool Kingdom::HeroesMayStillMove( void ) const
 {
     return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
-}
-
-u32 Kingdom::GetCountCapital( void ) const
-{
-    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCapital ) );
 }
 
 void Kingdom::AddFundsResource( const Funds & funds )
@@ -857,20 +834,6 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
             GetKingdom( ( *it )->GetColor() ).AddHeroes( *it );
 }
 
-void Kingdoms::AddCondLossHeroes( const AllHeroes & heroes )
-{
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        // skip gray color
-        if ( ( *it )->GetColor() ) {
-            Kingdom & kingdom = GetKingdom( ( *it )->GetColor() );
-
-            if ( kingdom.isControlHuman() ) {
-                ( *it )->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
-                kingdom.AddHeroStartCondLoss( *it );
-            }
-        }
-}
-
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
     for ( const auto & castle : castles ) {
@@ -880,28 +843,29 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const int objectType )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() ) {
-            const int color = kingdoms[ii].GetColor();
-            const Funds & funds = captureobj.TributeCapturedObject( color, obj );
+    for ( uint32_t i = 0; i < size(); ++i ) {
+        if ( kingdoms[i].isPlay() ) {
+            const int color = kingdoms[i].GetColor();
+            const Funds & funds = captureobj.TributeCapturedObject( color, objectType );
 
-            kingdoms[ii].AddFundsResource( funds );
+            kingdoms[i].AddFundsResource( funds );
 
             // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdoms[ii].isControlHuman() ) {
+            if ( funds.GetValidItemsCount() && kingdoms[i].isControlHuman() ) {
                 EventDate event;
 
                 event.computer = true;
                 event.first = day;
                 event.colors = color;
                 event.resource = funds;
-                event.message = MP2::StringObject( obj );
+                event.title = MP2::StringObject( objectType );
 
                 world.AddEventDate( event );
             }
         }
+    }
 }
 
 // Check if tile is visible from any crystal ball of any hero

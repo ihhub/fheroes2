@@ -34,8 +34,8 @@
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps_objects.h"
 #include "maps_tiles.h"
-#include "mus.h"
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
@@ -235,7 +235,7 @@ namespace AI
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
-        const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        const int object = tile.GetObject( dst_index != hero.GetIndex() );
         bool isAction = true;
 
         const bool isActionObject = MP2::isActionObject( object, hero.isShipMaster() );
@@ -493,9 +493,6 @@ namespace AI
         // ignore empty tiles
         if ( isAction )
             AI::Get().HeroesActionComplete( hero );
-
-        // reset if during an action music was stopped
-        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
     }
 
     void AIToHeroes( Heroes & hero, s32 dst_index )
@@ -549,10 +546,12 @@ namespace AI
     void AIToCastle( Heroes & hero, s32 dst_index )
     {
         const Settings & conf = Settings::Get();
-        Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ) );
-
-        if ( !castle )
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
+        if ( castle == nullptr ) {
+            // Something is wrong while calling this function for incorrect tile.
+            assert( 0 );
             return;
+        }
 
         if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );

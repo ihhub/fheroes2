@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cctype>
 #include <ctime>
+#include <iomanip>
 #include <iterator>
 #include <sstream>
 #include <string>
@@ -39,6 +40,7 @@
 #include "system.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "world.h"
 
@@ -73,9 +75,8 @@ bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::s
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
-    FileInfoListBox( const fheroes2::Point & pt, bool & edit )
+    FileInfoListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
-        , edit_mode( edit )
         , _isDoubleClicked( false )
     {}
 
@@ -87,8 +88,6 @@ public:
     void ActionListDoubleClick( Maps::FileInfo & ) override;
     void ActionListSingleClick( Maps::FileInfo & ) override;
     void ActionListPressRight( Maps::FileInfo & ) override {}
-
-    bool & edit_mode;
 
     bool isDoubleClicked() const
     {
@@ -144,26 +143,16 @@ void FileInfoListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQBKG, 0 ), fheroes2::Display::instance(), dst.x, dst.y );
 }
 
-void FileInfoListBox::ActionCurrentUp( void )
-{
-    edit_mode = false;
-}
+void FileInfoListBox::ActionCurrentUp() {}
 
-void FileInfoListBox::ActionCurrentDn( void )
-{
-    edit_mode = false;
-}
+void FileInfoListBox::ActionCurrentDn() {}
 
 void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & )
 {
-    edit_mode = false;
     _isDoubleClicked = true;
 }
 
-void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & )
-{
-    edit_mode = false;
-}
+void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ ) {}
 
 std::string ResizeToShortName( const std::string & str )
 {
@@ -197,7 +186,7 @@ std::string Dialog::SelectFileSave( void )
     const std::string & name = conf.CurrentFileInfo().name;
 
     std::string base = !name.empty() ? name : "newgame";
-    base.resize( std::distance( base.begin(), std::find_if( base.begin(), base.end(), ::ispunct ) ) );
+    base.erase( std::find_if( base.begin(), base.end(), ::ispunct ), base.end() );
     std::replace_if( base.begin(), base.end(), ::isspace, '_' );
     std::ostringstream os;
 
@@ -214,7 +203,7 @@ std::string Dialog::SelectFileLoad( void )
     return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );
 }
 
-std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, const bool editor )
+std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -238,10 +227,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
     fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
 
-    bool edit_mode = false;
-
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
-    FileInfoListBox listbox( rt.getPosition(), edit_mode );
+    FileInfoListBox listbox( rt.getPosition() );
 
     listbox.RedrawBackground( rt.getPosition() );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
@@ -267,7 +254,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             listbox.SetCurrent( std::distance( lists.begin(), it ) );
         }
         else {
-            if ( !editor ) {
+            if ( !isEditing ) {
                 filename.clear();
                 charInsertPos = 0;
             }
@@ -275,7 +262,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         }
     }
 
-    if ( !editor && lists.empty() )
+    if ( !isEditing && lists.empty() )
         buttonOk.disable();
 
     if ( filename.empty() && listbox.isSelected() ) {
@@ -294,6 +281,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     std::string result;
     bool is_limit = false;
+    std::string lastSelectedSaveFileName;
 
     while ( le.HandleEvents() && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -302,25 +290,25 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         listbox.QueueEventProcessing();
 
         bool needRedraw = false;
+        bool isListboxSelected = listbox.isSelected();
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
                 result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
-            else if ( listbox.isSelected() )
+            else if ( isListboxSelected )
                 result = listbox.GetCurrent().file;
         }
         else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             break;
         }
-        else if ( le.MouseClickLeft( enter_field ) && editor ) {
-            edit_mode = true;
+        else if ( le.MouseClickLeft( enter_field ) && isEditing ) {
             charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
             if ( filename.empty() )
                 buttonOk.disable();
 
             needRedraw = true;
         }
-        else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
+        else if ( isEditing && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
             if ( filename.empty() )
                 buttonOk.disable();
@@ -328,8 +316,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 buttonOk.enable();
 
             needRedraw = true;
+            listbox.Unselect();
+            isListboxSelected = false;
         }
-        if ( !edit_mode && le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
+        if ( !isEditing && le.KeyPress( KEY_DELETE ) && isListboxSelected ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
@@ -350,15 +340,20 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
         listbox.Redraw();
 
-        if ( edit_mode && editor )
-            is_limit = RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field );
-        else if ( listbox.isSelected() ) {
-            filename = ResizeToShortName( listbox.GetCurrent().file );
+        std::string selectedFileName = isListboxSelected ? ResizeToShortName( listbox.GetCurrent().file ) : "";
+        if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
+            lastSelectedSaveFileName = selectedFileName;
+            filename = selectedFileName;
             charInsertPos = filename.size();
-            is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
         }
-        else
-            is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+        else if ( isEditing ) {
+            // Empty last selected save file name so that we can replace the input field's name if we select the same save file again
+            // but when loading (isEditing == false), this doesn't matter since we cannot write to the input field
+            lastSelectedSaveFileName = "";
+        }
+
+        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field )
+                             : RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
 
         buttonOk.draw();
         buttonCancel.draw();

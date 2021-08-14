@@ -42,15 +42,18 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "maps_objects.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -308,7 +311,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     // custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
-        name = Game::GetEncodeString( st.toString( 13 ) );
+        name = st.toString( 13 );
     }
     else {
         st.skip( 13 );
@@ -784,13 +787,13 @@ void Heroes::RescanPath( void )
 /* if hero in castle */
 const Castle * Heroes::inCastle( void ) const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    const Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 Castle * Heroes::inCastle( void )
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 

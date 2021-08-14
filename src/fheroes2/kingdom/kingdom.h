@@ -22,21 +22,12 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
-#include <map>
-#include <vector>
-
 #include "castle.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "puzzle.h"
 
-class Castle;
-class Heroes;
-struct AllHeroes;
-struct VecHeroes;
-class AllCastles;
-struct VecCastles;
 struct CapturedObjects;
 
 struct LastLoseHero
@@ -62,7 +53,7 @@ public:
     {
         // UNDEF      = 0x0001,
         IDENTIFYHERO = 0x0002,
-        DISABLEHIRES = 0x0004,
+        // UNUSED = 0x0004,
         OVERVIEWCSTL = 0x0008
     };
 
@@ -82,8 +73,6 @@ public:
 
     void SetLastLostHero( const Heroes & );
     void ResetLastLostHero( void );
-    void AddHeroStartCondLoss( Heroes * );
-    std::string GetNamesHeroStartCondLoss( void ) const;
 
     void SetLastBattleWinHero( const Heroes & hero );
 
@@ -113,7 +102,6 @@ public:
     u32 GetCountCastle( void ) const;
     u32 GetCountTown( void ) const;
     u32 GetCountMarketplace( void ) const;
-    u32 GetCountCapital( void ) const;
     u32 GetLostTownDays( void ) const;
     u32 GetCountNecromancyShrineBuild( void ) const;
     u32 GetCountBuilding( u32 ) const;
@@ -224,8 +212,7 @@ public:
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
 
-    void AddCondLossHeroes( const AllHeroes & );
-    void AddTributeEvents( CapturedObjects &, u32 day, int obj );
+    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const int objectType );
 
     u32 size( void ) const;
 

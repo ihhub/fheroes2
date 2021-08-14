@@ -22,6 +22,7 @@
 
 #include "artifact_ultimate.h"
 #include "interface_gamearea.h"
+#include "serialize.h"
 
 UltimateArtifact::UltimateArtifact()
     : index( -1 )

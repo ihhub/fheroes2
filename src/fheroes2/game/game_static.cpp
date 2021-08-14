@@ -28,6 +28,7 @@
 #include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "skill.h"
 #include "skill_static.h"
 

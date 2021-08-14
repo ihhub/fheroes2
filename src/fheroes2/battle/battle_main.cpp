@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <memory>
 
-#include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
@@ -97,9 +96,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    if ( showBattle )
-        AGG::ResetMixer();
-
     std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle ) );
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
@@ -134,8 +130,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
             // Have to destroy old Arena instance first
             arena.reset();
-            // Make sure to reset mixer before loading the battle interface
-            AGG::ResetMixer();
 
             arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true ) );
 
@@ -162,8 +156,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     if ( showBattle ) {
-        AGG::ResetMixer();
-
         // fade arena
         const bool clearMessageLog
             = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );

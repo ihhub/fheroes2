@@ -808,14 +808,6 @@ namespace fheroes2
         }
     }
 
-    void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip )
-    {
-        if ( inPos.x < 0 || inPos.y < 0 )
-            return;
-
-        AlphaBlit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
-    }
-
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
     {
         ApplyPalette( image, image, palette );

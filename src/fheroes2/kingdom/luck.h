@@ -38,8 +38,8 @@ namespace Luck
         IRISH = 3
     };
 
-    const std::string & String( int );
-    const std::string & Description( int );
+    std::string String( int );
+    std::string Description( int );
     int Normalize( const int luck );
 }
 

@@ -25,7 +25,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "battle.h"
 #include "castle.h"
 #include "game.h"
@@ -36,6 +36,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_objects.h"
 #include "monster.h"
 #include "mp2.h"
 #include "mus.h"
@@ -46,6 +47,7 @@
 #include "skill.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
@@ -355,17 +357,22 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
         else {
             troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
+
+        Interface::Basic::Get().GetStatusWindow().SetRedraw();
     }
 }
 
 // action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
+    // restore the original music after the action is completed
+    const Game::MusicRestorer musicRestorer;
+
     if ( GetKingdom().isControlAI() )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+    const int object = tile.GetObject( tileIndex != GetIndex() );
 
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
@@ -855,7 +862,7 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
 
 void ActionToCastle( Heroes & hero, s32 dst_index )
 {
-    Castle * castle = world.GetCastle( Maps::GetPoint( dst_index ) );
+    Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
     const Settings & conf = Settings::Get();
 
     if ( !castle ) {
@@ -863,10 +870,8 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
     }
     else if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
-        Mixer::Reduce();
         castle->MageGuildEducateHero( hero );
         Game::OpenCastleDialog( *castle );
-        Mixer::Enhance();
     }
     else if ( hero.isFriends( castle->GetColor() ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" );
@@ -926,10 +931,8 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
 
-            Mixer::Reduce();
             castle->MageGuildEducateHero( hero );
             Game::OpenCastleDialog( *castle );
-            Mixer::Enhance();
         }
     }
 }
@@ -2816,8 +2819,6 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
-
-    AGG::PlayMusic( MUS::FromGround( tile.GetGround() ) );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

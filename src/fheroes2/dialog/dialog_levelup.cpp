@@ -29,6 +29,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void DialogPrimaryOnly( const std::string & name, const std::string & primary )

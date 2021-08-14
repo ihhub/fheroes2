@@ -31,34 +31,37 @@ class StreamBase;
 
 namespace GameOver
 {
-    enum conditions_t
+    enum conditions_t : uint32_t
     {
-        COND_NONE = 0x0000,
+        COND_NONE = 0x00000000,
 
-        WINS_ALL = 0x0001,
-        WINS_TOWN = 0x0002,
-        WINS_HERO = 0x0004,
-        WINS_ARTIFACT = 0x0008,
-        WINS_SIDE = 0x0010,
-        WINS_GOLD = 0x0020,
+        WINS_ALL = 0x00000001,
+        WINS_TOWN = 0x00000002,
+        WINS_HERO = 0x00000004,
+        WINS_ARTIFACT = 0x00000008,
+        WINS_SIDE = 0x00000010,
+        WINS_GOLD = 0x00000020,
 
         WINS = WINS_ALL | WINS_TOWN | WINS_HERO | WINS_ARTIFACT | WINS_SIDE | WINS_GOLD,
 
-        LOSS_ALL = 0x0100,
-        LOSS_TOWN = 0x0200,
-        LOSS_HERO = 0x0400,
-        LOSS_TIME = 0x0800,
-        LOSS_STARTHERO = 0x1000,
+        LOSS_ALL = 0x00000100,
+        LOSS_TOWN = 0x00000200,
+        LOSS_HERO = 0x00000400,
+        LOSS_TIME = 0x00000800,
+        LOSS_STARTHERO = 0x00001000,
         // These loss conditions apply if the enemy player won because of the corresponding win condition
-        LOSS_ENEMY_WINS_TOWN = 0x2000,
-        LOSS_ENEMY_WINS_ARTIFACT = 0x4000,
-        LOSS_ENEMY_WINS_GOLD = 0x8000,
+        LOSS_ENEMY_WINS_TOWN = 0x00010000,
+        LOSS_ENEMY_WINS_HERO = 0x00020000,
+        LOSS_ENEMY_WINS_ARTIFACT = 0x00040000,
+        LOSS_ENEMY_WINS_GOLD = 0x00080000,
 
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
+        LOSS
+        = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_HERO | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD,
+        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_HERO | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
     };
 
-    const char * GetString( int );
-    std::string GetActualDescription( int );
+    const char * GetString( uint32_t cond );
+    std::string GetActualDescription( uint32_t cond );
 
     class Result
     {
@@ -68,7 +71,7 @@ namespace GameOver
         void Reset(); // Resets everything
         void ResetResult(); // Resets just the result
 
-        int GetResult( void ) const;
+        uint32_t GetResult() const;
         fheroes2::GameMode LocalCheckGameOver();
 
     private:
@@ -78,7 +81,7 @@ namespace GameOver
         Result();
 
         int colors;
-        int result;
+        uint32_t result;
         bool continueAfterVictory;
     };
 

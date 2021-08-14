@@ -52,6 +52,7 @@
 #include "objwatr.h"
 #include "race.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "spell.h"
 #ifdef WITH_DEBUG
@@ -335,11 +336,6 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , index( ta.index )
 {}
 
-bool Maps::TilesAddon::isICN( int icn ) const
-{
-    return icn == MP2::GetICNObject( object );
-}
-
 bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
 {
     return ( ( ta1.level % 4 ) > ( ta2.level % 4 ) );
@@ -446,13 +442,6 @@ bool Maps::TilesAddon::isRoad() const
     }
 
     return false;
-}
-
-bool Maps::TilesAddon::hasRoadFlag() const
-{
-    // This MP2 "object" is a bitfield
-    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    return ( object >> 1 ) & 1;
 }
 
 bool Maps::TilesAddon::hasSpriteAnimation() const
@@ -1376,7 +1365,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect
     }
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
@@ -1398,7 +1387,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
         }
     }
 
-    RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
+    RedrawAddon( dst, addons_level2, visibleTileROI, isPuzzleDraw, area );
 }
 
 void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const
@@ -1519,7 +1508,7 @@ std::string Maps::Tiles::String( void ) const
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * castle = world.GetCastle( GetCenter() );
+        const Castle * castle = world.getCastle( GetCenter() );
         if ( castle )
             os << castle->String();
     } break;
@@ -1816,7 +1805,7 @@ bool Maps::Tiles::CaptureObjectIsProtection( void ) const
 
     if ( MP2::isCaptureObject( object ) ) {
         if ( MP2::OBJ_CASTLE == object ) {
-            Castle * castle = world.GetCastle( GetCenter() );
+            Castle * castle = world.getCastleEntrance( GetCenter() );
             if ( castle )
                 return castle->GetArmy().isValid();
         }
@@ -1892,6 +1881,23 @@ void Maps::Tiles::RemoveObjectSprite( void )
         RemoveJailSprite();
         tilePassable = DIRECTION_ALL;
         break;
+    case MP2::OBJ_ARTIFACT: {
+        const uint32_t uidArtifact = getObjectIdByICNType( ICN::OBJNARTI );
+        Remove( uidArtifact );
+
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidArtifact );
+        break;
+    }
+    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_RESOURCE: {
+        const uint32_t uidResource = getObjectIdByICNType( ICN::OBJNRSRC );
+        Remove( uidResource );
+
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidResource );
+        break;
+    }
     case MP2::OBJ_BARRIER:
         tilePassable = DIRECTION_ALL;
         // fall-through
@@ -2018,22 +2024,36 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     tile.SetObject( MP2::OBJ_ARTIFACT );
-    tile.objectIndex = art.IndexSprite();
+
+    uint32_t uidArtifact = tile.getObjectIdByICNType( ICN::OBJNARTI );
+    if ( uidArtifact == 0 ) {
+        uidArtifact = tile.uniq;
+    }
+
+    updateTileById( tile, uidArtifact, art.IndexSprite() );
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, art.IndexSprite() - 1 );
     }
 }
 
 void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 {
     tile.SetObject( MP2::OBJ_RESOURCE );
-    tile.objectIndex = Resource::GetIndexSprite( Resource::Rand() );
 
-    // replace shadow artifact
+    const uint32_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
+
+    uint32_t uidResource = tile.getObjectIdByICNType( ICN::OBJNRSRC );
+    if ( uidResource == 0 ) {
+        uidResource = tile.uniq;
+    }
+
+    updateTileById( tile, uidResource, resourceSprite );
+
+    // Replace shadow of the resource.
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidResource, resourceSprite - 1 );
     }
 }
 
@@ -2422,7 +2442,7 @@ void Maps::Tiles::setAsEmpty()
 
     bool isCoast = false;
 
-    const Indexes tileIndices = Maps::GetAroundIndexes( _index, 1 );
+    const Indexes tileIndices = Maps::getAroundIndexes( _index, 1 );
     for ( const int tileIndex : tileIndices ) {
         if ( tileIndex < 0 ) {
             // Invalid tile index.
@@ -2436,6 +2456,21 @@ void Maps::Tiles::setAsEmpty()
     }
 
     SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_ZERO );
+}
+
+uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
+{
+    if ( MP2::GetICNObject( objectTileset ) == icnId ) {
+        return uniq;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( MP2::GetICNObject( addon.object ) == icnId ) {
+            return addon.uniq;
+        }
+    }
+
+    return 0;
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )

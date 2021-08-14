@@ -24,7 +24,7 @@
 #define H2INTERFACE_STATUS_H
 
 #include "interface_border.h"
-#include "thread.h"
+#include "timer.h"
 
 namespace Interface
 {

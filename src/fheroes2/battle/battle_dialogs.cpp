@@ -31,6 +31,7 @@
 #include "battle_interface.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -41,6 +42,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace
 {
@@ -431,7 +433,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     if ( killed1.isValid() )
         Army::DrawMons32Line( killed1, pos_rt.x + 25, pos_rt.y + 303, 270 );
     else {
-        text.Set( "None", Font::SMALL );
+        text.Set( _( "None" ), Font::SMALL );
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 300 );
     }
 
@@ -442,7 +444,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     if ( killed2.isValid() )
         Army::DrawMons32Line( killed2, pos_rt.x + 25, pos_rt.y + 363, 270 );
     else {
-        text.Set( "None", Font::SMALL );
+        text.Set( _( "None" ), Font::SMALL );
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
     }
 
