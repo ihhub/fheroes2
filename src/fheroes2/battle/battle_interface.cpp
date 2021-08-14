@@ -2220,7 +2220,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
         }
 
         // animation troops
-        if ( IdleTroopsAnimation() )
+        if ( IdleTroopsAnimation( true ) )
             humanturn_redraw = true;
 
         CheckGlobalEvents( le );
@@ -5019,11 +5019,11 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
         AGG::PlaySound( M82::DRAWBRG );
 }
 
-bool Battle::Interface::IdleTroopsAnimation( const bool restart )
+bool Battle::Interface::IdleTroopsAnimation( const bool forceRestartIdleAnimation )
 {
     if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        const bool redrawNeeded = arena.GetForce1().animateIdleUnits( restart );
-        return arena.GetForce2().animateIdleUnits( restart ) || redrawNeeded;
+        const bool redrawNeeded = arena.GetForce1().animateIdleUnits( forceRestartIdleAnimation );
+        return arena.GetForce2().animateIdleUnits( forceRestartIdleAnimation ) || redrawNeeded;
     }
 
     return false;

@@ -321,7 +321,7 @@ Troops Battle::Force::GetKilledTroops( void ) const
     return killed;
 }
 
-bool Battle::Force::animateIdleUnits( const bool restart )
+bool Battle::Force::animateIdleUnits( const bool forceRestartIdleAnimation )
 {
     bool redrawNeeded = false;
 
@@ -340,7 +340,7 @@ bool Battle::Force::animateIdleUnits( const bool restart )
                 }
             }
             // checkIdleDelay() sets and checks unit's internal timer if we're ready to switch to next one
-            else if ( restart && unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
+            else if ( forceRestartIdleAnimation && unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
                 redrawNeeded = unit.SwitchAnimation( Monster_Info::IDLE ) || redrawNeeded;
             }
         }

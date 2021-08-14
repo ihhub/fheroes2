@@ -68,7 +68,7 @@ namespace Battle
         int GetControl( void ) const;
         uint32_t GetSurrenderCost( void ) const;
         Troops GetKilledTroops( void ) const;
-        bool animateIdleUnits( const bool restart = true );
+        bool animateIdleUnits( const bool forceRestartIdleAnimation );
         void resetIdleAnimation();
 
         void NewTurn( void );
