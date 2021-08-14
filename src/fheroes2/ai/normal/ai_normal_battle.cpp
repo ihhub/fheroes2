@@ -419,7 +419,7 @@ namespace AI
         if ( _commander && _myShooterStr > 1 ) {
             _myShooterStr += _commander->GetSpellcastStrength( _myArmyStrength );
         }
-        const HeroBase * enemyCommander = arena.GetCommander( _myColor, true );
+        const HeroBase * enemyCommander = arena.GetEnemyCommander( _myColor );
         if ( enemyCommander ) {
             _enemySpellStrength = enemyCommander->GetSpellcastStrength( _enemyArmyStrength );
             _enemyShooterStr += _enemySpellStrength;
