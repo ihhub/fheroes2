@@ -227,8 +227,8 @@ private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
     friend StreamBase & operator>>( StreamBase &, Kingdoms & );
 
-    static constexpr uint32_t size = KINGDOMMAX + 1;
-    Kingdom kingdoms[size];
+    static constexpr uint32_t _size = KINGDOMMAX + 1;
+    Kingdom kingdoms[_size];
 };
 
 StreamBase & operator<<( StreamBase &, const Kingdom & );

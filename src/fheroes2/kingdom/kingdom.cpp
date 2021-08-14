@@ -923,7 +923,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
 {
-    msg << Kingdoms::size;
+    msg << Kingdoms::_size;
     for ( const Kingdom & kingdom : obj.kingdoms )
         msg << kingdom;
 
@@ -935,7 +935,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
     u32 kingdomscount = 0;
     msg >> kingdomscount;
 
-    if ( kingdomscount <= Kingdoms::size ) {
+    if ( kingdomscount <= Kingdoms::_size ) {
         for ( u32 i = 0; i < kingdomscount; ++i )
             msg >> obj.kingdoms[i];
     }
