@@ -20,8 +20,7 @@
 
 #include "dialog_system_options.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -69,9 +68,9 @@ namespace
         const Settings & conf = Settings::Get();
 
         // Music volume.
-        const fheroes2::Sprite & musicVolumeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 1 : 0 );
+        const fheroes2::Sprite & musicVolumeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 1 : 0 );
         std::string value;
-        if ( Mixer::isValid() && conf.MusicVolume() ) {
+        if ( Audio::isValid() && conf.MusicVolume() ) {
             value = std::to_string( conf.MusicVolume() );
         }
         else {
@@ -81,8 +80,8 @@ namespace
         drawOption( rects[0], musicVolumeIcon, _( "Music" ), value );
 
         // Sound volume.
-        const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Mixer::isValid() ? 3 : 2 );
-        if ( Mixer::isValid() && conf.SoundVolume() ) {
+        const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
+        if ( Audio::isValid() && conf.SoundVolume() ) {
             value = std::to_string( conf.SoundVolume() );
         }
         else {
@@ -267,7 +266,7 @@ namespace
             }
 
             // set music volume
-            if ( Mixer::isValid() && le.MouseClickLeft( musicVolumeRoi ) ) {
+            if ( Audio::isValid() && le.MouseClickLeft( musicVolumeRoi ) ) {
                 conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
                 redraw = true;
                 Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
@@ -275,7 +274,7 @@ namespace
             }
 
             // set sound volume
-            if ( Mixer::isValid() && le.MouseClickLeft( soundVolumeRoi ) ) {
+            if ( Audio::isValid() && le.MouseClickLeft( soundVolumeRoi ) ) {
                 conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
                 redraw = true;
                 Game::EnvironmentSoundMixer();

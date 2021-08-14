@@ -25,8 +25,7 @@
 #include <string>
 
 #include "agg.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "bin_info.h"
 #include "cursor.h"
 #include "embedded_image.h"
@@ -159,7 +158,7 @@ int main( int argc, char ** argv )
 
             conf.setGameLanguage( conf.getGameLanguage() );
 
-            if ( Mixer::isValid() ) {
+            if ( Audio::isValid() ) {
                 Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
 
