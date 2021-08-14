@@ -167,8 +167,6 @@ CMake project which is distributed under the OSI-approved BSD 3-Clause License.
 The SDL2 CMake modules are also distributed under the OSI-approved BSD
 3-Clause License. See accompanying file [Copyright.txt](Copyright.txt).
 
-
-
 [CMake]: https://cmake.org
 [CMake GUI]: https://cmake.org/runningcmake
 [SDL2]: https://www.libsdl.org

@@ -2,7 +2,8 @@ Building with CMake
 --------------------------------
 ### Linux and macOS
 
-[**fheroes2**](README.md) can be built with CMake buildsystem. First, you need to install dependencies. For Linux and macOS follow to instructions as described above.
+[**fheroes2**](README.md) can be built with CMake buildsystem. First, you need to install dependencies.
+For Linux and macOS follow to instructions as described above.
 
 Next, you can build project with following commands:
 
@@ -24,7 +25,8 @@ After building, executable can be found in `build` directory.
 
 ### Windows / Visual Studio
 
-For Windows you'll need Visual Studio 2019 with C++ support and [vcpkg package manager](https://vcpkg.readthedocs.io/en/latest/) for dependency management.
+For Windows you'll need Visual Studio 2019 with C++ support and
+[vcpkg package manager](https://vcpkg.readthedocs.io/en/latest/) for dependency management.
 Here quick and short instruction for deployment:
 
 ```shell
@@ -47,7 +49,8 @@ After following command Visual Studio automagically will find all required depen
 .\vcpkg\vcpkg integrate install
 ```
 
-Now you ready to compile project. cd to fheroes2 directory and run `cmake` command (note for `-DCMAKE_TOOLCHAIN_FILE` and `-DVCPKG_TARGET_TRIPLET` options):
+Now you ready to compile project. cd to fheroes2 directory and run `cmake` command (note for `-DCMAKE_TOOLCHAIN_FILE` and
+`-DVCPKG_TARGET_TRIPLET` options):
 
 ```shell
 # SDL2
@@ -70,4 +73,3 @@ To do this please add `-DGET_HOMM2_DEMO=ON` to configuration options. For exampl
 ```shell
 cmake -B build -DGET_HOMM2_DEMO=ON <some other options>
 ```
-
