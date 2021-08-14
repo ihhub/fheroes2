@@ -102,30 +102,35 @@ try {
 
     $shell = New-Object -ComObject "Shell.Application"
 
-    foreach ($dir in @("ANIM", "DATA", "MAPS", "MUSIC")) {
-        if (-Not (Test-Path -Path "$homm2Path\$dir" -PathType Container)) {
+    foreach ($srcDir in @("ANIM", "DATA", "MAPS", "MUSIC")) {
+        if (-Not (Test-Path -Path "$homm2Path\$srcDir" -PathType Container)) {
             continue
         }
 
-        if (-Not (Test-Path -Path "$destPath\$dir" -PathType Container)) {
-            [void](New-Item -Path "$destPath\$dir" -ItemType "directory")
+        $destDir = $srcDir.ToLower()
+
+        if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
+            [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
         }
 
-        $content = $shell.NameSpace((Resolve-Path "$homm2Path\$dir").Path)
+        $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
 
         foreach ($item in $content.items()) {
-            $shell.Namespace((Resolve-Path "$destPath\$dir").Path).CopyHere($item, 0x14)
+            $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
         }
     }
 
     if ((Test-Path -Path "$homm2Path\homm2.ins" -PathType Leaf) -And
         (Test-Path -Path "$homm2Path\homm2.gog" -PathType Leaf) -And
         (Test-Path -Path "$homm2Path\DOSBOX\DOSBox.exe" -PathType Leaf)) {
+        if (-Not (Test-Path -Path "$destPath\anim" -PathType Container)) {
+            [void](New-Item -Path "$destPath\anim" -ItemType "directory")
+        }
+
         Write-Host -ForegroundColor Green "Running DOSBOX to extract animation assets, please wait..."
 
         & "$homm2Path\DOSBOX\DOSBox.exe" -c "imgmount D '$homm2Path\homm2.ins' -t iso -fs iso" `
                                          -c "mount E '$destPath'" `
-                                         -c "mkdir E:\ANIM" `
                                          -c "copy D:\HEROES2\ANIM\*.* E:\ANIM" `
                                          -c "exit"
     }
