@@ -30,10 +30,10 @@
 
 enum
 {
-    SCROLL_SLOW = 4,
-    SCROLL_NORMAL = 8,
-    SCROLL_FAST1 = 16,
-    SCROLL_FAST2 = 32
+    SCROLL_SLOW = 1,
+    SCROLL_NORMAL = 2,
+    SCROLL_FAST1 = 3,
+    SCROLL_FAST2 = 4
 };
 
 enum MusicSource

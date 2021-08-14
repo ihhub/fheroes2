@@ -511,21 +511,21 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll( void )
 {
-    const int32_t speed = Settings::Get().ScrollSpeed();
+    const int32_t shift = 2 << Settings::Get().ScrollSpeed();
     fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {
-        offset.x = -speed;
+        offset.x = -shift;
     }
     else if ( scrollDirection & SCROLL_RIGHT ) {
-        offset.x = speed;
+        offset.x = shift;
     }
 
     if ( scrollDirection & SCROLL_TOP ) {
-        offset.y = -speed;
+        offset.y = -shift;
     }
     else if ( scrollDirection & SCROLL_BOTTOM ) {
-        offset.y = speed;
+        offset.y = shift;
     }
 
     ShiftCenter( offset );
