@@ -363,9 +363,8 @@ void Battle::Force::resetIdleAnimation()
 
 void Battle::Force::resetAnimation()
 {
-    for ( Force::iterator it = begin(); it != end(); ++it ) {
-        Unit & unit = **it;
-        unit.SwitchAnimation( Monster_Info::STATIC );
+    for ( auto & it : *this ) {
+        ( *it ).SwitchAnimation( Monster_Info::STATIC );
     }
 }
 
