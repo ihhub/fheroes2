@@ -123,7 +123,8 @@ bool Battle::Position::contains( int cellIndex ) const
 Battle::Cell::Cell( int32_t ii )
     : index( ii )
     , object( 0 )
-    , direction( UNKNOWN )
+    , _headDirection( UNKNOWN )
+    , _tailDirection( UNKNOWN )
     , quality( 0 )
     , troop( nullptr )
 {
@@ -190,9 +191,14 @@ void Battle::Cell::SetObject( int val )
     object = val;
 }
 
-void Battle::Cell::SetDirection( int val )
+void Battle::Cell::SetHeadDirection( const int val )
 {
-    direction = val;
+    _headDirection = val;
+}
+
+void Battle::Cell::SetTailDirection( const int val )
+{
+    _tailDirection = val;
 }
 
 void Battle::Cell::SetQuality( u32 val )
@@ -205,9 +211,14 @@ int Battle::Cell::GetObject( void ) const
     return object;
 }
 
-int Battle::Cell::GetDirection( void ) const
+int Battle::Cell::GetHeadDirection() const
 {
-    return direction;
+    return _headDirection;
+}
+
+int Battle::Cell::GetTailDirection() const
+{
+    return _tailDirection;
 }
 
 const fheroes2::Rect & Battle::Cell::GetPos( void ) const
@@ -289,7 +300,8 @@ void Battle::Cell::ResetQuality( void )
     quality = 0;
 }
 
-void Battle::Cell::ResetDirection( void )
+void Battle::Cell::ResetDirections()
 {
-    direction = UNKNOWN;
+    _headDirection = UNKNOWN;
+    _tailDirection = UNKNOWN;
 }

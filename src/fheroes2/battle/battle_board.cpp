@@ -93,7 +93,7 @@ void Battle::Board::Reset( void )
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-        it->ResetDirection();
+        it->ResetDirections();
         it->ResetQuality();
     }
 }
@@ -180,9 +180,13 @@ uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 
 void Battle::Board::SetScanPassability( const Unit & unit )
 {
-    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirection(); } );
+    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirections(); } );
 
-    at( unit.GetHeadIndex() ).SetDirection( CENTER );
+    at( unit.GetHeadIndex() ).SetHeadDirection( CENTER );
+
+    if ( unit.isWide() ) {
+        at( unit.GetTailIndex() ).SetTailDirection( CENTER );
+    }
 
     if ( unit.isFlying() ) {
         const Bridge * bridge = Arena::GetBridge();
@@ -190,7 +194,11 @@ void Battle::Board::SetScanPassability( const Unit & unit )
 
         for ( std::size_t i = 0; i < size(); i++ ) {
             if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
-                at( i ).SetDirection( CENTER );
+                at( i ).SetHeadDirection( CENTER );
+
+                if ( unit.isWide() ) {
+                    at( i ).SetTailDirection( CENTER );
+                }
             }
         }
     }
@@ -299,7 +307,15 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
         const int32_t tailCellId = ( GetDirection( currentHeadCellId, headCellId ) & LEFT_SIDE ) ? headCellId + 1 : headCellId - 1;
 
         // Unit is already at its destination
-        if ( ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) || ( headCellId == dstTailCellId && tailCellId == dstHeadCellId ) ) {
+        if ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) {
+            result.push_back( headCellId );
+
+            return true;
+        }
+
+        // Unit is already at its destination, but in the opposite direction
+        if ( headCellId == dstTailCellId && tailCellId == dstHeadCellId ) {
+            result.push_back( tailCellId );
             result.push_back( headCellId );
 
             return true;
@@ -417,19 +433,18 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
         for ( std::size_t i = 0; i < result.size(); i++ ) {
             const int32_t cellId = result[i];
 
-            Cell * cell = GetCell( cellId );
-            assert( cell != nullptr );
+            Cell * headCell = GetCell( cellId );
+            assert( headCell != nullptr );
 
-            cell->SetDirection( cell->GetDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );
+            headCell->SetHeadDirection( headCell->GetHeadDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );
 
             if ( isWideUnit ) {
-                const int32_t head = cellId;
-                const int32_t prev = i == 0 ? unit.GetHeadIndex() : result[i - 1];
+                const int32_t prevCellId = i == 0 ? unit.GetHeadIndex() : result[i - 1];
 
-                Cell * tail = GetCell( head, LEFT_SIDE & GetDirection( head, prev ) ? LEFT : RIGHT );
+                Cell * tailCell = GetCell( cellId, LEFT_SIDE & GetDirection( cellId, prevCellId ) ? LEFT : RIGHT );
+                assert( tailCell != nullptr );
 
-                if ( tail && UNKNOWN == tail->GetDirection() )
-                    tail->SetDirection( GetDirection( tail->GetIndex(), head ) );
+                tailCell->SetTailDirection( tailCell->GetTailDirection() | GetDirection( tailCell->GetIndex(), cellId ) );
             }
         }
     }
@@ -705,7 +720,6 @@ bool Battle::Board::isMoatIndex( s32 index, const Unit & b )
 
 void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
 {
-    //    bool trees = Maps::ScanAroundObject(center, MP2::OBJ_TREES).size();
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     int ground = tile.GetGround();
     std::vector<int> objs;
@@ -1100,7 +1114,8 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     assert( fromCell != nullptr );
 
     // Target unit cannot be attacked if out of reach
-    if ( fromCell->GetDirection() == UNKNOWN && from != attacker.GetHeadIndex() && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
+    if ( ( fromCell->GetHeadDirection() == UNKNOWN && ( !attacker.isWide() || fromCell->GetTailDirection() == UNKNOWN ) ) && from != attacker.GetHeadIndex()
+         && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
         return false;
     }
 
@@ -1179,6 +1194,29 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     }
 
     return result;
+}
+
+int32_t Battle::Board::FixupTargetCellForUnit( const Unit & unit, const int32_t dst )
+{
+    // Only wide units may need this fixup
+    if ( !unit.isWide() ) {
+        return dst;
+    }
+
+    const Position pos = Position::GetCorrect( unit, dst );
+    assert( pos.GetTail() != nullptr );
+
+    // Destination cell is on the border of the cell space reachable for the unit
+    // and it should be the tail cell of this unit, return the head cell instead
+    if ( pos.GetTail()->GetTailDirection() == UNKNOWN ) {
+        const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+
+        if ( isValidDirection( dst, headDirection ) ) {
+            return GetIndexDirection( dst, headDirection );
+        }
+    }
+
+    return dst;
 }
 
 std::string Battle::Board::GetMoatInfo( void )

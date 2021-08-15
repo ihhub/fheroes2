@@ -56,10 +56,11 @@ namespace Battle
         explicit Cell( int32_t );
 
         void ResetQuality( void );
-        void ResetDirection( void );
+        void ResetDirections();
 
         void SetObject( int );
-        void SetDirection( int );
+        void SetHeadDirection( const int val );
+        void SetTailDirection( const int val );
         void SetQuality( u32 );
 
         void SetArea( const fheroes2::Rect & );
@@ -72,7 +73,8 @@ namespace Battle
         s32 GetIndex( void ) const;
         const fheroes2::Rect & GetPos( void ) const;
         int GetObject( void ) const;
-        int GetDirection( void ) const;
+        int GetHeadDirection() const;
+        int GetTailDirection() const;
         s32 GetQuality( void ) const;
         direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
@@ -84,7 +86,8 @@ namespace Battle
         s32 index;
         fheroes2::Rect pos;
         int object;
-        int direction;
+        int _headDirection;
+        int _tailDirection;
         s32 quality;
         Unit * troop;
         fheroes2::Point coord[7];
