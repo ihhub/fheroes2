@@ -23,7 +23,7 @@
 #ifndef H2OBJXLOC_H
 #define H2OBJXLOC_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjXlc1
 {

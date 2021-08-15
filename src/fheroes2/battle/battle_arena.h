@@ -25,16 +25,11 @@
 
 #include <list>
 
+#include "battle.h"
 #include "battle_board.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "gamedefs.h"
-#include "serialize.h"
 #include "spell_storage.h"
-
-#define ARENAW 11
-#define ARENAH 9
-#define ARENASIZE ARENAW * ARENAH
 
 class Castle;
 class HeroBase;
@@ -70,7 +65,8 @@ namespace Battle
         u32 GetCurrentTurn( void ) const;
         Result & GetResult( void );
 
-        const HeroBase * GetCommander( int color, bool invert = false ) const;
+        const HeroBase * getCommander( const int color ) const;
+        const HeroBase * getEnemyCommander( const int color ) const;
         const HeroBase * GetCommander1( void ) const;
         const HeroBase * GetCommander2( void ) const;
         const HeroBase * GetCurrentCommander( void ) const;
@@ -139,6 +135,8 @@ namespace Battle
 
         u32 GetCastleTargetValue( int ) const;
 
+        int32_t GetFreePositionNearHero( const int heroColor ) const;
+
         static Board * GetBoard( void );
         static Tower * GetTower( int );
         static Bridge * GetBridge( void );
@@ -162,7 +160,6 @@ namespace Battle
         void SetCastleTargetValue( int, u32 );
         void CatapultAction( void );
 
-        s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
@@ -192,6 +189,7 @@ namespace Battle
         int preferredColor; // preferred color for the next unit in the battle queue
 
         const Castle * castle;
+        const bool _isTown; // If the battle is in town (village or castle).
 
         Tower * towers[3];
         Catapult * catapult;

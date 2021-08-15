@@ -168,13 +168,6 @@ void Cursor::setVideoPlaybackCursor()
     }
 }
 
-void Cursor::resetVideoPlaybackCursor()
-{
-    if ( fheroes2::cursor().isSoftwareEmulation() ) {
-        SetThemes( Cursor::POINTER );
-    }
-}
-
 void Cursor::Refresh()
 {
     Get().SetThemes( Get().Themes(), true );

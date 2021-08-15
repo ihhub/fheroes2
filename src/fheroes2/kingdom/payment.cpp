@@ -23,8 +23,8 @@
 #include <cstring>
 
 #include "buildinginfo.h"
-#include "logging.h"
 #include "payment.h"
+#include "settings.h"
 
 struct paymentstats_t
 {
@@ -33,16 +33,16 @@ struct paymentstats_t
 };
 
 paymentstats_t _payments[] = {
-    {"buy_boat", {1000, 10, 0, 0, 0, 0, 0}},
-    {"buy_spell_book", {500, 0, 0, 0, 0, 0, 0}},
-    {"buy_spell_book_from_shrine1", {1250, 0, 0, 0, 0, 0, 0}},
-    {"buy_spell_book_from_shrine2", {1000, 0, 0, 0, 0, 0, 0}},
-    {"buy_spell_book_from_shrine3", {750, 0, 0, 0, 0, 0, 0}},
-    {"recruit_hero", {2500, 0, 0, 0, 0, 0, 0}},
-    {"recruit_level", {500, 0, 0, 0, 0, 0, 0}},
-    {"alchemist_payment", {750, 0, 0, 0, 0, 0, 0}},
+    { "buy_boat", { 1000, 10, 0, 0, 0, 0, 0 } },
+    { "buy_spell_book", { 500, 0, 0, 0, 0, 0, 0 } },
+    { "buy_spell_book_from_shrine1", { 1250, 0, 0, 0, 0, 0, 0 } },
+    { "buy_spell_book_from_shrine2", { 1000, 0, 0, 0, 0, 0, 0 } },
+    { "buy_spell_book_from_shrine3", { 750, 0, 0, 0, 0, 0, 0 } },
+    { "recruit_hero", { 2500, 0, 0, 0, 0, 0, 0 } },
+    { "recruit_level", { 500, 0, 0, 0, 0, 0, 0 } },
+    { "alchemist_payment", { 750, 0, 0, 0, 0, 0, 0 } },
 
-    {NULL, {0, 0, 0, 0, 0, 0, 0}},
+    { nullptr, { 0, 0, 0, 0, 0, 0, 0 } },
 };
 
 payment_t PaymentConditions::BuyBuilding( int race, u32 build )
@@ -67,7 +67,7 @@ payment_t PaymentConditions::BuySpellBook( int shrine )
 {
     payment_t result;
     const paymentstats_t * ptr = &_payments[0];
-    const char * skey = NULL;
+    const char * skey = nullptr;
 
     switch ( shrine ) {
     case 1:

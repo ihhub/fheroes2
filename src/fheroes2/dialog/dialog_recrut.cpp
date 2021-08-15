@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg_image.h"
+#include "bin_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -30,6 +31,8 @@
 #include "payment.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 #include <cassert>
@@ -89,7 +92,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
     assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
-    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( Monster::GetICNByMonsterID( monsterId ), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
     dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
     dst_pt.y = pos.y + 135 - smon.height();
 
@@ -182,7 +185,7 @@ void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 
     text.Blit( pos.x + 29, pos.y + 163 );
 }
 
-const char * SwitchMaxMinButtons( fheroes2::Button & btnMax, fheroes2::Button & btnMin, bool max )
+const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::ButtonBase & btnMin, bool max )
 {
     if ( btnMax.isEnabled() || btnMin.isEnabled() ) {
         if ( max ) {
@@ -253,7 +256,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;
-    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
+    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ),
+                                      fheroes2::AGG::GetICN( ICN::MAX_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     dst_pt.x = pos.x + 205;
@@ -263,6 +267,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.x = pos.x + 205;
     dst_pt.y = pos.y + 169;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
+
+    fheroes2::TimedEventValidator timedButtonUp( [&buttonUp]() { return buttonUp.isPressed(); } );
+    fheroes2::TimedEventValidator timedButtonDn( [&buttonDn]() { return buttonDn.isPressed(); } );
+
+    buttonDn.subscribe( &timedButtonDn );
+    buttonUp.subscribe( &timedButtonUp );
 
     const fheroes2::Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
 
@@ -311,7 +321,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     display.render();
 
-    std::vector<Monster> upgrades = {monster0};
+    std::vector<Monster> upgrades = { monster0 };
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
         upgrades.emplace_back( upgrades.back().GetDowngrade() );
     }
@@ -399,7 +409,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) ) && result < max ) {
+        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) || timedButtonUp.isDelayPassed() ) && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
             redraw = true;
@@ -412,7 +422,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) ) && result ) {
+        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) || timedButtonDn.isDelayPassed() ) && result ) {
             --result;
             paymentCosts -= paymentMonster;
             redraw = true;

@@ -28,20 +28,19 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_static.h"
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"
+#include "monster_anim.h"
 #include "morale.h"
 #include "payment.h"
 #include "settings.h"
-#include "skill.h"
-#include "speed.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "world.h"
-
-#include <sstream>
 
 namespace
 {
@@ -64,19 +63,12 @@ namespace
         int32_t offset;
         int32_t space;
     };
-
-    std::string GetString( const float value, const uint8_t prec )
-    {
-        std::ostringstream stream;
-        stream << std::setprecision( prec ) << value;
-        return stream.str();
-    }
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
 void DrawBattleStats( const fheroes2::Point &, const Troop & );
 void DrawMonsterInfo( const fheroes2::Point & dst, const Troop & troop );
-void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
+void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi );
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
@@ -120,8 +112,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
-    RandomMonsterAnimation monsterAnimation( troop );
-    const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 180 );
+    fheroes2::RandomMonsterAnimation monsterAnimation( troop );
+    const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 175 );
     if ( !isAnimated )
         monsterAnimation.reset();
 
@@ -185,15 +177,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     }
                 }
                 else {
-                    std::string msg;
-                    if ( GameStatic::isCustomMonsterUpgradeOption() ) {
-                        msg = _( "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest "
-                                 "number. Do you wish to upgrade them?" );
-                        StringReplace( msg, "%{ratio}", GetString( GameStatic::GetMonsterUpgradeRatio(), 2 ) );
-                    }
-                    else {
-                        msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-                    }
+                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
 
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
                         result = Dialog::UPGRADE;
@@ -203,7 +187,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             }
             // dismiss
             if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::EVENT_DISMISS_TROOP ) )
-                 && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                 && Dialog::YES
+                        == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
+                                            Dialog::YES | Dialog::NO ) ) {
                 result = Dialog::DISMISS;
                 break;
             }
@@ -276,7 +262,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     // shot
     if ( troop.isArchers() ) {
         std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
-        message.append( ":" );
+        message += ':';
         text.Set( message );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;
@@ -293,10 +279,10 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( std::to_string( troop().GetDamageMin() ) + "-" + std::to_string( troop().GetDamageMax() ) );
+    if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() )
+        text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ) );
     else
-        text.Set( std::to_string( troop().GetDamageMin() ) );
+        text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -306,7 +292,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    text.Set( std::to_string( troop().GetHitPoints() ) );
+    text.Set( std::to_string( troop.GetMonster().GetHitPoints() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -394,9 +380,9 @@ fheroes2::Sprite GetModesSprite( u32 mod )
 
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
-    const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                              Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                              Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
+    const uint32_t modes[] = { Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+                               Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                               Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE };
 
     int32_t ow = 0;
     int32_t spritesWidth = 0;
@@ -481,6 +467,50 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     fheroes2::Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
     text.Blit( pos.x, pos.y );
 
+    // Description.
+    const std::vector<std::string> descriptions = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
+    if ( !descriptions.empty() ) {
+        const int32_t descriptionWidth = 210;
+        const int32_t maximumRowCount = 3;
+        const int32_t rowHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+
+        bool asSolidText = true;
+        if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
+            asSolidText = false;
+            for ( const std::string & sentence : descriptions ) {
+                if ( fheroes2::Text( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).width() > descriptionWidth ) {
+                    asSolidText = true;
+                    break;
+                }
+            }
+        }
+
+        if ( asSolidText ) {
+            std::string description;
+            for ( const std::string & sentence : descriptions ) {
+                if ( !description.empty() ) {
+                    description += ' ';
+                }
+
+                description += sentence;
+            }
+
+            const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const int32_t rowCount = descriptionText.rows( descriptionWidth );
+
+            descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+        }
+        else {
+            int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
+            for ( const std::string & sentence : descriptions ) {
+                const fheroes2::Text descriptionText( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+
+                descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+                ++sentenceId;
+            }
+        }
+    }
+
     // amount
     text.Set( std::to_string( troop.GetCount() ), Font::BIG );
     pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
@@ -488,7 +518,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     text.Blit( pos.x, pos.y );
 }
 
-void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
+void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi )
 {
     const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
@@ -580,6 +610,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         result = btnGroup.processEvents();
 
         if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
+            LocalEvent::GetClean();
             hero.OpenDialog( false, false, true, true );
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
@@ -756,6 +787,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
+            LocalEvent::GetClean();
             hero.OpenDialog( false, false, true, true );
 
             needRedraw = true;

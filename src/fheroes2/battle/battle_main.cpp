@@ -23,24 +23,20 @@
 #include <algorithm>
 #include <memory>
 
-#include "agg.h"
-#include "agg_image.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "color.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes_base.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "settings.h"
 #include "skill.h"
-#include "text.h"
-#include "world.h"
+#include "tools.h"
+#include "translations.h"
 
 namespace Battle
 {
@@ -100,9 +96,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    if ( showBattle )
-        AGG::ResetMixer();
-
     std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle ) );
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
@@ -114,8 +107,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     Result result = arena->GetResult();
 
-    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : NULL ) );
-    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : NULL ) );
+    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
     bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
@@ -137,8 +130,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
             // Have to destroy old Arena instance first
             arena.reset();
-            // Make sure to reset mixer before loading the battle interface
-            AGG::ResetMixer();
 
             arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true ) );
 
@@ -148,8 +139,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
             // Override the result
             result = arena->GetResult();
-            hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : NULL ) );
-            hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : NULL ) );
+            hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+            hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
             isWinnerHuman = hero_wins && hero_wins->isControlHuman();
@@ -165,8 +156,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     if ( showBattle ) {
-        AGG::ResetMixer();
-
         // fade arena
         const bool clearMessageLog
             = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );
@@ -186,8 +175,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena->GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
-    arena->GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
+    arena->GetForce1().SyncArmyCount();
+    arena->GetForce2().SyncArmyCount();
 
     // after battle army1
     if ( commander1 ) {
@@ -255,7 +244,7 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
         if ( art.isUltimate() ) {
             art = Artifact::UNKNOWN;
         }
-        else if ( art() != Artifact::UNKNOWN && art() != Artifact::MAGIC_BOOK ) {
+        else if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK ) {
             BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
             if ( bag1.end() != it ) {
                 *it = art;

@@ -30,6 +30,7 @@
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
+#include "types.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 244
@@ -82,7 +83,6 @@ namespace Dialog
 
     int AdventureOptions( bool enabledig );
     fheroes2::GameMode FileOptions();
-    int SystemOptions( void );
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
     // show info cell maps
@@ -110,7 +110,7 @@ namespace Dialog
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );
-    int ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistributeMax, const bool saveLastTroop, uint32_t & redistributeCount, bool & useFastSplit );
+    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, const bool saveLastTroop, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );

@@ -21,10 +21,9 @@
  ***************************************************************************/
 
 #include "engine.h"
-#include "font.h"
+#include "audio.h"
 #include "localevent.h"
 #include "logging.h"
-#include "sdlnet.h"
 
 #if defined( FHEROES2_VITA )
 #include <psp2/kernel/processmgr.h>
@@ -32,20 +31,6 @@
 
 // allocating memory for application on Vita
 int _newlib_heap_size_user = 192 * 1024 * 1024;
-#endif
-
-namespace Mixer
-{
-    void Init();
-    void Quit();
-}
-
-#ifdef WITH_AUDIOCD
-namespace Cdrom
-{
-    void Open( void );
-    void Close( void );
-}
 #endif
 
 bool SDL::Init( const uint32_t system )
@@ -56,22 +41,12 @@ bool SDL::Init( const uint32_t system )
     }
 
     if ( SDL_INIT_AUDIO & system )
-        Mixer::Init();
+        Audio::Init();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SDL_INIT_GAMECONTROLLER & system ) {
         LocalEvent::Get().OpenController();
     }
     LocalEvent::Get().OpenTouchpad();
-#endif
-#ifdef WITH_AUDIOCD
-    if ( SDL_INIT_CDROM & system )
-        Cdrom::Open();
-#endif
-#ifdef WITH_TTF
-    FontTTF::Init();
-#endif
-#ifdef WITH_NET
-    Network::Init();
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -84,23 +59,13 @@ bool SDL::Init( const uint32_t system )
 
 void SDL::Quit()
 {
-#ifdef WITH_NET
-    Network::Quit();
-#endif
-#ifdef WITH_TTF
-    FontTTF::Quit();
-#endif
-#ifdef WITH_AUDIOCD
-    if ( SubSystem( SDL_INIT_CDROM ) )
-        Cdrom::Close();
-#endif
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) ) {
         LocalEvent::Get().CloseController();
     }
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
-        Mixer::Quit();
+        Audio::Quit();
 
     SDL_Quit();
 }

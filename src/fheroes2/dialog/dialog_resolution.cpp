@@ -23,11 +23,13 @@
 #include "cursor.h"
 #include "embedded_image.h"
 #include "game.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "screen.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "zzlib.h"
 
@@ -81,7 +83,7 @@ namespace
 
     void RedrawInfo( const fheroes2::Point & dst, const fheroes2::Size & resolution )
     {
-        Text text( "Select Game Resolution:", Font::YELLOW_BIG );
+        Text text( _( "Select Game Resolution" ), Font::YELLOW_BIG );
         text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
         if ( resolution.width > 0 && resolution.height > 0 ) {
@@ -184,10 +186,8 @@ namespace Dialog
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
             display.resize( selectedResolution.width, selectedResolution.height );
 
-#ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
-#endif
 
             return true;
         }

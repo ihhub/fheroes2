@@ -20,14 +20,19 @@
 
 #pragma once
 
-#include "players.h"
+#include <vector>
+
+#include "math_base.h"
+
+class Player;
+class Players;
 
 namespace Interface
 {
     struct PlayerInfo
     {
         PlayerInfo()
-            : player( NULL )
+            : player( nullptr )
         {}
 
         Player * player;

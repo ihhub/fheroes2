@@ -21,8 +21,6 @@
 #ifndef H2VIEWWORLD_H
 #define H2VIEWWORLD_H
 
-#include "gamedefs.h"
-#include "image.h"
 #include "math_base.h"
 
 namespace Interface
@@ -60,7 +58,8 @@ public:
     {
         ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
 
-        bool ChangeZoom( const bool zoomIn, const bool cycle = false );
+        bool zoomIn( const bool cycle );
+        bool zoomOut( const bool cycle );
         bool ChangeCenter( const fheroes2::Point & centerInPixels );
 
         const fheroes2::Rect & GetROIinPixels() const;
@@ -69,6 +68,9 @@ public:
         ZoomLevel _zoomLevel;
         fheroes2::Point _center;
         fheroes2::Rect _roiForZoomLevels[4];
+
+    private:
+        bool changeZoom( const ZoomLevel newLevel );
     };
 };
 

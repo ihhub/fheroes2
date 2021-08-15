@@ -30,7 +30,6 @@
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
@@ -38,7 +37,12 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
+#include "system.h"
+#include "tools.h"
+
+#include <cassert>
 
 namespace
 {
@@ -332,8 +336,8 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         // offset first addon
         fs.getLE16();
 
-        mp2tile.editorObjectLink = fs.getLE32();
-        mp2tile.editorObjectOverlay = fs.getLE32();
+        mp2tile.level1ObjectUID = fs.getLE32();
+        mp2tile.level2ObjectUID = fs.getLE32();
 
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );
@@ -350,11 +354,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // name
     fs.seek( 0x3A );
-    name = Game::GetEncodeString( fs.toString( mapNameLength ) );
+    name = fs.toString( mapNameLength );
 
     // description
     fs.seek( 0x76 );
-    description = Game::GetEncodeString( fs.toString( mapDescriptionLength ) );
+    description = fs.toString( mapDescriptionLength );
 
     // fill unions
     if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
@@ -362,6 +366,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         int side2 = 0;
 
         const Colors availableColors( kingdom_colors );
+
+        assert( !availableColors.empty() );
+        wins1 += Color::GetIndex( availableColors.front() );
 
         for ( const int color : availableColors ) {
             if ( Color::GetIndex( color ) < wins1 )
@@ -432,7 +439,7 @@ int Maps::FileInfo::KingdomRace( int color ) const
     return 0;
 }
 
-int Maps::FileInfo::ConditionWins( void ) const
+uint32_t Maps::FileInfo::ConditionWins() const
 {
     switch ( conditions_wins ) {
     case 0:
@@ -454,7 +461,7 @@ int Maps::FileInfo::ConditionWins( void ) const
     return GameOver::COND_NONE;
 }
 
-int Maps::FileInfo::ConditionLoss( void ) const
+uint32_t Maps::FileInfo::ConditionLoss() const
 {
     switch ( conditions_loss ) {
     case 0:
@@ -475,11 +482,6 @@ int Maps::FileInfo::ConditionLoss( void ) const
 bool Maps::FileInfo::WinsCompAlsoWins( void ) const
 {
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
-}
-
-bool Maps::FileInfo::WinsAllowNormalVictory( void ) const
-{
-    return allow_normal_victory && ( ( GameOver::WINS_TOWN | GameOver::WINS_ARTIFACT | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
 int Maps::FileInfo::WinsFindArtifactID( void ) const
@@ -520,11 +522,6 @@ int Maps::FileInfo::AllowCompHumanColors( void ) const
 int Maps::FileInfo::AllowHumanColors( void ) const
 {
     return allow_human_colors;
-}
-
-int Maps::FileInfo::AllowComputerColors( void ) const
-{
-    return allow_comp_colors;
 }
 
 int Maps::FileInfo::HumanOnlyColors( void ) const
@@ -572,27 +569,13 @@ std::string Maps::FileInfo::String( void ) const
     return os.str();
 }
 
-ListFiles GetMapsFiles( const char * suffix )
-{
-    ListFiles maps = Settings::GetListFiles( "maps", suffix );
-    const ListDirs & list = Settings::Get().GetMapsParams();
-
-    if ( !list.empty() ) {
-        for ( ListDirs::const_iterator it = list.begin(); it != list.end(); ++it )
-            if ( *it != "maps" )
-                maps.Append( Settings::GetListFiles( *it, suffix ) );
-    }
-
-    return maps;
-}
-
 bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
 {
     const Settings & conf = Settings::Get();
 
-    ListFiles maps_old = GetMapsFiles( ".mp2" );
+    ListFiles maps_old = Settings::FindFiles( "maps", ".mp2", false );
     if ( conf.isPriceOfLoyaltySupported() )
-        maps_old.Append( GetMapsFiles( ".mx2" ) );
+        maps_old.Append( Settings::FindFiles( "maps", ".mx2", false ) );
 
     for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
         Maps::FileInfo fi;
@@ -604,21 +587,16 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
         return false;
 
     std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-    lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
-
-    if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
-    }
+    lists.erase( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ), lists.end() );
 
     // set preferably count filter
     const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( prefPlayerCount > 0 ) {
-        MapsFileInfoList::iterator it
-            = std::remove_if( lists.begin(), lists.end(), [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
+    if ( !multi || prefPlayerCount > 0 ) {
+        lists.erase( std::remove_if( lists.begin(), lists.end(),
+                                     [multi, prefPlayerCount]( const Maps::FileInfo & info ) {
+                                         return ( !multi && info.isMultiPlayerMap() ) || ( prefPlayerCount > 0 && !info.isAllowCountPlayers( prefPlayerCount ) );
+                                     } ),
+                     lists.end() );
     }
 
     return !lists.empty();
@@ -626,7 +604,8 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
 
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
-    msg << fi.file << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>( KINGDOMMAX );
+    // Only the basename of map filename (fi.file) is saved
+    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>( KINGDOMMAX );
 
     for ( u32 ii = 0; ii < KINGDOMMAX; ++ii )
         msg << fi.races[ii] << fi.unions[ii];
@@ -644,6 +623,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 {
     u8 kingdommax;
 
+    // Only the basename of map filename (fi.file) is loaded
     msg >> fi.file >> fi.name >> fi.description >> fi.size_w >> fi.size_h >> fi.difficulty >> kingdommax;
 
     for ( u32 ii = 0; ii < kingdommax; ++ii )

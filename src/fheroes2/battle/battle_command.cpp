@@ -20,9 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-
-#include "battle_arena.h"
 #include "battle_command.h"
 #include "spell.h"
 
@@ -38,7 +35,7 @@ Battle::Command & Battle::Command::operator<<( const int val )
 
 Battle::Command & Battle::Command::operator>>( int & val )
 {
-    if ( size() ) {
+    if ( !empty() ) {
         val = back();
         pop_back();
     }

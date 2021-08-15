@@ -23,13 +23,11 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
+#include <list>
 #include <string>
-#include <vector>
 
-#include "gamedefs.h"
 #include "screen.h"
-#include "translations.h"
-#include "ui_tool.h"
+#include "types.h"
 
 namespace Font
 {
@@ -97,45 +95,11 @@ private:
     std::string message;
 };
 
-#ifdef WITH_TTF
-class TextUnicode : public TextInterface
-{
-public:
-    TextUnicode() = default;
-    TextUnicode( const std::string &, int ft = Font::BIG );
-    TextUnicode( const u16 *, size_t, int ft = Font::BIG );
-
-    void SetText( const std::string & ) override;
-    void SetFont( int ) override;
-    void Clear( void ) override;
-
-    int w() const override;
-    int h() const override;
-    size_t Size( void ) const override;
-
-    int w( size_t s, size_t c ) const;
-    int h( int ) const;
-
-    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
-
-    static bool isspace( int );
-    static int CharWidth( int, int ft );
-    static int CharHeight( int ft );
-
-private:
-    std::vector<u16> message;
-};
-#endif
-
 class Text
 {
 public:
     Text();
     Text( const std::string &, int ft = Font::BIG );
-#ifdef WITH_TTF
-    Text( const u16 *, size_t, int ft = Font::BIG );
-#endif
-    Text( const Text & );
     ~Text();
 
     Text & operator=( const Text & ) = delete;
@@ -159,9 +123,6 @@ public:
     void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
     void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
     void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-
-    static u32 width( const std::string &, int ft, u32 start = 0, u32 count = 0 );
-    static u32 height( const std::string &, int ft, u32 width = 0 );
 
     static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 
@@ -188,7 +149,6 @@ public:
     void Show( void );
     void Hide( void );
 
-    bool isHide( void ) const;
     bool isShow( void ) const;
 
     int w() const;
@@ -240,9 +200,6 @@ public:
 
 private:
     void Append( const std::string &, int, u32 );
-#ifdef WITH_TTF
-    void Append( const std::vector<u16> &, int, u32 );
-#endif
 
     std::list<Text> messages;
     int align;

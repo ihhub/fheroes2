@@ -23,7 +23,6 @@
 #ifndef H2INTERFACE_GAMEAREA_H
 #define H2INTERFACE_GAMEAREA_H
 
-#include "gamedefs.h"
 #include "image.h"
 #include "timing.h"
 
@@ -114,6 +113,8 @@ namespace Interface
         }
 
         void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
+
+        fheroes2::Point getCurrentCenterInPixels() const;
 
     private:
         Basic & interface;

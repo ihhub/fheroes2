@@ -24,10 +24,16 @@
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "serialize.h"
+#include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "system.h"
+#include "tools.h"
 #include "translations.h"
+
 #include <cassert>
+#include <map>
 
 namespace
 {
@@ -42,20 +48,8 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
             break;
         case 1:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
         case 2:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
         case 3:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
         case 4:
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
@@ -115,20 +109,8 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DEFENDER_HELM, 1 );
             break;
         case 3:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
         case 4:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
         case 5:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
         case 6:
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
@@ -346,7 +328,7 @@ namespace
         case Artifact::DIVINE_BREASTPLATE:
             return _( "Breastplate" );
         case Artifact::FIZBIN_MISFORTUNE:
-            return _( "Fibzin Medal" );
+            return _( "Fizbin of Misfortune" );
         case Artifact::MAGE_RING:
             return _( "Mage's ring" );
         case Artifact::DEFENDER_HELM:
@@ -367,34 +349,35 @@ namespace
             return Spell( spellId ).GetName();
         }
     }
-}
-
-namespace Campaign
-{
-    bool isCampaignMap( const std::string & fullMapPath, const std::string & scenarioMapName )
-    {
-        if ( fullMapPath.size() < scenarioMapName.size() ) {
-            return false;
-        }
-        const std::string lowerFullPath = StringLower( fullMapPath );
-        return lowerFullPath.compare( lowerFullPath.size() - scenarioMapName.size(), scenarioMapName.size(), scenarioMapName ) == 0;
-    }
 
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
-        const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
-        const ListFiles files = Settings::GetListFiles( "maps", fileExtension );
+        static const auto fileNameToPath = []() {
+            std::map<std::string, std::string> result;
 
-        const auto iterator = std::find_if( files.begin(), files.end(), [&fileName]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
+            const ListFiles files = Settings::FindFiles( "maps", "", false );
 
-        if ( iterator != files.end() ) {
-            matchingFilePath = *iterator;
+            for ( const std::string & file : files ) {
+                result.emplace( StringLower( System::GetBasename( file ) ), file );
+            }
+
+            return result;
+        }();
+
+        const auto result = fileNameToPath.find( fileName );
+
+        if ( result != fileNameToPath.end() ) {
+            matchingFilePath = result->second;
+
             return true;
         }
 
         return false;
     }
+}
 
+namespace Campaign
+{
     ScenarioBonusData::ScenarioBonusData()
         : _type( 0 )
         , _subType( 0 )
@@ -483,7 +466,7 @@ namespace Campaign
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )
-        , _fileName( fileName )
+        , _fileName( StringLower( fileName ) )
         , _scenarioName( scenarioName )
         , _description( description )
         , _victoryCondition( victoryCondition )

@@ -21,6 +21,8 @@
 TARGET	:= libengine
 CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
 
+.PHONY: all clean
+
 all: $(TARGET).a
 
 $(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp)) 
@@ -30,8 +32,6 @@ $(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 	$(CXX) -c -MD $< $(CFLAGS)
 
 include $(wildcard *.d)
-
-.PHONY: clean
 
 clean:
 	rm -f *.a *.so *.d *.o

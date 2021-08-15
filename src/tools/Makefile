@@ -31,13 +31,13 @@ LIBENGINE := ../engine/libengine.a
 LIBS := $(LIBENGINE) $(SDL_LIBS) $(LIBS)
 CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
 
+.PHONY: all clean
+
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
 	$(CXX) -c $@.cpp $(CFLAGS)
 	$(CXX) -o $@ $@.o $(LIBS)
-
-.PHONY: clean
 
 clean:
 	rm -f *.o *.exe $(TARGETS)

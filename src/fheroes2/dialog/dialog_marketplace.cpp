@@ -32,6 +32,8 @@
 #include "resource.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
 #include "world.h"
@@ -248,12 +250,12 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
-        Text text( "max", Font::YELLOW_SMALL );
+        Text text( _( "max" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
         buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
         text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( "min", Font::YELLOW_SMALL );
+        text.Set( _( "min" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
         buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
@@ -381,6 +383,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Button & buttonTrade = gui.buttonTrade;
     fheroes2::Button & buttonLeft = gui.buttonLeft;
     fheroes2::Button & buttonRight = gui.buttonRight;
+
+    fheroes2::TimedEventValidator timedButtonLeft( [&buttonLeft]() { return buttonLeft.isPressed(); } );
+    fheroes2::TimedEventValidator timedButtonRight( [&buttonRight]() { return buttonRight.isPressed(); } );
+    buttonLeft.subscribe( &timedButtonLeft );
+    buttonRight.subscribe( &timedButtonRight );
+
     fheroes2::Scrollbar & scrollbar = gui._scrollbar;
 
     // button exit
@@ -531,7 +539,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // decrease trade resource
-        if ( count_buy && ( ( buttonLeft.isEnabled() && le.MouseClickLeft( gui.buttonLeft.area() ) ) || le.MouseWheelDn( scrollbar.getArea() ) ) ) {
+        if ( count_buy
+             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( gui.buttonLeft.area() ) || timedButtonLeft.isDelayPassed() ) )
+                  || le.MouseWheelDn( scrollbar.getArea() ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
             count_sell -= Resource::GOLD == resourceTo ? 1 : GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
@@ -542,7 +552,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // increase trade resource
-        if ( count_buy < max_buy && ( ( buttonRight.isEnabled() && le.MouseClickLeft( buttonRight.area() ) ) || le.MouseWheelUp( scrollbar.getArea() ) ) ) {
+        if ( count_buy < max_buy
+             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRight.area() ) || timedButtonRight.isDelayPassed() ) )
+                  || le.MouseWheelUp( scrollbar.getArea() ) ) ) {
             count_buy += Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
             count_sell += Resource::GOLD == resourceTo ? 1 : GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );

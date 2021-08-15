@@ -28,6 +28,7 @@
 #include "image.h"
 #include "interface_border.h"
 #include "maps.h"
+#include "settings.h"
 #include "tools.h"
 #include "world.h"
 
@@ -283,7 +284,7 @@ namespace
                                 break;
                             case MP2::OBJ_CASTLE:
                                 if ( revealTowns || !tile.isFog( color ) ) { // draw hero now, castle flag on top later
-                                    const Castle * castle = world.GetCastle( tile.GetCenter() );
+                                    const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
                                     if ( castle ) {
                                         const fheroes2::Sprite & heroIcon = fheroes2::AGG::GetICN( icnBase, index );
                                         fheroes2::Blit( heroIcon, display, dstx, dsty );
@@ -300,7 +301,7 @@ namespace
 
                 case MP2::OBJ_CASTLE: {
                     if ( revealTowns || !tile.isFog( color ) ) {
-                        const Castle * castle = world.GetCastle( tile.GetCenter() );
+                        const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
                         if ( castle ) {
                             icn = icnFlagsBase;
                             index = colorToOffsetICN( castle->GetColor() );
@@ -419,14 +420,23 @@ bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
     return true;
 }
 
-bool ViewWorld::ZoomROIs::ChangeZoom( const bool zoomIn, const bool cycle )
+bool ViewWorld::ZoomROIs::changeZoom( const ZoomLevel newLevel )
 {
-    ViewWorld::ZoomLevel newLevel = zoomIn ? GetNextZoomLevel( _zoomLevel, cycle ) : GetPreviousZoomLevel( _zoomLevel, cycle );
-    if ( newLevel == _zoomLevel ) {
-        return false;
-    }
+    const bool changed = ( newLevel != _zoomLevel );
     _zoomLevel = newLevel;
-    return true;
+    return changed;
+}
+
+bool ViewWorld::ZoomROIs::zoomIn( const bool cycle )
+{
+    const ZoomLevel newLevel = GetNextZoomLevel( _zoomLevel, cycle );
+    return changeZoom( newLevel );
+}
+
+bool ViewWorld::ZoomROIs::zoomOut( const bool cycle )
+{
+    const ZoomLevel newLevel = GetPreviousZoomLevel( _zoomLevel, cycle );
+    return changeZoom( newLevel );
 }
 
 const fheroes2::Rect & ViewWorld::ZoomROIs::GetROIinPixels() const
@@ -516,7 +526,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {
-            changed = currentROI.ChangeZoom( false, true );
+            changed = currentROI.zoomOut( true );
         }
         else if ( le.MouseCursor( radar.GetRect() ) ) {
             changed = radar.QueueEventProcessingForWorldView( currentROI );
@@ -536,10 +546,10 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             }
         }
         else if ( le.MouseWheelUp() ) {
-            changed = currentROI.ChangeZoom( true );
+            changed = currentROI.zoomIn( false );
         }
         else if ( le.MouseWheelDn() ) {
-            changed = currentROI.ChangeZoom( false );
+            changed = currentROI.zoomOut( false );
         }
 
         if ( !le.MousePressLeft( visibleScreenInPixels ) || !le.MouseCursor( visibleScreenInPixels ) ) {

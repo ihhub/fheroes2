@@ -24,7 +24,6 @@
 #define H2BATTLE_COMMAND_H
 
 #include "battle_board.h"
-#include "gamedefs.h"
 
 namespace Battle
 {

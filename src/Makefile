@@ -29,7 +29,7 @@ endif
 CFLAGS := $(CFLAGS) -fsigned-char
 CXXFLAGS := -std=c++11 $(CFLAGS)
 LDFLAGS := $(LDFLAGS)
-LIBS := -pthread
+LIBS := -pthread -lz
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
@@ -56,26 +56,12 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT
-CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
+CFLAGS := $(CFLAGS) -DFHEROES2_IMAGE_SUPPORT $(shell libpng-config --cflags)
 ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs) -lz
+SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs) -lz
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
-endif
-
-ifndef WITHOUT_UNICODE
-CFLAGS := $(CFLAGS) -DWITH_TTF
-ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
-else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
-endif
-endif
-
-ifndef WITHOUT_ZLIB
-CFLAGS := $(CFLAGS) -DWITH_ZLIB
-LIBS := $(LIBS) -lz
 endif
 
 ifdef RELEASE
@@ -102,7 +88,6 @@ PLATFORM := all
 endif
 ifeq ($(OS),Haiku)
 PLATFORM := all
-LIBS := -liconv
 endif
 endif
 
@@ -117,7 +102,7 @@ LIBS := $(SDL_LIBS) $(LIBS)
 
 export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 
-.PHONY: clean
+.PHONY: all clean
 
 all:
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
@@ -126,9 +111,7 @@ all:
 ifdef WITH_TOOLS
 	$(MAKE) -C tools
 endif
-ifndef WITHOUT_UNICODE
 	$(MAKE) -C dist pot
-endif
 
 clean:
 	$(MAKE) -C thirdparty/libsmacker clean

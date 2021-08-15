@@ -26,14 +26,11 @@
 #include "army.h"
 #include "army_bar.h"
 #include "heroes_indicator.h"
-#include "heroes_recruits.h"
-#include "image.h"
 #include "players.h"
 #include "skill_bar.h"
 
 #include <memory>
 
-class PrimarySkillsBar;
 class ArtifactsBar;
 
 namespace Battle

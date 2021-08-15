@@ -23,19 +23,20 @@
 #include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "icn.h"
-#include "kingdom.h"
-#include "logging.h"
 #include "m82.h"
 #include "monster.h"
 #include "pal.h"
 #include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "statusbar.h"
-#include "world.h"
+#include "tools.h"
+#include "translations.h"
 
 namespace
 {
@@ -313,7 +314,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     }
 }
 
-u32 BuildingInfo::operator()( void ) const
+uint32_t BuildingInfo::getBuilding( void ) const
 {
     return building;
 }
@@ -502,7 +503,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         }
 
     // replace end sep
-    if ( str.size() )
+    if ( !str.empty() )
         str.replace( str.size() - sep.size(), sep.size(), "" );
 
     const bool isRequired = !str.empty();
@@ -602,7 +603,7 @@ const char * GetBuildConditionDescription( int bcond )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 std::string BuildingInfo::GetConditionDescription( void ) const

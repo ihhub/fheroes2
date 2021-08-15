@@ -34,6 +34,8 @@
 #include "mus.h"
 #include "puzzle.h"
 #include "rand.h"
+#include "serialize.h"
+#include "settings.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -96,6 +98,9 @@ void Puzzle::ShowMapsDialog( void ) const
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    // restore the original music on exit
+    const Game::MusicRestorer musicRestorer;
 
     AGG::PlayMusic( MUS::PUZZLE, false );
 

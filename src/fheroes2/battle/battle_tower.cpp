@@ -21,8 +21,11 @@
  ***************************************************************************/
 
 #include "battle_tower.h"
+#include "battle.h"
+#include "battle_board.h"
 #include "battle_cell.h"
 #include "castle.h"
+#include "tools.h"
 #include "translations.h"
 
 Battle::Tower::Tower( const Castle & castle, int twr )
@@ -145,8 +148,9 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
                 msg.append( addn );
                 StringReplace( msg, "%{attack}", twr.GetBonus() );
             }
-            else
-                msg.append( "." );
+            else {
+                msg += '.';
+            }
 
             if ( ( it + 1 ) != towers.end() )
                 msg.append( "\n \n" );

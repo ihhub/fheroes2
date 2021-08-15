@@ -23,36 +23,35 @@ MAKE	:= make
 
 PROJECT_TITLE := Free Heroes of Might & Magic II
 PROJECT_TITLEID := FHOMM0002
-PROJECT := fheroes2
+
+.PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf
 
 all: package
 
-package: $(PROJECT).vpk
+package: $(TARGET).vpk
 
-$(PROJECT).vpk: eboot.bin param.sfo
+$(TARGET).vpk: eboot.bin param.sfo
 	vita-pack-vpk -s param.sfo -b eboot.bin \
 		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
-	$(PROJECT).vpk
+	$(TARGET).vpk
 
-eboot.bin: $(PROJECT).velf
-	vita-make-fself $(PROJECT).velf eboot.bin
+eboot.bin: $(TARGET).velf
+	vita-make-fself $(TARGET).velf eboot.bin
 
 param.sfo:
 	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" "$(PROJECT_TITLE)" param.sfo
 
-$(PROJECT).velf: $(PROJECT).elf
+$(TARGET).velf: $(TARGET).elf
 	arm-vita-eabi-strip -g $<
 	vita-elf-create $< $@
 
-$(PROJECT).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true WITHOUT_UNICODE=true
-	$(MAKE) -f files/lang/Makefile
-	@cp src/dist/$(TARGET) ./$(PROJECT).elf
+$(TARGET).elf:
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true
+	@cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:
 	$(MAKE) -f Makefile -C src clean
-	$(MAKE) -f files/lang/Makefile clean
-	@rm -rf $(TARGET).velf $(TARGET).elf $(OBJS) $(TARGET).elf.unstripped.elf $(TARGET).vpk eboot.bin sce_sys/param.sfo ./param.sfo
+	@rm -rf $(TARGET).velf $(TARGET).elf $(TARGET).vpk eboot.bin param.sfo

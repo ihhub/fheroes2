@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cctype>
-#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -83,7 +81,7 @@ int main( int argc, char ** argv )
         sf1.seek( fat.offset );
         std::vector<u8> buf = sf1.getRaw( fat.size );
 
-        if ( buf.size() && sf2.open( fn, "wb" ) ) {
+        if ( !buf.empty() && sf2.open( fn, "wb" ) ) {
             sf2.putRaw( reinterpret_cast<char *>( &buf[0] ), buf.size() );
             sf2.close();
 

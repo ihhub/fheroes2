@@ -21,11 +21,10 @@
  ***************************************************************************/
 
 #include "agg_image.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
+#include "screen.h"
 #include "settings.h"
-#include "text.h"
 
 #include <algorithm>
 

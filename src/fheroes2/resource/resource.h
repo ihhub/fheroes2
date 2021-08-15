@@ -22,8 +22,12 @@
 #ifndef H2RESOURCE_H
 #define H2RESOURCE_H
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include <string>
+
+#include "math_base.h"
+#include "types.h"
+
+class StreamBase;
 
 struct cost_t
 {
@@ -107,7 +111,7 @@ StreamBase & operator>>( StreamBase &, Funds & );
 namespace Resource
 {
     const char * String( int resource );
-    int Rand( bool with_gold = false );
+    int Rand( const bool includeGold );
 
     /* return index sprite objnrsrc.icn */
     u32 GetIndexSprite( int resource );

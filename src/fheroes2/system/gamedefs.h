@@ -22,9 +22,6 @@
 #ifndef H2GAMEDEFS_H
 #define H2GAMEDEFS_H
 
-#include "tools.h"
-#include "types.h"
-
 // hardcore defines: kingdom
 #define KINGDOMMAX 6
 

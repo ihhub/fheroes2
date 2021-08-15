@@ -37,13 +37,14 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox2( message, ft, BOXAREA_WIDTH );
 
-    FrameBox box( 10 + ( header.size() ? textbox1.h() + 10 : 0 ) + textbox2.h(), buttons != 0 );
+    const int32_t headerHeight = !header.empty() ? textbox1.h() + 10 : 0;
+    FrameBox box( 10 + headerHeight + textbox2.h(), buttons != 0 );
     const fheroes2::Rect & pos = box.GetArea();
 
-    if ( header.size() )
+    if ( !header.empty() )
         textbox1.Blit( pos.x, pos.y + 10 );
-    if ( message.size() )
-        textbox2.Blit( pos.x, pos.y + 10 + ( header.size() ? textbox1.h() + 10 : 0 ) );
+    if ( !message.empty() )
+        textbox2.Blit( pos.x, pos.y + 10 + headerHeight );
 
     LocalEvent & le = LocalEvent::Get();
 
