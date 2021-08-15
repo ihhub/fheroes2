@@ -307,13 +307,6 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
 
         // Unit steps into the moat
         if ( isMoatBuilt && ( isMoatIndex( headCellId, unit ) || isMoatIndex( tailCellId, unit ) ) ) {
-            // Moat is a part of the unit's destination
-            if ( headCellId == dstHeadCellId ) {
-                result.push_back( headCellId );
-
-                return true;
-            }
-
             // In the moat it is only allowed to turn back, do not let the unit pass through the moat
             if ( ( tailCellId != currentHeadCellId || !isMoatIndex( tailCellId, unit ) ) && ( headCellId != currentTailCellId || !isMoatIndex( headCellId, unit ) ) ) {
                 continue;
@@ -425,7 +418,6 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
             const int32_t cellId = result[i];
 
             Cell * cell = GetCell( cellId );
-
             assert( cell != nullptr );
 
             cell->SetDirection( cell->GetDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );
@@ -1100,6 +1092,42 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
     }
 
     return true;
+}
+
+bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t from )
+{
+    const Cell * fromCell = GetCell( from );
+    assert( fromCell != nullptr );
+
+    // Target unit cannot be attacked if out of reach
+    if ( fromCell->GetDirection() == UNKNOWN && from != attacker.GetHeadIndex() && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
+        return false;
+    }
+
+    const Castle * castle = Arena::GetCastle();
+
+    // No moat - no further restrictions
+    if ( !castle || !castle->isBuild( BUILD_MOAT ) ) {
+        return true;
+    }
+
+    // Target unit isn't attacked from the moat
+    if ( !isMoatIndex( from, attacker ) ) {
+        return true;
+    }
+
+    // The moat doesn't stop flying units
+    if ( attacker.isFlying() ) {
+        return true;
+    }
+
+    // Attacker is already near the target
+    if ( from == attacker.GetHeadIndex() || ( attacker.isWide() && from == attacker.GetTailIndex() ) ) {
+        return true;
+    }
+
+    // In all other cases, the attack is prohibited
+    return false;
 }
 
 Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
