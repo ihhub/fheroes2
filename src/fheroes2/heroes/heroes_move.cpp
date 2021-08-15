@@ -388,7 +388,7 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
 {
     if ( next.GetObject() == MP2::OBJ_CASTLE ) {
         const Castle * castle = world.getCastleEntrance( next.GetCenter() );
-        return castle && !hero.isFriends(castle->GetColor()) && castle->GetActualArmy().isValid();
+        return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
     else
         // to coast action
