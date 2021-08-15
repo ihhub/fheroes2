@@ -15,7 +15,7 @@ try {
         return $false
     }
 
-    Write-Host -ForegroundColor Green "This script will extract and copy assets from the original Heroes of Might and Magic II distribution`r`n"
+    Write-Host -ForegroundColor Green "This script will extract and copy game resources from the original Heroes of Might and Magic II distribution`r`n"
 
     Write-Host "[1/3] determining destination directory"
 
@@ -100,7 +100,7 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("HoMM2 directory: ", (Resolve-Path $homm2Path).Path))
 
-    Write-Host "[3/3] copying assets"
+    Write-Host "[3/3] copying game resources"
 
     $shell = New-Object -ComObject "Shell.Application"
 
@@ -130,7 +130,7 @@ try {
             [void](New-Item -Path "$destPath\anim" -ItemType "directory")
         }
 
-        Write-Host -ForegroundColor Green "Running DOSBOX to extract animation assets, please wait..."
+        Write-Host -ForegroundColor Green "Running DOSBOX to extract animation resources, please wait..."
 
         & "$homm2Path\DOSBOX\DOSBox.exe" -c "imgmount D '$homm2Path\homm2.ins' -t iso -fs iso" `
                                          -c "mount E '$destPath'" `
