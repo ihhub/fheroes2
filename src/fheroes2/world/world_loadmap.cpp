@@ -554,6 +554,18 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
+    // clear artifact flags to correctly generate random artifacts
+    fheroes2::ResetArtifactStats();
+
+    const Settings & conf = Settings::Get();
+
+    // do not let the player get a random artifact that allows him to win the game
+    if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
+        const Artifact art = conf.WinsFindArtifactID();
+
+        fheroes2::ExcludeArtifactFromRandom( art.GetID() );
+    }
+
     ProcessNewMap();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" );
