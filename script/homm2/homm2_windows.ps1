@@ -72,8 +72,10 @@ try {
         }
 
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
-            if ($subkey.GetValue("Publisher") -Eq "GOG.com") {
-                $path = $subkey.GetValue("InstallLocation").TrimEnd("\")
+            $path = $subkey.GetValue("InstallLocation")
+
+            if ($null -Ne $path) {
+                $path = $path.TrimEnd("\")
 
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
