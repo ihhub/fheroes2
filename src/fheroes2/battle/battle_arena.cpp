@@ -764,14 +764,14 @@ int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
 
 bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
-    const HeroBase * hero1 = GetCommander( color, true ); // enemy
-    const HeroBase * hero2 = GetCommander( color, false );
+    const HeroBase * hero1 = getEnemyCommander( color );
+    const HeroBase * hero2 = getCommander( color );
     return hero1 && hero1->isHeroes() && hero2 && hero2->isHeroes() && !world.GetKingdom( hero2->GetColor() ).GetCastles().empty();
 }
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
 {
-    const HeroBase * hero = GetCommander( color );
+    const HeroBase * hero = getCommander( color );
     return hero && hero->isHeroes() && ( color == army1->GetColor() || hero->inCastle() == nullptr );
 }
 
@@ -1024,23 +1024,19 @@ std::vector<int> Battle::Arena::GetCastleTargets( void ) const
     return targets;
 }
 
-const HeroBase * Battle::Arena::GetCommander( int color, bool invert ) const
+const HeroBase * Battle::Arena::getCommander( const int color ) const
 {
-    const HeroBase * commander = nullptr;
+    return ( army1->GetColor() == color ) ? army1->GetCommander() : army2->GetCommander();
+}
 
-    if ( army1->GetColor() == color ) {
-        commander = invert ? army2->GetCommander() : army1->GetCommander();
-    }
-    else {
-        commander = invert ? army1->GetCommander() : army2->GetCommander();
-    }
-
-    return commander;
+const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
+{
+    return ( army1->GetColor() == color ) ? army2->GetCommander() : army1->GetCommander();
 }
 
 const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
 {
-    return GetCommander( current_color );
+    return getCommander( current_color );
 }
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
