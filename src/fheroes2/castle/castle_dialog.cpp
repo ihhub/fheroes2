@@ -291,6 +291,14 @@ int Castle::OpenDialog( bool readonly )
     int alphaHero = 255;
     fheroes2::Image surfaceHero( 552, 105 );
 
+    // Finish fade animation on selector troops event
+    const auto finishHeroFade = [&]() {
+        if ( alphaHero != 255 ) {
+            alphaHero = 255;
+            fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
+        }
+    };
+
     // dialog menu loop
     while ( le.HandleEvents() ) {
         // exit
@@ -319,11 +327,7 @@ int Castle::OpenDialog( bool readonly )
                && ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2, &msg_status ) )
                     || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1, &msg_status ) ) ) )
              || ( !selectArmy2.isValid() && le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( &msg_status ) ) ) {
-            // Just finish fade animation on selector troops event
-            if ( alphaHero != 255 ) {
-                alphaHero = 255;
-                fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
-            }
+            finishHeroFade();
             need_redraw = true;
         }
 
@@ -388,6 +392,7 @@ int Castle::OpenDialog( bool readonly )
 
         // view guardian
         if ( !readonly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
+            finishHeroFade();
             Game::SetUpdateSoundsOnFocusUpdate( false );
             Game::OpenHeroesDialog( *heroes.Guard(), false, false );
 
@@ -400,11 +405,7 @@ int Castle::OpenDialog( bool readonly )
         else
             // view hero
             if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
-            // Just finish fade animation on selector troops event
-            if ( alphaHero != 255 ) {
-                alphaHero = 255;
-                fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
-            }
+            finishHeroFade();
 
             Game::SetUpdateSoundsOnFocusUpdate( false );
             Game::OpenHeroesDialog( *heroes.Guest(), false, false );
@@ -433,6 +434,7 @@ int Castle::OpenDialog( bool readonly )
         for ( const auto & cacheBuilding : cacheBuildings ) {
             if ( cacheBuilding.id == GetActualDwelling( cacheBuilding.id ) && isBuild( cacheBuilding.id ) ) {
                 if ( !readonly && le.MouseClickLeft( cacheBuilding.coord ) ) {
+                    finishHeroFade();
                     fheroes2::ButtonRestorer exitRestorer( buttonExit );
                     if ( Castle::RecruitMonster(
                              Dialog::RecruitMonster( Monster( race, GetActualDwelling( cacheBuilding.id ) ), getMonstersInDwelling( cacheBuilding.id ), true ) ) ) {
@@ -440,6 +442,7 @@ int Castle::OpenDialog( bool readonly )
                     }
                 }
                 else if ( le.MousePressRight( cacheBuilding.coord ) ) {
+                    finishHeroFade();
                     Dialog::DwellingInfo( Monster( race, GetActualDwelling( cacheBuilding.id ) ), getMonstersInDwelling( cacheBuilding.id ) );
                 }
 
@@ -453,6 +456,7 @@ int Castle::OpenDialog( bool readonly )
                 const int mageGuildLevel = GetLevelMageGuild();
                 if ( cacheBuilding.id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
                     if ( le.MouseClickLeft( cacheBuilding.coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
+                        finishHeroFade();
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
                         bool noFreeSpaceForMagicBook = false;
                         if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
@@ -486,8 +490,10 @@ int Castle::OpenDialog( bool readonly )
 
                         OpenMageGuild( heroes );
                     }
-                    else if ( le.MousePressRight( cacheBuilding.coord ) )
+                    else if ( le.MousePressRight( cacheBuilding.coord ) ) {
+                        finishHeroFade();
                         Dialog::Message( GetStringBuilding( cacheBuilding.id ), GetDescriptionBuilding( cacheBuilding.id ), Font::BIG );
+                    }
 
                     if ( le.MouseCursor( cacheBuilding.coord ) )
                         msg_status = GetStringBuilding( cacheBuilding.id );
@@ -495,6 +501,7 @@ int Castle::OpenDialog( bool readonly )
             }
             else if ( isBuild( cacheBuilding.id ) || getPressedBuildingHotkey() == cacheBuilding.id ) {
                 if ( le.MouseClickLeft( cacheBuilding.coord ) ) {
+                    finishHeroFade();
                     if ( selectArmy1.isSelected() )
                         selectArmy1.ResetSelected();
                     if ( selectArmy2.isValid() && selectArmy2.isSelected() )
@@ -610,8 +617,10 @@ int Castle::OpenDialog( bool readonly )
                             break;
                         }
                 }
-                else if ( le.MousePressRight( cacheBuilding.coord ) )
+                else if ( le.MousePressRight( cacheBuilding.coord ) ) {
+                    finishHeroFade();
                     Dialog::Message( GetStringBuilding( cacheBuilding.id ), GetDescriptionBuilding( cacheBuilding.id ), Font::BIG );
+                }
 
                 if ( le.MouseCursor( cacheBuilding.coord ) ) {
                     msg_status = buildingStatusMessage( cacheBuilding.id );
