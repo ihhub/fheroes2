@@ -38,8 +38,16 @@ namespace fheroes2
         void forward();
         void backward();
 
-        void moveToIndex( const int indexId );
+        // Returns true if the position and/or index is updated.
+        bool moveToIndex( const int indexId );
+
         void moveToPos( const Point & position );
+
+        // Update position of the scrollbar based on the index. Useful mouse movement and release.
+        bool updatePosition()
+        {
+            return moveToIndex( _currentIndex );
+        }
 
         int currentIndex() const
         {
