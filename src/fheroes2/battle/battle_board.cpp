@@ -93,7 +93,7 @@ void Battle::Board::Reset( void )
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-        it->ResetDirections();
+        it->ResetReachability();
         it->ResetQuality();
     }
 }
@@ -180,12 +180,12 @@ uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 
 void Battle::Board::SetScanPassability( const Unit & unit )
 {
-    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirections(); } );
+    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetReachability(); } );
 
-    at( unit.GetHeadIndex() ).SetHeadDirection( CENTER );
+    at( unit.GetHeadIndex() ).SetReachableForHead();
 
     if ( unit.isWide() ) {
-        at( unit.GetTailIndex() ).SetTailDirection( CENTER );
+        at( unit.GetTailIndex() ).SetReachableForTail();
     }
 
     if ( unit.isFlying() ) {
@@ -194,10 +194,10 @@ void Battle::Board::SetScanPassability( const Unit & unit )
 
         for ( std::size_t i = 0; i < size(); i++ ) {
             if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
-                at( i ).SetHeadDirection( CENTER );
+                at( i ).SetReachableForHead();
 
                 if ( unit.isWide() ) {
-                    at( i ).SetTailDirection( CENTER );
+                    at( i ).SetReachableForTail();
                 }
             }
         }
@@ -436,7 +436,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
             Cell * headCell = GetCell( cellId );
             assert( headCell != nullptr );
 
-            headCell->SetHeadDirection( headCell->GetHeadDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );
+            headCell->SetReachableForHead();
 
             if ( isWideUnit ) {
                 const int32_t prevCellId = i == 0 ? unit.GetHeadIndex() : result[i - 1];
@@ -444,7 +444,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
                 Cell * tailCell = GetCell( cellId, LEFT_SIDE & GetDirection( cellId, prevCellId ) ? LEFT : RIGHT );
                 assert( tailCell != nullptr );
 
-                tailCell->SetTailDirection( tailCell->GetTailDirection() | GetDirection( tailCell->GetIndex(), cellId ) );
+                tailCell->SetReachableForTail();
             }
         }
     }
@@ -1114,7 +1114,7 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     assert( fromCell != nullptr );
 
     // Target unit cannot be attacked if out of reach
-    if ( ( fromCell->GetHeadDirection() == UNKNOWN && ( !attacker.isWide() || fromCell->GetTailDirection() == UNKNOWN ) ) && from != attacker.GetHeadIndex()
+    if ( !fromCell->isReachableForHead() && ( !attacker.isWide() || !fromCell->isReachableForTail() ) && from != attacker.GetHeadIndex()
          && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
         return false;
     }
@@ -1208,7 +1208,7 @@ int32_t Battle::Board::FixupTargetCellForUnit( const Unit & unit, const int32_t 
 
     // Destination cell is on the border of the cell space reachable for the unit
     // and it should be the tail cell of this unit, return the head cell instead
-    if ( pos.GetTail()->GetTailDirection() == UNKNOWN ) {
+    if ( !pos.GetTail()->isReachableForTail() ) {
         const int headDirection = unit.isReflect() ? LEFT : RIGHT;
 
         if ( isValidDirection( dst, headDirection ) ) {

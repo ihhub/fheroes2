@@ -123,8 +123,8 @@ bool Battle::Position::contains( int cellIndex ) const
 Battle::Cell::Cell( int32_t ii )
     : index( ii )
     , object( 0 )
-    , _headDirection( UNKNOWN )
-    , _tailDirection( UNKNOWN )
+    , _reachableForHead( false )
+    , _reachableForTail( false )
     , quality( 0 )
     , troop( nullptr )
 {
@@ -191,14 +191,14 @@ void Battle::Cell::SetObject( int val )
     object = val;
 }
 
-void Battle::Cell::SetHeadDirection( const int val )
+void Battle::Cell::SetReachableForHead()
 {
-    _headDirection = val;
+    _reachableForHead = true;
 }
 
-void Battle::Cell::SetTailDirection( const int val )
+void Battle::Cell::SetReachableForTail()
 {
-    _tailDirection = val;
+    _reachableForTail = true;
 }
 
 void Battle::Cell::SetQuality( u32 val )
@@ -209,16 +209,6 @@ void Battle::Cell::SetQuality( u32 val )
 int Battle::Cell::GetObject( void ) const
 {
     return object;
-}
-
-int Battle::Cell::GetHeadDirection() const
-{
-    return _headDirection;
-}
-
-int Battle::Cell::GetTailDirection() const
-{
-    return _tailDirection;
 }
 
 const fheroes2::Rect & Battle::Cell::GetPos( void ) const
@@ -239,6 +229,16 @@ Battle::Unit * Battle::Cell::GetUnit( void )
 void Battle::Cell::SetUnit( Unit * val )
 {
     troop = val;
+}
+
+bool Battle::Cell::isReachableForHead() const
+{
+    return _reachableForHead;
+}
+
+bool Battle::Cell::isReachableForTail() const
+{
+    return _reachableForTail;
 }
 
 bool Battle::Cell::isPassable4( const Unit & b, const Cell & from ) const
@@ -300,8 +300,8 @@ void Battle::Cell::ResetQuality( void )
     quality = 0;
 }
 
-void Battle::Cell::ResetDirections()
+void Battle::Cell::ResetReachability()
 {
-    _headDirection = UNKNOWN;
-    _tailDirection = UNKNOWN;
+    _reachableForHead = false;
+    _reachableForTail = false;
 }

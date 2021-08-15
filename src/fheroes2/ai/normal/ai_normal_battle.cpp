@@ -168,7 +168,7 @@ namespace AI
         assert( targetCell != nullptr );
 
         // Target cell is already reachable
-        if ( targetCell->GetHeadDirection() != UNKNOWN ) {
+        if ( targetCell->isReachableForHead() ) {
             return Board::FixupTargetCellForUnit( currentUnit, target );
         }
 
@@ -177,7 +177,7 @@ namespace AI
 
         // Search for the nearest reachable cell
         for ( const Cell & cell : *Arena::GetBoard() ) {
-            if ( cell.GetHeadDirection() != UNKNOWN ) {
+            if ( cell.isReachableForHead() ) {
                 const uint32_t distance = Board::GetDistance( target, cell.GetIndex() );
 
                 if ( distance < nearestDistance ) {
@@ -202,7 +202,7 @@ namespace AI
             if ( Board::isValidDirection( from, tailDirection ) ) {
                 const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( from, tailDirection ) );
 
-                if ( tailCell != nullptr && tailCell->GetTailDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &attacker ) ) {
+                if ( tailCell != nullptr && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &attacker ) ) {
                     headIndex = from;
                     tailIndex = tailCell->GetIndex();
                 }
@@ -215,7 +215,7 @@ namespace AI
                 if ( Board::isValidDirection( from, headDirection ) ) {
                     const Cell * headCell = Board::GetCell( Board::GetIndexDirection( from, headDirection ) );
 
-                    if ( headCell != nullptr && headCell->GetHeadDirection() != UNKNOWN && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &attacker ) ) {
+                    if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &attacker ) ) {
                         headIndex = headCell->GetIndex();
                         tailIndex = from;
                     }

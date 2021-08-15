@@ -1610,7 +1610,7 @@ void Battle::Interface::RedrawCover()
             if ( Board::isValidDirection( index_pos, tailDirection ) ) {
                 const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
 
-                if ( tailCell != nullptr && tailCell->GetTailDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
+                if ( tailCell != nullptr && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
                     highlightCells.emplace( tailCell );
                 }
             }
@@ -1622,7 +1622,7 @@ void Battle::Interface::RedrawCover()
                 if ( Board::isValidDirection( index_pos, headDirection ) ) {
                     const Cell * headCell = Board::GetCell( Board::GetIndexDirection( index_pos, headDirection ) );
 
-                    if ( headCell != nullptr && headCell->GetHeadDirection() != UNKNOWN && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == _currentUnit ) ) {
+                    if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == _currentUnit ) ) {
                         highlightCells.emplace( headCell );
                     }
                 }
@@ -1675,7 +1675,7 @@ void Battle::Interface::RedrawCover()
                     if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
                         const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
 
-                        if ( attackerTailCell != nullptr && attackerTailCell->GetTailDirection() != UNKNOWN
+                        if ( attackerTailCell != nullptr && attackerTailCell->isReachableForTail()
                              && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
                             highlightCells.emplace( attackerTailCell );
                         }
@@ -1688,7 +1688,7 @@ void Battle::Interface::RedrawCover()
                         if ( Board::isValidDirection( attackerCell->GetIndex(), headDirection ) ) {
                             const Cell * attackerHeadCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), headDirection ) );
 
-                            if ( attackerHeadCell != nullptr && attackerHeadCell->GetHeadDirection() != UNKNOWN
+                            if ( attackerHeadCell != nullptr && attackerHeadCell->isReachableForHead()
                                  && ( attackerHeadCell->GetUnit() == nullptr || attackerHeadCell->GetUnit() == _currentUnit ) ) {
                                 highlightCells.emplace( attackerHeadCell );
                             }
@@ -1759,7 +1759,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( const Cell & cell : board ) {
-            if ( cell.GetHeadDirection() != UNKNOWN || cell.GetTailDirection() != UNKNOWN ) {
+            if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
                 fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
         }
@@ -2113,7 +2113,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 }
             }
         }
-        else if ( cell->GetHeadDirection() != UNKNOWN || cell->GetTailDirection() != UNKNOWN ) {
+        else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
             statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
             StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
             return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
