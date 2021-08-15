@@ -400,6 +400,12 @@ int Castle::OpenDialog( bool readonly )
         else
             // view hero
             if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
+            // Just finish fade animation on selector troops event
+            if ( alphaHero != 255 ) {
+                alphaHero = 255;
+                fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
+            }
+
             Game::SetUpdateSoundsOnFocusUpdate( false );
             Game::OpenHeroesDialog( *heroes.Guest(), false, false );
 
