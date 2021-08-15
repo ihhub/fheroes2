@@ -313,9 +313,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
 int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, const bool savelastTroop, uint32_t & redistributeCount, bool & useFastSplit )
 {
-    if ( savelastTroop )
-        ++freeSlots;
-
     assert( freeSlots > 0 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
