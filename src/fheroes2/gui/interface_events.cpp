@@ -24,7 +24,7 @@
 #include <vector>
 
 #include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog_system_options.h"
 #include "game.h"
@@ -199,7 +199,6 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
 
 fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
-    Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
@@ -235,7 +234,6 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     default:
         break;
     }
-    Mixer::Enhance();
 
     return fheroes2::GameMode::CANCEL;
 }
@@ -363,16 +361,6 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
                     Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate.GetID() );
-
-                    // set all obelisks visited
-                    Kingdom & kingdom = world.GetKingdom( hero->GetColor() );
-                    const MapsIndexes obelisks = Maps::GetObjectPositions( MP2::OBJ_OBELISK, false );
-
-                    for ( MapsIndexes::const_iterator it = obelisks.begin(); it != obelisks.end(); ++it )
-                        if ( !hero->isVisited( world.GetTiles( *it ), Visit::GLOBAL ) )
-                            hero->SetVisited( *it, Visit::GLOBAL );
-
-                    kingdom.PuzzleMaps().Update( kingdom.CountVisitedObjects( MP2::OBJ_OBELISK ), world.CountObeliskOnMaps() );
                 }
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );

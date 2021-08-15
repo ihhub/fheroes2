@@ -21,8 +21,7 @@
  ***************************************************************************/
 
 #include "localevent.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -1234,14 +1233,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
 void LocalEvent::StopSounds()
 {
-    Music::Mute();
-    Mixer::Mute();
+    Audio::Mute();
 }
 
 void LocalEvent::ResumeSounds()
 {
-    Music::Unmute();
-    Mixer::Unmute();
+    Audio::Unmute();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
