@@ -24,10 +24,8 @@
 
 #include "army.h"
 #include "army_troop.h"
-#include "game.h"
 #include "heroes_base.h"
-#include "luck.h"
-#include "morale.h"
+#include "serialize.h"
 #include "speed.h"
 
 Troop::Troop()
@@ -48,11 +46,6 @@ bool Troop::operator==( const Monster & m ) const
 bool Troop::isMonster( int mons ) const
 {
     return GetID() == mons;
-}
-
-Monster Troop::operator()( void ) const
-{
-    return Monster( id );
 }
 
 Monster Troop::GetMonster( void ) const

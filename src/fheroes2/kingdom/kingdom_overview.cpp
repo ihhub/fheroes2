@@ -23,7 +23,6 @@
 #include <sstream>
 
 #include "agg_image.h"
-#include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
 #include "castle.h"
@@ -35,9 +34,10 @@
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
-#include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
@@ -491,7 +491,7 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
     for ( int i = 0; i < VisibleItemCount(); ++i ) {
         fheroes2::Copy( back, 0, 0, display, dst.x + 30, dst.y + 17 + i * ( back.height() + 4 ), back.width(), back.height() );
         // fix bar
-        fheroes2::Copy( overback, 30, 12, display, dst.x + 29, dst.y + 12 + i * ( back.height() + 4 ), 595, 6 );
+        fheroes2::Copy( overback, 29, 13, display, dst.x + 29, dst.y + 13 + i * ( back.height() + 4 ), 595, 4 );
     }
 
     // Copy one vertical line in case of previous army selection
@@ -622,7 +622,7 @@ void Kingdom::OverviewDialog( void )
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
-    Interface::ListBasic * listStats = NULL;
+    Interface::ListBasic * listStats = nullptr;
 
     // set state view: castles
     if ( Modes( OVERVIEWCSTL ) ) {

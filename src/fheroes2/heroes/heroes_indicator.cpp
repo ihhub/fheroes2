@@ -20,16 +20,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cmath>
-
+#include "heroes_indicator.h"
 #include "agg_image.h"
 #include "dialog.h"
 #include "heroes.h"
-#include "heroes_indicator.h"
 #include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 
 namespace fheroes2
 {
@@ -104,7 +104,7 @@ void LuckIndicator::Redraw( void )
     s32 cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
     s32 cy = area.y + ( area.height - sprite.height() ) / 2;
 
-    if ( modificators.size() )
+    if ( !modificators.empty() )
         descriptions.append( modificators );
     else
         descriptions.append( _( "None" ) );

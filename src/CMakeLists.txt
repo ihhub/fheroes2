@@ -12,6 +12,8 @@ if(FHEROES2_STRICT_COMPILATION)
 	endif()
 endif()
 
+add_compile_definitions($<$<CONFIG:Debug>:WITH_DEBUG>)
+
 add_subdirectory(thirdparty)
 add_subdirectory(engine)
 add_subdirectory(fheroes2)

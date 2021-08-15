@@ -25,11 +25,11 @@
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
@@ -226,7 +226,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
 
                 if ( troop1 ) {
                     // combine
-                    if ( troop() == troop1->GetID() ) {
+                    if ( troop.GetMonster() == troop1->GetID() ) {
                         troop1->SetCount( troop.GetCount() + troop1->GetCount() );
                         troop.Reset();
                     }
@@ -264,7 +264,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
 
                 if ( troop1 ) {
                     // combine
-                    if ( troop() == troop1->GetID() ) {
+                    if ( troop.GetMonster() == troop1->GetID() ) {
                         if ( troop1->GetCount() + troop.GetCount() < MAXU16 ) {
                             troop.SetCount( troop1->GetCount() + troop.GetCount() );
                             troop1->Reset();
@@ -316,5 +316,5 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
         display.render();
     }
 
-    return shadow() != troop() || shadow.GetCount() != troop.GetCount();
+    return shadow.GetMonster() != troop.GetMonster() || shadow.GetCount() != troop.GetCount();
 }

@@ -22,13 +22,11 @@
 
 #include "spell.h"
 #include "artifact.h"
-#include "game.h"
-#include "game_static.h"
 #include "heroes_base.h"
-#include "logging.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "serialize.h"
 #include "translations.h"
 
 enum
@@ -157,11 +155,6 @@ bool Spell::operator!=( const Spell & s ) const
 bool Spell::isValid( void ) const
 {
     return id != Spell::NONE;
-}
-
-int Spell::operator()( void ) const
-{
-    return id;
 }
 
 int Spell::GetID( void ) const
@@ -361,6 +354,16 @@ bool Spell::isEnabled() const
     return ( spells[id].bits & SP_DISABLE ) == 0;
 }
 
+bool Spell::isFire() const
+{
+    return id == FIREBALL || id == FIREBLAST;
+}
+
+bool Spell::isCold() const
+{
+    return id == COLDRAY || id == COLDRING;
+}
+
 bool Spell::isAdventure( void ) const
 {
     return !isCombat();
@@ -418,51 +421,6 @@ u32 Spell::IndexSprite( void ) const
     return spells[id].sprite;
 }
 
-u32 Spell::InlIndexSprite( void ) const
-{
-    switch ( id ) {
-    case HASTE:
-    case MASSHASTE:
-        return 0;
-    case SLOW:
-    case MASSSLOW:
-        return 1;
-    case BLIND:
-        return 2;
-    case BLESS:
-    case MASSBLESS:
-        return 3;
-    case CURSE:
-    case MASSCURSE:
-        return 4;
-    case BERSERKER:
-        return 5;
-    case PARALYZE:
-        return 6;
-    case HYPNOTIZE:
-        return 7;
-    case DRAGONSLAYER:
-        return 8;
-    case BLOODLUST:
-        return 9;
-    case SHIELD:
-    case MASSSHIELD:
-        return 10;
-    case STONE:
-        return 11;
-    case ANTIMAGIC:
-        return 12;
-    case STONESKIN:
-        return 13;
-    case STEELSKIN:
-        return 14;
-    default:
-        break;
-    }
-
-    return 0;
-}
-
 u32 Spell::Restore( void ) const
 {
     switch ( id ) {
@@ -517,7 +475,7 @@ Spell Spell::Rand( int lvl, bool adv )
         if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() && spell.isEnabled() )
             v.push_back( spell );
     }
-    return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
+    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell Spell::RandCombat( int lvl )
@@ -771,12 +729,8 @@ bool Spell::isRaceCompatible( int race ) const
     return true;
 }
 
-u32 Spell::CalculateDimensionDoorDistance( u32 current_sp, u32 total_hp )
+u32 Spell::CalculateDimensionDoorDistance()
 {
-    if ( GameStatic::Spell_DD_Distance() && GameStatic::Spell_DD_HP() && GameStatic::Spell_DD_SP() && total_hp ) {
-        const u32 res = ( GameStatic::Spell_DD_Distance() * current_sp * GameStatic::Spell_DD_HP() ) / ( GameStatic::Spell_DD_SP() * total_hp );
-        return res ? ( res < 255 ? res : 255 ) : 1;
-    }
     // original h2 variant
     return 14;
 }

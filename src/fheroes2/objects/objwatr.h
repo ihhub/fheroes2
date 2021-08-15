@@ -23,7 +23,7 @@
 #ifndef H2OBJWATR_H
 #define H2OBJWATR_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjWatr
 {

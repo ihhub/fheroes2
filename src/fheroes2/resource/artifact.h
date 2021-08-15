@@ -24,14 +24,13 @@
 
 #include <vector>
 
-#include "gamedefs.h"
 #include "interface_itemsbar.h"
-#include "serialize.h"
 #include "ui_tool.h"
 
 class Spell;
 class Heroes;
 class StatusBar;
+class StreamBase;
 
 class Artifact
 {
@@ -165,7 +164,6 @@ public:
     bool operator==( const Spell & ) const;
     bool operator==( const Artifact & ) const;
     bool operator!=( const Artifact & ) const;
-    int operator()( void ) const;
     int GetID( void ) const;
 
     bool isUltimate( void ) const;
@@ -207,7 +205,14 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
+
 u32 GoldInsteadArtifact( int );
+
+namespace fheroes2
+{
+    void ResetArtifactStats();
+    void ExcludeArtifactFromRandom( const int artifactID );
+}
 
 class BagArtifacts : public std::vector<Artifact>
 {
@@ -221,7 +226,6 @@ public:
     bool MakeBattleGarb( void );
     bool ContainUltimateArtifact( void ) const;
 
-    void RemoveArtifact( const Artifact & );
     void RemoveScroll( const Artifact & );
     void exchangeArtifacts( BagArtifacts & giftBag );
 
@@ -248,8 +252,8 @@ public:
     bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
     bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
-    bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
+    bool QueueEventProcessing( ArtifactsBar &, std::string * = nullptr );
 
     bool ActionBarCursor( Artifact & ) override;
     bool ActionBarCursor( Artifact &, Artifact & ) override;

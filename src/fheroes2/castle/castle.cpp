@@ -37,12 +37,17 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "m82.h"
 #include "maps_tiles.h"
 #include "morale.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "serialize.h"
+#include "settings.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -54,7 +59,7 @@ Castle::Castle()
     : race( Race::NONE )
     , building( 0 )
     , captain( *this )
-    , army( NULL )
+    , army( nullptr )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );
@@ -65,7 +70,7 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     , race( rc )
     , building( 0 )
     , captain( *this )
-    , army( NULL )
+    , army( nullptr )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );
@@ -194,12 +199,12 @@ void Castle::LoadFromMP2( StreamBuf st )
         Troop troops[5];
 
         // set monster id
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetMonster( st.get() + 1 );
+        for ( Troop & troop : troops )
+            troop.SetMonster( st.get() + 1 );
 
         // set count
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetCount( st.getLE16() );
+        for ( Troop & troop : troops )
+            troop.SetCount( st.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
         SetModes( CUSTOMARMY );
@@ -213,7 +218,7 @@ void Castle::LoadFromMP2( StreamBuf st )
 
     // custom name
     st.skip( 1 );
-    name = Game::GetEncodeString( st.toString( 13 ) );
+    name = st.toString( 13 );
 
     // race
     u32 kingdom_race = Players::GetPlayerRace( GetColor() );
@@ -439,13 +444,35 @@ double Castle::getVisitValue( const Heroes & hero ) const
     double spellValue = 0;
     const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
     for ( const Spell & spell : guildSpells ) {
+        if ( spell.isAdventure() ) {
+            // AI is stupid to use Adventure spells.
+            continue;
+        }
         if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
-            spellValue += spell.Level() * 250.0;
+            spellValue += spell.Level() * 50.0;
         }
     }
 
-    // we don't spend actual funds, so make a copy here
+    const Troops & heroArmy = hero.GetArmy();
+    Troops futureArmy( heroArmy );
+    const double heroArmyStrength = futureArmy.GetStrength();
+
     Funds potentialFunds = GetKingdom().GetFunds();
+
+    for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
+        Troop * monster = futureArmy.GetTroop( i );
+        if ( monster != nullptr && monster->isValid() ) {
+            const payment_t payment = monster->GetUpgradeCost();
+
+            if ( GetRace() == monster->GetRace() && isBuild( monster->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+                potentialFunds -= payment;
+                monster->Upgrade();
+            }
+        }
+    }
+
+    const double upgradeStrength = futureArmy.GetStrength() - heroArmyStrength;
+
     Troops reinforcement;
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) ) {
@@ -462,7 +489,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
-    return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
+    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( reinforcement );
 }
 
 void Castle::ActionNewDay( void )
@@ -497,22 +524,21 @@ u32 * Castle::GetDwelling( u32 dw )
         default:
             break;
         }
-    return NULL;
+    return nullptr;
 }
 
 void Castle::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
     if ( world.GetWeekType().GetType() != Week::PLAGUE ) {
-        const u32 dwellings1[] = {DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0};
-        u32 * dw = NULL;
+        const u32 dwellings1[] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
+        u32 * dw = nullptr;
 
         // simple growth
         for ( u32 ii = 0; dwellings1[ii]; ++ii )
-            if ( NULL != ( dw = GetDwelling( dwellings1[ii] ) ) ) {
+            if ( nullptr != ( dw = GetDwelling( dwellings1[ii] ) ) ) {
                 u32 growth = Monster( race, GetActualDwelling( dwellings1[ii] ) ).GetGrown();
 
                 // well build
@@ -535,11 +561,11 @@ void Castle::ActionNewWeek( void )
 
         // Week Of
         if ( world.GetWeekType().GetType() == Week::MONSTERS && !world.BeginMonth() ) {
-            const u32 dwellings2[] = {DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                      DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0};
+            const u32 dwellings2[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                       DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
 
             for ( u32 ii = 0; dwellings2[ii]; ++ii )
-                if ( NULL != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
+                if ( nullptr != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
                     const Monster mons( race, dwellings2[ii] );
                     if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                         *dw += GetGrownWeekOf();
@@ -569,12 +595,12 @@ void Castle::ActionNewMonth( void )
     else
         // Month Of
         if ( world.GetWeekType().GetType() == Week::MONSTERS ) {
-        const u32 dwellings[] = {DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                 DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0};
-        u32 * dw = NULL;
+        const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                  DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+        u32 * dw = nullptr;
 
         for ( u32 ii = 0; dwellings[ii]; ++ii )
-            if ( NULL != ( dw = GetDwelling( dwellings[ii] ) ) ) {
+            if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
                 const Monster mons( race, dwellings[ii] );
                 if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                     *dw += *dw * GetGrownMonthOf() / 100;
@@ -630,72 +656,72 @@ void Castle::MageGuildEducateHero( HeroBase & hero ) const
 
 const char * Castle::GetStringBuilding( u32 build, int race )
 {
-    const char * str_build[] = {_( "Thieves' Guild" ),
-                                _( "Tavern" ),
-                                _( "Shipyard" ),
-                                _( "Well" ),
-                                _( "Statue" ),
-                                _( "Left Turret" ),
-                                _( "Right Turret" ),
-                                _( "Marketplace" ),
-                                _( "Moat" ),
-                                _( "Castle" ),
-                                _( "Tent" ),
-                                _( "Captain's Quarters" ),
-                                _( "Mage Guild, Level 1" ),
-                                _( "Mage Guild, Level 2" ),
-                                _( "Mage Guild, Level 3" ),
-                                _( "Mage Guild, Level 4" ),
-                                _( "Mage Guild, Level 5" ),
-                                "Unknown"};
+    const char * str_build[] = { _( "Thieves' Guild" ),
+                                 _( "Tavern" ),
+                                 _( "Shipyard" ),
+                                 _( "Well" ),
+                                 _( "Statue" ),
+                                 _( "Left Turret" ),
+                                 _( "Right Turret" ),
+                                 _( "Marketplace" ),
+                                 _( "Moat" ),
+                                 _( "Castle" ),
+                                 _( "Tent" ),
+                                 _( "Captain's Quarters" ),
+                                 _( "Mage Guild, Level 1" ),
+                                 _( "Mage Guild, Level 2" ),
+                                 _( "Mage Guild, Level 3" ),
+                                 _( "Mage Guild, Level 4" ),
+                                 _( "Mage Guild, Level 5" ),
+                                 "Unknown" };
 
-    const char * str_wel2[] = {_( "Farm" ), _( "Garbage Heap" ), _( "Crystal Garden" ), _( "Waterfall" ), _( "Orchard" ), _( "Skull Pile" )};
+    const char * str_wel2[] = { _( "Farm" ), _( "Garbage Heap" ), _( "Crystal Garden" ), _( "Waterfall" ), _( "Orchard" ), _( "Skull Pile" ) };
 
-    const char * str_spec[] = {_( "Fortifications" ), _( "Coliseum" ), _( "Rainbow" ), _( "Dungeon" ), _( "Library" ), _( "Storm" )};
+    const char * str_spec[] = { _( "Fortifications" ), _( "Coliseum" ), _( "Rainbow" ), _( "Dungeon" ), _( "Library" ), _( "Storm" ) };
 
-    const char * str_dwelling[] = {_( "Thatched Hut" ),   _( "Hut" ),       _( "Treehouse" ),     _( "Cave" ),        _( "Habitat" ),      _( "Excavation" ),
-                                   _( "Archery Range" ),  _( "Stick Hut" ), _( "Cottage" ),       _( "Crypt" ),       _( "Pen" ),          _( "Graveyard" ),
-                                   _( "Blacksmith" ),     _( "Den" ),       _( "Archery Range" ), _( "Nest" ),        _( "Foundry" ),      _( "Pyramid" ),
-                                   _( "Armory" ),         _( "Adobe" ),     _( "Stonehenge" ),    _( "Maze" ),        _( "Cliff Nest" ),   _( "Mansion" ),
-                                   _( "Jousting Arena" ), _( "Bridge" ),    _( "Fenced Meadow" ), _( "Swamp" ),       _( "Ivory Tower" ),  _( "Mausoleum" ),
-                                   _( "Cathedral" ),      _( "Pyramid" ),   _( "Red Tower" ),     _( "Green Tower" ), _( "Cloud Castle" ), _( "Laboratory" )};
+    const char * str_dwelling[] = { _( "Thatched Hut" ),   _( "Hut" ),       _( "Treehouse" ),     _( "Cave" ),        _( "Habitat" ),      _( "Excavation" ),
+                                    _( "Archery Range" ),  _( "Stick Hut" ), _( "Cottage" ),       _( "Crypt" ),       _( "Pen" ),          _( "Graveyard" ),
+                                    _( "Blacksmith" ),     _( "Den" ),       _( "Archery Range" ), _( "Nest" ),        _( "Foundry" ),      _( "Pyramid" ),
+                                    _( "Armory" ),         _( "Adobe" ),     _( "Stonehenge" ),    _( "Maze" ),        _( "Cliff Nest" ),   _( "Mansion" ),
+                                    _( "Jousting Arena" ), _( "Bridge" ),    _( "Fenced Meadow" ), _( "Swamp" ),       _( "Ivory Tower" ),  _( "Mausoleum" ),
+                                    _( "Cathedral" ),      _( "Pyramid" ),   _( "Red Tower" ),     _( "Green Tower" ), _( "Cloud Castle" ), _( "Laboratory" ) };
 
-    const char * str_upgrade[] = {_( "Upg. Archery Range" ),
-                                  _( "Upg. Stick Hut" ),
-                                  _( "Upg. Cottage" ),
-                                  _( "Crypt" ),
-                                  _( "Pen" ),
-                                  _( "Upg. Graveyard" ),
-                                  _( "Upg. Blacksmith" ),
-                                  _( "Den" ),
-                                  _( "Upg. Archery Range" ),
-                                  _( "Nest" ),
-                                  _( "Upg. Foundry" ),
-                                  _( "Upg. Pyramid" ),
-                                  _( "Upg. Armory" ),
-                                  _( "Upg. Adobe" ),
-                                  _( "Upg. Stonehenge" ),
-                                  _( "Upg. Maze" ),
-                                  _( "Cliff Nest" ),
-                                  _( "Upg. Mansion" ),
-                                  _( "Upg. Jousting Arena" ),
-                                  _( "Upg. Bridge" ),
-                                  _( "Fenced Meadow" ),
-                                  _( "Swamp" ),
-                                  _( "Upg. Ivory Tower" ),
-                                  _( "Upg. Mausoleum" ),
-                                  _( "Upg. Cathedral" ),
-                                  _( "Pyramid" ),
-                                  _( "Red Tower" ),
-                                  _( "Red Tower" ),
-                                  _( "Upg. Cloud Castle" ),
-                                  _( "Laboratory" ),
-                                  "",
-                                  "",
-                                  "",
-                                  _( "Black Tower" ),
-                                  "",
-                                  ""};
+    const char * str_upgrade[] = { _( "Upg. Archery Range" ),
+                                   _( "Upg. Stick Hut" ),
+                                   _( "Upg. Cottage" ),
+                                   _( "Crypt" ),
+                                   _( "Pen" ),
+                                   _( "Upg. Graveyard" ),
+                                   _( "Upg. Blacksmith" ),
+                                   _( "Den" ),
+                                   _( "Upg. Archery Range" ),
+                                   _( "Nest" ),
+                                   _( "Upg. Foundry" ),
+                                   _( "Upg. Pyramid" ),
+                                   _( "Upg. Armory" ),
+                                   _( "Upg. Adobe" ),
+                                   _( "Upg. Stonehenge" ),
+                                   _( "Upg. Maze" ),
+                                   _( "Cliff Nest" ),
+                                   _( "Upg. Mansion" ),
+                                   _( "Upg. Jousting Arena" ),
+                                   _( "Upg. Bridge" ),
+                                   _( "Fenced Meadow" ),
+                                   _( "Swamp" ),
+                                   _( "Upg. Ivory Tower" ),
+                                   _( "Upg. Mausoleum" ),
+                                   _( "Upg. Cathedral" ),
+                                   _( "Pyramid" ),
+                                   _( "Red Tower" ),
+                                   _( "Red Tower" ),
+                                   _( "Upg. Cloud Castle" ),
+                                   _( "Laboratory" ),
+                                   "",
+                                   "",
+                                   "",
+                                   _( "Black Tower" ),
+                                   "",
+                                   "" };
 
     const char * shrine = _( "Shrine" );
 
@@ -816,21 +842,21 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
         _( "The Tent provides workers to build a castle, provided the materials and the gold are available." ),
         _( "The Captain's Quarters provides a captain to assist in the castle's defense when no hero is present." ),
         _( "The Mage Guild allows heroes to learn spells and replenish their spell points." ),
-        "Unknown"};
+        "Unknown" };
 
-    const char * desc_wel2[] = {_( "The Farm increases production of Peasants by %{count} per week." ),
-                                _( "The Garbage Heap increases production of Goblins by %{count} per week." ),
-                                _( "The Crystal Garden increases production of Sprites by %{count} per week." ),
-                                _( "The Waterfall increases production of Centaurs by %{count} per week." ),
-                                _( "The Orchard increases production of Halflings by %{count} per week." ),
-                                _( "The Skull Pile increases production of Skeletons by %{count} per week." )};
+    const char * desc_wel2[] = { _( "The Farm increases production of Peasants by %{count} per week." ),
+                                 _( "The Garbage Heap increases production of Goblins by %{count} per week." ),
+                                 _( "The Crystal Garden increases production of Sprites by %{count} per week." ),
+                                 _( "The Waterfall increases production of Centaurs by %{count} per week." ),
+                                 _( "The Orchard increases production of Halflings by %{count} per week." ),
+                                 _( "The Skull Pile increases production of Skeletons by %{count} per week." ) };
 
-    const char * desc_spec[] = {_( "The Fortifications increase the toughness of the walls, increasing the number of turns it takes to knock them down." ),
-                                _( "The Coliseum provides inspiring spectacles to defending troops, raising their morale by two during combat." ),
-                                _( "The Rainbow increases the luck of the defending units by two." ),
-                                _( "The Dungeon increases the income of the town by %{count} / day." ),
-                                _( "The Library increases the number of spells in the Guild by one for each level of the guild." ),
-                                _( "The Storm adds +2 to the power of spells of a defending spell caster." )};
+    const char * desc_spec[] = { _( "The Fortifications increase the toughness of the walls, increasing the number of turns it takes to knock them down." ),
+                                 _( "The Coliseum provides inspiring spectacles to defending troops, raising their morale by two during combat." ),
+                                 _( "The Rainbow increases the luck of the defending units by two." ),
+                                 _( "The Dungeon increases the income of the town by %{count} / day." ),
+                                 _( "The Library increases the number of spells in the Guild by one for each level of the guild." ),
+                                 _( "The Storm adds +2 to the power of spells of a defending spell caster." ) };
 
     const char * shrine_descr = _( "The Shrine increases the necromancy skill of all your necromancers by 10 percent." );
 
@@ -907,13 +933,6 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
 
 bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 {
-    const Kingdom & myKingdom = GetKingdom();
-    if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
-        if ( msg )
-            *msg = _( "Cannot recruit - you already recruit hero in current week." );
-        return false;
-    }
-
     CastleHeroes heroes = world.GetHeroes( *this );
 
     if ( heroes.Guest() ) {
@@ -932,6 +951,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
         }
     }
 
+    const Kingdom & myKingdom = GetKingdom();
     if ( !myKingdom.AllowRecruitHero( false, hero.GetLevel() ) ) {
         if ( msg )
             *msg = _( "Cannot recruit - you have too many Heroes." );
@@ -950,7 +970,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 Heroes * Castle::RecruitHero( Heroes * hero )
 {
     if ( !hero || !AllowBuyHero( *hero ) )
-        return NULL;
+        return nullptr;
 
     CastleHeroes heroes = world.GetHeroes( *this );
     if ( heroes.Guest() ) {
@@ -959,32 +979,30 @@ Heroes * Castle::RecruitHero( Heroes * hero )
             SwapCastleHeroes( heroes );
         }
         else
-            return NULL;
+            return nullptr;
     }
 
     // recruit
     if ( !hero->Recruit( *this ) )
-        return NULL;
-
-    Kingdom & kingdom = GetKingdom();
-
-    if ( kingdom.GetLastLostHero() == hero )
-        kingdom.ResetLastLostHero();
+        return nullptr;
 
     // actually update available heroes to recruit
-    kingdom.GetRecruits();
+    const Colors colors( Settings::Get().GetPlayers().GetActualColors() );
 
-    kingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
+    for ( const int kingdomColor : colors ) {
+        Kingdom & kingdom = world.GetKingdom( kingdomColor );
+        if ( kingdom.GetLastLostHero() == hero )
+            kingdom.ResetLastLostHero();
+
+        kingdom.GetRecruits();
+    }
+
+    Kingdom & currentKingdom = GetKingdom();
+    currentKingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
 
     // update spell book
     if ( GetLevelMageGuild() )
         MageGuildEducateHero( *hero );
-
-    if ( Settings::Get().ExtWorldOneHeroHiredEveryWeek() )
-        kingdom.SetModes( Kingdom::DISABLEHIRES );
-
-    if ( Settings::Get().ExtCastleOneHeroHiredEveryWeek() )
-        SetModes( DISABLEHIRES );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() );
 
@@ -2259,11 +2277,6 @@ u32 Castle::GetUpgradeBuilding( u32 build ) const
     return build;
 }
 
-bool Castle::PredicateIsCapital( const Castle * castle )
-{
-    return castle && castle->Modes( CAPITAL );
-}
-
 bool Castle::PredicateIsCastle( const Castle * castle )
 {
     return castle && castle->isCastle();
@@ -2283,7 +2296,7 @@ std::string Castle::String( void ) const
 {
     std::ostringstream os;
     const CastleHeroes heroes = GetHeroes();
-    const Heroes * hero = NULL;
+    const Heroes * hero = nullptr;
 
     os << "name and type   : " << name << " (" << Race::String( race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
@@ -2306,11 +2319,11 @@ std::string Castle::String( void ) const
        << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
-    if ( NULL != ( hero = heroes.Guard() ) ) {
+    if ( nullptr != ( hero = heroes.Guard() ) ) {
         os << "army guard      : " << hero->GetArmy().String() << std::endl;
     }
 
-    if ( NULL != ( hero = heroes.Guest() ) ) {
+    if ( nullptr != ( hero = heroes.Guest() ) ) {
         os << "army guest      : " << hero->GetArmy().String() << std::endl;
     }
 
@@ -2548,7 +2561,7 @@ u32 Castle::GetGrownMonthOf( void )
 
 void Castle::Scoute( void ) const
 {
-    Maps::ClearFog( GetIndex(), Game::GetViewDistance( isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN ), GetColor() );
+    Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
 }
 
 void Castle::JoinRNDArmy( void )
@@ -2607,7 +2620,7 @@ void Castle::ActionAfterBattle( bool attacker_wins )
 Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 void VecCastles::SortByBuildingValue()
@@ -2615,7 +2628,7 @@ void VecCastles::SortByBuildingValue()
     std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
         if ( left && right )
             return left->getBuildingValue() > right->getBuildingValue();
-        return right == NULL;
+        return right == nullptr;
     } );
 }
 
@@ -2656,42 +2669,27 @@ void AllCastles::AddCastle( Castle * castle )
 
     /* Register position of all castle elements on the map
     Castle element positions are:
-                -
-               ---
-              -+++-
+                +
+              +++++
+              +++++
               ++X++
+              ++ ++
 
      where
      X is the main castle position
      + are tiles that are considered part of the castle for the Get() method
-     - are tiles where there is a castle sprite, but not used in the Get() method
-
     */
 
     const size_t id = _castles.size() - 1;
     fheroes2::Point temp( castle->GetCenter().x, castle->GetCenter().y );
-    _castleTiles.emplace( temp, id );
 
-    temp.x -= 2;
-    _castleTiles.emplace( temp, id ); // (-2, 0)
+    for ( int32_t y = -2; y <= 2; ++y ) {
+        for ( int32_t x = -2; x <= 2; ++x ) {
+            _castleTiles.emplace( temp + fheroes2::Point( x, y ), id );
+        }
+    }
 
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (-1, 0)
-
-    --temp.y;
-    _castleTiles.emplace( temp, id ); // (-1, -1)
-
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (0, -1)
-
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (+1, -1)
-
-    ++temp.y;
-    _castleTiles.emplace( temp, id ); // (+1, 0)
-
-    ++temp.x;
-    _castleTiles.emplace( temp, id ); // (+2, 0)
+    _castleTiles.emplace( temp + fheroes2::Point( 0, -3 ), id );
 }
 
 Castle * AllCastles::Get( const fheroes2::Point & position ) const
@@ -2758,11 +2756,12 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
     u32 size;
     msg >> size;
 
-    castles.resize( size, NULL );
+    castles.resize( size, nullptr );
 
     for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
-        *it = ( index < 0 ? NULL : world.GetCastle( Maps::GetPoint( index ) ) );
+        *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
+        assert( *it != nullptr );
     }
 
     return msg;
@@ -2802,7 +2801,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
         heroes.Guard()->ResetModes( Heroes::GUARDIAN );
         heroes.Swap();
 
-        world.GetTiles( center.x, center.y ).SetHeroes( NULL );
+        world.GetTiles( center.x, center.y ).SetHeroes( nullptr );
 
         fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;
@@ -2822,7 +2821,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
         heroes.Swap();
         heroes.Guard()->GetArmy().JoinTroops( army );
 
-        world.GetTiles( center.x, center.y ).SetHeroes( NULL );
+        world.GetTiles( center.x, center.y ).SetHeroes( nullptr );
 
         fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;

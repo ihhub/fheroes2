@@ -20,24 +20,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
+#include "game.h"
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "dialog_game_settings.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "mus.h"
 #include "settings.h"
 #include "smk_decoder.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -272,7 +270,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     return gameChoice;
 }
 
-#ifdef NETWORK_ENABLE
 fheroes2::GameMode Game::NewNetwork()
 {
     Settings & conf = Settings::Get();
@@ -316,7 +313,6 @@ fheroes2::GameMode Game::NewNetwork()
 
     return fheroes2::GameMode::MAIN_MENU;
 }
-#endif
 
 fheroes2::GameMode Game::NewGame()
 {
@@ -339,7 +335,8 @@ fheroes2::GameMode Game::NewGame()
     const fheroes2::Point buttonPos = drawButtonPanel();
 
     fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BTNNEWGM, 0, 1 );
-    fheroes2::Button buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
+    fheroes2::ButtonSprite buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 ),
+                                              fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
     fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
     fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
@@ -378,8 +375,8 @@ fheroes2::GameMode Game::NewGame()
         if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
             return fheroes2::GameMode::NEW_MULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
-            Dialog::ExtSettings( false );
-            display.render();
+            fheroes2::openGameSettings();
+            return fheroes2::GameMode::MAIN_MENU;
         }
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
@@ -396,7 +393,7 @@ fheroes2::GameMode Game::NewGame()
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
             Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
         else if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
         else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
@@ -445,17 +442,6 @@ fheroes2::GameMode Game::NewMulti()
                              Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
-
-#ifdef NETWORK_ENABLE
-        if ( buttonNetwork.isEnabled() ) {
-            le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
-            if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
-                return fheroes2::GameMode::NEWNETWORK;
-            if ( le.MousePressRight( buttonNetwork.area() ) )
-                Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
-                                 Font::BIG );
-        }
-#endif
     }
 
     return fheroes2::GameMode::QUIT_GAME;
@@ -511,13 +497,13 @@ u32 Game::SelectCountPlayers( void )
 
         // right info
         if ( le.MousePressRight( button2Players.area() ) )
-            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up, to 4 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button3Players.area() ) )
-            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up, to 3 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button4Players.area() ) )
-            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up, to 2 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ), Font::BIG );
         if ( le.MousePressRight( button5Players.area() ) )
-            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up, to 1 additional computer players." ), Font::BIG );
+            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ), Font::BIG );
         if ( le.MousePressRight( button6Players.area() ) )
             Dialog::Message( _( "6 Players" ), _( "Play with 6 human players." ), Font::BIG );
         if ( le.MousePressRight( buttonCancel.area() ) )

@@ -23,7 +23,10 @@
 #ifndef H2BATTLE_CATAPULT_H
 #define H2BATTLE_CATAPULT_H
 
-#include "gamedefs.h"
+#include <vector>
+
+#include "math_base.h"
+#include "types.h"
 
 class HeroBase;
 

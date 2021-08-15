@@ -23,7 +23,6 @@
 #include <cstring>
 
 #include "castle.h"
-#include "logging.h"
 #include "profit.h"
 #include "race.h"
 
@@ -34,38 +33,38 @@ struct profitstats_t
 };
 
 profitstats_t _profits[] = {
-    {"castle", {1000, 0, 0, 0, 0, 0, 0}},
-    {"town", {250, 0, 0, 0, 0, 0, 0}},
-    {"statue", {250, 0, 0, 0, 0, 0, 0}},
-    {"dungeon", {500, 0, 0, 0, 0, 0, 0}},
+    { "castle", { 1000, 0, 0, 0, 0, 0, 0 } },
+    { "town", { 250, 0, 0, 0, 0, 0, 0 } },
+    { "statue", { 250, 0, 0, 0, 0, 0, 0 } },
+    { "dungeon", { 500, 0, 0, 0, 0, 0, 0 } },
 
-    {"sawmill", {0, 2, 0, 0, 0, 0, 0}},
-    {"alchemylab", {0, 0, 1, 0, 0, 0, 0}},
-    {"mine_ore", {0, 0, 0, 2, 0, 0, 0}},
-    {"mine_sulfur", {0, 0, 0, 0, 1, 0, 0}},
-    {"mine_crystal", {0, 0, 0, 0, 0, 1, 0}},
-    {"mine_gems", {0, 0, 0, 0, 0, 0, 1}},
-    {"mine_gold", {1000, 0, 0, 0, 0, 0, 0}},
+    { "sawmill", { 0, 2, 0, 0, 0, 0, 0 } },
+    { "alchemylab", { 0, 0, 1, 0, 0, 0, 0 } },
+    { "mine_ore", { 0, 0, 0, 2, 0, 0, 0 } },
+    { "mine_sulfur", { 0, 0, 0, 0, 1, 0, 0 } },
+    { "mine_crystal", { 0, 0, 0, 0, 0, 1, 0 } },
+    { "mine_gems", { 0, 0, 0, 0, 0, 0, 1 } },
+    { "mine_gold", { 1000, 0, 0, 0, 0, 0, 0 } },
 
-    {"ultimate_golden_goose", {10000, 0, 0, 0, 0, 0, 0}},
-    {"tax_lien", {250, 0, 0, 0, 0, 0, 0}},
-    {"endless_sack_gold", {1000, 0, 0, 0, 0, 0, 0}},
-    {"endless_bag_gold", {750, 0, 0, 0, 0, 0, 0}},
-    {"endless_purse_gold", {500, 0, 0, 0, 0, 0, 0}},
-    {"endless_cord_wood", {0, 1, 0, 0, 0, 0, 0}},
-    {"endless_vial_mercury", {0, 0, 1, 0, 0, 0, 0}},
-    {"endless_cart_ore", {0, 0, 0, 1, 0, 0, 0}},
-    {"endless_pouch_sulfur", {0, 0, 0, 0, 1, 0, 0}},
-    {"endless_pouch_crystal", {0, 0, 0, 0, 0, 1, 0}},
-    {"endless_pouch_gems", {0, 0, 0, 0, 0, 0, 1}},
+    { "ultimate_golden_goose", { 10000, 0, 0, 0, 0, 0, 0 } },
+    { "tax_lien", { 250, 0, 0, 0, 0, 0, 0 } },
+    { "endless_sack_gold", { 1000, 0, 0, 0, 0, 0, 0 } },
+    { "endless_bag_gold", { 750, 0, 0, 0, 0, 0, 0 } },
+    { "endless_purse_gold", { 500, 0, 0, 0, 0, 0, 0 } },
+    { "endless_cord_wood", { 0, 1, 0, 0, 0, 0, 0 } },
+    { "endless_vial_mercury", { 0, 0, 1, 0, 0, 0, 0 } },
+    { "endless_cart_ore", { 0, 0, 0, 1, 0, 0, 0 } },
+    { "endless_pouch_sulfur", { 0, 0, 0, 0, 1, 0, 0 } },
+    { "endless_pouch_crystal", { 0, 0, 0, 0, 0, 1, 0 } },
+    { "endless_pouch_gems", { 0, 0, 0, 0, 0, 0, 1 } },
 
-    {NULL, {0, 0, 0, 0, 0, 0, 0}},
+    { nullptr, { 0, 0, 0, 0, 0, 0, 0 } },
 };
 
 payment_t ProfitConditions::FromBuilding( u32 building, int race )
 {
     payment_t result;
-    const char * id = NULL;
+    const char * id = nullptr;
 
     switch ( building ) {
     case BUILD_CASTLE:
@@ -99,7 +98,7 @@ payment_t ProfitConditions::FromBuilding( u32 building, int race )
 payment_t ProfitConditions::FromArtifact( int artifact )
 {
     payment_t result;
-    const char * id = NULL;
+    const char * id = nullptr;
 
     switch ( artifact ) {
     case Artifact::TAX_LIEN:
@@ -153,7 +152,7 @@ payment_t ProfitConditions::FromArtifact( int artifact )
 payment_t ProfitConditions::FromMine( int type )
 {
     payment_t result;
-    const char * id = NULL;
+    const char * id = nullptr;
 
     switch ( type ) {
     case Resource::ORE:

@@ -21,8 +21,10 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
-#include "settings.h"
+#include <cstddef>
 #include <vector>
+
+#include "math_base.h"
 
 namespace Bin_Info
 {

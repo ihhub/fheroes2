@@ -21,7 +21,12 @@
 #pragma once
 
 #include "interface_itemsbar.h"
-#include "skill.h"
+
+class Heroes;
+namespace Skill
+{
+    class Secondary;
+}
 
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
@@ -36,7 +41,7 @@ public:
     bool ActionBarRightMouseHold( int & skill ) override;
     bool ActionBarCursor( int & skill ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
 
 private:
     const Heroes * _hero;
@@ -59,7 +64,7 @@ public:
     bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;
     bool ActionBarCursor( Skill::Secondary & skill ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
 
 private:
     fheroes2::Image backsf;

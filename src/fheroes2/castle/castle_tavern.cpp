@@ -28,12 +28,10 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "heroes.h"
 #include "icn.h"
-#include "kingdom.h"
-#include "resource.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 void Castle::OpenTavern( void ) const

@@ -22,6 +22,7 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -29,10 +30,14 @@
 #include "bitmodes.h"
 #include "captain.h"
 #include "castle_heroes.h"
-#include "heroes.h"
 #include "mageguild.h"
 #include "position.h"
 #include "ui_button.h"
+
+namespace fheroes2
+{
+    class RandomMonsterAnimation;
+}
 
 class Heroes;
 
@@ -109,7 +114,7 @@ public:
         ALLOWCASTLE = 0x0002,
         CUSTOMARMY = 0x0004,
         ALLOWBUILD = 0x0008,
-        DISABLEHIRES = 0x0010,
+        // UNUSED = 0x0010,
         CAPITAL = 0x0020
     };
 
@@ -126,7 +131,7 @@ public:
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
+    bool AllowBuyHero( const Heroes &, std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 
@@ -159,6 +164,8 @@ public:
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
     int getBuildingValue() const;
+
+    // Used only for AI.
     double getVisitValue( const Heroes & hero ) const;
 
     void ChangeColor( int );
@@ -208,7 +215,6 @@ public:
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
-    static bool PredicateIsCapital( const Castle * );
     static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
     static u32 GetGrownWell( void );
@@ -231,7 +237,7 @@ private:
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
-    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
+    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 

@@ -21,14 +21,13 @@
  ***************************************************************************/
 
 #include "interface_buttons.h"
-#include "agg_image.h"
 #include "dialog.h"
-#include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
@@ -204,12 +203,12 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
 void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
-    if ( currentHero == NULL || !currentHero->GetPath().isValid() || !currentHero->MayStillMove() )
+    if ( currentHero == nullptr || !currentHero->GetPath().isValid() || !currentHero->MayStillMove( false ) )
         buttonMovement.disable();
     else
         buttonMovement.enable();
 
-    if ( currentHero == NULL || !currentHero->HaveSpellBook() || !currentHero->MayCastAdventureSpells() )
+    if ( currentHero == nullptr || !currentHero->HaveSpellBook() || !currentHero->MayCastAdventureSpells() )
         buttonSpell.disable();
     else
         buttonSpell.enable();
@@ -219,7 +218,7 @@ void Interface::ButtonsArea::SetButtonStatus()
 
     bool isMovableHeroPresent = false;
     for ( size_t i = 0; i < heroes.size(); ++i ) {
-        if ( heroes[i]->MayStillMove() ) {
+        if ( heroes[i]->MayStillMove( false ) ) {
             isMovableHeroPresent = true;
             break;
         }

@@ -24,6 +24,8 @@
 #include "dialog_selectitems.h"
 #include "icn.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 
 fheroes2::Image GetBarBackgroundSprite( void )
 {

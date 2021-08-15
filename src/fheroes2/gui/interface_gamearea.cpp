@@ -32,6 +32,8 @@
 #include "maps.h"
 #include "pal.h"
 #include "route.h"
+#include "settings.h"
+#include "tools.h"
 #include "world.h"
 
 #include <cassert>
@@ -415,7 +417,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Top layer.
     for ( const Maps::Tiles * tile : topList ) {
-        tile->RedrawTop( dst, tileROI, *this );
+        tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
     }
 
     // Heroes and boats.
@@ -438,14 +440,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
                 tile->RedrawBoat( dst, tileROI, *this );
                 if ( drawTop ) {
-                    tile->RedrawTop( dst, tileROI, *this );
+                    tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
                 }
             }
         }
     }
 
     // Route
-    const Heroes * hero = drawHeroes ? GetFocusHeroes() : NULL;
+    const Heroes * hero = drawHeroes ? GetFocusHeroes() : nullptr;
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
 
     if ( hero && hero->GetPath().isShow() && drawRoutes ) {
@@ -509,21 +511,21 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll( void )
 {
-    const int32_t speed = Settings::Get().ScrollSpeed();
+    const int32_t shift = 2 << Settings::Get().ScrollSpeed();
     fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {
-        offset.x = -speed;
+        offset.x = -shift;
     }
     else if ( scrollDirection & SCROLL_RIGHT ) {
-        offset.x = speed;
+        offset.x = shift;
     }
 
     if ( scrollDirection & SCROLL_TOP ) {
-        offset.y = -speed;
+        offset.y = -shift;
     }
     else if ( scrollDirection & SCROLL_BOTTOM ) {
-        offset.y = speed;
+        offset.y = shift;
     }
 
     ShiftCenter( offset );
@@ -722,4 +724,9 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & po
 fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Point & tileId ) const
 {
     return fheroes2::Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
+}
+
+fheroes2::Point Interface::GameArea::getCurrentCenterInPixels() const
+{
+    return _topLeftTileOffset + _middlePoint();
 }

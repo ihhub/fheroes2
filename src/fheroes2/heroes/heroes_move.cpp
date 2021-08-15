@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "castle.h"
-#include "cursor.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
@@ -36,6 +35,7 @@
 #include "m82.h"
 #include "maps_tiles.h"
 #include "race.h"
+#include "settings.h"
 #include "world.h"
 
 #include <cassert>
@@ -386,9 +386,8 @@ const fheroes2::Sprite& SpriteFroth(const Heroes& hero, int index)
 
 bool isNeedStayFrontObject(const Heroes& hero, const Maps::Tiles& next)
 {
-    if (next.GetObject() == MP2::OBJ_CASTLE) {
-        const Castle* castle = world.GetCastle(next.GetCenter());
-
+    if ( next.GetObject() == MP2::OBJ_CASTLE ) {
+        const Castle * castle = world.getCastleEntrance( next.GetCenter() );
         return castle && !hero.isFriends(castle->GetColor()) && castle->GetActualArmy().isValid();
     }
     else
@@ -618,7 +617,7 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTil
     const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
-    tile.RedrawTop( dst, visibleTileROI, area );
+    tile.RedrawTop( dst, visibleTileROI, false, area );
 
     const int32_t centerIndex = GetIndex();
 
@@ -637,17 +636,17 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTil
 
     if ( _redrawIndex.topOnBottom != -1 ) {
         const Maps::Tiles & tileBottom = world.GetTiles( _redrawIndex.topOnBottom );
-        tileBottom.RedrawTop( dst, visibleTileROI, area );
+        tileBottom.RedrawTop( dst, visibleTileROI, false, area );
         tileBottom.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirection != -1 ) {
         const Maps::Tiles & tileDirection = world.GetTiles( _redrawIndex.topOnDirection );
-        tileDirection.RedrawTop( dst, visibleTileROI, area );
+        tileDirection.RedrawTop( dst, visibleTileROI, false, area );
         tileDirection.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirectionBottom != -1 ) {
         const Maps::Tiles & tileDirectionBottom = world.GetTiles( _redrawIndex.topOnDirectionBottom );
-        tileDirectionBottom.RedrawTop( dst, visibleTileROI, area );
+        tileDirectionBottom.RedrawTop( dst, visibleTileROI, false, area );
         tileDirectionBottom.RedrawTopFromBottom( dst, area );
     }
 }

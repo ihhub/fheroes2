@@ -18,11 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
+
 #include "image_tool.h"
 #include "palette_h2.h"
 
 #include <SDL_version.h>
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_surface.h>
+#else
 #include <SDL_video.h>
+#endif
 
 #if defined( FHEROES2_IMAGE_SUPPORT )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -53,7 +59,7 @@ namespace
 #else
         SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
 #endif
-        if ( surface == NULL )
+        if ( surface == nullptr )
             return false;
 
         const uint32_t width = image.width();
@@ -89,7 +95,7 @@ namespace
 #if defined( FHEROES2_ENABLE_PNG )
         int res = 0;
         const std::string pngExtension( ".png" );
-        if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) ) {
+        if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 ) {
             res = IMG_SavePNG( surface, path.c_str() );
         }
         else {

@@ -173,12 +173,8 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
-    <ClCompile Include="src\engine\audio_cdrom.cpp" />
-    <ClCompile Include="src\engine\audio_mixer.cpp" />
-    <ClCompile Include="src\engine\audio_music.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
-    <ClCompile Include="src\engine\font.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
@@ -186,11 +182,10 @@
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
-    <ClCompile Include="src\engine\sdlnet.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
-    <ClCompile Include="src\engine\thread.cpp" />
+    <ClCompile Include="src\engine\timer.cpp" />
     <ClCompile Include="src\engine\timing.cpp" />
     <ClCompile Include="src\engine\tinyconfig.cpp" />
     <ClCompile Include="src\engine\tools.cpp" />
@@ -254,11 +249,13 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_chest.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_game_settings.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_file.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_frameborder.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp" />
@@ -274,7 +271,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_skillinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_spellinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_spriteinfo.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_system.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_system_options.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
@@ -310,8 +307,10 @@
     <ClCompile Include="src\fheroes2\gui\skill_bar.cpp" />
     <ClCompile Include="src\fheroes2\gui\statusbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\text.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
@@ -351,6 +350,8 @@
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
     <ClCompile Include="src\fheroes2\maps\visit.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
+    <ClCompile Include="src\fheroes2\monster\monster_anim.cpp" />
+    <ClCompile Include="src\fheroes2\monster\monster_info.cpp" />
     <ClCompile Include="src\fheroes2\objects\mounts.cpp" />
     <ClCompile Include="src\fheroes2\objects\objcrck.cpp" />
     <ClCompile Include="src\fheroes2\objects\objdirt.cpp" />
@@ -370,7 +371,7 @@
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_book.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_storage.cpp" />
-    <ClCompile Include="src\fheroes2\system\gamedefs.cpp" />
+    <ClCompile Include="src\fheroes2\system\bitmodes.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
@@ -384,12 +385,8 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
-    <ClInclude Include="src\engine\audio_cdrom.h" />
-    <ClInclude Include="src\engine\audio_mixer.h" />
-    <ClInclude Include="src\engine\audio_music.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\engine.h" />
-    <ClInclude Include="src\engine\font.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
@@ -400,11 +397,10 @@
     <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\screen.h" />
-    <ClInclude Include="src\engine\sdlnet.h" />
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\system.h" />
-    <ClInclude Include="src\engine\thread.h" />
+    <ClInclude Include="src\engine\timer.h" />
     <ClInclude Include="src\engine\timing.h" />
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
@@ -449,9 +445,12 @@
     <ClInclude Include="src\fheroes2\castle\castle_ui.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_system_options.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
@@ -479,8 +478,10 @@
     <ClInclude Include="src\fheroes2\gui\skill_bar.h" />
     <ClInclude Include="src\fheroes2\gui\statusbar.h" />
     <ClInclude Include="src\fheroes2\gui\text.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
@@ -516,6 +517,7 @@
     <ClInclude Include="src\fheroes2\maps\position.h" />
     <ClInclude Include="src\fheroes2\maps\visit.h" />
     <ClInclude Include="src\fheroes2\monster\monster.h" />
+    <ClInclude Include="src\fheroes2\monster\monster_anim.h" />
     <ClInclude Include="src\fheroes2\monster\monster_info.h" />
     <ClInclude Include="src\fheroes2\objects\mounts.h" />
     <ClInclude Include="src\fheroes2\objects\objcrck.h" />
@@ -539,6 +541,7 @@
     <ClInclude Include="src\fheroes2\system\bitmodes.h" />
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
+    <ClInclude Include="src\fheroes2\system\save_format_version.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\system\version.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />

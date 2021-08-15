@@ -22,9 +22,10 @@
 
 #include "army.h"
 #include "color.h"
-#include "pairs.h"
 #include "pathfinding.h"
-#include "route.h"
+#include "skill.h"
+
+class IndexObject;
 
 // Abstract class that provides base functionality to path through World map
 class WorldPathfinder : public Pathfinder<PathfindingNode>
@@ -76,6 +77,12 @@ public:
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
+
+    // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
+    int getNeareastTileToMove( const Heroes & hero );
+
+    bool isHeroPossiblyBlockingWay( const Heroes & hero );
+
     std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
 
     // Used for non-hero armies, like castles or monsters
@@ -86,6 +93,13 @@ public:
 
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
+
+    double getCurrentArmyStrengthMultiplier() const
+    {
+        return _advantage;
+    }
+
+    void setArmyStrengthMultplier( const double multiplier );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;

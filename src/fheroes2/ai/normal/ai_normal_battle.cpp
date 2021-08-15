@@ -22,8 +22,6 @@
 #include "artifact.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
-#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_tower.h"
@@ -33,9 +31,13 @@
 #include "game.h"
 #include "heroes.h"
 #include "logging.h"
+#include "settings.h"
 #include "speed.h"
 
 #include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <set>
 
 using namespace Battle;
 
@@ -108,13 +110,18 @@ namespace AI
 
         for ( const int moveIndex : moves ) {
             // Skip if this cell has adjacent enemies
-            if ( !Board::GetCell( moveIndex )->GetQuality() )
+            if ( Board::GetCell( moveIndex )->GetQuality() )
                 continue;
 
             double cellThreatLevel = 0.0;
 
             for ( const Unit * enemy : enemies ) {
-                const uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
+                uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
+                if ( enemy->isWide() ) {
+                    const uint32_t distanceFromTail = Board::GetDistance( moveIndex, enemy->GetTailIndex() );
+                    dist = std::min( dist, distanceFromTail );
+                }
+
                 const uint32_t range = std::max( 1u, enemy->GetMoveRange() );
                 cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - static_cast<double>( dist ) / range );
             }
@@ -152,6 +159,34 @@ namespace AI
             }
         }
         return targetCell;
+    }
+
+    int32_t FindNearestReachableCell( const int32_t target, const Unit & currentUnit )
+    {
+        const Cell * targetCell = Board::GetCell( target );
+        assert( targetCell != nullptr );
+
+        // Target cell is already reachable
+        if ( targetCell->isPassable3( currentUnit, false ) && targetCell->GetDirection() != UNKNOWN ) {
+            return target;
+        }
+
+        int32_t nearest = -1;
+        uint32_t nearestDistance = UINT32_MAX;
+
+        // Search for the nearest reachable cell
+        for ( const Cell & cell : *Arena::GetBoard() ) {
+            if ( cell.isPassable3( currentUnit, false ) && cell.GetDirection() != UNKNOWN ) {
+                const uint32_t distance = Board::GetDistance( target, cell.GetIndex() );
+
+                if ( distance < nearestDistance ) {
+                    nearest = cell.GetIndex();
+                    nearestDistance = distance;
+                }
+            }
+        }
+
+        return nearest;
     }
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
@@ -205,7 +240,7 @@ namespace AI
         if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
             if ( isCommanderCanSpellcast( arena, _commander ) ) {
                 // Cast maximum damage spell
-                const SpellSeletion & bestSpell = selectBestSpell( arena, true );
+                const SpellSelection & bestSpell = selectBestSpell( arena, true );
 
                 if ( bestSpell.spellID != -1 ) {
                     actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
@@ -219,7 +254,7 @@ namespace AI
 
         // Step 3. Calculate spell heuristics
         if ( isCommanderCanSpellcast( arena, _commander ) ) {
-            const SpellSeletion & bestSpell = selectBestSpell( arena, false );
+            const SpellSelection & bestSpell = selectBestSpell( arena, false );
 
             if ( bestSpell.spellID != -1 ) {
                 actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
@@ -251,10 +286,13 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
             if ( target.cell != -1 ) {
-                if ( currentUnit.GetHeadIndex() != target.cell )
-                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
+                const int32_t reachableCell = FindNearestReachableCell( target.cell, currentUnit );
 
-                if ( target.unit ) {
+                if ( currentUnit.GetHeadIndex() != reachableCell )
+                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+
+                // Attack only if target unit is reachable and can be attacked from the target cell
+                if ( target.unit && target.cell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, target.cell ) ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -276,7 +314,7 @@ namespace AI
     void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
     {
         _myColor = currentUnit.GetCurrentColor();
-        _commander = arena.GetCommander( _myColor );
+        _commander = arena.getCommander( _myColor );
 
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
@@ -380,11 +418,11 @@ namespace AI
         // TODO: replace this hacky code for archers
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
         if ( _commander && _myShooterStr > 1 ) {
-            _myShooterStr += _commander->GetSpellcastStrength();
+            _myShooterStr += _commander->GetSpellcastStrength( _myArmyStrength );
         }
-        const HeroBase * enemyCommander = arena.GetCommander( _myColor, true );
+        const HeroBase * enemyCommander = arena.getEnemyCommander( _myColor );
         if ( enemyCommander ) {
-            _enemySpellStrength = enemyCommander->GetSpellcastStrength();
+            _enemySpellStrength = enemyCommander->GetSpellcastStrength( _enemyArmyStrength );
             _enemyShooterStr += _enemySpellStrength;
         }
 
@@ -437,7 +475,9 @@ namespace AI
                 target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
-                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
+                    const int32_t reachableCell = FindNearestReachableCell( target.cell, currentUnit );
+
+                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
                 }
             }
@@ -448,9 +488,29 @@ namespace AI
             double highestStrength = 0;
 
             for ( const Unit * enemy : enemies ) {
-                const double attackPriority = enemy->GetScoreQuality( currentUnit );
+                double attackPriority = enemy->GetScoreQuality( currentUnit );
 
-                if ( highestStrength < attackPriority ) {
+                if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+                    // TODO: update logic to handle tail case as well. Right now archers always shoot to head.
+                    const Indexes around = Board::GetAroundIndexes( enemy->GetHeadIndex() );
+                    std::set<const Unit *> targetedUnits;
+
+                    for ( const int32_t cellId : around ) {
+                        const Unit * monsterOnCell = Board::GetCell( cellId )->GetUnit();
+                        if ( monsterOnCell != nullptr ) {
+                            targetedUnits.emplace( monsterOnCell );
+                        }
+                    }
+
+                    for ( const Unit * monster : targetedUnits ) {
+                        if ( enemy != monster ) {
+                            // No need to recalculate for the same monster.
+                            attackPriority += monster->GetScoreQuality( currentUnit );
+                        }
+                    }
+                }
+
+                if ( highestStrength < attackPriority && attackPriority > 0 ) {
                     highestStrength = attackPriority;
                     target.unit = enemy;
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );
@@ -644,16 +704,16 @@ namespace AI
 
         const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
         if ( !nearestUnits.empty() ) {
-            for ( size_t i = 0; i < nearestUnits.size(); ++i ) {
-                const uint32_t targetUnitUID = nearestUnits[i]->GetUID();
-                const int32_t targetUnitHead = nearestUnits[i]->GetHeadIndex();
+            for ( const Unit * targetUnit : nearestUnits ) {
+                const uint32_t targetUnitUID = targetUnit->GetUID();
+                const int32_t targetUnitHead = targetUnit->GetHeadIndex();
                 if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
                     break;
                 }
                 else {
                     int targetCell = -1;
-                    const Indexes & around = Board::GetAroundIndexes( *nearestUnits[i] );
+                    const Indexes & around = Board::GetAroundIndexes( *targetUnit );
                     for ( const int cell : around ) {
                         if ( arena.hexIsPassable( cell ) ) {
                             targetCell = cell;
@@ -662,10 +722,15 @@ namespace AI
                     }
 
                     if ( targetCell != -1 ) {
-                        if ( currentUnit.GetHeadIndex() != targetCell )
-                            actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, targetCell );
+                        const int32_t reachableCell = FindNearestReachableCell( targetCell, currentUnit );
 
-                        actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+                        if ( currentUnit.GetHeadIndex() != reachableCell )
+                            actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+
+                        // Attack only if target unit is reachable and can be attacked from the target cell
+                        if ( targetCell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, targetCell ) )
+                            actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+
                         break;
                     }
                 }
@@ -678,6 +743,11 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        Board * board = Arena::GetBoard();
+
+        board->Reset();
+        board->SetScanPassability( currentUnit );
+
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
         // Do not end the turn if we only cast a spell

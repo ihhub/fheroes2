@@ -28,6 +28,8 @@
 #include "icn.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void DialogPrimaryOnly( const std::string & name, const std::string & primary )
@@ -116,11 +118,11 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     const fheroes2::Rect & boxArea = box.GetArea();
     fheroes2::Point pos( boxArea.x, boxArea.y );
 
-    if ( header.size() )
+    if ( !header.empty() )
         box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
-    if ( message.size() )
+    if ( !message.empty() )
         box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
@@ -194,6 +196,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         else if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) )
             return sec2.Skill();
         else if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+            LocalEvent::GetClean();
             hero.OpenDialog( false, true, true, true );
             display.render();
         }

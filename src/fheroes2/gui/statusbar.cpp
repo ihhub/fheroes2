@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "statusbar.h"
-#include "cursor.h"
 #include "screen.h"
 
 void StatusBar::SetCenter( s32 cx, s32 cy )

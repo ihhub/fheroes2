@@ -22,13 +22,12 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
-#include <functional>
 #include <list>
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "color.h"
 #include "direction.h"
-#include "gamedefs.h"
 #include "resource.h"
 #include "skill.h"
 
@@ -74,38 +73,22 @@ namespace Maps
         }
 
         bool isRoad() const;
-        bool hasRoadFlag() const;
-        bool isICN( int ) const;
         bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
 
         static bool isShadow( const TilesAddon & );
-        static bool isRoadObject( const TilesAddon & );
 
         static bool isResource( const TilesAddon & );
         static bool isArtifact( const TilesAddon & );
         static bool isFlag32( const TilesAddon & );
 
-        static bool isMounts( const TilesAddon & );
-        static bool isRocs( const TilesAddon & );
-        static bool isForests( const TilesAddon & );
-        static bool isTrees( const TilesAddon & );
-        static bool isDeadTrees( const TilesAddon & );
-        static bool isCactus( const TilesAddon & );
-        static bool isStump( const TilesAddon & );
-        static int GetActionObject( const TilesAddon & );
-
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
-        static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
-
-        static bool ForceLevel1( const TilesAddon & );
 
         u32 uniq;
         u8 level;
         u8 object;
         u8 index;
-        u8 tmp;
     };
 
     struct Addons : public std::list<TilesAddon>
@@ -169,8 +152,6 @@ namespace Maps
         bool isShadow( void ) const;
         bool GoodForUltimateArtifact() const;
 
-        TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
-
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
@@ -190,7 +171,18 @@ namespace Maps
 
         uint32_t GetRegion() const;
         void UpdateRegion( uint32_t newRegionID );
-        void UpdatePassable( void );
+
+        // Set initial passability based on information read from mp2 and addon structures.
+        void setInitialPassability();
+
+        // Update passability based on neigbhours around.
+        void updatePassability();
+
+        int getOriginalPassability() const;
+
+        bool isClearGround() const;
+
+        bool doesObjectExist( const uint32_t uid ) const;
 
         // ICN::FLAGS32 version
         void CaptureFlags32( int obj, int col );
@@ -202,7 +194,7 @@ namespace Maps
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
         void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
         void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
@@ -219,7 +211,16 @@ namespace Maps
         void AddonsPushLevel1( const TilesAddon & );
         void AddonsPushLevel2( const MP2::mp2tile_t & );
         void AddonsPushLevel2( const MP2::mp2addon_t & );
-        void AddonsPushLevel2( const TilesAddon & );
+
+        const Addons & getLevel1Addons() const
+        {
+            return addons_level1;
+        }
+
+        const Addons & getLevel2Addons() const
+        {
+            return addons_level2;
+        }
 
         void AddonsSort( void );
         void Remove( u32 uniqID );
@@ -240,9 +241,7 @@ namespace Maps
 
         /* monster operation */
         bool MonsterJoinConditionSkip( void ) const;
-        bool MonsterJoinConditionMoney( void ) const;
         bool MonsterJoinConditionFree( void ) const;
-        bool MonsterJoinConditionForce( void ) const;
         int MonsterJoinCondition( void ) const;
         void MonsterSetJoinCondition( int );
         void MonsterSetFixedCount( void );
@@ -286,6 +285,8 @@ namespace Maps
         // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
         void setAsEmpty();
 
+        uint32_t getObjectIdByICNType( const int icnId ) const;
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
@@ -293,7 +294,6 @@ namespace Maps
         static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
-        static int GetPassable( const uint32_t tileset, const uint32_t index );
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
@@ -306,7 +306,6 @@ namespace Maps
         // correct flags, ICN::FLAGS32 vesion
         void CorrectFlags32( u32 index, bool );
         void RemoveJailSprite( void );
-        bool isLongObject( int direction );
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );
@@ -351,8 +350,10 @@ namespace Maps
 
         bool tileIsRoad = false;
 
-        // This field does not persist in savegame
+        // This field does not persist in savegame.
         uint32_t _region = 0;
+
+        uint8_t _level = 0;
 
 #ifdef WITH_DEBUG
         uint8_t impassableTileRule = 0;

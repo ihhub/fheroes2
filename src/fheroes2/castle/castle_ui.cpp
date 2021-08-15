@@ -25,6 +25,7 @@
 #include "image.h"
 #include "logging.h"
 #include "race.h"
+#include "settings.h"
 
 #include <cassert>
 
@@ -63,7 +64,6 @@ namespace fheroes2
 
         // Draw castle's marker.
         switch ( Castle::GetAllBuildingStatus( castle ) ) {
-        case UNKNOWN_COND:
         case NOT_TODAY:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
             break;

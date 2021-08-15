@@ -22,9 +22,6 @@
 #define H2CAMPAIGN_DATA_H
 
 #include "campaign_scenariodata.h"
-#include "gamedefs.h"
-#include "maps_fileinfo.h"
-#include "serialize.h"
 
 namespace Campaign
 {
@@ -48,7 +45,6 @@ namespace Campaign
             return _scenarios;
         }
 
-        std::vector<int> getScenariosBefore( const int scenarioID ) const;
         const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
         std::vector<int> getStartingScenarios() const;
 
@@ -93,7 +89,6 @@ namespace Campaign
         uint32_t _startScenarioID;
         std::string _customName;
 
-        CampaignAwardData();
         CampaignAwardData( int id, uint32_t type, uint32_t subType );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
@@ -102,6 +97,10 @@ namespace Campaign
         std::string ToString() const;
 
         static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID );
+
+        static const char * getAllianceJoiningMessage( const int monsterId );
+        static const char * getAllianceFleeingMessage( const int monsterId );
+        static const char * getBaneFleeingMessage( const int monsterId );
     };
 }
 

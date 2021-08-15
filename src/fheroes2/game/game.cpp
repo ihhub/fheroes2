@@ -21,15 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
-#include <map>
 
 #include "agg.h"
-#include "audio_mixer.h"
-#include "battle.h"
-#include "buildinginfo.h"
-#include "castle.h"
+#include "audio.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -38,42 +35,53 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "icn.h"
-#include "kingdom.h"
-#include "logging.h"
+#include "m82.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
-#include "mus.h"
-#include "payment.h"
-#include "profit.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
-#include "spell.h"
-#include "system.h"
 #include "text.h"
-#include "tinyconfig.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
+
+namespace
+{
+    std::string lastMapFileName;
+    std::vector<Player> savedPlayers;
+
+    int save_version = CURRENT_FORMAT_VERSION;
+
+    std::string last_name;
+
+    bool updateSoundsOnFocusUpdate = true;
+    std::atomic<int> currentMusic{ MUS::UNKNOWN };
+
+    u32 castle_animation_frame = 0;
+    u32 maps_animation_frame = 0;
+
+    std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+
+    u32 GetMixerChannelFromObject( const Maps::Tiles & tile )
+    {
+        // force: check stream
+        if ( tile.isStream() )
+            return 13;
+
+        return M82::GetIndexLOOP00XXFromObject( tile.GetObject( false ) );
+    }
+}
 
 namespace Game
 {
-    u32 GetMixerChannelFromObject( const Maps::Tiles & );
     void AnimateDelaysInitialize( void );
     void KeyboardGlobalFilter( int, int );
 
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
-
-    bool disable_change_music = false;
-    int current_music = MUS::UNKNOWN;
-    u32 castle_animation_frame = 0;
-    u32 maps_animation_frame = 0;
-    std::string last_name;
-    int save_version = CURRENT_FORMAT_VERSION;
-    std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
-    std::string lastMapFileName;
-    std::vector<Player> savedPlayers;
 
     namespace ObjectFadeAnimation
     {
@@ -187,14 +195,14 @@ fheroes2::GameMode Game::Credits()
     return fheroes2::GameMode::MAIN_MENU;
 }
 
-bool Game::ChangeMusicDisabled( void )
+bool Game::UpdateSoundsOnFocusUpdate()
 {
-    return disable_change_music;
+    return updateSoundsOnFocusUpdate;
 }
 
-void Game::DisableChangeMusic( bool /*f*/ )
+void Game::SetUpdateSoundsOnFocusUpdate( bool update )
 {
-    // disable_change_music = f;
+    updateSoundsOnFocusUpdate = update;
 }
 
 void Game::Init( void )
@@ -215,14 +223,14 @@ void Game::Init( void )
     Game::HotKeysLoad( hotkeys );
 }
 
-int Game::CurrentMusic( void )
+int Game::CurrentMusic()
 {
-    return current_music;
+    return currentMusic;
 }
 
-void Game::SetCurrentMusic( int mus )
+void Game::SetCurrentMusic( const int mus )
 {
-    current_music = mus;
+    currentMusic = mus;
 }
 
 void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
@@ -343,7 +351,7 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Settings::Get().Sound() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
@@ -368,15 +376,6 @@ void Game::EnvironmentSoundMixer( void )
     }
 
     AGG::LoadLOOPXXSounds( reserved_vols, true );
-}
-
-u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
-{
-    // force: check stream
-    if ( tile.isStream() )
-        return 13;
-
-    return M82::GetIndexLOOP00XXFromObject( tile.GetObject( false ) );
 }
 
 u32 Game::GetRating( void )
@@ -488,17 +487,6 @@ u32 Game::GetViewDistance( u32 d )
 u32 Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
-}
-
-std::string Game::GetEncodeString( const std::string & str1 )
-{
-    const Settings & conf = Settings::Get();
-
-    // encode name
-    if ( conf.Unicode() && conf.MapsCharset().size() )
-        return EncodeString( str1.c_str(), conf.MapsCharset().c_str() );
-
-    return str1;
 }
 
 int Game::GetKingdomColors( void )

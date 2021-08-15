@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "audio_music.h"
+#include "audio.h"
 #include "tools.h"
 
 #if defined( _MSC_VER )
@@ -38,7 +38,7 @@ int main( int argc, char ** argv )
 
     std::vector<u8> buf = LoadFileToMem( argv[1] );
 
-    if ( buf.size() ) {
+    if ( !buf.empty() ) {
         buf = Music::Xmi2Mid( buf );
 
         if ( buf.empty() )

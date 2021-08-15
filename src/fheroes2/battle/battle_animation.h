@@ -22,8 +22,6 @@
 #define H2BATTLE_ANIMATION_H
 
 #include "bin_info.h"
-#include "gamedefs.h"
-#include "monster_info.h"
 #include "timing.h"
 
 // This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value

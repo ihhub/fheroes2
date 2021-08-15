@@ -19,8 +19,7 @@
  ***************************************************************************/
 
 #include "game_video.h"
-#include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "game_delays.h"
 #include "localevent.h"
@@ -49,7 +48,7 @@ namespace Video
         std::string temp;
 
         for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            ListFiles files = Settings::FindFiles( videoDir[i], fileName );
+            ListFiles files = Settings::FindFiles( videoDir[i], fileName, true );
             for ( std::string & name : files ) {
                 if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
                     path.swap( name );
@@ -98,11 +97,11 @@ namespace Video
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
-        const bool hasSound = Settings::Get().Sound();
+        const bool hasSound = Audio::isValid();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                if ( it->size() )
+                if ( !it->empty() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
         }
@@ -190,7 +189,7 @@ namespace Video
 
                     if ( hasSound ) {
                         for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                            if ( it->size() )
+                            if ( !it->empty() )
                                 Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
                         }
                     }

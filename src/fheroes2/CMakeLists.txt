@@ -4,13 +4,16 @@ if(MINGW)
 	set(MINGW_LIBRARIES mingw32 winmm)
 endif(MINGW)
 
+get_filename_component(CONFIGURE_FHEROES2_DATA_ABSOLUTE
+	${CONFIGURE_FHEROES2_DATA} ABSOLUTE
+	BASE_DIR ${CMAKE_INSTALL_PREFIX}
+	CACHE
+	)
+
 add_executable(fheroes2 ${FHEROES2_SOURCES})
 target_compile_definitions(fheroes2 PRIVATE
-	$<$<BOOL:${ENABLE_AUDIOCD}>:WITH_AUDIOCD>
 	$<$<BOOL:${ENABLE_RELEASE}>:BUILD_RELEASE>
-	$<$<BOOL:${ENABLE_UNICODE}>:WITH_TTF>
-	$<$<BOOL:${ENABLE_UNICODE}>:WITH_ICONV>
-	$<$<BOOL:${ENABLE_ZLIB}>:WITH_ZLIB>
+	CONFIGURE_FHEROES2_DATA=${CONFIGURE_FHEROES2_DATA_ABSOLUTE}
 	)
 target_include_directories(fheroes2 PRIVATE
 	agg
@@ -39,7 +42,7 @@ target_link_libraries(fheroes2
 	${SDL_MIXER_LIBRARIES}
 	engine
 	Threads::Threads
-	$<$<BOOL:${ENABLE_ZLIB}>:ZLIB::ZLIB>
+	ZLIB::ZLIB
 	)
 
 install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})

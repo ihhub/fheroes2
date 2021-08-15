@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include "battle_cell.h"
-#include "army_troop.h"
 #include "battle_board.h"
 #include "battle_troop.h"
 #include "logging.h"
+#include "tools.h"
 
 namespace
 {
@@ -78,7 +78,7 @@ const Battle::Cell * Battle::Position::GetTail( void ) const
 fheroes2::Rect Battle::Position::GetRect( void ) const
 {
     if ( first )
-        return second ? GetCommonRect( first->GetPos(), second->GetPos(), false ) : first->GetPos();
+        return second ? getBoundaryRect( first->GetPos(), second->GetPos() ) : first->GetPos();
 
     return fheroes2::Rect();
 }
@@ -102,7 +102,7 @@ Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
                 std::swap( result.first, result.second );
             }
             else {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "NULL pointer, " << b.String() << ", dst: " << head );
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "nullptr pointer, " << b.String() << ", dst: " << head );
             }
         }
     }
@@ -125,7 +125,7 @@ Battle::Cell::Cell( int32_t ii )
     , object( 0 )
     , direction( UNKNOWN )
     , quality( 0 )
-    , troop( NULL )
+    , troop( nullptr )
 {
     SetArea( fheroes2::Rect() );
 }
@@ -281,7 +281,7 @@ bool Battle::Cell::isPassable3( const Unit & b, bool check_reflect ) const
 
 bool Battle::Cell::isPassable1( bool check_troop ) const
 {
-    return 0 == object && ( !check_troop || NULL == troop );
+    return 0 == object && ( !check_troop || nullptr == troop );
 }
 
 void Battle::Cell::ResetQuality( void )

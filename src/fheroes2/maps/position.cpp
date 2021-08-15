@@ -22,6 +22,7 @@
 
 #include "position.h"
 #include "maps.h"
+#include "serialize.h"
 
 MapPosition::MapPosition( const fheroes2::Point & pt )
     : center( pt )

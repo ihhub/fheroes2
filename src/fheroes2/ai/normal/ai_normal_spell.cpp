@@ -21,10 +21,8 @@
 #include "ai_normal.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
-#include "battle_command.h"
 #include "battle_troop.h"
-#include "heroes.h"
+#include "heroes_base.h"
 #include "logging.h"
 
 using namespace Battle;
@@ -42,10 +40,10 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
-        SpellSeletion bestSpell;
+        SpellSelection bestSpell;
 
         // Commander must be set before calling this function! Check both debug/release version
         assert( _commander != nullptr );
@@ -94,7 +92,7 @@ namespace AI
                 checkSelectBestSpell( spell, spellDispellValue( spell, friendly, enemies ) );
             }
             else if ( spell.isSummon() ) {
-                checkSelectBestSpell( spell, spellSummonValue( spell ) );
+                checkSelectBestSpell( spell, spellSummonValue( spell, arena, _commander->GetColor() ) );
             }
             else if ( spell.isResurrect() ) {
                 checkSelectBestSpell( spell, spellResurrectValue( spell, arena ) );
@@ -174,6 +172,10 @@ namespace AI
 
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 for ( const Unit * enemy : enemies ) {
+                    if ( !enemy->AllowApplySpell( spell, _commander ) ) {
+                        continue;
+                    }
+
                     const int32_t index = enemy->GetHeadIndex();
                     areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
                 }
@@ -343,6 +345,9 @@ namespace AI
         else if ( spellID == Spell::BERSERKER && !target.isArchers() ) {
             ratio /= ReduceEffectivenessByDistance( target );
         }
+        else if ( spellID == Spell::DRAGONSLAYER ) {
+            // TODO: add logic to check if the enemy army contains a dragon.
+        }
 
         return target.GetStrength() * ratio * spellDurationMultiplier( target );
     }
@@ -441,10 +446,14 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellSummonValue( const Spell & spell ) const
+    SpellcastOutcome BattlePlanner::spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const
     {
         SpellcastOutcome bestOutcome;
         if ( spell.isSummon() ) {
+            if ( arena.GetFreePositionNearHero( heroColor ) < 0 ) {
+                return bestOutcome;
+            }
+
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
             if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
                 count *= 2;

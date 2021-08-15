@@ -25,19 +25,14 @@
 
 #include <string>
 
+#include "agg.h"
 #include "game_mode.h"
-#include "gamedefs.h"
+#include "mus.h"
 #include "types.h"
 
 class Players;
 class Heroes;
 class Castle;
-
-namespace Campaign
-{
-    struct CampaignAwardData;
-    class CampaignSaveData;
-}
 
 namespace Game
 {
@@ -58,15 +53,15 @@ namespace Game
         TYPE_NETWORK = 0x08,
         TYPE_BATTLEONLY = 0x10,
 
-        // TYPE_LOADTYPE used in the Settings::LoadedGameVersion, if you change that value,
+        // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.
         TYPE_LOADFILE = 0x80,
-        TYPE_MULTI = TYPE_HOTSEAT | TYPE_NETWORK
+        TYPE_MULTI = TYPE_HOTSEAT
     };
     // distance_t
     enum
     {
-        VIEW_TOWN = 0,
+        // UNUSED = 0,
         VIEW_CASTLE = 1,
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
@@ -87,7 +82,6 @@ namespace Game
         EVENT_BUTTON_SETTINGS,
         EVENT_BUTTON_SELECT,
         EVENT_BUTTON_HOTSEAT,
-        EVENT_BUTTON_NETWORK,
         EVENT_BUTTON_HOST,
         EVENT_BUTTON_GUEST,
         EVENT_BUTTON_BATTLEONLY,
@@ -141,6 +135,24 @@ namespace Game
         EVENT_JOINSTACKS,
         EVENT_UPGRADE_TROOP,
         EVENT_DISMISS_TROOP,
+        EVENT_TOWN_DWELLING_LEVEL_1,
+        EVENT_TOWN_DWELLING_LEVEL_2,
+        EVENT_TOWN_DWELLING_LEVEL_3,
+        EVENT_TOWN_DWELLING_LEVEL_4,
+        EVENT_TOWN_DWELLING_LEVEL_5,
+        EVENT_TOWN_DWELLING_LEVEL_6,
+        EVENT_TOWN_WELL,
+        EVENT_TOWN_MARKETPLACE,
+        EVENT_TOWN_MAGE_GUILD,
+        EVENT_TOWN_SHIPYARD,
+        EVENT_TOWN_THIEVES_GUILD,
+
+        // town screen exclusive, not applied to build screen!
+        EVENT_TOWN_TAVERN,
+        EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
+
+        EVENT_WELL_BUY_ALL_CREATURES,
+
         EVENT_LAST,
     };
 
@@ -161,13 +173,13 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
+    fheroes2::GameMode NewNetwork(); // To be utilized in future.
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();
     fheroes2::GameMode LoadHotseat();
-    fheroes2::GameMode LoadNetwork();
     fheroes2::GameMode ScenarioInfo();
-    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode );
+    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
     fheroes2::GameMode SelectScenario();
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();
@@ -181,8 +193,8 @@ namespace Game
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusic( int );
-    int CurrentMusic( void );
+    void SetCurrentMusic( const int mus );
+    int CurrentMusic();
     u32 & CastleAnimationFrame( void );
     u32 & MapsAnimationFrame( void );
     u32 GetRating( void );
@@ -193,11 +205,10 @@ namespace Game
     u32 SelectCountPlayers( void );
     void ShowMapLoadingText( void );
     void PlayPickupSound( void );
-    void DisableChangeMusic( bool );
-    bool ChangeMusicDisabled( void );
+    bool UpdateSoundsOnFocusUpdate();
+    void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
-    std::string GetEncodeString( const std::string & );
     // Returns the difficulty level based on the type of game.
     int getDifficulty();
     void LoadPlayers( const std::string & mapFileName, Players & players );
@@ -207,6 +218,32 @@ namespace Game
     std::string GetSaveDir();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
+
+    // Useful for restoring background music after playing short-term music effects
+    class MusicRestorer
+    {
+    public:
+        MusicRestorer()
+            : _music( CurrentMusic() )
+        {}
+
+        MusicRestorer( const MusicRestorer & ) = delete;
+
+        ~MusicRestorer()
+        {
+            if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
+                SetCurrentMusic( _music );
+            }
+            else {
+                AGG::PlayMusic( _music, true, true );
+            }
+        }
+
+        MusicRestorer & operator=( const MusicRestorer & ) = delete;
+
+    private:
+        const int _music;
+    };
 
     namespace ObjectFadeAnimation
     {

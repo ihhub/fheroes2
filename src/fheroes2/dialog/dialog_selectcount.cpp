@@ -28,7 +28,10 @@
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 #include <cassert>
 
 namespace
@@ -59,6 +62,8 @@ public:
         , vmax( max )
         , vcur( cur )
         , step( st )
+        , timedBtnUp( [this]() { return btnUp.isPressed(); } )
+        , timedBtnDn( [this]() { return btnDn.isPressed(); } )
     {
         if ( vmin >= vmax )
             vmin = 0;
@@ -67,6 +72,9 @@ public:
 
         btnUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
         btnDn.setICNInfo( ICN::TOWNWIND, 7, 8 );
+
+        btnUp.subscribe( &timedBtnUp );
+        btnDn.subscribe( &timedBtnDn );
 
         pos.width = 90;
         pos.height = 30;
@@ -86,7 +94,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    u32 operator()( void ) const
+    uint32_t getCur( void ) const
     {
         return vcur;
     }
@@ -111,13 +119,13 @@ public:
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isDelayPassed() ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isDelayPassed() ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
             return true;
         }
@@ -135,6 +143,9 @@ protected:
 
     fheroes2::Button btnUp;
     fheroes2::Button btnDn;
+
+    fheroes2::TimedEventValidator timedBtnUp;
+    fheroes2::TimedEventValidator timedBtnDn;
 };
 
 bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cur, int step )
@@ -160,7 +171,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    text.Set( "MAX", Font::SMALL );
+    text.Set( _( "MAX" ), Font::SMALL );
     const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
     text.Blit( rectMax.x, rectMax.y );
 
@@ -194,7 +205,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
         result = btnGroups.processEvents();
     }
 
-    cur = result == Dialog::OK ? sel() : 0;
+    cur = result == Dialog::OK ? sel.getCur() : 0;
 
     return result == Dialog::OK;
 }
@@ -208,7 +219,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    if ( res.size() )
+    if ( !res.empty() )
         res.clear();
     res.reserve( 48 );
     size_t charInsertPos = 0;
@@ -300,7 +311,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     return !res.empty();
 }
 
-int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistributeMax, const bool savelastTroop, uint32_t & redistributeCount, bool & useFastSplit )
+int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, const bool savelastTroop, uint32_t & redistributeCount, bool & useFastSplit )
 {
     assert( freeSlots > 0 );
 
@@ -344,7 +355,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
             ++spriteIconIdx;
 
             const int spriteWidth = sprites[i].width();
-            const int offset = spriteWidth * ( i - freeSlots / 2 ) + spriteWidth / 2;
+            const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
             vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
         }
 
@@ -441,7 +452,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     int result = 0;
 
     if ( bres == Dialog::OK ) {
-        redistributeCount = sel();
+        redistributeCount = sel.getCur();
 
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );

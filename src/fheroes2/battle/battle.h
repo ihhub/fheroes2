@@ -76,7 +76,7 @@ namespace Battle
         bool resist;
 
         TargetInfo()
-            : defender( NULL )
+            : defender( nullptr )
             , damage( 0 )
             , killed( 0 )
             , resist( false )
@@ -108,7 +108,7 @@ namespace Battle
         CAP_MIRROROWNER = 0x00004000,
         CAP_MIRRORIMAGE = 0x00008000,
 
-        TR_DEFENSED = 0x00010000,
+        // UNUSED = 0x00010000,
 
         SP_BLOODLUST = 0x00020000,
         SP_BLESS = 0x00040000,

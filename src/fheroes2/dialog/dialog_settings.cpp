@@ -30,6 +30,7 @@
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
 
@@ -108,24 +109,8 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
     if ( !readonly || conf.CanChangeInGame( item ) ) {
         conf.ExtModes( item ) ? conf.ExtResetModes( item ) : conf.ExtSetModes( item );
 
-        // depends
-        switch ( item ) {
-        case Settings::WORLD_1HERO_HIRED_EVERY_WEEK:
-            conf.ExtResetModes( Settings::CASTLE_1HERO_HIRED_EVERY_WEEK );
-            break;
-
-        case Settings::CASTLE_1HERO_HIRED_EVERY_WEEK:
-            conf.ExtResetModes( Settings::WORLD_1HERO_HIRED_EVERY_WEEK );
-            break;
-
-        case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
-                conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-            }
-            break;
-
-        default:
-            break;
+        if ( item == Settings::GAME_AUTOSAVE_BEGIN_DAY && conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
+            conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
         }
     }
 }
@@ -141,7 +126,7 @@ void Dialog::ExtSettings( bool readonly )
     const fheroes2::StandardWindow frameborder( 320, 400 );
     const fheroes2::Rect area( frameborder.activeArea() );
 
-    Text text( "Experimental Game Settings", Font::YELLOW_BIG );
+    Text text( _( "Experimental Game Settings" ), Font::YELLOW_BIG );
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
@@ -159,21 +144,13 @@ void Dialog::ExtSettings( bool readonly )
         states.push_back( Settings::GAME_USE_FADE );
 
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
-    states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
     states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
-    states.push_back( Settings::WORLD_BAN_WEEKOF );
-    states.push_back( Settings::WORLD_BAN_PLAGUES );
-    states.push_back( Settings::WORLD_BAN_MONTHOF_MONSTERS );
-    states.push_back( Settings::WORLD_STARTHERO_LOSSCOND4HUMANS );
-    states.push_back( Settings::WORLD_1HERO_HIRED_EVERY_WEEK );
-    states.push_back( Settings::CASTLE_1HERO_HIRED_EVERY_WEEK );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
@@ -192,7 +169,6 @@ void Dialog::ExtSettings( bool readonly )
 
     states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
     std::sort( states.begin(), states.end(),

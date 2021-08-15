@@ -22,13 +22,12 @@
 #ifndef H2MAPSGROUND_H
 #define H2MAPSGROUND_H
 
-#include <string>
-
-#include "gamedefs.h"
-#include "maps_tiles.h"
+#include <cstdint>
 
 namespace Maps
 {
+    class Tiles;
+
     namespace Ground
     {
         enum

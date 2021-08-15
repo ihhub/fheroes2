@@ -32,17 +32,13 @@
 #include "math_base.h"
 #include "types.h"
 
-struct Point;
-struct Rect;
-struct Size;
-
 class StreamBase
 {
 protected:
     size_t flags;
 
     virtual u8 get8() = 0;
-    virtual void put8( char ) = 0;
+    virtual void put8( const uint8_t ) = 0;
 
     virtual size_t sizeg( void ) const = 0;
     virtual size_t sizep( void ) const = 0;
@@ -90,7 +86,7 @@ public:
         return get8();
     }
 
-    void put( char ch )
+    void put( const uint8_t ch )
     {
         put8( ch );
     }
@@ -111,7 +107,6 @@ public:
     StreamBase & operator<<( const bool );
     StreamBase & operator<<( const char );
     StreamBase & operator<<( const u8 );
-    StreamBase & operator<<( const int8_t );
     StreamBase & operator<<( const u16 );
     StreamBase & operator<<( const int16_t );
     StreamBase & operator<<( const u32 );
@@ -194,10 +189,6 @@ public:
     }
 };
 
-#ifdef WITH_ZLIB
-class ZStreamBuf;
-#endif
-
 class StreamBuf : public StreamBase
 {
 public:
@@ -242,14 +233,11 @@ protected:
 
     void copy( const StreamBuf & );
     void reallocbuf( size_t );
-    void setfail( void );
 
     u8 get8() override;
-    void put8( char ) override;
+    void put8( const uint8_t v ) override;
 
-#ifdef WITH_ZLIB
     friend class ZStreamBuf;
-#endif
 
     u8 * itbeg;
     u8 * itget;
@@ -263,7 +251,6 @@ class StreamFile : public StreamBase
 
 public:
     StreamFile();
-    StreamFile( const std::string &, const char * mode );
     ~StreamFile() override;
 
     size_t size( void ) const;
@@ -304,7 +291,7 @@ protected:
     size_t tellp( void ) const override;
 
     u8 get8() override;
-    void put8( char ) override;
+    void put8( const uint8_t v ) override;
 
 private:
     std::FILE * _file;

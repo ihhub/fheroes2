@@ -36,7 +36,6 @@ public:
     Troop( const Monster &, u32 );
 
     bool operator==( const Monster & ) const;
-    Monster operator()( void ) const;
 
     void Set( const Troop & );
     void Set( const Monster &, u32 );

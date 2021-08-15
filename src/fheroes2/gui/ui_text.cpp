@@ -20,6 +20,7 @@
 
 #include "ui_text.h"
 #include "agg_image.h"
+#include "image.h"
 
 #include <cassert>
 #include <deque>
@@ -409,9 +410,38 @@ namespace fheroes2
             return;
         }
 
+        const int32_t fontHeight = getFontHeight( _fontType.size );
+
         std::deque<Point> offsets;
-        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, maxWidth, output, _fontType,
-                getFontHeight( _fontType.size ), true, offsets );
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, offsets );
+
+        int32_t xOffset = 0;
+        int32_t correctedWidth = maxWidth;
+        if ( offsets.size() > 1 ) {
+            // This is a multi-line message. Optimize it to fit the text evenly.
+            int32_t startWidth = 1;
+            int32_t endWidth = maxWidth;
+            while ( startWidth + 1 < endWidth ) {
+                const int32_t currentWidth = ( endWidth + startWidth ) / 2;
+                std::deque<Point> tempOffsets;
+                getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), currentWidth, _fontType, fontHeight,
+                                 tempOffsets );
+
+                if ( tempOffsets.size() > offsets.size() ) {
+                    startWidth = currentWidth;
+                    continue;
+                }
+
+                correctedWidth = currentWidth;
+                endWidth = currentWidth;
+            }
+
+            xOffset = ( maxWidth - correctedWidth ) / 2;
+        }
+
+        offsets.clear();
+        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, _fontType, fontHeight,
+                true, offsets );
     }
 
     bool Text::empty() const
@@ -522,12 +552,39 @@ namespace fheroes2
                              offsets );
         }
 
+        int32_t xOffset = 0;
+        int32_t correctedWidth = maxWidth;
+        if ( offsets.size() > 1 ) {
+            // This is a multi-line message. Optimize it to fit the text evenly.
+            int32_t startWidth = 1;
+            int32_t endWidth = maxWidth;
+            while ( startWidth + 1 < endWidth ) {
+                const int32_t currentWidth = ( endWidth + startWidth ) / 2;
+                std::deque<Point> tempOffsets;
+                for ( const Text & text : _texts ) {
+                    getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), currentWidth, text._fontType,
+                                     maxFontHeight, tempOffsets );
+                }
+
+                if ( tempOffsets.size() > offsets.size() ) {
+                    startWidth = currentWidth;
+                    continue;
+                }
+
+                correctedWidth = currentWidth;
+                endWidth = currentWidth;
+                std::swap( offsets, tempOffsets );
+            }
+
+            xOffset = ( maxWidth - correctedWidth ) / 2;
+        }
+
         for ( Point & point : offsets ) {
-            point.x = ( maxWidth - point.x ) / 2;
+            point.x = ( correctedWidth - point.x ) / 2;
         }
 
         for ( size_t i = 0; i < _texts.size(); ++i ) {
-            render( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), x, y, maxWidth, output,
+            render( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), x + xOffset, y, correctedWidth, output,
                     _texts[i]._fontType, maxFontHeight, false, offsets );
         }
     }

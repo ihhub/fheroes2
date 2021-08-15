@@ -23,21 +23,17 @@
 #include <algorithm>
 #include <cassert>
 #include <condition_variable>
-#include <iostream>
 #include <map>
 #include <queue>
 #include <thread>
+#include <utility>
 
 #include "agg.h"
 #include "agg_file.h"
 #include "audio.h"
-#include "audio_cdrom.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
 #include "dir.h"
-#include "font.h"
+#include "embedded_image.h"
 #include "game.h"
-#include "gamedefs.h"
 #include "localevent.h"
 #include "logging.h"
 #include "m82.h"
@@ -45,21 +41,12 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
+#include "tools.h"
 #include "xmi.h"
-
-#ifdef WITH_ZLIB
-#include "embedded_image.h"
 #include "zzlib.h"
-#endif
 
 namespace AGG
 {
-    // struct fnt_cache_t
-    // {
-    //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
-    // };
-
     struct loop_sound_t
     {
         loop_sound_t( int w, int c )
@@ -79,16 +66,9 @@ namespace AGG
     fheroes2::AGGFile heroes2_agg;
     fheroes2::AGGFile heroes2x_agg;
 
-    std::map<int, std::vector<u8> > wav_cache;
-    std::map<int, std::vector<u8> > mid_cache;
+    std::map<int, std::vector<u8>> wav_cache;
+    std::map<int, std::vector<u8>> mid_cache;
     std::vector<loop_sound_t> loop_sounds;
-    // std::map<u32, fnt_cache_t> fnt_cache;
-
-#ifdef WITH_TTF
-    FontTTF * fonts; /* small, medium */
-
-    // void LoadTTFChar( u32 );
-#endif
 
     const std::vector<u8> & GetWAV( int m82 );
     const std::vector<u8> & GetMID( int xmi );
@@ -96,39 +76,12 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    void LoadFNT( void );
-
     bool ReadDataDir( void );
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 
-    void PlayMusicInternally( const int mus, const bool loop );
-    void PlaySoundInternally( const int m82 );
-    void LoadLOOPXXSoundsInternally( const std::vector<int> & vols );
-
-    /* return letter sprite */
-    // Surface GetUnicodeLetter( u32 ch, u32 ft )
-    // {
-    //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-    //
-    //     if ( !ttf_valid )
-    //         return Surface();
-    //
-    //     if ( !fnt_cache[ch].sfs[0].isValid() )
-    //         LoadTTFChar( ch );
-    //
-    //     switch ( ft ) {
-    //     case Font::YELLOW_SMALL:
-    //         return fnt_cache[ch].sfs[1];
-    //     case Font::BIG:
-    //         return fnt_cache[ch].sfs[2];
-    //     case Font::YELLOW_BIG:
-    //         return fnt_cache[ch].sfs[3];
-    //     default:
-    //         break;
-    //     }
-    //
-    //     return fnt_cache[ch].sfs[0];
-    // }
+    void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
+    void PlaySoundInternally( const int m82, const int soundVolume );
+    void LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int soundVolume );
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -160,7 +113,7 @@ namespace AGG
             }
         }
 
-        void pushMusic( const int musicId, const bool isLooped )
+        void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
         {
             _createThreadIfNeeded();
 
@@ -170,29 +123,29 @@ namespace AGG
                 _musicTasks.pop();
             }
 
-            _musicTasks.emplace( musicId, isLooped );
+            _musicTasks.emplace( musicId, musicType, isLooped );
             _runFlag = 1;
             _workerNotification.notify_all();
         }
 
-        void pushSound( const int m82Sound )
+        void pushSound( const int m82Sound, const int soundVolume )
         {
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
-            _soundTasks.emplace( m82Sound );
+            _soundTasks.emplace( m82Sound, soundVolume );
             _runFlag = 1;
             _workerNotification.notify_all();
         }
 
-        void pushLoopSound( const std::vector<int> & vols )
+        void pushLoopSound( const std::vector<int> & vols, const int soundVolume )
         {
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
-            _loopSoundTasks.emplace( vols );
+            _loopSoundTasks.emplace( vols, soundVolume );
             _runFlag = 1;
             _workerNotification.notify_all();
         }
@@ -221,15 +174,50 @@ namespace AGG
         }
 
     private:
+        struct MusicTask
+        {
+            MusicTask( const int musicId_, const MusicSource musicType_, const bool isLooped_ )
+                : musicId( musicId_ )
+                , musicType( musicType_ )
+                , isLooped( isLooped_ )
+            {}
+
+            int musicId;
+            MusicSource musicType;
+            bool isLooped;
+        };
+
+        struct SoundTask
+        {
+            SoundTask( const int m82Sound_, const int soundVolume_ )
+                : m82Sound( m82Sound_ )
+                , soundVolume( soundVolume_ )
+            {}
+
+            int m82Sound;
+            int soundVolume;
+        };
+
+        struct LoopSoundTask
+        {
+            LoopSoundTask( std::vector<int> vols_, const int soundVolume_ )
+                : vols( std::move( vols_ ) )
+                , soundVolume( soundVolume_ )
+            {}
+
+            std::vector<int> vols;
+            int soundVolume;
+        };
+
         std::unique_ptr<std::thread> _worker;
         std::mutex _mutex;
 
         std::condition_variable _workerNotification;
         std::condition_variable _masterNotification;
 
-        std::queue<std::pair<int, bool> > _musicTasks;
-        std::queue<int> _soundTasks;
-        std::queue<std::vector<int> > _loopSoundTasks;
+        std::queue<MusicTask> _musicTasks;
+        std::queue<SoundTask> _soundTasks;
+        std::queue<LoopSoundTask> _loopSoundTasks;
 
         uint8_t _exitFlag;
         uint8_t _runFlag;
@@ -267,23 +255,23 @@ namespace AGG
                 manager->_mutex.lock();
 
                 if ( !manager->_soundTasks.empty() ) {
-                    const int m82Sound = manager->_soundTasks.back();
+                    const SoundTask soundTask = manager->_soundTasks.back();
                     manager->_soundTasks.pop();
 
                     manager->_mutex.unlock();
 
-                    PlaySoundInternally( m82Sound );
+                    PlaySoundInternally( soundTask.m82Sound, soundTask.soundVolume );
                 }
                 else if ( !manager->_loopSoundTasks.empty() ) {
-                    const std::vector<int> vols = manager->_loopSoundTasks.back();
+                    const LoopSoundTask loopSoundTask = manager->_loopSoundTasks.back();
                     manager->_loopSoundTasks.pop();
 
                     manager->_mutex.unlock();
 
-                    LoadLOOPXXSoundsInternally( vols );
+                    LoadLOOPXXSoundsInternally( loopSoundTask.vols, loopSoundTask.soundVolume );
                 }
                 else if ( !manager->_musicTasks.empty() ) {
-                    const std::pair<int, bool> musicInfo = manager->_musicTasks.back();
+                    const MusicTask musicTask = manager->_musicTasks.back();
 
                     while ( !manager->_musicTasks.empty() ) {
                         manager->_musicTasks.pop();
@@ -291,7 +279,7 @@ namespace AGG
 
                     manager->_mutex.unlock();
 
-                    PlayMusicInternally( musicInfo.first, musicInfo.second );
+                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
                 }
                 else {
                     manager->_runFlag = 0;
@@ -310,11 +298,7 @@ bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
 
-    ListFiles aggs = Settings::GetListFiles( "data", ".agg" );
-    const std::string & other_data = conf.GetDataParams();
-
-    if ( other_data.size() && other_data != "data" )
-        aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
+    ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
 
     // not found agg, exit
     if ( aggs.empty() )
@@ -342,7 +326,7 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansi
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.read( key );
-        if ( buf.size() )
+        if ( !buf.empty() )
             return buf;
     }
 
@@ -363,35 +347,10 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( conf.UseAltResource() ) {
-        std::string name = StringLower( M82::GetString( m82 ) );
-        std::string prefix_sounds = System::ConcatePath( "files", "sounds" );
-
-        // ogg
-        StringReplace( name, ".82m", ".ogg" );
-        std::string sound = Settings::GetLastFile( prefix_sounds, name );
-        v = LoadFileToMem( sound );
-
-        if ( v.empty() ) {
-            // find mp3
-            StringReplace( name, ".82m", ".mp3" );
-            sound = Settings::GetLastFile( prefix_sounds, name );
-
-            v = LoadFileToMem( sound );
-        }
-
-        if ( v.size() ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_INFO, sound );
-            return;
-        }
-    }
-
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
-    if ( body.size() ) {
+    if ( !body.empty() ) {
         // create WAV format
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
@@ -429,7 +388,7 @@ void AGG::LoadMID( int xmi, std::vector<u8> & v )
 const std::vector<u8> & AGG::GetWAV( int m82 )
 {
     std::vector<u8> & v = wav_cache[m82];
-    if ( Mixer::isValid() && v.empty() )
+    if ( Audio::isValid() && v.empty() )
         LoadWAV( m82, v );
     return v;
 }
@@ -438,7 +397,7 @@ const std::vector<u8> & AGG::GetWAV( int m82 )
 const std::vector<u8> & AGG::GetMID( int xmi )
 {
     std::vector<u8> & v = mid_cache[xmi];
-    if ( Mixer::isValid() && v.empty() )
+    if ( Audio::isValid() && v.empty() )
         LoadMID( xmi, v );
     return v;
 }
@@ -450,18 +409,17 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall
     }
 
     if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushLoopSound( vols );
+        g_asyncSoundManager.pushLoopSound( vols, Settings::Get().SoundVolume() );
     }
     else {
         g_asyncSoundManager.sync();
-        LoadLOOPXXSoundsInternally( vols );
+        LoadLOOPXXSoundsInternally( vols, Settings::Get().SoundVolume() );
     }
 }
 
-void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
+void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int soundVolume )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
@@ -479,10 +437,10 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 
         if ( itl != loop_sounds.end() ) {
             // unused, stop
-            if ( 0 == vol || conf.SoundVolume() == 0 ) {
+            if ( 0 == vol || soundVolume == 0 ) {
                 if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                     Mixer::Pause( ( *itl ).channel );
-                    Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+                    Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * soundVolume / 10 );
                     Mixer::Stop( ( *itl ).channel );
                 }
                 ( *itl ).sound = M82::UNKNOWN;
@@ -490,7 +448,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
             // used, update volume
             else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                 Mixer::Pause( ( *itl ).channel );
-                Mixer::Volume( ( *itl ).channel, vol * conf.SoundVolume() / 10 );
+                Mixer::Volume( ( *itl ).channel, vol * soundVolume / 10 );
                 Mixer::Resume( ( *itl ).channel );
             }
         }
@@ -502,7 +460,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 
             if ( 0 <= ch ) {
                 Mixer::Pause( ch );
-                Mixer::Volume( ch, vol * conf.SoundVolume() / 10 );
+                Mixer::Volume( ch, vol * soundVolume / 10 );
                 Mixer::Resume( ch );
 
                 // find unused
@@ -525,28 +483,29 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 void AGG::PlaySound( int m82, bool asyncronizedCall )
 {
     if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushSound( m82 );
+        g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
     }
     else {
         g_asyncSoundManager.sync();
-        PlaySoundInternally( m82 );
+        PlaySoundInternally( m82, Settings::Get().SoundVolume() );
     }
 }
 
-void AGG::PlaySoundInternally( const int m82 )
+void AGG::PlaySoundInternally( const int m82, const int soundVolume )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
+
     Mixer::Pause( ch );
-    Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+    Mixer::Volume( ch, Mixer::MaxVolume() * soundVolume / 10 );
     Mixer::Resume( ch );
 }
 
@@ -558,18 +517,17 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
     }
 
     if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushMusic( mus, loop );
+        g_asyncSoundManager.pushMusic( mus, Settings::Get().MusicType(), loop );
     }
     else {
         g_asyncSoundManager.sync();
-        PlayMusicInternally( mus, loop );
+        PlayMusicInternally( mus, Settings::Get().MusicType(), loop );
     }
 }
 
-void AGG::PlayMusicInternally( const int mus, const bool loop )
+void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Music() ) {
+    if ( !Audio::isValid() ) {
         return;
     }
 
@@ -580,11 +538,10 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     }
 
     const std::string prefix_music( "music" );
-    const MusicSource type = conf.MusicType();
 
     bool isSongFound = false;
 
-    if ( type == MUSIC_EXTERNAL ) {
+    if ( musicType == MUSIC_EXTERNAL ) {
         std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION ) );
 
         if ( !System::IsFile( filename ) ) {
@@ -608,7 +565,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
             }
         }
 
-        if ( filename.size() ) {
+        if ( !filename.empty() ) {
             Music::Play( filename, loop );
             isSongFound = true;
 
@@ -616,21 +573,11 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
-#ifdef WITH_AUDIOCD
-    else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
-        Cdrom::Play( mus, loop );
-        isSongFound = true;
-
-        Game::SetCurrentMusic( mus );
-
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
-    }
-#endif
 
     if ( !isSongFound ) {
         // Check if music needs to be pulled from HEROES2X
         int xmi = XMI::UNKNOWN;
-        if ( type == MUSIC_MIDI_EXPANSION ) {
+        if ( musicType == MUSIC_MIDI_EXPANSION ) {
             xmi = XMI::FromMUS( mus, g_midiHeroes2xAGG.isGood() );
         }
 
@@ -640,7 +587,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
 
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() ) {
+            if ( !v.empty() ) {
                 Music::Play( v, loop );
 
                 Game::SetCurrentMusic( mus );
@@ -649,61 +596,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     }
 }
-
-#ifdef WITH_TTF
-// void AGG::LoadTTFChar( u32 ch )
-// {
-//     const Settings & conf = Settings::Get();
-//      const RGBA white( 0xFF, 0xFF, 0xFF );
-//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
-//
-//      small
-//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-//
-//      medium
-//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-//
-//     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-// }
-
-void AGG::LoadFNT( void )
-{
-    // const Settings & conf = Settings::Get();
-    //
-    // if ( !conf.Unicode() ) {
-    //     DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    // }
-    // else if ( fnt_cache.empty() ) {
-    //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-    //
-    //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
-    //         LoadTTFChar( *it );
-    //
-    //     if ( fnt_cache.empty() ) {
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    //     }
-    //     else {
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
-    //     }
-    // }
-}
-
-u32 AGG::GetFontHeight( bool small )
-{
-    return small ? fonts[0].Height() : fonts[1].Height();
-}
-
-#else
-void AGG::LoadFNT( void )
-{
-    DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-}
-#endif
 
 // This exists to avoid exposing AGG::ReadChunk
 std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
@@ -729,7 +621,6 @@ bool AGG::Init( void )
     if ( !ReadDataDir() ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN, "data files not found" );
 
-#ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
@@ -739,28 +630,9 @@ bool AGG::Init( void )
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
             ;
-#endif
 
         return false;
     }
-
-#ifdef WITH_TTF
-    Settings & conf = Settings::Get();
-    const std::string prefix_fonts = System::ConcatePath( "files", "fonts" );
-    const std::string font1 = Settings::GetLastFile( prefix_fonts, conf.FontsNormal() );
-    const std::string font2 = Settings::GetLastFile( prefix_fonts, conf.FontsSmall() );
-
-    fonts = new FontTTF[2];
-
-    if ( conf.Unicode() ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "fonts: " << font1 << ", " << font2 );
-        if ( !fonts[1].Open( font1, conf.FontsNormalSize() ) || !fonts[0].Open( font2, conf.FontsSmallSize() ) )
-            conf.SetUnicode( false );
-    }
-#endif
-
-    // load font
-    LoadFNT();
 
     return true;
 }
@@ -770,9 +642,4 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    // fnt_cache.clear();
-
-#ifdef WITH_TTF
-    delete[] fonts;
-#endif
 }

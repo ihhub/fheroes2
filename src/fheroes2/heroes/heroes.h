@@ -28,13 +28,10 @@
 #include <vector>
 
 #include "army.h"
-#include "gamedefs.h"
 #include "heroes_base.h"
 #include "pairs.h"
 #include "route.h"
 #include "visit.h"
-
-class Recruits;
 
 namespace Battle
 {
@@ -45,6 +42,8 @@ namespace Interface
 {
     class GameArea;
 }
+
+class StreamBuf;
 
 struct HeroSeedsForLevelUp
 {
@@ -235,8 +234,8 @@ public:
 
     int GetMorale() const override;
     int GetLuck() const override;
-    int GetMoraleWithModificators( std::string * str = NULL ) const;
-    int GetLuckWithModificators( std::string * str = NULL ) const;
+    int GetMoraleWithModificators( std::string * str = nullptr ) const;
+    int GetLuckWithModificators( std::string * str = nullptr ) const;
     int GetLevel( void ) const;
 
     int GetMapsObject( void ) const;
@@ -251,7 +250,7 @@ public:
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );
-    bool MayStillMove( void ) const;
+    bool MayStillMove( const bool ignorePath ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
 
@@ -308,8 +307,11 @@ public:
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
+
+    // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );
+    void unmarkHeroMeeting();
 
     bool Move( bool fast = false );
     void Move2Dest( const int32_t destination );

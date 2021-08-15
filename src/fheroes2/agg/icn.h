@@ -23,7 +23,7 @@
 #ifndef H2ICN_H
 #define H2ICN_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ICN
 {
@@ -941,6 +941,10 @@ namespace ICN
         SWAP_ARROW_RIGHT_TO_LEFT,
 
         CURSOR_ADVENTURE_MAP,
+
+        DISMISS_HERO_DISABLED_BUTTON,
+        NEW_CAMPAIGN_DISABLED_BUTTON,
+        MAX_DISABLED_BUTTON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
