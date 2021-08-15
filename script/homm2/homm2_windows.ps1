@@ -122,6 +122,7 @@ try {
         }
     }
 
+    # Special case - CD image from GOG
     if ((Test-Path -Path "$homm2Path\homm2.ins" -PathType Leaf) -And
         (Test-Path -Path "$homm2Path\homm2.gog" -PathType Leaf) -And
         (Test-Path -Path "$homm2Path\DOSBOX\DOSBox.exe" -PathType Leaf)) {
