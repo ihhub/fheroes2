@@ -311,8 +311,8 @@ const fheroes2::Sprite & SpriteShad( const Heroes & hero, int index )
             indexSprite = 36;
             break;
         case Direction::BOTTOM_LEFT:
-indexSprite = 45;
-break;
+            indexSprite = 45;
+            break;
         case Direction::LEFT:
             indexSprite = 54;
             break;
@@ -320,37 +320,37 @@ break;
             indexSprite = 63;
             break;
         default:
-            DEBUG_LOG(DBG_GAME, DBG_WARN, "unknown direction");
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
             break;
         }
 
-        return fheroes2::AGG::GetICN(ICN::BOATSHAD, indexSprite + (index % 9));
+        return fheroes2::AGG::GetICN( ICN::BOATSHAD, indexSprite + ( index % 9 ) );
     }
     else {
-    int indexSprite = index;
+        int indexSprite = index;
 
-    if (indexSprite == 51)
-        indexSprite = 56;
-    else if (indexSprite == 50)
-        indexSprite = 57;
-    else if (indexSprite == 49)
-        indexSprite = 58;
-    else if (indexSprite == 47)
-        indexSprite = 55;
-    else if (indexSprite == 46)
-        indexSprite = 55;
+        if ( indexSprite == 51 )
+            indexSprite = 56;
+        else if ( indexSprite == 50 )
+            indexSprite = 57;
+        else if ( indexSprite == 49 )
+            indexSprite = 58;
+        else if ( indexSprite == 47 )
+            indexSprite = 55;
+        else if ( indexSprite == 46 )
+            indexSprite = 55;
 
-    const int indexOffset = (indexSprite < 9 || indexSprite >= 36) ? 0 : 50;
+        const int indexOffset = ( indexSprite < 9 || indexSprite >= 36 ) ? 0 : 50;
 
-    return fheroes2::AGG::GetICN(ICN::SHADOW32, indexSprite + indexOffset);
+        return fheroes2::AGG::GetICN( ICN::SHADOW32, indexSprite + indexOffset );
     }
 }
 
-const fheroes2::Sprite& SpriteFroth(const Heroes& hero, int index)
+const fheroes2::Sprite & SpriteFroth( const Heroes & hero, int index )
 {
     int index_sprite = 0;
 
-    switch (hero.GetDirection()) {
+    switch ( hero.GetDirection() ) {
     case Direction::TOP:
         index_sprite = 0;
         break;
@@ -377,26 +377,26 @@ const fheroes2::Sprite& SpriteFroth(const Heroes& hero, int index)
         break;
 
     default:
-        DEBUG_LOG(DBG_GAME, DBG_WARN, "unknown direction");
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
         break;
     }
 
-    return fheroes2::AGG::GetICN(ICN::FROTH, index_sprite + (index % 9));
+    return fheroes2::AGG::GetICN( ICN::FROTH, index_sprite + ( index % 9 ) );
 }
 
-bool isNeedStayFrontObject(const Heroes& hero, const Maps::Tiles& next)
+bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
 {
-    if (next.GetObject() == MP2::OBJ_CASTLE) {
-        const Castle* castle = world.GetCastle(next.GetCenter());
+    if ( next.GetObject() == MP2::OBJ_CASTLE ) {
+        const Castle * castle = world.GetCastle( next.GetCenter() );
 
-        return castle && !hero.isFriends(castle->GetColor()) && castle->GetActualArmy().isValid();
+        return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
     else
         // to coast action
-        if (hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST)
-            return true;
+        if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST )
+        return true;
 
-    return MP2::isNeedStayFront(next.GetObject());
+    return MP2::isNeedStayFront( next.GetObject() );
 }
 
 bool Heroes::isInVisibleMapArea() const
