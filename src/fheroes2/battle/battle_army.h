@@ -70,6 +70,7 @@ namespace Battle
         Troops GetKilledTroops( void ) const;
         bool animateIdleUnits( const bool forceRestartIdleAnimation );
         void resetIdleAnimation();
+        void resetAnimation();
 
         void NewTurn( void );
         void SyncArmyCount();

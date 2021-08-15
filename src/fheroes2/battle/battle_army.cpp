@@ -361,6 +361,14 @@ void Battle::Force::resetIdleAnimation()
     }
 }
 
+void Battle::Force::resetAnimation()
+{
+    for ( Force::iterator it = begin(); it != end(); ++it ) {
+        Unit & unit = **it;
+        unit.SwitchAnimation( Monster_Info::STATIC );
+    }
+}
+
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
