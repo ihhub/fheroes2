@@ -21,6 +21,7 @@
 #include "h2d.h"
 #include "h2d_file.h"
 #include "settings.h"
+#include "system.h"
 
 namespace
 {
@@ -35,7 +36,7 @@ namespace
 
         isInitialized = true;
 
-        ListFiles files = Settings::FindFiles( "data", ".h2d", false );
+        ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
         if ( files.empty() ) {
             return;
         }
