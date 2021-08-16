@@ -10,11 +10,13 @@ libnx switch-sdl2_image switch-sdl2_mixer
 
 After installation run `make -f Makefile.switch -j 2` command to build the package.
 
-
 ## SETUP
 You will need a copy of the official game to run this port.
 
-fheroes2 root directory is hardcoded as `/switch/fheroes2`. Put the game files there (specifically `ANIM`, `DATA`, `MAPS` and `MUSIC` folders), then copy over the `files` directory, as well as `fheroes2.nro`. If you have a Russian version from Buka Enternainment, you'll likely have `Anim2` folder instead. Rename it to `ANIM` if you wish use the Buka game data with this port.
+fheroes2 root directory is hardcoded as `/switch/fheroes2`. Put the game files there (specifically `ANIM`, `DATA`, `MAPS`
+and `MUSIC` folders), then copy over the `files` directory, as well as `fheroes2.nro`. If you have a Russian version from
+Buka Enternainment, you'll likely have `Anim2` folder instead. Rename it to `ANIM` if you wish use the Buka game data with
+this port.
 
 At the end you should have the following directory tree on your SD card:
 
@@ -30,8 +32,9 @@ At the end you should have the following directory tree on your SD card:
          +--- music        <--- HoMM2 game data
          +--- fheroes2.nro <--- Part of fheroes2 release
 
-Generally, you will need game resources from the localized version of HoMM2 in order to use translations in fheroes2. During the first run, the game
-should auto-detect the game data you have and offer to choose a language you'd like to use. English is always available.
+Generally, you will need game resources from the localized version of HoMM2 in order to use translations in fheroes2. During
+the first run, the game should auto-detect the game data you have and offer to choose a language you'd like to use. English
+is always available.
 
 ## RUNNING
 This build of fheroes2 was tested on 12.0.3|AMS M.19.4|S (FAT32). exFAT is not recommended.

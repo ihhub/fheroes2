@@ -214,13 +214,12 @@ public:
 
     void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
-    u32 size( void ) const;
-
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
     friend StreamBase & operator>>( StreamBase &, Kingdoms & );
 
-    Kingdom kingdoms[KINGDOMMAX + 1];
+    static constexpr uint32_t _size = KINGDOMMAX + 1;
+    Kingdom kingdoms[_size];
 };
 
 StreamBase & operator<<( StreamBase &, const Kingdom & );

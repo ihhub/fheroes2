@@ -23,16 +23,54 @@
 #ifndef H2AUDIO_H
 #define H2AUDIO_H
 
-#include <SDL.h>
+#include <cstdint>
+#include <string>
+#include <vector>
 
 namespace Audio
 {
-    struct Spec : public SDL_AudioSpec
-    {
-        Spec();
-    };
+    void Init();
+    void Quit();
 
-    Spec & GetHardwareSpec( void );
+    void Mute();
+    void Unmute();
+
+    bool isValid();
+}
+
+namespace Mixer
+{
+    void SetChannels( const int num );
+
+    int Play( const char * file, const int channel = -1, const bool loop = false );
+    int Play( const uint8_t * ptr, const uint32_t size, const int channel = -1, const bool loop = false );
+
+    int MaxVolume();
+    int Volume( const int channel, int vol );
+
+    void Pause( const int channel = -1 );
+    void Resume( const int channel = -1 );
+    void Stop( const int channel = -1 );
+    void Reset();
+
+    bool isPlaying( const int channel );
+}
+
+namespace Music
+{
+    void Play( const std::vector<uint8_t> & v, const bool loop );
+    void Play( const std::string & file, const bool loop );
+
+    int Volume( int vol );
+
+    void SetFadeIn( const int f );
+
+    void Pause();
+    void Reset();
+
+    bool isPlaying();
+
+    std::vector<uint8_t> Xmi2Mid( const std::vector<uint8_t> & buf );
 }
 
 #endif
