@@ -247,8 +247,7 @@ namespace Game
             FadeTask();
 
             FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
-                      bool fadeIn_,
-                      uint8_t objectTileset_ );
+                      bool fadeIn_, uint8_t objectTileset_ );
 
             MP2::MapObjectType object;
             uint32_t objectIndex;

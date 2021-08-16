@@ -1941,8 +1941,9 @@ void ActionToAncientLamp( Heroes & hero, const MP2::MapObjectType objectType, s3
 
     if ( troop.isValid()
          && Dialog::YES
-                == Dialog::Message( MP2::StringObject( objectType ), _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ),
-                                    Font::BIG, Dialog::YES | Dialog::NO ) )
+                == Dialog::Message( MP2::StringObject( objectType ),
+                                    _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ), Font::BIG,
+                                    Dialog::YES | Dialog::NO ) )
         RecruitMonsterFromTile( hero, tile, MP2::StringObject( objectType ), troop, true );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2409,8 +2410,7 @@ void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
 
         if ( access ) {
             Dialog::Message( MP2::StringObject( objectType ),
-                             _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ),
-                             Font::BIG, Dialog::OK );
+                             _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG, Dialog::OK );
             hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
             hero.IncreasePrimarySkill( Skill::Primary::DEFENSE );
             hero.IncreasePrimarySkill( Skill::Primary::KNOWLEDGE );
@@ -2592,8 +2592,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
     }
     else {
         Dialog::Message( MP2::StringObject( objectType ),
-                         _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ),
-                         Font::BIG, Dialog::OK );
+                         _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG, Dialog::OK );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2730,8 +2729,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
 
     if ( Dialog::YES
          == Dialog::Message( MP2::StringObject( objectType ),
-                             _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ),
-                             Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                             _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
+                             Dialog::YES | Dialog::NO ) ) {
         u32 variant = tile.QuantityVariant();
 
         if ( variant ) {
