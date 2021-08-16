@@ -433,9 +433,9 @@ std::string Route::Path::String( void ) const
 bool StepIsObstacle( const Route::Step & s )
 {
     s32 index = s.GetIndex();
-    int obj = 0 <= index ? world.GetTiles( index ).GetObject() : MP2::OBJ_ZERO;
+    const MP2::MapObjectType objectType = 0 <= index ? world.GetTiles( index ).GetObject() : MP2::OBJ_ZERO;
 
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_HEROES:
     case MP2::OBJ_MONSTER:
         return true;

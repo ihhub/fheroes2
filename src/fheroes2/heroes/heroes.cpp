@@ -93,16 +93,16 @@ const char * Heroes::GetName( int id )
 }
 
 template <std::size_t size>
-int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &objectTypes )[size], const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
     for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isObjectTypeVisited( objs[ii] ) ) {
-            result += GameStatic::ObjectVisitedModifiers( objs[ii] );
+        if ( hero.isObjectTypeVisited( objectTypes[ii] ) ) {
+            result += GameStatic::ObjectVisitedModifiers( objectTypes[ii] );
 
             if ( strs ) {
-                switch ( objs[ii] ) {
+                switch ( objectTypes[ii] ) {
                 case MP2::OBJ_GRAVEYARD:
                 case MP2::OBJN_GRAVEYARD:
                 case MP2::OBJ_SHIPWRECK:
@@ -110,21 +110,21 @@ int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], c
                 case MP2::OBJ_DERELICTSHIP:
                 case MP2::OBJN_DERELICTSHIP: {
                     std::string modRobber = _( "%{object} robber" );
-                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
                     strs->append( modRobber );
                 } break;
                 case MP2::OBJ_PYRAMID:
                 case MP2::OBJN_PYRAMID: {
                     std::string modRaided = _( "%{object} raided" );
-                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
                     strs->append( modRaided );
                 } break;
                 default:
-                    strs->append( _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( _( MP2::StringObject( objectTypes[ii] ) ) );
                     break;
                 }
 
-                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
+                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectTypes[ii] ) );
                 strs->append( "\n" );
             }
         }
@@ -609,8 +609,9 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, *this, strs );
+    const MP2::MapObjectType objectTypes[]
+        = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    result += ObjectVisitedModifiersResult( MDF_MORALE, objectTypes, *this, strs );
 
     // result
     return Morale::Normalize( result );
@@ -632,8 +633,8 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, *this, strs );
+    const MP2::MapObjectType objectTypes[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    result += ObjectVisitedModifiersResult( MDF_LUCK, objectTypes, *this, strs );
 
     return Luck::Normalize( result );
 }
@@ -800,54 +801,54 @@ Castle * Heroes::inCastle( void )
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
     const int32_t index = tile.GetIndex();
-    int object = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type )
-        return GetKingdom().isVisited( index, object );
+        return GetKingdom().isVisited( index, objectType );
 
-    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, object ) );
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
-bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
-        return GetKingdom().isVisited( object );
+        return GetKingdom().isVisited( objectType );
 
-    return std::any_of( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
 void Heroes::SetVisited( s32 index, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    int object = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type ) {
-        GetKingdom().SetVisited( index, object );
+        GetKingdom().SetVisited( index, objectType );
     }
-    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != object ) {
-        visit_object.push_front( IndexObject( index, object ) );
+    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != objectType ) {
+        visit_object.push_front( IndexObject( index, objectType ) );
     }
 }
 
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const int objectId = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
-        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
+        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectType );
     }
 }
 
-void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
+void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType objectType, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const uint32_t uid = tile.GetObjectUID();
     int wide = 0;
 
-    switch ( object ) {
+    switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_OASIS:
     case MP2::OBJ_STANDINGSTONES:
@@ -861,7 +862,7 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( tile.GetObject( false ) == object && wide ) {
+    if ( tile.GetObject( false ) == objectType && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
@@ -1481,14 +1482,14 @@ uint32_t Heroes::GetStartingXp()
     return Rand::Get( 40, 90 );
 }
 
-int Heroes::GetMapsObject( void ) const
+MP2::MapObjectType Heroes::GetMapsObject( void ) const
 {
-    return save_maps_object;
+    return static_cast<MP2::MapObjectType>( save_maps_object );
 }
 
-void Heroes::SetMapsObject( int obj )
+void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 {
-    save_maps_object = obj != MP2::OBJ_HEROES ? obj : MP2::OBJ_ZERO;
+    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_ZERO;
 }
 
 void Heroes::ActionPreBattle( void ) {}
@@ -1674,7 +1675,7 @@ std::string Heroes::String( void ) const
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
         for ( std::list<IndexObject>::const_iterator it = visit_object.begin(); it != visit_object.end(); ++it )
-            os << MP2::StringObject( ( *it ).second ) << "(" << ( *it ).first << "), ";
+            os << MP2::StringObject( static_cast<MP2::MapObjectType>( ( *it ).second ) ) << "(" << ( *it ).first << "), ";
         os << std::endl;
     }
 

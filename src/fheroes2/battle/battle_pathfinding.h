@@ -35,7 +35,7 @@ namespace Battle
      * terrain:  from: -1, isOpen: false, cost: MAX
      * if tile wouldn't be reached it stays as default
      */
-    struct ArenaNode : public PathfindingNode
+    struct ArenaNode : public PathfindingNode<uint16_t>
     {
         bool _isOpen = true;
         bool _isLeftDirection = false;

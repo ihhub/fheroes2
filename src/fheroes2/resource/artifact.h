@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "interface_itemsbar.h"
+#include "mp2.h"
 #include "ui_tool.h"
 
 class Spell;
@@ -205,7 +206,7 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
-u32 GoldInsteadArtifact( int );
+u32 GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
 class BagArtifacts : public std::vector<Artifact>
 {

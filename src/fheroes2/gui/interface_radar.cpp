@@ -174,8 +174,8 @@ void Interface::Radar::Generate( void )
             else {
                 color = GetPaletteIndexFromGround( tile.GetGround() );
 
-                const int mapObject = tile.GetObject();
-                if ( mapObject == MP2::OBJ_MOUNTS || mapObject == MP2::OBJ_TREES )
+                const MP2::MapObjectType objectType = tile.GetObject();
+                if ( objectType == MP2::OBJ_MOUNTS || objectType == MP2::OBJ_TREES )
                     color += 3;
             }
 
