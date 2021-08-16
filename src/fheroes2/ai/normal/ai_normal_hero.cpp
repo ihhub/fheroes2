@@ -924,7 +924,8 @@ namespace AI
 
             auto it = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&idxToErase]( const IndexObject & o ) { return o.first == idxToErase; } );
             // Actually remove if this object single use only
-            if ( it != _mapObjects.end() && !MP2::isCaptureObject( static_cast<MP2::MapObjectType>( it->second ) ) && !MP2::isRemoveObject( static_cast<MP2::MapObjectType>( it->second ) ) ) {
+            if ( it != _mapObjects.end() && !MP2::isCaptureObject( static_cast<MP2::MapObjectType>( it->second ) )
+                 && !MP2::isRemoveObject( static_cast<MP2::MapObjectType>( it->second ) ) ) {
                 // retains the vector order for binary search
                 _mapObjects.erase( it );
             }
