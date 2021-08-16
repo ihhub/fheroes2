@@ -467,13 +467,13 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} fait %{value} dégât(s) à toutes les créatures vivantes."
 
 msgid "The Unicorns attack blinds the %{name}!"
-msgstr "L'attaque des licornes aveugle les %{name} !"
+msgstr "L'attaque des Licornes aveugle les %{name} !"
 
 msgid "The Medusas gaze turns the %{name} to stone!"
-msgstr "Le regard de Méduses transforme les %{name} en pierre !"
+msgstr "Le regard des Méduses transforme les %{name} en pierre !"
 
 msgid "The Mummies' curse falls upon the %{name}!"
-msgstr "La malédiction des momies s'abat sur les %{name} !"
+msgstr "La malédiction des Momies s'abat sur les %{name} !"
 
 msgid "The %{name} are paralyzed by the Cyclopes!"
 msgstr "%{name} sont paralysés par les Cyclopes !"
@@ -491,7 +491,7 @@ msgid "High morale enables the %{monster} to attack again."
 msgstr "Un moral élevé permet aux %{monster} d'attaquer à nouveau."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr "Un moral bas fait que les %{monster} gèlent en panique."
+msgstr "Un faible moral empêche les %{monster} de bouger."
 
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} fait %{damage} dégât(s)."
@@ -929,7 +929,7 @@ msgid "The Elven Lands"
 msgstr "Les Terres Elfiques"
 
 msgid "The Epic Battle"
-msgstr "Combat Épique"
+msgstr "Le Combat Épique"
 
 msgid "The Southern War"
 msgstr "La guerre du Sud"
@@ -1239,7 +1239,7 @@ msgid "Tent"
 msgstr "Tente"
 
 msgid "Captain's Quarters"
-msgstr "Quartiers du Capitaine"
+msgstr "Quartiers du capitaine"
 
 msgid "Mage Guild, Level 1"
 msgstr "Guilde des M. niv. 1"
@@ -1404,7 +1404,7 @@ msgid "Upg. Cottage"
 msgstr "Cottage renforcé"
 
 msgid "Upg. Graveyard"
-msgstr "Cimetière renforcée"
+msgstr "Grand cimetière"
 
 msgid "Upg. Blacksmith"
 msgstr "Forge renforcée"
@@ -1413,7 +1413,7 @@ msgid "Upg. Foundry"
 msgstr "Fonderie renforcée"
 
 msgid "Upg. Pyramid"
-msgstr "Pyramide renforcée"
+msgstr "Grande pyramide"
 
 msgid "Upg. Armory"
 msgstr "Armurerie renforcée"
@@ -1422,31 +1422,31 @@ msgid "Upg. Adobe"
 msgstr "Cahute renforcée"
 
 msgid "Upg. Stonehenge"
-msgstr "Cromlech renforcé"
+msgstr "Grand cromlech"
 
 msgid "Upg. Maze"
-msgstr "Labyrinthe renforcé"
+msgstr "Grand labyrinthe"
 
 msgid "Upg. Mansion"
-msgstr "Manoir renforcé"
+msgstr "Grand manoir"
 
 msgid "Upg. Jousting Arena"
-msgstr "Arène renforcée"
+msgstr "Arène améliorée"
 
 msgid "Upg. Bridge"
 msgstr "Pont renforcé"
 
 msgid "Upg. Ivory Tower"
-msgstr "Tour d'ivoire renforcée"
+msgstr "Haute tour d'ivoire"
 
 msgid "Upg. Mausoleum"
-msgstr "Mausolée renforcée"
+msgstr "Grand mausolée"
 
 msgid "Upg. Cathedral"
-msgstr "Cathédrale renforcée"
+msgstr "Basilique"
 
 msgid "Upg. Cloud Castle"
-msgstr "Château céleste renforcée"
+msgstr "Grand château céleste"
 
 msgid "Black Tower"
 msgstr "Tour noire"
@@ -1582,8 +1582,7 @@ msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
-"La Bibliothèque augmente le nombre de sorts de la guilde d'un pour chaque "
-"niveau de la guilde."
+"La Bibliothèque rajoute 1 sort à chaque niveau de la guilde des magiciens."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
@@ -1597,7 +1596,7 @@ msgstr ""
 "de 10 pour cents."
 
 msgid "Cannot recruit - guest to guard automove error."
-msgstr "Impossible de recruter - guest to guard automove error."
+msgstr "Impossible de recruter - place du capitaine de la garnison déjà prise."
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Impossible de recruter - vous avez déjà un héros dans ce village."
@@ -1621,16 +1620,16 @@ msgid "Income"
 msgstr "Revenu"
 
 msgid "Army is full"
-msgstr "L'armée est complète"
+msgstr "Le peloton a atteint sa taille maximale"
 
 msgid "Join Error"
-msgstr "Join Error"
+msgstr "Erreur pour rejoindre"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-"Vous devez acheter un Grimoire pour utiliser la guilde des mages, mais vous "
+"Vous devez acheter un Grimoire pour utiliser la Guilde des Magiciens, mais vous "
 "n'avez actuellement pas de place pour un Grimoire. Essayez de donner un de "
 "vos artéfacts à un autre héros."
 
@@ -1662,7 +1661,7 @@ msgid "Meeting Heroes"
 msgstr "Rencontre"
 
 msgid "View Hero"
-msgstr "Voir le Héros"
+msgstr "Voir le héros"
 
 msgid "The above spells are available here."
 msgstr "Les sorts ci-dessus sont disponibles."
@@ -1730,13 +1729,13 @@ msgid "Castle Options"
 msgstr "Options du château"
 
 msgid "Not enough resources to buy monsters."
-msgstr "Pas assez de ressources pour acheter des monstres."
+msgstr "Pas assez de ressources pour acheter des créatures."
 
 msgid "No monsters available for purchase."
-msgstr "Pas de monstres disponibles à l'achat."
+msgstr "Pas de créatures disponibles à l'achat."
 
 msgid "Buy Monsters"
-msgstr "Acheter monstres"
+msgstr "Acheter créatures"
 
 msgid "Town Population Information and Statistics"
 msgstr "Information et statistiques sur la population du village"
@@ -1919,7 +1918,7 @@ msgid "Opponents"
 msgstr "Opposants"
 
 msgid "Class"
-msgstr "Classe"
+msgstr "Alignement"
 
 msgid ""
 "Victory\n"
@@ -2002,13 +2001,13 @@ msgid "n/a"
 msgstr "n/a"
 
 msgid "guarded by "
-msgstr "gardée par "
+msgstr "gardée par " #artifact is guarded by? (=gardé). A mine is guarded by? (=gardée). Ruins are guarded by? (=gardées).
 
 msgid "guarded by %{count} %{monster}"
-msgstr "gardé par %{count} de %{monster}"
+msgstr "gardé par %{count} %{monster}" #same "gardé/e/s problem as above.
 
 msgid "(available: %{count})"
-msgstr "(disponible: %{count})"
+msgstr "(disponible : %{count})"
 
 msgid "already learned"
 msgstr "déjà appris"
@@ -2053,7 +2052,7 @@ msgid "%{name} (Level %{level})"
 msgstr "%{name} (niveau %{level})"
 
 msgid "Move Points"
-msgstr "P. de voyage"
+msgstr "Mouvement"
 
 msgid "Available: %{count}"
 msgstr "Disponible : %{count}"
@@ -2092,25 +2091,25 @@ msgid "Small Maps"
 msgstr "Petite cartes"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr "Voir seulement les cartes de petite taille (36x36)"
+msgstr "Voir seulement les petites cartes (36x36)."
 
 msgid "Medium Maps"
 msgstr "Cartes moyennes"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr "Voir seulement les cartes de taille moyenne (72x72)"
+msgstr "Voir seulement les cartes de taille moyenne (72x72)."
 
 msgid "Large Maps"
 msgstr "Grandes cartes"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr "Voir seulement les grandes cartes (108x108)"
+msgstr "Voir seulement les grandes cartes (108x108)."
 
 msgid "Extra Large Maps"
 msgstr "Très grandes cartes"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr "Voir seulement les très grandes cartes (144x144)"
+msgstr "Voir seulement les très grandes cartes (144x144)."
 
 msgid "All Maps"
 msgstr "Toutes les cartes"
@@ -2259,7 +2258,7 @@ msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 
 msgid "Interface Type"
-msgstr "Interface"
+msgstr "Interface : Coloris"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Bascule le type d'interface que vous voulez utiliser."
@@ -2274,7 +2273,7 @@ msgid "Battles"
 msgstr "Batailles"
 
 msgid "Toggle instant battle mode."
-msgstr "Bascule le mode de combat instantané."
+msgstr "Change les modes de combat instantané."
 
 msgid "Exit this menu."
 msgstr "Quitter ce menu."
@@ -2307,10 +2306,10 @@ msgid "Good"
 msgstr "Bien"
 
 msgid "Hide"
-msgstr "Cacher"
+msgstr "Libre"
 
 msgid "Show"
-msgstr "Afficher"
+msgstr "Attachée"
 
 msgid "Auto Resolve"
 msgstr "Combat auto"
@@ -2586,7 +2585,7 @@ msgstr ""
 "ajouté. Il peut y avoir plusieurs invités pour les jeux TCP/IP."
 
 msgid "Battle Only"
-msgstr "Combat unique"
+msgstr "Champ de bataille"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Configurez et jouez une bataille sans charger de carte."
@@ -2631,7 +2630,7 @@ msgid "5 Players"
 msgstr "5 Joueurs"
 
 msgid ""
-"Play with 5 human players, and optionally, up to 1 additional computer "
+"Play with 5 human players, and optionally 1 additional computer "
 "player."
 msgstr ""
 "Jouez avec 5 joueurs humains, et éventuellement 1 joueur CPU "
@@ -2683,7 +2682,7 @@ msgid ""
 "They are triumphant."
 msgstr ""
 "L'ennemi a capturé %{name} !\n"
-"Ils sont triomphants."
+"Ce camp adverse a triomphé."
 
 msgid ""
 "The enemy has captured the hero %{name}!\n"
@@ -2765,7 +2764,7 @@ msgstr "Perdre le héros : %{name}."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
-"Ne pas gagner d'ici la fin du mois %{month}, semaine %{week}, jour %{day}."
+"Ne pas gagner avant cete date : mois %{month}, semaine %{week}, jour %{day}."
 
 msgid "%{color} player has been vanquished!"
 msgstr "Le joueur %{color} a été vaincu !"
@@ -2821,7 +2820,7 @@ msgid "Opponents:"
 msgstr "Opposants :"
 
 msgid "Class:"
-msgstr "Classe :"
+msgstr "Alignement :"
 
 msgid "Rating %{rating}%"
 msgstr "Taux %{rating}%"
@@ -2901,10 +2900,10 @@ msgid "Continue the Hero's movement along the current path."
 msgstr "Fait continuer le mouvement du Héros le long du chemin actuel."
 
 msgid "Kingdom Summary"
-msgstr "Résumé du Royaume"
+msgstr "Informations sur votre Royaume"
 
 msgid "View a Summary of your Kingdom."
-msgstr "Voir un résumé de votre Royaume."
+msgstr "Voir un récapitulatif de votre Royaume."
 
 msgid "Cast an adventure spell."
 msgstr "Lancer un sort d'aventure."
@@ -3045,8 +3044,8 @@ msgid ""
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
-"Ceci vous permet de changer la classe d'un joueur. Les classes ne sont pas "
-"toujours modifiables. Selon le scénario, un joueur peut recevoir des "
+"Ceci vous permet de changer l'alignement d'un joueur. Les alignements ne sont "
+"pas toujours modifiables. Selon le scénario, un joueur peut recevoir des "
 "villages et/ou des héros supplémentaires qui ne sont pas de son alignement "
 "principal."
 
@@ -3285,7 +3284,7 @@ msgid "%{object} robbed"
 msgstr "%{object} cambriolé"
 
 msgid "%{object} raided"
-msgstr "%{object} attaqué"
+msgstr "%{object} pillé"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
