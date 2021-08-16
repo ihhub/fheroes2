@@ -2,7 +2,11 @@
 
 ## Requirements
 
-You will need to have a demo version or the full version of **Heroes of Might and Magic II** game to be able to play. We strongly advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms. Alternatively, you can **download a free demo version of the game using the bundled script**. See detailed instructions below.
+You will need to have a demo version or the full version of **Heroes of Might and Magic II** game to be able to play. We strongly
+advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms.
+
+Alternatively, you can **download a free demo version of the game (in English only) using the bundled script**. See detailed
+instructions below.
 
 ## Installation
 
@@ -40,9 +44,12 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 * After downloading the installer, launch it and follow the instructions.
 
-* During the installation process, you will be prompted to download and install the demo version of the original game (you can also do this later by clicking the appropriate shortcut in the Windows Start menu).
+* During the installation process, you will be prompted to download and install the demo version of the original game (you can also do
+  this later by clicking the appropriate shortcut in the Windows Start menu).
 
-* If you have a legally purchased copy of the original game, you can choose not to install the demo version, but to copy all files belonging to the original game to the fheroes2 installation directory.
+* If you have a legally purchased copy of the original game, you can choose not to install the demo version, but to copy the subdirectories
+  `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game) from the original game
+  directory to the fheroes2 installation directory.
 
 <a name="windows-zip-archive"></a>
 ### Windows ZIP archive
@@ -59,7 +66,10 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice.
 
-* If you have a legally purchased copy of the original game, copy all files belonging to the original game to the fheroes2 installation directory. Otherwise, you can download and install the demo version of the original game by running the `demo_windows.bat` script supplied in the ZIP archive.
+* If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some
+  of them may be missing depending on the version of the original game) from the original game directory to the fheroes2
+  installation directory. Otherwise, you can download and install the demo version of the original game by running the
+  `demo_windows.bat` script supplied in the ZIP archive.
 
 <a name="macos"></a>
 ## macOS
@@ -80,9 +90,14 @@ Then follow the instructions on the screen.
 
 * Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos10_15_sdl2.zip).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_1.sh` or
+  `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries
+  required to run the game.
 
-* If you have a legally purchased copy of the original game, copy all files belonging to the original game to the fheroes2 installation directory. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
+* If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of
+  them may be missing depending on the version of the original game) from the original game directory to the fheroes2 installation
+  directory. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script
+  supplied in the ZIP archive.
 
 <a name="linux"></a>
 ## Linux
@@ -90,7 +105,8 @@ Then follow the instructions on the screen.
 <a name="aur-package"></a>
 ### AUR package
 
-If you are using Arch Linux or compatible distribution, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2) from AUR (Arch User Repository).
+If you are using Arch Linux or compatible distribution, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2)
+from AUR (Arch User Repository).
 
 #### Install using AUR helper
 
@@ -102,7 +118,8 @@ yay -S aur/fheroes2
 
 #### Install using official guide
 
-Follow [official guide](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages). One of possible command sets:
+Follow [official guide](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
+One of possible command sets:
 
 ```sh
 git clone https://aur.archlinux.org/fheroes2.git
@@ -110,20 +127,26 @@ cd fheroes2
 makepkg -si
 ```
 
-If you have a legally purchased copy of the original game, copy all files belonging to the original game to the `$XDG_DATA_HOME/fheroes2` (usually `~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the `/usr/share/fheroes2/demo_unix.sh` script.
+If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
+be missing depending on the version of the original game) from the original game directory to the `$XDG_DATA_HOME/fheroes2` (usually
+`~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the
+`/usr/share/fheroes2/demo_unix.sh` script.
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
 
 * Download one of the following Linux ZIP archives:<br>
-[**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_sdl2.zip) or<br>
-[**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_sdl1.zip).
+  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_sdl2.zip) or<br>
+  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_sdl1.zip).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries required to run the game. The installation procedure depends on the Linux distribution you are using:
+* After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
+  required to run the game. The installation procedure depends on the Linux distribution you are using:
 
-  * **Debian-based**: run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux` subdirectory.
+  * **Debian-based**: run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux`
+    subdirectory.
 
-  * **Pacman-based (e.g. Arch Linux)**: run one of the following commands: `sudo pacman -S sdl sdl_mixer` or `sudo pacman -S sdl2 sdl2_mixer` (depending on the downloaded build).
+  * **Pacman-based (e.g. Arch Linux)**: run one of the following commands: `sudo pacman -S sdl sdl_mixer` or `sudo pacman -S sdl2 sdl2_mixer`
+    (depending on the downloaded build).
 
   * **RedHat-based**: for RPM-based distributions (such as Fedora or RedHat) use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
 
@@ -131,12 +154,15 @@ If you have a legally purchased copy of the original game, copy all files belong
 
   * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer`.
 
-* After all dependencies are installed, copy all files belonging to the original game to the fheroes2 installation directory if you have a legally purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
+* After all dependencies are installed, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending
+  on the version of the original game) from the original game directory to the fheroes2 installation directory if you have a legally
+  purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the
+  `demo_unix.sh` script supplied in the ZIP archive.
 
 <a name="playstation-vita"></a>
 ## PlayStation Vita
 
-Please note: you need to be running custom firmware for it to work.
+**Please note**: you need to be running custom firmware for it to work.
 
 * Download the [**PlayStation Vita ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_psv_sdl2.zip).
 
@@ -145,7 +171,7 @@ Please note: you need to be running custom firmware for it to work.
 <a name="nintendo-switch"></a>
 ## Nintendo Switch
 
-Please note: you need to be running custom firmware for it to work.
+**Please note**: you need to be running custom firmware for it to work.
 
 * Download the [**Nintendo Switch ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_switch_sdl2.zip).
 
@@ -171,4 +197,5 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 ),
 [**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
 [**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch-sdl2_dev).
-**These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers. DON'T EXPECT THEM TO WORK PROPERLY.**
+**These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers.
+DON'T EXPECT THEM TO WORK PROPERLY.**

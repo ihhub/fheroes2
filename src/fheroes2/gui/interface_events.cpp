@@ -24,7 +24,7 @@
 #include <vector>
 
 #include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog_system_options.h"
 #include "game.h"
@@ -199,7 +199,6 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
 
 fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
-    Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
@@ -235,7 +234,6 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     default:
         break;
     }
-    Mixer::Enhance();
 
     return fheroes2::GameMode::CANCEL;
 }

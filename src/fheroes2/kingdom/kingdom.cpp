@@ -699,22 +699,17 @@ void Kingdoms::Init( void )
         GetKingdom( *it ).Init( *it );
 }
 
-u32 Kingdoms::size( void ) const
-{
-    return KINGDOMMAX + 1;
-}
-
 void Kingdoms::clear( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        kingdoms[ii].clear();
+    for ( Kingdom & kingdom : kingdoms )
+        kingdom.clear();
 }
 
 void Kingdoms::ApplyPlayWithStartingHero( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ApplyPlayWithStartingHero();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ApplyPlayWithStartingHero();
 }
 
 const Kingdom & Kingdoms::GetKingdom( int color ) const
@@ -790,39 +785,39 @@ Heroes * Kingdom::GetLastBattleWinHero() const
 
 void Kingdoms::NewDay( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ActionNewDay();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ActionNewDay();
 }
 
 void Kingdoms::NewWeek( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ActionNewWeek();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ActionNewWeek();
 }
 
 void Kingdoms::NewMonth( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ActionNewMonth();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ActionNewMonth();
 }
 
 int Kingdoms::GetNotLossColors( void ) const
 {
     int result = 0;
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].GetColor() && !kingdoms[ii].isLoss() )
-            result |= kingdoms[ii].GetColor();
+    for ( const Kingdom & kingdom : kingdoms )
+        if ( kingdom.GetColor() && !kingdom.isLoss() )
+            result |= kingdom.GetColor();
     return result;
 }
 
 int Kingdoms::FindWins( int cond ) const
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].GetColor() && world.KingdomIsWins( kingdoms[ii], cond ) )
-            return kingdoms[ii].GetColor();
+    for ( const Kingdom & kingdom : kingdoms )
+        if ( kingdom.GetColor() && world.KingdomIsWins( kingdom, cond ) )
+            return kingdom.GetColor();
     return 0;
 }
 
@@ -845,15 +840,15 @@ void Kingdoms::AddCastles( const AllCastles & castles )
 
 void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
 {
-    for ( uint32_t i = 0; i < size(); ++i ) {
-        if ( kingdoms[i].isPlay() ) {
-            const int color = kingdoms[i].GetColor();
+    for ( Kingdom & kingdom : kingdoms ) {
+        if ( kingdom.isPlay() ) {
+            const int color = kingdom.GetColor();
             const Funds & funds = captureobj.TributeCapturedObject( color, objectType );
 
-            kingdoms[i].AddFundsResource( funds );
+            kingdom.AddFundsResource( funds );
 
             // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdoms[i].isControlHuman() ) {
+            if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
 
                 event.computer = true;
@@ -929,9 +924,9 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
 {
-    msg << static_cast<u32>( obj.size() );
-    for ( u32 ii = 0; ii < obj.size(); ++ii )
-        msg << obj.kingdoms[ii];
+    msg << Kingdoms::_size;
+    for ( const Kingdom & kingdom : obj.kingdoms )
+        msg << kingdom;
 
     return msg;
 }
@@ -941,7 +936,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
     u32 kingdomscount = 0;
     msg >> kingdomscount;
 
-    if ( kingdomscount <= KINGDOMMAX + 1 ) {
+    if ( kingdomscount <= Kingdoms::_size ) {
         for ( u32 i = 0; i < kingdomscount; ++i )
             msg >> obj.kingdoms[i];
     }
