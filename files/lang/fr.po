@@ -449,7 +449,7 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} lance %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} fait %{value} dégât(s) à un mort-vivant."
+msgstr "%{spell} fait %{value} dégâts à un mort-vivant."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr "%{spell} fait %{value} dégât(s) à tous les morts-vivants."
@@ -1239,22 +1239,22 @@ msgid "Tent"
 msgstr "Tente"
 
 msgid "Captain's Quarters"
-msgstr "Quartiers du capitaine"
+msgstr "Quartiers du Capitaine"
 
 msgid "Mage Guild, Level 1"
-msgstr "Guilde des mages niv. 1"
+msgstr "Guilde des M. niv. 1"
 
 msgid "Mage Guild, Level 2"
-msgstr "Guilde des mages niv. 2"
+msgstr "Guilde des M. niv. 2"
 
 msgid "Mage Guild, Level 3"
-msgstr "Guilde des mages niv. 3"
+msgstr "Guilde des M. niv. 3"
 
 msgid "Mage Guild, Level 4"
-msgstr "Guilde des mages niv. 4"
+msgstr "Guilde des M. niv. 4"
 
 msgid "Mage Guild, Level 5"
-msgstr "Guilde des mages niv. 5"
+msgstr "Guilde des M. niv. 5"
 
 msgid "Crystal Garden"
 msgstr "Jardin de Cristaux"
@@ -1452,7 +1452,7 @@ msgid "Black Tower"
 msgstr "Tour noire"
 
 msgid "Shrine"
-msgstr "Sanctuaire"
+msgstr "Mausolée"
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -1593,7 +1593,7 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Le lieu saint augmente la puissance de nécromancie de tous les nécromanciens "
+"Le Mausolée augmente la puissance de nécromancie de tous les nécromanciens "
 "de 10 pour cents."
 
 msgid "Cannot recruit - guest to guard automove error."
@@ -2337,28 +2337,28 @@ msgid "Human"
 msgstr "Humain"
 
 msgid "1st"
-msgstr "1-er"
+msgstr "1er"
 
 msgid "2nd"
-msgstr "2-ème"
+msgstr "2ème"
 
 msgid "3rd"
-msgstr "3-ème"
+msgstr "3ème"
 
 msgid "4th"
-msgstr "4-ème"
+msgstr "4ème"
 
 msgid "5th"
-msgstr "5-ème"
+msgstr "5ème"
 
 msgid "6th"
-msgstr "6-ème"
+msgstr "6ème"
 
 msgid "Oracle: Player Rankings"
 msgstr "Oracle : Classement de joueurs"
 
 msgid "Thieves' Guild: Player Rankings"
-msgstr "Guilde des voleurs: Classement de joueurs"
+msgstr "Guilde des voleurs : Classement de joueurs"
 
 msgid "Number of Towns:"
 msgstr "Nombre de villages :"
@@ -2827,10 +2827,10 @@ msgid "Rating %{rating}%"
 msgstr "Taux %{rating}%"
 
 msgid "Astrologers proclaim Month of the %{name}."
-msgstr "Les astrologues proclament le mois de %{name}."
+msgstr "Les astrologues proclament le Mois %{name}."
 
 msgid "Astrologers proclaim Week of the %{name}."
-msgstr "Les astrologues proclament la Semaine de %{name}."
+msgstr "Les astrologues proclament la Semaine %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr ""
@@ -5389,76 +5389,76 @@ msgid "speed|Ultra Fast"
 msgstr "Ultra rapide"
 
 msgid "week|PLAGUE"
-msgstr "la PESTE"
+msgstr "de la PESTE"
 
 msgid "week|Ant"
-msgstr "la Fourmi"
+msgstr "de la Fourmi"
 
 msgid "week|Grasshopper"
-msgstr "la Sauterelle"
+msgstr "de la Sauterelle"
 
 msgid "week|Dragonfly"
-msgstr "la Libellule"
+msgstr "de la Libellule"
 
 msgid "week|Spider"
-msgstr "l'Araignée"
+msgstr "de l'Araignée"
 
 msgid "week|Butterfly"
-msgstr "Papillon"
+msgstr "du Papillon"
 
 msgid "week|Bumblebee"
-msgstr "Bourdon"
+msgstr "du Bourdon"
 
 msgid "week|Locust"
-msgstr "Criquet"
+msgstr "du Criquet"
 
 msgid "week|Earthworm"
-msgstr "Ver"
+msgstr "du Ver"
 
 msgid "week|Hornet"
-msgstr "la Guêpe"
+msgstr "de la Guêpe"
 
 msgid "week|Beetle"
-msgstr "la Coccinelle"
+msgstr "de la Coccinelle"
 
 msgid "week|Squirrel"
-msgstr "l'Écureuil"
+msgstr "de l'Écureuil"
 
 msgid "week|Rabbit"
-msgstr "Lapin"
+msgstr "du Lapin"
 
 msgid "week|Gopher"
-msgstr "la Gourde"
+msgstr "de la Gourde"
 
 msgid "week|Badger"
-msgstr "Blaireau"
+msgstr "du Blaireau"
 
 msgid "week|Eagle"
-msgstr "l'Aigle"
+msgstr "de l'Aigle"
 
 msgid "week|Weasel"
-msgstr "la Belette"
+msgstr "de la Belette"
 
 msgid "week|Raven"
-msgstr "Corbeau"
+msgstr "du Corbeau"
 
 msgid "week|Mongoose"
-msgstr "la Mangouste"
+msgstr "de la Mangouste"
 
 msgid "week|Aardvark"
-msgstr "l'Aardvark"
+msgstr "de l'Oryctérope du Cap"
 
 msgid "week|Lizard"
-msgstr "Lézard"
+msgstr "du Lézard"
 
 msgid "week|Tortoise"
-msgstr "la Tortue"
+msgstr "de la Tortue"
 
 msgid "week|Hedgehog"
-msgstr "Hérisson"
+msgstr "du Hérisson"
 
 msgid "week|Condor"
-msgstr "Condor"
+msgstr "du Condor"
 
 msgid "Beach"
 msgstr "Plage"
@@ -7817,10 +7817,10 @@ msgid "heroes: in Arena can choose any of primary skills"
 msgstr "héros : l'arène permet de choisir parmi les compétences primaires"
 
 msgid "unions: allow meeting heroes"
-msgstr "unions : rencontres des héros"
+msgstr "alliances : rencontres des héros"
 
 msgid "unions: allow castle visiting"
-msgstr "unions : visites des châteaux"
+msgstr "alliances : visites des châteaux"
 
 msgid "battle: show army order"
 msgstr "combat : afficher l'ordre de l'armée"
