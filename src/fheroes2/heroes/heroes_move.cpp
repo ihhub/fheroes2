@@ -406,7 +406,7 @@ bool Heroes::isInVisibleMapArea() const
 bool Heroes::isDeepOcean() const
 {
     // Maximum number of hero's steps per cell is 9 so we check if the hero moved more than half of them.
-    const bool isHeroMovedHalfOfCell = ( sprite_index % 9 > 4 );
+    const bool isHeroMovedHalfOfCell = ( sprite_index < 45 && sprite_index % 9 > 4 );
     const int32_t tileIndex
         = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
     for ( const auto aroundIndex : Maps::GetAroundIndexes( tileIndex ) ) {
