@@ -294,6 +294,8 @@ namespace
                                     }
                                 }
                                 break;
+                            default:
+                                break;
                             }
                         }
                     }

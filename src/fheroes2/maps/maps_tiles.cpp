@@ -679,7 +679,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
     SetTile( mp2.tileIndex, mp2.flags );
     SetIndex( index );
-    SetObject( mp2.mapObject );
+    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObject ) );
 
     addons_level1.clear();
     addons_level2.clear();
