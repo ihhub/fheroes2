@@ -58,7 +58,7 @@ Battle::Catapult::Catapult( const HeroBase & hero )
         catShots += Artifact( Artifact::BALLISTA ).ExtraValue();
 
     const int maxCatShots = 3;
-    if( catShots > maxCatShots) {
+    if ( catShots > maxCatShots ) {
         catShots = maxCatShots;
     }
 }
