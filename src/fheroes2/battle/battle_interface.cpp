@@ -1608,7 +1608,7 @@ int CursorTypeToDirection( const int cursorType )
     return direction;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSwordCursor( const Cell * cell, int cursorType) const
+std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSwordCursor( const Cell * cell, int cursorType ) const
 {
     std::set<const Battle::Cell *> highlightCells;
     highlightCells.emplace( cell );
@@ -1658,6 +1658,46 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSword
     return highlightCells;
 }
 
+std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsForBigUnit( const Cell * cell ) const
+{
+    std::set<const Battle::Cell *> highlightCells;
+    highlightCells.emplace( cell );
+    int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
+
+    if ( Board::isValidDirection( index_pos, tailDirection ) ) {
+        const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
+        if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
+            highlightCells.emplace( tailCell );
+        }
+    }
+
+    if ( highlightCells.size() == 1 ) {
+        // Try opposite direction
+        tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
+        if ( Board::isValidDirection( index_pos, tailDirection ) ) {
+            const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
+            if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
+                highlightCells.emplace( tailCell );
+            }
+        }
+    }
+    return highlightCells;
+}
+
+std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnAreaShot( const Cell * cell ) const
+{
+    std::set<const Battle::Cell *> highlightCells;
+    highlightCells.emplace( cell );
+    const Indexes around = Board::GetAroundIndexes( index_pos );
+    for ( size_t i = 0; i < around.size(); ++i ) {
+        const Cell * aroundCell = Board::GetCell( around[i] );
+        if ( aroundCell != nullptr ) {
+            highlightCells.emplace( aroundCell );
+        }
+    }
+    return highlightCells;
+}
+
 std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCells( const Cell * cell, int cursorType ) const
 {
     std::set<const Battle::Cell *> highlightCells;
@@ -1667,40 +1707,14 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCells( const
     }
     else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
               && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
-        highlightCells.emplace( cell );
-        const Indexes around = Board::GetAroundIndexes( index_pos );
-        for ( size_t i = 0; i < around.size(); ++i ) {
-            const Cell * aroundCell = Board::GetCell( around[i] );
-            if ( aroundCell != nullptr ) {
-                highlightCells.emplace( aroundCell );
-            }
-        }
+        highlightCells = CalculateHighlightCellsOnAreaShot( cell );
     }
     else if ( _currentUnit->GetTailIndex() != -1 && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
-        highlightCells.emplace( cell );
-        int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
-
-        if ( Board::isValidDirection( index_pos, tailDirection ) ) {
-            const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
-            if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
-                highlightCells.emplace( tailCell );
-            }
-        }
-
-        if ( highlightCells.size() == 1 ) {
-            // Try opposite direction
-            tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
-            if ( Board::isValidDirection( index_pos, tailDirection ) ) {
-                const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
-                if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
-                    highlightCells.emplace( tailCell );
-                }
-            }
-        }
+        highlightCells = CalculateHighlightCellsForBigUnit( cell );
     }
     else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
               || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
-        highlightCells = CalculateHighlightCellsOnSwordCursor(cell, cursorType);
+        highlightCells = CalculateHighlightCellsOnSwordCursor( cell, cursorType );
     }
     else {
         highlightCells.emplace( cell );

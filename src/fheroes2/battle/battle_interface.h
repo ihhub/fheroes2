@@ -297,6 +297,8 @@ namespace Battle
         std::set<const Cell *> CalculateHighlightCells( const Cell *, int ) const;
         std::set<const Battle::Cell *> CalculateHighlightCellsOnValidSpell( const Cell * cell ) const;
         std::set<const Battle::Cell *> CalculateHighlightCellsOnSwordCursor( const Cell * cell, int ) const;
+        std::set<const Battle::Cell *> CalculateHighlightCellsForBigUnit( const Cell * cell) const;
+        std::set<const Battle::Cell *> CalculateHighlightCellsOnAreaShot( const Cell * cell) const;
 
         Arena & arena;
         Dialog::FrameBorder border;
