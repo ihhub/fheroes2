@@ -23,6 +23,7 @@
 #ifndef H2BATTLE_INTERFACE_H
 #define H2BATTLE_INTERFACE_H
 
+#include <set>
 #include <string>
 
 #include "battle_animation.h"
@@ -292,6 +293,8 @@ namespace Battle
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
+
+        std::set<const Cell *> CalculateHighlightCells( const Cell *, int ) const;
 
         Arena & arena;
         Dialog::FrameBorder border;
