@@ -13,7 +13,7 @@ try {
 
         Write-Host -ForegroundColor Green "Running DOSBOX to extract animation resources, please wait..."
 
-        & "DOSBOX\DOSBox.exe" -c "imgmount D 'homm2.ins' -t iso -fs iso" `
+        & "DOSBOX\DOSBox.exe" -c "imgmount D homm2.ins -t iso -fs iso" `
                               -c "mount E ." `
                               -c "copy D:\HEROES2\ANIM\*.* E:\ANIM" `
                               -c "exit"
