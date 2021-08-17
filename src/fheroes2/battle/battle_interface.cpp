@@ -1536,8 +1536,8 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnValid
     switch ( humanturn_spell.GetID() ) {
     case Spell::COLDRING: {
         const Indexes around = Board::GetAroundIndexes( index_pos );
-        for ( size_t i = 0; i < around.size(); ++i ) {
-            const Cell * aroundCell = Board::GetCell( around[i] );
+        for ( const int32_t index : around ) {
+            const Cell * aroundCell = Board::GetCell( index );
             if ( aroundCell != nullptr ) {
                 highlightCells.emplace( aroundCell );
             }
@@ -1548,8 +1548,8 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnValid
     case Spell::METEORSHOWER: {
         highlightCells.emplace( cell );
         const Indexes around = Board::GetAroundIndexes( index_pos );
-        for ( size_t i = 0; i < around.size(); ++i ) {
-            const Cell * aroundCell = Board::GetCell( around[i] );
+        for ( const int32_t index : around ) {
+            const Cell * aroundCell = Board::GetCell( index );
             if ( aroundCell != nullptr ) {
                 highlightCells.emplace( aroundCell );
             }
@@ -1559,15 +1559,15 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnValid
     case Spell::FIREBLAST: {
         highlightCells.emplace( cell );
         const Indexes around = Board::GetAroundIndexes( index_pos );
-        for ( size_t i = 0; i < around.size(); ++i ) {
-            const Cell * aroundCell = Board::GetCell( around[i] );
+        for ( const int32_t index : around ) {
+            const Cell * aroundCell = Board::GetCell( index );
             if ( aroundCell != nullptr ) {
                 highlightCells.emplace( aroundCell );
             }
 
-            const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
-            for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
-                const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
+            const Indexes adjacent = Board::GetAroundIndexes( index );
+            for ( const int32_t adjacentIndex : adjacent ) {
+                const Cell * aroundCellTwice = Board::GetCell( adjacentIndex );
                 if ( aroundCellTwice != nullptr ) {
                     highlightCells.emplace( aroundCellTwice );
                 }
@@ -1689,8 +1689,8 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnAreaS
     std::set<const Battle::Cell *> highlightCells;
     highlightCells.emplace( cell );
     const Indexes around = Board::GetAroundIndexes( index_pos );
-    for ( size_t i = 0; i < around.size(); ++i ) {
-        const Cell * aroundCell = Board::GetCell( around[i] );
+    for ( const int32_t index : around ) {
+        const Cell * aroundCell = Board::GetCell( index );
         if ( aroundCell != nullptr ) {
             highlightCells.emplace( aroundCell );
         }
