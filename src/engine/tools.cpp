@@ -254,7 +254,7 @@ namespace fheroes2
         const int dy = pt2.y - pt1.y;
         const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
         // round up the integer division
-        const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
+        const uint32_t length = ( step > 0 && dist >= step / 2 ) ? ( dist + step / 2 ) / step : 1;
         const double moveX = dx / static_cast<double>( length );
         const double moveY = dy / static_cast<double>( length );
 
