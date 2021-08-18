@@ -131,7 +131,7 @@ namespace fheroes2
                 posY = maxYPos;
 
             const double tempPos = static_cast<double>( posY - minYPos ) * ( _maxIndex - _minIndex ) / roiHeight;
-            _currentIndex = std::lround( tempPos ) + _minIndex;
+            _currentIndex = static_cast<int>( std::lround( tempPos ) ) + _minIndex;
 
             setPosition( _area.x + roiWidth / 2, posY - scrollbarImageMiddle );
         }
@@ -147,7 +147,7 @@ namespace fheroes2
                 posX = maxXPos;
 
             const double tempPos = static_cast<double>( posX - minXPos ) * ( _maxIndex - _minIndex ) / roiWidth;
-            _currentIndex = std::lround( tempPos ) + _minIndex;
+            _currentIndex = static_cast<int>( std::lround( tempPos ) ) + _minIndex;
 
             setPosition( posX - scrollbarImageMiddle, _area.y + roiHeight / 2 );
         }
