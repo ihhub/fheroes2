@@ -283,7 +283,7 @@ msgid "Luck"
 msgstr "Chance"
 
 msgid "Spell Points"
-msgstr "Pt. de magie"
+msgstr "Pt de magie"
 
 msgid "Hero's Options"
 msgstr "Options du héros"
@@ -449,22 +449,22 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} lance %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} fait %{value} dégâts à un mort-vivant."
+msgstr "%{spell} inflige %{value} dégâts à un mort-vivant."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} fait %{value} dégât(s) à tous les morts-vivants."
+msgstr "%{spell} inflige %{value} dégâts à tous les morts-vivants."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} fait %{value} dégât(s), %{count} créatures meurent."
+msgstr "%{spell} inflige %{value} dégâts, %{count} créatures meurent."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr "%{spell} fait %{damage} dégât(s)."
+msgstr "%{spell} inflige %{damage} dégâts."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} fait %{value} dégât(s) à une créature vivante."
+msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} fait %{value} dégât(s) à toutes les créatures vivantes."
+msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
 
 msgid "The Unicorns attack blinds the %{name}!"
 msgstr "L'attaque des Licornes aveugle les %{name} !"
@@ -1947,7 +1947,7 @@ msgid "Your army too big!"
 msgstr "Votre armée est trop grande !"
 
 msgid "Choose game language:"
-msgstr "Choisissez la langue du jeu :"
+msgstr "Choix de la langue :"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} a gagné un niveau."
@@ -2561,7 +2561,6 @@ msgid "Expansion Campaign"
 msgstr "Campagne Expansion"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
 "L'une des quatre nouvelles campagnes de l'extension The Price of Loyalty."
 
 msgid "Host"
@@ -2996,7 +2995,7 @@ msgid "World Map"
 msgstr "Carte du monde"
 
 msgid "Month: %{month} Week: %{week}"
-msgstr "Mois : %{month} Semaine : %{week}"
+msgstr "Mois : %{month}, Semaine : %{week}"
 
 msgid "Day: %{day}"
 msgstr "Jour : %{day}"
@@ -3016,7 +3015,7 @@ msgid ""
 "shows the date."
 msgstr ""
 "Cette fenêtre fournit des informations sur le statut de votre héros et "
-"royaume, et affiche la date."
+"de votre royaume, et affiche la date."
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
@@ -7926,7 +7925,7 @@ msgstr ""
 #~ msgstr "monde : afficher le contenu d'objets visités"
 
 #~ msgid "world: ban for WeekOf/MonthOf Monsters"
-#~ msgstr "monde : interdiction les Semaines/Mois de monstres"
+#~ msgstr "monde : interdire les Semaines/Mois de monstres"
 
 #~ msgid "world: ban plagues months"
 #~ msgstr "monde : interdire les Mois de PESTE"
