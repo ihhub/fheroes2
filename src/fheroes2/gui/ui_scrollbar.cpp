@@ -21,6 +21,7 @@
 #include "ui_scrollbar.h"
 
 #include <cassert>
+#include <cmath>
 
 namespace fheroes2
 {
@@ -119,39 +120,36 @@ namespace fheroes2
         const int roiHeight = _area.height - height();
 
         if ( _isVertical() ) {
-            int32_t posY = position.y;
-            const int32_t maxYPos = _area.y + roiHeight;
+            const int32_t scrollbarImageMiddle = height() / 2;
+            const int32_t minYPos = _area.y + scrollbarImageMiddle;
+            const int32_t maxYPos = _area.y + roiHeight + height() - scrollbarImageMiddle - 1;
 
-            if ( posY < _area.y )
-                posY = _area.y;
+            int32_t posY = position.y;
+            if ( posY < minYPos )
+                posY = minYPos;
             else if ( posY > maxYPos )
                 posY = maxYPos;
 
-            const double tempPos = static_cast<double>( posY - _area.y ) * ( _maxIndex - _minIndex ) / roiHeight;
-            _currentIndex = static_cast<int>( tempPos + 0.5 ) + _minIndex;
+            const double tempPos = static_cast<double>( posY - minYPos ) * ( _maxIndex - _minIndex ) / roiHeight;
+            _currentIndex = std::lround( tempPos ) + _minIndex;
 
-            const int32_t posX = _area.x + roiWidth / 2;
-            setPosition( posX, posY );
+            setPosition( _area.x + roiWidth / 2, posY - scrollbarImageMiddle );
         }
         else {
-            int32_t posX = position.x;
-            const int32_t maxXPos = _area.x + roiWidth;
+            const int32_t scrollbarImageMiddle = width() / 2;
+            const int32_t minXPos = _area.x + scrollbarImageMiddle;
+            const int32_t maxXPos = _area.x + roiWidth + width() - scrollbarImageMiddle - 1;
 
-            if ( posX < _area.x )
-                posX = _area.x;
+            int32_t posX = position.x;
+            if ( posX < minXPos )
+                posX = minXPos;
             else if ( posX > maxXPos )
                 posX = maxXPos;
 
-            const double tempPos = static_cast<double>( posX - _area.x ) * ( _maxIndex - _minIndex ) / roiWidth;
-            _currentIndex = static_cast<int>( tempPos + 0.5 ) + _minIndex;
+            const double tempPos = static_cast<double>( posX - minXPos ) * ( _maxIndex - _minIndex ) / roiWidth;
+            _currentIndex = std::lround( tempPos ) + _minIndex;
 
-            const int32_t posY = _area.y + roiHeight / 2;
-            setPosition( posX, posY );
+            setPosition( posX - scrollbarImageMiddle, _area.y + roiHeight / 2 );
         }
-    }
-
-    bool Scrollbar::_isVertical() const
-    {
-        return _area.width < _area.height;
     }
 }

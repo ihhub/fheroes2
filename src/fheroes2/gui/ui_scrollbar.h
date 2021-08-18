@@ -75,6 +75,9 @@ namespace fheroes2
         int _maxIndex;
         int _currentIndex;
 
-        bool _isVertical() const;
+        bool _isVertical() const
+        {
+            return _area.width < _area.height;
+        }
     };
 }
