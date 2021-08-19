@@ -2561,7 +2561,7 @@ msgid "Expansion Campaign"
 msgstr "Campagne Expansion"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-"L'une des quatre nouvelles campagnes de l'extension The Price of Loyalty."
+msgstr "L'une des quatre nouvelles campagnes de l'extension The Price of Loyalty."
 
 msgid "Host"
 msgstr "Hôte"
