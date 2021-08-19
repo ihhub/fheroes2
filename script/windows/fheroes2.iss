@@ -33,6 +33,10 @@ Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Micro
 Source: "..\..\docs\README.txt"; DestDir: "{app}"; Flags: isreadme
 Source: "..\demo\demo_windows.bat"; DestDir: "{app}"
 Source: "..\demo\demo_windows.ps1"; DestDir: "{app}"
+Source: "..\homm2\anim_extract_windows.bat"; DestDir: "{app}"
+Source: "..\homm2\anim_extract_windows.ps1"; DestDir: "{app}"
+Source: "..\homm2\homm2_windows.bat"; DestDir: "{app}"
+Source: "..\homm2\homm2_windows.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
@@ -45,6 +49,7 @@ Name: desktopicon; Description: "Desktop shortcut"
 [Icons]
 Name: "{group}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"
 Name: "{group}\Download demo version files"; Filename: "{app}\demo_windows.bat"; WorkingDir: "{app}"
+Name: "{group}\Extract game resources from the original HoMM2 distribution"; Filename: "{app}\homm2_windows.bat"; WorkingDir: "{app}"
 Name: "{group}\Game data files"; Filename: %WINDIR%\explorer.exe; Parameters: """%APPDATA%\{#AppName}"""
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
