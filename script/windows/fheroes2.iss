@@ -55,4 +55,17 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser
+Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser; Check: IsNotInstalledToTheDirectoryOfTheOriginalGame
+Filename: "{app}\anim_extract_windows.bat"; Description: "Extract animation resources"; Flags: postinstall runascurrentuser; Check: FileExists(ExpandConstant('{app}\homm2.gog'))
+
+[Code]
+function IsNotInstalledToTheDirectoryOfTheOriginalGame: Boolean;
+var
+    InstallationDirectory: String;
+begin
+    InstallationDirectory := ExpandConstant('{app}');
+
+    result := not FileExists(AddBackslash(InstallationDirectory) + 'HEROES2.EXE') or
+              not DirExists(AddBackslash(InstallationDirectory) + 'DATA') or
+              not DirExists(AddBackslash(InstallationDirectory) + 'MAPS');
+end;
