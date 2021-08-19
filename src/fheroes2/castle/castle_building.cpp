@@ -66,11 +66,14 @@ void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( _alpha < 255 ) {
-        if ( Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+    if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+        if ( _alpha < 255 - 15 ) {
             _alpha += 15;
-            return true;
         }
+        else {
+            _alpha = 255;
+        }
+        return true;
     }
     return false;
 }
@@ -546,7 +549,7 @@ fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const fher
     case BUILD_WEL2:
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Rect( pt.x + 288, pt.y + 97, 63, 18 );
+            return fheroes2::Rect( pt.x + 241, pt.y + 102, 142, 24 );
         case Race::BARB:
             return fheroes2::Rect( pt.x + 252, pt.y + 120, 44, 16 );
         case Race::SORC:
