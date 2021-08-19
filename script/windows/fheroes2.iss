@@ -60,12 +60,8 @@ Filename: "{app}\anim_extract_windows.bat"; Description: "Extract animation reso
 
 [Code]
 function IsNotInstalledToTheDirectoryOfTheOriginalGame: Boolean;
-var
-    InstallationDirectory: String;
 begin
-    InstallationDirectory := ExpandConstant('{app}');
-
-    result := not FileExists(AddBackslash(InstallationDirectory) + 'HEROES2.EXE') or
-              not DirExists(AddBackslash(InstallationDirectory) + 'DATA') or
-              not DirExists(AddBackslash(InstallationDirectory) + 'MAPS');
+    result := not FileExists(ExpandConstant('{app}\HEROES2.EXE')) or
+              not DirExists(ExpandConstant('{app}\DATA')) or
+              not DirExists(ExpandConstant('{app}\MAPS'));
 end;
