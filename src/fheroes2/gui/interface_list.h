@@ -51,6 +51,7 @@ namespace Interface
             , maxItems( 0 )
             , ptRedraw( pt )
             , useHotkeys( true )
+            , _updateScrollbar( false )
             , _timedButtonPgUp( [this]() { return buttonPgUp.isPressed(); } )
             , _timedButtonPgDn( [this]() { return buttonPgDn.isPressed(); } )
         {
@@ -112,7 +113,7 @@ namespace Interface
             _scrollbar.setImage( image );
         }
 
-        fheroes2::Scrollbar & GetScrollbar( void )
+        fheroes2::Scrollbar & GetScrollbar()
         {
             return _scrollbar;
         }
@@ -357,7 +358,17 @@ namespace Interface
                 _scrollbar.moveToPos( mousePos );
                 _topId = _scrollbar.currentIndex();
 
+                _updateScrollbar = true;
+
                 return true;
+            }
+
+            if ( _updateScrollbar ) {
+                _updateScrollbar = false;
+                if ( _scrollbar.updatePosition() ) {
+                    needRedraw = true;
+                    return true;
+                }
             }
 
             const fheroes2::Point & mousePos = le.GetMouseCursor();
@@ -419,6 +430,8 @@ namespace Interface
         fheroes2::Point ptRedraw;
 
         bool useHotkeys;
+
+        bool _updateScrollbar;
 
         fheroes2::TimedEventValidator _timedButtonPgUp;
         fheroes2::TimedEventValidator _timedButtonPgDn;

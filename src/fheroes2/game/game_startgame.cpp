@@ -26,7 +26,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
@@ -719,8 +719,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    // current music will be set along with the focus, reset music from the previous turn
+    // current music will be set along with the focus, reset environment sounds
+    // and terrain music theme from the previous turn
     Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetMixer();
 
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
@@ -1138,6 +1140,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
+
+    // reset environment sounds and terrain music theme at the end of the human turn
+    Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetMixer();
 
     return res;
 }

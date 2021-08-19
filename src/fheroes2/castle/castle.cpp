@@ -1814,7 +1814,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_CAPTAIN:
             return ICN::TWNKCAPT;
         case BUILD_WEL2:
-            return ICN::TWNKWEL2;
+            return ICN::KNIGHT_CASTLE_RIGHT_FARM;
         case BUILD_LEFTTURRET:
             return ICN::TWNKLTUR;
         case BUILD_RIGHTTURRET:

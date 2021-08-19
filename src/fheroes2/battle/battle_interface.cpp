@@ -25,8 +25,7 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -1652,25 +1651,46 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Cell * attackerCell = Board::GetCell( cell->GetIndex(), direction );
+            const Cell * attackerCell = Board::GetCell( index_pos, direction );
             assert( attackerCell != nullptr );
-
-            Position attackerPos;
 
             if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
                 // The attacking unit is already there and shouldn't move
-                attackerPos = _currentUnit->GetPosition();
+                highlightCells.emplace( _currentUnit->GetPosition().GetHead() );
+
+                if ( _currentUnit->isWide() ) {
+                    highlightCells.emplace( _currentUnit->GetPosition().GetTail() );
+                }
             }
             else {
-                attackerPos = Position::GetCorrect( *_currentUnit, attackerCell->GetIndex() );
-            }
+                highlightCells.emplace( attackerCell );
 
-            assert( attackerPos.GetHead() != nullptr );
-            highlightCells.emplace( attackerPos.GetHead() );
+                if ( _currentUnit->isWide() ) {
+                    int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
 
-            if ( _currentUnit->isWide() ) {
-                assert( attackerPos.GetTail() != nullptr );
-                highlightCells.emplace( attackerPos.GetTail() );
+                    if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
+                        const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
+
+                        if ( attackerTailCell != nullptr && attackerTailCell->GetDirection() != UNKNOWN
+                             && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
+                            highlightCells.emplace( attackerTailCell );
+                        }
+                    }
+
+                    if ( highlightCells.size() == 2 ) {
+                        // Try opposite direction
+                        tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
+
+                        if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
+                            const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
+
+                            if ( attackerTailCell != nullptr && attackerTailCell->GetDirection() != UNKNOWN
+                                 && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
+                                highlightCells.emplace( attackerTailCell );
+                            }
+                        }
+                    }
+                }
             }
         }
         else {
@@ -2086,9 +2106,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
                         const s32 from = Board::GetIndexDirection( index_pos, dir );
 
-                        // if free cell or it is b_current
-                        if ( UNKNOWN != Board::GetCell( from )->GetDirection() || from == _currentUnit->GetHeadIndex()
-                             || ( _currentUnit->isWide() && from == _currentUnit->GetTailIndex() ) ) {
+                        if ( Board::CanAttackUnitFromCell( *_currentUnit, from ) ) {
                             statusMsg = _( "Attack %{monster}" );
                             StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
 
@@ -4962,7 +4980,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     // surrender
     case 3: {
         if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
-            const HeroBase * enemy = arena.GetCommander( arena.GetCurrentColor(), true );
+            const HeroBase * enemy = arena.getEnemyCommander( arena.GetCurrentColor() );
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();

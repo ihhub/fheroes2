@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,32 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AUDIO_MUSIC_H
-#define H2AUDIO_MUSIC_H
+#include "h2d.h"
+#include "h2d_file.h"
+#include "settings.h"
+#include "system.h"
 
-#include <string>
-#include <vector>
-
-#include "types.h"
-
-namespace Music
+namespace
 {
-    void Play( const std::vector<u8> &, bool loop );
-    void Play( const std::string &, bool loop );
+    bool isInitialized = false;
+    fheroes2::H2RReader reader;
 
-    int Volume( int vol );
+    void initialize()
+    {
+        if ( isInitialized ) {
+            return;
+        }
 
-    void SetFadeIn( int );
+        isInitialized = true;
 
-    void Pause( void );
-    void Reset( void );
+        ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
+        if ( files.empty() ) {
+            return;
+        }
 
-    bool isPlaying( void );
-
-    void Mute();
-    void Unmute();
-
-    std::vector<u8> Xmi2Mid( const std::vector<u8> & );
+        for ( const std::string & fileName : files ) {
+            if ( reader.open( fileName ) ) {
+                return;
+            }
+        }
+    }
 }
 
-#endif
+namespace fheroes2
+{
+    namespace h2d
+    {
+        bool readImage( const std::string & name, Sprite & image )
+        {
+            // Initialize only when it's requested.
+            initialize();
+
+            return readImageFromH2D( reader, name, image );
+        }
+    }
+}

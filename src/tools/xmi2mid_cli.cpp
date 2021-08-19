@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "audio_music.h"
+#include "audio.h"
 #include "tools.h"
 
 #if defined( _MSC_VER )

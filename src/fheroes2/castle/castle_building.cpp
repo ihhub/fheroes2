@@ -66,11 +66,14 @@ void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( _alpha < 255 ) {
-        if ( Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+    if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+        if ( _alpha < 255 - 15 ) {
             _alpha += 15;
-            return true;
         }
+        else {
+            _alpha = 255;
+        }
+        return true;
     }
     return false;
 }
@@ -356,6 +359,11 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
             CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max, alpha );
         }
     }
+    else if ( castle.GetRace() == Race::KNGT && BUILD_WEL2 == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
+        const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
+        CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
+    }
 }
 
 bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
@@ -541,7 +549,7 @@ fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const fher
     case BUILD_WEL2:
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Rect( pt.x + 288, pt.y + 97, 63, 18 );
+            return fheroes2::Rect( pt.x + 241, pt.y + 102, 142, 24 );
         case Race::BARB:
             return fheroes2::Rect( pt.x + 252, pt.y + 120, 44, 16 );
         case Race::SORC:
@@ -881,9 +889,9 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
     switch ( castle.GetRace() ) {
     case Race::KNGT:
         ordersBuildings.push_back( BUILD_TENT );
+        ordersBuildings.push_back( BUILD_WEL2 );
         ordersBuildings.push_back( BUILD_CASTLE );
         ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( BUILD_WEL2 );
         ordersBuildings.push_back( BUILD_CAPTAIN );
         ordersBuildings.push_back( BUILD_LEFTTURRET );
         ordersBuildings.push_back( BUILD_RIGHTTURRET );

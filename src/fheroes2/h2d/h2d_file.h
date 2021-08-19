@@ -18,60 +18,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2VIEWWORLD_H
-#define H2VIEWWORLD_H
+#pragma once
 
-#include "math_base.h"
+#include "serialize.h"
 
-namespace Interface
+#include <map>
+#include <string>
+#include <vector>
+
+namespace fheroes2
 {
-    class Basic;
-}
+    class Sprite;
 
-enum class ViewWorldMode : int
-{
-    OnlyVisible = 0, // Only show what is currently not under fog of war
-
-    ViewArtifacts = 1,
-    ViewMines = 2,
-    ViewResources = 3,
-    ViewHeroes = 4,
-    ViewTowns = 5,
-
-    ViewAll = 6,
-};
-
-class ViewWorld
-{
-public:
-    enum ZoomLevel : int
+    // Heroes 2 Data (H2D) file format used for storing files needed for the project. This format is not a part of original HoMM II.
+    class H2RReader
     {
-        ZoomLevel0 = 0,
-        ZoomLevel1 = 1,
-        ZoomLevel2 = 2,
-        ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
-    };
+    public:
+        // Returns true if file opening is successful.
+        bool open( const std::string & path );
 
-    static void ViewWorldWindow( const int color, const ViewWorldMode type, Interface::Basic & interface );
-
-    struct ZoomROIs
-    {
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
-
-        bool zoomIn( const bool cycle );
-        bool zoomOut( const bool cycle );
-        bool ChangeCenter( const fheroes2::Point & centerInPixels );
-
-        const fheroes2::Rect & GetROIinPixels() const;
-        fheroes2::Rect GetROIinTiles() const;
-
-        ZoomLevel _zoomLevel;
-        fheroes2::Point _center;
-        fheroes2::Rect _roiForZoomLevels[4];
+        // Returns non-empty vector if requested file exists.
+        std::vector<uint8_t> getFile( const std::string & fileName );
 
     private:
-        bool changeZoom( const ZoomLevel newLevel );
-    };
-};
+        // Relationship between file name in non-capital letters and its offset from the start of the archive.
+        std::map<std::string, std::pair<uint32_t, uint32_t>> _fileNameAndOffset;
 
-#endif
+        // Stream for reading h2d file.
+        StreamFile _fileStream;
+    };
+
+    // This class is not designed to be performance optimized as it will be used very rarely and out of game running session.
+    class H2Writer
+    {
+    public:
+        // Returns true if file opening is successful.
+        bool write( const std::string & path ) const;
+
+        bool add( const std::string & name, const std::vector<uint8_t> & data );
+
+    private:
+        std::map<std::string, std::vector<uint8_t>> _fileData;
+    };
+
+    bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image );
+}
