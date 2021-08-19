@@ -102,23 +102,27 @@ try {
 
     Write-Host "[3/3] copying game resources"
 
-    $shell = New-Object -ComObject "Shell.Application"
+    if ((Resolve-Path $homm2Path).Path -Eq (Resolve-Path $destPath).Path) {
+        Write-Host -ForegroundColor Green "Apparently fheroes2 was installed to the directory of the original game, there is no need to copy anything"
+    } else {
+        $shell = New-Object -ComObject "Shell.Application"
 
-    foreach ($srcDir in @("ANIM", "DATA", "MAPS", "MUSIC")) {
-        if (-Not (Test-Path -Path "$homm2Path\$srcDir" -PathType Container)) {
-            continue
-        }
+        foreach ($srcDir in @("ANIM", "DATA", "MAPS", "MUSIC")) {
+            if (-Not (Test-Path -Path "$homm2Path\$srcDir" -PathType Container)) {
+                continue
+            }
 
-        $destDir = $srcDir.ToLower()
+            $destDir = $srcDir.ToLower()
 
-        if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
-            [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
-        }
+            if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
+                [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
+            }
 
-        $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
+            $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
 
-        foreach ($item in $content.items()) {
-            $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
+            foreach ($item in $content.items()) {
+                $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
+            }
         }
     }
 
