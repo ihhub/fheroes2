@@ -80,7 +80,7 @@ public:
     void RedrawItem( const s32 &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp() override 
+    void ActionCurrentUp() override
     {
         // Do nothing.
     }

@@ -503,7 +503,7 @@ StreamBase & Route::operator<<( StreamBase & msg, const Step & step )
 
 StreamBase & Route::operator<<( StreamBase & msg, const Path & path )
 {
-    return msg << path.dst << path.hide << static_cast<const std::list<Step> & >( path );
+    return msg << path.dst << path.hide << static_cast<const std::list<Step> &>( path );
 }
 
 StreamBase & Route::operator>>( StreamBase & msg, Step & step )
