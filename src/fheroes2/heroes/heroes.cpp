@@ -112,13 +112,15 @@ int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &obje
                     std::string modRobber = _( "%{object} robber" );
                     StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
                     strs->append( modRobber );
-                } break;
+                    break;
+                }
                 case MP2::OBJ_PYRAMID:
                 case MP2::OBJN_PYRAMID: {
                     std::string modRaided = _( "%{object} raided" );
                     StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
                     strs->append( modRaided );
-                } break;
+                    break;
+                }
                 default:
                     strs->append( _( MP2::StringObject( objectTypes[ii] ) ) );
                     break;
@@ -1492,7 +1494,10 @@ void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
     save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_ZERO;
 }
 
-void Heroes::ActionPreBattle( void ) {}
+void Heroes::ActionPreBattle()
+{
+    // Do nothing.
+}
 
 void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {

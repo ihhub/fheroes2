@@ -270,11 +270,30 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        void ActionCurrentUp( void ) override {}
-        void ActionCurrentDn( void ) override {}
-        void ActionListDoubleClick( std::string & ) override {}
-        void ActionListSingleClick( std::string & ) override {}
-        void ActionListPressRight( std::string & ) override {}
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListDoubleClick( std::string & ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListSingleClick( std::string & ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListPressRight( std::string & ) override
+        {
+            // Do nothing.
+        }
 
         void SetOpenLog( const bool f )
         {
@@ -4708,7 +4727,8 @@ fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellIC
         // Overwrite result with custom blind value
         result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
         result.y += offset.y;
-    } break;
+        break;
+    }
     case ICN::STONSKIN:
     case ICN::STELSKIN:
         // bottom center point
@@ -4962,7 +4982,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
             else
                 Dialog::Message( "", _( "No spells to cast." ), Font::BIG, Dialog::OK );
         }
-    } break;
+        break;
+    }
 
     // retreat
     case 2: {
@@ -4973,9 +4994,11 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 humanturn_exit = true;
             }
         }
-        else
+        else {
             Dialog::Message( "", _( "Retreat disabled" ), Font::BIG, Dialog::OK );
-    } break;
+        }
+        break;
+    }
 
     // surrender
     case 3: {
@@ -4993,9 +5016,11 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 }
             }
         }
-        else
+        else {
             Dialog::Message( "", _( "Surrender disabled" ), Font::BIG, Dialog::OK );
-    } break;
+        }
+        break;
+    }
 
     default:
         break;

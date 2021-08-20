@@ -660,7 +660,8 @@ void World::ProcessNewMap()
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
-        } break;
+            break;
+        }
 
         default:
             break;

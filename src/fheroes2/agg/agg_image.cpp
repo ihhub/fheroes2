@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cassert>
 #include <cstring>
 #include <map>
@@ -70,6 +71,8 @@ namespace
             output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
         }
     }
+
+    const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 }
 
 namespace fheroes2
@@ -975,7 +978,7 @@ namespace fheroes2
             if ( _tilVsImage[id].empty() ) {
                 _tilVsImage[id].resize( 4 ); // 4 possible sides
 
-                const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
+                const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
                 if ( data.size() < headerSize ) {
                     return 0;
                 }

@@ -242,7 +242,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             case MP2::OBJ_BOAT: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -253,7 +254,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 else if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             case MP2::OBJ_MONSTER: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -264,7 +266,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawMonstersAndBoats ) {
                     monsterList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             case MP2::OBJ_HEROES: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -282,7 +285,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 else if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             default: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -293,7 +297,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             }
         }
     }

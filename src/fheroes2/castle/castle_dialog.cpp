@@ -603,7 +603,8 @@ int Castle::OpenDialog( bool readonly )
                                     RedrawResourcePanel( cur_pt );
                                     alphaHero = 0;
                                 }
-                            } break;
+                                break;
+                            }
 
                             default:
                                 break;

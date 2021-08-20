@@ -2084,7 +2084,8 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         default:
             break;
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( objectType );
@@ -2461,7 +2462,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
         msg2 = _( "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_FREEMANFOUNDRY: {
         monsToUpgrade = { Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM ) };
@@ -2469,7 +2471,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
         msg2 = _(
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
-    } break;
+        break;
+    }
 
     default:
         ERROR_LOG( "Incorrect object type passed to ActionToUpgradeArmyObject" );

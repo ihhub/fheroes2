@@ -379,17 +379,18 @@ struct MidiEvents : std::vector<MidiChunk>
                             trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
                         }
                         ptr += metaLength;
-                    } break;
+                        break;
+                    }
 
                     // key pressure
                     case 0x0A:
                     // control change
                     case 0x0B:
                     // pitch bend
-                    case 0x0E: {
+                    case 0x0E:
                         emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
                         ptr += 3;
-                    } break;
+                        break;
 
                     // XMI events doesn't have note off events
                     // note on
@@ -399,15 +400,16 @@ struct MidiEvents : std::vector<MidiChunk>
                         // note off
                         emplace_back( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F );
                         ptr += 3 + duration.second;
-                    } break;
+                        break;
+                    }
 
                     // program change
                     case 0x0C:
                     // channel aftertouch
-                    case 0x0D: {
+                    case 0x0D:
                         emplace_back( delta, *ptr, *( ptr + 1 ) );
                         ptr += 2;
-                    } break;
+                        break;
 
                     // unused command
                     default:

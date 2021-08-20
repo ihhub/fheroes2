@@ -80,16 +80,25 @@ public:
     void RedrawItem( const s32 &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
+    void ActionCurrentUp() override 
+    {
+        // Do nothing.
+    }
 
-    void ActionCurrentDn( void ) override {}
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
 
     void ActionListDoubleClick( s32 & ) override
     {
         result = Dialog::OK;
     }
 
-    void ActionListSingleClick( s32 & ) override {}
+    void ActionListSingleClick( s32 & ) override
+    {
+        // Do nothing.
+    }
 
     void ActionListPressRight( int32_t & index ) override
     {

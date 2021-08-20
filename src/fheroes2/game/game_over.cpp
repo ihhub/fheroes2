@@ -55,7 +55,8 @@ namespace
             const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
-        } break;
+            break;
+        }
 
         case GameOver::WINS_HERO: {
             body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
