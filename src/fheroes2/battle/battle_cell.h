@@ -56,13 +56,13 @@ namespace Battle
         explicit Cell( int32_t );
 
         void ResetQuality( void );
-        void ResetReachability();
+        void resetReachability();
 
         void SetObject( int );
         void SetQuality( u32 );
 
-        void SetReachableForHead();
-        void SetReachableForTail();
+        void setReachableForHead();
+        void setReachableForTail();
 
         void SetArea( const fheroes2::Rect & );
 

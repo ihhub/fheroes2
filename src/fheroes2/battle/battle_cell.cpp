@@ -191,12 +191,12 @@ void Battle::Cell::SetObject( int val )
     object = val;
 }
 
-void Battle::Cell::SetReachableForHead()
+void Battle::Cell::setReachableForHead()
 {
     _reachableForHead = true;
 }
 
-void Battle::Cell::SetReachableForTail()
+void Battle::Cell::setReachableForTail()
 {
     _reachableForTail = true;
 }
@@ -300,7 +300,7 @@ void Battle::Cell::ResetQuality( void )
     quality = 0;
 }
 
-void Battle::Cell::ResetReachability()
+void Battle::Cell::resetReachability()
 {
     _reachableForHead = false;
     _reachableForTail = false;

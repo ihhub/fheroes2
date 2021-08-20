@@ -93,7 +93,7 @@ void Battle::Board::Reset( void )
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-        it->ResetReachability();
+        it->resetReachability();
         it->ResetQuality();
     }
 }
@@ -180,12 +180,12 @@ uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 
 void Battle::Board::SetScanPassability( const Unit & unit )
 {
-    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetReachability(); } );
+    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.resetReachability(); } );
 
-    at( unit.GetHeadIndex() ).SetReachableForHead();
+    at( unit.GetHeadIndex() ).setReachableForHead();
 
     if ( unit.isWide() ) {
-        at( unit.GetTailIndex() ).SetReachableForTail();
+        at( unit.GetTailIndex() ).setReachableForTail();
     }
 
     if ( unit.isFlying() ) {
@@ -194,10 +194,10 @@ void Battle::Board::SetScanPassability( const Unit & unit )
 
         for ( std::size_t i = 0; i < size(); i++ ) {
             if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
-                at( i ).SetReachableForHead();
+                at( i ).setReachableForHead();
 
                 if ( unit.isWide() ) {
-                    at( i ).SetReachableForTail();
+                    at( i ).setReachableForTail();
                 }
             }
         }
@@ -436,7 +436,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
             Cell * headCell = GetCell( cellId );
             assert( headCell != nullptr );
 
-            headCell->SetReachableForHead();
+            headCell->setReachableForHead();
 
             if ( isWideUnit ) {
                 const int32_t prevCellId = i == 0 ? unit.GetHeadIndex() : result[i - 1];
@@ -444,7 +444,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
                 Cell * tailCell = GetCell( cellId, LEFT_SIDE & GetDirection( cellId, prevCellId ) ? LEFT : RIGHT );
                 assert( tailCell != nullptr );
 
-                tailCell->SetReachableForTail();
+                tailCell->setReachableForTail();
             }
         }
     }
