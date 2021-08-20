@@ -299,11 +299,20 @@ int Castle::OpenDialog( bool readonly )
             break;
         }
 
-        // Finish hero fade animation
+        // Finish fade animation
         if ( le.MousePressLeft() || le.MousePressRight() ) {
             if ( alphaHero != 255 ) {
                 alphaHero = 255;
                 fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
+            }
+            const uint32_t build = fadeBuilding.GetBuild();
+            if ( build != BUILD_NOTHING ) {
+                BuyBuilding( build );
+                if ( BUILD_CAPTAIN == build ) {
+                    RedrawIcons( *this, heroes, cur_pt );
+                    display.render();
+                }
+                fadeBuilding.StopFadeBuilding();
             }
         }
 
@@ -556,20 +565,11 @@ int Castle::OpenDialog( bool readonly )
                         }
 
                         case BUILD_CASTLE: {
-                            uint32_t build = fadeBuilding.GetBuild();
-                            if ( build != BUILD_NOTHING ) {
-                                BuyBuilding( build );
-                                if ( BUILD_CAPTAIN == build ) {
-                                    RedrawIcons( *this, heroes, cur_pt );
-                                    display.render();
-                                }
-                            }
-                            fadeBuilding.StopFadeBuilding();
                             const Heroes * prev = heroes.Guest();
-                            build = OpenTown();
                             heroes = world.GetHeroes( *this );
                             const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
 
+                            const uint32_t build = OpenTown();
                             if ( BUILD_NOTHING != build ) {
                                 AGG::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( build );
