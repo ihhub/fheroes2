@@ -227,7 +227,7 @@ namespace AI
         }
 
         // Check that the attacker is actually capable of attacking the target from this position
-        std::array<int32_t, 2> indexes = { headIndex, tailIndex };
+        const std::array<int32_t, 2> indexes = { headIndex, tailIndex };
 
         for ( const int32_t idx : indexes ) {
             if ( idx == -1 ) {
