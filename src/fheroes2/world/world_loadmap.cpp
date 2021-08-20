@@ -690,8 +690,7 @@ void World::ProcessNewMap()
 
     // Set Ultimate Artifact.
     fheroes2::Point ultimate_pos;
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
-                                           []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
+    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
     if ( vec_tiles.end() == it ) {
         // generate position for ultimate
         MapsIndexes pools;

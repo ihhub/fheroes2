@@ -312,7 +312,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     std::string str;
     if ( objectType == MP2::OBJ_COAST ) {
@@ -378,9 +378,9 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
     }
 
     const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
-    const int tileObject = world.GetTiles( dst ).GetObject();
+    const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject();
 
-    const bool monsterInfo = tileObject == MP2::OBJ_MONSTER;
+    const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
 
     // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
     if ( monsterInfo ) {
@@ -406,11 +406,11 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     if ( objectType != MP2::OBJ_ZERO
          && ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES
-              || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( objectType + 128 ) ) ) ) {
+              || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( static_cast<MP2::MapObjectType>( objectType + 128 ) ) ) ) ) {
         // This is non-main tile of an action object. We have to find the main tile.
         // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
         const int32_t radiusOfSearch = 3;

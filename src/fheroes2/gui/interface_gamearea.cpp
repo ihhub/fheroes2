@@ -227,9 +227,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            const int object = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.GetObject();
 
-            switch ( object ) {
+            switch ( objectType ) {
             case MP2::OBJ_ZERO: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -366,15 +366,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     for ( const Maps::Tiles * tile : drawList ) {
-        const int object = tile->GetObject();
-        if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+        const MP2::MapObjectType objectType = tile->GetObject();
+        if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
             const Heroes * hero = tile->GetHeroes();
             if ( hero ) {
                 const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
                 hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
             }
         }
-        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
+        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
             tile->RedrawBoatShadow( dst, tileROI, *this );
         }
     }
@@ -423,8 +423,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Heroes and boats.
     if ( drawTop || drawBottom ) {
         for ( const Maps::Tiles * tile : drawList ) {
-            const int object = tile->GetObject();
-            if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+            const MP2::MapObjectType objectType = tile->GetObject();
+            if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
                 const Heroes * hero = tile->GetHeroes();
                 if ( hero ) {
                     const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
@@ -437,7 +437,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
             }
-            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
+            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
                 tile->RedrawBoat( dst, tileROI, *this );
                 if ( drawTop ) {
                     tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );

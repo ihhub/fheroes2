@@ -238,8 +238,8 @@ public:
     int GetLuckWithModificators( std::string * str = nullptr ) const;
     int GetLevel( void ) const;
 
-    int GetMapsObject( void ) const;
-    void SetMapsObject( int );
+    MP2::MapObjectType GetMapsObject() const;
+    void SetMapsObject( const MP2::MapObjectType objectType );
 
     const fheroes2::Point & GetCenterPatrol( void ) const;
     void SetCenterPatrol( const fheroes2::Point & );
@@ -304,8 +304,8 @@ public:
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
-    bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
+    void SetVisitedWideTile( s32, const MP2::MapObjectType objectType, Visit::type_t = Visit::LOCAL );
+    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     // These methods are used only for AI.

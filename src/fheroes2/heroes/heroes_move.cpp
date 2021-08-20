@@ -631,8 +631,8 @@ void Heroes::UpdateRedrawBottom( const Maps::Tiles & tile )
 
 void Heroes::UpdateRedrawTop( const Maps::Tiles & tile )
 {
-    const int object = tile.GetObject();
-    if ( MP2::OBJ_BOAT != object && MP2::OBJ_HEROES != object ) {
+    const MP2::MapObjectType objectType = tile.GetObject();
+    if ( MP2::OBJ_BOAT != objectType && MP2::OBJ_HEROES != objectType ) {
         return;
     }
     if ( _redrawIndex.topOnBottom == tile.GetIndex() ) {
