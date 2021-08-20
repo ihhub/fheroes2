@@ -1035,7 +1035,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
-        ultimate_artifact.SetFound( true );
+        ultimate_artifact.markAsFound();
         return true;
     }
 
