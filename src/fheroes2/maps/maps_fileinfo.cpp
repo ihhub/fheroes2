@@ -413,11 +413,6 @@ bool Maps::FileInfo::NameSorting( const FileInfo & fi1, const FileInfo & fi2 )
     return AlphabeticalCompare( fi1.name, fi2.name );
 }
 
-bool Maps::FileInfo::NameCompare( const FileInfo & fi1, const FileInfo & fi2 )
-{
-    return fi1.name == fi2.name;
-}
-
 int Maps::FileInfo::KingdomRace( int color ) const
 {
     switch ( color ) {
@@ -587,7 +582,6 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
         return false;
 
     std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-    lists.erase( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ), lists.end() );
 
     // set preferably count filter
     const int prefPlayerCount = conf.PreferablyCountPlayers();

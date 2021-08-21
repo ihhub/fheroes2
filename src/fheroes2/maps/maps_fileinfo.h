@@ -57,7 +57,6 @@ namespace Maps
         }
         static bool NameSorting( const FileInfo &, const FileInfo & );
         static bool FileSorting( const FileInfo &, const FileInfo & );
-        static bool NameCompare( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
         bool isMultiPlayerMap( void ) const;
