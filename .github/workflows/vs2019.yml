@@ -26,3 +26,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
     - name: Build
       run: MSBuild.exe fheroes2-vs2019.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}
+    - name: Tools build
+      run: |
+        cd src/tools
+        MSBuild.exe extractor.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}
