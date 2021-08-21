@@ -29,4 +29,4 @@ jobs:
     - name: Tools build
       run: |
         cd src/tools
-        MSBuild.exe extractor.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}
+        MSBuild.exe extractor-vs2019.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}
