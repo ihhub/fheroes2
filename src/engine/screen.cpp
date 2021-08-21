@@ -99,7 +99,7 @@ namespace
             static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
             const std::vector<fheroes2::Size> possibleResolutions
                 = {fheroes2::Size( 640, 480 ), fheroes2::Size( 800, 600 ), fheroes2::Size( 1024, 768 ), fheroes2::Size( 1280, 960 ), fheroes2::Size( 1920, 1080 )};
-            const fheroes2::Size & currentResolution = resolutions.front();
+            const fheroes2::Size currentResolution = resolutions.front();
             for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
                 if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
                     break;
