@@ -76,17 +76,6 @@ namespace
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000
     };
-
-    struct settings_t
-    {
-        u32 id;
-        const char * str;
-
-        bool operator==( u32 i ) const
-        {
-            return id && id == i;
-        }
-    };
 }
 
 std::string Settings::GetVersion()
