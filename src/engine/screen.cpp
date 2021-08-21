@@ -70,7 +70,7 @@ namespace
 
     bool SortResolutions( const fheroes2::Size & first, const fheroes2::Size & second )
     {
-        return first.width > second.width || ( first.width == second.width && first.height >= second.height );
+        return first.width > second.width || ( first.width == second.width && first.height > second.height );
     }
 
     bool IsLowerThanDefaultRes( const fheroes2::Size & value )
