@@ -64,7 +64,7 @@ void Interface::StatusWindow::Reset()
 u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
 {
     if ( ptr ) {
-        Interface::StatusWindow * status = reinterpret_cast<Interface::StatusWindow *>( ptr );
+        Interface::StatusWindow * status = static_cast<Interface::StatusWindow *>( ptr );
         if ( StatusType::STATUS_RESOURCE == status->_state ) {
             status->_state = status->_oldState;
             Interface::Basic::Get().SetRedraw( REDRAW_STATUS );
