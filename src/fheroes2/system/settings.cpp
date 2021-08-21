@@ -87,144 +87,6 @@ namespace
             return id && id == i;
         }
     };
-
-    // internal settings
-    const settings_t settingsFHeroes2[] = {
-        {
-            Settings::GAME_SAVE_REWRITE_CONFIRM,
-            _( "game: always confirm for rewrite savefile" ),
-        },
-        {
-            Settings::GAME_REMEMBER_LAST_FOCUS,
-            _( "game: remember last focus" ),
-        },
-        {
-            Settings::GAME_BATTLE_SHOW_DAMAGE,
-            _( "battle: show damage info" ),
-        },
-        {
-            Settings::WORLD_SHOW_TERRAIN_PENALTY,
-            _( "world: show terrain penalty" ),
-        },
-        {
-            Settings::WORLD_SCOUTING_EXTENDED,
-            _( "world: scouting skill show extended content info" ),
-        },
-        {
-            Settings::WORLD_ALLOW_SET_GUARDIAN,
-            _( "world: allow set guardian to objects" ),
-        },
-        {
-            Settings::WORLD_EYE_EAGLE_AS_SCHOLAR,
-            _( "world: Eagle Eye also works like Scholar in H3." ),
-        },
-        {
-            Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
-            _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-        },
-        {
-            Settings::WORLD_SCALE_NEUTRAL_ARMIES,
-            _( "world: Neutral armies scale with game difficulty" ),
-        },
-        {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS,
-            _( "world: use unique artifacts for resource affecting" ),
-        },
-        {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS,
-            _( "world: use unique artifacts for primary skills" ),
-        },
-        {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS,
-            _( "world: use unique artifacts for secondary skills" ),
-        },
-        {
-            Settings::WORLD_EXT_OBJECTS_CAPTURED,
-            _( "world: Wind/Water Mills and Magic Garden can be captured" ),
-        },
-        {
-            Settings::WORLD_DISABLE_BARROW_MOUNDS,
-            _( "world: disable Barrow Mounds" ),
-        },
-        {
-            Settings::CASTLE_ALLOW_GUARDIANS,
-            _( "castle: allow guardians" ),
-        },
-        {
-            Settings::CASTLE_MAGEGUILD_POINTS_TURN,
-            _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" ),
-        },
-        {
-            Settings::HEROES_BUY_BOOK_FROM_SHRINES,
-            _( "heroes: allow buy a spellbook from Shrines" ),
-        },
-        {
-            Settings::HEROES_COST_DEPENDED_FROM_LEVEL,
-            _( "heroes: recruit cost to be dependent on hero level" ),
-        },
-        {
-            Settings::HEROES_REMEMBER_POINTS_RETREAT,
-            _( "heroes: remember move points for retreat/surrender result" ),
-        },
-        {
-            Settings::HEROES_TRANSCRIBING_SCROLLS,
-            _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
-        },
-        {
-            Settings::HEROES_ARENA_ANY_SKILLS,
-            _( "heroes: in Arena can choose any of primary skills" ),
-        },
-        {
-            Settings::UNIONS_ALLOW_HERO_MEETINGS,
-            _( "unions: allow meeting heroes" ),
-        },
-        {
-            Settings::UNIONS_ALLOW_CASTLE_VISITING,
-            _( "unions: allow castle visiting" ),
-        },
-        {
-            Settings::BATTLE_SHOW_ARMY_ORDER,
-            _( "battle: show army order" ),
-        },
-        {
-            Settings::BATTLE_SOFT_WAITING,
-            _( "battle: soft wait troop" ),
-        },
-        {
-            Settings::BATTLE_REVERSE_WAIT_ORDER,
-            _( "battle: reverse wait order (fast, average, slow)" ),
-        },
-        {
-            Settings::GAME_SHOW_SYSTEM_INFO,
-            _( "game: show system info" ),
-        },
-        {
-            Settings::GAME_AUTOSAVE_ON,
-            _( "game: autosave on" ),
-        },
-        {
-            Settings::GAME_AUTOSAVE_BEGIN_DAY,
-            _( "game: autosave will be made at the beginning of the day" ),
-        },
-        {
-            Settings::GAME_USE_FADE,
-            _( "game: use fade" ),
-        },
-        {
-            Settings::GAME_EVIL_INTERFACE,
-            _( "game: use evil interface" ),
-        },
-        {
-            Settings::GAME_HIDE_INTERFACE,
-            _( "game: hide interface" ),
-        },
-        {
-            Settings::GAME_CONTINUE_AFTER_VICTORY,
-            _( "game: offer to continue the game afer victory condition" ),
-        },
-
-        { 0, nullptr },
-    };
 }
 
 std::string Settings::GetVersion()
@@ -1141,11 +1003,80 @@ bool Settings::ExtModes( u32 f ) const
     return false;
 }
 
-const char * Settings::ExtName( u32 f ) const
+std::string Settings::ExtName( const uint32_t settingId ) const
 {
-    const settings_t * ptr = std::find( settingsFHeroes2, std::end( settingsFHeroes2 ) - 1, f );
+    switch ( settingId ) {
+    case Settings::GAME_SAVE_REWRITE_CONFIRM:
+        return _( "game: always confirm for rewrite savefile" );
+    case Settings::GAME_REMEMBER_LAST_FOCUS:
+        return _( "game: remember last focus" );
+    case Settings::GAME_BATTLE_SHOW_DAMAGE:
+        return _( "battle: show damage info" );
+    case Settings::WORLD_SHOW_TERRAIN_PENALTY:
+        return _( "world: show terrain penalty" );
+    case Settings::WORLD_SCOUTING_EXTENDED:
+        return _( "world: scouting skill show extended content info" );
+    case Settings::WORLD_ALLOW_SET_GUARDIAN:
+        return _( "world: allow set guardian to objects" );
+    case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
+        return _( "world: Eagle Eye also works like Scholar in H3." );
+    case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
+        return _( "world: Crystal Ball also added Identify Hero and Visions spells" );
+    case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
+        return _( "world: Neutral armies scale with game difficulty" );
+    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
+        return _( "world: use unique artifacts for resource affecting" );
+    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
+        return _( "world: use unique artifacts for primary skills" );
+    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
+        return _( "world: use unique artifacts for secondary skills" );
+    case Settings::WORLD_EXT_OBJECTS_CAPTURED:
+        return _( "world: Wind/Water Mills and Magic Garden can be captured" );
+    case Settings::WORLD_DISABLE_BARROW_MOUNDS:
+        return _( "world: disable Barrow Mounds" );
+    case Settings::CASTLE_ALLOW_GUARDIANS:
+        return _( "castle: allow guardians" );
+    case Settings::CASTLE_MAGEGUILD_POINTS_TURN:
+        return _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" );
+    case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
+        return _( "heroes: allow buy a spellbook from Shrines" );
+    case Settings::HEROES_COST_DEPENDED_FROM_LEVEL:
+        return _( "heroes: recruit cost to be dependent on hero level" );
+    case Settings::HEROES_REMEMBER_POINTS_RETREAT:
+        return _( "heroes: remember move points for retreat/surrender result" );
+    case Settings::HEROES_TRANSCRIBING_SCROLLS:
+        return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
+    case Settings::HEROES_ARENA_ANY_SKILLS:
+        return _( "heroes: in Arena can choose any of primary skills" );
+    case Settings::UNIONS_ALLOW_HERO_MEETINGS:
+        return _( "unions: allow meeting heroes" );
+    case Settings::UNIONS_ALLOW_CASTLE_VISITING:
+        return _( "unions: allow castle visiting" );
+    case Settings::BATTLE_SHOW_ARMY_ORDER:
+        return _( "battle: show army order" );
+    case Settings::BATTLE_SOFT_WAITING:
+        return _( "battle: soft wait troop" );
+    case Settings::BATTLE_REVERSE_WAIT_ORDER:
+        return _( "battle: reverse wait order (fast, average, slow)" );
+    case Settings::GAME_SHOW_SYSTEM_INFO:
+        return _( "game: show system info" );
+    case Settings::GAME_AUTOSAVE_ON:
+        return _( "game: autosave on" );
+    case Settings::GAME_AUTOSAVE_BEGIN_DAY:
+        return _( "game: autosave will be made at the beginning of the day" );
+    case Settings::GAME_USE_FADE:
+        return _( "game: use fade" );
+    case Settings::GAME_EVIL_INTERFACE:
+        return _( "game: use evil interface" );
+    case Settings::GAME_HIDE_INTERFACE:
+        return _( "game: hide interface" );
+    case Settings::GAME_CONTINUE_AFTER_VICTORY:
+        return _( "game: offer to continue the game afer victory condition" );
+    default:
+        break;
+    };
 
-    return ptr ? _( ptr->str ) : nullptr;
+    return std::string();
 }
 
 void Settings::ExtSetModes( u32 f )

@@ -507,11 +507,6 @@ void Kingdom::UpdateRecruits( void )
         world.UpdateRecruits( recruits );
 }
 
-const Puzzle & Kingdom::PuzzleMaps( void ) const
-{
-    return puzzle_maps;
-}
-
 Puzzle & Kingdom::PuzzleMaps( void )
 {
     return puzzle_maps;

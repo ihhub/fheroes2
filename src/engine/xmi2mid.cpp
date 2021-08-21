@@ -144,25 +144,12 @@ struct GroupChunkHeader
     u32 length;
     u32 type; // 4 byte ASCII string
 
-    GroupChunkHeader( u32 id, u32 sz, u32 tp )
-        : ID( id )
-        , length( sz )
-        , type( tp )
-    {}
     GroupChunkHeader()
         : ID( 0 )
         , length( 0 )
         , type( 0 )
     {}
 };
-
-StreamBuf & operator<<( StreamBuf & sb, const GroupChunkHeader & st )
-{
-    sb.putBE32( st.ID );
-    sb.putBE32( st.length );
-    sb.putBE32( st.type );
-    return sb;
-}
 
 StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
 {
@@ -369,7 +356,7 @@ struct MidiEvents : std::vector<MidiChunk>
                     switch ( *ptr >> 4 ) {
                     // metadata
                     case 0x0F: {
-                        ptr++; // skip 0xFF
+                        ++ptr; // skip 0xFF
                         const uint8_t metaType = *( ptr++ );
                         const uint8_t metaLength = *( ptr++ );
                         emplace_back( delta, 0xFF, metaType, ptr, metaLength );

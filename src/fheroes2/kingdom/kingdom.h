@@ -151,7 +151,6 @@ public:
 
     bool HeroesMayStillMove( void ) const;
 
-    const Puzzle & PuzzleMaps( void ) const;
     Puzzle & PuzzleMaps( void );
 
     void SetVisitTravelersTent( int color );
