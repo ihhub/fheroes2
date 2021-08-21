@@ -504,9 +504,11 @@ void AGG::PlaySoundInternally( const int m82, const int soundVolume )
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
 
-    Mixer::Pause( ch );
-    Mixer::Volume( ch, Mixer::MaxVolume() * soundVolume / 10 );
-    Mixer::Resume( ch );
+    if ( ch >= 0 ) {
+        Mixer::Pause( ch );
+        Mixer::Volume( ch, Mixer::MaxVolume() * soundVolume / 10 );
+        Mixer::Resume( ch );
+    }
 }
 
 /* wrapper Audio::Play */
