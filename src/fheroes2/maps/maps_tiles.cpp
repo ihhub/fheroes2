@@ -2243,7 +2243,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
             revert = true;
         }
         else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
-                 && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
+                  && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
             index = 11;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
@@ -2261,7 +2261,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
             revert = true;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
-                 && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
+                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
             index = 19;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
@@ -2311,7 +2311,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
             revert = true;
         }
         else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
-                 && !( around & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+                  && !( around & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 27;
         }
         else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::RIGHT )
