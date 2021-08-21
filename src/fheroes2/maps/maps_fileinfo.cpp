@@ -61,7 +61,7 @@ namespace
             if ( lc < rc ) {
                 return true;
             }
-            else if ( lc > rc ) {
+            if ( lc > rc ) {
                 return false;
             }
             // the chars are "equal", so proceed to check the next pair
