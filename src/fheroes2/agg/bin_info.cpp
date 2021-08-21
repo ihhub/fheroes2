@@ -89,9 +89,13 @@ namespace Bin_Info
         // Frame X offsets for the future use
         for ( size_t moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
+
+            moveOffset.reserve( 16 );
+
             for ( int frame = 0; frame < 16; ++frame ) {
                 moveOffset.push_back( static_cast<int>( getValue<int8_t>( data, 5 + moveID * 16, frame ) ) );
             }
+
             frameXOffset.push_back( moveOffset );
         }
 
