@@ -184,8 +184,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
-    std::sort( states.begin(), states.end(),
-               [&conf]( uint32_t first, uint32_t second ) { return conf.ExtName( first ) > conf.ExtName( second ); } );
+    std::sort( states.begin(), states.end(), [&conf]( uint32_t first, uint32_t second ) { return conf.ExtName( first ) > conf.ExtName( second ); } );
 
     SettingsListBox listbox( area.getPosition(), readonly );
 
