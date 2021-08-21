@@ -192,7 +192,9 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         fheroes2::Blit( sprite, display, sprite.x() + ox + 500 + 32, sprite.y() + oy + 70 + 24 );
 
         /*+hgs.days+ox+oy - to start from "random" animation frame when a monster occurs more than once in the high score list*/
-        uint32_t animateIndex = spriteIndex + 1 + monsterAnimationSequence[( static_cast<unsigned long long>( hgs.days ) + ox + oy + Game::MapsAnimationFrame() ) % monsterAnimationSequence.size()];
+        uint32_t animateIndex
+            = spriteIndex + 1
+              + monsterAnimationSequence[( static_cast<unsigned long long>( hgs.days ) + ox + oy + Game::MapsAnimationFrame() ) % monsterAnimationSequence.size()];
         const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animateIndex );
         fheroes2::Blit( animatedSprite, display, animatedSprite.x() + ox + 500 + 32, animatedSprite.y() + oy + 70 + 24 );
 
