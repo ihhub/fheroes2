@@ -247,9 +247,7 @@ protected:
 
 class StreamFile : public StreamBase
 {
-    StreamFile( const StreamFile & )
-        : _file( nullptr )
-    {}
+    StreamFile( const StreamFile & ) = delete;
 
 public:
     StreamFile();
