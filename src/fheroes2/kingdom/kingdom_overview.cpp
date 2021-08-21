@@ -587,7 +587,7 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
     fheroes2::Blit( lighthouse, 0, 0, fheroes2::Display::instance(), pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
 }
 
-void Kingdom::OverviewDialog( void )
+void Kingdom::openOverviewDialog()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -624,17 +624,24 @@ void Kingdom::OverviewDialog( void )
 
     Interface::ListBasic * listStats = nullptr;
 
-    // set state view: castles
-    if ( Modes( OVERVIEWCSTL ) ) {
+    if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
+        // set state view: castles
         buttonCastle.press();
         buttonHeroes.release();
+
+        assert( _topItemInKingdomView >= 0 );
+        listCastles.setTopVisibleItem( _topItemInKingdomView );
+
         listStats = &listCastles;
     }
-    else
-    // set state view: heroes
-    {
+    else {
+        // set state view: heroes
         buttonHeroes.press();
         buttonCastle.release();
+
+        assert( _topItemInKingdomView >= 0 );
+        listHeroes.setTopVisibleItem( _topItemInKingdomView );
+
         listStats = &listHeroes;
     }
 
@@ -659,14 +666,14 @@ void Kingdom::OverviewDialog( void )
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
             listStats = &listHeroes;
-            ResetModes( OVERVIEWCSTL );
+            ResetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
         }
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
             listStats = &listCastles;
-            SetModes( OVERVIEWCSTL );
+            SetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
         }
 
@@ -708,6 +715,8 @@ void Kingdom::OverviewDialog( void )
 
         redraw = false;
     }
+
+    _topItemInKingdomView = listStats->getTopId();
 
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window

@@ -31,12 +31,30 @@
 
 namespace Interface
 {
-    struct ListBasic
+    class ListBasic
     {
+    public:
+        ListBasic()
+            : _currentId( -1 )
+            , _topId( -1 )
+        {
+            // Do nothing.
+        }
+
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
-        virtual void Redraw( void ) = 0;
+        virtual void Redraw() = 0;
         virtual bool QueueEventProcessing( void ) = 0;
+
+        int getTopId() const
+        {
+            return _topId;
+        }
+
+    protected:
+        int _currentId;
+
+        int _topId;
     };
 
     template <class Item>
@@ -46,8 +64,6 @@ namespace Interface
         explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
             : needRedraw( false )
             , content( nullptr )
-            , _currentId( -1 )
-            , _topId( -1 )
             , maxItems( 0 )
             , ptRedraw( pt )
             , useHotkeys( true )
@@ -247,6 +263,27 @@ namespace Interface
             }
         }
 
+        // Move visible area to the position with given element ID being on the top of the list.
+        void setTopVisibleItem( const int topId )
+        {
+            if ( topId < 0 || static_cast<size_t>( topId ) >= content->size() ) {
+                // Invalid ID.
+                return;
+            }
+
+            Verify();
+
+            if ( !IsValid() ) {
+                Reset();
+                return;
+            }
+
+            _topId = topId;
+
+            UpdateScrollbarRange();
+            _scrollbar.moveToIndex( _topId );
+        }
+
         void SetCurrent( const Item & item )
         {
             typename std::vector<Item>::iterator pos = std::find( content->begin(), content->end(), item );
@@ -423,8 +460,6 @@ namespace Interface
 
     private:
         std::vector<Item> * content;
-        int _currentId;
-        int _topId;
         int maxItems;
 
         fheroes2::Point ptRedraw;
