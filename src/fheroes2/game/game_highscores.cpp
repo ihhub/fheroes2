@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -29,9 +30,11 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "bin_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_over.h"
 #include "icn.h"
 #ifdef WITH_DEBUG
@@ -99,6 +102,8 @@ public:
 
 private:
     std::vector<hgs_t> list;
+    const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
+    Monster GetMonsterByRating( u32 rating );
 };
 
 bool HGSData::Load( const std::string & fn )
@@ -181,8 +186,258 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         text.Set( std::to_string( hgs.rating ) );
         text.Blit( ox + 480, oy + 70 );
 
+        Monster monster = GetMonsterByRating( hgs.rating );
+        uint32_t spriteIndex = monster.GetSpriteIndex() * 9;
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndex );
+        fheroes2::Blit( sprite, display, sprite.x() + ox + 500 + 32, sprite.y() + oy + 70 + 24 );
+
+        /*+hgs.days+ox+oy - to start from "random" animation frame when a monster occurs more than once in the high score list*/
+        uint32_t animateIndex = spriteIndex + 1 + monsterAnimationSequence[( static_cast<unsigned long long>( hgs.days ) + ox + oy + Game::MapsAnimationFrame() ) % monsterAnimationSequence.size()];
+        const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animateIndex );
+        fheroes2::Blit( animatedSprite, display, animatedSprite.x() + ox + 500 + 32, animatedSprite.y() + oy + 70 + 24 );
+
         oy += 40;
     }
+}
+
+Monster HGSData::GetMonsterByRating( u32 rating )
+{
+    const std::array<Monster::monster_t, 229> rating2monster = { Monster::PEASANT,
+                                                                 Monster::PEASANT,
+                                                                 Monster::PEASANT,
+                                                                 Monster::PEASANT,
+                                                                 Monster::GOBLIN,
+                                                                 Monster::GOBLIN,
+                                                                 Monster::GOBLIN,
+                                                                 /*7*/ Monster::GOBLIN,
+                                                                 Monster::SPRITE,
+                                                                 Monster::SPRITE,
+                                                                 Monster::SPRITE,
+                                                                 Monster::SPRITE,
+                                                                 Monster::HALFLING,
+                                                                 Monster::HALFLING,
+                                                                 Monster::HALFLING,
+                                                                 Monster::HALFLING,
+                                                                 /*16*/ Monster::CENTAUR,
+                                                                 Monster::CENTAUR,
+                                                                 Monster::CENTAUR,
+                                                                 Monster::CENTAUR,
+                                                                 Monster::ROGUE,
+                                                                 Monster::ROGUE,
+                                                                 Monster::ROGUE,
+                                                                 Monster::ROGUE,
+                                                                 /*24*/ Monster::SKELETON,
+                                                                 Monster::SKELETON,
+                                                                 Monster::SKELETON,
+                                                                 Monster::SKELETON,
+                                                                 Monster::ORC,
+                                                                 Monster::ORC,
+                                                                 Monster::ORC,
+                                                                 Monster::ORC,
+                                                                 /*32*/ Monster::ZOMBIE,
+                                                                 Monster::ZOMBIE,
+                                                                 Monster::ZOMBIE,
+                                                                 Monster::ZOMBIE,
+                                                                 Monster::ARCHER,
+                                                                 Monster::ARCHER,
+                                                                 Monster::ARCHER,
+                                                                 Monster::ARCHER,
+                                                                 /*40*/ Monster::RANGER,
+                                                                 Monster::RANGER,
+                                                                 Monster::RANGER,
+                                                                 Monster::RANGER,
+                                                                 Monster::BOAR,
+                                                                 Monster::BOAR,
+                                                                 Monster::BOAR,
+                                                                 Monster::BOAR,
+                                                                 /*48*/ Monster::DWARF,
+                                                                 Monster::DWARF,
+                                                                 Monster::DWARF,
+                                                                 Monster::DWARF,
+                                                                 Monster::MUTANT_ZOMBIE,
+                                                                 Monster::MUTANT_ZOMBIE,
+                                                                 Monster::MUTANT_ZOMBIE,
+                                                                 Monster::MUTANT_ZOMBIE,
+                                                                 /*56*/ Monster::ORC_CHIEF,
+                                                                 Monster::ORC_CHIEF,
+                                                                 Monster::ORC_CHIEF,
+                                                                 Monster::ORC_CHIEF,
+                                                                 Monster::ELF,
+                                                                 Monster::ELF,
+                                                                 Monster::ELF,
+                                                                 Monster::ELF,
+                                                                 /*64*/ Monster::GARGOYLE,
+                                                                 Monster::GARGOYLE,
+                                                                 Monster::GARGOYLE,
+                                                                 Monster::GARGOYLE,
+                                                                 Monster::PIKEMAN,
+                                                                 Monster::PIKEMAN,
+                                                                 Monster::PIKEMAN,
+                                                                 Monster::PIKEMAN,
+                                                                 /*72*/ Monster::GRAND_ELF,
+                                                                 Monster::GRAND_ELF,
+                                                                 Monster::GRAND_ELF,
+                                                                 Monster::GRAND_ELF,
+                                                                 Monster::BATTLE_DWARF,
+                                                                 Monster::BATTLE_DWARF,
+                                                                 Monster::BATTLE_DWARF,
+                                                                 Monster::BATTLE_DWARF,
+                                                                 /*80*/ Monster::NOMAD,
+                                                                 Monster::NOMAD,
+                                                                 Monster::NOMAD,
+                                                                 Monster::NOMAD,
+                                                                 Monster::VETERAN_PIKEMAN,
+                                                                 Monster::VETERAN_PIKEMAN,
+                                                                 Monster::VETERAN_PIKEMAN,
+                                                                 Monster::VETERAN_PIKEMAN,
+                                                                 /*88*/ Monster::WOLF,
+                                                                 Monster::WOLF,
+                                                                 Monster::WOLF,
+                                                                 Monster::WOLF,
+                                                                 Monster::MUMMY,
+                                                                 Monster::MUMMY,
+                                                                 Monster::MUMMY,
+                                                                 Monster::MUMMY,
+                                                                 /*96*/ Monster::IRON_GOLEM,
+                                                                 Monster::IRON_GOLEM,
+                                                                 Monster::IRON_GOLEM,
+                                                                 Monster::IRON_GOLEM,
+                                                                 Monster::ROYAL_MUMMY,
+                                                                 Monster::ROYAL_MUMMY,
+                                                                 Monster::ROYAL_MUMMY,
+                                                                 Monster::ROYAL_MUMMY,
+                                                                 /*104*/ Monster::OGRE,
+                                                                 Monster::OGRE,
+                                                                 Monster::OGRE,
+                                                                 Monster::OGRE,
+                                                                 Monster::GRIFFIN,
+                                                                 Monster::GRIFFIN,
+                                                                 Monster::GRIFFIN,
+                                                                 Monster::GRIFFIN,
+                                                                 /*112*/ Monster::SWORDSMAN,
+                                                                 Monster::SWORDSMAN,
+                                                                 Monster::SWORDSMAN,
+                                                                 Monster::SWORDSMAN,
+                                                                 Monster::DRUID,
+                                                                 Monster::DRUID,
+                                                                 Monster::DRUID,
+                                                                 Monster::DRUID,
+                                                                 /*120*/ Monster::STEEL_GOLEM,
+                                                                 Monster::STEEL_GOLEM,
+                                                                 Monster::STEEL_GOLEM,
+                                                                 Monster::STEEL_GOLEM,
+                                                                 Monster::MASTER_SWORDSMAN,
+                                                                 Monster::MASTER_SWORDSMAN,
+                                                                 Monster::MASTER_SWORDSMAN,
+                                                                 Monster::MASTER_SWORDSMAN,
+                                                                 /*128*/ Monster::AIR_ELEMENT,
+                                                                 Monster::AIR_ELEMENT,
+                                                                 Monster::AIR_ELEMENT,
+                                                                 Monster::AIR_ELEMENT,
+                                                                 Monster::GREATER_DRUID,
+                                                                 Monster::GREATER_DRUID,
+                                                                 Monster::GREATER_DRUID,
+                                                                 /*135*/ Monster::FIRE_ELEMENT,
+                                                                 Monster::FIRE_ELEMENT,
+                                                                 Monster::FIRE_ELEMENT,
+                                                                 Monster::GHOST,
+                                                                 Monster::GHOST,
+                                                                 Monster::GHOST,
+                                                                 /*141*/ Monster::VAMPIRE,
+                                                                 Monster::VAMPIRE,
+                                                                 Monster::VAMPIRE,
+                                                                 Monster::WATER_ELEMENT,
+                                                                 Monster::WATER_ELEMENT,
+                                                                 Monster::WATER_ELEMENT,
+                                                                 /*147*/ Monster::EARTH_ELEMENT,
+                                                                 Monster::EARTH_ELEMENT,
+                                                                 Monster::EARTH_ELEMENT,
+                                                                 Monster::ROC,
+                                                                 Monster::ROC,
+                                                                 Monster::ROC,
+                                                                 /*153*/ Monster::MINOTAUR,
+                                                                 Monster::MINOTAUR,
+                                                                 Monster::MINOTAUR,
+                                                                 Monster::CAVALRY,
+                                                                 Monster::CAVALRY,
+                                                                 Monster::CAVALRY,
+                                                                 /*159*/ Monster::TROLL,
+                                                                 Monster::TROLL,
+                                                                 Monster::TROLL,
+                                                                 Monster::MAGE,
+                                                                 Monster::MAGE,
+                                                                 Monster::MAGE,
+                                                                 /*165*/ Monster::MEDUSA,
+                                                                 Monster::MEDUSA,
+                                                                 Monster::MEDUSA,
+                                                                 Monster::LICH,
+                                                                 Monster::LICH,
+                                                                 Monster::LICH,
+                                                                 /*171*/ Monster::OGRE_LORD,
+                                                                 Monster::OGRE_LORD,
+                                                                 Monster::OGRE_LORD,
+                                                                 Monster::MINOTAUR_KING,
+                                                                 Monster::MINOTAUR_KING,
+                                                                 Monster::MINOTAUR_KING,
+                                                                 /*177*/ Monster::CHAMPION,
+                                                                 Monster::CHAMPION,
+                                                                 Monster::CHAMPION,
+                                                                 Monster::WAR_TROLL,
+                                                                 Monster::WAR_TROLL,
+                                                                 Monster::WAR_TROLL,
+                                                                 /*183*/ Monster::VAMPIRE_LORD,
+                                                                 Monster::VAMPIRE_LORD,
+                                                                 Monster::VAMPIRE_LORD,
+                                                                 Monster::ARCHMAGE,
+                                                                 Monster::ARCHMAGE,
+                                                                 Monster::ARCHMAGE,
+                                                                 /*189*/ Monster::POWER_LICH,
+                                                                 Monster::POWER_LICH,
+                                                                 Monster::POWER_LICH,
+                                                                 Monster::UNICORN,
+                                                                 Monster::UNICORN,
+                                                                 Monster::UNICORN,
+                                                                 /*195*/ Monster::HYDRA,
+                                                                 Monster::HYDRA,
+                                                                 Monster::HYDRA,
+                                                                 Monster::PALADIN,
+                                                                 Monster::PALADIN,
+                                                                 Monster::PALADIN,
+                                                                 /*201*/ Monster::GENIE,
+                                                                 Monster::GENIE,
+                                                                 Monster::GENIE,
+                                                                 Monster::CRUSADER,
+                                                                 Monster::CRUSADER,
+                                                                 Monster::CRUSADER,
+                                                                 /*207*/ Monster::CYCLOPS,
+                                                                 Monster::CYCLOPS,
+                                                                 Monster::CYCLOPS,
+                                                                 Monster::GIANT,
+                                                                 Monster::GIANT,
+                                                                 Monster::GIANT,
+                                                                 /*213*/ Monster::PHOENIX,
+                                                                 Monster::PHOENIX,
+                                                                 Monster::PHOENIX,
+                                                                 Monster::BONE_DRAGON,
+                                                                 Monster::BONE_DRAGON,
+                                                                 Monster::BONE_DRAGON,
+                                                                 /*219*/ Monster::GREEN_DRAGON,
+                                                                 Monster::GREEN_DRAGON,
+                                                                 Monster::GREEN_DRAGON,
+                                                                 Monster::RED_DRAGON,
+                                                                 Monster::RED_DRAGON,
+                                                                 Monster::RED_DRAGON,
+                                                                 /*225*/ Monster::TITAN,
+                                                                 Monster::TITAN,
+                                                                 Monster::TITAN,
+                                                                 Monster::BLACK_DRAGON };
+
+    if ( rating > 228 )
+        rating = 228;
+
+    Monster monster = Monster( rating2monster[rating] );
+
+    return monster;
 }
 
 fheroes2::GameMode Game::HighScores()
@@ -257,6 +512,14 @@ fheroes2::GameMode Game::HighScores()
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return fheroes2::GameMode::MAIN_MENU;
+
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            uint32_t & frame = Game::MapsAnimationFrame();
+            ++frame;
+
+            hgs.RedrawList( top.x, top.y );
+            display.render();
+        }
     }
 
     return fheroes2::GameMode::QUIT_GAME;
