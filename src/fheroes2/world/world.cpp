@@ -298,22 +298,22 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, int obj )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
 {
-    Funds result;
+    funds = Funds();
+    objectCount = 0;
 
     for ( iterator it = begin(); it != end(); ++it ) {
         const ObjectColor & objcol = ( *it ).second.objcol;
 
-        if ( objcol.isObject( obj ) && objcol.isColor( color ) ) {
+        if ( objcol.isObject( objectType ) && objcol.isColor( playerColorId ) ) {
             Maps::Tiles & tile = world.GetTiles( ( *it ).first );
 
-            result += Funds( tile.QuantityResourceCount() );
+            funds += Funds( tile.QuantityResourceCount() );
+            ++objectCount;
             tile.QuantityReset();
         }
     }
-
-    return result;
 }
 
 World & world = World::Get();
