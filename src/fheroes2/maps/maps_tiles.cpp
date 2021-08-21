@@ -2172,20 +2172,14 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         u32 index = 0;
         bool revert = false;
 
-        // see ICN::CLOP32: sprite 10
         if ( ( around & Direction::CENTER ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 10;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 6, 7, 8
-            if ( ( contains( around, Direction::CENTER | Direction::TOP ) ) && !( around & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( around, Direction::CENTER | Direction::TOP ) ) && !( around & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 6;
-            revert = false;
         }
         else if ( ( contains( around, Direction::CENTER | Direction::RIGHT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 7;
-            revert = false;
         }
         else if ( ( contains( around, Direction::CENTER | Direction::LEFT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 7;
@@ -2193,23 +2187,15 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( ( contains( around, Direction::CENTER | Direction::BOTTOM ) ) && !( around & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 8;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 9, 29
-            if ( ( contains( around, DIRECTION_CENTER_COL ) ) && !( around & ( Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( around, DIRECTION_CENTER_COL ) ) && !( around & ( Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 9;
-            revert = false;
         }
         else if ( ( contains( around, DIRECTION_CENTER_ROW ) ) && !( around & ( Direction::TOP | Direction::BOTTOM ) ) ) {
             index = 29;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 15, 22
-            if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
+        else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
             index = 15;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
             index = 15;
@@ -2217,17 +2203,13 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
             index = 22;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
             index = 22;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 16, 17, 18, 23
-            if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 16;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 16;
@@ -2235,7 +2217,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 17;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 17;
@@ -2243,17 +2224,12 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
             index = 18;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 23;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 13, 14
-            if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
+        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
             index = 13;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
             index = 13;
@@ -2261,18 +2237,14 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
             index = 14;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
             index = 14;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 11, 12
-            if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
-                 && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
+        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
+                  && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
             index = 11;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
                   && !( around & ( Direction::TOP | Direction::LEFT ) ) ) {
@@ -2282,19 +2254,15 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP_LEFT | Direction::TOP )
                   && !( around & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 12;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP )
                   && !( around & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 12;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 19, 20, 22
-            if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
-                 && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
+                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
             index = 19;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
                   && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
@@ -2304,7 +2272,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
                   && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 20;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
                   && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
@@ -2314,13 +2281,9 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
                   && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 22;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 24, 25, 26, 30
-            if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( around & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( around & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
             index = 24;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
             index = 24;
@@ -2328,7 +2291,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT ) && !( around & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 25;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT ) && !( around & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 25;
@@ -2336,7 +2298,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 26;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 26;
@@ -2344,18 +2305,14 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
             index = 30;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
             index = 30;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 27, 28
-            if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
-                 && !( around & ( Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
+                  && !( around & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 27;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::RIGHT )
                   && !( around & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
@@ -2365,22 +2322,17 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP )
                   && !( around & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
             index = 28;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP )
                   && !( around & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
             index = 28;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 31, 32, 33
-            if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 31;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 32;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
             index = 32;
@@ -2388,28 +2340,22 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 33;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 0, 1, 2, 3, 4, 5
-            if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( around & Direction::TOP ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( around & Direction::TOP ) ) {
             index = ( _index % 2 ) ? 0 : 1;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( around & Direction::BOTTOM ) ) {
             index = ( _index % 2 ) ? 4 : 5;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( around & Direction::RIGHT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( around & Direction::LEFT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
             revert = true;
         }
-        // unknown
         else {
+            // unknown
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             area.DrawTile( dst, sf, mp );
