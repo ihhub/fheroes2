@@ -199,7 +199,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />

@@ -87,7 +87,11 @@ public:
     void ActionCurrentDn( void ) override;
     void ActionListDoubleClick( Maps::FileInfo & ) override;
     void ActionListSingleClick( Maps::FileInfo & ) override;
-    void ActionListPressRight( Maps::FileInfo & ) override {}
+
+    void ActionListPressRight( Maps::FileInfo & ) override
+    {
+        // Do nothing.
+    }
 
     bool isDoubleClicked() const
     {
@@ -143,16 +147,25 @@ void FileInfoListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQBKG, 0 ), fheroes2::Display::instance(), dst.x, dst.y );
 }
 
-void FileInfoListBox::ActionCurrentUp() {}
+void FileInfoListBox::ActionCurrentUp()
+{
+    // Do nothing.
+}
 
-void FileInfoListBox::ActionCurrentDn() {}
+void FileInfoListBox::ActionCurrentDn()
+{
+    // Do nothing.
+}
 
 void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & )
 {
     _isDoubleClicked = true;
 }
 
-void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ ) {}
+void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
+{
+    // Do nothing.
+}
 
 std::string ResizeToShortName( const std::string & str )
 {

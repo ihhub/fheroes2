@@ -101,11 +101,30 @@ public:
     void RedrawItem( const HeroRow &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp() override {}
-    void ActionCurrentDn() override {}
-    void ActionListSingleClick( HeroRow & ) override {}
-    void ActionListDoubleClick( HeroRow & ) override {}
-    void ActionListPressRight( HeroRow & ) override {}
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
+
+    void ActionListSingleClick( HeroRow & ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListDoubleClick( HeroRow & ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListPressRight( HeroRow & ) override
+    {
+        // Do nothing.
+    }
 
     void ActionListSingleClick( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
     void ActionListDoubleClick( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
@@ -322,11 +341,30 @@ public:
     void RedrawItem( const CstlRow &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
-    void ActionCurrentDn( void ) override {}
-    void ActionListDoubleClick( CstlRow & ) override {}
-    void ActionListSingleClick( CstlRow & ) override {}
-    void ActionListPressRight( CstlRow & ) override {}
+    void ActionCurrentUp( void ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn( void ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListDoubleClick( CstlRow & ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListSingleClick( CstlRow & ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListPressRight( CstlRow & ) override
+    {
+        // Do nothing.
+    }
 
     void ActionListSingleClick( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
     void ActionListDoubleClick( CstlRow &, const fheroes2::Point &, s32, s32 ) override;

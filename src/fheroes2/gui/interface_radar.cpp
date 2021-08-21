@@ -310,7 +310,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     if ( hero )
                         fillColor = GetPaletteIndexFromColor( hero->GetColor() );
                 }
-            } break;
+                break;
+            }
 
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
@@ -319,7 +320,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     if ( castle )
                         fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 }
-            } break;
+                break;
+            }
 
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:

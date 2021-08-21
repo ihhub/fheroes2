@@ -923,7 +923,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     }
 #else
     switch ( sym ) {
-    case KEY_BACKSPACE: {
+    case KEY_BACKSPACE:
         if ( !res.empty() && pos ) {
             if ( pos >= res.size() )
                 res.resize( res.size() - 1 );
@@ -931,13 +931,13 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
                 res.erase( pos - 1, 1 );
             --pos;
         }
-    } break;
-    case KEY_DELETE: {
+        break;
+    case KEY_DELETE:
         if ( !res.empty() ) {
             if ( pos < res.size() )
                 res.erase( pos, 1 );
         }
-    } break;
+        break;
 
     case KEY_LEFT:
         if ( pos )

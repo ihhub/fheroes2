@@ -1405,19 +1405,22 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             MapEvent * ptr = new MapEvent();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_SPHINX: {
             MapSphinx * ptr = new MapSphinx();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_SIGN: {
             MapSign * ptr = new MapSign();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_ARTIFACT:
@@ -1430,7 +1433,8 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             MapObjectSimple * ptr = new MapObjectSimple();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
         }
     }
 

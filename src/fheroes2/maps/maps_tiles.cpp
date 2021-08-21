@@ -1506,14 +1506,16 @@ std::string Maps::Tiles::String( void ) const
         const Heroes * hero = GetHeroes();
         if ( hero )
             os << hero->String();
-    } break;
+        break;
+    }
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( GetCenter() );
         if ( castle )
             os << castle->String();
-    } break;
+        break;
+    }
 
     default: {
         const MapsIndexes & v = Maps::GetTilesUnderProtection( _index );
@@ -1720,7 +1722,8 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
             tile.CorrectFlags32( index, true );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_SAWMILL: {
         index += 28;
@@ -1728,7 +1731,8 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
             tile.CorrectFlags32( index, true );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_CASTLE: {
         index *= 2;
@@ -1742,7 +1746,8 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
             tile.CorrectFlags32( index, true );
         }
-    } break;
+        break;
+    }
 
     default:
         break;
@@ -1793,7 +1798,8 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
             else {
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile._index );
             }
-        } break;
+            break;
+        }
 
         default:
             break;

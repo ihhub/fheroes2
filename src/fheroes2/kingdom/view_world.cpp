@@ -299,7 +299,8 @@ namespace
                             }
                         }
                     }
-                } break;
+                    break;
+                }
 
                 case MP2::OBJ_CASTLE: {
                     if ( revealTowns || !tile.isFog( color ) ) {
@@ -309,7 +310,8 @@ namespace
                             index = colorToOffsetICN( castle->GetColor() );
                         }
                     }
-                } break;
+                    break;
+                }
 
                 case MP2::OBJ_ALCHEMYLAB:
                 case MP2::OBJ_MINES:

@@ -63,8 +63,8 @@ namespace Interface
         virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
         virtual void RedrawBackground( const fheroes2::Point & ) = 0;
 
-        virtual void ActionCurrentUp( void ) = 0;
-        virtual void ActionCurrentDn( void ) = 0;
+        virtual void ActionCurrentUp() = 0;
+        virtual void ActionCurrentDn() = 0;
 
         virtual void ActionListDoubleClick( Item & ) = 0;
         virtual void ActionListSingleClick( Item & ) = 0;
@@ -138,7 +138,7 @@ namespace Interface
                 _currentId = 0;
         }
 
-        void Reset( void )
+        void Reset()
         {
             if ( content == nullptr || content->empty() ) { // empty content. Must be non-initialized array
                 _currentId = -1;
@@ -163,7 +163,7 @@ namespace Interface
             useHotkeys = !f;
         }
 
-        void Redraw( void ) override
+        void Redraw() override
         {
             needRedraw = false;
 

@@ -66,11 +66,30 @@ public:
         ok = true;
     }
 
-    void RedrawItem( const int &, s32, s32, bool ) override {}
-    void ActionCurrentUp( void ) override {}
-    void ActionCurrentDn( void ) override {}
-    void ActionListSingleClick( int & ) override {}
-    void ActionListPressRight( int & ) override {}
+    void RedrawItem( const int &, s32, s32, bool ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
+
+    void ActionListSingleClick( int & ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListPressRight( int & ) override
+    {
+        // Do nothing.
+    }
 
     fheroes2::Rect area;
     bool ok;

@@ -61,7 +61,7 @@ public:
     static int fontHeight( const int ft );
 
 private:
-    int _font = 0;
+    int _font = Font::BIG;
     std::string _message;
 };
 

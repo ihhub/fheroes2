@@ -62,10 +62,25 @@ namespace
             fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
         }
 
-        void ActionCurrentUp() override {}
-        void ActionCurrentDn() override {}
-        void ActionListSingleClick( fheroes2::Size & ) override {}
-        void ActionListPressRight( fheroes2::Size & ) override {}
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListSingleClick( fheroes2::Size & ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListPressRight( fheroes2::Size & ) override
+        {
+            // Do nothing.
+        }
 
         void ActionListDoubleClick( fheroes2::Size & ) override
         {

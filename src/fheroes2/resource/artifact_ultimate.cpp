@@ -80,7 +80,7 @@ void UltimateArtifact::Reset()
 
 StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
 {
-    return msg << static_cast<Artifact>( ultimate ) << ultimate._index << ultimate._isFound << ultimate._offset;
+    return msg << static_cast<const Artifact &>( ultimate ) << ultimate._index << ultimate._isFound << ultimate._offset;
 }
 
 StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
