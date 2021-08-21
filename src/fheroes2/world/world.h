@@ -286,6 +286,7 @@ private:
     World()
         : fheroes2::Size( 0, 0 )
         , _rumor( nullptr )
+        , _seed( 0 )
     {}
 
     void Defaults( void );

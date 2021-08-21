@@ -1279,7 +1279,8 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         SetModes( SP_HYPNOTIZE );
         u32 acount = hero ? hero->HasArtifact( Artifact::GOLD_WATCH ) : 0;
         affected.AddMode( SP_HYPNOTIZE, ( acount ? duration * acount * 2 : duration ) );
-    } break;
+        break;
+    }
 
     case Spell::STONE:
         SetModes( SP_STONE );
@@ -1500,7 +1501,8 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
             StringReplace( str, "%{name}", GetName() );
             Arena::GetInterface()->SetStatus( str, true );
         }
-    } break;
+        break;
+    }
 
     default:
         break;

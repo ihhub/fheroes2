@@ -395,6 +395,12 @@ namespace
 
 namespace fheroes2
 {
+    Image::Image()
+        : _width( 0 )
+        , _height( 0 )
+        , _singleLayer( false )
+    {}
+
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
@@ -533,6 +539,12 @@ namespace fheroes2
 
         memcpy( _data.get(), image._data.get(), size * 2 );
     }
+
+    Sprite::Sprite()
+        : Image( 0, 0 )
+        , _x( 0 )
+        , _y( 0 )
+    {}
 
     Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )

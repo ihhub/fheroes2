@@ -37,11 +37,27 @@ public:
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
-    void ActionCurrentDn( void ) override {}
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
+
     void ActionListDoubleClick( Maps::FileInfo & ) override;
-    void ActionListSingleClick( Maps::FileInfo & ) override {}
-    void ActionListPressRight( Maps::FileInfo & ) override {}
+
+    void ActionListSingleClick( Maps::FileInfo & ) override
+    {
+        // Do nothing.
+    }
+
+    void ActionListPressRight( Maps::FileInfo & ) override
+    {
+        // Do nothing.
+    }
 
     bool selectOk;
 };

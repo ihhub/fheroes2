@@ -46,11 +46,24 @@ public:
     void RedrawItem( const u32 &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
-    void ActionCurrentDn( void ) override {}
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
+
     void ActionListDoubleClick( u32 & ) override;
+
     void ActionListSingleClick( u32 & ) override;
-    void ActionListPressRight( u32 & ) override {}
+
+    void ActionListPressRight( u32 & ) override
+    {
+        // Do nothing.
+    }
 
     bool readonly;
     fheroes2::ImageRestorer _restorer;
