@@ -351,10 +351,6 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Audio::isValid() ) {
-        return;
-    }
-
     const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
