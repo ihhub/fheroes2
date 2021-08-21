@@ -449,7 +449,7 @@ int Castle::OpenDialog( bool readonly )
             for ( auto it = cacheBuildings.cbegin(); it != cacheBuildings.cend(); ++it ) {
                 if ( BUILD_MAGEGUILD & ( *it ).id ) {
                     const int mageGuildLevel = GetLevelMageGuild();
-                    if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
+                    if ( mageGuildLevel > 0 && ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
                         if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             bool noFreeSpaceForMagicBook = false;
