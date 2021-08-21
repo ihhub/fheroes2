@@ -693,10 +693,10 @@ void Kingdom::OverviewDialog( void )
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MousePressRight( buttonHeroes.area() ) ) {
-            Dialog::Message( _( "Heroes" ), _( "Select to view heroes." ), Font::BIG );
+            Dialog::Message( _( "Heroes" ), _( "View Heroes." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonCastle.area() ) ) {
-            Dialog::Message( _( "Towns/Castles" ), _( "Select to view towns and castles." ), Font::BIG );
+            Dialog::Message( _( "Towns/Castles" ), _( "View Towns and Castles." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
