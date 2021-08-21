@@ -705,7 +705,7 @@ namespace
 #endif
                 SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
 
-                fheroes2::Display & display = fheroes2::Display::instance();
+                const fheroes2::Display & display = fheroes2::Display::instance();
                 if ( display.width() != 0 && display.height() != 0 ) {
                     SDL_SetWindowSize( _window, display.width(), display.height() );
                 }
@@ -986,7 +986,7 @@ namespace
             if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
                     // copy the image from display buffer to SDL surface
-                    fheroes2::Display & display = fheroes2::Display::instance();
+                    const fheroes2::Display & display = fheroes2::Display::instance();
                     if ( _surface->w == display.width() && _surface->h == display.height() ) {
                         memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }

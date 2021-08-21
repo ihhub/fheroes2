@@ -250,6 +250,8 @@ class StreamFile : public StreamBase
 public:
     StreamFile();
     StreamFile( const StreamFile & ) = delete;
+    StreamFile & operator=( const StreamFile & ) = delete;
+
     ~StreamFile() override;
 
     size_t size( void ) const;
@@ -279,11 +281,6 @@ public:
     std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    StreamFile & operator=( const StreamFile & )
-    {
-        return *this;
-    }
-
     size_t sizeg( void ) const override;
     size_t sizep( void ) const override;
     size_t tellg( void ) const override;

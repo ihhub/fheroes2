@@ -136,7 +136,8 @@ int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &obje
 }
 
 Heroes::Heroes()
-    : move_point_scale( -1 )
+    : experience( 0 )
+    , move_point_scale( -1 )
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
@@ -953,9 +954,8 @@ bool Heroes::PickupArtifact( const Artifact & art )
     }
 
     // check: anduran garb
-    if ( bag_artifacts.MakeBattleGarb() ) {
-        if ( isControlHuman() )
-            Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+    if ( bag_artifacts.MakeBattleGarb() && isControlHuman() ) {
+        Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
     }
 
     return true;

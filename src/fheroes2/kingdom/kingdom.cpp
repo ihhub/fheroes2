@@ -50,6 +50,7 @@ bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 
 Kingdom::Kingdom()
     : color( Color::NONE )
+    , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
 {
@@ -505,11 +506,6 @@ void Kingdom::UpdateRecruits( void )
 
     if ( recruits.GetID1() == recruits.GetID2() )
         world.UpdateRecruits( recruits );
-}
-
-const Puzzle & Kingdom::PuzzleMaps( void ) const
-{
-    return puzzle_maps;
 }
 
 Puzzle & Kingdom::PuzzleMaps( void )

@@ -60,7 +60,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     u32 count = hero->GetCountArtifacts();
     if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
-        count--;
+        --count;
 
     std::string str = _( "%{name} is a level %{value} %{race} " );
 
