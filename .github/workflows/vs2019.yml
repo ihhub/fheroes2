@@ -30,3 +30,4 @@ jobs:
       run: |
         cd src/tools
         MSBuild.exe extractor-vs2019.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}
+        MSBuild.exe icn2img-vs2019.vcxproj /property:Configuration=${{ matrix.config_type }} /property:Platform=${{ matrix.platform_type }}
