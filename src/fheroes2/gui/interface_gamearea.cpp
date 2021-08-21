@@ -551,7 +551,7 @@ void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
     scrollDirection = 0;
 }
 
-fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_t index )
+fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" );
@@ -566,8 +566,8 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
 
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
-    fheroes2::Point pt = Maps::GetPoint( index );
-    gamearea.SetCenter( pt );
+    const fheroes2::Point pt = Maps::GetPoint( index );
+    gamearea.SetCenter( pt + offset );
 
     gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
 
