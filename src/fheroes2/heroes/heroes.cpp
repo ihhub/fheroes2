@@ -136,7 +136,8 @@ int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &obje
 }
 
 Heroes::Heroes()
-    : move_point_scale( -1 )
+    : experience( 0 )
+    , move_point_scale( -1 )
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
