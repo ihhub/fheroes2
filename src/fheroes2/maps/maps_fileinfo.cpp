@@ -60,12 +60,13 @@ namespace
             const CharType rc = std::tolower( *ri++, std::locale() );
             if ( lc < rc ) {
                 return true;
-            } else if ( lc > rc ) {
-                return false;
-            } else {
-                // the chars are "equal", so proceed to check the next pair
             }
+            else if ( lc > rc ) {
+                return false;
+            }
+            // the chars are "equal", so proceed to check the next pair
         }
+
         // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
         return li == lhs.end() && ri != rhs.end();
     }
