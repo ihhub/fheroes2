@@ -118,7 +118,7 @@ namespace Bin_Info
 
         // Projectile data
         for ( size_t i = 0; i < 3; ++i ) {
-            projectileOffset.push_back( fheroes2::Point( getValue<int16_t>( data, 174 + ( i * 4 ) ), getValue<int16_t>( data, 176 + ( i * 4 ) ) ) );
+            projectileOffset.emplace_back( getValue<int16_t>( data, 174 + ( i * 4 ) ), getValue<int16_t>( data, 176 + ( i * 4 ) ) );
         }
 
         // Elves and Grand Elves have incorrect start Y position for lower shooting attack
