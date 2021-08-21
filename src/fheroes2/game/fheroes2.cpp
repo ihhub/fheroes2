@@ -163,7 +163,11 @@ int main( int argc, char ** argv )
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
 
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
+#if !defined( _MSC_VER ) && !defined( __MINGW32__ )
+                // On Windows, the MIDI music volume is used as the master volume,
+                // so this fade-in would be set for everything, including sound effects
                 Music::SetFadeIn( 900 );
+#endif
             }
 
             fheroes2::Display & display = fheroes2::Display::instance();
