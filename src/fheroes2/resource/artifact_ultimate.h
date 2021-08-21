@@ -30,22 +30,22 @@ class UltimateArtifact : public Artifact
 public:
     UltimateArtifact();
 
-    bool isPosition( s32 ) const;
-    bool isFound( void ) const;
-    void SetFound( bool );
-    void Set( s32, const Artifact & );
-    void Reset( void );
+    bool isPosition( const int32_t position ) const;
+    bool isFound() const;
+    void markAsFound();
+    void Set( const int32_t position, const Artifact & );
+    void Reset();
 
     fheroes2::Image GetPuzzleMapSurface() const;
-    const Artifact & GetArtifact( void ) const;
+    const Artifact & GetArtifact() const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const UltimateArtifact & );
     friend StreamBase & operator>>( StreamBase &, UltimateArtifact & );
 
-    fheroes2::Image puzzlemap;
-    s32 index;
-    bool isfound;
+    fheroes2::Point _offset;
+    int32_t _index;
+    bool _isFound;
 };
 
 StreamBase & operator<<( StreamBase &, const UltimateArtifact & );

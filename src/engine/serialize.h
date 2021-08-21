@@ -247,10 +247,9 @@ protected:
 
 class StreamFile : public StreamBase
 {
-    StreamFile( const StreamFile & ) {}
-
 public:
     StreamFile();
+    StreamFile( const StreamFile & ) = delete;
     ~StreamFile() override;
 
     size_t size( void ) const;

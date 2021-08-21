@@ -25,6 +25,7 @@ target_include_directories(fheroes2 PRIVATE
 	dialog
 	game
 	gui
+	h2d
 	heroes
 	image
 	kingdom

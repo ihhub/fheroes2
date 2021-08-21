@@ -280,12 +280,13 @@ public:
 
     uint32_t GetMapSeed() const;
 
-    bool isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const;
+    bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
 private:
     World()
         : fheroes2::Size( 0, 0 )
         , _rumor( nullptr )
+        , _seed( 0 )
     {}
 
     void Defaults( void );

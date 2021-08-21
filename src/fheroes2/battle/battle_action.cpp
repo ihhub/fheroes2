@@ -761,7 +761,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         // check abroads
         case Spell::FIREBALL:
@@ -784,7 +785,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         // check all troops
         case Spell::DEATHRIPPLE:
@@ -814,7 +816,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         default:
             break;

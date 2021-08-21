@@ -53,7 +53,8 @@
 struct hgs_t
 {
     hgs_t()
-        : days( 0 )
+        : localtime( 0 )
+        , days( 0 )
         , rating( 0 )
     {}
 

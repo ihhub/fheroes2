@@ -141,13 +141,13 @@ public:
     void ActionNewWeek( void );
     void ActionNewMonth( void );
 
-    void SetVisited( s32 index, int object = MP2::OBJ_ZERO );
-    u32 CountVisitedObjects( int object ) const;
-    bool isVisited( int object ) const;
+    void SetVisited( s32 index, const MP2::MapObjectType objectType );
+    u32 CountVisitedObjects( const MP2::MapObjectType objectType ) const;
+    bool isVisited( const MP2::MapObjectType objectType ) const;
     bool isVisited( const Maps::Tiles & ) const;
-    bool isVisited( s32, int obj ) const;
+    bool isVisited( s32, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const;
+    bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
     bool HeroesMayStillMove( void ) const;
 
@@ -212,7 +212,7 @@ public:
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
 
-    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const int objectType );
+    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );

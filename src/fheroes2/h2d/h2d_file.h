@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,50 +20,46 @@
 
 #pragma once
 
-#include "route.h"
+#include "serialize.h"
 
-// Base representation of the dataset that mirrors the 2D map being traversed
-template <class T>
-struct PathfindingNode
+#include <map>
+#include <string>
+#include <vector>
+
+namespace fheroes2
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    T _objectID{};
+    class Sprite;
 
-    PathfindingNode() = default;
-    PathfindingNode( int node, uint32_t cost, T object )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-    {}
-    virtual ~PathfindingNode() = default;
-    // Sets node values back to the defaults; used before processing new path
-    virtual void resetNode()
+    // Heroes 2 Data (H2D) file format used for storing files needed for the project. This format is not a part of original HoMM II.
+    class H2RReader
     {
-        _from = -1;
-        _cost = 0;
-        _objectID = T();
-    }
-};
+    public:
+        // Returns true if file opening is successful.
+        bool open( const std::string & path );
 
-// Template class has to be either PathfindingNode or its derivative
-template <class T>
-class Pathfinder
-{
-public:
-    virtual void reset() = 0;
+        // Returns non-empty vector if requested file exists.
+        std::vector<uint8_t> getFile( const std::string & fileName );
 
-    virtual uint32_t getDistance( int targetIndex ) const
+    private:
+        // Relationship between file name in non-capital letters and its offset from the start of the archive.
+        std::map<std::string, std::pair<uint32_t, uint32_t>> _fileNameAndOffset;
+
+        // Stream for reading h2d file.
+        StreamFile _fileStream;
+    };
+
+    // This class is not designed to be performance optimized as it will be used very rarely and out of game running session.
+    class H2Writer
     {
-        return _cache[targetIndex]._cost;
-    }
+    public:
+        // Returns true if file opening is successful.
+        bool write( const std::string & path ) const;
 
-    virtual const T & getNode( int targetIndex ) const
-    {
-        return _cache[targetIndex];
-    }
+        bool add( const std::string & name, const std::vector<uint8_t> & data );
 
-protected:
-    std::vector<T> _cache;
-    int _pathStart = -1;
-};
+    private:
+        std::map<std::string, std::vector<uint8_t>> _fileData;
+    };
+
+    bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image );
+}

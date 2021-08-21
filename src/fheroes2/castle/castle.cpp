@@ -1814,7 +1814,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_CAPTAIN:
             return ICN::TWNKCAPT;
         case BUILD_WEL2:
-            return ICN::TWNKWEL2;
+            return ICN::KNIGHT_CASTLE_RIGHT_FARM;
         case BUILD_LEFTTURRET:
             return ICN::TWNKLTUR;
         case BUILD_RIGHTTURRET:
@@ -2871,13 +2871,15 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
             res.append( "\n \n" );
             res.append( Battle::Board::GetMoatInfo() );
         }
-    } break;
+        break;
+    }
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
-    } break;
+        break;
+    }
 
     default:
         break;

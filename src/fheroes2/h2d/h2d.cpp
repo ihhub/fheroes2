@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,52 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "h2d.h"
+#include "h2d_file.h"
+#include "settings.h"
+#include "system.h"
 
-#include "route.h"
-
-// Base representation of the dataset that mirrors the 2D map being traversed
-template <class T>
-struct PathfindingNode
+namespace
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    T _objectID{};
+    bool isInitialized = false;
+    fheroes2::H2RReader reader;
 
-    PathfindingNode() = default;
-    PathfindingNode( int node, uint32_t cost, T object )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-    {}
-    virtual ~PathfindingNode() = default;
-    // Sets node values back to the defaults; used before processing new path
-    virtual void resetNode()
+    void initialize()
     {
-        _from = -1;
-        _cost = 0;
-        _objectID = T();
-    }
-};
+        if ( isInitialized ) {
+            return;
+        }
 
-// Template class has to be either PathfindingNode or its derivative
-template <class T>
-class Pathfinder
+        isInitialized = true;
+
+        ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
+        if ( files.empty() ) {
+            return;
+        }
+
+        for ( const std::string & fileName : files ) {
+            if ( reader.open( fileName ) ) {
+                return;
+            }
+        }
+    }
+}
+
+namespace fheroes2
 {
-public:
-    virtual void reset() = 0;
-
-    virtual uint32_t getDistance( int targetIndex ) const
+    namespace h2d
     {
-        return _cache[targetIndex]._cost;
-    }
+        bool readImage( const std::string & name, Sprite & image )
+        {
+            // Initialize only when it's requested.
+            initialize();
 
-    virtual const T & getNode( int targetIndex ) const
-    {
-        return _cache[targetIndex];
+            return readImageFromH2D( reader, name, image );
+        }
     }
-
-protected:
-    std::vector<T> _cache;
-    int _pathStart = -1;
-};
+}

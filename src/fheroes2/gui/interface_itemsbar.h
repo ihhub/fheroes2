@@ -171,7 +171,10 @@ namespace Interface
         }
 
     protected:
-        virtual void SetContentItems() {}
+        virtual void SetContentItems()
+        {
+            // Do nothing.
+        }
 
         ItemsIterator GetBeginItemIter()
         {
@@ -280,8 +283,15 @@ namespace Interface
 
         ~ItemsActionBar() override = default;
 
-        void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) override {}
-        virtual void RedrawItem( Item &, const fheroes2::Rect &, bool, fheroes2::Image & ) {}
+        void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) override
+        {
+            // Do nothing.
+        }
+
+        virtual void RedrawItem( Item &, const fheroes2::Rect &, bool, fheroes2::Image & )
+        {
+            // Do nothing.
+        }
 
         bool ActionBarCursor( Item & ) override
         {

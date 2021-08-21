@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cassert>
 #include <cstring>
 #include <map>
@@ -26,6 +27,7 @@
 #include "agg.h"
 #include "agg_file.h"
 #include "agg_image.h"
+#include "h2d.h"
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
@@ -69,6 +71,8 @@ namespace
             output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
         }
     }
+
+    const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 }
 
 namespace fheroes2
@@ -937,6 +941,22 @@ namespace fheroes2
                 Blit( common, output );
                 return true;
             }
+            case ICN::KNIGHT_CASTLE_RIGHT_FARM: {
+                _icnVsSprite[id].resize( 1 );
+                Sprite & output = _icnVsSprite[id][0];
+                output = GetICN( ICN::TWNKWEL2, 0 );
+
+                ApplyPalette( output, 28, 21, output, 28, 21, 39, 1, 8 );
+                ApplyPalette( output, 0, 22, output, 0, 22, 69, 1, 8 );
+                ApplyPalette( output, 0, 23, output, 0, 23, 53, 1, 8 );
+                ApplyPalette( output, 0, 24, output, 0, 24, 54, 1, 8 );
+                ApplyPalette( output, 0, 25, output, 0, 25, 62, 1, 8 );
+                return true;
+            }
+            case ICN::KNIGHT_CASTLE_LEFT_FARM:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "knight_castle_left_farm.image", _icnVsSprite[id][0] );
+                return true;
             default:
                 break;
             }
@@ -958,7 +978,7 @@ namespace fheroes2
             if ( _tilVsImage[id].empty() ) {
                 _tilVsImage[id].resize( 4 ); // 4 possible sides
 
-                const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
+                const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
                 if ( data.size() < headerSize ) {
                     return 0;
                 }

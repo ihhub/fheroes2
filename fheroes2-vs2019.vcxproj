@@ -199,7 +199,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
@@ -316,6 +315,8 @@
     <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_window.cpp" />
+    <ClCompile Include="src\fheroes2\h2d\h2d.cpp" />
+    <ClCompile Include="src\fheroes2\h2d\h2d_file.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_action.cpp" />
@@ -487,6 +488,8 @@
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\gui\ui_window.h" />
+    <ClInclude Include="src\fheroes2\h2d\h2d.h" />
+    <ClInclude Include="src\fheroes2\h2d\h2d_file.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_base.h" />

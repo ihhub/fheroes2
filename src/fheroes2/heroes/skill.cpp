@@ -435,9 +435,9 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
     case PATHFINDING:
         switch ( Level() ) {
         case Level::BASIC:
-        case Level::ADVANCED: {
+        case Level::ADVANCED:
             str = _( "%{skill} reduces the movement penalty for rough terrain by %{count} percent." );
-        } break;
+            break;
         case Level::EXPERT:
             str = _( "%{skill} eliminates the movement penalty for rough terrain." );
             break;
@@ -461,9 +461,9 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         str = _( "%{skill} allows you to negotiate with monsters who are weaker than your group. " );
         switch ( Level() ) {
         case Level::BASIC:
-        case Level::ADVANCED: {
+        case Level::ADVANCED:
             str.append( _( "Approximately %{count} percent of the creatures may offer to join you." ) );
-        } break;
+            break;
         case Level::EXPERT:
             str.append( _( "All of the creatures may offer to join you." ) );
             break;

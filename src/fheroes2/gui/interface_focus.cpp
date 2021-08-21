@@ -109,7 +109,8 @@ void Interface::Basic::ResetFocus( int priority )
                 SetFocus( *it );
             else
                 ResetFocus( GameFocus::CASTLE );
-        } break;
+            break;
+        }
 
         case GameFocus::HEROES:
             if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )

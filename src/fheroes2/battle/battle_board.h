@@ -99,6 +99,10 @@ namespace Battle
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
+        // Handles the situation when the destination cell is on the border of the cell
+        // space reachable for the unit and it should be the tail cell of this unit
+        static int32_t FixupTargetCellForUnit( const Unit & unit, const int32_t dst );
+
     private:
         void SetCobjObject( const int icn, const int32_t dst );
 

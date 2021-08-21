@@ -34,6 +34,7 @@
 #include "settings.h"
 #include "speed.h"
 
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdint>
@@ -167,8 +168,8 @@ namespace AI
         assert( targetCell != nullptr );
 
         // Target cell is already reachable
-        if ( targetCell->isPassable3( currentUnit, false ) && targetCell->GetDirection() != UNKNOWN ) {
-            return target;
+        if ( targetCell->isReachableForHead() ) {
+            return Board::FixupTargetCellForUnit( currentUnit, target );
         }
 
         int32_t nearest = -1;
@@ -176,7 +177,7 @@ namespace AI
 
         // Search for the nearest reachable cell
         for ( const Cell & cell : *Arena::GetBoard() ) {
-            if ( cell.isPassable3( currentUnit, false ) && cell.GetDirection() != UNKNOWN ) {
+            if ( cell.isReachableForHead() ) {
                 const uint32_t distance = Board::GetDistance( target, cell.GetIndex() );
 
                 if ( distance < nearestDistance ) {
@@ -186,7 +187,64 @@ namespace AI
             }
         }
 
-        return nearest;
+        return Board::FixupTargetCellForUnit( currentUnit, nearest );
+    }
+
+    bool CanAttackUnitFromCell( const Unit & attacker, const Unit * target, const int32_t from )
+    {
+        int32_t headIndex = -1;
+        int32_t tailIndex = -1;
+
+        // Get the actual position of the attacker before attacking
+        if ( attacker.isWide() ) {
+            const int tailDirection = attacker.isReflect() ? RIGHT : LEFT;
+
+            if ( Board::isValidDirection( from, tailDirection ) ) {
+                const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( from, tailDirection ) );
+
+                if ( tailCell != nullptr && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &attacker ) ) {
+                    headIndex = from;
+                    tailIndex = tailCell->GetIndex();
+                }
+            }
+
+            if ( headIndex == -1 || tailIndex == -1 ) {
+                // Try opposite direction
+                const int headDirection = attacker.isReflect() ? LEFT : RIGHT;
+
+                if ( Board::isValidDirection( from, headDirection ) ) {
+                    const Cell * headCell = Board::GetCell( Board::GetIndexDirection( from, headDirection ) );
+
+                    if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &attacker ) ) {
+                        headIndex = headCell->GetIndex();
+                        tailIndex = from;
+                    }
+                }
+            }
+        }
+        else {
+            headIndex = from;
+        }
+
+        // Check that the attacker is actually capable of attacking the target from this position
+        const std::array<int32_t, 2> indexes = { headIndex, tailIndex };
+
+        for ( const int32_t idx : indexes ) {
+            if ( idx == -1 ) {
+                continue;
+            }
+
+            for ( const int32_t aroundIdx : Board::GetAroundIndexes( idx ) ) {
+                const Cell * cell = Board::GetCell( aroundIdx );
+                assert( cell != nullptr );
+
+                if ( cell->GetUnit() == target ) {
+                    return Board::CanAttackUnitFromCell( attacker, idx );
+                }
+            }
+        }
+
+        return false;
     }
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
@@ -291,10 +349,10 @@ namespace AI
                 if ( currentUnit.GetHeadIndex() != reachableCell )
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
 
-                // Attack only if target unit is reachable and can be attacked from the target cell
-                if ( target.unit && target.cell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, target.cell ) ) {
+                // Attack only if target unit is reachable and can be attacked
+                if ( target.unit && CanAttackUnitFromCell( currentUnit, target.unit, reachableCell ) ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                          Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell ), 0 );
+                                          Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
@@ -478,7 +536,7 @@ namespace AI
                     const int32_t reachableCell = FindNearestReachableCell( target.cell, currentUnit );
 
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << reachableCell );
                 }
             }
             // Worst case scenario - Skip turn
@@ -727,8 +785,8 @@ namespace AI
                         if ( currentUnit.GetHeadIndex() != reachableCell )
                             actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
 
-                        // Attack only if target unit is reachable and can be attacked from the target cell
-                        if ( targetCell == reachableCell && Board::CanAttackUnitFromCell( currentUnit, targetCell ) )
+                        // Attack only if target unit is reachable and can be attacked
+                        if ( CanAttackUnitFromCell( currentUnit, targetUnit, reachableCell ) )
                             actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
 
                         break;
