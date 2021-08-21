@@ -1003,7 +1003,7 @@ bool Settings::ExtModes( u32 f ) const
     return false;
 }
 
-std::string Settings::ExtName( const uint32_t settingId ) const
+std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
     case Settings::GAME_SAVE_REWRITE_CONFIRM:

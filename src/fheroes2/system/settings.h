@@ -164,7 +164,7 @@ public:
     bool ExtModes( u32 ) const;
     void ExtSetModes( u32 );
     void ExtResetModes( u32 );
-    std::string ExtName( const uint32_t settingId ) const;
+    static std::string ExtName( const uint32_t settingId );
 
     bool ExtHeroBuySpellBookFromShrine() const;
     bool ExtHeroRecruitCostDependedFromLevel() const;
