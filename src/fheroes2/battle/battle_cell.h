@@ -56,13 +56,18 @@ namespace Battle
         explicit Cell( int32_t );
 
         void ResetQuality( void );
-        void ResetDirection( void );
+        void resetReachability();
 
         void SetObject( int );
-        void SetDirection( int );
         void SetQuality( u32 );
 
+        void setReachableForHead();
+        void setReachableForTail();
+
         void SetArea( const fheroes2::Rect & );
+
+        bool isReachableForHead() const;
+        bool isReachableForTail() const;
 
         bool isPassable4( const Unit &, const Cell & ) const;
         bool isPassable3( const Unit &, bool check_reflect ) const;
@@ -72,7 +77,6 @@ namespace Battle
         s32 GetIndex( void ) const;
         const fheroes2::Rect & GetPos( void ) const;
         int GetObject( void ) const;
-        int GetDirection( void ) const;
         s32 GetQuality( void ) const;
         direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
@@ -84,7 +88,8 @@ namespace Battle
         s32 index;
         fheroes2::Rect pos;
         int object;
-        int direction;
+        bool _reachableForHead;
+        bool _reachableForTail;
         s32 quality;
         Unit * troop;
         fheroes2::Point coord[7];
