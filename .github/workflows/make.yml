@@ -70,9 +70,10 @@ jobs:
     - name: Build
       run: |
         make -j 2
-        cd files/lang
-        make -j 2
       env: ${{ matrix.config.env }}
+    - name: Generate translations
+      run: |
+        make -C files/lang -j 2
     - name: Create package
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
@@ -128,11 +129,12 @@ jobs:
       run: |
         export PATH=$VITASDK/bin:$PATH
         make -f Makefile.vita -j 2
-        cd files/lang
-        make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
+    - name: Generate translations
+      run: |
+        make -C files/lang -j 2
     - name: Update Vita SDK cache
       run: |
         if [[ -d /usr/local/vitasdk ]]; then
@@ -171,11 +173,12 @@ jobs:
       run: |
         export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
         make -f Makefile.switch -j 2
-        cd files/lang
-        make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
+    - name: Generate translations
+      run: |
+        make -C files/lang -j 2
     - name: Create package
       if: ${{ github.event_name == 'push' }}
       run: |
