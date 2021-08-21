@@ -692,6 +692,23 @@ void Kingdom::OverviewDialog( void )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
+        if ( le.MousePressRight( buttonHeroes.area() ) ) {
+            Dialog::Message( _( "Heroes" ), _( "Select to view heroes." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonCastle.area() ) ) {
+            Dialog::Message( _( "Towns/Castles" ), _( "Select to view towns and castles." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonExit.area() ) ) {
+            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( rectIncome ) ) {
+            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
+        }
+
+        // Exit this dialog.
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+            break;
+
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
             buttonHeroes.drawOnPress();
@@ -708,16 +725,11 @@ void Kingdom::OverviewDialog( void )
             redraw = true;
         }
 
-        // exit event
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
-            break;
-
         redraw |= listStats->QueueEventProcessing();
 
-        if ( le.MouseClickLeft( rectIncome ) )
+        if ( le.MouseClickLeft( rectIncome ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), Dialog::OK );
-        else if ( le.MousePressRight( rectIncome ) )
-            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
+        }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {
             continue;
