@@ -50,9 +50,9 @@ bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 
 Kingdom::Kingdom()
     : color( Color::NONE )
+    , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
-    , _lastBattleWinHeroID( 0 )
 {
     heroes_cond_loss.reserve( 4 );
 }
