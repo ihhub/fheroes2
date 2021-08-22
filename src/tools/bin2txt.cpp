@@ -1,7 +1,21 @@
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+namespace
+{
+    template <typename T>
+    T getValue( const char * data, const size_t base, const size_t offset = 0 )
+    {
+        T result;
+
+        memcpy( &result, data + base + offset * sizeof( T ), sizeof( T ) );
+
+        return result;
+    }
+}
 
 int main( int argc, char ** argv )
 {
@@ -47,7 +61,7 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
-    file << "Monster eye position: [" << *( reinterpret_cast<int16_t *>( data.data() + 1 ) ) << ", " << *( reinterpret_cast<int16_t *>( data.data() + 3 ) ) << "]\n\n";
+    file << "Monster eye position: [" << getValue<int16_t>( data.data(), 1 ) << ", " << getValue<int16_t>( data.data(), 3 ) << "]\n\n";
 
     file << "Animation frame offsets:\n";
     for ( size_t setId = 0u; setId < 7; ++setId ) {
@@ -74,35 +88,35 @@ int main( int argc, char ** argv )
 
     file << "Probabilities of each idle animation:\n";
     for ( int i = 0; i < idleAnimationCount; ++i ) {
-        file << i + 1 << ": " << *( reinterpret_cast<float *>( data.data() + 118 ) ) << "\n";
+        file << i + 1 << ": " << getValue<float>( data.data(), 118 ) << "\n";
     }
     file << "\n";
 
-    file << "Idle animation delay (?) (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 138 ) ) << " "
-         << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 4 ) ) << " " << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 8 ) ) << " "
-         << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 12 ) ) << " " << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 16 ) ) << "\n\n";
+    file << "Idle animation delay (?) (ms): " << getValue<uint32_t>( data.data(), 138, 0 ) << " "
+         << getValue<uint32_t>( data.data(), 138, 1 ) << " " << getValue<uint32_t>( data.data(), 138, 2 ) << " "
+         << getValue<uint32_t>( data.data(), 138, 3 ) << " " << getValue<uint32_t>( data.data(), 138, 4 ) << "\n\n";
 
-    file << "Idle animation delay (?) (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 158 ) ) << "\n\n";
+    file << "Idle animation delay (?) (ms): " << getValue<uint32_t>( data.data(), 158 ) << "\n\n";
 
-    file << "Walking animation speed (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 162 ) ) << "\n\n";
+    file << "Walking animation speed (ms): " << getValue<uint32_t>( data.data(), 162 ) << "\n\n";
 
-    file << "Shooting animation speed (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 166 ) ) << "\n\n";
+    file << "Shooting animation speed (ms): " << getValue<uint32_t>( data.data(), 166 ) << "\n\n";
 
-    file << "Flying animation speed (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 170 ) ) << "\n\n";
+    file << "Flying animation speed (ms): " << getValue<uint32_t>( data.data(), 170 ) << "\n\n";
 
     file << "Projectile start positions:\n";
-    file << "[" << *( reinterpret_cast<int16_t *>( data.data() + 174 ) ) << ", " << *( reinterpret_cast<int16_t *>( data.data() + 176 ) ) << "]\n";
-    file << "[" << *( reinterpret_cast<int16_t *>( data.data() + 178 ) ) << ", " << *( reinterpret_cast<int16_t *>( data.data() + 180 ) ) << "]\n";
-    file << "[" << *( reinterpret_cast<int16_t *>( data.data() + 182 ) ) << ", " << *( reinterpret_cast<int16_t *>( data.data() + 184 ) ) << "]\n\n";
+    file << "[" << getValue<int16_t>( data.data(), 174, 0 ) << ", " << getValue<int16_t>( data.data(), 174, 1 ) << "]\n";
+    file << "[" << getValue<int16_t>( data.data(), 174, 2 ) << ", " << getValue<int16_t>( data.data(), 174, 3 ) << "]\n";
+    file << "[" << getValue<int16_t>( data.data(), 174, 4 ) << ", " << getValue<int16_t>( data.data(), 174, 5 ) << "]\n\n";
 
     file << "Number of projectile frames is " << static_cast<int>( *( data.data() + 186 ) ) << "\n\n";
 
     file << "Projectile angles:\n";
     for ( size_t angleId = 0; angleId < 12; ++angleId )
-        file << *( reinterpret_cast<float *>( data.data() + 187 + angleId * 4 ) ) << "\n";
+        file << getValue<float>( data.data(), 187, angleId ) << "\n";
     file << "\n";
 
-    file << "Troop count offset: [" << *( reinterpret_cast<int32_t *>( data.data() + 235 ) ) << ", " << *( reinterpret_cast<int32_t *>( data.data() + 239 ) ) << "]\n\n";
+    file << "Troop count offset: [" << getValue<int32_t>( data.data(), 235 ) << ", " << getValue<int32_t>( data.data(), 239 ) << "]\n\n";
 
     file << "Animation sequence (frame IDs):\n";
     const char invalidFrameId = static_cast<char>( 0xFF );
