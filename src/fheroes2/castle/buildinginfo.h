@@ -72,7 +72,7 @@ public:
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( DwellingItem &, const fheroes2::Rect &, fheroes2::Image & ) override;
 
-    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, DwellingItem & dwelling, const fheroes2::Rect &  /*unused*/) override;
+    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, DwellingItem & dwl, const fheroes2::Rect &  /*unused*/) override;
     bool ActionBarRightMouseHold( DwellingItem & dwelling ) override;
 
 protected:
