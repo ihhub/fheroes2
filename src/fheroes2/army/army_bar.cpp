@@ -44,15 +44,18 @@ namespace
         const bool isSameTroopType = troopTarget.isValid() && troopFrom.GetID() == troopTarget.GetID();
         const uint32_t overallCount = isSameTroopType ? troopFrom.GetCount() + troopTarget.GetCount() : troopFrom.GetCount();
 
-        if ( overallCount <= 1 ) {
-            // cross-army split logic - prevent splits where we'd lose the last stack of a hero
+        assert( overallCount > 0 );
+
+        if ( overallCount == 1 ) {
+            // prevent cross-army split if we lose the last unit in the hero army
             if ( saveLastTroop ) {
                 return;
             }
-            // or else just move the source troop around
-            else if ( !troopTarget.isValid() ) {
-                Army::SwapTroops( troopFrom, troopTarget );
-            }
+
+            // it seems that we are just moving a single unit to a free cell
+            assert( !troopTarget.isValid() );
+
+            Army::SwapTroops( troopFrom, troopTarget );
         }
         else {
             uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
