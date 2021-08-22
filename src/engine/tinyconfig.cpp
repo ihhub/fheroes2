@@ -58,7 +58,8 @@ bool TinyConfig::Load( const std::string & cfile )
 
     std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
 
-    for ( auto it = rows.begin(); it != rows.end(); ++it ) {
+    for (auto & row : rows) {
+row
         std::string str = StringTrim( *it );
         if ( str.empty() || str[0] == comment )
             continue;
