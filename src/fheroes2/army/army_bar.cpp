@@ -42,15 +42,12 @@ namespace
         const Army * armyFrom = troopFrom.GetArmy();
         const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
         const bool isSameTroopType = troopTarget.isValid() && troopFrom.GetID() == troopTarget.GetID();
+        const uint32_t overallCount = isSameTroopType ? troopFrom.GetCount() + troopTarget.GetCount() : troopFrom.GetCount();
 
-        if ( troopFrom.GetCount() <= 1 ) {
+        if ( overallCount <= 1 ) {
             // cross-army split logic - prevent splits where we'd lose the last stack of a hero
-            if ( saveLastTroop )
+            if ( saveLastTroop ) {
                 return;
-            // join the two stacks if the troop types are same and the source stack is just 1 unit
-            else if ( isSameTroopType ) {
-                troopTarget.SetCount( troopTarget.GetCount() + troopFrom.GetCount() );
-                troopFrom.Reset();
             }
             // or else just move the source troop around
             else if ( !troopTarget.isValid() ) {
@@ -68,7 +65,7 @@ namespace
 
             // if splitting to the same troop type, use this bool to turn off fast split option at the beginning of the dialog
             bool useFastSplit = !isSameTroopType;
-            const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > maxCount ? maxCount : freeSlots ), maxCount, saveLastTroop, redistributeCount, useFastSplit );
+            const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 
             if ( slots < 2 || slots > 6 )
                 return;

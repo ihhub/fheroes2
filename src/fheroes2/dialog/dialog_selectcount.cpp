@@ -32,6 +32,8 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_tool.h"
+
+#include <algorithm>
 #include <cassert>
 
 namespace
@@ -311,7 +313,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     return !res.empty();
 }
 
-int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, const bool savelastTroop, uint32_t & redistributeCount, bool & useFastSplit )
+int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit )
 {
     assert( freeSlots > 0 );
 
@@ -320,7 +322,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const u32 min = 1;
+    const u32 min = std::min( 1u, redistributeMax );
     const int spacer = 10;
 
     const int defaultYPosition = 160;
@@ -380,15 +382,13 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    const uint32_t maximumAcceptedValue = savelastTroop ? redistributeMax : redistributeMax - 1;
-
     const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     const fheroes2::Rect buttonArea( 5, 0, 61, 25 );
-    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
+    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMax );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -410,8 +410,8 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
-            redistributeCount = maximumAcceptedValue;
-            sel.SetCur( maximumAcceptedValue );
+            redistributeCount = redistributeMax;
+            sel.SetCur( redistributeMax );
             redraw_count = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
@@ -433,7 +433,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             }
 
         if ( redraw_count ) {
-            SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
+            SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMax );
             if ( !ssp.empty() )
                 ssp.hide();
             sel.Redraw();
