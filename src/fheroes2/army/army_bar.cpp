@@ -173,9 +173,14 @@ void ArmyBar::SetArmy( Army * ptr )
     _army = ptr;
     items.clear();
 
-    if ( ptr )
-        for ( u32 ii = 0; ii < ptr->Size(); ++ii )
-            items.push_back( reinterpret_cast<ArmyTroop *>( ptr->GetTroop( ii ) ) );
+    if ( ptr ) {
+        for ( u32 ii = 0; ii < ptr->Size(); ++ii ) {
+            ArmyTroop * troop = dynamic_cast<ArmyTroop *>( ptr->GetTroop( ii ) );
+            assert( troop != nullptr );
+
+            items.push_back( troop );
+        }
+    }
 
     SetContentItems();
 }
