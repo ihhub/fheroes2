@@ -163,9 +163,9 @@ void StringReplace( std::string & dst, const char * pred, int value )
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-std::list<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
 {
-    std::list<std::string> list;
+    std::vector<std::string> list;
     size_t pos1 = 0;
     size_t pos2 = std::string::npos;
 

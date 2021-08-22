@@ -56,9 +56,9 @@ bool TinyConfig::Load( const std::string & cfile )
     if ( !sf.open( cfile, "rb" ) )
         return false;
 
-    std::list<std::string> rows = StringSplit( sf.toString(), "\n" );
+    std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
 
-    for ( std::list<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
+    for ( auto it = rows.begin(); it != rows.end(); ++it ) {
         std::string str = StringTrim( *it );
         if ( str.empty() || str[0] == comment )
             continue;

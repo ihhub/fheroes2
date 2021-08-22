@@ -211,7 +211,7 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
         // 2: en_us
         // 1: en
         if ( length < 3 ) {
-            std::list<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
+            std::vector<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
             return list.empty() ? locname : list.front();
         }
     }
