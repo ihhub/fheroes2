@@ -187,7 +187,7 @@ bool ArmyBar::isValid() const
 
 fheroes2::Rect ArmyBar::UpgradeButtonPos( const fheroes2::Rect & itemPos )
 {
-    return fheroes2::Rect( itemPos.x + itemPos.width - 23, itemPos.y + 3, 20, 10 );
+    return { itemPos.x + itemPos.width - 23, itemPos.y + 3, 20, 10 };
 }
 
 bool ArmyBar::CanUpgradeNow( const ArmyTroop & troop ) const
@@ -541,7 +541,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     return false; // reset cursor
 }
 
-bool ArmyBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point &, ArmyTroop & troop, const fheroes2::Rect & )
+bool ArmyBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect &  /*pos*/)
 {
     if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
         ResetSelected();
