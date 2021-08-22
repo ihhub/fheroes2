@@ -53,6 +53,7 @@ Kingdom::Kingdom()
     , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
+    , _topItemInKingdomView( 0 )
 {
     heroes_cond_loss.reserve( 4 );
 }

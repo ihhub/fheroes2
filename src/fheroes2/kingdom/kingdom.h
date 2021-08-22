@@ -54,7 +54,7 @@ public:
         // UNDEF      = 0x0001,
         IDENTIFYHERO = 0x0002,
         // UNUSED = 0x0004,
-        OVERVIEWCSTL = 0x0008
+        KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
     };
 
     Kingdom();
@@ -63,7 +63,7 @@ public:
     void Init( int color );
     void clear( void );
 
-    void OverviewDialog( void );
+    void openOverviewDialog();
 
     void UpdateStartingResource( void );
     bool isPlay( void ) const;
@@ -186,6 +186,9 @@ private:
     u32 visited_tents_colors;
 
     KingdomHeroes heroes_cond_loss;
+
+    // Used to remember which item was selected in Kingdom View dialog.
+    int _topItemInKingdomView;
 };
 
 class Kingdoms
