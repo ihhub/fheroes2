@@ -157,7 +157,8 @@ struct mofile
             buf.seek( offset2 );
             std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
 
-            for ( auto it = tags.begin(); it != tags.end(); ++it ) {
+            for (auto & tag : tags) {
+tagtag
                 if ( encoding.empty() )
                     encoding = get_tag( *it, tag1, sep1 );
 
