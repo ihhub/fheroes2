@@ -50,9 +50,29 @@ namespace
     const size_t mapDescriptionLength = 143;
 
     template <typename CharType>
-    bool AlphabeticalCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
+    bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
     {
-        return std::use_facet<std::collate<CharType> >( std::locale() ).compare( lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size() ) == -1;
+        typename std::basic_string<CharType>::const_iterator li = lhs.begin();
+        typename std::basic_string<CharType>::const_iterator ri = rhs.begin();
+
+        while ( li != lhs.end() && ri != rhs.end() ) {
+            const CharType lc = std::tolower( *li, std::locale() );
+            const CharType rc = std::tolower( *ri, std::locale() );
+
+            ++li;
+            ++ri;
+
+            if ( lc < rc ) {
+                return true;
+            }
+            if ( lc > rc ) {
+                return false;
+            }
+            // the chars are "equal", so proceed to check the next pair
+        }
+
+        // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
+        return li == lhs.end() && ri != rhs.end();
     }
 
     int ByteToColor( const int byte )
@@ -405,12 +425,12 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 
 bool Maps::FileInfo::FileSorting( const FileInfo & fi1, const FileInfo & fi2 )
 {
-    return AlphabeticalCompare( fi1.file, fi2.file );
+    return CaseInsensitiveCompare( fi1.file, fi2.file );
 }
 
 bool Maps::FileInfo::NameSorting( const FileInfo & fi1, const FileInfo & fi2 )
 {
-    return AlphabeticalCompare( fi1.name, fi2.name );
+    return CaseInsensitiveCompare( fi1.name, fi2.name );
 }
 
 int Maps::FileInfo::KingdomRace( int color ) const
