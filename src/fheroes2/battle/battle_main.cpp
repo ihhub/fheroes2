@@ -65,27 +65,31 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     // pre battle army1
     HeroBase * commander1 = army1.GetCommander();
     uint32_t initialSpellPoints1 = 0;
+
     if ( commander1 ) {
-        initialSpellPoints1 = commander1->GetSpellPoints();
         if ( commander1->isCaptain() )
             commander1->ActionPreBattle();
         else if ( army1.isControlAI() )
             AI::Get().HeroesPreBattle( *commander1, true );
         else
             commander1->ActionPreBattle();
+
+        initialSpellPoints1 = commander1->GetSpellPoints();
     }
 
     // pre battle army2
     HeroBase * commander2 = army2.GetCommander();
     uint32_t initialSpellPoints2 = 0;
+
     if ( commander2 ) {
-        initialSpellPoints2 = commander2->GetSpellPoints();
         if ( commander2->isCaptain() )
             commander2->ActionPreBattle();
         else if ( army2.isControlAI() )
             AI::Get().HeroesPreBattle( *commander2, false );
         else
             commander2->ActionPreBattle();
+
+        initialSpellPoints2 = commander2->GetSpellPoints();
     }
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
