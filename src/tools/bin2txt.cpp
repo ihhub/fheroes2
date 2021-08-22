@@ -92,9 +92,8 @@ int main( int argc, char ** argv )
     }
     file << "\n";
 
-    file << "Idle animation delay (?) (ms): " << getValue<uint32_t>( data.data(), 138, 0 ) << " "
-         << getValue<uint32_t>( data.data(), 138, 1 ) << " " << getValue<uint32_t>( data.data(), 138, 2 ) << " "
-         << getValue<uint32_t>( data.data(), 138, 3 ) << " " << getValue<uint32_t>( data.data(), 138, 4 ) << "\n\n";
+    file << "Idle animation delay (?) (ms): " << getValue<uint32_t>( data.data(), 138, 0 ) << " " << getValue<uint32_t>( data.data(), 138, 1 ) << " "
+         << getValue<uint32_t>( data.data(), 138, 2 ) << " " << getValue<uint32_t>( data.data(), 138, 3 ) << " " << getValue<uint32_t>( data.data(), 138, 4 ) << "\n\n";
 
     file << "Idle animation delay (?) (ms): " << getValue<uint32_t>( data.data(), 158 ) << "\n\n";
 
