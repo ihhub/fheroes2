@@ -2065,10 +2065,12 @@ namespace fheroes2
 
     void Transpose( const Image & in, Image & out )
     {
-        assert( !in.empty() );
         assert( !out.empty() );
-        assert( in.width() == out.height() && in.height() == out.width() );
 
+        if ( in.empty() || in.width() != out.height() || in.height() != out.width() ) {
+            out.reset();
+            return;
+        }
         const int32_t width = in.width();
         const int32_t height = in.height();
 
