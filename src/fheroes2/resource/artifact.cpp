@@ -931,7 +931,7 @@ void ArtifactsBar::RedrawItem( Artifact & art, const fheroes2::Rect & pos, bool 
     }
 }
 
-bool ArtifactsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Artifact & art, const fheroes2::Rect &  /*unused*/)
+bool ArtifactsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Artifact & art, const fheroes2::Rect & /*unused*/ )
 {
     if ( isMagicBook( art ) ) {
         const bool isMbSelected = ( !isSelected() || isMagicBook( *GetSelectedItem() ) );
@@ -1047,7 +1047,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art1, Artifact & ar
     return false;
 }
 
-bool ArtifactsBar::ActionBarCursor( const fheroes2::Point & /*unused*/, Artifact & art, const fheroes2::Rect &  /*unused*/)
+bool ArtifactsBar::ActionBarCursor( const fheroes2::Point & /*unused*/, Artifact & art, const fheroes2::Rect & /*unused*/ )
 {
     if ( isSelected() ) {
         const Artifact * art2 = GetSelectedItem();

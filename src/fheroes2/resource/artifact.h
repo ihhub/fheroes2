@@ -248,7 +248,7 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Artifact & artifact, const fheroes2::Rect &  /*unused*/) override;
+    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Artifact & artifact, const fheroes2::Rect & /*unused*/ ) override;
     bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
     bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, Artifact & artifact, const fheroes2::Rect &  /*pos*/) override;
     bool ActionBarRightMouseHold( Artifact & artifact ) override;
@@ -256,7 +256,7 @@ public:
     bool QueueEventProcessing( std::string * = nullptr );
     bool QueueEventProcessing( ArtifactsBar &, std::string * = nullptr );
 
-    bool ActionBarCursor( const fheroes2::Point & /*unused*/, Artifact & /*unused*/, const fheroes2::Rect &  /*unused*/) override;
+    bool ActionBarCursor( const fheroes2::Point & /*unused*/, Artifact & /*unused*/, const fheroes2::Rect & /*unused*/ ) override;
     bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:

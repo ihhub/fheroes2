@@ -55,7 +55,7 @@ namespace Interface
         virtual void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) = 0;
 
-        virtual bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect &  /*unused*/)
+        virtual bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ )
         {
             return false;
         }
@@ -65,7 +65,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarCursor( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect &  /*unused*/)
+        virtual bool ActionBarCursor( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ )
         {
             return false;
         }
@@ -293,7 +293,7 @@ namespace Interface
             // Do nothing.
         }
 
-        bool ActionBarCursor( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect &  /*unused*/) override
+        bool ActionBarCursor( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ ) override
         {
             return false;
         }
@@ -308,7 +308,7 @@ namespace Interface
             return false;
         }
 
-        bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect &  /*unused*/) override
+        bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ ) override
         {
             return false;
         }

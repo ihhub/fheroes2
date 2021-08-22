@@ -50,7 +50,7 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect &  /*unused*/) override;
+    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & /*unused*/ ) override;
     bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
     bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect &  /*pos*/) override;
     bool ActionBarLeftMouseRelease( ArmyTroop & troop ) override;
@@ -59,7 +59,7 @@ public:
     bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
-    bool ActionBarCursor( const fheroes2::Point & /*unused*/, ArmyTroop & /*unused*/, const fheroes2::Rect &  /*unused*/) override;
+    bool ActionBarCursor( const fheroes2::Point & /*unused*/, ArmyTroop & /*unused*/, const fheroes2::Rect & /*unused*/ ) override;
     bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
 
     bool QueueEventProcessing( std::string * = nullptr );
