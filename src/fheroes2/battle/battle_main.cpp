@@ -67,12 +67,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     uint32_t initialSpellPoints1 = 0;
 
     if ( commander1 ) {
-        if ( commander1->isCaptain() )
-            commander1->ActionPreBattle();
-        else if ( army1.isControlAI() )
+        commander1->ActionPreBattle();
+
+        if ( army1.isControlAI() ) {
             AI::Get().HeroesPreBattle( *commander1, true );
-        else
-            commander1->ActionPreBattle();
+        }
 
         initialSpellPoints1 = commander1->GetSpellPoints();
     }
@@ -82,12 +81,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     uint32_t initialSpellPoints2 = 0;
 
     if ( commander2 ) {
-        if ( commander2->isCaptain() )
-            commander2->ActionPreBattle();
-        else if ( army2.isControlAI() )
+        commander2->ActionPreBattle();
+
+        if ( army2.isControlAI() ) {
             AI::Get().HeroesPreBattle( *commander2, false );
-        else
-            commander2->ActionPreBattle();
+        }
 
         initialSpellPoints2 = commander2->GetSpellPoints();
     }
