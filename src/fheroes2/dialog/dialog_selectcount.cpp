@@ -67,10 +67,11 @@ public:
         , timedBtnUp( [this]() { return btnUp.isPressed(); } )
         , timedBtnDn( [this]() { return btnDn.isPressed(); } )
     {
-        if ( vmin >= vmax )
-            vmin = 0;
-        if ( vcur > vmax || vcur < vmin )
+        vmin = std::min( vmin, vmax );
+
+        if ( vcur > vmax || vcur < vmin ) {
             vcur = vmin;
+        }
 
         btnUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
         btnDn.setICNInfo( ICN::TOWNWIND, 7, 8 );
