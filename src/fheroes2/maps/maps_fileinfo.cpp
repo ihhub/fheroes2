@@ -56,8 +56,12 @@ namespace
         typename std::basic_string<CharType>::const_iterator ri = rhs.begin();
 
         while ( li != lhs.end() && ri != rhs.end() ) {
-            const CharType lc = std::tolower( *li++, std::locale() );
-            const CharType rc = std::tolower( *ri++, std::locale() );
+            const CharType lc = std::tolower( *li, std::locale() );
+            const CharType rc = std::tolower( *ri, std::locale() );
+
+            ++li;
+            ++ri;
+
             if ( lc < rc ) {
                 return true;
             }
