@@ -931,7 +931,7 @@ void ArtifactsBar::RedrawItem( Artifact & art, const fheroes2::Rect & pos, bool 
     }
 }
 
-bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
+bool ArtifactsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point &, Artifact & art, const fheroes2::Rect & )
 {
     if ( isMagicBook( art ) ) {
         const bool isMbSelected = ( !isSelected() || isMagicBook( *GetSelectedItem() ) );
@@ -978,7 +978,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
+bool ArtifactsBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point &, Artifact & art, const fheroes2::Rect & )
 {
     if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
@@ -1047,7 +1047,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art1, Artifact & ar
     return false;
 }
 
-bool ArtifactsBar::ActionBarCursor( Artifact & art )
+bool ArtifactsBar::ActionBarCursor( const fheroes2::Point &, Artifact & art, const fheroes2::Rect & )
 {
     if ( isSelected() ) {
         const Artifact * art2 = GetSelectedItem();

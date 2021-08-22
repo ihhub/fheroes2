@@ -145,7 +145,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
     }
 }
 
-bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
+bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point &, int & skill, const fheroes2::Rect & )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Font::BIG, Dialog::OK );
@@ -165,7 +165,7 @@ bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
     return false;
 }
 
-bool PrimarySkillsBar::ActionBarCursor( int & skill )
+bool PrimarySkillsBar::ActionBarCursor( const fheroes2::Point &, int & skill, const fheroes2::Rect & )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         msg = _( "View %{skill} Info" );
@@ -228,7 +228,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
     }
 }
 
-bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
+bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point &, Skill::Secondary & skill, const fheroes2::Rect & )
 {
     if ( skill.isValid() ) {
         Dialog::SecondarySkillInfo( skill, _hero, true );
@@ -259,7 +259,7 @@ bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
     return false;
 }
 
-bool SecondarySkillsBar::ActionBarCursor( Skill::Secondary & skill )
+bool SecondarySkillsBar::ActionBarCursor( const fheroes2::Point &, Skill::Secondary & skill, const fheroes2::Rect & )
 {
     if ( skill.isValid() ) {
         msg = _( "View %{skill} Info" );

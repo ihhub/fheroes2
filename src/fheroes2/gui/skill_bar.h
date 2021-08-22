@@ -37,9 +37,9 @@ public:
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( int &, const fheroes2::Rect &, fheroes2::Image & ) override;
 
-    bool ActionBarLeftMouseSingleClick( int & skill ) override;
+    bool ActionBarLeftMouseSingleClick( const fheroes2::Point &, int & skill, const fheroes2::Rect & ) override;
     bool ActionBarRightMouseHold( int & skill ) override;
-    bool ActionBarCursor( int & skill ) override;
+    bool ActionBarCursor( const fheroes2::Point &, int & skill, const fheroes2::Rect & ) override;
 
     bool QueueEventProcessing( std::string * = nullptr );
 
@@ -60,9 +60,9 @@ public:
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Skill::Secondary &, const fheroes2::Rect &, fheroes2::Image & ) override;
 
-    bool ActionBarLeftMouseSingleClick( Skill::Secondary & skill ) override;
+    bool ActionBarLeftMouseSingleClick( const fheroes2::Point &, Skill::Secondary & skill, const fheroes2::Rect & ) override;
     bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;
-    bool ActionBarCursor( Skill::Secondary & skill ) override;
+    bool ActionBarCursor( const fheroes2::Point &, Skill::Secondary & skill, const fheroes2::Rect & ) override;
 
     bool QueueEventProcessing( std::string * = nullptr );
 

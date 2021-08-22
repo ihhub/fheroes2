@@ -682,6 +682,12 @@ int Castle::OpenDialog( bool readonly )
                 BuyBuilding( build );
                 if ( BUILD_CAPTAIN == build )
                     RedrawIcons( *this, heroes, cur_pt );
+
+                // may render new quick upgrade possibilities
+                selectArmy1.Redraw();
+                if ( selectArmy2.isValid() && alphaHero >= 255 )
+                    selectArmy2.Redraw();
+
                 CastleRedrawTownName( *this, cur_pt );
                 RedrawResourcePanel( cur_pt );
                 display.render();

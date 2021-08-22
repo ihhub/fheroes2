@@ -724,7 +724,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, f
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.width - 10, pos.y + 4 );
 }
 
-bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
+bool DwellingsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point &, DwellingItem & dwl, const fheroes2::Rect & )
 {
     if ( castle.isBuild( dwl.type ) ) {
         castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true ) );

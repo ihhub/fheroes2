@@ -55,7 +55,7 @@ namespace Interface
         virtual void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) = 0;
 
-        virtual bool ActionBarLeftMouseSingleClick( Item & )
+        virtual bool ActionBarLeftMouseSingleClick( const fheroes2::Point &, Item &, const fheroes2::Rect & )
         {
             return false;
         }
@@ -65,7 +65,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarCursor( Item & )
+        virtual bool ActionBarCursor( const fheroes2::Point &, Item &, const fheroes2::Rect & )
         {
             return false;
         }
@@ -201,15 +201,15 @@ namespace Interface
             RedrawItem( **it, pos, dstsf );
         }
 
-        virtual bool ActionCursorItemIter( const fheroes2::Point &, ItemIterPos iterPos )
+        virtual bool ActionCursorItemIter( const fheroes2::Point & cursor, ItemIterPos iterPos )
         {
             if ( iterPos.first != GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( **iterPos.first ) )
+                if ( ActionBarCursor( cursor, **iterPos.first, iterPos.second ) )
                     return true;
                 else if ( le.MouseClickLeft( iterPos.second ) )
-                    return ActionBarLeftMouseSingleClick( **iterPos.first );
+                    return ActionBarLeftMouseSingleClick( cursor, **iterPos.first, iterPos.second );
                 else if ( le.MousePressRight( iterPos.second ) )
                     return ActionBarRightMouseHold( **iterPos.first );
             }
@@ -293,7 +293,7 @@ namespace Interface
             // Do nothing.
         }
 
-        bool ActionBarCursor( Item & ) override
+        bool ActionBarCursor( const fheroes2::Point &, Item &, const fheroes2::Rect & ) override
         {
             return false;
         }
@@ -308,14 +308,14 @@ namespace Interface
             return false;
         }
 
-        bool ActionBarLeftMouseSingleClick( Item & ) override
+        bool ActionBarLeftMouseSingleClick( const fheroes2::Point &, Item &, const fheroes2::Rect & ) override
         {
             return false;
         }
 
-        virtual bool ActionBarLeftMouseDoubleClick( Item & item )
+        virtual bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & cursor, Item & item, const fheroes2::Rect & pos )
         {
-            return ActionBarLeftMouseSingleClick( item );
+            return ActionBarLeftMouseSingleClick( cursor, item, pos );
         }
 
         virtual bool ActionBarLeftMouseRelease( Item & )
@@ -463,20 +463,20 @@ namespace Interface
             return false;
         }
 
-        bool ActionCursorItemIter( const fheroes2::Point &, ItemIterPos iterPos ) override
+        bool ActionCursorItemIter( const fheroes2::Point & cursor, ItemIterPos iterPos ) override
         {
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( **iterPos.first ) ) {
+                if ( ActionBarCursor( cursor, **iterPos.first, iterPos.second ) ) {
                     return true;
                 }
                 else if ( le.MouseClickLeft( iterPos.second ) ) {
                     if ( iterPos.first == GetCurItemIter() ) {
-                        return ActionBarLeftMouseDoubleClick( **iterPos.first );
+                        return ActionBarLeftMouseDoubleClick( cursor, **iterPos.first, iterPos.second );
                     }
                     else {
-                        if ( ActionBarLeftMouseSingleClick( **iterPos.first ) )
+                        if ( ActionBarLeftMouseSingleClick( cursor, **iterPos.first, iterPos.second ) )
                             curItemPos = iterPos;
                         else
                             ResetSelected();
