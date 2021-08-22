@@ -322,7 +322,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const u32 min = std::min( 1u, redistributeMax );
+    const u32 min = std::min( 1U, redistributeMax );
     const int spacer = 10;
 
     const int defaultYPosition = 160;
