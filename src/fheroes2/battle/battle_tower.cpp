@@ -22,6 +22,7 @@
 
 #include "battle_tower.h"
 #include "battle.h"
+#include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_cell.h"
 #include "castle.h"
@@ -109,10 +110,10 @@ void Battle::Tower::SetDestroy( void )
 {
     switch ( type ) {
     case TWR_LEFT:
-        Board::GetCell( 19 )->SetObject( 1 );
+        Board::GetCell( Arena::CASTLE_TOP_ARCHER_TOWER_POS )->SetObject( 1 );
         break;
     case TWR_RIGHT:
-        Board::GetCell( 85 )->SetObject( 1 );
+        Board::GetCell( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS )->SetObject( 1 );
         break;
     default:
         break;

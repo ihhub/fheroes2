@@ -219,24 +219,24 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         bridge = new Bridge();
 
         // catapult cell
-        board[77].SetObject( 1 );
+        board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        board[8].SetObject( fortification ? 3 : 2 );
-        board[29].SetObject( fortification ? 3 : 2 );
-        board[73].SetObject( fortification ? 3 : 2 );
-        board[96].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
 
         // tower
-        board[40].SetObject( 2 );
-        board[62].SetObject( 2 );
+        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
+        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 2 );
 
         // archers tower
-        board[19].SetObject( 2 );
-        board[85].SetObject( 2 );
+        board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( 2 );
+        board[CASTLE_BOTTOM_ARCHER_TOWER_POS].SetObject( 2 );
 
         // bridge
-        board[50].SetObject( 1 );
+        board[CASTLE_GATE_POS].SetObject( 1 );
     }
     else
     // set obstacles
@@ -928,16 +928,16 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 {
     switch ( target ) {
     case CAT_WALL1:
-        board[8].SetObject( value );
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( value );
         break;
     case CAT_WALL2:
-        board[29].SetObject( value );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( value );
         break;
     case CAT_WALL3:
-        board[73].SetObject( value );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( value );
         break;
     case CAT_WALL4:
-        board[96].SetObject( value );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
         break;
 
     case CAT_TOWER1:
@@ -976,13 +976,13 @@ u32 Battle::Arena::GetCastleTargetValue( int target ) const
 {
     switch ( target ) {
     case CAT_WALL1:
-        return board[8].GetObject();
+        return board[CASTLE_FIRST_TOP_WALL_POS].GetObject();
     case CAT_WALL2:
-        return board[29].GetObject();
+        return board[CASTLE_SECOND_TOP_WALL_POS].GetObject();
     case CAT_WALL3:
-        return board[73].GetObject();
+        return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
     case CAT_WALL4:
-        return board[96].GetObject();
+        return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
 
     case CAT_TOWER1:
         return towers[0] && towers[0]->isValid();
@@ -1006,13 +1006,13 @@ std::vector<int> Battle::Arena::GetCastleTargets( void ) const
     targets.reserve( 8 );
 
     // check walls
-    if ( 0 != board[8].GetObject() )
+    if ( 0 != board[CASTLE_FIRST_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL1 );
-    if ( 0 != board[29].GetObject() )
+    if ( 0 != board[CASTLE_SECOND_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL2 );
-    if ( 0 != board[73].GetObject() )
+    if ( 0 != board[CASTLE_THIRD_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL3 );
-    if ( 0 != board[96].GetObject() )
+    if ( 0 != board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL4 );
 
     // check right/left towers
@@ -1156,13 +1156,10 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
-        if ( 0 == board[8].GetObject() && ( board[8].GetPos() & *it ) )
-            return false;
-        else if ( 0 == board[29].GetObject() && ( board[29].GetPos() & *it ) )
-            return false;
-        else if ( 0 == board[73].GetObject() && ( board[73].GetPos() & *it ) )
-            return false;
-        else if ( 0 == board[96].GetObject() && ( board[96].GetPos() & *it ) )
+        if ( ( 0 == board[CASTLE_FIRST_TOP_WALL_POS].GetObject() && ( board[CASTLE_FIRST_TOP_WALL_POS].GetPos() & *it ) )
+             || ( 0 == board[CASTLE_SECOND_TOP_WALL_POS].GetObject() && ( board[CASTLE_SECOND_TOP_WALL_POS].GetPos() & *it ) )
+             || ( 0 == board[CASTLE_THIRD_TOP_WALL_POS].GetObject() && ( board[CASTLE_THIRD_TOP_WALL_POS].GetPos() & *it ) )
+             || ( 0 == board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() && ( board[CASTLE_FOURTH_TOP_WALL_POS].GetPos() & *it ) ) )
             return false;
     }
 

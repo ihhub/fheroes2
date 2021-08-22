@@ -1146,9 +1146,9 @@ void Battle::Interface::RedrawArmies()
     const Castle * castle = Arena::GetCastle();
 
     const int32_t wallCellIds[ARENAH]
-        = {Board::CASTLE_FIRST_TOP_WALL_POS, Board::CASTLE_TOP_ARCHER_TOWER_POS,  Board::CASTLE_SECOND_TOP_WALL_POS, Board::CASTLE_TOP_GATE_TOWER_POS,
-           Board::CASTLE_GATE_POS,           Board::CASTLE_BOTTOM_GATE_TOWER_POS, Board::CASTLE_THIRD_TOP_WALL_POS,  Board::CASTLE_BOTTOM_ARCHER_TOWER_POS,
-           Board::CASTLE_FORTH_TOP_WALL_POS};
+        = { Arena::CASTLE_FIRST_TOP_WALL_POS, Arena::CASTLE_TOP_ARCHER_TOWER_POS,  Arena::CASTLE_SECOND_TOP_WALL_POS, Arena::CASTLE_TOP_GATE_TOWER_POS,
+            Arena::CASTLE_GATE_POS,           Arena::CASTLE_BOTTOM_GATE_TOWER_POS, Arena::CASTLE_THIRD_TOP_WALL_POS,  Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS,
+            Arena::CASTLE_FOURTH_TOP_WALL_POS };
 
     if ( castle == nullptr ) {
         RedrawKilled();
@@ -1167,7 +1167,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawCastleMainTower( *castle );
             }
             else if ( cellRowId == 7 ) { // Redraw catapult.
-                RedrawCastle2( *castle, Board::CATAPULT_POS );
+                RedrawCastle2( *castle, Arena::CATAPULT_POS );
             }
 
             std::vector<const Unit *> deadTroopBeforeWall;
@@ -1193,7 +1193,7 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     isCellBefore = cellId > wallCellId;
-                    if ( ( wallCellId == Board::CASTLE_THIRD_TOP_WALL_POS || wallCellId == Board::CASTLE_FORTH_TOP_WALL_POS )
+                    if ( ( wallCellId == Arena::CASTLE_THIRD_TOP_WALL_POS || wallCellId == Arena::CASTLE_FOURTH_TOP_WALL_POS )
                          && Board::GetCell( wallCellId )->GetObject() == 0 ) {
                         isCellBefore = false;
                     }
@@ -1832,11 +1832,11 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
 {
     const int castleIcnId = ICN::Get4Castle( castle.GetRace() );
 
-    if ( Board::CATAPULT_POS == cellId ) {
+    if ( Arena::CATAPULT_POS == cellId ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
         fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
-    else if ( Board::CASTLE_GATE_POS == cellId ) {
+    else if ( Arena::CASTLE_GATE_POS == cellId ) {
         const Bridge * bridge = Arena::GetBridge();
         assert( bridge != nullptr );
         if ( bridge != nullptr && !bridge->isDestroy() ) {
@@ -1844,22 +1844,22 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
         }
     }
-    else if ( Board::CASTLE_FIRST_TOP_WALL_POS == cellId || Board::CASTLE_SECOND_TOP_WALL_POS == cellId || Board::CASTLE_THIRD_TOP_WALL_POS == cellId
-              || Board::CASTLE_FORTH_TOP_WALL_POS == cellId ) {
+    else if ( Arena::CASTLE_FIRST_TOP_WALL_POS == cellId || Arena::CASTLE_SECOND_TOP_WALL_POS == cellId || Arena::CASTLE_THIRD_TOP_WALL_POS == cellId
+              || Arena::CASTLE_FOURTH_TOP_WALL_POS == cellId ) {
         uint32_t index = 0;
         const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
 
         switch ( cellId ) {
-        case Board::CASTLE_FIRST_TOP_WALL_POS:
+        case Arena::CASTLE_FIRST_TOP_WALL_POS:
             index = 5;
             break;
-        case Board::CASTLE_SECOND_TOP_WALL_POS:
+        case Arena::CASTLE_SECOND_TOP_WALL_POS:
             index = 6;
             break;
-        case Board::CASTLE_THIRD_TOP_WALL_POS:
+        case Arena::CASTLE_THIRD_TOP_WALL_POS:
             index = 7;
             break;
-        case Board::CASTLE_FORTH_TOP_WALL_POS:
+        case Arena::CASTLE_FOURTH_TOP_WALL_POS:
             index = 8;
             break;
         default:
@@ -1903,7 +1903,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
-    else if ( Board::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
         const Tower * ltower = Arena::GetTower( TWR_LEFT );
         uint32_t index = 17;
 
@@ -1913,7 +1913,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
-    else if ( Board::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
         const Tower * rtower = Arena::GetTower( TWR_RIGHT );
         uint32_t index = 17;
 
@@ -1923,11 +1923,11 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
-    else if ( Board::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
-    else if ( Board::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }
