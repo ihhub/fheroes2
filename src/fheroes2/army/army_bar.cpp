@@ -541,7 +541,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     return false; // reset cursor
 }
 
-bool ArmyBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect &  /*pos*/)
+bool ArmyBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect & /*pos*/ )
 {
     if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
         ResetSelected();

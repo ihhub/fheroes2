@@ -250,7 +250,7 @@ public:
 
     bool ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unused*/, Artifact & artifact, const fheroes2::Rect & /*unused*/ ) override;
     bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
-    bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, Artifact & artifact, const fheroes2::Rect &  /*pos*/) override;
+    bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, Artifact & artifact, const fheroes2::Rect & /*pos*/ ) override;
     bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
     bool QueueEventProcessing( std::string * = nullptr );

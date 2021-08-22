@@ -52,7 +52,7 @@ public:
 
     bool ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & /*unused*/ ) override;
     bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
-    bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect &  /*pos*/) override;
+    bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect & /*pos*/ ) override;
     bool ActionBarLeftMouseRelease( ArmyTroop & troop ) override;
     bool ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & troop ) override;
     bool ActionBarRightMouseHold( ArmyTroop & troop ) override;

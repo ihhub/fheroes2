@@ -978,7 +978,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( const fheroes2::Point & /*unus
     return true;
 }
 
-bool ArtifactsBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, Artifact & art, const fheroes2::Rect &  /*pos*/)
+bool ArtifactsBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, Artifact & art, const fheroes2::Rect & /*pos*/ )
 {
     if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
