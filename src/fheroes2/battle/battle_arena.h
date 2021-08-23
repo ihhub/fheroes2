@@ -54,7 +54,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::BattleRandomGenerator & randomGenerator );
+        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
         ~Arena();
 
         void Turns( void );
@@ -138,7 +138,7 @@ namespace Battle
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
-        const Rand::BattleRandomGenerator & GetRandomGenerator() const;
+        const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
         static Board * GetBoard( void );
         static Tower * GetTower( int );
@@ -227,7 +227,7 @@ namespace Battle
 
         bool end_turn;
 
-        Rand::BattleRandomGenerator & _randomGenerator;
+        Rand::DeterministicRandomGenerator & _randomGenerator;
 
         enum
         {

@@ -42,7 +42,7 @@
 namespace Battle
 {
     void PickupArtifactsAction( HeroBase &, HeroBase & );
-    void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::BattleRandomGenerator & randomGenerator );
+    void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
     void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
 }
 
@@ -100,7 +100,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 #endif
 
     const size_t battleRandomSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
-    Rand::BattleRandomGenerator randomGenerator( battleRandomSeed );
+    Rand::DeterministicRandomGenerator randomGenerator( battleRandomSeed );
 
     std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle, randomGenerator ) );
 
@@ -263,7 +263,7 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
     }
 }
 
-void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::BattleRandomGenerator & randomGenerator )
+void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
 {
     if ( spells.empty() || !hero.HaveSpellBook() )
         return;

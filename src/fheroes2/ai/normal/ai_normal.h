@@ -114,7 +114,7 @@ namespace AI
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
 
-        const Rand::BattleRandomGenerator * _randomGenerator = nullptr;
+        const Rand::DeterministicRandomGenerator * _randomGenerator = nullptr;
     };
 
     class Normal : public Base

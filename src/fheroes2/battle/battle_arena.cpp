@@ -51,52 +51,73 @@ namespace Battle
     Arena * arena = nullptr;
 }
 
-int GetCovr( int ground, std::mt19937 & gen )
+namespace
 {
-    std::vector<int> covrs;
+    // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
+    size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+    {
+        size_t newSeed = seed;
+        if ( actions.empty() ) { // update the seed for next turn in all cases, even if no actions were performed
+            fheroes2::hashCombine( newSeed, 0 );
+        }
 
-    switch ( ground ) {
-    case Maps::Ground::SNOW:
-        covrs.push_back( ICN::COVR0007 );
-        covrs.push_back( ICN::COVR0008 );
-        covrs.push_back( ICN::COVR0009 );
-        covrs.push_back( ICN::COVR0010 );
-        covrs.push_back( ICN::COVR0011 );
-        covrs.push_back( ICN::COVR0012 );
-        break;
+        for ( const Battle::Command & command : actions ) {
+            fheroes2::hashCombine( newSeed, command.GetType() );
+            for ( const int commandArg : command ) {
+                fheroes2::hashCombine( newSeed, commandArg );
+            }
+        }
 
-    case Maps::Ground::WASTELAND:
-        covrs.push_back( ICN::COVR0019 );
-        covrs.push_back( ICN::COVR0020 );
-        covrs.push_back( ICN::COVR0021 );
-        covrs.push_back( ICN::COVR0022 );
-        covrs.push_back( ICN::COVR0023 );
-        covrs.push_back( ICN::COVR0024 );
-        break;
-
-    case Maps::Ground::DIRT:
-        covrs.push_back( ICN::COVR0013 );
-        covrs.push_back( ICN::COVR0014 );
-        covrs.push_back( ICN::COVR0015 );
-        covrs.push_back( ICN::COVR0016 );
-        covrs.push_back( ICN::COVR0017 );
-        covrs.push_back( ICN::COVR0018 );
-        break;
-
-    case Maps::Ground::GRASS:
-        covrs.push_back( ICN::COVR0001 );
-        covrs.push_back( ICN::COVR0002 );
-        covrs.push_back( ICN::COVR0003 );
-        covrs.push_back( ICN::COVR0004 );
-        covrs.push_back( ICN::COVR0005 );
-        covrs.push_back( ICN::COVR0006 );
-        break;
-
-    default:
-        break;
+        return newSeed;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
+    int GetCovr( int ground, std::mt19937 & gen )
+    {
+        std::vector<int> covrs;
+
+        switch ( ground ) {
+        case Maps::Ground::SNOW:
+            covrs.push_back( ICN::COVR0007 );
+            covrs.push_back( ICN::COVR0008 );
+            covrs.push_back( ICN::COVR0009 );
+            covrs.push_back( ICN::COVR0010 );
+            covrs.push_back( ICN::COVR0011 );
+            covrs.push_back( ICN::COVR0012 );
+            break;
+
+        case Maps::Ground::WASTELAND:
+            covrs.push_back( ICN::COVR0019 );
+            covrs.push_back( ICN::COVR0020 );
+            covrs.push_back( ICN::COVR0021 );
+            covrs.push_back( ICN::COVR0022 );
+            covrs.push_back( ICN::COVR0023 );
+            covrs.push_back( ICN::COVR0024 );
+            break;
+
+        case Maps::Ground::DIRT:
+            covrs.push_back( ICN::COVR0013 );
+            covrs.push_back( ICN::COVR0014 );
+            covrs.push_back( ICN::COVR0015 );
+            covrs.push_back( ICN::COVR0016 );
+            covrs.push_back( ICN::COVR0017 );
+            covrs.push_back( ICN::COVR0018 );
+            break;
+
+        case Maps::Ground::GRASS:
+            covrs.push_back( ICN::COVR0001 );
+            covrs.push_back( ICN::COVR0002 );
+            covrs.push_back( ICN::COVR0003 );
+            covrs.push_back( ICN::COVR0004 );
+            covrs.push_back( ICN::COVR0005 );
+            covrs.push_back( ICN::COVR0006 );
+            break;
+
+        default:
+            break;
+        }
+
+        return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
+    }
 }
 
 bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
@@ -149,7 +170,7 @@ Battle::Tower * Battle::Arena::GetTower( int type )
     return nullptr;
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::BattleRandomGenerator & randomGenerator )
+Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )
     , armies_order( nullptr )
@@ -282,24 +303,6 @@ Battle::Arena::~Arena()
 
     assert( arena == this );
     arena = nullptr;
-}
-
-// compute a new seed from a list of actions, so random actions happen differently depending on user inputs
-size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
-{
-    size_t newSeed = seed;
-    if ( actions.empty() ) { // update the seed for next turn in all cases, even if no actions were performed
-        fheroes2::hashCombine( newSeed, 0 );
-    }
-
-    for ( const Battle::Command & command : actions ) {
-        fheroes2::hashCombine( newSeed, command.GetType() );
-        for ( const int commandArg : command ) {
-            fheroes2::hashCombine( newSeed, commandArg );
-        }
-    }
-
-    return newSeed;
 }
 
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
@@ -1236,7 +1239,7 @@ void Battle::Arena::BreakAutoBattle( void )
     auto_battle &= ~current_color;
 }
 
-const Rand::BattleRandomGenerator & Battle::Arena::GetRandomGenerator() const
+const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const
 {
     return _randomGenerator;
 }

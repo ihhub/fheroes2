@@ -104,15 +104,15 @@ namespace Rand
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc );
     };
 
-    // Specific random generator used so that battle randomness is deterministic
-    class BattleRandomGenerator
+    // Specific random generator that keeps and update its state
+    class DeterministicRandomGenerator
     {
     public:
-        BattleRandomGenerator( const size_t initialSeed );
+        DeterministicRandomGenerator( const size_t initialSeed );
 
         // prevent accidental copies
-        BattleRandomGenerator( const BattleRandomGenerator & ) = delete;
-        BattleRandomGenerator & operator=( const BattleRandomGenerator & ) = delete;
+        DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
+        DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
 
         size_t GetSeed() const;
         void UpdateSeed( const size_t seed );

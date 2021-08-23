@@ -29,7 +29,7 @@
 #include "tools.h"
 #include "translations.h"
 
-Battle::Tower::Tower( const Castle & castle, int twr, const Rand::BattleRandomGenerator & randomGenerator )
+Battle::Tower::Tower( const Castle & castle, int twr, const Rand::DeterministicRandomGenerator & randomGenerator )
     : Unit( Troop( Monster::ARCHER, 0 ), -1, false, randomGenerator )
     , type( twr )
     , color( castle.GetColor() )
@@ -138,7 +138,7 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
             towers.push_back( TWR_RIGHT );
 
         for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
-            Tower twr = Tower( cstl, *it, Rand::BattleRandomGenerator( 0 ) );
+            Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ) );
 
             msg.append( tmpl );
             StringReplace( msg, "%{name}", twr.GetName() );

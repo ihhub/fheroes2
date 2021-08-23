@@ -127,7 +127,7 @@ Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
     return it == end() ? nullptr : *it;
 }
 
-Battle::Force::Force( Army & parent, bool opposite, const Rand::BattleRandomGenerator & randomGenerator )
+Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator )
     : army( parent )
 {
     uids.reserve( army.Size() );
