@@ -18,38 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <map>
-#include <type_traits>
 
 #include "agg.h"
 #include "battle_animation.h"
 #include "battle_cell.h"
 #include "bin_info.h"
-#include "endian_h2.h"
 #include "logging.h"
 #include "monster.h"
+#include "serialize.h"
 
 namespace
 {
-    template <typename T, typename = typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
+    template <typename T>
     T getValue( const uint8_t * data, const size_t base, const size_t offset = 0 )
     {
-        const char * begin = reinterpret_cast<const char *>( data ) + base + offset * sizeof( T );
-        const char * end = begin + sizeof( T );
-
-        T result;
-
-        // Data is originally stored using the little-endian byte order
-#if BYTE_ORDER == LITTLE_ENDIAN
-        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
-#elif BYTE_ORDER == BIG_ENDIAN
-        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
-#else
-        static_assert( false, "Unknown byte order" );
-#endif
-
-        return result;
+        return fheroes2::getLEValue<T>( reinterpret_cast<const char *>( data ), base, offset );
     }
 }
 

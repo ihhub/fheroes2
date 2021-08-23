@@ -23,12 +23,15 @@
 #ifndef H2SERIALIZE_H
 #define H2SERIALIZE_H
 
+#include <algorithm>
 #include <cstdio>
 #include <list>
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
+#include "endian_h2.h"
 #include "math_base.h"
 #include "types.h"
 
@@ -308,5 +311,28 @@ private:
             std::fwrite( &val, sizeof( T ), 1, _file );
     }
 };
+
+namespace fheroes2
+{
+    // Get a value of type T in the system byte order from the buffer in which it was originally stored in the little-endian byte order
+    template <typename T, typename = typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
+    T getLEValue( const char * data, const size_t base, const size_t offset = 0 )
+    {
+        const char * begin = data + base + offset * sizeof( T );
+        const char * end = begin + sizeof( T );
+
+        T result;
+
+#if BYTE_ORDER == LITTLE_ENDIAN
+        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
+#elif BYTE_ORDER == BIG_ENDIAN
+        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
+#else
+        static_assert( false, "Unknown byte order" );
+#endif
+
+        return result;
+    }
+}
 
 #endif
