@@ -185,7 +185,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
             // upgrade
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
-                if ( Dialog::YES == Dialog::TroopUpgrade( troop, UPGRADE_DISABLE & flags ) ) {
+                const bool cannotAfford = UPGRADE_DISABLE == ( UPGRADE_DISABLE & flags );
+                if ( Dialog::YES == Dialog::TroopUpgrade( troop, cannotAfford ) ) {
                     result = Dialog::UPGRADE;
                     break;
                 }
