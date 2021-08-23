@@ -151,9 +151,9 @@ MeetingButton::MeetingButton( s32 px, s32 py )
 
 SwapButton::SwapButton( s32 px, s32 py )
 {
-    const fheroes2::Sprite & sprite = GetMeetingSprite();
-    // Custom graphics: rotate existing sprtie
-    // sf = GetMeetingSprite().RenderRotate( 1 );
+    const fheroes2::Sprite & in = GetMeetingSprite();
+    fheroes2::Sprite sprite( in.height(), in.width() );
+    Transpose( in, sprite );
     setSprite( sprite, sprite );
     setPosition( px, py );
 }
@@ -255,8 +255,8 @@ int Castle::OpenDialog( bool readonly )
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
     // button swap
-    SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
-    MeetingButton buttonMeeting( cur_pt.x + 88, cur_pt.y + 345 );
+    SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 348 );
+    MeetingButton buttonMeeting( cur_pt.x + 88, cur_pt.y + 346 );
 
     if ( heroes.Guest() && heroes.Guard() && !readonly ) {
         buttonSwap.draw();
