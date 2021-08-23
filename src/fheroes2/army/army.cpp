@@ -1010,7 +1010,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
             hasUndead = hasUndead || ( race == Race::NECR ) || ( troop->GetID() == Monster::GHOST );
         }
 
-    const size_t count = races.size();
+    const int count = static_cast<int>( races.size() );
 
     switch ( count ) {
     case 0:
@@ -1031,7 +1031,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         }
         break;
     default:
-        const size_t penalty = count - 2;
+        const int penalty = count - 2;
         result -= penalty;
         if ( strs ) {
             std::string str = _( "Troops of %{count} alignments -%{penalty}" );
