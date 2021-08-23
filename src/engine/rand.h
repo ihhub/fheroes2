@@ -112,7 +112,7 @@ namespace Rand
 
         // prevent accidental copies
         BattleRandomGenerator( const BattleRandomGenerator & ) = delete;
-        BattleRandomGenerator& operator=( const BattleRandomGenerator & ) = delete;
+        BattleRandomGenerator & operator=( const BattleRandomGenerator & ) = delete;
 
         size_t GetSeed() const;
         void UpdateSeed( const size_t seed );
