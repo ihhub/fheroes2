@@ -1031,7 +1031,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         }
         break;
     default:
-        const int penalty = count - 2;
+        const uint32_t penalty = count - 2;
         result -= penalty;
         if ( strs ) {
             std::string str = _( "Troops of %{count} alignments -%{penalty}" );
