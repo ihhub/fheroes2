@@ -137,6 +137,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             // Have to destroy old Arena instance first
             arena.reset();
 
+            // reset random seed to its initial value
+            randomGenerator.UpdateSeed( battleRandomSeed );
+
             arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true, randomGenerator ) );
 
             while ( arena->BattleValid() ) {
