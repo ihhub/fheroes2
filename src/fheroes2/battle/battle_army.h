@@ -25,6 +25,7 @@
 
 #include "army.h"
 #include "bitmodes.h"
+#include "rand.h"
 
 namespace Battle
 {
@@ -50,7 +51,7 @@ namespace Battle
     class Force : public Units, public BitModes
     {
     public:
-        Force( Army &, bool );
+        Force( Army & parent, bool opposite, const Rand::BattleRandomGenerator & randomGenerator );
         Force( const Force & ) = delete;
 
         ~Force() override;

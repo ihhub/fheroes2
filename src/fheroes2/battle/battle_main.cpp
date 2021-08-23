@@ -37,11 +37,12 @@
 #include "skill.h"
 #include "tools.h"
 #include "translations.h"
+#include "world.h"
 
 namespace Battle
 {
     void PickupArtifactsAction( HeroBase &, HeroBase & );
-    void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool );
+    void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::BattleRandomGenerator & randomGenerator );
     void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
 }
 
@@ -98,7 +99,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle ) );
+    const size_t battleRandomSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
+    Rand::BattleRandomGenerator randomGenerator( battleRandomSeed );
+
+    std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle, randomGenerator ) );
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
@@ -133,7 +137,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             // Have to destroy old Arena instance first
             arena.reset();
 
-            arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true ) );
+            arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true, randomGenerator ) );
 
             while ( arena->BattleValid() ) {
                 arena->Turns();
@@ -198,7 +202,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // eagle eye capability
     if ( hero_wins && hero_loss && hero_wins->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && hero_loss->isHeroes() )
-        EagleEyeSkillAction( *hero_wins, arena->GetUsageSpells(), hero_wins->isControlHuman() );
+        EagleEyeSkillAction( *hero_wins, arena->GetUsageSpells(), hero_wins->isControlHuman(), randomGenerator );
 
     // necromancy capability
     if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
@@ -256,7 +260,7 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
     }
 }
 
-void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local )
+void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::BattleRandomGenerator & randomGenerator )
 {
     if ( spells.empty() || !hero.HaveSpellBook() )
         return;
@@ -273,17 +277,17 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
             switch ( eagleeye.Level() ) {
             case Skill::Level::BASIC:
                 // 20%
-                if ( 3 > sp.Level() && eagleeye.GetValues() >= Rand::Get( 1, 100 ) )
+                if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
                     new_spells.push_back( sp );
                 break;
             case Skill::Level::ADVANCED:
                 // 30%
-                if ( 4 > sp.Level() && eagleeye.GetValues() >= Rand::Get( 1, 100 ) )
+                if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
                     new_spells.push_back( sp );
                 break;
             case Skill::Level::EXPERT:
                 // 40%
-                if ( 5 > sp.Level() && eagleeye.GetValues() >= Rand::Get( 1, 100 ) )
+                if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
                     new_spells.push_back( sp );
                 break;
             default:

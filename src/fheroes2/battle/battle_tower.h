@@ -39,7 +39,7 @@ namespace Battle
     class Tower : public Unit
     {
     public:
-        Tower( const Castle &, int );
+        Tower( const Castle &, int, const Rand::BattleRandomGenerator & randomGenerator );
 
         bool isValid( void ) const override;
         int GetColor( void ) const override;

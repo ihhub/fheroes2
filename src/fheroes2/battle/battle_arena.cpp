@@ -149,7 +149,7 @@ Battle::Tower * Battle::Arena::GetTower( int type )
     return nullptr;
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
+Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::BattleRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )
     , armies_order( nullptr )
@@ -164,14 +164,16 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , current_turn( 0 )
     , auto_battle( 0 )
     , end_turn( false )
+    , _randomGenerator( randomGenerator )
 {
     const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;
-    army1 = new Force( a1, false );
-    army2 = new Force( a2, true );
+
+    army1 = new Force( a1, false, _randomGenerator );
+    army2 = new Force( a2, true, _randomGenerator );
 
     // init castle (interface ahead)
     if ( castle ) {
@@ -211,9 +213,9 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
 
     if ( castle ) {
         // init
-        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT ) : nullptr;
-        towers[1] = new Tower( *castle, TWR_CENTER );
-        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT ) : nullptr;
+        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator ) : nullptr;
+        towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator );
+        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator ) : nullptr;
         const bool fortification = ( Race::KNGT == castle->GetRace() ) && castle->isBuild( BUILD_SPEC );
         catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander() ) : nullptr;
         bridge = new Bridge();
@@ -282,6 +284,24 @@ Battle::Arena::~Arena()
     arena = nullptr;
 }
 
+// compute a new seed from a list of actions, so random actions happen differently depending on user inputs
+size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+{
+    size_t newSeed = seed;
+    if ( actions.empty() ) { // update the seed for next turn in all cases, even if no actions were performed
+        fheroes2::hashCombine( newSeed, 0 );
+    }
+
+    for ( const Battle::Command & command : actions ) {
+        fheroes2::hashCombine( newSeed, command.GetType() );
+        for ( const int commandArg : command ) {
+            fheroes2::hashCombine( newSeed, commandArg );
+        }
+    }
+
+    return newSeed;
+}
+
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
@@ -320,8 +340,10 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
+        const size_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        _randomGenerator.UpdateSeed( newSeed );
 
+        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
         // apply task
         while ( !actions.empty() ) {
             // apply action
@@ -1093,7 +1115,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     if ( acount )
         count *= acount * 2;
 
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander() );
+    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator );
 
     if ( elem ) {
         elem->SetModes( CAP_SUMMONELEM );
@@ -1109,7 +1131,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
 Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 {
-    Unit * image = new Unit( b, pos, b.isReflect() );
+    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator );
 
     if ( image ) {
         b.SetMirror( image );
@@ -1212,4 +1234,9 @@ bool Battle::Arena::CanBreakAutoBattle( void ) const
 void Battle::Arena::BreakAutoBattle( void )
 {
     auto_battle &= ~current_color;
+}
+
+const Rand::BattleRandomGenerator & Battle::Arena::GetRandomGenerator() const
+{
+    return _randomGenerator;
 }

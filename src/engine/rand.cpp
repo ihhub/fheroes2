@@ -125,3 +125,23 @@ int32_t Rand::Queue::GetWithSeed( uint32_t seed )
 {
     return Rand::Queue::Get( [seed]( uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
 }
+
+Rand::BattleRandomGenerator::BattleRandomGenerator( const size_t initialSeed )
+    : _currentSeed( initialSeed )
+{}
+
+size_t Rand::BattleRandomGenerator::GetSeed() const
+{
+    return _currentSeed;
+}
+
+void Rand::BattleRandomGenerator::UpdateSeed( const size_t seed )
+{
+    _currentSeed = seed;
+}
+
+uint32_t Rand::BattleRandomGenerator::Get( uint32_t from, uint32_t to /*= 0*/ ) const
+{
+    ++_currentSeed;
+    return Rand::GetWithSeed( from, to, static_cast<uint32_t>( _currentSeed ) );
+}

@@ -127,7 +127,7 @@ Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
     return it == end() ? nullptr : *it;
 }
 
-Battle::Force::Force( Army & parent, bool opposite )
+Battle::Force::Force( Army & parent, bool opposite, const Rand::BattleRandomGenerator & randomGenerator )
     : army( parent )
 {
     uids.reserve( army.Size() );
@@ -138,7 +138,7 @@ Battle::Force::Force( Army & parent, bool opposite )
         u32 uid = 0;
 
         if ( troop && troop->isValid() ) {
-            push_back( new Unit( *troop, ( opposite ? position + 10 : position ), opposite ) );
+            push_back( new Unit( *troop, opposite ? position + 10 : position, opposite, randomGenerator ) );
             back()->SetArmy( army );
             uid = back()->GetUID();
         }

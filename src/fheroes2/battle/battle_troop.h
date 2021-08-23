@@ -31,6 +31,7 @@
 #include "battle_cell.h"
 #include "bitmodes.h"
 #include "players.h"
+#include "rand.h"
 
 class Spell;
 class HeroBase;
@@ -70,7 +71,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop &, s32 pos, bool reflect );
+        Unit( const Troop &, s32 pos, bool reflect, const Rand::BattleRandomGenerator & randomGenerator );
         Unit( const Unit & ) = default;
 
         ~Unit() override;
@@ -211,6 +212,8 @@ namespace Battle
 
         bool blindanswer;
         uint32_t customAlphaMask;
+
+        const Rand::BattleRandomGenerator & _randomGenerator;
     };
 }
 

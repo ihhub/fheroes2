@@ -48,6 +48,13 @@ namespace Rand
     }
 
     template <typename T>
+    void ShuffleWithSeed( std::vector<T> & vec, uint32_t seed )
+    {
+        std::mt19937 seededGen( seed );
+        std::shuffle( vec.begin(), vec.end(), seededGen );
+    }
+
+    template <typename T>
     void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
     {
         std::shuffle( vec.begin(), vec.end(), gen );
@@ -95,6 +102,32 @@ namespace Rand
 
     private:
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc );
+    };
+
+    // Specific random generator used so that battle randomness is deterministic
+    class BattleRandomGenerator
+    {
+    public:
+        BattleRandomGenerator( const size_t initialSeed );
+
+        // prevent accidental copies
+        BattleRandomGenerator( const BattleRandomGenerator & ) = delete;
+        BattleRandomGenerator& operator=( const BattleRandomGenerator & ) = delete;
+
+        size_t GetSeed() const;
+        void UpdateSeed( const size_t seed );
+
+        uint32_t Get( uint32_t from, uint32_t to = 0 ) const;
+
+        template <class T>
+        void Shuffle( std::vector<T> & vector ) const
+        {
+            ++_currentSeed;
+            Rand::ShuffleWithSeed( vector, static_cast<uint32_t>( _currentSeed ) );
+        }
+
+    private:
+        mutable size_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
     };
 }
 
