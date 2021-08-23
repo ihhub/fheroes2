@@ -18,24 +18,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
+#include <algorithm>
 #include <map>
+#include <type_traits>
 
 #include "agg.h"
 #include "battle_animation.h"
 #include "battle_cell.h"
 #include "bin_info.h"
+#include "endian_h2.h"
 #include "logging.h"
 #include "monster.h"
 
 namespace
 {
-    template <typename T>
+    template <typename T, typename = typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
     T getValue( const uint8_t * data, const size_t base, const size_t offset = 0 )
     {
+        const char * begin = reinterpret_cast<const char *>( data ) + base + offset * sizeof( T );
+        const char * end = begin + sizeof( T );
+
         T result;
 
-        memcpy( &result, data + base + offset * sizeof( T ), sizeof( T ) );
+        // Data is originally stored using the little-endian byte order
+#if BYTE_ORDER == LITTLE_ENDIAN
+        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
+#elif BYTE_ORDER == BIG_ENDIAN
+        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
+#else
+        static_assert( false, "Unknown byte order" );
+#endif
 
         return result;
     }

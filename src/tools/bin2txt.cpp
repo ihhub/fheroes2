@@ -1,17 +1,30 @@
-#include <cstring>
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <type_traits>
 #include <vector>
+
+#include "endian_h2.h"
 
 namespace
 {
-    template <typename T>
+    template <typename T, typename = typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
     T getValue( const char * data, const size_t base, const size_t offset = 0 )
     {
+        const char * begin = data + base + offset * sizeof( T );
+        const char * end = begin + sizeof( T );
+
         T result;
 
-        memcpy( &result, data + base + offset * sizeof( T ), sizeof( T ) );
+        // Data is originally stored using the little-endian byte order
+#if BYTE_ORDER == LITTLE_ENDIAN
+        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
+#elif BYTE_ORDER == BIG_ENDIAN
+        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
+#else
+        static_assert( false, "Unknown byte order" );
+#endif
 
         return result;
     }
