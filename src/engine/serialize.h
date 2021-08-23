@@ -323,9 +323,9 @@ namespace fheroes2
 
         T result;
 
-#if BYTE_ORDER == LITTLE_ENDIAN
+#if defined( BYTE_ORDER ) && defined( LITTLE_ENDIAN ) && BYTE_ORDER == LITTLE_ENDIAN
         std::copy( begin, end, reinterpret_cast<char *>( &result ) );
-#elif BYTE_ORDER == BIG_ENDIAN
+#elif defined( BYTE_ORDER ) && defined( BIG_ENDIAN ) && BYTE_ORDER == BIG_ENDIAN
         std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
 #else
         static_assert( false, "Unknown byte order" );
