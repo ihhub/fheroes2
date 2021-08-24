@@ -106,7 +106,7 @@ private:
 
     static Monster getMonsterByRatingStandardGame( const size_t rating );
 
-    std::chrono::time_point<std::chrono::steady_clock> _prevTime = std::chrono::steady_clock::now();    
+    std::chrono::time_point<std::chrono::steady_clock> _prevTime = std::chrono::steady_clock::now();
     u32 hgs_animation_frame = 0;
 };
 
@@ -182,7 +182,7 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         text.Blit( ox + 79 + 9, oy + 70 );
 
         text.Set( hgs.land );
-        text.Blit( ox + 79 + 165 , oy + 70 );
+        text.Blit( ox + 79 + 165, oy + 70 );
 
         text.Set( std::to_string( hgs.days ) );
         text.Blit( ox + 79 + 324, oy + 70 );
@@ -198,8 +198,7 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         const std::array<uint8_t, 15> monsterAnimationSequence = fheroes2::MonsterAnimationSequence();
 
         //+ox+oy+hgs.days - to start from a "random" animation frame when a monster occurs more than once in the high score list
-        const uint32_t animateIndex = spriteIndex + 1
-              + monsterAnimationSequence[( ox + oy + hgs.days + hgs_animation_frame ) % monsterAnimationSequence.size()];
+        const uint32_t animateIndex = spriteIndex + 1 + monsterAnimationSequence[( ox + oy + hgs.days + hgs_animation_frame ) % monsterAnimationSequence.size()];
         const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animateIndex );
         fheroes2::Blit( animatedSprite, display, animatedSprite.x() + ox + 79 + 475, animatedSprite.y() + oy + 70 + 21 );
 
