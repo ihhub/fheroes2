@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <map>
 
 #include "agg.h"
@@ -27,17 +26,14 @@
 #include "bin_info.h"
 #include "logging.h"
 #include "monster.h"
+#include "serialize.h"
 
 namespace
 {
     template <typename T>
     T getValue( const uint8_t * data, const size_t base, const size_t offset = 0 )
     {
-        T result;
-
-        memcpy( &result, data + base + offset * sizeof( T ), sizeof( T ) );
-
-        return result;
+        return fheroes2::getLEValue<T>( reinterpret_cast<const char *>( data ), base, offset );
     }
 }
 
