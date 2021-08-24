@@ -93,4 +93,6 @@ namespace fheroes2
         void _addValidMove( const Monster_Info::AnimationType type );
         void _updateFrameInfo();
     };
+
+    std::array<uint8_t, 15> MonsterAnimationSequence( void );
 }
