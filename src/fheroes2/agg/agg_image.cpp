@@ -41,13 +41,13 @@ namespace
 {
     const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
-    std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite( ICN::LASTICN );
-    std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage( TIL::LASTTIL );
+    std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
+    std::vector<std::vector<std::vector<fheroes2::Image>>> _tilVsImage( TIL::LASTTIL );
     const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
 
-    std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
+    std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
 
     bool IsValidICNId( int id )
     {
