@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <array>
 #include <list>
 
 #include "battle_animation.h"
