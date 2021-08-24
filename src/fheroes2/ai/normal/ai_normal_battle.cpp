@@ -53,7 +53,7 @@ namespace AI
         int32_t fromIndex = -1;
         double attackValue = -INT32_MAX;
         double positionValue = -INT32_MAX;
-        bool canReach = false;
+        bool canAttackImmediately = false;
     };
 
     bool ValueHasImproved( double primary, double primaryMax, double secondary, double secondaryMax )
@@ -67,8 +67,8 @@ namespace AI
         // Primary - Enemy is within move range and can be attacked this turn
         // Secondary - Postion quality (to attack from, or protect friendly unit)
         // Tertiary - Enemy unit threat
-        return ( newOutcome.canReach && !previous.canReach )
-               || ( newOutcome.canReach == previous.canReach
+        return ( newOutcome.canAttackImmediately && !previous.canAttackImmediately )
+               || ( newOutcome.canAttackImmediately == previous.canAttackImmediately
                     && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
     }
 
@@ -88,14 +88,14 @@ namespace AI
             MeleeAttackOutcome current;
             current.positionValue = Board::GetCell( cell )->GetQuality();
             current.attackValue = Board::OptimalAttackValue( attacker, defender, cell );
-            current.canReach = Board::CanAttackUnitFromCell( attacker, defender, cell );
+            current.canAttackImmediately = Board::CanAttackUnitFromCell( attacker, defender, cell );
 
             // Pick target if either position has improved or unit is higher value at the same position quality
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
                 bestOutcome.attackValue = current.attackValue;
                 bestOutcome.positionValue = current.positionValue;
                 bestOutcome.fromIndex = cell;
-                bestOutcome.canReach = current.canReach;
+                bestOutcome.canAttackImmediately = current.canAttackImmediately;
             }
         }
         return bestOutcome;
@@ -512,7 +512,7 @@ namespace AI
         for ( const Unit * enemy : enemies ) {
             const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
 
-            if ( outcome.canReach && ValueHasImproved( outcome.positionValue, attackPositionValue, outcome.attackValue, attackHighestValue ) ) {
+            if ( outcome.canAttackImmediately && ValueHasImproved( outcome.positionValue, attackPositionValue, outcome.attackValue, attackHighestValue ) ) {
                 attackHighestValue = outcome.attackValue;
                 attackPositionValue = outcome.positionValue;
                 target.cell = outcome.fromIndex;
@@ -602,8 +602,8 @@ namespace AI
                 attackOption.positionValue = outcome.positionValue;
                 target.cell = outcome.fromIndex;
 
-                if ( outcome.canReach ) {
-                    attackOption.canReach = true;
+                if ( outcome.canAttackImmediately ) {
+                    attackOption.canAttackImmediately = true;
                     target.unit = enemy;
                 }
             }
@@ -641,8 +641,8 @@ namespace AI
                     protectOption.positionValue = archerValue;
                     target.cell = outcome.fromIndex;
 
-                    if ( outcome.canReach ) {
-                        protectOption.canReach = true;
+                    if ( outcome.canAttackImmediately ) {
+                        protectOption.canAttackImmediately = true;
                         target.unit = enemy;
                     }
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << target.cell << " archer value " << archerValue );
