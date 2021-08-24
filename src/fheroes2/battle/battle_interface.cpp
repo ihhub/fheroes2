@@ -2659,7 +2659,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupTargetCellForUnit( *_currentUnit, index ) ) );
+            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupDestinationCellForUnit( *_currentUnit, index ) ) );
             a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
@@ -2677,7 +2677,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
                 const s32 move = Board::GetIndexDirection( index, dir );
 
                 if ( _currentUnit->GetHeadIndex() != move )
-                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupTargetCellForUnit( *_currentUnit, move ) ) );
+                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupDestinationCellForUnit( *_currentUnit, move ) ) );
                 a.push_back( Command( MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                 humanturn_exit = true;

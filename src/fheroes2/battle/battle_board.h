@@ -103,12 +103,12 @@ namespace Battle
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
-        // Finds the cell nearest to the target and reachable for the unit
-        static int32_t FindNearestReachableCell( const int32_t target, const Unit & unit );
+        // Finds the cell nearest to the destination cell and reachable for the unit
+        static int32_t FindNearestReachableCell( const int32_t dst, const Unit & unit );
 
         // Handles the situation when the destination cell is on the border of the cell
         // space reachable for the unit and it should be the tail cell of this unit
-        static int32_t FixupTargetCellForUnit( const Unit & unit, const int32_t dst );
+        static int32_t FixupDestinationCellForUnit( const Unit & unit, const int32_t dst );
 
     private:
         void SetCobjObject( const int icn, const int32_t dst );

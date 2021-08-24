@@ -1255,14 +1255,14 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     return result;
 }
 
-int32_t Battle::Board::FindNearestReachableCell( const int32_t target, const Unit & unit )
+int32_t Battle::Board::FindNearestReachableCell( const int32_t dst, const Unit & unit )
 {
-    const Cell * targetCell = GetCell( target );
-    assert( targetCell != nullptr );
+    const Cell * dstCell = GetCell( dst );
+    assert( dstCell != nullptr );
 
-    // Target cell is already reachable
-    if ( targetCell->isReachableForHead() ) {
-        return FixupTargetCellForUnit( unit, target );
+    // Destination cell is already reachable
+    if ( dstCell->isReachableForHead() ) {
+        return FixupDestinationCellForUnit( unit, dst );
     }
 
     int32_t nearest = -1;
@@ -1271,7 +1271,7 @@ int32_t Battle::Board::FindNearestReachableCell( const int32_t target, const Uni
     // Search for the nearest reachable cell
     for ( const Cell & cell : *Arena::GetBoard() ) {
         if ( cell.isReachableForHead() ) {
-            const uint32_t distance = GetDistance( target, cell.GetIndex() );
+            const uint32_t distance = GetDistance( dst, cell.GetIndex() );
 
             if ( distance < nearestDistance ) {
                 nearest = cell.GetIndex();
@@ -1280,10 +1280,10 @@ int32_t Battle::Board::FindNearestReachableCell( const int32_t target, const Uni
         }
     }
 
-    return FixupTargetCellForUnit( unit, nearest );
+    return FixupDestinationCellForUnit( unit, nearest );
 }
 
-int32_t Battle::Board::FixupTargetCellForUnit( const Unit & unit, const int32_t dst )
+int32_t Battle::Board::FixupDestinationCellForUnit( const Unit & unit, const int32_t dst )
 {
     // Only wide units may need this fixup
     if ( !unit.isWide() ) {
