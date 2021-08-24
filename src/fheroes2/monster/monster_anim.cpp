@@ -138,7 +138,7 @@ namespace fheroes2
 
     const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
 
-    std::array<uint8_t, 15> MonsterAnimationSequence( void )
+    std::array<uint8_t, 15> MonsterAnimationSequence( )
     {
         return monsterAnimationSequence;
     }

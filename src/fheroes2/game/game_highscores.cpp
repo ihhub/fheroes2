@@ -442,7 +442,7 @@ Monster HGSData::getMonsterByRatingStandardGame( const size_t rating )
     return Monster( rating2monster[std::min( rating, rating2monster.size() - 1 )] );
 }
 
-bool HGSData::validateAnimationDelay( void )
+bool HGSData::validateAnimationDelay()
 {
     const std::chrono::duration<double> time = std::chrono::steady_clock::now() - HGSData::_prevTime;
     const uint64_t passedMs = static_cast<uint64_t>( time.count() * 1000 + 0.5 );
