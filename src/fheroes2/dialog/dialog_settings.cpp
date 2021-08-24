@@ -25,6 +25,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
@@ -218,7 +219,8 @@ void Dialog::ExtSettings( bool readonly )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        if ( le.MouseClickLeft( buttonOk.area() ) ) {
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow ) {
             break;
         }
 
