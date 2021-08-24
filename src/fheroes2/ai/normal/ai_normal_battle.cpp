@@ -447,7 +447,9 @@ namespace AI
                 if ( target.cell != -1 ) {
                     const int32_t reachableCell = Board::FindNearestReachableCell( target.cell, currentUnit );
 
-                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+                    if ( currentUnit.GetHeadIndex() != reachableCell )
+                        actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << reachableCell );
                 }
             }
