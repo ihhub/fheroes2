@@ -21,7 +21,9 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <cstdint>
 #include <iterator>
 #include <set>
 
@@ -1145,6 +1147,63 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     return false;
 }
 
+bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const Unit & target, const int32_t from )
+{
+    int32_t headIndex = -1;
+    int32_t tailIndex = -1;
+
+    // Get the actual position of the attacker before attacking
+    if ( attacker.isWide() ) {
+        const int tailDirection = attacker.isReflect() ? RIGHT : LEFT;
+
+        if ( isValidDirection( from, tailDirection ) ) {
+            const Cell * tailCell = GetCell( GetIndexDirection( from, tailDirection ) );
+
+            if ( tailCell != nullptr && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &attacker ) ) {
+                headIndex = from;
+                tailIndex = tailCell->GetIndex();
+            }
+        }
+
+        if ( headIndex == -1 || tailIndex == -1 ) {
+            // Try opposite direction
+            const int headDirection = attacker.isReflect() ? LEFT : RIGHT;
+
+            if ( isValidDirection( from, headDirection ) ) {
+                const Cell * headCell = GetCell( GetIndexDirection( from, headDirection ) );
+
+                if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &attacker ) ) {
+                    headIndex = headCell->GetIndex();
+                    tailIndex = from;
+                }
+            }
+        }
+    }
+    else {
+        headIndex = from;
+    }
+
+    // Check that the attacker is actually capable of attacking the target from this position
+    const std::array<int32_t, 2> indexes = { headIndex, tailIndex };
+
+    for ( const int32_t idx : indexes ) {
+        if ( idx == -1 ) {
+            continue;
+        }
+
+        for ( const int32_t aroundIdx : GetAroundIndexes( idx ) ) {
+            const Cell * cell = GetCell( aroundIdx );
+            assert( cell != nullptr );
+
+            if ( cell->GetUnit() == &target ) {
+                return CanAttackUnitFromCell( attacker, idx );
+            }
+        }
+    }
+
+    return false;
+}
+
 Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
 {
     Indexes result;
@@ -1194,6 +1253,34 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     }
 
     return result;
+}
+
+int32_t Battle::Board::FindNearestReachableCell( const int32_t target, const Unit & unit )
+{
+    const Cell * targetCell = GetCell( target );
+    assert( targetCell != nullptr );
+
+    // Target cell is already reachable
+    if ( targetCell->isReachableForHead() ) {
+        return FixupTargetCellForUnit( unit, target );
+    }
+
+    int32_t nearest = -1;
+    uint32_t nearestDistance = UINT32_MAX;
+
+    // Search for the nearest reachable cell
+    for ( const Cell & cell : *Arena::GetBoard() ) {
+        if ( cell.isReachableForHead() ) {
+            const uint32_t distance = GetDistance( target, cell.GetIndex() );
+
+            if ( distance < nearestDistance ) {
+                nearest = cell.GetIndex();
+                nearestDistance = distance;
+            }
+        }
+    }
+
+    return FixupTargetCellForUnit( unit, nearest );
 }
 
 int32_t Battle::Board::FixupTargetCellForUnit( const Unit & unit, const int32_t dst )
