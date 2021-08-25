@@ -42,8 +42,8 @@ public:
 
     bool isValid( void ) const;
 
-    const fheroes2::Sprite GetUpgradeButton();
-    fheroes2::Rect GetUpgradeButtonPos( const fheroes2::Rect & itemPos );
+    const fheroes2::Sprite GetUpgradeButton() const;
+    fheroes2::Rect GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const;
     bool CanUpgradeNow( const ArmyTroop & troop ) const;
     bool CanAffordUpgrade( const ArmyTroop & troop ) const;
     void UpgradeTroop( ArmyTroop & troop );
