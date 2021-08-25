@@ -300,7 +300,6 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
 
         if ( CanUpgradeNow( troop ) ) {
             const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
-
             const fheroes2::Sprite upgradeButton = GetUpgradeButton();
             fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x, upButtonPos.y );
         }
