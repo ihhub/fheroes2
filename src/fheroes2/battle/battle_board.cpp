@@ -1149,54 +1149,23 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
 
 bool Battle::Board::CanAttackUnitFromPosition( const Unit & attacker, const Unit & target, const int32_t dst )
 {
-    int32_t headIndex = -1;
-    int32_t tailIndex = -1;
-
     // Get the actual position of the attacker before attacking
-    if ( attacker.isWide() ) {
-        const int tailDirection = attacker.isReflect() ? RIGHT : LEFT;
-
-        if ( isValidDirection( dst, tailDirection ) ) {
-            const Cell * tailCell = GetCell( GetIndexDirection( dst, tailDirection ) );
-
-            if ( tailCell != nullptr && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &attacker ) ) {
-                headIndex = dst;
-                tailIndex = tailCell->GetIndex();
-            }
-        }
-
-        if ( headIndex == -1 || tailIndex == -1 ) {
-            // Try opposite direction
-            const int headDirection = attacker.isReflect() ? LEFT : RIGHT;
-
-            if ( isValidDirection( dst, headDirection ) ) {
-                const Cell * headCell = GetCell( GetIndexDirection( dst, headDirection ) );
-
-                if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &attacker ) ) {
-                    headIndex = headCell->GetIndex();
-                    tailIndex = dst;
-                }
-            }
-        }
-    }
-    else {
-        headIndex = dst;
-    }
+    const Position attackerPos = Position::GetReachable( attacker, dst );
 
     // Check that the attacker is actually capable of attacking the target from this position
-    const std::array<int32_t, 2> indexes = { headIndex, tailIndex };
+    const std::array<const Cell *, 2> cells = { attackerPos.GetHead(), attackerPos.GetTail() };
 
-    for ( const int32_t idx : indexes ) {
-        if ( idx == -1 ) {
+    for ( const Cell * cell : cells ) {
+        if ( cell == nullptr ) {
             continue;
         }
 
-        for ( const int32_t aroundIdx : GetAroundIndexes( idx ) ) {
-            const Cell * cell = GetCell( aroundIdx );
-            assert( cell != nullptr );
+        for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
+            const Cell * aroundCell = GetCell( aroundIdx );
+            assert( aroundCell != nullptr );
 
-            if ( cell->GetUnit() == &target ) {
-                return CanAttackUnitFromCell( attacker, idx );
+            if ( aroundCell->GetUnit() == &target ) {
+                return CanAttackUnitFromCell( attacker, cell->GetIndex() );
             }
         }
     }
