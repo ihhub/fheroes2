@@ -27,10 +27,11 @@
 #include "rand.h"
 #include "skill.h"
 
-Battle::Catapult::Catapult( const HeroBase & hero )
+Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator )
     : catShots( 1 )
     , doubleDamageChance( 25 )
     , canMiss( true )
+    , _randomGenerator( randomGenerator )
 {
     switch ( hero.GetLevelSkill( Skill::Secondary::BALLISTICS ) ) {
     case Skill::Level::BASIC:
@@ -60,7 +61,7 @@ Battle::Catapult::Catapult( const HeroBase & hero )
 
 u32 Battle::Catapult::GetDamage() const
 {
-    if ( doubleDamageChance == 100 || doubleDamageChance >= Rand::Get( 1, 100 ) ) {
+    if ( doubleDamageChance == 100 || doubleDamageChance >= _randomGenerator.Get( 1, 100 ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" );
         return 2;
     }
@@ -130,7 +131,7 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
     }
 
     if ( !targets.empty() ) {
-        return Rand::Get( targets );
+        return _randomGenerator.Get( targets );
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." );
@@ -141,5 +142,5 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
 bool Battle::Catapult::IsNextShotHit() const
 {
     // Miss chance is 25%
-    return !( canMiss && Rand::Get( 1, 20 ) < 6 );
+    return !( canMiss && _randomGenerator.Get( 1, 20 ) < 6 );
 }

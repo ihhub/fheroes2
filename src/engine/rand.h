@@ -119,6 +119,14 @@ namespace Rand
 
         uint32_t Get( uint32_t from, uint32_t to = 0 ) const;
 
+        template <typename T>
+        const T & Get( const std::vector<T> & vec ) const
+        {
+            ++_currentSeed;
+            std::mt19937 seededGen( static_cast<uint32_t>( _currentSeed ) );
+            return Rand::GetWithGen( vec, seededGen );
+        }
+
         template <class T>
         void Shuffle( std::vector<T> & vector ) const
         {
