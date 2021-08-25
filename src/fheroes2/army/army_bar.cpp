@@ -37,6 +37,8 @@
 
 namespace
 {
+    const int32_t UPGRADE_BUTTON_MARGIN = 2;
+
     void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget )
     {
         const Army * armyFrom = troopFrom.GetArmy();
@@ -202,15 +204,14 @@ const fheroes2::Sprite & ArmyBar::GetUpgradeButton() const
 fheroes2::Rect ArmyBar::GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const
 {
     const fheroes2::Sprite & upButton = GetUpgradeButton();
-    const int32_t margin = 3;
-    return { itemPos.x + margin, itemPos.y + margin, upButton.width(), upButton.height() };
+    return { itemPos.x, itemPos.y, upButton.width() + 2 * UPGRADE_BUTTON_MARGIN, upButton.height() + 2 * UPGRADE_BUTTON_MARGIN };
 }
 
 void ArmyBar::DrawUpgadeButton( const fheroes2::Rect & pos, fheroes2::Image & dstsf ) const
 {
     const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
     const fheroes2::Sprite & upgradeButton = GetUpgradeButton();
-    fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x, upButtonPos.y );
+    fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x + UPGRADE_BUTTON_MARGIN, upButtonPos.y + UPGRADE_BUTTON_MARGIN );
 }
 
 bool ArmyBar::CanUpgradeNow( const ArmyTroop & troop ) const
