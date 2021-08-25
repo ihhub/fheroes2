@@ -71,20 +71,15 @@ void DrawMonsterInfo( const fheroes2::Point & dst, const Troop & troop );
 void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi );
 
-int Dialog::TroopUpgrade( const Troop & troop, bool cannotAfford )
+int Dialog::TroopUpgrade( const Troop & troop, const bool cannotAfford )
 {
-    std::string msg;
-    int flags;
+    const payment_t cost = troop.GetUpgradeCost();
 
     if ( cannotAfford ) {
-        msg = _( "You can't afford to upgrade your troops!" );
-        flags = Dialog::OK;
+        return Dialog::ResourceInfo( "", _( "You can't afford to upgrade your troops!" ), cost, Dialog::OK );
     }
-    else {
-        msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-        flags = Dialog::YES | Dialog::NO;
-    }
-    return Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), flags );
+
+    return Dialog::ResourceInfo( "", _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ), cost, Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )

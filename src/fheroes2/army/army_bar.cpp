@@ -189,7 +189,7 @@ const fheroes2::Sprite & ArmyBar::GetUpgradeButton() const
 {
     const fheroes2::Sprite & upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
     if ( use_mini_sprite ) {
-        static const fheroes2::Sprite miniUpButton = [&upButton]() {
+        static const fheroes2::Sprite & miniUpButton = [&upButton]() {
             fheroes2::Sprite result( upButton.width() / 2, upButton.height() / 2 );
             fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), result, 0, 0, result.width(), result.height(), true );
             return result;
@@ -201,8 +201,16 @@ const fheroes2::Sprite & ArmyBar::GetUpgradeButton() const
 
 fheroes2::Rect ArmyBar::GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const
 {
-    const fheroes2::Sprite upButton = GetUpgradeButton();
-    return { itemPos.x + 3, itemPos.y + 3, upButton.width(), upButton.height() };
+    const fheroes2::Sprite & upButton = GetUpgradeButton();
+    const int32_t margin = 3;
+    return { itemPos.x + margin, itemPos.y + margin, upButton.width(), upButton.height() };
+}
+
+void ArmyBar::DrawUpgadeButton( const fheroes2::Rect & pos, fheroes2::Image & dstsf ) const
+{
+    const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
+    const fheroes2::Sprite & upgradeButton = GetUpgradeButton();
+    fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x, upButtonPos.y );
 }
 
 bool ArmyBar::CanUpgradeNow( const ArmyTroop & troop ) const
@@ -218,6 +226,9 @@ bool ArmyBar::CanAffordUpgrade( const ArmyTroop & troop ) const
 
 void ArmyBar::UpgradeTroop( ArmyTroop & troop )
 {
+    assert( CanUpgradeNow( troop ) );
+    assert( CanAffordUpgrade( troop ) );
+
     world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
     troop.Upgrade();
 }
@@ -298,9 +309,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
         }
 
         if ( CanUpgradeNow( troop ) ) {
-            const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
-            const fheroes2::Sprite upgradeButton = GetUpgradeButton();
-            fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x, upButtonPos.y );
+            DrawUpgadeButton( pos, dstsf );
         }
 
         if ( use_mini_sprite ) {
