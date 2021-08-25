@@ -530,7 +530,7 @@ u32 Heroes::GetMaxSpellPoints( void ) const
 
 u32 Heroes::GetMaxMovePoints( void ) const
 {
-    int point = 0;
+    uint32_t point = 0;
 
     // start point
     if ( isShipMaster() ) {
