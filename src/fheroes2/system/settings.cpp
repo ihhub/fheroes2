@@ -1047,6 +1047,8 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "battle: soft wait troop" );
     case Settings::BATTLE_REVERSE_WAIT_ORDER:
         return _( "battle: reverse wait order (fast, average, slow)" );
+    case Settings::BATTLE_DETERMINISTIC_RESULT:
+        return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:
         return _( "game: show system info" );
     case Settings::GAME_AUTOSAVE_ON:
@@ -1193,6 +1195,11 @@ bool Settings::ExtBattleShowBattleOrder() const
 bool Settings::ExtBattleSoftWait() const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
+}
+
+bool Settings::ExtBattleDeterministicResult() const
+{
+    return ExtModes( BATTLE_DETERMINISTIC_RESULT );
 }
 
 bool Settings::ExtGameRewriteConfirm() const

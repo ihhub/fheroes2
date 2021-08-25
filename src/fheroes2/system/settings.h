@@ -99,7 +99,8 @@ public:
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
-        BATTLE_REVERSE_WAIT_ORDER = 0x40020000
+        BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
+        BATTLE_DETERMINISTIC_RESULT = 0x40040000
     };
 
     Settings( const Settings & ) = delete;
@@ -189,6 +190,7 @@ public:
     bool ExtBattleShowDamage() const;
     bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
+    bool ExtBattleDeterministicResult() const;
     bool ExtBattleReverseWaitOrder() const;
     bool ExtGameRememberLastFocus() const;
     bool ExtGameContinueAfterVictory() const;
