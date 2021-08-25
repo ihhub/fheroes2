@@ -1224,32 +1224,33 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     return result;
 }
 
-int32_t Battle::Board::FindNearestReachableCell( const int32_t dst, const Unit & unit )
+int32_t Battle::Board::FindNearestReachableCell( const Unit & unit, const int32_t dst )
 {
-    const Cell * dstCell = GetCell( dst );
-    assert( dstCell != nullptr );
+    const Position dstPos = Position::GetReachable( unit, dst );
 
-    // Destination cell is already reachable
-    if ( dstCell->isReachableForHead() ) {
-        return FixupDestinationCellForUnit( unit, dst );
+    if ( dstPos.GetHead() != nullptr && ( !unit.isWide() || dstPos.GetTail() != nullptr ) ) {
+        // Destination cell is already reachable
+        return dstPos.GetHead()->GetIndex();
     }
 
-    int32_t nearest = -1;
+    const Cell * nearestCell = nullptr;
     uint32_t nearestDistance = UINT32_MAX;
 
     // Search for the nearest reachable cell
     for ( const Cell & cell : *Arena::GetBoard() ) {
-        if ( cell.isReachableForHead() ) {
+        const Position pos = Position::GetReachable( unit, cell.GetIndex() );
+
+        if ( pos.GetHead() != nullptr && ( !unit.isWide() || pos.GetTail() != nullptr ) ) {
             const uint32_t distance = GetDistance( dst, cell.GetIndex() );
 
             if ( distance < nearestDistance ) {
-                nearest = cell.GetIndex();
+                nearestCell = pos.GetHead();
                 nearestDistance = distance;
             }
         }
     }
 
-    return FixupDestinationCellForUnit( unit, nearest );
+    return nearestCell ? nearestCell->GetIndex() : -1;
 }
 
 int32_t Battle::Board::FixupDestinationCellForUnit( const Unit & unit, const int32_t dst )

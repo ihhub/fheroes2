@@ -104,7 +104,7 @@ namespace Battle
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
         // Finds the cell nearest to the cell with the given index and reachable for the unit
-        static int32_t FindNearestReachableCell( const int32_t dst, const Unit & unit );
+        static int32_t FindNearestReachableCell( const Unit & unit, const int32_t dst );
 
         // Handles the situation when the cell with the given index is specified as the target cell of the unit's movement,
         // is located on the border of the cell space reachable for the unit and it should be the tail cell of this unit
