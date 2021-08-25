@@ -227,7 +227,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         usage_spells.Append( spell );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    spell.GetName() << ", "
                                    << "incorrect param" );
     }
@@ -457,7 +457,7 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
         }
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "incorrect param"
                        << ": "
                        << "uid: "
