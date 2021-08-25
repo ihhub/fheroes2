@@ -42,7 +42,7 @@ int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const Her
         const Artifact art( arts[ii] );
 
         if ( art.isValid() ) {
-            int acount = base.HasArtifact( art );
+            uint32_t acount = base.artifactCount( art );
             if ( acount ) {
                 s32 mod = art.ExtraValue();
 
@@ -224,7 +224,7 @@ Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, bool canCastSpell
 
 bool HeroBase::HaveSpellBook( void ) const
 {
-    return HasArtifact( Artifact::MAGIC_BOOK ) != 0;
+    return hasArtifact( Artifact::MAGIC_BOOK );
 }
 
 std::vector<Spell> HeroBase::GetSpells( int lvl ) const
@@ -264,7 +264,7 @@ BagArtifacts & HeroBase::GetBagArtifacts( void )
     return bag_artifacts;
 }
 
-u32 HeroBase::HasArtifact( const Artifact & art ) const
+uint32_t HeroBase::artifactCount( const Artifact & art ) const
 {
     bool unique = true;
 
@@ -291,6 +291,11 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
     else {
         return bag_artifacts.Count( art );
     }
+}
+
+bool HeroBase::hasArtifact( const Artifact & art ) const
+{
+    return bag_artifacts.isPresentArtifact( art );
 }
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
