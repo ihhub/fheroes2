@@ -25,7 +25,11 @@
 
 #include "army.h"
 #include "bitmodes.h"
-#include "rand.h"
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
 
 namespace Battle
 {

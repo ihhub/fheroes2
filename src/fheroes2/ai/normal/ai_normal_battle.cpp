@@ -299,6 +299,7 @@ namespace AI
         _considerRetreat = false;
         _randomGenerator = &arena.GetRandomGenerator();
         assert( _randomGenerator );
+        //TODO : this pointer will dangle as we don't set it to nullptr when the Battle instance is deleted
 
         if ( enemyForce.empty() )
             return;

@@ -31,10 +31,14 @@
 #include "battle_cell.h"
 #include "bitmodes.h"
 #include "players.h"
-#include "rand.h"
 
 class Spell;
 class HeroBase;
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
 
 namespace Battle
 {

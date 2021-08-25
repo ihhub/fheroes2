@@ -117,7 +117,7 @@ namespace Rand
         size_t GetSeed() const;
         void UpdateSeed( const size_t seed );
 
-        uint32_t Get( uint32_t from, uint32_t to = 0 ) const;
+        uint32_t Get( const uint32_t from, const uint32_t to = 0 ) const;
 
         template <typename T>
         const T & Get( const std::vector<T> & vec ) const

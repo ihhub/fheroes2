@@ -140,7 +140,7 @@ void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
     _currentSeed = seed;
 }
 
-uint32_t Rand::DeterministicRandomGenerator::Get( uint32_t from, uint32_t to /*= 0*/ ) const
+uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /*= 0*/ ) const
 {
     ++_currentSeed;
     return Rand::GetWithSeed( from, to, static_cast<uint32_t>( _currentSeed ) );
