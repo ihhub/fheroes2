@@ -1147,7 +1147,7 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     return false;
 }
 
-bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const Unit & target, const int32_t from )
+bool Battle::Board::CanAttackUnitFromPosition( const Unit & attacker, const Unit & target, const int32_t dst )
 {
     int32_t headIndex = -1;
     int32_t tailIndex = -1;
@@ -1156,11 +1156,11 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const Unit & t
     if ( attacker.isWide() ) {
         const int tailDirection = attacker.isReflect() ? RIGHT : LEFT;
 
-        if ( isValidDirection( from, tailDirection ) ) {
-            const Cell * tailCell = GetCell( GetIndexDirection( from, tailDirection ) );
+        if ( isValidDirection( dst, tailDirection ) ) {
+            const Cell * tailCell = GetCell( GetIndexDirection( dst, tailDirection ) );
 
             if ( tailCell != nullptr && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &attacker ) ) {
-                headIndex = from;
+                headIndex = dst;
                 tailIndex = tailCell->GetIndex();
             }
         }
@@ -1169,18 +1169,18 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const Unit & t
             // Try opposite direction
             const int headDirection = attacker.isReflect() ? LEFT : RIGHT;
 
-            if ( isValidDirection( from, headDirection ) ) {
-                const Cell * headCell = GetCell( GetIndexDirection( from, headDirection ) );
+            if ( isValidDirection( dst, headDirection ) ) {
+                const Cell * headCell = GetCell( GetIndexDirection( dst, headDirection ) );
 
                 if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &attacker ) ) {
                     headIndex = headCell->GetIndex();
-                    tailIndex = from;
+                    tailIndex = dst;
                 }
             }
         }
     }
     else {
-        headIndex = from;
+        headIndex = dst;
     }
 
     // Check that the attacker is actually capable of attacking the target from this position

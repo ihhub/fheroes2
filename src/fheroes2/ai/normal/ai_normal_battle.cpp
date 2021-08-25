@@ -88,7 +88,7 @@ namespace AI
             MeleeAttackOutcome current;
             current.positionValue = Board::GetCell( cell )->GetQuality();
             current.attackValue = Board::OptimalAttackValue( attacker, defender, cell );
-            current.canAttackImmediately = Board::CanAttackUnitFromCell( attacker, defender, cell );
+            current.canAttackImmediately = Board::CanAttackUnitFromPosition( attacker, defender, cell );
 
             // Pick target if either position has improved or unit is higher value at the same position quality
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
@@ -262,7 +262,7 @@ namespace AI
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
 
                 // Attack only if target unit is reachable and can be attacked
-                if ( target.unit && Board::CanAttackUnitFromCell( currentUnit, *target.unit, reachableCell ) ) {
+                if ( target.unit && Board::CanAttackUnitFromPosition( currentUnit, *target.unit, reachableCell ) ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -700,7 +700,7 @@ namespace AI
                             actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
 
                         // Attack only if target unit is reachable and can be attacked
-                        if ( Board::CanAttackUnitFromCell( currentUnit, *targetUnit, reachableCell ) )
+                        if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) )
                             actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
 
                         break;

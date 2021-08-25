@@ -98,8 +98,8 @@ namespace Battle
 
         // Checks that the attacker is able (in principle) to attack from the given cell
         static bool CanAttackUnitFromCell( const Unit & attacker, const int32_t from );
-        // Checks that the attacker is able to attack the target from the given cell
-        static bool CanAttackUnitFromCell( const Unit & attacker, const Unit & target, const int32_t from );
+        // Checks that the attacker is able to attack the target from the position corresponding to the given cell
+        static bool CanAttackUnitFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
