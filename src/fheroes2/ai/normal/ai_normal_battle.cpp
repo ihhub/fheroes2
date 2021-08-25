@@ -599,12 +599,9 @@ namespace AI
             if ( IsOutcomeImproved( outcome, attackOption ) ) {
                 attackOption.attackValue = outcome.attackValue;
                 attackOption.positionValue = outcome.positionValue;
+                attackOption.canAttackImmediately = outcome.canAttackImmediately;
                 target.cell = outcome.fromIndex;
-
-                if ( outcome.canAttackImmediately ) {
-                    attackOption.canAttackImmediately = true;
-                    target.unit = enemy;
-                }
+                target.unit = outcome.canAttackImmediately ? enemy : nullptr;
             }
         }
 
@@ -638,12 +635,10 @@ namespace AI
                 if ( IsOutcomeImproved( outcome, protectOption ) ) {
                     protectOption.attackValue = outcome.attackValue;
                     protectOption.positionValue = archerValue;
+                    protectOption.canAttackImmediately = outcome.canAttackImmediately;
                     target.cell = outcome.fromIndex;
+                    target.unit = outcome.canAttackImmediately ? enemy : nullptr;
 
-                    if ( outcome.canAttackImmediately ) {
-                        protectOption.canAttackImmediately = true;
-                        target.unit = enemy;
-                    }
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << target.cell << " archer value " << archerValue );
                 }
             }
