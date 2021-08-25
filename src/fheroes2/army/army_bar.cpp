@@ -187,14 +187,13 @@ bool ArmyBar::isValid() const
 
 const fheroes2::Sprite & ArmyBar::GetUpgradeButton() const
 {
-    static const fheroes2::Sprite upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
+    const fheroes2::Sprite & upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
     if ( use_mini_sprite ) {
-        static fheroes2::Sprite miniUpButton( upButton.width() / 2, upButton.height() / 2 );
-        static bool drawn = false;
-        if ( !drawn ) {
-            drawn = true;
-            fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), miniUpButton, 0, 0, miniUpButton.width(), miniUpButton.height(), true );
-        }
+        static const fheroes2::Sprite miniUpButton = [&upButton]() {
+            fheroes2::Sprite result( upButton.width() / 2, upButton.height() / 2 );
+            fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), result, 0, 0, result.width(), result.height(), true );
+            return result;
+        }();
         return miniUpButton;
     }
     return upButton;
