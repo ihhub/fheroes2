@@ -1005,19 +1005,19 @@ int Army::GetMoraleModificator( std::string * strs ) const
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
-            int race = troop->GetRace();
-            races.insert( race );
-            hasUndead = hasUndead || ( race == Race::NECR ) || ( troop->GetID() == Monster::GHOST );
+            races.insert( troop->GetRace() );
+            hasUndead = hasUndead || troop->isUndead();
         }
 
     const int count = static_cast<int>( races.size() );
+    const bool allUndead = hasUndead && AllTroopsAreUndead();
 
     switch ( count ) {
     case 0:
     case 2:
         break;
     case 1:
-        if ( hasUndead )
+        if ( allUndead )
             return 0;
 
         if ( !AllTroopsAreTheSame() ) {
@@ -1044,7 +1044,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     // undead in life group or artifact "Arm of the Martyr"
-    if ( hasUndead || ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
+    if ( !allUndead && ( hasUndead || ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) ) {
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in group -1" ) );
