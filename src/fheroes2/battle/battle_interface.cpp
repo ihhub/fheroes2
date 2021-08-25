@@ -2627,10 +2627,11 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
             const int dir = GetDirectionFromCursorSword( themes );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
-                const s32 move = Board::GetIndexDirection( index, dir );
+                const int32_t move = Board::FixupDestinationCellForUnit( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
-                if ( _currentUnit->GetHeadIndex() != move )
-                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupDestinationCellForUnit( *_currentUnit, move ) ) );
+                if ( _currentUnit->GetHeadIndex() != move ) {
+                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );
+                }
                 a.push_back( Command( MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                 humanturn_exit = true;

@@ -1150,10 +1150,10 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
 bool Battle::Board::CanAttackUnitFromPosition( const Unit & attacker, const Unit & target, const int32_t dst )
 {
     // Get the actual position of the attacker before attacking
-    const Position attackerPos = Position::GetReachable( attacker, dst );
+    const Position pos = Position::GetReachable( attacker, dst );
 
     // Check that the attacker is actually capable of attacking the target from this position
-    const std::array<const Cell *, 2> cells = { attackerPos.GetHead(), attackerPos.GetTail() };
+    const std::array<const Cell *, 2> cells = { pos.GetHead(), pos.GetTail() };
 
     for ( const Cell * cell : cells ) {
         if ( cell == nullptr ) {
@@ -1259,20 +1259,12 @@ int32_t Battle::Board::FixupDestinationCellForUnit( const Unit & unit, const int
         return dst;
     }
 
-    const Position pos = Position::GetCorrect( unit, dst );
+    const Position pos = Position::GetReachable( unit, dst );
+
+    assert( pos.GetHead() != nullptr );
     assert( pos.GetTail() != nullptr );
 
-    // Destination cell is on the border of the cell space reachable for the unit
-    // and it should be the tail cell of this unit, return the head cell instead
-    if ( !pos.GetTail()->isReachableForTail() ) {
-        const int headDirection = unit.isReflect() ? LEFT : RIGHT;
-
-        if ( isValidDirection( dst, headDirection ) ) {
-            return GetIndexDirection( dst, headDirection );
-        }
-    }
-
-    return dst;
+    return pos.GetHead()->GetIndex();
 }
 
 std::string Battle::Board::GetMoatInfo( void )
