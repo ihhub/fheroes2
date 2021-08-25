@@ -185,7 +185,7 @@ bool ArmyBar::isValid() const
     return _army != nullptr;
 }
 
-const fheroes2::Sprite ArmyBar::GetUpgradeButton() const
+const fheroes2::Sprite & ArmyBar::GetUpgradeButton() const
 {
     static const fheroes2::Sprite upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
     if ( use_mini_sprite ) {
