@@ -185,9 +185,25 @@ bool ArmyBar::isValid() const
     return _army != nullptr;
 }
 
-fheroes2::Rect ArmyBar::UpgradeButtonPos( const fheroes2::Rect & itemPos )
+const fheroes2::Sprite ArmyBar::GetUpgradeButton()
 {
-    return { itemPos.x + itemPos.width - 23, itemPos.y + 3, 20, 10 };
+    static const fheroes2::Sprite upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
+    if ( use_mini_sprite ) {
+        static fheroes2::Sprite miniUpButton( upButton.width() / 2, upButton.height() / 2 );
+        static bool drawn = false;
+        if ( !drawn ) {
+            drawn = true;
+            fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), miniUpButton, 0, 0, miniUpButton.width(), miniUpButton.height(), true );
+        }
+        return miniUpButton;
+    }
+    return upButton;
+}
+
+fheroes2::Rect ArmyBar::GetUpgradeButtonPos( const fheroes2::Rect & itemPos )
+{
+    const fheroes2::Sprite upButton = GetUpgradeButton();
+    return { itemPos.x + 3, itemPos.y + 3, upButton.width(), upButton.height() };
 }
 
 bool ArmyBar::CanUpgradeNow( const ArmyTroop & troop ) const
@@ -283,8 +299,10 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
         }
 
         if ( CanUpgradeNow( troop ) ) {
-            const fheroes2::Rect upButtonPos = UpgradeButtonPos( pos );
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RECRUIT, 0 ), dstsf, upButtonPos.x, upButtonPos.y );
+            const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
+
+            const fheroes2::Sprite upgradeButton = GetUpgradeButton();
+            fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x, upButtonPos.y );
         }
 
         if ( use_mini_sprite ) {
@@ -347,7 +365,7 @@ bool ArmyBar::ActionBarCursor( const fheroes2::Point & cursor, ArmyTroop & troop
         }
     }
     else if ( troop.isValid() ) {
-        if ( CanUpgradeNow( troop ) && ( UpgradeButtonPos( pos ) & cursor ) ) {
+        if ( CanUpgradeNow( troop ) && ( GetUpgradeButtonPos( pos ) & cursor ) ) {
             msg = _( "Upgrade %{name}" );
             StringReplace( msg, "%{name}", troop.GetName() );
         }
@@ -429,7 +447,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, Arm
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
-            if ( CanUpgradeNow( troop ) && ( UpgradeButtonPos( pos ) & cursor ) ) {
+            if ( CanUpgradeNow( troop ) && ( GetUpgradeButtonPos( pos ) & cursor ) ) {
                 if ( Dialog::YES == Dialog::TroopUpgrade( troop, !CanAffordUpgrade( troop ) ) ) {
                     UpgradeTroop( troop );
                 }
