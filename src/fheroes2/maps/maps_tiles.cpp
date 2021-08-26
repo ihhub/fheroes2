@@ -918,6 +918,8 @@ void Maps::Tiles::updatePassability()
             if ( !isDetachedObject( objectType ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
+                const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
+
                 if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                         if ( isShortObject( bottomTileObjectType ) ) {
@@ -929,14 +931,11 @@ void Maps::Tiles::updatePassability()
                         }
                     }
                 }
-                else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128
-                          && MP2::isActionObject( static_cast<MP2::MapObjectType>( bottomTile.mp2_object + 128 ) )
-                          && isShortObject( static_cast<MP2::MapObjectType>( bottomTile.mp2_object + 128 ) )
-                          && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-                    // TODO: add extra logic to handle Stables.
+                else if ( bottomTile.mp2_object != 0 && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
+                          && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
-                else if ( isShortObject( static_cast<MP2::MapObjectType>( bottomTile.mp2_object ) ) ) {
+                else if ( isShortObject( bottomTileObjectType ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {

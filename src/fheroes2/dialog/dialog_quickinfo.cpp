@@ -407,10 +407,9 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
     const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
 
-    if ( objectType != MP2::OBJ_ZERO
-         && ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES
-              || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( static_cast<MP2::MapObjectType>( objectType + 128 ) ) ) ) ) {
+    if ( objectType != MP2::OBJ_ZERO && objectType != correctedObjectType && MP2::isActionObject( correctedObjectType ) ) {
         // This is non-main tile of an action object. We have to find the main tile.
         // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
         const int32_t radiusOfSearch = 3;
@@ -439,24 +438,14 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         const int32_t tileIndex = tile.GetIndex();
         const int32_t mapWidth = world.w();
 
-        int32_t requiredObjectType = 0;
-        if ( objectType == MP2::OBJN_ALCHEMYTOWER ) {
-            requiredObjectType = MP2::OBJ_ALCHEMYTOWER;
-        }
-        else if ( objectType == MP2::OBJN_STABLES ) {
-            requiredObjectType = MP2::OBJ_STABLES;
-        }
-        else {
-            requiredObjectType = objectType + 128;
-        }
-        assert( requiredObjectType > objectType );
+        assert( correctedObjectType > objectType );
 
         for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
             for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
                 const int32_t index = tileIndex + y * mapWidth + x;
                 if ( Maps::isValidAbsIndex( index ) ) {
                     const Maps::Tiles & foundTile = world.GetTiles( index );
-                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == requiredObjectType ) {
+                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
                         QuickInfo( foundTile );
                         return;
                     }
