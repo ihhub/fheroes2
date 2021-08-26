@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "agg_image.h"
 #include "castle.h"
@@ -51,9 +52,9 @@ namespace
                 if ( constructionInProgress ) {
                     return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
                 }
-                else {
-                    return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
-                }
+
+                assert( mageGuildLevel > 0 );
+                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
             }
             else if ( buildId == BUILD_THIEVESGUILD ) {
                 return true;
