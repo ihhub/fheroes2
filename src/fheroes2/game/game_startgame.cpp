@@ -1245,7 +1245,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
                 if ( castle )
-                    Dialog::QuickInfo( *castle );
+                    Dialog::QuickInfo( *castle, fheroes2::Rect() );
                 else
                     Dialog::QuickInfo( tile );
                 break;
@@ -1254,7 +1254,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes );
+                    Dialog::QuickInfo( *heroes, fheroes2::Rect() );
                 break;
             }
 

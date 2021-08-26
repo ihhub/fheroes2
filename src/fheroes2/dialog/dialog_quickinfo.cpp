@@ -43,21 +43,65 @@
 
 #include <cassert>
 
-std::string GetMinesIncomeString( int type )
+namespace
 {
-    const payment_t income = ProfitConditions::FromMine( type );
-    const s32 value = income.Get( type );
-    std::string res;
+    class RadarUpdater
+    {
+    public:
+        RadarUpdater( const fheroes2::Rect & mainArea, const fheroes2::Point & updatedPosition )
+            : _mainArea( mainArea )
+            , _updatedPosition( updatedPosition )
+            , _prevPosition( Interface::Basic::Get().GetGameArea().getCurrentCenterInPixels() )
+            , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+        {
+            if ( _updatedPosition != _prevPosition ) {
+                Interface::Radar & radar = Interface::Basic::Get().GetRadar();
 
-    if ( value ) {
+                const fheroes2::Rect commonArea = mainArea ^ radar.GetRect();
+                _restorer.update( commonArea.x, commonArea.y, commonArea.width, commonArea.height );
+
+                Interface::Basic::Get().GetGameArea().SetCenter( updatedPosition );
+                radar.Redraw();
+
+                _restorer.restore();
+            }
+        }
+
+        void restore()
+        {
+            if ( _updatedPosition != _prevPosition ) {
+                Interface::Basic::Get().GetGameArea().SetCenterInPixels( _prevPosition );
+                Interface::Basic::Get().GetRadar().Redraw();
+
+                _restorer.restore();
+            }
+        }
+
+    private:
+        const fheroes2::Rect _mainArea;
+        const fheroes2::Point _updatedPosition;
+        const fheroes2::Point _prevPosition;
+        fheroes2::ImageRestorer _restorer;
+    };
+
+    std::string GetMinesIncomeString( const int resourceType )
+    {
+        const payment_t income = ProfitConditions::FromMine( resourceType );
+        const int32_t value = income.Get( resourceType );
+
+        std::string res;
+        if ( value == 0 ) {
+            return res;
+        }
+
         res += ' ';
         res += '(';
         res += ( value > 0 ? '+' : '-' );
         res.append( std::to_string( value ) );
         res += ')';
-    }
 
-    return res;
+        return res;
+    }
 }
 
 std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t basicScoutingLevel )
@@ -643,19 +687,12 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     display.render();
 }
 
-void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // Update radar.
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-
-    gamearea.SetCenter( castle.GetCenter() );
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    radar.Redraw();
+    RadarUpdater radarUpdater( activeArea, castle.GetCenter() );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
@@ -663,6 +700,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
@@ -795,14 +833,13 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     // restore background
     back.restore();
 
-    // Restore radar.
-    gamearea.SetCenterInPixels( prevCenter );
-    radar.Redraw();
+    // Restore radar view.
+    radarUpdater.restore();
 
     display.render();
 }
 
-void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
@@ -810,12 +847,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
     const Settings & conf = Settings::Get();
 
     // Update radar.
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-
-    gamearea.SetCenter( hero.GetCenter() );
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    radar.Redraw();
+    RadarUpdater radarUpdater( activeArea, hero.GetCenter() );
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -1003,9 +1035,8 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
     // restore background
     restorer.restore();
 
-    // Restore radar.
-    gamearea.SetCenterInPixels( prevCenter );
-    radar.Redraw();
+    // Restore radar view.
+    radarUpdater.restore();
 
     display.render();
 }
