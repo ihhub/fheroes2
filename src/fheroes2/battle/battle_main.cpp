@@ -101,11 +101,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     const size_t battleDeterministicSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
     const size_t battlePureRandomSeed = Rand::Get( std::numeric_limits<uint32_t>::max() );
-
-    const size_t autoBattleSeed = battleDeterministicSeed;
-    const size_t manualBattleSeed = Settings::Get().ExtBattleDeterministicResult() ? battleDeterministicSeed : battlePureRandomSeed;
-
-    Rand::DeterministicRandomGenerator randomGenerator( showBattle ? manualBattleSeed : autoBattleSeed );
+    const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? battleDeterministicSeed : battlePureRandomSeed;
+    Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
 
     std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle, randomGenerator ) );
 
@@ -142,8 +139,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             // Have to destroy old Arena instance first
             arena.reset();
 
-            // reset random seed to correspond to manual battle
-            randomGenerator.UpdateSeed( manualBattleSeed );
+            // reset random seed
+            randomGenerator.UpdateSeed( battleSeed );
 
             arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true, randomGenerator ) );
 
