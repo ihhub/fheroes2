@@ -195,8 +195,8 @@ namespace AI
     uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
     {
         uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
-        duration += _commander->artifactCount( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
-                    + _commander->artifactCount( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += _commander->artifactCount( art ) * Artifact( art ).ExtraValue();
 
         if ( duration < 2 && target.Modes( TR_MOVED ) )
             return 0;

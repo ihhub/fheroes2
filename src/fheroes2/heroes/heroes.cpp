@@ -748,10 +748,7 @@ void Heroes::ReplenishSpellPoints()
     curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
 
     // power ring action
-    const uint32_t acount = artifactCount( Artifact::POWER_RING );
-    if ( acount ) {
-        curr += acount * Artifact( Artifact::POWER_RING ).ExtraValue();
-    }
+    curr += artifactCount( Artifact::POWER_RING ) * Artifact( Artifact::POWER_RING ).ExtraValue();
 
     // secondary skill
     curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
@@ -1252,9 +1249,7 @@ void Heroes::Scoute( const int tileIndex ) const
 
 int Heroes::GetScoute( void ) const
 {
-    uint32_t acount = artifactCount( Artifact::TELESCOPE );
-
-    return ( acount ? acount * Game::GetViewDistance( Game::VIEW_TELESCOPE ) : 0 ) + Game::GetViewDistance( Game::VIEW_HEROES )
+    return artifactCount( Artifact::TELESCOPE ) * Game::GetViewDistance( Game::VIEW_TELESCOPE ) + Game::GetViewDistance( Game::VIEW_HEROES )
            + GetSecondaryValues( Skill::Secondary::SCOUTING );
 }
 
@@ -1278,9 +1273,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    uint32_t crystalBallCount = artifactCount( Artifact::CRYSTAL_BALL );
-    if ( crystalBallCount < 1 )
-        crystalBallCount = 1;
+    uint32_t crystalBallCount = std::max( 1u, artifactCount( Artifact::CRYSTAL_BALL ) );
     return 8 * crystalBallCount;
 }
 

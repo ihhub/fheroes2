@@ -1162,12 +1162,8 @@ bool Battle::Unit::isArchers( void ) const
 void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const HeroBase * hero )
 {
     if ( hero ) {
-        uint32_t acount = hero->artifactCount( Artifact::WIZARD_HAT );
-        if ( acount )
-            duration += acount * Artifact( Artifact::WIZARD_HAT ).ExtraValue();
-        acount = hero->artifactCount( Artifact::ENCHANTED_HOURGLASS );
-        if ( acount )
-            duration += acount * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += hero->artifactCount( art ) * Artifact( art ).ExtraValue();
     }
 
     switch ( spell.GetID() ) {
