@@ -108,7 +108,6 @@ namespace Game
             , fadeOut( false )
             , fadeIn( false )
             , objectTileset( 0 )
-
         {}
 
         // Single instance of FadeTask.
@@ -250,7 +249,7 @@ void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType object
         fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else {
-        const int icn = MP2::GetICNObject( objectType );
+        const int icn = MP2::GetICNObject( fromTile.GetObjectTileset() );
         const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() != 0 );
 
         fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
