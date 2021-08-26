@@ -99,7 +99,7 @@ public:
     bool Save( const std::string & ) const;
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
-    uint32_t & GetHgsAnimationFrame( );
+    uint32_t & GetHgsAnimationFrame();
 
 private:
     std::vector<hgs_t> list;
@@ -109,7 +109,7 @@ private:
     uint32_t hgs_animation_frame = 0;
     std::array<Monster::monster_t, 229> rating2monster;
 };
-{}
+
 HGSData::HGSData()
 {
     rating2monster = { Monster::PEASANT,
