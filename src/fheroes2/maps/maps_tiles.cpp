@@ -2099,7 +2099,7 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     }
     else {
         const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
-        const std::array<uint8_t, 15> monsterAnimationSequence = fheroes2::MonsterAnimationSequence();
+        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
         spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % monsterAnimationSequence.size()];
     }
     return spriteIndices;

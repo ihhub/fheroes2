@@ -18,14 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <array>
-
 #include "monster.h"
 #include "monster_anim.h"
 #include "rand.h"
 
+namespace
+{
+    const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
+}
+
 namespace fheroes2
 {
+    const std::array<uint8_t, 15> & getMonsterAnimationSequence()
+    {
+        return monsterAnimationSequence;
+    }
+
     RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
         : _reference( monster.GetID() )
         , _icnID( fheroes2::getMonsterData( monster.GetID() ).icnId )
@@ -134,13 +142,6 @@ namespace fheroes2
 
         _pushFrames( Monster_Info::STATIC );
         _updateFrameInfo();
-    }
-
-    const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
-
-    std::array<uint8_t, 15> MonsterAnimationSequence()
-    {
-        return monsterAnimationSequence;
     }
 
     void RandomMonsterAnimation::_pushFrames( const Monster_Info::AnimationType type )
