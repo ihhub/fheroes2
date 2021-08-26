@@ -107,7 +107,7 @@ const char * Game::EventsName( int evnt )
         return "dig artifact";
     case EVENT_CASTSPELL:
         return "cast spell";
-    case EVENT_KINGDOMINFO:
+    case EVENT_KINGDOM_INFO:
         return "kingdom overview";
     case EVENT_DEFAULTACTION:
         return "default action";
@@ -263,7 +263,7 @@ void Game::HotKeysDefaults( void )
     // cast spell
     key_events[EVENT_CASTSPELL] = KEY_c;
     // kingdom overview
-    key_events[EVENT_KINGDOMINFO] = KEY_k;
+    key_events[EVENT_KINGDOM_INFO] = KEY_k;
     // default action
     key_events[EVENT_DEFAULTACTION] = KEY_SPACE;
     // move hero

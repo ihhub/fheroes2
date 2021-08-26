@@ -852,7 +852,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
                 EventCastSpell();
             // kingdom overview
-            else if ( HotKeyPressEvent( Game::EVENT_KINGDOMINFO ) )
+            else if ( HotKeyPressEvent( Game::EVENT_KINGDOM_INFO ) )
                 EventKingdomInfo();
             // show/hide control panel
             else if ( HotKeyPressEvent( Game::EVENT_CTRLPANEL ) )
