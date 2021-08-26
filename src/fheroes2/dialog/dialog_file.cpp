@@ -91,8 +91,10 @@ fheroes2::GameMode Dialog::FileOptions()
             }
         }
         else if ( le.MouseClickLeft( buttonSave.area() ) ) {
-            result = Interface::Basic::Get().EventSaveGame();
-            break;
+            // Special case: since we show a window about file saving we don't want to display the current didloag anymore.
+            back.restore();
+
+            return Interface::Basic::Get().EventSaveGame();
         }
         else if ( le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
