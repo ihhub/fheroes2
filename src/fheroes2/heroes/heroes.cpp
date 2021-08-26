@@ -1249,8 +1249,8 @@ void Heroes::Scoute( const int tileIndex ) const
 
 int Heroes::GetScoute( void ) const
 {
-    return artifactCount( Artifact::TELESCOPE ) * Game::GetViewDistance( Game::VIEW_TELESCOPE ) + Game::GetViewDistance( Game::VIEW_HEROES )
-           + GetSecondaryValues( Skill::Secondary::SCOUTING );
+    return static_cast<int>( artifactCount( Artifact::TELESCOPE ) * Game::GetViewDistance( Game::VIEW_TELESCOPE ) + Game::GetViewDistance( Game::VIEW_HEROES )
+                             + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
@@ -1273,7 +1273,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    uint32_t crystalBallCount = std::max( 1u, artifactCount( Artifact::CRYSTAL_BALL ) );
+    uint32_t crystalBallCount = std::max( 1U, artifactCount( Artifact::CRYSTAL_BALL ) );
     return 8 * crystalBallCount;
 }
 
