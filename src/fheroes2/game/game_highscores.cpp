@@ -109,7 +109,7 @@ private:
     uint32_t hgs_animation_frame = 0;
     std::array<Monster::monster_t, 229> rating2monster;
 };
-
+{}
 HGSData::HGSData()
 {
     rating2monster = { Monster::PEASANT,
