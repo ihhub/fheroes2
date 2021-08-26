@@ -88,8 +88,8 @@ StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
     Artifact & artifact = ultimate;
     msg >> artifact >> ultimate._index >> ultimate._isFound;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_097_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE_097_RELEASE ) {
         msg >> ultimate._offset;
     }
     else {
