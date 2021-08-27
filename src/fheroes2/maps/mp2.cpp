@@ -873,6 +873,150 @@ bool MP2::isActionObject( const MapObjectType objectType )
     return true;
 }
 
+MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case OBJN_ALCHEMYLAB:
+        return OBJ_ALCHEMYLAB;
+    case OBJN_SKELETON:
+        return OBJ_SKELETON;
+    case OBJN_DAEMONCAVE:
+        return OBJ_DAEMONCAVE;
+    case OBJN_FAERIERING:
+        return OBJ_FAERIERING;
+    case OBJN_GAZEBO:
+        return OBJ_GAZEBO;
+    case OBJN_GRAVEYARD:
+        return OBJ_GRAVEYARD;
+    case OBJN_ARCHERHOUSE:
+        return OBJ_ARCHERHOUSE;
+    case OBJN_DWARFCOTT:
+        return OBJ_DWARFCOTT;
+    case OBJN_PEASANTHUT:
+        return OBJ_PEASANTHUT;
+    case OBJN_DRAGONCITY:
+        return OBJ_DRAGONCITY;
+    case OBJN_LIGHTHOUSE:
+        return OBJ_LIGHTHOUSE;
+    case OBJN_WATERWHEEL:
+        return OBJ_WATERWHEEL;
+    case OBJN_MINES:
+        return OBJ_MINES;
+    case OBJN_OBELISK:
+        return OBJ_OBELISK;
+    case OBJN_OASIS:
+        return OBJ_OASIS;
+    case OBJN_SAWMILL:
+        return OBJ_SAWMILL;
+    case OBJN_ORACLE:
+        return OBJ_ORACLE;
+    case OBJN_SHIPWRECK:
+        return OBJ_SHIPWRECK;
+    case OBJN_DESERTTENT:
+        return OBJ_DESERTTENT;
+    case OBJN_CASTLE:
+        return OBJ_CASTLE;
+    case OBJN_STONELITHS:
+        return OBJ_STONELITHS;
+    case OBJN_WAGONCAMP:
+        return OBJ_WAGONCAMP;
+    case OBJN_WINDMILL:
+        return OBJ_WINDMILL;
+    case OBJN_RNDTOWN:
+        return OBJ_RNDTOWN;
+    case OBJN_RNDCASTLE:
+        return OBJ_RNDCASTLE;
+    case OBJN_WATCHTOWER:
+        return OBJ_WATCHTOWER;
+    case OBJN_TREEHOUSE:
+        return OBJ_TREEHOUSE;
+    case OBJN_TREECITY:
+        return OBJ_TREECITY;
+    case OBJN_RUINS:
+        return OBJ_RUINS;
+    case OBJN_FORT:
+        return OBJ_FORT;
+    case OBJN_TRADINGPOST:
+        return OBJ_TRADINGPOST;
+    case OBJN_ABANDONEDMINE:
+        return OBJ_ABANDONEDMINE;
+    case OBJN_TREEKNOWLEDGE:
+        return OBJ_TREEKNOWLEDGE;
+    case OBJN_DOCTORHUT:
+        return OBJ_DOCTORHUT;
+    case OBJN_TEMPLE:
+        return OBJ_TEMPLE;
+    case OBJN_HILLFORT:
+        return OBJ_HILLFORT;
+    case OBJN_HALFLINGHOLE:
+        return OBJ_HALFLINGHOLE;
+    case OBJN_MERCENARYCAMP:
+        return OBJ_MERCENARYCAMP;
+    case OBJN_PYRAMID:
+        return OBJ_PYRAMID;
+    case OBJN_CITYDEAD:
+        return OBJ_CITYDEAD;
+    case OBJN_EXCAVATION:
+        return OBJ_EXCAVATION;
+    case OBJN_SPHINX:
+        return OBJ_SPHINX;
+    case OBJN_ARTESIANSPRING:
+        return OBJ_ARTESIANSPRING;
+    case OBJN_TROLLBRIDGE:
+        return OBJ_TROLLBRIDGE;
+    case OBJN_WATERINGHOLE:
+        return OBJ_WATERINGHOLE;
+    case OBJN_WITCHSHUT:
+        return OBJ_WITCHSHUT;
+    case OBJN_XANADU:
+        return OBJ_XANADU;
+    case OBJN_CAVE:
+        return OBJ_CAVE;
+    case OBJN_MAGELLANMAPS:
+        return OBJ_MAGELLANMAPS;
+    case OBJN_DERELICTSHIP:
+        return OBJ_DERELICTSHIP;
+    case OBJN_MAGICWELL:
+        return OBJ_MAGICWELL;
+    case OBJN_OBSERVATIONTOWER:
+        return OBJ_OBSERVATIONTOWER;
+    case OBJN_FREEMANFOUNDRY:
+        return OBJ_FREEMANFOUNDRY;
+    case OBJN_ARENA:
+        return OBJ_ARENA;
+    case OBJN_BARROWMOUNDS:
+        return OBJ_BARROWMOUNDS;
+    case OBJN_MERMAID:
+        return OBJ_MERMAID;
+    case OBJN_SIRENS:
+        return OBJ_SIRENS;
+    case OBJN_HUTMAGI:
+        return OBJ_HUTMAGI;
+    case OBJN_EYEMAGI:
+        return OBJ_EYEMAGI;
+    case OBJN_TRAVELLERTENT:
+        return OBJ_TRAVELLERTENT;
+    case OBJN_JAIL:
+        return OBJ_JAIL;
+    case OBJN_FIREALTAR:
+        return OBJ_FIREALTAR;
+    case OBJN_AIRALTAR:
+        return OBJ_AIRALTAR;
+    case OBJN_EARTHALTAR:
+        return OBJ_EARTHALTAR;
+    case OBJN_WATERALTAR:
+        return OBJ_WATERALTAR;
+    case OBJN_ALCHEMYTOWER:
+        return OBJ_ALCHEMYTOWER;
+    case OBJN_STABLES:
+        return OBJ_STABLES;
+    default:
+        break;
+    }
+
+    return objectType;
+}
+
 bool MP2::isQuantityObject( const MapObjectType objectType )
 {
     switch ( objectType ) {

@@ -44,20 +44,20 @@ namespace
         const Army * armyFrom = troopFrom.GetArmy();
         const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
         const bool isSameTroopType = troopTarget.isValid() && troopFrom.GetID() == troopTarget.GetID();
+        const uint32_t overallCount = isSameTroopType ? troopFrom.GetCount() + troopTarget.GetCount() : troopFrom.GetCount();
 
-        if ( troopFrom.GetCount() <= 1 ) {
-            // cross-army split logic - prevent splits where we'd lose the last stack of a hero
-            if ( saveLastTroop )
+        assert( overallCount > 0 );
+
+        if ( overallCount == 1 ) {
+            // prevent cross-army split if we lose the last unit in the hero army
+            if ( saveLastTroop ) {
                 return;
-            // join the two stacks if the troop types are same and the source stack is just 1 unit
-            else if ( isSameTroopType ) {
-                troopTarget.SetCount( troopTarget.GetCount() + troopFrom.GetCount() );
-                troopFrom.Reset();
             }
-            // or else just move the source troop around
-            else if ( !troopTarget.isValid() ) {
-                Army::SwapTroops( troopFrom, troopTarget );
-            }
+
+            // it seems that we are just moving a single unit to a free cell
+            assert( !troopTarget.isValid() );
+
+            Army::SwapTroops( troopFrom, troopTarget );
         }
         else {
             uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
@@ -70,7 +70,7 @@ namespace
 
             // if splitting to the same troop type, use this bool to turn off fast split option at the beginning of the dialog
             bool useFastSplit = !isSameTroopType;
-            const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > maxCount ? maxCount : freeSlots ), maxCount, saveLastTroop, redistributeCount, useFastSplit );
+            const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 
             if ( slots < 2 || slots > 6 )
                 return;
@@ -175,9 +175,14 @@ void ArmyBar::SetArmy( Army * ptr )
     _army = ptr;
     items.clear();
 
-    if ( ptr )
-        for ( u32 ii = 0; ii < ptr->Size(); ++ii )
-            items.push_back( reinterpret_cast<ArmyTroop *>( ptr->GetTroop( ii ) ) );
+    if ( ptr ) {
+        for ( u32 ii = 0; ii < ptr->Size(); ++ii ) {
+            ArmyTroop * troop = dynamic_cast<ArmyTroop *>( ptr->GetTroop( ii ) );
+            assert( troop != nullptr );
+
+            items.push_back( troop );
+        }
+    }
 
     SetContentItems();
 }

@@ -203,10 +203,10 @@ StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 
     switch ( focus.first ) {
     case FOCUS_HEROES:
-        msg << reinterpret_cast<Heroes *>( focus.second )->GetIndex();
+        msg << static_cast<Heroes *>( focus.second )->GetIndex();
         break;
     case FOCUS_CASTLE:
-        msg << reinterpret_cast<Castle *>( focus.second )->GetIndex();
+        msg << static_cast<Castle *>( focus.second )->GetIndex();
         break;
     default:
         msg << static_cast<s32>( -1 );

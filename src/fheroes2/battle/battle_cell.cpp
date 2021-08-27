@@ -110,6 +110,55 @@ Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
     return result;
 }
 
+Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst )
+{
+    Position result;
+
+    if ( unit.isWide() ) {
+        auto checkCells = []( const Unit & u, Cell * headCell, Cell * tailCell ) {
+            Position res;
+
+            if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &u ) && tailCell != nullptr
+                 && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &u ) ) {
+                res.first = headCell;
+                res.second = tailCell;
+            }
+
+            return res;
+        };
+
+        const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+
+        if ( Board::isValidDirection( dst, tailDirection ) ) {
+            Cell * headCell = Board::GetCell( dst );
+            Cell * tailCell = Board::GetCell( Board::GetIndexDirection( dst, tailDirection ) );
+
+            result = checkCells( unit, headCell, tailCell );
+        }
+
+        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
+            // Try opposite direction
+            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+
+            if ( Board::isValidDirection( dst, headDirection ) ) {
+                Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
+                Cell * tailCell = Board::GetCell( dst );
+
+                result = checkCells( unit, headCell, tailCell );
+            }
+        }
+    }
+    else {
+        Cell * headCell = Board::GetCell( dst );
+
+        if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &unit ) ) {
+            result.first = headCell;
+        }
+    }
+
+    return result;
+}
+
 bool Battle::Position::isReflect( void ) const
 {
     return first && second && first->GetIndex() < second->GetIndex();

@@ -104,7 +104,7 @@ bool Game::Save( const std::string & fn )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "wb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" );
         return false;
     }
 
@@ -139,7 +139,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -152,7 +152,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -184,7 +184,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fz.setbigendian( true );
 
     if ( !fz.read( fn, offset ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, ", uncompress: error" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, ", uncompress: error" );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -271,11 +271,13 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
 bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 {
+    DEBUG_LOG( DBG_GAME, DBG_INFO, fn );
+
     StreamFile fs;
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" );
         return false;
     }
 
@@ -285,7 +287,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" );
         return false;
     }
 
