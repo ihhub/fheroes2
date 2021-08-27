@@ -316,7 +316,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         else if ( le.MousePressRight( resolutionArea ) )
-            Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
