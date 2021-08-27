@@ -862,11 +862,13 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 event.colors = color;
                 event.resource = funds;
 
-                event.title += MP2::StringObject( objectType );
-
                 if ( objectCount > 1 ) {
-                    event.title += _( " (%{count} places)" );
-                    StringReplace( event.title, "%{count}", objectCount );
+                    event.title = std::to_string( objectCount );
+                    event.title += ' ';
+                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                }
+                else {
+                    event.title = MP2::StringObject( objectType );
                 }
 
                 world.AddEventDate( event );

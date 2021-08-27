@@ -562,6 +562,9 @@ namespace MP2
     int GetICNObject( int tileset );
     const char * StringObject( const MapObjectType objectType );
 
+    // This function returns plural forms only for certain object types.
+    const char * getPluralObjectName( const MapObjectType objectType, const size_t count );
+
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
 
     // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
