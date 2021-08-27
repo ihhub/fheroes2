@@ -87,8 +87,8 @@ namespace Dialog
     std::string SelectFileSave( void );
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile );
-    void QuickInfo( const Castle & castle, const fheroes2::Point & position = fheroes2::Point() );
-    void QuickInfo( const Heroes & hero, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
@@ -110,7 +110,7 @@ namespace Dialog
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, const bool saveLastTroop, uint32_t & redistributeCount, bool & useFastSplit );
+    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );

@@ -57,7 +57,7 @@ int main( int argc, char ** argv )
 
     System::MakeDirectory( argv[2] );
 
-    const u32 size = sf1.size();
+    const size_t size = sf1.size();
     int total = 0;
     int count_items = sf1.getLE16();
 

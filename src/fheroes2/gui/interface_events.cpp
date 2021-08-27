@@ -160,7 +160,7 @@ void Interface::Basic::EventContinueMovement( void ) const
 void Interface::Basic::EventKingdomInfo( void ) const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    myKingdom.OverviewDialog();
+    myKingdom.openOverviewDialog();
 
     iconsPanel.SetRedraw();
 }

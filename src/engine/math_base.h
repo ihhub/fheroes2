@@ -84,11 +84,6 @@ namespace fheroes2
             return PointBase2D( x - point.x, y - point.y );
         }
 
-        PointBase2D operator*( const _Type & value ) const
-        {
-            return PointBase2D( value * x, value * y );
-        }
-
         bool operator<( const PointBase2D & point ) const
         {
             return x == point.x ? y < point.y : x < point.x;
@@ -97,12 +92,6 @@ namespace fheroes2
         _Type x;
         _Type y;
     };
-
-    template <typename _Type, typename T>
-    PointBase2D<_Type> operator*( const T & value, const PointBase2D<_Type> & point )
-    {
-        return PointBase2D<_Type>( static_cast<_Type>( value ) * point.x, static_cast<_Type>( value ) * point.y );
-    }
 
     template <typename _Type>
     struct SizeBase2D
@@ -154,11 +143,6 @@ namespace fheroes2
         SizeBase2D operator-( const SizeBase2D & size ) const
         {
             return SizeBase2D( width - size.width, height - size.height );
-        }
-
-        SizeBase2D operator*( const _Type & value ) const
-        {
-            return SizeBase2D( value * width, value * height );
         }
 
         _Type width;

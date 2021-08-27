@@ -20,6 +20,7 @@
 
 #include "dialog_language_selection.h"
 #include "agg_image.h"
+#include "game.h"
 #include "icn.h"
 #include "localevent.h"
 #include "screen.h"
@@ -107,7 +108,7 @@ namespace fheroes2
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
                 break;
             }
 

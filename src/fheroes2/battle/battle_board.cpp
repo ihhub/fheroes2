@@ -21,7 +21,9 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <cstdint>
 #include <iterator>
 #include <set>
 
@@ -93,7 +95,7 @@ void Battle::Board::Reset( void )
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-        it->ResetDirection();
+        it->resetReachability();
         it->ResetQuality();
     }
 }
@@ -180,9 +182,13 @@ uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 
 void Battle::Board::SetScanPassability( const Unit & unit )
 {
-    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirection(); } );
+    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.resetReachability(); } );
 
-    at( unit.GetHeadIndex() ).SetDirection( CENTER );
+    at( unit.GetHeadIndex() ).setReachableForHead();
+
+    if ( unit.isWide() ) {
+        at( unit.GetTailIndex() ).setReachableForTail();
+    }
 
     if ( unit.isFlying() ) {
         const Bridge * bridge = Arena::GetBridge();
@@ -190,7 +196,11 @@ void Battle::Board::SetScanPassability( const Unit & unit )
 
         for ( std::size_t i = 0; i < size(); i++ ) {
             if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
-                at( i ).SetDirection( CENTER );
+                at( i ).setReachableForHead();
+
+                if ( unit.isWide() ) {
+                    at( i ).setReachableForTail();
+                }
             }
         }
     }
@@ -299,7 +309,15 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
         const int32_t tailCellId = ( GetDirection( currentHeadCellId, headCellId ) & LEFT_SIDE ) ? headCellId + 1 : headCellId - 1;
 
         // Unit is already at its destination
-        if ( ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) || ( headCellId == dstTailCellId && tailCellId == dstHeadCellId ) ) {
+        if ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) {
+            result.push_back( headCellId );
+
+            return true;
+        }
+
+        // Unit is already at its destination, but in the opposite direction
+        if ( headCellId == dstTailCellId && tailCellId == dstHeadCellId ) {
+            result.push_back( tailCellId );
             result.push_back( headCellId );
 
             return true;
@@ -417,19 +435,18 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
         for ( std::size_t i = 0; i < result.size(); i++ ) {
             const int32_t cellId = result[i];
 
-            Cell * cell = GetCell( cellId );
-            assert( cell != nullptr );
+            Cell * headCell = GetCell( cellId );
+            assert( headCell != nullptr );
 
-            cell->SetDirection( cell->GetDirection() | GetDirection( cellId, i == 0 ? unit.GetHeadIndex() : result[i - 1] ) );
+            headCell->setReachableForHead();
 
             if ( isWideUnit ) {
-                const int32_t head = cellId;
-                const int32_t prev = i == 0 ? unit.GetHeadIndex() : result[i - 1];
+                const int32_t prevCellId = i == 0 ? unit.GetHeadIndex() : result[i - 1];
 
-                Cell * tail = GetCell( head, LEFT_SIDE & GetDirection( head, prev ) ? LEFT : RIGHT );
+                Cell * tailCell = GetCell( cellId, LEFT_SIDE & GetDirection( cellId, prevCellId ) ? LEFT : RIGHT );
+                assert( tailCell != nullptr );
 
-                if ( tail && UNKNOWN == tail->GetDirection() )
-                    tail->SetDirection( GetDirection( tail->GetIndex(), head ) );
+                tailCell->setReachableForTail();
             }
         }
     }
@@ -705,7 +722,6 @@ bool Battle::Board::isMoatIndex( s32 index, const Unit & b )
 
 void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
 {
-    //    bool trees = Maps::ScanAroundObject(center, MP2::OBJ_TREES).size();
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     int ground = tile.GetGround();
     std::vector<int> objs;
@@ -1100,7 +1116,8 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     assert( fromCell != nullptr );
 
     // Target unit cannot be attacked if out of reach
-    if ( fromCell->GetDirection() == UNKNOWN && from != attacker.GetHeadIndex() && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
+    if ( !fromCell->isReachableForHead() && ( !attacker.isWide() || !fromCell->isReachableForTail() ) && from != attacker.GetHeadIndex()
+         && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
         return false;
     }
 
@@ -1127,6 +1144,32 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     }
 
     // In all other cases, the attack is prohibited
+    return false;
+}
+
+bool Battle::Board::CanAttackUnitFromPosition( const Unit & attacker, const Unit & target, const int32_t dst )
+{
+    // Get the actual position of the attacker before attacking
+    const Position pos = Position::GetReachable( attacker, dst );
+
+    // Check that the attacker is actually capable of attacking the target from this position
+    const std::array<const Cell *, 2> cells = { pos.GetHead(), pos.GetTail() };
+
+    for ( const Cell * cell : cells ) {
+        if ( cell == nullptr ) {
+            continue;
+        }
+
+        for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
+            const Cell * aroundCell = GetCell( aroundIdx );
+            assert( aroundCell != nullptr );
+
+            if ( aroundCell->GetUnit() == &target ) {
+                return CanAttackUnitFromCell( attacker, cell->GetIndex() );
+            }
+        }
+    }
+
     return false;
 }
 
@@ -1179,6 +1222,50 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     }
 
     return result;
+}
+
+int32_t Battle::Board::FindNearestReachableCell( const Unit & unit, const int32_t dst )
+{
+    const Position dstPos = Position::GetReachable( unit, dst );
+
+    if ( dstPos.GetHead() != nullptr && ( !unit.isWide() || dstPos.GetTail() != nullptr ) ) {
+        // Destination cell is already reachable
+        return dstPos.GetHead()->GetIndex();
+    }
+
+    const Cell * nearestCell = nullptr;
+    uint32_t nearestDistance = UINT32_MAX;
+
+    // Search for the nearest reachable cell
+    for ( const Cell & cell : *Arena::GetBoard() ) {
+        const Position pos = Position::GetReachable( unit, cell.GetIndex() );
+
+        if ( pos.GetHead() != nullptr && ( !unit.isWide() || pos.GetTail() != nullptr ) ) {
+            const uint32_t distance = GetDistance( dst, cell.GetIndex() );
+
+            if ( distance < nearestDistance ) {
+                nearestCell = pos.GetHead();
+                nearestDistance = distance;
+            }
+        }
+    }
+
+    return nearestCell ? nearestCell->GetIndex() : -1;
+}
+
+int32_t Battle::Board::FixupDestinationCellForUnit( const Unit & unit, const int32_t dst )
+{
+    // Only wide units may need this fixup
+    if ( !unit.isWide() ) {
+        return dst;
+    }
+
+    const Position pos = Position::GetReachable( unit, dst );
+
+    assert( pos.GetHead() != nullptr );
+    assert( pos.GetTail() != nullptr );
+
+    return pos.GetHead()->GetIndex();
 }
 
 std::string Battle::Board::GetMoatInfo( void )

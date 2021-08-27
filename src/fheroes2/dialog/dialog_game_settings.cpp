@@ -23,6 +23,7 @@
 #include "dialog.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "game.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -146,7 +147,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {

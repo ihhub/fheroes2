@@ -570,6 +570,9 @@ namespace MP2
     // The method checks if the object is an action independent form its location.
     bool isActionObject( const MapObjectType objectType );
 
+    // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
+    MapObjectType getBaseActionObjectType( const MapObjectType objectType );
+
     bool isWaterActionObject( const MapObjectType objectType );
 
     bool isQuantityObject( const MapObjectType objectType );

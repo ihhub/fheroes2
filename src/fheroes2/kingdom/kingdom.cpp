@@ -36,6 +36,7 @@
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -52,8 +53,10 @@ bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 
 Kingdom::Kingdom()
     : color( Color::NONE )
+    , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
+    , _topItemInKingdomView( 0 )
 {
     heroes_cond_loss.reserve( 4 );
 }
@@ -70,7 +73,7 @@ void Kingdom::Init( int clr )
         UpdateStartingResource();
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
     }
 }
 
@@ -509,11 +512,6 @@ void Kingdom::UpdateRecruits( void )
         world.UpdateRecruits( recruits );
 }
 
-const Puzzle & Kingdom::PuzzleMaps( void ) const
-{
-    return puzzle_maps;
-}
-
 Puzzle & Kingdom::PuzzleMaps( void )
 {
     return puzzle_maps;
@@ -926,14 +924,23 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
                << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss
-               << kingdom._lastBattleWinHeroID;
+               << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
-           >> kingdom.lost_hero >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss
-           >> kingdom._lastBattleWinHeroID;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
+        msg >> kingdom._topItemInKingdomView;
+    }
+    else {
+        kingdom._topItemInKingdomView = 0;
+    }
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )

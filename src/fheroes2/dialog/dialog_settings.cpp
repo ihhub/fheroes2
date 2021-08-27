@@ -25,6 +25,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
@@ -83,7 +84,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
-    TextBox msg( conf.ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
+    TextBox msg( Settings::ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
@@ -184,8 +185,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
-    std::sort( states.begin(), states.end(),
-               [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
+    std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
 
     SettingsListBox listbox( area.getPosition(), readonly );
 
@@ -219,7 +219,8 @@ void Dialog::ExtSettings( bool readonly )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        if ( le.MouseClickLeft( buttonOk.area() ) ) {
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow ) {
             break;
         }
 

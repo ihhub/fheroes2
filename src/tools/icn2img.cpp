@@ -72,7 +72,7 @@ int main( int argc, char ** argv )
 
     fs << "<?xml version=\"1.0\" ?>" << std::endl << "<icn name=\"" << shortname << ".icn\" count=\"" << count_sprite << "\">" << std::endl;
 
-    u32 save_pos = sf.tell();
+    size_t save_pos = sf.tell();
 
     std::vector<fheroes2::ICNHeader> headers( count_sprite );
     for ( int ii = 0; ii < count_sprite; ++ii )

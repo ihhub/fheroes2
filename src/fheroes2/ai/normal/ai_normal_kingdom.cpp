@@ -169,7 +169,7 @@ namespace AI
 
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
-            heroLimit++;
+            ++heroLimit;
         if ( slowEarlyGame )
             heroLimit = 2;
 

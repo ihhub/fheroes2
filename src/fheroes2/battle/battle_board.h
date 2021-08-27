@@ -95,23 +95,20 @@ namespace Battle
         static Indexes GetAroundIndexes( const Unit & );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
+
+        // Checks that the attacker is able (in principle) to attack from the cell with the given index
         static bool CanAttackUnitFromCell( const Unit & attacker, const int32_t from );
+        // Checks that the attacker is able to attack the target from the position which corresponds to the given index
+        static bool CanAttackUnitFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
-        enum
-        {
-            CATAPULT_POS = 77,
-            CASTLE_GATE_POS = 50,
-            CASTLE_FIRST_TOP_WALL_POS = 8,
-            CASTLE_SECOND_TOP_WALL_POS = 29,
-            CASTLE_THIRD_TOP_WALL_POS = 73,
-            CASTLE_FORTH_TOP_WALL_POS = 96,
-            CASTLE_TOP_ARCHER_TOWER_POS = 19,
-            CASTLE_BOTTOM_ARCHER_TOWER_POS = 85,
-            CASTLE_TOP_GATE_TOWER_POS = 40,
-            CASTLE_BOTTOM_GATE_TOWER_POS = 62
-        };
+        // Finds the cell nearest to the cell with the given index and reachable for the unit
+        static int32_t FindNearestReachableCell( const Unit & unit, const int32_t dst );
+
+        // Handles the situation when the cell with the given index is specified as the target cell of the unit's movement,
+        // is located on the border of the cell space reachable for the unit and it should be the tail cell of this unit
+        static int32_t FixupDestinationCellForUnit( const Unit & unit, const int32_t dst );
 
     private:
         void SetCobjObject( const int icn, const int32_t dst );

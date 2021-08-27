@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <atomic>
 #include <mutex>
 #include <numeric>
 
@@ -51,7 +52,7 @@ namespace
 
     Spec hardware;
 
-    bool valid = false;
+    std::atomic<bool> valid{ false };
     bool muted = false;
 
     std::vector<int> savedMixerVolumes;
@@ -214,8 +215,6 @@ void Audio::Unmute()
 
 bool Audio::isValid()
 {
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
     return valid;
 }
 

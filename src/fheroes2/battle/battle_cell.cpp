@@ -110,6 +110,55 @@ Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
     return result;
 }
 
+Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst )
+{
+    Position result;
+
+    if ( unit.isWide() ) {
+        auto checkCells = []( const Unit & u, Cell * headCell, Cell * tailCell ) {
+            Position res;
+
+            if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &u ) && tailCell != nullptr
+                 && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &u ) ) {
+                res.first = headCell;
+                res.second = tailCell;
+            }
+
+            return res;
+        };
+
+        const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+
+        if ( Board::isValidDirection( dst, tailDirection ) ) {
+            Cell * headCell = Board::GetCell( dst );
+            Cell * tailCell = Board::GetCell( Board::GetIndexDirection( dst, tailDirection ) );
+
+            result = checkCells( unit, headCell, tailCell );
+        }
+
+        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
+            // Try opposite direction
+            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+
+            if ( Board::isValidDirection( dst, headDirection ) ) {
+                Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
+                Cell * tailCell = Board::GetCell( dst );
+
+                result = checkCells( unit, headCell, tailCell );
+            }
+        }
+    }
+    else {
+        Cell * headCell = Board::GetCell( dst );
+
+        if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &unit ) ) {
+            result.first = headCell;
+        }
+    }
+
+    return result;
+}
+
 bool Battle::Position::isReflect( void ) const
 {
     return first && second && first->GetIndex() < second->GetIndex();
@@ -123,7 +172,8 @@ bool Battle::Position::contains( int cellIndex ) const
 Battle::Cell::Cell( int32_t ii )
     : index( ii )
     , object( 0 )
-    , direction( UNKNOWN )
+    , _reachableForHead( false )
+    , _reachableForTail( false )
     , quality( 0 )
     , troop( nullptr )
 {
@@ -190,9 +240,14 @@ void Battle::Cell::SetObject( int val )
     object = val;
 }
 
-void Battle::Cell::SetDirection( int val )
+void Battle::Cell::setReachableForHead()
 {
-    direction = val;
+    _reachableForHead = true;
+}
+
+void Battle::Cell::setReachableForTail()
+{
+    _reachableForTail = true;
 }
 
 void Battle::Cell::SetQuality( u32 val )
@@ -203,11 +258,6 @@ void Battle::Cell::SetQuality( u32 val )
 int Battle::Cell::GetObject( void ) const
 {
     return object;
-}
-
-int Battle::Cell::GetDirection( void ) const
-{
-    return direction;
 }
 
 const fheroes2::Rect & Battle::Cell::GetPos( void ) const
@@ -228,6 +278,16 @@ Battle::Unit * Battle::Cell::GetUnit( void )
 void Battle::Cell::SetUnit( Unit * val )
 {
     troop = val;
+}
+
+bool Battle::Cell::isReachableForHead() const
+{
+    return _reachableForHead;
+}
+
+bool Battle::Cell::isReachableForTail() const
+{
+    return _reachableForTail;
 }
 
 bool Battle::Cell::isPassable4( const Unit & b, const Cell & from ) const
@@ -289,7 +349,8 @@ void Battle::Cell::ResetQuality( void )
     quality = 0;
 }
 
-void Battle::Cell::ResetDirection( void )
+void Battle::Cell::resetReachability()
 {
-    direction = UNKNOWN;
+    _reachableForHead = false;
+    _reachableForTail = false;
 }

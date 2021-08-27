@@ -113,6 +113,7 @@ namespace
         case Color::PURPLE:
             return 5;
         case Color::NONE:
+        case Color::UNUSED:
             return 6;
         default:
             return -1;
@@ -255,125 +256,107 @@ namespace
                 const int dstx = posX * tileSize - offsetX + BORDERWIDTH;
 
                 const Maps::Tiles & tile = world.GetTiles( posX, posY );
-                int icn = icnBase;
-                int index = -1;
 
-                int letterIndex = -1;
+                std::vector<MP2::MapObjectType> objectTypes;
+                objectTypes.emplace_back( tile.GetObject( false ) );
+                if ( tile.GetObject( false ) != tile.GetObject( true ) ) {
+                    objectTypes.emplace_back( tile.GetObject( true ) );
+                }
 
-                int spriteOffsetX = 0;
-                int spriteOffsetY = 0;
+                for ( const MP2::MapObjectType objectType : objectTypes ) {
+                    int icn = icnBase;
+                    int index = -1;
 
-                switch ( tile.GetObject() ) {
-                case MP2::OBJ_HEROES: {
-                    if ( revealHeroes || !tile.isFog( color ) ) {
-                        const Heroes * hero = world.GetHeroes( tile.GetCenter() );
-                        if ( hero ) {
-                            const int colorOffset = colorToOffsetICN( hero->GetColor() );
-                            index = colorOffset >= 0 ? 7 + colorOffset : -1;
+                    int letterIndex = -1;
 
-                            // handle case of hero above town/mine :
-                            switch ( tile.GetObject( false ) ) {
-                            case MP2::OBJ_ALCHEMYLAB:
-                            case MP2::OBJ_MINES:
-                            case MP2::OBJ_SAWMILL:
-                                if ( revealMines || !tile.isFog( color ) ) { // draw mine now, hero on top after the switch
-                                    const int colorOffsetForMine = colorToOffsetICN( tile.QuantityColor() );
-                                    const fheroes2::Sprite & mineSprite = fheroes2::AGG::GetICN( icnBase, colorOffsetForMine );
-                                    fheroes2::Blit( mineSprite, display, dstx, dsty );
-                                }
+                    int spriteOffsetX = 0;
+                    int spriteOffsetY = 0;
+
+                    switch ( objectType ) {
+                    case MP2::OBJ_HEROES: {
+                        if ( revealHeroes || !tile.isFog( color ) ) {
+                            const Heroes * hero = world.GetHeroes( tile.GetCenter() );
+                            if ( hero ) {
+                                const int colorOffset = colorToOffsetICN( hero->GetColor() );
+                                index = colorOffset >= 0 ? 7 + colorOffset : -1;
+                            }
+                        }
+                        break;
+                    }
+
+                    case MP2::OBJ_CASTLE: {
+                        if ( revealTowns || !tile.isFog( color ) ) {
+                            const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
+                            if ( castle ) {
+                                icn = icnFlagsBase;
+                                index = colorToOffsetICN( castle->GetColor() );
+                            }
+                        }
+                        break;
+                    }
+
+                    case MP2::OBJ_ALCHEMYLAB:
+                    case MP2::OBJ_MINES:
+                    case MP2::OBJ_SAWMILL:
+                        if ( revealMines || !tile.isFog( color ) ) {
+                            index = colorToOffsetICN( tile.QuantityColor() );
+                            spriteOffsetX = -6; // TODO -4 , -3
+                            letterIndex = tile.QuantityResourceCount().first;
+                        }
+                        break;
+
+                    case MP2::OBJ_ARTIFACT:
+                        if ( revealArtifacts || !tile.isFog( color ) ) {
+                            index = 14;
+                        }
+                        break;
+
+                    case MP2::OBJ_RESOURCE:
+                        if ( revealResources || !tile.isFog( color ) ) {
+                            index = 13;
+                            letterIndex = tile.GetQuantity1();
+                        }
+                        break;
+
+                    default:
+                        continue;
+                    }
+
+                    if ( index >= 0 ) {
+                        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
+                        fheroes2::Blit( sprite, display, dstx + spriteOffsetX, dsty + spriteOffsetY );
+
+                        if ( letterIndex >= 0 ) {
+                            switch ( letterIndex ) {
+                            case Resource::WOOD:
+                                letterIndex = 0;
                                 break;
-                            case MP2::OBJ_CASTLE:
-                                if ( revealTowns || !tile.isFog( color ) ) { // draw hero now, castle flag on top later
-                                    const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
-                                    if ( castle ) {
-                                        const fheroes2::Sprite & heroIcon = fheroes2::AGG::GetICN( icnBase, index );
-                                        fheroes2::Blit( heroIcon, display, dstx, dsty );
-
-                                        icn = icnFlagsBase;
-                                        index = colorToOffsetICN( castle->GetColor() );
-                                    }
-                                }
+                            case Resource::MERCURY:
+                                letterIndex = 1;
+                                break;
+                            case Resource::ORE:
+                                letterIndex = 2;
+                                break;
+                            case Resource::SULFUR:
+                                letterIndex = 3;
+                                break;
+                            case Resource::CRYSTAL:
+                                letterIndex = 4;
+                                break;
+                            case Resource::GEMS:
+                                letterIndex = 5;
+                                break;
+                            case Resource::GOLD:
+                                letterIndex = 6;
                                 break;
                             default:
                                 break;
                             }
+
+                            const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
+                            fheroes2::Blit( letter, display, dstx + spriteOffsetX + ( sprite.width() - letter.width() ) / 2,
+                                            dsty + spriteOffsetY + ( sprite.height() - letter.height() ) / 2 );
                         }
-                    }
-                    break;
-                }
-
-                case MP2::OBJ_CASTLE: {
-                    if ( revealTowns || !tile.isFog( color ) ) {
-                        const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
-                        if ( castle ) {
-                            icn = icnFlagsBase;
-                            index = colorToOffsetICN( castle->GetColor() );
-                        }
-                    }
-                    break;
-                }
-
-                case MP2::OBJ_ALCHEMYLAB:
-                case MP2::OBJ_MINES:
-                case MP2::OBJ_SAWMILL:
-                    if ( revealMines || !tile.isFog( color ) ) {
-                        index = colorToOffsetICN( tile.QuantityColor() );
-                        spriteOffsetX = -6; // TODO -4 , -3
-                        letterIndex = tile.QuantityResourceCount().first;
-                    }
-                    break;
-
-                case MP2::OBJ_ARTIFACT:
-                    if ( revealArtifacts || !tile.isFog( color ) ) {
-                        index = 14;
-                    }
-                    break;
-
-                case MP2::OBJ_RESOURCE:
-                    if ( revealResources || !tile.isFog( color ) ) {
-                        index = 13;
-                        letterIndex = tile.GetQuantity1();
-                    }
-                    break;
-
-                default:
-                    continue;
-                }
-
-                if ( index >= 0 ) {
-                    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
-                    fheroes2::Blit( sprite, display, dstx + spriteOffsetX, dsty + spriteOffsetY );
-
-                    if ( letterIndex >= 0 ) {
-                        switch ( letterIndex ) {
-                        case Resource::WOOD:
-                            letterIndex = 0;
-                            break;
-                        case Resource::MERCURY:
-                            letterIndex = 1;
-                            break;
-                        case Resource::ORE:
-                            letterIndex = 2;
-                            break;
-                        case Resource::SULFUR:
-                            letterIndex = 3;
-                            break;
-                        case Resource::CRYSTAL:
-                            letterIndex = 4;
-                            break;
-                        case Resource::GEMS:
-                            letterIndex = 5;
-                            break;
-                        case Resource::GOLD:
-                            letterIndex = 6;
-                            break;
-                        default:
-                            break;
-                        }
-
-                        const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
-                        fheroes2::Blit( letter, display, dstx + spriteOffsetX + ( sprite.width() - letter.width() ) / 2,
-                                        dsty + spriteOffsetY + ( sprite.height() - letter.height() ) / 2 );
                     }
                 }
             }
