@@ -789,27 +789,12 @@ void Heroes::RescanPath( void )
 }
 
 /* if hero in castle */
-const Castle * Heroes::inCastle( void ) const
+const Castle * Heroes::inCastle() const
 {
-    if ( GetColor() == Color::NONE ) {
-        return nullptr;
-    }
-
-    if ( Modes( Heroes::GUARDIAN ) ) {
-        const fheroes2::Point & heroPoint = GetCenter();
-        const fheroes2::Point castlePoint( heroPoint.x, heroPoint.y + 1 );
-
-        const Castle * castle = world.getCastleEntrance( castlePoint );
-
-        return castle && castle->GetHeroes() == this ? castle : nullptr;
-    }
-
-    const Castle * castle = world.getCastleEntrance( GetCenter() );
-
-    return castle && castle->GetHeroes() == this ? castle : nullptr;
+    return inCastleMutable();
 }
 
-Castle * Heroes::inCastle( void )
+Castle * Heroes::inCastleMutable() const
 {
     if ( GetColor() == Color::NONE ) {
         return nullptr;
