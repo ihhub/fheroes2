@@ -1020,7 +1020,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     case 2:
         break;
     case 1:
-        if ( !AllTroopsAreTheSame() ) {
+        if ( !hasUndead && !AllTroopsAreTheSame() ) { // Neutral troops army can have undead Ghost
             ++result;
             if ( strs ) {
                 std::string str = _( "All %{race} troops +1" );
