@@ -115,11 +115,10 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
     Position result;
 
     if ( unit.isWide() ) {
-        auto checkCells = []( const Unit & u, Cell * headCell, Cell * tailCell ) {
+        auto checkCells = []( Cell * headCell, Cell * tailCell ) {
             Position res;
 
-            if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &u ) && tailCell != nullptr
-                 && tailCell->isReachableForTail() && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == &u ) ) {
+            if ( headCell != nullptr && headCell->isReachableForHead() && tailCell != nullptr && tailCell->isReachableForTail() ) {
                 res.first = headCell;
                 res.second = tailCell;
             }
@@ -133,7 +132,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             Cell * headCell = Board::GetCell( dst );
             Cell * tailCell = Board::GetCell( Board::GetIndexDirection( dst, tailDirection ) );
 
-            result = checkCells( unit, headCell, tailCell );
+            result = checkCells( headCell, tailCell );
         }
 
         if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
@@ -144,14 +143,14 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
                 Cell * tailCell = Board::GetCell( dst );
 
-                result = checkCells( unit, headCell, tailCell );
+                result = checkCells( headCell, tailCell );
             }
         }
     }
     else {
         Cell * headCell = Board::GetCell( dst );
 
-        if ( headCell != nullptr && headCell->isReachableForHead() && ( headCell->GetUnit() == nullptr || headCell->GetUnit() == &unit ) ) {
+        if ( headCell != nullptr && headCell->isReachableForHead() ) {
             result.first = headCell;
         }
     }

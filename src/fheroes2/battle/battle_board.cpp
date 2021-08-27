@@ -1116,8 +1116,7 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & attacker, const int32_t 
     assert( fromCell != nullptr );
 
     // Target unit cannot be attacked if out of reach
-    if ( !fromCell->isReachableForHead() && ( !attacker.isWide() || !fromCell->isReachableForTail() ) && from != attacker.GetHeadIndex()
-         && ( !attacker.isWide() || from != attacker.GetTailIndex() ) ) {
+    if ( !fromCell->isReachableForHead() && ( !attacker.isWide() || !fromCell->isReachableForTail() ) ) {
         return false;
     }
 
