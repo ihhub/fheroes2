@@ -110,11 +110,11 @@ Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
     return result;
 }
 
-Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst )
+Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const int32_t dst )
 {
     Position result;
 
-    if ( unit.isWide() ) {
+    if ( currentUnit.isWide() ) {
         auto checkCells = []( Cell * headCell, Cell * tailCell ) {
             Position res;
 
@@ -126,7 +126,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             return res;
         };
 
-        const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+        const int tailDirection = currentUnit.isReflect() ? RIGHT : LEFT;
 
         if ( Board::isValidDirection( dst, tailDirection ) ) {
             Cell * headCell = Board::GetCell( dst );
@@ -137,7 +137,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
 
         if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
             // Try opposite direction
-            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+            const int headDirection = currentUnit.isReflect() ? LEFT : RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
