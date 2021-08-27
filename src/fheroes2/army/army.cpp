@@ -997,29 +997,29 @@ int Army::GetMorale( void ) const
 
 int Army::GetMoraleModificator( std::string * strs ) const
 {
-    int result = Morale::NORMAL;
-
     // different race penalty
     std::set<int> races;
     bool hasUndead = false;
+    bool allUndead = true;
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
             races.insert( troop->GetRace() );
             hasUndead = hasUndead || troop->isUndead();
+            allUndead = allUndead && troop->isUndead();
         }
 
+    if ( allUndead )
+        return Morale::NORMAL;
+
     const int count = static_cast<int>( races.size() );
-    const bool allUndead = hasUndead && AllTroopsAreUndead();
+    int result = Morale::NORMAL;
 
     switch ( count ) {
     case 0:
     case 2:
         break;
     case 1:
-        if ( allUndead )
-            return 0;
-
         if ( !AllTroopsAreTheSame() ) {
             ++result;
             if ( strs ) {
@@ -1044,7 +1044,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     // undead in life group or artifact "Arm of the Martyr"
-    if ( !allUndead && ( hasUndead || ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) ) {
+    if ( hasUndead || ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in group -1" ) );
