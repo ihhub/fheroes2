@@ -25,6 +25,7 @@
 #include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "game.h"
@@ -296,12 +297,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             }
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
-            if ( Dialog::SelectResolution() ) {
-                conf.Save( "fheroes2.cfg" );
-                // force interface to reset area and positions
-                Interface::Basic::Get().Reset();
-                return fheroes2::GameMode::MAIN_MENU;
-            }
+            fheroes2::openGameSettings();
+
+            // force interface to reset area and positions
+            Interface::Basic::Get().Reset();
+            return fheroes2::GameMode::MAIN_MENU;
         }
 
         // right info
