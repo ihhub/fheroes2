@@ -256,14 +256,18 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
             if ( target.cell != -1 ) {
-                const int32_t reachableCell = Board::FindNearestReachableCell( target.cell, currentUnit );
+                const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
 
-                if ( currentUnit.GetHeadIndex() != reachableCell )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
+
+                if ( currentUnit.GetHeadIndex() != reachableCell ) {
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+                }
 
                 if ( target.unit ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), 0 );
+
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
@@ -444,12 +448,15 @@ namespace AI
                 target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
-                    const int32_t reachableCell = Board::FindNearestReachableCell( target.cell, currentUnit );
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
 
-                    if ( currentUnit.GetHeadIndex() != reachableCell )
+                    const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
+
+                    if ( currentUnit.GetHeadIndex() != reachableCell ) {
                         actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << reachableCell );
+                    }
                 }
             }
             // Worst case scenario - Skip turn
@@ -688,14 +695,22 @@ namespace AI
                     }
 
                     if ( targetCell != -1 ) {
-                        const int32_t reachableCell = Board::FindNearestReachableCell( targetCell, currentUnit );
+                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
 
-                        if ( currentUnit.GetHeadIndex() != reachableCell )
+                        const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, targetCell );
+
+                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
+
+                        if ( currentUnit.GetHeadIndex() != reachableCell ) {
                             actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+                        }
 
                         // Attack only if target unit is reachable and can be attacked
-                        if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) )
+                        if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
                             actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+
+                            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
+                        }
 
                         break;
                     }
