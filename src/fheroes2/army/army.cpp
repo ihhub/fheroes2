@@ -1012,15 +1012,18 @@ int Army::GetMoraleModificator( std::string * strs ) const
     if ( allUndead )
         return Morale::NORMAL;
 
-    const int count = static_cast<int>( races.size() );
     int result = Morale::NORMAL;
 
+    // artifact "Arm of the Martyr" adds the undead morale penalty
+    hasUndead = hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) );
+
+    const int count = static_cast<int>( races.size() );
     switch ( count ) {
     case 0:
     case 2:
         break;
     case 1:
-        if ( !hasUndead && !AllTroopsAreTheSame() ) { // Neutral troops army can have undead Ghost
+        if ( !hasUndead && !AllTroopsAreTheSame() ) { // presence of undead discards "All %{race} troops +1" bonus
             ++result;
             if ( strs ) {
                 std::string str = _( "All %{race} troops +1" );
@@ -1043,8 +1046,8 @@ int Army::GetMoraleModificator( std::string * strs ) const
         break;
     }
 
-    // undead in life group or artifact "Arm of the Martyr"
-    if ( hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) ) ) {
+    // undead in life group
+    if ( hasUndead ) {
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in group -1" ) );
