@@ -780,7 +780,7 @@ bool Battle::Arena::isSpellcastDisabled() const
     const HeroBase * hero1 = army1->GetCommander();
     const HeroBase * hero2 = army2->GetCommander();
 
-    if ( ( hero1 && hero1->HasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->HasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+    if ( ( hero1 && hero1->hasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->hasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
         return true;
     }
     return false;
@@ -1089,7 +1089,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
     u32 count = spell.ExtraValue() * hero->GetPower();
-    u32 acount = hero->HasArtifact( Artifact::BOOK_ELEMENTS );
+    uint32_t acount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
     if ( acount )
         count *= acount * 2;
 
@@ -1134,7 +1134,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
 
     // check golden bow artifact
     const HeroBase * hero = attacker.GetCommander();
-    if ( hero && hero->HasArtifact( Artifact::GOLDEN_BOW ) )
+    if ( hero && hero->hasArtifact( Artifact::GOLDEN_BOW ) )
         return false;
 
     if ( castle == nullptr ) {
