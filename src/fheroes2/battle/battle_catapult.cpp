@@ -54,7 +54,7 @@ Battle::Catapult::Catapult( const HeroBase & hero )
         break;
     }
 
-    if ( hero.HasArtifact( Artifact::BALLISTA ) )
+    if ( hero.hasArtifact( Artifact::BALLISTA ) )
         catShots += Artifact( Artifact::BALLISTA ).ExtraValue();
 }
 

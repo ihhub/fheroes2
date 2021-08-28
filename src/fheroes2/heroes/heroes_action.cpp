@@ -2427,7 +2427,7 @@ void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
 
 bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool combineWithAnd )
 {
-    const std::string combTypeAnd = " and ";
+    const std::string combTypeAnd = _( " and " );
     const std::string combTypeComma = ", ";
 
     if ( army.HasMonster( mons ) ) {
@@ -2839,7 +2839,7 @@ void ActionToAlchemistsTower( Heroes & hero )
         payment_t payment = PaymentConditions::ForAlchemist();
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
-            std::string msg = "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you.";
+            std::string msg = _( "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you." );
             msg += '\n';
             msg.append(
                 _n( "He checks your pack, and sees that you have 1 cursed item.", "He checks your pack, and sees that you have %{count} cursed items.", cursed ) );

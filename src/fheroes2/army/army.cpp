@@ -1044,7 +1044,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     // undead in life group or artifact "Arm of the Martyr"
-    if ( hasUndead || ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
+    if ( hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in group -1" ) );
@@ -1299,7 +1299,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         }
     }
 
-    if ( hero.HasArtifact( Artifact::HIDEOUS_MASK ) > 0 ) {
+    if ( hero.hasArtifact( Artifact::HIDEOUS_MASK ) ) {
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 

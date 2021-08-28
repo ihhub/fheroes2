@@ -812,7 +812,7 @@ namespace AI
 
     void Normal::HeroesActionComplete( Heroes & hero )
     {
-        Castle * castle = hero.inCastle();
+        Castle * castle = hero.inCastleMutable();
         if ( castle ) {
             ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
         }

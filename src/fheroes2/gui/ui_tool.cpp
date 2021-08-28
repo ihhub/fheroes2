@@ -23,6 +23,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 
 #include <chrono>
 #include <cmath>
@@ -73,7 +74,7 @@ namespace
             averageFps /= static_cast<double>( _fps.size() );
             const int currentFps = static_cast<int>( averageFps );
 
-            info += ", FPS: ";
+            info += _( ", FPS: " );
             info += std::to_string( currentFps );
             if ( averageFps < 10 ) {
                 info += '.';

@@ -209,7 +209,7 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
     const HeroBase * commander = GetCommander();
     if ( commander ) {
         const Artifact art( Artifact::STATESMAN_QUILL );
-        double mod = commander->HasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+        double mod = commander->hasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
 
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
         case Skill::Level::BASIC:

@@ -696,6 +696,22 @@ const char * MP2::StringObject( const MapObjectType objectType )
     return nullptr;
 }
 
+const char * MP2::getPluralObjectName( const MapObjectType objectType, const size_t count )
+{
+    switch ( objectType ) {
+    case OBJ_WATERWHEEL:
+        return _n( "Water Wheel", "Water Wheels", count );
+    case OBJ_WINDMILL:
+        return _n( "Windmill", "Windmills", count );
+    case OBJ_MAGICGARDEN:
+        return _n( "Magic Garden", "Magic Gardens", count );
+    default:
+        break;
+    }
+
+    return StringObject( objectType );
+}
+
 bool MP2::isDayLife( const MapObjectType objectType )
 {
     // FIXME: list day object life

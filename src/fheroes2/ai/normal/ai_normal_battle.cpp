@@ -365,7 +365,7 @@ namespace AI
         _defendingCastle = false;
         const Castle * castle = Arena::GetCastle();
         if ( castle ) {
-            const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW ) > 0;
+            const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->hasArtifact( Artifact::GOLDEN_BOW );
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 

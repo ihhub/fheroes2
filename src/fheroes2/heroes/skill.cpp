@@ -790,7 +790,7 @@ int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
 {
     const uint32_t shrineCount = world.GetKingdom( hero.GetColor() ).GetCountNecromancyShrineBuild();
-    const uint32_t artifactCount = hero.HasArtifact( Artifact::SPADE_NECROMANCY );
+    const uint32_t artifactCount = hero.artifactCount( Artifact::SPADE_NECROMANCY );
     // cap bonus at 7
     return std::min( 7u, shrineCount + artifactCount );
 }

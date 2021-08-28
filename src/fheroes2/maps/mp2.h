@@ -22,6 +22,8 @@
 #ifndef H2MP2_H
 #define H2MP2_H
 
+#include <cstddef>
+
 #include "types.h"
 
 #define MP2OFFSETDATA 428
@@ -561,6 +563,9 @@ namespace MP2
 
     int GetICNObject( int tileset );
     const char * StringObject( const MapObjectType objectType );
+
+    // This function returns plural forms only for certain object types.
+    const char * getPluralObjectName( const MapObjectType objectType, const size_t count );
 
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
 

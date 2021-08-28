@@ -298,22 +298,22 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, int obj )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
 {
-    Funds result;
+    funds = Funds();
+    objectCount = 0;
 
     for ( iterator it = begin(); it != end(); ++it ) {
         const ObjectColor & objcol = ( *it ).second.objcol;
 
-        if ( objcol.isObject( obj ) && objcol.isColor( color ) ) {
+        if ( objcol.isObject( objectType ) && objcol.isColor( playerColorId ) ) {
             Maps::Tiles & tile = world.GetTiles( ( *it ).first );
 
-            result += Funds( tile.QuantityResourceCount() );
+            funds += Funds( tile.QuantityResourceCount() );
+            ++objectCount;
             tile.QuantityReset();
         }
     }
-
-    return result;
 }
 
 World & world = World::Get();
@@ -1142,7 +1142,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } );
+            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->hasArtifact( art ); } );
         }
     }
 
