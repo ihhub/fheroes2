@@ -497,21 +497,20 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
 
-        for ( size_t i = 0; i < bag2.size(); ++i ) {
-            Artifact & art = bag2[i];
+        BagArtifacts & sortedBag2( bag2 );
+        // all ultimate artifacst should be displayed last
+        std::sort( sortedBag2.begin(), sortedBag2.end(),
+                   []( const Artifact & left, const Artifact & right ) { return ( left.isUltimate() ? 1 : 0 ) < ( right.isUltimate() ? 1 : 0 ); } );
 
-            if ( art.isUltimate() ) {
-                art = Artifact::UNKNOWN;
-                continue;
-            }
+        for ( size_t i = 0; i < sortedBag2.size(); ++i ) {
+            Artifact & art = sortedBag2[i];
 
             if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
                 continue;
             }
 
             BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
-            if ( bag1.end() != it ) {
-                *it = art;
+            if ( bag1.end() != it || art.isUltimate() ) { // show the message for ultimate artifact, even if we don't have space in the bag
 
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
@@ -519,9 +518,18 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
                 btn_ok.draw();
 
-                Game::PlayPickupSound();
+                std::string artMsg;
+                if ( !art.isUltimate() ) {
+                    *it = art;
+                    artMsg = _( "You have captured an enemy artifact!" );
+                    Game::PlayPickupSound();
+                }
+                else {
+                    artMsg = _( "As you reach for the %{artname}, it mysteriously disappears." );
+                    StringReplace( artMsg, "%{artname}", art.GetName() );
+                }
 
-                TextBox box( _( "You have captured an enemy artifact!" ), Font::YELLOW_BIG, bsTextWidth );
+                TextBox box( artMsg, Font::YELLOW_BIG, bsTextWidth );
                 box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
 
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
