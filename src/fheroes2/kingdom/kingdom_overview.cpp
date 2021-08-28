@@ -44,6 +44,11 @@
 
 #include <cassert>
 
+namespace
+{
+    const int32_t scrollbarOffset = 626;
+}
+
 struct HeroRow
 {
     Heroes * hero;
@@ -146,9 +151,9 @@ StatsHeroesList::StatsHeroesList( const fheroes2::Rect & area, const fheroes2::P
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( offset );
-    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( offset.x + 629, offset.y + 18, back.width(), back.height() - 2 ) );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( offset.x + 626, offset.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( offset.x + 626, offset.y + 20 + back.height() ) );
+    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 ) );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( offset.x + scrollbarOffset, offset.y ) );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( offset.x + scrollbarOffset, offset.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
     SetAreaItems( fheroes2::Rect( offset.x + 30, offset.y + 17, 594, 344 ) );
     SetContent( heroes );
@@ -280,7 +285,7 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
     // scrollbar background
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + scrollbarOffset + 1, dst.y + 17 );
 
     // items background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
@@ -387,9 +392,9 @@ StatsCastlesList::StatsCastlesList( const fheroes2::Rect & area, const fheroes2:
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( offset );
-    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( offset.x + 629, offset.y + 18, back.width(), back.height() - 2 ) );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( offset.x + 626, offset.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( offset.x + 626, offset.y + 20 + back.height() ) );
+    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 ) );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( offset.x + scrollbarOffset, offset.y ) );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( offset.x + scrollbarOffset, offset.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
     SetAreaItems( fheroes2::Rect( offset.x + 30, offset.y + 17, 594, 344 ) );
 
@@ -527,7 +532,7 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
     // scrollbar background
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + scrollbarOffset + 1, dst.y + 17 );
 
     // items background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
