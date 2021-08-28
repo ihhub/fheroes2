@@ -689,10 +689,10 @@ namespace fheroes2
             std::string temp;
 
             if ( spellInfoIter->first == 100 ) {
-                temp += "Immune to ";
+                temp += _( "Immune to " );
             }
             else {
-                temp += std::to_string( spellInfoIter->first ) + "% immunity to ";
+                temp += std::to_string( spellInfoIter->first ) + _( "% immunity to " );
             }
 
             const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
@@ -703,7 +703,7 @@ namespace fheroes2
                 }
 
                 if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                    temp += "Lightning";
+                    temp += _( "Lightning" );
                 }
                 else {
                     temp += Spell( sortedSpells[i] ).GetName();
@@ -733,7 +733,7 @@ namespace fheroes2
 
             std::string temp;
 
-            temp += std::to_string( spellInfoIter->first + 100 ) + "% damage from ";
+            temp += std::to_string( spellInfoIter->first + 100 ) + _( "% damage from " );
 
             const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
 
@@ -743,7 +743,7 @@ namespace fheroes2
                 }
 
                 if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                    temp += "Lightning";
+                    temp += _( "Lightning" );
                 }
                 else {
                     temp += Spell( sortedSpells[i] ).GetName();

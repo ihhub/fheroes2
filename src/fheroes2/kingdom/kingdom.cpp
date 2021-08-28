@@ -39,6 +39,8 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "tools.h"
+#include "translations.h"
 #include "visit.h"
 #include "world.h"
 
@@ -841,7 +843,13 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
     for ( Kingdom & kingdom : kingdoms ) {
         if ( kingdom.isPlay() ) {
             const int color = kingdom.GetColor();
-            const Funds & funds = captureobj.TributeCapturedObject( color, objectType );
+            Funds funds;
+            int objectCount = 0;
+
+            captureobj.tributeCapturedObjects( color, objectType, funds, objectCount );
+            if ( objectCount == 0 ) {
+                continue;
+            }
 
             kingdom.AddFundsResource( funds );
 
@@ -853,7 +861,15 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 event.first = day;
                 event.colors = color;
                 event.resource = funds;
-                event.title = MP2::StringObject( objectType );
+
+                if ( objectCount > 1 ) {
+                    event.title = std::to_string( objectCount );
+                    event.title += ' ';
+                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                }
+                else {
+                    event.title = MP2::StringObject( objectType );
+                }
 
                 world.AddEventDate( event );
             }
