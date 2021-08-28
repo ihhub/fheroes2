@@ -493,8 +493,6 @@ namespace Campaign
 {
     CampaignData::CampaignData()
         : _campaignID( 0 )
-        , _campaignDescription()
-        , _scenarios()
     {}
 
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
