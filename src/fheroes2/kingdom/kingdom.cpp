@@ -39,6 +39,8 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "tools.h"
+#include "translations.h"
 #include "visit.h"
 #include "world.h"
 
@@ -631,11 +633,11 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
         for ( u32 index = 0; artifacts[index] != Artifact::UNKNOWN; ++index )
             for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).HasArtifact( Artifact( artifacts[index] ) );
+                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).artifactCount( Artifact( artifacts[index] ) );
 
         // TAX_LIEN
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).HasArtifact( Artifact( Artifact::TAX_LIEN ) );
+            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).artifactCount( Artifact( Artifact::TAX_LIEN ) );
     }
 
     if ( INCOME_HEROSKILLS & type ) {
@@ -841,7 +843,13 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
     for ( Kingdom & kingdom : kingdoms ) {
         if ( kingdom.isPlay() ) {
             const int color = kingdom.GetColor();
-            const Funds & funds = captureobj.TributeCapturedObject( color, objectType );
+            Funds funds;
+            int objectCount = 0;
+
+            captureobj.tributeCapturedObjects( color, objectType, funds, objectCount );
+            if ( objectCount == 0 ) {
+                continue;
+            }
 
             kingdom.AddFundsResource( funds );
 
@@ -853,7 +861,15 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 event.first = day;
                 event.colors = color;
                 event.resource = funds;
-                event.title = MP2::StringObject( objectType );
+
+                if ( objectCount > 1 ) {
+                    event.title = std::to_string( objectCount );
+                    event.title += ' ';
+                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                }
+                else {
+                    event.title = MP2::StringObject( objectType );
+                }
 
                 world.AddEventDate( event );
             }
@@ -865,7 +881,7 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
-        if ( hero->HasArtifact( Artifact::CRYSTAL_BALL ) ) {
+        if ( hero->hasArtifact( Artifact::CRYSTAL_BALL ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
             if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;

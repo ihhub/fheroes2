@@ -195,8 +195,8 @@ namespace AI
     uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
     {
         uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
-        duration += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
-                    + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += _commander->artifactCount( art ) * Artifact( art ).ExtraValue();
 
         if ( duration < 2 && target.Modes( TR_MOVED ) )
             return 0;
@@ -416,7 +416,7 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        const uint32_t ankhModifier = _commander->HasArtifact( Artifact::ANKH ) ? 2 : 1;
+        const uint32_t ankhModifier = _commander->hasArtifact( Artifact::ANKH ) ? 2 : 1;
         const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
@@ -455,7 +455,7 @@ namespace AI
             }
 
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
-            if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
+            if ( _commander->hasArtifact( Artifact::BOOK_ELEMENTS ) )
                 count *= 2;
 
             const Troop summon( Monster( spell ), count );

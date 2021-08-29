@@ -621,7 +621,7 @@ std::string BuildingInfo::GetConditionDescription( void ) const
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {
-            res = "disable build.";
+            res = _( "disable build." );
         }
         break;
 

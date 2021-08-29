@@ -112,7 +112,8 @@ struct CapturedObjects : std::map<s32, CapturedObject>
     void ResetColor( int );
 
     CapturedObject & Get( s32 );
-    Funds TributeCapturedObject( int col, int obj );
+
+    void tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount );
 
     u32 GetCount( int, int ) const;
     u32 GetCountMines( int, int ) const;

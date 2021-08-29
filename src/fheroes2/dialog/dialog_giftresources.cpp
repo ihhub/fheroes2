@@ -289,7 +289,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         event.first = world.CountDay() + 1;
         event.subsequent = 0;
         event.colors = selector.recipients;
-        event.message = "Gift from %{name}";
+        event.message = _( "Gift from %{name}" );
         const Player * player = Settings::Get().GetPlayers().Get( kingdom.GetColor() );
         if ( player )
             StringReplace( event.message, "%{name}", player->GetName() );

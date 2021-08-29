@@ -530,7 +530,7 @@ u32 Heroes::GetMaxSpellPoints( void ) const
 
 u32 Heroes::GetMaxMovePoints( void ) const
 {
-    int point = 0;
+    uint32_t point = 0;
 
     // start point
     if ( isShipMaster() ) {
@@ -540,7 +540,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        point += HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
+        point += artifactCount( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -579,15 +579,15 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        point += HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
-        point += HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
+        point += artifactCount( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
+        point += artifactCount( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
 
-    point += HasArtifact( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
+    point += artifactCount( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
@@ -748,10 +748,7 @@ void Heroes::ReplenishSpellPoints()
     curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
 
     // power ring action
-    const int acount = HasArtifact( Artifact::POWER_RING );
-    if ( acount ) {
-        curr += acount * Artifact( Artifact::POWER_RING ).ExtraValue();
-    }
+    curr += artifactCount( Artifact::POWER_RING ) * Artifact( Artifact::POWER_RING ).ExtraValue();
 
     // secondary skill
     curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
@@ -789,15 +786,28 @@ void Heroes::RescanPath( void )
 }
 
 /* if hero in castle */
-const Castle * Heroes::inCastle( void ) const
+const Castle * Heroes::inCastle() const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
-    return castle && castle->GetHeroes() == this ? castle : nullptr;
+    return inCastleMutable();
 }
 
-Castle * Heroes::inCastle( void )
+Castle * Heroes::inCastleMutable() const
 {
-    Castle * castle = Color::NONE != GetColor() ? world.getCastleEntrance( GetCenter() ) : nullptr;
+    if ( GetColor() == Color::NONE ) {
+        return nullptr;
+    }
+
+    if ( Modes( Heroes::GUARDIAN ) ) {
+        const fheroes2::Point & heroPoint = GetCenter();
+        const fheroes2::Point castlePoint( heroPoint.x, heroPoint.y + 1 );
+
+        Castle * castle = world.getCastleEntrance( castlePoint );
+
+        return castle && castle->GetHeroes() == this ? castle : nullptr;
+    }
+
+    Castle * castle = world.getCastleEntrance( GetCenter() );
+
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
@@ -1252,10 +1262,8 @@ void Heroes::Scoute( const int tileIndex ) const
 
 int Heroes::GetScoute( void ) const
 {
-    int acount = HasArtifact( Artifact::TELESCOPE );
-
-    return ( acount ? acount * Game::GetViewDistance( Game::VIEW_TELESCOPE ) : 0 ) + Game::GetViewDistance( Game::VIEW_HEROES )
-           + GetSecondaryValues( Skill::Secondary::SCOUTING );
+    return static_cast<int>( artifactCount( Artifact::TELESCOPE ) * Game::GetViewDistance( Game::VIEW_TELESCOPE ) + Game::GetViewDistance( Game::VIEW_HEROES )
+                             + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
@@ -1278,10 +1286,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    uint32_t crystalBallCount = HasArtifact( Artifact::CRYSTAL_BALL );
-    if ( crystalBallCount < 1 )
-        crystalBallCount = 1;
-    return 8 * crystalBallCount;
+    return 8 * std::max( 1U, artifactCount( Artifact::CRYSTAL_BALL ) );
 }
 
 int Heroes::GetDirection( void ) const

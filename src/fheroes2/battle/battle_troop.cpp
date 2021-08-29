@@ -802,7 +802,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         break;
     }
 
-    if ( guard_art.isValid() && myhero->HasArtifact( guard_art ) ) {
+    if ( guard_art.isValid() && myhero->hasArtifact( guard_art ) ) {
         if ( msg ) {
             *msg = _( "The %{artifact} artifact is in effect for this battle, disabling %{spell} spell." );
             StringReplace( *msg, "%{artifact}", guard_art.GetName() );
@@ -990,7 +990,7 @@ void Battle::Unit::PostAttackAction()
     if ( isArchers() && !isHandFighting() ) {
         // check ammo cart artifact
         const HeroBase * hero = GetCommander();
-        if ( !hero || !hero->HasArtifact( Artifact::AMMO_CART ) )
+        if ( !hero || !hero->hasArtifact( Artifact::AMMO_CART ) )
             --shots;
     }
 
@@ -1162,12 +1162,8 @@ bool Battle::Unit::isArchers( void ) const
 void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const HeroBase * hero )
 {
     if ( hero ) {
-        u32 acount = hero->HasArtifact( Artifact::WIZARD_HAT );
-        if ( acount )
-            duration += acount * Artifact( Artifact::WIZARD_HAT ).ExtraValue();
-        acount = hero->HasArtifact( Artifact::ENCHANTED_HOURGLASS );
-        if ( acount )
-            duration += acount * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += hero->artifactCount( art ) * Artifact( art ).ExtraValue();
     }
 
     switch ( spell.GetID() ) {
@@ -1277,7 +1273,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
     case Spell::HYPNOTIZE: {
         SetModes( SP_HYPNOTIZE );
-        u32 acount = hero ? hero->HasArtifact( Artifact::GOLD_WATCH ) : 0;
+        uint32_t acount = hero ? hero->artifactCount( Artifact::GOLD_WATCH ) : 0;
         affected.AddMode( SP_HYPNOTIZE, ( acount ? duration * acount * 2 : duration ) );
         break;
     }
@@ -1373,19 +1369,19 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::COLDRAY:
         case Spell::COLDRING:
             // +50%
-            if ( hero->HasArtifact( Artifact::EVERCOLD_ICICLE ) )
+            if ( hero->hasArtifact( Artifact::EVERCOLD_ICICLE ) )
                 dmg += dmg * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
 
             if ( defendingHero ) {
                 // -50%
-                if ( defendingHero->HasArtifact( Artifact::ICE_CLOAK ) )
+                if ( defendingHero->hasArtifact( Artifact::ICE_CLOAK ) )
                     dmg -= dmg * Artifact( Artifact::ICE_CLOAK ).ExtraValue() / 100;
 
-                if ( defendingHero->HasArtifact( Artifact::HEART_ICE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_ICE ) )
                     dmg -= dmg * Artifact( Artifact::HEART_ICE ).ExtraValue() / 100;
 
                 // 100%
-                if ( defendingHero->HasArtifact( Artifact::HEART_FIRE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_FIRE ) )
                     dmg *= 2;
             }
             break;
@@ -1393,38 +1389,38 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
             // +50%
-            if ( hero->HasArtifact( Artifact::EVERHOT_LAVA_ROCK ) )
+            if ( hero->hasArtifact( Artifact::EVERHOT_LAVA_ROCK ) )
                 dmg += dmg * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
 
             if ( defendingHero ) {
                 // -50%
-                if ( defendingHero->HasArtifact( Artifact::FIRE_CLOAK ) )
+                if ( defendingHero->hasArtifact( Artifact::FIRE_CLOAK ) )
                     dmg -= dmg * Artifact( Artifact::FIRE_CLOAK ).ExtraValue() / 100;
 
-                if ( defendingHero->HasArtifact( Artifact::HEART_FIRE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_FIRE ) )
                     dmg -= dmg * Artifact( Artifact::HEART_FIRE ).ExtraValue() / 100;
 
                 // 100%
-                if ( defendingHero->HasArtifact( Artifact::HEART_ICE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_ICE ) )
                     dmg *= 2;
             }
             break;
 
         case Spell::LIGHTNINGBOLT:
             // +50%
-            if ( hero->HasArtifact( Artifact::LIGHTNING_ROD ) )
+            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
                 dmg += dmg * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
             // -50%
-            if ( defendingHero && defendingHero->HasArtifact( Artifact::LIGHTNING_HELM ) )
+            if ( defendingHero && defendingHero->hasArtifact( Artifact::LIGHTNING_HELM ) )
                 dmg -= dmg * Artifact( Artifact::LIGHTNING_HELM ).ExtraValue() / 100;
             break;
 
         case Spell::CHAINLIGHTNING:
             // +50%
-            if ( hero->HasArtifact( Artifact::LIGHTNING_ROD ) )
+            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
                 dmg += dmg * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
             // -50%
-            if ( defendingHero && defendingHero->HasArtifact( Artifact::LIGHTNING_HELM ) )
+            if ( defendingHero && defendingHero->hasArtifact( Artifact::LIGHTNING_HELM ) )
                 dmg -= dmg * Artifact( Artifact::LIGHTNING_HELM ).ExtraValue() / 100;
             // update orders damage
             switch ( target.damage ) {
@@ -1447,7 +1443,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::ELEMENTALSTORM:
         case Spell::ARMAGEDDON:
             // -50%
-            if ( defendingHero && defendingHero->HasArtifact( Artifact::BROACH_SHIELDING ) )
+            if ( defendingHero && defendingHero->hasArtifact( Artifact::BROACH_SHIELDING ) )
                 dmg /= 2;
             break;
 
@@ -1489,7 +1485,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
             Arena::GetGraveyard()->RemoveTroop( *this );
         }
         // restore hp
-        u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
+        uint32_t acount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
         if ( acount )
             restore *= acount * 2;
 
