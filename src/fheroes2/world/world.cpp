@@ -1060,11 +1060,14 @@ EventsDate World::GetEventsDate( int color ) const
 
 std::string World::DateString( void ) const
 {
-    std::ostringstream os;
-    os << "month: " << GetMonth() << ", "
-       << "week: " << GetWeek() << ", "
-       << "day: " << GetDay();
-    return os.str();
+    std::string output( "month: " );
+    output += std::to_string( GetMonth() );
+    output +=  ", week: ";
+    output += std::to_string( GetWeek() );
+    output += ", day: ";
+    output += std::to_string( GetDay() );
+
+    return output;
 }
 
 u32 World::CountObeliskOnMaps( void )

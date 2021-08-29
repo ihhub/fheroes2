@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "agg_image.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
@@ -47,6 +45,24 @@
 namespace
 {
     const int32_t scrollbarOffset = 626;
+
+    std::string CapturedExtInfoString( int res, int color, const Funds & funds )
+    {
+        std::string output = std::to_string( world.CountCapturedMines( res, color ) );
+
+        const int32_t vals = funds.Get( res );
+
+        if ( vals != 0 ) {
+            output += " (";
+            if ( vals > 0 ) {
+                output += '+';
+            }
+            output += std::to_string( vals );
+            output += ')';
+        }
+
+        return output;
+    }
 }
 
 struct HeroRow
@@ -545,23 +561,6 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
 
     // Copy one vertical line in case of previous army selection
     fheroes2::Copy( overback, 29, 12, display, dst.x + 29, dst.y + 12, 1, 357 );
-}
-
-std::string CapturedExtInfoString( int res, int color, const Funds & funds )
-{
-    std::ostringstream os;
-    os << world.CountCapturedMines( res, color );
-    const s32 vals = funds.Get( res );
-
-    if ( vals ) {
-        os << " "
-           << "(";
-        if ( vals > 0 )
-            os << "+";
-        os << vals << ")";
-    }
-
-    return os.str();
 }
 
 void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
