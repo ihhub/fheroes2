@@ -92,6 +92,17 @@ namespace
             }
             break;
 
+        case MP2::OBJ_ABANDONEDMINE:
+            if ( !hero.isFriends( tile.QuantityColor() ) ) {
+                if ( tile.CaptureObjectIsProtection() ) {
+                    const Army enemy( tile );
+                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                }
+
+                return true;
+            }
+            break;
+
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_SKELETON:
@@ -543,6 +554,12 @@ namespace AI
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
+        }
+        else if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
+            if ( tile.QuantityColor() == hero.GetColor() ) {
+                return -dangerousTaskPenalty; // don't even attempt to go here
+            }
+            return 3000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
             return 1000.0 * tile.QuantityArtifact().getArtifactValue();
