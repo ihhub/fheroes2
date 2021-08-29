@@ -98,9 +98,8 @@ namespace
                     const Army enemy( tile );
                     return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
                 }
-                else {
-                    return true;
-                }
+
+                return true;
             }
             break;
 
