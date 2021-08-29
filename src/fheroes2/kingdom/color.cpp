@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "color.h"
 #include "players.h"
 #include "serialize.h"
@@ -160,12 +158,14 @@ Colors::Colors( int colors )
 
 std::string Colors::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << Color::String( *it ) << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += Color::String( *it );
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 bool ColorBase::isFriends( int col ) const

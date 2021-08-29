@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "army.h"
 #include "army_troop.h"
 #include "heroes_base.h"
@@ -230,9 +228,12 @@ std::string ArmyTroop::GetAttackString( void ) const
     if ( Troop::GetAttack() == GetAttack() )
         return std::to_string( Troop::GetAttack() );
 
-    std::ostringstream os;
-    os << Troop::GetAttack() << " (" << GetAttack() << ")";
-    return os.str();
+    std::string output( std::to_string( Troop::GetAttack() ) );
+    output += " (";
+    output += std::to_string( GetAttack() );
+    output += ')';
+
+    return output;
 }
 
 std::string ArmyTroop::GetDefenseString( void ) const
@@ -240,9 +241,12 @@ std::string ArmyTroop::GetDefenseString( void ) const
     if ( Troop::GetDefense() == GetDefense() )
         return std::to_string( Troop::GetDefense() );
 
-    std::ostringstream os;
-    os << Troop::GetDefense() << " (" << GetDefense() << ")";
-    return os.str();
+    std::string output( std::to_string( Troop::GetDefense() ) );
+    output += " (";
+    output += std::to_string( GetDefense() );
+    output += ')';
+
+    return output;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Troop & troop )

@@ -210,17 +210,24 @@ std::string Battle::Unit::GetShotString( void ) const
     if ( Troop::GetShots() == GetShots() )
         return std::to_string( Troop::GetShots() );
 
-    std::ostringstream os;
-    os << Troop::GetShots() << " (" << GetShots() << ")";
-    return os.str();
+    std::string output( std::to_string( Troop::GetShots() ) );
+    output += " (";
+    output += std::to_string( GetShots() );
+    output += ')';
+
+    return output;
 }
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    std::ostringstream os;
     const uint32_t speedValue = GetSpeed( true );
-    os << Speed::String( speedValue ) << " (" << speedValue << ")";
-    return os.str();
+
+    std::string output( Speed::String( speedValue ) );
+    output += " (";
+    output += std::to_string( speedValue );
+    output += ')';
+
+    return output;
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
