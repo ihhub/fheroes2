@@ -1062,7 +1062,7 @@ std::string World::DateString( void ) const
 {
     std::string output( "month: " );
     output += std::to_string( GetMonth() );
-    output +=  ", week: ";
+    output += ", week: ";
     output += std::to_string( GetWeek() );
     output += ", day: ";
     output += std::to_string( GetDay() );
