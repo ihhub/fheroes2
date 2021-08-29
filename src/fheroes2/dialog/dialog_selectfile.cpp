@@ -67,6 +67,15 @@ namespace
 
         return text.size();
     }
+
+    std::string ResizeToShortName( const std::string & str )
+    {
+        std::string res = System::GetBasename( str );
+        size_t it = res.rfind( '.' );
+        if ( std::string::npos != it )
+            res.resize( it );
+        return res;
+    }
 }
 
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
@@ -83,14 +92,25 @@ public:
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override;
-    void ActionCurrentDn( void ) override;
+    void ActionCurrentUp() override;
+    void ActionCurrentDn() override;
     void ActionListDoubleClick( Maps::FileInfo & ) override;
     void ActionListSingleClick( Maps::FileInfo & ) override;
 
-    void ActionListPressRight( Maps::FileInfo & ) override
+    void ActionListPressRight( Maps::FileInfo & info ) override
     {
-        // Do nothing.
+        // On some OS like Windows path contains '\' symbol. This symbol doesn't exist in the resources.
+        // To avoid this we have to replace all '\' symbols by '/' symbols.
+        std::string fullPath = info.file;
+        StringReplace( fullPath, "\\", "/" );
+
+        std::string description( _( "Map: " ) );
+        description += info.name;
+        description += "\n \n";
+        description += _( "Location: " );
+        description += fullPath;
+
+        Dialog::Message( ResizeToShortName( info.file ), description, Font::BIG );
     }
 
     bool isDoubleClicked() const
@@ -165,15 +185,6 @@ void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & )
 void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
 {
     // Do nothing.
-}
-
-std::string ResizeToShortName( const std::string & str )
-{
-    std::string res = System::GetBasename( str );
-    size_t it = res.rfind( '.' );
-    if ( std::string::npos != it )
-        res.resize( it );
-    return res;
 }
 
 MapsFileInfoList GetSortedMapsFileInfoList( void )
