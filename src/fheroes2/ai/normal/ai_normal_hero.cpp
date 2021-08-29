@@ -92,6 +92,17 @@ namespace
             }
             break;
 
+        case MP2::OBJ_ABANDONEDMINE:
+            if ( !hero.isFriends( tile.QuantityColor() ) ) {
+                if ( tile.CaptureObjectIsProtection() ) {
+                    const Army enemy( tile );
+                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                }
+                else
+                    return true;
+            }
+            break;
+
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_SKELETON:
