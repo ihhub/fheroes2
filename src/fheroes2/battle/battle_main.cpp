@@ -113,14 +113,12 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-    bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
     bool transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
-    bool artifactsTransferred = !transferArtifacts;
 
     bool battleSummaryShown = false;
     // Check if it was an auto battle
     if ( isHumanBattle && !showBattle ) {
-        if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, true ) ) {
+        if ( arena->DialogBattleSummary( result, transferArtifacts, true ) ) {
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
@@ -145,15 +143,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-            isWinnerHuman = hero_wins && hero_wins->isControlHuman();
             transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
-            artifactsTransferred = !transferArtifacts;
         }
         else {
             battleSummaryShown = true;
-            if ( isWinnerHuman ) {
-                artifactsTransferred = true;
-            }
         }
     }
 
@@ -166,13 +159,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // final summary dialog
     if ( isHumanBattle && !battleSummaryShown ) {
-        arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, false );
-        if ( isWinnerHuman ) {
-            artifactsTransferred = true;
-        }
+        arena->DialogBattleSummary( result, transferArtifacts, false );
     }
 
-    if ( !artifactsTransferred ) {
+    if ( transferArtifacts ) {
         PickupArtifactsAction( *hero_wins, *hero_loss );
     }
 
@@ -235,20 +225,20 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     return result;
 }
 
-void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
+void Battle::PickupArtifactsAction( HeroBase & hero_wins, HeroBase & hero_loss )
 {
-    BagArtifacts & bag1 = hero1.GetBagArtifacts();
-    BagArtifacts & bag2 = hero2.GetBagArtifacts();
+    BagArtifacts & bag_wins = hero_wins.GetBagArtifacts();
+    BagArtifacts & bag_loss = hero_loss.GetBagArtifacts();
 
-    for ( u32 ii = 0; ii < bag2.size(); ++ii ) {
-        Artifact & art = bag2[ii];
+    for ( size_t i = 0; i < bag_loss.size(); ++i ) {
+        Artifact & art = bag_loss[i];
 
         if ( art.isUltimate() ) {
             art = Artifact::UNKNOWN;
         }
         else if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK ) {
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
-            if ( bag1.end() != it ) {
+            BagArtifacts::iterator it = std::find( bag_wins.begin(), bag_wins.end(), Artifact( Artifact::UNKNOWN ) );
+            if ( bag_wins.end() != it ) {
                 *it = art;
             }
             art = Artifact::UNKNOWN;

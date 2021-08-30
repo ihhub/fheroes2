@@ -484,33 +484,36 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     }
 
     if ( transferArtifacts ) {
-        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
-        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
+        HeroBase * hero_wins = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
+        HeroBase * hero_loss = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
-        if ( hero1 == nullptr || hero2 == nullptr )
+        if ( hero_wins == nullptr || hero_loss == nullptr )
             return false;
 
-        BagArtifacts & bag1 = hero1->GetBagArtifacts();
-        BagArtifacts & bag2 = hero2->GetBagArtifacts();
+        const BagArtifacts & bag_wins = hero_wins->GetBagArtifacts();
+        const BagArtifacts & bag_loss = hero_loss->GetBagArtifacts();
+
+        bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+        size_t numWinnerFreeSlots = std::count( bag_wins.begin(), bag_wins.end(), Artifact( Artifact::UNKNOWN ) );
 
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
 
-        BagArtifacts & sortedBag2( bag2 );
-        // all ultimate artifacst should be displayed last
-        std::sort( sortedBag2.begin(), sortedBag2.end(),
-                   []( const Artifact & left, const Artifact & right ) { return ( left.isUltimate() ? 1 : 0 ) < ( right.isUltimate() ? 1 : 0 ); } );
+        BagArtifacts sortedBag( bag_loss );
 
-        for ( size_t i = 0; i < sortedBag2.size(); ++i ) {
-            Artifact & art = sortedBag2[i];
+        // all ultimate artifacts should be displayed last
+        std::stable_sort( sortedBag.begin(), sortedBag.end(),
+                          []( const Artifact & left, const Artifact & right ) { return ( left.isUltimate() ? 1 : 0 ) < ( right.isUltimate() ? 1 : 0 ); } );
+
+        for ( size_t i = 0; i < sortedBag.size(); ++i ) {
+            const Artifact & art = sortedBag[i];
 
             if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
                 continue;
             }
 
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
-            if ( bag1.end() != it || art.isUltimate() ) { // show the message for ultimate artifact, even if we don't have space in the bag
+            if ( ( isWinnerHuman && numWinnerFreeSlots != 0 ) || art.isUltimate() ) { // always show the message for ultimate artifact
 
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
@@ -520,13 +523,19 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
                 std::string artMsg;
                 if ( !art.isUltimate() ) {
-                    *it = art;
                     artMsg = _( "You have captured an enemy artifact!" );
                     Game::PlayPickupSound();
+
+                    --numWinnerFreeSlots;
                 }
                 else {
-                    artMsg = _( "As you reach for the %{artname}, it mysteriously disappears." );
-                    StringReplace( artMsg, "%{artname}", art.GetName() );
+                    if ( isWinnerHuman ) {
+                        artMsg = _( "As you reach for the %{name}, it mysteriously disappears." );
+                    }
+                    else {
+                        artMsg = _( "As your enemy reaches for the %{name}, it mysteriously disappears." );
+                    }
+                    StringReplace( artMsg, "%{name}", art.GetName() );
                 }
 
                 TextBox box( artMsg, Font::YELLOW_BIG, bsTextWidth );
@@ -568,7 +577,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                     }
                 }
             }
-            art = Artifact::UNKNOWN;
         }
     }
     return false;
