@@ -74,7 +74,7 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-        resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
+        resource = _getKingdomStartingResources( Game::getDifficulty(), isControlAI() );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
@@ -883,7 +883,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
+cost_t Kingdom::_getKingdomStartingResources( const int difficulty, const bool isAIKingdom )
 {
     if ( isAIKingdom )
         return GameStatic::kingdom_starting_resource[5];

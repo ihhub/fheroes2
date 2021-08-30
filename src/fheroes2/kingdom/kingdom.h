@@ -160,9 +160,10 @@ public:
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
     static u32 GetMaxHeroes( void );
-    static cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
 
 private:
+    static cost_t _getKingdomStartingResources( const int difficulty, const bool isAIKingdom );
+
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
