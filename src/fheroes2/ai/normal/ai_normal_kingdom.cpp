@@ -52,9 +52,8 @@ namespace
             heroStrength.emplace_back( hero->GetArmy().GetStrength(), hero );
         }
 
-        std::sort( heroStrength.begin(), heroStrength.end(), []( const std::pair<double, Heroes *> & first, const std::pair<double, Heroes *> & second ) {
-            return first.first > second.first;
-        } );
+        std::sort( heroStrength.begin(), heroStrength.end(),
+                   []( const std::pair<double, Heroes *> & first, const std::pair<double, Heroes *> & second ) { return first.first > second.first; } );
 
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
