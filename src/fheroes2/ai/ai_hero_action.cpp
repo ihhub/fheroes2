@@ -726,8 +726,16 @@ namespace AI
 
             if ( gold ) {
                 const u32 expr = gold > 500 ? gold - 500 : 500;
-                // Only 10% chance of choosing experience. Make AI rich!
-                if ( Rand::Get( 1, 10 ) == 1 ) {
+
+                if ( hero.getAIRole() == Heroes::Role::HUNTER ) {
+                    // Only 10% chance of choosing experience. Make AI rich!
+                    if ( Rand::Get( 1, 10 ) == 1 ) {
+                        gold = 0;
+                        hero.IncreaseExperience( expr );
+                    }
+                }
+                else if ( Rand::Get( 1, 2 ) == 1 ) {
+                    // 50/50 chance.
                     gold = 0;
                     hero.IncreaseExperience( expr );
                 }
