@@ -65,7 +65,6 @@ public:
 
     void openOverviewDialog();
 
-    void UpdateStartingResource( void );
     bool isPlay( void ) const;
     bool isLoss( void ) const;
     bool AllowPayment( const Funds & ) const;

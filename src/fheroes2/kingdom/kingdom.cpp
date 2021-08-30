@@ -74,8 +74,7 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-
-        UpdateStartingResource();
+        resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
@@ -115,11 +114,6 @@ int Kingdom::GetColor( void ) const
 int Kingdom::GetRace( void ) const
 {
     return Players::GetPlayerRace( GetColor() );
-}
-
-void Kingdom::UpdateStartingResource( void )
-{
-    resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
