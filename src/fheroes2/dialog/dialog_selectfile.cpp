@@ -42,6 +42,8 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -104,13 +106,15 @@ public:
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
 
-        std::string description( _( "Map: " ) );
-        description += info.name;
-        description += "\n \n";
-        description += _( "Location: " );
-        description += fullPath;
+        fheroes2::Text header( ResizeToShortName( info.file ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
 
-        Dialog::Message( ResizeToShortName( info.file ), description, Font::BIG );
+        fheroes2::MultiFontText body;
+        body.add( { _( "Map: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "\n\nLocation: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+
+        fheroes2::showMessage( header, body, Dialog::ZERO );
     }
 
     bool isDoubleClicked() const
