@@ -655,18 +655,17 @@ namespace AI
             if ( moral >= 3 ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
             }
-            else if ( moral == 2 ) {
+            if ( moral == 2 ) {
                 return -4000; // moral is good enough to avoid visting this object
             }
-            else if ( moral == 1 ) {
+            if ( moral == 1 ) {
                 return -2000; // is it worth to visit this object with little better than neutral moral?
             }
-            else if ( moral == 0 ) {
+            if ( moral == 0 ) {
                 return 0;
             }
-            else {
-                return 100;
-            }
+
+            return 100;
         }
         else if ( objectType == MP2::OBJ_STABLES ) {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
@@ -895,13 +894,13 @@ namespace AI
             if ( moral >= 3 ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
             }
-            else if ( moral == 2 ) {
+            if ( moral == 2 ) {
                 return -4000; // moral is good enough to avoid visting this object
             }
-            else if ( moral == 1 ) {
+            if ( moral == 1 ) {
                 return -2000; // is it worth to visit this object with little better than neutral moral?
             }
-            else if ( moral == 0 ) {
+            if ( moral == 0 ) {
                 return 0;
             }
 
