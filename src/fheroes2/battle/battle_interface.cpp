@@ -93,7 +93,7 @@ namespace
         return std::atan2( end.y - start.y, end.x - start.x );
     }
 
-    std::vector<std::pair<LightningPoint, LightningPoint>> GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
+    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
     {
         const int distance = static_cast<int>( getDistance( src, dst ) );
         const double angle = getAngle( src, dst );
@@ -104,13 +104,13 @@ namespace
         if ( iterationCount > 5 )
             iterationCount = 5;
 
-        std::vector<std::pair<LightningPoint, LightningPoint>> lines;
+        std::vector<std::pair<LightningPoint, LightningPoint> > lines;
         lines.emplace_back( LightningPoint( fheroes2::Point( 0, 0 ), 5 ), LightningPoint( fheroes2::Point( distance, 0 ), 3 ) );
 
         int maxOffset = distance;
 
         for ( int step = 0; step < iterationCount; ++step ) {
-            std::vector<std::pair<LightningPoint, LightningPoint>> oldLines;
+            std::vector<std::pair<LightningPoint, LightningPoint> > oldLines;
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
@@ -151,7 +151,7 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint>> & lightning, uint8_t color, fheroes2::Image & surface,
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, uint8_t color, fheroes2::Image & surface,
                           const fheroes2::Rect & roi = fheroes2::Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
@@ -346,7 +346,7 @@ namespace Battle
         const int heroType = matchHeroType( hero );
         static std::vector<int> sorrowAnim;
         if ( sorrowAnim.empty() ) {
-            const int sorrowArray[9] = { 2, 3, 4, 5, 4, 5, 4, 3, 2 };
+            const int sorrowArray[9] = {2, 3, 4, 5, 4, 5, 4, 3, 2};
             sorrowAnim.insert( sorrowAnim.begin(), sorrowArray, sorrowArray + 9 );
         }
 
@@ -358,21 +358,13 @@ namespace Battle
         if ( heroTypeAnim[heroType][animation].empty() ) {
             const int sourceArray[7][9][9] = {
                 //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
-                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
-                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
-                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
-                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
-                { { 6, 7, 6, 7, 6, 7 },
-                  { 7, 8, 9, 10, 11 },
-                  { 10, 9, 7 },
-                  { 7, 12, 13, 14, 15 },
-                  { 7 },
-                  { 7, 12, 13, 14, 16 },
-                  { 7 },
-                  { 17 },
-                  { 18, 19 } }, // NECROMANCER
-                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
+                {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
+                {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
+                {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
+                {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
+                {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
+                {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
+                {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
             };
 
             for ( int frame = 0; frame < 9; ++frame ) {
@@ -1073,11 +1065,11 @@ void Battle::Interface::UpdateContourColor()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = { 108, 115, 122, 129, 122, 115 };
+        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = { 110, 114, 118, 122, 126, 122, 118, 114 };
+        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
@@ -1586,9 +1578,9 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnValid
 
             const Indexes adjacent = Board::GetAroundIndexes( index );
             for ( const int32_t adjacentIndex : adjacent ) {
-                const Cell * aroundCellTwice = Board::GetCell( adjacentIndex );
-                if ( aroundCellTwice != nullptr ) {
-                    highlightCells.emplace( aroundCellTwice );
+                const Cell * adjacentCell = Board::GetCell( adjacentIndex );
+                if ( adjacentCell != nullptr ) {
+                    highlightCells.emplace( adjacentCell );
                 }
             }
         }
@@ -1660,16 +1652,16 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsForWide
 
 std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnAreaShot( const Cell * cell ) const
 {
-    std::set<const Battle::Cell *> highlightCells;
-    highlightCells.emplace( cell );
+    std::set<const Battle::Cell *> result;
+    result.emplace( cell );
     const Indexes around = Board::GetAroundIndexes( index_pos );
     for ( const int32_t index : around ) {
         const Cell * aroundCell = Board::GetCell( index );
         if ( aroundCell != nullptr ) {
-            highlightCells.emplace( aroundCell );
+            result.emplace( aroundCell );
         }
     }
-    return highlightCells;
+    return result;
 }
 
 std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCells( const Cell * cell, int cursorType ) const
@@ -1683,7 +1675,7 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCells( const
               && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
         highlightCells = CalculateHighlightCellsOnAreaShot( cell );
     }
-    else if ( _currentUnit->GetTailIndex() != -1 && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
+    else if ( _currentUnit->isWide() && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
         highlightCells = CalculateHighlightCellsForWideUnit();
     }
     else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
