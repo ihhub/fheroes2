@@ -139,6 +139,7 @@ Heroes::Heroes()
     , patrol_square( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
+    , _aiRole( Role::HUNTER )
 {}
 
 Heroes::Heroes( int heroID, int race, int initialLevel )
@@ -169,6 +170,7 @@ Heroes::Heroes( int heroid, int rc )
     , patrol_square( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
+    , _aiRole( Role::HUNTER )
 {
     name = _( Heroes::GetName( heroid ) );
 

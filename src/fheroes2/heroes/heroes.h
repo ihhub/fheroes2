@@ -118,14 +118,14 @@ public:
         ROXANA,
         SANDRO,
         CELIA,
-        // from campain
+        // From The Succession Wars campaign.
         ROLAND,
         CORLAGON,
         ELIZA,
         ARCHIBALD,
         HALTON,
         BAX,
-        // from extended
+        // From The Price of Loyalty expansion.
         SOLMYR,
         DAINWIN,
         MOG,
@@ -170,13 +170,28 @@ public:
         MOVED = 0x00100000
     };
 
-    // Values are set by BitModes; shared with previous enum
-    enum class Role
+    // Types of heroes. Used only for AI as humans are smart enough to manage heroes by themselves.
+    enum class Role : int
     {
-        SCOUT = 0x01000000,
-        HUNTER = 0x02000000,
-        COURIER = 0x04000000,
-        CHAMPION = 0x08000000
+        // The most ordinary hero's role with no any specialization. This type does eveything what a hero can do:
+        // collecting resources, fighting (mostly weak) monsters, claiming towns and mines and expanding the visible territory.
+        HUNTER,
+
+        // The type of hero with a skew towards fights. His main priority is to kill monsters and enemies, capture castles and guarded mines.
+        // This type still can capture valuable mines or dwellings if they're on the way to something better.
+        FIGHTER,
+
+        // The main goal for Scout is to discover new areas so he should run towards the fog of war to expand the visible territory.
+        // These heroes usually appear when either no tasks exist on the map or when AI has too many heroes.
+        SCOUT,
+
+        // Courier's life is to deliver things from one place to another. Usually they bring an army for Fighters or Champions from
+        // dwellings, castles or from one hero to another.
+        COURIER,
+
+        // The mightiest hero among others. The main purpose of this type is to run over the enemy's territory and defeat all heroes there while
+        // capturing all castles and towns. This type of hero is set when one (or few) heroes are too strong in comparison to others.
+        CHAMPION
     };
 
     struct RedrawIndex
@@ -370,6 +385,16 @@ public:
     int GetAttackedMonsterTileIndex() const;
     void SetAttackedMonsterTileIndex( int idx );
 
+    void setAIRole( const Role role )
+    {
+        _aiRole = role;
+    }
+
+    Role getAIRole() const
+    {
+        return _aiRole;
+    }
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -429,6 +454,9 @@ private:
     mutable int _alphaValue;
 
     int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
+
+    // This value should NOT be saved in save file as it's dynamically set during AI turn.
+    Role _aiRole;
 
     enum
     {
