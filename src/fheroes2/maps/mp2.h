@@ -22,6 +22,8 @@
 #ifndef H2MP2_H
 #define H2MP2_H
 
+#include <cstddef>
+
 #include "types.h"
 
 #define MP2OFFSETDATA 428
@@ -284,7 +286,7 @@ namespace MP2
 
     ///////////////////////////////////////////////////////////////////////////////
     // First bit indicates if you can interact with object
-    enum
+    enum MapObjectType
     {
         OBJ_ZERO = 0x00,
         OBJN_ALCHEMYLAB = 0x01,
@@ -560,38 +562,44 @@ namespace MP2
     };
 
     int GetICNObject( int tileset );
-    const char * StringObject( int object );
+    const char * StringObject( const MapObjectType objectType );
+
+    // This function returns plural forms only for certain object types.
+    const char * getPluralObjectName( const MapObjectType objectType, const size_t count );
 
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
 
     // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
-    bool isActionObject( const int obj, const bool locatesOnWater );
+    bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
 
     // The method checks if the object is an action independent form its location.
-    bool isActionObject( const int obj );
+    bool isActionObject( const MapObjectType objectType );
 
-    bool isWaterActionObject( const int obj );
+    // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
+    MapObjectType getBaseActionObjectType( const MapObjectType objectType );
 
-    bool isQuantityObject( int obj );
-    bool isCaptureObject( int obj );
-    bool isPickupObject( int obj );
-    bool isArtifactObject( int obj );
-    bool isHeroUpgradeObject( int obj );
-    bool isMonsterDwelling( int obj );
-    bool isRemoveObject( int obj );
-    bool isMoveObject( int obj );
-    bool isAbandonedMine( int obj );
-    bool isProtectedObject( int obj );
+    bool isWaterActionObject( const MapObjectType objectType );
 
-    bool isNeedStayFront( int obj );
+    bool isQuantityObject( const MapObjectType objectType );
+    bool isCaptureObject( const MapObjectType objectType );
+    bool isPickupObject( const MapObjectType objectType );
+    bool isArtifactObject( const MapObjectType objectType );
+    bool isHeroUpgradeObject( const MapObjectType objectType );
+    bool isMonsterDwelling( const MapObjectType objectType );
+    bool isRemoveObject( const MapObjectType objectType );
+    bool isMoveObject( const MapObjectType objectType );
+    bool isAbandonedMine( const MapObjectType objectType );
+    bool isProtectedObject( const MapObjectType objectType );
 
-    bool isDayLife( int obj );
-    bool isWeekLife( int obj );
-    bool isMonthLife( int obj );
-    bool isBattleLife( int obj );
+    bool isNeedStayFront( const MapObjectType objectType );
+
+    bool isDayLife( const MapObjectType objectType );
+    bool isWeekLife( const MapObjectType objectType );
+    bool isMonthLife( const MapObjectType objectType );
+    bool isBattleLife( const MapObjectType objectType );
 
     // Make sure that you pass a valid action object.
-    int getActionObjectDirection( const int objId );
+    int getActionObjectDirection( const MapObjectType objectType );
 }
 
 #endif

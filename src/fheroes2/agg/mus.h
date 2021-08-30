@@ -23,6 +23,7 @@
 #ifndef H2MUS_H
 #define H2MUS_H
 
+#include "mp2.h"
 #include <string>
 
 namespace MUS
@@ -88,7 +89,7 @@ namespace MUS
 
     int FromGround( int );
     int FromRace( int );
-    int FromMapObject( int );
+    int FromMapObject( const MP2::MapObjectType objectType );
 
     int GetBattleRandom( void );
 }

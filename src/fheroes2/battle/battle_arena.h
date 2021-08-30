@@ -29,6 +29,7 @@
 #include "battle_board.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
+#include "rand.h"
 #include "spell_storage.h"
 
 class Castle;
@@ -53,7 +54,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army &, Army &, s32, bool );
+        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
         ~Arena();
 
         void Turns( void );
@@ -137,12 +138,28 @@ namespace Battle
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
+        const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
+
         static Board * GetBoard( void );
         static Tower * GetTower( int );
         static Bridge * GetBridge( void );
         static const Castle * GetCastle( void );
         static Interface * GetInterface( void );
         static Graveyard * GetGraveyard( void );
+
+        enum
+        {
+            CATAPULT_POS = 77,
+            CASTLE_GATE_POS = 50,
+            CASTLE_FIRST_TOP_WALL_POS = 8,
+            CASTLE_SECOND_TOP_WALL_POS = 29,
+            CASTLE_THIRD_TOP_WALL_POS = 73,
+            CASTLE_FOURTH_TOP_WALL_POS = 96,
+            CASTLE_TOP_ARCHER_TOWER_POS = 19,
+            CASTLE_BOTTOM_ARCHER_TOWER_POS = 85,
+            CASTLE_TOP_GATE_TOWER_POS = 40,
+            CASTLE_BOTTOM_GATE_TOWER_POS = 62
+        };
 
     private:
         Arena( const Arena & ) = delete;
@@ -210,13 +227,7 @@ namespace Battle
 
         bool end_turn;
 
-        enum
-        {
-            FIRST_WALL_HEX_POSITION = 8,
-            SECOND_WALL_HEX_POSITION = 29,
-            THIRD_WALL_HEX_POSITION = 73,
-            FORTH_WALL_HEX_POSITION = 96
-        };
+        Rand::DeterministicRandomGenerator & _randomGenerator;
 
         enum
         {

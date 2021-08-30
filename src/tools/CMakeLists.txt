@@ -4,6 +4,9 @@ target_link_libraries(82m2wav
 	)
 
 add_executable(bin2txt bin2txt.cpp)
+target_link_libraries(bin2txt
+	engine
+	)
 
 add_executable(extractor extractor.cpp)
 target_link_libraries(extractor

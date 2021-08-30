@@ -60,8 +60,8 @@ namespace
                 continue;
             }
 
-            const int indexedObjectId = indexedTile.GetObject( true );
-            if ( indexedObjectId == MP2::OBJ_CASTLE || indexedObjectId == MP2::OBJ_HEROES || indexedObjectId == MP2::OBJ_MONSTER ) {
+            const MP2::MapObjectType objectType = indexedTile.GetObject( true );
+            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
                 return true;
             }
         }
@@ -293,27 +293,27 @@ void CapturedObjects::ResetColor( int color )
 
         if ( objcol.isColor( color ) ) {
             objcol.second = Color::UNUSED;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( objcol.first, objcol.second );
+            world.GetTiles( ( *it ).first ).CaptureFlags32( static_cast<MP2::MapObjectType>( objcol.first ), objcol.second );
         }
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, int obj )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
 {
-    Funds result;
+    funds = Funds();
+    objectCount = 0;
 
     for ( iterator it = begin(); it != end(); ++it ) {
         const ObjectColor & objcol = ( *it ).second.objcol;
 
-        if ( objcol.isObject( obj ) && objcol.isColor( color ) ) {
+        if ( objcol.isObject( objectType ) && objcol.isColor( playerColorId ) ) {
             Maps::Tiles & tile = world.GetTiles( ( *it ).first );
 
-            result += Funds( tile.QuantityResourceCount() );
+            funds += Funds( tile.QuantityResourceCount() );
+            ++objectCount;
             tile.QuantityReset();
         }
     }
-
-    return result;
 }
 
 World & world = World::Get();
@@ -741,14 +741,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
         }
 
         const int32_t tileId = tile.GetIndex();
-        const int objectId = tile.GetObject( true );
+        const MP2::MapObjectType objectType = tile.GetObject( true );
 
-        if ( objectId == MP2::OBJ_CASTLE || objectId == MP2::OBJ_HEROES || objectId == MP2::OBJ_MONSTER ) {
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
             excludeTiles.emplace( tileId );
             continue;
         }
 
-        if ( MP2::isActionObject( objectId ) ) {
+        if ( MP2::isActionObject( objectType ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
                 continue;
             }
@@ -949,15 +949,15 @@ u32 World::CountCapturedMines( int type, int color ) const
 /* capture object */
 void World::CaptureObject( s32 index, int color )
 {
-    int obj = GetTiles( index ).GetObject( false );
-    map_captureobj.Set( index, obj, color );
+    const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
+    map_captureobj.Set( index, objectType, color );
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
     if ( castle && castle->GetColor() != color )
         castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( obj, color );
+        GetTiles( index ).CaptureFlags32( objectType, color );
 }
 
 /* return color captured object */
@@ -1035,7 +1035,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
-        ultimate_artifact.SetFound( true );
+        ultimate_artifact.markAsFound();
         return true;
     }
 
@@ -1060,11 +1060,14 @@ EventsDate World::GetEventsDate( int color ) const
 
 std::string World::DateString( void ) const
 {
-    std::ostringstream os;
-    os << "month: " << GetMonth() << ", "
-       << "week: " << GetWeek() << ", "
-       << "day: " << GetDay();
-    return os.str();
+    std::string output( "month: " );
+    output += std::to_string( GetMonth() );
+    output += ", week: ";
+    output += std::to_string( GetWeek() );
+    output += ", day: ";
+    output += std::to_string( GetDay() );
+
+    return output;
 }
 
 u32 World::CountObeliskOnMaps( void )
@@ -1142,7 +1145,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } );
+            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->hasArtifact( art ); } );
         }
     }
 
@@ -1162,12 +1165,12 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
     return false;
 }
 
-bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
+bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
 {
     const Colors colors( Game::GetKingdomColors() );
     for ( const int color : colors ) {
         const Kingdom & kingdom = world.GetKingdom( color );
-        if ( kingdom.isVisited( dstIndex, obj ) ) {
+        if ( kingdom.isVisited( dstIndex, objectType ) ) {
             return true;
         }
     }
@@ -1405,19 +1408,22 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             MapEvent * ptr = new MapEvent();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_SPHINX: {
             MapSphinx * ptr = new MapSphinx();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_SIGN: {
             MapSign * ptr = new MapSign();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_ARTIFACT:
@@ -1430,7 +1436,8 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             MapObjectSimple * ptr = new MapObjectSimple();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
         }
     }
 

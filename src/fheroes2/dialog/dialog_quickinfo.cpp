@@ -43,21 +43,65 @@
 
 #include <cassert>
 
-std::string GetMinesIncomeString( int type )
+namespace
 {
-    const payment_t income = ProfitConditions::FromMine( type );
-    const s32 value = income.Get( type );
-    std::string res;
+    class RadarUpdater
+    {
+    public:
+        RadarUpdater( const fheroes2::Rect & mainArea, const fheroes2::Point & updatedPosition )
+            : _mainArea( mainArea )
+            , _updatedPosition( updatedPosition )
+            , _prevPosition( Interface::Basic::Get().GetGameArea().getCurrentCenterInPixels() )
+            , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+        {
+            if ( _updatedPosition != _prevPosition ) {
+                Interface::Radar & radar = Interface::Basic::Get().GetRadar();
 
-    if ( value ) {
+                const fheroes2::Rect commonArea = mainArea ^ radar.GetRect();
+                _restorer.update( commonArea.x, commonArea.y, commonArea.width, commonArea.height );
+
+                Interface::Basic::Get().GetGameArea().SetCenter( updatedPosition );
+                radar.Redraw();
+
+                _restorer.restore();
+            }
+        }
+
+        void restore()
+        {
+            if ( _updatedPosition != _prevPosition ) {
+                Interface::Basic::Get().GetGameArea().SetCenterInPixels( _prevPosition );
+                Interface::Basic::Get().GetRadar().Redraw();
+
+                _restorer.restore();
+            }
+        }
+
+    private:
+        const fheroes2::Rect _mainArea;
+        const fheroes2::Point _updatedPosition;
+        const fheroes2::Point _prevPosition;
+        fheroes2::ImageRestorer _restorer;
+    };
+
+    std::string GetMinesIncomeString( const int resourceType )
+    {
+        const payment_t income = ProfitConditions::FromMine( resourceType );
+        const int32_t value = income.Get( resourceType );
+
+        std::string res;
+        if ( value == 0 ) {
+            return res;
+        }
+
         res += ' ';
         res += '(';
         res += ( value > 0 ? '+' : '-' );
         res.append( std::to_string( value ) );
         res += ')';
-    }
 
-    return res;
+        return res;
+    }
 }
 
 std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t basicScoutingLevel )
@@ -312,7 +356,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     std::string str;
     if ( objectType == MP2::OBJ_COAST ) {
@@ -378,9 +422,9 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
     }
 
     const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
-    const int tileObject = world.GetTiles( dst ).GetObject();
+    const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject();
 
-    const bool monsterInfo = tileObject == MP2::OBJ_MONSTER;
+    const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
 
     // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
     if ( monsterInfo ) {
@@ -406,11 +450,10 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
 
-    if ( objectType != MP2::OBJ_ZERO
-         && ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES
-              || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( objectType + 128 ) ) ) ) {
+    if ( objectType != correctedObjectType && MP2::isActionObject( correctedObjectType ) ) {
         // This is non-main tile of an action object. We have to find the main tile.
         // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
         const int32_t radiusOfSearch = 3;
@@ -439,24 +482,14 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         const int32_t tileIndex = tile.GetIndex();
         const int32_t mapWidth = world.w();
 
-        int32_t requiredObjectType = 0;
-        if ( objectType == MP2::OBJN_ALCHEMYTOWER ) {
-            requiredObjectType = MP2::OBJ_ALCHEMYTOWER;
-        }
-        else if ( objectType == MP2::OBJN_STABLES ) {
-            requiredObjectType = MP2::OBJ_STABLES;
-        }
-        else {
-            requiredObjectType = objectType + 128;
-        }
-        assert( requiredObjectType > objectType );
+        assert( correctedObjectType > objectType );
 
         for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
             for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
                 const int32_t index = tileIndex + y * mapWidth + x;
                 if ( Maps::isValidAbsIndex( index ) ) {
                     const Maps::Tiles & foundTile = world.GetTiles( index );
-                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == requiredObjectType ) {
+                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
                         QuickInfo( foundTile );
                         return;
                     }
@@ -643,19 +676,12 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     display.render();
 }
 
-void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // Update radar.
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-
-    gamearea.SetCenter( castle.GetCenter() );
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    radar.Redraw();
+    RadarUpdater radarUpdater( activeArea, castle.GetCenter() );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
@@ -663,6 +689,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
@@ -795,14 +822,13 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     // restore background
     back.restore();
 
-    // Restore radar.
-    gamearea.SetCenterInPixels( prevCenter );
-    radar.Redraw();
+    // Restore radar view.
+    radarUpdater.restore();
 
     display.render();
 }
 
-void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
@@ -810,12 +836,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
     const Settings & conf = Settings::Get();
 
     // Update radar.
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-
-    gamearea.SetCenter( hero.GetCenter() );
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    radar.Redraw();
+    RadarUpdater radarUpdater( activeArea, hero.GetCenter() );
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -1003,9 +1024,8 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
     // restore background
     restorer.restore();
 
-    // Restore radar.
-    gamearea.SetCenterInPixels( prevCenter );
-    radar.Redraw();
+    // Restore radar view.
+    radarUpdater.restore();
 
     display.render();
 }

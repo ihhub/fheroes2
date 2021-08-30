@@ -51,52 +51,73 @@ namespace Battle
     Arena * arena = nullptr;
 }
 
-int GetCovr( int ground, std::mt19937 & gen )
+namespace
 {
-    std::vector<int> covrs;
+    // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
+    size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+    {
+        size_t newSeed = seed;
+        if ( actions.empty() ) { // update the seed for next turn in all cases, even if no actions were performed
+            fheroes2::hashCombine( newSeed, 0 );
+        }
 
-    switch ( ground ) {
-    case Maps::Ground::SNOW:
-        covrs.push_back( ICN::COVR0007 );
-        covrs.push_back( ICN::COVR0008 );
-        covrs.push_back( ICN::COVR0009 );
-        covrs.push_back( ICN::COVR0010 );
-        covrs.push_back( ICN::COVR0011 );
-        covrs.push_back( ICN::COVR0012 );
-        break;
+        for ( const Battle::Command & command : actions ) {
+            fheroes2::hashCombine( newSeed, command.GetType() );
+            for ( const int commandArg : command ) {
+                fheroes2::hashCombine( newSeed, commandArg );
+            }
+        }
 
-    case Maps::Ground::WASTELAND:
-        covrs.push_back( ICN::COVR0019 );
-        covrs.push_back( ICN::COVR0020 );
-        covrs.push_back( ICN::COVR0021 );
-        covrs.push_back( ICN::COVR0022 );
-        covrs.push_back( ICN::COVR0023 );
-        covrs.push_back( ICN::COVR0024 );
-        break;
-
-    case Maps::Ground::DIRT:
-        covrs.push_back( ICN::COVR0013 );
-        covrs.push_back( ICN::COVR0014 );
-        covrs.push_back( ICN::COVR0015 );
-        covrs.push_back( ICN::COVR0016 );
-        covrs.push_back( ICN::COVR0017 );
-        covrs.push_back( ICN::COVR0018 );
-        break;
-
-    case Maps::Ground::GRASS:
-        covrs.push_back( ICN::COVR0001 );
-        covrs.push_back( ICN::COVR0002 );
-        covrs.push_back( ICN::COVR0003 );
-        covrs.push_back( ICN::COVR0004 );
-        covrs.push_back( ICN::COVR0005 );
-        covrs.push_back( ICN::COVR0006 );
-        break;
-
-    default:
-        break;
+        return newSeed;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
+    int GetCovr( int ground, std::mt19937 & gen )
+    {
+        std::vector<int> covrs;
+
+        switch ( ground ) {
+        case Maps::Ground::SNOW:
+            covrs.push_back( ICN::COVR0007 );
+            covrs.push_back( ICN::COVR0008 );
+            covrs.push_back( ICN::COVR0009 );
+            covrs.push_back( ICN::COVR0010 );
+            covrs.push_back( ICN::COVR0011 );
+            covrs.push_back( ICN::COVR0012 );
+            break;
+
+        case Maps::Ground::WASTELAND:
+            covrs.push_back( ICN::COVR0019 );
+            covrs.push_back( ICN::COVR0020 );
+            covrs.push_back( ICN::COVR0021 );
+            covrs.push_back( ICN::COVR0022 );
+            covrs.push_back( ICN::COVR0023 );
+            covrs.push_back( ICN::COVR0024 );
+            break;
+
+        case Maps::Ground::DIRT:
+            covrs.push_back( ICN::COVR0013 );
+            covrs.push_back( ICN::COVR0014 );
+            covrs.push_back( ICN::COVR0015 );
+            covrs.push_back( ICN::COVR0016 );
+            covrs.push_back( ICN::COVR0017 );
+            covrs.push_back( ICN::COVR0018 );
+            break;
+
+        case Maps::Ground::GRASS:
+            covrs.push_back( ICN::COVR0001 );
+            covrs.push_back( ICN::COVR0002 );
+            covrs.push_back( ICN::COVR0003 );
+            covrs.push_back( ICN::COVR0004 );
+            covrs.push_back( ICN::COVR0005 );
+            covrs.push_back( ICN::COVR0006 );
+            break;
+
+        default:
+            break;
+        }
+
+        return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
+    }
 }
 
 bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
@@ -149,7 +170,7 @@ Battle::Tower * Battle::Arena::GetTower( int type )
     return nullptr;
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
+Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )
     , armies_order( nullptr )
@@ -164,14 +185,16 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , current_turn( 0 )
     , auto_battle( 0 )
     , end_turn( false )
+    , _randomGenerator( randomGenerator )
 {
     const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;
-    army1 = new Force( a1, false );
-    army2 = new Force( a2, true );
+
+    army1 = new Force( a1, false, _randomGenerator );
+    army2 = new Force( a2, true, _randomGenerator );
 
     // init castle (interface ahead)
     if ( castle ) {
@@ -211,32 +234,32 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
 
     if ( castle ) {
         // init
-        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT ) : nullptr;
-        towers[1] = new Tower( *castle, TWR_CENTER );
-        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT ) : nullptr;
+        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator ) : nullptr;
+        towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator );
+        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator ) : nullptr;
         const bool fortification = ( Race::KNGT == castle->GetRace() ) && castle->isBuild( BUILD_SPEC );
-        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander() ) : nullptr;
+        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), _randomGenerator ) : nullptr;
         bridge = new Bridge();
 
         // catapult cell
-        board[77].SetObject( 1 );
+        board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        board[8].SetObject( fortification ? 3 : 2 );
-        board[29].SetObject( fortification ? 3 : 2 );
-        board[73].SetObject( fortification ? 3 : 2 );
-        board[96].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
 
         // tower
-        board[40].SetObject( 2 );
-        board[62].SetObject( 2 );
+        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
+        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 2 );
 
         // archers tower
-        board[19].SetObject( 2 );
-        board[85].SetObject( 2 );
+        board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( 2 );
+        board[CASTLE_BOTTOM_ARCHER_TOWER_POS].SetObject( 2 );
 
         // bridge
-        board[50].SetObject( 1 );
+        board[CASTLE_GATE_POS].SetObject( 1 );
     }
     else
     // set obstacles
@@ -320,8 +343,10 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
+        const size_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        _randomGenerator.UpdateSeed( newSeed );
 
+        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
         // apply task
         while ( !actions.empty() ) {
             // apply action
@@ -780,7 +805,7 @@ bool Battle::Arena::isSpellcastDisabled() const
     const HeroBase * hero1 = army1->GetCommander();
     const HeroBase * hero2 = army2->GetCommander();
 
-    if ( ( hero1 && hero1->HasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->HasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+    if ( ( hero1 && hero1->hasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->hasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
         return true;
     }
     return false;
@@ -928,16 +953,16 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 {
     switch ( target ) {
     case CAT_WALL1:
-        board[8].SetObject( value );
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( value );
         break;
     case CAT_WALL2:
-        board[29].SetObject( value );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( value );
         break;
     case CAT_WALL3:
-        board[73].SetObject( value );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( value );
         break;
     case CAT_WALL4:
-        board[96].SetObject( value );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
         break;
 
     case CAT_TOWER1:
@@ -976,13 +1001,13 @@ u32 Battle::Arena::GetCastleTargetValue( int target ) const
 {
     switch ( target ) {
     case CAT_WALL1:
-        return board[8].GetObject();
+        return board[CASTLE_FIRST_TOP_WALL_POS].GetObject();
     case CAT_WALL2:
-        return board[29].GetObject();
+        return board[CASTLE_SECOND_TOP_WALL_POS].GetObject();
     case CAT_WALL3:
-        return board[73].GetObject();
+        return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
     case CAT_WALL4:
-        return board[96].GetObject();
+        return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
 
     case CAT_TOWER1:
         return towers[0] && towers[0]->isValid();
@@ -1006,13 +1031,13 @@ std::vector<int> Battle::Arena::GetCastleTargets( void ) const
     targets.reserve( 8 );
 
     // check walls
-    if ( 0 != board[8].GetObject() )
+    if ( 0 != board[CASTLE_FIRST_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL1 );
-    if ( 0 != board[29].GetObject() )
+    if ( 0 != board[CASTLE_SECOND_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL2 );
-    if ( 0 != board[73].GetObject() )
+    if ( 0 != board[CASTLE_THIRD_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL3 );
-    if ( 0 != board[96].GetObject() )
+    if ( 0 != board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() )
         targets.push_back( CAT_WALL4 );
 
     // check right/left towers
@@ -1089,11 +1114,11 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
     u32 count = spell.ExtraValue() * hero->GetPower();
-    u32 acount = hero->HasArtifact( Artifact::BOOK_ELEMENTS );
+    uint32_t acount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
     if ( acount )
         count *= acount * 2;
 
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander() );
+    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator );
 
     if ( elem ) {
         elem->SetModes( CAP_SUMMONELEM );
@@ -1109,7 +1134,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
 Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 {
-    Unit * image = new Unit( b, pos, b.isReflect() );
+    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator );
 
     if ( image ) {
         b.SetMirror( image );
@@ -1134,7 +1159,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
 
     // check golden bow artifact
     const HeroBase * hero = attacker.GetCommander();
-    if ( hero && hero->HasArtifact( Artifact::GOLDEN_BOW ) )
+    if ( hero && hero->hasArtifact( Artifact::GOLDEN_BOW ) )
         return false;
 
     if ( castle == nullptr ) {
@@ -1156,13 +1181,10 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
-        if ( 0 == board[8].GetObject() && ( board[8].GetPos() & *it ) )
-            return false;
-        else if ( 0 == board[29].GetObject() && ( board[29].GetPos() & *it ) )
-            return false;
-        else if ( 0 == board[73].GetObject() && ( board[73].GetPos() & *it ) )
-            return false;
-        else if ( 0 == board[96].GetObject() && ( board[96].GetPos() & *it ) )
+        if ( ( 0 == board[CASTLE_FIRST_TOP_WALL_POS].GetObject() && ( board[CASTLE_FIRST_TOP_WALL_POS].GetPos() & *it ) )
+             || ( 0 == board[CASTLE_SECOND_TOP_WALL_POS].GetObject() && ( board[CASTLE_SECOND_TOP_WALL_POS].GetPos() & *it ) )
+             || ( 0 == board[CASTLE_THIRD_TOP_WALL_POS].GetObject() && ( board[CASTLE_THIRD_TOP_WALL_POS].GetPos() & *it ) )
+             || ( 0 == board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() && ( board[CASTLE_FOURTH_TOP_WALL_POS].GetPos() & *it ) ) )
             return false;
     }
 
@@ -1215,4 +1237,9 @@ bool Battle::Arena::CanBreakAutoBattle( void ) const
 void Battle::Arena::BreakAutoBattle( void )
 {
     auto_battle &= ~current_color;
+}
+
+const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const
+{
+    return _randomGenerator;
 }

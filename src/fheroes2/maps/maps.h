@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "math_base.h"
+#include "mp2.h"
 #include "types.h"
 
 #define TILEWIDTH 32
@@ -64,16 +65,16 @@ namespace Maps
     Indexes GetAroundIndexes( s32 );
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile );
 
-    Indexes ScanAroundObject( const int32_t center, const int obj );
-    Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj );
-    Indexes ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes );
+    Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
+    Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
+    Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
     Indexes GetFreeIndexesAroundTile( const int32_t center );
 
     Indexes GetTilesUnderProtection( int32_t center );
     bool TileIsUnderProtection( int32_t center );
 
-    Indexes GetObjectPositions( int obj, bool ignoreHeroes );
-    Indexes GetObjectPositions( int32_t center, int obj, bool ignoreHeroes );
+    Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
+    Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
     void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
 

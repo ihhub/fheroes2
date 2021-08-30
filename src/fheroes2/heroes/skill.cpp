@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <sstream>
 
 #include "game_static.h"
 #include "heroes.h"
@@ -435,9 +434,9 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
     case PATHFINDING:
         switch ( Level() ) {
         case Level::BASIC:
-        case Level::ADVANCED: {
+        case Level::ADVANCED:
             str = _( "%{skill} reduces the movement penalty for rough terrain by %{count} percent." );
-        } break;
+            break;
         case Level::EXPERT:
             str = _( "%{skill} eliminates the movement penalty for rough terrain." );
             break;
@@ -461,9 +460,9 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         str = _( "%{skill} allows you to negotiate with monsters who are weaker than your group. " );
         switch ( Level() ) {
         case Level::BASIC:
-        case Level::ADVANCED: {
+        case Level::ADVANCED:
             str.append( _( "Approximately %{count} percent of the creatures may offer to join you." ) );
-        } break;
+            break;
         case Level::EXPERT:
             str.append( _( "All of the creatures may offer to join you." ) );
             break;
@@ -658,12 +657,14 @@ std::vector<Skill::Secondary> & Skill::SecSkills::ToVector( void )
 
 std::string Skill::SecSkills::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << ( *it ).GetName() << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += it->GetName();
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 void Skill::SecSkills::FillMax( const Skill::Secondary & skill )
@@ -790,7 +791,7 @@ int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
 {
     const uint32_t shrineCount = world.GetKingdom( hero.GetColor() ).GetCountNecromancyShrineBuild();
-    const uint32_t artifactCount = hero.HasArtifact( Artifact::SPADE_NECROMANCY );
+    const uint32_t artifactCount = hero.artifactCount( Artifact::SPADE_NECROMANCY );
     // cap bonus at 7
     return std::min( 7u, shrineCount + artifactCount );
 }

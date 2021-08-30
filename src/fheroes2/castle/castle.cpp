@@ -1814,7 +1814,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_CAPTAIN:
             return ICN::TWNKCAPT;
         case BUILD_WEL2:
-            return ICN::TWNKWEL2;
+            return ICN::KNIGHT_CASTLE_RIGHT_FARM;
         case BUILD_LEFTTURRET:
             return ICN::TWNKLTUR;
         case BUILD_RIGHTTURRET:
@@ -1874,7 +1874,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_SPEC:
             return ICN::TWNNSPEC;
         case BUILD_CAPTAIN:
-            return ICN::TWNNCAPT;
+            return ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS;
         case BUILD_WEL2:
             return ICN::TWNNWEL2;
         case BUILD_LEFTTURRET:
@@ -2450,7 +2450,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonus if there are any troops defending it
     if ( isCastle() && totalStrength > 1 ) {
-        const Battle::Tower tower( *this, Battle::TWR_CENTER );
+        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ) );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
 
         totalStrength += towerStr;
@@ -2871,13 +2871,15 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
             res.append( "\n \n" );
             res.append( Battle::Board::GetMoatInfo() );
         }
-    } break;
+        break;
+    }
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
-    } break;
+        break;
+    }
 
     default:
         break;

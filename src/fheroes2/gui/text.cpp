@@ -39,36 +39,58 @@ namespace
     }
 }
 
-TextInterface::TextInterface( int ft )
-    : font( ft )
-{}
+class TextAscii
+{
+public:
+    TextAscii() = default;
+    TextAscii( const std::string & msg, int ft = Font::BIG );
+
+    void setText( const std::string & msg );
+    void setFont( int ft );
+    void clear();
+
+    int w() const;
+    int h() const;
+    size_t size() const;
+
+    int w( size_t s, size_t c ) const;
+    int h( int width ) const;
+
+    void blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() );
+    static int charWidth( const uint8_t character, const int ft );
+    static int fontHeight( const int ft );
+
+private:
+    int _font = Font::BIG;
+    std::string _message;
+};
 
 TextAscii::TextAscii( const std::string & msg, int ft )
-    : TextInterface( ft )
-    , message( msg )
+    : _font( ft )
+    , _message( msg )
 {}
 
-void TextAscii::SetText( const std::string & msg )
+void TextAscii::setText( const std::string & msg )
 {
-    message = msg;
+    _message = msg;
 }
 
-void TextAscii::SetFont( int ft )
+void TextAscii::setFont( int ft )
 {
-    font = ft;
+    _font = ft;
 }
 
-void TextAscii::Clear( void )
+void TextAscii::clear()
 {
-    message.clear();
+    _message.clear();
 }
 
-size_t TextAscii::Size( void ) const
+size_t TextAscii::size() const
 {
-    return message.size();
+    return _message.size();
 }
 
-int TextAscii::CharWidth( const uint8_t character, const int ft )
+int TextAscii::charWidth( const uint8_t character, const int ft )
 {
     if ( character < 0x21 || character > fheroes2::AGG::ASCIILastSupportedCharacter( ft ) ) {
         if ( isSmallFont( ft ) )
@@ -83,7 +105,7 @@ int TextAscii::CharWidth( const uint8_t character, const int ft )
     }
 }
 
-int TextAscii::FontHeight( const int f )
+int TextAscii::fontHeight( const int f )
 {
     if ( isSmallFont( f ) )
         return 8 + 2 + 1;
@@ -95,7 +117,7 @@ int TextAscii::FontHeight( const int f )
 
 int TextAscii::w( size_t s, size_t c ) const
 {
-    const size_t size = message.size();
+    const size_t size = _message.size();
     if ( size == 0 )
         return 0;
 
@@ -107,39 +129,39 @@ int TextAscii::w( size_t s, size_t c ) const
         c = size - s;
 
     for ( size_t i = s; i < s + c; ++i )
-        res += CharWidth( static_cast<uint8_t>( message[i] ), font );
+        res += charWidth( static_cast<uint8_t>( _message[i] ), _font );
 
     return res;
 }
 
-int TextAscii::w( void ) const
+int TextAscii::w() const
 {
-    return w( 0, message.size() );
+    return w( 0, _message.size() );
 }
 
-int TextAscii::h( void ) const
+int TextAscii::h() const
 {
     return h( 0 );
 }
 
 int TextAscii::h( int width ) const
 {
-    if ( message.empty() )
+    if ( _message.empty() )
         return 0;
 
     if ( 0 == width || w() <= width )
-        return FontHeight( font );
+        return fontHeight( _font );
 
     int res = 0;
     int www = 0;
 
-    std::string::const_iterator pos1 = message.begin();
-    std::string::const_iterator pos2 = message.end();
+    std::string::const_iterator pos1 = _message.begin();
+    std::string::const_iterator pos2 = _message.end();
     std::string::const_iterator space = pos2;
 
-    const uint32_t maxSupportedCharacter = fheroes2::AGG::ASCIILastSupportedCharacter( font );
+    const uint32_t maxSupportedCharacter = fheroes2::AGG::ASCIILastSupportedCharacter( _font );
 
-    const int fontHeight = FontHeight( font );
+    const int fontH = fontHeight( _font );
 
     while ( pos1 < pos2 ) {
         // To use std::isspace safely with plain chars (or signed chars), the argument should first be converted to unsigned char:
@@ -150,44 +172,44 @@ int TextAscii::h( int width ) const
             space = pos1;
         }
 
-        if ( www + CharWidth( character, font ) >= width ) {
+        if ( www + charWidth( character, _font ) >= width ) {
             www = 0;
-            res += fontHeight;
+            res += fontH;
             if ( pos2 != space )
                 pos1 = space + 1;
             space = pos2;
             continue;
         }
 
-        www += CharWidth( character, font );
+        www += charWidth( character, _font );
         ++pos1;
     }
 
     return res;
 }
 
-void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
+void TextAscii::blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst )
 {
-    if ( message.empty() )
+    if ( _message.empty() )
         return;
 
     int sx = ax;
 
-    const uint32_t maxSupportedCharacter = fheroes2::AGG::ASCIILastSupportedCharacter( font );
+    const uint32_t maxSupportedCharacter = fheroes2::AGG::ASCIILastSupportedCharacter( _font );
 
-    for ( std::string::const_iterator it = message.begin(); it != message.end(); ++it ) {
+    for ( const char ch : _message ) {
         if ( maxw && ( ax - sx ) >= maxw )
             break;
 
-        const uint8_t character = static_cast<uint8_t>( *it );
+        const uint8_t character = static_cast<uint8_t>( ch );
 
         // space or unknown letter
         if ( character < 0x21 || character > maxSupportedCharacter ) {
-            ax += CharWidth( character, font );
+            ax += charWidth( character, _font );
             continue;
         }
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetLetter( character, font );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetLetter( character, _font );
         if ( sprite.empty() )
             continue;
 
@@ -226,56 +248,56 @@ Text::~Text()
 
 void Text::Set( const std::string & msg, int ft )
 {
-    message->SetText( msg );
-    message->SetFont( ft );
+    message->setText( msg );
+    message->setFont( ft );
     gw = message->w();
     gh = message->h();
 }
 
 void Text::Set( const std::string & msg )
 {
-    message->SetText( msg );
+    message->setText( msg );
     gw = message->w();
     gh = message->h();
 }
 
 void Text::Set( int ft )
 {
-    message->SetFont( ft );
+    message->setFont( ft );
     gw = message->w();
     gh = message->h();
 }
 
 void Text::Clear( void )
 {
-    message->Clear();
+    message->clear();
     gw = 0;
     gh = 0;
 }
 
 size_t Text::Size( void ) const
 {
-    return message->Size();
+    return message->size();
 }
 
 void Text::Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst ) const
 {
-    return message->Blit( dst_pt.x, dst_pt.y, 0, dst );
+    return message->blit( dst_pt.x, dst_pt.y, 0, dst );
 }
 
 void Text::Blit( s32 ax, s32 ay, fheroes2::Image & dst ) const
 {
-    return message->Blit( ax, ay, 0, dst );
+    return message->blit( ax, ay, 0, dst );
 }
 
 void Text::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst ) const
 {
-    return message->Blit( ax, ay, maxw, dst );
+    return message->blit( ax, ay, maxw, dst );
 }
 
 int32_t Text::getCharacterWidth( const uint8_t character, const int fontType )
 {
-    return TextAscii::CharWidth( character, fontType );
+    return TextAscii::charWidth( character, fontType );
 }
 
 int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
@@ -357,7 +379,7 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
 
     const uint32_t maxSupportedCharacter = fheroes2::AGG::ASCIILastSupportedCharacter( ft );
 
-    const int fontHeight = TextAscii::FontHeight( ft );
+    const int fontHeight = TextAscii::fontHeight( ft );
 
     while ( pos2 < pos3 ) {
         // To use std::isspace safely with plain chars (or signed chars), the argument should first be converted to unsigned char:
@@ -367,7 +389,7 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
         if ( std::isspace( character ) || character > maxSupportedCharacter ) {
             space = pos2;
         }
-        const int charWidth = TextAscii::CharWidth( character, ft );
+        const int charWidth = TextAscii::charWidth( character, ft );
 
         if ( www + charWidth >= width_ ) {
             www = 0;

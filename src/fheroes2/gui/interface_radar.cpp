@@ -174,8 +174,8 @@ void Interface::Radar::Generate( void )
             else {
                 color = GetPaletteIndexFromGround( tile.GetGround() );
 
-                const int mapObject = tile.GetObject();
-                if ( mapObject == MP2::OBJ_MOUNTS || mapObject == MP2::OBJ_TREES )
+                const MP2::MapObjectType objectType = tile.GetObject();
+                if ( objectType == MP2::OBJ_MOUNTS || objectType == MP2::OBJ_TREES )
                     color += 3;
             }
 
@@ -310,7 +310,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     if ( hero )
                         fillColor = GetPaletteIndexFromColor( hero->GetColor() );
                 }
-            } break;
+                break;
+            }
 
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
@@ -319,7 +320,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     if ( castle )
                         fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 }
-            } break;
+                break;
+            }
 
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:

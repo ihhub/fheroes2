@@ -33,7 +33,8 @@ namespace fheroes2
     class Image
     {
     public:
-        Image( int32_t width_ = 0, int32_t height_ = 0 );
+        Image();
+        Image( int32_t width_, int32_t height_ );
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
@@ -98,7 +99,8 @@ namespace fheroes2
     class Sprite : public Image
     {
     public:
-        Sprite( int32_t width_ = 0, int32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
+        Sprite();
+        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & sprite );
         Sprite( Sprite && sprite ) noexcept;

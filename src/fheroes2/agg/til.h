@@ -35,8 +35,6 @@ namespace TIL
         // IMPORTANT! Put any new entry just above this one.
         LASTTIL
     };
-
-    const char * GetString( int );
 }
 
 #endif

@@ -62,9 +62,9 @@ namespace AI
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
-            int objectID = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.GetObject();
 
-            if ( !kingdom.isValidKingdomObject( tile, objectID ) )
+            if ( !kingdom.isValidKingdomObject( tile, objectType ) )
                 continue;
 
             const uint32_t regionID = tile.GetRegion();
@@ -75,14 +75,14 @@ namespace AI
             }
 
             RegionStats & stats = _regions[regionID];
-            if ( objectID != MP2::OBJ_COAST )
-                stats.validObjects.emplace_back( idx, objectID );
+            if ( objectType != MP2::OBJ_COAST )
+                stats.validObjects.emplace_back( idx, objectType );
 
             if ( !tile.isFog( color ) ) {
-                _mapObjects.emplace_back( idx, objectID );
+                _mapObjects.emplace_back( idx, objectType );
 
                 const int tileColor = tile.QuantityColor();
-                if ( objectID == MP2::OBJ_HEROES ) {
+                if ( objectType == MP2::OBJ_HEROES ) {
                     const Heroes * hero = tile.GetHeroes();
                     if ( !hero )
                         continue;
@@ -100,7 +100,7 @@ namespace AI
                         }
                     }
                 }
-                else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
+                else if ( objectType == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
                     if ( !castle )
                         continue;
@@ -113,7 +113,7 @@ namespace AI
                         stats.highestThreat = castleThreat;
                     }
                 }
-                else if ( objectID == MP2::OBJ_MONSTER ) {
+                else if ( objectType == MP2::OBJ_MONSTER ) {
                     stats.averageMonster += Army( tile ).GetStrength();
                     ++stats.monsterCount;
                 }
@@ -169,7 +169,7 @@ namespace AI
 
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
-            heroLimit++;
+            ++heroLimit;
         if ( slowEarlyGame )
             heroLimit = 2;
 

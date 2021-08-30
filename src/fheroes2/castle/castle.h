@@ -273,12 +273,12 @@ namespace CastleDialog
 
         bool IsFadeDone() const
         {
-            return _alpha >= 255;
+            return _alpha == 255;
         }
 
         void StopFadeBuilding();
 
-        uint32_t GetAlpha() const
+        uint8_t GetAlpha() const
         {
             return _alpha;
         }
@@ -289,7 +289,7 @@ namespace CastleDialog
         }
 
     private:
-        uint32_t _alpha;
+        uint8_t _alpha;
         uint32_t _build;
     };
 
@@ -319,9 +319,6 @@ namespace CastleDialog
 
     void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
     void CastleRedrawBuildingExtended( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
-
-    bool RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress );
-    void RedrawRoadConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha = 255 );
 }
 
 struct VecCastles : public std::vector<Castle *>

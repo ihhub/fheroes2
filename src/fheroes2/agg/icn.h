@@ -27,7 +27,7 @@
 
 namespace ICN
 {
-    enum
+    enum : int
     {
         UNKNOWN,
         ADVBORDE,
@@ -945,6 +945,12 @@ namespace ICN
         DISMISS_HERO_DISABLED_BUTTON,
         NEW_CAMPAIGN_DISABLED_BUTTON,
         MAX_DISABLED_BUTTON,
+
+        KNIGHT_CASTLE_RIGHT_FARM,
+        KNIGHT_CASTLE_LEFT_FARM,
+
+        NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS,
+        NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

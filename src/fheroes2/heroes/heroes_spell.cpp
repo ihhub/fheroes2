@@ -70,33 +70,43 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
-    CastleIndexListBox( const fheroes2::Point & pt, int & res, const bool isEvilInterface )
-        : Interface::ListBox<s32>( pt )
+    CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const bool isEvilInterface )
+        : Interface::ListBox<int32_t>( offset )
         , result( res )
         , _townFrameIcnId( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD )
         , _listBoxIcnId( isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX )
+        , _area( area )
     {}
 
     void RedrawItem( const s32 &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
 
-    void ActionCurrentDn( void ) override {}
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
 
     void ActionListDoubleClick( s32 & ) override
     {
         result = Dialog::OK;
     }
 
-    void ActionListSingleClick( s32 & ) override {}
+    void ActionListSingleClick( s32 & ) override
+    {
+        // Do nothing.
+    }
 
     void ActionListPressRight( int32_t & index ) override
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
         if ( castle != nullptr ) {
-            Dialog::QuickInfo( *castle );
+            Dialog::QuickInfo( *castle, _area );
         }
     }
 
@@ -105,6 +115,7 @@ public:
 private:
     int _townFrameIcnId;
     int _listBoxIcnId;
+    const fheroes2::Rect _area;
 };
 
 void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool current )
@@ -505,10 +516,10 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 280, 250 ) );
 
-    const fheroes2::Rect area( frameborder->activeArea() );
+    const fheroes2::Rect & area = frameborder->activeArea();
     int result = Dialog::ZERO;
 
-    CastleIndexListBox listbox( area.getPosition(), result, isEvilInterface );
+    CastleIndexListBox listbox( frameborder->windowArea(), area.getPosition(), result, isEvilInterface );
 
     const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
     listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );

@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cassert>
 #include <cstring>
 #include <map>
@@ -26,6 +27,7 @@
 #include "agg.h"
 #include "agg_file.h"
 #include "agg_image.h"
+#include "h2d.h"
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
@@ -37,6 +39,26 @@
 
 namespace
 {
+    const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
+
+    std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
+    std::vector<std::vector<std::vector<fheroes2::Image>>> _tilVsImage( TIL::LASTTIL );
+    const fheroes2::Sprite errorImage;
+
+    const uint32_t headerSize = 6;
+
+    std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
+
+    bool IsValidICNId( int id )
+    {
+        return id >= 0 && static_cast<size_t>( id ) < _icnVsSprite.size();
+    }
+
+    bool IsValidTILId( int id )
+    {
+        return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
+    }
+
     fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points )
     {
         fheroes2::Image digit( width, height );
@@ -75,24 +97,6 @@ namespace fheroes2
 {
     namespace AGG
     {
-        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite( ICN::LASTICN );
-        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage( TIL::LASTTIL );
-        const fheroes2::Sprite errorImage;
-
-        const uint32_t headerSize = 6;
-
-        std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
-
-        bool IsValidICNId( int id )
-        {
-            return id >= 0 && static_cast<size_t>( id ) < _icnVsSprite.size();
-        }
-
-        bool IsValidTILId( int id )
-        {
-            return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
-        }
-
         void LoadOriginalICN( int id )
         {
             const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
@@ -937,6 +941,49 @@ namespace fheroes2
                 Blit( common, output );
                 return true;
             }
+            case ICN::KNIGHT_CASTLE_RIGHT_FARM: {
+                _icnVsSprite[id].resize( 1 );
+                Sprite & output = _icnVsSprite[id][0];
+                output = GetICN( ICN::TWNKWEL2, 0 );
+
+                ApplyPalette( output, 28, 21, output, 28, 21, 39, 1, 8 );
+                ApplyPalette( output, 0, 22, output, 0, 22, 69, 1, 8 );
+                ApplyPalette( output, 0, 23, output, 0, 23, 53, 1, 8 );
+                ApplyPalette( output, 0, 24, output, 0, 24, 54, 1, 8 );
+                ApplyPalette( output, 0, 25, output, 0, 25, 62, 1, 8 );
+                return true;
+            }
+            case ICN::KNIGHT_CASTLE_LEFT_FARM:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "knight_castle_left_farm.image", _icnVsSprite[id][0] );
+                return true;
+            case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
+                _icnVsSprite[id].resize( 1 );
+                Sprite & output = _icnVsSprite[id][0];
+                const Sprite & original = GetICN( ICN::TWNNCAPT, 0 );
+
+                output = Crop( original, 21, 0, original.width() - 21, original.height() );
+                output.setPosition( original.x() + 21, original.y() );
+
+                for ( int32_t y = 47; y < output.height(); ++y ) {
+                    SetTransformPixel( output, 0, y, 1 );
+                }
+
+                const Sprite & castle = GetICN( ICN::TWNNCSTL, 0 );
+                Copy( castle, 402, 123, output, 1, 56, 2, 11 );
+
+                return true;
+            }
+            case ICN::NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE: {
+                _icnVsSprite[id].resize( 1 );
+                Sprite & output = _icnVsSprite[id][0];
+                const Sprite & original = GetICN( ICN::TWNNCAPT, 0 );
+
+                output = Crop( original, 0, 0, 23, original.height() );
+                output.setPosition( original.x(), original.y() );
+
+                return true;
+            }
             default:
                 break;
             }
@@ -958,7 +1005,7 @@ namespace fheroes2
             if ( _tilVsImage[id].empty() ) {
                 _tilVsImage[id].resize( 4 ); // 4 possible sides
 
-                const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
+                const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
                 if ( data.size() < headerSize ) {
                     return 0;
                 }

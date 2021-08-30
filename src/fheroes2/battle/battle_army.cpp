@@ -127,7 +127,7 @@ Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
     return it == end() ? nullptr : *it;
 }
 
-Battle::Force::Force( Army & parent, bool opposite )
+Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator )
     : army( parent )
 {
     uids.reserve( army.Size() );
@@ -138,7 +138,7 @@ Battle::Force::Force( Army & parent, bool opposite )
         u32 uid = 0;
 
         if ( troop && troop->isValid() ) {
-            push_back( new Unit( *troop, ( opposite ? position + 10 : position ), opposite ) );
+            push_back( new Unit( *troop, opposite ? position + 10 : position, opposite, randomGenerator ) );
             back()->SetArmy( army );
             uid = back()->GetUID();
         }
@@ -209,7 +209,7 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
     const HeroBase * commander = GetCommander();
     if ( commander ) {
         const Artifact art( Artifact::STATESMAN_QUILL );
-        double mod = commander->HasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+        double mod = commander->hasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
 
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
         case Skill::Level::BASIC:

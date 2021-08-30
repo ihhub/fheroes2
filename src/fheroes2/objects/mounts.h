@@ -23,6 +23,7 @@
 #ifndef H2MOUNTS_H
 #define H2MOUNTS_H
 
+#include "mp2.h"
 #include "types.h"
 
 namespace ObjMnts1
@@ -30,7 +31,7 @@ namespace ObjMnts1
     bool isAction( u32 index );
     bool isShadow( u32 index );
     int GetPassable( int icn, u32 index );
-    int GetActionObject( u32 index );
+    MP2::MapObjectType GetActionObject( u32 index );
 }
 
 namespace ObjMnts2
@@ -38,7 +39,7 @@ namespace ObjMnts2
     bool isAction( u32 index );
     bool isShadow( u32 index );
     int GetPassable( int icn, u32 index );
-    int GetActionObject( u32 index );
+    MP2::MapObjectType GetActionObject( u32 index );
 }
 
 #endif

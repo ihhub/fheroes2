@@ -93,7 +93,7 @@ namespace
         return std::atan2( end.y - start.y, end.x - start.x );
     }
 
-    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
+    std::vector<std::pair<LightningPoint, LightningPoint>> GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
     {
         const int distance = static_cast<int>( getDistance( src, dst ) );
         const double angle = getAngle( src, dst );
@@ -104,13 +104,13 @@ namespace
         if ( iterationCount > 5 )
             iterationCount = 5;
 
-        std::vector<std::pair<LightningPoint, LightningPoint> > lines;
+        std::vector<std::pair<LightningPoint, LightningPoint>> lines;
         lines.emplace_back( LightningPoint( fheroes2::Point( 0, 0 ), 5 ), LightningPoint( fheroes2::Point( distance, 0 ), 3 ) );
 
         int maxOffset = distance;
 
         for ( int step = 0; step < iterationCount; ++step ) {
-            std::vector<std::pair<LightningPoint, LightningPoint> > oldLines;
+            std::vector<std::pair<LightningPoint, LightningPoint>> oldLines;
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
@@ -151,7 +151,7 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, uint8_t color, fheroes2::Image & surface,
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint>> & lightning, uint8_t color, fheroes2::Image & surface,
                           const fheroes2::Rect & roi = fheroes2::Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
@@ -270,11 +270,30 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        void ActionCurrentUp( void ) override {}
-        void ActionCurrentDn( void ) override {}
-        void ActionListDoubleClick( std::string & ) override {}
-        void ActionListSingleClick( std::string & ) override {}
-        void ActionListPressRight( std::string & ) override {}
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListDoubleClick( std::string & ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListSingleClick( std::string & ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListPressRight( std::string & ) override
+        {
+            // Do nothing.
+        }
 
         void SetOpenLog( const bool f )
         {
@@ -327,7 +346,7 @@ namespace Battle
         const int heroType = matchHeroType( hero );
         static std::vector<int> sorrowAnim;
         if ( sorrowAnim.empty() ) {
-            const int sorrowArray[9] = {2, 3, 4, 5, 4, 5, 4, 3, 2};
+            const int sorrowArray[9] = { 2, 3, 4, 5, 4, 5, 4, 3, 2 };
             sorrowAnim.insert( sorrowAnim.begin(), sorrowArray, sorrowArray + 9 );
         }
 
@@ -339,13 +358,21 @@ namespace Battle
         if ( heroTypeAnim[heroType][animation].empty() ) {
             const int sourceArray[7][9][9] = {
                 //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
-                {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
-                {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
-                {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
-                {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
-                {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
-                {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
+                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
+                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
+                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
+                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
+                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
+                { { 6, 7, 6, 7, 6, 7 },
+                  { 7, 8, 9, 10, 11 },
+                  { 10, 9, 7 },
+                  { 7, 12, 13, 14, 15 },
+                  { 7 },
+                  { 7, 12, 13, 14, 16 },
+                  { 7 },
+                  { 17 },
+                  { 18, 19 } }, // NECROMANCER
+                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
             };
 
             for ( int frame = 0; frame < 9; ++frame ) {
@@ -1046,11 +1073,11 @@ void Battle::Interface::UpdateContourColor()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        static const uint8_t contourColorTable[] = { 108, 115, 122, 129, 122, 115 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        static const uint8_t contourColorTable[] = { 110, 114, 118, 122, 126, 122, 118, 114 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
@@ -1127,9 +1154,9 @@ void Battle::Interface::RedrawArmies()
     const Castle * castle = Arena::GetCastle();
 
     const int32_t wallCellIds[ARENAH]
-        = {Board::CASTLE_FIRST_TOP_WALL_POS, Board::CASTLE_TOP_ARCHER_TOWER_POS,  Board::CASTLE_SECOND_TOP_WALL_POS, Board::CASTLE_TOP_GATE_TOWER_POS,
-           Board::CASTLE_GATE_POS,           Board::CASTLE_BOTTOM_GATE_TOWER_POS, Board::CASTLE_THIRD_TOP_WALL_POS,  Board::CASTLE_BOTTOM_ARCHER_TOWER_POS,
-           Board::CASTLE_FORTH_TOP_WALL_POS};
+        = { Arena::CASTLE_FIRST_TOP_WALL_POS, Arena::CASTLE_TOP_ARCHER_TOWER_POS,  Arena::CASTLE_SECOND_TOP_WALL_POS, Arena::CASTLE_TOP_GATE_TOWER_POS,
+            Arena::CASTLE_GATE_POS,           Arena::CASTLE_BOTTOM_GATE_TOWER_POS, Arena::CASTLE_THIRD_TOP_WALL_POS,  Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS,
+            Arena::CASTLE_FOURTH_TOP_WALL_POS };
 
     if ( castle == nullptr ) {
         RedrawKilled();
@@ -1148,7 +1175,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawCastleMainTower( *castle );
             }
             else if ( cellRowId == 7 ) { // Redraw catapult.
-                RedrawCastle2( *castle, Board::CATAPULT_POS );
+                RedrawCastle2( *castle, Arena::CATAPULT_POS );
             }
 
             std::vector<const Unit *> deadTroopBeforeWall;
@@ -1174,7 +1201,7 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     isCellBefore = cellId > wallCellId;
-                    if ( ( wallCellId == Board::CASTLE_THIRD_TOP_WALL_POS || wallCellId == Board::CASTLE_FORTH_TOP_WALL_POS )
+                    if ( ( wallCellId == Arena::CASTLE_THIRD_TOP_WALL_POS || wallCellId == Arena::CASTLE_FOURTH_TOP_WALL_POS )
                          && Board::GetCell( wallCellId )->GetObject() == 0 ) {
                         isCellBefore = false;
                     }
@@ -1600,80 +1627,35 @@ int CursorTypeToDirection( const int cursorType )
     return direction;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSwordCursor( const Cell * cell, int cursorType ) const
+std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSwordCursor( int cursorType ) const
 {
-    std::set<const Battle::Cell *> highlightCells;
-    highlightCells.emplace( cell );
+    int direction = CursorTypeToDirection( cursorType );
+    const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
 
-    const int direction = CursorTypeToDirection( cursorType );
-    const Cell * attackerCell = Board::GetCell( index_pos, direction );
-    assert( attackerCell != nullptr );
+    assert( pos.GetHead() != nullptr );
 
-    if ( attackerCell->GetIndex() == _currentUnit->GetHeadIndex() ) {
-        // The attacking unit is already there and shouldn't move
-        highlightCells.emplace( _currentUnit->GetPosition().GetHead() );
+    std::set<const Battle::Cell *> result;
+    result.emplace( pos.GetHead() );
 
-        if ( _currentUnit->isWide() ) {
-            highlightCells.emplace( _currentUnit->GetPosition().GetTail() );
-        }
+    if ( _currentUnit->isWide() ) {
+        assert( pos.GetTail() != nullptr );
+
+        result.emplace( pos.GetTail() );
     }
-    else {
-        highlightCells.emplace( attackerCell );
-
-        if ( _currentUnit->isWide() ) {
-            int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
-
-            if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
-                const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
-
-                if ( attackerTailCell != nullptr && attackerTailCell->GetDirection() != UNKNOWN
-                     && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
-                    highlightCells.emplace( attackerTailCell );
-                }
-            }
-
-            if ( highlightCells.size() == 2 ) {
-                // Try opposite direction
-                tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
-
-                if ( Board::isValidDirection( attackerCell->GetIndex(), tailDirection ) ) {
-                    const Cell * attackerTailCell = Board::GetCell( Board::GetIndexDirection( attackerCell->GetIndex(), tailDirection ) );
-
-                    if ( attackerTailCell != nullptr && attackerTailCell->GetDirection() != UNKNOWN
-                         && ( attackerTailCell->GetUnit() == nullptr || attackerTailCell->GetUnit() == _currentUnit ) ) {
-                        highlightCells.emplace( attackerTailCell );
-                    }
-                }
-            }
-        }
-    }
-    return highlightCells;
+    return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsForWideUnit( const Cell * cell ) const
+std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsForWideUnit() const
 {
-    std::set<const Battle::Cell *> highlightCells;
-    highlightCells.emplace( cell );
-    int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
+    const Position pos = Position::GetReachable( *_currentUnit, index_pos );
 
-    if ( Board::isValidDirection( index_pos, tailDirection ) ) {
-        const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
-        if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
-            highlightCells.emplace( tailCell );
-        }
-    }
+    assert( pos.GetHead() != nullptr );
+    assert( pos.GetTail() != nullptr );
 
-    if ( highlightCells.size() == 1 ) {
-        // Try opposite direction
-        tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
-        if ( Board::isValidDirection( index_pos, tailDirection ) ) {
-            const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
-            if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
-                highlightCells.emplace( tailCell );
-            }
-        }
-    }
-    return highlightCells;
+    std::set<const Battle::Cell *> result;
+    result.emplace( pos.GetHead() );
+    result.emplace( pos.GetTail() );
+    return result;
 }
 
 std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnAreaShot( const Cell * cell ) const
@@ -1702,11 +1684,11 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCells( const
         highlightCells = CalculateHighlightCellsOnAreaShot( cell );
     }
     else if ( _currentUnit->GetTailIndex() != -1 && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
-        highlightCells = CalculateHighlightCellsForWideUnit( cell );
+        highlightCells = CalculateHighlightCellsForWideUnit();
     }
     else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
               || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
-        highlightCells = CalculateHighlightCellsOnSwordCursor( cell, cursorType );
+        highlightCells = CalculateHighlightCellsOnSwordCursor( cursorType );
     }
     else {
         highlightCells.emplace( cell );
@@ -1740,24 +1722,17 @@ void Battle::Interface::RedrawCover()
         const HeroBase * currentCommander = arena.GetCurrentCommander();
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
-        const bool displayMoveShadow = conf.BattleShowMoveShadow();
-
         for ( const Cell * highlightCell : CalculateHighlightCells( cell, cursorType ) ) {
             bool isApplicable = highlightCell->isPassable1( false );
+
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
+
                 isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower );
             }
 
             if ( isApplicable ) {
-                if ( displayMoveShadow && ( highlightCell->GetDirection() == UNKNOWN || highlightCell->GetUnit() != nullptr ) ) {
-                    fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
-                }
-
                 fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
-            }
-            else {
-                fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
         }
     }
@@ -1793,15 +1768,15 @@ void Battle::Interface::RedrawCoverStatic()
 void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
 {
     if ( conf.BattleShowGrid() ) { // grid
-        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            fheroes2::Blit( sf_hexagon, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+        for ( const Cell & cell : board ) {
+            fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
     }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
-        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() ) {
-                fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+        for ( const Cell & cell : board ) {
+            if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
+                fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
         }
     }
@@ -1854,11 +1829,11 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
 {
     const int castleIcnId = ICN::Get4Castle( castle.GetRace() );
 
-    if ( Board::CATAPULT_POS == cellId ) {
+    if ( Arena::CATAPULT_POS == cellId ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
         fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
-    else if ( Board::CASTLE_GATE_POS == cellId ) {
+    else if ( Arena::CASTLE_GATE_POS == cellId ) {
         const Bridge * bridge = Arena::GetBridge();
         assert( bridge != nullptr );
         if ( bridge != nullptr && !bridge->isDestroy() ) {
@@ -1866,22 +1841,22 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
         }
     }
-    else if ( Board::CASTLE_FIRST_TOP_WALL_POS == cellId || Board::CASTLE_SECOND_TOP_WALL_POS == cellId || Board::CASTLE_THIRD_TOP_WALL_POS == cellId
-              || Board::CASTLE_FORTH_TOP_WALL_POS == cellId ) {
+    else if ( Arena::CASTLE_FIRST_TOP_WALL_POS == cellId || Arena::CASTLE_SECOND_TOP_WALL_POS == cellId || Arena::CASTLE_THIRD_TOP_WALL_POS == cellId
+              || Arena::CASTLE_FOURTH_TOP_WALL_POS == cellId ) {
         uint32_t index = 0;
         const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
 
         switch ( cellId ) {
-        case Board::CASTLE_FIRST_TOP_WALL_POS:
+        case Arena::CASTLE_FIRST_TOP_WALL_POS:
             index = 5;
             break;
-        case Board::CASTLE_SECOND_TOP_WALL_POS:
+        case Arena::CASTLE_SECOND_TOP_WALL_POS:
             index = 6;
             break;
-        case Board::CASTLE_THIRD_TOP_WALL_POS:
+        case Arena::CASTLE_THIRD_TOP_WALL_POS:
             index = 7;
             break;
-        case Board::CASTLE_FORTH_TOP_WALL_POS:
+        case Arena::CASTLE_FOURTH_TOP_WALL_POS:
             index = 8;
             break;
         default:
@@ -1925,7 +1900,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
-    else if ( Board::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
         const Tower * ltower = Arena::GetTower( TWR_LEFT );
         uint32_t index = 17;
 
@@ -1935,7 +1910,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
-    else if ( Board::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
         const Tower * rtower = Arena::GetTower( TWR_RIGHT );
         uint32_t index = 17;
 
@@ -1945,11 +1920,11 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
-    else if ( Board::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
-    else if ( Board::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
+    else if ( Arena::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }
@@ -2154,7 +2129,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 }
             }
         }
-        else if ( cell->isPassable3( *_currentUnit, false ) && UNKNOWN != cell->GetDirection() ) {
+        else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
             statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
             StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
             return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
@@ -2678,32 +2653,10 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
     const Unit * b = cell.GetUnit();
 
     if ( _currentUnit ) {
-        auto fixupTargetIndex = []( const Unit * unit, const int32_t dst ) {
-            // only wide units may need this fixup
-            if ( !unit->isWide() ) {
-                return dst;
-            }
-
-            const Position pos = Position::GetCorrect( *unit, dst );
-            assert( pos.GetTail() != nullptr );
-
-            // destination cell is on the border of the cell space available to the unit
-            // and it should be the tail cell of the unit, return the head cell instead
-            if ( pos.GetTail()->GetDirection() == UNKNOWN ) {
-                const int headDirection = unit->isReflect() ? LEFT : RIGHT;
-
-                if ( Board::isValidDirection( dst, headDirection ) ) {
-                    return Board::GetIndexDirection( dst, headDirection );
-                }
-            }
-
-            return dst;
-        };
-
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupTargetIndex( _currentUnit, index ) ) );
+            a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupDestinationCell( *_currentUnit, index ) ) );
             a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
@@ -2718,10 +2671,11 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
             const int dir = GetDirectionFromCursorSword( themes );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
-                const s32 move = Board::GetIndexDirection( index, dir );
+                const int32_t move = Board::FixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
-                if ( _currentUnit->GetHeadIndex() != move )
-                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupTargetIndex( _currentUnit, move ) ) );
+                if ( _currentUnit->GetHeadIndex() != move ) {
+                    a.push_back( Command( MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );
+                }
                 a.push_back( Command( MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                 humanturn_exit = true;
@@ -4746,7 +4700,8 @@ fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellIC
         // Overwrite result with custom blind value
         result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
         result.y += offset.y;
-    } break;
+        break;
+    }
     case ICN::STONSKIN:
     case ICN::STELSKIN:
         // bottom center point
@@ -5000,7 +4955,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
             else
                 Dialog::Message( "", _( "No spells to cast." ), Font::BIG, Dialog::OK );
         }
-    } break;
+        break;
+    }
 
     // retreat
     case 2: {
@@ -5011,9 +4967,11 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 humanturn_exit = true;
             }
         }
-        else
+        else {
             Dialog::Message( "", _( "Retreat disabled" ), Font::BIG, Dialog::OK );
-    } break;
+        }
+        break;
+    }
 
     // surrender
     case 3: {
@@ -5031,9 +4989,11 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 }
             }
         }
-        else
+        else {
             Dialog::Message( "", _( "Surrender disabled" ), Font::BIG, Dialog::OK );
-    } break;
+        }
+        break;
+    }
 
     default:
         break;

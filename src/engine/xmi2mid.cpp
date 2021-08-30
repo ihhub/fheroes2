@@ -144,25 +144,12 @@ struct GroupChunkHeader
     u32 length;
     u32 type; // 4 byte ASCII string
 
-    GroupChunkHeader( u32 id, u32 sz, u32 tp )
-        : ID( id )
-        , length( sz )
-        , type( tp )
-    {}
     GroupChunkHeader()
         : ID( 0 )
         , length( 0 )
         , type( 0 )
     {}
 };
-
-StreamBuf & operator<<( StreamBuf & sb, const GroupChunkHeader & st )
-{
-    sb.putBE32( st.ID );
-    sb.putBE32( st.length );
-    sb.putBE32( st.type );
-    return sb;
-}
 
 StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
 {
@@ -369,7 +356,7 @@ struct MidiEvents : std::vector<MidiChunk>
                     switch ( *ptr >> 4 ) {
                     // metadata
                     case 0x0F: {
-                        ptr++; // skip 0xFF
+                        ++ptr; // skip 0xFF
                         const uint8_t metaType = *( ptr++ );
                         const uint8_t metaLength = *( ptr++ );
                         emplace_back( delta, 0xFF, metaType, ptr, metaLength );
@@ -379,17 +366,18 @@ struct MidiEvents : std::vector<MidiChunk>
                             trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
                         }
                         ptr += metaLength;
-                    } break;
+                        break;
+                    }
 
                     // key pressure
                     case 0x0A:
                     // control change
                     case 0x0B:
                     // pitch bend
-                    case 0x0E: {
+                    case 0x0E:
                         emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
                         ptr += 3;
-                    } break;
+                        break;
 
                     // XMI events doesn't have note off events
                     // note on
@@ -399,15 +387,16 @@ struct MidiEvents : std::vector<MidiChunk>
                         // note off
                         emplace_back( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F );
                         ptr += 3 + duration.second;
-                    } break;
+                        break;
+                    }
 
                     // program change
                     case 0x0C:
                     // channel aftertouch
-                    case 0x0D: {
+                    case 0x0D:
                         emplace_back( delta, *ptr, *( ptr + 1 ) );
                         ptr += 2;
-                    } break;
+                        break;
 
                     // unused command
                     default:

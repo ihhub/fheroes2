@@ -249,7 +249,8 @@ namespace
                 if ( hero != nullptr ) {
                     hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
                 }
-            } break;
+                break;
+            }
             case Campaign::ScenarioBonusData::TROOP:
                 kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 break;
@@ -260,7 +261,8 @@ namespace
                     // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
                     heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
                 }
-            } break;
+                break;
+            }
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
                 break;

@@ -89,7 +89,7 @@ namespace
         { 0, 1, TYPE3, _( "Armored Gauntlets of Protection" ), _( "The %{name} increase your defense skill by %{count}." ) },
         { 0, 1, TYPE3, _( "Defender Helm of Protection" ), _( "The %{name} increases your defense skill by %{count}." ) },
         { 0, 1, TYPE3, _( "Giant Flail of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 2, TYPE0, _( "Ballista of Quickness" ), _( "The %{name} lets your catapult fire twice per combat round." ) },
+        { 0, 1, TYPE0, _( "Ballista of Quickness" ), _( "The %{name} lets your catapult fire twice per combat round." ) },
         { 0, 2, TYPE3, _( "Stealth Shield of Protection" ), _( "The %{name} increases your defense skill by %{count}." ) },
         { 0, 3, TYPE3, _( "Dragon Sword of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
         { 0, 2, TYPE3, _( "Power Axe of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
@@ -807,12 +807,14 @@ void BagArtifacts::RemoveScroll( const Artifact & art )
 
 std::string BagArtifacts::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << ( *it ).GetName() << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += it->GetName();
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 u32 BagArtifacts::Count( const Artifact & art ) const
@@ -820,9 +822,9 @@ u32 BagArtifacts::Count( const Artifact & art ) const
     return static_cast<uint32_t>( std::count( begin(), end(), art ) ); // no way that we have more than 4 billion artifacts
 }
 
-u32 GoldInsteadArtifact( int obj )
+u32 GoldInsteadArtifact( const MP2::MapObjectType objectType )
 {
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_SHIPWRECKSURVIROR:

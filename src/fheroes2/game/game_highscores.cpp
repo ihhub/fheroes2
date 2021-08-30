@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <ctime>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -53,7 +52,8 @@
 struct hgs_t
 {
     hgs_t()
-        : days( 0 )
+        : localtime( 0 )
+        , days( 0 )
         , rating( 0 )
     {}
 
@@ -199,12 +199,11 @@ fheroes2::GameMode Game::HighScores()
 
     HGSData hgs;
 
-    std::ostringstream stream;
-    stream << System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
+    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    hgs.Load( stream.str() );
+    hgs.Load( highScoreDataPath );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
@@ -234,7 +233,7 @@ fheroes2::GameMode Game::HighScores()
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
-        hgs.Save( stream.str() );
+        hgs.Save( highScoreDataPath );
         hgs.RedrawList( top.x, top.y );
         buttonCampain.draw();
         buttonExit.draw();

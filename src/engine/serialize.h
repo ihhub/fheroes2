@@ -23,12 +23,15 @@
 #ifndef H2SERIALIZE_H
 #define H2SERIALIZE_H
 
+#include <algorithm>
 #include <cstdio>
 #include <list>
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
+#include "endian_h2.h"
 #include "math_base.h"
 #include "types.h"
 
@@ -247,10 +250,11 @@ protected:
 
 class StreamFile : public StreamBase
 {
-    StreamFile( const StreamFile & ) {}
-
 public:
     StreamFile();
+    StreamFile( const StreamFile & ) = delete;
+    StreamFile & operator=( const StreamFile & ) = delete;
+
     ~StreamFile() override;
 
     size_t size( void ) const;
@@ -280,11 +284,6 @@ public:
     std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    StreamFile & operator=( const StreamFile & )
-    {
-        return *this;
-    }
-
     size_t sizeg( void ) const override;
     size_t sizep( void ) const override;
     size_t tellg( void ) const override;
@@ -312,5 +311,28 @@ private:
             std::fwrite( &val, sizeof( T ), 1, _file );
     }
 };
+
+namespace fheroes2
+{
+    // Get a value of type T in the system byte order from the buffer in which it was originally stored in the little-endian byte order
+    template <typename T, typename = typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
+    T getLEValue( const char * data, const size_t base, const size_t offset = 0 )
+    {
+        const char * begin = data + base + offset * sizeof( T );
+        const char * end = begin + sizeof( T );
+
+        T result;
+
+#if defined( BYTE_ORDER ) && defined( LITTLE_ENDIAN ) && BYTE_ORDER == LITTLE_ENDIAN
+        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
+#elif defined( BYTE_ORDER ) && defined( BIG_ENDIAN ) && BYTE_ORDER == BIG_ENDIAN
+        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
+#else
+        static_assert( false, "Unknown byte order" );
+#endif
+
+        return result;
+    }
+}
 
 #endif

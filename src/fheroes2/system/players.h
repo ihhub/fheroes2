@@ -82,11 +82,11 @@ struct Focus : std::pair<int, void *>
 
     Castle * GetCastle( void )
     {
-        return first == FOCUS_CASTLE && second ? reinterpret_cast<Castle *>( second ) : nullptr;
+        return first == FOCUS_CASTLE && second ? static_cast<Castle *>( second ) : nullptr;
     }
     Heroes * GetHeroes( void )
     {
-        return first == FOCUS_HEROES && second ? reinterpret_cast<Heroes *>( second ) : nullptr;
+        return first == FOCUS_HEROES && second ? static_cast<Heroes *>( second ) : nullptr;
     }
 };
 
