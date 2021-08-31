@@ -113,6 +113,8 @@ namespace AI
         bool _defendingCastle = false;
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
+
+        const Rand::DeterministicRandomGenerator * _randomGenerator = nullptr;
     };
 
     class Normal : public Base
@@ -140,6 +142,10 @@ namespace AI
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
+
+        double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+
+        double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
     };
 }
 

@@ -995,131 +995,59 @@ int Army::GetMorale( void ) const
     return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( nullptr );
 }
 
-// TODO:: need optimize
 int Army::GetMoraleModificator( std::string * strs ) const
 {
+    // different race penalty
+    std::set<int> races;
+    bool hasUndead = false;
+    bool allUndead = true;
+
+    for ( const Troop * troop : *this )
+        if ( troop->isValid() ) {
+            races.insert( troop->GetRace() );
+            hasUndead = hasUndead || troop->isUndead();
+            allUndead = allUndead && troop->isUndead();
+        }
+
+    if ( allUndead )
+        return Morale::NORMAL;
+
     int result = Morale::NORMAL;
 
-    // different race penalty
-    u32 count = 0;
-    u32 count_kngt = 0;
-    u32 count_barb = 0;
-    u32 count_sorc = 0;
-    u32 count_wrlk = 0;
-    u32 count_wzrd = 0;
-    u32 count_necr = 0;
-    u32 count_bomg = 0;
-    bool ghost_present = false;
+    // artifact "Arm of the Martyr" adds the undead morale penalty
+    hasUndead = hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) );
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            switch ( ( *it )->GetRace() ) {
-            case Race::KNGT:
-                ++count_kngt;
-                break;
-            case Race::BARB:
-                ++count_barb;
-                break;
-            case Race::SORC:
-                ++count_sorc;
-                break;
-            case Race::WRLK:
-                ++count_wrlk;
-                break;
-            case Race::WZRD:
-                ++count_wzrd;
-                break;
-            case Race::NECR:
-                ++count_necr;
-                break;
-            case Race::NONE:
-                ++count_bomg;
-                break;
-            default:
-                break;
-            }
-            if ( ( *it )->GetID() == Monster::GHOST )
-                ghost_present = true;
-        }
-
-    u32 r = Race::MULT;
-    if ( count_kngt ) {
-        ++count;
-        r = Race::KNGT;
-    }
-    if ( count_barb ) {
-        ++count;
-        r = Race::BARB;
-    }
-    if ( count_sorc ) {
-        ++count;
-        r = Race::SORC;
-    }
-    if ( count_wrlk ) {
-        ++count;
-        r = Race::WRLK;
-    }
-    if ( count_wzrd ) {
-        ++count;
-        r = Race::WZRD;
-    }
-    if ( count_necr ) {
-        ++count;
-        r = Race::NECR;
-    }
-    if ( count_bomg ) {
-        ++count;
-        r = Race::NONE;
-    }
-    const bool hasDifferentTroops = !AllTroopsAreTheSame();
-
+    const int count = static_cast<int>( races.size() );
     switch ( count ) {
-    case 2:
     case 0:
+    case 2:
         break;
     case 1:
-        if ( 0 == count_necr && !ghost_present ) {
-            if ( hasDifferentTroops ) {
-                ++result;
-                if ( strs ) {
-                    std::string str = _( "All %{race} troops +1" );
-                    StringReplace( str, "%{race}", Race::String( r ) );
-                    strs->append( str );
-                    *strs += '\n';
-                }
+        if ( !hasUndead && !AllTroopsAreTheSame() ) { // presence of undead discards "All %{race} troops +1" bonus
+            ++result;
+            if ( strs ) {
+                std::string str = _( "All %{race} troops +1" );
+                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "Multiple" ) : Race::String( *races.begin() ) );
+                strs->append( str );
+                *strs += '\n';
             }
-        }
-        else {
-            return 0;
-        }
-        break;
-    case 3:
-        result -= 1;
-        if ( strs ) {
-            strs->append( _( "Troops of 3 alignments -1" ) );
-            *strs += '\n';
-        }
-        break;
-    case 4:
-        result -= 2;
-        if ( strs ) {
-            strs->append( _( "Troops of 4 alignments -2" ) );
-            *strs += '\n';
         }
         break;
     default:
-        result -= 3;
+        const int penalty = count - 2;
+        result -= penalty;
         if ( strs ) {
-            strs->append( _( "Troops of 5 alignments -3" ) );
+            std::string str = _( "Troops of %{count} alignments -%{penalty}" );
+            StringReplace( str, "%{count}", count );
+            StringReplace( str, "%{penalty}", penalty );
+            strs->append( str );
             *strs += '\n';
         }
         break;
     }
 
     // undead in life group
-    if ( ( hasDifferentTroops && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
-         // or artifact Arm Martyr
-         ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) ) ) {
+    if ( hasUndead ) {
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in group -1" ) );

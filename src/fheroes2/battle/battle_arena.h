@@ -29,6 +29,7 @@
 #include "battle_board.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
+#include "rand.h"
 #include "spell_storage.h"
 
 class Castle;
@@ -53,7 +54,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army &, Army &, s32, bool );
+        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
         ~Arena();
 
         void Turns( void );
@@ -136,6 +137,8 @@ namespace Battle
         u32 GetCastleTargetValue( int ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
+
+        const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
         static Board * GetBoard( void );
         static Tower * GetTower( int );
@@ -223,6 +226,8 @@ namespace Battle
         int auto_battle;
 
         bool end_turn;
+
+        Rand::DeterministicRandomGenerator & _randomGenerator;
 
         enum
         {

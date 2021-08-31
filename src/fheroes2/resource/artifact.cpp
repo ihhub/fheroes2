@@ -807,12 +807,14 @@ void BagArtifacts::RemoveScroll( const Artifact & art )
 
 std::string BagArtifacts::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << ( *it ).GetName() << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += it->GetName();
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 u32 BagArtifacts::Count( const Artifact & art ) const

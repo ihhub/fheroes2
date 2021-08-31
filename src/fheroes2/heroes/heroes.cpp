@@ -56,16 +56,6 @@
 #include "translations.h"
 #include "world.h"
 
-namespace
-{
-    template <class T>
-    void hashCombine( std::size_t & seed, const T & v )
-    {
-        std::hash<T> hasher;
-        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
-    }
-}
-
 const char * Heroes::GetName( int id )
 {
     const char * names[]
@@ -149,6 +139,7 @@ Heroes::Heroes()
     , patrol_square( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
+    , _aiRole( Role::HUNTER )
 {}
 
 Heroes::Heroes( int heroID, int race, int initialLevel )
@@ -179,6 +170,7 @@ Heroes::Heroes( int heroid, int rc )
     , patrol_square( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
+    , _aiRole( Role::HUNTER )
 {
     name = _( Heroes::GetName( heroid ) );
 
@@ -1938,14 +1930,14 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = world.GetMapSeed();
-    hashCombine( hash, hid );
-    hashCombine( hash, _race );
-    hashCombine( hash, attack );
-    hashCombine( hash, defense );
-    hashCombine( hash, power );
-    hashCombine( hash, knowledge );
+    fheroes2::hashCombine( hash, hid );
+    fheroes2::hashCombine( hash, _race );
+    fheroes2::hashCombine( hash, attack );
+    fheroes2::hashCombine( hash, defense );
+    fheroes2::hashCombine( hash, power );
+    fheroes2::hashCombine( hash, knowledge );
     for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
-        hashCombine( hash, GetLevelSkill( skillId ) );
+        fheroes2::hashCombine( hash, GetLevelSkill( skillId ) );
     }
 
     HeroSeedsForLevelUp seeds;

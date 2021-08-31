@@ -71,6 +71,13 @@ namespace fheroes2
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
+
+    template <class T>
+    void hashCombine( std::size_t & seed, const T & v )
+    {
+        std::hash<T> hasher;
+        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
 }
 
 #endif

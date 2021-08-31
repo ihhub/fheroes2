@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <sstream>
 
 #include "game_static.h"
 #include "heroes.h"
@@ -658,12 +657,14 @@ std::vector<Skill::Secondary> & Skill::SecSkills::ToVector( void )
 
 std::string Skill::SecSkills::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << ( *it ).GetName() << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += it->GetName();
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 void Skill::SecSkills::FillMax( const Skill::Secondary & skill )

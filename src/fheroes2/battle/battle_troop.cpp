@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <iomanip>
 
@@ -35,7 +36,6 @@
 #include "logging.h"
 #include "monster_anim.h"
 #include "morale.h"
-#include "rand.h"
 #include "speed.h"
 #include "tools.h"
 #include "translations.h"
@@ -102,7 +102,7 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
+Battle::Unit::Unit( const Troop & t, s32 pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator )
     : ArmyTroop( nullptr, t )
     , animation( id )
     , uid( World::GetUniq() )
@@ -116,6 +116,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , idleTimer( animation.getIdleDelay() )
     , blindanswer( false )
     , customAlphaMask( 255 )
+    , _randomGenerator( randomGenerator )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -210,17 +211,24 @@ std::string Battle::Unit::GetShotString( void ) const
     if ( Troop::GetShots() == GetShots() )
         return std::to_string( Troop::GetShots() );
 
-    std::ostringstream os;
-    os << Troop::GetShots() << " (" << GetShots() << ")";
-    return os.str();
+    std::string output( std::to_string( Troop::GetShots() ) );
+    output += " (";
+    output += std::to_string( GetShots() );
+    output += ')';
+
+    return output;
 }
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    std::ostringstream os;
     const uint32_t speedValue = GetSpeed( true );
-    os << Speed::String( speedValue ) << " (" << speedValue << ")";
-    return os.str();
+
+    std::string output( Speed::String( speedValue ) );
+    output += " (";
+    output += std::to_string( speedValue );
+    output += ')';
+
+    return output;
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
@@ -310,15 +318,15 @@ void Battle::Unit::SetRandomMorale( void )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int32_t>( Rand::Get( 1, 12 ) ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( Rand::Get( 1, 4 ) != 1 ) {
+        else if ( _randomGenerator.Get( 1, 4 ) != 1 ) {
             SetModes( MORALE_BAD );
         }
     }
@@ -327,7 +335,7 @@ void Battle::Unit::SetRandomMorale( void )
 void Battle::Unit::SetRandomLuck( void )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( Rand::Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -588,7 +596,7 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     else if ( Modes( SP_CURSE ) )
         res = CalculateMinDamage( enemy );
     else
-        res = Rand::Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+        res = _randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res <<= 1; // mul 2
@@ -1575,7 +1583,7 @@ int Battle::Unit::GetSpellMagic() const
         return Spell::NONE;
     }
 
-    if ( Rand::Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( _randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }

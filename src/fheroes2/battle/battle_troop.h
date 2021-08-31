@@ -35,6 +35,11 @@
 class Spell;
 class HeroBase;
 
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
+
 namespace Battle
 {
     struct TargetInfo;
@@ -70,7 +75,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop &, s32 pos, bool reflect );
+        Unit( const Troop &, s32 pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator );
         Unit( const Unit & ) = default;
 
         ~Unit() override;
@@ -211,6 +216,8 @@ namespace Battle
 
         bool blindanswer;
         uint32_t customAlphaMask;
+
+        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 
