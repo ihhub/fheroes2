@@ -329,7 +329,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 }
 
 // Returns true if player want to restart the battle
-bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts, bool allowToCancel ) const
+bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPickup & artifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -483,7 +483,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         }
     }
 
-    if ( transferArtifacts ) {
+    if ( !artifacts.empty() ) {
         HeroBase * hero_wins = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
         HeroBase * hero_loss = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
@@ -491,29 +491,15 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         if ( hero_wins == nullptr || hero_loss == nullptr )
             return false;
 
-        const BagArtifacts & bag_wins = hero_wins->GetBagArtifacts();
-        const BagArtifacts & bag_loss = hero_loss->GetBagArtifacts();
-
         bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
-        size_t numWinnerFreeSlots = std::count( bag_wins.begin(), bag_wins.end(), Artifact( Artifact::UNKNOWN ) );
 
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
 
-        BagArtifacts sortedBag( bag_loss );
+        for ( ArtifactsPickup::const_iterator it = artifacts.begin(); it != artifacts.end(); ++it ) {
+            const Artifact & art = *it->second;
 
-        // all ultimate artifacts should be displayed last
-        std::stable_sort( sortedBag.begin(), sortedBag.end(),
-                          []( const Artifact & left, const Artifact & right ) { return ( left.isUltimate() ? 1 : 0 ) < ( right.isUltimate() ? 1 : 0 ); } );
-
-        for ( size_t i = 0; i < sortedBag.size(); ++i ) {
-            const Artifact & art = sortedBag[i];
-
-            if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
-                continue;
-            }
-
-            if ( ( isWinnerHuman && numWinnerFreeSlots != 0 ) || art.isUltimate() ) { // always show the message for ultimate artifact
+            if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifact
 
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
@@ -525,8 +511,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 if ( !art.isUltimate() ) {
                     artMsg = _( "You have captured an enemy artifact!" );
                     Game::PlayPickupSound();
-
-                    --numWinnerFreeSlots;
                 }
                 else {
                     if ( isWinnerHuman ) {

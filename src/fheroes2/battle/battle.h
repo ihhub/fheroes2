@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "army.h"
+#include "artifact.h"
 #include "gamedefs.h"
 #include "m82.h"
 
@@ -67,6 +68,8 @@ namespace Battle
     };
 
     Result Loader( Army &, Army &, s32 );
+
+    typedef std::list<std::pair<BagArtifacts::iterator, BagArtifacts::iterator>> ArtifactsPickup;
 
     struct TargetInfo
     {
