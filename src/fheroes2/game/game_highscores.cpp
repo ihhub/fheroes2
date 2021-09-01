@@ -105,7 +105,7 @@ private:
     std::vector<hgs_t> list;
     std::array<Monster::monster_t, 229> _monsterRating;
 
-    Monster getMonsterByRatingStandardGame( const uint32_t rating ) const
+    Monster getMonsterByRatingStandardGame( const size_t rating ) const
     {
         const size_t id = std::min( rating, _monsterRating.size() - 1 );
         return Monster( _monsterRating[id] );
