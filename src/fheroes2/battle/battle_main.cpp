@@ -41,8 +41,8 @@
 
 namespace Battle
 {
-    ArtifactsPickup CalcArtifactsPickup( HeroBase &, HeroBase & );
-    void ExecArtifactsPickup( const ArtifactsPickup & );
+    ArtifactsPickup CalcArtifactsPickup( HeroBase & hero_wins, HeroBase & hero_loss );
+    void ExecArtifactsPickup( const ArtifactsPickup & actions, BagArtifacts::const_iterator wend );
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
     void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
 }
@@ -177,7 +177,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsPickup, false );
     }
 
-    ExecArtifactsPickup( artifactsPickup );
+    ExecArtifactsPickup( artifactsPickup, hero_wins->GetBagArtifacts().end() );
 
     // save count troop
     arena->GetForce1().SyncArmyCount();
@@ -251,14 +251,17 @@ Battle::ArtifactsPickup Battle::CalcArtifactsPickup( HeroBase & hero_wins, HeroB
 
         if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK && !art.isUltimate() ) {
             wi = std::find( wi, bag_wins.end(), Artifact( Artifact::UNKNOWN ) );
+
+            // we intentionally allow the end iterator here: it signals no pickup later, only removal
+            result.emplace_back( wi, li );
+
             if ( bag_wins.end() != wi ) {
-                result.emplace_back( wi, li );
                 ++wi;
             }
         }
     }
 
-    // one more pass to put all the ultimate artifact at the end of the list
+    // one more pass to put all the ultimate artifacts at the end of the list
     for ( BagArtifacts::iterator li = bag_loss.begin(); li != bag_loss.end(); ++li ) {
         const Artifact & art = *li;
 
@@ -270,15 +273,14 @@ Battle::ArtifactsPickup Battle::CalcArtifactsPickup( HeroBase & hero_wins, HeroB
     return result;
 }
 
-void Battle::ExecArtifactsPickup( const ArtifactsPickup & action )
+void Battle::ExecArtifactsPickup( const ArtifactsPickup & actions, BagArtifacts::const_iterator wend )
 {
-    for ( ArtifactsPickup::const_iterator it = action.begin(); it != action.end(); ++it ) {
+    for ( ArtifactsPickup::const_iterator it = actions.begin(); it != actions.end(); ++it ) {
         BagArtifacts::iterator wi = it->first;
         BagArtifacts::iterator li = it->second;
         Artifact & art = *li;
 
-        // FIXME: abstraction leak
-        if ( !art.isUltimate() ) {
+        if ( wi != wend ) {
             *wi = art;
         }
         art = Artifact::UNKNOWN;

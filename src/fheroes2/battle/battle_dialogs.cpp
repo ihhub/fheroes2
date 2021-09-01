@@ -491,7 +491,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
         if ( hero_wins == nullptr || hero_loss == nullptr )
             return false;
 
-        bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+        const bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+        const BagArtifacts::const_iterator winnerBagEnd = hero_wins->GetBagArtifacts().end();
 
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
@@ -499,8 +500,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
         for ( ArtifactsPickup::const_iterator it = artifacts.begin(); it != artifacts.end(); ++it ) {
             const Artifact & art = *it->second;
 
-            if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifact
-
+            if ( ( isWinnerHuman && it->first != winnerBagEnd ) || art.isUltimate() ) { // always show the message for ultimate artifacts
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
