@@ -104,7 +104,7 @@ private:
     uint32_t _monsterAnimationFrameId;
     std::vector<hgs_t> list;
     std::array<Monster::monster_t, 229> _monsterRating;
-    
+
     Monster getMonsterByRatingStandardGame( const uint32_t rating ) const
     {
         const size_t id = std::min( rating, rating2monster.size() - 1 );
@@ -397,7 +397,7 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 void HGSData::RedrawList( int32_t ox, int32_t oy )
 {
     ++_monsterAnimationFrameId;
-    
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
