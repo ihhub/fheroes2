@@ -268,7 +268,7 @@ int Battle::Unit::GetMorale() const
     int armyTroopMorale = ArmyTroop::GetMorale();
 
     // enemy Bone dragons affect morale
-    if ( isAffectedByMorale() && GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
+    if ( isAffectedByMorale() && GetArena()->getEnemyForce( GetArmyColor() ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
         --armyTroopMorale;
 
     return armyTroopMorale;

@@ -52,8 +52,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.GetForce( _myColor ), true );
-        const Units enemies( arena.GetForce( _myColor, true ), true );
+        const Units friendly( arena.getForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -420,7 +420,7 @@ namespace AI
         const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
-        const Force & friendlyForce = arena.GetForce( _myColor );
+        const Force & friendlyForce = arena.getForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
             if ( !unit || !unit->AllowApplySpell( spell, _commander ) )

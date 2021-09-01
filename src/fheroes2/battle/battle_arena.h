@@ -74,7 +74,8 @@ namespace Battle
 
         Force & GetForce1( void );
         Force & GetForce2( void );
-        Force & GetForce( int color, bool invert = false );
+        Force & getForce( const int color );
+        Force & getEnemyForce( const int color );
         Force & GetCurrentForce( void );
 
         int GetArmyColor1( void ) const;
