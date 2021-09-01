@@ -99,20 +99,23 @@ public:
     bool Save( const std::string & ) const;
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
-    uint32_t & GetHgsAnimationFrame();
 
 private:
+    uint32_t _monsterAnimationFrameId;
     std::vector<hgs_t> list;
-
-    Monster getMonsterByRatingStandardGame( const size_t rating );
-
-    uint32_t hgs_animation_frame = 0;
-    std::array<Monster::monster_t, 229> rating2monster;
+    std::array<Monster::monster_t, 229> _monsterRating;
+    
+    Monster getMonsterByRatingStandardGame( const uint32_t rating ) const
+    {
+        const size_t id = std::min( rating, rating2monster.size() - 1 );
+        return { rating2monster[id] };
+    }
 };
 
 HGSData::HGSData()
+    : _monsterAnimationFrameId( 0 )
 {
-    rating2monster = { Monster::PEASANT,
+    _monsterRating = { Monster::PEASANT,
                        Monster::PEASANT,
                        Monster::PEASANT,
                        Monster::PEASANT,
@@ -393,6 +396,8 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 
 void HGSData::RedrawList( int32_t ox, int32_t oy )
 {
+    ++_monsterAnimationFrameId;
+    
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
@@ -407,6 +412,8 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
 
     Text text;
     text.Set( Font::BIG );
+
+    const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
 
     for ( ; it1 != it2 && ( it1 - list.begin() < HGS_MAX ); ++it1 ) {
         const hgs_t & hgs = *it1;
@@ -424,29 +431,18 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         text.Blit( ox + 484, oy + 70 );
 
         const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs.rating );
-        const uint32_t spriteIndex = monster.GetSpriteIndex() * 9;
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndex );
-        fheroes2::Blit( sprite, display, sprite.x() + ox + 79 + 475, sprite.y() + oy + 70 + 21 );
+        const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
+        const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
+        fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
 
-        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-
-        //+ox+oy+hgs.days - to start from a "random" animation frame when a monster occurs more than once in the high score list
-        const uint32_t animateIndex = spriteIndex + 1 + monsterAnimationSequence[( ox + oy + hgs.days + hgs_animation_frame ) % monsterAnimationSequence.size()];
-        const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animateIndex );
-        fheroes2::Blit( animatedSprite, display, animatedSprite.x() + ox + 79 + 475, animatedSprite.y() + oy + 70 + 21 );
+        // Animation frame of a creature is based on its position on screen and common animation frame ID.
+        const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs.days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+        const uint32_t secondaryMonsterAnimationIndex = spriteIndex + 1 + monsterAnimationId;
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
+        fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
 
         oy += 40;
     }
-}
-
-Monster HGSData::getMonsterByRatingStandardGame( const size_t rating )
-{
-    return Monster( rating2monster[std::min( rating, rating2monster.size() - 1 )] );
-}
-
-uint32_t & HGSData::GetHgsAnimationFrame()
-{
-    return hgs_animation_frame;
 }
 
 fheroes2::GameMode Game::HighScores()
@@ -523,8 +519,6 @@ fheroes2::GameMode Game::HighScores()
             return fheroes2::GameMode::MAIN_MENU;
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = hgs.GetHgsAnimationFrame();
-            ++frame;
             hgs.RedrawList( top.x, top.y );
             display.render();
         }
