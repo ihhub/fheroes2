@@ -144,7 +144,7 @@ namespace
     }
 }
 
-fheroes2::GameMode Game::SelectScenario( void )
+fheroes2::GameMode Game::SelectScenario()
 {
     return fheroes2::GameMode::SCENARIO_INFO;
 }
