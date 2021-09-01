@@ -437,7 +437,7 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
 
         // Animation frame of a creature is based on its position on screen and common animation frame ID.
         const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs.days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
-        const uint32_t secondaryMonsterAnimationIndex = spriteIndex + 1 + monsterAnimationId;
+        const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
         const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
         fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
 
