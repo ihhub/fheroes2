@@ -546,24 +546,16 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 {
     ListFiles res;
 
-    auto processDir = [&res, &fileNameFilter, exactMatch]( const std::string & dir ) {
-        if ( exactMatch ) {
-            res.FindFileInDir( dir, fileNameFilter, false );
-        }
-        else {
-            res.ReadDir( dir, fileNameFilter, false );
-        }
-    };
-
-    if ( !prefixDir.empty() && System::IsDirectory( prefixDir ) ) {
-        processDir( prefixDir );
-    }
-
     for ( const std::string & dir : GetRootDirs() ) {
         const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
 
         if ( System::IsDirectory( path ) ) {
-            processDir( path );
+            if ( exactMatch ) {
+                res.FindFileInDir( path, fileNameFilter, false );
+            }
+            else {
+                res.ReadDir( path, fileNameFilter, false );
+            }
         }
     }
 
