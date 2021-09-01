@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "monster.h"
 #include "monster_anim.h"
+#include "monster.h"
 #include "rand.h"
 
 namespace
