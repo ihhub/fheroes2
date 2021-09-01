@@ -107,8 +107,8 @@ private:
 
     Monster getMonsterByRatingStandardGame( const uint32_t rating ) const
     {
-        const size_t id = std::min( rating, rating2monster.size() - 1 );
-        return { rating2monster[id] };
+        const size_t id = std::min( rating, _monsterRating.size() - 1 );
+        return Monster( _monsterRating[id] );
     }
 };
 
