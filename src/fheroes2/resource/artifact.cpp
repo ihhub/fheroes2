@@ -728,6 +728,13 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     return false;
 }
 
+void BagArtifacts::RemoveArtifact( const Artifact & art )
+{
+    iterator it = std::find( begin(), end(), art );
+    if ( it != end() )
+        ( *it ).Reset();
+}
+
 bool BagArtifacts::isFull( void ) const
 {
     return end() == std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
