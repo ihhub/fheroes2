@@ -497,10 +497,10 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
 
-        for ( ArtifactsPickup::const_iterator it = artifacts.begin(); it != artifacts.end(); ++it ) {
-            const Artifact & art = *it->second;
+        for ( const Battle::SingleArtifactPickup & pickup : artifacts ) {
+            const Artifact & art = *pickup.second;
 
-            if ( ( isWinnerHuman && it->first != winnerBagEnd ) || art.isUltimate() ) { // always show the message for ultimate artifacts
+            if ( ( isWinnerHuman && pickup.first != winnerBagEnd ) || art.isUltimate() ) { // always show the message for ultimate artifacts
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
@@ -508,11 +508,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
                 btn_ok.draw();
 
                 std::string artMsg;
-                if ( !art.isUltimate() ) {
-                    artMsg = _( "You have captured an enemy artifact!" );
-                    Game::PlayPickupSound();
-                }
-                else {
+                if ( art.isUltimate() ) {
                     if ( isWinnerHuman ) {
                         artMsg = _( "As you reach for the %{name}, it mysteriously disappears." );
                     }
@@ -520,6 +516,10 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
                         artMsg = _( "As your enemy reaches for the %{name}, it mysteriously disappears." );
                     }
                     StringReplace( artMsg, "%{name}", art.GetName() );
+                }
+                else {
+                    artMsg = _( "You have captured an enemy artifact!" );
+                    Game::PlayPickupSound();
                 }
 
                 TextBox box( artMsg, Font::YELLOW_BIG, bsTextWidth );

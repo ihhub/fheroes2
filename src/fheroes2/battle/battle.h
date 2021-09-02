@@ -69,7 +69,8 @@ namespace Battle
 
     Result Loader( Army &, Army &, s32 );
 
-    using ArtifactsPickup = std::list<std::pair<BagArtifacts::iterator, BagArtifacts::iterator>>;
+    using SingleArtifactPickup = std::pair<BagArtifacts::iterator, BagArtifacts::iterator>;
+    using ArtifactsPickup = std::list<SingleArtifactPickup>;
 
     struct TargetInfo
     {

@@ -41,10 +41,60 @@
 
 namespace Battle
 {
-    ArtifactsPickup CalcArtifactsPickup( HeroBase & hero_wins, HeroBase & hero_loss );
-    void ExecArtifactsPickup( const ArtifactsPickup & actions, BagArtifacts::const_iterator wend );
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
     void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
+}
+
+namespace
+{
+    Battle::ArtifactsPickup CalcArtifactsPickup( HeroBase & winner, HeroBase & loser )
+    {
+        Battle::ArtifactsPickup result;
+
+        BagArtifacts & winnerBag = winner.GetBagArtifacts();
+        BagArtifacts & loserBag = loser.GetBagArtifacts();
+
+        BagArtifacts::iterator wi = winnerBag.begin();
+        for ( BagArtifacts::iterator li = loserBag.begin(); li != loserBag.end(); ++li ) {
+            const Artifact & art = *li;
+
+            if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK && !art.isUltimate() ) {
+                wi = std::find( wi, winnerBag.end(), Artifact( Artifact::UNKNOWN ) );
+
+                // we intentionally allow the end iterator here: it signals no pickup later, only removal
+                result.emplace_back( wi, li );
+
+                if ( winnerBag.end() != wi ) {
+                    ++wi;
+                }
+            }
+        }
+
+        // one more pass to put all the ultimate artifacts at the end of the list
+        for ( BagArtifacts::iterator li = loserBag.begin(); li != loserBag.end(); ++li ) {
+            const Artifact & art = *li;
+
+            if ( art.isUltimate() ) {
+                result.emplace_back( winnerBag.end(), li );
+            }
+        }
+
+        return result;
+    }
+
+    void ExecArtifactsPickup( const Battle::ArtifactsPickup & artifacts, BagArtifacts::const_iterator wend )
+    {
+        for ( const Battle::SingleArtifactPickup & pickup : artifacts ) {
+            BagArtifacts::iterator wi = pickup.first;
+            BagArtifacts::iterator li = pickup.second;
+            Artifact & art = *li;
+
+            if ( wi != wend ) {
+                *wi = art;
+            }
+            art = Artifact::UNKNOWN;
+        }
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
@@ -236,55 +286,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
 
     return result;
-}
-
-Battle::ArtifactsPickup Battle::CalcArtifactsPickup( HeroBase & hero_wins, HeroBase & hero_loss )
-{
-    ArtifactsPickup result;
-
-    BagArtifacts & bag_wins = hero_wins.GetBagArtifacts();
-    BagArtifacts & bag_loss = hero_loss.GetBagArtifacts();
-
-    BagArtifacts::iterator wi = bag_wins.begin();
-    for ( BagArtifacts::iterator li = bag_loss.begin(); li != bag_loss.end(); ++li ) {
-        const Artifact & art = *li;
-
-        if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK && !art.isUltimate() ) {
-            wi = std::find( wi, bag_wins.end(), Artifact( Artifact::UNKNOWN ) );
-
-            // we intentionally allow the end iterator here: it signals no pickup later, only removal
-            result.emplace_back( wi, li );
-
-            if ( bag_wins.end() != wi ) {
-                ++wi;
-            }
-        }
-    }
-
-    // one more pass to put all the ultimate artifacts at the end of the list
-    for ( BagArtifacts::iterator li = bag_loss.begin(); li != bag_loss.end(); ++li ) {
-        const Artifact & art = *li;
-
-        if ( art.isUltimate() ) {
-            result.emplace_back( bag_wins.end(), li );
-        }
-    }
-
-    return result;
-}
-
-void Battle::ExecArtifactsPickup( const ArtifactsPickup & actions, BagArtifacts::const_iterator wend )
-{
-    for ( ArtifactsPickup::const_iterator it = actions.begin(); it != actions.end(); ++it ) {
-        BagArtifacts::iterator wi = it->first;
-        BagArtifacts::iterator li = it->second;
-        Artifact & art = *li;
-
-        if ( wi != wend ) {
-            *wi = art;
-        }
-        art = Artifact::UNKNOWN;
-    }
 }
 
 void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
