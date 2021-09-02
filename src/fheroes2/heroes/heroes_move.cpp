@@ -440,23 +440,23 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, 
         if ( frame > 0 )
             --frame;
 
-        int32_t ox = _offset.x;
+        int32_t offsetX = _offset.x;
         if ( direction & DIRECTION_LEFT_COL )
-            ox -= HERO_MOVE_STEP * frame;
+            offsetX -= HERO_MOVE_STEP * frame;
         else if ( direction & DIRECTION_RIGHT_COL )
-            ox += HERO_MOVE_STEP * frame;
+            offsetX += HERO_MOVE_STEP * frame;
 
-        dstShad.x += ox;
-        dstFroth.x += ox;
+        dstShad.x += offsetX;
+        dstFroth.x += offsetX;
 
-        int32_t oy = _offset.y;
+        int32_t offsetY = _offset.y;
         if ( direction & DIRECTION_TOP_ROW )
-            oy -= HERO_MOVE_STEP * frame;
+            offsetY -= HERO_MOVE_STEP * frame;
         else if ( direction & DIRECTION_BOTTOM_ROW )
-            oy += HERO_MOVE_STEP * frame;
+            offsetY += HERO_MOVE_STEP * frame;
 
-        dstShad.y += oy;
-        dstFroth.y += oy;
+        dstShad.y += offsetY;
+        dstFroth.y += offsetY;
     }
 
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
@@ -503,23 +503,23 @@ void Heroes::Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const 
         if ( frame > 0 )
             --frame;
 
-        int32_t ox = _offset.x;
+        int32_t offsetX = _offset.x;
         if ( direction & DIRECTION_LEFT_COL )
-            ox -= HERO_MOVE_STEP * frame;
+            offsetX -= HERO_MOVE_STEP * frame;
         else if ( direction & DIRECTION_RIGHT_COL )
-            ox += HERO_MOVE_STEP * frame;
+            offsetX += HERO_MOVE_STEP * frame;
 
-        dstHero.x += ox;
-        dstFlag.x += ox;
+        dstHero.x += offsetX;
+        dstFlag.x += offsetX;
 
-        int32_t oy = _offset.y;
+        int32_t offsetY = _offset.y;
         if ( direction & DIRECTION_TOP_ROW )
-            oy -= HERO_MOVE_STEP * frame;
+            offsetY -= HERO_MOVE_STEP * frame;
         else if ( direction & DIRECTION_BOTTOM_ROW )
-            oy += HERO_MOVE_STEP * frame;
+            offsetY += HERO_MOVE_STEP * frame;
 
-        dstHero.y += oy;
-        dstFlag.y += oy;
+        dstHero.y += offsetY;
+        dstFlag.y += offsetY;
     }
 
     // redraw sprites hero and flag
