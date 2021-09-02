@@ -211,7 +211,6 @@ u32 GoldInsteadArtifact( int );
 
 struct ArtifactSetData
 {
-    ArtifactSetData();
     ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
 
     uint32_t _assembledArtifactID;
