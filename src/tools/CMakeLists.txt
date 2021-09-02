@@ -4,6 +4,9 @@ target_link_libraries(82m2wav
 	)
 
 add_executable(bin2txt bin2txt.cpp)
+target_link_libraries(bin2txt
+	engine
+	)
 
 add_executable(extractor extractor.cpp)
 target_link_libraries(extractor
@@ -11,11 +14,17 @@ target_link_libraries(extractor
 	)
 
 add_executable(icn2img icn2img.cpp)
+target_compile_definitions(icn2img PRIVATE
+        $<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
+        )
 target_link_libraries(icn2img
 	engine
 	)
 
 add_executable(til2img til2img.cpp)
+target_compile_definitions(til2img PRIVATE
+        $<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
+        )
 target_link_libraries(til2img
 	engine
 	)

@@ -22,14 +22,13 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
-#include <functional>
 #include <list>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
-#include "gamedefs.h"
+#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
@@ -75,8 +74,6 @@ namespace Maps
         }
 
         bool isRoad() const;
-        bool hasRoadFlag() const;
-        bool isICN( int ) const;
         bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
@@ -113,7 +110,7 @@ namespace Maps
         }
 
         fheroes2::Point GetCenter( void ) const;
-        int GetObject( bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
@@ -147,7 +144,7 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface( void ) const;
 
-        bool isObject( int obj ) const;
+        bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
@@ -160,7 +157,7 @@ namespace Maps
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-        void SetObject( int object );
+        void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
         {
@@ -189,7 +186,7 @@ namespace Maps
         bool doesObjectExist( const uint32_t uid ) const;
 
         // ICN::FLAGS32 version
-        void CaptureFlags32( int obj, int col );
+        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
 
         // Removes all ICN::FLAGS32 objects from this tile.
         void removeFlags();
@@ -198,7 +195,7 @@ namespace Maps
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
         void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
         void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
@@ -245,9 +242,7 @@ namespace Maps
 
         /* monster operation */
         bool MonsterJoinConditionSkip( void ) const;
-        bool MonsterJoinConditionMoney( void ) const;
         bool MonsterJoinConditionFree( void ) const;
-        bool MonsterJoinConditionForce( void ) const;
         int MonsterJoinCondition( void ) const;
         void MonsterSetJoinCondition( int );
         void MonsterSetFixedCount( void );
@@ -291,9 +286,11 @@ namespace Maps
         // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
         void setAsEmpty();
 
+        uint32_t getObjectIdByICNType( const int icnId ) const;
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
+        static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );

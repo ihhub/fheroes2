@@ -21,11 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 
 #include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -38,13 +39,13 @@
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
-#include "mus.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -57,7 +58,7 @@ namespace
     std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
-    int current_music = MUS::UNKNOWN;
+    std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
     u32 castle_animation_frame = 0;
     u32 maps_animation_frame = 0;
@@ -84,8 +85,8 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask::FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
-                            bool fadeIn_, uint8_t objectTileset_ )
+        FadeTask::FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
+                            bool fadeOut_, bool fadeIn_, uint8_t objectTileset_ )
             : object( object_ )
             , objectIndex( objectIndex_ )
             , animationIndex( animationIndex_ )
@@ -107,7 +108,6 @@ namespace Game
             , fadeOut( false )
             , fadeIn( false )
             , objectTileset( 0 )
-
         {}
 
         // Single instance of FadeTask.
@@ -222,37 +222,37 @@ void Game::Init( void )
     Game::HotKeysLoad( hotkeys );
 }
 
-int Game::CurrentMusic( void )
+int Game::CurrentMusic()
 {
-    return current_music;
+    return currentMusic;
 }
 
-void Game::SetCurrentMusic( int mus )
+void Game::SetCurrentMusic( const int mus )
 {
-    current_music = mus;
+    currentMusic = mus;
 }
 
-void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
+void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
 {
     const uint8_t alpha = fadeOut ? 255u : 0;
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
 
-    if ( object == MP2::OBJ_ZERO ) {
+    if ( objectType == MP2::OBJ_ZERO ) {
         fadeTask = FadeTask();
     }
-    else if ( object == MP2::OBJ_MONSTER ) {
+    else if ( objectType == MP2::OBJ_MONSTER ) {
         const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
 
-        fadeTask = FadeTask( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+        fadeTask = FadeTask( objectType, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
-    else if ( object == MP2::OBJ_BOAT ) {
-        fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+    else if ( objectType == MP2::OBJ_BOAT ) {
+        fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else {
-        const int icn = MP2::GetICNObject( object );
+        const int icn = MP2::GetICNObject( fromTile.GetObjectTileset() );
         const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() != 0 );
 
-        fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
+        fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
     }
 }
 
@@ -350,10 +350,6 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Mixer::isValid() ) {
-        return;
-    }
-
     const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
@@ -486,17 +482,6 @@ u32 Game::GetViewDistance( u32 d )
 u32 Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
-}
-
-std::string Game::GetEncodeString( const std::string & str1 )
-{
-    const Settings & conf = Settings::Get();
-
-    // encode name
-    if ( conf.Unicode() && !conf.MapsCharset().empty() )
-        return EncodeString( str1, conf.MapsCharset().c_str() );
-
-    return str1;
 }
 
 int Game::GetKingdomColors( void )

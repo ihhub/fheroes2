@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   Part of the Free Heroes2 Engine:                                      *
  *   http://sourceforge.net/projects/fheroes2                              *
@@ -20,37 +20,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AUDIO_MUSIC_H
-#define H2AUDIO_MUSIC_H
-
-#include <string>
-#include <vector>
+#ifndef SDLTIMER_H
+#define SDLTIMER_H
 
 #include "types.h"
+#include <SDL.h>
 
-namespace Music
+namespace SDL
 {
-    void Play( const std::vector<u8> &, bool loop );
-    void Play( const std::string &, bool loop );
+    class Timer
+    {
+    public:
+        Timer();
 
-    int Volume( int vol );
+        bool IsValid() const;
 
-    void SetFadeIn( int );
-    void SetFadeOut( int );
+        void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
+        void Remove();
 
-    void SetExtCommand( const std::string & );
-
-    void Pause( void );
-    void Resume( void );
-    void Reset( void );
-
-    bool isPlaying( void );
-    bool isPaused( void );
-
-    void Mute();
-    void Unmute();
-
-    std::vector<u8> Xmi2Mid( const std::vector<u8> & );
+    private:
+        SDL_TimerID id;
+    };
 }
 
 #endif

@@ -32,6 +32,7 @@
 #include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "translations.h"
@@ -1211,7 +1212,7 @@ const char * Monster::GetMultiName( void ) const
 const char * Monster::GetPluralName( u32 count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
-    return _n( generalStats.name, generalStats.pluralName, count );
+    return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
 }
 
 u32 Monster::GetSpriteIndex( void ) const

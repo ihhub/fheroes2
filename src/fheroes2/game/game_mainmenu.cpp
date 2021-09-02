@@ -22,9 +22,11 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_game_settings.h"
+#include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_delays.h"
@@ -36,6 +38,7 @@
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -160,6 +163,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
+        if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
+            supportedLanguage = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage }, 0 );
+            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
+        }
+
         Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
                          Dialog::OK );
 
@@ -288,12 +297,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             }
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
-            if ( Dialog::SelectResolution() ) {
-                conf.Save( "fheroes2.cfg" );
-                // force interface to reset area and positions
-                Interface::Basic::Get().Reset();
-                return fheroes2::GameMode::MAIN_MENU;
-            }
+            fheroes2::openGameSettings();
+
+            // force interface to reset area and positions
+            Interface::Basic::Get().Reset();
+            return fheroes2::GameMode::MAIN_MENU;
         }
 
         // right info
@@ -308,7 +316,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         else if ( le.MousePressRight( resolutionArea ) )
-            Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );

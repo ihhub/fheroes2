@@ -37,6 +37,7 @@
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -326,7 +327,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
 
         // right info
         if ( !readonly && le.MousePressRight( portPos ) )
-            Dialog::QuickInfo( *this );
+            Dialog::QuickInfo( *this, fheroes2::Rect( 0, 0, display.width(), display.height() ) );
         else if ( le.MousePressRight( rectSpreadArmyFormat ) )
             Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
         else if ( le.MousePressRight( rectGroupedArmyFormat ) )

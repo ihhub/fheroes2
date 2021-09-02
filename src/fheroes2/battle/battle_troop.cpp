@@ -21,19 +21,24 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <iomanip>
 
 #include "agg_image.h"
+#include "battle.h"
+#include "battle_arena.h"
+#include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "game_static.h"
 #include "logging.h"
+#include "monster_anim.h"
 #include "morale.h"
-#include "rand.h"
 #include "speed.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 Battle::ModeDuration::ModeDuration( u32 mode, u32 duration )
@@ -97,7 +102,7 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
+Battle::Unit::Unit( const Troop & t, s32 pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator )
     : ArmyTroop( nullptr, t )
     , animation( id )
     , uid( World::GetUniq() )
@@ -111,6 +116,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , idleTimer( animation.getIdleDelay() )
     , blindanswer( false )
     , customAlphaMask( 255 )
+    , _randomGenerator( randomGenerator )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -205,17 +211,24 @@ std::string Battle::Unit::GetShotString( void ) const
     if ( Troop::GetShots() == GetShots() )
         return std::to_string( Troop::GetShots() );
 
-    std::ostringstream os;
-    os << Troop::GetShots() << " (" << GetShots() << ")";
-    return os.str();
+    std::string output( std::to_string( Troop::GetShots() ) );
+    output += " (";
+    output += std::to_string( GetShots() );
+    output += ')';
+
+    return output;
 }
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    std::ostringstream os;
     const uint32_t speedValue = GetSpeed( true );
-    os << Speed::String( speedValue ) << " (" << speedValue << ")";
-    return os.str();
+
+    std::string output( Speed::String( speedValue ) );
+    output += " (";
+    output += std::to_string( speedValue );
+    output += ')';
+
+    return output;
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
@@ -305,15 +318,15 @@ void Battle::Unit::SetRandomMorale( void )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int32_t>( Rand::Get( 1, 12 ) ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( Rand::Get( 1, 4 ) != 1 ) {
+        else if ( _randomGenerator.Get( 1, 4 ) != 1 ) {
             SetModes( MORALE_BAD );
         }
     }
@@ -322,7 +335,7 @@ void Battle::Unit::SetRandomMorale( void )
 void Battle::Unit::SetRandomLuck( void )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( Rand::Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -583,7 +596,7 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     else if ( Modes( SP_CURSE ) )
         res = CalculateMinDamage( enemy );
     else
-        res = Rand::Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+        res = _randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res <<= 1; // mul 2
@@ -797,7 +810,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         break;
     }
 
-    if ( guard_art.isValid() && myhero->HasArtifact( guard_art ) ) {
+    if ( guard_art.isValid() && myhero->hasArtifact( guard_art ) ) {
         if ( msg ) {
             *msg = _( "The %{artifact} artifact is in effect for this battle, disabling %{spell} spell." );
             StringReplace( *msg, "%{artifact}", guard_art.GetName() );
@@ -985,7 +998,7 @@ void Battle::Unit::PostAttackAction()
     if ( isArchers() && !isHandFighting() ) {
         // check ammo cart artifact
         const HeroBase * hero = GetCommander();
-        if ( !hero || !hero->HasArtifact( Artifact::AMMO_CART ) )
+        if ( !hero || !hero->hasArtifact( Artifact::AMMO_CART ) )
             --shots;
     }
 
@@ -1157,12 +1170,8 @@ bool Battle::Unit::isArchers( void ) const
 void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const HeroBase * hero )
 {
     if ( hero ) {
-        u32 acount = hero->HasArtifact( Artifact::WIZARD_HAT );
-        if ( acount )
-            duration += acount * Artifact( Artifact::WIZARD_HAT ).ExtraValue();
-        acount = hero->HasArtifact( Artifact::ENCHANTED_HOURGLASS );
-        if ( acount )
-            duration += acount * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += hero->artifactCount( art ) * Artifact( art ).ExtraValue();
     }
 
     switch ( spell.GetID() ) {
@@ -1272,9 +1281,10 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
     case Spell::HYPNOTIZE: {
         SetModes( SP_HYPNOTIZE );
-        u32 acount = hero ? hero->HasArtifact( Artifact::GOLD_WATCH ) : 0;
+        uint32_t acount = hero ? hero->artifactCount( Artifact::GOLD_WATCH ) : 0;
         affected.AddMode( SP_HYPNOTIZE, ( acount ? duration * acount * 2 : duration ) );
-    } break;
+        break;
+    }
 
     case Spell::STONE:
         SetModes( SP_STONE );
@@ -1367,19 +1377,19 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::COLDRAY:
         case Spell::COLDRING:
             // +50%
-            if ( hero->HasArtifact( Artifact::EVERCOLD_ICICLE ) )
+            if ( hero->hasArtifact( Artifact::EVERCOLD_ICICLE ) )
                 dmg += dmg * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
 
             if ( defendingHero ) {
                 // -50%
-                if ( defendingHero->HasArtifact( Artifact::ICE_CLOAK ) )
+                if ( defendingHero->hasArtifact( Artifact::ICE_CLOAK ) )
                     dmg -= dmg * Artifact( Artifact::ICE_CLOAK ).ExtraValue() / 100;
 
-                if ( defendingHero->HasArtifact( Artifact::HEART_ICE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_ICE ) )
                     dmg -= dmg * Artifact( Artifact::HEART_ICE ).ExtraValue() / 100;
 
                 // 100%
-                if ( defendingHero->HasArtifact( Artifact::HEART_FIRE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_FIRE ) )
                     dmg *= 2;
             }
             break;
@@ -1387,38 +1397,38 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
             // +50%
-            if ( hero->HasArtifact( Artifact::EVERHOT_LAVA_ROCK ) )
+            if ( hero->hasArtifact( Artifact::EVERHOT_LAVA_ROCK ) )
                 dmg += dmg * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
 
             if ( defendingHero ) {
                 // -50%
-                if ( defendingHero->HasArtifact( Artifact::FIRE_CLOAK ) )
+                if ( defendingHero->hasArtifact( Artifact::FIRE_CLOAK ) )
                     dmg -= dmg * Artifact( Artifact::FIRE_CLOAK ).ExtraValue() / 100;
 
-                if ( defendingHero->HasArtifact( Artifact::HEART_FIRE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_FIRE ) )
                     dmg -= dmg * Artifact( Artifact::HEART_FIRE ).ExtraValue() / 100;
 
                 // 100%
-                if ( defendingHero->HasArtifact( Artifact::HEART_ICE ) )
+                if ( defendingHero->hasArtifact( Artifact::HEART_ICE ) )
                     dmg *= 2;
             }
             break;
 
         case Spell::LIGHTNINGBOLT:
             // +50%
-            if ( hero->HasArtifact( Artifact::LIGHTNING_ROD ) )
+            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
                 dmg += dmg * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
             // -50%
-            if ( defendingHero && defendingHero->HasArtifact( Artifact::LIGHTNING_HELM ) )
+            if ( defendingHero && defendingHero->hasArtifact( Artifact::LIGHTNING_HELM ) )
                 dmg -= dmg * Artifact( Artifact::LIGHTNING_HELM ).ExtraValue() / 100;
             break;
 
         case Spell::CHAINLIGHTNING:
             // +50%
-            if ( hero->HasArtifact( Artifact::LIGHTNING_ROD ) )
+            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
                 dmg += dmg * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
             // -50%
-            if ( defendingHero && defendingHero->HasArtifact( Artifact::LIGHTNING_HELM ) )
+            if ( defendingHero && defendingHero->hasArtifact( Artifact::LIGHTNING_HELM ) )
                 dmg -= dmg * Artifact( Artifact::LIGHTNING_HELM ).ExtraValue() / 100;
             // update orders damage
             switch ( target.damage ) {
@@ -1441,7 +1451,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::ELEMENTALSTORM:
         case Spell::ARMAGEDDON:
             // -50%
-            if ( defendingHero && defendingHero->HasArtifact( Artifact::BROACH_SHIELDING ) )
+            if ( defendingHero && defendingHero->hasArtifact( Artifact::BROACH_SHIELDING ) )
                 dmg /= 2;
             break;
 
@@ -1483,7 +1493,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
             Arena::GetGraveyard()->RemoveTroop( *this );
         }
         // restore hp
-        u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
+        uint32_t acount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
         if ( acount )
             restore *= acount * 2;
 
@@ -1495,7 +1505,8 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
             StringReplace( str, "%{name}", GetName() );
             Arena::GetInterface()->SetStatus( str, true );
         }
-    } break;
+        break;
+    }
 
     default:
         break;
@@ -1572,7 +1583,7 @@ int Battle::Unit::GetSpellMagic() const
         return Spell::NONE;
     }
 
-    if ( Rand::Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( _randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }
@@ -1749,5 +1760,5 @@ const HeroBase * Battle::Unit::GetCommander( void ) const
 
 const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
 {
-    return GetArena()->GetCommander( GetCurrentOrArmyColor(), false );
+    return GetArena()->getCommander( GetCurrentOrArmyColor() );
 }

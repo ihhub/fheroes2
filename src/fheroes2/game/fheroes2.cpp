@@ -25,11 +25,9 @@
 #include <string>
 
 #include "agg.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "bin_info.h"
 #include "cursor.h"
-#include "dir.h"
 #include "embedded_image.h"
 #include "engine.h"
 #include "game.h"
@@ -43,7 +41,6 @@
 #ifndef BUILD_RELEASE
 #include "tools.h"
 #endif
-#include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -74,10 +71,6 @@ namespace
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
         if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
-            const std::string & externalCommand = conf.externalMusicCommand();
-            if ( !externalCommand.empty() )
-                Music::SetExtCommand( externalCommand );
-
             LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
         else {
@@ -112,28 +105,6 @@ namespace
 
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
-    }
-
-    void SetLangEnvPath( const Settings & conf )
-    {
-        if ( !conf.ForceLang().empty() ) {
-            System::SetLocale( LC_ALL, "" );
-            System::SetLocale( LC_NUMERIC, "C" );
-
-            const std::string mofile = std::string( conf.ForceLang() ).append( ".mo" );
-
-            const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
-
-            if ( !translations.empty() ) {
-                if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
-                    Translation::setDomain( "fheroes2" );
-            }
-            else {
-                ERROR_LOG( "translation not found: " << mofile );
-            }
-        }
-
-        Translation::setStripContext( '|' );
     }
 }
 
@@ -185,9 +156,9 @@ int main( int argc, char ** argv )
         {
             std::atexit( SDL::Quit );
 
-            SetLangEnvPath( conf );
+            conf.setGameLanguage( conf.getGameLanguage() );
 
-            if ( Mixer::isValid() ) {
+            if ( Audio::isValid() ) {
                 Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
 

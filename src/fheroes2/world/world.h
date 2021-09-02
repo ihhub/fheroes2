@@ -22,27 +22,22 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <string>
 #include <vector>
 
 #include "artifact_ultimate.h"
 #include "castle_heroes.h"
-#include "gamedefs.h"
 #include "kingdom.h"
 #include "maps.h"
-#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "week.h"
 #include "world_pathfinding.h"
 #include "world_regions.h"
-#include <string>
 
-class Heroes;
-class Castle;
-class Kingdom;
 class Recruits;
-class Radar;
 class MapObjectSimple;
 class ActionSimple;
+struct MapEvent;
 
 struct ListActions : public std::list<ActionSimple *>
 {
@@ -117,7 +112,8 @@ struct CapturedObjects : std::map<s32, CapturedObject>
     void ResetColor( int );
 
     CapturedObject & Get( s32 );
-    Funds TributeCapturedObject( int col, int obj );
+
+    void tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount );
 
     u32 GetCount( int, int ) const;
     u32 GetCountMines( int, int ) const;
@@ -144,6 +140,8 @@ struct EventDate
     int colors;
     bool computer;
     std::string message;
+
+    std::string title;
 };
 
 StreamBase & operator<<( StreamBase &, const EventDate & );
@@ -258,10 +256,10 @@ public:
     void ClearFog( int color );
     void UpdateRecruits( Recruits & ) const;
 
-    int CheckKingdomWins( const Kingdom & ) const;
-    bool KingdomIsWins( const Kingdom &, int wins ) const;
-    int CheckKingdomLoss( const Kingdom & ) const;
-    bool KingdomIsLoss( const Kingdom &, int loss ) const;
+    uint32_t CheckKingdomWins( const Kingdom & ) const;
+    bool KingdomIsWins( const Kingdom &, uint32_t wins ) const;
+    uint32_t CheckKingdomLoss( const Kingdom & ) const;
+    bool KingdomIsLoss( const Kingdom &, uint32_t loss ) const;
 
     void AddEventDate( const EventDate & );
     EventsDate GetEventsDate( int color ) const;
@@ -283,12 +281,13 @@ public:
 
     uint32_t GetMapSeed() const;
 
-    bool isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const;
+    bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
 private:
     World()
         : fheroes2::Size( 0, 0 )
         , _rumor( nullptr )
+        , _seed( 0 )
     {}
 
     void Defaults( void );

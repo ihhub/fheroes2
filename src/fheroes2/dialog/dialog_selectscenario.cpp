@@ -31,6 +31,7 @@
 #include "localevent.h"
 #include "maps.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void LossConditionInfo( const Maps::FileInfo & );

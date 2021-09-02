@@ -23,14 +23,15 @@
 #include "route.h"
 
 // Base representation of the dataset that mirrors the 2D map being traversed
+template <class T>
 struct PathfindingNode
 {
     int _from = -1;
     uint32_t _cost = 0;
-    uint16_t _objectID = 0;
+    T _objectID{};
 
     PathfindingNode() = default;
-    PathfindingNode( int node, uint32_t cost, uint16_t object )
+    PathfindingNode( int node, uint32_t cost, T object )
         : _from( node )
         , _cost( cost )
         , _objectID( object )
@@ -41,7 +42,7 @@ struct PathfindingNode
     {
         _from = -1;
         _cost = 0;
-        _objectID = 0;
+        _objectID = T();
     }
 };
 

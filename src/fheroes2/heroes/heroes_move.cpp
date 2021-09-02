@@ -631,8 +631,8 @@ void Heroes::UpdateRedrawBottom( const Maps::Tiles & tile )
 
 void Heroes::UpdateRedrawTop( const Maps::Tiles & tile )
 {
-    const int object = tile.GetObject();
-    if ( MP2::OBJ_BOAT != object && MP2::OBJ_HEROES != object ) {
+    const MP2::MapObjectType objectType = tile.GetObject();
+    if ( MP2::OBJ_BOAT != objectType && MP2::OBJ_HEROES != objectType ) {
         return;
     }
     if ( _redrawIndex.topOnBottom == tile.GetIndex() ) {
@@ -662,7 +662,7 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTil
     const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
-    tile.RedrawTop( dst, visibleTileROI, area );
+    tile.RedrawTop( dst, visibleTileROI, false, area );
 
     const int32_t centerIndex = GetIndex();
 
@@ -681,17 +681,17 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTil
 
     if ( _redrawIndex.topOnBottom != -1 ) {
         const Maps::Tiles & tileBottom = world.GetTiles( _redrawIndex.topOnBottom );
-        tileBottom.RedrawTop( dst, visibleTileROI, area );
+        tileBottom.RedrawTop( dst, visibleTileROI, false, area );
         tileBottom.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirection != -1 ) {
         const Maps::Tiles & tileDirection = world.GetTiles( _redrawIndex.topOnDirection );
-        tileDirection.RedrawTop( dst, visibleTileROI, area );
+        tileDirection.RedrawTop( dst, visibleTileROI, false, area );
         tileDirection.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirectionBottom != -1 ) {
         const Maps::Tiles & tileDirectionBottom = world.GetTiles( _redrawIndex.topOnDirectionBottom );
-        tileDirectionBottom.RedrawTop( dst, visibleTileROI, area );
+        tileDirectionBottom.RedrawTop( dst, visibleTileROI, false, area );
         tileDirectionBottom.RedrawTopFromBottom( dst, area );
     }
 }

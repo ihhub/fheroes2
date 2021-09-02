@@ -72,7 +72,7 @@ int main( int argc, char ** argv )
 
     fs << "<?xml version=\"1.0\" ?>" << std::endl << "<icn name=\"" << shortname << ".icn\" count=\"" << count_sprite << "\">" << std::endl;
 
-    u32 save_pos = sf.tell();
+    size_t save_pos = sf.tell();
 
     std::vector<fheroes2::ICNHeader> headers( count_sprite );
     for ( int ii = 0; ii < count_sprite; ++ii )
@@ -95,7 +95,7 @@ int main( int argc, char ** argv )
             std::string dstfile = System::ConcatePath( prefix, os.str() );
             std::string shortdstfile( os.str() ); // the name of destfile without the path
 
-#ifndef WITH_IMAGE
+#ifndef FHEROES2_IMAGE_SUPPORT
             dstfile += ".bmp";
             shortdstfile += ".bmp";
 #else

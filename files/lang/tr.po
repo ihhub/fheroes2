@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-01 15:11+0200\n"
+"POT-Creation-Date: 2021-08-31 21:44+0800\n"
 "PO-Revision-Date: 2009-12-08 00:41+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -18,6 +18,15 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+msgid "Warrior"
+msgstr ""
+
+msgid "Builder"
+msgstr ""
+
+msgid "Explorer"
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -67,43 +76,40 @@ msgstr ""
 msgid "army|Few"
 msgstr ""
 
-msgid "army|Several"
-msgstr ""
-
-msgid "army|Pack"
+msgid "army|Horde"
 msgstr ""
 
 msgid "army|Lots"
 msgstr ""
 
-msgid "army|Horde"
+msgid "army|Pack"
 msgstr ""
 
-msgid "army|Throng"
-msgstr ""
-
-msgid "army|Swarm"
-msgstr ""
-
-msgid "army|Zounds"
+msgid "army|Several"
 msgstr ""
 
 msgid "army|Legion"
 msgstr ""
 
+msgid "army|Swarm"
+msgstr ""
+
+msgid "army|Throng"
+msgstr ""
+
+msgid "army|Zounds"
+msgstr ""
+
 msgid "All %{race} troops +1"
 msgstr ""
 
-msgid "Troops of 3 alignments -1"
+msgid "Multiple"
 msgstr ""
 
-msgid "Troops of 4 alignments -2"
+msgid "Troops of %{count} alignments -%{penalty}"
 msgstr ""
 
-msgid "Troops of 5 alignments -3"
-msgstr ""
-
-msgid "Some undead in groups -1"
+msgid "Some undead in group -1"
 msgstr ""
 
 msgid "View %{name}"
@@ -176,10 +182,10 @@ msgstr ""
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "On"
+msgid "Off"
 msgstr ""
 
-msgid "Off"
+msgid "On"
 msgstr ""
 
 msgid "The enemy has surrendered!"
@@ -210,6 +216,9 @@ msgid "Battlefield Casualties"
 msgstr ""
 
 msgid "Attacker"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid "Defender"
@@ -307,6 +316,10 @@ msgstr ""
 msgid "Shoot %{monster}"
 msgstr ""
 
+msgid "(1 shot left)"
+msgid_plural "(%{count} shots left)"
+msgstr[0] ""
+
 msgid "Attack %{monster}"
 msgstr ""
 
@@ -361,17 +374,25 @@ msgstr ""
 msgid "Show logs"
 msgstr ""
 
-msgid "%{color} cast spell: %{spell}"
+msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
-msgid "%{name} skipping turn"
+msgid "%{name} skip the turn"
 msgstr ""
 
-msgid "%{name} waiting turn"
+msgid "%{name} wait their turn"
 msgstr ""
 
 msgid "%{attacker} do %{damage} damage."
 msgstr ""
+
+msgid "1 creature perishes."
+msgid_plural "%{count} creatures perish."
+msgstr[0] ""
+
+msgid "1 %{defender} perishes."
+msgid_plural "%{count} %{defender} perish."
+msgstr[0] ""
 
 msgid "Moved %{monster}: %{src}, %{dst}"
 msgstr ""
@@ -421,10 +442,10 @@ msgstr ""
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Good luck shines on the %{attacker}"
 msgstr ""
 
 msgid "High morale enables the %{monster} to attack again."
@@ -436,13 +457,16 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr ""
 
-msgid "MirrorImage created"
+msgid "The mirror image is created"
 msgstr ""
 
 msgid "The mirror image is destroyed!"
 msgstr ""
 
 msgid "Break auto battle?"
+msgstr ""
+
+msgid "Error"
 msgstr ""
 
 msgid "No spells to cast."
@@ -474,6 +498,12 @@ msgid ""
 "%{spell}."
 msgstr ""
 
+msgid "Monsters"
+msgstr ""
+
+msgid "N/A"
+msgstr ""
+
 msgid "Left Turret"
 msgstr ""
 
@@ -494,6 +524,9 @@ msgstr ""
 msgid "%{count} %{name} rise(s) from the dead!"
 msgstr ""
 
+msgid "Dwarven Alliance"
+msgstr ""
+
 msgid "Sorceress Guild"
 msgstr ""
 
@@ -512,25 +545,19 @@ msgstr ""
 msgid "Uncle Ivan"
 msgstr ""
 
-msgid "Force of Arms"
-msgstr ""
-
 msgid "Annexation"
-msgstr ""
-
-msgid "Save the Dwarves"
 msgstr ""
 
 msgid "Carator Mines"
 msgstr ""
 
+msgid "Force of Arms"
+msgstr ""
+
+msgid "Save the Dwarves"
+msgstr ""
+
 msgid "Turning Point"
-msgstr ""
-
-msgid "The Gauntlet"
-msgstr ""
-
-msgid "The Crown"
 msgstr ""
 
 msgid "Corlagon's Defense"
@@ -539,103 +566,10 @@ msgstr ""
 msgid "Final Justice"
 msgstr ""
 
-msgid "First Blood"
+msgid "The Crown"
 msgstr ""
 
-msgid "Barbarian Wars"
-msgstr ""
-
-msgid "Necromancers"
-msgstr ""
-
-msgid "Slay the Dwarves"
-msgstr ""
-
-msgid "Rebellion"
-msgstr ""
-
-msgid "Dragon Master"
-msgstr ""
-
-msgid "Country Lords"
-msgstr ""
-
-msgid "Greater Glory"
-msgstr ""
-
-msgid "Apocalypse"
-msgstr ""
-
-msgid "Uprising"
-msgstr ""
-
-msgid "Island of Chaos"
-msgstr ""
-
-msgid "Arrow's Flight"
-msgstr ""
-
-msgid "The Abyss"
-msgstr ""
-
-msgid "The Giant's Pass"
-msgstr ""
-
-msgid "Aurora Borealis"
-msgstr ""
-
-msgid "Betrayal's End"
-msgstr ""
-
-msgid "Corruption's Heart"
-msgstr ""
-
-msgid "Conquer and Unify"
-msgstr ""
-
-msgid "Border Towns"
-msgstr ""
-
-msgid "The Wayward Son"
-msgstr ""
-
-msgid "Crazy Uncle Ivan"
-msgstr ""
-
-msgid "The Southern War"
-msgstr ""
-
-msgid "Ivory Gates"
-msgstr ""
-
-msgid "The Elven Lands"
-msgstr ""
-
-msgid "The Epic Battle"
-msgstr ""
-
-msgid "The Shrouded Isles"
-msgstr ""
-
-msgid "The Eternal Scrolls"
-msgstr ""
-
-msgid "Power's End"
-msgstr ""
-
-msgid "Fount of Wizardry"
-msgstr ""
-
-msgid "Stranded"
-msgstr ""
-
-msgid "Pirate Isles"
-msgstr ""
-
-msgid "King and Country"
-msgstr ""
-
-msgid "Blood is Thicker"
+msgid "The Gauntlet"
 msgstr ""
 
 msgid ""
@@ -699,6 +633,33 @@ msgid ""
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
 
+msgid "Barbarian Wars"
+msgstr ""
+
+msgid "First Blood"
+msgstr ""
+
+msgid "Necromancers"
+msgstr ""
+
+msgid "Rebellion"
+msgstr ""
+
+msgid "Slay the Dwarves"
+msgstr ""
+
+msgid "Apocalypse"
+msgstr ""
+
+msgid "Country Lords"
+msgstr ""
+
+msgid "Dragon Master"
+msgstr ""
+
+msgid "Greater Glory"
+msgstr ""
+
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
 "They are not allied with one another, so they will spend most of their "
@@ -757,6 +718,30 @@ msgid ""
 "not to lose Archibald in the fight!"
 msgstr ""
 
+msgid "Arrow's Flight"
+msgstr ""
+
+msgid "Island of Chaos"
+msgstr ""
+
+msgid "The Abyss"
+msgstr ""
+
+msgid "Uprising"
+msgstr ""
+
+msgid "Aurora Borealis"
+msgstr ""
+
+msgid "Betrayal's End"
+msgstr ""
+
+msgid "Corruption's Heart"
+msgstr ""
+
+msgid "The Giant's Pass"
+msgstr ""
+
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
@@ -800,6 +785,30 @@ msgid ""
 "hero for all time."
 msgstr ""
 
+msgid "Border Towns"
+msgstr ""
+
+msgid "Conquer and Unify"
+msgstr ""
+
+msgid "Crazy Uncle Ivan"
+msgstr ""
+
+msgid "The Wayward Son"
+msgstr ""
+
+msgid "Ivory Gates"
+msgstr ""
+
+msgid "The Elven Lands"
+msgstr ""
+
+msgid "The Epic Battle"
+msgstr ""
+
+msgid "The Southern War"
+msgstr ""
+
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
@@ -841,6 +850,18 @@ msgid ""
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
 
+msgid "Fount of Wizardry"
+msgstr ""
+
+msgid "Power's End"
+msgstr ""
+
+msgid "The Eternal Scrolls"
+msgstr ""
+
+msgid "The Shrouded Isles"
+msgstr ""
+
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
 "The completion of this task will give you a fighting chance against your "
@@ -848,8 +869,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The location of the great library has been dicovered! You must make your way "
-"to it, and reclaim the city of Chronos in which it lies."
+"The location of the great library has been discovered! You must make your "
+"way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
 
 msgid ""
@@ -862,6 +883,18 @@ msgstr ""
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
+msgstr ""
+
+msgid "Blood is Thicker"
+msgstr ""
+
+msgid "King and Country"
+msgstr ""
+
+msgid "Pirate Isles"
+msgstr ""
+
+msgid "Stranded"
 msgstr ""
 
 msgid ""
@@ -899,6 +932,48 @@ msgstr ""
 msgid " defeated"
 msgstr ""
 
+msgid "The dwarves recognize their allies and gladly join your forces."
+msgstr ""
+
+msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
+msgstr ""
+
+msgid ""
+"The dragons, snarling and growling, agree to join forces with you, their "
+"'Ally'."
+msgstr ""
+
+msgid ""
+"As you approach the group of elves, their leader calls them all to "
+"attention.  He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"your ranks."
+msgstr ""
+
+msgid ""
+"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"pass.\""
+msgstr ""
+
+msgid ""
+"The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
+msgstr ""
+
+msgid ""
+"The dragons see you and call out.  \"Our alliance with Archibald compels us "
+"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
+"scatter."
+msgstr ""
+
+msgid ""
+"The elves stand at attention as you approach.  Their leader calls to you and "
+"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"yours.\""
+msgstr ""
+
+msgid "\"The Dwarfbane!!!!, run for your lives.\""
+msgstr ""
+
 msgid "Thunder Mace"
 msgstr ""
 
@@ -911,7 +986,7 @@ msgstr ""
 msgid "Breastplate"
 msgstr ""
 
-msgid "Fizbin Medal"
+msgid "Fizbin of Misfortune"
 msgstr ""
 
 msgid "Mage's ring"
@@ -939,6 +1014,9 @@ msgid "For this action it is necessary first to build a castle."
 msgstr ""
 
 msgid "Cannot build %{name} because castle is too far from water."
+msgstr ""
+
+msgid "disable build."
 msgstr ""
 
 msgid "Cannot afford %{name}."
@@ -998,16 +1076,13 @@ msgstr ""
 msgid "Mage Guild, Level 5"
 msgstr ""
 
+msgid "Crystal Garden"
+msgstr ""
+
 msgid "Farm"
 msgstr ""
 
 msgid "Garbage Heap"
-msgstr ""
-
-msgid "Crystal Garden"
-msgstr ""
-
-msgid "Waterfall"
 msgstr ""
 
 msgid "Orchard"
@@ -1016,46 +1091,46 @@ msgstr ""
 msgid "Skull Pile"
 msgstr ""
 
-msgid "Fortifications"
+msgid "Waterfall"
 msgstr ""
 
 msgid "Coliseum"
 msgstr ""
 
-msgid "Rainbow"
+msgid "Dungeon"
 msgstr ""
 
-msgid "Dungeon"
+msgid "Fortifications"
 msgstr ""
 
 msgid "Library"
 msgstr ""
 
+msgid "Rainbow"
+msgstr ""
+
 msgid "Storm"
-msgstr ""
-
-msgid "Thatched Hut"
-msgstr ""
-
-msgid "Hut"
-msgstr ""
-
-msgid "Treehouse"
 msgstr ""
 
 msgid "Cave"
 msgstr ""
 
-msgid "Habitat"
-msgstr ""
-
 msgid "Excavation"
 msgstr ""
 
-msgid "Archery Range"
+msgid "Habitat"
 msgstr ""
 
-msgid "Stick Hut"
+msgid "Hut"
+msgstr ""
+
+msgid "Thatched Hut"
+msgstr ""
+
+msgid "Treehouse"
+msgstr ""
+
+msgid "Archery Range"
 msgstr ""
 
 msgid "Cottage"
@@ -1064,10 +1139,13 @@ msgstr ""
 msgid "Crypt"
 msgstr ""
 
+msgid "Graveyard"
+msgstr ""
+
 msgid "Pen"
 msgstr ""
 
-msgid "Graveyard"
+msgid "Stick Hut"
 msgstr ""
 
 msgid "Blacksmith"
@@ -1076,25 +1154,19 @@ msgstr ""
 msgid "Den"
 msgstr ""
 
-msgid "Nest"
+msgid "Foundry"
 msgstr ""
 
-msgid "Foundry"
+msgid "Nest"
 msgstr ""
 
 msgid "Pyramid"
 msgstr ""
 
-msgid "Armory"
-msgstr ""
-
 msgid "Adobe"
 msgstr ""
 
-msgid "Stonehenge"
-msgstr ""
-
-msgid "Maze"
+msgid "Armory"
 msgstr ""
 
 msgid "Cliff Nest"
@@ -1103,7 +1175,10 @@ msgstr ""
 msgid "Mansion"
 msgstr ""
 
-msgid "Jousting Arena"
+msgid "Maze"
+msgstr ""
+
+msgid "Stonehenge"
 msgstr ""
 
 msgid "Bridge"
@@ -1112,28 +1187,31 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "Swamp"
+msgid "Ivory Tower"
 msgstr ""
 
-msgid "Ivory Tower"
+msgid "Jousting Arena"
 msgstr ""
 
 msgid "Mausoleum"
 msgstr ""
 
+msgid "Swamp"
+msgstr ""
+
 msgid "Cathedral"
-msgstr ""
-
-msgid "Red Tower"
-msgstr ""
-
-msgid "Green Tower"
 msgstr ""
 
 msgid "Cloud Castle"
 msgstr ""
 
+msgid "Green Tower"
+msgstr ""
+
 msgid "Laboratory"
+msgstr ""
+
+msgid "Red Tower"
 msgstr ""
 
 msgid "Upg. Archery Range"
@@ -1300,9 +1378,6 @@ msgid ""
 "percent."
 msgstr ""
 
-msgid "Cannot recruit - you already recruit hero in current week."
-msgstr ""
-
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
 
@@ -1327,10 +1402,10 @@ msgstr ""
 msgid "Income"
 msgstr ""
 
-msgid "Join Error"
+msgid "Army is full"
 msgstr ""
 
-msgid "Army is full"
+msgid "Join Error"
 msgstr ""
 
 msgid ""
@@ -1338,10 +1413,10 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-msgid "Town"
+msgid "This town may not be upgraded to a castle."
 msgstr ""
 
-msgid "This town may not be upgraded to a castle."
+msgid "Town"
 msgstr ""
 
 msgid "Exit Castle"
@@ -1456,16 +1531,28 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
+msgid "View World"
+msgstr ""
+
 msgid "View the entire world."
 msgstr ""
 
+msgid "Puzzle"
+msgstr ""
+
 msgid "View the obelisk puzzle."
+msgstr ""
+
+msgid "Scenario Information"
 msgstr ""
 
 msgid "View information on the scenario you are currently playing."
 msgstr ""
 
 msgid "Dig for the Ultimate Artifact."
+msgstr ""
+
+msgid "Digging"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
@@ -1488,10 +1575,10 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
-msgid "Shots Left"
+msgid "Shots"
 msgstr ""
 
-msgid "Shots"
+msgid "Shots Left"
 msgstr ""
 
 msgid "Hit Points"
@@ -1574,6 +1661,41 @@ msgstr ""
 msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr ""
 
+msgid "Language"
+msgstr ""
+
+msgid "Resolution"
+msgstr ""
+
+msgid "Experimental"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Select Game Language"
+msgstr ""
+
+msgid "Change language of the game."
+msgstr ""
+
+msgid "Select Game Resolution"
+msgstr ""
+
+msgid "Change resolution of the game."
+msgstr ""
+
+msgid "Experimental game settings."
+msgstr ""
+
+msgid "Attention"
+msgstr ""
+
+msgid ""
+"Your version of Heroes of Might and Magic II does not support any languages "
+"except English."
+msgstr ""
+
 msgid ""
 "Map\n"
 "Difficulty"
@@ -1606,16 +1728,37 @@ msgid ""
 "Conditions"
 msgstr ""
 
+msgid "score: "
+msgstr ""
+
+msgid "First select recipients!"
+msgstr ""
+
 msgid "You cannot select %{resource}!"
 msgstr ""
 
 msgid "Select count %{resource}:"
 msgstr ""
 
+msgid "Select Recipients"
+msgstr ""
+
+msgid "Your Funds"
+msgstr ""
+
+msgid "Planned Gift"
+msgstr ""
+
+msgid "Gift from %{name}"
+msgstr ""
+
 msgid "Set Guardian"
 msgstr ""
 
 msgid "Your army too big!"
+msgstr ""
+
+msgid "Choose game language:"
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -1649,6 +1792,12 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "Qty to trade"
 msgstr ""
 
@@ -1664,10 +1813,16 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
+msgid "guarded by "
+msgstr ""
+
 msgid "guarded by %{count} %{monster}"
 msgstr ""
 
 msgid "(available: %{count})"
+msgstr ""
+
+msgid "(empty)"
 msgstr ""
 
 msgid "already learned"
@@ -1703,9 +1858,6 @@ msgstr ""
 msgid "Defenders:"
 msgstr ""
 
-msgid "None"
-msgstr ""
-
 msgid "Unknown"
 msgstr ""
 
@@ -1719,6 +1871,9 @@ msgid "Available: %{count}"
 msgstr ""
 
 msgid "Number to buy:"
+msgstr ""
+
+msgid "MAX"
 msgstr ""
 
 msgid "How many troops to move?"
@@ -1783,14 +1938,14 @@ msgid ""
 "occupied by humans will be occupied by computer players."
 msgstr ""
 
-msgid "Size Icon"
-msgstr ""
-
 msgid ""
 "Indicates whether the map\n"
 "is small (36 x 36), medium\n"
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
 msgstr ""
 
 msgid "Selected Name"
@@ -1815,10 +1970,10 @@ msgstr ""
 msgid "The description of the currently selected map."
 msgstr ""
 
-msgid "Okay"
+msgid "Accept the choice made."
 msgstr ""
 
-msgid "Accept the choice made."
+msgid "Okay"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -1857,75 +2012,22 @@ msgstr ""
 msgid "Victory Condition"
 msgstr ""
 
+msgid "Experimental Game Settings"
+msgstr ""
+
 msgid "one"
 msgstr ""
 
 msgid "two"
 msgstr ""
 
+msgid "off"
+msgstr ""
+
 msgid "Music"
 msgstr ""
 
-msgid "Toggle ambient music level."
-msgstr ""
-
 msgid "Effects"
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
-
-msgid "Change the type of music."
-msgstr ""
-
-msgid "Hero Speed"
-msgstr ""
-
-msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
-
-msgid "Enemy Speed"
-msgstr ""
-
-msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Interface"
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "OK"
-msgstr ""
-
-msgid "Exit this menu."
-msgstr ""
-
-msgid "off"
 msgstr ""
 
 msgid "MIDI"
@@ -1934,16 +2036,25 @@ msgstr ""
 msgid "MIDI Expansion"
 msgstr ""
 
-msgid "CD Stereo"
+msgid "External"
 msgstr ""
 
-msgid "External"
+msgid "Music Type"
 msgstr ""
 
 msgid "Jump"
 msgstr ""
 
+msgid "Hero Speed"
+msgstr ""
+
 msgid "Don't Show"
+msgstr ""
+
+msgid "Enemy Speed"
+msgstr ""
+
+msgid "Scroll Speed"
 msgstr ""
 
 msgid "Evil"
@@ -1952,10 +2063,16 @@ msgstr ""
 msgid "Good"
 msgstr ""
 
+msgid "Interface Type"
+msgstr ""
+
 msgid "Hide"
 msgstr ""
 
 msgid "Show"
+msgstr ""
+
+msgid "Interface"
 msgstr ""
 
 msgid "Auto Resolve"
@@ -1964,7 +2081,45 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
+msgid "Battles"
+msgstr ""
+
 msgid "Manual"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Change the speed at which your heroes move on the main screen."
+msgstr ""
+
+msgid ""
+"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
+"I. movement at all."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr ""
+
+msgid "OK"
 msgstr ""
 
 msgid "Att."
@@ -2075,6 +2230,33 @@ msgstr ""
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 
+msgid "Project Coordination and Core Development"
+msgstr ""
+
+msgid "QA and Support"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Visit us at "
+msgstr ""
+
+msgid "Special Thanks to"
+msgstr ""
+
+msgid "Original project before 0.7"
+msgstr ""
+
+msgid "Support us at"
+msgstr ""
+
+msgid "Connect with us at"
+msgstr ""
+
+msgid "Need help with the game?"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -2086,9 +2268,27 @@ msgid ""
 "of save files."
 msgstr ""
 
+msgid "Warning"
+msgstr ""
+
 msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
+msgstr ""
+
+msgid "Usupported save format: "
+msgstr ""
+
+msgid "Current game version: "
+msgstr ""
+
+msgid "Last supported version: "
+msgstr ""
+
+msgid "This saved game is localized to '"
+msgstr ""
+
+msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
@@ -2102,32 +2302,27 @@ msgstr ""
 msgid "Cancel back to the main menu."
 msgstr ""
 
-msgid "Network"
-msgstr ""
-
-msgid ""
-"Play a network game, where 2 players use their own computers connected "
-"through a LAN (Local Area Network)."
+msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
 msgstr ""
 
-msgid "A single player game playing out a single map."
+msgid "A single player game playing through a series of maps."
 msgstr ""
 
 msgid "Campaign Game"
 msgstr ""
 
-msgid "A single player game playing through a series of maps."
+msgid ""
+"A multi-player game, with several human players completing against each "
+"other on a single map."
 msgstr ""
 
 msgid "Multi-Player Game"
 msgstr ""
 
-msgid ""
-"A multi-player game, with several human players completing against each "
-"other on a single map."
+msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Greetings!"
@@ -2178,18 +2373,15 @@ msgstr ""
 msgid "View the high score screen."
 msgstr ""
 
-msgid "Select Game Resolution"
-msgstr ""
-
-msgid "Change resolution of the game."
-msgstr ""
-
-msgid "Original Campaign"
+msgid "Game settings."
 msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
+msgstr ""
+
+msgid "Original Campaign"
 msgstr ""
 
 msgid "Expansion Campaign"
@@ -2220,17 +2412,11 @@ msgstr ""
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
-msgid "Experimental game settings."
-msgstr ""
-
 msgid "2 Players"
 msgstr ""
 
 msgid ""
-"Play with 2 human players, and optionally, up, to 4 additional computer "
+"Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
 msgstr ""
 
@@ -2238,7 +2424,7 @@ msgid "3 Players"
 msgstr ""
 
 msgid ""
-"Play with 3 human players, and optionally, up, to 3 additional computer "
+"Play with 3 human players, and optionally, up to 3 additional computer "
 "players."
 msgstr ""
 
@@ -2246,7 +2432,7 @@ msgid "4 Players"
 msgstr ""
 
 msgid ""
-"Play with 4 human players, and optionally, up, to 2 additional computer "
+"Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
 msgstr ""
 
@@ -2254,58 +2440,14 @@ msgid "5 Players"
 msgstr ""
 
 msgid ""
-"Play with 5 human players, and optionally, up, to 1 additional computer "
-"players."
+"Play with 5 human players, and optionally, up to 1 additional computer "
+"player."
 msgstr ""
 
 msgid "6 Players"
 msgstr ""
 
 msgid "Play with 6 human players."
-msgstr ""
-
-msgid "Defeat all enemy heroes and capture all enemy towns and castles."
-msgstr ""
-
-msgid "Run out of time. (Fail to win by a certain point.)"
-msgstr ""
-
-msgid "Capture the castle '%{name}'"
-msgstr ""
-
-msgid "Capture the town '%{name}'"
-msgstr ""
-
-msgid "Defeat the hero '%{name}'"
-msgstr ""
-
-msgid "Find the ultimate artifact"
-msgstr ""
-
-msgid "Find the '%{name}' artifact"
-msgstr ""
-
-msgid "Accumulate %{count} gold"
-msgstr ""
-
-msgid ""
-", or you may win by defeating all enemy heroes and capturing all enemy towns "
-"and castles."
-msgstr ""
-
-msgid "Lose the castle '%{name}'."
-msgstr ""
-
-msgid "Lose the town '%{name}'."
-msgstr ""
-
-msgid "Lose the hero: %{name}."
-msgstr ""
-
-msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
-msgstr ""
-
-msgid "Lose the heroes: %{name}."
 msgstr ""
 
 msgid ""
@@ -2334,13 +2476,18 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The enemy has found the %{name}.\n"
+"The enemy has captured %{name}!\n"
+"They are triumphant."
+msgstr ""
+
+msgid ""
+"The enemy has captured the hero %{name}!\n"
 "Your quest is a failure."
 msgstr ""
 
 msgid ""
-"%{color} has fallen!\n"
-"All is lost."
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
 msgstr ""
 
 msgid ""
@@ -2349,11 +2496,6 @@ msgid ""
 msgstr ""
 
 msgid "You have been eliminated from the game!!!"
-msgstr ""
-
-msgid ""
-"The enemy has captured %{name}!\n"
-"They are triumphant."
 msgstr ""
 
 msgid ""
@@ -2366,19 +2508,60 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid "Defeat all enemy heroes and capture all enemy towns and castles."
+msgstr ""
+
+msgid "Run out of time. (Fail to win by a certain point.)"
+msgstr ""
+
+msgid "Capture the castle '%{name}'."
+msgstr ""
+
+msgid "Capture the town '%{name}'."
+msgstr ""
+
+msgid "Defeat the hero '%{name}'."
+msgstr ""
+
+msgid "Find the ultimate artifact."
+msgstr ""
+
+msgid "Find the '%{name}' artifact."
+msgstr ""
+
+msgid "Accumulate %{count} gold."
+msgstr ""
+
+msgid ""
+", or you may win by defeating all enemy heroes and capturing all enemy towns "
+"and castles."
+msgstr ""
+
+msgid "Lose the castle '%{name}'."
+msgstr ""
+
+msgid "Lose the town '%{name}'."
+msgstr ""
+
+msgid "Lose the hero: %{name}."
+msgstr ""
+
+msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
+msgstr ""
+
 msgid "%{color} player has been vanquished!"
 msgstr ""
 
-msgid "Warning"
+msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "No maps available!"
 msgstr ""
 
-msgid "Scenario"
+msgid "Click here to select which scenario to play."
 msgstr ""
 
-msgid "Click here to select which scenario to play."
+msgid "Scenario"
 msgstr ""
 
 msgid "Game Difficulty"
@@ -2425,18 +2608,24 @@ msgstr ""
 msgid "Astrologers proclaim Week of the %{name}."
 msgstr ""
 
-msgid "After regular growth, population of %{monster} is doubled!"
+msgid "After regular growth, the population of %{monster} is doubled!"
+msgstr ""
+
+msgid ""
+"After regular growth, the population of %{monster} increases by %{count} "
+"percent!"
+msgid_plural ""
+"After regular growth, the population of %{monster} increases by %{count} "
+"percent!"
+msgstr[0] ""
+
+msgid "%{monster} population increases by +%{count}."
 msgstr ""
 
 msgid " All populations are halved."
 msgstr ""
 
 msgid " All dwellings increase population."
-msgstr ""
-
-msgid ""
-"%{color} player, your heroes abandon you, and you are banished from this "
-"land."
 msgstr ""
 
 msgid ""
@@ -2455,6 +2644,11 @@ msgstr ""
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
+msgstr ""
+
+msgid ""
+"%{color} player, your heroes abandon you, and you are banished from this "
+"land."
 msgstr ""
 
 msgid "Next Hero"
@@ -2490,16 +2684,16 @@ msgstr ""
 msgid "Bring up the adventure options menu."
 msgstr ""
 
-msgid "File Options"
-msgstr ""
-
 msgid "Bring up the file options menu, alloving you to load menu, save etc."
 msgstr ""
 
-msgid "System Options"
+msgid "File Options"
 msgstr ""
 
 msgid "Bring up the system options menu, alloving you to customize your game."
+msgstr ""
+
+msgid "System Options"
 msgstr ""
 
 msgid ""
@@ -2544,10 +2738,10 @@ msgstr ""
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr ""
 
-msgid "World Map"
+msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
-msgid "A miniature view of the known world. Left click to move viewing area."
+msgid "World Map"
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
@@ -2595,10 +2789,28 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr ""
 
-msgid "Lord Kilburn"
+msgid "English"
 msgstr ""
 
-msgid "Sir Gallant"
+msgid "French"
+msgstr ""
+
+msgid "Polish"
+msgstr ""
+
+msgid "German"
+msgstr ""
+
+msgid "Russian"
+msgstr ""
+
+msgid ", FPS: "
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Dimitry"
 msgstr ""
 
 msgid "Ector"
@@ -2607,52 +2819,67 @@ msgstr ""
 msgid "Gwenneth"
 msgstr ""
 
-msgid "Tyro"
-msgstr ""
-
-msgid "Ambrose"
-msgstr ""
-
-msgid "Ruby"
+msgid "Lord Kilburn"
 msgstr ""
 
 msgid "Maximus"
 msgstr ""
 
-msgid "Dimitry"
+msgid "Ruby"
 msgstr ""
 
-msgid "Thundax"
+msgid "Sir Gallant"
 msgstr ""
 
-msgid "Fineous"
-msgstr ""
-
-msgid "Jojosh"
-msgstr ""
-
-msgid "Crag Hack"
-msgstr ""
-
-msgid "Jezebel"
-msgstr ""
-
-msgid "Jaclyn"
-msgstr ""
-
-msgid "Ergon"
-msgstr ""
-
-msgid "Tsabu"
+msgid "Tyro"
 msgstr ""
 
 msgid "Atlas"
 msgstr ""
 
+msgid "Crag Hack"
+msgstr ""
+
+msgid "Ergon"
+msgstr ""
+
+msgid "Fineous"
+msgstr ""
+
+msgid "Jaclyn"
+msgstr ""
+
+msgid "Jezebel"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Tsabu"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
 msgid "Astra"
 msgstr ""
 
+msgid "Carlawn"
+msgstr ""
+
+msgid "Gem"
+msgstr ""
+
+msgid "Luna"
+msgstr ""
+
 msgid "Natasha"
+msgstr ""
+
+msgid "Rebecca"
 msgstr ""
 
 msgid "Troyan"
@@ -2661,67 +2888,40 @@ msgstr ""
 msgid "Vatawna"
 msgstr ""
 
-msgid "Rebecca"
-msgstr ""
-
-msgid "Gem"
-msgstr ""
-
-msgid "Ariel"
-msgstr ""
-
-msgid "Carlawn"
-msgstr ""
-
-msgid "Luna"
-msgstr ""
-
-msgid "Arie"
+msgid "Agar"
 msgstr ""
 
 msgid "Alamar"
 msgstr ""
 
-msgid "Vesper"
-msgstr ""
-
-msgid "Crodo"
+msgid "Arie"
 msgstr ""
 
 msgid "Barok"
 msgstr ""
 
-msgid "Kastore"
-msgstr ""
-
-msgid "Agar"
+msgid "Crodo"
 msgstr ""
 
 msgid "Falagar"
 msgstr ""
 
+msgid "Kastore"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
 msgid "Wrathmont"
-msgstr ""
-
-msgid "Myra"
-msgstr ""
-
-msgid "Flint"
 msgstr ""
 
 msgid "Dawn"
 msgstr ""
 
+msgid "Flint"
+msgstr ""
+
 msgid "Halon"
-msgstr ""
-
-msgid "Myrini"
-msgstr ""
-
-msgid "Wilfrey"
-msgstr ""
-
-msgid "Sarakin"
 msgstr ""
 
 msgid "Kalindra"
@@ -2730,19 +2930,28 @@ msgstr ""
 msgid "Mandigal"
 msgstr ""
 
-msgid "Zom"
+msgid "Myra"
+msgstr ""
+
+msgid "Myrini"
+msgstr ""
+
+msgid "Sarakin"
+msgstr ""
+
+msgid "Wilfrey"
+msgstr ""
+
+msgid "Celia"
+msgstr ""
+
+msgid "Charity"
 msgstr ""
 
 msgid "Darlana"
 msgstr ""
 
-msgid "Zam"
-msgstr ""
-
 msgid "Ranloo"
-msgstr ""
-
-msgid "Charity"
 msgstr ""
 
 msgid "Rialdo"
@@ -2754,55 +2963,58 @@ msgstr ""
 msgid "Sandro"
 msgstr ""
 
-msgid "Celia"
+msgid "Zam"
 msgstr ""
 
-msgid "Roland"
-msgstr ""
-
-msgid "Lord Corlagon"
-msgstr ""
-
-msgid "Sister Eliza"
+msgid "Zom"
 msgstr ""
 
 msgid "Archibald"
 msgstr ""
 
-msgid "Lord Halton"
-msgstr ""
-
 msgid "Brother Brax"
 msgstr ""
 
-msgid "Solmyr"
+msgid "Lord Corlagon"
 msgstr ""
 
-msgid "Dainwin"
+msgid "Lord Halton"
 msgstr ""
 
-msgid "Mog"
+msgid "Roland"
 msgstr ""
 
-msgid "Joseph"
-msgstr ""
-
-msgid "Gallavant"
-msgstr ""
-
-msgid "Elderian"
+msgid "Sister Eliza"
 msgstr ""
 
 msgid "Ceallach"
 msgstr ""
 
+msgid "Dainwin"
+msgstr ""
+
 msgid "Drakonia"
 msgstr ""
 
-msgid "Martine"
+msgid "Elderian"
+msgstr ""
+
+msgid "Gallavant"
+msgstr ""
+
+msgid "Joseph"
+msgstr ""
+
+msgid "Mog"
+msgstr ""
+
+msgid "Solmyr"
 msgstr ""
 
 msgid "Jarkonas"
+msgstr ""
+
+msgid "Martine"
 msgstr ""
 
 msgid "%{object} robber"
@@ -2995,18 +3207,18 @@ msgid ""
 "teaches you %{skill} for her own inscrutable purposes."
 msgstr ""
 
-msgid "You drink from the enchanted fountain, but nothing happens."
-msgstr ""
-
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
 
-msgid "You enter the faerie ring, but nothing happens."
+msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr ""
 
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
+msgstr ""
+
+msgid "You enter the faerie ring, but nothing happens."
 msgstr ""
 
 msgid ""
@@ -3534,6 +3746,9 @@ msgid ""
 "\"Come back when you think yourself worthy.\""
 msgstr ""
 
+msgid " and "
+msgstr ""
+
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
 "masters of the fort. Your army now contains %{monsters2}."
@@ -3662,6 +3877,16 @@ msgstr ""
 
 msgid "Except for evidence of a terrible battle, the cave is empty."
 msgstr ""
+
+msgid ""
+"As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
+"makes his way towards you."
+msgstr ""
+
+msgid "He checks your pack, and sees that you have 1 cursed item."
+msgid_plural ""
+"He checks your pack, and sees that you have %{count} cursed items."
+msgstr[0] ""
 
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
 msgstr ""
@@ -3871,9 +4096,6 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr ""
 
-msgid " and "
-msgstr ""
-
 msgid ""
 "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
 "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
@@ -3931,16 +4153,25 @@ msgid ""
 "work."
 msgstr ""
 
-msgid "I fear these creatures are in the mood for a fight."
-msgstr ""
-
 msgid "The creatures are willing to join us!"
 msgstr ""
 
 msgid "All the creatures will join us..."
 msgstr ""
 
+msgid "The creature will join us..."
+msgid_plural "%{count} of the creatures will join us..."
+msgstr[0] ""
+
+msgid ""
+"\n"
+" for a fee of %{gold} gold."
+msgstr ""
+
 msgid "These weak creatures will surely flee before us."
+msgstr ""
+
+msgid "I fear these creatures are in the mood for a fight."
 msgstr ""
 
 msgid ""
@@ -3966,40 +4197,37 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr ""
 
-msgid "skill|Basic"
+msgid "skill|Advanced"
 msgstr ""
 
-msgid "skill|Advanced"
+msgid "skill|Basic"
 msgstr ""
 
 msgid "skill|Expert"
 msgstr ""
 
-msgid "Pathfinding"
-msgstr ""
-
 msgid "Archery"
-msgstr ""
-
-msgid "Logistics"
-msgstr ""
-
-msgid "Scouting"
 msgstr ""
 
 msgid "Diplomacy"
 msgstr ""
 
-msgid "Navigation"
-msgstr ""
-
 msgid "Leadership"
 msgstr ""
 
-msgid "Wisdom"
+msgid "Logistics"
 msgstr ""
 
-msgid "Mysticism"
+msgid "Navigation"
+msgstr ""
+
+msgid "Pathfinding"
+msgstr ""
+
+msgid "Scouting"
+msgstr ""
+
+msgid "Wisdom"
 msgstr ""
 
 msgid "Ballistics"
@@ -4008,130 +4236,133 @@ msgstr ""
 msgid "Eagle Eye"
 msgstr ""
 
-msgid "Necromancy"
-msgstr ""
-
 msgid "Estates"
 msgstr ""
 
-msgid "Basic Pathfinding"
+msgid "Mysticism"
 msgstr ""
 
-msgid "Advanced Pathfinding"
-msgstr ""
-
-msgid "Expert Pathfinding"
-msgstr ""
-
-msgid "Basic Archery"
+msgid "Necromancy"
 msgstr ""
 
 msgid "Advanced Archery"
 msgstr ""
 
-msgid "Expert Archery"
+msgid "Advanced Pathfinding"
 msgstr ""
 
-msgid "Basic Logistics"
+msgid "Basic Archery"
+msgstr ""
+
+msgid "Basic Pathfinding"
+msgstr ""
+
+msgid "Expert Pathfinding"
 msgstr ""
 
 msgid "Advanced Logistics"
 msgstr ""
 
-msgid "Expert Logistics"
+msgid "Basic Logistics"
 msgstr ""
 
 msgid "Basic Scouting"
 msgstr ""
 
-msgid "Advanced Scouting"
+msgid "Expert Archery"
 msgstr ""
 
-msgid "Expert Scouting"
-msgstr ""
-
-msgid "Basic Diplomacy"
+msgid "Expert Logistics"
 msgstr ""
 
 msgid "Advanced Diplomacy"
 msgstr ""
 
+msgid "Advanced Scouting"
+msgstr ""
+
+msgid "Basic Diplomacy"
+msgstr ""
+
 msgid "Expert Diplomacy"
 msgstr ""
 
-msgid "Basic Navigation"
-msgstr ""
-
-msgid "Advanced Navigation"
-msgstr ""
-
-msgid "Expert Navigation"
-msgstr ""
-
-msgid "Basic Leadership"
+msgid "Expert Scouting"
 msgstr ""
 
 msgid "Advanced Leadership"
 msgstr ""
 
-msgid "Expert Leadership"
+msgid "Advanced Navigation"
 msgstr ""
 
-msgid "Basic Wisdom"
+msgid "Basic Leadership"
+msgstr ""
+
+msgid "Basic Navigation"
+msgstr ""
+
+msgid "Expert Navigation"
 msgstr ""
 
 msgid "Advanced Wisdom"
 msgstr ""
 
-msgid "Expert Wisdom"
-msgstr ""
-
 msgid "Basic Mysticism"
 msgstr ""
 
-msgid "Advanced Mysticism"
+msgid "Basic Wisdom"
 msgstr ""
 
-msgid "Expert Mysticism"
+msgid "Expert Leadership"
 msgstr ""
 
-msgid "Basic Luck"
+msgid "Expert Wisdom"
 msgstr ""
 
 msgid "Advanced Luck"
 msgstr ""
 
+msgid "Advanced Mysticism"
+msgstr ""
+
+msgid "Basic Luck"
+msgstr ""
+
 msgid "Expert Luck"
 msgstr ""
 
-msgid "Basic Ballistics"
+msgid "Expert Mysticism"
 msgstr ""
 
 msgid "Advanced Ballistics"
 msgstr ""
 
-msgid "Expert Ballistics"
+msgid "Advanced Eagle Eye"
+msgstr ""
+
+msgid "Basic Ballistics"
 msgstr ""
 
 msgid "Basic Eagle Eye"
 msgstr ""
 
-msgid "Advanced Eagle Eye"
-msgstr ""
-
-msgid "Expert Eagle Eye"
-msgstr ""
-
-msgid "Basic Necromancy"
+msgid "Expert Ballistics"
 msgstr ""
 
 msgid "Advanced Necromancy"
 msgstr ""
 
-msgid "Expert Necromancy"
+msgid "Basic Estates"
 msgstr ""
 
-msgid "Basic Estates"
+msgid "Basic Necromancy"
+msgstr ""
+
+msgid "Expert Eagle Eye"
+msgstr ""
+
+msgid "Expert Necromancy"
 msgstr ""
 
 msgid "Advanced Estates"
@@ -4140,34 +4371,99 @@ msgstr ""
 msgid "Expert Estates"
 msgstr ""
 
-msgid " allows you to negotiate with monsters who are weaker than your group."
+msgid ""
+"%{skill} reduces the movement penalty for rough terrain by %{count} percent."
+msgstr ""
+
+msgid "%{skill} eliminates the movement penalty for rough terrain."
+msgstr ""
+
+msgid ""
+"%{skill} increases the damage done by range attacking creatures by %{count} "
+"percent."
+msgstr ""
+
+msgid "%{skill} increases your hero's movement points by %{count} percent."
+msgstr ""
+
+msgid "%{skill} increases your hero's viewable area by one square."
+msgid_plural ""
+"%{skill} increases your hero's viewable area by %{count} squares."
+msgstr[0] ""
+
+msgid ""
+"%{skill} allows you to negotiate with monsters who are weaker than your "
+"group. "
+msgstr ""
+
+msgid "Approximately %{count} percent of the creatures may offer to join you."
 msgstr ""
 
 msgid "All of the creatures may offer to join you."
 msgstr ""
 
-msgid " allows your hero to learn third level spells."
+msgid ""
+"%{skill} increases your hero's movement points over water by %{count} "
+"percent."
 msgstr ""
 
-msgid " allows your hero to learn fourth level spells."
+msgid "%{skill} increases your hero's troops morale by %{count}."
 msgstr ""
 
-msgid " allows your hero to learn fifth level spells."
+msgid "%{skill} allows your hero to learn third level spells."
+msgstr ""
+
+msgid "%{skill} allows your hero to learn fourth level spells."
+msgstr ""
+
+msgid "%{skill} allows your hero to learn fifth level spells."
+msgstr ""
+
+msgid "%{skill} regenerates one of your hero's spell points per day."
+msgid_plural ""
+"%{skill} regenerates %{count} of your hero's spell points per day."
+msgstr[0] ""
+
+msgid "%{skill} increases your hero's luck by %{count}."
 msgstr ""
 
 msgid ""
-" gives your hero's catapult shots a greater chance to hit and do damage to "
-"castle walls."
+"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"damage to castle walls."
 msgstr ""
 
 msgid ""
-" gives your hero's catapult an extra shot, and each shot has a greater "
-"chance to hit and do damage to castle walls."
+"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"greater chance to hit and do damage to castle walls."
 msgstr ""
 
 msgid ""
-" gives your hero's catapult an extra shot, and each shot automatically "
-"destroys any wall, except a fortified wall in a Knight town."
+"%{skill} gives your hero's catapult an extra shot, and each shot "
+"automatically destroys any wall, except a fortified wall in a Knight castle."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"2nd level enemy spell used against him in a combat."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"level spell (or below) used against him in combat."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"level spell (or below) used against him in combat."
+msgstr ""
+
+msgid ""
+"%{skill} allows %{count} percent of the creatures killed in combat to be "
+"brought back from the dead as Skeletons."
+msgstr ""
+
+msgid ""
+"Your hero produces %{count} gold pieces per turn as tax revenue from estates."
 msgstr ""
 
 msgid "Blue"
@@ -4213,6 +4509,21 @@ msgid "Garrison"
 msgstr ""
 
 msgid "Gold Per Day:"
+msgstr ""
+
+msgid "Heroes"
+msgstr ""
+
+msgid "View Heroes."
+msgstr ""
+
+msgid "Towns/Castles"
+msgstr ""
+
+msgid "View Towns and Castles."
+msgstr ""
+
+msgid "Exit"
 msgstr ""
 
 msgid "luck|Cursed"
@@ -4406,19 +4717,10 @@ msgstr ""
 msgid "week|Condor"
 msgstr ""
 
-msgid "Desert"
-msgstr ""
-
-msgid "Snow"
-msgstr ""
-
-msgid "Wasteland"
-msgstr ""
-
 msgid "Beach"
 msgstr ""
 
-msgid "Lava"
+msgid "Desert"
 msgstr ""
 
 msgid "Dirt"
@@ -4427,22 +4729,31 @@ msgstr ""
 msgid "Grass"
 msgstr ""
 
+msgid "Lava"
+msgstr ""
+
 msgid "Ocean"
 msgstr ""
 
-msgid "maps|Small"
+msgid "Snow"
 msgstr ""
 
-msgid "maps|Medium"
+msgid "Wasteland"
 msgstr ""
 
-msgid "maps|Large"
+msgid "maps|Custom Size"
 msgstr ""
 
 msgid "maps|Extra Large"
 msgstr ""
 
-msgid "maps|Custom Size"
+msgid "maps|Large"
+msgstr ""
+
+msgid "maps|Medium"
+msgstr ""
+
+msgid "maps|Small"
 msgstr ""
 
 msgid "Ore Mine"
@@ -4479,7 +4790,8 @@ msgid "Lighthouse"
 msgstr ""
 
 msgid "Water Wheel"
-msgstr ""
+msgid_plural "Water Wheels"
+msgstr[0] ""
 
 msgid "Mines"
 msgstr ""
@@ -4503,7 +4815,8 @@ msgid "Wagon Camp"
 msgstr ""
 
 msgid "Windmill"
-msgstr ""
+msgid_plural "Windmills"
+msgstr[0] ""
 
 msgid "Random Town"
 msgstr ""
@@ -4599,9 +4912,6 @@ msgid "Stone Liths"
 msgstr ""
 
 msgid "Magic Well"
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Nothing Special"
@@ -4725,7 +5035,8 @@ msgid "Bottle"
 msgstr ""
 
 msgid "Magic Garden"
-msgstr ""
+msgid_plural "Magic Gardens"
+msgstr[0] ""
 
 msgid "Jail"
 msgstr ""
@@ -4772,46 +5083,607 @@ msgstr ""
 msgid "Reefs"
 msgstr ""
 
-msgid "Ultimate Book of Knowledge"
+msgid "Unknown Monster"
+msgstr ""
+
+msgid "Unknown Monsters"
+msgstr ""
+
+msgid "Peasant"
+msgstr ""
+
+msgid "Peasants"
+msgstr ""
+
+msgid "Archer"
+msgstr ""
+
+msgid "Archers"
+msgstr ""
+
+msgid "Ranger"
+msgstr ""
+
+msgid "Rangers"
+msgstr ""
+
+msgid "Pikeman"
+msgstr ""
+
+msgid "Pikemen"
+msgstr ""
+
+msgid "Veteran Pikeman"
+msgstr ""
+
+msgid "Veteran Pikemen"
+msgstr ""
+
+msgid "Swordsman"
+msgstr ""
+
+msgid "Swordsmen"
+msgstr ""
+
+msgid "Master Swordsman"
+msgstr ""
+
+msgid "Master Swordsmen"
+msgstr ""
+
+msgid "Cavalries"
+msgstr ""
+
+msgid "Cavalry"
+msgstr ""
+
+msgid "Champion"
+msgstr ""
+
+msgid "Champions"
+msgstr ""
+
+msgid "Paladin"
+msgstr ""
+
+msgid "Paladins"
+msgstr ""
+
+msgid "Crusader"
+msgstr ""
+
+msgid "Crusaders"
+msgstr ""
+
+msgid "Goblin"
+msgstr ""
+
+msgid "Goblins"
+msgstr ""
+
+msgid "Orc"
+msgstr ""
+
+msgid "Orcs"
+msgstr ""
+
+msgid "Orc Chief"
+msgstr ""
+
+msgid "Orc Chiefs"
+msgstr ""
+
+msgid "Wolf"
+msgstr ""
+
+msgid "Wolves"
+msgstr ""
+
+msgid "Ogre"
+msgstr ""
+
+msgid "Ogres"
+msgstr ""
+
+msgid "Ogre Lord"
+msgstr ""
+
+msgid "Ogre Lords"
+msgstr ""
+
+msgid "Troll"
+msgstr ""
+
+msgid "Trolls"
+msgstr ""
+
+msgid "War Troll"
+msgstr ""
+
+msgid "War Trolls"
+msgstr ""
+
+msgid "Cyclopes"
+msgstr ""
+
+msgid "Cyclops"
+msgstr ""
+
+msgid "Sprite"
+msgstr ""
+
+msgid "Sprites"
+msgstr ""
+
+msgid "Dwarf"
+msgstr ""
+
+msgid "Dwarves"
+msgstr ""
+
+msgid "Battle Dwarf"
+msgstr ""
+
+msgid "Battle Dwarves"
+msgstr ""
+
+msgid "Elf"
+msgstr ""
+
+msgid "Elves"
+msgstr ""
+
+msgid "Grand Elf"
+msgstr ""
+
+msgid "Grand Elves"
+msgstr ""
+
+msgid "Druid"
+msgstr ""
+
+msgid "Druids"
+msgstr ""
+
+msgid "Greater Druid"
+msgstr ""
+
+msgid "Greater Druids"
+msgstr ""
+
+msgid "Unicorn"
+msgstr ""
+
+msgid "Unicorns"
+msgstr ""
+
+msgid "Phoenix"
+msgstr ""
+
+msgid "Phoenixes"
+msgstr ""
+
+msgid "Centaur"
+msgstr ""
+
+msgid "Centaurs"
+msgstr ""
+
+msgid "Gargoyle"
+msgstr ""
+
+msgid "Gargoyles"
+msgstr ""
+
+msgid "Griffin"
+msgstr ""
+
+msgid "Griffins"
+msgstr ""
+
+msgid "Minotaur"
+msgstr ""
+
+msgid "Minotaurs"
+msgstr ""
+
+msgid "Minotaur King"
+msgstr ""
+
+msgid "Minotaur Kings"
+msgstr ""
+
+msgid "Hydra"
+msgstr ""
+
+msgid "Hydras"
+msgstr ""
+
+msgid "Green Dragon"
+msgstr ""
+
+msgid "Green Dragons"
+msgstr ""
+
+msgid "Red Dragon"
+msgstr ""
+
+msgid "Red Dragons"
+msgstr ""
+
+msgid "Black Dragon"
+msgstr ""
+
+msgid "Black Dragons"
+msgstr ""
+
+msgid "Halfling"
+msgstr ""
+
+msgid "Halflings"
+msgstr ""
+
+msgid "Boar"
+msgstr ""
+
+msgid "Boars"
+msgstr ""
+
+msgid "Iron Golem"
+msgstr ""
+
+msgid "Iron Golems"
+msgstr ""
+
+msgid "Steel Golem"
+msgstr ""
+
+msgid "Steel Golems"
+msgstr ""
+
+msgid "Roc"
+msgstr ""
+
+msgid "Rocs"
+msgstr ""
+
+msgid "Mage"
+msgstr ""
+
+msgid "Magi"
+msgstr ""
+
+msgid "Archmage"
+msgstr ""
+
+msgid "Archmagi"
+msgstr ""
+
+msgid "Giant"
+msgstr ""
+
+msgid "Giants"
+msgstr ""
+
+msgid "Titan"
+msgstr ""
+
+msgid "Titans"
+msgstr ""
+
+msgid "Skeletons"
+msgstr ""
+
+msgid "Zombie"
+msgstr ""
+
+msgid "Zombies"
+msgstr ""
+
+msgid "Mutant Zombie"
+msgstr ""
+
+msgid "Mutant Zombies"
+msgstr ""
+
+msgid "Mummies"
+msgstr ""
+
+msgid "Mummy"
+msgstr ""
+
+msgid "Royal Mummies"
+msgstr ""
+
+msgid "Royal Mummy"
+msgstr ""
+
+msgid "Vampire"
+msgstr ""
+
+msgid "Vampires"
+msgstr ""
+
+msgid "Vampire Lord"
+msgstr ""
+
+msgid "Vampire Lords"
+msgstr ""
+
+msgid "Lich"
+msgstr ""
+
+msgid "Liches"
+msgstr ""
+
+msgid "Power Lich"
+msgstr ""
+
+msgid "Power Liches"
+msgstr ""
+
+msgid "Bone Dragon"
+msgstr ""
+
+msgid "Bone Dragons"
+msgstr ""
+
+msgid "Rogue"
+msgstr ""
+
+msgid "Rogues"
+msgstr ""
+
+msgid "Nomad"
+msgstr ""
+
+msgid "Nomads"
+msgstr ""
+
+msgid "Ghost"
+msgstr ""
+
+msgid "Ghosts"
+msgstr ""
+
+msgid "Genie"
+msgstr ""
+
+msgid "Genies"
+msgstr ""
+
+msgid "Medusa"
+msgstr ""
+
+msgid "Medusas"
+msgstr ""
+
+msgid "Earth Elemental"
+msgstr ""
+
+msgid "Earth Elementals"
+msgstr ""
+
+msgid "Air Elemental"
+msgstr ""
+
+msgid "Air Elementals"
+msgstr ""
+
+msgid "Fire Elemental"
+msgstr ""
+
+msgid "Fire Elementals"
+msgstr ""
+
+msgid "Water Elemental"
+msgstr ""
+
+msgid "Water Elementals"
+msgstr ""
+
+msgid "Random Monster"
+msgstr ""
+
+msgid "Random Monsters"
+msgstr ""
+
+msgid "Random Monster 1"
+msgstr ""
+
+msgid "Random Monsters 1"
+msgstr ""
+
+msgid "Random Monster 2"
+msgstr ""
+
+msgid "Random Monsters 2"
+msgstr ""
+
+msgid "Random Monster 3"
+msgstr ""
+
+msgid "Random Monsters 3"
+msgstr ""
+
+msgid "Random Monster 4"
+msgstr ""
+
+msgid "Random Monsters 4"
+msgstr ""
+
+msgid "Double shot"
+msgstr ""
+
+msgid "2-hex monster"
+msgstr ""
+
+msgid "Double strike"
+msgstr ""
+
+msgid "Double damage to Undead"
+msgstr ""
+
+#, c-format
+msgid "% magic resistance"
+msgstr ""
+
+msgid "Immune to Mind spells"
+msgstr ""
+
+msgid "Immune to Elemental spells"
+msgstr ""
+
+msgid "Immune to Fire spells"
+msgstr ""
+
+msgid "Immune to Cold spells"
+msgstr ""
+
+msgid "Immune to "
+msgstr ""
+
+msgid "% immunity to %{spell} spell"
+msgstr ""
+
+#, c-format
+msgid "% damage from Elemental spells"
+msgstr ""
+
+#, c-format
+msgid "% chance to Dispel beneficial spells"
+msgstr ""
+
+#, c-format
+msgid "% chance to Paralyze"
+msgstr ""
+
+#, c-format
+msgid "% chance to Petrify"
+msgstr ""
+
+#, c-format
+msgid "% chance to Blind"
+msgstr ""
+
+#, c-format
+msgid "% chance to Curse"
+msgstr ""
+
+msgid "% chance to cast %{spell} spell"
+msgstr ""
+
+msgid "HP regeneration"
+msgstr ""
+
+msgid "Two hexes attack"
+msgstr ""
+
+msgid "Flyer"
+msgstr ""
+
+msgid "Always retaliates"
+msgstr ""
+
+msgid "Attacks all adjacent enemies"
+msgstr ""
+
+msgid "No melee penalty"
+msgstr ""
+
+msgid "Dragon"
+msgstr ""
+
+msgid "Undead"
+msgstr ""
+
+msgid "No enemy retaliation"
+msgstr ""
+
+msgid "HP drain"
+msgstr ""
+
+msgid "Cloud attack"
+msgstr ""
+
+msgid "Decreases enemy's morale by "
+msgstr ""
+
+#, c-format
+msgid "% chance to halve enemy"
+msgstr ""
+
+msgid "Soul Eater"
+msgstr ""
+
+msgid "Elemental"
+msgstr ""
+
+msgid "No Morale"
+msgstr ""
+
+#, c-format
+msgid "200% damage from Fire spells"
+msgstr ""
+
+#, c-format
+msgid "200% damage from Cold spells"
+msgstr ""
+
+msgid "% damage from %{spell} spell"
+msgstr ""
+
+#, c-format
+msgid "% immunity to "
+msgstr ""
+
+msgid "Lightning"
+msgstr ""
+
+#, c-format
+msgid "% damage from "
 msgstr ""
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
-msgid "Ultimate Sword of Dominion"
+msgid "Ultimate Book of Knowledge"
 msgstr ""
 
 msgid "The %{name} increases your attack skill by %{count}."
 msgstr ""
 
-msgid "Ultimate Cloak of Protection"
+msgid "Ultimate Sword of Dominion"
 msgstr ""
 
 msgid "The %{name} increases your defense skill by %{count}."
 msgstr ""
 
-msgid "Ultimate Wand of Magic"
+msgid "Ultimate Cloak of Protection"
 msgstr ""
 
 msgid "The %{name} increases your spell power by %{count}."
 msgstr ""
 
-msgid "Ultimate Shield"
+msgid "Ultimate Wand of Magic"
 msgstr ""
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
 
-msgid "Ultimate Staff"
+msgid "Ultimate Shield"
 msgstr ""
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
 
-msgid "Ultimate Crown"
+msgid "Ultimate Staff"
 msgstr ""
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
+msgstr ""
+
+msgid "Ultimate Crown"
 msgstr ""
 
 msgid "Golden Goose"
@@ -4845,9 +5717,6 @@ msgid "Medal of Honor"
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr ""
-
-msgid "Fizbin of Misfortune"
 msgstr ""
 
 msgid "The %{name} greatly decreases your morale by %{count}."
@@ -4934,10 +5803,10 @@ msgstr ""
 msgid "Four-Leaf Clover"
 msgstr ""
 
-msgid "True Compass of Mobility"
+msgid "The %{name} increases your movement on land and sea."
 msgstr ""
 
-msgid "The %{name} increases your movement on land and sea."
+msgid "True Compass of Mobility"
 msgstr ""
 
 msgid "Sailor's Astrolabe of Mobility"
@@ -5080,10 +5949,10 @@ msgstr ""
 msgid "The %{name} makes all your troops immune to holy spells."
 msgstr ""
 
-msgid "Wand of Negation"
+msgid "The %{name} protects your troops from the Dispel Magic spell."
 msgstr ""
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgid "Wand of Negation"
 msgstr ""
 
 msgid "Golden Bow"
@@ -5110,10 +5979,10 @@ msgid ""
 "cost of troops you have in your army."
 msgstr ""
 
-msgid "Wizard's Hat"
+msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr ""
 
-msgid "The %{name} increases the duration of your spells by %{count} turns."
+msgid "Wizard's Hat"
 msgstr ""
 
 msgid "Power Ring"
@@ -5144,31 +6013,36 @@ msgid "Endless Pouch of Sulfur"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of sulfur per day."
+msgstr[0] ""
 
 msgid "Endless Vial of Mercury"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of mercury per day."
+msgstr[0] ""
 
 msgid "Endless Pouch of Gems"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of gems per day."
+msgstr[0] ""
 
 msgid "Endless Cord of Wood"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of wood per day."
+msgstr[0] ""
 
 msgid "Endless Cart of Ore"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr ""
+msgid_plural "The %{name} provides %{count} units of ore per day."
+msgstr[0] ""
 
 msgid "Endless Pouch of Crystal"
 msgstr ""
@@ -5299,9 +6173,28 @@ msgstr ""
 msgid "The %{name} gives you increased necromancy skill."
 msgstr ""
 
+msgid "The %{name} extends the duration of all your spells by %{count} turn."
+msgid_plural ""
+"The %{name} extends the duration of all your spells by %{count} turns."
+msgstr[0] ""
+
+msgid "The %{name} increases the duration of your spells by %{count} turn."
+msgid_plural ""
+"The %{name} increases the duration of your spells by %{count} turns."
+msgstr[0] ""
+
+msgid "The %{name} returns %{count} extra power point/turn to your hero."
+msgid_plural ""
+"The %{name} returns %{count} extra power points/turn to your hero."
+msgstr[0] ""
+
+msgid "The %{name} provides %{count} unit of crystal per day."
+msgid_plural "The %{name} provides %{count} units of crystal per day."
+msgstr[0] ""
+
 msgid ""
-"You find an elaborate aontainer which housesan old vellum scroll. The runes "
-"on the container are very old, and the artistry with whitch it was put "
+"You find an elaborate container which houses an old vellum scroll. The runes "
+"on the container are very old, and the artistry with which it was put "
 "together is stunning. As you pull the scroll out, you feel imbued with "
 "magical power."
 msgstr ""
@@ -5442,7 +6335,10 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
-msgid "Wood"
+msgid "Crystal"
+msgstr ""
+
+msgid "Gems"
 msgstr ""
 
 msgid "Mercury"
@@ -5454,18 +6350,15 @@ msgstr ""
 msgid "Sulfur"
 msgstr ""
 
-msgid "Crystal"
-msgstr ""
-
-msgid "Gems"
-msgstr ""
-
-msgid "Fireball"
+msgid "Wood"
 msgstr ""
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
+msgstr ""
+
+msgid "Fireball"
 msgstr ""
 
 msgid "Fireblast"
@@ -5476,10 +6369,10 @@ msgid ""
 "center point of the spell, rather than one."
 msgstr ""
 
-msgid "Lightning Bolt"
+msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr ""
 
-msgid "Causes a bolt of electrical energy to strike the selected creature."
+msgid "Lightning Bolt"
 msgstr ""
 
 msgid "Chain Lightning"
@@ -5533,16 +6426,16 @@ msgstr ""
 msgid "Increases the speed of any creature by %{count}."
 msgstr ""
 
-msgid "Mass Haste"
-msgstr ""
-
 msgid "Increases the speed of all of your creatures by %{count}."
 msgstr ""
 
-msgid "spell|Slow"
+msgid "Mass Haste"
 msgstr ""
 
 msgid "Slows target to half movement rate."
+msgstr ""
+
+msgid "spell|Slow"
 msgstr ""
 
 msgid "Mass Slow"
@@ -5551,10 +6444,10 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr ""
 
-msgid "spell|Blind"
+msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
 msgstr ""
 
 msgid "Bless"
@@ -5563,19 +6456,16 @@ msgstr ""
 msgid "Causes the selected creatures to inflict maximum damage."
 msgstr ""
 
-msgid "Mass Bless"
-msgstr ""
-
 msgid "Causes all of your units to inflict maximum damage."
 msgstr ""
 
-msgid "Stoneskin"
+msgid "Mass Bless"
 msgstr ""
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr ""
 
-msgid "Steelskin"
+msgid "Stoneskin"
 msgstr ""
 
 msgid ""
@@ -5583,29 +6473,32 @@ msgid ""
 "version of Stoneskin."
 msgstr ""
 
-msgid "Curse"
+msgid "Steelskin"
 msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
 
-msgid "Mass Curse"
+msgid "Curse"
 msgstr ""
 
 msgid "Causes all enemy troops to inflict minimum damage."
 msgstr ""
 
-msgid "Holy Word"
+msgid "Mass Curse"
 msgstr ""
 
 msgid "Damages all undead in the battle."
 msgstr ""
 
-msgid "Holy Shout"
+msgid "Holy Word"
 msgstr ""
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
+msgstr ""
+
+msgid "Holy Shout"
 msgstr ""
 
 msgid "Anti-Magic"
@@ -5626,10 +6519,10 @@ msgstr ""
 msgid "Removes all magic spells from all creatures."
 msgstr ""
 
-msgid "Magic Arrow"
+msgid "Causes a magic arrow to strike the selected target."
 msgstr ""
 
-msgid "Causes a magic arrow to strike the selected target."
+msgid "Magic Arrow"
 msgstr ""
 
 msgid "Berserker"
@@ -5651,12 +6544,12 @@ msgstr ""
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
 
-msgid "Meteor Shower"
-msgstr ""
-
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
+msgstr ""
+
+msgid "Meteor Shower"
 msgstr ""
 
 msgid "Paralyze"
@@ -5693,18 +6586,18 @@ msgstr ""
 msgid "Reduces the defense rating of an enemy unit by three."
 msgstr ""
 
-msgid "Death Ripple"
-msgstr ""
-
 msgid "Damages all living (non-undead) units in the battle."
 msgstr ""
 
-msgid "Death Wave"
+msgid "Death Ripple"
 msgstr ""
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
+msgstr ""
+
+msgid "Death Wave"
 msgstr ""
 
 msgid "Dragon Slayer"
@@ -5734,16 +6627,16 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Shield"
-msgstr ""
-
 msgid "Halves damage received from ranged attacks for a single unit."
 msgstr ""
 
-msgid "Mass Shield"
+msgid "Shield"
 msgstr ""
 
 msgid "Halves damage received from ranged attacks for all of your units."
+msgstr ""
+
+msgid "Mass Shield"
 msgstr ""
 
 msgid "Summon Earth Elemental"
@@ -5770,52 +6663,52 @@ msgstr ""
 msgid "Summons Water Elementals to fight for your army."
 msgstr ""
 
-msgid "Earthquake"
-msgstr ""
-
 msgid "Damages castle walls."
 msgstr ""
 
-msgid "View Mines"
+msgid "Earthquake"
 msgstr ""
 
 msgid "Causes all mines across the land to become visible."
 msgstr ""
 
-msgid "View Resources"
+msgid "View Mines"
 msgstr ""
 
 msgid "Causes all resources across the land to become visible."
 msgstr ""
 
-msgid "View Artifacts"
+msgid "View Resources"
 msgstr ""
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr ""
 
-msgid "View Towns"
+msgid "View Artifacts"
 msgstr ""
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr ""
 
-msgid "View Heroes"
+msgid "View Towns"
 msgstr ""
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
-msgid "View All"
+msgid "View Heroes"
 msgstr ""
 
 msgid "Causes the entire land to become visible."
 msgstr ""
 
-msgid "Identify Hero"
+msgid "View All"
 msgstr ""
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
+msgstr ""
+
+msgid "Identify Hero"
 msgstr ""
 
 msgid "Summon Boat"
@@ -5827,16 +6720,16 @@ msgid ""
 "recent player to occupy."
 msgstr ""
 
-msgid "Dimension Door"
-msgstr ""
-
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
 
-msgid "Town Gate"
+msgid "Dimension Door"
 msgstr ""
 
 msgid "Returns the caster to any town or castle currently owned."
+msgstr ""
+
+msgid "Town Gate"
 msgstr ""
 
 msgid ""
@@ -5916,9 +6809,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: show visited content from objects"
-msgstr ""
-
 msgid "world: show terrain penalty"
 msgstr ""
 
@@ -5931,25 +6821,7 @@ msgstr ""
 msgid "world: Eagle Eye also works like Scholar in H3."
 msgstr ""
 
-msgid "world: ban for WeekOf/MonthOf Monsters"
-msgstr ""
-
-msgid "world: ban plagues months"
-msgstr ""
-
-msgid "world: Months Of Monsters do not place creatures on map"
-msgstr ""
-
 msgid "world: Crystal Ball also added Identify Hero and Visions spells"
-msgstr ""
-
-msgid "world: Starting heroes as Loss Conditions for Human Players"
-msgstr ""
-
-msgid "world: Only 1 hero can be hired by the one player every week"
-msgstr ""
-
-msgid "world: Each castle allows one hero to be recruited every week"
 msgstr ""
 
 msgid "world: Neutral armies scale with game difficulty"
@@ -6006,6 +6878,9 @@ msgid "battle: soft wait troop"
 msgstr ""
 
 msgid "battle: reverse wait order (fast, average, slow)"
+msgstr ""
+
+msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"

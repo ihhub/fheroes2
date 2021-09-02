@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "battle_pathfinding.h"
+#include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
@@ -47,11 +48,6 @@ namespace Battle
         for ( size_t i = 0; i < _cache.size(); ++i ) {
             _cache[i].resetNode();
         }
-    }
-
-    bool ArenaPathfinder::hexIsAccessible( int targetCell ) const
-    {
-        return _cache[targetCell]._from != -1;
     }
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const

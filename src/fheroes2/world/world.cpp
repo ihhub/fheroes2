@@ -35,11 +35,13 @@
 #include "heroes.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_objects.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "world.h"
 
@@ -47,7 +49,7 @@ namespace
 {
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
-        const MapsIndexes & indexes = Maps::GetAroundIndexes( tileId, radius, false );
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
@@ -58,8 +60,8 @@ namespace
                 continue;
             }
 
-            const int indexedObjectId = indexedTile.GetObject( true );
-            if ( indexedObjectId == MP2::OBJ_CASTLE || indexedObjectId == MP2::OBJ_HEROES || indexedObjectId == MP2::OBJ_MONSTER ) {
+            const MP2::MapObjectType objectType = indexedTile.GetObject( true );
+            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
                 return true;
             }
         }
@@ -291,27 +293,27 @@ void CapturedObjects::ResetColor( int color )
 
         if ( objcol.isColor( color ) ) {
             objcol.second = Color::UNUSED;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( objcol.first, objcol.second );
+            world.GetTiles( ( *it ).first ).CaptureFlags32( static_cast<MP2::MapObjectType>( objcol.first ), objcol.second );
         }
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, int obj )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
 {
-    Funds result;
+    funds = Funds();
+    objectCount = 0;
 
     for ( iterator it = begin(); it != end(); ++it ) {
         const ObjectColor & objcol = ( *it ).second.objcol;
 
-        if ( objcol.isObject( obj ) && objcol.isColor( color ) ) {
+        if ( objcol.isObject( objectType ) && objcol.isColor( playerColorId ) ) {
             Maps::Tiles & tile = world.GetTiles( ( *it ).first );
 
-            result += Funds( tile.QuantityResourceCount() );
+            funds += Funds( tile.QuantityResourceCount() );
+            ++objectCount;
             tile.QuantityReset();
         }
     }
-
-    return result;
 }
 
 World & world = World::Get();
@@ -706,7 +708,7 @@ void World::NewWeek( void )
 void World::NewMonth( void )
 {
     // skip first month
-    if ( 1 < week && week_current.GetType() == Week::MONSTERS && !Settings::Get().ExtWorldBanMonthOfMonsters() )
+    if ( 1 < week && week_current.GetType() == Week::MONSTERS )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns
@@ -739,14 +741,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
         }
 
         const int32_t tileId = tile.GetIndex();
-        const int objectId = tile.GetObject( true );
+        const MP2::MapObjectType objectType = tile.GetObject( true );
 
-        if ( objectId == MP2::OBJ_CASTLE || objectId == MP2::OBJ_HEROES || objectId == MP2::OBJ_MONSTER ) {
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
             excludeTiles.emplace( tileId );
             continue;
         }
 
-        if ( MP2::isActionObject( objectId ) ) {
+        if ( MP2::isActionObject( objectType ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
                 continue;
             }
@@ -947,15 +949,15 @@ u32 World::CountCapturedMines( int type, int color ) const
 /* capture object */
 void World::CaptureObject( s32 index, int color )
 {
-    int obj = GetTiles( index ).GetObject( false );
-    map_captureobj.Set( index, obj, color );
+    const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
+    map_captureobj.Set( index, objectType, color );
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
     if ( castle && castle->GetColor() != color )
         castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( obj, color );
+        GetTiles( index ).CaptureFlags32( objectType, color );
 }
 
 /* return color captured object */
@@ -1033,7 +1035,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
-        ultimate_artifact.SetFound( true );
+        ultimate_artifact.markAsFound();
         return true;
     }
 
@@ -1058,11 +1060,14 @@ EventsDate World::GetEventsDate( int color ) const
 
 std::string World::DateString( void ) const
 {
-    std::ostringstream os;
-    os << "month: " << GetMonth() << ", "
-       << "week: " << GetWeek() << ", "
-       << "day: " << GetDay();
-    return os.str();
+    std::string output( "month: " );
+    output += std::to_string( GetMonth() );
+    output += ", week: ";
+    output += std::to_string( GetWeek() );
+    output += ", day: ";
+    output += std::to_string( GetDay() );
+
+    return output;
 }
 
 u32 World::CountObeliskOnMaps( void )
@@ -1114,7 +1119,7 @@ const Heroes * World::GetHeroesCondLoss( void ) const
     return GetHeroes( heroes_cond_loss );
 }
 
-bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
+bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -1140,7 +1145,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } );
+            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->hasArtifact( art ); } );
         }
     }
 
@@ -1160,19 +1165,19 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     return false;
 }
 
-bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
+bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
 {
     const Colors colors( Game::GetKingdomColors() );
     for ( const int color : colors ) {
         const Kingdom & kingdom = world.GetKingdom( color );
-        if ( kingdom.isVisited( dstIndex, obj ) ) {
+        if ( kingdom.isVisited( dstIndex, objectType ) ) {
             return true;
         }
     }
     return false;
 }
 
-bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
+bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -1187,7 +1192,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 
     case GameOver::LOSS_HERO: {
         const Heroes * hero = GetHeroesCondLoss();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() && hero->GetKillerColor() != kingdom.GetColor() );
+        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
     }
 
     case GameOver::LOSS_TIME:
@@ -1200,11 +1205,9 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
     return false;
 }
 
-int World::CheckKingdomWins( const Kingdom & kingdom ) const
+uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
-    const int wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
-    const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
@@ -1227,21 +1230,27 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
         }
     }
 
-    for ( u32 ii = 0; wins[ii]; ++ii )
-        if ( ( mapWinCondition & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
-            return wins[ii];
+    const std::array<uint32_t, 6> wins
+        = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
+
+    for ( const uint32_t cond : wins ) {
+        if ( ( ( conf.ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
+            return cond;
+        }
+    }
 
     return GameOver::COND_NONE;
 }
 
-int World::CheckKingdomLoss( const Kingdom & kingdom ) const
+uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
 
-    // first, check if the other players have not completed WINS_TOWN, WINS_ARTIFACT or WINS_GOLD yet
-    const std::array<std::pair<int, int>, 3> enemy_wins = { std::make_pair<int, int>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
-                                                            std::make_pair<int, int>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
-                                                            std::make_pair<int, int>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
+    // first, check if the other players have not completed WINS_TOWN, WINS_HERO, WINS_ARTIFACT or WINS_GOLD yet
+    const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
+                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_HERO, GameOver::LOSS_ENEMY_WINS_HERO ),
+                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
+                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
     for ( const auto & item : enemy_wins ) {
         if ( conf.ConditionWins() & item.first ) {
@@ -1252,8 +1261,6 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
             }
         }
     }
-
-    const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
@@ -1282,13 +1289,12 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    for ( u32 ii = 0; loss[ii]; ++ii )
-        if ( ( conf.ConditionLoss() & loss[ii] ) && KingdomIsLoss( kingdom, loss[ii] ) )
-            return loss[ii];
+    const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
-    if ( conf.ExtWorldStartHeroLossCond4Humans() ) {
-        if ( kingdom.GetFirstHeroStartCondLoss() )
-            return GameOver::LOSS_STARTHERO;
+    for ( const uint32_t cond : loss ) {
+        if ( ( ( conf.ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
+            return cond;
+        }
     }
 
     return GameOver::COND_NONE;
@@ -1402,19 +1408,22 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             MapEvent * ptr = new MapEvent();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_SPHINX: {
             MapSphinx * ptr = new MapSphinx();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_SIGN: {
             MapSign * ptr = new MapSign();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
 
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_ARTIFACT:
@@ -1427,7 +1436,8 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             MapObjectSimple * ptr = new MapObjectSimple();
             msg >> *ptr;
             objs[index] = ptr;
-        } break;
+            break;
+        }
         }
     }
 
@@ -1510,7 +1520,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
             colors |= Color::PURPLE;
 
         // message
-        message = Game::GetEncodeString( st.toString() );
+        message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
                        << ": " << message );
@@ -1532,10 +1542,17 @@ bool EventDate::isAllow( int col, u32 date ) const
 
 StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 {
-    return msg << obj.resource << obj.computer << obj.first << obj.subsequent << obj.colors << obj.message;
+    return msg << obj.resource << obj.computer << obj.first << obj.subsequent << obj.colors << obj.message << obj.title;
 }
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    return msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
+    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_096_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_096_RELEASE ) {
+        msg >> obj.title;
+    }
+
+    return msg;
 }

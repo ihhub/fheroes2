@@ -23,15 +23,11 @@
 #ifndef H2MONSTER_H
 #define H2MONSTER_H
 
-#include <string>
-
-#include "battle_animation.h"
-#include "gamedefs.h"
 #include "monster_info.h"
 #include "payment.h"
-#include "serialize.h"
 
 class Spell;
+class StreamBase;
 
 class Monster
 {
@@ -40,8 +36,7 @@ public:
     {
         JOIN_CONDITION_SKIP = 0,
         JOIN_CONDITION_MONEY = 1,
-        JOIN_CONDITION_FREE = 2,
-        JOIN_CONDITION_FORCE = 3
+        JOIN_CONDITION_FREE = 2
     };
 
     enum class LevelType : int

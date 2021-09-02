@@ -36,7 +36,11 @@
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
+#include "tools.h"
+#include "translations.h"
 #include "visit.h"
 #include "world.h"
 
@@ -49,8 +53,10 @@ bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 
 Kingdom::Kingdom()
     : color( Color::NONE )
+    , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
+    , _topItemInKingdomView( 0 )
 {
     heroes_cond_loss.reserve( 4 );
 }
@@ -67,7 +73,7 @@ void Kingdom::Init( int clr )
         UpdateStartingResource();
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
     }
 }
 
@@ -195,8 +201,6 @@ void Kingdom::ActionNewDay( void )
 
 void Kingdom::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
-
     // skip first day
     if ( 1 < world.CountDay() ) {
         // castle New Week
@@ -248,29 +252,12 @@ void Kingdom::AddHeroes( Heroes * hero )
     }
 }
 
-void Kingdom::AddHeroStartCondLoss( Heroes * hero )
-{
-    // see: Settings::ExtWorldStartHeroLossCond4Humans
-    heroes_cond_loss.push_back( hero );
-}
-
 const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
 {
     for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
         if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
             return *it;
     return nullptr;
-}
-
-std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
-{
-    std::string result;
-    for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it ) {
-        result.append( ( *it )->GetName() );
-        if ( it + 1 != heroes_cond_loss.end() )
-            result.append( ", " );
-    }
-    return result;
 }
 
 void Kingdom::RemoveHeroes( const Heroes * hero )
@@ -395,36 +382,36 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject() );
 }
 
-bool Kingdom::isVisited( s32 index, int object ) const
+bool Kingdom::isVisited( s32 index, const MP2::MapObjectType objectType ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
-    return visit_object.end() != it && ( *it ).isObject( object );
+    return visit_object.end() != it && ( *it ).isObject( objectType );
 }
 
 /* return true if object visited */
-bool Kingdom::isVisited( int object ) const
+bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
 {
-    return std::any_of( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( int object ) const
+u32 Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, int object )
+void Kingdom::SetVisited( s32 index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
 {
-    if ( !isVisited( index, object ) && object != MP2::OBJ_ZERO )
-        visit_object.push_front( IndexObject( index, object ) );
+    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
+        visit_object.push_front( IndexObject( index, objectType ) );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const
+bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
 {
-    if ( !MP2::isActionObject( objectID ) && objectID != MP2::OBJ_COAST )
+    if ( !MP2::isActionObject( objectType ) && objectType != MP2::OBJ_COAST )
         return false;
 
-    if ( isVisited( tile.GetIndex(), objectID ) )
+    if ( isVisited( tile.GetIndex(), objectType ) )
         return false;
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
@@ -438,15 +425,15 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-    if ( objectID == MP2::OBJ_HEROES ) {
+    if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 
-    if ( MP2::isCaptureObject( objectID ) )
+    if ( MP2::isCaptureObject( objectType ) )
         return !Players::isFriends( color, tile.QuantityColor() );
 
-    if ( MP2::isQuantityObject( objectID ) )
+    if ( MP2::isQuantityObject( objectType ) )
         return tile.QuantityIsValid();
 
     return true;
@@ -455,11 +442,6 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
 bool Kingdom::HeroesMayStillMove( void ) const
 {
     return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
-}
-
-u32 Kingdom::GetCountCapital( void ) const
-{
-    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCapital ) );
 }
 
 void Kingdom::AddFundsResource( const Funds & funds )
@@ -528,11 +510,6 @@ void Kingdom::UpdateRecruits( void )
 
     if ( recruits.GetID1() == recruits.GetID2() )
         world.UpdateRecruits( recruits );
-}
-
-const Puzzle & Kingdom::PuzzleMaps( void ) const
-{
-    return puzzle_maps;
 }
 
 Puzzle & Kingdom::PuzzleMaps( void )
@@ -656,11 +633,11 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
         for ( u32 index = 0; artifacts[index] != Artifact::UNKNOWN; ++index )
             for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).HasArtifact( Artifact( artifacts[index] ) );
+                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).artifactCount( Artifact( artifacts[index] ) );
 
         // TAX_LIEN
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).HasArtifact( Artifact( Artifact::TAX_LIEN ) );
+            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).artifactCount( Artifact( Artifact::TAX_LIEN ) );
     }
 
     if ( INCOME_HEROSKILLS & type ) {
@@ -722,22 +699,17 @@ void Kingdoms::Init( void )
         GetKingdom( *it ).Init( *it );
 }
 
-u32 Kingdoms::size( void ) const
-{
-    return KINGDOMMAX + 1;
-}
-
 void Kingdoms::clear( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        kingdoms[ii].clear();
+    for ( Kingdom & kingdom : kingdoms )
+        kingdom.clear();
 }
 
 void Kingdoms::ApplyPlayWithStartingHero( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ApplyPlayWithStartingHero();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ApplyPlayWithStartingHero();
 }
 
 const Kingdom & Kingdoms::GetKingdom( int color ) const
@@ -813,39 +785,39 @@ Heroes * Kingdom::GetLastBattleWinHero() const
 
 void Kingdoms::NewDay( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ActionNewDay();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ActionNewDay();
 }
 
 void Kingdoms::NewWeek( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ActionNewWeek();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ActionNewWeek();
 }
 
 void Kingdoms::NewMonth( void )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() )
-            kingdoms[ii].ActionNewMonth();
+    for ( Kingdom & kingdom : kingdoms )
+        if ( kingdom.isPlay() )
+            kingdom.ActionNewMonth();
 }
 
 int Kingdoms::GetNotLossColors( void ) const
 {
     int result = 0;
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].GetColor() && !kingdoms[ii].isLoss() )
-            result |= kingdoms[ii].GetColor();
+    for ( const Kingdom & kingdom : kingdoms )
+        if ( kingdom.GetColor() && !kingdom.isLoss() )
+            result |= kingdom.GetColor();
     return result;
 }
 
 int Kingdoms::FindWins( int cond ) const
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].GetColor() && world.KingdomIsWins( kingdoms[ii], cond ) )
-            return kingdoms[ii].GetColor();
+    for ( const Kingdom & kingdom : kingdoms )
+        if ( kingdom.GetColor() && world.KingdomIsWins( kingdom, cond ) )
+            return kingdom.GetColor();
     return 0;
 }
 
@@ -857,20 +829,6 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
             GetKingdom( ( *it )->GetColor() ).AddHeroes( *it );
 }
 
-void Kingdoms::AddCondLossHeroes( const AllHeroes & heroes )
-{
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        // skip gray color
-        if ( ( *it )->GetColor() ) {
-            Kingdom & kingdom = GetKingdom( ( *it )->GetColor() );
-
-            if ( kingdom.isControlHuman() ) {
-                ( *it )->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
-                kingdom.AddHeroStartCondLoss( *it );
-            }
-        }
-}
-
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
     for ( const auto & castle : castles ) {
@@ -880,35 +838,50 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
 {
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].isPlay() ) {
-            const int color = kingdoms[ii].GetColor();
-            const Funds & funds = captureobj.TributeCapturedObject( color, obj );
+    for ( Kingdom & kingdom : kingdoms ) {
+        if ( kingdom.isPlay() ) {
+            const int color = kingdom.GetColor();
+            Funds funds;
+            int objectCount = 0;
 
-            kingdoms[ii].AddFundsResource( funds );
+            captureobj.tributeCapturedObjects( color, objectType, funds, objectCount );
+            if ( objectCount == 0 ) {
+                continue;
+            }
+
+            kingdom.AddFundsResource( funds );
 
             // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdoms[ii].isControlHuman() ) {
+            if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
 
                 event.computer = true;
                 event.first = day;
                 event.colors = color;
                 event.resource = funds;
-                event.message = MP2::StringObject( obj );
+
+                if ( objectCount > 1 ) {
+                    event.title = std::to_string( objectCount );
+                    event.title += ' ';
+                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                }
+                else {
+                    event.title = MP2::StringObject( objectType );
+                }
 
                 world.AddEventDate( event );
             }
         }
+    }
 }
 
 // Check if tile is visible from any crystal ball of any hero
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
-        if ( hero->HasArtifact( Artifact::CRYSTAL_BALL ) ) {
+        if ( hero->hasArtifact( Artifact::CRYSTAL_BALL ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
             if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;
@@ -953,21 +926,30 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
                << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss
-               << kingdom._lastBattleWinHeroID;
+               << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
-           >> kingdom.lost_hero >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss
-           >> kingdom._lastBattleWinHeroID;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
+        msg >> kingdom._topItemInKingdomView;
+    }
+    else {
+        kingdom._topItemInKingdomView = 0;
+    }
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
 {
-    msg << static_cast<u32>( obj.size() );
-    for ( u32 ii = 0; ii < obj.size(); ++ii )
-        msg << obj.kingdoms[ii];
+    msg << Kingdoms::_size;
+    for ( const Kingdom & kingdom : obj.kingdoms )
+        msg << kingdom;
 
     return msg;
 }
@@ -977,7 +959,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
     u32 kingdomscount = 0;
     msg >> kingdomscount;
 
-    if ( kingdomscount <= KINGDOMMAX + 1 ) {
+    if ( kingdomscount <= Kingdoms::_size ) {
         for ( u32 i = 0; i < kingdomscount; ++i )
             msg >> obj.kingdoms[i];
     }

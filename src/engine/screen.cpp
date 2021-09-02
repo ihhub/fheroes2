@@ -70,7 +70,7 @@ namespace
 
     bool SortResolutions( const fheroes2::Size & first, const fheroes2::Size & second )
     {
-        return first.width > second.width || ( first.width == second.width && first.height >= second.height );
+        return first.width > second.width || ( first.width == second.width && first.height > second.height );
     }
 
     bool IsLowerThanDefaultRes( const fheroes2::Size & value )
@@ -99,7 +99,7 @@ namespace
             static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
             const std::vector<fheroes2::Size> possibleResolutions
                 = {fheroes2::Size( 640, 480 ), fheroes2::Size( 800, 600 ), fheroes2::Size( 1024, 768 ), fheroes2::Size( 1280, 960 ), fheroes2::Size( 1920, 1080 )};
-            const fheroes2::Size & currentResolution = resolutions.front();
+            const fheroes2::Size currentResolution = resolutions.front();
             for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
                 if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
                     break;
@@ -705,7 +705,7 @@ namespace
 #endif
                 SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
 
-                fheroes2::Display & display = fheroes2::Display::instance();
+                const fheroes2::Display & display = fheroes2::Display::instance();
                 if ( display.width() != 0 && display.height() != 0 ) {
                     SDL_SetWindowSize( _window, display.width(), display.height() );
                 }
@@ -742,6 +742,11 @@ namespace
                     }
                 }
 
+#if defined( __SWITCH__ )
+                // Nintendo Switch supports arbitrary resolutions via the HW scaler
+                // 848x480 is the smallest resolution supported by Free Heroes 2
+                resolutionSet.emplace( 848, 480 );
+#endif
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
 
@@ -981,7 +986,7 @@ namespace
             if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
                     // copy the image from display buffer to SDL surface
-                    fheroes2::Display & display = fheroes2::Display::instance();
+                    const fheroes2::Display & display = fheroes2::Display::instance();
                     if ( _surface->w == display.width() && _surface->h == display.height() ) {
                         memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
@@ -1002,8 +1007,13 @@ namespace
             _currentScreenResolution.width = displayMode.w;
             _currentScreenResolution.height = displayMode.h;
 
+#if defined( __SWITCH__ )
+            // On a Nintendo Switch the game is always fullscreen
+            _activeWindowROI = fheroes2::Rect( 0, 0, _currentScreenResolution.width, _currentScreenResolution.height );
+#else
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
+#endif
         }
     };
 #else
@@ -1357,24 +1367,6 @@ namespace fheroes2
         currentPalette = ( palette == nullptr ) ? PALPAlette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
-    }
-
-    void Display::setEngine( std::unique_ptr<BaseRenderEngine> & engine )
-    {
-        assert( engine.get() != nullptr );
-        if ( engine.get() == nullptr ) {
-            return;
-        }
-        std::swap( engine, _engine );
-    }
-
-    void Display::setCursor( std::unique_ptr<Cursor> & cursor )
-    {
-        assert( cursor.get() != nullptr );
-        if ( cursor.get() == nullptr ) {
-            return;
-        }
-        std::swap( cursor, _cursor );
     }
 
     bool Cursor::isFocusActive() const

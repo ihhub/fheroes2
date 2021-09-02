@@ -45,7 +45,6 @@ namespace Campaign
             return _scenarios;
         }
 
-        std::vector<int> getScenariosBefore( const int scenarioID ) const;
         const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
         std::vector<int> getStartingScenarios() const;
 
@@ -90,7 +89,6 @@ namespace Campaign
         uint32_t _startScenarioID;
         std::string _customName;
 
-        CampaignAwardData();
         CampaignAwardData( int id, uint32_t type, uint32_t subType );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );

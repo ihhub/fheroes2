@@ -25,13 +25,10 @@
 
 #include <string>
 
-#include "battle_board.h"
+#include "battle_animation.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game_delays.h"
-#include "gamedefs.h"
 #include "spell.h"
-#include "statusbar.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -54,7 +51,6 @@ namespace Battle
     class Actions;
     struct TargetInfo;
     struct TargetsInfo;
-    struct Result;
 
     void DialogBattleSettings( void );
     bool DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom );

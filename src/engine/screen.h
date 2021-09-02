@@ -51,9 +51,15 @@ namespace fheroes2
             return std::vector<Size>();
         }
 
-        virtual void setTitle( const std::string & ) {}
+        virtual void setTitle( const std::string & )
+        {
+            // Do nothing.
+        }
 
-        virtual void setIcon( const Image & ) {}
+        virtual void setIcon( const Image & )
+        {
+            // Do nothing.
+        }
 
         virtual fheroes2::Rect getActiveWindowROI() const
         {
@@ -70,8 +76,16 @@ namespace fheroes2
             : _isFullScreen( false )
         {}
 
-        virtual void clear() {}
-        virtual void render( const Display &, const Rect & ) {}
+        virtual void clear()
+        {
+            // Do nothing.
+        }
+
+        virtual void render( const Display &, const Rect & )
+        {
+            // Do nothing.
+        }
+
         virtual bool allocate( int32_t &, int32_t &, bool )
         {
             return false;
@@ -82,8 +96,11 @@ namespace fheroes2
             return false;
         }
 
-        // to support color cycling we need to update palette
-        virtual void updatePalette( const std::vector<uint8_t> & ) {}
+        // To support color cycling we need to update palette.
+        virtual void updatePalette( const std::vector<uint8_t> & )
+        {
+            // Do nothing.
+        }
 
         void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
 
@@ -129,9 +146,6 @@ namespace fheroes2
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
-
-        void setEngine( std::unique_ptr<BaseRenderEngine> & engine );
-        void setCursor( std::unique_ptr<Cursor> & cursor );
 
     private:
         std::unique_ptr<BaseRenderEngine> _engine;
@@ -180,7 +194,10 @@ namespace fheroes2
         }
 
         // Default implementation of Cursor uses software emulation.
-        virtual void enableSoftwareEmulation( const bool ) {}
+        virtual void enableSoftwareEmulation( const bool )
+        {
+            // Do nothing.
+        }
 
         bool isSoftwareEmulation() const
         {

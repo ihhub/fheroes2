@@ -25,14 +25,14 @@
 #include <set>
 #include <vector>
 
-#include "gamedefs.h"
 #include "interface_itemsbar.h"
-#include "serialize.h"
+#include "mp2.h"
 #include "ui_tool.h"
 
 class Spell;
 class Heroes;
 class StatusBar;
+class StreamBase;
 
 class Artifact
 {
@@ -207,7 +207,14 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
-u32 GoldInsteadArtifact( int );
+
+u32 GoldInsteadArtifact( const MP2::MapObjectType objectType );
+
+namespace fheroes2
+{
+    void ResetArtifactStats();
+    void ExcludeArtifactFromRandom( const int artifactID );
+}
 
 struct ArtifactSetData
 {
@@ -230,7 +237,6 @@ public:
     bool isFull( void ) const;
     bool ContainUltimateArtifact( void ) const;
 
-    void RemoveArtifact( const Artifact & );
     void RemoveScroll( const Artifact & );
     void exchangeArtifacts( BagArtifacts & giftBag );
 

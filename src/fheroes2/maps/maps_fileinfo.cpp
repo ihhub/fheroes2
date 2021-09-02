@@ -24,13 +24,14 @@
 #include <locale>
 #endif
 #include <algorithm>
+#include <cassert>
 #include <cstring>
+#include <map>
 
 #include "artifact.h"
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
@@ -38,6 +39,7 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
@@ -48,9 +50,29 @@ namespace
     const size_t mapDescriptionLength = 143;
 
     template <typename CharType>
-    bool AlphabeticalCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
+    bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
     {
-        return std::use_facet<std::collate<CharType> >( std::locale() ).compare( lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size() ) == -1;
+        typename std::basic_string<CharType>::const_iterator li = lhs.begin();
+        typename std::basic_string<CharType>::const_iterator ri = rhs.begin();
+
+        while ( li != lhs.end() && ri != rhs.end() ) {
+            const CharType lc = std::tolower( *li, std::locale() );
+            const CharType rc = std::tolower( *ri, std::locale() );
+
+            ++li;
+            ++ri;
+
+            if ( lc < rc ) {
+                return true;
+            }
+            if ( lc > rc ) {
+                return false;
+            }
+            // the chars are "equal", so proceed to check the next pair
+        }
+
+        // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
+        return li == lhs.end() && ri != rhs.end();
     }
 
     int ByteToColor( const int byte )
@@ -352,11 +374,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // name
     fs.seek( 0x3A );
-    name = Game::GetEncodeString( fs.toString( mapNameLength ) );
+    name = fs.toString( mapNameLength );
 
     // description
     fs.seek( 0x76 );
-    description = Game::GetEncodeString( fs.toString( mapDescriptionLength ) );
+    description = fs.toString( mapDescriptionLength );
 
     // fill unions
     if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
@@ -364,6 +386,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         int side2 = 0;
 
         const Colors availableColors( kingdom_colors );
+
+        assert( !availableColors.empty() );
+        wins1 += Color::GetIndex( availableColors.front() );
 
         for ( const int color : availableColors ) {
             if ( Color::GetIndex( color ) < wins1 )
@@ -400,17 +425,12 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 
 bool Maps::FileInfo::FileSorting( const FileInfo & fi1, const FileInfo & fi2 )
 {
-    return AlphabeticalCompare( fi1.file, fi2.file );
+    return CaseInsensitiveCompare( fi1.file, fi2.file );
 }
 
 bool Maps::FileInfo::NameSorting( const FileInfo & fi1, const FileInfo & fi2 )
 {
-    return AlphabeticalCompare( fi1.name, fi2.name );
-}
-
-bool Maps::FileInfo::NameCompare( const FileInfo & fi1, const FileInfo & fi2 )
-{
-    return fi1.name == fi2.name;
+    return CaseInsensitiveCompare( fi1.name, fi2.name );
 }
 
 int Maps::FileInfo::KingdomRace( int color ) const
@@ -434,7 +454,7 @@ int Maps::FileInfo::KingdomRace( int color ) const
     return 0;
 }
 
-int Maps::FileInfo::ConditionWins( void ) const
+uint32_t Maps::FileInfo::ConditionWins() const
 {
     switch ( conditions_wins ) {
     case 0:
@@ -456,7 +476,7 @@ int Maps::FileInfo::ConditionWins( void ) const
     return GameOver::COND_NONE;
 }
 
-int Maps::FileInfo::ConditionLoss( void ) const
+uint32_t Maps::FileInfo::ConditionLoss() const
 {
     switch ( conditions_loss ) {
     case 0:
@@ -477,11 +497,6 @@ int Maps::FileInfo::ConditionLoss( void ) const
 bool Maps::FileInfo::WinsCompAlsoWins( void ) const
 {
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
-}
-
-bool Maps::FileInfo::WinsAllowNormalVictory( void ) const
-{
-    return allow_normal_victory && ( ( GameOver::WINS_TOWN | GameOver::WINS_ARTIFACT | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
 int Maps::FileInfo::WinsFindArtifactID( void ) const
@@ -522,11 +537,6 @@ int Maps::FileInfo::AllowCompHumanColors( void ) const
 int Maps::FileInfo::AllowHumanColors( void ) const
 {
     return allow_human_colors;
-}
-
-int Maps::FileInfo::AllowComputerColors( void ) const
-{
-    return allow_comp_colors;
 }
 
 int Maps::FileInfo::HumanOnlyColors( void ) const
@@ -574,44 +584,6 @@ std::string Maps::FileInfo::String( void ) const
     return os.str();
 }
 
-bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
-{
-    const Settings & conf = Settings::Get();
-
-    ListFiles maps_old = Settings::FindFiles( "maps", ".mp2", false );
-    if ( conf.isPriceOfLoyaltySupported() )
-        maps_old.Append( Settings::FindFiles( "maps", ".mx2", false ) );
-
-    for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
-        Maps::FileInfo fi;
-        if ( fi.ReadMP2( *it ) )
-            lists.push_back( fi );
-    }
-
-    if ( lists.empty() )
-        return false;
-
-    std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-    lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
-
-    if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
-    }
-
-    // set preferably count filter
-    const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( prefPlayerCount > 0 ) {
-        MapsFileInfoList::iterator it
-            = std::remove_if( lists.begin(), lists.end(), [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
-    }
-
-    return !lists.empty();
-}
-
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
     // Only the basename of map filename (fi.file) is saved
@@ -646,6 +618,43 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     // Please take a look at HeaderSAV class in game_io.cpp file.
     // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE add GameVersion loading code here and remove the separate function below.
     return msg;
+}
+
+MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
+{
+    const Settings & conf = Settings::Get();
+
+    ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
+    }
+
+    // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
+    std::map<std::string, Maps::FileInfo> uniqueMaps;
+
+    const int prefNumOfPlayers = conf.PreferablyCountPlayers();
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        if ( fi.ReadMP2( mapFile ) ) {
+            if ( ( !multi && !fi.isMultiPlayerMap() ) || ( multi && prefNumOfPlayers > 1 && fi.isAllowCountPlayers( prefNumOfPlayers ) ) ) {
+                uniqueMaps[System::GetBasename( mapFile )] = fi;
+            }
+        }
+    }
+
+    MapsFileInfoList result;
+
+    result.reserve( uniqueMaps.size() );
+
+    for ( const auto & item : uniqueMaps ) {
+        result.push_back( item.second );
+    }
+
+    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+
+    return result;
 }
 
 StreamBase & operator>>( StreamBase & stream, GameVersion & version )

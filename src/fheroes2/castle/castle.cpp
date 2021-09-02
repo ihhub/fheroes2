@@ -25,6 +25,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
+#include "battle_board.h"
 #include "battle_tower.h"
 #include "castle.h"
 #include "dialog.h"
@@ -36,14 +37,17 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "m82.h"
 #include "maps_tiles.h"
 #include "morale.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -214,7 +218,7 @@ void Castle::LoadFromMP2( StreamBuf st )
 
     // custom name
     st.skip( 1 );
-    name = Game::GetEncodeString( st.toString( 13 ) );
+    name = st.toString( 13 );
 
     // race
     u32 kingdom_race = Players::GetPlayerRace( GetColor() );
@@ -525,7 +529,6 @@ u32 * Castle::GetDwelling( u32 dw )
 
 void Castle::ActionNewWeek( void )
 {
-    ResetModes( DISABLEHIRES );
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
@@ -930,13 +933,6 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
 
 bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 {
-    const Kingdom & myKingdom = GetKingdom();
-    if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
-        if ( msg )
-            *msg = _( "Cannot recruit - you already recruit hero in current week." );
-        return false;
-    }
-
     CastleHeroes heroes = world.GetHeroes( *this );
 
     if ( heroes.Guest() ) {
@@ -955,6 +951,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
         }
     }
 
+    const Kingdom & myKingdom = GetKingdom();
     if ( !myKingdom.AllowRecruitHero( false, hero.GetLevel() ) ) {
         if ( msg )
             *msg = _( "Cannot recruit - you have too many Heroes." );
@@ -989,25 +986,23 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     if ( !hero->Recruit( *this ) )
         return nullptr;
 
-    Kingdom & kingdom = GetKingdom();
-
-    if ( kingdom.GetLastLostHero() == hero )
-        kingdom.ResetLastLostHero();
-
     // actually update available heroes to recruit
-    kingdom.GetRecruits();
+    const Colors colors( Settings::Get().GetPlayers().GetActualColors() );
 
-    kingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
+    for ( const int kingdomColor : colors ) {
+        Kingdom & kingdom = world.GetKingdom( kingdomColor );
+        if ( kingdom.GetLastLostHero() == hero )
+            kingdom.ResetLastLostHero();
+
+        kingdom.GetRecruits();
+    }
+
+    Kingdom & currentKingdom = GetKingdom();
+    currentKingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
 
     // update spell book
     if ( GetLevelMageGuild() )
         MageGuildEducateHero( *hero );
-
-    if ( Settings::Get().ExtWorldOneHeroHiredEveryWeek() )
-        kingdom.SetModes( Kingdom::DISABLEHIRES );
-
-    if ( Settings::Get().ExtCastleOneHeroHiredEveryWeek() )
-        SetModes( DISABLEHIRES );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() );
 
@@ -1819,7 +1814,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_CAPTAIN:
             return ICN::TWNKCAPT;
         case BUILD_WEL2:
-            return ICN::TWNKWEL2;
+            return ICN::KNIGHT_CASTLE_RIGHT_FARM;
         case BUILD_LEFTTURRET:
             return ICN::TWNKLTUR;
         case BUILD_RIGHTTURRET:
@@ -1879,7 +1874,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_SPEC:
             return ICN::TWNNSPEC;
         case BUILD_CAPTAIN:
-            return ICN::TWNNCAPT;
+            return ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS;
         case BUILD_WEL2:
             return ICN::TWNNWEL2;
         case BUILD_LEFTTURRET:
@@ -2282,11 +2277,6 @@ u32 Castle::GetUpgradeBuilding( u32 build ) const
     return build;
 }
 
-bool Castle::PredicateIsCapital( const Castle * castle )
-{
-    return castle && castle->Modes( CAPITAL );
-}
-
 bool Castle::PredicateIsCastle( const Castle * castle )
 {
     return castle && castle->isCastle();
@@ -2460,7 +2450,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonus if there are any troops defending it
     if ( isCastle() && totalStrength > 1 ) {
-        const Battle::Tower tower( *this, Battle::TWR_CENTER );
+        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ) );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
 
         totalStrength += towerStr;
@@ -2571,7 +2561,7 @@ u32 Castle::GetGrownMonthOf( void )
 
 void Castle::Scoute( void ) const
 {
-    Maps::ClearFog( GetIndex(), Game::GetViewDistance( isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN ), GetColor() );
+    Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
 }
 
 void Castle::JoinRNDArmy( void )
@@ -2881,13 +2871,15 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
             res.append( "\n \n" );
             res.append( Battle::Board::GetMoatInfo() );
         }
-    } break;
+        break;
+    }
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
-    } break;
+        break;
+    }
 
     default:
         break;

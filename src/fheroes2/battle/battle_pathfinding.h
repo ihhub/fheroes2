@@ -35,7 +35,7 @@ namespace Battle
      * terrain:  from: -1, isOpen: false, cost: MAX
      * if tile wouldn't be reached it stays as default
      */
-    struct ArenaNode : public PathfindingNode
+    struct ArenaNode : public PathfindingNode<uint16_t>
     {
         bool _isOpen = true;
         bool _isLeftDirection = false;
@@ -61,7 +61,6 @@ namespace Battle
         void calculate( const Unit & unit );
         Indexes buildPath( int targetCell ) const;
         Indexes findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const;
-        bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
 

@@ -36,6 +36,7 @@
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -520,8 +521,8 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     // header
     std::string message = "%{name1} vs %{name2}";
 
-    StringReplace( message, "%{name1}", ( hero1 ? std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() : "Monsters" ) );
-    StringReplace( message, "%{name2}", ( hero2 ? std::string( Race::String( hero2->GetRace() ) ) + " " + hero2->GetName() : "Monsters" ) );
+    StringReplace( message, "%{name1}", ( hero1 ? std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() : _( "Monsters" ) ) );
+    StringReplace( message, "%{name2}", ( hero2 ? std::string( Race::String( hero2->GetRace() ) ) + " " + hero2->GetName() : _( "Monsters" ) ) );
 
     Text text( message, Font::BIG );
     text.Blit( top.x + 320 - text.w() / 2, top.y + 26 );
@@ -534,7 +535,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
     else {
         fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.width, rtPortrait1.height, 0 );
-        text.Set( "N/A", Font::BIG );
+        text.Set( _( "N/A" ), Font::BIG );
         text.Blit( rtPortrait1.x + ( rtPortrait1.width - text.w() ) / 2, rtPortrait1.y + rtPortrait1.height / 2 - 8 );
     }
 
@@ -545,7 +546,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
     else {
         fheroes2::Fill( display, rtPortrait2.x, rtPortrait2.y, rtPortrait2.width, rtPortrait2.height, 0 );
-        text.Set( "N/A", Font::BIG );
+        text.Set( _( "N/A" ), Font::BIG );
         text.Blit( rtPortrait2.x + ( rtPortrait2.width - text.w() ) / 2, rtPortrait2.y + rtPortrait2.height / 2 - 8 );
     }
 

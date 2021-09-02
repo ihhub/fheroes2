@@ -25,19 +25,15 @@
 
 #include <string>
 
+#include "agg.h"
 #include "game_mode.h"
-#include "gamedefs.h"
+#include "mp2.h"
+#include "mus.h"
 #include "types.h"
 
 class Players;
 class Heroes;
 class Castle;
-
-namespace Campaign
-{
-    struct CampaignAwardData;
-    class CampaignSaveData;
-}
 
 namespace Game
 {
@@ -66,7 +62,7 @@ namespace Game
     // distance_t
     enum
     {
-        VIEW_TOWN = 0,
+        // UNUSED = 0,
         VIEW_CASTLE = 1,
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
@@ -108,6 +104,7 @@ namespace Game
         EVENT_INFOGAME,
         EVENT_DIGARTIFACT,
         EVENT_CASTSPELL,
+        EVENT_KINGDOM_INFO,
         EVENT_DEFAULTACTION,
         EVENT_OPENFOCUS,
         EVENT_SYSTEMOPTIONS,
@@ -140,12 +137,12 @@ namespace Game
         EVENT_JOINSTACKS,
         EVENT_UPGRADE_TROOP,
         EVENT_DISMISS_TROOP,
-        EVENT_TOWN_CREATURE_1,
-        EVENT_TOWN_CREATURE_2,
-        EVENT_TOWN_CREATURE_3,
-        EVENT_TOWN_CREATURE_4,
-        EVENT_TOWN_CREATURE_5,
-        EVENT_TOWN_CREATURE_6,
+        EVENT_TOWN_DWELLING_LEVEL_1,
+        EVENT_TOWN_DWELLING_LEVEL_2,
+        EVENT_TOWN_DWELLING_LEVEL_3,
+        EVENT_TOWN_DWELLING_LEVEL_4,
+        EVENT_TOWN_DWELLING_LEVEL_5,
+        EVENT_TOWN_DWELLING_LEVEL_6,
         EVENT_TOWN_WELL,
         EVENT_TOWN_MARKETPLACE,
         EVENT_TOWN_MAGE_GUILD,
@@ -155,6 +152,8 @@ namespace Game
         // town screen exclusive, not applied to build screen!
         EVENT_TOWN_TAVERN,
         EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
+
+        EVENT_WELL_BUY_ALL_CREATURES,
 
         EVENT_LAST,
     };
@@ -176,7 +175,7 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
-    fheroes2::GameMode NewNetwork();
+    fheroes2::GameMode NewNetwork(); // To be utilized in future.
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();
@@ -196,8 +195,8 @@ namespace Game
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusic( int );
-    int CurrentMusic( void );
+    void SetCurrentMusic( const int mus );
+    int CurrentMusic();
     u32 & CastleAnimationFrame( void );
     u32 & MapsAnimationFrame( void );
     u32 GetRating( void );
@@ -212,7 +211,6 @@ namespace Game
     void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
-    std::string GetEncodeString( const std::string & );
     // Returns the difficulty level based on the type of game.
     int getDifficulty();
     void LoadPlayers( const std::string & mapFileName, Players & players );
@@ -223,16 +221,42 @@ namespace Game
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 
+    // Useful for restoring background music after playing short-term music effects
+    class MusicRestorer
+    {
+    public:
+        MusicRestorer()
+            : _music( CurrentMusic() )
+        {}
+
+        MusicRestorer( const MusicRestorer & ) = delete;
+
+        ~MusicRestorer()
+        {
+            if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
+                SetCurrentMusic( _music );
+            }
+            else {
+                AGG::PlayMusic( _music, true, true );
+            }
+        }
+
+        MusicRestorer & operator=( const MusicRestorer & ) = delete;
+
+    private:
+        const int _music;
+    };
+
     namespace ObjectFadeAnimation
     {
         struct FadeTask
         {
             FadeTask();
 
-            FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_, bool fadeIn_,
-                      uint8_t objectTileset_ );
+            FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
+                      bool fadeIn_, uint8_t objectTileset_ );
 
-            int object;
+            MP2::MapObjectType object;
             uint32_t objectIndex;
             uint32_t animationIndex;
             int32_t fromIndex;
@@ -245,7 +269,7 @@ namespace Game
 
         const FadeTask & GetFadeTask();
 
-        void PrepareFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PrepareFadeTask( const MP2::MapObjectType object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
         void PerformFadeTask();
     }
 

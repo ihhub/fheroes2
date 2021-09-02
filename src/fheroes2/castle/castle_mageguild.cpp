@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <string>
 #include <vector>
 
 #include "agg_image.h"
@@ -34,6 +33,7 @@
 #include "race.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace
 {

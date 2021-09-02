@@ -173,11 +173,8 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
-    <ClCompile Include="src\engine\audio_mixer.cpp" />
-    <ClCompile Include="src\engine\audio_music.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
-    <ClCompile Include="src\engine\font.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
@@ -188,7 +185,7 @@
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
-    <ClCompile Include="src\engine\thread.cpp" />
+    <ClCompile Include="src\engine\timer.cpp" />
     <ClCompile Include="src\engine\timing.cpp" />
     <ClCompile Include="src\engine\tinyconfig.cpp" />
     <ClCompile Include="src\engine\tools.cpp" />
@@ -201,7 +198,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
@@ -252,11 +248,13 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_chest.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_game_settings.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_file.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_frameborder.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp" />
@@ -272,7 +270,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_skillinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_spellinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_spriteinfo.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_system.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_system_options.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
@@ -311,10 +309,13 @@
     <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_window.cpp" />
+    <ClCompile Include="src\fheroes2\h2d\h2d.cpp" />
+    <ClCompile Include="src\fheroes2\h2d\h2d_file.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_action.cpp" />
@@ -385,11 +386,8 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
-    <ClInclude Include="src\engine\audio_mixer.h" />
-    <ClInclude Include="src\engine\audio_music.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\engine.h" />
-    <ClInclude Include="src\engine\font.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
@@ -403,7 +401,7 @@
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\system.h" />
-    <ClInclude Include="src\engine\thread.h" />
+    <ClInclude Include="src\engine\timer.h" />
     <ClInclude Include="src\engine\timing.h" />
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
@@ -448,9 +446,12 @@
     <ClInclude Include="src\fheroes2\castle\castle_ui.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_system_options.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
@@ -481,10 +482,13 @@
     <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\gui\ui_window.h" />
+    <ClInclude Include="src\fheroes2\h2d\h2d.h" />
+    <ClInclude Include="src\fheroes2\h2d\h2d_file.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_base.h" />
