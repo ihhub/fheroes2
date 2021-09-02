@@ -1181,5 +1181,5 @@ std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 
 bool ArtifactSetData::operator<( const ArtifactSetData & other ) const
 {
-    return _assembledArtifactID == other._assembledArtifactID;
+    return _assembledArtifactID < other._assembledArtifactID;
 }
