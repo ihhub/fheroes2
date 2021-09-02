@@ -403,7 +403,7 @@ bool Heroes::isInVisibleMapArea() const
     return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
-bool Heroes::isDeepOcean() const
+bool Heroes::isInDeepOcean() const
 {
     // Maximum number of hero's steps per cell is 9 so we check if the hero moved more than half of them.
     const bool isHeroMovedHalfOfCell = ( sprite_index < 45 && sprite_index % 9 > 4 );
