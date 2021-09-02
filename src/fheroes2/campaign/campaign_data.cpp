@@ -110,14 +110,6 @@ namespace
         return obtainableAwards;
     }
 
-    std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyExtraCampaignAwardData()
-    {
-        std::vector<Campaign::CampaignAwardData> extraAwards;
-
-        extraAwards.emplace_back( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
-        return extraAwards;
-    }
-
     std::vector<Campaign::CampaignAwardData> getWizardsIsleCampaignAwardData( const int scenarioID )
     {
         std::vector<Campaign::CampaignAwardData> obtainableAwards;
@@ -514,8 +506,11 @@ namespace Campaign
         assert( campaignID >= 0 );
 
         switch ( campaignID ) {
-        case PRICE_OF_LOYALTY_CAMPAIGN:
-            return getPriceOfLoyaltyExtraCampaignAwardData();
+        case PRICE_OF_LOYALTY_CAMPAIGN: {
+            std::vector<Campaign::CampaignAwardData> extraAwards;
+            extraAwards.emplace_back( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
+            return extraAwards;
+        }
         case ROLAND_CAMPAIGN:
         case ARCHIBALD_CAMPAIGN:
         case DESCENDANTS_CAMPAIGN:
