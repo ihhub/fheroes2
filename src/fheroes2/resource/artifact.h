@@ -213,7 +213,7 @@ struct ArtifactSetData
 {
     ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
 
-    uint32_t _assembledArtifactID;
+    uint32_t _assembledArtifactID = Artifact::UNKNOWN;
     std::string _assembleMessage;
 
     bool operator<( const ArtifactSetData & other ) const;
