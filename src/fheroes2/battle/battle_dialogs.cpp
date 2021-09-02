@@ -484,15 +484,15 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
     }
 
     if ( !artifacts.empty() ) {
-        HeroBase * hero_wins = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
-        HeroBase * hero_loss = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
+        HeroBase * winner = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
+        HeroBase * loser = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
-        if ( hero_wins == nullptr || hero_loss == nullptr )
+        if ( winner == nullptr || loser == nullptr )
             return false;
 
-        const bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
-        const BagArtifacts::const_iterator winnerBagEnd = hero_wins->GetBagArtifacts().end();
+        const bool isWinnerHuman = winner && winner->isControlHuman();
+        const BagArtifacts::const_iterator winnerBagEnd = winner->GetBagArtifacts().end();
 
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
