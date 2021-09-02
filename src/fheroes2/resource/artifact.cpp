@@ -1148,7 +1148,7 @@ ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string &
     , _assembleMessage( assembleMessage )
 {}
 
-const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
+std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
     std::set<ArtifactSetData> assembledArtifactSets;
 
