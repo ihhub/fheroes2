@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-30 11:21+0200\n"
+"POT-Creation-Date: 2021-08-31 21:44+0800\n"
 "PO-Revision-Date: 2013-06-03 16:38+0000\n"
 "Last-Translator: elhoir <jfarroyo82@hotmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -122,14 +122,13 @@ msgstr "ejército|Demasiados"
 msgid "All %{race} troops +1"
 msgstr "Toda la tropa %{race +1"
 
-msgid "Troops of 3 alignments -1"
+#, fuzzy
+msgid "Multiple"
+msgstr "Multi"
+
+#, fuzzy
+msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Tropas de 3 líneas -1"
-
-msgid "Troops of 4 alignments -2"
-msgstr "Tropas de 4 líneas -2"
-
-msgid "Troops of 5 alignments -3"
-msgstr "Tropas de 5 líneas -3"
 
 #, fuzzy
 msgid "Some undead in group -1"
@@ -248,6 +247,9 @@ msgstr "Bajas en el campo de batalla."
 
 msgid "Attacker"
 msgstr "Agresor"
+
+msgid "None"
+msgstr "Ninguna"
 
 msgid "Defender"
 msgstr "Defensor"
@@ -543,6 +545,9 @@ msgstr ""
 msgid "Break auto battle?"
 msgstr "Activar combate automático"
 
+msgid "Error"
+msgstr "Error"
+
 msgid "No spells to cast."
 msgstr "Sin hechizos que lanzar."
 
@@ -575,6 +580,13 @@ msgid ""
 msgstr ""
 "Mediante la observación del ojo de halcón, %{name} es capaz de aprender el "
 "hechizo mágico %{spell}."
+
+#, fuzzy
+msgid "Monsters"
+msgstr "Monstruo"
+
+msgid "N/A"
+msgstr ""
 
 msgid "Left Turret"
 msgstr "Torreón Izquierdo"
@@ -992,8 +1004,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The location of the great library has been dicovered! You must make your way "
-"to it, and reclaim the city of Chronos in which it lies."
+"The location of the great library has been discovered! You must make your "
+"way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
 
 msgid ""
@@ -1154,6 +1166,9 @@ msgid "Cannot build %{name} because castle is too far from water."
 msgstr ""
 "No se puede construir %{name} porque el castillo está demasiado lejos del "
 "agua."
+
+msgid "disable build."
+msgstr ""
 
 #, fuzzy
 msgid "Cannot afford %{name}."
@@ -1556,10 +1571,6 @@ msgid ""
 msgstr "El Santuario incrementa la habilidad de nigromancia."
 
 #, fuzzy
-msgid "Cannot recruit - you have already recruited a hero in the current week."
-msgstr "No se puede reclutar - Ya has reclutado un héroe esta semana"
-
-#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "No puedes reclutar, tienes demasiados Héroes."
 
@@ -1733,17 +1744,31 @@ msgstr "semana"
 msgid "Available"
 msgstr "Disponible"
 
+#, fuzzy
+msgid "View World"
+msgstr "Ver Todo"
+
 msgid "View the entire world."
 msgstr "Ver el mundo entero."
 
+msgid "Puzzle"
+msgstr ""
+
 msgid "View the obelisk puzzle."
 msgstr "Ver el puzzle del Obelisco"
+
+#, fuzzy
+msgid "Scenario Information"
+msgstr "Formación Desplegada"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Ver información del escenario que estás jugando actualmente."
 
 msgid "Dig for the Ultimate Artifact."
 msgstr "Cavar buscando el Artefacto Definitivo."
+
+msgid "Digging"
+msgstr ""
 
 msgid "Exit this menu without doing anything."
 msgstr "Cerrar este menú sin hacer cambios"
@@ -1874,6 +1899,47 @@ msgstr "Salir"
 msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr ""
 
+msgid "Language"
+msgstr ""
+
+#, fuzzy
+msgid "Resolution"
+msgstr "Revolución"
+
+#, fuzzy
+msgid "Experimental"
+msgstr "Elemental del Aire"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+#, fuzzy
+msgid "Select Game Language"
+msgstr "Descripción seleccionada"
+
+msgid "Change language of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Select Game Resolution"
+msgstr "Descripción seleccionada"
+
+msgid "Change resolution of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Experimental game settings."
+msgstr "Configuración del juego FHeroes2"
+
+#, fuzzy
+msgid "Attention"
+msgstr "\"Anexión\""
+
+msgid ""
+"Your version of Heroes of Might and Magic II does not support any languages "
+"except English."
+msgstr ""
+
 msgid ""
 "Map\n"
 "Difficulty"
@@ -1914,11 +1980,31 @@ msgstr ""
 "Condiciones\n"
 "de derrota"
 
+msgid "score: "
+msgstr ""
+
+msgid "First select recipients!"
+msgstr ""
+
 msgid "You cannot select %{resource}!"
 msgstr ""
 
 msgid "Select count %{resource}:"
 msgstr ""
+
+#, fuzzy
+msgid "Select Recipients"
+msgstr "Descripción seleccionada"
+
+msgid "Your Funds"
+msgstr ""
+
+msgid "Planned Gift"
+msgstr ""
+
+#, fuzzy
+msgid "Gift from %{name}"
+msgstr "Recluta %{name}"
 
 msgid "Set Guardian"
 msgstr "Establecer Guardián"
@@ -1966,6 +2052,12 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Te puedo ofrecer 1 unidad de %{resto} por %{count} unidades de %{resfrom}"
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "Qty to trade"
 msgstr "Cantidad a comerciar"
 
@@ -1990,6 +2082,9 @@ msgstr "protegido por %{count} %{monster}"
 
 msgid "(available: %{count})"
 msgstr "(disponibles: %{count})"
+
+msgid "(empty)"
+msgstr ""
 
 msgid "already learned"
 msgstr "ya se ha aprendido"
@@ -2026,9 +2121,6 @@ msgstr "Territorio Virgen"
 msgid "Defenders:"
 msgstr "Defensores:"
 
-msgid "None"
-msgstr "Ninguna"
-
 msgid "Unknown"
 msgstr ""
 
@@ -2045,9 +2137,8 @@ msgstr "Disponible: %{count}"
 msgid "Number to buy:"
 msgstr "NÚMERO"
 
-#, fuzzy
-msgid "Select Game Resolution"
-msgstr "Descripción seleccionada"
+msgid "MAX"
+msgstr ""
 
 msgid "How many troops to move?"
 msgstr "¿Cuántas tropas deseas mover?"
@@ -2202,83 +2293,25 @@ msgstr "Acumular una gran cantidad de dinero."
 msgid "Victory Condition"
 msgstr "Condiciones de victoria"
 
+#, fuzzy
+msgid "Experimental Game Settings"
+msgstr "Configuración del juego FHeroes2"
+
 msgid "one"
 msgstr "uno"
 
 msgid "two"
 msgstr "dos"
 
+msgid "off"
+msgstr "apagado"
+
 #, fuzzy
 msgid "Music"
 msgstr "música"
 
-msgid "Toggle ambient music level."
-msgstr ""
-
 msgid "Effects"
 msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
-
-msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
-
-#, fuzzy
-msgid "Hero Speed"
-msgstr "Velocidad del héroe"
-
-#, fuzzy
-msgid "Enemy Speed"
-msgstr "Velocidad"
-
-msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
-msgstr ""
-
-#, fuzzy
-msgid "Scroll Speed"
-msgstr "Velocidad de desplazamiento"
-
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Interface"
-msgstr "Interfaz"
-
-msgid "Toggle interface visibility."
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Botella"
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-#, fuzzy
-msgid "Exit this menu."
-msgstr "Esta unidad espera"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "off"
-msgstr "apagado"
 
 msgid "MIDI"
 msgstr ""
@@ -2290,11 +2323,26 @@ msgstr "Mansión"
 msgid "External"
 msgstr ""
 
+msgid "Music Type"
+msgstr ""
+
 msgid "Jump"
 msgstr ""
 
+#, fuzzy
+msgid "Hero Speed"
+msgstr "Velocidad del héroe"
+
 msgid "Don't Show"
 msgstr ""
+
+#, fuzzy
+msgid "Enemy Speed"
+msgstr "Velocidad"
+
+#, fuzzy
+msgid "Scroll Speed"
+msgstr "Velocidad de desplazamiento"
 
 msgid "Evil"
 msgstr "Mal"
@@ -2302,11 +2350,18 @@ msgstr "Mal"
 msgid "Good"
 msgstr "Bien"
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
 msgid "Hide"
 msgstr ""
 
 msgid "Show"
 msgstr ""
+
+msgid "Interface"
+msgstr "Interfaz"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2314,8 +2369,48 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
+#, fuzzy
+msgid "Battles"
+msgstr "Botella"
+
 msgid "Manual"
 msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Change the speed at which your heroes move on the main screen."
+msgstr ""
+
+msgid ""
+"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
+"I. movement at all."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Esta unidad espera"
+
+msgid "OK"
+msgstr "OK"
 
 msgid "Att."
 msgstr ""
@@ -2405,17 +2500,17 @@ msgstr "Mejor monstruo:"
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
-msgid "difficulty|Expert"
-msgstr "Experto"
+msgid "difficulty|Normal"
+msgstr "Normal"
 
 msgid "difficulty|Hard"
 msgstr "Difícil"
 
+msgid "difficulty|Expert"
+msgstr "Experto"
+
 msgid "difficulty|Impossible"
 msgstr "Imposible"
-
-msgid "difficulty|Normal"
-msgstr "Normal"
 
 #, fuzzy
 msgid "Map is loading..."
@@ -2430,6 +2525,33 @@ msgstr ""
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 
+msgid "Project Coordination and Core Development"
+msgstr ""
+
+msgid "QA and Support"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Visit us at "
+msgstr ""
+
+msgid "Special Thanks to"
+msgstr ""
+
+msgid "Original project before 0.7"
+msgstr ""
+
+msgid "Support us at"
+msgstr ""
+
+msgid "Connect with us at"
+msgstr ""
+
+msgid "Need help with the game?"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -2441,9 +2563,28 @@ msgid ""
 "of save files."
 msgstr ""
 
+msgid "Warning"
+msgstr "Advertencia"
+
 msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
+msgstr ""
+
+msgid "Usupported save format: "
+msgstr ""
+
+#, fuzzy
+msgid "Current game version: "
+msgstr "Modificadores actuales:"
+
+msgid "Last supported version: "
+msgstr ""
+
+msgid "This saved game is localized to '"
+msgstr ""
+
+msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
@@ -2534,8 +2675,9 @@ msgstr "Puntuaciones más altas"
 msgid "View the high score screen."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid "Change resolution of the game."
-msgstr ""
+#, fuzzy
+msgid "Game settings."
+msgstr "Ajustes"
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -2578,13 +2720,6 @@ msgstr "Enano de Combate"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "Configuración del juego FHeroes2"
-
-msgid "Settings"
-msgstr "Ajustes"
 
 msgid "2 Players"
 msgstr "2 jugadores"
@@ -2767,18 +2902,16 @@ msgstr ""
 "No consigas ganar para el final del mes &{month}, semana %{semana}, día "
 "%{day}."
 
-msgid "Lose the heroes: %{name}."
-msgstr "Piérdes los Héroes: %{name}."
-
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
 
+#, fuzzy
+msgid "Do you wish to continue the game?"
+msgstr "¿Quiéres comprar uno?"
+
 msgid "No maps available!"
 msgstr "¡Ningún mapa disponible!"
-
-msgid "Warning"
-msgstr "Advertencia"
 
 msgid "Click here to select which scenario to play."
 msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
@@ -2842,9 +2975,15 @@ msgstr "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
 
 #, fuzzy
 msgid ""
-"After regular growth, the population of %{monter} increases by %{count} "
+"After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
-msgstr "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
+msgid_plural ""
+"After regular growth, the population of %{monster} increases by %{count} "
+"percent!"
+msgstr[0] ""
+"Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
+msgstr[1] ""
+"Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
 
 #, fuzzy
 msgid "%{monster} population increases by +%{count}."
@@ -3068,6 +3207,9 @@ msgid "German"
 msgstr "Sherman"
 
 msgid "Russian"
+msgstr ""
+
+msgid ", FPS: "
 msgstr ""
 
 msgid "Ambrose"
@@ -4285,6 +4427,9 @@ msgstr ""
 "famoso ni suficientemente letrado para llegar a ver a mi maestro\" dice con "
 "desdén. \"Vuelve cuando te consideres suficientemente válido\"."
 
+msgid " and "
+msgstr " y "
+
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
 "masters of the fort. Your army now contains %{monsters2}."
@@ -4451,6 +4596,11 @@ msgstr ""
 
 msgid "Except for evidence of a terrible battle, the cave is empty."
 msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
+
+msgid ""
+"As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
+"makes his way towards you."
+msgstr ""
 
 msgid "He checks your pack, and sees that you have 1 cursed item."
 msgid_plural ""
@@ -4743,9 +4893,6 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} se reune con %{name2}"
 
-msgid " and "
-msgstr " y "
-
 msgid ""
 "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
 "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
@@ -4827,6 +4974,11 @@ msgid "The creature will join us..."
 msgid_plural "%{count} of the creatures will join us..."
 msgstr[0] "La criatura se unirá a nosotros..."
 msgstr[1] "%{count} de las criaturas se unirán a nosotros..."
+
+msgid ""
+"\n"
+" for a fee of %{gold} gold."
+msgstr ""
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
@@ -5176,17 +5328,17 @@ msgstr "Azul"
 msgid "Green"
 msgstr "Verde"
 
-msgid "Orange"
-msgstr "Naranja"
-
-msgid "Purple"
-msgstr "Morado"
-
 msgid "Red"
 msgstr "Rojo"
 
 msgid "Yellow"
 msgstr "Amarillo"
+
+msgid "Orange"
+msgstr "Naranja"
+
+msgid "Purple"
+msgstr "Morado"
 
 msgid "Aqua"
 msgstr "Agua"
@@ -5215,14 +5367,36 @@ msgstr ""
 msgid "Gold Per Day:"
 msgstr "Oro por día:"
 
+msgid "Heroes"
+msgstr "Héroes"
+
+#, fuzzy
+msgid "View Heroes."
+msgstr "Ver Heroes"
+
+#, fuzzy
+msgid "Towns/Castles"
+msgstr "Puerta de la Ciudad"
+
+#, fuzzy
+msgid "View Towns and Castles."
+msgstr "Ver Ciudades"
+
+#, fuzzy
+msgid "Exit"
+msgstr "Salir de la ciudad"
+
+msgid "luck|Cursed"
+msgstr "suerte|Maldito"
+
 msgid "luck|Awful"
 msgstr "suerte|Horrible"
 
 msgid "luck|Bad"
 msgstr "suerte|Malo"
 
-msgid "luck|Cursed"
-msgstr "suerte|Maldito"
+msgid "luck|Normal"
+msgstr "suerte|Normal"
 
 msgid "luck|Good"
 msgstr "suerte|bueno"
@@ -5232,9 +5406,6 @@ msgstr "suerte|Grande"
 
 msgid "luck|Irish"
 msgstr "suerte|Irlandés"
-
-msgid "luck|Normal"
-msgstr "suerte|Normal"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5257,26 +5428,26 @@ msgstr ""
 "Con Buena Suerte a veces tus tropas consegirán ataques afortunados "
 "duplicando su daño."
 
+msgid "morale|Treason"
+msgstr "moral|Traición"
+
 msgid "morale|Awful"
 msgstr "moral|Horrible"
-
-msgid "morale|Normal"
-msgstr "moral|Normal"
 
 msgid "morale|Poor"
 msgstr "moral|Pobre"
 
-msgid "morale|Treason"
-msgstr "moral|Traición"
-
-msgid "morale|Blood!"
-msgstr "moral|¡Sangre!"
+msgid "morale|Normal"
+msgstr "moral|Normal"
 
 msgid "morale|Good"
 msgstr "moral|Bueno"
 
 msgid "morale|Great"
 msgstr "moral|Grande"
+
+msgid "morale|Blood!"
+msgstr "moral|¡Sangre!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr "Con Baja Moral tus tropas puede paralizarse en combate."
@@ -5291,17 +5462,11 @@ msgstr ""
 msgid "Good morale may give your armies extra attacks in combat."
 msgstr "Con Moral Alta tus tropas podrán lograr ataques extra en combate."
 
-msgid "Barbarian"
-msgstr "Bárbaro"
-
 msgid "Knight"
 msgstr "Caballero"
 
-msgid "Multi"
-msgstr "Multi"
-
-msgid "Necromancer"
-msgstr "Nigromante"
+msgid "Barbarian"
+msgstr "Bárbaro"
 
 msgid "Sorceress"
 msgstr "Hechicera"
@@ -5312,35 +5477,41 @@ msgstr "Brujo"
 msgid "Wizard"
 msgstr "Mago"
 
-msgid "speed|Average"
-msgstr "velocidad|Media"
+msgid "Necromancer"
+msgstr "Nigromante"
 
-msgid "speed|Crawling"
-msgstr "velocidad|Arrastrando"
-
-msgid "speed|Fast"
-msgstr "velocidad|Rápido"
-
-msgid "speed|Slow"
-msgstr "velocidad|Lento"
+msgid "Multi"
+msgstr "Multi"
 
 msgid "speed|Standing"
 msgstr "velocidad|Fijo"
 
-msgid "speed|Very Fast"
-msgstr "velocidad|Muy rápido"
+msgid "speed|Crawling"
+msgstr "velocidad|Arrastrando"
 
 msgid "speed|Very Slow"
 msgstr "velocidad|Muy lento"
+
+msgid "speed|Slow"
+msgstr "velocidad|Lento"
+
+msgid "speed|Average"
+msgstr "velocidad|Media"
+
+msgid "speed|Fast"
+msgstr "velocidad|Rápido"
+
+msgid "speed|Very Fast"
+msgstr "velocidad|Muy rápido"
+
+msgid "speed|Ultra Fast"
+msgstr "velocidad|Ultra rápido"
 
 msgid "speed|Blazing"
 msgstr "velocidad|fugaz"
 
 msgid "speed|Instant"
 msgstr "velocidad|Instantáneo"
-
-msgid "speed|Ultra Fast"
-msgstr "velocidad|Ultra rápido"
 
 msgid "week|PLAGUE"
 msgstr "semana|PLAGA"
@@ -5487,8 +5658,11 @@ msgstr "Ciudad Dragón"
 msgid "Lighthouse"
 msgstr "Faro"
 
+#, fuzzy
 msgid "Water Wheel"
-msgstr "Molino de Agua"
+msgid_plural "Water Wheels"
+msgstr[0] "Molino de Agua"
+msgstr[1] "Molino de Agua"
 
 msgid "Mines"
 msgstr "Minas"
@@ -5511,8 +5685,11 @@ msgstr "Tienda del Desierto"
 msgid "Wagon Camp"
 msgstr "Carromato"
 
+#, fuzzy
 msgid "Windmill"
-msgstr "Molino de Viento"
+msgid_plural "Windmills"
+msgstr[0] "Molino de Viento"
+msgstr[1] "Molino de Viento"
 
 msgid "Random Town"
 msgstr "Cualquier torre"
@@ -5611,9 +5788,6 @@ msgstr ""
 
 msgid "Magic Well"
 msgstr "Pozo Mágico"
-
-msgid "Heroes"
-msgstr "Héroes"
 
 msgid "Nothing Special"
 msgstr "Nada especial"
@@ -5736,8 +5910,11 @@ msgstr ""
 msgid "Bottle"
 msgstr "Botella"
 
+#, fuzzy
 msgid "Magic Garden"
-msgstr "Jardín mágico"
+msgid_plural "Magic Gardens"
+msgstr[0] "Jardín mágico"
+msgstr[1] "Jardín mágico"
 
 msgid "Jail"
 msgstr "Cárcel"
@@ -6422,6 +6599,18 @@ msgstr ""
 msgid "% damage from %{spell} spell"
 msgstr ""
 
+#, c-format
+msgid "% immunity to "
+msgstr ""
+
+#, fuzzy
+msgid "Lightning"
+msgstr "Vara Relampagueante"
+
+#, fuzzy, c-format
+msgid "% damage from "
+msgstr "Elementales del Agua"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -6992,9 +7181,10 @@ msgstr[1] ""
 "Has tomado el control de una mina de cristal. Te proveerá con %{count} "
 "unidades de cristal al día."
 
+#, fuzzy
 msgid ""
-"You find an elaborate aontainer which housesan old vellum scroll. The runes "
-"on the container are very old, and the artistry with whitch it was put "
+"You find an elaborate container which houses an old vellum scroll. The runes "
+"on the container are very old, and the artistry with which it was put "
 "together is stunning. As you pull the scroll out, you feel imbued with "
 "magical power."
 msgstr ""
@@ -7753,9 +7943,6 @@ msgstr "juego: recordar el último foco."
 msgid "battle: show damage info"
 msgstr "juego: mostrar información del sistema"
 
-msgid "world: show visited content from objects"
-msgstr "mundo: ver contenido de objetos visitados"
-
 msgid "world: show terrain penalty"
 msgstr ""
 
@@ -7768,25 +7955,7 @@ msgstr "mundo: permitir establecer guardianes en objetos"
 msgid "world: Eagle Eye also works like Scholar in H3."
 msgstr ""
 
-msgid "world: ban for WeekOf/MonthOf Monsters"
-msgstr ""
-
-msgid "world: ban plagues months"
-msgstr ""
-
-msgid "world: Months Of Monsters do not place creatures on map"
-msgstr ""
-
 msgid "world: Crystal Ball also added Identify Hero and Visions spells"
-msgstr ""
-
-msgid "world: Starting heroes as Loss Conditions for Human Players"
-msgstr ""
-
-msgid "world: Only 1 hero can be hired by the one player every week"
-msgstr ""
-
-msgid "world: Each castle allows one hero to be recruited every week"
 msgstr ""
 
 msgid "world: Neutral armies scale with game difficulty"
@@ -7844,6 +8013,9 @@ msgid "battle: soft wait troop"
 msgstr "batalla: espera de tropa fluido"
 
 msgid "battle: reverse wait order (fast, average, slow)"
+msgstr ""
+
+msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"
@@ -7936,6 +8108,23 @@ msgid ""
 msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "http://sf.net/projects/fheroes2"
+
+#~ msgid "Troops of 4 alignments -2"
+#~ msgstr "Tropas de 4 líneas -2"
+
+#~ msgid "Troops of 5 alignments -3"
+#~ msgstr "Tropas de 5 líneas -3"
+
+#, fuzzy
+#~ msgid ""
+#~ "Cannot recruit - you have already recruited a hero in the current week."
+#~ msgstr "No se puede reclutar - Ya has reclutado un héroe esta semana"
+
+#~ msgid "Lose the heroes: %{name}."
+#~ msgstr "Piérdes los Héroes: %{name}."
+
+#~ msgid "world: show visited content from objects"
+#~ msgstr "mundo: ver contenido de objetos visitados"
 
 #~ msgid "Network"
 #~ msgstr "Red"
@@ -8036,9 +8225,6 @@ msgstr ""
 
 #~ msgid "buy"
 #~ msgstr "comprar"
-
-#~ msgid "Error"
-#~ msgstr "Error"
 
 #~ msgid "This release is compiled without network support."
 #~ msgstr "Esta versión está compilada sin soporte para red."
@@ -10204,9 +10390,6 @@ msgstr ""
 
 #~ msgid "Rest stop."
 #~ msgstr "Parada de descanso."
-
-#~ msgid "Revolution"
-#~ msgstr "Revolución"
 
 #~ msgid "Right thinking - he who takes the riskes deserves the rewards."
 #~ msgstr "Lo correcto - quien asuma los riesgos se merece las recompensas."
