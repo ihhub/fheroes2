@@ -148,6 +148,20 @@ namespace
 
         return false;
     }
+
+    const fheroes2::Sprite & GetUpgradeButton( bool useMiniIcon )
+    {
+        const fheroes2::Sprite & upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
+        if ( useMiniIcon ) {
+            static const fheroes2::Sprite & miniUpButton = [&upButton]() {
+                fheroes2::Sprite result( upButton.width() / 2, upButton.height() / 2 );
+                fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), result, 0, 0, result.width(), result.height(), true );
+                return result;
+            }();
+            return miniUpButton;
+        }
+        return upButton;
+    }
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
@@ -192,31 +206,17 @@ bool ArmyBar::isValid() const
     return _army != nullptr;
 }
 
-const fheroes2::Sprite & ArmyBar::GetUpgradeButton() const
-{
-    const fheroes2::Sprite & upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
-    if ( use_mini_sprite ) {
-        static const fheroes2::Sprite & miniUpButton = [&upButton]() {
-            fheroes2::Sprite result( upButton.width() / 2, upButton.height() / 2 );
-            fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), result, 0, 0, result.width(), result.height(), true );
-            return result;
-        }();
-        return miniUpButton;
-    }
-    return upButton;
-}
-
 fheroes2::Rect ArmyBar::GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const
 {
-    const fheroes2::Sprite & upButton = GetUpgradeButton();
+    const fheroes2::Sprite & upButton = GetUpgradeButton( use_mini_sprite );
     return { itemPos.x, itemPos.y, upButton.width() + 2 * upgradeButtonMargin, upButton.height() + 2 * upgradeButtonMargin };
 }
 
-void ArmyBar::DrawUpgadeButton( const fheroes2::Rect & pos, fheroes2::Image & dstsf ) const
+void ArmyBar::DrawUpgadeButton( const fheroes2::Rect & pos, fheroes2::Image & outputImage ) const
 {
     const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
-    const fheroes2::Sprite & upgradeButton = GetUpgradeButton();
-    fheroes2::Blit( upgradeButton, dstsf, upButtonPos.x + upgradeButtonMargin, upButtonPos.y + upgradeButtonMargin );
+    const fheroes2::Sprite & upgradeButton = GetUpgradeButton( use_mini_sprite );
+    fheroes2::Blit( upgradeButton, outputImage, upButtonPos.x + upgradeButtonMargin, upButtonPos.y + upgradeButtonMargin );
 }
 
 bool ArmyBar::CanUpgradeNow( const ArmyTroop & troop ) const
