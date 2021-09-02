@@ -458,7 +458,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
 
             for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-                Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
+                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
