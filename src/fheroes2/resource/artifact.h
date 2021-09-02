@@ -239,7 +239,7 @@ public:
     u32 CountArtifacts( void ) const;
     u32 Count( const Artifact & ) const;
 
-    const std::set<ArtifactSetData> assembleArtifactSetIfPossible();
+    std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
     std::string String( void ) const;
 };
