@@ -484,7 +484,7 @@ msgid "The %{name} are paralyzed by the Cyclopes!"
 msgstr "%{name} sont paralysés par les Cyclopes !"
 
 msgid "The Archmagi dispel all good spells on your %{name}!"
-msgstr "Les Archi-mages dissipent tous les bons sorts sur vos %{name} !"
+msgstr "Les Grands mages dissipent tous les bons sorts sur vos %{name} !"
 
 msgid "Bad luck descends on the %{attacker}"
 msgstr "La malchance s'abat sur les %{attacker}."
@@ -6290,10 +6290,10 @@ msgid "Magi"
 msgstr "Mages"
 
 msgid "Archmage"
-msgstr "Archimage"
+msgstr "Grand mage"
 
 msgid "Archmagi"
-msgstr "Archimages"
+msgstr "Grands mages"
 
 msgid "Giant"
 msgstr "Géant"
