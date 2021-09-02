@@ -24,7 +24,9 @@
 #include <locale>
 #endif
 #include <algorithm>
+#include <cassert>
 #include <cstring>
+#include <map>
 
 #include "artifact.h"
 #include "color.h"
@@ -41,8 +43,6 @@
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
-
-#include <cassert>
 
 namespace
 {
@@ -584,38 +584,6 @@ std::string Maps::FileInfo::String( void ) const
     return os.str();
 }
 
-bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
-{
-    const Settings & conf = Settings::Get();
-
-    ListFiles maps_old = Settings::FindFiles( "maps", ".mp2", false );
-    if ( conf.isPriceOfLoyaltySupported() )
-        maps_old.Append( Settings::FindFiles( "maps", ".mx2", false ) );
-
-    for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
-        Maps::FileInfo fi;
-        if ( fi.ReadMP2( *it ) )
-            lists.push_back( fi );
-    }
-
-    if ( lists.empty() )
-        return false;
-
-    std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-
-    // set preferably count filter
-    const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( !multi || prefPlayerCount > 0 ) {
-        lists.erase( std::remove_if( lists.begin(), lists.end(),
-                                     [multi, prefPlayerCount]( const Maps::FileInfo & info ) {
-                                         return ( !multi && info.isMultiPlayerMap() ) || ( prefPlayerCount > 0 && !info.isAllowCountPlayers( prefPlayerCount ) );
-                                     } ),
-                     lists.end() );
-    }
-
-    return !lists.empty();
-}
-
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
     // Only the basename of map filename (fi.file) is saved
@@ -650,6 +618,43 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     // Please take a look at HeaderSAV class in game_io.cpp file.
     // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE add GameVersion loading code here and remove the separate function below.
     return msg;
+}
+
+MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
+{
+    const Settings & conf = Settings::Get();
+
+    ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
+    }
+
+    // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
+    std::map<std::string, Maps::FileInfo> uniqueMaps;
+
+    const int prefNumOfPlayers = conf.PreferablyCountPlayers();
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        if ( fi.ReadMP2( mapFile ) ) {
+            if ( ( !multi && !fi.isMultiPlayerMap() ) || ( multi && prefNumOfPlayers > 1 && fi.isAllowCountPlayers( prefNumOfPlayers ) ) ) {
+                uniqueMaps[System::GetBasename( mapFile )] = fi;
+            }
+        }
+    }
+
+    MapsFileInfoList result;
+
+    result.reserve( uniqueMaps.size() );
+
+    for ( const auto & item : uniqueMaps ) {
+        result.push_back( item.second );
+    }
+
+    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+
+    return result;
 }
 
 StreamBase & operator>>( StreamBase & stream, GameVersion & version )
