@@ -349,7 +349,6 @@ public:
     int GetScoute( void ) const;
     u32 GetVisionsDistance( void ) const;
 
-    bool isDeepOcean() const;
     bool isShipMaster( void ) const;
     void SetShipMaster( bool );
     uint32_t lastGroundRegion() const;
@@ -393,6 +392,8 @@ private:
     void SetValidDirectionSprite();
 
     uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
+
+    bool isDeepOcean() const;
 
     enum
     {
