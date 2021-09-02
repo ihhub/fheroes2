@@ -45,7 +45,8 @@ void Dialog::GameInfo( void )
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    fheroes2::Point pt( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    // the visual graphics of the box sprite height is 4 pixels less than given value
+    fheroes2::Point pt( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( ( display.height() - box.height() + 4 ) / 2 ) );
     fheroes2::ImageRestorer back( display, pt.x, pt.y, box.width(), box.height() );
     fheroes2::Blit( box, display, pt.x, pt.y );
 
