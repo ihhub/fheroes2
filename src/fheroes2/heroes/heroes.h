@@ -393,7 +393,7 @@ private:
 
     uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
 
-    bool isDeepOcean() const;
+    bool isInDeepOcean() const;
 
     enum
     {
