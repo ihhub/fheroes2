@@ -98,9 +98,12 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::HELMET_ANDURAN );
             break;
         case 6:
-            // will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // Will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // If we get all the parts, we'll obtain the Battle Garb award while removing the awards for the individual parts
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN );
+
+            // seems that Kraeger is a custom name for Dainwin in this case
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
             break;
         }
 
@@ -496,6 +499,29 @@ namespace Campaign
         , _campaignDescription()
         , _scenarios()
     {}
+
+    // this is used to get awards that are not directly obtainable via scenario clear, such as assembling artifacts
+    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getExtraCampaignAwardData( const int campaignID )
+    {
+        assert( campaignID >= 0 );
+
+        switch ( campaignID ) {
+        case PRICE_OF_LOYALTY_CAMPAIGN: {
+            std::vector<Campaign::CampaignAwardData> extraAwards;
+            extraAwards.emplace_back( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
+            return extraAwards;
+        }
+        case ROLAND_CAMPAIGN:
+        case ARCHIBALD_CAMPAIGN:
+        case DESCENDANTS_CAMPAIGN:
+        case WIZARDS_ISLE_CAMPAIGN:
+        case VOYAGE_HOME_CAMPAIGN:
+        default:
+            break;
+        }
+
+        return std::vector<Campaign::CampaignAwardData>();
+    }
 
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
     {

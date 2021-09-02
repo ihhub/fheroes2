@@ -955,9 +955,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    // check: anduran garb
-    if ( bag_artifacts.MakeBattleGarb() && isControlHuman() ) {
-        Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+    // check: artifact sets such as anduran garb
+    const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+    if ( isControlHuman() ) {
+        for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
+            Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
     }
 
     return true;

@@ -475,9 +475,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            if ( bag_artifacts.MakeBattleGarb() || otherHero.bag_artifacts.MakeBattleGarb() ) {
-                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
-            }
+            std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+
+            // Use insert instead of std::merge to make appveyour happy
+            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
+                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
