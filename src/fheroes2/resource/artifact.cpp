@@ -42,7 +42,7 @@
 namespace
 {
     const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
-        = { { ArtifactSetData( Artifact::BATTLE_GARB, _( "The three Anduran artifacts magically combine into one." ) ),
+        = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 }
 
