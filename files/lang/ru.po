@@ -130,7 +130,7 @@ msgstr "Мульти"
 
 #, fuzzy
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Отряды 3-х рас -1"
+msgstr "Отряды %{count} рас -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "В армии нежить -1"
@@ -550,7 +550,7 @@ msgid "Monsters"
 msgstr "Монстры"
 
 msgid "N/A"
-msgstr ""
+msgstr "Н/Д"
 
 msgid "Left Turret"
 msgstr "Левая Башня"
@@ -1743,7 +1743,7 @@ msgstr "Показать мозаику."
 
 #, fuzzy
 msgid "Scenario Information"
-msgstr "Разомкнутый строй"
+msgstr "Информация о сценарии"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Описание текущего сценария."
@@ -1879,15 +1879,15 @@ msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr "Выйдите из Free Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 #, fuzzy
 msgid "Resolution"
-msgstr "Революция"
+msgstr "Разрешение"
 
 #, fuzzy
 msgid "Experimental"
-msgstr "Элементал"
+msgstr "Экспериментальные"
 
 msgid "Settings"
 msgstr "Настройки"
@@ -1898,10 +1898,10 @@ msgstr "Выберите язык игры:"
 
 #, fuzzy
 msgid "Change language of the game."
-msgstr "Изменить разрешение экрана."
+msgstr "Изменить язык интерфейса."
 
 msgid "Select Game Resolution"
-msgstr "Выбор Разрешения Экрана"
+msgstr "Выбор разрешения экрана"
 
 msgid "Change resolution of the game."
 msgstr "Изменить разрешение экрана."
@@ -1911,7 +1911,7 @@ msgstr "Экспериментальные настройки игры."
 
 #, fuzzy
 msgid "Attention"
-msgstr "Присоединение"
+msgstr "Внимание"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any languages "
@@ -1982,7 +1982,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Gift from %{name}"
-msgstr "Нанять  %{name}"
+msgstr "Дар от %{name}"
 
 msgid "Set Guardian"
 msgstr "Установить Охрану"
