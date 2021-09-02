@@ -1138,11 +1138,6 @@ void ArtifactsBar::messageMagicBookAbortTrading() const
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
 }
 
-ArtifactSetData::ArtifactSetData()
-    : _assembledArtifactID( Artifact::ART_NONE )
-    , _assembleMessage()
-{}
-
 ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
     : _assembledArtifactID( artifactID )
     , _assembleMessage( assembleMessage )
