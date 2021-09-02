@@ -234,6 +234,9 @@ public:
     bool ContainSpell( const Spell & ) const;
     bool isPresentArtifact( const Artifact & ) const;
     bool PushArtifact( const Artifact & );
+
+    void RemoveArtifact( const Artifact & art );
+
     bool isFull( void ) const;
     bool ContainUltimateArtifact( void ) const;
 
