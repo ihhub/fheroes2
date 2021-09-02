@@ -461,7 +461,7 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, 
 
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
 
-    if ( isShipMaster() && isMoveEnabled() && isDeepOcean() ) {
+    if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
         const fheroes2::Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
         fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ),
                              reflect );
