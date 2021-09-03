@@ -69,7 +69,9 @@ namespace Battle
 
     Result Loader( Army &, Army &, s32 );
 
-    using SingleArtifactPickup = std::pair<BagArtifacts::iterator, BagArtifacts::iterator>;
+    // a single artifact pickup action is a pair of pointers (dst, src) into the artifact bags of the two heroes
+    // dst may be null, if the artifact cannot be picked up
+    using SingleArtifactPickup = std::pair<Artifact *, Artifact *>;
     using ArtifactsPickup = std::list<SingleArtifactPickup>;
 
     struct TargetInfo

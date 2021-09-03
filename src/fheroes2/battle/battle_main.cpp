@@ -47,52 +47,43 @@ namespace Battle
 
 namespace
 {
-    Battle::ArtifactsPickup CalcArtifactsPickup( HeroBase & winner, HeroBase & loser )
+    Battle::ArtifactsPickup PlanArtifactsPickup( BagArtifacts & winnerBag, BagArtifacts & loserBag )
     {
         Battle::ArtifactsPickup result;
-
-        BagArtifacts & winnerBag = winner.GetBagArtifacts();
-        BagArtifacts & loserBag = loser.GetBagArtifacts();
-
         BagArtifacts::iterator wi = winnerBag.begin();
-        for ( BagArtifacts::iterator li = loserBag.begin(); li != loserBag.end(); ++li ) {
-            const Artifact & art = *li;
 
+        for ( Artifact & art : loserBag ) {
             if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK && !art.isUltimate() ) {
                 wi = std::find( wi, winnerBag.end(), Artifact( Artifact::UNKNOWN ) );
-
-                // we intentionally allow the end iterator here: it signals no pickup later, only removal
-                result.emplace_back( wi, li );
-
                 if ( winnerBag.end() != wi ) {
+                    result.emplace_back( &*wi, &art );
                     ++wi;
+                }
+                else {
+                    result.emplace_back( nullptr, &art );
                 }
             }
         }
 
         // one more pass to put all the ultimate artifacts at the end of the list
-        for ( BagArtifacts::iterator li = loserBag.begin(); li != loserBag.end(); ++li ) {
-            const Artifact & art = *li;
-
+        for ( Artifact & art : loserBag ) {
             if ( art.isUltimate() ) {
-                result.emplace_back( winnerBag.end(), li );
+                result.emplace_back( nullptr, &art );
             }
         }
 
         return result;
     }
 
-    void ExecArtifactsPickup( const Battle::ArtifactsPickup & artifacts, BagArtifacts::const_iterator wend )
+    void ExecArtifactsPickup( const Battle::ArtifactsPickup & artifacts )
     {
         for ( const Battle::SingleArtifactPickup & pickup : artifacts ) {
-            BagArtifacts::iterator wi = pickup.first;
-            BagArtifacts::iterator li = pickup.second;
-            Artifact & art = *li;
-
-            if ( wi != wend ) {
-                *wi = art;
+            Artifact * dst = pickup.first;
+            Artifact * src = pickup.second;
+            if ( nullptr != dst ) {
+                *dst = *src;
             }
-            art = Artifact::UNKNOWN;
+            *src = Artifact::UNKNOWN;
         }
     }
 }
@@ -172,7 +163,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     ArtifactsPickup artifactsPickup;
     if ( ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) ) {
-        artifactsPickup = CalcArtifactsPickup( *hero_wins, *hero_loss );
+        artifactsPickup = PlanArtifactsPickup( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
     }
 
     bool battleSummaryShown = false;
@@ -207,7 +198,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
             if ( ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) ) {
-                artifactsPickup = CalcArtifactsPickup( *hero_wins, *hero_loss );
+                artifactsPickup = PlanArtifactsPickup( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
             }
         }
         else {
@@ -227,7 +218,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsPickup, false );
     }
 
-    ExecArtifactsPickup( artifactsPickup, hero_wins->GetBagArtifacts().end() );
+    ExecArtifactsPickup( artifactsPickup );
 
     // save count troop
     arena->GetForce1().SyncArmyCount();
