@@ -292,7 +292,7 @@ void CapturedObjects::ResetColor( int color )
         ObjectColor & objcol = ( *it ).second.objcol;
 
         if ( objcol.isColor( color ) ) {
-            MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
+            const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
 
             objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
             world.GetTiles( ( *it ).first ).CaptureFlags32( objectType, objcol.second );

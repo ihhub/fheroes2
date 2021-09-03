@@ -1752,7 +1752,7 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     }
 }
 
-void Maps::Tiles::CorrectFlags32( int col, u32 index, bool up )
+void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up )
 {
     if ( col == Color::NONE ) {
         removeFlags();
