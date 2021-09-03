@@ -1756,20 +1756,20 @@ void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up 
 {
     if ( col == Color::NONE ) {
         removeFlags();
+        return;
     }
-    else {
-        TilesAddon * taddon = FindFlags();
 
-        // replace flag
-        if ( taddon )
-            taddon->index = index;
-        else if ( up )
-            // or new flag
-            addons_level2.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
-        else
-            // or new flag
-            addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
-    }
+    TilesAddon * taddon = FindFlags();
+
+    // replace flag
+    if ( taddon )
+        taddon->index = index;
+    else if ( up )
+        // or new flag
+        addons_level2.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
+    else
+        // or new flag
+        addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
 }
 
 void Maps::Tiles::FixedPreload( Tiles & tile )
