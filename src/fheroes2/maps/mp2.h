@@ -587,7 +587,6 @@ namespace MP2
     bool isHeroUpgradeObject( const MapObjectType objectType );
     bool isMonsterDwelling( const MapObjectType objectType );
     bool isRemoveObject( const MapObjectType objectType );
-    bool isMoveObject( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
 
