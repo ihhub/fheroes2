@@ -305,7 +305,7 @@ namespace Maps
         TilesAddon * FindFlags( void );
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( u32 index, bool );
+        void CorrectFlags32( const int col, const u32 index, const bool up );
         void RemoveJailSprite( void );
 
         void QuantitySetVariant( int );

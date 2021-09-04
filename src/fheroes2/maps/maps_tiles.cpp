@@ -1694,31 +1694,31 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     switch ( objectType ) {
     case MP2::OBJ_WINDMILL:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
     case MP2::OBJ_WATERWHEEL:
         index += 14;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
     case MP2::OBJ_MAGICGARDEN:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
 
     case MP2::OBJ_MINES:
         index += 14;
-        CorrectFlags32( index, true );
+        CorrectFlags32( col, index, true );
         break;
     case MP2::OBJ_LIGHTHOUSE:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
 
     case MP2::OBJ_ALCHEMYLAB: {
         index += 21;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
         break;
     }
@@ -1727,7 +1727,7 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
         index += 28;
         if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
         break;
     }
@@ -1736,13 +1736,13 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
         index *= 2;
         if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
 
         index += 1;
         if ( Maps::isValidDirection( _index, Direction::RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
         break;
     }
@@ -1752,8 +1752,13 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     }
 }
 
-void Maps::Tiles::CorrectFlags32( u32 index, bool up )
+void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up )
 {
+    if ( col == Color::NONE ) {
+        removeFlags();
+        return;
+    }
+
     TilesAddon * taddon = FindFlags();
 
     // replace flag
