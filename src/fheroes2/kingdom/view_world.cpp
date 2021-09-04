@@ -395,7 +395,9 @@ ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fhero
 
 bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
-    const fheroes2::Point newCenter( clamp( centerInPixels.x, 0, world.w() * TILEWIDTH ), clamp( centerInPixels.y, 0, world.h() * TILEWIDTH ) );
+    const fheroes2::Rect currentRect = GetROIinPixels();
+    const fheroes2::Point newCenter( clamp( centerInPixels.x, currentRect.width / 2, world.w() * TILEWIDTH - currentRect.width / 2 ),
+                                     clamp( centerInPixels.y, currentRect.height / 2, world.h() * TILEWIDTH - currentRect.height / 2 ) );
 
     if ( newCenter == _center ) {
         return false;
