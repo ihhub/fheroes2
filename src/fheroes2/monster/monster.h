@@ -208,10 +208,4 @@ protected:
     int id;
 };
 
-struct MonsterStaticData
-{
-    // wrapper for stream
-    static MonsterStaticData & Get( void );
-};
-
 #endif

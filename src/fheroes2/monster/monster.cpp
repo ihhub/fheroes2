@@ -1215,9 +1215,3 @@ int Monster::GetMonsterSprite() const
 {
     return fheroes2::getMonsterData( id ).icnId;
 }
-
-MonsterStaticData & MonsterStaticData::Get( void )
-{
-    static MonsterStaticData mgds;
-    return mgds;
-}
