@@ -1641,10 +1641,10 @@ msgid "No save files to load."
 msgstr ""
 
 msgid "New Game"
-msgstr ""
+msgstr "Neues Spiel"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Einzel- oder Multiplayer-Spiel starten."
 
 msgid "Load a previously saved game."
 msgstr ""
@@ -2359,7 +2359,7 @@ msgid ""
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr ""
+msgstr "Heroes of Might and Magic beenden und zum Betriebssystem zurueckkehren."
 
 msgid "Credits"
 msgstr ""
@@ -2790,7 +2790,7 @@ msgid "View %{skill} Info"
 msgstr ""
 
 msgid "English"
-msgstr ""
+msgstr "Englische"
 
 msgid "French"
 msgstr ""
@@ -2799,7 +2799,7 @@ msgid "Polish"
 msgstr ""
 
 msgid "German"
-msgstr ""
+msgstr "Deutsch"
 
 msgid "Russian"
 msgstr ""
@@ -4524,7 +4524,7 @@ msgid "View Towns and Castles."
 msgstr ""
 
 msgid "Exit"
-msgstr ""
+msgstr "Beenden"
 
 msgid "luck|Cursed"
 msgstr ""
