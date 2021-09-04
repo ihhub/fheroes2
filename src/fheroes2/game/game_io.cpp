@@ -219,12 +219,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove the System::GetUniversalBasename()" );
     conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetUniversalBasename( conf.MapsFile() ) ) );
 
-    // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove MonsterStaticData usage" );
-    if ( binver < FORMAT_VERSION_PRE_095_RELEASE ) {
-        fz >> MonsterStaticData::Get();
-    }
-
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
         warningMessage.append( conf.loadedFileLanguage() );

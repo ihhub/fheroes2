@@ -214,7 +214,4 @@ struct MonsterStaticData
     static MonsterStaticData & Get( void );
 };
 
-// TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-StreamBase & operator>>( StreamBase &, const MonsterStaticData & );
-
 #endif
