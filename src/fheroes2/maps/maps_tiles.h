@@ -150,7 +150,7 @@ namespace Maps
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
         bool isRoad() const;
         bool isStream( void ) const;
-        bool isShadow( void ) const;
+        bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
