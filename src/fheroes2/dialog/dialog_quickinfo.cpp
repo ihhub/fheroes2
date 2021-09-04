@@ -116,7 +116,7 @@ namespace
         else if ( isAbandonnedMine ) {
             const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
             if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
-                str = MP2::StringObject( tile.GetObject( false) );
+                str = MP2::StringObject( objectType );
             }
             else {
                 str = Maps::GetMinesName( tile.QuantityResourceCount().first );
