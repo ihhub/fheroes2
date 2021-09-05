@@ -1,4 +1,5 @@
 version 0.9.7 (05 September 2021)
+- add popup dialogs for buttons in High Scores and save files manipulation windows
 - fix Faerie Ring passability
 - boat boarding animation speed doesn't depend on hero speed
 - add base support of German translation
