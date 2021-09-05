@@ -205,7 +205,6 @@ namespace fheroes2
 
     ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY )
         : ButtonBase( offsetX, offsetY )
-        , _disabled()
     {}
 
     ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled )
