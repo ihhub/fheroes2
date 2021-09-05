@@ -1,4 +1,8 @@
 version 0.9.7 (05 September 2021)
+- fix Faerie Ring passability
+- boat boarding animation speed doesn't depend on hero speed
+- add base support of German translation
+- fix medium size hero portraits
 - fix incorrect object info when a hero stands on it
 - remove flags from most of the captured objects for a lost player
 - fix alignment of scenario info window
