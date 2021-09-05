@@ -272,7 +272,7 @@ msgid "Surrender"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Abbruch"
 
 msgid "Hero Screen"
 msgstr ""
@@ -1635,19 +1635,19 @@ msgid "Resource cost:"
 msgstr ""
 
 msgid "Load Game"
-msgstr ""
+msgstr "Spiel laden"
 
 msgid "No save files to load."
 msgstr ""
 
 msgid "New Game"
-msgstr ""
+msgstr "Neues Spiel"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Einzel- oder Multiplayer-Spiel starten."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Ein zuvor gespeichertes Spiel laden."
 
 msgid "Save Game"
 msgstr ""
@@ -1656,7 +1656,7 @@ msgid "Save the current game."
 msgstr ""
 
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr ""
@@ -2300,27 +2300,30 @@ msgid ""
 msgstr ""
 
 msgid "Cancel back to the main menu."
-msgstr ""
+msgstr "Zurueck zum Kampf."
 
 msgid "A single player game playing out a single map."
-msgstr ""
+msgstr "Ein Spiel fuer einen einzelnen Spieler, das auf einer einzelnen Karte "
+"gespielt wird."
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Standard-Spiel"
 
 msgid "A single player game playing through a series of maps."
-msgstr ""
+msgstr "Ein Spiel fuer einen einzelnen Spieler, das in fester Reihenfolge auf "
+"einer Reihe von Karten gespielt wird."
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Feldzug-Spiel"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
-msgstr ""
+msgstr "Ein Multiplayer-Spiel, mit mehreren menschlichen Spielern, die auf "
+"einer einzelnen Karte gegeneinander antreten."
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Multiplayer-Spiel"
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr ""
@@ -2359,19 +2362,19 @@ msgid ""
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr ""
+msgstr "Heroes of Might and Magic beenden und zum Betriebssystem zurueckkehren."
 
 msgid "Credits"
-msgstr ""
+msgstr "Credits"
 
 msgid "View the credits screen."
-msgstr ""
+msgstr "Die Credits anzeigen."
 
 msgid "High Scores"
-msgstr ""
+msgstr "Bestenliste"
 
 msgid "View the high score screen."
-msgstr ""
+msgstr "Die Bestenliste anzeigen."
 
 msgid "Game settings."
 msgstr ""
@@ -2745,10 +2748,10 @@ msgid "World Map"
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Monat: %{day} Woche: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "Tag: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -2790,7 +2793,7 @@ msgid "View %{skill} Info"
 msgstr ""
 
 msgid "English"
-msgstr ""
+msgstr "Englische"
 
 msgid "French"
 msgstr ""
@@ -2799,7 +2802,7 @@ msgid "Polish"
 msgstr ""
 
 msgid "German"
-msgstr ""
+msgstr "Deutsch"
 
 msgid "Russian"
 msgstr ""
