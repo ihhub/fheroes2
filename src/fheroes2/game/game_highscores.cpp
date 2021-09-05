@@ -516,6 +516,13 @@ fheroes2::GameMode Game::HighScores()
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return fheroes2::GameMode::MAIN_MENU;
 
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonCampain.area() ) ) {
+            Dialog::Message( _( "Campaign" ), _( "View High Scores for Campaigns." ), Font::BIG );
+        }
+
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             hgs.RedrawList( top.x, top.y );
             display.render();
