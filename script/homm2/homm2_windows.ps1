@@ -137,10 +137,11 @@ try {
 
         Write-Host -ForegroundColor Green "Running DOSBOX to extract animation resources, please wait..."
 
-        & "$homm2Path\DOSBOX\DOSBox.exe" -c "imgmount D '$homm2Path\homm2.ins' -t iso -fs iso" `
-                                         -c "mount E '$destPath'" `
-                                         -c "copy D:\HEROES2\ANIM\*.* E:\ANIM" `
-                                         -c "exit"
+        Start-Process -FilePath "$homm2Path\DOSBOX\DOSBox.exe" -ArgumentList @("-c", "`"imgmount D '$homm2Path\homm2.ins' -t iso -fs iso`"", `
+                                                                               "-c", "`"mount E '$destPath'`"", `
+                                                                               "-c", "`"copy D:\HEROES2\ANIM\*.* E:\ANIM`"", `
+                                                                               "-c", "exit") `
+                      -Wait
     }
 } catch {
     Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))
