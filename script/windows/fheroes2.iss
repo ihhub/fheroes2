@@ -56,7 +56,7 @@ Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppN
 
 [Run]
 Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser; Check: IsNotInstalledToTheDirectoryOfTheOriginalGame
-Filename: "{app}\anim_extract_windows.bat"; Description: "Extract animation resources"; Flags: postinstall runascurrentuser; Check: FileExists(ExpandConstant('{app}\homm2.gog'))
+Filename: "{app}\anim_extract_windows.bat"; Description: "Extract video files from the original HoMM2 distribution"; Flags: postinstall runascurrentuser; Check: FileExists(ExpandConstant('{app}\homm2.gog'))
 
 [Code]
 function IsNotInstalledToTheDirectoryOfTheOriginalGame: Boolean;
