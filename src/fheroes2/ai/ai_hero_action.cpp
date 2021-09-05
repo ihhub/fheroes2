@@ -1535,7 +1535,7 @@ namespace AI
         const fheroes2::Point offset( destPos - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            hero.FadeOut( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
+            hero.FadeOut( offset );
         }
 
         hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );

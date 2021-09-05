@@ -496,8 +496,6 @@ namespace Campaign
 {
     CampaignData::CampaignData()
         : _campaignID( 0 )
-        , _campaignDescription()
-        , _scenarios()
     {}
 
     // this is used to get awards that are not directly obtainable via scenario clear, such as assembling artifacts

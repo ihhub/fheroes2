@@ -28,12 +28,9 @@
 namespace Campaign
 {
     CampaignSaveData::CampaignSaveData()
-        : _finishedMaps()
-        , _obtainedCampaignAwards()
-        , _currentScenarioID( 0 )
+        : _currentScenarioID( 0 )
         , _campaignID( 0 )
         , _daysPassed( 0 )
-        , _currentScenarioBonus()
     {}
 
     CampaignSaveData & Campaign::CampaignSaveData::Get()

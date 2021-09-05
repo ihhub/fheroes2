@@ -1201,17 +1201,19 @@ Battle::Force & Battle::Arena::GetForce2( void )
     return *army2;
 }
 
-Battle::Force & Battle::Arena::GetForce( int color, bool invert )
+Battle::Force & Battle::Arena::getForce( const int color )
 {
-    if ( army1->GetColor() == color )
-        return invert ? *army2 : *army1;
+    return ( army1->GetColor() == color ) ? *army1 : *army2;
+}
 
-    return invert ? *army1 : *army2;
+Battle::Force & Battle::Arena::getEnemyForce( const int color )
+{
+    return ( army1->GetColor() == color ) ? *army2 : *army1;
 }
 
 Battle::Force & Battle::Arena::GetCurrentForce( void )
 {
-    return GetForce( current_color, false );
+    return getForce( current_color );
 }
 
 int Battle::Arena::GetICNCovr( void ) const
