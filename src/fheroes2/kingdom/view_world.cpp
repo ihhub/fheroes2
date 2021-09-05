@@ -388,24 +388,47 @@ ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fhero
     : _zoomLevel( zoomLevel )
     , _center( centerInPixels )
 {
+    updateZoomLevels();
+    updateCenter();
+}
+
+void ViewWorld::ZoomROIs::updateZoomLevels()
+{
     for ( int i = 0; i < 4; ++i ) {
         _roiForZoomLevels[i] = computeROI( _center, static_cast<ViewWorld::ZoomLevel>( i ) );
     }
 }
 
+bool ViewWorld::ZoomROIs::updateCenter()
+{
+    return ChangeCenter( _center );
+}
+
 bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
     const fheroes2::Rect currentRect = GetROIinPixels();
-    const fheroes2::Point newCenter( clamp( centerInPixels.x, currentRect.width / 2, world.w() * TILEWIDTH - currentRect.width / 2 ),
-                                     clamp( centerInPixels.y, currentRect.height / 2, world.h() * TILEWIDTH - currentRect.height / 2 ) );
+    const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
+    fheroes2::Point newCenter;
+
+    if ( worldSize.width <= currentRect.width ) {
+        newCenter.x = worldSize.width / 2;
+    }
+    else {
+        newCenter.x = clamp( centerInPixels.x, currentRect.width / 2, worldSize.width - currentRect.width / 2 );
+    }
+
+    if ( worldSize.height <= currentRect.height ) {
+        newCenter.y = worldSize.height / 2;
+    }
+    else {
+        newCenter.y = clamp( centerInPixels.y, currentRect.height / 2, worldSize.height - currentRect.height / 2 );
+    }
 
     if ( newCenter == _center ) {
         return false;
     }
     _center = newCenter;
-    for ( int i = 0; i < 4; ++i ) {
-        _roiForZoomLevels[i] = computeROI( _center, static_cast<ViewWorld::ZoomLevel>( i ) );
-    }
+    updateZoomLevels();
     return true;
 }
 
@@ -413,6 +436,7 @@ bool ViewWorld::ZoomROIs::changeZoom( const ZoomLevel newLevel )
 {
     const bool changed = ( newLevel != _zoomLevel );
     _zoomLevel = newLevel;
+    updateCenter();
     return changed;
 }
 
