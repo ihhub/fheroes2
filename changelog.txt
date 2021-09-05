@@ -7,7 +7,7 @@ version 0.9.7 (05 September 2021)
 - remove flags from most of the captured objects for a lost player
 - fix alignment of scenario info window
 - fix boat froth drawing conditions
-- fix Battle Garb of Anduran missing assmebly for The Price of Loyalty campaign
+- fix Battle Garb of Anduran missing assembly for The Price of Loyalty campaign
 - add monsters into High Score dialog
 - add short save file description window by right clicking
 - add base roles for AI heroes
@@ -26,7 +26,7 @@ version 0.9.7 (05 September 2021)
 - add missing hotkey for Kingdom Overview
 - fix missing mine being drawn in View Mines
 - fix incorrect fading of some objects on World Map
-- fix AI behavior during siege
+- fix AI behaviour during siege
 - fix cases of incorrect monster stack splitting logic
 - handle Escape/Enter keys in various settings dialogs
 - use distinct image for the "Swap heroes" button
@@ -43,9 +43,9 @@ version 0.9.7 (05 September 2021)
 - update French translation
 - add missing Farm sprite in Knight castle
 - update every scrollbar logic in the game
-- fix a crash while shooting from castle's tower during castle siedge
+- fix a crash while shooting from castle's tower during castle siege
 - fix Holy Shout being applied on Dwarves
-- properly handle cross-moat attacks during castle siedge
+- properly handle cross-moat attacks during castle siege
 - do not let the player get a random artifact that allows him to win the game
 - allow player to immediately edit save file name without clicking on the input field
 - add few performance optimization in music and audio
