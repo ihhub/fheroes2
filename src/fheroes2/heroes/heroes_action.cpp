@@ -954,7 +954,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeOut( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+    hero.FadeOut( offset );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it

@@ -378,7 +378,12 @@ void Music::Play( const std::vector<uint8_t> & v, const bool loop )
 #endif
         SDL_FreeRW( rwops );
 
-        PlayMusic( mix, loop );
+        if ( !mix ) {
+            ERROR_LOG( Mix_GetError() );
+        }
+        else {
+            PlayMusic( mix, loop );
+        }
     }
 }
 

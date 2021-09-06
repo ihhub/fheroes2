@@ -36,14 +36,14 @@ msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Niewiele\n"
+"Mało\n"
 "%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Kilka\n"
+"Parę\n"
 "%{monster}"
 
 msgid ""
@@ -71,21 +71,21 @@ msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
-"Chmara\n"
+"Tłum\n"
 "%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Rój\n"
+"Mnóstwo\n"
 "%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Od cholery\n"
+"Setki\n"
 "%{monster}"
 
 msgid ""
@@ -96,44 +96,41 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "army|Niewiele"
+msgstr "Mało"
 
 msgid "army|Horde"
-msgstr "army|Horda"
+msgstr "Horda"
 
 msgid "army|Lots"
-msgstr "army|Mnóstwo"
+msgstr "Mnóstwo"
 
 msgid "army|Pack"
-msgstr "army|Paczka"
+msgstr "Grupa"
 
 msgid "army|Several"
-msgstr "army|Kilka"
+msgstr "Parę"
 
 msgid "army|Legion"
-msgstr "army|Legion"
+msgstr "Legion"
 
 msgid "army|Swarm"
-msgstr "army|Rój"
+msgstr "Mrowie"
 
 msgid "army|Throng"
-msgstr "army|Masa"
+msgstr "Tłum"
 
 msgid "army|Zounds"
-msgstr "army|W cholerę"
+msgstr "Setki"
 
 msgid "All %{race} troops +1"
 msgstr "Wszystkie %{race} oddziały +1"
 
-#, fuzzy
 msgid "Multiple"
 msgstr "Różne"
 
-#, fuzzy
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Jednostki z 3 różnych frakcji -1"
+msgstr "Jednostki z %{count} różnych frakcji -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in group -1"
 msgstr "Nieumarli w armii -1"
 
@@ -579,12 +576,11 @@ msgid ""
 msgstr ""
 "Dzięki swemu sokolemu wzrokowi, %{name} nauczył się zaklęcia '%{spell}'."
 
-#, fuzzy
 msgid "Monsters"
-msgstr "Potwór"
+msgstr "Potwory"
 
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 msgid "Left Turret"
 msgstr "Lewa wieżyczka"
@@ -1705,22 +1701,20 @@ msgstr "tydzień"
 msgid "Available"
 msgstr "Dostępne"
 
-#, fuzzy
 msgid "View World"
-msgstr "Pokaż wszystko"
+msgstr "Pokaż świat"
 
 msgid "View the entire world."
 msgstr "Pokaż cały świat."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Pokaż układankę"
 
 msgid "View the obelisk puzzle."
 msgstr "Pokaż wzór na obelisku."
 
-#, fuzzy
 msgid "Scenario Information"
-msgstr "Luźna formacja"
+msgstr "Informacje o scenariuszu"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Obejrzyj informacje na temat scenariusza, w który obecnie grasz."
@@ -1728,9 +1722,8 @@ msgstr "Obejrzyj informacje na temat scenariusza, w który obecnie grasz."
 msgid "Dig for the Ultimate Artifact."
 msgstr "Kop w poszukiwaniu Najpotężniejszego Artefaktu."
 
-#, fuzzy
 msgid "Digging"
-msgstr "(można kopać)"
+msgstr "Poszukiwanie"
 
 msgid "Exit this menu without doing anything."
 msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
@@ -1862,41 +1855,34 @@ msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr "Zamknij Free Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Język"
 
-#, fuzzy
 msgid "Resolution"
-msgstr "Rewolucja"
+msgstr "Rozdzielczość"
 
-#, fuzzy
 msgid "Experimental"
-msgstr "Żywiołak powietrza"
+msgstr "Eksperymentalne"
 
 msgid "Settings"
 msgstr "Ustawienia"
 
-#, fuzzy
 msgid "Select Game Language"
-msgstr "Zmień język gry:"
+msgstr "Wybierz język gry"
 
-#, fuzzy
 msgid "Change language of the game."
-msgstr "Zmień rozdzielczość gry."
+msgstr "Zmień język gry."
 
-#, fuzzy
 msgid "Select Game Resolution"
 msgstr "Wybierz rozdzielczość gry"
 
 msgid "Change resolution of the game."
 msgstr "Zmień rozdzielczość gry."
 
-#, fuzzy
 msgid "Experimental game settings."
-msgstr "Ustawienia gry FHeroes2."
+msgstr "Eksperymentalne ustawienia gry."
 
-#, fuzzy
 msgid "Attention"
-msgstr "\"Annexation\""
+msgstr "Uwaga"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any languages "
@@ -1947,7 +1933,7 @@ msgid "score: "
 msgstr "wynik: "
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Wskaż najpierw odbiorców!"
 
 msgid "You cannot select %{resource}!"
 msgstr "Nie możesz wybrać %{resource}!"
@@ -1955,19 +1941,17 @@ msgstr "Nie możesz wybrać %{resource}!"
 msgid "Select count %{resource}:"
 msgstr "Wybierz ilość %{resource}:"
 
-#, fuzzy
 msgid "Select Recipients"
-msgstr "Wybrany opis"
+msgstr "Wybierz odbiorcę"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Twoje zasoby"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Przekazujesz"
 
-#, fuzzy
 msgid "Gift from %{name}"
-msgstr "Rekrutuj %{name}"
+msgstr "Dar od %{name}"
 
 msgid "Set Guardian"
 msgstr "Ustaw strażnika"
@@ -2015,10 +1999,10 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Mogę ci zaproponować 1 szt. %{resto} za %{count} szt. %{resfrom}."
 
 msgid "max"
-msgstr ""
+msgstr "max"
 
 msgid "min"
-msgstr ""
+msgstr "min"
 
 msgid "Qty to trade"
 msgstr "Ilość"
@@ -2046,7 +2030,7 @@ msgid "(available: %{count})"
 msgstr "(dostępne: %{count})"
 
 msgid "(empty)"
-msgstr ""
+msgstr "(nie ma nikogo)"
 
 msgid "already learned"
 msgstr "Już to umiesz"
@@ -2100,7 +2084,7 @@ msgid "Number to buy:"
 msgstr "Rekrutuj:"
 
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 msgid "How many troops to move?"
 msgstr "Ile jednostek przenieść?"
@@ -2253,9 +2237,8 @@ msgstr "Zgromadź dużą ilość złota."
 msgid "Victory Condition"
 msgstr "Warunki zwycięstwa"
 
-#, fuzzy
 msgid "Experimental Game Settings"
-msgstr "Ustawienia gry FHeroes2."
+msgstr "Eksperymentalne ustawienia gry"
 
 msgid "one"
 msgstr "jeden"
@@ -2276,31 +2259,27 @@ msgstr ""
 msgid "MIDI"
 msgstr "MIDI"
 
-#, fuzzy
 msgid "MIDI Expansion"
-msgstr "Posiadłość"
+msgstr "MIDI z dodatku"
 
 msgid "External"
-msgstr "Zewnętrzny"
+msgstr "Zewnętrzna"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Rodzaj muzyki"
 
 msgid "Jump"
-msgstr ""
+msgstr "Skok"
 
-#, fuzzy
 msgid "Hero Speed"
-msgstr "prędkość bohatera"
+msgstr "Szybkość"
 
 msgid "Don't Show"
 msgstr "Nie pokazuj"
 
-#, fuzzy
 msgid "Enemy Speed"
-msgstr "Szybkość"
+msgstr "Szybk. wroga"
 
-#, fuzzy
 msgid "Scroll Speed"
 msgstr "Prędkość przewijania"
 
@@ -2310,9 +2289,8 @@ msgstr "Zły"
 msgid "Good"
 msgstr "Dobry"
 
-#, fuzzy
 msgid "Interface Type"
-msgstr "Intefejs"
+msgstr "Typ intefejsu"
 
 msgid "Hide"
 msgstr "Ukryj"
@@ -2324,50 +2302,50 @@ msgid "Interface"
 msgstr "Intefejs"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Automatyczna"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto, bez zaklęć"
 
-#, fuzzy
 msgid "Battles"
-msgstr "Bitwy"
+msgstr "Walki"
 
 msgid "Manual"
-msgstr ""
+msgstr "Ręczna"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Zmiana poziomu głośności muzyki."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Zmiana poziomu głośności efektów."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Zmienia rodzaj muzyki."
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
+msgstr "Zmienia szybkość, z jaką poruszają się Twoi bohaterowie na ekranie."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
 "I. movement at all."
 msgstr ""
+"Zmienia szybkość, z jaką poruszają się bohaterowie sterowani przez A.I."
+"Możesz również wyłączyć podgląd ruchów A.I."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Zmienia prędkość przewijania okna."
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Zmienia typ interfejsu."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Zmienia widoczność interfejsu."
 
 msgid "Toggle instant battle mode."
-msgstr ""
+msgstr "Zmienia tryb błyskawicznej walki."
 
-#, fuzzy
 msgid "Exit this menu."
-msgstr "Wyjdź z menu."
+msgstr "Wyjdź z tego menu."
 
 msgid "OK"
 msgstr "OK"
@@ -2486,31 +2464,31 @@ msgid "Please make sure that campaign files are correct and present."
 msgstr "Upewnij się, że pliki kampanii są poprawne."
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Koordynacja projektu i development"
 
 msgid "QA and Support"
-msgstr ""
+msgstr "QA i wsparcie"
 
 msgid "Development"
-msgstr ""
+msgstr "Development"
 
 msgid "Visit us at "
-msgstr ""
+msgstr "Odwiedź nas "
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Specjalnie podziękowania dla"
 
 msgid "Original project before 0.7"
-msgstr ""
+msgstr "Przed wersją 0.7"
 
 msgid "Support us at"
-msgstr ""
+msgstr "Wesprzyj nas"
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Odwiedź nas"
 
 msgid "Need help with the game?"
-msgstr ""
+msgstr "Potrzebujesz wsparcia?"
 
 msgid "Unknown Hero"
 msgstr "Nieznany bohater"
@@ -2533,20 +2511,19 @@ msgid ""
 msgstr "Ten plik jest zapisany w wersji rozszerzenia \"Price of Loyalty\"."
 
 msgid "Usupported save format: "
-msgstr ""
+msgstr "Niewspierany format zapisanej gry: "
 
-#, fuzzy
 msgid "Current game version: "
-msgstr "Aktualne modyfikatory:"
+msgstr "Aktualna wersja gry:"
 
 msgid "Last supported version: "
-msgstr ""
+msgstr "Ostatnia wspierana wersja: "
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Zapisana gra jest w języku '"
 
 msgid "' language, but the current language of the game is '"
-msgstr ""
+msgstr ", ale bieżący język to '"
 
 msgid "Hot Seat"
 msgstr "Na zmianę"
@@ -2646,9 +2623,8 @@ msgstr "Najlepsze wyniki"
 msgid "View the high score screen."
 msgstr "Obejrzyj najlepsze wyniki"
 
-#, fuzzy
 msgid "Game settings."
-msgstr "Witaj!"
+msgstr "Ustawienia gry."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -2872,9 +2848,8 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} zostaje wygnany!"
 
-#, fuzzy
 msgid "Do you wish to continue the game?"
-msgstr "Czy chcesz ją kupić?"
+msgstr "Czy chcesz kontynuować grę?"
 
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
@@ -3176,7 +3151,7 @@ msgid "Russian"
 msgstr "Rosyjski"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "Ambrose"
 msgstr "Ambrose"
@@ -4907,7 +4882,6 @@ msgid ""
 "Spell Failed!!!"
 msgstr "Brak dostępnego miasta. Zaklęcie się nie udało!!!"
 
-#, fuzzy
 msgid ""
 "Nearest town occupied.\n"
 "Spell Failed!!!"
@@ -4934,10 +4908,13 @@ msgstr[0] "Jedno stworzenie dołączy do nas..."
 msgstr[1] "Część tych stworzeń (%{count}) dołączy do nas..."
 msgstr[2] "Część tych stworzeń (%{count}) dołączy do nas..."
 
+#, fuzzy
 msgid ""
 "\n"
 " for a fee of %{gold} gold."
 msgstr ""
+"\n"
+" za zapłatą %{gold} złota."
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Te słabowite stworzenia na pewno przed nami uciekną."
@@ -5323,21 +5300,17 @@ msgstr "Złota na dzień."
 msgid "Heroes"
 msgstr "Bohaterowie"
 
-#, fuzzy
 msgid "View Heroes."
 msgstr "Pokaż bohaterów"
 
-#, fuzzy
 msgid "Towns/Castles"
-msgstr "Miasto/Zamek"
+msgstr "Miasta/Zamki"
 
-#, fuzzy
 msgid "View Towns and Castles."
-msgstr "Pokaż miasta"
+msgstr "Pokaż miasta i zamki"
 
-#, fuzzy
 msgid "Exit"
-msgstr "Wyjście z miasta"
+msgstr "Wyjście"
 
 msgid "luck|Cursed"
 msgstr "Beznadziejne"
@@ -5616,12 +5589,11 @@ msgstr "Smocze Miasto"
 msgid "Lighthouse"
 msgstr "Latarnia morska"
 
-#, fuzzy
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Młyn wodny"
-msgstr[1] "Młyn wodny"
-msgstr[2] "Młyn wodny"
+msgstr[1] "Młyny wodne"
+msgstr[2] "Młynów wodnych"
 
 msgid "Mines"
 msgstr "Kopalnia"
@@ -5644,12 +5616,11 @@ msgstr "Namiot na pustyni"
 msgid "Wagon Camp"
 msgstr "Tabor"
 
-#, fuzzy
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Wiatrak"
-msgstr[1] "Wiatrak"
-msgstr[2] "Wiatrak"
+msgstr[1] "Wiatraki"
+msgstr[2] "Wiatraków"
 
 msgid "Random Town"
 msgstr "Losowe miasto"
@@ -5869,12 +5840,11 @@ msgstr "Ocalały rozbitek"
 msgid "Bottle"
 msgstr "Butelka"
 
-#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Magiczny ogród"
-msgstr[1] "Magiczny ogród"
-msgstr[2] "Magiczny ogród"
+msgstr[1] "Magiczne ogrody"
+msgstr[2] "Magicznych ogrodów"
 
 msgid "Jail"
 msgstr "Więzienie"
@@ -8009,18 +7979,17 @@ msgstr "sojusze: pozwól poznać bohaterów"
 msgid "unions: allow castle visiting"
 msgstr "sojusze: pozwól odwiedzać zamki"
 
-#, fuzzy
 msgid "battle: show army order"
-msgstr "gra: pokaż siatkę podczas walki"
+msgstr "walka: pokaż kolejność jednostek"
 
 msgid "battle: soft wait troop"
-msgstr ""
+msgstr "walka: wstrzymanie jednostki"
 
 msgid "battle: reverse wait order (fast, average, slow)"
-msgstr ""
+msgstr "walka: odwrócona kolejność czekania (szybki, średni, wolny)"
 
 msgid "battle: deterministic events"
-msgstr ""
+msgstr "walka: deterministyczne zdarzenia"
 
 msgid "game: show system info"
 msgstr "game: pokaż informacje systemowe"
@@ -8105,14 +8074,14 @@ msgstr ""
 msgid "An unknown force is being ressurected..."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Check the newest version of game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
-" http://sf.net/projects/fheroes2"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
 
 #~ msgid "Troops of 4 alignments -2"
 #~ msgstr "Jednostki z 4 różnych frakcji -2"

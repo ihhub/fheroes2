@@ -142,7 +142,6 @@ int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
 HeroBase::HeroBase( int type, int race )
     : magic_point( 0 )
     , move_point( 0 )
-    , spell_book()
 {
     bag_artifacts.assign( HEROESMAXARTIFACT, Artifact::UNKNOWN );
     LoadDefaults( type, race );
@@ -184,7 +183,6 @@ void HeroBase::LoadDefaults( int type, int race )
 HeroBase::HeroBase()
     : magic_point( 0 )
     , move_point( 0 )
-    , spell_book()
 {}
 
 bool HeroBase::isCaptain( void ) const

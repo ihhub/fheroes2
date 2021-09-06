@@ -347,6 +347,19 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             listbox.Unselect();
             isListboxSelected = false;
         }
+
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
+            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            if ( isEditing ) {
+                Dialog::Message( _( "OK" ), _( "Click to save the current game." ), Font::BIG );
+            }
+            else {
+                Dialog::Message( _( "OK" ), _( "Click to load a previously saved game." ), Font::BIG );
+            }
+        }
+
         if ( !isEditing && le.KeyPress( KEY_DELETE ) && isListboxSelected ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );

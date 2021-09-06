@@ -294,6 +294,8 @@ namespace
         case MP2::OBJN_CASTLE:
         case MP2::OBJ_WAGONCAMP:
         case MP2::OBJN_WAGONCAMP:
+        case MP2::OBJ_FAERIERING:
+        case MP2::OBJN_FAERIERING:
             return true;
         default:
             break;

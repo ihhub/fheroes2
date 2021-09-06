@@ -1,3 +1,60 @@
+version 0.9.7 (05 September 2021)
+- add popup dialogs for buttons in High Scores and save files manipulation windows
+- fix Faerie Ring passability
+- boat boarding animation speed doesn't depend on hero speed
+- add base support of German translation
+- fix medium size hero portraits
+- fix incorrect object info when a hero stands on it
+- remove flags from most of the captured objects for a lost player
+- fix alignment of scenario info window
+- fix boat froth drawing conditions
+- fix Battle Garb of Anduran missing assembly for The Price of Loyalty campaign
+- add monsters into High Score dialog
+- add short save file description window by right clicking
+- add base roles for AI heroes
+- restart of the battle should lead to the same results
+- fix logic in moral indicator
+- AI can capture Haunted mines
+- fix scrollbar position in Kingdom Overview dialog
+- allow guardian heroes upgrade their troops
+- add object count for weekly object income message
+- open game settings window while clicking on the main menu door
+- fix object passability nearby Hut of Magi
+- modify Necromancer Captain Quarters look
+- fix Radar appearance while right clicking on hero/castle
+- do not show file options window upon file saving
+- save Kingdom Overview UI selection in save files
+- add missing hotkey for Kingdom Overview
+- fix missing mine being drawn in View Mines
+- fix incorrect fading of some objects on World Map
+- fix AI behaviour during siege
+- fix cases of incorrect monster stack splitting logic
+- handle Escape/Enter keys in various settings dialogs
+- use distinct image for the "Swap heroes" button
+- properly restore captain's spell points after quick battle
+- remember UI position in Kingdom Overview dialog
+- add strict ordering of save files ignoring capitalization of letters
+- add popup dialogs in Kingdom Overview UI dialog
+- fix missing game resolutions on some machines
+- fix incorrect rendering on specific fog tile
+- display same name maps in the list of available maps
+- improve pathfinding algorithm for AI
+- place Ultimate artifact not always in the center of puzzle image
+- fix max ballista shots during battle
+- update French translation
+- add missing Farm sprite in Knight castle
+- update every scrollbar logic in the game
+- fix a crash while shooting from castle's tower during castle siege
+- fix Holy Shout being applied on Dwarves
+- properly handle cross-moat attacks during castle siege
+- do not let the player get a random artifact that allows him to win the game
+- allow player to immediately edit save file name without clicking on the input field
+- add few performance optimization in music and audio
+- update Polish translation
+- not visited obelisk remains not visited after the Ultimate Artifact has been found
+- fix polish translation encoding
+- game settings dialog: reset current language to English if game resources do not support other languages
+
 version 0.9.6 (06 August 2021)
 - update status window if troops has fallen overboard
 - add direct preview of changes in system options dialog
