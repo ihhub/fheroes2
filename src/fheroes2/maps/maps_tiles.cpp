@@ -853,7 +853,7 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) ) {
+    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
@@ -884,7 +884,7 @@ void Maps::Tiles::updatePassability()
 
     const MP2::MapObjectType objectType = GetObject( false );
     const bool isActionObject = MP2::isActionObject( objectType );
-    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
+    if ( !isActionObject && !isShadow() && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
@@ -1621,10 +1621,10 @@ bool Maps::Tiles::isStream( void ) const
     return tileICN == ICN::STREAM || ( tileICN == ICN::OBJNMUL2 && objectIndex < 14 );
 }
 
-bool Maps::Tiles::isShadow( void ) const
+bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( objectTileset, objectIndex )
-           && addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+           && addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const
