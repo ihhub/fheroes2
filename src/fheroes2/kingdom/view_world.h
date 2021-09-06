@@ -70,6 +70,8 @@ public:
         fheroes2::Rect _roiForZoomLevels[4];
 
     private:
+        void updateZoomLevels();
+        bool updateCenter();
         bool changeZoom( const ZoomLevel newLevel );
     };
 };
