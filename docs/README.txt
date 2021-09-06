@@ -16,10 +16,10 @@ If you do not have the original Heroes of Might and Magic II game, please run
 This script will download and install all the necessary files from the demo
 version of the original Heroes of Might and Magic II game.
 
-If you have a legally purchased copy of the original game, copy the
-subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing
-depending on the version of the original game) from the original game directory
-to the fheroes2 installation directory.
+If you have a legally purchased copy of the original game, copy the subdirectories
+'ANIM', 'DATA', 'MAPS' and 'MUSIC' (some of them may be missing depending on the
+version of the original game) from the original game directory to the fheroes2
+installation directory.
 
 --- License ---
 This project is under GNU General Public License v2.0. Please refer to file
