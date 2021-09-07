@@ -566,10 +566,9 @@ int Castle::OpenDialog( bool readonly )
 
                         case BUILD_CASTLE: {
                             const Heroes * prev = heroes.Guest();
+                            const uint32_t build = OpenTown();
                             heroes = world.GetHeroes( *this );
                             const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
-
-                            const uint32_t build = OpenTown();
                             if ( BUILD_NOTHING != build ) {
                                 AGG::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( build );
