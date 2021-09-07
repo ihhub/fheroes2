@@ -446,7 +446,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( mp2_object ) )
+    if ( MP2::isPickupObject( static_cast<MP2::MapObjectType>( mp2_object ) ) )
         setAsEmpty();
 }
 
@@ -481,7 +481,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL123 ) );
         else
             QuantityReset();
-    } break;
+        break;
+    }
 
     case MP2::OBJ_WAGON: {
         quantity2 = 0;
@@ -505,7 +506,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantityReset();
             break;
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_ARTIFACT: {
         const int art = Artifact::FromMP2IndexSprite( objectIndex ).GetID();
@@ -531,7 +533,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                     QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand( false ) ) + 1 );
             }
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_RESOURCE: {
         const int res = Resource::FromIndexSprite( objectIndex );
@@ -551,12 +554,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         }
 
         QuantitySetResource( res, count );
-    } break;
+        break;
+    }
 
-    case MP2::OBJ_CAMPFIRE: {
+    case MP2::OBJ_CAMPFIRE:
         // 4-6 rnd resource and + 400-600 gold
         QuantitySetResource( Resource::Rand( false ), Rand::Get( 4, 6 ) );
-    } break;
+        break;
 
     case MP2::OBJ_MAGICGARDEN:
         // 5 gems or 500 gold
@@ -579,7 +583,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         // 2 rnd resource
         QuantitySetResource( res, 2 );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_LEANTO:
         // 1-4 rnd resource
@@ -606,7 +611,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             quantity1 = 5;
             break;
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_SHIPWRECKSURVIROR: {
         Rand::Queue percents( 3 );
@@ -629,7 +635,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL3 ) );
             break;
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_WATERCHEST: {
         Rand::Queue percents( 3 );
@@ -658,7 +665,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         QuantitySetResource( Resource::GOLD, gold );
         QuantitySetArtifact( art );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_TREASURECHEST:
         if ( isWater() ) {
@@ -719,7 +727,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         QuantitySetVariant( cond );
         QuantitySetArtifact( cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL123 ) : Artifact::UNKNOWN );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_GRAVEYARD:
         // 1000 gold + art
@@ -731,14 +740,16 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // random spell level 5
         const Spell & spell = Rand::Get( 1 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 );
         QuantitySetSpell( spell.GetID() );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_DAEMONCAVE: {
         // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
-        int cond = Rand::Get( 1, 4 );
+        const int cond = Rand::Get( 1, 4 );
         QuantitySetVariant( cond );
         QuantitySetArtifact( cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL123 ) : Artifact::UNKNOWN );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_TREEKNOWLEDGE:
         // variant: 10 gems, 2000 gold or free
@@ -754,13 +765,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         }
         break;
 
-    case MP2::OBJ_BARRIER: {
+    case MP2::OBJ_BARRIER:
         QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
-    } break;
+        break;
 
-    case MP2::OBJ_TRAVELLERTENT: {
+    case MP2::OBJ_TRAVELLERTENT:
         QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
-    } break;
+        break;
 
     case MP2::OBJ_ALCHEMYLAB:
         QuantitySetResource( Resource::MERCURY, 1 );
@@ -790,7 +801,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         default:
             break;
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_ABANDONEDMINE: {
         Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
@@ -799,7 +811,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         troop.Set( Monster::GHOST, 3 * Rand::Get( 13, 15 ) );
 
         QuantitySetResource( Resource::GOLD, 1000 );
-    } break;
+        break;
+    }
 
     case MP2::OBJ_BOAT:
         objectTileset = 27;
@@ -913,11 +926,6 @@ bool Maps::Tiles::MonsterJoinConditionFree( void ) const
     return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionForce( void ) const
-{
-    return Monster::JOIN_CONDITION_FORCE == MonsterJoinCondition();
-}
-
 u32 Maps::Tiles::MonsterCount( void ) const
 {
     return ( static_cast<u32>( quantity1 ) << 8 ) | quantity2;
@@ -950,15 +958,14 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         tile.MonsterSetCount( mons.GetRNDSize( true ) );
     }
 
-    // skip join
-    if ( mons.GetID() == Monster::GHOST || mons.isElemental() )
+    if ( mons.GetID() == Monster::GHOST || mons.isElemental() ) {
+        // Ghosts and elementals never join hero's army.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
-    else
-        // fixed count: for money
-        if ( tile.MonsterFixedCount() ||
-             // month of monster
-             ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) )
+    }
+    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+        // Monsters will be willing to join for some amount of money.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+    }
     else {
         // 20% chance for join
         if ( 3 > Rand::Get( 1, 10 ) )
@@ -1017,9 +1024,9 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
-    const int obj = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    switch ( obj ) {
+    switch ( objectType ) {
     // join monsters
     case MP2::OBJ_HALFLINGHOLE:
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );

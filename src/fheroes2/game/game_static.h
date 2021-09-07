@@ -23,6 +23,7 @@
 #ifndef H2GAMESTATIC_H
 #define H2GAMESTATIC_H
 
+#include "mp2.h"
 #include "types.h"
 
 class StreamBase;
@@ -59,7 +60,7 @@ namespace GameStatic
     u32 GetHeroesRestoreSpellPointsPerDay( void );
     u32 GetMageGuildRestoreSpellPointsPercentDay( int level );
 
-    s32 ObjectVisitedModifiers( int obj );
+    s32 ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 
     int GetBattleMoatReduceDefense( void );
 

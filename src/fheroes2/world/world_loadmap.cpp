@@ -26,21 +26,21 @@
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "game.h"
 #include "game_over.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "race.h"
 #include "rand.h"
+#include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
-#include "zzlib.h"
 
 namespace
 {
@@ -537,7 +537,7 @@ bool World::LoadMapMP2( const std::string & filename )
         else if ( 0x00 == pblock[0] ) {
             // add event day
             if ( SIZEOFMP2EVENT - 1 < pblock.size() && 1 == pblock[42] ) {
-                vec_eventsday.emplace_back( EventDate() );
+                vec_eventsday.emplace_back();
                 vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
             }
             // add rumors
@@ -552,6 +552,18 @@ bool World::LoadMapMP2( const std::string & filename )
         else {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "read maps: unknown block addons, size: " << pblock.size() );
         }
+    }
+
+    // clear artifact flags to correctly generate random artifacts
+    fheroes2::ResetArtifactStats();
+
+    const Settings & conf = Settings::Get();
+
+    // do not let the player get a random artifact that allows him to win the game
+    if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
+        const Artifact art = conf.WinsFindArtifactID();
+
+        fheroes2::ExcludeArtifactFromRandom( art.GetID() );
     }
 
     ProcessNewMap();
@@ -648,7 +660,8 @@ void World::ProcessNewMap()
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -678,8 +691,7 @@ void World::ProcessNewMap()
 
     // Set Ultimate Artifact.
     fheroes2::Point ultimate_pos;
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
-                                           []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
+    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
     if ( vec_tiles.end() == it ) {
         // generate position for ultimate
         MapsIndexes pools;

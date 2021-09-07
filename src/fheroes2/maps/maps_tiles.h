@@ -22,14 +22,13 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
-#include <functional>
 #include <list>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
-#include "gamedefs.h"
+#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
@@ -111,7 +110,7 @@ namespace Maps
         }
 
         fheroes2::Point GetCenter( void ) const;
-        int GetObject( bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
@@ -145,20 +144,20 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface( void ) const;
 
-        bool isObject( int obj ) const;
+        bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
         bool isRoad() const;
         bool isStream( void ) const;
-        bool isShadow( void ) const;
+        bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-        void SetObject( int object );
+        void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
         {
@@ -187,7 +186,7 @@ namespace Maps
         bool doesObjectExist( const uint32_t uid ) const;
 
         // ICN::FLAGS32 version
-        void CaptureFlags32( int obj, int col );
+        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
 
         // Removes all ICN::FLAGS32 objects from this tile.
         void removeFlags();
@@ -244,7 +243,6 @@ namespace Maps
         /* monster operation */
         bool MonsterJoinConditionSkip( void ) const;
         bool MonsterJoinConditionFree( void ) const;
-        bool MonsterJoinConditionForce( void ) const;
         int MonsterJoinCondition( void ) const;
         void MonsterSetJoinCondition( int );
         void MonsterSetFixedCount( void );
@@ -292,7 +290,7 @@ namespace Maps
 
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
+        static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
@@ -307,7 +305,7 @@ namespace Maps
         TilesAddon * FindFlags( void );
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( u32 index, bool );
+        void CorrectFlags32( const int col, const u32 index, const bool up );
         void RemoveJailSprite( void );
 
         void QuantitySetVariant( int );

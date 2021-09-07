@@ -97,6 +97,7 @@ namespace Campaign
         std::string ToString() const;
 
         static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID );
+        static std::vector<Campaign::CampaignAwardData> getExtraCampaignAwardData( const int campaignID );
 
         static const char * getAllianceJoiningMessage( const int monsterId );
         static const char * getAllianceFleeingMessage( const int monsterId );

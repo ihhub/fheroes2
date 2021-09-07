@@ -35,7 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{93C65864-B300-4957-855C-3316FD9C4000}</ProjectGuid>
+    <ProjectGuid>{DB81EEEA-E8D2-4CBE-A1FC-771DD2F90C22}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -171,8 +171,6 @@
   <ItemGroup>
     <ClCompile Include="..\engine\agg_file.cpp" />
     <ClCompile Include="..\engine\audio.cpp" />
-    <ClCompile Include="..\engine\audio_mixer.cpp" />
-    <ClCompile Include="..\engine\audio_music.cpp" />
     <ClCompile Include="..\engine\dir.cpp" />
     <ClCompile Include="..\engine\engine.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
@@ -193,7 +191,7 @@
     <ClCompile Include="..\engine\translations.cpp" />
     <ClCompile Include="..\engine\xmi2mid.cpp" />
     <ClCompile Include="..\engine\zzlib.cpp" />
-    <ClCompile Include="til2img.cpp" />
+    <ClCompile Include="xmi2mid_cli.cpp" />
     <ClCompile Include="..\thirdparty\libsmacker\smacker.c" />
     <ClCompile Include="..\thirdparty\libsmacker\smk_bitstream.c" />
     <ClCompile Include="..\thirdparty\libsmacker\smk_hufftree.c" />
@@ -201,8 +199,6 @@
   <ItemGroup>
     <ClInclude Include="..\engine\agg_file.h" />
     <ClInclude Include="..\engine\audio.h" />
-    <ClInclude Include="..\engine\audio_mixer.h" />
-    <ClInclude Include="..\engine\audio_music.h" />
     <ClInclude Include="..\engine\dir.h" />
     <ClInclude Include="..\engine\engine.h" />
     <ClInclude Include="..\engine\image.h" />

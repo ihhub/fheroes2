@@ -47,6 +47,7 @@ POT        := $(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
+.PHONY: all clean pot
 
 all: $(TARGET)
 
@@ -68,8 +69,6 @@ VPATH := $(SOURCEDIR)
 	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
 
 include $(wildcard *.d)
-
-.PHONY: clean
 
 clean:
 	rm -f *.pot *.o *.d *.rc *.res *.exe $(TARGET)

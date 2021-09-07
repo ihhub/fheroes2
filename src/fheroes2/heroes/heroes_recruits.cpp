@@ -22,6 +22,7 @@
 
 #include "heroes_recruits.h"
 #include "heroes.h"
+#include "serialize.h"
 #include "world.h"
 
 Recruits::Recruits()

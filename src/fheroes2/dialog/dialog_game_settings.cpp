@@ -23,6 +23,7 @@
 #include "dialog.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "game.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -146,7 +147,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -207,22 +208,26 @@ namespace fheroes2
             case SelectedWindow::Language: {
                 Settings & conf = Settings::Get();
 
-                fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
-                const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+                const fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
+                fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
 
                 if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
-                    supportedLanguage
+                    currentLanguage
                         = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage }, currentLanguage == supportedLanguage ? 1 : 0 );
-                    conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
-                    Settings::Get().Save( "fheroes2.cfg" );
                 }
                 else {
+                    currentLanguage = fheroes2::SupportedLanguage::English;
+
                     fheroes2::Text header( _( "Attention" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
                     fheroes2::Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ),
                                          { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
                     fheroes2::showMessage( header, body, Dialog::OK );
                 }
+
+                conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
+                Settings::Get().Save( "fheroes2.cfg" );
+
                 windowType = SelectedWindow::Configuration;
                 break;
             }

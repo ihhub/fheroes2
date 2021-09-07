@@ -34,12 +34,33 @@
 #endif
 
 #include <cstring>
-#if defined( __SWITCH__ )
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
 #include <strings.h> // for strcasecmp
 #endif
 
 namespace
 {
+    using StrCmp = int ( * )( const char *, const char * );
+
+    bool filterByName( const char * filename, const bool nameAsFilter, const std::string & name, const StrCmp strCmp )
+    {
+        if ( !nameAsFilter || !name.empty() ) {
+            const size_t filenameLength = strlen( filename );
+            if ( filenameLength < name.length() )
+                return true;
+
+            if ( !nameAsFilter && filenameLength != name.length() ) {
+                return true;
+            }
+
+            const char * filenamePtr = filename + filenameLength - name.length();
+            if ( strCmp( filenamePtr, name.c_str() ) != 0 )
+                return true;
+        }
+
+        return false;
+    }
+
     void getFilesFromDirectory( const std::string & path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files )
     {
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
@@ -56,21 +77,8 @@ namespace
             std::string fullname = System::ConcatePath( path, data.cFileName );
 
             // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
-            if ( !nameAsFilter || !name.empty() ) {
-                const size_t filenameLength = strlen( data.cFileName );
-                if ( filenameLength < name.length() )
-                    continue;
-
-                if ( !nameAsFilter && filenameLength != name.length() ) {
-                    continue;
-                }
-
-                const char * filenamePtr = data.cFileName + filenameLength - name.length();
-
-                if ( _stricmp( filenamePtr, name.c_str() ) != 0 ) {
-                    continue;
-                }
-            }
+            if ( filterByName( data.cFileName, nameAsFilter, name, _stricmp ) )
+                continue;
 
             files.emplace_back( std::move( fullname ) );
         } while ( FindNextFile( hFind, &data ) != 0 );
@@ -82,10 +90,11 @@ namespace
         if ( uid <= 0 )
             return;
 
+        const StrCmp strCmp = sensitive ? strcmp : strcasecmp;
+
         // iterate over the directory for files, print name and size of array (always 256)
         // this means you use strlen() to get length of file name
         SceIoDirent dir;
-
         while ( sceIoDread( uid, &dir ) > 0 ) {
             std::string fullname = System::ConcatePath( path, dir.d_name );
 
@@ -93,25 +102,8 @@ namespace
             if ( !SCE_S_ISREG( dir.d_stat.st_mode ) )
                 continue;
 
-            if ( !nameAsFilter || !name.empty() ) {
-                const size_t filenameLength = strlen( dir.d_name );
-                if ( filenameLength < name.length() )
-                    continue;
-
-                if ( !nameAsFilter && filenameLength != name.length() ) {
-                    continue;
-                }
-
-                const char * filenamePtr = dir.d_name + filenameLength - name.length();
-
-                if ( sensitive ) {
-                    if ( strcmp( filenamePtr, name.c_str() ) != 0 )
-                        continue;
-                }
-                else if ( strcasecmp( filenamePtr, name.c_str() ) != 0 ) {
-                    continue;
-                }
-            }
+            if ( filterByName( dir.d_name, nameAsFilter, name, strCmp ) )
+                continue;
 
             files.emplace_back( std::move( fullname ) );
         }
@@ -129,6 +121,8 @@ namespace
             return;
         }
 
+        const StrCmp strCmp = sensitive ? strcmp : strcasecmp;
+
         struct dirent * ep;
         while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
@@ -137,26 +131,8 @@ namespace
             if ( !System::IsFile( fullname ) )
                 continue;
 
-            if ( !nameAsFilter || !name.empty() ) {
-                const size_t filenameLength = strlen( ep->d_name );
-                if ( filenameLength < name.length() )
-                    continue;
-
-                if ( !nameAsFilter && filenameLength != name.length() ) {
-                    continue;
-                }
-
-                const char * filenamePtr = ep->d_name + filenameLength - name.length();
-
-                if ( sensitive ) {
-                    if ( strcmp( filenamePtr, name.c_str() ) != 0 )
-                        continue;
-                }
-                else {
-                    if ( strcasecmp( filenamePtr, name.c_str() ) != 0 )
-                        continue;
-                }
-            }
+            if ( filterByName( ep->d_name, nameAsFilter, name, strCmp ) )
+                continue;
 
             files.emplace_back( std::move( fullname ) );
         }

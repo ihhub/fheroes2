@@ -1,7 +1,7 @@
 # For descent FetchContent()
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.5 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.7 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
@@ -21,8 +21,7 @@ option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" 
 
 option(FHEROES2_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
 
-set(CONFIGURE_FHEROES2_LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}/${PROJECT_NAME}" CACHE STRING "System Locale directory")
-set(CONFIGURE_FHEROES2_DATA      "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "System fheroes2 game directory")
+set(CONFIGURE_FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "System fheroes2 game directory")
 
 # Find libraries and enable/disable features
 find_package(${USE_SDL_VERSION} REQUIRED)
@@ -39,6 +38,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(src)
 
+file(GLOB H2D_FILES ${CMAKE_SOURCE_DIR}/files/data/*.h2d)
+install(
+	FILES ${H2D_FILES}
+	DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
+	)
 install(
 	FILES docs/README.txt LICENSE changelog.txt
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}

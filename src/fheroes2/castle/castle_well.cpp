@@ -23,6 +23,7 @@
 #include <string>
 
 #include "agg_image.h"
+#include "army_troop.h"
 #include "battle_cell.h"
 #include "castle.h"
 #include "cursor.h"
@@ -31,9 +32,11 @@
 #include "game_delays.h"
 #include "icn.h"
 #include "kingdom.h"
+#include "monster_anim.h"
 #include "resource.h"
 #include "speed.h"
 #include "text.h"
+#include "translations.h"
 
 namespace
 {

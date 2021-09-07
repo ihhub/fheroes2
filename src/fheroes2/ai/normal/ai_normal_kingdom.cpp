@@ -29,6 +29,45 @@
 #include "mus.h"
 #include "world.h"
 
+namespace
+{
+    const double fighterStrengthMultipler = 3;
+
+    void setHeroRoles( KingdomHeroes & heroes )
+    {
+        if ( heroes.empty() ) {
+            // No heroes exist.
+            return;
+        }
+
+        if ( heroes.size() == 1 ) {
+            // A single hero has no roles.
+            heroes[0]->setAIRole( Heroes::Role::HUNTER );
+            return;
+        }
+
+        // Set hero's roles. First calculate each hero strength and sort it in descending order.
+        std::vector<std::pair<double, Heroes *>> heroStrength;
+        for ( Heroes * hero : heroes ) {
+            heroStrength.emplace_back( hero->GetArmy().GetStrength(), hero );
+        }
+
+        std::sort( heroStrength.begin(), heroStrength.end(),
+                   []( const std::pair<double, Heroes *> & first, const std::pair<double, Heroes *> & second ) { return first.first > second.first; } );
+
+        const double medianStrength = heroStrength[heroStrength.size() / 2].first;
+
+        for ( std::pair<double, Heroes *> & hero : heroStrength ) {
+            if ( hero.first > medianStrength * fighterStrengthMultipler ) {
+                hero.second->setAIRole( Heroes::Role::FIGHTER );
+            }
+            else {
+                hero.second->setAIRole( Heroes::Role::HUNTER );
+            }
+        }
+    }
+}
+
 namespace AI
 {
     void Normal::KingdomTurn( Kingdom & kingdom )
@@ -44,7 +83,6 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        AGG::ResetMixer();
         AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         KingdomHeroes & heroes = kingdom.GetHeroes();
@@ -63,9 +101,9 @@ namespace AI
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
-            int objectID = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.GetObject();
 
-            if ( !kingdom.isValidKingdomObject( tile, objectID ) )
+            if ( !kingdom.isValidKingdomObject( tile, objectType ) )
                 continue;
 
             const uint32_t regionID = tile.GetRegion();
@@ -76,14 +114,14 @@ namespace AI
             }
 
             RegionStats & stats = _regions[regionID];
-            if ( objectID != MP2::OBJ_COAST )
-                stats.validObjects.emplace_back( idx, objectID );
+            if ( objectType != MP2::OBJ_COAST )
+                stats.validObjects.emplace_back( idx, objectType );
 
             if ( !tile.isFog( color ) ) {
-                _mapObjects.emplace_back( idx, objectID );
+                _mapObjects.emplace_back( idx, objectType );
 
                 const int tileColor = tile.QuantityColor();
-                if ( objectID == MP2::OBJ_HEROES ) {
+                if ( objectType == MP2::OBJ_HEROES ) {
                     const Heroes * hero = tile.GetHeroes();
                     if ( !hero )
                         continue;
@@ -101,7 +139,7 @@ namespace AI
                         }
                     }
                 }
-                else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
+                else if ( objectType == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
                     if ( !castle )
                         continue;
@@ -114,7 +152,7 @@ namespace AI
                         stats.highestThreat = castleThreat;
                     }
                 }
-                else if ( objectID == MP2::OBJ_MONSTER ) {
+                else if ( objectType == MP2::OBJ_MONSTER ) {
                     stats.averageMonster += Army( tile ).GetStrength();
                     ++stats.monsterCount;
                 }
@@ -170,11 +208,13 @@ namespace AI
 
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
-            heroLimit++;
+            ++heroLimit;
         if ( slowEarlyGame )
             heroLimit = 2;
 
         // Step 3. Do some hero stuff.
+        setHeroRoles( heroes );
+
         const bool moreTasksForHeroes = HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 6 );
@@ -236,6 +276,8 @@ namespace AI
         status.RedrawTurnProgress( 7 );
 
         // Step 5. Move newly hired heroes if any.
+        setHeroRoles( heroes );
+
         HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 9 );

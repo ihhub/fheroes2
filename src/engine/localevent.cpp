@@ -21,8 +21,7 @@
  ***************************************************************************/
 
 #include "localevent.h"
-#include "audio_mixer.h"
-#include "audio_music.h"
+#include "audio.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -215,6 +214,33 @@ namespace
     }
 #endif
 }
+
+// Custom button mapping for Nintendo Switch
+#if defined( __SWITCH__ )
+#undef SDL_CONTROLLER_BUTTON_A
+#undef SDL_CONTROLLER_BUTTON_B
+#undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
+#undef SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+#undef SDL_CONTROLLER_BUTTON_DPAD_UP
+#undef SDL_CONTROLLER_BUTTON_DPAD_DOWN
+#define SDL_CONTROLLER_BUTTON_A 1
+#define SDL_CONTROLLER_BUTTON_B 0
+#define SDL_CONTROLLER_BUTTON_DPAD_LEFT 13
+#define SDL_CONTROLLER_BUTTON_DPAD_RIGHT 14
+#define SDL_CONTROLLER_BUTTON_DPAD_UP 11
+#define SDL_CONTROLLER_BUTTON_DPAD_DOWN 12
+
+enum SwitchJoyconKeys
+{
+    SWITCH_BUTTON_Y = 2,
+    SWITCH_BUTTON_X = 3,
+    SWITCH_BUTTON_MINUS = 4,
+    SWITCH_BUTTON_PLUS = 6,
+    SWITCH_BUTTON_L = 9,
+    SWITCH_BUTTON_R = 10
+};
+
+#endif
 
 LocalEvent::LocalEvent()
     : modes( 0 )
@@ -897,7 +923,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     }
 #else
     switch ( sym ) {
-    case KEY_BACKSPACE: {
+    case KEY_BACKSPACE:
         if ( !res.empty() && pos ) {
             if ( pos >= res.size() )
                 res.resize( res.size() - 1 );
@@ -905,13 +931,13 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
                 res.erase( pos - 1, 1 );
             --pos;
         }
-    } break;
-    case KEY_DELETE: {
+        break;
+    case KEY_DELETE:
         if ( !res.empty() ) {
             if ( pos < res.size() )
                 res.erase( pos, 1 );
         }
-    } break;
+        break;
 
     case KEY_LEFT:
         if ( pos )
@@ -1207,14 +1233,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
 void LocalEvent::StopSounds()
 {
-    Music::Mute();
-    Mixer::Mute();
+    Audio::Mute();
 }
 
 void LocalEvent::ResumeSounds()
 {
-    Music::Unmute();
-    Mixer::Unmute();
+    Audio::Unmute();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1414,6 +1438,27 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = KEY_RETURN;
         }
+#if defined( __SWITCH__ )
+        // Custom button mapping for Nintendo Switch
+        if ( button.button == SWITCH_BUTTON_Y ) {
+            key_value = KEY_RETURN;
+        }
+        else if ( button.button == SWITCH_BUTTON_X ) {
+            key_value = KEY_ESCAPE;
+        }
+        else if ( button.button == SWITCH_BUTTON_R ) {
+            key_value = KEY_t;
+        }
+        else if ( button.button == SWITCH_BUTTON_L ) {
+            key_value = KEY_h;
+        }
+        else if ( button.button == SWITCH_BUTTON_MINUS ) {
+            key_value = KEY_e;
+        }
+        else if ( button.button == SWITCH_BUTTON_PLUS ) {
+            key_value = KEY_c;
+        }
+#endif
     }
 }
 

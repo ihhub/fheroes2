@@ -28,7 +28,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "mus.h"
-#include "settings.h"
+#include "serialize.h"
 #include "translations.h"
 
 namespace AI
@@ -59,42 +59,90 @@ namespace AI
         return Type();
     }
 
-    void Base::Reset() {}
+    void Base::Reset()
+    {
+        // Do nothing.
+    }
 
-    void Base::CastlePreBattle( Castle & ) {}
+    void Base::CastlePreBattle( Castle & )
+    {
+        // Do nothing.
+    }
 
-    void Base::CastleAfterBattle( Castle &, bool ) {}
+    void Base::CastleAfterBattle( Castle &, bool )
+    {
+        // Do nothing.
+    }
 
-    void Base::CastleTurn( Castle &, bool ) {}
+    void Base::CastleTurn( Castle &, bool )
+    {
+        // Do nothing.
+    }
 
-    void Base::CastleAdd( const Castle & ) {}
+    void Base::CastleAdd( const Castle & )
+    {
+        // Do nothing.
+    }
 
-    void Base::CastleRemove( const Castle & ) {}
+    void Base::CastleRemove( const Castle & )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesAdd( const Heroes & ) {}
+    void Base::HeroesAdd( const Heroes & )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesRemove( const Heroes & ) {}
+    void Base::HeroesRemove( const Heroes & )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesPreBattle( HeroBase &, bool ) {}
+    void Base::HeroesPreBattle( HeroBase &, bool )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesAfterBattle( HeroBase &, bool ) {}
+    void Base::HeroesAfterBattle( HeroBase &, bool )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesActionNewPosition( Heroes & ) {}
+    void Base::HeroesActionNewPosition( Heroes & )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesClearTask( const Heroes & ) {}
+    void Base::HeroesClearTask( const Heroes & )
+    {
+        // Do nothing.
+    }
 
-    void Base::revealFog( const Maps::Tiles & ) {}
+    void Base::revealFog( const Maps::Tiles & )
+    {
+        // Do nothing.
+    }
 
     std::string Base::HeroesString( const Heroes & )
     {
-        return "";
+        return std::string();
     }
 
-    void Base::HeroesActionComplete( Heroes & ) {}
+    void Base::HeroesActionComplete( Heroes & )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesLevelUp( Heroes & ) {}
+    void Base::HeroesLevelUp( Heroes & )
+    {
+        // Do nothing.
+    }
 
-    void Base::HeroesPostLoad( Heroes & ) {}
+    void Base::HeroesPostLoad( Heroes & )
+    {
+        // Do nothing.
+    }
 
     bool Base::HeroesGetTask( Heroes & hero )
     {
@@ -150,7 +198,6 @@ namespace AI
             return;
         }
 
-        AGG::ResetMixer();
         AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();

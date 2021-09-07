@@ -23,21 +23,17 @@ MAKE	:= make
 
 PROJECT_TITLE := fheroes2
 PROJECT_AUTHOR := fheroes2 resurrection team
-PROJECT_VERSION := 0.9.5
+PROJECT_VERSION := 0.9.7
 
-all: package
+PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
 
-package: $(TARGET).nro
+.PHONY: all clean
 
-$(TARGET).nro: $(TARGET).elf $(TARGET).nacp
-	elf2nro $(TARGET).elf $(TARGET).nro --icon=files/images/platform/switch/icon.png --nacp=$(TARGET).nacp
-
-$(TARGET).nacp:
-	nacptool --create "$(PROJECT_TITLE)" "$(PROJECT_AUTHOR)" "$(PROJECT_VERSION)" $(TARGET).nacp
-
-$(TARGET).elf:
+all:
 	$(MAKE) -f Makefile -C src PLATFORM=switch RELEASE=true
 	@cp src/dist/$(TARGET) $(TARGET).elf
+	nacptool --create "$(PROJECT_TITLE)" "$(PROJECT_AUTHOR)" "$(PROJECT_VERSION)" $(TARGET).nacp
+	elf2nro $(TARGET).elf $(TARGET).nro --icon=files/images/platform/switch/icon.jpg --nacp=$(TARGET).nacp
 
 clean:
 	$(MAKE) -f Makefile -C src clean

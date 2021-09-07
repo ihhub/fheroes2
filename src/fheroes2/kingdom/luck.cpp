@@ -24,53 +24,46 @@
 #include "tools.h"
 #include "translations.h"
 
-const std::string & Luck::String( int luck )
+std::string Luck::String( int luck )
 {
-    static const std::string str_luck[]
-        = {"Unknown", _( "luck|Cursed" ), _( "luck|Awful" ), _( "luck|Bad" ), _( "luck|Normal" ), _( "luck|Good" ), _( "luck|Great" ), _( "luck|Irish" )};
-
     switch ( luck ) {
     case Luck::CURSED:
-        return str_luck[1];
+        return _( "luck|Cursed" );
     case Luck::AWFUL:
-        return str_luck[2];
+        return _( "luck|Awful" );
     case Luck::BAD:
-        return str_luck[3];
+        return _( "luck|Bad" );
     case Luck::NORMAL:
-        return str_luck[4];
+        return _( "luck|Normal" );
     case Luck::GOOD:
-        return str_luck[5];
+        return _( "luck|Good" );
     case Luck::GREAT:
-        return str_luck[6];
+        return _( "luck|Great" );
     case Luck::IRISH:
-        return str_luck[7];
+        return _( "luck|Irish" );
     default:
         break;
     }
 
-    return str_luck[0];
+    return "Unknown";
 }
 
-const std::string & Luck::Description( int luck )
+std::string Luck::Description( int luck )
 {
-    static const std::string str_desc_luck[] = {"Unknown", _( "Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage." ),
-                                                _( "Neutral luck means your armies will never get lucky or unlucky attacks on the enemy." ),
-                                                _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." )};
-
     switch ( luck ) {
     case Luck::CURSED:
     case Luck::AWFUL:
     case Luck::BAD:
-        return str_desc_luck[1];
+        return _( "Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage." );
     case Luck::NORMAL:
-        return str_desc_luck[2];
+        return _( "Neutral luck means your armies will never get lucky or unlucky attacks on the enemy." );
     case Luck::GOOD:
     case Luck::GREAT:
     case Luck::IRISH:
-        return str_desc_luck[3];
+        return _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." );
     }
 
-    return str_desc_luck[0];
+    return "Unknown";
 }
 
 int Luck::Normalize( const int luck )

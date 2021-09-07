@@ -29,6 +29,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 
 #include <cassert>
 
@@ -128,7 +129,7 @@ namespace
         enum : int32_t
         {
             ALPHA_VALUE_STEP = 5,
-            NO_ACTION_COUNTER_LIMIT = 80
+            NO_ACTION_COUNTER_LIMIT = 100
         };
     };
 
@@ -221,12 +222,14 @@ namespace
         const std::string contributors( "LeHerosInconnu\n"
                                         "undef21\n"
                                         "shprotru\n"
+                                        "Arkadiy Illarionov\n"
                                         "eos428\n"
                                         "vincent-grosbois\n"
-                                        "Andrii Kurdiumov\n"
                                         "Vasilenko Alexey\n"
-                                        "Arkadiy Illarionov\n"
+                                        "Andrii Kurdiumov\n"
                                         "Andrey Starodubtsev\n"
+                                        "dimag0g\n"
+                                        "felix642\n"
                                         "and many other contributors!" );
 
         name.Set( contributors, Font::BIG, textWidth );

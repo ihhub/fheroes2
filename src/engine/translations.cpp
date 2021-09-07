@@ -91,9 +91,9 @@ struct mofile
 
         while ( plural > 0 ) {
             while ( *ptr )
-                ptr++;
-            plural--;
-            ptr++;
+                ++ptr;
+            --plural;
+            ++ptr;
         }
 
         return reinterpret_cast<const char *>( ptr );

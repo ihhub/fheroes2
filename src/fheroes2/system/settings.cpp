@@ -29,6 +29,7 @@
 #include "logging.h"
 #include "save_format_version.h"
 #include "screen.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
@@ -75,155 +76,6 @@ namespace
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000
     };
-
-    struct settings_t
-    {
-        u32 id;
-        const char * str;
-
-        bool operator==( u32 i ) const
-        {
-            return id && id == i;
-        }
-    };
-
-    // internal settings
-    const settings_t settingsFHeroes2[] = {
-        {
-            Settings::GAME_SAVE_REWRITE_CONFIRM,
-            _( "game: always confirm for rewrite savefile" ),
-        },
-        {
-            Settings::GAME_REMEMBER_LAST_FOCUS,
-            _( "game: remember last focus" ),
-        },
-        {
-            Settings::GAME_BATTLE_SHOW_DAMAGE,
-            _( "battle: show damage info" ),
-        },
-        {
-            Settings::WORLD_SHOW_TERRAIN_PENALTY,
-            _( "world: show terrain penalty" ),
-        },
-        {
-            Settings::WORLD_SCOUTING_EXTENDED,
-            _( "world: scouting skill show extended content info" ),
-        },
-        {
-            Settings::WORLD_ALLOW_SET_GUARDIAN,
-            _( "world: allow set guardian to objects" ),
-        },
-        {
-            Settings::WORLD_EYE_EAGLE_AS_SCHOLAR,
-            _( "world: Eagle Eye also works like Scholar in H3." ),
-        },
-        {
-            Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
-            _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-        },
-        {
-            Settings::WORLD_SCALE_NEUTRAL_ARMIES,
-            _( "world: Neutral armies scale with game difficulty" ),
-        },
-        {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS,
-            _( "world: use unique artifacts for resource affecting" ),
-        },
-        {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS,
-            _( "world: use unique artifacts for primary skills" ),
-        },
-        {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS,
-            _( "world: use unique artifacts for secondary skills" ),
-        },
-        {
-            Settings::WORLD_EXT_OBJECTS_CAPTURED,
-            _( "world: Wind/Water Mills and Magic Garden can be captured" ),
-        },
-        {
-            Settings::WORLD_DISABLE_BARROW_MOUNDS,
-            _( "world: disable Barrow Mounds" ),
-        },
-        {
-            Settings::CASTLE_ALLOW_GUARDIANS,
-            _( "castle: allow guardians" ),
-        },
-        {
-            Settings::CASTLE_MAGEGUILD_POINTS_TURN,
-            _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" ),
-        },
-        {
-            Settings::HEROES_BUY_BOOK_FROM_SHRINES,
-            _( "heroes: allow buy a spellbook from Shrines" ),
-        },
-        {
-            Settings::HEROES_COST_DEPENDED_FROM_LEVEL,
-            _( "heroes: recruit cost to be dependent on hero level" ),
-        },
-        {
-            Settings::HEROES_REMEMBER_POINTS_RETREAT,
-            _( "heroes: remember move points for retreat/surrender result" ),
-        },
-        {
-            Settings::HEROES_TRANSCRIBING_SCROLLS,
-            _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
-        },
-        {
-            Settings::HEROES_ARENA_ANY_SKILLS,
-            _( "heroes: in Arena can choose any of primary skills" ),
-        },
-        {
-            Settings::UNIONS_ALLOW_HERO_MEETINGS,
-            _( "unions: allow meeting heroes" ),
-        },
-        {
-            Settings::UNIONS_ALLOW_CASTLE_VISITING,
-            _( "unions: allow castle visiting" ),
-        },
-        {
-            Settings::BATTLE_SHOW_ARMY_ORDER,
-            _( "battle: show army order" ),
-        },
-        {
-            Settings::BATTLE_SOFT_WAITING,
-            _( "battle: soft wait troop" ),
-        },
-        {
-            Settings::BATTLE_REVERSE_WAIT_ORDER,
-            _( "battle: reverse wait order (fast, average, slow)" ),
-        },
-        {
-            Settings::GAME_SHOW_SYSTEM_INFO,
-            _( "game: show system info" ),
-        },
-        {
-            Settings::GAME_AUTOSAVE_ON,
-            _( "game: autosave on" ),
-        },
-        {
-            Settings::GAME_AUTOSAVE_BEGIN_DAY,
-            _( "game: autosave will be made at the beginning of the day" ),
-        },
-        {
-            Settings::GAME_USE_FADE,
-            _( "game: use fade" ),
-        },
-        {
-            Settings::GAME_EVIL_INTERFACE,
-            _( "game: use evil interface" ),
-        },
-        {
-            Settings::GAME_HIDE_INTERFACE,
-            _( "game: hide interface" ),
-        },
-        {
-            Settings::GAME_CONTINUE_AFTER_VICTORY,
-            _( "game: offer to continue the game afer victory condition" ),
-        },
-
-        { 0, nullptr },
-    };
 }
 
 std::string Settings::GetVersion()
@@ -242,7 +94,7 @@ Settings::Settings()
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
-    , battle_speed( DEFAULT_SPEED_DELAY )
+    , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
@@ -371,66 +223,28 @@ bool Settings::Read( const std::string & filename )
 
     // sound volume
     if ( config.Exists( "sound volume" ) ) {
-        sound_volume = config.IntParams( "sound volume" );
-        if ( sound_volume > 10 )
-            sound_volume = 10;
+        SetSoundVolume( config.IntParams( "sound volume" ) );
     }
 
     // music volume
     if ( config.Exists( "music volume" ) ) {
-        music_volume = config.IntParams( "music volume" );
-        if ( music_volume > 10 )
-            music_volume = 10;
+        SetMusicVolume( config.IntParams( "music volume" ) );
     }
 
     // move speed
     if ( config.Exists( "ai speed" ) ) {
-        ai_speed = config.IntParams( "ai speed" );
-        if ( ai_speed > 10 ) {
-            ai_speed = 10;
-        }
-        if ( ai_speed < 0 ) {
-            ai_speed = 0;
-        }
+        SetAIMoveSpeed( config.IntParams( "ai speed" ) );
     }
 
     if ( config.Exists( "heroes speed" ) ) {
-        heroes_speed = config.IntParams( "heroes speed" );
-        if ( heroes_speed > 10 ) {
-            heroes_speed = 10;
-        }
-        if ( heroes_speed < 1 ) {
-            heroes_speed = 1;
-        }
+        SetHeroesMoveSpeed( config.IntParams( "heroes speed" ) );
     }
 
     // scroll speed
-    switch ( config.IntParams( "scroll speed" ) ) {
-    case 1:
-        scroll_speed = SCROLL_SLOW;
-        break;
-    case 2:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    case 3:
-        scroll_speed = SCROLL_FAST1;
-        break;
-    case 4:
-        scroll_speed = SCROLL_FAST2;
-        break;
-    default:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    }
+    SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
     if ( config.Exists( "battle speed" ) ) {
-        battle_speed = config.IntParams( "battle speed" );
-        if ( battle_speed > 10 ) {
-            battle_speed = 10;
-        }
-        if ( battle_speed < 1 ) {
-            battle_speed = 1;
-        }
+        SetBattleSpeed( config.IntParams( "battle speed" ) );
     }
 
     if ( config.Exists( "battle grid" ) ) {
@@ -481,11 +295,7 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "controller pointer speed" ) ) {
-        _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
-        if ( _controllerPointerSpeed > 100 )
-            _controllerPointerSpeed = 100;
-        else if ( _controllerPointerSpeed < 0 )
-            _controllerPointerSpeed = 0;
+        _controllerPointerSpeed = clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
     }
 
     if ( config.Exists( "first time game run" ) && config.StrParams( "first time game run" ) == "off" ) {
@@ -588,27 +398,7 @@ std::string Settings::String() const
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
-    os << "scroll speed = ";
-
-    switch ( scroll_speed ) {
-    case SCROLL_SLOW:
-        os << 1;
-        break;
-    case SCROLL_NORMAL:
-        os << 2;
-        break;
-    case SCROLL_FAST1:
-        os << 3;
-        break;
-    case SCROLL_FAST2:
-        os << 4;
-        break;
-    default:
-        os << 2;
-        break;
-    }
-
-    os << std::endl;
+    os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
@@ -756,24 +546,16 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 {
     ListFiles res;
 
-    auto processDir = [&res, &fileNameFilter, exactMatch]( const std::string & dir ) {
-        if ( exactMatch ) {
-            res.FindFileInDir( dir, fileNameFilter, false );
-        }
-        else {
-            res.ReadDir( dir, fileNameFilter, false );
-        }
-    };
-
-    if ( !prefixDir.empty() && System::IsDirectory( prefixDir ) ) {
-        processDir( prefixDir );
-    }
-
     for ( const std::string & dir : GetRootDirs() ) {
         const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
 
         if ( System::IsDirectory( path ) ) {
-            processDir( path );
+            if ( exactMatch ) {
+                res.FindFileInDir( path, fileNameFilter, false );
+            }
+            else {
+                res.ReadDir( path, fileNameFilter, false );
+            }
         }
     }
 
@@ -814,37 +596,19 @@ int Settings::ScrollSpeed() const
 /* set ai speed: 1 - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
-    if ( speed < 0 ) {
-        speed = 0;
-    }
-    if ( speed > 10 ) {
-        speed = 10;
-    }
-    ai_speed = speed;
+    ai_speed = clamp( speed, 0, 10 );
 }
 
 /* set hero speed: 1 - 10 */
 void Settings::SetHeroesMoveSpeed( int speed )
 {
-    if ( speed < 1 ) {
-        speed = 1;
-    }
-    if ( speed > 10 ) {
-        speed = 10;
-    }
-    heroes_speed = speed;
+    heroes_speed = clamp( speed, 1, 10 );
 }
 
 /* set battle speed: 1 - 10 */
 void Settings::SetBattleSpeed( int speed )
 {
-    if ( speed < 1 ) {
-        speed = 1;
-    }
-    if ( speed > 10 ) {
-        speed = 10;
-    }
-    battle_speed = speed;
+    battle_speed = clamp( speed, 1, 10 );
 }
 
 void Settings::setBattleAutoResolve( bool enable )
@@ -882,16 +646,10 @@ void Settings::SetScrollSpeed( int speed )
 {
     switch ( speed ) {
     case SCROLL_SLOW:
-        scroll_speed = SCROLL_SLOW;
-        break;
     case SCROLL_NORMAL:
-        scroll_speed = SCROLL_NORMAL;
-        break;
     case SCROLL_FAST1:
-        scroll_speed = SCROLL_FAST1;
-        break;
     case SCROLL_FAST2:
-        scroll_speed = SCROLL_FAST2;
+        scroll_speed = speed;
         break;
     default:
         scroll_speed = SCROLL_NORMAL;
@@ -999,13 +757,13 @@ MusicSource Settings::MusicType() const
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
-    sound_volume = 10 <= v ? 10 : v;
+    sound_volume = std::min( v, 10 );
 }
 
 /* music volume: 0 - 10 */
 void Settings::SetMusicVolume( int v )
 {
-    music_volume = 10 <= v ? 10 : v;
+    music_volume = std::min( v, 10 );
 }
 
 /* Set music type: check MusicSource enum */
@@ -1048,7 +806,7 @@ Players & Settings::GetPlayers()
 
 void Settings::SetPreferablyCountPlayers( int c )
 {
-    preferably_count_players = 6 < c ? 6 : c;
+    preferably_count_players = std::min( c, 6 );
 }
 
 int Settings::PreferablyCountPlayers() const
@@ -1226,11 +984,82 @@ bool Settings::ExtModes( u32 f ) const
     return false;
 }
 
-const char * Settings::ExtName( u32 f ) const
+std::string Settings::ExtName( const uint32_t settingId )
 {
-    const settings_t * ptr = std::find( settingsFHeroes2, std::end( settingsFHeroes2 ) - 1, f );
+    switch ( settingId ) {
+    case Settings::GAME_SAVE_REWRITE_CONFIRM:
+        return _( "game: always confirm for rewrite savefile" );
+    case Settings::GAME_REMEMBER_LAST_FOCUS:
+        return _( "game: remember last focus" );
+    case Settings::GAME_BATTLE_SHOW_DAMAGE:
+        return _( "battle: show damage info" );
+    case Settings::WORLD_SHOW_TERRAIN_PENALTY:
+        return _( "world: show terrain penalty" );
+    case Settings::WORLD_SCOUTING_EXTENDED:
+        return _( "world: scouting skill show extended content info" );
+    case Settings::WORLD_ALLOW_SET_GUARDIAN:
+        return _( "world: allow set guardian to objects" );
+    case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
+        return _( "world: Eagle Eye also works like Scholar in H3." );
+    case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
+        return _( "world: Crystal Ball also added Identify Hero and Visions spells" );
+    case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
+        return _( "world: Neutral armies scale with game difficulty" );
+    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
+        return _( "world: use unique artifacts for resource affecting" );
+    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
+        return _( "world: use unique artifacts for primary skills" );
+    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
+        return _( "world: use unique artifacts for secondary skills" );
+    case Settings::WORLD_EXT_OBJECTS_CAPTURED:
+        return _( "world: Wind/Water Mills and Magic Garden can be captured" );
+    case Settings::WORLD_DISABLE_BARROW_MOUNDS:
+        return _( "world: disable Barrow Mounds" );
+    case Settings::CASTLE_ALLOW_GUARDIANS:
+        return _( "castle: allow guardians" );
+    case Settings::CASTLE_MAGEGUILD_POINTS_TURN:
+        return _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" );
+    case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
+        return _( "heroes: allow buy a spellbook from Shrines" );
+    case Settings::HEROES_COST_DEPENDED_FROM_LEVEL:
+        return _( "heroes: recruit cost to be dependent on hero level" );
+    case Settings::HEROES_REMEMBER_POINTS_RETREAT:
+        return _( "heroes: remember move points for retreat/surrender result" );
+    case Settings::HEROES_TRANSCRIBING_SCROLLS:
+        return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
+    case Settings::HEROES_ARENA_ANY_SKILLS:
+        return _( "heroes: in Arena can choose any of primary skills" );
+    case Settings::UNIONS_ALLOW_HERO_MEETINGS:
+        return _( "unions: allow meeting heroes" );
+    case Settings::UNIONS_ALLOW_CASTLE_VISITING:
+        return _( "unions: allow castle visiting" );
+    case Settings::BATTLE_SHOW_ARMY_ORDER:
+        return _( "battle: show army order" );
+    case Settings::BATTLE_SOFT_WAITING:
+        return _( "battle: soft wait troop" );
+    case Settings::BATTLE_REVERSE_WAIT_ORDER:
+        return _( "battle: reverse wait order (fast, average, slow)" );
+    case Settings::BATTLE_DETERMINISTIC_RESULT:
+        return _( "battle: deterministic events" );
+    case Settings::GAME_SHOW_SYSTEM_INFO:
+        return _( "game: show system info" );
+    case Settings::GAME_AUTOSAVE_ON:
+        return _( "game: autosave on" );
+    case Settings::GAME_AUTOSAVE_BEGIN_DAY:
+        return _( "game: autosave will be made at the beginning of the day" );
+    case Settings::GAME_USE_FADE:
+        return _( "game: use fade" );
+    case Settings::GAME_EVIL_INTERFACE:
+        return _( "game: use evil interface" );
+    case Settings::GAME_HIDE_INTERFACE:
+        return _( "game: hide interface" );
+    case Settings::GAME_CONTINUE_AFTER_VICTORY:
+        return _( "game: offer to continue the game afer victory condition" );
+    default:
+        break;
+    };
 
-    return ptr ? _( ptr->str ) : nullptr;
+    return std::string();
 }
 
 void Settings::ExtSetModes( u32 f )
@@ -1358,6 +1187,11 @@ bool Settings::ExtBattleShowBattleOrder() const
 bool Settings::ExtBattleSoftWait() const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
+}
+
+bool Settings::ExtBattleDeterministicResult() const
+{
+    return ExtModes( BATTLE_DETERMINISTIC_RESULT );
 }
 
 bool Settings::ExtGameRewriteConfirm() const
@@ -1545,17 +1379,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     u32 opt_game = 0; // skip: settings
 
     // map file
-    msg >> conf.current_maps_file;
-
-    // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE remove this check.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove the check below" );
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_094_RELEASE ) {
-        msg >> conf.current_maps_file._version;
-    }
-
-    msg >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle >> conf.opt_addons
-        >> conf.players;
+    msg >> conf.current_maps_file >> conf.current_maps_file._version >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game
+        >> conf.opt_world >> conf.opt_battle >> conf.opt_addons >> conf.players;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

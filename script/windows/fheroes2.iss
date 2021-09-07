@@ -37,6 +37,7 @@ Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
 Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
+Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
 
 [Tasks]
 Name: desktopicon; Description: "Desktop shortcut"

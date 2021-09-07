@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
@@ -217,8 +216,10 @@ std::vector<u8> LoadFileToMem( const std::string & file )
 {
     std::vector<u8> data;
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
-    if ( rw == nullptr )
+    if ( rw == nullptr ) {
         ERROR_LOG( SDL_GetError() );
+        return data;
+    }
 
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
     if ( length < 0 )
@@ -255,7 +256,7 @@ namespace fheroes2
         const int dy = pt2.y - pt1.y;
         const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
         // round up the integer division
-        const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
+        const uint32_t length = ( step > 0 && dist >= step / 2 ) ? ( dist + step / 2 ) / step : 1;
         const double moveX = dx / static_cast<double>( length );
         const double moveY = dy / static_cast<double>( length );
 

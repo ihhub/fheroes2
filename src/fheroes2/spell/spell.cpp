@@ -26,6 +26,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "serialize.h"
 #include "translations.h"
 
 enum
@@ -185,7 +186,7 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         switch ( id ) {
         case BLESS:
         case MASSBLESS:
-            acount = hero->HasArtifact( Artifact::SNAKE_RING );
+            acount = hero->artifactCount( Artifact::SNAKE_RING );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
             break;
@@ -194,14 +195,14 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         case SUMMONAELEMENT:
         case SUMMONFELEMENT:
         case SUMMONWELEMENT:
-            acount = hero->HasArtifact( Artifact::ELEMENTAL_RING );
+            acount = hero->artifactCount( Artifact::ELEMENTAL_RING );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
             break;
 
         case CURSE:
         case MASSCURSE:
-            acount = hero->HasArtifact( Artifact::EVIL_EYE );
+            acount = hero->artifactCount( Artifact::EVIL_EYE );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
             break;
@@ -211,7 +212,7 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         }
 
         if ( isMindInfluence() ) {
-            acount = hero->HasArtifact( Artifact::SKULLCAP );
+            acount = hero->artifactCount( Artifact::SKULLCAP );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
         }

@@ -28,12 +28,9 @@
 namespace Campaign
 {
     CampaignSaveData::CampaignSaveData()
-        : _finishedMaps()
-        , _obtainedCampaignAwards()
-        , _currentScenarioID( 0 )
+        : _currentScenarioID( 0 )
         , _campaignID( 0 )
         , _daysPassed( 0 )
-        , _currentScenarioBonus()
     {}
 
     CampaignSaveData & Campaign::CampaignSaveData::Get()
@@ -45,6 +42,11 @@ namespace Campaign
     void CampaignSaveData::addCampaignAward( const int awardID )
     {
         _obtainedCampaignAwards.emplace_back( awardID );
+    }
+
+    void CampaignSaveData::removeCampaignAward( const int awardID )
+    {
+        _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
     }
 
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
@@ -110,6 +112,12 @@ namespace Campaign
                 if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awards[j]._id ) != _obtainedCampaignAwards.end() )
                     obtainedAwards.emplace_back( awards[j] );
             }
+        }
+
+        const std::vector<Campaign::CampaignAwardData> extraAwards = Campaign::CampaignAwardData::getExtraCampaignAwardData( _campaignID );
+        for ( const Campaign::CampaignAwardData & award : extraAwards ) {
+            if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), award._id ) != _obtainedCampaignAwards.end() )
+                obtainedAwards.emplace_back( award );
         }
 
         return obtainedAwards;

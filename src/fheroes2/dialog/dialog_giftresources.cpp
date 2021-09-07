@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -30,6 +28,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -132,10 +131,7 @@ struct ResourceBar
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
     {
-        std::ostringstream os;
-
-        os << count;
-        Text text( os.str(), Font::SMALL );
+        Text text( std::to_string( count ), Font::SMALL );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::GetIndexSprite2( type ) );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
         text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
@@ -170,7 +166,7 @@ struct ResourceBar
             u32 max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
 
             if ( 0 == mul ) {
-                Dialog::Message( "", "First select recipients!", Font::BIG, Dialog::OK );
+                Dialog::Message( "", _( "First select recipients!" ), Font::BIG, Dialog::OK );
             }
             else if ( 0 == max ) {
                 std::string msg = _( "You cannot select %{resource}!" );
@@ -216,19 +212,19 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     Funds funds2;
     Text text;
 
-    text.Set( "Select Recipients" );
+    text.Set( _( "Select Recipients" ) );
     text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 5 );
 
     SelectRecipientsColors selector( fheroes2::Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
     selector.Redraw();
 
-    text.Set( "Your Funds" );
+    text.Set( _( "Your Funds" ) );
     text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 55 );
 
     ResourceBar info1( funds1, box.x + 25, box.y + 80 );
     info1.Redraw();
 
-    text.Set( "Planned Gift" );
+    text.Set( _( "Planned Gift" ) );
     text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 125 );
 
     ResourceBar info2( funds2, box.x + 25, box.y + 150 );
@@ -288,7 +284,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         event.first = world.CountDay() + 1;
         event.subsequent = 0;
         event.colors = selector.recipients;
-        event.message = "Gift from %{name}";
+        event.message = _( "Gift from %{name}" );
         const Player * player = Settings::Get().GetPlayers().Get( kingdom.GetColor() );
         if ( player )
             StringReplace( event.message, "%{name}", player->GetName() );

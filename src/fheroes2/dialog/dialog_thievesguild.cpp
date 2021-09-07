@@ -33,6 +33,7 @@
 #include "monster.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 struct ValueColors : std::pair<int, int>

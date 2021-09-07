@@ -26,7 +26,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
@@ -47,6 +47,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -193,7 +194,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
                 Game::EnvironmentSoundMixer();
                 AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
             }
-        } break;
+            break;
+        }
 
         case GameFocus::CASTLE: {
             const Castle * focusedCastle = Interface::GetFocusCastle();
@@ -201,7 +203,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
             Game::EnvironmentSoundMixer();
             AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -306,7 +309,8 @@ void ShowNewWeekDialog( void )
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )
                 message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                            : _( "After regular growth, the population of %{monter} increases by %{count} percent!" );
+                                                            : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                                  "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             else
                 message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
@@ -326,13 +330,15 @@ void ShowNewWeekDialog( void )
 void ShowEventDayDialog( void )
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
+    const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
 
-    for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
-        if ( ( *it ).resource.GetValidItemsCount() )
-            Dialog::ResourceInfo( "", ( *it ).message, ( *it ).resource );
-        else if ( !( *it ).message.empty() )
-            Dialog::Message( "", ( *it ).message, Font::BIG, Dialog::OK );
+    for ( const EventDate & event : events ) {
+        if ( event.resource.GetValidItemsCount() ) {
+            Dialog::ResourceInfo( event.title, event.message, event.resource );
+        }
+        else if ( !event.message.empty() ) {
+            Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
+        }
     }
 }
 
@@ -360,14 +366,16 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
 
         if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-    } break;
+        break;
+    }
 
     case MP2::OBJ_HEROES: {
         const Heroes * heroes = tile.GetHeroes();
 
         if ( nullptr != heroes )
             return heroes->GetColor() == from_castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
-    } break;
+        break;
+    }
 
     default:
         break;
@@ -394,7 +402,8 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
         if ( castle )
             return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-    } break;
+        break;
+    }
 
     case MP2::OBJ_HEROES: {
         const Heroes * to_hero = tile.GetHeroes();
@@ -411,7 +420,8 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
             else
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_COAST:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -474,7 +484,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_HEROES: {
         const Heroes * to_hero = tile.GetHeroes();
@@ -495,7 +506,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             else
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_BOAT:
         return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -606,9 +618,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           std::endl
-                               << world.DateString() << ", "
-                               << "color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+                           world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
                 radar.SetHide( true );
                 radar.SetRedraw();
@@ -643,23 +653,24 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 // CONTROL_AI turn
                 default:
-                    if ( res == fheroes2::GameMode::END_TURN ) {
-                        Cursor::Get().SetThemes( Cursor::WAIT );
+                    // TODO: remove this temporary assertion
+                    assert( res == fheroes2::GameMode::END_TURN );
 
-                        conf.SetCurrentColor( player->GetColor() );
+                    Cursor::Get().SetThemes( Cursor::WAIT );
 
-                        statusWindow.Reset();
-                        statusWindow.SetState( StatusType::STATUS_AITURN );
+                    conf.SetCurrentColor( player->GetColor() );
 
-                        Redraw();
-                        display.render();
+                    statusWindow.Reset();
+                    statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        world.ClearFog( player->GetColor() );
+                    Redraw();
+                    display.render();
 
-                        kingdom.ActionBeforeTurn();
+                    world.ClearFog( player->GetColor() );
 
-                        AI::Get().KingdomTurn( kingdom );
-                    }
+                    kingdom.ActionBeforeTurn();
+
+                    AI::Get().KingdomTurn( kingdom );
                     break;
                 }
 
@@ -714,8 +725,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    // current music will be set along with the focus, reset music from the previous turn
+    // current music will be set along with the focus, reset environment sounds
+    // and terrain music theme from the previous turn
     Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetMixer();
 
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
@@ -836,6 +849,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             // cast spell
             else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
                 EventCastSpell();
+            // kingdom overview
+            else if ( HotKeyPressEvent( Game::EVENT_KINGDOM_INFO ) )
+                EventKingdomInfo();
             // show/hide control panel
             else if ( HotKeyPressEvent( Game::EVENT_CTRLPANEL ) )
                 EventSwitchShowControlPanel();
@@ -1134,6 +1150,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             Game::AutoSave();
     }
 
+    // reset environment sounds and terrain music theme at the end of the human turn
+    Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetMixer();
+
     return res;
 }
 
@@ -1156,12 +1176,13 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
                 Cursor::Get().SetThemes( Cursor::HEROES );
             }
         }
-    } break;
+        break;
+    }
 
     case Cursor::CASTLE: {
         // correct index for castle
-        const int tileObjId = tile.GetObject();
-        if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
+        const MP2::MapObjectType objectType = tile.GetObject();
+        if ( MP2::OBJN_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
             break;
 
         Castle * to_castle = world.getCastle( tile.GetCenter() );
@@ -1177,7 +1198,8 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
             Game::OpenCastleDialog( *to_castle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
-    } break;
+        break;
+    }
     case Cursor::CURSOR_HERO_FIGHT:
     case Cursor::CURSOR_HERO_MOVE:
     case Cursor::CURSOR_HERO_BOAT:
@@ -1224,16 +1246,18 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
                 if ( castle )
-                    Dialog::QuickInfo( *castle );
+                    Dialog::QuickInfo( *castle, fheroes2::Rect() );
                 else
                     Dialog::QuickInfo( tile );
-            } break;
+                break;
+            }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes );
-            } break;
+                    Dialog::QuickInfo( *heroes, fheroes2::Rect() );
+                break;
+            }
 
             default:
                 Dialog::QuickInfo( tile );

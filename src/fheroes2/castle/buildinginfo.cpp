@@ -23,6 +23,7 @@
 #include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -35,6 +36,7 @@
 #include "settings.h"
 #include "statusbar.h"
 #include "tools.h"
+#include "translations.h"
 
 namespace
 {
@@ -619,7 +621,7 @@ std::string BuildingInfo::GetConditionDescription( void ) const
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {
-            res = "disable build.";
+            res = _( "disable build." );
         }
         break;
 

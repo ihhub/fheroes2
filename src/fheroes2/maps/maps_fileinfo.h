@@ -22,10 +22,14 @@
 #ifndef H2MAPSFILEINFO_H
 #define H2MAPSFILEINFO_H
 
+#include <string>
 #include <vector>
 
 #include "gamedefs.h"
-#include "serialize.h"
+#include "math_base.h"
+#include "types.h"
+
+class StreamBase;
 
 enum class GameVersion : int
 {
@@ -53,7 +57,6 @@ namespace Maps
         }
         static bool NameSorting( const FileInfo &, const FileInfo & );
         static bool FileSorting( const FileInfo &, const FileInfo & );
-        static bool NameCompare( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
         bool isMultiPlayerMap( void ) const;
@@ -133,10 +136,13 @@ namespace Maps
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
 
-StreamBase & operator>>( StreamBase & stream, GameVersion & version );
-
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
-bool PrepareMapsFileInfoList( MapsFileInfoList &, bool multi );
+namespace Maps
+{
+    MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
+}
+
+StreamBase & operator>>( StreamBase & stream, GameVersion & version );
 
 #endif

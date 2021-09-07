@@ -32,6 +32,7 @@
 #include "player_info.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 void Dialog::GameInfo( void )
@@ -44,7 +45,10 @@ void Dialog::GameInfo( void )
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    fheroes2::Point pt( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    // This is a shadow offset from the original ICN::SCENIBKG image.
+    const fheroes2::Point shadowOffset( -16, 4 );
+
+    fheroes2::Point pt( ( display.width() - box.width() + shadowOffset.x ) / 2, ( ( display.height() - box.height() + shadowOffset.y ) / 2 ) );
     fheroes2::ImageRestorer back( display, pt.x, pt.y, box.width(), box.height() );
     fheroes2::Blit( box, display, pt.x, pt.y );
 
@@ -103,7 +107,7 @@ void Dialog::GameInfo( void )
     text.Set( GameOver::GetActualDescription( conf.ConditionLoss() ), Font::SMALL, 272 );
     text.Blit( pt.x + 130, pt.y + 396 );
 
-    text.Set( "score: " + std::to_string( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
+    text.Set( _( "score: " ) + std::to_string( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
     text.Blit( pt.x + 415 - text.w(), pt.y + 434 );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );

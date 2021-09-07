@@ -28,6 +28,7 @@
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 int Dialog::AdventureOptions( bool enabledig )
@@ -101,15 +102,15 @@ int Dialog::AdventureOptions( bool enabledig )
 
         // right info
         if ( le.MousePressRight( buttonWorld.area() ) )
-            Dialog::Message( "", _( "View the entire world." ), Font::BIG );
+            Dialog::Message( _( "View World" ), _( "View the entire world." ), Font::BIG );
         if ( le.MousePressRight( buttonPuzzle.area() ) )
-            Dialog::Message( "", _( "View the obelisk puzzle." ), Font::BIG );
+            Dialog::Message( _( "Puzzle" ), _( "View the obelisk puzzle." ), Font::BIG );
         if ( le.MousePressRight( buttonInfo.area() ) )
-            Dialog::Message( "", _( "View information on the scenario you are currently playing." ), Font::BIG );
+            Dialog::Message( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Font::BIG );
         if ( le.MousePressRight( buttonDig.area() ) )
-            Dialog::Message( "", _( "Dig for the Ultimate Artifact." ), Font::BIG );
+            Dialog::Message( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Font::BIG );
         if ( le.MousePressRight( buttonCancel.area() ) )
-            Dialog::Message( "", _( "Exit this menu without doing anything." ), Font::BIG );
+            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
     }
 
     // restore background

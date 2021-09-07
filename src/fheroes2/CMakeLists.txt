@@ -4,11 +4,6 @@ if(MINGW)
 	set(MINGW_LIBRARIES mingw32 winmm)
 endif(MINGW)
 
-get_filename_component(CONFIGURE_FHEROES2_LOCALEDIR_ABSOLUTE
-	${CONFIGURE_FHEROES2_LOCALEDIR} ABSOLUTE
-	BASE_DIR ${CMAKE_INSTALL_PREFIX}
-	CACHE
-	)
 get_filename_component(CONFIGURE_FHEROES2_DATA_ABSOLUTE
 	${CONFIGURE_FHEROES2_DATA} ABSOLUTE
 	BASE_DIR ${CMAKE_INSTALL_PREFIX}
@@ -18,7 +13,6 @@ get_filename_component(CONFIGURE_FHEROES2_DATA_ABSOLUTE
 add_executable(fheroes2 ${FHEROES2_SOURCES})
 target_compile_definitions(fheroes2 PRIVATE
 	$<$<BOOL:${ENABLE_RELEASE}>:BUILD_RELEASE>
-	CONFIGURE_FHEROES2_LOCALEDIR=${CONFIGURE_FHEROES2_LOCALEDIR_ABSOLUTE}
 	CONFIGURE_FHEROES2_DATA=${CONFIGURE_FHEROES2_DATA_ABSOLUTE}
 	)
 target_include_directories(fheroes2 PRIVATE
@@ -31,6 +25,7 @@ target_include_directories(fheroes2 PRIVATE
 	dialog
 	game
 	gui
+	h2d
 	heroes
 	image
 	kingdom

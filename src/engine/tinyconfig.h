@@ -23,9 +23,7 @@
 #ifndef TINYCONFIG_H
 #define TINYCONFIG_H
 
-#include <list>
 #include <map>
-#include <ostream>
 #include <string>
 
 class TinyConfig : protected std::multimap<std::string, std::string>
@@ -34,8 +32,6 @@ public:
     TinyConfig( char sep = '=', char com = ';' );
 
     bool Load( const std::string & );
-
-    void AddEntry( const std::string &, const std::string &, bool uniq = true );
 
     bool Exists( const std::string & ) const;
 

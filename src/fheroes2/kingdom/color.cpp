@@ -20,36 +20,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "color.h"
 #include "players.h"
+#include "serialize.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
 
-const std::string & Color::String( int color )
+std::string Color::String( int color )
 {
-    static const std::string str_color[] = {"None", _( "Blue" ), _( "Green" ), _( "Red" ), _( "Yellow" ), _( "Orange" ), _( "Purple" ), "uknown"};
-
     switch ( color ) {
     case Color::BLUE:
-        return str_color[1];
+        return _( "Blue" );
     case Color::GREEN:
-        return str_color[2];
+        return _( "Green" );
     case Color::RED:
-        return str_color[3];
+        return _( "Red" );
     case Color::YELLOW:
-        return str_color[4];
+        return _( "Yellow" );
     case Color::ORANGE:
-        return str_color[5];
+        return _( "Orange" );
     case Color::PURPLE:
-        return str_color[6];
+        return _( "Purple" );
     case Color::UNUSED:
-        return str_color[7];
+        return "Uknown";
     }
 
-    return str_color[0];
+    return "None";
 }
 
 int Color::GetIndex( int color )
@@ -161,12 +158,14 @@ Colors::Colors( int colors )
 
 std::string Colors::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << Color::String( *it ) << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += Color::String( *it );
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 bool ColorBase::isFriends( int col ) const

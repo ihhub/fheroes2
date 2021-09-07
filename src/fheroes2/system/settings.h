@@ -23,21 +23,17 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
-#include <iomanip>
-#include <list>
-
 #include "bitmodes.h"
 #include "dir.h"
-#include "gamedefs.h"
 #include "maps_fileinfo.h"
 #include "players.h"
 
 enum
 {
-    SCROLL_SLOW = 4,
-    SCROLL_NORMAL = 8,
-    SCROLL_FAST1 = 16,
-    SCROLL_FAST2 = 32
+    SCROLL_SLOW = 1,
+    SCROLL_NORMAL = 2,
+    SCROLL_FAST1 = 3,
+    SCROLL_FAST2 = 4
 };
 
 enum MusicSource
@@ -101,7 +97,7 @@ public:
         // UNUSED = 0x30008000,
 
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
-        // UNUSED = 0x40008000,
+        BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000
     };
@@ -168,7 +164,7 @@ public:
     bool ExtModes( u32 ) const;
     void ExtSetModes( u32 );
     void ExtResetModes( u32 );
-    const char * ExtName( u32 ) const;
+    static std::string ExtName( const uint32_t settingId );
 
     bool ExtHeroBuySpellBookFromShrine() const;
     bool ExtHeroRecruitCostDependedFromLevel() const;
@@ -193,6 +189,7 @@ public:
     bool ExtBattleShowDamage() const;
     bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
+    bool ExtBattleDeterministicResult() const;
     bool ExtBattleReverseWaitOrder() const;
     bool ExtGameRememberLastFocus() const;
     bool ExtGameContinueAfterVictory() const;

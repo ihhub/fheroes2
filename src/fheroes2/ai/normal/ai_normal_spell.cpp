@@ -52,8 +52,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.GetForce( _myColor ), true );
-        const Units enemies( arena.GetForce( _myColor, true ), true );
+        const Units friendly( arena.getForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -195,8 +195,8 @@ namespace AI
     uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
     {
         uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
-        duration += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
-                    + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += _commander->artifactCount( art ) * Artifact( art ).ExtraValue();
 
         if ( duration < 2 && target.Modes( TR_MOVED ) )
             return 0;
@@ -416,11 +416,11 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        const uint32_t ankhModifier = _commander->HasArtifact( Artifact::ANKH ) ? 2 : 1;
+        const uint32_t ankhModifier = _commander->hasArtifact( Artifact::ANKH ) ? 2 : 1;
         const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
-        const Force & friendlyForce = arena.GetForce( _myColor );
+        const Force & friendlyForce = arena.getForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
             if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
@@ -455,7 +455,7 @@ namespace AI
             }
 
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
-            if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
+            if ( _commander->hasArtifact( Artifact::BOOK_ELEMENTS ) )
                 count *= 2;
 
             const Troop summon( Monster( spell ), count );

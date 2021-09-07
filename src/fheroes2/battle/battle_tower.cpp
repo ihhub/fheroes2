@@ -21,13 +21,16 @@
  ***************************************************************************/
 
 #include "battle_tower.h"
+#include "battle.h"
+#include "battle_arena.h"
+#include "battle_board.h"
 #include "battle_cell.h"
 #include "castle.h"
 #include "tools.h"
 #include "translations.h"
 
-Battle::Tower::Tower( const Castle & castle, int twr )
-    : Unit( Troop( Monster::ARCHER, 0 ), -1, false )
+Battle::Tower::Tower( const Castle & castle, int twr, const Rand::DeterministicRandomGenerator & randomGenerator )
+    : Unit( Troop( Monster::ARCHER, 0 ), -1, false, randomGenerator )
     , type( twr )
     , color( castle.GetColor() )
     , bonus( 0 )
@@ -107,10 +110,10 @@ void Battle::Tower::SetDestroy( void )
 {
     switch ( type ) {
     case TWR_LEFT:
-        Board::GetCell( 19 )->SetObject( 1 );
+        Board::GetCell( Arena::CASTLE_TOP_ARCHER_TOWER_POS )->SetObject( 1 );
         break;
     case TWR_RIGHT:
-        Board::GetCell( 85 )->SetObject( 1 );
+        Board::GetCell( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS )->SetObject( 1 );
         break;
     default:
         break;
@@ -135,7 +138,7 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
             towers.push_back( TWR_RIGHT );
 
         for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
-            Tower twr = Tower( cstl, *it );
+            Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ) );
 
             msg.append( tmpl );
             StringReplace( msg, "%{name}", twr.GetName() );
@@ -146,8 +149,9 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
                 msg.append( addn );
                 StringReplace( msg, "%{attack}", twr.GetBonus() );
             }
-            else
-                msg.append( "." );
+            else {
+                msg += '.';
+            }
 
             if ( ( it + 1 ) != towers.end() )
                 msg.append( "\n \n" );

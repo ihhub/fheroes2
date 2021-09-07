@@ -20,6 +20,7 @@
 
 #include "ai.h"
 #include "army.h"
+#include "army_troop.h"
 #include "castle.h"
 #include "kingdom.h"
 #include "normal/ai_normal.h"

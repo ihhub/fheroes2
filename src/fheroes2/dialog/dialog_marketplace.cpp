@@ -33,6 +33,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
 #include "world.h"
@@ -249,12 +250,12 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
-        Text text( "max", Font::YELLOW_SMALL );
+        Text text( _( "max" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
         buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
         text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( "min", Font::YELLOW_SMALL );
+        text.Set( _( "min" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
         buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
@@ -497,9 +498,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             gui.RedrawInfoBuySell( count_sell, count_buy, max_sell, fundsFrom.Get( resourceTo ) );
             display.render();
         }
-        else
-            // click max
-            if ( buttonMax.width && max_buy && le.MouseClickLeft( buttonMax ) ) {
+        else if ( scrollbar.updatePosition() ) {
+            display.render();
+        }
+
+        // click max
+        if ( buttonMax.width && max_buy && le.MouseClickLeft( buttonMax ) ) {
             const int32_t max = scrollbar.maxIndex();
 
             count_buy = max * ( Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1 );
@@ -509,6 +513,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             gui.RedrawInfoBuySell( count_sell, count_buy, max_sell, fundsFrom.Get( resourceTo ) );
             display.render();
         }
+
         // click min
         if ( buttonMin.width && max_buy && le.MouseClickLeft( buttonMin ) ) {
             const int32_t min = 1;

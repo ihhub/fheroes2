@@ -27,10 +27,11 @@
 # WITH_TOOLS: build tools
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
 #
-# -DCONFIGURE_FHEROES2_LOCALEDIR: system locale dir
 # -DCONFIGURE_FHEROES2_DATA: system fheroes2 game dir
 
 TARGET	:= fheroes2
+
+.PHONY: all clean
 
 all:
 	$(MAKE) -C src
