@@ -149,18 +149,37 @@ namespace
         return false;
     }
 
-    const fheroes2::Sprite & GetUpgradeButton( bool useMiniIcon )
+    fheroes2::Sprite DrawUpgradeButton( const bool pressed )
     {
-        const fheroes2::Sprite & upButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 0 );
+        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::LISTBOX, pressed ? 4 : 3 );
+
+        fheroes2::Sprite result( original.width() - 4, original.height() - 3 );
+        const fheroes2::Point offset = pressed ? fheroes2::Point( 1, 3 ) : fheroes2::Point( 2, 2 );
+
+        fheroes2::Copy( original, offset.x, offset.y, result, 0, 0, result.width(), result.height() );
+        // remove black background
+        fheroes2::AddTransparency( result, 36 ); // TODO: what's the magic number 36?
+
+        return result;
+    }
+
+    fheroes2::Sprite DrawMiniButton( const fheroes2::Sprite & original )
+    {
+        fheroes2::Sprite result( original.width() / 2, original.height() / 2 );
+        fheroes2::Resize( original, 0, 0, original.width(), original.height(), result, 0, 0, result.width(), result.height(), true );
+        return result;
+    }
+
+    const fheroes2::Sprite & GetUpgradeButton( const bool useMiniIcon, const bool pressed = false )
+    {
+        static const fheroes2::Sprite & btnNormal = DrawUpgradeButton( false );
+        static const fheroes2::Sprite & btnPressed = DrawUpgradeButton( true );
         if ( useMiniIcon ) {
-            static const fheroes2::Sprite & miniUpButton = [&upButton]() {
-                fheroes2::Sprite result( upButton.width() / 2, upButton.height() / 2 );
-                fheroes2::Resize( upButton, 0, 0, upButton.width(), upButton.height(), result, 0, 0, result.width(), result.height(), true );
-                return result;
-            }();
-            return miniUpButton;
+            static const fheroes2::Sprite & btnNormalMini = DrawMiniButton( btnNormal );
+            static const fheroes2::Sprite & btnPressedMini = DrawMiniButton( btnPressed );
+            return pressed ? btnPressedMini : btnNormalMini;
         }
-        return upButton;
+        return pressed ? btnPressed : btnNormal;
     }
 }
 
