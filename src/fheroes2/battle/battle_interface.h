@@ -294,7 +294,7 @@ namespace Battle
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
 
-        std::set<const Cell *> GetHighlightCells( const Cell * cell, const int ) const;
+        std::set<const Cell *> GetHighlightCells( const Cell * cell, const int cursorType ) const;
         std::set<const Cell *> GetHighlightCellsOnValidSpell( const Cell * cell ) const;
         std::set<const Cell *> GetHighlightCellsOnSwordCursor( const int cursorType ) const;
         std::set<const Cell *> GetHighlightCellsForWideUnit() const;

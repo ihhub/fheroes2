@@ -1597,7 +1597,7 @@ std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsOnValidSpell(
         highlightCells.emplace( cell );
         const Indexes around = Board::GetAroundIndexes( index_pos );
         for ( const int32_t index : around ) {
-            std::set<const Battle::Cell *> adjacents = CollectCellsAround( index );
+            const std::set<const Battle::Cell *> adjacents = CollectCellsAround( index );
             highlightCells.insert( adjacents.begin(), adjacents.end() );
         }
         break;
