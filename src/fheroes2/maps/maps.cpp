@@ -123,22 +123,20 @@ struct ComparisonDistance
 
 const char * Maps::SizeString( int s )
 {
-    const char * mapsize[] = { "Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" ) };
-
     switch ( s ) {
     case SMALL:
-        return mapsize[1];
+        return _( "maps|Small" );
     case MEDIUM:
-        return mapsize[2];
+        return _( "maps|Medium" );
     case LARGE:
-        return mapsize[3];
+        return _( "maps|Large" );
     case XLARGE:
-        return mapsize[4];
+        return _( "maps|Extra Large" );
     default:
         break;
     }
 
-    return mapsize[5];
+    return _( "maps|Custom Size" );
 }
 
 const char * Maps::GetMinesName( int type )

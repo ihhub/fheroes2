@@ -35,11 +35,6 @@ namespace Campaign
     public:
         CampaignSaveData();
 
-        const ScenarioBonusData & getCurrentScenarioBonus() const
-        {
-            return _currentScenarioBonus;
-        }
-
         const std::vector<int> & getFinishedMaps() const
         {
             return _finishedMaps;

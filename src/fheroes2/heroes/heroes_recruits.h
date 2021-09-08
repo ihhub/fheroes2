@@ -38,8 +38,6 @@ public:
     int GetID1( void ) const;
     int GetID2( void ) const;
 
-    const Heroes * GetHero1( void ) const;
-    const Heroes * GetHero2( void ) const;
     Heroes * GetHero1( void );
     Heroes * GetHero2( void );
 

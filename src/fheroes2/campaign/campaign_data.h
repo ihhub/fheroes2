@@ -30,11 +30,6 @@ namespace Campaign
     public:
         CampaignData();
 
-        const std::string & getCampaignDescription() const
-        {
-            return _campaignDescription;
-        }
-
         int getCampaignID() const
         {
             return _campaignID;

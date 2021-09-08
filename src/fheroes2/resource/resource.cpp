@@ -319,34 +319,30 @@ std::string Funds::String( void ) const
     return os.str();
 }
 
-/* name resource */
 const char * Resource::String( int resource )
 {
-    const char * res[] = {"Unknown", _( "Wood" ), _( "Mercury" ), _( "Ore" ), _( "Sulfur" ), _( "Crystal" ), _( "Gems" ), _( "Gold" )};
-
     switch ( resource ) {
     case Resource::WOOD:
-        return res[1];
+        return _( "Wood" );
     case Resource::MERCURY:
-        return res[2];
+        return _( "Mercury" );
     case Resource::ORE:
-        return res[3];
+        return _( "Ore" );
     case Resource::SULFUR:
-        return res[4];
+        return _( "Sulfur" );
     case Resource::CRYSTAL:
-        return res[5];
+        return _( "Crystal" );
     case Resource::GEMS:
-        return res[6];
+        return _( "Gems" );
     case Resource::GOLD:
-        return res[7];
+        return _( "Gold" );
     default:
         break;
     }
 
-    return res[0];
+    return "Unknown";
 }
 
-/* return index sprite objnrsrc.icn */
 u32 Resource::GetIndexSprite( int resource )
 {
     switch ( resource ) {

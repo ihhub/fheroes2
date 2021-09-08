@@ -145,22 +145,20 @@ int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 
 const char * Skill::Primary::String( int skill )
 {
-    const char * str_skill[] = {_( "Attack Skill" ), _( "Defense Skill" ), _( "Spell Power" ), _( "Knowledge" ), "Unknown"};
-
     switch ( skill ) {
     case ATTACK:
-        return str_skill[0];
+        return _( "Attack Skill" );
     case DEFENSE:
-        return str_skill[1];
+        return _( "Defense Skill" );
     case POWER:
-        return str_skill[2];
+        return _( "Spell Power" );
     case KNOWLEDGE:
-        return str_skill[3];
+        return _( "Knowledge" );
     default:
         break;
     }
 
-    return str_skill[4];
+    return "Unknown";
 }
 
 std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
@@ -209,20 +207,18 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
 
 const char * Skill::Level::String( int level )
 {
-    const char * str_level[] = {"None", _( "skill|Basic" ), _( "skill|Advanced" ), _( "skill|Expert" )};
-
     switch ( level ) {
     case BASIC:
-        return str_level[1];
+        return _( "skill|Basic" );
     case ADVANCED:
-        return str_level[2];
+        return _( "skill|Advanced" );
     case EXPERT:
-        return str_level[3];
+        return _( "skill|Expert" );
     default:
         break;
     }
 
-    return str_level[0];
+    return "None";
 }
 
 std::string Skill::Level::StringWithBonus( const Heroes & hero, int skill, int level )

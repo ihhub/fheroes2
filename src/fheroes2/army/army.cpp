@@ -125,31 +125,28 @@ std::string Army::TroopSizeString( const Troop & troop )
 
 std::string Army::SizeString( u32 size )
 {
-    const char * str_size[] = { _( "army|Few" ),    _( "army|Several" ), _( "army|Pack" ),   _( "army|Lots" ),  _( "army|Horde" ),
-                                _( "army|Throng" ), _( "army|Swarm" ),   _( "army|Zounds" ), _( "army|Legion" ) };
-
     switch ( ArmyGetSize( size ) ) {
     default:
         break;
     case ARMY_SEVERAL:
-        return str_size[1];
+        return _( "army|Several" );
     case ARMY_PACK:
-        return str_size[2];
+        return _( "army|Pack" );
     case ARMY_LOTS:
-        return str_size[3];
+        return _( "army|Lots" );
     case ARMY_HORDE:
-        return str_size[4];
+        return _( "army|Horde" );
     case ARMY_THRONG:
-        return str_size[5];
+        return _( "army|Throng" );
     case ARMY_SWARM:
-        return str_size[6];
+        return _( "army|Swarm" );
     case ARMY_ZOUNDS:
-        return str_size[7];
+        return _( "army|Zounds" );
     case ARMY_LEGION:
-        return str_size[8];
+        return _( "army|Legion" );
     }
 
-    return str_size[0];
+    return _( "army|Few" );
 }
 
 Troops::Troops( const Troops & troops )

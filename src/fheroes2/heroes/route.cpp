@@ -29,27 +29,6 @@
 #include "serialize.h"
 #include "world.h"
 
-s32 Route::Step::GetIndex( void ) const
-{
-    return currentIndex;
-}
-
-s32 Route::Step::GetFrom( void ) const
-{
-    return from;
-}
-
-int Route::Step::GetDirection( void ) const
-{
-    return direction;
-}
-
-u32 Route::Step::GetPenalty( void ) const
-{
-    return penalty;
-}
-
-/* construct */
 Route::Path::Path( const Heroes & h )
     : hero( &h )
     , dst( h.GetIndex() )

@@ -243,7 +243,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_ZERO:
-        return "OBJ_ZERO";
+        return _( "No object" );
     case OBJN_ALCHEMYLAB:
     case OBJ_ALCHEMYLAB:
         return _( "Alchemist Lab" );
@@ -471,25 +471,25 @@ const char * MP2::StringObject( const MapObjectType objectType )
     case OBJ_BOAT:
         return _( "Boat" );
     case OBJ_RNDARTIFACT:
-        return "Random Artifact";
+        return _( "Random Artifact" );
     case OBJ_RNDRESOURCE:
-        return "Random Resource";
+        return _( "Random Resource" );
     case OBJ_RNDMONSTER1:
-        return "OBJ_RNDMONSTER1";
+        return _( "Random Monster - weak" );
     case OBJ_RNDMONSTER2:
-        return "OBJ_RNDMONSTER2";
+        return _( "Random Monster - medium" );
     case OBJ_RNDMONSTER3:
-        return "OBJ_RNDMONSTER3";
+        return _( "Random Monster - strong" );
     case OBJ_RNDMONSTER4:
-        return "OBJ_RNDMONSTER4";
+        return _( "Random Monster - very strong" );
     case OBJ_STANDINGSTONES:
         return _( "Standing Stones" );
     case OBJ_EVENT:
-        return "OBJ_EVENT";
+        return _( "Event" );
     case OBJ_RNDMONSTER:
-        return "OBJ_RNDMONSTER";
+        return _( "Random Monster" );
     case OBJ_RNDULTIMATEARTIFACT:
-        return "OBJ_RNDULTIMATEARTIFACT";
+        return _( "Random Ultimate Artifact" );
     case OBJ_IDOL:
         return _( "Idol" );
     case OBJ_SHRINE1:
@@ -511,11 +511,11 @@ const char * MP2::StringObject( const MapObjectType objectType )
     case OBJ_MAGICGARDEN:
         return _( "Magic Garden" );
     case OBJ_RNDARTIFACT1:
-        return "OBJ_RNDARTIFACT1";
+        return _( "Random Artifact - Treasure" );
     case OBJ_RNDARTIFACT2:
-        return "OBJ_RNDARTIFACT2";
+        return _( "Random Artifact - Minor" );
     case OBJ_RNDARTIFACT3:
-        return "OBJ_RNDARTIFACT3";
+        return _( "Random Artifact - Major" );
 
     case OBJN_JAIL:
     case OBJ_JAIL:
@@ -784,7 +784,6 @@ bool MP2::isMonthLife( const MapObjectType objectType )
 
 bool MP2::isBattleLife( const MapObjectType objectType )
 {
-    // FIXME: list battle object life
     switch ( objectType ) {
     // luck modificators
     case OBJ_IDOL:

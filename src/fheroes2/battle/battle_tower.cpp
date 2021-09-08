@@ -123,9 +123,6 @@ void Battle::Tower::SetDestroy( void )
 
 std::string Battle::Tower::GetInfo( const Castle & cstl )
 {
-    const char * tmpl = _( "The %{name} fires with the strength of %{count} Archers" );
-    const char * addn = _( "each with a +%{attack} bonus to their attack skill." );
-
     std::vector<int> towers;
     std::string msg;
 
@@ -136,6 +133,9 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
             towers.push_back( TWR_LEFT );
         if ( cstl.isBuild( BUILD_RIGHTTURRET ) )
             towers.push_back( TWR_RIGHT );
+
+        const char * tmpl = _( "The %{name} fires with the strength of %{count} Archers" );
+        const char * addn = _( "each with a +%{attack} bonus to their attack skill." );
 
         for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
             Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ) );

@@ -355,10 +355,6 @@ namespace Maps
         uint32_t _region = 0;
 
         uint8_t _level = 0;
-
-#ifdef WITH_DEBUG
-        uint8_t impassableTileRule = 0;
-#endif
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

@@ -474,7 +474,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
     Spell spell = art.GetSpell();
 
     if ( spell.isValid() && CanCastSpell( spell ) ) {
-        int learning = GetLevelSkill( Skill::Secondary::LEARNING );
+        int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
         return ( ( 3 < spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
                  || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
@@ -485,7 +485,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
 
 bool HeroBase::CanTeachSpell( const Spell & spell ) const
 {
-    int learning = GetLevelSkill( Skill::Secondary::LEARNING );
+    int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
     return ( ( 4 == spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
              || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );

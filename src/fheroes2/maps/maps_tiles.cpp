@@ -663,9 +663,6 @@ Maps::Tiles::Tiles()
     , quantity1( 0 )
     , quantity2( 0 )
     , quantity3( 0 )
-#ifdef WITH_DEBUG
-    , impassableTileRule( 0 )
-#endif
 {}
 
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
@@ -1204,14 +1201,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( ( visibleTileROI & mp ) && ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
-        fheroes2::Image sf = PassableViewSurface( tilePassable );
-
-        if ( impassableTileRule ) {
-            const Text text( std::to_string( impassableTileRule ), Font::SMALL );
-            text.Blit( 13, 13, sf );
-        }
-
-        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, sf, 0, 0, mp );
+        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp );
     }
 #else
     (void)dst;
@@ -1461,10 +1451,6 @@ std::string Maps::Tiles::String( void ) const
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
-#ifdef WITH_DEBUG
-    if ( impassableTileRule )
-        os << ", disable(" << static_cast<int>( impassableTileRule ) << ")";
-#endif
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
@@ -2442,12 +2428,6 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove temp variable usage here." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_095_RELEASE ) {
-        uint8_t temp = 0;
-        msg >> temp;
-    }
-
     return msg;
 }
 
@@ -2460,12 +2440,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
-        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove old saves support here." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
-        msg >> tile._level;
-    }
+        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._level;
 
     return msg;
 }

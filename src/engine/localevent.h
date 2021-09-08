@@ -173,9 +173,7 @@ KeySym GetKeySym( int );
 
 bool PressIntKey( u32 max, u32 & result );
 
-size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
-
-char CharFromKeySym( KeySym, u16 mod = 0 );
+size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod );
 
 class LocalEvent
 {
