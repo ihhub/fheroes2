@@ -401,9 +401,9 @@ namespace Battle
         return heroTypeAnim[heroType][animation];
     }
 
-    std::set<const Battle::Cell* > CollectCellsAround( const s32 start )
+    std::set<const Battle::Cell *> CollectCellsAround( const s32 start )
     {
-        std::set<const Battle::Cell* > result;
+        std::set<const Battle::Cell *> result;
         const Indexes around = Board::GetAroundIndexes( start );
         for ( const int32_t index : around ) {
             const Cell * aroundCell = Board::GetCell( index );
