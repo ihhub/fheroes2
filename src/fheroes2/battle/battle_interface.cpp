@@ -399,6 +399,19 @@ namespace Battle
 
         return heroTypeAnim[heroType][animation];
     }
+
+    std::set<const Battle::Cell* > CollectCellsAround( const s32 start )
+    {
+        std::set<const Battle::Cell* > result;
+        const Indexes around = Board::GetAroundIndexes( start );
+        for ( const int32_t index : around ) {
+            const Cell * aroundCell = Board::GetCell( index );
+            if ( aroundCell != nullptr ) {
+                result.emplace( aroundCell );
+            }
+        }
+        return result;
+    }
 }
 
 bool CursorAttack( u32 theme )
@@ -1569,43 +1582,22 @@ std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnValidSpell(
 
     switch ( humanturn_spell.GetID() ) {
     case Spell::COLDRING: {
-        const Indexes around = Board::GetAroundIndexes( index_pos );
-        for ( const int32_t index : around ) {
-            const Cell * aroundCell = Board::GetCell( index );
-            if ( aroundCell != nullptr ) {
-                highlightCells.emplace( aroundCell );
-            }
-        }
+        highlightCells = CollectCellsAround( index_pos );
         break;
     }
     case Spell::FIREBALL:
     case Spell::METEORSHOWER: {
+        highlightCells = CollectCellsAround( index_pos );
         highlightCells.emplace( cell );
-        const Indexes around = Board::GetAroundIndexes( index_pos );
-        for ( const int32_t index : around ) {
-            const Cell * aroundCell = Board::GetCell( index );
-            if ( aroundCell != nullptr ) {
-                highlightCells.emplace( aroundCell );
-            }
-        }
         break;
     }
     case Spell::FIREBLAST: {
+        highlightCells = CollectCellsAround( index_pos );
         highlightCells.emplace( cell );
         const Indexes around = Board::GetAroundIndexes( index_pos );
         for ( const int32_t index : around ) {
-            const Cell * aroundCell = Board::GetCell( index );
-            if ( aroundCell != nullptr ) {
-                highlightCells.emplace( aroundCell );
-            }
-
-            const Indexes adjacent = Board::GetAroundIndexes( index );
-            for ( const int32_t adjacentIndex : adjacent ) {
-                const Cell * adjacentCell = Board::GetCell( adjacentIndex );
-                if ( adjacentCell != nullptr ) {
-                    highlightCells.emplace( adjacentCell );
-                }
-            }
+            std::set<const Battle::Cell *> adjacents = CollectCellsAround( index );
+            highlightCells.insert( adjacents.begin(), adjacents.end() );
         }
         break;
     }
@@ -1711,7 +1703,7 @@ void Battle::Interface::RedrawCover()
         const HeroBase * currentCommander = arena.GetCurrentCommander();
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
-        for ( const Cell * highlightCell : CalculateHighlightCells( cell, cursorType ) ) {
+        for ( const Cell * highlightCell : getHighlightCells( cell, cursorType ) ) {
             bool isApplicable = highlightCell->isPassable1( false );
 
             if ( isApplicable ) {
