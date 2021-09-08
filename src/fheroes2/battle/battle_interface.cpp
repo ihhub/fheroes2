@@ -1608,7 +1608,6 @@ std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsOnValidSpell(
     return highlightCells;
 }
 
-
 std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsOnSwordCursor( int cursorType ) const
 {
     const int direction = CursorTypeToDirection( cursorType );
