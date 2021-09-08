@@ -345,7 +345,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarLeftMouseHold( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ )
+        bool ActionBarLeftMouseHold( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ ) override
         {
             return false;
         }
