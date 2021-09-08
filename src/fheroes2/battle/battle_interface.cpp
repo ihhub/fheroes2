@@ -202,6 +202,7 @@ namespace
             return Direction::LEFT;
         }
         assert( 0 );
+        return Direction::UNKNOWN;
     }
 }
 
