@@ -141,7 +141,7 @@ public:
         fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + offsetX, roi.y + offsetY, srcrt.width, srcrt.height );
 
         if ( CanUpgradeNow( troop ) ) {
-            DrawUpgadeButton( roi, image );
+            DrawUpgadeButton( false, roi, image );
         }
 
         text.Blit( roi.x + ( roi.width - text.w() ) / 2, roi.y + roi.height - 1, image );

@@ -27,7 +27,9 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "icn.h"
+#include "image_tool.h"
 #include "race.h"
+#include "screen.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -160,7 +162,7 @@ namespace
         // remove black background
         fheroes2::AddTransparency( result, 36 ); // TODO: what's the magic number 36?
 
-        return result;
+        return fheroes2::addShadow( result, fheroes2::Point( -2, 2 ), 2 );
     }
 
     fheroes2::Sprite DrawMiniButton( const fheroes2::Sprite & original )
@@ -180,6 +182,11 @@ namespace
             return pressed ? btnPressedMini : btnNormalMini;
         }
         return pressed ? btnPressed : btnNormal;
+    }
+
+    fheroes2::Rect getUpgradeButtonPos( const fheroes2::Sprite & upButton, const fheroes2::Rect & itemPos )
+    {
+        return { itemPos.x, itemPos.y, upButton.width() + 2 * upgradeButtonMargin, upButton.height() + 2 * upgradeButtonMargin };
     }
 }
 
@@ -227,14 +234,13 @@ bool ArmyBar::isValid() const
 
 fheroes2::Rect ArmyBar::GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const
 {
-    const fheroes2::Sprite & upButton = GetUpgradeButton( use_mini_sprite );
-    return { itemPos.x, itemPos.y, upButton.width() + 2 * upgradeButtonMargin, upButton.height() + 2 * upgradeButtonMargin };
+    return getUpgradeButtonPos( GetUpgradeButton( use_mini_sprite ), itemPos );
 }
 
-void ArmyBar::DrawUpgadeButton( const fheroes2::Rect & pos, fheroes2::Image & outputImage ) const
+void ArmyBar::DrawUpgadeButton( const bool pressed, const fheroes2::Rect & pos, fheroes2::Image & outputImage ) const
 {
-    const fheroes2::Rect upButtonPos = GetUpgradeButtonPos( pos );
-    const fheroes2::Sprite & upgradeButton = GetUpgradeButton( use_mini_sprite );
+    const fheroes2::Sprite & upgradeButton = GetUpgradeButton( use_mini_sprite, pressed );
+    const fheroes2::Rect upButtonPos = getUpgradeButtonPos( upgradeButton, pos );
     fheroes2::Blit( upgradeButton, outputImage, upButtonPos.x + upgradeButtonMargin, upButtonPos.y + upgradeButtonMargin );
 }
 
@@ -334,7 +340,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
         }
 
         if ( CanUpgradeNow( troop ) ) {
-            DrawUpgadeButton( pos, dstsf );
+            DrawUpgadeButton( false, pos, dstsf );
         }
 
         if ( use_mini_sprite ) {
@@ -439,6 +445,13 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
 
 bool ArmyBar::ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos )
 {
+    if ( !read_only ) {
+        // redraw upgrade button as released
+        if ( CanUpgradeNow( troop ) ) {
+            DrawUpgadeButton( false, pos, fheroes2::Display::instance() );
+        }
+    }
+
     if ( isSelected() ) {
         if ( read_only ) {
             return false; // reset cursor
@@ -628,6 +641,16 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/,
     ResetSelected();
 
     return true;
+}
+
+bool ArmyBar::ActionBarLeftMouseHold( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos )
+{
+    if ( !read_only ) {
+        if ( CanUpgradeNow( troop ) && ( GetUpgradeButtonPos( pos ) & cursor ) ) {
+            DrawUpgadeButton( true, pos, fheroes2::Display::instance() );
+        }
+    }
+    return false;
 }
 
 bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )

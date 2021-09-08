@@ -43,7 +43,7 @@ public:
     bool isValid( void ) const;
 
     fheroes2::Rect GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const;
-    void DrawUpgadeButton( const fheroes2::Rect & pos, fheroes2::Image & outputImage ) const;
+    void DrawUpgadeButton( const bool pressed, const fheroes2::Rect & pos, fheroes2::Image & outputImage ) const;
 
     bool CanUpgradeNow( const ArmyTroop & troop ) const;
     bool CanAffordUpgrade( const ArmyTroop & troop ) const;
@@ -52,10 +52,11 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & /*unused*/ ) override;
+    bool ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos ) override;
     bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
     bool ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect & /*pos*/ ) override;
     bool ActionBarLeftMouseRelease( ArmyTroop & troop ) override;
+    bool ActionBarLeftMouseHold( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos ) override;
     bool ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & troop ) override;
     bool ActionBarRightMouseHold( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;

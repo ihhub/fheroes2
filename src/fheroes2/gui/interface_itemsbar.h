@@ -60,6 +60,11 @@ namespace Interface
             return false;
         }
 
+        virtual bool ActionBarLeftMouseHold( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ )
+        {
+            return false;
+        }
+
         virtual bool ActionBarRightMouseHold( Item & )
         {
             return false;
@@ -210,6 +215,8 @@ namespace Interface
                     return true;
                 else if ( le.MouseClickLeft( iterPos.second ) )
                     return ActionBarLeftMouseSingleClick( cursor, **iterPos.first, iterPos.second );
+                else if ( le.MousePressLeft( iterPos.second ) )
+                    return ActionBarLeftMouseHold( cursor, **iterPos.first, iterPos.second );
                 else if ( le.MousePressRight( iterPos.second ) )
                     return ActionBarRightMouseHold( **iterPos.first );
             }
@@ -333,12 +340,12 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarLeftMouseHold( Item & )
+        virtual bool ActionBarLeftMouseHold( Item &, Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarLeftMouseHold( Item &, Item & )
+        virtual bool ActionBarLeftMouseHold( const fheroes2::Point & /*unused*/, Item & /*unused*/, const fheroes2::Rect & /*unused*/ )
         {
             return false;
         }
@@ -485,7 +492,7 @@ namespace Interface
                     }
                 }
                 else if ( le.MousePressLeft( iterPos.second ) ) {
-                    return ActionBarLeftMouseHold( **iterPos.first );
+                    return ActionBarLeftMouseHold( cursor, **iterPos.first, iterPos.second );
                 }
                 else if ( le.MouseReleaseLeft( iterPos.second ) ) {
                     return ActionBarLeftMouseRelease( **iterPos.first );
