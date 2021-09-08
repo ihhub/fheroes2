@@ -1577,7 +1577,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
-std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnValidSpell( const Cell * cell ) const
+std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsOnValidSpell( const Cell * cell ) const
 {
     std::set<const Battle::Cell *> highlightCells;
 
@@ -1609,7 +1609,7 @@ std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnValidSpell(
 }
 
 
-std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnSwordCursor( int cursorType ) const
+std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsOnSwordCursor( int cursorType ) const
 {
     const int direction = CursorTypeToDirection( cursorType );
     const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
@@ -1627,7 +1627,7 @@ std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnSwordCursor
     return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsForWideUnit() const
+std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsForWideUnit() const
 {
     const Position pos = Position::GetReachable( *_currentUnit, index_pos );
 
@@ -1640,7 +1640,7 @@ std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsForWideUnit()
     return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnAreaShot( const Cell * cell ) const
+std::set<const Battle::Cell *> Battle::Interface::GetHighlightCellsOnAreaShot( const Cell * cell ) const
 {
     std::set<const Battle::Cell *> result;
     result.emplace( cell );
@@ -1654,23 +1654,23 @@ std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnAreaShot( c
     return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::getHighlightCells( const Cell * cell, int cursorType ) const
+std::set<const Battle::Cell *> Battle::Interface::GetHighlightCells( const Cell * cell, int cursorType ) const
 {
     std::set<const Battle::Cell *> highlightCells;
 
     if ( humanturn_spell.isValid() ) {
-        highlightCells = getHighlightCellsOnValidSpell( cell );
+        highlightCells = GetHighlightCellsOnValidSpell( cell );
     }
     else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
               && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
-        highlightCells = getHighlightCellsOnAreaShot( cell );
+        highlightCells = GetHighlightCellsOnAreaShot( cell );
     }
     else if ( _currentUnit->isWide() && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
-        highlightCells = getHighlightCellsForWideUnit();
+        highlightCells = GetHighlightCellsForWideUnit();
     }
     else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
               || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
-        highlightCells = getHighlightCellsOnSwordCursor( cursorType );
+        highlightCells = GetHighlightCellsOnSwordCursor( cursorType );
     }
     else {
         highlightCells.emplace( cell );
@@ -1704,7 +1704,7 @@ void Battle::Interface::RedrawCover()
         const HeroBase * currentCommander = arena.GetCurrentCommander();
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
-        for ( const Cell * highlightCell : getHighlightCells( cell, cursorType ) ) {
+        for ( const Cell * highlightCell : GetHighlightCells( cell, cursorType ) ) {
             bool isApplicable = highlightCell->isPassable1( false );
 
             if ( isApplicable ) {
