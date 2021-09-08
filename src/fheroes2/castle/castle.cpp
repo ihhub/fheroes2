@@ -850,7 +850,8 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
     case BUILD_SHRINE:
         return _( "The Shrine increases the necromancy skill of all your necromancers by 10 percent." );
     case BUILD_THIEVESGUILD:
-        return _( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information." );
+        return _(
+            "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information." );
     case BUILD_TAVERN:
         return _( "The Tavern increases morale for troops defending the castle." );
     case BUILD_SHIPYARD:
