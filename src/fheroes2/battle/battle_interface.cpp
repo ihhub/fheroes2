@@ -180,6 +180,29 @@ namespace
             }
         }
     }
+
+    int CursorTypeToDirection( const int cursorType )
+    {
+        if ( cursorType == Cursor::SWORD_TOPLEFT ) {
+            return Direction::BOTTOM_RIGHT;
+        }
+        if ( cursorType == Cursor::SWORD_TOPRIGHT ) {
+            return Direction::BOTTOM_LEFT;
+        }
+        if ( cursorType == Cursor::SWORD_BOTTOMLEFT ) {
+            return Direction::TOP_RIGHT;
+        }
+        if ( cursorType == Cursor::SWORD_BOTTOMRIGHT ) {
+            return Direction::TOP_LEFT;
+        }
+        if ( cursorType == Cursor::SWORD_LEFT ) {
+            return Direction::RIGHT;
+        }
+        if ( cursorType == Cursor::SWORD_RIGHT ) {
+            return Direction::LEFT;
+        }
+        assert( 0 );
+    }
 }
 
 namespace Battle
@@ -1540,7 +1563,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnValidSpell( const Cell * cell ) const
+std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnValidSpell( const Cell * cell ) const
 {
     std::set<const Battle::Cell *> highlightCells;
 
@@ -1592,36 +1615,10 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnValid
     return highlightCells;
 }
 
-int CursorTypeToDirection( const int cursorType )
-{
-    int direction = 0;
-    if ( cursorType == Cursor::SWORD_TOPLEFT ) {
-        direction = Direction::BOTTOM_RIGHT;
-    }
-    else if ( cursorType == Cursor::SWORD_TOPRIGHT ) {
-        direction = Direction::BOTTOM_LEFT;
-    }
-    else if ( cursorType == Cursor::SWORD_BOTTOMLEFT ) {
-        direction = Direction::TOP_RIGHT;
-    }
-    else if ( cursorType == Cursor::SWORD_BOTTOMRIGHT ) {
-        direction = Direction::TOP_LEFT;
-    }
-    else if ( cursorType == Cursor::SWORD_LEFT ) {
-        direction = Direction::RIGHT;
-    }
-    else if ( cursorType == Cursor::SWORD_RIGHT ) {
-        direction = Direction::LEFT;
-    }
-    else {
-        assert( 0 );
-    }
-    return direction;
-}
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSwordCursor( int cursorType ) const
+std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnSwordCursor( int cursorType ) const
 {
-    int direction = CursorTypeToDirection( cursorType );
+    const int direction = CursorTypeToDirection( cursorType );
     const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
 
     assert( pos.GetHead() != nullptr );
@@ -1637,7 +1634,7 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnSword
     return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsForWideUnit() const
+std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsForWideUnit() const
 {
     const Position pos = Position::GetReachable( *_currentUnit, index_pos );
 
@@ -1650,7 +1647,7 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsForWide
     return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnAreaShot( const Cell * cell ) const
+std::set<const Battle::Cell *> Battle::Interface::getHighlightCellsOnAreaShot( const Cell * cell ) const
 {
     std::set<const Battle::Cell *> result;
     result.emplace( cell );
@@ -1664,23 +1661,23 @@ std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCellsOnAreaS
     return result;
 }
 
-std::set<const Battle::Cell *> Battle::Interface::CalculateHighlightCells( const Cell * cell, int cursorType ) const
+std::set<const Battle::Cell *> Battle::Interface::getHighlightCells( const Cell * cell, int cursorType ) const
 {
     std::set<const Battle::Cell *> highlightCells;
 
     if ( humanturn_spell.isValid() ) {
-        highlightCells = CalculateHighlightCellsOnValidSpell( cell );
+        highlightCells = getHighlightCellsOnValidSpell( cell );
     }
     else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
               && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
-        highlightCells = CalculateHighlightCellsOnAreaShot( cell );
+        highlightCells = getHighlightCellsOnAreaShot( cell );
     }
     else if ( _currentUnit->isWide() && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
-        highlightCells = CalculateHighlightCellsForWideUnit();
+        highlightCells = getHighlightCellsForWideUnit();
     }
     else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
               || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
-        highlightCells = CalculateHighlightCellsOnSwordCursor( cursorType );
+        highlightCells = getHighlightCellsOnSwordCursor( cursorType );
     }
     else {
         highlightCells.emplace( cell );

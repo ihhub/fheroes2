@@ -294,11 +294,11 @@ namespace Battle
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
 
-        std::set<const Cell *> CalculateHighlightCells( const Cell *, int ) const;
-        std::set<const Cell *> CalculateHighlightCellsOnValidSpell( const Cell * ) const;
-        std::set<const Cell *> CalculateHighlightCellsOnSwordCursor( int ) const;
-        std::set<const Cell *> CalculateHighlightCellsForWideUnit() const;
-        std::set<const Cell *> CalculateHighlightCellsOnAreaShot( const Cell * ) const;
+        std::set<const Cell *> getHighlightCells( const Cell * cell, const int ) const;
+        std::set<const Cell *> getHighlightCellsOnValidSpell( const Cell * cell ) const;
+        std::set<const Cell *> getHighlightCellsOnSwordCursor( const int cursorType ) const;
+        std::set<const Cell *> getHighlightCellsForWideUnit() const;
+        std::set<const Cell *> getHighlightCellsOnAreaShot( const Cell * cell ) const;
 
         Arena & arena;
         Dialog::FrameBorder border;
