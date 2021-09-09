@@ -231,48 +231,46 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
-    if ( it != myHeroes.end() ) {
-        int result = Dialog::ZERO;
+    int result = Dialog::ZERO;
 
-        while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false, needFade, disableDismiss );
-            if ( needFade )
-                needFade = false;
+    while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss );
+        if ( needFade )
+            needFade = false;
 
-            switch ( result ) {
-            case Dialog::PREV:
-                if ( it == myHeroes.begin() )
-                    it = myHeroes.end();
-                --it;
-                break;
+        switch ( result ) {
+        case Dialog::PREV:
+            if ( it == myHeroes.begin() )
+                it = myHeroes.end();
+            --it;
+            break;
 
-            case Dialog::NEXT:
-                ++it;
-                if ( it == myHeroes.end() )
-                    it = myHeroes.begin();
-                break;
-
-            case Dialog::DISMISS:
-                AGG::PlaySound( M82::KILLFADE );
-
-                ( *it )->GetPath().Hide();
-                gameArea.SetRedraw();
-
-                if ( windowIsGameWorld ) {
-                    ( *it )->FadeOut();
-                }
-
-                ( *it )->SetFreeman( 0 );
+        case Dialog::NEXT:
+            ++it;
+            if ( it == myHeroes.end() )
                 it = myHeroes.begin();
+            break;
 
-                updateFocus = true;
+        case Dialog::DISMISS:
+            AGG::PlaySound( M82::KILLFADE );
 
-                result = Dialog::CANCEL;
-                break;
+            ( *it )->GetPath().Hide();
+            gameArea.SetRedraw();
 
-            default:
-                break;
+            if ( windowIsGameWorld ) {
+                ( *it )->FadeOut();
             }
+
+            ( *it )->SetFreeman( 0 );
+            it = myHeroes.end();
+
+            updateFocus = true;
+
+            result = Dialog::CANCEL;
+            break;
+
+        default:
+            break;
         }
     }
 
