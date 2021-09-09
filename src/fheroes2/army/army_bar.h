@@ -62,7 +62,7 @@ public:
     bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
-    bool ActionBarCursor( const fheroes2::Point & /*unused*/, ArmyTroop & /*unused*/, const fheroes2::Rect & /*unused*/ ) override;
+    bool ActionBarCursor( const fheroes2::Point & unused, ArmyTroop & unused, const fheroes2::Rect & unused ) override;
     bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
 
     bool QueueEventProcessing( std::string * = nullptr );

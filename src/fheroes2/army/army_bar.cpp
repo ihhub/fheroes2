@@ -174,14 +174,14 @@ namespace
 
     const fheroes2::Sprite & GetUpgradeButton( const bool useMiniIcon, const bool pressed = false )
     {
-        static const fheroes2::Sprite & btnNormal = DrawUpgradeButton( false );
+        static const fheroes2::Sprite & btnReleased = DrawUpgradeButton( false );
         static const fheroes2::Sprite & btnPressed = DrawUpgradeButton( true );
         if ( useMiniIcon ) {
-            static const fheroes2::Sprite & btnNormalMini = DrawMiniButton( btnNormal );
+            static const fheroes2::Sprite & btnReleasedMini = DrawMiniButton( btnReleased );
             static const fheroes2::Sprite & btnPressedMini = DrawMiniButton( btnPressed );
-            return pressed ? btnPressedMini : btnNormalMini;
+            return pressed ? btnPressedMini : btnReleasedMini;
         }
-        return pressed ? btnPressed : btnNormal;
+        return pressed ? btnPressed : btnReleased;
     }
 
     fheroes2::Rect getUpgradeButtonPos( const fheroes2::Sprite & upButton, const fheroes2::Rect & itemPos )
