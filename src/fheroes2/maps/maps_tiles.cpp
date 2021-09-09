@@ -296,6 +296,8 @@ namespace
         case MP2::OBJN_WAGONCAMP:
         case MP2::OBJ_FAERIERING:
         case MP2::OBJN_FAERIERING:
+        case MP2::OBJ_MINES:
+        case MP2::OBJN_MINES:
             return true;
         default:
             break;
