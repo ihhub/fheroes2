@@ -156,18 +156,6 @@ Colors::Colors( int colors )
         push_back( Color::PURPLE );
 }
 
-std::string Colors::String( void ) const
-{
-    std::string output;
-
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        output += Color::String( *it );
-        output += ", ";
-    }
-
-    return output;
-}
-
 bool ColorBase::isFriends( int col ) const
 {
     return ( col & Color::ALL ) && ( color == col || Players::isFriends( color, col ) );

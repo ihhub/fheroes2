@@ -143,6 +143,4 @@ namespace Maps
     MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
 }
 
-StreamBase & operator>>( StreamBase & stream, GameVersion & version );
-
 #endif

@@ -252,14 +252,6 @@ void Kingdom::AddHeroes( Heroes * hero )
     }
 }
 
-const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
-{
-    for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
-        if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
-            return *it;
-    return nullptr;
-}
-
 void Kingdom::RemoveHeroes( const Heroes * hero )
 {
     if ( hero ) {

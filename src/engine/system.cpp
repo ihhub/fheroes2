@@ -185,15 +185,6 @@ std::string System::GetBasename( const std::string & str )
     return str;
 }
 
-std::string System::GetUniversalBasename( const std::string & str )
-{
-    std::string path = str;
-
-    std::replace( path.begin(), path.end(), ( SEPARATOR == '/' ) ? '\\' : '/', SEPARATOR );
-
-    return GetBasename( path );
-}
-
 std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;

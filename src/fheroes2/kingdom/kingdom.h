@@ -79,7 +79,6 @@ public:
     Heroes * GetLastLostHero( void ) const;
     Heroes * GetLastBattleWinHero() const;
 
-    const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
     Monster GetStrongestMonster() const;
