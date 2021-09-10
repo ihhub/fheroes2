@@ -302,7 +302,7 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
         return results;
     }
 
-    results.reserve( maxDistanceFromTile * 12 );
+    results.reserve( ( maxDistanceFromTile * 2 + 1 ) * ( maxDistanceFromTile * 2 + 1 ) - 1 );
 
     assert( world.w() > 0 );
 
