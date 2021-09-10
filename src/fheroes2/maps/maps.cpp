@@ -289,12 +289,7 @@ int32_t Maps::GetIndexFromAbsPoint( const int32_t x, const int32_t y )
     return y * world.w() + x;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex )
-{
-    return getAroundIndexes( tileIndex, 1 );
-}
-
-Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile )
+Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile /* = 1 */ )
 {
     Indexes results;
 
@@ -367,26 +362,26 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes )
 {
-    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType, ignoreHeroes );
 }
 
 Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 {
-    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    Indexes results = getAroundIndexes( center );
     results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
     return results;
 }
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
-    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType );
 }
 
 Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType )
 {
-    Indexes results = Maps::getAroundIndexes( center, dist );
+    Indexes results = getAroundIndexes( center, dist );
     std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return MapsIndexesFilteredObject( results, objectType );
 }

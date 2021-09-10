@@ -74,7 +74,7 @@ namespace
         std::vector<int32_t> suitableIds;
 
         if ( allDirections ) {
-            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
+            const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
             for ( const int32_t indexId : tiles ) {
                 const Maps::Tiles & indexedTile = mapTiles[indexId];
                 if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
@@ -86,7 +86,7 @@ namespace
         }
         else {
             const int32_t width = world.w();
-            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
+            const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
             for ( const int32_t indexId : tiles ) {
                 if ( indexId < tileId + width - 2 ) {
                     // Only tiles which are lower than current object.
@@ -112,7 +112,7 @@ namespace
     int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
-        const MapsIndexes & suitableIds = Maps::GetAroundIndexes( tileId );
+        const MapsIndexes & suitableIds = Maps::getAroundIndexes( tileId );
         for ( const int32_t indexId : suitableIds ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
