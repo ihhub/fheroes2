@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "ai.h"
 #include "difficulty.h"
@@ -288,59 +289,38 @@ int32_t Maps::GetIndexFromAbsPoint( const int32_t x, const int32_t y )
     return y * world.w() + x;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( int32_t center )
+Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex )
 {
-    Indexes result;
-    if ( !isValidAbsIndex( center ) )
-        return result;
-
-    result.reserve( 8 );
-    const int width = world.w();
-    const int x = center % width;
-    const int y = center / width;
-
-    if ( y > 0 ) {
-        if ( x > 0 )
-            result.push_back( center - width - 1 );
-
-        result.push_back( center - width );
-
-        if ( x < width - 1 )
-            result.push_back( center - width + 1 );
-    }
-
-    if ( x > 0 )
-        result.push_back( center - 1 );
-    if ( x < width - 1 )
-        result.push_back( center + 1 );
-
-    if ( y < world.h() - 1 ) {
-        if ( x > 0 )
-            result.push_back( center + width - 1 );
-
-        result.push_back( center + width );
-
-        if ( x < width - 1 )
-            result.push_back( center + width + 1 );
-    }
-
-    return result;
+    return getAroundIndexes( tileIndex, 1 );
 }
 
 Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile )
 {
     Indexes results;
+
+    if ( !isValidAbsIndex( tileIndex ) || maxDistanceFromTile <= 0 ) {
+        return results;
+    }
+
     results.reserve( maxDistanceFromTile * 12 );
 
-    const int32_t width = world.w();
-    const int32_t size = world.h() * width;
+    assert( world.w() > 0 );
+
+    const int32_t centerX = tileIndex % world.w();
+    const int32_t centerY = tileIndex / world.w();
 
     for ( int32_t y = -maxDistanceFromTile; y <= maxDistanceFromTile; ++y ) {
         for ( int32_t x = -maxDistanceFromTile; x <= maxDistanceFromTile; ++x ) {
-            const int32_t tileId = tileIndex + y * width + x;
+            // the central tile is not included
+            if ( x == 0 && y == 0 ) {
+                continue;
+            }
 
-            if ( tileId >= 0 && tileId < size && tileId != tileIndex ) {
-                results.push_back( tileId );
+            const int32_t tileX = centerX + x;
+            const int32_t tileY = centerY + y;
+
+            if ( isValidAbsPoint( tileX, tileY ) ) {
+                results.push_back( tileY * world.w() + tileX );
             }
         }
     }
