@@ -41,9 +41,71 @@
 
 namespace Battle
 {
-    void PickupArtifactsAction( HeroBase &, HeroBase & );
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
     void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
+}
+
+namespace
+{
+    std::vector<Artifact> planArtifactTransfer( const BagArtifacts & winnerBag, const BagArtifacts & loserBag )
+    {
+        std::vector<Artifact> artifacts;
+
+        // Calculate how many free slots the winner has in his bag.
+        size_t availableArtifactSlots = 0;
+        for ( const Artifact & artifact : winnerBag ) {
+            if ( !artifact.isValid() ) {
+                ++availableArtifactSlots;
+            }
+        }
+
+        for ( const Artifact & artifact : loserBag ) {
+            if ( availableArtifactSlots == 0 ) {
+                break;
+            }
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK && !artifact.isUltimate() ) {
+                artifacts.push_back( artifact );
+                --availableArtifactSlots;
+            }
+        }
+
+        // One more pass to put all the ultimate artifacts at the end.
+        for ( const Artifact & artifact : loserBag ) {
+            if ( artifact.isUltimate() ) {
+                artifacts.push_back( artifact );
+            }
+        }
+
+        return artifacts;
+    }
+
+    void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag, const std::vector<Artifact> & artifacts )
+    {
+        // Clear loser's artifact bag.
+        for ( Artifact & artifact : loserBag ) {
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
+                artifact = Artifact::UNKNOWN;
+            }
+        }
+
+        size_t artifactPos = 0;
+
+        for ( Artifact & artifact : winnerBag ) {
+            if ( artifact.isValid() ) {
+                continue;
+            }
+            for ( ; artifactPos < artifacts.size(); ++artifactPos ) {
+                if ( !artifacts[artifactPos].isUltimate() ) {
+                    artifact = artifacts[artifactPos];
+                    ++artifactPos;
+                    break;
+                }
+            }
+            if ( artifactPos >= artifacts.size() ) {
+                break;
+            }
+        }
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
@@ -119,14 +181,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-    bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
-    bool transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
-    bool artifactsTransferred = !transferArtifacts;
+    std::vector<Artifact> artifactsToTransfer;
+    if ( ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) ) {
+        artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+    }
 
     bool battleSummaryShown = false;
     // Check if it was an auto battle
     if ( isHumanBattle && !showBattle ) {
-        if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, true ) ) {
+        if ( arena->DialogBattleSummary( result, artifactsToTransfer, true ) ) {
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
@@ -154,15 +217,12 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-            isWinnerHuman = hero_wins && hero_wins->isControlHuman();
-            transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
-            artifactsTransferred = !transferArtifacts;
+            if ( ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) ) {
+                artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+            }
         }
         else {
             battleSummaryShown = true;
-            if ( isWinnerHuman ) {
-                artifactsTransferred = true;
-            }
         }
     }
 
@@ -175,15 +235,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // final summary dialog
     if ( isHumanBattle && !battleSummaryShown ) {
-        arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, false );
-        if ( isWinnerHuman ) {
-            artifactsTransferred = true;
-        }
+        arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
-    if ( !artifactsTransferred ) {
-        PickupArtifactsAction( *hero_wins, *hero_loss );
-    }
+    transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
 
     // save count troop
     arena->GetForce1().SyncArmyCount();
@@ -242,27 +297,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
 
     return result;
-}
-
-void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
-{
-    BagArtifacts & bag1 = hero1.GetBagArtifacts();
-    BagArtifacts & bag2 = hero2.GetBagArtifacts();
-
-    for ( u32 ii = 0; ii < bag2.size(); ++ii ) {
-        Artifact & art = bag2[ii];
-
-        if ( art.isUltimate() ) {
-            art = Artifact::UNKNOWN;
-        }
-        else if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK ) {
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
-            if ( bag1.end() != it ) {
-                *it = art;
-            }
-            art = Artifact::UNKNOWN;
-        }
-    }
 }
 
 void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
