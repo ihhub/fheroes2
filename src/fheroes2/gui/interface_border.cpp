@@ -35,6 +35,8 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     if ( conf.ExtGameHideInterface() && !viewWorldMode )
         return;
 
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const int32_t displayWidth = display.width();
@@ -50,7 +52,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     fheroes2::Rect srcrt;
     fheroes2::Point dstpt;
-    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
 
     // TOP BORDER
     srcrt.x = 0;
@@ -117,6 +119,17 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = icnadv.height() - srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
+    // fix extra border part on higher resolutions
+    if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
+        srcrt.x = 478;
+        srcrt.y = isEvilInterface ? 328 : 345;
+        srcrt.width = 3;
+        srcrt.height = isEvilInterface ? 15 : 20;
+        dstpt.x += 14;
+        dstpt.y += 18;
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    }
+
     // RIGHT BORDER
     srcrt.x = icnadv.width() - BORDERWIDTH;
     srcrt.y = 0;
@@ -136,6 +149,16 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.y += TILEWIDTH;
     srcrt.height = icnadv.height() - srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+
+    // fix extra border part on higher resolutions
+    if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
+        srcrt.x = 624;
+        srcrt.y = isEvilInterface ? 328 : 345;
+        srcrt.width = 3;
+        srcrt.height = isEvilInterface ? 15 : 20;
+        dstpt.y += 18;
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    }
 
     // BOTTOM BORDER
     srcrt.x = 0;
