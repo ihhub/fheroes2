@@ -409,7 +409,7 @@ bool Heroes::isInDeepOcean() const
     const bool isHeroMovedHalfOfCell = ( sprite_index < 45 && sprite_index % 9 > 4 );
     const int32_t tileIndex
         = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
-    for ( const int32_t aroundIndex : Maps::GetAroundIndexes( tileIndex ) ) {
+    for ( const int32_t aroundIndex : Maps::getAroundIndexes( tileIndex ) ) {
         if ( !world.GetTiles( aroundIndex ).isWater() ) {
             return false;
         }

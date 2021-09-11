@@ -191,7 +191,7 @@ namespace Game
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 
-    void EnvironmentSoundMixer( void );
+    void EnvironmentSoundMixer();
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );
