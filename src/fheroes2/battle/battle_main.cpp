@@ -47,43 +47,63 @@ namespace Battle
 
 namespace
 {
-    Battle::ArtifactsPickup PlanArtifactsPickup( BagArtifacts & winnerBag, BagArtifacts & loserBag )
+    std::vector<Artifact> planArtifactTransfer( const BagArtifacts & winnerBag, const BagArtifacts & loserBag )
     {
-        Battle::ArtifactsPickup result;
-        BagArtifacts::iterator wi = winnerBag.begin();
+        std::vector<Artifact> artifacts;
 
-        for ( Artifact & art : loserBag ) {
-            if ( art.GetID() != Artifact::UNKNOWN && art.GetID() != Artifact::MAGIC_BOOK && !art.isUltimate() ) {
-                wi = std::find( wi, winnerBag.end(), Artifact( Artifact::UNKNOWN ) );
-                if ( winnerBag.end() != wi ) {
-                    result.emplace_back( &*wi, &art );
-                    ++wi;
-                }
-                else {
-                    result.emplace_back( nullptr, &art );
-                }
+        // Calculate how many free slots the winner has in his bag.
+        size_t availableArtifactSlots = 0;
+        for ( const Artifact & artifact : winnerBag ) {
+            if ( !artifact.isValid() ) {
+                ++availableArtifactSlots;
             }
         }
 
-        // one more pass to put all the ultimate artifacts at the end of the list
-        for ( Artifact & art : loserBag ) {
-            if ( art.isUltimate() ) {
-                result.emplace_back( nullptr, &art );
+        for ( const Artifact & artifact : loserBag ) {
+            if ( availableArtifactSlots == 0 ) {
+                break;
+            }
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK && !artifact.isUltimate() ) {
+                artifacts.push_back( artifact );
+                --availableArtifactSlots;
             }
         }
 
-        return result;
+        // One more pass to put all the ultimate artifacts at the end.
+        for ( const Artifact & artifact : loserBag ) {
+            if ( artifact.isUltimate() ) {
+                artifacts.push_back( artifact );
+            }
+        }
+
+        return artifacts;
     }
 
-    void ExecArtifactsPickup( const Battle::ArtifactsPickup & artifacts )
+    void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag, const std::vector<Artifact> & artifacts )
     {
-        for ( const Battle::SingleArtifactPickup & pickup : artifacts ) {
-            Artifact * dst = pickup.first;
-            Artifact * src = pickup.second;
-            if ( nullptr != dst ) {
-                *dst = *src;
+        // Clear loser's artifact bag.
+        for ( Artifact & artifact : loserBag ) {
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
+                artifact = Artifact::UNKNOWN;
             }
-            *src = Artifact::UNKNOWN;
+        }
+
+        size_t artifactPos = 0;
+
+        for ( Artifact & artifact : winnerBag ) {
+            if ( artifact.isValid() ) {
+                continue;
+            }
+            for ( ; artifactPos < artifacts.size(); ++artifactPos ) {
+                if ( !artifacts[artifactPos].isUltimate() ) {
+                    artifact = artifacts[artifactPos];
+                    ++artifactPos;
+                    break;
+                }
+            }
+            if ( artifactPos >= artifacts.size() ) {
+                break;
+            }
         }
     }
 }
@@ -161,15 +181,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-    ArtifactsPickup artifactsPickup;
+    std::vector<Artifact> artifactsToTransfer;
     if ( ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) ) {
-        artifactsPickup = PlanArtifactsPickup( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+        artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
     }
 
     bool battleSummaryShown = false;
     // Check if it was an auto battle
     if ( isHumanBattle && !showBattle ) {
-        if ( arena->DialogBattleSummary( result, artifactsPickup, true ) ) {
+        if ( arena->DialogBattleSummary( result, artifactsToTransfer, true ) ) {
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
@@ -198,7 +218,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
             if ( ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) ) {
-                artifactsPickup = PlanArtifactsPickup( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+                artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
             }
         }
         else {
@@ -215,10 +235,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // final summary dialog
     if ( isHumanBattle && !battleSummaryShown ) {
-        arena->DialogBattleSummary( result, artifactsPickup, false );
+        arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
-    ExecArtifactsPickup( artifactsPickup );
+    transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
 
     // save count troop
     arena->GetForce1().SyncArmyCount();

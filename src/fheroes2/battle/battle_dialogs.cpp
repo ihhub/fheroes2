@@ -329,7 +329,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 }
 
 // Returns true if player want to restart the battle
-bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPickup & artifacts, bool allowToCancel ) const
+bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -496,10 +496,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const ArtifactsPick
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
         btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
 
-        for ( const Battle::SingleArtifactPickup & pickup : artifacts ) {
-            const Artifact & art = *pickup.second;
-
-            if ( ( isWinnerHuman && nullptr != pickup.first ) || art.isUltimate() ) { // always show the message for ultimate artifacts
+        for ( const Artifact & art : artifacts ) {
+            if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
