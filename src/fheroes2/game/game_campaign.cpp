@@ -442,17 +442,18 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
-fheroes2::GameMode Game::CompleteCampaignScenario()
+fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile )
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
-    saveData.addCurrentMapToFinished();
-    saveData.addDaysPassed( world.CountDay() );
+    if ( !isLoadingSaveFile ) {
+        saveData.addCurrentMapToFinished();
+        saveData.addDaysPassed( world.CountDay() );
+        Game::SaveCompletedCampaignScenario();
+    }
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
-
-    Game::SaveCompletedCampaignScenario();
 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards
         = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
