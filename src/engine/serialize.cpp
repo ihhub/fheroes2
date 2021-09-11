@@ -394,7 +394,7 @@ u8 StreamBuf::get8()
 u16 StreamBuf::getBE16()
 {
     u16 result = ( get8() << 8 );
-    result += get8();
+    result |= get8();
 
     return result;
 }
@@ -402,7 +402,7 @@ u16 StreamBuf::getBE16()
 u16 StreamBuf::getLE16()
 {
     u16 result = get8();
-    result += ( get8() << 8 );
+    result |= ( get8() << 8 );
 
     return result;
 }
@@ -410,9 +410,9 @@ u16 StreamBuf::getLE16()
 u32 StreamBuf::getBE32()
 {
     u32 result = ( get8() << 24 );
-    result += ( get8() << 16 );
-    result += ( get8() << 8 );
-    result += get8();
+    result |= ( get8() << 16 );
+    result |= ( get8() << 8 );
+    result |= get8();
 
     return result;
 }
@@ -420,9 +420,9 @@ u32 StreamBuf::getBE32()
 u32 StreamBuf::getLE32()
 {
     u32 result = get8();
-    result += ( get8() << 8 );
-    result += ( get8() << 16 );
-    result += ( get8() << 24 );
+    result |= ( get8() << 8 );
+    result |= ( get8() << 16 );
+    result |= ( get8() << 24 );
 
     return result;
 }
