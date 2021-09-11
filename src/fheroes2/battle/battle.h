@@ -27,7 +27,6 @@
 #include <vector>
 
 #include "army.h"
-#include "artifact.h"
 #include "gamedefs.h"
 #include "m82.h"
 
