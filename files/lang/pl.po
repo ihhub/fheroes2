@@ -22,7 +22,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Launchpad (build 16799)\n"
 
-#, fuzzy
 msgid "Warrior"
 msgstr "Wojownik"
 
@@ -30,7 +29,7 @@ msgid "Builder"
 msgstr "Budowniczy"
 
 msgid "Explorer"
-msgstr "Odkrywca"
+msgstr "Badacz"
 
 msgid ""
 "A few\n"
@@ -195,25 +194,21 @@ msgstr ""
 msgid "Speed"
 msgstr "Szybkość"
 
-#, fuzzy
 msgid "Speed: %{speed}"
-msgstr "Prędkość: %{speed}"
+msgstr "Szybkość: %{speed}"
 
-#, fuzzy
 msgid "Auto Spell Casting"
-msgstr "Automatyczne rzucanie czarów"
+msgstr "Automatyczne rzucanie zaklęć"
 
 msgid "Grid"
 msgstr "Siatka"
 
-#, fuzzy
 msgid "Shadow Movement"
-msgstr "Dalszy ruch"
+msgstr "Cieniowanie pola"
 
 msgid "Shadow Cursor"
-msgstr "Cień kursora"
+msgstr "Cieniowanie kursora"
 
-#, fuzzy
 msgid "Off"
 msgstr "Wyłączone"
 
@@ -229,9 +224,8 @@ msgstr "Przeciwnik uciekł!"
 msgid "A glorious victory!"
 msgstr "Wspaniałe zwycięstwo!"
 
-#, fuzzy
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "Za męstwo w walce, %{name} otrzymuje %{exp} pkt. doświadczenia"
+msgstr "Za odwagę w walce, %{name} otrzymuje %{exp} pkt. doświadczenia"
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "%{name} tchórzliwie ucieka z pola bitwy."
@@ -262,9 +256,8 @@ msgstr "Udało ci się zdobyć artfeakt przeciwnika!"
 
 #, fuzzy
 msgid "Necromancy!"
-msgstr "Nekromancja"
+msgstr "Nekromancja!"
 
-#, fuzzy
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
@@ -314,12 +307,11 @@ msgstr "Anuluj"
 msgid "Hero Screen"
 msgstr "Ekran bohatera"
 
-#, fuzzy
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
-"Rzuć magiczne zaklęcie. Możesz rzucić tylko jeden czar na rundę walki. Runda "
+"Rzucanie magicznego zalęcia. Możesz rzucić tylko jedno zaklęcie na rundę walki. Runda "
 "kończy się gdy wszystkie stworzenia wykonają ruch."
 
 msgid ""
@@ -337,11 +329,9 @@ msgstr ""
 "Za możliwość kapitulacji płaci się w złocie. Jeśli jednak zapłacisz okup, "
 "będzie można nająć ponownie zarówno bohatera jak i ocalałe jednostki."
 
-#, fuzzy
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
-"Pozwala osobie rzucającej zaklęcie zobaczyć szczegółowe informacje na temat "
-"herosów wroga."
+"Otwórz ekran bohatera, aby zobaczyć pełne informacje o nim."
 
 msgid "Return to the battle."
 msgstr "Powrót na pole bitwy."
@@ -9461,3 +9451,9 @@ msgstr ""
 
 #~ msgid "pocketpc: low display resolution (needs restart)"
 #~ msgstr "pocketpc: niska rozdzielczość ekranu (wymaga restartu)"
+
+msgid "race|Random"
+msgstr "Losowo"
+
+msgid "race|Neutral"
+msgstr "Neutralny"
