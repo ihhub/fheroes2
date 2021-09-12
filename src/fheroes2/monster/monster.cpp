@@ -32,47 +32,10 @@
 #include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "translations.h"
-
-namespace
-{
-    struct monstats_t
-    {
-        u8 attack;
-        u8 defense;
-        u8 damageMin;
-        u8 damageMax;
-        u16 hp;
-        u8 speed;
-        u8 grown;
-        u8 shots;
-        const char * name;
-        const char * multiname;
-        cost_t cost;
-    };
-}
-
-StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
-    return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;
-}
-
-StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
-
-    u32 monsters_size;
-    msg >> monsters_size;
-
-    monstats_t dummyMonster = { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "", "", { 0, 0, 0, 0, 0, 0, 0 } };
-
-    for ( u32 ii = 0; ii < monsters_size; ++ii )
-        msg >> dummyMonster;
-    return msg;
-}
 
 uint32_t Monster::GetMissileICN( uint32_t monsterID )
 {
@@ -1211,7 +1174,7 @@ const char * Monster::GetMultiName( void ) const
 const char * Monster::GetPluralName( u32 count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
-    return _n( generalStats.name, generalStats.pluralName, count );
+    return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
 }
 
 u32 Monster::GetSpriteIndex( void ) const
@@ -1251,10 +1214,4 @@ u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
 int Monster::GetMonsterSprite() const
 {
     return fheroes2::getMonsterData( id ).icnId;
-}
-
-MonsterStaticData & MonsterStaticData::Get( void )
-{
-    static MonsterStaticData mgds;
-    return mgds;
 }

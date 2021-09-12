@@ -80,9 +80,7 @@ StreamBase & operator>>( StreamBase &, ObjectColor & );
 class ResourceCount : public std::pair<int, u32>
 {
 public:
-    ResourceCount()
-        : std::pair<int, u32>( Resource::UNKNOWN, 0 )
-    {}
+    ResourceCount() = delete;
 
     ResourceCount( int res, u32 count )
         : std::pair<int, u32>( res, count )
@@ -93,7 +91,5 @@ public:
         return ( first & Resource::ALL ) && second;
     }
 };
-
-StreamBase & operator>>( StreamBase &, ResourceCount & );
 
 #endif

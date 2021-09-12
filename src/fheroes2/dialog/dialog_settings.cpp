@@ -25,11 +25,13 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
 
@@ -45,11 +47,24 @@ public:
     void RedrawItem( const u32 &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
-    void ActionCurrentDn( void ) override {}
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
+
     void ActionListDoubleClick( u32 & ) override;
+
     void ActionListSingleClick( u32 & ) override;
-    void ActionListPressRight( u32 & ) override {}
+
+    void ActionListPressRight( u32 & ) override
+    {
+        // Do nothing.
+    }
 
     bool readonly;
     fheroes2::ImageRestorer _restorer;
@@ -69,7 +84,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
-    TextBox msg( conf.ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
+    TextBox msg( Settings::ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
@@ -108,24 +123,8 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
     if ( !readonly || conf.CanChangeInGame( item ) ) {
         conf.ExtModes( item ) ? conf.ExtResetModes( item ) : conf.ExtSetModes( item );
 
-        // depends
-        switch ( item ) {
-        case Settings::WORLD_1HERO_HIRED_EVERY_WEEK:
-            conf.ExtResetModes( Settings::CASTLE_1HERO_HIRED_EVERY_WEEK );
-            break;
-
-        case Settings::CASTLE_1HERO_HIRED_EVERY_WEEK:
-            conf.ExtResetModes( Settings::WORLD_1HERO_HIRED_EVERY_WEEK );
-            break;
-
-        case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
-                conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-            }
-            break;
-
-        default:
-            break;
+        if ( item == Settings::GAME_AUTOSAVE_BEGIN_DAY && conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
+            conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
         }
     }
 }
@@ -141,7 +140,7 @@ void Dialog::ExtSettings( bool readonly )
     const fheroes2::StandardWindow frameborder( 320, 400 );
     const fheroes2::Rect area( frameborder.activeArea() );
 
-    Text text( "Experimental Game Settings", Font::YELLOW_BIG );
+    Text text( _( "Experimental Game Settings" ), Font::YELLOW_BIG );
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
@@ -159,19 +158,12 @@ void Dialog::ExtSettings( bool readonly )
         states.push_back( Settings::GAME_USE_FADE );
 
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
-    states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
     states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
-    states.push_back( Settings::WORLD_BAN_WEEKOF );
-    states.push_back( Settings::WORLD_BAN_PLAGUES );
-    states.push_back( Settings::WORLD_BAN_MONTHOF_MONSTERS );
-    states.push_back( Settings::WORLD_STARTHERO_LOSSCOND4HUMANS );
-    states.push_back( Settings::WORLD_1HERO_HIRED_EVERY_WEEK );
-    states.push_back( Settings::CASTLE_1HERO_HIRED_EVERY_WEEK );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
@@ -192,9 +184,9 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
+    states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
 
-    std::sort( states.begin(), states.end(),
-               [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
+    std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
 
     SettingsListBox listbox( area.getPosition(), readonly );
 
@@ -228,7 +220,8 @@ void Dialog::ExtSettings( bool readonly )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        if ( le.MouseClickLeft( buttonOk.area() ) ) {
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow ) {
             break;
         }
 

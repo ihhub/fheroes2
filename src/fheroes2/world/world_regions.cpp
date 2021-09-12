@@ -240,7 +240,7 @@ void World::ComputeStaticAnalysis()
     const size_t totalMapTiles = vec_tiles.size();
     for ( const TileData & castleTile : castleCenters ) {
         // Check if a lot of players next to each other? (Slugfest map)
-        // GetCastle( fheroes2::Point( val % width, val / width ) )->GetColor();
+        // getCastle( fheroes2::Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
         AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
@@ -292,8 +292,8 @@ void World::ComputeStaticAnalysis()
             node.passable = tile.GetPassable();
             node.isWater = tile.isWater();
 
-            const int object = tile.GetObject();
-            node.mapObject = MP2::isActionObject( object, node.isWater ) ? object : 0;
+            const MP2::MapObjectType objectType = tile.GetObject();
+            node.mapObject = MP2::isActionObject( objectType, node.isWater ) ? objectType : 0;
             if ( node.passable != 0 ) {
                 node.type = REGION_NODE_OPEN;
             }

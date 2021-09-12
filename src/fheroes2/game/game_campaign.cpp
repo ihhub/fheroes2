@@ -34,6 +34,7 @@
 #include "icn.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -248,7 +249,8 @@ namespace
                 if ( hero != nullptr ) {
                     hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
                 }
-            } break;
+                break;
+            }
             case Campaign::ScenarioBonusData::TROOP:
                 kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 break;
@@ -259,7 +261,8 @@ namespace
                     // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
                     heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
                 }
-            } break;
+                break;
+            }
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
                 break;
@@ -439,32 +442,70 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
-fheroes2::GameMode Game::CompleteCampaignScenario()
+fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile )
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
-    saveData.addCurrentMapToFinished();
-    saveData.addDaysPassed( world.CountDay() );
+    if ( !isLoadingSaveFile ) {
+        saveData.addCurrentMapToFinished();
+        saveData.addDaysPassed( world.CountDay() );
+        Game::SaveCompletedCampaignScenario();
+    }
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
-
-    Game::SaveCompletedCampaignScenario();
 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards
         = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        saveData.addCampaignAward( obtainableAwards[i]._id );
+        const uint32_t awardType = obtainableAwards[i]._type;
 
-        if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
             Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
 
             const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
 
             if ( lastBattleWinHero )
                 saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+        }
+
+        saveData.addCampaignAward( obtainableAwards[i]._id );
+
+        // after adding an artifact award, check whether the artifacts can be assembled into something else
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
+            const std::vector<Campaign::CampaignAwardData> obtainedAwards = saveData.getObtainedCampaignAwards();
+            std::map<uint32_t, int> artifactAwardIDs;
+            BagArtifacts bagArtifacts;
+
+            for ( const Campaign::CampaignAwardData & awardData : obtainedAwards ) {
+                if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
+                    continue;
+
+                artifactAwardIDs.emplace( awardData._subType, awardData._id );
+                bagArtifacts.PushArtifact( awardData._subType );
+                saveData.removeCampaignAward( awardData._id );
+            }
+
+            // add the assembled artifact's campaign award to artifactAwards
+            for ( const Campaign::CampaignAwardData & awardData : Campaign::CampaignAwardData::getExtraCampaignAwardData( saveData.getCampaignID() ) ) {
+                if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
+                    continue;
+
+                artifactAwardIDs.emplace( awardData._subType, awardData._id );
+            }
+
+            bagArtifacts.assembleArtifactSetIfPossible();
+
+            for ( const Artifact & artifact : bagArtifacts ) {
+                if ( !artifact.isValid() )
+                    continue;
+
+                const auto foundArtifact = artifactAwardIDs.find( artifact.GetID() );
+                if ( foundArtifact != artifactAwardIDs.end() )
+                    saveData.addCampaignAward( foundArtifact->second );
+            }
         }
     }
 

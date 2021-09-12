@@ -23,11 +23,13 @@
 #include "cursor.h"
 #include "embedded_image.h"
 #include "game.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "screen.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "zzlib.h"
 
@@ -60,10 +62,25 @@ namespace
             fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
         }
 
-        void ActionCurrentUp() override {}
-        void ActionCurrentDn() override {}
-        void ActionListSingleClick( fheroes2::Size & ) override {}
-        void ActionListPressRight( fheroes2::Size & ) override {}
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListSingleClick( fheroes2::Size & ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListPressRight( fheroes2::Size & ) override
+        {
+            // Do nothing.
+        }
 
         void ActionListDoubleClick( fheroes2::Size & ) override
         {
@@ -81,7 +98,7 @@ namespace
 
     void RedrawInfo( const fheroes2::Point & dst, const fheroes2::Size & resolution )
     {
-        Text text( "Select Game Resolution:", Font::YELLOW_BIG );
+        Text text( _( "Select Game Resolution" ), Font::YELLOW_BIG );
         text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
         if ( resolution.width > 0 && resolution.height > 0 ) {

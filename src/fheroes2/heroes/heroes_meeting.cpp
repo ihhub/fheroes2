@@ -26,6 +26,7 @@
 #include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -37,6 +38,7 @@
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 
 namespace
@@ -414,10 +416,32 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        le.MousePressLeft( moveArmyToHero2.area() ) ? moveArmyToHero2.drawOnPress() : moveArmyToHero2.drawOnRelease();
-        le.MousePressLeft( moveArmyToHero1.area() ) ? moveArmyToHero1.drawOnPress() : moveArmyToHero1.drawOnRelease();
-        le.MousePressLeft( moveArtifactsToHero2.area() ) ? moveArtifactsToHero2.drawOnPress() : moveArtifactsToHero2.drawOnRelease();
-        le.MousePressLeft( moveArtifactsToHero1.area() ) ? moveArtifactsToHero1.drawOnPress() : moveArtifactsToHero1.drawOnRelease();
+
+        if ( le.MousePressLeft( moveArmyToHero2.area() ) ) {
+            moveArmyToHero2.drawOnPress();
+            moveArmyToHero1.drawOnRelease();
+        }
+        else if ( le.MousePressLeft( moveArmyToHero1.area() ) ) {
+            moveArmyToHero1.drawOnPress();
+            moveArmyToHero2.drawOnRelease();
+        }
+        else {
+            moveArmyToHero1.drawOnRelease();
+            moveArmyToHero2.drawOnRelease();
+        }
+
+        if ( le.MousePressLeft( moveArtifactsToHero2.area() ) ) {
+            moveArtifactsToHero2.drawOnPress();
+            moveArtifactsToHero1.drawOnRelease();
+        }
+        else if ( le.MousePressLeft( moveArtifactsToHero1.area() ) ) {
+            moveArtifactsToHero1.drawOnPress();
+            moveArtifactsToHero2.drawOnRelease();
+        }
+        else {
+            moveArtifactsToHero1.drawOnRelease();
+            moveArtifactsToHero2.drawOnRelease();
+        }
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
@@ -451,9 +475,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            if ( bag_artifacts.MakeBattleGarb() || otherHero.bag_artifacts.MakeBattleGarb() ) {
-                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
-            }
+            std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+
+            // Use insert instead of std::merge to make appveyour happy
+            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
+                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
@@ -644,24 +673,16 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 
     // remove_if for learn spells
     if ( !learn.empty() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
-        learn.resize( std::distance( learn.begin(), res ) );
-    }
-
-    if ( !learn.empty() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
-        learn.resize( std::distance( learn.begin(), res ) );
+        learn.erase( std::remove_if( learn.begin(), learn.end(),
+                                     [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ) || !teacher->CanTeachSpell( spell ); } ),
+                     learn.end() );
     }
 
     // remove_if for teach spells
     if ( !teach.empty() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
-        teach.resize( std::distance( teach.begin(), res ) );
-    }
-
-    if ( !teach.empty() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
-        teach.resize( std::distance( teach.begin(), res ) );
+        teach.erase( std::remove_if( teach.begin(), teach.end(),
+                                     [learner, teacher]( const Spell & spell ) { return learner->HaveSpell( spell ) || !teacher->CanTeachSpell( spell ); } ),
+                     teach.end() );
     }
 
     std::string message, spells1, spells2;

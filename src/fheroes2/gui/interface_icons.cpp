@@ -142,11 +142,11 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
     }
 }
 
-void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
+void Interface::CastleIcons::ActionListPressRight( CASTLE & castle )
 {
-    if ( item ) {
+    if ( castle ) {
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
-        Dialog::QuickInfo( *item, p );
+        Dialog::QuickInfo( *castle, fheroes2::Rect(), p );
     }
 }
 
@@ -209,7 +209,7 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
         if ( item->Modes( Heroes::GUARDIAN ) ) {
-            Castle * castle = world.GetCastle( item->GetCenter() );
+            Castle * castle = world.getCastle( item->GetCenter() );
             if ( castle )
                 Game::OpenCastleDialog( *castle );
         }
@@ -233,7 +233,7 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
-        Dialog::QuickInfo( *item, p );
+        Dialog::QuickInfo( *item, fheroes2::Rect(), p );
     }
 }
 

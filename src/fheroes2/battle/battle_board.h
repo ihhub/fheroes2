@@ -23,15 +23,18 @@
 #ifndef H2BATTLE_BOARD_H
 #define H2BATTLE_BOARD_H
 
-#include <functional>
 #include <random>
 
-#include "battle.h"
 #include "battle_cell.h"
 
 #define ARENAW 11
 #define ARENAH 9
 #define ARENASIZE ARENAW * ARENAH
+
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace Battle
 {
@@ -74,7 +77,6 @@ namespace Battle
         static bool isCastleIndex( s32 );
         static bool isMoatIndex( s32 index, const Unit & b );
         static bool isBridgeIndex( s32 index, const Unit & b );
-        static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
@@ -94,21 +96,23 @@ namespace Battle
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
 
+        // Checks that the current unit (to which the current passability information relates) is able (in principle)
+        // to attack from the cell with the given index
+        static bool CanAttackUnitFromCell( const Unit & currentUnit, const int32_t from );
+        // Checks that the current unit (to which the current passability information relates) is able to attack the
+        // target from the position which corresponds to the given index
+        static bool CanAttackUnitFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst );
+
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
-        enum
-        {
-            CATAPULT_POS = 77,
-            CASTLE_GATE_POS = 50,
-            CASTLE_FIRST_TOP_WALL_POS = 8,
-            CASTLE_SECOND_TOP_WALL_POS = 29,
-            CASTLE_THIRD_TOP_WALL_POS = 73,
-            CASTLE_FORTH_TOP_WALL_POS = 96,
-            CASTLE_TOP_ARCHER_TOWER_POS = 19,
-            CASTLE_BOTTOM_ARCHER_TOWER_POS = 85,
-            CASTLE_TOP_GATE_TOWER_POS = 40,
-            CASTLE_BOTTOM_GATE_TOWER_POS = 62
-        };
+        // Finds the cell nearest to the cell with the given index and reachable for the current unit (to which the
+        // current passability information relates)
+        static int32_t FindNearestReachableCell( const Unit & currentUnit, const int32_t dst );
+
+        // Handles the situation when the cell with the given index is specified as the target cell for the movement of
+        // the current unit (to which the current passability information relates), this cell is located on the border
+        // of the cell space reachable for this unit and it should be the tail cell of this unit
+        static int32_t FixupDestinationCell( const Unit & currentUnit, const int32_t dst );
 
     private:
         void SetCobjObject( const int icn, const int32_t dst );

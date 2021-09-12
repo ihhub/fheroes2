@@ -42,26 +42,19 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "maps_objects.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "speed.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
-
-namespace
-{
-    template <class T>
-    void hashCombine( std::size_t & seed, const T & v )
-    {
-        std::hash<T> hasher;
-        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
-    }
-}
 
 const char * Heroes::GetName( int id )
 {
@@ -90,16 +83,16 @@ const char * Heroes::GetName( int id )
 }
 
 template <std::size_t size>
-int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &objectTypes )[size], const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
     for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isObjectTypeVisited( objs[ii] ) ) {
-            result += GameStatic::ObjectVisitedModifiers( objs[ii] );
+        if ( hero.isObjectTypeVisited( objectTypes[ii] ) ) {
+            result += GameStatic::ObjectVisitedModifiers( objectTypes[ii] );
 
             if ( strs ) {
-                switch ( objs[ii] ) {
+                switch ( objectTypes[ii] ) {
                 case MP2::OBJ_GRAVEYARD:
                 case MP2::OBJN_GRAVEYARD:
                 case MP2::OBJ_SHIPWRECK:
@@ -107,21 +100,23 @@ int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], c
                 case MP2::OBJ_DERELICTSHIP:
                 case MP2::OBJN_DERELICTSHIP: {
                     std::string modRobber = _( "%{object} robber" );
-                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
                     strs->append( modRobber );
-                } break;
+                    break;
+                }
                 case MP2::OBJ_PYRAMID:
                 case MP2::OBJN_PYRAMID: {
                     std::string modRaided = _( "%{object} raided" );
-                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
                     strs->append( modRaided );
-                } break;
+                    break;
+                }
                 default:
-                    strs->append( _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( _( MP2::StringObject( objectTypes[ii] ) ) );
                     break;
                 }
 
-                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
+                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectTypes[ii] ) );
                 strs->append( "\n" );
             }
         }
@@ -131,7 +126,8 @@ int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], c
 }
 
 Heroes::Heroes()
-    : move_point_scale( -1 )
+    : experience( 0 )
+    , move_point_scale( -1 )
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
@@ -143,6 +139,7 @@ Heroes::Heroes()
     , patrol_square( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
+    , _aiRole( Role::HUNTER )
 {}
 
 Heroes::Heroes( int heroID, int race, int initialLevel )
@@ -173,6 +170,7 @@ Heroes::Heroes( int heroid, int rc )
     , patrol_square( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
+    , _aiRole( Role::HUNTER )
 {
     name = _( Heroes::GetName( heroid ) );
 
@@ -308,7 +306,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     // custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
-        name = Game::GetEncodeString( st.toString( 13 ) );
+        name = st.toString( 13 );
     }
     else {
         st.skip( 13 );
@@ -524,7 +522,7 @@ u32 Heroes::GetMaxSpellPoints( void ) const
 
 u32 Heroes::GetMaxMovePoints( void ) const
 {
-    int point = 0;
+    uint32_t point = 0;
 
     // start point
     if ( isShipMaster() ) {
@@ -534,7 +532,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        point += HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
+        point += artifactCount( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -573,15 +571,15 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        point += HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
-        point += HasArtifact( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
+        point += artifactCount( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
+        point += artifactCount( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
 
-    point += HasArtifact( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
+    point += artifactCount( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
@@ -606,8 +604,9 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, *this, strs );
+    const MP2::MapObjectType objectTypes[]
+        = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    result += ObjectVisitedModifiersResult( MDF_MORALE, objectTypes, *this, strs );
 
     // result
     return Morale::Normalize( result );
@@ -629,8 +628,8 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, *this, strs );
+    const MP2::MapObjectType objectTypes[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    result += ObjectVisitedModifiersResult( MDF_LUCK, objectTypes, *this, strs );
 
     return Luck::Normalize( result );
 }
@@ -741,10 +740,7 @@ void Heroes::ReplenishSpellPoints()
     curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
 
     // power ring action
-    const int acount = HasArtifact( Artifact::POWER_RING );
-    if ( acount ) {
-        curr += acount * Artifact( Artifact::POWER_RING ).ExtraValue();
-    }
+    curr += artifactCount( Artifact::POWER_RING ) * Artifact( Artifact::POWER_RING ).ExtraValue();
 
     // secondary skill
     curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
@@ -782,69 +778,82 @@ void Heroes::RescanPath( void )
 }
 
 /* if hero in castle */
-const Castle * Heroes::inCastle( void ) const
+const Castle * Heroes::inCastle() const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
-    return castle && castle->GetHeroes() == this ? castle : nullptr;
+    return inCastleMutable();
 }
 
-Castle * Heroes::inCastle( void )
+Castle * Heroes::inCastleMutable() const
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    if ( GetColor() == Color::NONE ) {
+        return nullptr;
+    }
+
+    if ( Modes( Heroes::GUARDIAN ) ) {
+        const fheroes2::Point & heroPoint = GetCenter();
+        const fheroes2::Point castlePoint( heroPoint.x, heroPoint.y + 1 );
+
+        Castle * castle = world.getCastleEntrance( castlePoint );
+
+        return castle && castle->GetHeroes() == this ? castle : nullptr;
+    }
+
+    Castle * castle = world.getCastleEntrance( GetCenter() );
+
     return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
     const int32_t index = tile.GetIndex();
-    int object = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type )
-        return GetKingdom().isVisited( index, object );
+        return GetKingdom().isVisited( index, objectType );
 
-    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, object ) );
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
-bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
-        return GetKingdom().isVisited( object );
+        return GetKingdom().isVisited( objectType );
 
-    return std::any_of( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
 void Heroes::SetVisited( s32 index, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    int object = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type ) {
-        GetKingdom().SetVisited( index, object );
+        GetKingdom().SetVisited( index, objectType );
     }
-    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != object ) {
-        visit_object.push_front( IndexObject( index, object ) );
+    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != objectType ) {
+        visit_object.push_front( IndexObject( index, objectType ) );
     }
 }
 
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const int objectId = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
-        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
+        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectType );
     }
 }
 
-void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
+void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType objectType, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const uint32_t uid = tile.GetObjectUID();
     int wide = 0;
 
-    switch ( object ) {
+    switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_OASIS:
     case MP2::OBJ_STANDINGSTONES:
@@ -858,7 +867,7 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( tile.GetObject( false ) == object && wide ) {
+    if ( tile.GetObject( false ) == objectType && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
@@ -946,10 +955,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    // check: anduran garb
-    if ( bag_artifacts.MakeBattleGarb() ) {
-        if ( isControlHuman() )
-            Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+    // check: artifact sets such as anduran garb
+    const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+    if ( isControlHuman() ) {
+        for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
+            Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
     }
 
     return true;
@@ -1246,10 +1256,8 @@ void Heroes::Scoute( const int tileIndex ) const
 
 int Heroes::GetScoute( void ) const
 {
-    int acount = HasArtifact( Artifact::TELESCOPE );
-
-    return ( acount ? acount * Game::GetViewDistance( Game::VIEW_TELESCOPE ) : 0 ) + Game::GetViewDistance( Game::VIEW_HEROES )
-           + GetSecondaryValues( Skill::Secondary::SCOUTING );
+    return static_cast<int>( artifactCount( Artifact::TELESCOPE ) * Game::GetViewDistance( Game::VIEW_TELESCOPE ) + Game::GetViewDistance( Game::VIEW_HEROES )
+                             + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
@@ -1272,10 +1280,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    uint32_t crystalBallCount = HasArtifact( Artifact::CRYSTAL_BALL );
-    if ( crystalBallCount < 1 )
-        crystalBallCount = 1;
-    return 8 * crystalBallCount;
+    return 8 * std::max( 1U, artifactCount( Artifact::CRYSTAL_BALL ) );
 }
 
 int Heroes::GetDirection( void ) const
@@ -1478,17 +1483,20 @@ uint32_t Heroes::GetStartingXp()
     return Rand::Get( 40, 90 );
 }
 
-int Heroes::GetMapsObject( void ) const
+MP2::MapObjectType Heroes::GetMapsObject( void ) const
 {
-    return save_maps_object;
+    return static_cast<MP2::MapObjectType>( save_maps_object );
 }
 
-void Heroes::SetMapsObject( int obj )
+void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 {
-    save_maps_object = obj != MP2::OBJ_HEROES ? obj : MP2::OBJ_ZERO;
+    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_ZERO;
 }
 
-void Heroes::ActionPreBattle( void ) {}
+void Heroes::ActionPreBattle()
+{
+    // Do nothing.
+}
 
 void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
@@ -1565,8 +1573,21 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
         switch ( type ) {
         case PORT_BIG:
             return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
-        case PORT_MEDIUM:
-            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::PORTMEDI, id + 1 ) : fheroes2::AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
+        case PORT_MEDIUM: {
+            // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
+            // TODO: find a better way to store these images, ideally in agg_image.cpp file.
+            static std::map<int, fheroes2::Sprite> mediumSizePortait;
+            auto iter = mediumSizePortait.find( id );
+            if ( iter != mediumSizePortait.end() ) {
+                return iter->second;
+            }
+
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            fheroes2::Sprite output( 50, 47 );
+            fheroes2::Resize( original, output );
+
+            return mediumSizePortait.emplace( id, std::move( output ) ).first->second;
+        }
         case PORT_SMALL:
             return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
         default:
@@ -1671,7 +1692,7 @@ std::string Heroes::String( void ) const
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
         for ( std::list<IndexObject>::const_iterator it = visit_object.begin(); it != visit_object.end(); ++it )
-            os << MP2::StringObject( ( *it ).second ) << "(" << ( *it ).first << "), ";
+            os << MP2::StringObject( static_cast<MP2::MapObjectType>( ( *it ).second ) ) << "(" << ( *it ).first << "), ";
         os << std::endl;
     }
 
@@ -1924,14 +1945,14 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = world.GetMapSeed();
-    hashCombine( hash, hid );
-    hashCombine( hash, _race );
-    hashCombine( hash, attack );
-    hashCombine( hash, defense );
-    hashCombine( hash, power );
-    hashCombine( hash, knowledge );
+    fheroes2::hashCombine( hash, hid );
+    fheroes2::hashCombine( hash, _race );
+    fheroes2::hashCombine( hash, attack );
+    fheroes2::hashCombine( hash, defense );
+    fheroes2::hashCombine( hash, power );
+    fheroes2::hashCombine( hash, knowledge );
     for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
-        hashCombine( hash, GetLevelSkill( skillId ) );
+        fheroes2::hashCombine( hash, GetLevelSkill( skillId ) );
     }
 
     HeroSeedsForLevelUp seeds;

@@ -28,6 +28,7 @@
 #include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "skill.h"
 #include "skill_static.h"
 
@@ -218,58 +219,6 @@ namespace GameStatic
     u32 uniq = 0;
 }
 
-StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
-    return msg;
-}
-
-StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_SECOND_PRE_095_RELEASE ) {
-        return msg;
-    }
-
-    msg >> whirlpool_lost_percent >> kingdom_max_heroes >> castle_grown_well >> castle_grown_wel2 >> castle_grown_week_of >> castle_grown_month_of
-        >> heroes_spell_points_day >> gameover_lost_days >> spell_dd_distance >> spell_dd_sp >> spell_dd_hp;
-
-    u8 array_size = 0;
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> overview_distance[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> kingdom_starting_resource[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> mageguild_restore_spell_points_day[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> objects_mod[ii];
-
-    msg >> monsterUpgradeRatio >> uniq;
-    if ( monsterUpgradeRatio < 0 ) {
-        monsterUpgradeRatio = 1.0f;
-    }
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> Skill::_stats[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> Skill::_values[ii];
-
-    msg >> Skill::_from_witchs_hut;
-
-    return msg;
-}
-
 u32 GameStatic::GetLostOnWhirlpoolPercent( void )
 {
     return whirlpool_lost_percent;
@@ -320,9 +269,9 @@ u32 GameStatic::GetCastleGrownMonthOf( void )
     return castle_grown_month_of;
 }
 
-s32 GameStatic::ObjectVisitedModifiers( int obj )
+s32 GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
 {
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_BUOY:
         return objects_mod[0];
     case MP2::OBJ_OASIS:
@@ -417,12 +366,6 @@ const Skill::values_t * GameStatic::GetSkillValues( int type )
 const Skill::secondary_t * GameStatic::GetSkillForWitchsHut( void )
 {
     return &Skill::_from_witchs_hut;
-}
-
-GameStatic::Data & GameStatic::Data::Get( void )
-{
-    static Data gds;
-    return gds;
 }
 
 int GameStatic::GetBattleMoatReduceDefense( void )

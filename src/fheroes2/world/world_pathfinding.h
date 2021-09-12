@@ -22,12 +22,14 @@
 
 #include "army.h"
 #include "color.h"
-#include "pairs.h"
+#include "mp2.h"
 #include "pathfinding.h"
-#include "route.h"
+#include "skill.h"
+
+class IndexObject;
 
 // Abstract class that provides base functionality to path through World map
-class WorldPathfinder : public Pathfinder<PathfindingNode>
+class WorldPathfinder : public Pathfinder<PathfindingNode<MP2::MapObjectType>>
 {
 public:
     WorldPathfinder() = default;

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg_image.h"
+#include "bin_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -31,6 +32,7 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 #include <cassert>

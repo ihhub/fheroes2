@@ -25,6 +25,7 @@
 #include <iomanip>
 
 #include "battle_arena.h"
+#include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_command.h"
@@ -36,6 +37,7 @@
 #include "rand.h"
 #include "spell.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -225,7 +227,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         usage_spells.Append( spell );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    spell.GetName() << ", "
                                    << "incorrect param" );
     }
@@ -455,7 +457,7 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
         }
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "incorrect param"
                        << ": "
                        << "uid: "
@@ -759,7 +761,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         // check abroads
         case Spell::FIREBALL:
@@ -777,12 +780,13 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             }
 
             // unique
-            targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         // check all troops
         case Spell::DEATHRIPPLE:
@@ -807,12 +811,13 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             }
 
             // unique
-            targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -913,8 +918,10 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
-    if ( interface )
+    if ( interface ) {
+        assert( elem != nullptr );
         interface->RedrawActionSummonElementalSpell( *elem );
+    }
 }
 
 void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
@@ -939,7 +946,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
         }
     }
 
-    targets.resize( std::distance( targets.begin(), std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ) ) );
+    targets.erase( std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ), targets.end() );
 
     if ( interface ) {
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );
@@ -989,7 +996,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
     const HeroBase * commander = GetCurrentCommander();
     const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
-    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
+    const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );

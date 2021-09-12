@@ -36,11 +36,8 @@ namespace System
 
     std::string GetDirname( const std::string & );
     std::string GetBasename( const std::string & );
-    std::string GetUniversalBasename( const std::string & str );
 
-    void SetLocale( int, const char * );
     std::string GetMessageLocale( int /* 3: en_us.utf-8, 2: en_us, 1: en */ );
-    size_t GetMemoryUsage( void );
 
     int GetCommandOptions( int argc, char * const argv[], const char * optstring );
     char * GetOptionsArgument( void );

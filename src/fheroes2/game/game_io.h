@@ -23,6 +23,10 @@
 #ifndef H2GAMEIO_H
 #define H2GAMEIO_H
 
+#include <string>
+
+#include "game_mode.h"
+
 namespace Maps
 {
     struct FileInfo;

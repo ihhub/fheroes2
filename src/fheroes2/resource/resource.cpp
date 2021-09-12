@@ -27,7 +27,9 @@
 #include "logging.h"
 #include "pairs.h"
 #include "rand.h"
+#include "serialize.h"
 #include "text.h"
+#include "translations.h"
 
 Funds::Funds()
     : wood( 0 )
@@ -111,9 +113,9 @@ Funds::Funds( const ResourceCount & rs )
         *ptr = rs.second;
 }
 
-int Resource::Rand( bool with_gold )
+int Resource::Rand( const bool includeGold )
 {
-    switch ( Rand::Get( 1, ( with_gold ? 7 : 6 ) ) ) {
+    switch ( Rand::Get( 1, ( includeGold ? 7 : 6 ) ) ) {
     case 1:
         return Resource::WOOD;
     case 2:
@@ -317,34 +319,30 @@ std::string Funds::String( void ) const
     return os.str();
 }
 
-/* name resource */
 const char * Resource::String( int resource )
 {
-    const char * res[] = {"Unknown", _( "Wood" ), _( "Mercury" ), _( "Ore" ), _( "Sulfur" ), _( "Crystal" ), _( "Gems" ), _( "Gold" )};
-
     switch ( resource ) {
     case Resource::WOOD:
-        return res[1];
+        return _( "Wood" );
     case Resource::MERCURY:
-        return res[2];
+        return _( "Mercury" );
     case Resource::ORE:
-        return res[3];
+        return _( "Ore" );
     case Resource::SULFUR:
-        return res[4];
+        return _( "Sulfur" );
     case Resource::CRYSTAL:
-        return res[5];
+        return _( "Crystal" );
     case Resource::GEMS:
-        return res[6];
+        return _( "Gems" );
     case Resource::GOLD:
-        return res[7];
+        return _( "Gold" );
     default:
         break;
     }
 
-    return res[0];
+    return "Unknown";
 }
 
-/* return index sprite objnrsrc.icn */
 u32 Resource::GetIndexSprite( int resource )
 {
     switch ( resource ) {

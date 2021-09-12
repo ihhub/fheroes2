@@ -29,6 +29,7 @@
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"

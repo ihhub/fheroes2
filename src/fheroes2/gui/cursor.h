@@ -180,7 +180,6 @@ public:
 
     // Only for software emulation.
     void setVideoPlaybackCursor();
-    void resetVideoPlaybackCursor();
 
 private:
     Cursor();

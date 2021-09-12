@@ -20,62 +20,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2FONT_H
-#define H2FONT_H
+#include "timer.h"
 
-#include <string>
-#include <vector>
+using namespace SDL;
 
-#include "image.h"
+Timer::Timer()
+    : id( 0 )
+{}
 
-#ifdef WITH_TTF
-#include <SDL_ttf.h>
-
-class FontTTF
+void Timer::Run( u32 interval, u32 ( *fn )( u32, void * ), void * param )
 {
-public:
-    FontTTF();
-    ~FontTTF();
+    if ( id )
+        Remove();
 
-    static void Init( void );
-    static void Quit( void );
+    id = SDL_AddTimer( interval, fn, param );
+}
 
-    bool Open( const std::string &, int size );
-    bool isValid( void ) const;
-    void SetStyle( int );
-
-    int Height( void ) const;
-    int Ascent( void ) const;
-    int Descent( void ) const;
-    int LineSkip( void ) const;
-
-    // Surface RenderText( const std::string &, const RGBA &, bool solid /* or blended */ );
-    // Surface RenderChar( char, const RGBA &, bool solid /* or blended */ );
-    // Surface RenderUnicodeText( const std::vector<uint16_t> &, const RGBA &, bool solid /* or blended */ );
-    // Surface RenderUnicodeChar( uint16_t, const RGBA &, bool solid /* or blended */ );
-
-protected:
-    TTF_Font * ptr;
-
-private:
-    FontTTF( const FontTTF & ) {}
-    FontTTF & operator=( const FontTTF & )
-    {
-        return *this;
+void Timer::Remove( void )
+{
+    if ( id ) {
+        SDL_RemoveTimer( id );
+        id = 0;
     }
-};
+}
 
-#endif
-
-class FontPSF
+bool Timer::IsValid( void ) const
 {
-public:
-    FontPSF( const std::string & filePath, const fheroes2::Size & size );
-
-    fheroes2::Image RenderText( const std::string & text, const uint8_t color ) const;
-
-private:
-    const std::vector<uint8_t> _data;
-    const fheroes2::Size _size;
-};
-#endif
+    return id != 0;
+}

@@ -22,10 +22,10 @@
 #ifndef H2COLOR_H
 #define H2COLOR_H
 
+#include <string>
 #include <vector>
 
-#include "gamedefs.h"
-#include "serialize.h"
+class StreamBase;
 
 namespace BarrierColor
 {
@@ -59,7 +59,7 @@ namespace Color
         ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
     };
 
-    const std::string & String( int );
+    std::string String( int );
     int Count( int );
     int GetIndex( int );
     int GetFirst( int );
@@ -70,8 +70,6 @@ class Colors : public std::vector<int>
 {
 public:
     explicit Colors( int = Color::ALL );
-
-    std::string String( void ) const;
 };
 
 class Kingdom;

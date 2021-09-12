@@ -173,9 +173,7 @@ KeySym GetKeySym( int );
 
 bool PressIntKey( u32 max, u32 & result );
 
-size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
-
-char CharFromKeySym( KeySym, u16 mod = 0 );
+size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod );
 
 class LocalEvent
 {
@@ -188,7 +186,6 @@ public:
 
     static void SetStateDefaults( void );
     static void SetState( u32 type, bool enable );
-    static int GetState( u32 type );
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
@@ -208,7 +205,6 @@ public:
     bool MouseClickRight();
 
     bool MouseClickLeft( const fheroes2::Rect & rt );
-    bool MouseClickMiddle( const fheroes2::Rect & rt );
     bool MouseClickRight( const fheroes2::Rect & rt );
 
     bool MouseWheelUp() const;
@@ -216,15 +212,11 @@ public:
 
     bool MousePressLeft() const;
     bool MousePressLeft( const fheroes2::Rect & rt ) const;
-    bool MousePressMiddle() const;
-    bool MousePressMiddle( const fheroes2::Rect & rt ) const;
     bool MousePressRight() const;
     bool MousePressRight( const fheroes2::Rect & rt ) const;
 
     bool MouseReleaseLeft() const;
     bool MouseReleaseLeft( const fheroes2::Rect & rt ) const;
-    bool MouseReleaseMiddle() const;
-    bool MouseReleaseMiddle( const fheroes2::Rect & rt ) const;
     bool MouseReleaseRight() const;
     bool MouseReleaseRight( const fheroes2::Rect & rt ) const;
 

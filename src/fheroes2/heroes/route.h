@@ -25,10 +25,10 @@
 #include <list>
 
 #include "direction.h"
-#include "gamedefs.h"
-#include "skill.h"
+#include "types.h"
 
 class Heroes;
+class StreamBase;
 
 namespace Route
 {
@@ -43,10 +43,25 @@ namespace Route
             , penalty( cost )
         {}
 
-        s32 GetIndex( void ) const;
-        u32 GetPenalty( void ) const;
-        s32 GetFrom( void ) const;
-        int GetDirection( void ) const;
+        int32_t GetIndex() const
+        {
+            return currentIndex;
+        }
+
+        uint32_t GetPenalty() const
+        {
+            return penalty;
+        }
+
+        int32_t GetFrom() const
+        {
+            return from;
+        }
+
+        int GetDirection() const
+        {
+            return direction;
+        }
 
     protected:
         friend StreamBase & operator<<( StreamBase &, const Step & );

@@ -33,7 +33,8 @@ namespace fheroes2
     class Image
     {
     public:
-        Image( int32_t width_ = 0, int32_t height_ = 0 );
+        Image();
+        Image( int32_t width_, int32_t height_ );
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
@@ -98,7 +99,8 @@ namespace fheroes2
     class Sprite : public Image
     {
     public:
-        Sprite( int32_t width_ = 0, int32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
+        Sprite();
+        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & sprite );
         Sprite( Sprite && sprite ) noexcept;
@@ -182,9 +184,6 @@ namespace fheroes2
     void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, uint8_t alphaValue, bool flip = false );
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue,
                     bool flip = false );
-
-    // inPos must contain non-negative values
-    void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     // apply palette only for image layer, it doesn't affect transform part
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette );

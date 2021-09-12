@@ -37,6 +37,7 @@
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "world.h"
 
@@ -58,8 +59,8 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     TextBox recruitHeroText( _( "Recruit Hero" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 
     u32 count = hero->GetCountArtifacts();
-    if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
-        count--;
+    if ( hero->hasArtifact( Artifact::MAGIC_BOOK ) )
+        --count;
 
     std::string str = _( "%{name} is a level %{value} %{race} " );
 

@@ -40,10 +40,10 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
-        SpellSeletion bestSpell;
+        SpellSelection bestSpell;
 
         // Commander must be set before calling this function! Check both debug/release version
         assert( _commander != nullptr );
@@ -52,8 +52,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.GetForce( _myColor ), true );
-        const Units enemies( arena.GetForce( _myColor, true ), true );
+        const Units friendly( arena.getForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -92,7 +92,7 @@ namespace AI
                 checkSelectBestSpell( spell, spellDispellValue( spell, friendly, enemies ) );
             }
             else if ( spell.isSummon() ) {
-                checkSelectBestSpell( spell, spellSummonValue( spell ) );
+                checkSelectBestSpell( spell, spellSummonValue( spell, arena, _commander->GetColor() ) );
             }
             else if ( spell.isResurrect() ) {
                 checkSelectBestSpell( spell, spellResurrectValue( spell, arena ) );
@@ -172,6 +172,10 @@ namespace AI
 
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 for ( const Unit * enemy : enemies ) {
+                    if ( !enemy->AllowApplySpell( spell, _commander ) ) {
+                        continue;
+                    }
+
                     const int32_t index = enemy->GetHeadIndex();
                     areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
                 }
@@ -191,8 +195,8 @@ namespace AI
     uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
     {
         uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
-        duration += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
-                    + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
+            duration += _commander->artifactCount( art ) * Artifact( art ).ExtraValue();
 
         if ( duration < 2 && target.Modes( TR_MOVED ) )
             return 0;
@@ -341,6 +345,9 @@ namespace AI
         else if ( spellID == Spell::BERSERKER && !target.isArchers() ) {
             ratio /= ReduceEffectivenessByDistance( target );
         }
+        else if ( spellID == Spell::DRAGONSLAYER ) {
+            // TODO: add logic to check if the enemy army contains a dragon.
+        }
 
         return target.GetStrength() * ratio * spellDurationMultiplier( target );
     }
@@ -409,11 +416,11 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        const uint32_t ankhModifier = _commander->HasArtifact( Artifact::ANKH ) ? 2 : 1;
+        const uint32_t ankhModifier = _commander->hasArtifact( Artifact::ANKH ) ? 2 : 1;
         const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
-        const Force & friendlyForce = arena.GetForce( _myColor );
+        const Force & friendlyForce = arena.getForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
             if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
@@ -439,12 +446,16 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellSummonValue( const Spell & spell ) const
+    SpellcastOutcome BattlePlanner::spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const
     {
         SpellcastOutcome bestOutcome;
         if ( spell.isSummon() ) {
+            if ( arena.GetFreePositionNearHero( heroColor ) < 0 ) {
+                return bestOutcome;
+            }
+
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
-            if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
+            if ( _commander->hasArtifact( Artifact::BOOK_ELEMENTS ) )
                 count *= 2;
 
             const Troop summon( Monster( spell ), count );

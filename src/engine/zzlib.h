@@ -23,7 +23,6 @@
 #ifndef H2ZLIB_H
 #define H2ZLIB_H
 
-#include <iostream>
 #include <vector>
 
 #include "image.h"

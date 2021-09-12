@@ -36,12 +36,17 @@ namespace fheroes2
             return _activeArea;
         }
 
+        const Rect & windowArea() const
+        {
+            return _windowArea;
+        }
+
         void render();
 
     private:
         Image & _output;
-        Rect _activeArea;
-        Rect _windowArea;
+        const Rect _activeArea;
+        const Rect _windowArea;
         ImageRestorer _restorer;
     };
 }

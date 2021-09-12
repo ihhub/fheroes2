@@ -24,9 +24,9 @@
 #include <vector>
 
 #include "agg.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog_system_options.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
@@ -39,6 +39,7 @@
 #include "system.h"
 #include "text.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const
@@ -159,7 +160,7 @@ void Interface::Basic::EventContinueMovement( void ) const
 void Interface::Basic::EventKingdomInfo( void ) const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    myKingdom.OverviewDialog();
+    myKingdom.openOverviewDialog();
 
     iconsPanel.SetRedraw();
 }
@@ -198,7 +199,6 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
 
 fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
-    Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
@@ -234,7 +234,6 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     default:
         break;
     }
-    Mixer::Enhance();
 
     return fheroes2::GameMode::CANCEL;
 }
@@ -244,29 +243,9 @@ fheroes2::GameMode Interface::Basic::EventFileDialog() const
     return Dialog::FileOptions();
 }
 
-void Interface::Basic::EventSystemDialog( void )
+void Interface::Basic::EventSystemDialog() const
 {
-    const Settings & conf = Settings::Get();
-
-    // Change and save system settings
-    const int changes = Dialog::SystemOptions();
-
-    // interface themes
-    if ( 0x08 & changes ) {
-        Interface::Basic::Get().Reset();
-        SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-        ResetFocus( GameFocus::HEROES );
-        Redraw();
-    }
-
-    // interface hide/show
-    if ( 0x04 & changes ) {
-        GetRadar().ResetAreaSize();
-        SetHideInterface( conf.ExtGameHideInterface() );
-        SetRedraw( REDRAW_ALL );
-        ResetFocus( GameFocus::HEROES );
-        Redraw();
-    }
+    fheroes2::showSystemOptionsDialog();
 }
 
 fheroes2::GameMode Interface::Basic::EventExit()
@@ -382,16 +361,6 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
                     Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate.GetID() );
-
-                    // set all obelisks visited
-                    Kingdom & kingdom = world.GetKingdom( hero->GetColor() );
-                    const MapsIndexes obelisks = Maps::GetObjectPositions( MP2::OBJ_OBELISK, false );
-
-                    for ( MapsIndexes::const_iterator it = obelisks.begin(); it != obelisks.end(); ++it )
-                        if ( !hero->isVisited( world.GetTiles( *it ), Visit::GLOBAL ) )
-                            hero->SetVisited( *it, Visit::GLOBAL );
-
-                    kingdom.PuzzleMaps().Update( kingdom.CountVisitedObjects( MP2::OBJ_OBELISK ), world.CountObeliskOnMaps() );
                 }
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
@@ -419,18 +388,12 @@ void Interface::Basic::EventDefaultAction( void )
 
     if ( hero ) {
         // 1. action object
-        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
-            const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-
+        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
-            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
-                SetRedraw( REDRAW_HEROES );
-            SetRedraw( REDRAW_GAMEAREA );
         }
     }
-    else
+    else if ( GetFocusCastle() ) {
         // 2. town dialog
-        if ( GetFocusCastle() ) {
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
 }

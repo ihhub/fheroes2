@@ -22,21 +22,12 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
-#include <map>
-#include <vector>
-
 #include "castle.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "puzzle.h"
 
-class Castle;
-class Heroes;
-struct AllHeroes;
-struct VecHeroes;
-class AllCastles;
-struct VecCastles;
 struct CapturedObjects;
 
 struct LastLoseHero
@@ -62,8 +53,8 @@ public:
     {
         // UNDEF      = 0x0001,
         IDENTIFYHERO = 0x0002,
-        DISABLEHIRES = 0x0004,
-        OVERVIEWCSTL = 0x0008
+        // UNUSED = 0x0004,
+        KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
     };
 
     Kingdom();
@@ -72,7 +63,7 @@ public:
     void Init( int color );
     void clear( void );
 
-    void OverviewDialog( void );
+    void openOverviewDialog();
 
     void UpdateStartingResource( void );
     bool isPlay( void ) const;
@@ -82,15 +73,12 @@ public:
 
     void SetLastLostHero( const Heroes & );
     void ResetLastLostHero( void );
-    void AddHeroStartCondLoss( Heroes * );
-    std::string GetNamesHeroStartCondLoss( void ) const;
 
     void SetLastBattleWinHero( const Heroes & hero );
 
     Heroes * GetLastLostHero( void ) const;
     Heroes * GetLastBattleWinHero() const;
 
-    const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
     Monster GetStrongestMonster() const;
@@ -113,7 +101,6 @@ public:
     u32 GetCountCastle( void ) const;
     u32 GetCountTown( void ) const;
     u32 GetCountMarketplace( void ) const;
-    u32 GetCountCapital( void ) const;
     u32 GetLostTownDays( void ) const;
     u32 GetCountNecromancyShrineBuild( void ) const;
     u32 GetCountBuilding( u32 ) const;
@@ -153,17 +140,16 @@ public:
     void ActionNewWeek( void );
     void ActionNewMonth( void );
 
-    void SetVisited( s32 index, int object = MP2::OBJ_ZERO );
-    u32 CountVisitedObjects( int object ) const;
-    bool isVisited( int object ) const;
+    void SetVisited( s32 index, const MP2::MapObjectType objectType );
+    u32 CountVisitedObjects( const MP2::MapObjectType objectType ) const;
+    bool isVisited( const MP2::MapObjectType objectType ) const;
     bool isVisited( const Maps::Tiles & ) const;
-    bool isVisited( s32, int obj ) const;
+    bool isVisited( s32, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const;
+    bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
     bool HeroesMayStillMove( void ) const;
 
-    const Puzzle & PuzzleMaps( void ) const;
     Puzzle & PuzzleMaps( void );
 
     void SetVisitTravelersTent( int color );
@@ -199,6 +185,9 @@ private:
     u32 visited_tents_colors;
 
     KingdomHeroes heroes_cond_loss;
+
+    // Used to remember which item was selected in Kingdom View dialog.
+    int _topItemInKingdomView;
 };
 
 class Kingdoms
@@ -224,16 +213,14 @@ public:
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
 
-    void AddCondLossHeroes( const AllHeroes & );
-    void AddTributeEvents( CapturedObjects &, u32 day, int obj );
-
-    u32 size( void ) const;
+    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
     friend StreamBase & operator>>( StreamBase &, Kingdoms & );
 
-    Kingdom kingdoms[KINGDOMMAX + 1];
+    static constexpr uint32_t _size = KINGDOMMAX + 1;
+    Kingdom kingdoms[_size];
 };
 
 StreamBase & operator<<( StreamBase &, const Kingdom & );

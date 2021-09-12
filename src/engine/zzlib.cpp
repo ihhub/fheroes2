@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <cstring>
-#include <sstream>
 #include <zlib.h>
 
 #include "logging.h"
@@ -48,9 +47,9 @@ std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz )
             res.resize( dstsz );
         else {
             res.clear();
-            std::ostringstream os;
-            os << "zlib error:" << ret;
-            ERROR_LOG( os.str().c_str() );
+            std::string errorDesc( "zlib error: " );
+            errorDesc += std::to_string( ret );
+            ERROR_LOG( errorDesc.c_str() );
         }
     }
 
@@ -70,9 +69,9 @@ std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
             res.resize( dstsz );
         else {
             res.clear();
-            std::ostringstream os;
-            os << "zlib error:" << ret;
-            ERROR_LOG( os.str().c_str() );
+            std::string errorDesc( "zlib error: " );
+            errorDesc += std::to_string( ret );
+            ERROR_LOG( errorDesc.c_str() );
         }
     }
 

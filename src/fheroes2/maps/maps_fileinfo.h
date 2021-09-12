@@ -22,10 +22,14 @@
 #ifndef H2MAPSFILEINFO_H
 #define H2MAPSFILEINFO_H
 
+#include <string>
 #include <vector>
 
 #include "gamedefs.h"
-#include "serialize.h"
+#include "math_base.h"
+#include "types.h"
+
+class StreamBase;
 
 enum class GameVersion : int
 {
@@ -53,22 +57,19 @@ namespace Maps
         }
         static bool NameSorting( const FileInfo &, const FileInfo & );
         static bool FileSorting( const FileInfo &, const FileInfo & );
-        static bool NameCompare( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
         bool isMultiPlayerMap( void ) const;
         int AllowCompHumanColors( void ) const;
-        int AllowComputerColors( void ) const;
         int AllowHumanColors( void ) const;
         int HumanOnlyColors( void ) const;
         int ComputerOnlyColors( void ) const;
 
         int KingdomRace( int color ) const;
 
-        int ConditionWins( void ) const;
-        int ConditionLoss( void ) const;
+        uint32_t ConditionWins() const;
+        uint32_t ConditionLoss() const;
         bool WinsCompAlsoWins( void ) const;
-        bool WinsAllowNormalVictory( void ) const;
         int WinsFindArtifactID( void ) const;
         bool WinsFindUltimateArtifact( void ) const;
         u32 WinsAccumulateGold( void ) const;
@@ -135,10 +136,11 @@ namespace Maps
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
 
-StreamBase & operator>>( StreamBase & stream, GameVersion & version );
-
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
-bool PrepareMapsFileInfoList( MapsFileInfoList &, bool multi );
+namespace Maps
+{
+    MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
+}
 
 #endif

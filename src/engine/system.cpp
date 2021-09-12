@@ -61,6 +61,8 @@ namespace
     {
 #if defined( FHEROES2_VITA )
         return "ux0:data/fheroes2";
+#elif defined( __SWITCH__ )
+        return "/switch/fheroes2";
 #endif
 
         if ( getenv( "HOME" ) )
@@ -183,24 +185,6 @@ std::string System::GetBasename( const std::string & str )
     return str;
 }
 
-std::string System::GetUniversalBasename( const std::string & str )
-{
-    std::string path = str;
-
-    std::replace( path.begin(), path.end(), ( SEPARATOR == '/' ) ? '\\' : '/', SEPARATOR );
-
-    return GetBasename( path );
-}
-
-void System::SetLocale( int category, const char * locale )
-{
-#if defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    setlocale( category, locale );
-#else
-    std::setlocale( category, locale );
-#endif
-}
-
 std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;
@@ -244,33 +228,6 @@ char * System::GetOptionsArgument( void )
     return nullptr;
 #else
     return optarg;
-#endif
-}
-
-size_t System::GetMemoryUsage( void )
-{
-#if defined( __WIN32__ )
-    static MEMORYSTATUS ms;
-
-    ZeroMemory( &ms, sizeof( ms ) );
-    ms.dwLength = sizeof( MEMORYSTATUS );
-    GlobalMemoryStatus( &ms );
-
-    return ( ms.dwTotalVirtual - ms.dwAvailVirtual );
-#elif defined( __LINUX__ )
-    unsigned int size = 0;
-    std::ostringstream os;
-    os << "/proc/" << getpid() << "/statm";
-
-    std::ifstream fs( os.str().c_str() );
-    if ( fs.is_open() ) {
-        fs >> size;
-        fs.close();
-    }
-
-    return size * getpagesize();
-#else
-    return 0;
 #endif
 }
 

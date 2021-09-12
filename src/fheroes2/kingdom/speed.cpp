@@ -23,38 +23,34 @@
 #include "speed.h"
 #include "translations.h"
 
-const std::string & Speed::String( int speed )
+std::string Speed::String( int speed )
 {
-    static const std::string str_speed[]
-        = {_( "speed|Standing" ),   _( "speed|Crawling" ), _( "speed|Very Slow" ), _( "speed|Slow" ), _( "speed|Average" ), _( "speed|Fast" ), _( "speed|Very Fast" ),
-           _( "speed|Ultra Fast" ), _( "speed|Blazing" ),  _( "speed|Instant" ),   "Unknown"};
-
     switch ( speed ) {
     case STANDING:
-        return str_speed[0];
+        return _( "speed|Standing" );
     case CRAWLING:
-        return str_speed[1];
+        return _( "speed|Crawling" );
     case VERYSLOW:
-        return str_speed[2];
+        return _( "speed|Very Slow" );
     case SLOW:
-        return str_speed[3];
+        return _( "speed|Slow" );
     case AVERAGE:
-        return str_speed[4];
+        return _( "speed|Average" );
     case FAST:
-        return str_speed[5];
+        return _( "speed|Fast" );
     case VERYFAST:
-        return str_speed[6];
+        return _( "speed|Very Fast" );
     case ULTRAFAST:
-        return str_speed[7];
+        return _( "speed|Ultra Fast" );
     case BLAZING:
-        return str_speed[8];
+        return _( "speed|Blazing" );
     case INSTANT:
-        return str_speed[9];
+        return _( "speed|Instant" );
     default:
         break;
     }
 
-    return str_speed[10];
+    return "Unknown";
 }
 
 int Speed::GetOriginalSlow( int speed )
@@ -100,26 +96,6 @@ int Speed::GetOriginalFast( int speed )
     case BLAZING:
     case INSTANT:
         return INSTANT;
-    default:
-        break;
-    }
-
-    return STANDING;
-}
-
-int Speed::FromInt( int speed )
-{
-    switch ( speed ) {
-    case CRAWLING:
-    case VERYSLOW:
-    case SLOW:
-    case AVERAGE:
-    case FAST:
-    case VERYFAST:
-    case ULTRAFAST:
-    case BLAZING:
-    case INSTANT:
-        return speed;
     default:
         break;
     }

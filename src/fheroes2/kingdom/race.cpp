@@ -24,35 +24,32 @@
 #include "rand.h"
 #include "translations.h"
 
-const std::string & Race::String( int race )
+std::string Race::String( int race )
 {
-    static const std::string str_race[]
-        = {_( "Knight" ), _( "Barbarian" ), _( "Sorceress" ), _( "Warlock" ), _( "Wizard" ), _( "Necromancer" ), _( "Multi" ), "Random", "Neutral"};
-
     switch ( race ) {
     case Race::KNGT:
-        return str_race[0];
+        return _( "Knight" );
     case Race::BARB:
-        return str_race[1];
+        return _( "Barbarian" );
     case Race::SORC:
-        return str_race[2];
+        return _( "Sorceress" );
     case Race::WRLK:
-        return str_race[3];
+        return _( "Warlock" );
     case Race::WZRD:
-        return str_race[4];
+        return _( "Wizard" );
     case Race::NECR:
-        return str_race[5];
+        return _( "Necromancer" );
     case Race::MULT:
-        return str_race[6];
+        return _( "Multi" );
     case Race::RAND:
-        return str_race[7];
+        return _( "race|Random" );
     case Race::NONE:
-        return str_race[8];
+        return _( "race|Neutral" );
     default:
         break;
     }
 
-    return str_race[8];
+    return _( "race|Neutral" );
 }
 
 int Race::Rand( void )

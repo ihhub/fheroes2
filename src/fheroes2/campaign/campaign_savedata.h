@@ -35,11 +35,6 @@ namespace Campaign
     public:
         CampaignSaveData();
 
-        const ScenarioBonusData & getCurrentScenarioBonus() const
-        {
-            return _currentScenarioBonus;
-        }
-
         const std::vector<int> & getFinishedMaps() const
         {
             return _finishedMaps;
@@ -83,6 +78,7 @@ namespace Campaign
         void setCarryOverTroops( const Troops & troops );
         void reset();
         void addDaysPassed( const uint32_t days );
+        void removeCampaignAward( const int awardID );
 
         static CampaignSaveData & Get();
 

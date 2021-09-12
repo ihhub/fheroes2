@@ -22,6 +22,7 @@
 
 #include "heroes_recruits.h"
 #include "heroes.h"
+#include "serialize.h"
 #include "world.h"
 
 Recruits::Recruits()
@@ -42,16 +43,6 @@ int Recruits::GetID1( void ) const
 int Recruits::GetID2( void ) const
 {
     return second;
-}
-
-const Heroes * Recruits::GetHero1( void ) const
-{
-    return world.GetHeroes( first );
-}
-
-const Heroes * Recruits::GetHero2( void ) const
-{
-    return world.GetHeroes( second );
 }
 
 Heroes * Recruits::GetHero1( void )

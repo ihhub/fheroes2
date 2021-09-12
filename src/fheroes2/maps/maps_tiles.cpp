@@ -40,6 +40,7 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "monster.h"
+#include "monster_anim.h"
 #include "mounts.h"
 #include "mp2.h"
 #include "objcrck.h"
@@ -52,6 +53,7 @@
 #include "objwatr.h"
 #include "race.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "spell.h"
 #ifdef WITH_DEBUG
@@ -63,8 +65,6 @@
 
 namespace
 {
-    const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
-
     bool contains( const int base, const int value )
     {
         return ( base & value ) == value;
@@ -161,10 +161,10 @@ namespace
     }
 #endif
 
-    bool isTallObject( const int objectId )
+    bool isTallObject( const MP2::MapObjectType objectType )
     {
         // Some objects don't allow diagonal moves from top to bottom as they're considered as very tall.
-        switch ( objectId ) {
+        switch ( objectType ) {
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJN_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
@@ -245,13 +245,13 @@ namespace
         return false;
     }
 
-    bool isShortObject( const int objectId )
+    bool isShortObject( const MP2::MapObjectType objectType )
     {
         // Some objects allow middle moves even being attached to the bottom.
         // These object actually don't have any sprites on tiles above them within addon 2 level objects.
         // TODO: find a better way to do not hardcode values here.
 
-        switch ( objectId ) {
+        switch ( objectType ) {
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJN_HALFLINGHOLE:
         case MP2::OBJ_LEANTO:
@@ -286,14 +286,18 @@ namespace
         return false;
     }
 
-    bool isDetachedObject( const int objectId )
+    bool isDetachedObject( const MP2::MapObjectType objectType )
     {
         // Some objects do not take into account other objects below them.
-        switch ( objectId ) {
+        switch ( objectType ) {
         case MP2::OBJ_CASTLE:
         case MP2::OBJN_CASTLE:
         case MP2::OBJ_WAGONCAMP:
         case MP2::OBJN_WAGONCAMP:
+        case MP2::OBJ_FAERIERING:
+        case MP2::OBJN_FAERIERING:
+        case MP2::OBJ_MINES:
+        case MP2::OBJN_MINES:
             return true;
         default:
             break;
@@ -335,17 +339,12 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , index( ta.index )
 {}
 
-bool Maps::TilesAddon::isICN( int icn ) const
-{
-    return icn == MP2::GetICNObject( object );
-}
-
 bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
 {
     return ( ( ta1.level % 4 ) > ( ta2.level % 4 ) );
 }
 
-int Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
+MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
 {
     switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::X_LOC1:
@@ -446,13 +445,6 @@ bool Maps::TilesAddon::isRoad() const
     }
 
     return false;
-}
-
-bool Maps::TilesAddon::hasRoadFlag() const
-{
-    // This MP2 "object" is a bitfield
-    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    return ( object >> 1 ) & 1;
 }
 
 bool Maps::TilesAddon::hasSpriteAnimation() const
@@ -673,9 +665,6 @@ Maps::Tiles::Tiles()
     , quantity1( 0 )
     , quantity2( 0 )
     , quantity3( 0 )
-#ifdef WITH_DEBUG
-    , impassableTileRule( 0 )
-#endif
 {}
 
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
@@ -690,7 +679,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
     SetTile( mp2.tileIndex, mp2.flags );
     SetIndex( index );
-    SetObject( mp2.mapObject );
+    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObject ) );
 
     addons_level1.clear();
     addons_level2.clear();
@@ -718,7 +707,7 @@ Heroes * Maps::Tiles::GetHeroes( void ) const
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
     if ( hero ) {
-        hero->SetMapsObject( mp2_object );
+        hero->SetMapsObject( static_cast<MP2::MapObjectType>( mp2_object ) );
         heroID = hero->GetID() + 1;
         SetObject( MP2::OBJ_HEROES );
     }
@@ -742,19 +731,19 @@ fheroes2::Point Maps::Tiles::GetCenter( void ) const
     return Maps::GetPoint( _index );
 }
 
-int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
+MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
     if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == mp2_object ) {
         const Heroes * hero = GetHeroes();
         return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
     }
 
-    return mp2_object;
+    return static_cast<MP2::MapObjectType>( mp2_object );
 }
 
-void Maps::Tiles::SetObject( int object )
+void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 {
-    mp2_object = object;
+    mp2_object = objectType;
     world.resetPathfinder();
 }
 
@@ -857,13 +846,13 @@ const fheroes2::Image & Maps::Tiles::GetTileSurface( void ) const
 
 int Maps::Tiles::getOriginalPassability() const
 {
-    const int objId = GetObject( false );
+    const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isActionObject( objId ) ) {
-        return MP2::getActionObjectDirection( objId );
+    if ( MP2::isActionObject( objectType ) ) {
+        return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) ) {
+    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
@@ -892,9 +881,9 @@ void Maps::Tiles::updatePassability()
         tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
     }
 
-    const int objId = GetObject( false );
-    const bool isActionObject = MP2::isActionObject( objId );
-    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
+    const MP2::MapObjectType objectType = GetObject( false );
+    const bool isActionObject = MP2::isActionObject( objectType );
+    if ( !isActionObject && !isShadow() && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
@@ -926,12 +915,14 @@ void Maps::Tiles::updatePassability()
 
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( !isDetachedObject( objId ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
-                const int bottomTileObjId = bottomTile.GetObject( false );
-                const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjId );
+            if ( !isDetachedObject( objectType ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
+                const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
+                const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
+                const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
+
                 if ( isBottomTileActionObject ) {
-                    if ( ( MP2::getActionObjectDirection( bottomTileObjId ) & Direction::TOP ) == 0 ) {
-                        if ( isShortObject( bottomTileObjId ) ) {
+                    if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
+                        if ( isShortObject( bottomTileObjectType ) ) {
                             tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                         }
                         else {
@@ -940,12 +931,11 @@ void Maps::Tiles::updatePassability()
                         }
                     }
                 }
-                else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isActionObject( bottomTile.mp2_object + 128 )
-                          && isShortObject( bottomTile.mp2_object + 128 ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-                    // TODO: add extra logic to handle Stables.
+                else if ( bottomTile.mp2_object != 0 && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
+                          && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
-                else if ( isShortObject( bottomTile.mp2_object ) ) {
+                else if ( isShortObject( bottomTileObjectType ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {
@@ -1018,9 +1008,9 @@ int Maps::Tiles::GetPassable( void ) const
 
 bool Maps::Tiles::isClearGround() const
 {
-    const int objId = GetObject( true );
+    const MP2::MapObjectType objectType = GetObject( true );
 
-    switch ( objId ) {
+    switch ( objectType ) {
     case MP2::OBJ_ZERO:
     case MP2::OBJ_COAST:
         return true;
@@ -1030,7 +1020,7 @@ bool Maps::Tiles::isClearGround() const
     }
 
     if ( objectTileset == 0 || objectIndex == 255 || ( ( _level >> 1 ) & 1 ) == 1 ) {
-        if ( MP2::isActionObject( objId, isWater() ) ) {
+        if ( MP2::isActionObject( objectType, isWater() ) ) {
             return false;
         }
         // No objects are here.
@@ -1259,14 +1249,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( ( visibleTileROI & mp ) && ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
-        fheroes2::Image sf = PassableViewSurface( tilePassable );
-
-        if ( impassableTileRule ) {
-            const Text text( std::to_string( impassableTileRule ), Font::SMALL );
-            text.Blit( 13, 13, sf );
-        }
-
-        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, sf, 0, 0, mp );
+        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp );
     }
 #else
     (void)dst;
@@ -1276,11 +1259,11 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
 
 void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
-    int object = GetObject();
+    const MP2::MapObjectType objectType = GetObject();
 
     // monsters and boats will be drawn later, on top of everything else
     // hero object is accepted here since it replaces what was there originally
-    if ( object != MP2::OBJ_BOAT && object != MP2::OBJ_MONSTER && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
+    if ( objectType != MP2::OBJ_BOAT && objectType != MP2::OBJ_MONSTER && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
         const int icn = MP2::GetICNObject( objectTileset );
 
         if ( ICN::UNKNOWN != icn ) {
@@ -1422,19 +1405,19 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect
     }
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( !( visibleTileROI & mp ) )
         return;
 
-    const int objectID = GetObject( false );
+    const MP2::MapObjectType objectType = GetObject( false );
     // animate objects
-    if ( objectID == MP2::OBJ_ABANDONEDMINE ) {
+    if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
         area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
     }
-    else if ( objectID == MP2::OBJ_MINES ) {
+    else if ( objectType == MP2::OBJ_MINES ) {
         const uint8_t spellID = quantity3;
         if ( spellID == Spell::HAUNT ) {
             area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
@@ -1444,7 +1427,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
         }
     }
 
-    RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
+    RedrawAddon( dst, addons_level2, visibleTileROI, isPuzzleDraw, area );
 }
 
 void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const
@@ -1468,7 +1451,7 @@ void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & 
 
     if ( ( visibleTileROI & mp ) && !addons_level2.empty() ) {
         for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
-            if ( skip_ground && MP2::isActionObject( ( *it ).object ) )
+            if ( skip_ground && MP2::isActionObject( static_cast<MP2::MapObjectType>( ( *it ).object ) ) )
                 continue;
 
             const uint8_t object = ( *it ).object;
@@ -1516,10 +1499,6 @@ std::string Maps::Tiles::String( void ) const
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
-#ifdef WITH_DEBUG
-    if ( impassableTileRule )
-        os << ", disable(" << static_cast<int>( impassableTileRule ) << ")";
-#endif
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
@@ -1561,14 +1540,16 @@ std::string Maps::Tiles::String( void ) const
         const Heroes * hero = GetHeroes();
         if ( hero )
             os << hero->String();
-    } break;
+        break;
+    }
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * castle = world.GetCastle( GetCenter() );
+        const Castle * castle = world.getCastle( GetCenter() );
         if ( castle )
             os << castle->String();
-    } break;
+        break;
+    }
 
     default: {
         const MapsIndexes & v = Maps::GetTilesUnderProtection( _index );
@@ -1674,10 +1655,10 @@ bool Maps::Tiles::isStream( void ) const
     return tileICN == ICN::STREAM || ( tileICN == ICN::OBJNMUL2 && objectIndex < 14 );
 }
 
-bool Maps::Tiles::isShadow( void ) const
+bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( objectTileset, objectIndex )
-           && addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+           && addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const
@@ -1685,9 +1666,9 @@ bool Maps::Tiles::hasSpriteAnimation() const
     return objectTileset & 1;
 }
 
-bool Maps::Tiles::isObject( int obj ) const
+bool Maps::Tiles::isObject( const MP2::MapObjectType objectType ) const
 {
-    return obj == mp2_object;
+    return objectType == mp2_object;
 }
 
 uint8_t Maps::Tiles::GetObjectTileset() const
@@ -1718,7 +1699,7 @@ void Maps::Tiles::removeFlags()
     addons_level2.remove_if( TilesAddon::isFlag32 );
 }
 
-void Maps::Tiles::CaptureFlags32( int obj, int col )
+void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
 {
     u32 index = 0;
 
@@ -1746,66 +1727,74 @@ void Maps::Tiles::CaptureFlags32( int obj, int col )
         break;
     }
 
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_WINDMILL:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
     case MP2::OBJ_WATERWHEEL:
         index += 14;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
     case MP2::OBJ_MAGICGARDEN:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
 
     case MP2::OBJ_MINES:
         index += 14;
-        CorrectFlags32( index, true );
+        CorrectFlags32( col, index, true );
         break;
     case MP2::OBJ_LIGHTHOUSE:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
 
     case MP2::OBJ_ALCHEMYLAB: {
         index += 21;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_SAWMILL: {
         index += 28;
         if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_CASTLE: {
         index *= 2;
         if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
 
         index += 1;
         if ( Maps::isValidDirection( _index, Direction::RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
-    } break;
+        break;
+    }
 
     default:
         break;
     }
 }
 
-void Maps::Tiles::CorrectFlags32( u32 index, bool up )
+void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up )
 {
+    if ( col == Color::NONE ) {
+        removeFlags();
+        return;
+    }
+
     TilesAddon * taddon = FindFlags();
 
     // replace flag
@@ -1833,22 +1822,23 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
         case MP2::OBJ_UNKNW_7A:
         case MP2::OBJ_UNKNW_F9:
         case MP2::OBJ_UNKNW_FA: {
-            int newObjectID = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
-            if ( newObjectID == MP2::OBJ_ZERO ) {
+            MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
+            if ( objectType == MP2::OBJ_ZERO ) {
                 // if nothing was found it means there's overlay tile on top of the object; search for it
                 for ( auto it = tile.addons_level2.begin(); it != tile.addons_level2.end(); ++it ) {
-                    newObjectID = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
-                    if ( newObjectID != MP2::OBJ_ZERO )
+                    objectType = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
+                    if ( objectType != MP2::OBJ_ZERO )
                         break;
                 }
             }
 
-            if ( MP2::OBJ_ZERO != newObjectID )
-                tile.SetObject( newObjectID );
+            if ( MP2::OBJ_ZERO != objectType )
+                tile.SetObject( objectType );
             else {
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile._index );
             }
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -1858,11 +1848,11 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
 /* true: if protection or has guardians */
 bool Maps::Tiles::CaptureObjectIsProtection( void ) const
 {
-    const int object = GetObject( false );
+    const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isCaptureObject( object ) ) {
-        if ( MP2::OBJ_CASTLE == object ) {
-            Castle * castle = world.GetCastle( GetCenter() );
+    if ( MP2::isCaptureObject( objectType ) ) {
+        if ( MP2::OBJ_CASTLE == objectType ) {
+            Castle * castle = world.getCastleEntrance( GetCenter() );
             if ( castle )
                 return castle->GetArmy().isValid();
         }
@@ -1938,6 +1928,23 @@ void Maps::Tiles::RemoveObjectSprite( void )
         RemoveJailSprite();
         tilePassable = DIRECTION_ALL;
         break;
+    case MP2::OBJ_ARTIFACT: {
+        const uint32_t uidArtifact = getObjectIdByICNType( ICN::OBJNARTI );
+        Remove( uidArtifact );
+
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidArtifact );
+        break;
+    }
+    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_RESOURCE: {
+        const uint32_t uidResource = getObjectIdByICNType( ICN::OBJNRSRC );
+        Remove( uidResource );
+
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidResource );
+        break;
+    }
     case MP2::OBJ_BARRIER:
         tilePassable = DIRECTION_ALL;
         // fall-through
@@ -2064,22 +2071,36 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     tile.SetObject( MP2::OBJ_ARTIFACT );
-    tile.objectIndex = art.IndexSprite();
+
+    uint32_t uidArtifact = tile.getObjectIdByICNType( ICN::OBJNARTI );
+    if ( uidArtifact == 0 ) {
+        uidArtifact = tile.uniq;
+    }
+
+    updateTileById( tile, uidArtifact, art.IndexSprite() );
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, art.IndexSprite() - 1 );
     }
 }
 
 void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 {
     tile.SetObject( MP2::OBJ_RESOURCE );
-    tile.objectIndex = Resource::GetIndexSprite( Resource::Rand() );
 
-    // replace shadow artifact
+    const uint32_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
+
+    uint32_t uidResource = tile.getObjectIdByICNType( ICN::OBJNRSRC );
+    if ( uidResource == 0 ) {
+        uidResource = tile.uniq;
+    }
+
+    updateTileById( tile, uidResource, resourceSprite );
+
+    // Replace shadow of the resource.
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidResource, resourceSprite - 1 );
     }
 }
 
@@ -2118,6 +2139,7 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     }
     else {
         const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
+        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
         spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % monsterAnimationSequence.size()];
     }
     return spriteIndices;
@@ -2190,20 +2212,14 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         u32 index = 0;
         bool revert = false;
 
-        // see ICN::CLOP32: sprite 10
         if ( ( around & Direction::CENTER ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 10;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 6, 7, 8
-            if ( ( contains( around, Direction::CENTER | Direction::TOP ) ) && !( around & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( around, Direction::CENTER | Direction::TOP ) ) && !( around & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 6;
-            revert = false;
         }
         else if ( ( contains( around, Direction::CENTER | Direction::RIGHT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 7;
-            revert = false;
         }
         else if ( ( contains( around, Direction::CENTER | Direction::LEFT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 7;
@@ -2211,23 +2227,15 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( ( contains( around, Direction::CENTER | Direction::BOTTOM ) ) && !( around & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 8;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 9, 29
-            if ( ( contains( around, DIRECTION_CENTER_COL ) ) && !( around & ( Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( around, DIRECTION_CENTER_COL ) ) && !( around & ( Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 9;
-            revert = false;
         }
         else if ( ( contains( around, DIRECTION_CENTER_ROW ) ) && !( around & ( Direction::TOP | Direction::BOTTOM ) ) ) {
             index = 29;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 15, 22
-            if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
+        else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
             index = 15;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
             index = 15;
@@ -2235,17 +2243,13 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
             index = 22;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
             index = 22;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 16, 17, 18, 23
-            if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 16;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 16;
@@ -2253,7 +2257,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 17;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 17;
@@ -2261,17 +2264,12 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
             index = 18;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 23;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 13, 14
-            if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
+        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
             index = 13;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
             index = 13;
@@ -2279,18 +2277,14 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
             index = 14;
-            revert = false;
         }
         else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
             index = 14;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 11, 12
-            if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
-                 && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
+        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
+                  && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
             index = 11;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
                   && !( around & ( Direction::TOP | Direction::LEFT ) ) ) {
@@ -2300,19 +2294,15 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP_LEFT | Direction::TOP )
                   && !( around & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 12;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP )
                   && !( around & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 12;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 19, 20, 22
-            if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
-                 && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
+                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
             index = 19;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
                   && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
@@ -2322,7 +2312,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
                   && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 20;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
                   && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
@@ -2332,13 +2321,9 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
                   && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 22;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 24, 25, 26, 30
-            if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( around & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( around & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
             index = 24;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
             index = 24;
@@ -2346,7 +2331,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT ) && !( around & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 25;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT ) && !( around & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 25;
@@ -2354,7 +2338,6 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 26;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 26;
@@ -2362,18 +2345,14 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
             index = 30;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
             index = 30;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 27, 28
-            if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
-                 && !( around & ( Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
+                  && !( around & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 27;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::RIGHT )
                   && !( around & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
@@ -2383,22 +2362,17 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP )
                   && !( around & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
             index = 28;
-            revert = false;
         }
         else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP )
                   && !( around & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
             index = 28;
             revert = true;
         }
-        else
-            // see ICN::CLOP32: sprite 31, 32, 33
-            if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 31;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 32;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
             index = 32;
@@ -2406,28 +2380,22 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 33;
-            revert = false;
         }
-        else
-            // see ICN::CLOP32: sprite 0, 1, 2, 3, 4, 5
-            if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( around & Direction::TOP ) ) {
+        else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( around & Direction::TOP ) ) {
             index = ( _index % 2 ) ? 0 : 1;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( around & Direction::BOTTOM ) ) {
             index = ( _index % 2 ) ? 4 : 5;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( around & Direction::RIGHT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
-            revert = false;
         }
         else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( around & Direction::LEFT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
             revert = true;
         }
-        // unknown
         else {
+            // unknown
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             area.DrawTile( dst, sf, mp );
@@ -2468,7 +2436,7 @@ void Maps::Tiles::setAsEmpty()
 
     bool isCoast = false;
 
-    const Indexes tileIndices = Maps::GetAroundIndexes( _index, 1 );
+    const Indexes tileIndices = Maps::getAroundIndexes( _index, 1 );
     for ( const int tileIndex : tileIndices ) {
         if ( tileIndex < 0 ) {
             // Invalid tile index.
@@ -2484,6 +2452,21 @@ void Maps::Tiles::setAsEmpty()
     SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_ZERO );
 }
 
+uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
+{
+    if ( MP2::GetICNObject( objectTileset ) == icnId ) {
+        return uniq;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( MP2::GetICNObject( addon.object ) == icnId ) {
+            return addon.uniq;
+        }
+    }
+
+    return 0;
+}
+
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
     return msg << ta.level << ta.uniq << ta.object << ta.index;
@@ -2492,12 +2475,6 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove temp variable usage here." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_095_RELEASE ) {
-        uint8_t temp = 0;
-        msg >> temp;
-    }
 
     return msg;
 }
@@ -2511,12 +2488,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
-        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove old saves support here." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
-        msg >> tile._level;
-    }
+        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._level;
 
     return msg;
 }

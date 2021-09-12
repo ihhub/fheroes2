@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "agg_image.h"
 #include "castle.h"
@@ -38,6 +39,87 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
 fheroes2::Rect CastleGetCoordBuilding( int, building_t, const fheroes2::Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 fheroes2::Rect CastleGetMaxArea( const Castle &, const fheroes2::Point & );
+
+namespace
+{
+    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
+    {
+        const int race = castle.GetRace();
+
+        if ( race == Race::BARB ) {
+            if ( buildId & BUILD_MAGEGUILD ) {
+                const int mageGuildLevel = castle.GetLevelMageGuild();
+                if ( constructionInProgress ) {
+                    return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
+                }
+
+                assert( mageGuildLevel > 0 );
+                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
+            }
+            else if ( buildId == BUILD_THIEVESGUILD ) {
+                return true;
+            }
+        }
+        else if ( race == Race::NECR ) {
+            if ( buildId == BUILD_CAPTAIN ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha = 255 )
+    {
+        const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
+        const bool constructionInProgress = alpha < 255;
+
+        const int race = castle.GetRace();
+
+        if ( race == Race::BARB ) {
+            if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
+                if ( buildId & BUILD_MAGEGUILD ) {
+                    if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_SPEC ) ) )
+                        return;
+                }
+                else if ( buildId == BUILD_SPEC ) {
+                    if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_MAGEGUILD1 ) ) )
+                        return;
+                }
+
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT2, 0 );
+                CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
+            }
+
+            if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
+                if ( buildId == DWELLING_MONSTER3 ) {
+                    if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_THIEVESGUILD ) ) )
+                        return;
+                }
+                else if ( buildId == BUILD_THIEVESGUILD ) {
+                    if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( DWELLING_MONSTER3 ) ) )
+                        return;
+                }
+
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT3, 0 );
+                CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
+            }
+        }
+        else if ( race == Race::NECR ) {
+            if ( buildId == BUILD_CAPTAIN ) {
+                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_CASTLE ) ) )
+                    return;
+            }
+            else if ( buildId == BUILD_CASTLE ) {
+                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_CAPTAIN ) ) )
+                    return;
+            }
+
+            const fheroes2::Sprite & bridge = fheroes2::AGG::GetICN( ICN::NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE, 0 );
+            CastleDialog::RedrawBuildingSpriteToArea( bridge, position.x + bridge.x(), position.y + bridge.y(), roi, alpha );
+        }
+    }
+}
 
 void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const fheroes2::Rect & max, uint8_t alpha )
 {
@@ -66,11 +148,14 @@ void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( _alpha < 255 ) {
-        if ( Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+    if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+        if ( _alpha < 255 - 15 ) {
             _alpha += 15;
-            return true;
         }
+        else {
+            _alpha = 255;
+        }
+        return true;
     }
     return false;
 }
@@ -194,8 +279,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
             if ( castle.isBuild( currentBuildId ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
                 CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
-                if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
+                if ( isBuildingConnectionNeeded( castle, currentBuildId, false ) ) {
+                    redrawBuildingConnection( castle, dst_pt, currentBuildId );
                 }
             }
         }
@@ -213,16 +298,16 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
                 else {
                     CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
                 }
-                if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, fadeBuilding.GetBuild(), fadeBuilding.GetAlpha() );
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
+                if ( isBuildingConnectionNeeded( castle, currentBuildId, false ) ) {
+                    redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuild(), fadeBuilding.GetAlpha() );
+                    redrawBuildingConnection( castle, dst_pt, currentBuildId );
                 }
             }
             else if ( currentBuildId == fadeBuilding.GetBuild() ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
                 CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
-                if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, true ) ) {
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId, fadeBuilding.GetAlpha() );
+                if ( isBuildingConnectionNeeded( castle, currentBuildId, true ) ) {
+                    redrawBuildingConnection( castle, dst_pt, currentBuildId, fadeBuilding.GetAlpha() );
                 }
             }
         }
@@ -356,61 +441,10 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
             CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max, alpha );
         }
     }
-}
-
-bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
-{
-    if ( Race::BARB == castle.GetRace() ) {
-        if ( buildId & BUILD_MAGEGUILD ) {
-            const int mageGuildLevel = castle.GetLevelMageGuild();
-            if ( constructionInProgress ) {
-                return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
-            }
-            else {
-                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
-            }
-        }
-        else if ( buildId == BUILD_THIEVESGUILD ) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void CastleDialog::RedrawRoadConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha )
-{
-    const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
-    const bool constructionInProgress = alpha < 255;
-
-    if ( Race::BARB == castle.GetRace() ) {
-        if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
-            if ( buildId & BUILD_MAGEGUILD ) {
-                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_SPEC ) ) )
-                    return;
-            }
-            else if ( buildId == BUILD_SPEC ) {
-                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_MAGEGUILD1 ) ) )
-                    return;
-            }
-
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT2, 0 );
-            CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
-        }
-
-        if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
-            if ( buildId == DWELLING_MONSTER3 ) {
-                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_THIEVESGUILD ) ) )
-                    return;
-            }
-            else if ( buildId == BUILD_THIEVESGUILD ) {
-                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( DWELLING_MONSTER3 ) ) )
-                    return;
-            }
-
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT3, 0 );
-            CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
-        }
+    else if ( castle.GetRace() == Race::KNGT && BUILD_WEL2 == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
+        const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
+        CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
     }
 }
 
@@ -541,7 +575,7 @@ fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const fher
     case BUILD_WEL2:
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Rect( pt.x + 288, pt.y + 97, 63, 18 );
+            return fheroes2::Rect( pt.x + 241, pt.y + 102, 142, 24 );
         case Race::BARB:
             return fheroes2::Rect( pt.x + 252, pt.y + 120, 44, 16 );
         case Race::SORC:
@@ -881,9 +915,9 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
     switch ( castle.GetRace() ) {
     case Race::KNGT:
         ordersBuildings.push_back( BUILD_TENT );
+        ordersBuildings.push_back( BUILD_WEL2 );
         ordersBuildings.push_back( BUILD_CASTLE );
         ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( BUILD_WEL2 );
         ordersBuildings.push_back( BUILD_CAPTAIN );
         ordersBuildings.push_back( BUILD_LEFTTURRET );
         ordersBuildings.push_back( BUILD_RIGHTTURRET );

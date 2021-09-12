@@ -22,8 +22,18 @@
 #include "monster.h"
 #include "rand.h"
 
+namespace
+{
+    const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
+}
+
 namespace fheroes2
 {
+    const std::array<uint8_t, 15> & getMonsterAnimationSequence()
+    {
+        return monsterAnimationSequence;
+    }
+
     RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
         : _reference( monster.GetID() )
         , _icnID( fheroes2::getMonsterData( monster.GetID() ).icnId )

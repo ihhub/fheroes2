@@ -20,6 +20,7 @@
 
 #include "ai_normal.h"
 #include "maps_tiles.h"
+#include "pairs.h"
 
 namespace AI
 {

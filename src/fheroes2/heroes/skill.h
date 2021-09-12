@@ -24,14 +24,15 @@
 #define H2SKILL_H
 
 #include <string>
+#include <vector>
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include "types.h"
 
 void StringAppendModifiers( std::string &, int );
 
 class Heroes;
 class HeroBase;
+class StreamBase;
 
 namespace Skill
 {
@@ -74,9 +75,7 @@ namespace Skill
             BALLISTICS = 11,
             EAGLEEYE = 12,
             NECROMANCY = 13,
-            ESTATES = 14,
-
-            LEARNING = EAGLEEYE
+            ESTATES = 14
         };
 
         Secondary();

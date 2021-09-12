@@ -5,6 +5,8 @@ CONLYFLAGS:=$(filter-out -std=c++11,$(CFLAGS))
 
 TARGET	:= libsmacker
 
+.PHONY: all clean
+
 all: $(TARGET).a
 
 $(TARGET).a: $(patsubst %.c, %.o, $(wildcard *.c)) 
@@ -14,8 +16,6 @@ $(TARGET).a: $(patsubst %.c, %.o, $(wildcard *.c))
 	$(CC) -c -MD $< $(CONLYFLAGS)
 
 include $(wildcard *.d)
-
-.PHONY: clean
 
 clean:
 	rm -f *.a *.so *.d *.o

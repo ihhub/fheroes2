@@ -24,6 +24,7 @@
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "serialize.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
@@ -327,7 +328,7 @@ namespace
         case Artifact::DIVINE_BREASTPLATE:
             return _( "Breastplate" );
         case Artifact::FIZBIN_MISFORTUNE:
-            return _( "Fizbin Medal" );
+            return _( "Fizbin of Misfortune" );
         case Artifact::MAGE_RING:
             return _( "Mage's ring" );
         case Artifact::DEFENDER_HELM:

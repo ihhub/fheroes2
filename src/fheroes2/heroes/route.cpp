@@ -26,29 +26,9 @@
 #include "heroes.h"
 #include "maps.h"
 #include "route.h"
+#include "serialize.h"
 #include "world.h"
 
-s32 Route::Step::GetIndex( void ) const
-{
-    return currentIndex;
-}
-
-s32 Route::Step::GetFrom( void ) const
-{
-    return from;
-}
-
-int Route::Step::GetDirection( void ) const
-{
-    return direction;
-}
-
-u32 Route::Step::GetPenalty( void ) const
-{
-    return penalty;
-}
-
-/* construct */
 Route::Path::Path( const Heroes & h )
     : hero( &h )
     , dst( h.GetIndex() )
@@ -432,9 +412,9 @@ std::string Route::Path::String( void ) const
 bool StepIsObstacle( const Route::Step & s )
 {
     s32 index = s.GetIndex();
-    int obj = 0 <= index ? world.GetTiles( index ).GetObject() : MP2::OBJ_ZERO;
+    const MP2::MapObjectType objectType = 0 <= index ? world.GetTiles( index ).GetObject() : MP2::OBJ_ZERO;
 
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_HEROES:
     case MP2::OBJ_MONSTER:
         return true;
@@ -502,7 +482,7 @@ StreamBase & Route::operator<<( StreamBase & msg, const Step & step )
 
 StreamBase & Route::operator<<( StreamBase & msg, const Path & path )
 {
-    return msg << path.dst << path.hide << static_cast<std::list<Step> >( path );
+    return msg << path.dst << path.hide << static_cast<const std::list<Step> &>( path );
 }
 
 StreamBase & Route::operator>>( StreamBase & msg, Step & step )

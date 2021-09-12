@@ -28,6 +28,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
+#include "serialize.h"
 #include "settings.h"
 #include "translations.h"
 #include "world.h"
@@ -41,7 +42,7 @@ int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const Her
         const Artifact art( arts[ii] );
 
         if ( art.isValid() ) {
-            int acount = base.HasArtifact( art );
+            uint32_t acount = base.artifactCount( art );
             if ( acount ) {
                 s32 mod = art.ExtraValue();
 
@@ -141,7 +142,6 @@ int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
 HeroBase::HeroBase( int type, int race )
     : magic_point( 0 )
     , move_point( 0 )
-    , spell_book()
 {
     bag_artifacts.assign( HEROESMAXARTIFACT, Artifact::UNKNOWN );
     LoadDefaults( type, race );
@@ -162,7 +162,8 @@ void HeroBase::LoadDefaults( int type, int race )
             Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() )
                 spell_book.Append( spell );
-        } break;
+            break;
+        }
 
         case HeroBase::HEROES: {
             Spell spell = Skill::Primary::GetInitialSpell( race );
@@ -170,7 +171,8 @@ void HeroBase::LoadDefaults( int type, int race )
                 SpellBookActivate();
                 spell_book.Append( spell );
             }
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -181,7 +183,6 @@ void HeroBase::LoadDefaults( int type, int race )
 HeroBase::HeroBase()
     : magic_point( 0 )
     , move_point( 0 )
-    , spell_book()
 {}
 
 bool HeroBase::isCaptain( void ) const
@@ -221,7 +222,7 @@ Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, bool canCastSpell
 
 bool HeroBase::HaveSpellBook( void ) const
 {
-    return HasArtifact( Artifact::MAGIC_BOOK ) != 0;
+    return hasArtifact( Artifact::MAGIC_BOOK );
 }
 
 std::vector<Spell> HeroBase::GetSpells( int lvl ) const
@@ -261,7 +262,7 @@ BagArtifacts & HeroBase::GetBagArtifacts( void )
     return bag_artifacts;
 }
 
-u32 HeroBase::HasArtifact( const Artifact & art ) const
+uint32_t HeroBase::artifactCount( const Artifact & art ) const
 {
     bool unique = true;
 
@@ -288,6 +289,11 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
     else {
         return bag_artifacts.Count( art );
     }
+}
+
+bool HeroBase::hasArtifact( const Artifact & art ) const
+{
+    return bag_artifacts.isPresentArtifact( art );
 }
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
@@ -468,7 +474,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
     Spell spell = art.GetSpell();
 
     if ( spell.isValid() && CanCastSpell( spell ) ) {
-        int learning = GetLevelSkill( Skill::Secondary::LEARNING );
+        int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
         return ( ( 3 < spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
                  || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
@@ -479,7 +485,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
 
 bool HeroBase::CanTeachSpell( const Spell & spell ) const
 {
-    int learning = GetLevelSkill( Skill::Secondary::LEARNING );
+    int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
     return ( ( 4 == spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
              || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );

@@ -395,6 +395,12 @@ namespace
 
 namespace fheroes2
 {
+    Image::Image()
+        : _width( 0 )
+        , _height( 0 )
+        , _singleLayer( false )
+    {}
+
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
@@ -533,6 +539,12 @@ namespace fheroes2
 
         memcpy( _data.get(), image._data.get(), size * 2 );
     }
+
+    Sprite::Sprite()
+        : Image( 0, 0 )
+        , _x( 0 )
+        , _y( 0 )
+    {}
 
     Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )
@@ -806,14 +818,6 @@ namespace fheroes2
                 }
             }
         }
-    }
-
-    void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip )
-    {
-        if ( inPos.x < 0 || inPos.y < 0 )
-            return;
-
-        AlphaBlit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
     }
 
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
@@ -2061,9 +2065,12 @@ namespace fheroes2
 
     void Transpose( const Image & in, Image & out )
     {
-        if ( in.empty() || out.empty() || in.width() != out.height() || in.height() != out.width() )
-            return;
+        assert( !out.empty() );
 
+        if ( in.empty() || in.width() != out.height() || in.height() != out.width() ) {
+            out.reset();
+            return;
+        }
         const int32_t width = in.width();
         const int32_t height = in.height();
 

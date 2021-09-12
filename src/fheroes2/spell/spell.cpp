@@ -26,6 +26,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "serialize.h"
 #include "translations.h"
 
 enum
@@ -185,7 +186,7 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         switch ( id ) {
         case BLESS:
         case MASSBLESS:
-            acount = hero->HasArtifact( Artifact::SNAKE_RING );
+            acount = hero->artifactCount( Artifact::SNAKE_RING );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
             break;
@@ -194,14 +195,14 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         case SUMMONAELEMENT:
         case SUMMONFELEMENT:
         case SUMMONWELEMENT:
-            acount = hero->HasArtifact( Artifact::ELEMENTAL_RING );
+            acount = hero->artifactCount( Artifact::ELEMENTAL_RING );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
             break;
 
         case CURSE:
         case MASSCURSE:
-            acount = hero->HasArtifact( Artifact::EVIL_EYE );
+            acount = hero->artifactCount( Artifact::EVIL_EYE );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
             break;
@@ -211,7 +212,7 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         }
 
         if ( isMindInfluence() ) {
-            acount = hero->HasArtifact( Artifact::SKULLCAP );
+            acount = hero->artifactCount( Artifact::SKULLCAP );
             if ( acount )
                 res = spells[id].sp / ( acount * 2 );
         }
@@ -418,51 +419,6 @@ bool Spell::isMindInfluence( void ) const
 u32 Spell::IndexSprite( void ) const
 {
     return spells[id].sprite;
-}
-
-u32 Spell::InlIndexSprite( void ) const
-{
-    switch ( id ) {
-    case HASTE:
-    case MASSHASTE:
-        return 0;
-    case SLOW:
-    case MASSSLOW:
-        return 1;
-    case BLIND:
-        return 2;
-    case BLESS:
-    case MASSBLESS:
-        return 3;
-    case CURSE:
-    case MASSCURSE:
-        return 4;
-    case BERSERKER:
-        return 5;
-    case PARALYZE:
-        return 6;
-    case HYPNOTIZE:
-        return 7;
-    case DRAGONSLAYER:
-        return 8;
-    case BLOODLUST:
-        return 9;
-    case SHIELD:
-    case MASSSHIELD:
-        return 10;
-    case STONE:
-        return 11;
-    case ANTIMAGIC:
-        return 12;
-    case STONESKIN:
-        return 13;
-    case STEELSKIN:
-        return 14;
-    default:
-        break;
-    }
-
-    return 0;
 }
 
 u32 Spell::Restore( void ) const

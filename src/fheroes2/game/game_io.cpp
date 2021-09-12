@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <ctime>
-#include <sstream>
 
 #include "campaign_savedata.h"
 #include "dialog.h"
@@ -35,6 +34,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "translations.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -85,18 +85,7 @@ namespace
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove version handling in HeaderSAV class." );
-
-        if ( hdr._saveFileVersion < FORMAT_VERSION_094_RELEASE ) {
-            msg >> hdr.status >> hdr.info >> hdr.gameType;
-        }
-        else {
-            msg >> hdr.status >> hdr.info;
-            msg >> hdr.info._version;
-            msg >> hdr.gameType;
-        }
-
-        return msg;
+        return msg >> hdr.status >> hdr.info >> hdr.gameType;
     }
 }
 
@@ -115,7 +104,7 @@ bool Game::Save( const std::string & fn )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "wb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" );
         return false;
     }
 
@@ -132,7 +121,7 @@ bool Game::Save( const std::string & fn )
     fz.setbigendian( true );
 
     // zip game data content
-    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get();
+    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get();
 
     if ( conf.isCampaignGameType() )
         fz << Campaign::CampaignSaveData::Get();
@@ -150,7 +139,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -163,7 +152,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -187,7 +176,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     Settings & conf = Settings::Get();
     if ( ( conf.GameType() & fileGameType ) == 0 ) {
-        Dialog::Message( "Warning", _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Warning" ), _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -195,47 +184,47 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fz.setbigendian( true );
 
     if ( !fz.read( fn, offset ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, ", uncompress: error" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, ", uncompress: error" );
         return fheroes2::GameMode::CANCEL;
     }
 
     if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() ) {
-        Dialog::Message( "Warning", _( "This file is saved in the \"The Price of Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Warning" ), _( "This file is saved in the \"The Price of Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
     }
 
     fz >> binver;
 
     // check version: false
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION ) {
-        std::ostringstream os;
-        os << "usupported save format: " << binver << std::endl
-           << "game version: " << CURRENT_FORMAT_VERSION << std::endl
-           << "last supported version: " << LAST_SUPPORTED_FORMAT_VERSION;
-        Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
+        std::string errorMessage( _( "Usupported save format: " ) );
+        errorMessage += std::to_string( binver );
+        errorMessage += ".\n";
+        errorMessage += _( "Current game version: " );
+        errorMessage += std::to_string( CURRENT_FORMAT_VERSION );
+        errorMessage += ".\n";
+        errorMessage += _( "Last supported version: " );
+        errorMessage += std::to_string( LAST_SUPPORTED_FORMAT_VERSION );
+        errorMessage += ".\n";
+
+        Dialog::Message( _( "Error" ), errorMessage, Font::BIG, Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
 
-    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
+    fz >> World::Get() >> conf >> GameOver::Result::Get();
 
     // Settings should contain the full path to the current map file, if this map is available
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove the System::GetUniversalBasename()" );
-    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetUniversalBasename( conf.MapsFile() ) ) );
+    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetBasename( conf.MapsFile() ) ) );
 
-    // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove MonsterStaticData usage" );
-    if ( binver < FORMAT_VERSION_PRE_095_RELEASE ) {
-        fz >> MonsterStaticData::Get();
-    }
-
-    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
+    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
+        std::string warningMessage( _( "This saved game is localized to '" ) );
         warningMessage.append( conf.loadedFileLanguage() );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
-        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
+        warningMessage.append( _( "' language, but the current language of the game is '" ) );
+        warningMessage.append( conf.getGameLanguage() );
+        warningMessage += "'.";
+        Dialog::Message( _( "Warning" ), warningMessage, Font::BIG, Dialog::OK );
     }
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;
@@ -275,11 +264,13 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
 bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 {
+    DEBUG_LOG( DBG_GAME, DBG_INFO, fn );
+
     StreamFile fs;
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" );
         return false;
     }
 
@@ -289,7 +280,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" );
         return false;
     }
 

@@ -23,15 +23,11 @@
 #ifndef H2MONSTER_H
 #define H2MONSTER_H
 
-#include <string>
-
-#include "battle_animation.h"
-#include "gamedefs.h"
 #include "monster_info.h"
 #include "payment.h"
-#include "serialize.h"
 
 class Spell;
+class StreamBase;
 
 class Monster
 {
@@ -40,8 +36,7 @@ public:
     {
         JOIN_CONDITION_SKIP = 0,
         JOIN_CONDITION_MONEY = 1,
-        JOIN_CONDITION_FREE = 2,
-        JOIN_CONDITION_FORCE = 3
+        JOIN_CONDITION_FREE = 2
     };
 
     enum class LevelType : int
@@ -212,14 +207,5 @@ protected:
 
     int id;
 };
-
-struct MonsterStaticData
-{
-    // wrapper for stream
-    static MonsterStaticData & Get( void );
-};
-
-// TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-StreamBase & operator>>( StreamBase &, const MonsterStaticData & );
 
 #endif

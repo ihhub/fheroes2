@@ -23,7 +23,7 @@
 #include "game.h"
 #include "agg.h"
 #include "agg_image.h"
-#include "audio_mixer.h"
+#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_io.h"
@@ -34,6 +34,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
 #include "ui_button.h"
 
 fheroes2::GameMode Game::LoadCampaign()
