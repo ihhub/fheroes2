@@ -948,7 +948,8 @@ void Maps::Tiles::updatePassability()
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
-                else if ( isShortObject( bottomTileObjectType ) || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) != isCombinedObject( bottomTileObjectType ) ) ) ) {
+                else if ( isShortObject( bottomTileObjectType )
+                          || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) != isCombinedObject( bottomTileObjectType ) ) ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {
