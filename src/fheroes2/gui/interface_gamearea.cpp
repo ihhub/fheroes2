@@ -269,7 +269,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-            tile.RedrawTop( dst, tileROI, *this );
+            tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
         }
     }
 
