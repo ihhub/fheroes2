@@ -6985,21 +6985,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Pack"
-#~ msgstr "Inpakken"
-
-#~ msgid "Lots"
-#~ msgstr "Veel"
-
-#~ msgid "Few"
-#~ msgstr "Weinig"
-
-#~ msgid "Several"
-#~ msgstr "Enkele"
-
-#~ msgid "Swarm"
-#~ msgstr "Zwerm"
-
-#~ msgid "Legion"
-#~ msgstr "Legioen"
