@@ -305,6 +305,19 @@ namespace
 
         return false;
     }
+
+    bool isCombinedObject( const MP2::MapObjectType objectType )
+    {
+        // Trees allow bottom and top movements but they don't allow the same for other trees.
+        switch ( objectType ) {
+        case MP2::OBJ_TREES:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
 Maps::TilesAddon::TilesAddon()
@@ -935,7 +948,7 @@ void Maps::Tiles::updatePassability()
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
-                else if ( isShortObject( bottomTileObjectType ) ) {
+                else if ( isShortObject( bottomTileObjectType ) || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) != isCombinedObject( bottomTileObjectType ) ) ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {
@@ -1197,17 +1210,18 @@ void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & vi
     RedrawAddon( dst, addons_level1, visibleTileROI, isPuzzleDraw, area );
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( ( visibleTileROI & mp ) && ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
-        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp );
+        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp );
     }
 #else
     (void)dst;
     (void)visibleTileROI;
+    (void)area;
 #endif
 }
 
@@ -2419,6 +2433,52 @@ uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
     }
 
     return 0;
+}
+
+std::vector<uint8_t> Maps::Tiles::getValidTileSets() const
+{
+    std::vector<uint8_t> tileSets;
+
+    if ( objectTileset != 0 ) {
+        tileSets.emplace_back( objectTileset >> 2 );
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.object != 0 ) {
+            tileSets.emplace_back( addon.object >> 2 );
+        }
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
+        if ( addon.object != 0 ) {
+            tileSets.emplace_back( addon.object >> 2 );
+        }
+    }
+
+    return tileSets;
+}
+
+bool Maps::Tiles::containsTileSet( const std::vector<uint8_t> & tileSets ) const
+{
+    for ( const uint8_t tileSetId : tileSets ) {
+        if ( ( objectTileset >> 2 ) == tileSetId ) {
+            return true;
+        }
+
+        for ( const TilesAddon & addon : addons_level1 ) {
+            if ( ( addon.object >> 2 ) == tileSetId ) {
+                return true;
+            }
+        }
+
+        for ( const TilesAddon & addon : addons_level2 ) {
+            if ( ( addon.object >> 2 ) == tileSetId ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )

@@ -55,7 +55,8 @@ namespace Interface
     {
     public:
         explicit GameArea( Basic & );
-        void Build( void );
+
+        void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
         const fheroes2::Rect & GetROI() const // returns visible Game Area ROI in pixels
         {

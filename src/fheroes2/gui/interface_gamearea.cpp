@@ -66,14 +66,12 @@ fheroes2::Rect Interface::GameArea::RectFixed( fheroes2::Point & dst, int rw, in
     return res.first;
 }
 
-void Interface::GameArea::Build( void )
+void Interface::GameArea::generate( const fheroes2::Size & screenSize, const bool withoutBorders )
 {
-    const fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( Settings::Get().ExtGameHideInterface() )
-        SetAreaPosition( 0, 0, display.width(), display.height() );
+    if ( withoutBorders )
+        SetAreaPosition( 0, 0, screenSize.width, screenSize.height );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
+        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, screenSize.width - RADARWIDTH - 3 * BORDERWIDTH, screenSize.height - 2 * BORDERWIDTH );
 }
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
@@ -499,7 +497,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI );
+                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI, *this );
                 }
             }
         }
