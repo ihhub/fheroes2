@@ -41,14 +41,26 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     const int32_t displayWidth = display.width();
     const int32_t displayHeight = display.height();
-    int32_t count_w = ( displayWidth >= fheroes2::Display::DEFAULT_WIDTH ? displayWidth - fheroes2::Display::DEFAULT_WIDTH : 0 ) / TILEWIDTH;
-    int32_t count_h = ( displayHeight >= fheroes2::Display::DEFAULT_HEIGHT ? displayHeight - fheroes2::Display::DEFAULT_HEIGHT : 0 ) / TILEWIDTH;
-    const int32_t count_icons = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
+    const int32_t extraDisplayWidth = displayWidth - fheroes2::Display::DEFAULT_WIDTH;
+    const int32_t extraDisplayHeight = displayHeight - fheroes2::Display::DEFAULT_HEIGHT;
+    const int32_t topRepeatCount = ( extraDisplayWidth > 0 ? extraDisplayWidth : 0 ) / TILEWIDTH;
+    const int32_t vertRepeatCount = ( extraDisplayHeight > 0 ? extraDisplayHeight : 0 ) / TILEWIDTH;
+    const int32_t iconsCount = vertRepeatCount > 3 ? 8 : ( vertRepeatCount < 3 ? 4 : 7 );
 
-    if ( displayWidth % TILEWIDTH )
-        ++count_w;
-    if ( displayHeight % TILEWIDTH )
-        ++count_h;
+    const int32_t topPadWidth = ( extraDisplayWidth % TILEWIDTH ) / 2; // top and bottom padding is split in two halves around the repeated "tiles"
+    int32_t bottomRepeatWidth;
+    int32_t bottomRepeatCount;
+    if ( isEvilInterface ) {
+        bottomRepeatWidth = 7; // width of a single bone piece
+        bottomRepeatCount = ( extraDisplayWidth > 0 ? extraDisplayWidth : 0 ) / bottomRepeatWidth;
+    }
+    else {
+        bottomRepeatWidth = TILEWIDTH;
+        bottomRepeatCount = topRepeatCount;
+    }
+    const int32_t bottomPadWidth = ( extraDisplayWidth % bottomRepeatWidth ) / 2;
+
+    const int32_t vertPadHeight = extraDisplayHeight % TILEWIDTH;
 
     fheroes2::Rect srcrt;
     fheroes2::Point dstpt;
@@ -57,22 +69,51 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     // TOP BORDER
     srcrt.x = 0;
     srcrt.y = 0;
-    srcrt.width = 223;
+    srcrt.width = isEvilInterface ? 153 : 193;
     srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    srcrt.x += srcrt.width;
 
-    srcrt.x = 223;
-    srcrt.width = TILEWIDTH;
+    srcrt.width = 6;
     dstpt.x = srcrt.x;
-    dstpt.y = 0;
-    for ( int32_t i = 0; i < count_w + 1; ++i ) {
+    for ( int32_t x = 0; x < srcrt.width + topPadWidth; x += srcrt.width ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+    }
+    // reset position back to align
+    dstpt.x = srcrt.x + srcrt.width + topPadWidth;
+
+    srcrt.x += srcrt.width;
+    srcrt.width = isEvilInterface ? 64 : 24;
+    srcrt.height = BORDERWIDTH;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.x += srcrt.width;
+
+    srcrt.x += srcrt.width;
+    srcrt.width = TILEWIDTH;
+    for ( int32_t i = 0; i <= topRepeatCount; ++i ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.x += TILEWIDTH;
     }
+
     srcrt.x += TILEWIDTH;
+    srcrt.width = isEvilInterface ? 65 : 25;
+    srcrt.height = BORDERWIDTH;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.x += srcrt.width;
+
+    srcrt.x += srcrt.width;
+    srcrt.width = 6;
+    for ( int32_t x = 0; x < srcrt.width + topPadWidth; x += srcrt.width ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+    }
+    srcrt.x += srcrt.width;
+
     srcrt.width = icnadv.width() - srcrt.x;
+    dstpt.x = displayWidth - srcrt.width;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // LEFT BORDER
@@ -83,16 +124,32 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+
     srcrt.y = 255;
     srcrt.height = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    for ( int32_t i = 0; i < count_h + 1; ++i ) {
+    for ( int32_t i = 0; i <= vertRepeatCount; ++i ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
+
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = isEvilInterface ? 33 : 123;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    srcrt.y += srcrt.height;
+    dstpt.y += srcrt.height;
+
+    srcrt.height = 8;
+    for ( int32_t y = 0; y < srcrt.height + vertPadHeight; y += srcrt.height ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+    }
+    srcrt.y += srcrt.height;
+
     srcrt.height = icnadv.height() - srcrt.y;
+    dstpt.y = displayHeight - srcrt.height;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // MIDDLE BORDER
@@ -103,32 +160,47 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+
     srcrt.y = 255;
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-
-    const int32_t countHMiddleBorder = viewWorldMode ? 0 : count_h;
-
-    for ( int32_t i = 0; i < countHMiddleBorder + 1; ++i ) {
+    for ( int32_t i = 0; i <= vertRepeatCount; ++i ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
-
     srcrt.y += TILEWIDTH;
-    srcrt.height = icnadv.height() - srcrt.y;
+
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = isEvilInterface ? 33 : 125; // middle border is special on good interface due to all the green leaves
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // fix extra border part on higher resolutions
     if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        srcrt.x = 478;
-        srcrt.y = isEvilInterface ? 328 : 345;
-        srcrt.width = 3;
-        srcrt.height = isEvilInterface ? 15 : 20;
-        dstpt.x += 14;
-        dstpt.y += 18;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Rect fixrt;
+        fheroes2::Point fixpt;
+        fixrt.x = 478;
+        fixrt.y = isEvilInterface ? 328 : 345;
+        fixrt.width = 3;
+        fixrt.height = isEvilInterface ? 15 : 20;
+        fixpt.x = dstpt.x + 14;
+        fixpt.y = dstpt.y + 18;
+        fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
+
+    srcrt.y += srcrt.height;
+    dstpt.y += srcrt.height;
+
+    srcrt.height = 8;
+    for ( int32_t y = 0; y < srcrt.height + vertPadHeight; y += srcrt.height ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+    }
+    srcrt.y += srcrt.height;
+
+    srcrt.height = icnadv.height() - srcrt.y;
+    dstpt.y = displayHeight - srcrt.height;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // RIGHT BORDER
     srcrt.x = icnadv.width() - BORDERWIDTH;
@@ -138,46 +210,95 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+
     srcrt.y = 255;
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    for ( int32_t i = 0; i < count_h + 1; ++i ) {
+    for ( int32_t i = 0; i < vertRepeatCount + 1; ++i ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
-    srcrt.height = icnadv.height() - srcrt.y;
+
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = isEvilInterface ? 33 : 123;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // fix extra border part on higher resolutions
     if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        srcrt.x = 624;
-        srcrt.y = isEvilInterface ? 328 : 345;
-        srcrt.width = 3;
-        srcrt.height = isEvilInterface ? 15 : 20;
-        dstpt.y += 18;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Rect fixrt;
+        fheroes2::Point fixpt;
+        fixrt.x = 624;
+        fixrt.y = isEvilInterface ? 328 : 345;
+        fixrt.width = 3;
+        fixrt.height = isEvilInterface ? 15 : 20;
+        fixpt.x = dstpt.x;
+        fixpt.y = dstpt.y + 18;
+        fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
+
+    srcrt.y += srcrt.height;
+    dstpt.y += srcrt.height;
+
+    srcrt.height = 8;
+    for ( int32_t y = 0; y < srcrt.height + vertPadHeight; y += srcrt.height ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+    }
+    srcrt.y += srcrt.height;
+
+    srcrt.height = icnadv.height() - srcrt.y;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // BOTTOM BORDER
     srcrt.x = 0;
     srcrt.y = icnadv.height() - BORDERWIDTH;
-    srcrt.width = 223;
+    srcrt.width = isEvilInterface ? 129 : 193;
     srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = displayHeight - BORDERWIDTH;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    srcrt.x = 223;
-    srcrt.width = TILEWIDTH;
+    srcrt.x += srcrt.width;
+
+    srcrt.width = 6;
     dstpt.x = srcrt.x;
-    dstpt.y = displayHeight - BORDERWIDTH;
-    for ( int32_t i = 0; i < count_w + 1; ++i ) {
+    for ( int32_t x = 0; x < srcrt.width + bottomPadWidth; x += srcrt.width ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.x += TILEWIDTH;
+        dstpt.x += srcrt.width;
     }
-    srcrt.x += TILEWIDTH;
+    // reset position back to align
+    dstpt.x = srcrt.x + srcrt.width + bottomPadWidth;
+
+    srcrt.x += srcrt.width;
+    srcrt.width = isEvilInterface ? 90 : 24;
+    srcrt.height = BORDERWIDTH;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.x += srcrt.width;
+    srcrt.x += srcrt.width;
+
+    srcrt.width = bottomRepeatWidth;
+    for ( int32_t i = 0; i <= bottomRepeatCount; ++i ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+    }
+    srcrt.x += srcrt.width;
+
+    srcrt.width = isEvilInterface ? 86 : 25; // evil bottom border is asymmetric
+    srcrt.height = BORDERWIDTH;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.x += srcrt.width;
+
+    srcrt.x += srcrt.width;
+    srcrt.width = 6;
+    for ( int32_t x = 0; x <= srcrt.width + bottomPadWidth; x += srcrt.width ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+    }
+    srcrt.x += srcrt.width;
+
     srcrt.width = icnadv.width() - srcrt.x;
+    dstpt.x = displayWidth - srcrt.width;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // ICON BORDER
@@ -188,7 +309,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.x = displayWidth - RADARWIDTH - BORDERWIDTH;
     dstpt.y = srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y = srcrt.y + BORDERWIDTH + count_icons * 32;
+    dstpt.y = srcrt.y + BORDERWIDTH + iconsCount * 32;
     srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
     if ( viewWorldMode && displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
         dstpt.y = 464;
