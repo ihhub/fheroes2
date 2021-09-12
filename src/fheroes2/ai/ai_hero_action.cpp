@@ -497,12 +497,11 @@ namespace AI
 
     void AIToHeroes( Heroes & hero, s32 dst_index )
     {
-        const Settings & conf = Settings::Get();
         Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
         if ( !other_hero )
             return;
 
-        if ( hero.GetColor() == other_hero->GetColor() || ( conf.ExtUnionsAllowHeroesMeetings() && Players::isFriends( hero.GetColor(), other_hero->GetColor() ) ) ) {
+        if ( hero.GetColor() == other_hero->GetColor() ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() );
             AIMeeting( hero, *other_hero );
         }
@@ -545,7 +544,6 @@ namespace AI
 
     void AIToCastle( Heroes & hero, s32 dst_index )
     {
-        const Settings & conf = Settings::Get();
         Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
         if ( castle == nullptr ) {
             // Something is wrong while calling this function for incorrect tile.
@@ -553,7 +551,7 @@ namespace AI
             return;
         }
 
-        if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
+        if ( hero.GetColor() == castle->GetColor() ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
             castle->MageGuildEducateHero( hero );
             hero.SetVisited( dst_index );
