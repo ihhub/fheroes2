@@ -816,12 +816,11 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
 void ActionToHeroes( Heroes & hero, s32 dst_index )
 {
     Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
-    const Settings & conf = Settings::Get();
 
     if ( !other_hero )
         return;
 
-    if ( hero.GetColor() == other_hero->GetColor() || ( conf.ExtUnionsAllowHeroesMeetings() && Players::isFriends( hero.GetColor(), other_hero->GetColor() ) ) ) {
+    if ( hero.GetColor() == other_hero->GetColor() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() );
         hero.MeetingDialog( *other_hero );
     }
@@ -863,12 +862,11 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
 void ActionToCastle( Heroes & hero, s32 dst_index )
 {
     Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
-    const Settings & conf = Settings::Get();
 
     if ( !castle ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "castle not found " << dst_index );
     }
-    else if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
+    else if ( hero.GetColor() == castle->GetColor() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
         castle->MageGuildEducateHero( hero );
         Game::OpenCastleDialog( *castle );
