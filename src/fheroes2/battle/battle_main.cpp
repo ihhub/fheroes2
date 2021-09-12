@@ -238,7 +238,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
-    transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
+    if ( hero_wins != nullptr && hero_loss != nullptr ) {
+        transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
+    }
 
     // save count troop
     arena->GetForce1().SyncArmyCount();
