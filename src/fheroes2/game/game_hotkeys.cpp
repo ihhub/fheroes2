@@ -109,6 +109,8 @@ const char * Game::EventsName( int evnt )
         return "cast spell";
     case EVENT_KINGDOM_INFO:
         return "kingdom overview";
+    case EVENT_VIEW_WORLD:
+        return "view world";
     case EVENT_DEFAULTACTION:
         return "default action";
 
@@ -264,6 +266,8 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_CASTSPELL] = KEY_c;
     // kingdom overview
     key_events[EVENT_KINGDOM_INFO] = KEY_k;
+    // view world
+    key_events[EVENT_VIEW_WORLD] = KEY_v;
     // default action
     key_events[EVENT_DEFAULTACTION] = KEY_SPACE;
     // move hero
