@@ -177,14 +177,8 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     // fix extra border part on higher resolutions
     if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        fheroes2::Rect fixrt;
-        fheroes2::Point fixpt;
-        fixrt.x = 478;
-        fixrt.y = isEvilInterface ? 328 : 345;
-        fixrt.width = 3;
-        fixrt.height = isEvilInterface ? 15 : 20;
-        fixpt.x = dstpt.x + 14;
-        fixpt.y = dstpt.y + 18;
+        fheroes2::Rect fixrt( 478, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
+        fheroes2::Point fixpt( dstpt.x + 14, dstpt.y + 18 );
         fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
 
@@ -227,14 +221,8 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     // fix extra border part on higher resolutions
     if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        fheroes2::Rect fixrt;
-        fheroes2::Point fixpt;
-        fixrt.x = 624;
-        fixrt.y = isEvilInterface ? 328 : 345;
-        fixrt.width = 3;
-        fixrt.height = isEvilInterface ? 15 : 20;
-        fixpt.x = dstpt.x;
-        fixpt.y = dstpt.y + 18;
+        fheroes2::Rect fixrt( 624, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
+        fheroes2::Point fixpt( dstpt.x, dstpt.y + 18 );
         fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
 
