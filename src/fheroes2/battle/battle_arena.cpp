@@ -57,11 +57,12 @@ namespace
     size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
     {
         size_t newSeed = seed;
-        if ( actions.empty() ) { // update the seed for next turn in all cases, even if no actions were performed
-            fheroes2::hashCombine( newSeed, 0 );
-        }
 
         for ( const Battle::Command & command : actions ) {
+            if ( command.GetType() == Battle::MSG_BATTLE_AUTO ) {
+                continue; // "auto battle" button event is ignored for the purpose of this hash
+            }
+
             fheroes2::hashCombine( newSeed, command.GetType() );
             for ( const int commandArg : command ) {
                 fheroes2::hashCombine( newSeed, commandArg );
