@@ -50,7 +50,8 @@ spellstats_t spells[] = {
       gettext_noop( "An improved version of fireball, fireblast affects two hexes around the center point of the spell, rather than one." ) },
     { gettext_noop( "Lightning Bolt" ), 7, 0, 4, 25, gettext_noop( "Causes a bolt of electrical energy to strike the selected creature." ) },
     { gettext_noop( "Chain Lightning" ), 15, 0, 5, 40,
-      gettext_noop( "Causes a bolt of electrical energy to strike a selected creature, then strike the nearest creature with half damage, then strike the NEXT nearest creature with half again damage, and so on, until it becomes too weak to be harmful.  Warning:  This spell can hit your own creatures!" ) },
+      gettext_noop(
+          "Causes a bolt of electrical energy to strike a selected creature, then strike the nearest creature with half damage, then strike the NEXT nearest creature with half again damage, and so on, until it becomes too weak to be harmful.  Warning:  This spell can hit your own creatures!" ) },
     { gettext_noop( "Teleport" ), 9, 0, 10, 0, gettext_noop( "Teleports the creature you select to any open position on the battlefield." ) },
     { gettext_noop( "Cure" ), 6, 0, 6, 5,
       gettext_noop( "Removes all negative spells cast upon one of your units, and restores up to %{count} HP per level of spell power." ) },
@@ -92,7 +93,8 @@ spellstats_t spells[] = {
     { gettext_noop( "Blood Lust" ), 3, 0, 27, 3, gettext_noop( "Increases a unit's attack skill." ) },
     { gettext_noop( "Animate Dead" ), 10, 0, 25, 50, gettext_noop( "Resurrects creatures from a damaged or dead undead unit permanently." ) },
     { gettext_noop( "Mirror Image" ), 25, 0, 26, 0,
-      gettext_noop( "Creates an illusionary unit that duplicates one of your existing units.  This illusionary unit does the same damages as the original, but will vanish if it takes any damage." ) },
+      gettext_noop(
+          "Creates an illusionary unit that duplicates one of your existing units.  This illusionary unit does the same damages as the original, but will vanish if it takes any damage." ) },
     { gettext_noop( "Shield" ), 3, 0, 15, 2, gettext_noop( "Halves damage received from ranged attacks for a single unit." ) },
     { gettext_noop( "Mass Shield" ), 7, 0, 65, 0, gettext_noop( "Halves damage received from ranged attacks for all of your units." ) },
     { gettext_noop( "Summon Earth Elemental" ), 30, 0, 56, 3, gettext_noop( "Summons Earth Elementals to fight for your army." ) },
@@ -108,7 +110,8 @@ spellstats_t spells[] = {
     { gettext_noop( "View All" ), 3, 0, 44, 0, gettext_noop( "Causes the entire land to become visible." ) },
     { gettext_noop( "Identify Hero" ), 3, 0, 45, 0, gettext_noop( "Allows the caster to view detailed information on enemy Heroes." ) },
     { gettext_noop( "Summon Boat" ), 5, 0, 46, 0,
-      gettext_noop( "Summons the nearest unoccupied, friendly boat to an adjacent shore location.  A friendly boat is one which you just built or were the most recent player to occupy." ) },
+      gettext_noop(
+          "Summons the nearest unoccupied, friendly boat to an adjacent shore location.  A friendly boat is one which you just built or were the most recent player to occupy." ) },
     { gettext_noop( "Dimension Door" ), 10, 0, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
     { gettext_noop( "Town Gate" ), 10, 0, 48, 0, gettext_noop( "Returns the caster to any town or castle currently owned." ) },
     { gettext_noop( "Town Portal" ), 20, 0, 49, 0, gettext_noop( "Returns the hero to the town or castle of choice, provided it is controlled by you." ) },
@@ -125,7 +128,8 @@ spellstats_t spells[] = {
     { "Random 3", 1, 0, 0, 0, "Random 3" },
     { "Random 4", 1, 0, 0, 0, "Random 4" },
     { "Random 5", 1, 0, 0, 0, "Random 5" },
-    { gettext_noop( "Petrification" ), 1, 0, 0, 0, gettext_noop( "Turns the targeted creature into stone.  A petrified creature receives half damage from a direct attack." ) },
+    { gettext_noop( "Petrification" ), 1, 0, 0, 0,
+      gettext_noop( "Turns the targeted creature into stone.  A petrified creature receives half damage from a direct attack." ) },
 };
 
 Spell::Spell( int s )

@@ -482,10 +482,10 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
         ow = dst.x - ow / 2;
         for ( const auto & spell : spellsInfo ) {
             const fheroes2::Sprite & sprite = GetModesSprite( spell.mode );
-            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + maxSpriteHeight - sprite.height() );
+            const fheroes2::Point imageOffset( ow, dst.y + maxSpriteHeight - sprite.height() );
 
-            output.emplace_back( std::make_pair( fheroes2::Rect( ow, dst.y + maxSpriteHeight - sprite.height(), sprite.width(), sprite.height() ),
-                                                 modeToSpell( spell.mode ) ) );
+            fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
+            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) ) );
 
             if ( spell.duration > 0 ) {
                 text.Set( std::to_string( spell.duration ), Font::SMALL );
@@ -510,10 +510,10 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
 
         for ( auto spellIt = spellsInfo.crbegin(); spellIt != spellsInfo.crend(); ++spellIt ) {
             const fheroes2::Sprite & sprite = GetModesSprite( spellIt->mode );
-            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
+            const fheroes2::Point imageOffset( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
 
-            output.emplace_back( std::make_pair( fheroes2::Rect( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height(),
-                                                 sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) ) );
+            fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
+            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) ) );
 
             if ( spellIt->duration > 0 ) {
                 text.Set( std::to_string( spellIt->duration ), Font::SMALL );
