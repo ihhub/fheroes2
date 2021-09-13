@@ -54,12 +54,10 @@ namespace Battle
     class TroopsUidGenerator
     {
     private:
-        uint32_t _id;
+        uint32_t _id{ 0 };
 
     public:
-        TroopsUidGenerator()
-            : _id( 0 )
-        {}
+        TroopsUidGenerator() {}
 
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
         TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
