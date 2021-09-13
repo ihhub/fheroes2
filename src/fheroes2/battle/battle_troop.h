@@ -201,7 +201,7 @@ namespace Battle
         AnimationState animation;
 
     private:
-        u32 uid;
+        const uint32_t _uid;
         u32 hp;
         u32 count0;
         u32 dead;
