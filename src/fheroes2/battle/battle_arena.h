@@ -57,8 +57,7 @@ namespace Battle
         uint32_t _id{ 0 };
 
     public:
-        TroopsUidGenerator() {}
-
+        TroopsUidGenerator() = default;
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
         TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
 
