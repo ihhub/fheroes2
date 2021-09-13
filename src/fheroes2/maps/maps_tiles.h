@@ -52,7 +52,7 @@ namespace Maps
 {
     struct TilesAddon
     {
-        enum level_t
+        enum level_t : uint8_t
         {
             GROUND = 0,
             DOWN = 1,
@@ -61,7 +61,7 @@ namespace Maps
         };
 
         TilesAddon();
-        TilesAddon( int lv, u32 gid, int obj, u32 ii );
+        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
         TilesAddon( const TilesAddon & ta );
 
         ~TilesAddon() = default;
@@ -86,10 +86,10 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
 
-        u32 uniq;
-        u8 level;
-        u8 object;
-        u8 index;
+        uint32_t uniq;
+        uint8_t level;
+        uint8_t object;
+        uint8_t index;
     };
 
     struct Addons : public std::list<TilesAddon>

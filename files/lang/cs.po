@@ -457,10 +457,10 @@ msgstr "%{spell} způsobil %{value} škod."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} způsobil %{value} škod."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr ""
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr ""
 
 msgid "The Mummies' curse falls upon the %{name}!"

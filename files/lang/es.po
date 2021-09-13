@@ -502,10 +502,10 @@ msgstr ""
 "El hechizo %{spell} hace %{damage} puntos de daño a todas las criaturas "
 "vivas."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "¡El ataque del Unicornio ciega a %{name}!"
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "¡La mirada de la Medusa convierte a %{name} en piedra!"
 
 msgid "The Mummies' curse falls upon the %{name}!"

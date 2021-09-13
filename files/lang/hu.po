@@ -488,10 +488,10 @@ msgstr "A %{spell} varázslat %{damage} sebzést okoz valamennyi élő lénynek.
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "A %{spell} varázslat %{damage} sebzést okoz valamennyi élő lénynek.."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "Az Unikornis megvakítja a(z) %{name}!"
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "A Medúza szeme kővé változtatta a(z) %{name} lényt!"
 
 msgid "The Mummies' curse falls upon the %{name}!"

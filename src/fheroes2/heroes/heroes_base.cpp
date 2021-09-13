@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <sstream>
 
 #include "army.h"
 #include "castle.h"
@@ -413,54 +412,39 @@ double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
 {
-    const Kingdom & kingdom = world.GetKingdom( GetColor() );
-
     if ( res ) {
-        std::ostringstream os;
+        res->clear();
 
         if ( HaveSpellBook() ) {
             if ( HaveSpell( spell ) ) {
                 if ( HaveSpellPoints( spell ) ) {
                     if ( spell.MovePoint() <= move_point ) {
-                        if ( kingdom.AllowPayment( spell.GetCost() ) )
-                            return true;
-                        else
-                            os << "resource"
-                               << " "
-                               << "failed";
+                        return true;
                     }
-                    else
-                        os << "move points"
-                           << " "
-                           << "failed";
+                    else {
+                        *res += _( "Not enough move points." );
+                    }
                 }
-                else
-                    os << _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+                else {
+                    *res += _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+                }
             }
-            else
-                os << "spell"
-                   << " "
-                   << "not found";
+            else {
+                *res += _( "The spell is not found." );
+            }
         }
-        else
-            os << "spell book"
-               << " "
-               << "not found";
-        *res = os.str();
+        else {
+            *res += _( "Spell book is not present." );
+        }
+
         return false;
     }
 
-    return HaveSpellBook() && HaveSpell( spell ) && HaveSpellPoints( spell ) && kingdom.AllowPayment( spell.GetCost() );
+    return HaveSpellBook() && HaveSpell( spell ) && HaveSpellPoints( spell );
 }
 
 void HeroBase::SpellCasted( const Spell & spell )
 {
-    // resource cost
-    Kingdom & kingdom = world.GetKingdom( GetColor() );
-    const payment_t & cost = spell.GetCost();
-    if ( cost.GetValidItemsCount() )
-        kingdom.OddFundsResource( cost );
-
     // spell point cost
     magic_point -= ( spell.SpellPoint( this ) < magic_point ? spell.SpellPoint( this ) : magic_point );
 

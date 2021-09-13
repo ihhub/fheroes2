@@ -3554,10 +3554,10 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
 
     switch ( attacker.GetID() ) {
     case Monster::UNICORN:
-        msg = _( "The Unicorns attack blinds the %{name}!" );
+        msg = _( "The Unicorns' attack blinds the %{name}!" );
         break;
     case Monster::MEDUSA:
-        msg = _( "The Medusas gaze turns the %{name} to stone!" );
+        msg = _( "The Medusas' gaze turns the %{name} to stone!" );
         break;
     case Monster::ROYAL_MUMMY:
     case Monster::MUMMY:

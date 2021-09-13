@@ -26,30 +26,27 @@
 
 const char * Maps::Ground::String( int ground )
 {
-    const char * str_ground[]
-        = {_( "Desert" ), _( "Snow" ), _( "Swamp" ), _( "Wasteland" ), _( "Beach" ), _( "Lava" ), _( "Dirt" ), _( "Grass" ), _( "Ocean" ), "Unknown"};
-
     switch ( ground ) {
     case DESERT:
-        return str_ground[0];
+        return _( "Desert" );
     case SNOW:
-        return str_ground[1];
+        return _( "Snow" );
     case SWAMP:
-        return str_ground[2];
+        return _( "Swamp" );
     case WASTELAND:
-        return str_ground[3];
+        return _( "Wasteland" );
     case BEACH:
-        return str_ground[4];
+        return _( "Beach" );
     case LAVA:
-        return str_ground[5];
+        return _( "Lava" );
     case DIRT:
-        return str_ground[6];
+        return _( "Dirt" );
     case GRASS:
-        return str_ground[7];
+        return _( "Grass" );
     case WATER:
-        return str_ground[8];
+        return _( "Ocean" );
     default:
-        return str_ground[9];
+        return "Unknown";
     }
 }
 

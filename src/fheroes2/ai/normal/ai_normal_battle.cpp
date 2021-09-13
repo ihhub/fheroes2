@@ -566,7 +566,7 @@ namespace AI
 
         // Walkers: move closer to the castle walls during siege
         if ( _attackingCastle && target.cell == -1 ) {
-            uint32_t shortestDist = MAXU16;
+            uint32_t shortestDist = 65535;
 
             for ( const int wallIndex : underWallsIndicies ) {
                 if ( !arena.hexIsPassable( wallIndex ) ) {

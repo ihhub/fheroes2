@@ -486,10 +486,10 @@ msgstr "%{spell} zadaje %{damage} pkt. obrażeń żywej istocie."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń wszystkim żywym istotom."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "Atak jednorożców oślepia jednostkę (%{name})!"
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "Spojrzenie meduz zamienia jednostkę (%{name}) w kamień!"
 
 msgid "The Mummies' curse falls upon the %{name}!"
@@ -7526,7 +7526,7 @@ msgid "Curse"
 msgstr "Klątwa"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr "prawia, że wszystkie wrogie oddziały zadają minimalne obrażenia."
+msgstr "Sprawia, że wszystkie wrogie oddziały zadają minimalne obrażenia."
 
 msgid "Mass Curse"
 msgstr "Grupowa klątwa"

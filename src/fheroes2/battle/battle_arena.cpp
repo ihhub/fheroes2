@@ -630,7 +630,7 @@ Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
 {
-    std::pair<int, uint32_t> result = { -1, MAXU16 };
+    std::pair<int, uint32_t> result = { -1, 65535 };
 
     const Position & pos = target.GetPosition();
     const Cell * head = pos.GetHead();
@@ -657,7 +657,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
 
 uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
+    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : 65535;
 }
 
 bool Battle::Arena::hexIsPassable( int32_t indexTo ) const

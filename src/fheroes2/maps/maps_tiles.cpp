@@ -327,11 +327,11 @@ Maps::TilesAddon::TilesAddon()
     , index( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( int lv, u32 gid, int obj, u32 ii )
-    : uniq( gid )
+Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ )
+    : uniq( uid )
     , level( lv )
     , object( obj )
-    , index( ii )
+    , index( index_ )
 {}
 
 std::string Maps::TilesAddon::String( int lvl ) const

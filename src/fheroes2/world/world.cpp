@@ -1007,8 +1007,8 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
     // puts hole sprite
-    int obj = 0;
-    u32 idx = 0;
+    uint8_t obj = 0;
+    uint32_t idx = 0;
 
     switch ( tile.GetGround() ) {
     case Maps::Ground::WASTELAND:
