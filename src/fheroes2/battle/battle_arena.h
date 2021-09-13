@@ -51,6 +51,25 @@ namespace Battle
     {
     };
 
+    class TroopsUidGenerator
+    {
+    private:
+        uint32_t _id;
+
+    public:
+        TroopsUidGenerator()
+            : _id( 0 )
+        {}
+
+        TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+        TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
+
+        uint32_t GetUnique()
+        {
+            return _id++;
+        }
+    };
+
     class Arena
     {
     public:
@@ -229,6 +248,8 @@ namespace Battle
         bool end_turn;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
+
+        TroopsUidGenerator _uidGenerator;
 
         enum
         {

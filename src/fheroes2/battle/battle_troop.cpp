@@ -102,10 +102,10 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, s32 pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::Unit::Unit( const Troop & t, s32 pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )
-    , uid( World::GetUniq() )
+    , uid( uid )
     , hp( t.GetHitPoints() )
     , count0( t.GetCount() )
     , dead( 0 )
