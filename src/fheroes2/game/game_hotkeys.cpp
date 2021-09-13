@@ -275,12 +275,12 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_MOVERIGHT] = KEY_RIGHT;
     key_events[EVENT_MOVETOP] = KEY_UP;
     key_events[EVENT_MOVEBOTTOM] = KEY_DOWN;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVETOPLEFT] = KEY_NONE;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVETOPRIGHT] = KEY_NONE;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVEBOTTOMLEFT] = KEY_NONE;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
+    key_events[EVENT_MOVETOPLEFT] = KEY_NONE;
+    key_events[EVENT_MOVETOPRIGHT] = KEY_NONE;
+    key_events[EVENT_MOVEBOTTOMLEFT] = KEY_NONE;
+    key_events[EVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
     // open focus
-    // key_events[EVENT_OPENFOCUS] = KEY_NONE;
+    key_events[EVENT_OPENFOCUS] = KEY_RETURN;
     // control panel
     key_events[EVENT_CTRLPANEL] = KEY_1;
     key_events[EVENT_SHOWRADAR] = KEY_2;
