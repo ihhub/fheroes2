@@ -563,7 +563,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // draw interface
-    gameArea.Build();
+    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
 
     radar.Build();
     radar.SetHide( true );

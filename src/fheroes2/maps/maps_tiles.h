@@ -205,7 +205,7 @@ namespace Maps
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
+        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -287,6 +287,10 @@ namespace Maps
         void setAsEmpty();
 
         uint32_t getObjectIdByICNType( const int icnId ) const;
+
+        std::vector<uint8_t> getValidTileSets() const;
+
+        bool containsTileSet( const std::vector<uint8_t> & tileSets ) const;
 
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
