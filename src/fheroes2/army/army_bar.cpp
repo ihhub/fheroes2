@@ -65,7 +65,7 @@ namespace
                 ++freeSlots;
 
             const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
-            uint32_t redistributeCount = (isSameTroopType || isTargetEmpty) ? 1 : troopFrom.GetCount() / 2;
+            uint32_t redistributeCount = ( isSameTroopType || isTargetEmpty ) ? 1 : troopFrom.GetCount() / 2;
 
             // if splitting to the same troop type, use this bool to turn on fast split option at the beginning of the dialog
             bool useFastSplit = isSameTroopType && !isTargetEmpty;
