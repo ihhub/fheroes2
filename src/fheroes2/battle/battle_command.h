@@ -29,27 +29,17 @@ namespace Battle
 {
     enum
     {
-        MSG_BATTLE_RAW,
-
-        MSG_BATTLE_BOARD,
         MSG_BATTLE_MOVE,
         MSG_BATTLE_ATTACK,
-        MSG_BATTLE_DEFENSE,
-        MSG_BATTLE_DAMAGE,
         MSG_BATTLE_CAST,
         MSG_BATTLE_MORALE,
-        MSG_BATTLE_LUCK,
         MSG_BATTLE_CATAPULT,
         MSG_BATTLE_TOWER,
         MSG_BATTLE_RETREAT,
         MSG_BATTLE_SURRENDER,
         MSG_BATTLE_SKIP,
         MSG_BATTLE_END_TURN,
-        MSG_BATTLE_TURN,
-        MSG_BATTLE_RESULT,
-        MSG_BATTLE_AUTO,
-
-        MSG_UNKNOWN
+        MSG_BATTLE_AUTO
     };
 
     class Command : public std::vector<int>
