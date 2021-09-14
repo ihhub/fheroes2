@@ -142,40 +142,40 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
 void Battle::Arena::ApplyAction( Command & cmd )
 {
     switch ( cmd.GetType() ) {
-    case MSG_BATTLE_CAST:
+    case CommandType::MSG_BATTLE_CAST:
         ApplyActionSpellCast( cmd );
         break;
-    case MSG_BATTLE_ATTACK:
+    case CommandType::MSG_BATTLE_ATTACK:
         ApplyActionAttack( cmd );
         break;
-    case MSG_BATTLE_MOVE:
+    case CommandType::MSG_BATTLE_MOVE:
         ApplyActionMove( cmd );
         break;
-    case MSG_BATTLE_SKIP:
+    case CommandType::MSG_BATTLE_SKIP:
         ApplyActionSkip( cmd );
         break;
-    case MSG_BATTLE_END_TURN:
+    case CommandType::MSG_BATTLE_END_TURN:
         ApplyActionEnd( cmd );
         break;
-    case MSG_BATTLE_MORALE:
+    case CommandType::MSG_BATTLE_MORALE:
         ApplyActionMorale( cmd );
         break;
 
-    case MSG_BATTLE_TOWER:
+    case CommandType::MSG_BATTLE_TOWER:
         ApplyActionTower( cmd );
         break;
-    case MSG_BATTLE_CATAPULT:
+    case CommandType::MSG_BATTLE_CATAPULT:
         ApplyActionCatapult( cmd );
         break;
 
-    case MSG_BATTLE_RETREAT:
+    case CommandType::MSG_BATTLE_RETREAT:
         ApplyActionRetreat( cmd );
         break;
-    case MSG_BATTLE_SURRENDER:
+    case CommandType::MSG_BATTLE_SURRENDER:
         ApplyActionSurrender( cmd );
         break;
 
-    case MSG_BATTLE_AUTO:
+    case CommandType::MSG_BATTLE_AUTO:
         ApplyActionAutoBattle( cmd );
         break;
 

@@ -23,11 +23,13 @@
 #ifndef H2BATTLE_COMMAND_H
 #define H2BATTLE_COMMAND_H
 
+#include <functional>
+
 #include "battle_board.h"
 
 namespace Battle
 {
-    enum
+    enum class CommandType : int32_t
     {
         MSG_BATTLE_MOVE,
         MSG_BATTLE_ATTACK,
@@ -44,24 +46,43 @@ namespace Battle
 
     class Command : public std::vector<int>
     {
-        int type;
-
     public:
-        explicit Command( int cmd );
-        Command( int cmd, int param1, int param2 = -1, int param3 = -1, int param4 = -1 );
+        explicit Command( const CommandType cmd );
+        Command( const CommandType cmd, const int param1, const int param2 = -1, const int param3 = -1, const int param4 = -1 );
 
-        int GetType( void ) const
+        CommandType GetType() const
         {
-            return type;
+            return _type;
         }
-        int GetValue( void );
-        bool isType( int msg ) const
+
+        int GetValue();
+
+        bool isType( const CommandType cmd ) const
         {
-            return type == msg;
+            return _type == cmd;
         }
 
         Command & operator<<( const int );
         Command & operator>>( int & );
+
+    private:
+        CommandType _type;
+    };
+}
+
+namespace std
+{
+    template <>
+    struct hash<Battle::CommandType>
+    {
+        std::size_t operator()( const Battle::CommandType key ) const noexcept
+        {
+            using UnderlyingCommandType = typename std::underlying_type<Battle::CommandType>::type;
+
+            std::hash<UnderlyingCommandType> hasher;
+
+            return hasher( static_cast<UnderlyingCommandType>( key ) );
+        }
     };
 }
 

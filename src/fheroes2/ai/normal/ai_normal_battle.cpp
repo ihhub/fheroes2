@@ -213,12 +213,12 @@ namespace AI
                 const SpellSelection & bestSpell = selectBestSpell( arena, true );
 
                 if ( bestSpell.spellID != -1 ) {
-                    actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
+                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
                 }
             }
 
-            actions.emplace_back( MSG_BATTLE_RETREAT );
-            actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
+            actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
+            actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
             return actions;
         }
 
@@ -227,7 +227,7 @@ namespace AI
             const SpellSelection & bestSpell = selectBestSpell( arena, false );
 
             if ( bestSpell.spellID != -1 ) {
-                actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
+                actions.emplace_back( CommandType::MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
                 return actions;
             }
         }
@@ -261,11 +261,11 @@ namespace AI
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
                 if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+                    actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
                 }
 
                 if ( target.unit ) {
-                    actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
+                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), 0 );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -278,7 +278,7 @@ namespace AI
 
         // no action was taken - skip
         if ( actions.size() == actionsSize ) {
-            actions.emplace_back( MSG_BATTLE_SKIP, currentUnit.GetUID(), true );
+            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnit.GetUID(), true );
         }
 
         return actions;
@@ -444,7 +444,7 @@ namespace AI
             if ( target.unit && target.cell != -1 ) {
                 // Melee attack selected target
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
-                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
@@ -458,7 +458,7 @@ namespace AI
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
                     if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                        actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+                        actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
                     }
                 }
             }
@@ -499,7 +499,7 @@ namespace AI
             }
 
             if ( target.unit ) {
-                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " archer focusing enemy " << target.unit->GetName()
@@ -684,7 +684,7 @@ namespace AI
                 const uint32_t targetUnitUID = targetUnit->GetUID();
                 const int32_t targetUnitHead = targetUnit->GetHeadIndex();
                 if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-                    actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
                     break;
                 }
                 else {
@@ -705,12 +705,12 @@ namespace AI
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
                         if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                            actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+                            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
                         }
 
                         // Attack only if target unit is reachable and can be attacked
                         if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
-                            actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+                            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
 
                             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
                         }
@@ -721,7 +721,7 @@ namespace AI
             }
         }
 
-        actions.emplace_back( MSG_BATTLE_END_TURN, currentUnitUID );
+        actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnitUID );
         return actions;
     }
 
@@ -735,7 +735,7 @@ namespace AI
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
         // Do not end the turn if we only cast a spell
-        if ( plannedActions.size() != 1 || !plannedActions.front().isType( MSG_BATTLE_CAST ) )
-            actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
+        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::MSG_BATTLE_CAST ) )
+            actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 }
