@@ -53,9 +53,6 @@ namespace Battle
 
     class TroopsUidGenerator
     {
-    private:
-        uint32_t _id{ 0 };
-
     public:
         TroopsUidGenerator() = default;
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
@@ -65,6 +62,9 @@ namespace Battle
         {
             return _id++;
         }
+
+    private:
+        uint32_t _id{ 0 };
     };
 
     class Arena
