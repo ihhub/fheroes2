@@ -49,21 +49,6 @@ int Battle::Command::GetValue( void )
     return val;
 }
 
-Battle::Command::Command( int cmd, int param1, int param2, const Indexes & param3 )
-    : type( cmd )
-{
-    switch ( type ) {
-    case MSG_BATTLE_MOVE:
-        for ( Indexes::const_reverse_iterator it = param3.rbegin(); it != param3.rend(); ++it )
-            *this << *it;
-        *this << static_cast<int>( param3.size() ) << param2 << param1; // path, dst, uid
-        break;
-
-    default:
-        break;
-    }
-}
-
 Battle::Command::Command( int cmd, int param1, int param2, int param3, int param4 )
     : type( cmd )
 {
@@ -108,7 +93,7 @@ Battle::Command::Command( int cmd, int param1, int param2, int param3, int param
         break;
 
     case MSG_BATTLE_MOVE:
-        *this << static_cast<int>( 0 ) << param2 << param1; // path size, dst, uid
+        *this << param2 << param1; // dst, uid
         break;
 
     case MSG_BATTLE_ATTACK:

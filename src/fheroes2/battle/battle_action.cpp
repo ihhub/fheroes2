@@ -293,7 +293,6 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
     const int32_t dst = cmd.GetValue();
-    const int32_t path_size = cmd.GetValue();
 
     Battle::Unit * b = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
@@ -338,16 +337,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             pos2 = pos1;
         }
         else {
-            Indexes path;
-
-            // check path
-            if ( 0 == path_size ) {
-                path = GetPath( *b, pos1 );
-                cmd = Command( MSG_BATTLE_MOVE, b->GetUID(), dst, path );
-            }
-            else
-                for ( int index = 0; index < path_size; ++index )
-                    path.push_back( cmd.GetValue() );
+            const Indexes path = GetPath( *b, pos1 );
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
