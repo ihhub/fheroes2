@@ -471,10 +471,10 @@ msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "L'attaque des Licornes aveugle les %{name} !"
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "Le regard des Méduses transforme les %{name} en pierre !"
 
 msgid "The Mummies' curse falls upon the %{name}!"

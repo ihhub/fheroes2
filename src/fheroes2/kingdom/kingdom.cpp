@@ -386,9 +386,10 @@ bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
+uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
+    // Safe to downcast as we don't deal with gigantic amount of data.
+    return static_cast<uint32_t>( std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } ) );
 }
 
 /* set visited cell */
