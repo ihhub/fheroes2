@@ -42,6 +42,7 @@ namespace
         const Army * armyFrom = troopFrom.GetArmy();
         const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
         const bool isSameTroopType = troopTarget.isValid() && troopFrom.GetID() == troopTarget.GetID();
+        const bool isTargetEmpty = troopTarget.isEmpty();
         const uint32_t overallCount = isSameTroopType ? troopFrom.GetCount() + troopTarget.GetCount() : troopFrom.GetCount();
 
         assert( overallCount > 0 );
@@ -64,10 +65,10 @@ namespace
                 ++freeSlots;
 
             const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
-            uint32_t redistributeCount = isSameTroopType ? 1 : troopFrom.GetCount() / 2;
+            uint32_t redistributeCount = (isSameTroopType || isTargetEmpty) ? 1 : troopFrom.GetCount() / 2;
 
-            // if splitting to the same troop type, use this bool to turn off fast split option at the beginning of the dialog
-            bool useFastSplit = !isSameTroopType;
+            // if splitting to the same troop type, use this bool to turn on fast split option at the beginning of the dialog
+            bool useFastSplit = isSameTroopType && !isTargetEmpty;
             const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 
             if ( slots < 2 || slots > 6 )
