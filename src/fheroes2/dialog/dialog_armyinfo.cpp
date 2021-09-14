@@ -111,7 +111,7 @@ namespace
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
-std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::Point &, const Troop & );
+std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::Point & dst, const Troop & b );
 void DrawMonsterInfo( const fheroes2::Point & dst, const Troop & troop );
 void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi );

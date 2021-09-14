@@ -994,8 +994,8 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 
             if ( spell.MovePoint() ) {
                 text += '\n';
-                text.append( _( "Move points: " ) );
-                text += std::to_string( spell.MovePoint() );
+                text.append( _( "Move points: %{mp}" ) );
+                StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
             const uint32_t answer = Dialog::Message( _( "Transcribe Spell Scroll" ), text, Font::BIG, Dialog::YES | Dialog::NO );

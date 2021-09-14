@@ -129,7 +129,7 @@ spellstats_t spells[] = {
     { "Random 4", 1, 0, 0, 0, "Random 4" },
     { "Random 5", 1, 0, 0, 0, "Random 5" },
     { gettext_noop( "Petrification" ), 1, 0, 0, 0,
-      gettext_noop( "Turns the targeted creature into stone.  A petrified creature receives half damage from a direct attack." ) },
+      gettext_noop( "Turns the affected creature into stone.  A petrified creature receives half damage from a direct attack." ) },
 };
 
 Spell::Spell( int s )
