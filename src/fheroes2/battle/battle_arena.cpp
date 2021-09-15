@@ -323,7 +323,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
             // bad morale, happens only if the unit wasn't waiting for a turn
-            actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), false ) );
+            actions.push_back( Command( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false ) );
             end_turn = true;
         }
         else {
@@ -369,7 +369,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             // good morale
             if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
-                actions.emplace_back( MSG_BATTLE_MORALE, troop->GetUID(), true );
+                actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), true );
             }
         }
 
@@ -566,7 +566,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     const Unit * enemy = GetEnemyMaxQuality( twr.GetColor() );
 
     if ( enemy ) {
-        Command cmd( MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
+        Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
         ApplyAction( cmd );
     }
 }
@@ -586,7 +586,7 @@ void Battle::Arena::CatapultAction( void )
         values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
         values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
 
-        Command cmd( MSG_BATTLE_CATAPULT );
+        Command cmd( CommandType::MSG_BATTLE_CATAPULT );
 
         cmd << shots;
 
