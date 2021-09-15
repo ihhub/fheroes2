@@ -64,11 +64,29 @@ namespace
             if ( isSameTroopType )
                 ++freeSlots;
 
-            const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
-            uint32_t redistributeCount = ( isSameTroopType || isTargetEmpty ) ? 1 : troopFrom.GetCount() / 2;
+            const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() : troopFrom.GetCount() - 1;
 
-            // if splitting to the same troop type, use this bool to turn on fast split option at the beginning of the dialog
-            bool useFastSplit = isSameTroopType && !isTargetEmpty;
+            // by default, the game proposes the fast split option
+            bool useFastSplit = true;
+
+            // if splitting troops and the destination slot contains the same troop type, then we want to divide the sum of all troops from both slots
+            // the default redistribute value represents how many troops should be moved to achieve equal slots
+            uint32_t redistributeCount = 1;
+
+            if ( useFastSplit ) {
+                if ( isSameTroopType ) {
+                    redistributeCount
+                        = ( overallCount / 2 ) > troopTarget.GetCount() ? ( overallCount / 2 ) - troopTarget.GetCount() : troopTarget.GetCount() - ( overallCount / 2 );
+
+                    // possible when merging two slots of the same unit and there is a count difference, ie. 2 Titan + 14 Titans
+                    if ( redistributeCount > maxCount )
+                        redistributeCount = maxCount;
+                }
+                else {
+                    redistributeCount = troopFrom.GetCount() / 2;
+                }
+            }
+
             const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 
             if ( slots < 2 || slots > 6 )
