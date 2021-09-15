@@ -387,7 +387,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction( void )
+void Interface::Basic::EventDefaultAction() const
 {
     Heroes * hero = GetFocusHeroes();
 
