@@ -59,7 +59,7 @@ namespace
         size_t newSeed = seed;
 
         for ( const Battle::Command & command : actions ) {
-            if ( command.GetType() == Battle::MSG_BATTLE_AUTO ) {
+            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
                 continue; // "auto battle" button event is ignored for the purpose of this hash
             }
 

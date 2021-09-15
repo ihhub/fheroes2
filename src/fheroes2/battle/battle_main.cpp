@@ -111,7 +111,7 @@ namespace
     {
         size_t seed = static_cast<size_t>( mapIndex ) + static_cast<size_t>( mapSeed );
 
-        for ( int i = 0; i < army1.Size(); ++i ) {
+        for ( size_t i = 0; i < army1.Size(); ++i ) {
             const Troop * troop = army1.GetTroop( i );
             if ( troop->isValid() ) {
                 fheroes2::hashCombine( seed, troop->GetID() );
@@ -122,7 +122,7 @@ namespace
             }
         }
 
-        for ( int i = 0; i < army2.Size(); ++i ) {
+        for ( size_t i = 0; i < army2.Size(); ++i ) {
             const Troop * troop = army2.GetTroop( i );
             if ( troop->isValid() ) {
                 fheroes2::hashCombine( seed, troop->GetID() );
