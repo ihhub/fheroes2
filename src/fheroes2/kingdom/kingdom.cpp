@@ -46,11 +46,6 @@
 
 #include <cassert>
 
-namespace GameStatic
-{
-    extern cost_t kingdom_starting_resource[];
-}
-
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 {
     return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
@@ -885,25 +880,33 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 
 cost_t Kingdom::_getKingdomStartingResources( const int difficulty, const bool isAIKingdom )
 {
+    static cost_t startingResourcesSet[] = {{10000, 30, 10, 30, 10, 10, 10},
+                                            {7500, 20, 5, 20, 5, 5, 5},
+                                            {5000, 10, 2, 10, 2, 2, 2},
+                                            {2500, 5, 0, 5, 0, 0, 0},
+                                            {0, 0, 0, 0, 0, 0, 0},
+                                            // ai resource
+                                            {10000, 30, 10, 30, 10, 10, 10}};
+
     if ( isAIKingdom )
-        return GameStatic::kingdom_starting_resource[5];
+        return startingResourcesSet[5];
 
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return GameStatic::kingdom_starting_resource[0];
+        return startingResourcesSet[0];
     case Difficulty::NORMAL:
-        return GameStatic::kingdom_starting_resource[1];
+        return startingResourcesSet[1];
     case Difficulty::HARD:
-        return GameStatic::kingdom_starting_resource[2];
+        return startingResourcesSet[2];
     case Difficulty::EXPERT:
-        return GameStatic::kingdom_starting_resource[3];
+        return startingResourcesSet[3];
     case Difficulty::IMPOSSIBLE:
-        return GameStatic::kingdom_starting_resource[4];
+        return startingResourcesSet[4];
     default:
         break;
     }
 
-    return GameStatic::kingdom_starting_resource[1];
+    return startingResourcesSet[1];
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
