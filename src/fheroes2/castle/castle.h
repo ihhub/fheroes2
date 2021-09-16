@@ -150,6 +150,8 @@ public:
     bool isLibraryBuild( void ) const;
     void MageGuildEducateHero( HeroBase & ) const;
 
+    bool isFortificationBuild() const;
+
     const Army & GetArmy( void ) const;
     Army & GetArmy( void );
     const Army & GetActualArmy( void ) const;
