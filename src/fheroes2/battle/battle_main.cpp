@@ -153,6 +153,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         initialSpellPoints2 = commander2->GetSpellPoints();
     }
 
+    std::unique_ptr<Arena> arena;
+    Result result;
+    HeroBase * hero_wins = nullptr;
+    HeroBase * hero_loss = nullptr;
+
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
     bool showBattle = !Settings::Get().BattleAutoResolve() && isHumanBattle;
 
@@ -161,82 +166,63 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
+    bool battleSummaryShown = false;
+    std::vector<Artifact> artifactsToTransfer;
+
     const size_t battleDeterministicSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
     const size_t battlePureRandomSeed = Rand::Get( std::numeric_limits<uint32_t>::max() );
     const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? battleDeterministicSeed : battlePureRandomSeed;
     Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
 
-    std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle, randomGenerator ) );
+    do {
+        // Reset army commander state
+        if ( commander1 )
+            commander1->SetSpellPoints( initialSpellPoints1 );
+        if ( commander2 )
+            commander2->SetSpellPoints( initialSpellPoints2 );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
+        // Have to destroy old Arena instance first
+        arena.reset();
 
-    while ( arena->BattleValid() ) {
-        arena->Turns();
-    }
+        // reset random seed
+        randomGenerator.UpdateSeed( battleSeed );
 
-    Result result = arena->GetResult();
+        arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, showBattle, randomGenerator ) );
 
-    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
-    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
-    u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-    std::vector<Artifact> artifactsToTransfer;
-    if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
-        artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
-    }
+        while ( arena->BattleValid() ) {
+            arena->Turns();
+        }
+        result = arena->GetResult();
 
-    bool battleSummaryShown = false;
-    // Check if it was an auto battle
-    if ( isHumanBattle && !showBattle ) {
-        if ( arena->DialogBattleSummary( result, artifactsToTransfer, true ) ) {
-            // If dialog returns true we will restart battle in manual mode
-            showBattle = true;
+        hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+        hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
+        u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-            // Reset army commander state
-            if ( commander1 )
-                commander1->SetSpellPoints( initialSpellPoints1 );
-            if ( commander2 )
-                commander2->SetSpellPoints( initialSpellPoints2 );
+        if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
+            artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+        }
 
-            // Have to destroy old Arena instance first
-            arena.reset();
+        if ( showBattle ) {
+            // fade arena
+            const bool clearMessageLog
+                = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );
+            arena->FadeArena( clearMessageLog );
+        }
 
-            // reset random seed
-            randomGenerator.UpdateSeed( battleSeed );
-
-            arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true, randomGenerator ) );
-
-            while ( arena->BattleValid() ) {
-                arena->Turns();
+        if ( isHumanBattle ) {
+            if ( arena->DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
+                // If dialog returns true we will restart battle in manual mode
+                showBattle = true;
             }
-
-            // Override the result
-            result = arena->GetResult();
-            hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
-            hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
-            loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
-
-            if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
-                artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+            else {
+                battleSummaryShown = true;
             }
         }
-        else {
-            battleSummaryShown = true;
-        }
-    }
-
-    if ( showBattle ) {
-        // fade arena
-        const bool clearMessageLog
-            = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );
-        arena->FadeArena( clearMessageLog );
-    }
-
-    // final summary dialog
-    if ( isHumanBattle && !battleSummaryShown ) {
-        arena->DialogBattleSummary( result, artifactsToTransfer, false );
-    }
+        // repeat up to one time
+    } while ( isHumanBattle && !battleSummaryShown );
 
     if ( hero_wins != nullptr && hero_loss != nullptr ) {
         transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
