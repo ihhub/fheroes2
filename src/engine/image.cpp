@@ -1092,17 +1092,16 @@ namespace fheroes2
         uint8_t * imageOutY = out.image() + offsetOutY;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
-        if ( out.singleLayer() ) {
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
-                memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
-            }
+        for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
+            memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
         }
-        else {
+
+        if ( !out.singleLayer() ) {
             const uint8_t * transformInY = in.transform() + offsetInY;
             uint8_t * transformOutY = out.transform() + offsetOutY;
+            const uint8_t * transformInYEnd = transformInY + height * widthIn;
 
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
-                memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
+            for ( ; transformInY != transformInYEnd; transformInY += widthIn, transformOutY += widthOut ) {
                 memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
             }
         }
