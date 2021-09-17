@@ -29,6 +29,44 @@
 #include "settings.h"
 #include "ui_tool.h"
 
+namespace
+{
+    void repeatPattern( const fheroes2::Image & in, int32_t inX, int32_t inY, int32_t inWidth, int32_t inHeight,
+                        fheroes2::Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
+    {
+        // TODO: verify/validate
+        // TODO: support offsetXY in the pattern
+
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
+        const size_t restWidth = static_cast<size_t>( width % inWidth );
+
+        const int32_t offsetIn = inY * widthIn + inX;
+        const uint8_t * imageIn = in.image() + offsetIn;
+        const uint8_t * const imageInEnd = imageIn + inHeight * widthIn;
+
+        const int32_t offsetOut = outY * widthOut + outX;
+        uint8_t * imageOut = out.image() + offsetOut;
+        uint8_t * const imageOutEnd = imageOut + height * widthOut;
+
+        for ( ; imageOut != imageOutEnd; imageOut += widthOut - width ) {
+
+            const uint8_t * const imageOutRepeatEnd = imageOut + width - restWidth;
+            for ( ; imageOut != imageOutRepeatEnd; imageOut += inWidth ) {
+                memcpy( imageOut, imageIn, inWidth );
+            }
+            memcpy( imageOut, imageIn, restWidth );
+            imageOut += restWidth;
+
+            imageIn += widthIn;
+            if ( imageInEnd == imageIn ) {
+                imageIn = in.image() + offsetIn;
+            }
+        }
+
+    }
+}
+
 void Interface::GameBorderRedraw( const bool viewWorldMode )
 {
     const Settings & conf = Settings::Get();
@@ -93,10 +131,12 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     srcrt.x += srcrt.width;
     srcrt.width = TILEWIDTH;
-    for ( int32_t i = 0; i <= topRepeatCount; ++i ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.x += TILEWIDTH;
-    }
+    // for ( int32_t i = 0; i <= topRepeatCount; ++i ) {
+    //     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    //     dstpt.x += TILEWIDTH;
+    // }
+    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, ( topRepeatCount + 1 ) * TILEWIDTH, BORDERWIDTH );
+    dstpt.x += ( topRepeatCount + 1 ) * TILEWIDTH;
 
     srcrt.x += TILEWIDTH;
     srcrt.width = isEvilInterface ? 65 : 25;
