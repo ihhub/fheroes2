@@ -43,6 +43,29 @@
 
 namespace
 {
+    void drawViewWorldSprite( const fheroes2::Sprite & viewWorldSprite, fheroes2::Display & display, const bool isEvilInterface )
+    {
+        const int32_t dstx = display.width() - viewWorldSprite.width() - BORDERWIDTH;
+        int32_t dsty = 2 * BORDERWIDTH + RADARWIDTH;
+        const int32_t cuty = 275;
+        fheroes2::Blit( viewWorldSprite, 0, 0, display, dstx, dsty, viewWorldSprite.width(), cuty );
+        dsty += cuty;
+
+        if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
+            const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
+            const int32_t startY = 11;
+            const int32_t copyHeight = 46;
+            const int32_t repeatHeight = display.height() - BORDERWIDTH - dsty - ( viewWorldSprite.height() - cuty );
+            fheroes2::repeatPattern( icnston, 0, startY, icnston.width(), copyHeight, display, dstx, dsty, icnston.width(), repeatHeight );
+            dsty += repeatHeight;
+        }
+
+        fheroes2::Blit( viewWorldSprite, 0, cuty, display, dstx, dsty, viewWorldSprite.width(), viewWorldSprite.height() - cuty );
+    }
+}
+
+namespace
+{
     const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
     const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
     const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
@@ -520,7 +543,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     // "View world" sprite
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
-    fheroes2::Blit( viewWorldSprite, display, display.width() - viewWorldSprite.width() - BORDERWIDTH, 2 * BORDERWIDTH + RADARWIDTH );
+    drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
 
     // Zoom button
     const fheroes2::Point buttonZoomPosition( display.width() - RADARWIDTH + 16, 2 * BORDERWIDTH + RADARWIDTH + 128 );
@@ -585,7 +608,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             DrawObjectsIcons( color, mode, currentROI );
             Interface::GameBorderRedraw( true );
             radar.RedrawForViewWorld( currentROI, mode );
-            fheroes2::Blit( viewWorldSprite, display, display.width() - viewWorldSprite.width() - BORDERWIDTH, 2 * BORDERWIDTH + RADARWIDTH );
+            drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
         }
     }

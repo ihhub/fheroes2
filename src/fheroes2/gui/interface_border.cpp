@@ -29,42 +29,6 @@
 #include "settings.h"
 #include "ui_tool.h"
 
-namespace
-{
-    void repeatPattern( const fheroes2::Image & in, int32_t inX, int32_t inY, int32_t inWidth, int32_t inHeight, fheroes2::Image & out, int32_t outX, int32_t outY,
-                        int32_t width, int32_t height )
-    {
-        // TODO: verify/validate
-        // TODO: support offsetXY in the pattern
-
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
-        const size_t restWidth = static_cast<size_t>( width % inWidth );
-
-        const int32_t offsetIn = inY * widthIn + inX;
-        const uint8_t * imageIn = in.image() + offsetIn;
-        const uint8_t * const imageInEnd = imageIn + inHeight * widthIn;
-
-        const int32_t offsetOut = outY * widthOut + outX;
-        uint8_t * imageOut = out.image() + offsetOut;
-        uint8_t * const imageOutEnd = imageOut + height * widthOut;
-
-        for ( ; imageOut != imageOutEnd; imageOut += widthOut - width ) {
-            const uint8_t * const imageOutRepeatEnd = imageOut + width - restWidth;
-            for ( ; imageOut != imageOutRepeatEnd; imageOut += inWidth ) {
-                memcpy( imageOut, imageIn, inWidth );
-            }
-            memcpy( imageOut, imageIn, restWidth );
-            imageOut += restWidth;
-
-            imageIn += widthIn;
-            if ( imageInEnd == imageIn ) {
-                imageIn = in.image() + offsetIn;
-            }
-        }
-    }
-}
-
 void Interface::GameBorderRedraw( const bool viewWorldMode )
 {
     const Settings & conf = Settings::Get();
@@ -128,7 +92,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     srcrt.width = 6;
     dstpt.x = srcrt.x;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthLeft, BORDERWIDTH );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthLeft, BORDERWIDTH );
     dstpt.x += srcrt.width + topPadWidthLeft;
     srcrt.x += srcrt.width;
 
@@ -139,7 +103,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = TILEWIDTH;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, topRepeatWidth, BORDERWIDTH );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, topRepeatWidth, BORDERWIDTH );
     dstpt.x += topRepeatWidth;
     srcrt.x += TILEWIDTH;
 
@@ -150,7 +114,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = 6;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthRight, BORDERWIDTH );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthRight, BORDERWIDTH );
     srcrt.x += srcrt.width;
 
     srcrt.width = icnadv.width() - srcrt.x;
@@ -170,7 +134,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
     dstpt.y += vertRepeatHeight;
     srcrt.y += TILEWIDTH;
 
@@ -181,7 +145,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
 
     srcrt.height = 8;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
     srcrt.y += srcrt.height;
 
     srcrt.height = icnadv.height() - srcrt.y;
@@ -201,7 +165,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
     dstpt.y += vertRepeatHeight;
     srcrt.y += TILEWIDTH;
 
@@ -210,7 +174,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // fix extra border part on higher resolutions
-    if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
+    if ( viewWorldMode || displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
         fheroes2::Rect fixrt( 478, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
         fheroes2::Point fixpt( dstpt.x + 14, dstpt.y + 18 );
         fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
@@ -220,7 +184,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
 
     srcrt.height = 8;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
     srcrt.y += srcrt.height;
 
     srcrt.height = icnadv.height() - srcrt.y;
@@ -240,7 +204,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
     dstpt.y += vertRepeatHeight;
     srcrt.y += TILEWIDTH;
 
@@ -249,7 +213,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // fix extra border part on higher resolutions
-    if ( displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
+    if ( viewWorldMode || displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
         fheroes2::Rect fixrt( 624, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
         fheroes2::Point fixpt( dstpt.x, dstpt.y + 18 );
         fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
@@ -259,7 +223,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
 
     srcrt.height = 8;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
     srcrt.y += srcrt.height;
 
     srcrt.height = icnadv.height() - srcrt.y;
@@ -278,7 +242,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     srcrt.width = 6;
     dstpt.x = srcrt.x;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthLeft, BORDERWIDTH );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthLeft, BORDERWIDTH );
     dstpt.x += srcrt.width + bottomPadWidthLeft;
     srcrt.x += srcrt.width;
 
@@ -289,7 +253,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = bottomTileWidth;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, bottomRepeatWidth, BORDERWIDTH );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, bottomRepeatWidth, BORDERWIDTH );
     dstpt.x += bottomRepeatWidth;
     srcrt.x += srcrt.width;
 
@@ -300,7 +264,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = 6;
-    repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthRight, BORDERWIDTH );
+    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthRight, BORDERWIDTH );
     srcrt.x += srcrt.width;
 
     srcrt.width = icnadv.width() - srcrt.x;
@@ -315,12 +279,12 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.x = displayWidth - RADARWIDTH - BORDERWIDTH;
     dstpt.y = srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y = srcrt.y + BORDERWIDTH + iconsCount * 32;
-    srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
-    if ( viewWorldMode && displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        dstpt.y = 464;
+
+    if ( !viewWorldMode ) {
+        dstpt.y = srcrt.y + BORDERWIDTH + iconsCount * 32;
+        srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     }
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 }
 
 Interface::BorderWindow::BorderWindow( const fheroes2::Rect & rt )
