@@ -412,8 +412,6 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
 bool ActionSpellDimensionDoor( Heroes & hero )
 {
-    const u32 distance = Spell::CalculateDimensionDoorDistance();
-
     Interface::Basic & I = Interface::Basic::Get();
 
     // center hero
@@ -423,7 +421,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
     const s32 src = hero.GetIndex();
     // get destination
-    const s32 dst = I.GetDimensionDoorDestination( src, distance, hero.isShipMaster() );
+    const s32 dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );

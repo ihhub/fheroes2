@@ -484,8 +484,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     if ( !artifacts.empty() ) {
-        HeroBase * winner = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
-        HeroBase * loser = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
+        const HeroBase * winner = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
+        const HeroBase * loser = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
         if ( winner == nullptr || loser == nullptr )
@@ -494,7 +494,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         const bool isWinnerHuman = winner && winner->isControlHuman();
 
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
-        btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
+        btn_ok.setPosition( pos_rt.x + 120, pos_rt.y + 410 );
 
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
@@ -522,19 +522,17 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 TextBox box( artMsg, Font::YELLOW_BIG, bsTextWidth );
                 box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
 
-                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
                 const fheroes2::Point artifactOffset( pos_rt.x + 119, pos_rt.y + 310 );
 
-                fheroes2::Sprite image = border;
-                const int32_t borderSize = 5;
-                fheroes2::Blit( artifact, image, borderSize, borderSize );
-                fheroes2::Blit( image, display, artifactOffset.x, artifactOffset.y );
+                fheroes2::Blit( border, display, artifactOffset.x, artifactOffset.y );
+                fheroes2::Blit( artifact, display, artifactOffset.x + 8, artifactOffset.y + 8 );
 
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
-                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + image.height() + borderSize );
+                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + border.height() + 5 );
 
-                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
+                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
 
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();

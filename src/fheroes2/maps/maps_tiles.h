@@ -52,7 +52,7 @@ namespace Maps
 {
     struct TilesAddon
     {
-        enum level_t
+        enum level_t : uint8_t
         {
             GROUND = 0,
             DOWN = 1,
@@ -61,7 +61,7 @@ namespace Maps
         };
 
         TilesAddon();
-        TilesAddon( int lv, u32 gid, int obj, u32 ii );
+        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
         TilesAddon( const TilesAddon & ta );
 
         ~TilesAddon() = default;
@@ -86,10 +86,10 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
 
-        u32 uniq;
-        u8 level;
-        u8 object;
-        u8 index;
+        uint32_t uniq;
+        uint8_t level;
+        uint8_t object;
+        uint8_t index;
     };
 
     struct Addons : public std::list<TilesAddon>
@@ -205,7 +205,7 @@ namespace Maps
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
+        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -287,6 +287,10 @@ namespace Maps
         void setAsEmpty();
 
         uint32_t getObjectIdByICNType( const int icnId ) const;
+
+        std::vector<uint8_t> getValidTileSets() const;
+
+        bool containsTileSet( const std::vector<uint8_t> & tileSets ) const;
 
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );

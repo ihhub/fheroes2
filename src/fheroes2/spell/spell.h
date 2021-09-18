@@ -130,7 +130,6 @@ public:
     u32 Resurrect( void ) const;
 
     u32 ExtraValue( void ) const;
-    payment_t GetCost( void ) const;
 
     bool isValid( void ) const;
     bool isLevel( int ) const;
@@ -151,7 +150,6 @@ public:
     bool isApplyToEnemies( void ) const;
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
-    bool isEnabled() const;
     bool isFire() const;
     bool isCold() const;
 
@@ -162,7 +160,7 @@ public:
     static Spell RandAdventure( int lvl );
     static Spell Rand( int lvl, bool adv );
 
-    static u32 CalculateDimensionDoorDistance();
+    static int32_t CalculateDimensionDoorDistance();
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Spell & );

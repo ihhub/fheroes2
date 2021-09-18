@@ -36,6 +36,11 @@
 
 //#define VIEWWORLD_DEBUG_ZOOM_LEVEL  // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
+#if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
+#define SAVE_WORLD_MAP
+#include "image_tool.h"
+#endif
+
 namespace
 {
     const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
@@ -162,7 +167,9 @@ namespace
                 drawingFlags &= ~Interface::RedrawLevelType::LEVEL_FOG;
             }
 
+#if !defined( SAVE_WORLD_MAP )
             drawingFlags ^= Interface::RedrawLevelType::LEVEL_HEROES;
+#endif
 
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
@@ -178,6 +185,10 @@ namespace
                     }
                 }
             }
+
+#if defined( SAVE_WORLD_MAP )
+            fheroes2::Save( cachedImages[3], "world_map.bmp" );
+#endif
         }
     };
 

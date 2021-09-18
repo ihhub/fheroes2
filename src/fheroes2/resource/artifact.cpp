@@ -986,8 +986,6 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
         else if ( _hero->CanLearnSpell( spell ) ) {
-            payment_t cost = spell.GetCost();
-            u32 answer = 0;
             std::string text = _(
                 "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
 
@@ -995,18 +993,12 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             StringReplace( text, "%{sp}", spell.SpellPoint() );
 
             if ( spell.MovePoint() ) {
-                text.append( "\n" );
-                text.append( "Move point: %{mp}" );
+                text += '\n';
+                text.append( _( "Move points: %{mp}" ) );
                 StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
-            const std::string title = _( "Transcribe Spell Scroll" );
-
-            if ( cost.GetValidItemsCount() )
-                answer = Dialog::ResourceInfo( title, text, cost, Dialog::YES | Dialog::NO );
-            else
-                answer = Dialog::Message( title, text, Font::BIG, Dialog::YES | Dialog::NO );
-
+            const uint32_t answer = Dialog::Message( _( "Transcribe Spell Scroll" ), text, Font::BIG, Dialog::YES | Dialog::NO );
             if ( answer == Dialog::YES )
                 const_cast<Heroes *>( _hero )->TranscribeScroll( art );
         }

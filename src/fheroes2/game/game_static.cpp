@@ -117,60 +117,6 @@ namespace Skill
         /* estates */ 1,   /* leadership */ 0, /* logistics */ 1, /* luck */ 1,
         /* mysticism */ 1, /* navigation */ 1, /* necromancy*/ 0, /* pathfinding */ 1,
         /* scouting */ 1,  /* wisdom */ 1};
-
-    StreamBase & operator<<( StreamBase & msg, const level_t & obj )
-    {
-        return msg << obj.basic << obj.advanced << obj.expert;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, level_t & obj )
-    {
-        return msg >> obj.basic >> obj.advanced >> obj.expert;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const primary_t & obj )
-    {
-        return msg << obj.attack << obj.defense << obj.power << obj.knowledge;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, primary_t & obj )
-    {
-        return msg >> obj.attack >> obj.defense >> obj.power >> obj.knowledge;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const secondary_t & obj )
-    {
-        return msg << obj.archery << obj.ballistics << obj.diplomacy << obj.eagleeye << obj.estates << obj.leadership << obj.logistics << obj.luck << obj.mysticism
-                   << obj.navigation << obj.necromancy << obj.pathfinding << obj.scouting << obj.wisdom;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, secondary_t & obj )
-    {
-        return msg >> obj.archery >> obj.ballistics >> obj.diplomacy >> obj.eagleeye >> obj.estates >> obj.leadership >> obj.logistics >> obj.luck >> obj.mysticism
-               >> obj.navigation >> obj.necromancy >> obj.pathfinding >> obj.scouting >> obj.wisdom;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const stats_t & obj )
-    {
-        return msg << obj.captain_primary << obj.initial_primary << obj.initial_book << obj.initial_spell << obj.initial_secondary << obj.over_level
-                   << obj.mature_primary_under << obj.mature_primary_over << obj.mature_secondary;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, stats_t & obj )
-    {
-        return msg >> obj.captain_primary >> obj.initial_primary >> obj.initial_book >> obj.initial_spell >> obj.initial_secondary >> obj.over_level
-               >> obj.mature_primary_under >> obj.mature_primary_over >> obj.mature_secondary;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const values_t & obj )
-    {
-        return msg << obj.values;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, values_t & obj )
-    {
-        return msg >> obj.values;
-    }
 }
 
 namespace GameStatic

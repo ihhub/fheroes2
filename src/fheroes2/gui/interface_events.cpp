@@ -201,7 +201,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
+        EventViewWorld();
         break;
 
     case Dialog::PUZZLE:
@@ -236,6 +236,11 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     }
 
     return fheroes2::GameMode::CANCEL;
+}
+
+void Interface::Basic::EventViewWorld()
+{
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
 }
 
 fheroes2::GameMode Interface::Basic::EventFileDialog() const
@@ -382,7 +387,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction( void )
+void Interface::Basic::EventDefaultAction() const
 {
     Heroes * hero = GetFocusHeroes();
 

@@ -72,8 +72,8 @@ public:
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
-        UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
-        UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
+        // UNUSED = 0x20001000,
+        // UNUSED = 0x20002000,
         WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
         // UNUSED = 0x20008000,
         // UNUSED = 0x20010000,
@@ -171,8 +171,6 @@ public:
     bool ExtHeroRememberPointsForRetreating() const;
     bool ExtHeroAllowTranscribingScroll() const;
     bool ExtHeroArenaCanChoiseAnySkills() const;
-    bool ExtUnionsAllowCastleVisiting() const;
-    bool ExtUnionsAllowHeroesMeetings() const;
     bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;

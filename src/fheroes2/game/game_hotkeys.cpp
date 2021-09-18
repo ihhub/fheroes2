@@ -109,6 +109,8 @@ const char * Game::EventsName( int evnt )
         return "cast spell";
     case EVENT_KINGDOM_INFO:
         return "kingdom overview";
+    case EVENT_VIEW_WORLD:
+        return "view world";
     case EVENT_DEFAULTACTION:
         return "default action";
 
@@ -264,6 +266,8 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_CASTSPELL] = KEY_c;
     // kingdom overview
     key_events[EVENT_KINGDOM_INFO] = KEY_k;
+    // view world
+    key_events[EVENT_VIEW_WORLD] = KEY_v;
     // default action
     key_events[EVENT_DEFAULTACTION] = KEY_SPACE;
     // move hero
@@ -271,12 +275,12 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_MOVERIGHT] = KEY_RIGHT;
     key_events[EVENT_MOVETOP] = KEY_UP;
     key_events[EVENT_MOVEBOTTOM] = KEY_DOWN;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVETOPLEFT] = KEY_NONE;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVETOPRIGHT] = KEY_NONE;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVEBOTTOMLEFT] = KEY_NONE;
-    // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
+    key_events[EVENT_MOVETOPLEFT] = KEY_NONE;
+    key_events[EVENT_MOVETOPRIGHT] = KEY_NONE;
+    key_events[EVENT_MOVEBOTTOMLEFT] = KEY_NONE;
+    key_events[EVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
     // open focus
-    // key_events[EVENT_OPENFOCUS] = KEY_NONE;
+    key_events[EVENT_OPENFOCUS] = KEY_RETURN;
     // control panel
     key_events[EVENT_CTRLPANEL] = KEY_1;
     key_events[EVENT_SHOWRADAR] = KEY_2;

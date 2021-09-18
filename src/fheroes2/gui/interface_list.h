@@ -257,10 +257,10 @@ namespace Interface
                 else if ( _topId + maxItems <= _currentId ) { // scroll down, put current id at bottom
                     _topId = _currentId + 1 - maxItems;
                 }
-
-                UpdateScrollbarRange();
-                _scrollbar.moveToIndex( _topId );
             }
+
+            UpdateScrollbarRange();
+            _scrollbar.moveToIndex( _topId );
         }
 
         // Move visible area to the position with given element ID being on the top of the list.
