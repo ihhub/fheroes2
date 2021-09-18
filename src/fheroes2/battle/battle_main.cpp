@@ -155,8 +155,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     std::unique_ptr<Arena> arena;
     Result result;
-    HeroBase * hero_wins = nullptr;
-    HeroBase * hero_loss = nullptr;
+    HeroBase * winnerHero = nullptr;
+    HeroBase * loserHero = nullptr;
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
     bool showBattle = !Settings::Get().BattleAutoResolve() && isHumanBattle;
@@ -197,12 +197,12 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         }
         result = arena->GetResult();
 
-        hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
-        hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
+        winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+        loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
         uint32_t loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-        if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
-            artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
+        if ( winnerHero && loserHero && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && winnerHero->isHeroes() && loserHero->isHeroes() ) {
+            artifactsToTransfer = planArtifactTransfer( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts() );
         }
 
         if ( showBattle ) {
@@ -224,8 +224,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // repeat up to one time
     } while ( isHumanBattle && !battleSummaryShown );
 
-    if ( hero_wins != nullptr && hero_loss != nullptr ) {
-        transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
+    if ( winnerHero != nullptr && loserHero != nullptr ) {
+        transferArtifacts( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts(), artifactsToTransfer );
     }
 
     // save count troop
@@ -249,15 +249,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // eagle eye capability
-    if ( hero_wins && hero_loss && hero_wins->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && hero_loss->isHeroes() )
-        EagleEyeSkillAction( *hero_wins, arena->GetUsageSpells(), hero_wins->isControlHuman(), randomGenerator );
+    if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() )
+        EagleEyeSkillAction( *winnerHero, arena->GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
 
     // necromancy capability
-    if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
-        NecromancySkillAction( *hero_wins, result.killed, hero_wins->isControlHuman(), *arena );
+    if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
+        NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman(), *arena );
 
-    if ( hero_wins ) {
-        Heroes * kingdomHero = dynamic_cast<Heroes *>( hero_wins );
+    if ( winnerHero ) {
+        Heroes * kingdomHero = dynamic_cast<Heroes *>( winnerHero );
 
         if ( kingdomHero ) {
             Kingdom & kingdom = kingdomHero->GetKingdom();
