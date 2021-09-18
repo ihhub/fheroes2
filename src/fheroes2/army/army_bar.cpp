@@ -70,7 +70,7 @@ namespace
             const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
             uint32_t redistributeCount = troopFrom.GetCount() / 2;
 
-            // if same type, then display how amny troops should be moved from one slot to another (if redistributeCount > 1 then the Min button is displayed by default)
+            // if the same type, then display how many troops should be moved from one slot to another (if redistributeCount > 1 then the Min button is displayed by default)
             if ( isSameTroopType ) {
                 redistributeCount
                     = ( overallCount / 2 ) > troopTarget.GetCount() ? ( overallCount / 2 ) - troopTarget.GetCount() : troopTarget.GetCount() - ( overallCount / 2 );
