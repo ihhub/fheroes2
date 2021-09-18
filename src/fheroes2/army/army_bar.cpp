@@ -57,34 +57,31 @@ namespace
 
             Army::SwapTroops( troopFrom, troopTarget );
         }
+        else if ( !troopTarget.isValid() && troopFrom.GetCount() == 2 ) {
+            troopFrom.SetCount( 1 );
+            troopTarget.Set( troopFrom.GetMonster(), 1 );
+        }
         else {
             uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
 
             if ( isSameTroopType )
                 ++freeSlots;
 
-            const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() : troopFrom.GetCount() - 1;
+            const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
+            uint32_t redistributeCount = troopFrom.GetCount() / 2;
 
-            // by default, the game proposes the fast split option
-            bool useFastSplit = true;
+            // if same type, then display how amny troops should be moved from one slot to another (if redistributeCount > 1 then the Min button is displayed by default)
+            if ( isSameTroopType ) {
+                redistributeCount
+                    = ( overallCount / 2 ) > troopTarget.GetCount() ? ( overallCount / 2 ) - troopTarget.GetCount() : troopTarget.GetCount() - ( overallCount / 2 );
 
-            // if splitting troops and the destination slot contains the same troop type, then we want to divide the sum of all troops from both slots
-            // the default redistribute value represents how many troops should be moved to achieve equal slots
-            uint32_t redistributeCount = 1;
-
-            if ( useFastSplit ) {
-                if ( isSameTroopType ) {
-                    redistributeCount
-                        = ( overallCount / 2 ) > troopTarget.GetCount() ? ( overallCount / 2 ) - troopTarget.GetCount() : troopTarget.GetCount() - ( overallCount / 2 );
-
-                    // possible when merging two slots of the same unit and there is a count difference, ie. 2 Titan + 14 Titans
-                    if ( redistributeCount > maxCount )
-                        redistributeCount = maxCount;
-                }
-                else {
-                    redistributeCount = troopFrom.GetCount() / 2;
-                }
+                // possible when merging two slots of the same unit and there is a count difference, ie. 2 Titan + 14 Titans
+                if ( redistributeCount > maxCount )
+                    redistributeCount = maxCount;
             }
+
+            // if splitting to the same troop type, use this bool to turn on fast split option at the beginning of the dialog
+            bool useFastSplit = true;
 
             const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 
