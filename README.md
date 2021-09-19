@@ -14,7 +14,7 @@ and UI improvements), breathing new life into one of the most addictive turn-bas
 </p>
 
 ## FAQ
-You can find answers for the most common questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
+You can find answers to the most common questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
 
 
 ## Download and install
