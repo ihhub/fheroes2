@@ -13,6 +13,10 @@ and UI improvements), breathing new life into one of the most addictive turn-bas
     <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="512">
 </p>
 
+## FAQ
+You can find answers for the most common questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
+
+
 ## Download and install
 
 To download and install fheroes2 please follow the [**installation guide**](docs/INSTALL.md).
@@ -34,7 +38,9 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Development
 
-To build the project from source or contribute please follow [**this guide**](docs/DEVELOPMENT.md).
+This repository is the place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+
+To build the project from source please follow [**this guide**](docs/DEVELOPMENT.md).
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2)
 [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
