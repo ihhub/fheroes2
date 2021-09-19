@@ -150,21 +150,54 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
-    srcrt.height = TILEWIDTH;
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
-    dstpt.y += vertRepeatHeight;
-    srcrt.y += TILEWIDTH;
+    if ( isEvilInterface ) {
+        srcrt.height = TILEWIDTH;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
+        dstpt.y += vertRepeatHeightTop;
+        srcrt.y += TILEWIDTH;
 
-    srcrt.width = BORDERWIDTH;
-    srcrt.height = isEvilInterface ? 33 : 123;
-    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y += srcrt.height;
-    srcrt.y += srcrt.height;
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 33;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
 
-    srcrt.height = 8;
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
-    dstpt.y += srcrt.height + vertPadHeight;
-    srcrt.y += srcrt.height;
+        srcrt.height = 8;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+        dstpt.y += srcrt.height + vertPadHeight;
+        srcrt.y += srcrt.height;
+
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 103;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
+
+        srcrt.height = TILEWIDTH;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += TILEWIDTH;
+
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+        dstpt.y += vertRepeatHeightBottom;
+        srcrt.y += TILEWIDTH;
+    }
+    else {
+        srcrt.height = TILEWIDTH;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+        dstpt.y += vertRepeatHeight;
+        srcrt.y += TILEWIDTH;
+
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 123;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
+
+        srcrt.height = 8;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+        dstpt.y += srcrt.height + vertPadHeight;
+        srcrt.y += srcrt.height;
+    }
 
     srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -199,24 +232,46 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
-    srcrt.height = TILEWIDTH;
-    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y += TILEWIDTH;
+    if ( isEvilInterface ) {
+        srcrt.height = 8;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+        dstpt.y += srcrt.height + vertPadHeight;
+        srcrt.y += srcrt.height;
 
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
-    dstpt.y += vertRepeatHeightBottom;
-    srcrt.y += TILEWIDTH;
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 103;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
 
-    srcrt.width = BORDERWIDTH;
-    srcrt.height = isEvilInterface ? 0 : 43; // middle border is special on good interface due to all the green leaves
-    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y += srcrt.height;
-    srcrt.y += srcrt.height;
+        srcrt.height = TILEWIDTH;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += TILEWIDTH;
 
-    srcrt.height = 8;
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
-    dstpt.y += srcrt.height + vertPadHeight;
-    srcrt.y += srcrt.height;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+        dstpt.y += vertRepeatHeightBottom;
+        srcrt.y += TILEWIDTH;
+    }
+    else {
+        srcrt.height = TILEWIDTH;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += TILEWIDTH;
+
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+        dstpt.y += vertRepeatHeightBottom;
+        srcrt.y += TILEWIDTH;
+
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 43;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
+
+        srcrt.height = 8;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+        dstpt.y += srcrt.height + vertPadHeight;
+        srcrt.y += srcrt.height;
+    }
 
     srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -251,24 +306,46 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
-    srcrt.height = TILEWIDTH;
-    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y += TILEWIDTH;
+    if ( isEvilInterface ) {
+        srcrt.height = 8;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+        dstpt.y += srcrt.height + vertPadHeight;
+        srcrt.y += srcrt.height;
 
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
-    dstpt.y += vertRepeatHeightBottom;
-    srcrt.y += TILEWIDTH;
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 103;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
 
-    srcrt.width = BORDERWIDTH;
-    srcrt.height = isEvilInterface ? 0 : 41;
-    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    dstpt.y += srcrt.height;
-    srcrt.y += srcrt.height;
+        srcrt.height = TILEWIDTH;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += TILEWIDTH;
 
-    srcrt.height = 8;
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
-    dstpt.y += srcrt.height + vertPadHeight;
-    srcrt.y += srcrt.height;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+        dstpt.y += vertRepeatHeightBottom;
+        srcrt.y += TILEWIDTH;
+    }
+    else {
+        srcrt.height = TILEWIDTH;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += TILEWIDTH;
+
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+        dstpt.y += vertRepeatHeightBottom;
+        srcrt.y += TILEWIDTH;
+
+        srcrt.width = BORDERWIDTH;
+        srcrt.height = 41;
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.y += srcrt.height;
+        srcrt.y += srcrt.height;
+
+        srcrt.height = 8;
+        repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+        dstpt.y += srcrt.height + vertPadHeight;
+        srcrt.y += srcrt.height;
+    }
 
     srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
