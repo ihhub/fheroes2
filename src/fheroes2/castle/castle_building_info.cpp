@@ -187,15 +187,12 @@ namespace
         case BUILD_CAPTAIN:
             return { 223, 122, 37, 52 };
         case BUILD_MAGEGUILD1:
-            return { 285, 32, 55, 129 };
+            return { 280, 21, 60, 143 };
         case BUILD_MAGEGUILD2:
-            return { 285, 32, 55, 129 };
         case BUILD_MAGEGUILD3:
-            return { 285, 32, 55, 129 };
         case BUILD_MAGEGUILD4:
-            return { 285, 32, 55, 129 };
         case BUILD_MAGEGUILD5:
-            return { 285, 32, 55, 129 };
+            return { 280, 0, 60, 164 };
         case BUILD_TENT:
             return { 104, 130, 59, 42 };
         case DWELLING_MONSTER1:
