@@ -29,6 +29,22 @@
 #include "settings.h"
 #include "ui_tool.h"
 
+namespace
+{
+    inline void BlitR( const fheroes2::Image & in, int32_t x, int32_t y, fheroes2::Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
+    {
+        fheroes2::Blit( in, x, y, out, outX, outY, width, height );
+        // fheroes2::DrawRect( out, fheroes2::Rect( outX, outY, width - 1, height - 1 ), 214 ); // DEBUG
+    }
+
+    inline void repeatPatternR( const fheroes2::Image & in, int32_t inX, int32_t inY, int32_t inWidth, int32_t inHeight, fheroes2::Image & out, int32_t outX,
+                                int32_t outY, int32_t width, int32_t height )
+    {
+        fheroes2::repeatPattern( in, inX, inY, inWidth, inHeight, out, outX, outY, width, height );
+        // fheroes2::DrawRect( out, fheroes2::Rect( outX, outY, width - 1 , height - 1 ), 214 ); // DEBUG
+    }
+}
+
 void Interface::GameBorderRedraw( const bool viewWorldMode )
 {
     const Settings & conf = Settings::Get();
@@ -87,148 +103,145 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.x += srcrt.width;
 
     srcrt.width = 6;
     dstpt.x = srcrt.x;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthLeft, BORDERWIDTH );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthLeft, BORDERWIDTH );
     dstpt.x += srcrt.width + topPadWidthLeft;
     srcrt.x += srcrt.width;
 
     srcrt.width = isEvilInterface ? 64 : 24;
     srcrt.height = BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
 
     srcrt.width = TILEWIDTH;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, topRepeatWidth, BORDERWIDTH );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, topRepeatWidth, BORDERWIDTH );
     dstpt.x += topRepeatWidth;
     srcrt.x += TILEWIDTH;
 
     srcrt.width = isEvilInterface ? 65 : 25;
     srcrt.height = BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
 
     srcrt.width = 6;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthRight, BORDERWIDTH );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + topPadWidthRight, BORDERWIDTH );
+    dstpt.x += srcrt.width + topPadWidthRight;
     srcrt.x += srcrt.width;
 
     srcrt.width = icnadv.width() - srcrt.x;
-    dstpt.x = displayWidth - srcrt.width;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // LEFT BORDER
     srcrt.x = 0;
-    srcrt.y = 0;
+    srcrt.y = BORDERWIDTH;
     srcrt.width = BORDERWIDTH;
-    srcrt.height = 255;
+    srcrt.height = 255 - BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
 
-    srcrt.y = 255;
     srcrt.height = TILEWIDTH;
-    dstpt.x = srcrt.x;
-    dstpt.y = srcrt.y;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
     dstpt.y += vertRepeatHeight;
     srcrt.y += TILEWIDTH;
 
     srcrt.width = BORDERWIDTH;
     srcrt.height = isEvilInterface ? 33 : 123;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    srcrt.y += srcrt.height;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
 
     srcrt.height = 8;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    dstpt.y += srcrt.height + vertPadHeight;
     srcrt.y += srcrt.height;
 
-    srcrt.height = icnadv.height() - srcrt.y;
-    dstpt.y = displayHeight - srcrt.height;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // MIDDLE BORDER
     srcrt.x = icnadv.width() - RADARWIDTH - 2 * BORDERWIDTH;
-    srcrt.y = 0;
+    srcrt.y = BORDERWIDTH;
     srcrt.width = BORDERWIDTH;
-    srcrt.height = 255;
+    srcrt.height = 255 - BORDERWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
 
-    srcrt.y = 255;
     srcrt.height = TILEWIDTH;
-    dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
-    dstpt.y = srcrt.y;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
     dstpt.y += vertRepeatHeight;
     srcrt.y += TILEWIDTH;
 
     srcrt.width = BORDERWIDTH;
     srcrt.height = isEvilInterface ? 33 : 125; // middle border is special on good interface due to all the green leaves
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // fix extra border part on higher resolutions
     if ( viewWorldMode || displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
         fheroes2::Rect fixrt( 478, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
         fheroes2::Point fixpt( dstpt.x + 14, dstpt.y + 18 );
-        fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
+        BlitR( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
 
-    srcrt.y += srcrt.height;
     dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
 
     srcrt.height = 8;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    dstpt.y += srcrt.height + vertPadHeight;
     srcrt.y += srcrt.height;
 
-    srcrt.height = icnadv.height() - srcrt.y;
-    dstpt.y = displayHeight - srcrt.height;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // RIGHT BORDER
     srcrt.x = icnadv.width() - BORDERWIDTH;
-    srcrt.y = 0;
+    srcrt.y = BORDERWIDTH;
     srcrt.width = BORDERWIDTH;
-    srcrt.height = 255;
+    srcrt.height = 255 - BORDERWIDTH;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
 
-    srcrt.y = 255;
     srcrt.height = TILEWIDTH;
-    dstpt.x = displayWidth - BORDERWIDTH;
-    dstpt.y = srcrt.y;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
     dstpt.y += vertRepeatHeight;
     srcrt.y += TILEWIDTH;
 
     srcrt.width = BORDERWIDTH;
     srcrt.height = isEvilInterface ? 33 : 123;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // fix extra border part on higher resolutions
     if ( viewWorldMode || displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
         fheroes2::Rect fixrt( 624, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
         fheroes2::Point fixpt( dstpt.x, dstpt.y + 18 );
-        fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
+        BlitR( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
 
-    srcrt.y += srcrt.height;
     dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
 
     srcrt.height = 8;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
+    dstpt.y += srcrt.height + vertPadHeight;
     srcrt.y += srcrt.height;
 
-    srcrt.height = icnadv.height() - srcrt.y;
-    dstpt.y = displayHeight - srcrt.height;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // BOTTOM BORDER
     srcrt.x = 0;
@@ -237,39 +250,39 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = displayHeight - BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
 
     srcrt.width = 6;
-    dstpt.x = srcrt.x;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthLeft, BORDERWIDTH );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthLeft, BORDERWIDTH );
     dstpt.x += srcrt.width + bottomPadWidthLeft;
     srcrt.x += srcrt.width;
 
     srcrt.width = isEvilInterface ? 90 : 24;
     srcrt.height = BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
 
     srcrt.width = bottomTileWidth;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, bottomRepeatWidth, BORDERWIDTH );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, bottomRepeatWidth, BORDERWIDTH );
     dstpt.x += bottomRepeatWidth;
     srcrt.x += srcrt.width;
 
     srcrt.width = isEvilInterface ? 86 : 25; // evil bottom border is asymmetric
     srcrt.height = BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
 
     srcrt.width = 6;
-    fheroes2::repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthRight, BORDERWIDTH );
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthRight, BORDERWIDTH );
+    dstpt.x += srcrt.width + bottomPadWidthRight;
     srcrt.x += srcrt.width;
 
     srcrt.width = icnadv.width() - srcrt.x;
-    dstpt.x = displayWidth - srcrt.width;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // ICON BORDER
     srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
@@ -278,12 +291,12 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = BORDERWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     if ( !viewWorldMode ) {
         dstpt.y = srcrt.y + BORDERWIDTH + iconsCount * 32;
         srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     }
 }
 
