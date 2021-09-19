@@ -187,9 +187,9 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = isEvilInterface ? 33 : 125; // middle border is special on good interface due to all the green leaves
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
-    // fix extra border part on higher resolutions
-    if ( viewWorldMode || displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        fheroes2::Rect fixrt( 478, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
+    // hide embranchment
+    if ( viewWorldMode ) {
+        fheroes2::Rect fixrt( 478, isEvilInterface ? 137 : 345, 3, isEvilInterface ? 15 : 20 );
         fheroes2::Point fixpt( dstpt.x + 14, dstpt.y + 18 );
         BlitR( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
@@ -225,9 +225,9 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.height = isEvilInterface ? 33 : 123;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
-    // fix extra border part on higher resolutions
-    if ( viewWorldMode || displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
-        fheroes2::Rect fixrt( 624, isEvilInterface ? 328 : 345, 3, isEvilInterface ? 15 : 20 );
+    // hide embranchment
+    if ( viewWorldMode ) {
+        fheroes2::Rect fixrt( 624, isEvilInterface ? 139 : 345, 3, isEvilInterface ? 15 : 20 );
         fheroes2::Point fixpt( dstpt.x, dstpt.y + 18 );
         BlitR( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
