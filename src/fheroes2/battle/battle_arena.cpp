@@ -237,7 +237,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
         towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator ) : nullptr;
         towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator );
         towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator ) : nullptr;
-        const bool fortification = castle->isFortificationBuild();
         catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), _randomGenerator ) : nullptr;
         bridge = new Bridge();
 
@@ -245,10 +244,11 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
         // tower
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
