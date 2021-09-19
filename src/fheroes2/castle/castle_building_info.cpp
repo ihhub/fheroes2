@@ -82,7 +82,7 @@ namespace
             return { 445, 50, 194, 157 };
         case BUILD_LEFTTURRET:
             return { 7, 33, 0, 0 };
-         case BUILD_RIGHTTURRET:
+        case BUILD_RIGHTTURRET:
             return { 134, 37, 0, 0 };
         default:
             break;
@@ -150,7 +150,7 @@ namespace
             return { 407, 0, 113, 106 };
         case BUILD_LEFTTURRET:
             return { 5, 50, 0, 0 };
-         case BUILD_RIGHTTURRET:
+        case BUILD_RIGHTTURRET:
             return { 118, 45, 0, 0 };
         default:
             break;
@@ -218,7 +218,7 @@ namespace
             return { 179, 0, 84, 119 };
         case BUILD_LEFTTURRET:
             return { 98, 99, 0, 0 };
-         case BUILD_RIGHTTURRET:
+        case BUILD_RIGHTTURRET:
             return { 151, 98, 0, 0 };
         default:
             break;
@@ -286,7 +286,7 @@ namespace
             return { 92, 0, 64, 255 };
         case BUILD_LEFTTURRET:
             return { 311, 84, 0, 0 };
-         case BUILD_RIGHTTURRET:
+        case BUILD_RIGHTTURRET:
             return { 359, 83, 0, 0 };
         default:
             break;
@@ -354,7 +354,7 @@ namespace
             return { 160, 0, 178, 67 };
         case BUILD_LEFTTURRET:
             return { 30, 17, 0, 0 };
-         case BUILD_RIGHTTURRET:
+        case BUILD_RIGHTTURRET:
             return { 127, 17, 0, 0 };
         default:
             break;
@@ -422,7 +422,7 @@ namespace
             return { 464, 72, 105, 124 };
         case BUILD_LEFTTURRET:
             return { 330, 47, 0, 0 };
-         case BUILD_RIGHTTURRET:
+        case BUILD_RIGHTTURRET:
             return { 360, 46, 0, 0 };
         default:
             break;
@@ -443,8 +443,7 @@ namespace fheroes2
             return {};
         }
 
-        switch ( race )
-        {
+        switch ( race ) {
         case Race::KNGT:
             return getKnightBuildingArea( buildingId );
         case Race::BARB:
