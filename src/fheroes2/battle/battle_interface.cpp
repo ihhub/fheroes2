@@ -3058,10 +3058,10 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
-        frameDelay = frameDelay * 8 / 10; // 20% faster
+        frameDelay = frameDelay * 65 / 100; // by 35% faster
     }
     else if ( unit.Modes( SP_SLOW ) ) {
-        frameDelay = frameDelay * 12 / 10; // 20% slower
+        frameDelay = frameDelay * 150 / 100; // by 50% slower
     }
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
