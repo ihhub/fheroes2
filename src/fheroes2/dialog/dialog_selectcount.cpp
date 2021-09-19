@@ -222,8 +222,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    if ( !res.empty() )
-        res.clear();
+    res.clear();
     res.reserve( 48 );
     size_t charInsertPos = 0;
 
@@ -288,7 +287,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
         else if ( le.KeyPress() ) {
-            if ( charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
+            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
             redraw = true;
         }
