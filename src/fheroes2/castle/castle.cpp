@@ -654,6 +654,11 @@ void Castle::MageGuildEducateHero( HeroBase & hero ) const
     mageguild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
 }
 
+bool Castle::isFortificationBuild() const
+{
+    return race == Race::KNGT && isBuild( BUILD_SPEC );
+}
+
 const char * Castle::GetStringBuilding( u32 build, int race )
 {
     const char * str_wel2[] = { _( "Farm" ), _( "Garbage Heap" ), _( "Crystal Garden" ), _( "Waterfall" ), _( "Orchard" ), _( "Skull Pile" ) };
