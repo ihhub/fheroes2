@@ -64,9 +64,11 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     const int32_t topRepeatWidth = ( topRepeatCount + 1 ) * TILEWIDTH;
 
     const int32_t vertRepeatCount = extraDisplayHeight > 0 ? extraDisplayHeight / TILEWIDTH : 0;
-    const int32_t vertRepeatHeight = ( vertRepeatCount + 1 ) * TILEWIDTH;
-
     const int32_t iconsCount = vertRepeatCount > 3 ? 8 : ( vertRepeatCount < 3 ? 4 : 7 );
+
+    const int32_t vertRepeatHeight = ( vertRepeatCount + 1 ) * TILEWIDTH;
+    const int32_t vertRepeatHeightTop = ( iconsCount - 3 ) * TILEWIDTH;
+    const int32_t vertRepeatHeightBottom = vertRepeatHeight - vertRepeatHeightTop;
 
     const int32_t topPadWidth = extraDisplayWidth % TILEWIDTH;
 
@@ -179,12 +181,12 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.y += srcrt.height;
 
     srcrt.height = TILEWIDTH;
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
-    dstpt.y += vertRepeatHeight;
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
+    dstpt.y += vertRepeatHeightTop;
     srcrt.y += TILEWIDTH;
 
     srcrt.width = BORDERWIDTH;
-    srcrt.height = isEvilInterface ? 33 : 125; // middle border is special on good interface due to all the green leaves
+    srcrt.height = isEvilInterface ? 33 : 50; // middle border is special on good interface due to all the green leaves
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // hide embranchment
@@ -194,6 +196,20 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         BlitR( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
 
+    dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
+
+    srcrt.height = TILEWIDTH;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.y += TILEWIDTH;
+
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+    dstpt.y += vertRepeatHeightBottom;
+    srcrt.y += TILEWIDTH;
+
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = isEvilInterface ? 0 : 43; // middle border is special on good interface due to all the green leaves
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
@@ -217,12 +233,12 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.y += srcrt.height;
 
     srcrt.height = TILEWIDTH;
-    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
-    dstpt.y += vertRepeatHeight;
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
+    dstpt.y += vertRepeatHeightTop;
     srcrt.y += TILEWIDTH;
 
     srcrt.width = BORDERWIDTH;
-    srcrt.height = isEvilInterface ? 33 : 123;
+    srcrt.height = isEvilInterface ? 33 : 50;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // hide embranchment
@@ -232,6 +248,20 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         BlitR( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
     }
 
+    dstpt.y += srcrt.height;
+    srcrt.y += srcrt.height;
+
+    srcrt.height = TILEWIDTH;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    dstpt.y += TILEWIDTH;
+
+    repeatPatternR( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
+    dstpt.y += vertRepeatHeightBottom;
+    srcrt.y += TILEWIDTH;
+
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = isEvilInterface ? 0 : 41;
+    BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
