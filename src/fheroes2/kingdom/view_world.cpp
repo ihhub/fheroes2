@@ -34,11 +34,17 @@
 
 #include <cassert>
 
-//#define VIEWWORLD_DEBUG_ZOOM_LEVEL  // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+// #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
 #if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
 #define SAVE_WORLD_MAP
 #include "image_tool.h"
+
+namespace
+{
+    const std::string saveFilePrefix = "_old";
+}
+
 #endif
 
 namespace
@@ -187,7 +193,7 @@ namespace
             }
 
 #if defined( SAVE_WORLD_MAP )
-            fheroes2::Save( cachedImages[3], "world_map.bmp" );
+            fheroes2::Save( cachedImages[3], Settings::Get().MapsName() + saveFilePrefix + ".bmp" );
 #endif
         }
     };
