@@ -115,7 +115,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = isEvilInterface ? 64 : 24;
-    srcrt.height = BORDERWIDTH;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
@@ -126,7 +125,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += TILEWIDTH;
 
     srcrt.width = isEvilInterface ? 65 : 25;
-    srcrt.height = BORDERWIDTH;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
@@ -167,7 +165,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
 
-        srcrt.width = BORDERWIDTH;
         srcrt.height = 103;
         BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -187,7 +184,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += vertRepeatHeight;
         srcrt.y += TILEWIDTH;
 
-        srcrt.width = BORDERWIDTH;
         srcrt.height = 123;
         BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -218,7 +214,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += vertRepeatHeightTop;
     srcrt.y += TILEWIDTH;
 
-    srcrt.width = BORDERWIDTH;
     srcrt.height = isEvilInterface ? 33 : 50; // middle border is special on good interface due to all the green leaves
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
@@ -238,7 +233,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
 
-        srcrt.width = BORDERWIDTH;
         srcrt.height = 103;
         BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -261,7 +255,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += vertRepeatHeightBottom;
         srcrt.y += TILEWIDTH;
 
-        srcrt.width = BORDERWIDTH;
         srcrt.height = 43;
         BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -292,7 +285,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += vertRepeatHeightTop;
     srcrt.y += TILEWIDTH;
 
-    srcrt.width = BORDERWIDTH;
     srcrt.height = isEvilInterface ? 33 : 50;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
@@ -312,7 +304,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
 
-        srcrt.width = BORDERWIDTH;
         srcrt.height = 103;
         BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -335,7 +326,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += vertRepeatHeightBottom;
         srcrt.y += TILEWIDTH;
 
-        srcrt.width = BORDERWIDTH;
         srcrt.height = 41;
         BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -367,7 +357,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = isEvilInterface ? 90 : 24;
-    srcrt.height = BORDERWIDTH;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
@@ -378,7 +367,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.x += srcrt.width;
 
     srcrt.width = isEvilInterface ? 86 : 25; // evil bottom border is asymmetric
-    srcrt.height = BORDERWIDTH;
     BlitR( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
