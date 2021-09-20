@@ -65,7 +65,6 @@ public:
 
     void openOverviewDialog();
 
-    void UpdateStartingResource( void );
     bool isPlay( void ) const;
     bool isLoss( void ) const;
     bool AllowPayment( const Funds & ) const;
@@ -161,9 +160,10 @@ public:
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
     static u32 GetMaxHeroes( void );
-    static cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
 
 private:
+    cost_t _getKingdomStartingResources( const int difficulty );
+
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
