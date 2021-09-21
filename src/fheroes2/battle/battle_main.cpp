@@ -162,18 +162,12 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    bool battleSummaryShown = false;
-
     const size_t battleDeterministicSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
     const size_t battlePureRandomSeed = Rand::Get( std::numeric_limits<uint32_t>::max() );
     const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? battleDeterministicSeed : battlePureRandomSeed;
-    do {
-        // Reset army commander state
-        if ( commander1 )
-            commander1->SetSpellPoints( initialSpellPoints1 );
-        if ( commander2 )
-            commander2->SetSpellPoints( initialSpellPoints2 );
 
+    bool isBattleOver = false;
+    while ( !isBattleOver ) {
         Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
@@ -204,10 +198,16 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             if ( arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
                 // If dialog returns true we will restart battle in manual mode
                 showBattle = true;
+
+                // Reset army commander state
+                if ( commander1 )
+                    commander1->SetSpellPoints( initialSpellPoints1 );
+                if ( commander2 )
+                    commander2->SetSpellPoints( initialSpellPoints2 );
                 continue;
             }
-            battleSummaryShown = true;
         }
+        isBattleOver = true;
 
         if ( winnerHero != nullptr && loserHero != nullptr ) {
             transferArtifacts( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts(), artifactsToTransfer );
@@ -249,29 +249,26 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
                 kingdom.SetLastBattleWinHero( *kingdomHero );
             }
         }
+    }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
 
-        // update army
-        if ( commander1 && commander1->isHeroes() ) {
-            // hard reset army
-            if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
-                army1.Reset( false );
-        }
+    // update army
+    if ( commander1 && commander1->isHeroes() ) {
+        // hard reset army
+        if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
+            army1.Reset( false );
+    }
 
-        // update army
-        if ( commander2 && commander2->isHeroes() ) {
-            // hard reset army
-            if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
-                army2.Reset( false );
-        }
+    // update army
+    if ( commander2 && commander2->isHeroes() ) {
+        // hard reset army
+        if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
+            army2.Reset( false );
+    }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                   "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
-
-        // allow to restart battle, but only one time
-    } while ( isHumanBattle && !battleSummaryShown );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
 
     return result;
 }
