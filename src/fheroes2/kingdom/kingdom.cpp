@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 
 #include "ai.h"
 #include "battle.h"
