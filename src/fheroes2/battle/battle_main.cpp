@@ -110,9 +110,10 @@ namespace
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 {
+    Result result;
+
     // Validate the arguments - check if battle should even load
     if ( !army1.isValid() || !army2.isValid() ) {
-        Result result;
         // Check second army first so attacker would win by default
         if ( !army2.isValid() ) {
             result.army1 = RESULT_WINS;
@@ -153,11 +154,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         initialSpellPoints2 = commander2->GetSpellPoints();
     }
 
-    std::unique_ptr<Arena> arena;
-    Result result;
-    HeroBase * winnerHero = nullptr;
-    HeroBase * loserHero = nullptr;
-
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
     bool showBattle = !Settings::Get().BattleAutoResolve() && isHumanBattle;
 
@@ -167,13 +163,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 #endif
 
     bool battleSummaryShown = false;
-    std::vector<Artifact> artifactsToTransfer;
 
     const size_t battleDeterministicSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
     const size_t battlePureRandomSeed = Rand::Get( std::numeric_limits<uint32_t>::max() );
     const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? battleDeterministicSeed : battlePureRandomSeed;
-    Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
-
     do {
         // Reset army commander state
         if ( commander1 )
@@ -181,26 +174,22 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         if ( commander2 )
             commander2->SetSpellPoints( initialSpellPoints2 );
 
-        // Have to destroy old Arena instance first
-        arena.reset();
-
-        // reset random seed
-        randomGenerator.UpdateSeed( battleSeed );
-
-        arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, showBattle, randomGenerator ) );
+        Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
+        Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-        while ( arena->BattleValid() ) {
-            arena->Turns();
+        while ( arena.BattleValid() ) {
+            arena.Turns();
         }
-        result = arena->GetResult();
+        result = arena.GetResult();
 
-        winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
-        loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
+        HeroBase * winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+        HeroBase * loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
         uint32_t loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
+        std::vector<Artifact> artifactsToTransfer;
         if ( winnerHero && loserHero && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && winnerHero->isHeroes() && loserHero->isHeroes() ) {
             artifactsToTransfer = planArtifactTransfer( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts() );
         }
@@ -208,80 +197,81 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         if ( showBattle ) {
             // fade arena
             const bool clearMessageLog = ( result.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) || ( result.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) );
-            arena->FadeArena( clearMessageLog );
+            arena.FadeArena( clearMessageLog );
         }
 
         if ( isHumanBattle ) {
-            if ( arena->DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
+            if ( arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
                 // If dialog returns true we will restart battle in manual mode
                 showBattle = true;
+                continue;
             }
-            else {
-                battleSummaryShown = true;
+            battleSummaryShown = true;
+        }
+
+        if ( winnerHero != nullptr && loserHero != nullptr ) {
+            transferArtifacts( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts(), artifactsToTransfer );
+        }
+
+        // save count troop
+        arena.GetForce1().SyncArmyCount();
+        arena.GetForce2().SyncArmyCount();
+
+        // after battle army1
+        if ( commander1 ) {
+            if ( army1.isControlAI() )
+                AI::Get().HeroesAfterBattle( *commander1, true );
+            else
+                commander1->ActionAfterBattle();
+        }
+
+        // after battle army2
+        if ( commander2 ) {
+            if ( army2.isControlAI() )
+                AI::Get().HeroesAfterBattle( *commander2, false );
+            else
+                commander2->ActionAfterBattle();
+        }
+
+        // eagle eye capability
+        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() )
+            EagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
+
+        // necromancy capability
+        if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
+            NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman(), arena );
+
+        if ( winnerHero ) {
+            Heroes * kingdomHero = dynamic_cast<Heroes *>( winnerHero );
+
+            if ( kingdomHero ) {
+                Kingdom & kingdom = kingdomHero->GetKingdom();
+                kingdom.SetLastBattleWinHero( *kingdomHero );
             }
         }
-        // repeat up to one time
+
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
+
+        // update army
+        if ( commander1 && commander1->isHeroes() ) {
+            // hard reset army
+            if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
+                army1.Reset( false );
+        }
+
+        // update army
+        if ( commander2 && commander2->isHeroes() ) {
+            // hard reset army
+            if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
+                army2.Reset( false );
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                   "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
+
+        // allow to restart battle, but only one time
     } while ( isHumanBattle && !battleSummaryShown );
-
-    if ( winnerHero != nullptr && loserHero != nullptr ) {
-        transferArtifacts( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts(), artifactsToTransfer );
-    }
-
-    // save count troop
-    arena->GetForce1().SyncArmyCount();
-    arena->GetForce2().SyncArmyCount();
-
-    // after battle army1
-    if ( commander1 ) {
-        if ( army1.isControlAI() )
-            AI::Get().HeroesAfterBattle( *commander1, true );
-        else
-            commander1->ActionAfterBattle();
-    }
-
-    // after battle army2
-    if ( commander2 ) {
-        if ( army2.isControlAI() )
-            AI::Get().HeroesAfterBattle( *commander2, false );
-        else
-            commander2->ActionAfterBattle();
-    }
-
-    // eagle eye capability
-    if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() )
-        EagleEyeSkillAction( *winnerHero, arena->GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
-
-    // necromancy capability
-    if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
-        NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman(), *arena );
-
-    if ( winnerHero ) {
-        Heroes * kingdomHero = dynamic_cast<Heroes *>( winnerHero );
-
-        if ( kingdomHero ) {
-            Kingdom & kingdom = kingdomHero->GetKingdom();
-            kingdom.SetLastBattleWinHero( *kingdomHero );
-        }
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
-
-    // update army
-    if ( commander1 && commander1->isHeroes() ) {
-        // hard reset army
-        if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
-            army1.Reset( false );
-    }
-
-    // update army
-    if ( commander2 && commander2->isHeroes() ) {
-        // hard reset army
-        if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
-            army2.Reset( false );
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
 
     return result;
 }
