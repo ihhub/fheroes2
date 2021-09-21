@@ -55,38 +55,38 @@
 struct hgs_t
 {
     hgs_t()
-        : localtime( 0 )
-        , days( 0 )
-        , rating( 0 )
+        : _localTime( 0 )
+        , _days( 0 )
+        , _rating( 0 )
     {}
 
     bool operator==( const hgs_t & ) const;
 
-    std::string player;
-    std::string land;
-    u32 localtime;
-    u32 days;
-    u32 rating;
+    std::string _player;
+    std::string _land;
+    uint32_t _localTime;
+    uint32_t _days;
+    uint32_t _rating;
 };
 
 StreamBase & operator<<( StreamBase & msg, const hgs_t & hgs )
 {
-    return msg << hgs.player << hgs.land << hgs.localtime << hgs.days << hgs.rating;
+    return msg << hgs._player << hgs._land << hgs._localTime << hgs._days << hgs._rating;
 }
 
 StreamBase & operator>>( StreamBase & msg, hgs_t & hgs )
 {
-    return msg >> hgs.player >> hgs.land >> hgs.localtime >> hgs.days >> hgs.rating;
+    return msg >> hgs._player >> hgs._land >> hgs._localTime >> hgs._days >> hgs._rating;
 }
 
 bool hgs_t::operator==( const hgs_t & h ) const
 {
-    return player == h.player && land == h.land && days == h.days;
+    return _player == h._player && _land == h._land && _days == h._days;
 }
 
 bool RatingSort( const hgs_t & h1, const hgs_t & h2 )
 {
-    return h1.rating > h2.rating;
+    return h1._rating > h2._rating;
 }
 
 class HGSData
@@ -94,14 +94,15 @@ class HGSData
 public:
     HGSData();
 
-    bool Load( const std::string & );
-    bool Save( const std::string & ) const;
-    void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
+    bool Load( const std::string & fileName );
+    bool Save( const std::string & fileName ) const;
+    void ScoreRegistry( const std::string & playerName, const std::string & land, const uint32_t days, const uint32_t rating );
     void RedrawList( int32_t ox, int32_t oy );
 
 private:
     uint32_t _monsterAnimationFrameId;
-    std::vector<hgs_t> list;
+    std::vector<hgs_t> _standardHighScores;
+    std::vector<hgs_t> _campaignHighScores;
     std::vector<std::pair<size_t, Monster::monster_t>> _monsterRatings;
     std::vector<std::pair<size_t, Monster::monster_t>> _monsterDays;
 
@@ -253,7 +254,7 @@ bool HGSData::Load( const std::string & fn )
     hdata >> hgs_id;
 
     if ( hgs_id == HGS_ID ) {
-        hdata >> list;
+        hdata >> _standardHighScores;
         return !hdata.fail();
     }
 
@@ -264,28 +265,28 @@ bool HGSData::Save( const std::string & fn ) const
 {
     ZStreamFile hdata;
     hdata.setbigendian( true );
-    hdata << static_cast<u16>( HGS_ID ) << list;
+    hdata << static_cast<u16>( HGS_ID ) << _standardHighScores;
     if ( hdata.fail() || !hdata.write( fn ) )
         return false;
 
     return true;
 }
 
-void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r, u32 s )
+void HGSData::ScoreRegistry( const std::string & playerName, const std::string & land, const uint32_t days, const uint32_t rating )
 {
-    hgs_t h;
+    hgs_t highScore;
 
-    h.player = p;
-    h.land = m;
-    h.localtime = std::time( nullptr );
-    h.days = r;
-    h.rating = s;
+    highScore._player = playerName;
+    highScore._land = land;
+    highScore._localTime = std::time( nullptr );
+    highScore._days = days;
+    highScore._rating = rating;
 
-    if ( list.end() == std::find( list.begin(), list.end(), h ) ) {
-        list.push_back( h );
-        std::sort( list.begin(), list.end(), RatingSort );
-        if ( list.size() > HGS_MAX )
-            list.resize( HGS_MAX );
+    if ( _standardHighScores.end() == std::find( _standardHighScores.begin(), _standardHighScores.end(), highScore ) ) {
+        _standardHighScores.push_back( highScore );
+        std::sort( _standardHighScores.begin(), _standardHighScores.end(), RatingSort );
+        if ( _standardHighScores.size() > HGS_MAX )
+            _standardHighScores.resize( HGS_MAX );
     }
 }
 
@@ -300,38 +301,38 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
 
-    std::sort( list.begin(), list.end(), RatingSort );
+    std::sort( _standardHighScores.begin(), _standardHighScores.end(), RatingSort );
 
-    std::vector<hgs_t>::const_iterator it1 = list.begin();
-    std::vector<hgs_t>::const_iterator it2 = list.end();
+    std::vector<hgs_t>::const_iterator it1 = _standardHighScores.begin();
+    std::vector<hgs_t>::const_iterator it2 = _standardHighScores.end();
 
     Text text;
     text.Set( Font::BIG );
 
     const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
 
-    for ( ; it1 != it2 && ( it1 - list.begin() < HGS_MAX ); ++it1 ) {
+    for ( ; it1 != it2 && ( it1 - _standardHighScores.begin() < HGS_MAX ); ++it1 ) {
         const hgs_t & hgs = *it1;
 
-        text.Set( hgs.player );
+        text.Set( hgs._player );
         text.Blit( ox + 88, oy + 70 );
 
-        text.Set( hgs.land );
+        text.Set( hgs._land );
         text.Blit( ox + 244, oy + 70 );
 
-        text.Set( std::to_string( hgs.days ) );
+        text.Set( std::to_string( hgs._days ) );
         text.Blit( ox + 403, oy + 70 );
 
-        text.Set( std::to_string( hgs.rating ) );
+        text.Set( std::to_string( hgs._rating ) );
         text.Blit( ox + 484, oy + 70 );
 
-        const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs.rating );
+        const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs._rating );
         const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
         const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
         fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
 
         // Animation frame of a creature is based on its position on screen and common animation frame ID.
-        const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs.days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+        const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs._days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
         const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
         const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
         fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
@@ -369,12 +370,10 @@ fheroes2::GameMode Game::HighScores()
 
     hgs.RedrawList( top.x, top.y );
 
-    fheroes2::Button buttonCampain( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
+    fheroes2::Button buttonCampaign( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
 
-    buttonCampain.disable(); // disable for now till full campaign support
-
-    buttonCampain.draw();
+    buttonCampaign.draw();
     buttonExit.draw();
 
     display.render();
@@ -391,7 +390,7 @@ fheroes2::GameMode Game::HighScores()
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
         hgs.Save( highScoreDataPath );
         hgs.RedrawList( top.x, top.y );
-        buttonCampain.draw();
+        buttonCampaign.draw();
         buttonExit.draw();
         display.render();
         gameResult.ResetResult();
@@ -404,8 +403,8 @@ fheroes2::GameMode Game::HighScores()
         // key code info
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
             Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
-        if ( buttonCampain.isEnabled() ) {
-            le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
+        if ( buttonCampaign.isEnabled() ) {
+            le.MousePressLeft( buttonCampaign.area() ) ? buttonCampaign.drawOnPress() : buttonCampaign.drawOnRelease();
         }
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
@@ -415,7 +414,7 @@ fheroes2::GameMode Game::HighScores()
         if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( buttonCampain.area() ) ) {
+        else if ( le.MousePressRight( buttonCampaign.area() ) ) {
             Dialog::Message( _( "Campaign" ), _( "View High Scores for Campaigns." ), Font::BIG );
         }
 
