@@ -102,247 +102,143 @@ public:
 private:
     uint32_t _monsterAnimationFrameId;
     std::vector<hgs_t> list;
-    std::array<Monster::monster_t, 229> _monsterRating;
+    std::vector<std::pair<size_t, Monster::monster_t>> _monsterRatings;
+    std::vector<std::pair<size_t, Monster::monster_t>> _monsterDays;
 
     Monster getMonsterByRatingStandardGame( const size_t rating ) const
     {
-        const size_t id = std::min( rating, _monsterRating.size() - 1 );
-        return Monster( _monsterRating[id] );
+        std::pair<size_t, Monster::monster_t> lastData = _monsterRatings.back();
+
+        if ( rating >= lastData.first )
+            return Monster( lastData.second );
+
+        Monster::monster_t monster = Monster::PEASANT;
+        for ( size_t i = 0; i < _monsterRatings.size(); ++i ) {
+            if ( rating <= _monsterRatings[i].first ) {
+                monster = _monsterRatings[i].second;
+                break;
+            }
+        }
+
+        return Monster( monster );
+    }
+
+    Monster getMonsterByRatingCampaignGame( const size_t dayCount ) const 
+    {
+        std::pair<size_t, Monster::monster_t> lastData = _monsterDays.back();
+
+        if ( dayCount >= lastData.first )
+            return Monster( lastData.second );
+
+        Monster::monster_t monster = Monster::PEASANT;
+        for ( size_t i = 0; i < _monsterDays.size(); ++i ) {
+            if ( dayCount <= _monsterDays[i].first ) {
+                monster = _monsterDays[i].second;
+                break;
+            }
+        }
+
+        return Monster( monster );
     }
 };
 
 HGSData::HGSData()
     : _monsterAnimationFrameId( 0 )
 {
-    _monsterRating = { Monster::PEASANT,
-                       Monster::PEASANT,
-                       Monster::PEASANT,
-                       Monster::PEASANT,
-                       Monster::GOBLIN,
-                       Monster::GOBLIN,
-                       Monster::GOBLIN,
-                       Monster::GOBLIN,
-                       Monster::SPRITE,
-                       Monster::SPRITE,
-                       Monster::SPRITE,
-                       Monster::SPRITE,
-                       Monster::HALFLING,
-                       Monster::HALFLING,
-                       Monster::HALFLING,
-                       Monster::HALFLING,
-                       Monster::CENTAUR,
-                       Monster::CENTAUR,
-                       Monster::CENTAUR,
-                       Monster::CENTAUR,
-                       Monster::ROGUE,
-                       Monster::ROGUE,
-                       Monster::ROGUE,
-                       Monster::ROGUE,
-                       Monster::SKELETON,
-                       Monster::SKELETON,
-                       Monster::SKELETON,
-                       Monster::SKELETON,
-                       Monster::ORC,
-                       Monster::ORC,
-                       Monster::ORC,
-                       Monster::ORC,
-                       Monster::ZOMBIE,
-                       Monster::ZOMBIE,
-                       Monster::ZOMBIE,
-                       Monster::ZOMBIE,
-                       Monster::ARCHER,
-                       Monster::ARCHER,
-                       Monster::ARCHER,
-                       Monster::ARCHER,
-                       Monster::RANGER,
-                       Monster::RANGER,
-                       Monster::RANGER,
-                       Monster::RANGER,
-                       Monster::BOAR,
-                       Monster::BOAR,
-                       Monster::BOAR,
-                       Monster::BOAR,
-                       Monster::DWARF,
-                       Monster::DWARF,
-                       Monster::DWARF,
-                       Monster::DWARF,
-                       Monster::MUTANT_ZOMBIE,
-                       Monster::MUTANT_ZOMBIE,
-                       Monster::MUTANT_ZOMBIE,
-                       Monster::MUTANT_ZOMBIE,
-                       Monster::ORC_CHIEF,
-                       Monster::ORC_CHIEF,
-                       Monster::ORC_CHIEF,
-                       Monster::ORC_CHIEF,
-                       Monster::ELF,
-                       Monster::ELF,
-                       Monster::ELF,
-                       Monster::ELF,
-                       Monster::GARGOYLE,
-                       Monster::GARGOYLE,
-                       Monster::GARGOYLE,
-                       Monster::GARGOYLE,
-                       Monster::PIKEMAN,
-                       Monster::PIKEMAN,
-                       Monster::PIKEMAN,
-                       Monster::PIKEMAN,
-                       Monster::GRAND_ELF,
-                       Monster::GRAND_ELF,
-                       Monster::GRAND_ELF,
-                       Monster::GRAND_ELF,
-                       Monster::BATTLE_DWARF,
-                       Monster::BATTLE_DWARF,
-                       Monster::BATTLE_DWARF,
-                       Monster::BATTLE_DWARF,
-                       Monster::NOMAD,
-                       Monster::NOMAD,
-                       Monster::NOMAD,
-                       Monster::NOMAD,
-                       Monster::VETERAN_PIKEMAN,
-                       Monster::VETERAN_PIKEMAN,
-                       Monster::VETERAN_PIKEMAN,
-                       Monster::VETERAN_PIKEMAN,
-                       Monster::WOLF,
-                       Monster::WOLF,
-                       Monster::WOLF,
-                       Monster::WOLF,
-                       Monster::MUMMY,
-                       Monster::MUMMY,
-                       Monster::MUMMY,
-                       Monster::MUMMY,
-                       Monster::IRON_GOLEM,
-                       Monster::IRON_GOLEM,
-                       Monster::IRON_GOLEM,
-                       Monster::IRON_GOLEM,
-                       Monster::ROYAL_MUMMY,
-                       Monster::ROYAL_MUMMY,
-                       Monster::ROYAL_MUMMY,
-                       Monster::ROYAL_MUMMY,
-                       Monster::OGRE,
-                       Monster::OGRE,
-                       Monster::OGRE,
-                       Monster::OGRE,
-                       Monster::GRIFFIN,
-                       Monster::GRIFFIN,
-                       Monster::GRIFFIN,
-                       Monster::GRIFFIN,
-                       Monster::SWORDSMAN,
-                       Monster::SWORDSMAN,
-                       Monster::SWORDSMAN,
-                       Monster::SWORDSMAN,
-                       Monster::DRUID,
-                       Monster::DRUID,
-                       Monster::DRUID,
-                       Monster::DRUID,
-                       Monster::STEEL_GOLEM,
-                       Monster::STEEL_GOLEM,
-                       Monster::STEEL_GOLEM,
-                       Monster::STEEL_GOLEM,
-                       Monster::MASTER_SWORDSMAN,
-                       Monster::MASTER_SWORDSMAN,
-                       Monster::MASTER_SWORDSMAN,
-                       Monster::MASTER_SWORDSMAN,
-                       Monster::AIR_ELEMENT,
-                       Monster::AIR_ELEMENT,
-                       Monster::AIR_ELEMENT,
-                       Monster::AIR_ELEMENT,
-                       Monster::GREATER_DRUID,
-                       Monster::GREATER_DRUID,
-                       Monster::GREATER_DRUID,
-                       Monster::FIRE_ELEMENT,
-                       Monster::FIRE_ELEMENT,
-                       Monster::FIRE_ELEMENT,
-                       Monster::GHOST,
-                       Monster::GHOST,
-                       Monster::GHOST,
-                       Monster::VAMPIRE,
-                       Monster::VAMPIRE,
-                       Monster::VAMPIRE,
-                       Monster::WATER_ELEMENT,
-                       Monster::WATER_ELEMENT,
-                       Monster::WATER_ELEMENT,
-                       Monster::EARTH_ELEMENT,
-                       Monster::EARTH_ELEMENT,
-                       Monster::EARTH_ELEMENT,
-                       Monster::ROC,
-                       Monster::ROC,
-                       Monster::ROC,
-                       Monster::MINOTAUR,
-                       Monster::MINOTAUR,
-                       Monster::MINOTAUR,
-                       Monster::CAVALRY,
-                       Monster::CAVALRY,
-                       Monster::CAVALRY,
-                       Monster::TROLL,
-                       Monster::TROLL,
-                       Monster::TROLL,
-                       Monster::MAGE,
-                       Monster::MAGE,
-                       Monster::MAGE,
-                       Monster::MEDUSA,
-                       Monster::MEDUSA,
-                       Monster::MEDUSA,
-                       Monster::LICH,
-                       Monster::LICH,
-                       Monster::LICH,
-                       Monster::OGRE_LORD,
-                       Monster::OGRE_LORD,
-                       Monster::OGRE_LORD,
-                       Monster::MINOTAUR_KING,
-                       Monster::MINOTAUR_KING,
-                       Monster::MINOTAUR_KING,
-                       Monster::CHAMPION,
-                       Monster::CHAMPION,
-                       Monster::CHAMPION,
-                       Monster::WAR_TROLL,
-                       Monster::WAR_TROLL,
-                       Monster::WAR_TROLL,
-                       Monster::VAMPIRE_LORD,
-                       Monster::VAMPIRE_LORD,
-                       Monster::VAMPIRE_LORD,
-                       Monster::ARCHMAGE,
-                       Monster::ARCHMAGE,
-                       Monster::ARCHMAGE,
-                       Monster::POWER_LICH,
-                       Monster::POWER_LICH,
-                       Monster::POWER_LICH,
-                       Monster::UNICORN,
-                       Monster::UNICORN,
-                       Monster::UNICORN,
-                       Monster::HYDRA,
-                       Monster::HYDRA,
-                       Monster::HYDRA,
-                       Monster::PALADIN,
-                       Monster::PALADIN,
-                       Monster::PALADIN,
-                       Monster::GENIE,
-                       Monster::GENIE,
-                       Monster::GENIE,
-                       Monster::CRUSADER,
-                       Monster::CRUSADER,
-                       Monster::CRUSADER,
-                       Monster::CYCLOPS,
-                       Monster::CYCLOPS,
-                       Monster::CYCLOPS,
-                       Monster::GIANT,
-                       Monster::GIANT,
-                       Monster::GIANT,
-                       Monster::PHOENIX,
-                       Monster::PHOENIX,
-                       Monster::PHOENIX,
-                       Monster::BONE_DRAGON,
-                       Monster::BONE_DRAGON,
-                       Monster::BONE_DRAGON,
-                       Monster::GREEN_DRAGON,
-                       Monster::GREEN_DRAGON,
-                       Monster::GREEN_DRAGON,
-                       Monster::RED_DRAGON,
-                       Monster::RED_DRAGON,
-                       Monster::RED_DRAGON,
-                       Monster::TITAN,
-                       Monster::TITAN,
-                       Monster::TITAN,
-                       Monster::BLACK_DRAGON };
+    const std::array<Monster::monster_t, 65> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
+                                                                    Monster::SPRITE,        Monster::HALFLING,
+                                                                    Monster::CENTAUR,       Monster::ROGUE,
+                                                                    Monster::SKELETON,      Monster::ORC,
+                                                                    Monster::ZOMBIE,        Monster::ARCHER,
+                                                                    Monster::RANGER,        Monster::BOAR,
+                                                                    Monster::DWARF,         Monster::MUTANT_ZOMBIE,
+                                                                    Monster::ORC_CHIEF,     Monster::ELF,
+                                                                    Monster::GARGOYLE,      Monster::PIKEMAN,
+                                                                    Monster::GRAND_ELF,     Monster::BATTLE_DWARF,
+                                                                    Monster::NOMAD,         Monster::VETERAN_PIKEMAN,
+                                                                    Monster::WOLF,          Monster::MUMMY,
+                                                                    Monster::IRON_GOLEM,    Monster::ROYAL_MUMMY,
+                                                                    Monster::OGRE,          Monster::GRIFFIN,
+                                                                    Monster::SWORDSMAN,     Monster::DRUID,
+                                                                    Monster::STEEL_GOLEM,   Monster::MASTER_SWORDSMAN,
+                                                                    Monster::AIR_ELEMENT,   Monster::GREATER_DRUID,
+                                                                    Monster::FIRE_ELEMENT,  Monster::GHOST,
+                                                                    Monster::VAMPIRE,       Monster::WATER_ELEMENT,
+                                                                    Monster::EARTH_ELEMENT, Monster::ROC,
+                                                                    Monster::MINOTAUR,      Monster::CAVALRY,
+                                                                    Monster::TROLL,         Monster::MAGE,
+                                                                    Monster::MEDUSA,        Monster::LICH,
+                                                                    Monster::OGRE_LORD,     Monster::MINOTAUR_KING,
+                                                                    Monster::CHAMPION,      Monster::WAR_TROLL,
+                                                                    Monster::VAMPIRE_LORD,  Monster::ARCHMAGE,
+                                                                    Monster::POWER_LICH,    Monster::UNICORN,
+                                                                    Monster::HYDRA,         Monster::PALADIN,
+                                                                    Monster::GENIE,         Monster::CRUSADER,
+                                                                    Monster::CYCLOPS,       Monster::GIANT,
+                                                                    Monster::PHOENIX,       Monster::BONE_DRAGON,
+                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
+                                                                    Monster::TITAN };
+
+    uint32_t ratingSoFar = 0;
+    uint32_t ratingIncrementCount = 0;
+
+    // need int for reverse-for loop
+    const int monstersInRankingCount = static_cast<int>( monstersInRanking.size() );
+
+    for ( int i = 0; i < monstersInRankingCount; ++i ) {
+        const Monster::monster_t monster = monstersInRanking[i];
+
+        // 0 to 3
+        if ( monster == Monster::PEASANT ) {
+            ratingIncrementCount = 3;
+        }
+        // 4 to 131
+        else if ( monster == Monster::GOBLIN ) {
+            ratingIncrementCount = 4;
+        }
+        // 132 to 227
+        else if ( monster == Monster::GREATER_DRUID ) {
+            ratingIncrementCount = 3;
+        }
+        // >= 228
+        else if ( monster == Monster::BLACK_DRAGON ) {
+            ratingIncrementCount = 1;
+        }
+
+        ratingSoFar += ratingIncrementCount;
+        _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
+    }
+
+    uint32_t daySoFar = 0;
+    uint32_t dayIncrementCount = 0;
+
+    for ( int i = monstersInRankingCount - 1; i >= 0; --i ) {
+        const Monster::monster_t monster = monstersInRanking[i];
+
+        // 0 to 300
+        if ( monster == Monster::BLACK_DRAGON ) {
+            dayIncrementCount = 300;
+        }
+        // 301 to 1000
+        else if ( monster == Monster::TITAN ) {
+            dayIncrementCount = 20;
+        }
+        // 1001 to 2000
+        else if ( monster == Monster::DRUID ) {
+            dayIncrementCount = 100;
+        }
+        // 2001 to 5800
+        else if ( monster == Monster::BATTLE_DWARF ) {
+            dayIncrementCount = 200;
+        }
+        // >= 5801
+        else if ( monster == Monster::PEASANT ) {
+            dayIncrementCount = 1;
+        }
+
+        daySoFar += dayIncrementCount;
+        _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
+    }
 }
 
 bool HGSData::Load( const std::string & fn )
