@@ -56,7 +56,7 @@ Kingdom::Kingdom()
     , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
-    , _topItemInKingdomView( 0 )
+    , _topItemInKingdomView( -1 )
 {
     heroes_cond_loss.reserve( 4 );
 }
@@ -926,7 +926,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
         msg >> kingdom._topItemInKingdomView;
     }
     else {
-        kingdom._topItemInKingdomView = 0;
+        kingdom._topItemInKingdomView = -1;
     }
 
     return msg;
