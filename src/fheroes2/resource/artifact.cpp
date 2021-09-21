@@ -378,6 +378,10 @@ int Artifact::LoyaltyLevel( void ) const
 
 int Artifact::Level( void ) const
 {
+    if ( isUltimate() ) {
+        return ART_ULTIMATE;
+    }
+
     switch ( id ) {
     case MEDAL_VALOR:
     case MEDAL_COURAGE:
@@ -399,13 +403,13 @@ int Artifact::Level( void ) const
     case HOLY_PENDANT:
     case PENDANT_FREE_WILL:
     case PENDANT_LIFE:
+    case SERENITY_PENDANT:
+    case SEEING_EYE_PENDANT:
+    case KINETIC_PENDANT:
     case PENDANT_DEATH:
     case GOLDEN_BOW:
     case TELESCOPE:
-    case SERENITY_PENDANT:
     case STATESMAN_QUILL:
-    case KINETIC_PENDANT:
-    case SEEING_EYE_PENDANT:
         return ART_LEVEL1;
 
     case CASTER_BRACELET:
@@ -415,20 +419,21 @@ int Artifact::Level( void ) const
     case MINOR_SCROLL:
     case ENDLESS_PURSE_GOLD:
     case SAILORS_ASTROLABE_MOBILITY:
+    case EVIL_EYE:
+    case GOLD_WATCH:
+    case SKULLCAP:
+    case EVERCOLD_ICICLE:
+    case EVERHOT_LAVA_ROCK:
+    case LIGHTNING_ROD:
+    case ANKH:
+    case BOOK_ELEMENTS:
+    case ELEMENTAL_RING:
+    case POWER_RING:
+    case AMMO_CART:
     case ENDLESS_CORD_WOOD:
     case ENDLESS_CART_ORE:
     case SPIKED_HELM:
     case WHITE_PEARL:
-    case EVIL_EYE:
-    case GOLD_WATCH:
-    case ANKH:
-    case BOOK_ELEMENTS:
-    case ELEMENTAL_RING:
-    case SKULLCAP:
-    case EVERCOLD_ICICLE:
-    case POWER_RING:
-    case AMMO_CART:
-    case EVERHOT_LAVA_ROCK:
         return ART_LEVEL2;
 
     case ARCANE_NECKLACE:
@@ -444,26 +449,15 @@ int Artifact::Level( void ) const
     case NOMAD_BOOTS_MOBILITY:
     case TRAVELER_BOOTS_MOBILITY:
     case TRUE_COMPASS_MOBILITY:
-    case ENDLESS_POUCH_SULFUR:
-    case ENDLESS_POUCH_GEMS:
-    case ENDLESS_POUCH_CRYSTAL:
-    case ENDLESS_VIAL_MERCURY:
-    case SPIKED_SHIELD:
-    case BLACK_PEARL:
-    case LIGHTNING_ROD:
     case WAND_NEGATION:
     case WIZARD_HAT:
+    case ENDLESS_POUCH_SULFUR:
+    case ENDLESS_VIAL_MERCURY:
+    case ENDLESS_POUCH_GEMS:
+    case ENDLESS_POUCH_CRYSTAL:
+    case SPIKED_SHIELD:
+    case BLACK_PEARL:
         return ART_LEVEL3;
-
-    case ULTIMATE_BOOK:
-    case ULTIMATE_SWORD:
-    case ULTIMATE_CLOAK:
-    case ULTIMATE_WAND:
-    case ULTIMATE_SHIELD:
-    case ULTIMATE_STAFF:
-    case ULTIMATE_CROWN:
-    case GOLDEN_GOOSE:
-        return ART_ULTIMATE;
 
     // no random
     case MAGIC_BOOK:

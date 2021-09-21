@@ -278,6 +278,7 @@ namespace
         case MP2::OBJN_FAERIERING:
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_MAGICWELL:
+        case MP2::OBJ_NOTHINGSPECIAL:
             return true;
         default:
             break;
@@ -311,6 +312,7 @@ namespace
         // Trees allow bottom and top movements but they don't allow the same for other trees.
         switch ( objectType ) {
         case MP2::OBJ_TREES:
+        case MP2::OBJ_CRATER:
             return true;
         default:
             break;
@@ -949,7 +951,7 @@ void Maps::Tiles::updatePassability()
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else if ( isShortObject( bottomTileObjectType )
-                          || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) != isCombinedObject( bottomTileObjectType ) ) ) ) {
+                          || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {

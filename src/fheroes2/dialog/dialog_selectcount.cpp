@@ -213,7 +213,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     return result == Dialog::OK;
 }
 
-bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title )
+bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title, const size_t charLimit )
 {
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
@@ -222,8 +222,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    if ( !res.empty() )
-        res.clear();
+    res.clear();
     res.reserve( 48 );
     size_t charInsertPos = 0;
 
@@ -288,7 +287,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
         else if ( le.KeyPress() ) {
-            charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
+            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
+                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
             redraw = true;
         }
 
