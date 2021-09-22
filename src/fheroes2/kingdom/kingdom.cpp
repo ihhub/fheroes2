@@ -56,7 +56,7 @@ Kingdom::Kingdom()
     , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
-    , _topItemInKingdomView( 0 )
+    , _topItemInKingdomView( -1 )
 {
     heroes_cond_loss.reserve( 4 );
 }
@@ -69,8 +69,7 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-
-        UpdateStartingResource();
+        resource = _getKingdomStartingResources( Game::getDifficulty() );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
@@ -110,11 +109,6 @@ int Kingdom::GetColor( void ) const
 int Kingdom::GetRace( void ) const
 {
     return Players::GetPlayerRace( GetColor() );
-}
-
-void Kingdom::UpdateStartingResource( void )
-{
-    resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
@@ -884,7 +878,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
+cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
 {
     static cost_t startingResourcesSet[] = {{10000, 30, 10, 30, 10, 10, 10},
                                             {7500, 20, 5, 20, 5, 5, 5},
@@ -894,7 +888,7 @@ cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
                                             // ai resource
                                             {10000, 30, 10, 30, 10, 10, 10}};
 
-    if ( isAIKingdom )
+    if ( isControlAI() )
         return startingResourcesSet[5];
 
     switch ( difficulty ) {
@@ -932,7 +926,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
         msg >> kingdom._topItemInKingdomView;
     }
     else {
-        kingdom._topItemInKingdomView = 0;
+        kingdom._topItemInKingdomView = -1;
     }
 
     return msg;

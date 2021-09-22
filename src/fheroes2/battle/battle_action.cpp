@@ -818,7 +818,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         for ( auto & tgt : targets ) {
             const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
-            if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
+            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
                 tgt.resist = true;
             }
         }

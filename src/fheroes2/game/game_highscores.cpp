@@ -489,7 +489,7 @@ fheroes2::GameMode Game::HighScores()
 
     if ( rating && ( gameResult.GetResult() & GameOver::WINS ) ) {
         std::string player( _( "Unknown Hero" ) );
-        Dialog::InputString( _( "Your Name" ), player );
+        Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
