@@ -2044,10 +2044,10 @@ void Battle::Interface::RedrawKilled()
     // redraw killed troop
     const Indexes cells = arena.GraveyardClosedCells();
 
-    for ( Indexes::const_iterator it = cells.begin(); it != cells.end(); ++it ) {
-        const std::vector<const Unit *> & units = arena.GetGraveyardTroops( *it );
+    for ( const auto cell : cells ) {
+        const std::vector<const Unit *> & units = arena.GetGraveyardTroops( cell );
         for ( size_t i = 0; i < units.size(); ++i ) {
-            if ( units[i] && *it != units[i]->GetTailIndex() ) {
+            if ( units[i] && cell != units[i]->GetTailIndex() ) {
                 RedrawTroopSprite( *units[i] );
             }
         }
@@ -2932,13 +2932,13 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
         if ( 1 < targets.size() ) {
-            u32 killed = 0;
-            u32 damage = 0;
+            uint32_t killed = 0;
+            uint32_t damage = 0;
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
-                    killed += ( *it ).killed;
-                    damage += ( *it ).damage;
+            for ( const auto & target : targets ) {
+                if ( !target.defender->isModes( CAP_MIRRORIMAGE ) ) {
+                    killed += target.killed;
+                    damage += target.damage;
                 }
             }
 
@@ -2980,36 +2980,35 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-        Unit * defender = it->defender;
-        if ( defender == nullptr ) {
+    for ( const auto & target : targets ) {
+        if ( target.defender == nullptr ) {
             continue;
         }
 
-        if ( defender->isModes( CAP_MIRRORIMAGE ) )
-            mirrorImages.push_back( defender );
+        if ( target.defender->isModes( CAP_MIRRORIMAGE ) )
+            mirrorImages.push_back( target.defender );
 
         // kill animation
-        if ( !defender->isValid() ) {
+        if ( !target.defender->isValid() ) {
             // destroy linked mirror
-            if ( defender->isModes( CAP_MIRROROWNER ) )
-                mirrorImages.push_back( defender->GetMirror() );
+            if ( target.defender->isModes( CAP_MIRROROWNER ) )
+                mirrorImages.push_back( target.defender->GetMirror() );
 
-            defender->SwitchAnimation( Monster_Info::KILL );
-            AGG::PlaySound( defender->M82Kill() );
+            target.defender->SwitchAnimation( Monster_Info::KILL );
+            AGG::PlaySound( target.defender->M82Kill() );
             ++finish;
 
-            deathColor = defender->GetArmyColor();
+            deathColor = target.defender->GetArmyColor();
         }
-        else if ( it->damage ) {
+        else if ( target.damage ) {
             // wince animation
-            defender->SwitchAnimation( Monster_Info::WNCE );
-            AGG::PlaySound( defender->M82Wnce() );
+            target.defender->SwitchAnimation( Monster_Info::WNCE );
+            AGG::PlaySound( target.defender->M82Wnce() );
             ++finish;
         }
         else {
             // have immunity
-            resistantTarget.insert( it->defender );
+            resistantTarget.insert( target.defender );
             AGG::PlaySound( M82::RSBRYFZL );
         }
     }
@@ -3047,8 +3046,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 redrawBattleField = true;
             }
             else {
-                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-                    if ( ( *it ).defender ) {
+                for ( const auto & target : targets ) {
+                    if ( target.defender ) {
                         redrawBattleField = true;
                         break;
                     }
@@ -3079,13 +3078,13 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
             finishedAnimation = ( finish == finishedAnimationCount );
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( ( *it ).defender ) {
-                    if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
-                        it->defender->SwitchAnimation( Monster_Info::STATIC );
+            for ( const auto & target : targets ) {
+                if ( target.defender ) {
+                    if ( target.defender->isFinishAnimFrame() && target.defender->GetAnimationState() == Monster_Info::WNCE ) {
+                        target.defender->SwitchAnimation( Monster_Info::STATIC );
                     }
                     else {
-                        it->defender->IncreaseAnimFrame();
+                        target.defender->IncreaseAnimFrame();
                     }
                 }
             }
@@ -3504,14 +3503,14 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
         uint32_t maximumDamage = 0;
         uint32_t damagedMonsters = 0;
 
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-            if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
-                killed += ( *it ).killed;
+        for ( const auto & target : targets ) {
+            if ( !target.defender->isModes( CAP_MIRRORIMAGE ) ) {
+                killed += target.killed;
 
                 ++damagedMonsters;
-                totalDamage += it->damage;
-                if ( maximumDamage < it->damage )
-                    maximumDamage = it->damage;
+                totalDamage += target.damage;
+                if ( maximumDamage < target.damage )
+                    maximumDamage = target.damage;
             }
         }
 
@@ -3679,7 +3678,11 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 width += 3;
             }
             else if ( IdleTroopsAnimation( false ) ) {
-                Redraw();
+                RedrawPartialStart();
+
+                fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.width - src.width ) / 2, y, src.width, src.height );
+
+                RedrawPartialFinish();
             }
         }
     }
@@ -3708,7 +3711,12 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 ++frameId;
             }
             else if ( IdleTroopsAnimation( false ) ) {
-                Redraw();
+                RedrawPartialStart();
+
+                const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
+                fheroes2::Blit( luckSprite, _mainSurface, pos.x + pos.width / 2 + luckSprite.x(), y + luckSprite.y() );
+
+                RedrawPartialFinish();
             }
         }
     }
@@ -3825,7 +3833,9 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
             ++pnt;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            fheroes2::Blit( missile, _mainSurface, pnt->x, pnt->y );
+            RedrawPartialFinish();
         }
     }
 
@@ -3850,7 +3860,10 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
+            fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
+            RedrawPartialFinish();
         }
     }
 
@@ -3981,7 +3994,11 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
             ++pnt;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            const fheroes2::Point & sp = GetTroopPosition( target, sprite );
+
+            RedrawPartialStart();
+            fheroes2::Blit( sprite, _mainSurface, sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y, target.isReflect() );
+            RedrawPartialFinish();
         }
     }
 
@@ -4074,7 +4091,13 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
                 RedrawPartialFinish();
             }
             else if ( IdleTroopsAnimation( false ) ) {
-                Redraw();
+                RedrawPartialStart();
+
+                RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
+                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height ) );
+                fheroes2::ApplyPalette( _mainSurface, 7 );
+
+                RedrawPartialFinish();
             }
         }
     }
@@ -4100,7 +4123,15 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPARKS, frame );
+
+            for ( size_t i = 1; i < points.size(); ++i ) {
+                fheroes2::Point pt = points[i] - fheroes2::Point( sprite.width() / 2, 0 ) + roiOffset;
+                fheroes2::Blit( sprite, _mainSurface, pt.x, pt.y );
+            }
+            RedrawPartialFinish();
         }
     }
 }
@@ -4126,8 +4157,8 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
     std::vector<fheroes2::Point> points;
     points.push_back( startingPos );
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-        const fheroes2::Rect & pos = it->defender->GetRectPosition();
+    for ( const auto & target : targets ) {
+        const fheroes2::Rect & pos = target.defender->GetRectPosition();
         points.push_back( fheroes2::Point( pos.x + pos.width / 2, pos.y ) );
     }
 
@@ -4188,6 +4219,8 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
+            mixSprite = unitSprite;
+            fheroes2::AlphaBlit( bloodlustEffect, mixSprite, static_cast<uint8_t>( alpha ) );
             Redraw();
         }
     }
@@ -4228,6 +4261,8 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
+            mixSprite = fheroes2::Sprite( unitSprite );
+            fheroes2::AlphaBlit( stoneEffect, mixSprite, static_cast<uint8_t>( alpha ) );
             Redraw();
         }
     }
@@ -4294,7 +4329,11 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
             ++i;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
+            fheroes2::Blit( sprite, _mainSurface, path[i].x - sprite.width() / 2, path[i].y - sprite.height() / 2 );
+            RedrawPartialFinish();
         }
     }
 }
@@ -4327,6 +4366,10 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
             frame += 2;
         }
         else if ( IdleTroopsAnimation( false ) ) {
+            rippleSprite = fheroes2::CreateRippleEffect( unitSprite, frame );
+            rippleSprite.setPosition( unitSprite.x(), unitSprite.y() );
+
+            b_current_sprite = &rippleSprite;
             Redraw();
         }
     }
@@ -4361,7 +4404,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
             position += 3;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
+            RedrawPartialFinish();
         }
     }
 
@@ -4381,9 +4426,9 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
 
     // set WNCE
     _currentUnit = nullptr;
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender && ( *it ).damage )
-            ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
+    for ( const auto & target : targets )
+        if ( target.defender && target.damage )
+            target.defender->SwitchAnimation( Monster_Info::WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -4402,19 +4447,25 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
             fheroes2::Blit( sprite2, _mainSurface, center.x + center.width / 2 - sprite2.width() - sprite2.x(), center.y + center.height / 2 + sprite2.y(), true );
             RedrawPartialFinish();
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                if ( ( *it ).defender && ( *it ).damage )
-                    ( *it ).defender->IncreaseAnimFrame( false );
+            for ( const auto & target : targets )
+                if ( target.defender && target.damage )
+                    target.defender->IncreaseAnimFrame( false );
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn, frame );
+            fheroes2::Blit( sprite1, _mainSurface, center.x + center.width / 2 + sprite1.x(), center.y + center.height / 2 + sprite1.y() );
+            const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn, frame );
+            fheroes2::Blit( sprite2, _mainSurface, center.x + center.width / 2 - sprite2.width() - sprite2.x(), center.y + center.height / 2 + sprite2.y(), true );
+            RedrawPartialFinish();
         }
     }
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
+    for ( const auto & target : targets )
+        if ( target.defender ) {
+            target.defender->SwitchAnimation( Monster_Info::STATIC );
             _currentUnit = nullptr;
         }
 }
@@ -4451,7 +4502,12 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            if ( frame < 9 || frame > 10 ) {
+                fheroes2::Copy( original, _mainSurface );
+                fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
+            }
+            RedrawPartialFinish();
         }
     }
 
@@ -4476,9 +4532,9 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = nullptr;
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender && ( *it ).damage )
-            ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
+    for ( const auto & target : targets )
+        if ( target.defender && target.damage )
+            target.defender->SwitchAnimation( Monster_Info::WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -4505,19 +4561,32 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 
             RedrawPartialFinish();
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                if ( ( *it ).defender && ( *it ).damage )
-                    ( *it ).defender->IncreaseAnimFrame( false );
+            for ( const auto & target : targets )
+                if ( target.defender && target.damage )
+                    target.defender->IncreaseAnimFrame( false );
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            if ( icnCount > 0 ) {
+                for ( int x = 0; x * spriteSize < _surfaceInnerArea.width; ++x ) {
+                    const int idX = frame + x * 3;
+                    const int offsetX = x * spriteSize;
+                    for ( int y = 0; y * spriteSize < _surfaceInnerArea.height; ++y ) {
+                        const fheroes2::Sprite & sprite = spriteCache[( idX + y ) % icnCount];
+                        fheroes2::Blit( sprite, _mainSurface, offsetX + sprite.x(), y * spriteSize + sprite.y() );
+                    }
+                }
+            }
+
+            RedrawPartialFinish();
         }
     }
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
+    for ( const auto & target : targets )
+        if ( target.defender ) {
+            target.defender->SwitchAnimation( Monster_Info::STATIC );
             _currentUnit = nullptr;
         }
 }
@@ -4640,7 +4709,31 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
+            const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
+            const fheroes2::Rect initialArea( area );
+            fheroes2::Rect original = initialArea ^ fheroes2::Rect( area.x + offsetX, area.y + offsetY, area.width, area.height );
+
+            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.width, original.height );
+            if ( shifted.x < 0 ) {
+                const int32_t offset = -shifted.x;
+                shifted.x = 0;
+                original.x += offset;
+                shifted.width -= offset;
+                shifted.x = 0;
+            }
+            if ( shifted.y < 0 ) {
+                const int32_t offset = -shifted.y;
+                shifted.y = 0;
+                original.y += offset;
+                shifted.height -= offset;
+                shifted.y = 0;
+            }
+
+            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+
+            RedrawPartialFinish();
         }
     }
 
@@ -4658,8 +4751,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                fheroes2::Point pt2 = Catapult::GetTargetPosition( *it, true );
+            for ( const auto & target : targets ) {
+                fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
                 pt2.x += area.x;
                 pt2.y += area.y;
@@ -4673,7 +4766,19 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            for ( const auto & target : targets ) {
+                fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
+
+                pt2.x += area.x;
+                pt2.y += area.y;
+
+                const fheroes2::Sprite & spriteCloud = fheroes2::AGG::GetICN( icn, frame );
+                fheroes2::Blit( spriteCloud, _mainSurface, pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );
+            }
+
+            RedrawPartialFinish();
         }
     }
 }
@@ -4691,16 +4796,20 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
-            for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
-                if ( *it )
-                    ( *it )->SetCustomAlpha( alpha );
-            }
+            for ( const auto & mirrorImage : mirrorImages )
+                if ( mirrorImage )
+                    mirrorImage->SetCustomAlpha( alpha );
 
             Redraw();
 
             --frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
+            const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
+            for ( const auto & mirrorImage : mirrorImages )
+                if ( mirrorImage )
+                    mirrorImage->SetCustomAlpha( alpha );
+
             Redraw();
         }
     }
@@ -4717,9 +4826,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = nullptr;
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender && ( *it ).damage )
-            ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
+    for ( const auto & target : targets )
+        if ( target.defender && target.damage )
+            target.defender->SwitchAnimation( Monster_Info::WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -4738,9 +4847,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
             fheroes2::Blit( sprite, _mainSurface, center.x + center.width / 2 + sprite.x(), center.y + center.height / 2 + sprite.y() );
             RedrawPartialFinish();
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                if ( ( *it ).defender && ( *it ).damage )
-                    ( *it ).defender->IncreaseAnimFrame( false );
+            for ( const auto & target : targets )
+                if ( target.defender && target.damage )
+                    target.defender->IncreaseAnimFrame( false );
             ++frame;
 
             if ( frame == frameCount && repeatCount > 0 ) {
@@ -4749,13 +4858,17 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
             }
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
+            fheroes2::Blit( sprite, _mainSurface, center.x + center.width / 2 + sprite.x(), center.y + center.height / 2 + sprite.y() );
+            RedrawPartialFinish();
         }
     }
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
+    for ( const auto & target : targets )
+        if ( target.defender ) {
+            target.defender->SwitchAnimation( Monster_Info::STATIC );
             _currentUnit = nullptr;
         }
 }
@@ -4816,9 +4929,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     _currentUnit = nullptr;
 
     if ( wnce )
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-            if ( ( *it ).defender && ( *it ).damage )
-                ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
+        for ( const auto & target : targets )
+            if ( target.defender && target.damage )
+                target.defender->SwitchAnimation( Monster_Info::WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -4831,30 +4944,39 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                if ( ( *it ).defender ) {
-                    const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
+            for ( const auto & target : targets )
+                if ( target.defender ) {
+                    const bool reflect = ( icn == ICN::SHIELD && target.defender->isReflect() );
                     const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                    const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
+                    const fheroes2::Point & pos = CalculateSpellPosition( *target.defender, icn, spellSprite );
                     fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
                 }
             RedrawPartialFinish();
 
             if ( wnce )
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                    if ( ( *it ).defender && ( *it ).damage )
-                        ( *it ).defender->IncreaseAnimFrame( false );
+                for ( const auto & target : targets )
+                    if ( target.defender && target.damage )
+                        target.defender->IncreaseAnimFrame( false );
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            for ( const auto & target : targets )
+                if ( target.defender ) {
+                    const bool reflect = ( icn == ICN::SHIELD && target.defender->isReflect() );
+                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+                    const fheroes2::Point & pos = CalculateSpellPosition( *target.defender, icn, spellSprite );
+                    fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+                }
+            RedrawPartialFinish();
         }
     }
 
     if ( wnce )
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-            if ( ( *it ).defender ) {
-                ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
+        for ( const auto & target : targets )
+            if ( target.defender ) {
+                target.defender->SwitchAnimation( Monster_Info::STATIC );
                 _currentUnit = nullptr;
             }
 }
@@ -4903,7 +5025,12 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+
+            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+            const fheroes2::Point & pos = CalculateSpellPosition( b, icn, spellSprite );
+            fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+            RedrawPartialFinish();
         }
     }
 
@@ -4949,7 +5076,10 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
                 ++frame;
         }
         else if ( IdleTroopsAnimation( false ) ) {
-            Redraw();
+            RedrawPartialStart();
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
+            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+            RedrawPartialFinish();
         }
     }
 
