@@ -57,11 +57,12 @@ namespace
     size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
     {
         size_t newSeed = seed;
-        if ( actions.empty() ) { // update the seed for next turn in all cases, even if no actions were performed
-            fheroes2::hashCombine( newSeed, 0 );
-        }
 
         for ( const Battle::Command & command : actions ) {
+            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
+                continue; // "auto battle" button event is ignored for the purpose of this hash
+            }
+
             fheroes2::hashCombine( newSeed, command.GetType() );
             for ( const int commandArg : command ) {
                 fheroes2::hashCombine( newSeed, commandArg );
@@ -193,8 +194,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
     assert( arena == nullptr );
     arena = this;
 
-    army1 = new Force( a1, false, _randomGenerator );
-    army2 = new Force( a2, true, _randomGenerator );
+    army1 = new Force( a1, false, _randomGenerator, _uidGenerator );
+    army2 = new Force( a2, true, _randomGenerator, _uidGenerator );
 
     // init castle (interface ahead)
     if ( castle ) {
@@ -234,9 +235,9 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
 
     if ( castle ) {
         // init
-        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator ) : nullptr;
-        towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator );
-        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator ) : nullptr;
+        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
+        towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
+        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
         const bool fortification = castle->isFortificationBuild();
         catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), _randomGenerator ) : nullptr;
         bridge = new Bridge();
@@ -1118,7 +1119,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     if ( acount )
         count *= acount * 2;
 
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator );
+    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( elem ) {
         elem->SetModes( CAP_SUMMONELEM );
@@ -1134,7 +1135,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
 Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 {
-    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator );
+    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( image ) {
         b.SetMirror( image );

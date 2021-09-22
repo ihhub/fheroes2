@@ -102,10 +102,10 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, s32 pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )
-    , uid( World::GetUniq() )
+    , _uid( uid )
     , hp( t.GetHitPoints() )
     , count0( t.GetCount() )
     , dead( 0 )
@@ -276,12 +276,12 @@ int Battle::Unit::GetMorale() const
 
 bool Battle::Unit::isUID( u32 v ) const
 {
-    return uid == v;
+    return _uid == v;
 }
 
 u32 Battle::Unit::GetUID( void ) const
 {
-    return uid;
+    return _uid;
 }
 
 Battle::Unit * Battle::Unit::GetMirror()
@@ -970,7 +970,7 @@ std::string Battle::Unit::String( bool more ) const
         ss << ", mode("
            << "0x" << std::hex << modes << std::dec << ")"
            << ", uid("
-           << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid << std::dec << ")"
+           << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << _uid << std::dec << ")"
            << ", speed(" << Speed::String( GetSpeed() ) << ", " << static_cast<int>( GetSpeed() ) << ")"
            << ", hp(" << hp << ")"
            << ", die(" << dead << ")"

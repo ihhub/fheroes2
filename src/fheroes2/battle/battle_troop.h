@@ -75,7 +75,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop &, s32 pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator );
+        Unit( const Troop &, int32_t pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Unit( const Unit & ) = default;
 
         ~Unit() override;
@@ -201,7 +201,7 @@ namespace Battle
         AnimationState animation;
 
     private:
-        u32 uid;
+        const uint32_t _uid;
         u32 hp;
         u32 count0;
         u32 dead;
