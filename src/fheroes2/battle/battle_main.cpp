@@ -135,6 +135,20 @@ namespace
 
         return seed;
     }
+
+    uint32_t getBattleResult( const uint32_t army )
+    {
+        if ( army & Battle::RESULT_SURRENDER )
+            return Battle::RESULT_SURRENDER;
+        if ( army & Battle::RESULT_RETREAT )
+            return Battle::RESULT_RETREAT;
+        if ( army & Battle::RESULT_LOSS )
+            return Battle::RESULT_LOSS;
+        if ( army & Battle::RESULT_WINS )
+            return Battle::RESULT_WINS;
+
+        return 0;
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
@@ -405,30 +419,12 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
 
 u32 Battle::Result::AttackerResult( void ) const
 {
-    if ( RESULT_SURRENDER & army1 )
-        return RESULT_SURRENDER;
-    else if ( RESULT_RETREAT & army1 )
-        return RESULT_RETREAT;
-    else if ( RESULT_LOSS & army1 )
-        return RESULT_LOSS;
-    else if ( RESULT_WINS & army1 )
-        return RESULT_WINS;
-
-    return 0;
+    return getBattleResult( army1 );
 }
 
 u32 Battle::Result::DefenderResult( void ) const
 {
-    if ( RESULT_SURRENDER & army2 )
-        return RESULT_SURRENDER;
-    else if ( RESULT_RETREAT & army2 )
-        return RESULT_RETREAT;
-    else if ( RESULT_LOSS & army2 )
-        return RESULT_LOSS;
-    else if ( RESULT_WINS & army2 )
-        return RESULT_WINS;
-
-    return 0;
+    return getBattleResult( army2 );
 }
 
 u32 Battle::Result::GetExperienceAttacker( void ) const
