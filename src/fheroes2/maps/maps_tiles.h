@@ -319,6 +319,8 @@ namespace Maps
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
 
+        bool isTallObject() const;
+
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );

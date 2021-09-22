@@ -1740,8 +1740,6 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
 
 void Battle::Interface::RedrawCastle1( const Castle & castle )
 {
-    const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
-
     int icn_castbkg = ICN::UNKNOWN;
 
     switch ( castle.GetRace() ) {
@@ -1777,7 +1775,7 @@ void Battle::Interface::RedrawCastle1( const Castle & castle )
     }
 
     // top wall
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn_castbkg, fortification ? 4 : 3 );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn_castbkg, castle.isFortificationBuild() ? 4 : 3 );
     fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
 }
 
@@ -1800,7 +1798,6 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
     else if ( Arena::CASTLE_FIRST_TOP_WALL_POS == cellId || Arena::CASTLE_SECOND_TOP_WALL_POS == cellId || Arena::CASTLE_THIRD_TOP_WALL_POS == cellId
               || Arena::CASTLE_FOURTH_TOP_WALL_POS == cellId ) {
         uint32_t index = 0;
-        const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
 
         switch ( cellId ) {
         case Arena::CASTLE_FIRST_TOP_WALL_POS:
@@ -1819,7 +1816,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             break;
         }
 
-        if ( fortification ) {
+        if ( castle.isFortificationBuild() ) {
             switch ( Board::GetCell( cellId )->GetObject() ) {
             case 0:
                 index += 31;
@@ -3061,10 +3058,10 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
-        frameDelay = frameDelay * 8 / 10; // 20% faster
+        frameDelay = frameDelay * 65 / 100; // by 35% faster
     }
     else if ( unit.Modes( SP_SLOW ) ) {
-        frameDelay = frameDelay * 12 / 10; // 20% slower
+        frameDelay = frameDelay * 150 / 100; // by 50% slower
     }
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );

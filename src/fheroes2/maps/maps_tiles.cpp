@@ -161,90 +161,6 @@ namespace
     }
 #endif
 
-    bool isTallObject( const MP2::MapObjectType objectType )
-    {
-        // Some objects don't allow diagonal moves from top to bottom as they're considered as very tall.
-        switch ( objectType ) {
-        case MP2::OBJ_WATERWHEEL:
-        case MP2::OBJN_WATERWHEEL:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJN_WINDMILL:
-        case MP2::OBJ_STONES:
-        case MP2::OBJ_DRAGONCITY:
-        case MP2::OBJN_DRAGONCITY:
-        case MP2::OBJ_FORT:
-        case MP2::OBJN_FORT:
-        case MP2::OBJ_ALCHEMYLAB:
-        case MP2::OBJN_ALCHEMYLAB:
-        case MP2::OBJ_MINES:
-        case MP2::OBJN_MINES:
-        case MP2::OBJ_ABANDONEDMINE:
-        case MP2::OBJN_ABANDONEDMINE:
-        case MP2::OBJ_TRAVELLERTENT:
-        case MP2::OBJN_TRAVELLERTENT:
-        case MP2::OBJ_FREEMANFOUNDRY:
-        case MP2::OBJN_FREEMANFOUNDRY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJN_WAGONCAMP:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJN_TREECITY:
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJN_SAWMILL:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJN_GRAVEYARD:
-        case MP2::OBJ_ARENA:
-        case MP2::OBJN_ARENA:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJN_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJN_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJN_EARTHALTAR:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJN_WATERALTAR:
-        case MP2::OBJ_CITYDEAD:
-        case MP2::OBJN_CITYDEAD:
-        case MP2::OBJ_STABLES:
-        case MP2::OBJN_STABLES:
-        case MP2::OBJ_BARROWMOUNDS:
-        case MP2::OBJN_BARROWMOUNDS:
-        case MP2::OBJ_ORACLE:
-        case MP2::OBJN_ORACLE:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJN_TEMPLE:
-        case MP2::OBJ_MERMAID:
-        case MP2::OBJN_MERMAID:
-        case MP2::OBJ_PYRAMID:
-        case MP2::OBJN_PYRAMID:
-        case MP2::OBJ_TROLLBRIDGE:
-        case MP2::OBJN_TROLLBRIDGE:
-        case MP2::OBJ_HILLFORT:
-        case MP2::OBJ_ALCHEMYTOWER:
-        case MP2::OBJN_ALCHEMYTOWER:
-        case MP2::OBJ_HUTMAGI:
-        case MP2::OBJN_HUTMAGI:
-        case MP2::OBJ_DERELICTSHIP:
-        case MP2::OBJN_DERELICTSHIP:
-        case MP2::OBJ_CASTLE:
-        case MP2::OBJN_CASTLE:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJN_SHIPWRECK:
-        case MP2::OBJ_OBSERVATIONTOWER:
-        case MP2::OBJN_OBSERVATIONTOWER:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJN_TREEHOUSE:
-        case MP2::OBJ_WITCHSHUT:
-        case MP2::OBJN_WITCHSHUT:
-        case MP2::OBJ_XANADU:
-        case MP2::OBJN_XANADU:
-            return true;
-        default:
-            break;
-        }
-
-        return false;
-    }
-
     bool isShortObject( const MP2::MapObjectType objectType )
     {
         // Some objects allow middle moves even being attached to the bottom.
@@ -278,6 +194,7 @@ namespace
         case MP2::OBJN_FAERIERING:
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_MAGICWELL:
+        case MP2::OBJ_NOTHINGSPECIAL:
             return true;
         default:
             break;
@@ -311,6 +228,7 @@ namespace
         // Trees allow bottom and top movements but they don't allow the same for other trees.
         switch ( objectType ) {
         case MP2::OBJ_TREES:
+        case MP2::OBJ_CRATER:
             return true;
         default:
             break;
@@ -949,7 +867,7 @@ void Maps::Tiles::updatePassability()
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else if ( isShortObject( bottomTileObjectType )
-                          || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) != isCombinedObject( bottomTileObjectType ) ) ) ) {
+                          || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {
@@ -967,7 +885,7 @@ void Maps::Tiles::updatePassability()
     // Left side.
     if ( ( tilePassable & Direction::TOP_LEFT ) && Maps::isValidDirection( _index, Direction::LEFT ) ) {
         const Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
-        const bool leftTileTallObject = isTallObject( leftTile.GetObject( false ) );
+        const bool leftTileTallObject = leftTile.isTallObject();
         if ( leftTileTallObject && ( leftTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
             tilePassable &= ~Direction::TOP_LEFT;
         }
@@ -976,7 +894,7 @@ void Maps::Tiles::updatePassability()
     // Right side.
     if ( ( tilePassable & Direction::TOP_RIGHT ) && Maps::isValidDirection( _index, Direction::RIGHT ) ) {
         const Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
-        const bool rightTileTallObject = isTallObject( rightTile.GetObject( false ) );
+        const bool rightTileTallObject = rightTile.isTallObject();
         if ( rightTileTallObject && ( rightTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
             tilePassable &= ~Direction::TOP_RIGHT;
         }
@@ -1463,11 +1381,12 @@ std::string Maps::Tiles::String( void ) const
        << "uniq            : " << uniq << std::endl
        << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
-       << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
+       << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "level           : " << static_cast<int>( _level ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
+
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
@@ -2474,6 +2393,47 @@ bool Maps::Tiles::containsTileSet( const std::vector<uint8_t> & tileSets ) const
 
         for ( const TilesAddon & addon : addons_level2 ) {
             if ( ( addon.object >> 2 ) == tileSetId ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Maps::Tiles::isTallObject() const
+{
+    // TODO: possibly cache the output of the method as right now it's in average twice.
+    if ( !Maps::isValidDirection( _index, Direction::TOP ) ) {
+        // Nothing above so this object can't be tall.
+        return false;
+    }
+
+    std::vector<uint32_t> tileUIDs;
+    if ( objectTileset > 0 && objectIndex < 255 && uniq != 0 && ( ( _level >> 1 ) & 1 ) == 0 ) {
+        tileUIDs.emplace_back( uniq );
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.uniq != 0 && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
+            tileUIDs.emplace_back( addon.uniq );
+        }
+    }
+
+    const Tiles & topTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
+    for ( const uint32_t tileUID : tileUIDs ) {
+        if ( topTile.uniq == tileUID ) {
+            return true;
+        }
+
+        for ( const TilesAddon & addon : topTile.addons_level1 ) {
+            if ( addon.uniq == tileUID ) {
+                return true;
+            }
+        }
+
+        for ( const TilesAddon & addon : topTile.addons_level2 ) {
+            if ( addon.uniq == tileUID ) {
                 return true;
             }
         }

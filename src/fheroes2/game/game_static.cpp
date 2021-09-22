@@ -130,13 +130,6 @@ namespace GameStatic
 
     // kingdom
     u8 kingdom_max_heroes = 8;
-    cost_t kingdom_starting_resource[] = {{10000, 30, 10, 30, 10, 10, 10},
-                                          {7500, 20, 5, 20, 5, 5, 5},
-                                          {5000, 10, 2, 10, 2, 2, 2},
-                                          {2500, 5, 0, 5, 0, 0, 0},
-                                          {0, 0, 0, 0, 0, 0, 0},
-                                          // ai resource
-                                          {10000, 30, 10, 30, 10, 10, 10}};
 
     // castle
     u8 castle_grown_well = 2;
