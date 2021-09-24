@@ -82,7 +82,6 @@ namespace Bin_Info
 
         eyePosition = fheroes2::Point( getValue<int16_t>( data, 1 ), getValue<int16_t>( data, 3 ) );
 
-        // Frame X offsets for the future use
         for ( size_t moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
 

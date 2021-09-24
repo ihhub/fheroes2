@@ -131,13 +131,10 @@ void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
 {
     std::vector<building_t> ordersBuildings;
-
-    ordersBuildings.reserve( 25 );
-
     CastlePackOrdersBuildings( castle, ordersBuildings );
 
-    for ( auto it = ordersBuildings.cbegin(); it != ordersBuildings.cend(); ++it ) {
-        push_back( builds_t( *it, CastleGetCoordBuilding( castle.GetRace(), *it, top ) ) );
+    for ( const building_t buildingId : ordersBuildings ) {
+        emplace_back( buildingId, CastleGetCoordBuilding( castle.GetRace(), buildingId, top ) );
     }
 }
 
@@ -456,7 +453,7 @@ fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const fher
 
 void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> & ordersBuildings )
 {
-    ordersBuildings.reserve( 30 );
+    ordersBuildings.reserve( 32 );
 
     switch ( castle.GetRace() ) {
     case Race::KNGT:
@@ -644,6 +641,8 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
         ordersBuildings.push_back( BUILD_WELL );
         break;
     default:
+        // Did you add a new race? Please add the logic here.
+        assert( 0 );
         break;
     }
 
