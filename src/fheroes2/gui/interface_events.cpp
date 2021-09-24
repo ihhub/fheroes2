@@ -53,13 +53,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
+
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
-        LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Point & mousePos = le.GetMouseCursor();
+        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
         if ( gameArea.GetROI() & mousePos ) {
             const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
             Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
