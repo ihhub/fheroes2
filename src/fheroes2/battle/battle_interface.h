@@ -220,7 +220,7 @@ namespace Battle
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
         void RedrawActionSkipStatus( const Unit & );
         void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
-        void RedrawBridgeAnimation( bool down );
+        void RedrawBridgeAnimation( const bool bridgeDownAnimation );
         void RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, double angle, uint32_t monsterID );
 
     private:
@@ -343,6 +343,22 @@ namespace Battle
 
         CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
+
+        struct BridgeMovementAnimation
+        {
+            enum AnimationStatusId : uint32_t
+            {
+                DOWN_POSITION = 21,
+                UP_POSITION = 23,
+                DESTROYED = 24
+            };
+
+            bool animationIsRequired;
+
+            uint32_t currentFrameId;
+        };
+
+        BridgeMovementAnimation _bridgeAnimation;
     };
 }
 
