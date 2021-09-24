@@ -468,6 +468,7 @@
     <ClInclude Include="src\fheroes2\game\game_static.h" />
     <ClInclude Include="src\fheroes2\game\game_video.h" />
     <ClInclude Include="src\fheroes2\game\game_video_type.h" />
+    <ClInclude Include="src\fheroes2\game\game_highscores.h" />
     <ClInclude Include="src\fheroes2\gui\cursor.h" />
     <ClInclude Include="src\fheroes2\gui\interface_border.h" />
     <ClInclude Include="src\fheroes2\gui\interface_buttons.h" />

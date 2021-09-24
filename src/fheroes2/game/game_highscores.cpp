@@ -33,6 +33,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_highscores.h"
 #include "game_over.h"
 #include "icn.h"
 #ifdef WITH_DEBUG
@@ -52,296 +53,241 @@
 #define HGS_ID 0xF1F3
 #define HGS_MAX 10
 
-struct hgs_t
-{
-    hgs_t()
-        : _localTime( 0 )
-        , _days( 0 )
-        , _rating( 0 )
-    {}
-
-    bool operator==( const hgs_t & ) const;
-
-    std::string _player;
-    std::string _land;
-    uint32_t _localTime;
-    uint32_t _days;
-    uint32_t _rating;
-};
-
-StreamBase & operator<<( StreamBase & msg, const hgs_t & hgs )
-{
-    return msg << hgs._player << hgs._land << hgs._localTime << hgs._days << hgs._rating;
-}
-
-StreamBase & operator>>( StreamBase & msg, hgs_t & hgs )
-{
-    return msg >> hgs._player >> hgs._land >> hgs._localTime >> hgs._days >> hgs._rating;
-}
-
-bool hgs_t::operator==( const hgs_t & h ) const
-{
-    return _player == h._player && _land == h._land && _days == h._days;
-}
-
-bool RatingSort( const hgs_t & h1, const hgs_t & h2 )
-{
-    return h1._rating > h2._rating;
-}
-
-class HGSData
-{
-public:
-    HGSData();
-
-    bool Load( const std::string & fileName );
-    bool Save( const std::string & fileName ) const;
-    void ScoreRegistry( const std::string & playerName, const std::string & land, const uint32_t days, const uint32_t rating );
-    void RedrawList( int32_t ox, int32_t oy );
-
-private:
-    uint32_t _monsterAnimationFrameId;
-    std::vector<hgs_t> _standardHighScores;
-    std::vector<hgs_t> _campaignHighScores;
-    std::vector<std::pair<size_t, Monster::monster_t>> _monsterRatings;
-    std::vector<std::pair<size_t, Monster::monster_t>> _monsterDays;
-
-    Monster getMonsterByRatingStandardGame( const size_t rating ) const
-    {
-        std::pair<size_t, Monster::monster_t> lastData = _monsterRatings.back();
-
-        if ( rating >= lastData.first )
-            return Monster( lastData.second );
-
-        Monster::monster_t monster = Monster::PEASANT;
-        for ( size_t i = 0; i < _monsterRatings.size(); ++i ) {
-            if ( rating <= _monsterRatings[i].first ) {
-                monster = _monsterRatings[i].second;
-                break;
-            }
-        }
-
-        return Monster( monster );
-    }
-
-    Monster getMonsterByRatingCampaignGame( const size_t dayCount ) const 
-    {
-        std::pair<size_t, Monster::monster_t> lastData = _monsterDays.back();
-
-        if ( dayCount >= lastData.first )
-            return Monster( lastData.second );
-
-        Monster::monster_t monster = Monster::PEASANT;
-        for ( size_t i = 0; i < _monsterDays.size(); ++i ) {
-            if ( dayCount <= _monsterDays[i].first ) {
-                monster = _monsterDays[i].second;
-                break;
-            }
-        }
-
-        return Monster( monster );
-    }
-};
-
-HGSData::HGSData()
-    : _monsterAnimationFrameId( 0 )
+namespace
 {
     const std::array<Monster::monster_t, 65> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
-                                                                    Monster::SPRITE,        Monster::HALFLING,
-                                                                    Monster::CENTAUR,       Monster::ROGUE,
-                                                                    Monster::SKELETON,      Monster::ORC,
-                                                                    Monster::ZOMBIE,        Monster::ARCHER,
-                                                                    Monster::RANGER,        Monster::BOAR,
-                                                                    Monster::DWARF,         Monster::MUTANT_ZOMBIE,
-                                                                    Monster::ORC_CHIEF,     Monster::ELF,
-                                                                    Monster::GARGOYLE,      Monster::PIKEMAN,
-                                                                    Monster::GRAND_ELF,     Monster::BATTLE_DWARF,
-                                                                    Monster::NOMAD,         Monster::VETERAN_PIKEMAN,
-                                                                    Monster::WOLF,          Monster::MUMMY,
-                                                                    Monster::IRON_GOLEM,    Monster::ROYAL_MUMMY,
-                                                                    Monster::OGRE,          Monster::GRIFFIN,
-                                                                    Monster::SWORDSMAN,     Monster::DRUID,
-                                                                    Monster::STEEL_GOLEM,   Monster::MASTER_SWORDSMAN,
-                                                                    Monster::AIR_ELEMENT,   Monster::GREATER_DRUID,
-                                                                    Monster::FIRE_ELEMENT,  Monster::GHOST,
-                                                                    Monster::VAMPIRE,       Monster::WATER_ELEMENT,
-                                                                    Monster::EARTH_ELEMENT, Monster::ROC,
-                                                                    Monster::MINOTAUR,      Monster::CAVALRY,
-                                                                    Monster::TROLL,         Monster::MAGE,
-                                                                    Monster::MEDUSA,        Monster::LICH,
-                                                                    Monster::OGRE_LORD,     Monster::MINOTAUR_KING,
-                                                                    Monster::CHAMPION,      Monster::WAR_TROLL,
-                                                                    Monster::VAMPIRE_LORD,  Monster::ARCHMAGE,
-                                                                    Monster::POWER_LICH,    Monster::UNICORN,
-                                                                    Monster::HYDRA,         Monster::PALADIN,
-                                                                    Monster::GENIE,         Monster::CRUSADER,
-                                                                    Monster::CYCLOPS,       Monster::GIANT,
-                                                                    Monster::PHOENIX,       Monster::BONE_DRAGON,
-                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
-                                                                    Monster::TITAN };
-
-    uint32_t ratingSoFar = 0;
-    uint32_t ratingIncrementCount = 0;
-
-    // need int for reverse-for loop
-    const int monstersInRankingCount = static_cast<int>( monstersInRanking.size() );
-
-    for ( int i = 0; i < monstersInRankingCount; ++i ) {
-        const Monster::monster_t monster = monstersInRanking[i];
-
-        // 0 to 3
-        if ( monster == Monster::PEASANT ) {
-            ratingIncrementCount = 3;
-        }
-        // 4 to 131
-        else if ( monster == Monster::GOBLIN ) {
-            ratingIncrementCount = 4;
-        }
-        // 132 to 227
-        else if ( monster == Monster::GREATER_DRUID ) {
-            ratingIncrementCount = 3;
-        }
-        // >= 228
-        else if ( monster == Monster::BLACK_DRAGON ) {
-            ratingIncrementCount = 1;
-        }
-
-        ratingSoFar += ratingIncrementCount;
-        _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
-    }
-
-    uint32_t daySoFar = 0;
-    uint32_t dayIncrementCount = 0;
-
-    for ( int i = monstersInRankingCount - 1; i >= 0; --i ) {
-        const Monster::monster_t monster = monstersInRanking[i];
-
-        // 0 to 300
-        if ( monster == Monster::BLACK_DRAGON ) {
-            dayIncrementCount = 300;
-        }
-        // 301 to 1000
-        else if ( monster == Monster::TITAN ) {
-            dayIncrementCount = 20;
-        }
-        // 1001 to 2000
-        else if ( monster == Monster::DRUID ) {
-            dayIncrementCount = 100;
-        }
-        // 2001 to 5800
-        else if ( monster == Monster::BATTLE_DWARF ) {
-            dayIncrementCount = 200;
-        }
-        // >= 5801
-        else if ( monster == Monster::PEASANT ) {
-            dayIncrementCount = 1;
-        }
-
-        daySoFar += dayIncrementCount;
-        _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
-    }
+                                                                   Monster::SPRITE,        Monster::HALFLING,
+                                                                   Monster::CENTAUR,       Monster::ROGUE,
+                                                                   Monster::SKELETON,      Monster::ORC,
+                                                                   Monster::ZOMBIE,        Monster::ARCHER,
+                                                                   Monster::RANGER,        Monster::BOAR,
+                                                                   Monster::DWARF,         Monster::MUTANT_ZOMBIE,
+                                                                   Monster::ORC_CHIEF,     Monster::ELF,
+                                                                   Monster::GARGOYLE,      Monster::PIKEMAN,
+                                                                   Monster::GRAND_ELF,     Monster::BATTLE_DWARF,
+                                                                   Monster::NOMAD,         Monster::VETERAN_PIKEMAN,
+                                                                   Monster::WOLF,          Monster::MUMMY,
+                                                                   Monster::IRON_GOLEM,    Monster::ROYAL_MUMMY,
+                                                                   Monster::OGRE,          Monster::GRIFFIN,
+                                                                   Monster::SWORDSMAN,     Monster::DRUID,
+                                                                   Monster::STEEL_GOLEM,   Monster::MASTER_SWORDSMAN,
+                                                                   Monster::AIR_ELEMENT,   Monster::GREATER_DRUID,
+                                                                   Monster::FIRE_ELEMENT,  Monster::GHOST,
+                                                                   Monster::VAMPIRE,       Monster::WATER_ELEMENT,
+                                                                   Monster::EARTH_ELEMENT, Monster::ROC,
+                                                                   Monster::MINOTAUR,      Monster::CAVALRY,
+                                                                   Monster::TROLL,         Monster::MAGE,
+                                                                   Monster::MEDUSA,        Monster::LICH,
+                                                                   Monster::OGRE_LORD,     Monster::MINOTAUR_KING,
+                                                                   Monster::CHAMPION,      Monster::WAR_TROLL,
+                                                                   Monster::VAMPIRE_LORD,  Monster::ARCHMAGE,
+                                                                   Monster::POWER_LICH,    Monster::UNICORN,
+                                                                   Monster::HYDRA,         Monster::PALADIN,
+                                                                   Monster::GENIE,         Monster::CRUSADER,
+                                                                   Monster::CYCLOPS,       Monster::GIANT,
+                                                                   Monster::PHOENIX,       Monster::BONE_DRAGON,
+                                                                   Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
+                                                                   Monster::TITAN };
 }
 
-bool HGSData::Load( const std::string & fn )
+namespace HighScore
 {
-    ZStreamFile hdata;
-    if ( !hdata.read( fn ) )
+    StreamBase & operator<<( StreamBase & msg, const HighScoreScenarioData & data )
+    {
+        return msg << data._player << data._scenarioName << data._localTime << data._days << data._rating;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, HighScoreScenarioData & data )
+    {
+        return msg >> data._player >> data._scenarioName >> data._localTime >> data._days >> data._rating;
+    }
+
+    bool HighScoreScenarioData::operator==( const HighScoreScenarioData & other ) const
+    {
+        return _player == other._player && _scenarioName == other._scenarioName && _days == other._days;
+    }
+
+    bool RatingSort( const HighScoreScenarioData & h1, const HighScoreScenarioData & h2 )
+    {
+        return h1._rating > h2._rating;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const HighScoreCampaignData & data ) 
+    {
+        return msg << data._player << data._campaignName << data._localTime << data._days;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, HighScoreCampaignData & data ) 
+    {
+        return msg >> data._player >> data._campaignName >> data._localTime >> data._days;
+    }
+
+    HGSData::HGSData()
+        : _monsterAnimationFrameId( 0 )
+    {
+        uint32_t ratingSoFar = 0;
+        uint32_t ratingIncrementCount = 0;
+
+        // need int for reverse-for loop
+        const int monstersInRankingCount = static_cast<int>( monstersInRanking.size() );
+
+        for ( int i = 0; i < monstersInRankingCount; ++i ) {
+            const Monster::monster_t monster = monstersInRanking[i];
+
+            // 0 to 3
+            if ( monster == Monster::PEASANT ) {
+                ratingIncrementCount = 3;
+            }
+            // 4 to 131
+            else if ( monster == Monster::GOBLIN ) {
+                ratingIncrementCount = 4;
+            }
+            // 132 to 227
+            else if ( monster == Monster::GREATER_DRUID ) {
+                ratingIncrementCount = 3;
+            }
+            // >= 228
+            else if ( monster == Monster::BLACK_DRAGON ) {
+                ratingIncrementCount = 1;
+            }
+
+            ratingSoFar += ratingIncrementCount;
+            _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
+        }
+
+        uint32_t daySoFar = 0;
+        uint32_t dayIncrementCount = 0;
+
+        for ( int i = monstersInRankingCount - 1; i >= 0; --i ) {
+            const Monster::monster_t monster = monstersInRanking[i];
+
+            // 0 to 300
+            if ( monster == Monster::BLACK_DRAGON ) {
+                dayIncrementCount = 300;
+            }
+            // 301 to 1000
+            else if ( monster == Monster::TITAN ) {
+                dayIncrementCount = 20;
+            }
+            // 1001 to 2000
+            else if ( monster == Monster::DRUID ) {
+                dayIncrementCount = 100;
+            }
+            // 2001 to 5800
+            else if ( monster == Monster::BATTLE_DWARF ) {
+                dayIncrementCount = 200;
+            }
+            // >= 5801
+            else if ( monster == Monster::PEASANT ) {
+                dayIncrementCount = 1;
+            }
+
+            daySoFar += dayIncrementCount;
+            _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
+        }
+    }
+
+    bool HGSData::Load( const std::string & fileName )
+    {
+        ZStreamFile hdata;
+        if ( !hdata.read( fileName ) )
+            return false;
+
+        hdata.setbigendian( true );
+        u16 hgs_id = 0;
+
+        hdata >> hgs_id;
+
+        if ( hgs_id == HGS_ID ) {
+            hdata >> _highScores;
+            return !hdata.fail();
+        }
+
         return false;
-
-    hdata.setbigendian( true );
-    u16 hgs_id = 0;
-
-    hdata >> hgs_id;
-
-    if ( hgs_id == HGS_ID ) {
-        hdata >> _standardHighScores;
-        return !hdata.fail();
     }
 
-    return false;
-}
+    bool HGSData::Save( const std::string & fileName ) const
+    {
+        ZStreamFile hdata;
+        hdata.setbigendian( true );
+        hdata << static_cast<u16>( HGS_ID ) << _highScores;
+        if ( hdata.fail() || !hdata.write( fileName ) )
+            return false;
 
-bool HGSData::Save( const std::string & fn ) const
-{
-    ZStreamFile hdata;
-    hdata.setbigendian( true );
-    hdata << static_cast<u16>( HGS_ID ) << _standardHighScores;
-    if ( hdata.fail() || !hdata.write( fn ) )
-        return false;
-
-    return true;
-}
-
-void HGSData::ScoreRegistry( const std::string & playerName, const std::string & land, const uint32_t days, const uint32_t rating )
-{
-    hgs_t highScore;
-
-    highScore._player = playerName;
-    highScore._land = land;
-    highScore._localTime = std::time( nullptr );
-    highScore._days = days;
-    highScore._rating = rating;
-
-    if ( _standardHighScores.end() == std::find( _standardHighScores.begin(), _standardHighScores.end(), highScore ) ) {
-        _standardHighScores.push_back( highScore );
-        std::sort( _standardHighScores.begin(), _standardHighScores.end(), RatingSort );
-        if ( _standardHighScores.size() > HGS_MAX )
-            _standardHighScores.resize( HGS_MAX );
+        return true;
     }
-}
 
-void HGSData::RedrawList( int32_t ox, int32_t oy )
-{
-    ++_monsterAnimationFrameId;
+    void HGSData::ScoreRegistry( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
+    {
+        HighScoreScenarioData highScore;
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+        highScore._player = playerName;
+        highScore._scenarioName = scenarioName;
+        highScore._localTime = std::time( nullptr );
+        highScore._days = days;
+        highScore._rating = rating;
 
-    // image background
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
+        if ( _highScores.end() == std::find( _highScores.begin(), _highScores.end(), highScore ) ) {
+            _highScores.push_back( highScore );
+            std::sort( _highScores.begin(), _highScores.end(), RatingSort );
+            if ( _highScores.size() > HGS_MAX )
+                _highScores.resize( HGS_MAX );
+        }
+    }
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
+    void HGSData::RedrawListStandard( int32_t ox, int32_t oy )
+    {
+        ++_monsterAnimationFrameId;
 
-    std::sort( _standardHighScores.begin(), _standardHighScores.end(), RatingSort );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-    std::vector<hgs_t>::const_iterator it1 = _standardHighScores.begin();
-    std::vector<hgs_t>::const_iterator it2 = _standardHighScores.end();
+        // image background
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
 
-    Text text;
-    text.Set( Font::BIG );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
 
-    const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
+        std::sort( _highScores.begin(), _highScores.end(), RatingSort );
 
-    for ( ; it1 != it2 && ( it1 - _standardHighScores.begin() < HGS_MAX ); ++it1 ) {
-        const hgs_t & hgs = *it1;
+        std::vector<HighScoreScenarioData>::const_iterator it1 = _highScores.begin();
+        std::vector<HighScoreScenarioData>::const_iterator it2 = _highScores.end();
 
-        text.Set( hgs._player );
-        text.Blit( ox + 88, oy + 70 );
+        Text text;
+        text.Set( Font::BIG );
 
-        text.Set( hgs._land );
-        text.Blit( ox + 244, oy + 70 );
+        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
 
-        text.Set( std::to_string( hgs._days ) );
-        text.Blit( ox + 403, oy + 70 );
+        for ( ; it1 != it2 && ( it1 - _highScores.begin() < HGS_MAX ); ++it1 ) {
+            const HighScoreScenarioData & hgs = *it1;
 
-        text.Set( std::to_string( hgs._rating ) );
-        text.Blit( ox + 484, oy + 70 );
+            text.Set( hgs._player );
+            text.Blit( ox + 88, oy + 70 );
 
-        const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs._rating );
-        const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
-        const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
-        fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
+            text.Set( hgs._scenarioName );
+            text.Blit( ox + 244, oy + 70 );
 
-        // Animation frame of a creature is based on its position on screen and common animation frame ID.
-        const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs._days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
-        const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
-        fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
+            text.Set( std::to_string( hgs._days ) );
+            text.Blit( ox + 403, oy + 70 );
 
-        oy += 40;
+            text.Set( std::to_string( hgs._rating ) );
+            text.Blit( ox + 484, oy + 70 );
+
+            const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs._rating );
+            const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
+            const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
+            fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
+
+            // Animation frame of a creature is based on its position on screen and common animation frame ID.
+            const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs._days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+            const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
+            const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
+            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
+
+            oy += 40;
+        }
     }
 }
 
-fheroes2::GameMode Game::HighScores()
+fheroes2::GameMode Game::HighScoresStandard()
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
@@ -353,8 +299,7 @@ fheroes2::GameMode Game::HighScores()
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    HGSData hgs;
+    HighScore::HGSData hgs;
 
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
@@ -368,7 +313,7 @@ fheroes2::GameMode Game::HighScores()
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
-    hgs.RedrawList( top.x, top.y );
+    hgs.RedrawListStandard( top.x, top.y );
 
     fheroes2::Button buttonCampaign( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
@@ -378,18 +323,19 @@ fheroes2::GameMode Game::HighScores()
 
     display.render();
 
-    const u32 rating = GetGameOverScores();
-    const u32 days = world.CountDay();
     GameOver::Result & gameResult = GameOver::Result::Get();
 
-    if ( rating && ( gameResult.GetResult() & GameOver::WINS ) ) {
+    if ( gameResult.GetResult() & GameOver::WINS ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
         if ( player.empty() )
             player = _( "Unknown Hero" );
+
+        const uint32_t rating = GetGameOverScores();
+        const uint32_t days = world.CountDay();
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
         hgs.Save( highScoreDataPath );
-        hgs.RedrawList( top.x, top.y );
+        hgs.RedrawListStandard( top.x, top.y );
         buttonCampaign.draw();
         buttonExit.draw();
         display.render();
@@ -419,10 +365,15 @@ fheroes2::GameMode Game::HighScores()
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            hgs.RedrawList( top.x, top.y );
+            hgs.RedrawListStandard( top.x, top.y );
             display.render();
         }
     }
 
+    return fheroes2::GameMode::QUIT_GAME;
+}
+
+fheroes2::GameMode Game::HighScoresCampaign()
+{
     return fheroes2::GameMode::QUIT_GAME;
 }

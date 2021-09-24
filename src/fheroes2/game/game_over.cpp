@@ -353,14 +353,14 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     AGG::ResetMixer();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
 
-                    res = fheroes2::GameMode::HIGHSCORES;
+                    res = fheroes2::GameMode::HIGHSCORES_STANDARD;
 
                     if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
                         if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
                             // Game::HighScores() calls ResetResult()
-                            Game::HighScores();
+                            Game::HighScoresStandard();
 
                             Interface::Basic & I = Interface::Basic::Get();
 

@@ -515,7 +515,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
         AGG::ResetMixer();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-        return fheroes2::GameMode::HIGHSCORES;
+        return fheroes2::GameMode::HIGHSCORES_STANDARD;
     }
 
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
