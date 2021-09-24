@@ -911,6 +911,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( nullptr )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
+    , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
 {
     const Settings & conf = Settings::Get();
 
@@ -1550,9 +1551,14 @@ void Battle::Interface::RedrawCover()
     RedrawCoverBoard( conf, board );
 
     const Bridge * bridge = Arena::GetBridge();
-    // bridge
-    if ( bridge && bridge->isDown() ) {
-        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), bridge->isDestroy() ? 24 : 21 );
+    if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
+        uint32_t spriteIndex = bridge->isDestroy() ? BridgeMovementAnimation::DESTROYED : BridgeMovementAnimation::DOWN_POSITION;
+
+        if ( _bridgeAnimation.animationIsRequired ) {
+            spriteIndex = _bridgeAnimation.currentFrameId;
+        }
+
+        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), spriteIndex );
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
@@ -4780,41 +4786,42 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     }
 }
 
-void Battle::Interface::RedrawBridgeAnimation( bool down )
+void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    uint32_t frame = down ? 23 : 21;
+    _bridgeAnimation.animationIsRequired = true;
 
-    if ( down )
+    _bridgeAnimation.currentFrameId = bridgeDownAnimation ? BridgeMovementAnimation::UP_POSITION : BridgeMovementAnimation::DOWN_POSITION;
+
+    if ( bridgeDownAnimation )
         AGG::PlaySound( M82::DRAWBRG );
 
     while ( le.HandleEvents() ) {
-        if ( down ) {
-            if ( frame < 21 )
+        if ( bridgeDownAnimation ) {
+            if ( _bridgeAnimation.currentFrameId < BridgeMovementAnimation::DOWN_POSITION )
                 break;
         }
         else {
-            if ( frame > 23 )
+            if ( _bridgeAnimation.currentFrameId > BridgeMovementAnimation::UP_POSITION )
                 break;
         }
 
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
-            RedrawPartialStart();
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
-            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
-            RedrawPartialFinish();
+            Redraw();
 
-            if ( down )
-                --frame;
+            if ( bridgeDownAnimation )
+                --_bridgeAnimation.currentFrameId;
             else
-                ++frame;
+                ++_bridgeAnimation.currentFrameId;
         }
     }
 
-    if ( !down )
+    _bridgeAnimation.animationIsRequired = false;
+
+    if ( !bridgeDownAnimation )
         AGG::PlaySound( M82::DRAWBRG );
 }
 
