@@ -41,6 +41,7 @@ namespace HighScore
 
         bool operator==( const HighScoreStandardData & other ) const;
 
+
         std::string _player;
         std::string _scenarioName;
         uint32_t _localTime;
@@ -68,7 +69,7 @@ namespace HighScore
     class HighScoreDataContainer
     {
     public:
-        HighScoreDataContainer::HighScoreDataContainer()
+        HighScoreDataContainer()
             : _highScoresStandard()
             , _highScoresCampaign()
         {}
