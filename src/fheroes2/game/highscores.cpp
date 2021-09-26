@@ -31,7 +31,7 @@ namespace
     const uint16_t HGS_ID2 = 0xF1F4;
     const uint8_t HGS_MAX = 10;
 
-    const std::array<Monster::monster_t, 65> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
+    const std::array<Monster::monster_t, 66> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
                                                                    Monster::SPRITE,        Monster::HALFLING,
                                                                    Monster::CENTAUR,       Monster::ROGUE,
                                                                    Monster::SKELETON,      Monster::ORC,
@@ -63,7 +63,7 @@ namespace
                                                                    Monster::CYCLOPS,       Monster::GIANT,
                                                                    Monster::PHOENIX,       Monster::BONE_DRAGON,
                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
-                                                                   Monster::TITAN };
+                                                                   Monster::TITAN,         Monster::BLACK_DRAGON };
 
     bool RatingSort( const HighScore::HighScoreStandardData & h1, const HighScore::HighScoreStandardData & h2 )
     {
