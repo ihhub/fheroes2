@@ -54,7 +54,7 @@
 
 namespace
 {
-    const std::string highScoreDataPath = "fheroes2.hgs";
+    const std::string highscoreFileName = "fheroes2.hgs";
     static uint32_t monsterAnimationFrameId = 0;
 
     void RedrawHighScoresStandard( HighScore::HighScoreDataContainer & dataContainer, int32_t ox, int32_t oy )
