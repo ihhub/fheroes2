@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +23,6 @@
 
 #include <string>
 
-#include "game_mode.h"
 #include "monster.h"
 
 class StreamBase;
@@ -35,7 +32,9 @@ namespace HighScore
     struct HighScoreStandardData
     {
         HighScoreStandardData()
-            : _localTime( 0 )
+            : _player()
+            , _scenarioName()
+            , _localTime( 0 )
             , _days( 0 )
             , _rating( 0 )
         {}
@@ -52,7 +51,9 @@ namespace HighScore
     struct HighScoreCampaignData
     {
         HighScoreCampaignData()
-            : _localTime( 0 )
+            : _player()
+            , _campaignName()
+            , _localTime( 0 )
             , _days( 0 )
         {}
 
@@ -67,31 +68,33 @@ namespace HighScore
     class HighScoreDataContainer
     {
     public:
-        HighScoreDataContainer();
+        HighScoreDataContainer::HighScoreDataContainer()
+            : _highScoresStandard()
+            , _highScoresCampaign()
+        {}
 
         bool Load( const std::string & fileName );
         bool Save( const std::string & fileName ) const;
         void RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
         void RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days );
-        void RedrawListStandard( int32_t ox, int32_t oy );
-        void RedrawListCampaign( int32_t ox, int32_t oy );
 
-        void RefreshMonsterAnimationFrameID() 
+        const std::vector<HighScoreStandardData> & GetHighScoresStandard()
         {
-            _monsterAnimationFrameId = 0;
+            return _highScoresStandard;
+        }
+
+        const std::vector<HighScoreCampaignData> & GetHighScoresCampaign()
+        {
+            return _highScoresCampaign;
         }
 
         static HighScoreDataContainer & Get();
+        static Monster getMonsterByRating( const size_t rating );
+        static Monster getMonsterByDay( const size_t dayCount );
 
     private:
-        uint32_t _monsterAnimationFrameId;
         std::vector<HighScoreStandardData> _highScoresStandard;
         std::vector<HighScoreCampaignData> _highScoresCampaign;
-        std::vector<std::pair<size_t, Monster::monster_t>> _monsterRatings;
-        std::vector<std::pair<size_t, Monster::monster_t>> _monsterDays;
-
-        Monster getMonsterByRating( const size_t rating ) const;
-        Monster getMonsterByDay( const size_t dayCount ) const;
     };
 }
 
