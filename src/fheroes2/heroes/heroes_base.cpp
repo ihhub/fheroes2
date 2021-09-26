@@ -412,35 +412,38 @@ double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
 {
-    if ( res ) {
-        res->clear();
-
-        if ( HaveSpellBook() ) {
-            if ( HaveSpell( spell ) ) {
-                if ( HaveSpellPoints( spell ) ) {
-                    if ( spell.MovePoint() <= move_point ) {
-                        return true;
-                    }
-                    else {
-                        *res += _( "Not enough move points." );
-                    }
-                }
-                else {
-                    *res += _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
-                }
-            }
-            else {
-                *res += _( "The spell is not found." );
-            }
+    if ( !HaveSpellBook() ) {
+        if ( res ) {
+            *res = _( "Spell book is not present." );
         }
-        else {
-            *res += _( "Spell book is not present." );
-        }
-
         return false;
     }
 
-    return HaveSpellBook() && HaveSpell( spell ) && HaveSpellPoints( spell );
+    if ( !HaveSpell( spell ) ) {
+        if ( res ) {
+            *res = _( "The spell is not found." );
+        }
+        return false;
+    }
+
+    if ( !HaveSpellPoints( spell ) ) {
+        if ( res ) {
+            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+        }
+        return false;
+    }
+
+    if ( move_point < spell.MovePoint() ) {
+        if ( res ) {
+            *res = _( "Not enough move points." );
+        }
+        return false;
+    }
+
+    if ( res ) {
+        res->clear();
+    }
+    return true;
 }
 
 void HeroBase::SpellCasted( const Spell & spell )

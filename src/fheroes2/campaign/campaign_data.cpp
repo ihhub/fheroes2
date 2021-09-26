@@ -196,11 +196,10 @@ namespace
                                                              { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "GOOD07QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        // NOTE: In Roland's Campaign, scenario 8 is drawn above scenario 7, so we emplace_back scenario 8 first
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
-                                    rolandCampaignDescription[7], emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
         scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignScenarioNames[6],
                                     rolandCampaignDescription[6], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
+                                    rolandCampaignDescription[7], emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
         scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignScenarioNames[8],
                                     rolandCampaignDescription[8],
                                     Campaign::VideoSequence{ { "GOOD09W.SMK", Video::VideoAction::IGNORE_VIDEO },

@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,46 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_TOWER_H
-#define H2BATTLE_TOWER_H
+#pragma once
 
-#include "battle_troop.h"
+#include "castle.h"
 
-class Castle;
-
-namespace Battle
+namespace fheroes2
 {
-    enum
-    {
-        TWR_LEFT = 0x01,
-        TWR_CENTER = 0x02,
-        TWR_RIGHT = 0x04
-    };
-
-    class Tower : public Unit
-    {
-    public:
-        Tower( const Castle &, int, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t );
-
-        bool isValid( void ) const override;
-        int GetColor( void ) const override;
-        u32 GetType( void ) const;
-        u32 GetBonus( void ) const;
-        u32 GetAttack( void ) const override;
-
-        const char * GetName( void ) const;
-
-        void SetDestroy( void );
-        fheroes2::Point GetPortPosition( void ) const;
-
-        static std::string GetInfo( const Castle & );
-
-    private:
-        int type;
-        int color;
-        u32 bonus;
-        bool valid;
-    };
+    Rect getCastleBuildingArea( const int race, const building_t buildingId );
 }
-
-#endif

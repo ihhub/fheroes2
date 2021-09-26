@@ -24,51 +24,45 @@
 
 std::string Direction::String( int direct )
 {
-    const char * str_direct[] = {"unknown", "center", "top", "top right", "right", "bottom right", "bottom", "bottom left", "left", "top left"};
     std::string temp;
 
     if ( direct & CENTER ) {
-        temp += str_direct[1];
-        temp += ',';
+        temp += "center, ";
     }
     if ( direct & TOP ) {
-        temp += str_direct[2];
-        temp += ',';
+        temp += "top, ";
     }
     if ( direct & TOP_RIGHT ) {
-        temp += str_direct[3];
-        temp += ',';
+        temp += "top-right, ";
     }
     if ( direct & RIGHT ) {
-        temp += str_direct[4];
-        temp += ',';
+        temp += "right, ";
     }
     if ( direct & BOTTOM_RIGHT ) {
-        temp += str_direct[5];
-        temp += ',';
+        temp += "bottom-right, ";
     }
     if ( direct & BOTTOM ) {
-        temp += str_direct[6];
-        temp += ',';
+        temp += "bottom, ";
     }
     if ( direct & BOTTOM_LEFT ) {
-        temp += str_direct[7];
-        temp += ',';
+        temp += "bottom-left, ";
     }
     if ( direct & LEFT ) {
-        temp += str_direct[8];
-        temp += ',';
+        temp += "left, ";
     }
     if ( direct & TOP_LEFT ) {
-        temp += str_direct[9];
-        temp += ',';
+        temp += "top-left, ";
+    }
+
+    if ( !temp.empty() && temp.back() == ' ' ) {
+        temp.pop_back();
     }
 
     if ( !temp.empty() && temp.back() == ',' ) {
         temp.pop_back();
     }
 
-    return temp.empty() ? str_direct[0] : temp;
+    return temp.empty() ? "unknown" : temp;
 }
 
 bool Direction::isDiagonal( int direction )

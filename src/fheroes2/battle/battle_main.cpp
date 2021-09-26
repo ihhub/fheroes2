@@ -106,6 +106,49 @@ namespace
             }
         }
     }
+
+    size_t computeBattleSeed( const int32_t mapIndex, const uint32_t mapSeed, const Army & army1, const Army & army2 )
+    {
+        size_t seed = static_cast<size_t>( mapIndex ) + static_cast<size_t>( mapSeed );
+
+        for ( size_t i = 0; i < army1.Size(); ++i ) {
+            const Troop * troop = army1.GetTroop( i );
+            if ( troop->isValid() ) {
+                fheroes2::hashCombine( seed, troop->GetID() );
+                fheroes2::hashCombine( seed, troop->GetCount() );
+            }
+            else {
+                fheroes2::hashCombine( seed, 0 );
+            }
+        }
+
+        for ( size_t i = 0; i < army2.Size(); ++i ) {
+            const Troop * troop = army2.GetTroop( i );
+            if ( troop->isValid() ) {
+                fheroes2::hashCombine( seed, troop->GetID() );
+                fheroes2::hashCombine( seed, troop->GetCount() );
+            }
+            else {
+                fheroes2::hashCombine( seed, 0 );
+            }
+        }
+
+        return seed;
+    }
+
+    uint32_t getBattleResult( const uint32_t army )
+    {
+        if ( army & Battle::RESULT_SURRENDER )
+            return Battle::RESULT_SURRENDER;
+        if ( army & Battle::RESULT_RETREAT )
+            return Battle::RESULT_RETREAT;
+        if ( army & Battle::RESULT_LOSS )
+            return Battle::RESULT_LOSS;
+        if ( army & Battle::RESULT_WINS )
+            return Battle::RESULT_WINS;
+
+        return 0;
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
@@ -161,7 +204,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    const size_t battleDeterministicSeed = static_cast<size_t>( mapsindex ) + static_cast<size_t>( world.GetMapSeed() );
+    const size_t battleDeterministicSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
     const size_t battlePureRandomSeed = Rand::Get( std::numeric_limits<uint32_t>::max() );
     const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? battleDeterministicSeed : battlePureRandomSeed;
     Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
@@ -376,30 +419,12 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
 
 u32 Battle::Result::AttackerResult( void ) const
 {
-    if ( RESULT_SURRENDER & army1 )
-        return RESULT_SURRENDER;
-    else if ( RESULT_RETREAT & army1 )
-        return RESULT_RETREAT;
-    else if ( RESULT_LOSS & army1 )
-        return RESULT_LOSS;
-    else if ( RESULT_WINS & army1 )
-        return RESULT_WINS;
-
-    return 0;
+    return getBattleResult( army1 );
 }
 
 u32 Battle::Result::DefenderResult( void ) const
 {
-    if ( RESULT_SURRENDER & army2 )
-        return RESULT_SURRENDER;
-    else if ( RESULT_RETREAT & army2 )
-        return RESULT_RETREAT;
-    else if ( RESULT_LOSS & army2 )
-        return RESULT_LOSS;
-    else if ( RESULT_WINS & army2 )
-        return RESULT_WINS;
-
-    return 0;
+    return getBattleResult( army2 );
 }
 
 u32 Battle::Result::GetExperienceAttacker( void ) const
