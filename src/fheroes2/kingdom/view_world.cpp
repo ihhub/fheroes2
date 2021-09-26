@@ -43,29 +43,6 @@
 
 namespace
 {
-    void drawViewWorldSprite( const fheroes2::Sprite & viewWorldSprite, fheroes2::Display & display, const bool isEvilInterface )
-    {
-        const int32_t dstx = display.width() - viewWorldSprite.width() - BORDERWIDTH;
-        int32_t dsty = 2 * BORDERWIDTH + RADARWIDTH;
-        const int32_t cuty = 275;
-        fheroes2::Blit( viewWorldSprite, 0, 0, display, dstx, dsty, viewWorldSprite.width(), cuty );
-        dsty += cuty;
-
-        if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
-            const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
-            const int32_t startY = 11;
-            const int32_t copyHeight = 46;
-            const int32_t repeatHeight = display.height() - BORDERWIDTH - dsty - ( viewWorldSprite.height() - cuty );
-            fheroes2::repeatPattern( icnston, 0, startY, icnston.width(), copyHeight, display, dstx, dsty, icnston.width(), repeatHeight );
-            dsty += repeatHeight;
-        }
-
-        fheroes2::Blit( viewWorldSprite, 0, cuty, display, dstx, dsty, viewWorldSprite.width(), viewWorldSprite.height() - cuty );
-    }
-}
-
-namespace
-{
     const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
     const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
     const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
@@ -415,6 +392,31 @@ namespace
         default: // "View World"
             return evil ? ICN::EVIWWRLD : ICN::VIEWWRLD;
         }
+    }
+
+    void drawViewWorldSprite( const fheroes2::Sprite & viewWorldSprite, fheroes2::Display & display, const bool isEvilInterface )
+    {
+        const int32_t dstX = display.width() - viewWorldSprite.width() - BORDERWIDTH;
+        int32_t dstY = 2 * BORDERWIDTH + RADARWIDTH;
+        const int32_t cutHeight = 275;
+        fheroes2::Blit( viewWorldSprite, 0, 0, display, dstX, dstY, viewWorldSprite.width(), cutHeight );
+        dstY += cutHeight;
+
+        if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
+            const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
+            const int32_t startY = 11;
+            const int32_t copyHeight = 46;
+            const int32_t repeatHeight = display.height() - BORDERWIDTH - dstY - ( viewWorldSprite.height() - cutHeight );
+            const int32_t repeatCount = repeatHeight / copyHeight;
+            for ( int32_t i = 0; i < repeatCount; ++i ) {
+                fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), copyHeight );
+                dstY += copyHeight;
+            }
+            fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), repeatHeight % copyHeight );
+            dstY += repeatHeight % copyHeight;
+        }
+
+        fheroes2::Blit( viewWorldSprite, 0, cutHeight, display, dstX, dstY, viewWorldSprite.width(), viewWorldSprite.height() - cutHeight );
     }
 }
 

@@ -2094,37 +2094,4 @@ namespace fheroes2
             }
         }
     }
-
-    void repeatPattern( const Image & in, int32_t inX, int32_t inY, int32_t inWidth, int32_t inHeight, Image & out, int32_t outX, int32_t outY, int32_t width,
-                        int32_t height )
-    {
-        if ( inX < 0 || inY < 0 || outX < 0 || outY < 0 || inWidth <= 0 || inHeight <= 0 || width <= 0 || height <= 0 )
-            return;
-
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
-        const size_t restWidth = static_cast<size_t>( width % inWidth );
-
-        const int32_t offsetIn = inY * widthIn + inX;
-        const uint8_t * imageIn = in.image() + offsetIn;
-        const uint8_t * const imageInEnd = imageIn + inHeight * widthIn;
-
-        const int32_t offsetOut = outY * widthOut + outX;
-        uint8_t * imageOut = out.image() + offsetOut;
-        uint8_t * const imageOutEnd = imageOut + height * widthOut;
-
-        for ( ; imageOut != imageOutEnd; imageOut += widthOut - width ) {
-            const uint8_t * const imageOutRepeatEnd = imageOut + width - restWidth;
-            for ( ; imageOut != imageOutRepeatEnd; imageOut += inWidth ) {
-                memcpy( imageOut, imageIn, inWidth );
-            }
-            memcpy( imageOut, imageIn, restWidth );
-            imageOut += restWidth;
-
-            imageIn += widthIn;
-            if ( imageInEnd == imageIn ) {
-                imageIn = in.image() + offsetIn;
-            }
-        }
-    }
 }
