@@ -428,6 +428,11 @@ bool Monster::isDoubleCellAttack() const
     return isAbilityPresent( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 }
 
+bool Monster::isAllAdjacentCellsAttack() const
+{
+    return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
+}
+
 bool Monster::isAffectedByMorale() const
 {
     return !( isUndead() || isElemental() );
