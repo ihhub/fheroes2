@@ -26,20 +26,21 @@
 #include <string>
 
 #include "game_mode.h"
+#include "monster.h"
 
 class StreamBase;
 
 namespace HighScore
 {
-    struct HighScoreScenarioData
+    struct HighScoreStandardData
     {
-        HighScoreScenarioData()
+        HighScoreStandardData()
             : _localTime( 0 )
             , _days( 0 )
             , _rating( 0 )
         {}
 
-        bool operator==( const HighScoreScenarioData & other ) const;
+        bool operator==( const HighScoreStandardData & other ) const;
 
         std::string _player;
         std::string _scenarioName;
@@ -63,58 +64,34 @@ namespace HighScore
         uint32_t _days;
     };
 
-    class HGSData
+    class HighScoreDataContainer
     {
     public:
-        HGSData();
+        HighScoreDataContainer();
 
         bool Load( const std::string & fileName );
         bool Save( const std::string & fileName ) const;
-        void ScoreRegistry( const std::string & playerName, const std::string & land, const uint32_t days, const uint32_t rating );
+        void RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
+        void RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days );
         void RedrawListStandard( int32_t ox, int32_t oy );
         void RedrawListCampaign( int32_t ox, int32_t oy );
 
+        void RefreshMonsterAnimationFrameID() 
+        {
+            _monsterAnimationFrameId = 0;
+        }
+
+        static HighScoreDataContainer & Get();
+
     private:
         uint32_t _monsterAnimationFrameId;
-        std::vector<HighScoreScenarioData> _highScores;
+        std::vector<HighScoreStandardData> _highScoresStandard;
+        std::vector<HighScoreCampaignData> _highScoresCampaign;
         std::vector<std::pair<size_t, Monster::monster_t>> _monsterRatings;
         std::vector<std::pair<size_t, Monster::monster_t>> _monsterDays;
 
-        Monster getMonsterByRatingStandardGame( const size_t rating ) const
-        {
-            std::pair<size_t, Monster::monster_t> lastData = _monsterRatings.back();
-
-            if ( rating >= lastData.first )
-                return Monster( lastData.second );
-
-            Monster::monster_t monster = Monster::PEASANT;
-            for ( size_t i = 0; i < _monsterRatings.size(); ++i ) {
-                if ( rating <= _monsterRatings[i].first ) {
-                    monster = _monsterRatings[i].second;
-                    break;
-                }
-            }
-
-            return Monster( monster );
-        }
-
-        Monster getMonsterByRatingCampaignGame( const size_t dayCount ) const
-        {
-            std::pair<size_t, Monster::monster_t> lastData = _monsterDays.back();
-
-            if ( dayCount >= lastData.first )
-                return Monster( lastData.second );
-
-            Monster::monster_t monster = Monster::PEASANT;
-            for ( size_t i = 0; i < _monsterDays.size(); ++i ) {
-                if ( dayCount <= _monsterDays[i].first ) {
-                    monster = _monsterDays[i].second;
-                    break;
-                }
-            }
-
-            return Monster( monster );
-        }
+        Monster getMonsterByRating( const size_t rating ) const;
+        Monster getMonsterByDay( const size_t dayCount ) const;
     };
 }
 

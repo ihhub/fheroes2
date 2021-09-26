@@ -29,6 +29,8 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -50,11 +52,13 @@
 #include "world.h"
 #include "zzlib.h"
 
-#define HGS_ID 0xF1F3
-#define HGS_MAX 10
-
 namespace
 {
+    const uint16_t HGS_ID1 = 0xF1F3;
+    const uint16_t HGS_ID2 = 0xF1F4;
+    const uint8_t HGS_MAX = 10;
+    const std::string HGS_DATA_PATH = "fheroes2.hgs";
+
     const std::array<Monster::monster_t, 65> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
                                                                    Monster::SPRITE,        Monster::HALFLING,
                                                                    Monster::CENTAUR,       Monster::ROGUE,
@@ -92,22 +96,28 @@ namespace
 
 namespace HighScore
 {
-    StreamBase & operator<<( StreamBase & msg, const HighScoreScenarioData & data )
+    HighScoreDataContainer & HighScoreDataContainer::Get() 
+    {
+        static HighScoreDataContainer instance;
+        return instance;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const HighScoreStandardData & data )
     {
         return msg << data._player << data._scenarioName << data._localTime << data._days << data._rating;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HighScoreScenarioData & data )
+    StreamBase & operator>>( StreamBase & msg, HighScoreStandardData & data )
     {
         return msg >> data._player >> data._scenarioName >> data._localTime >> data._days >> data._rating;
     }
 
-    bool HighScoreScenarioData::operator==( const HighScoreScenarioData & other ) const
+    bool HighScoreStandardData::operator==( const HighScoreStandardData & other ) const
     {
         return _player == other._player && _scenarioName == other._scenarioName && _days == other._days;
     }
 
-    bool RatingSort( const HighScoreScenarioData & h1, const HighScoreScenarioData & h2 )
+    bool RatingSort( const HighScoreStandardData & h1, const HighScoreStandardData & h2 )
     {
         return h1._rating > h2._rating;
     }
@@ -122,7 +132,17 @@ namespace HighScore
         return msg >> data._player >> data._campaignName >> data._localTime >> data._days;
     }
 
-    HGSData::HGSData()
+    bool HighScoreCampaignData::operator==( const HighScoreCampaignData & other ) const 
+    {
+        return _player == other._player && _campaignName == other._campaignName && _days == other._days;
+    }
+
+    bool DaysSort( const HighScoreCampaignData & h1, const HighScoreCampaignData & h2 ) 
+    {
+        return h1._days < h2._days;
+    }
+
+    HighScoreDataContainer::HighScoreDataContainer()
         : _monsterAnimationFrameId( 0 )
     {
         uint32_t ratingSoFar = 0;
@@ -183,11 +203,11 @@ namespace HighScore
             }
 
             daySoFar += dayIncrementCount;
-            _monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
+            _monsterDays.emplace_back( std::make_pair( daySoFar, monstersInRanking[i] ) );
         }
     }
 
-    bool HGSData::Load( const std::string & fileName )
+    bool HighScoreDataContainer::Load( const std::string & fileName )
     {
         ZStreamFile hdata;
         if ( !hdata.read( fileName ) )
@@ -198,28 +218,33 @@ namespace HighScore
 
         hdata >> hgs_id;
 
-        if ( hgs_id == HGS_ID ) {
-            hdata >> _highScores;
+        if ( hgs_id == HGS_ID1 ) {
+            hdata >> _highScoresStandard;
+            return !hdata.fail();
+        }
+        if ( hgs_id == HGS_ID2 ) {
+            hdata >> _highScoresStandard >> _highScoresCampaign;
             return !hdata.fail();
         }
 
         return false;
     }
 
-    bool HGSData::Save( const std::string & fileName ) const
+    bool HighScoreDataContainer::Save( const std::string & fileName ) const
     {
         ZStreamFile hdata;
         hdata.setbigendian( true );
-        hdata << static_cast<u16>( HGS_ID ) << _highScores;
+        hdata << static_cast<uint16_t>( HGS_ID2 ) << _highScoresStandard << _highScoresCampaign;
         if ( hdata.fail() || !hdata.write( fileName ) )
             return false;
 
         return true;
     }
 
-    void HGSData::ScoreRegistry( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
+    void HighScoreDataContainer::RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
     {
-        HighScoreScenarioData highScore;
+        HighScoreStandardData highScore;
+        std::vector<HighScoreStandardData> & highScores = _highScoresStandard;
 
         highScore._player = playerName;
         highScore._scenarioName = scenarioName;
@@ -227,15 +252,37 @@ namespace HighScore
         highScore._days = days;
         highScore._rating = rating;
 
-        if ( _highScores.end() == std::find( _highScores.begin(), _highScores.end(), highScore ) ) {
-            _highScores.push_back( highScore );
-            std::sort( _highScores.begin(), _highScores.end(), RatingSort );
-            if ( _highScores.size() > HGS_MAX )
-                _highScores.resize( HGS_MAX );
-        }
+        // duplicate score
+        if ( highScores.end() != std::find( highScores.begin(), highScores.end(), highScore ) )
+            return;
+
+        highScores.emplace_back( highScore );
+        std::sort( highScores.begin(), highScores.end(), RatingSort );
+        if ( highScores.size() > HGS_MAX )
+            highScores.resize( HGS_MAX );
     }
 
-    void HGSData::RedrawListStandard( int32_t ox, int32_t oy )
+    void HighScoreDataContainer::RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days )
+    {
+        HighScoreCampaignData highScore;
+        std::vector<HighScoreCampaignData> & highScores = _highScoresCampaign;
+
+        highScore._player = playerName;
+        highScore._campaignName = campaignName;
+        highScore._localTime = std::time( nullptr );
+        highScore._days = days;
+
+        // duplicate score
+        if ( highScores.end() != std::find( highScores.begin(), highScores.end(), highScore ) )
+            return;
+
+        highScores.emplace_back( highScore );
+        std::sort( highScores.begin(), highScores.end(), RatingSort );
+        if ( highScores.size() > HGS_MAX )
+            highScores.resize( HGS_MAX );
+    }
+
+    void HighScoreDataContainer::RedrawListStandard( int32_t ox, int32_t oy )
     {
         ++_monsterAnimationFrameId;
 
@@ -246,18 +293,18 @@ namespace HighScore
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
 
-        std::sort( _highScores.begin(), _highScores.end(), RatingSort );
+        std::sort( _highScoresStandard.begin(), _highScoresStandard.end(), RatingSort );
 
-        std::vector<HighScoreScenarioData>::const_iterator it1 = _highScores.begin();
-        std::vector<HighScoreScenarioData>::const_iterator it2 = _highScores.end();
+        std::vector<HighScoreStandardData>::const_iterator it1 = _highScoresStandard.begin();
+        std::vector<HighScoreStandardData>::const_iterator it2 = _highScoresStandard.end();
 
         Text text;
         text.Set( Font::BIG );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
 
-        for ( ; it1 != it2 && ( it1 - _highScores.begin() < HGS_MAX ); ++it1 ) {
-            const HighScoreScenarioData & hgs = *it1;
+        for ( ; it1 != it2 && ( it1 - _highScoresStandard.begin() < HGS_MAX ); ++it1 ) {
+            const HighScoreStandardData & hgs = *it1;
 
             text.Set( hgs._player );
             text.Blit( ox + 88, oy + 70 );
@@ -271,7 +318,7 @@ namespace HighScore
             text.Set( std::to_string( hgs._rating ) );
             text.Blit( ox + 484, oy + 70 );
 
-            const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs._rating );
+            const Monster monster = HighScoreDataContainer::getMonsterByRating( hgs._rating );
             const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
             const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
             fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
@@ -284,6 +331,90 @@ namespace HighScore
 
             oy += 40;
         }
+    }
+
+    void HighScoreDataContainer::RedrawListCampaign( int32_t ox, int32_t oy )
+    {
+        ++_monsterAnimationFrameId;
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        // image background
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 4 ), display, ox, oy );
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 7 ), display, ox + 50, oy + 31 );
+
+        std::sort( _highScoresCampaign.begin(), _highScoresCampaign.end(), DaysSort );
+
+        std::vector<HighScoreCampaignData>::const_iterator it1 = _highScoresCampaign.begin();
+        std::vector<HighScoreCampaignData>::const_iterator it2 = _highScoresCampaign.end();
+
+        Text text;
+        text.Set( Font::BIG );
+
+        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
+
+        for ( ; it1 != it2 && ( it1 - _highScoresCampaign.begin() < HGS_MAX ); ++it1 ) {
+            const HighScoreCampaignData & hgs = *it1;
+
+            text.Set( hgs._player );
+            text.Blit( ox + 88, oy + 70 );
+
+            text.Set( hgs._campaignName );
+            text.Blit( ox + 244, oy + 70 );
+
+            text.Set( std::to_string( hgs._days ) );
+            text.Blit( ox + 403, oy + 70 );
+
+            const Monster monster = HighScoreDataContainer::getMonsterByDay( hgs._days );
+            const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
+            const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
+            fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
+
+            // Animation frame of a creature is based on its position on screen and common animation frame ID.
+            const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs._days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+            const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
+            const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
+            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
+
+            oy += 40;
+        }
+    }
+
+    Monster HighScoreDataContainer::getMonsterByRating( const size_t rating ) const
+    {
+        std::pair<size_t, Monster::monster_t> lastData = _monsterRatings.back();
+
+        if ( rating >= lastData.first )
+            return Monster( lastData.second );
+
+        Monster::monster_t monster = Monster::PEASANT;
+        for ( size_t i = 0; i < _monsterRatings.size(); ++i ) {
+            if ( rating <= _monsterRatings[i].first ) {
+                monster = _monsterRatings[i].second;
+                break;
+            }
+        }
+
+        return Monster( monster );
+    }
+
+    Monster HighScoreDataContainer::getMonsterByDay( const size_t dayCount ) const
+    {
+        std::pair<size_t, Monster::monster_t> lastData = _monsterDays.back();
+
+        if ( dayCount >= lastData.first )
+            return Monster( lastData.second );
+
+        Monster::monster_t monster = Monster::PEASANT;
+        for ( size_t i = 0; i < _monsterDays.size(); ++i ) {
+            if ( dayCount <= _monsterDays[i].first ) {
+                monster = _monsterDays[i].second;
+                break;
+            }
+        }
+
+        return Monster( monster );
     }
 }
 
@@ -299,12 +430,14 @@ fheroes2::GameMode Game::HighScoresStandard()
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    HighScore::HGSData hgs;
-
-    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
+
+    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), HGS_DATA_PATH );
+
+    HighScore::HighScoreDataContainer & hgs = HighScore::HighScoreDataContainer::Get();
+    hgs.RefreshMonsterAnimationFrameID();
     hgs.Load( highScoreDataPath );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
@@ -333,7 +466,7 @@ fheroes2::GameMode Game::HighScoresStandard()
 
         const uint32_t rating = GetGameOverScores();
         const uint32_t days = world.CountDay();
-        hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
+        hgs.RegisterScoreStandard( player, Settings::Get().CurrentFileInfo().name, days, rating );
         hgs.Save( highScoreDataPath );
         hgs.RedrawListStandard( top.x, top.y );
         buttonCampaign.draw();
@@ -356,6 +489,8 @@ fheroes2::GameMode Game::HighScoresStandard()
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return fheroes2::GameMode::MAIN_MENU;
+        if ( le.MouseClickLeft( buttonCampaign.area() ) )
+            return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
 
         if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
@@ -375,5 +510,91 @@ fheroes2::GameMode Game::HighScoresStandard()
 
 fheroes2::GameMode Game::HighScoresCampaign()
 {
+#ifdef WITH_DEBUG
+    if ( IS_DEVEL() && world.CountDay() ) {
+        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
+        Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
+        return fheroes2::GameMode::MAIN_MENU;
+    }
+#endif
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    Mixer::Pause();
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
+
+    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), HGS_DATA_PATH );
+
+    HighScore::HighScoreDataContainer & hgs = HighScore::HighScoreDataContainer::Get();
+    hgs.RefreshMonsterAnimationFrameID();
+    hgs.Load( highScoreDataPath );
+
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
+    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+
+    hgs.RedrawListCampaign( top.x, top.y );
+
+    fheroes2::Button buttonStandard( top.x + 8, top.y + 315, ICN::HISCORE, 2, 1 );
+    fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
+
+    buttonStandard.draw();
+    buttonExit.draw();
+
+    display.render();
+
+    GameOver::Result & gameResult = GameOver::Result::Get();
+
+    if ( gameResult.GetResult() & GameOver::WINS ) {
+        std::string player( _( "Unknown Hero" ) );
+        Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
+        if ( player.empty() )
+            player = _( "Unknown Hero" );
+
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( campaignSaveData.getCampaignID() );
+
+        hgs.RegisterScoreCampaign( player, campaignData.getCampaignName(), campaignSaveData.getDaysPassed() );
+        hgs.Save( highScoreDataPath );
+        hgs.RedrawListCampaign( top.x, top.y );
+        buttonStandard.draw();
+        buttonExit.draw();
+        display.render();
+        gameResult.ResetResult();
+    }
+
+    LocalEvent & le = LocalEvent::Get();
+
+    // highscores loop
+    while ( le.HandleEvents() ) {
+        // key code info
+        if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
+            Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
+        if ( buttonStandard.isEnabled() ) {
+            le.MousePressLeft( buttonStandard.area() ) ? buttonStandard.drawOnPress() : buttonStandard.drawOnRelease();
+        }
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+            return fheroes2::GameMode::MAIN_MENU;
+        if ( le.MouseClickLeft( buttonStandard.area() ) )
+            return fheroes2::GameMode::HIGHSCORES_STANDARD;
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonStandard.area() ) ) {
+            Dialog::Message( _( "Standard" ), _( "View High Scores for Standard Maps." ), Font::BIG );
+        }
+
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            hgs.RedrawListCampaign( top.x, top.y );
+            display.render();
+        }
+    }
+
     return fheroes2::GameMode::QUIT_GAME;
 }
