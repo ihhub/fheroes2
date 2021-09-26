@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.14)
 project(fheroes2 VERSION 0.9.7 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12")
+    cmake_policy(SET CMP0074 NEW)
+endif()
+
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
