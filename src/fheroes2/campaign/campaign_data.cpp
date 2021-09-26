@@ -214,7 +214,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
-        campaignData.setCampaignDescription( "Roland Campaign" );
+        campaignData.setCampaignName( _( "Roland Campaign" ) );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -288,7 +288,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
-        campaignData.setCampaignDescription( "Archibald Campaign" );
+        campaignData.setCampaignName( _( "Archibald Campaign" ) );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -348,6 +348,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( campaignID );
+        campaignData.setCampaignName( _( "Price of Loyalty" ) );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -406,6 +407,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( campaignID );
+        campaignData.setCampaignName( _( "Descendants" ) );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -446,6 +448,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( campaignID );
+        campaignData.setCampaignName( _( "Wizards' Isle" ) );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -485,6 +488,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( campaignID );
+        campaignData.setCampaignName( _( "Voyage Home" ) );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -582,9 +586,9 @@ namespace Campaign
         _scenarios = scenarios;
     }
 
-    void CampaignData::setCampaignDescription( const std::string & campaignDescription )
+    void CampaignData::setCampaignName( const std::string & campaignName )
     {
-        _campaignDescription = campaignDescription;
+        _campaignName = campaignName;
     }
 
     const CampaignData & CampaignData::getCampaignData( const int campaignID )
