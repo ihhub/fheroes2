@@ -54,7 +54,7 @@
 
 namespace
 {
-    const std::string highscoreFileName = "fheroes2.hgs";
+    const std::string highScoreFileName = "fheroes2.hgs";
     static uint32_t monsterAnimationFrameId = 0;
 
     void RedrawHighScoresStandard( HighScore::HighScoreDataContainer & dataContainer, int32_t ox, int32_t oy )
@@ -163,7 +163,7 @@ fheroes2::GameMode Game::HighScoresStandard()
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreDataPath );
+    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
 
     HighScore::HighScoreDataContainer & dataContainer = HighScore::HighScoreDataContainer::Get();
     dataContainer.Load( highScoreDataPath );
@@ -253,7 +253,7 @@ fheroes2::GameMode Game::HighScoresCampaign()
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreDataPath );
+    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
 
     HighScore::HighScoreDataContainer & dataContainer = HighScore::HighScoreDataContainer::Get();
     dataContainer.Load( highScoreDataPath );
