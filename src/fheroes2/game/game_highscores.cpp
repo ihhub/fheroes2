@@ -277,7 +277,7 @@ namespace HighScore
             return;
 
         highScores.emplace_back( highScore );
-        std::sort( highScores.begin(), highScores.end(), RatingSort );
+        std::sort( highScores.begin(), highScores.end(), DaysSort );
         if ( highScores.size() > HGS_MAX )
             highScores.resize( HGS_MAX );
     }
@@ -361,10 +361,10 @@ namespace HighScore
             text.Blit( ox + 88, oy + 70 );
 
             text.Set( hgs._campaignName );
-            text.Blit( ox + 244, oy + 70 );
+            text.Blit( ox + 250, oy + 70 );
 
             text.Set( std::to_string( hgs._days ) );
-            text.Blit( ox + 403, oy + 70 );
+            text.Blit( ox + 455, oy + 70 );
 
             const Monster monster = HighScoreDataContainer::getMonsterByDay( hgs._days );
             const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
@@ -512,7 +512,7 @@ fheroes2::GameMode Game::HighScoresCampaign()
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
+        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
