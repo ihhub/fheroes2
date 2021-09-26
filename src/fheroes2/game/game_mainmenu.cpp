@@ -84,6 +84,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         case fheroes2::GameMode::HIGHSCORES_CAMPAIGN:
             result = Game::HighScoresCampaign();
+            break;
         case fheroes2::GameMode::CREDITS:
             result = Game::Credits();
             break;
