@@ -511,11 +511,10 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     playPreviosScenarioVideo();
 
-    // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
         AGG::ResetMixer();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-        return fheroes2::GameMode::HIGHSCORES_STANDARD;
+        return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
 
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
