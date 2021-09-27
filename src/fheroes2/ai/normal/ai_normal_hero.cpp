@@ -348,7 +348,13 @@ namespace
             }
             break;
 
-            // TODO: add evaluation for MP2::OBJ_PYRAMID.
+        case MP2::OBJ_PYRAMID:
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
+                Army enemy( tile );
+                return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
+                       && army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            }
+            break;
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
