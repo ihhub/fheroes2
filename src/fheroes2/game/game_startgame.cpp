@@ -300,7 +300,7 @@ void ShowNewWeekDialog( void )
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
-    if ( week.GetType() == Week::MONSTERS ) {
+    if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
         const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
@@ -317,7 +317,7 @@ void ShowNewWeekDialog( void )
         }
     }
 
-    if ( week.GetType() == Week::PLAGUE )
+    if ( week.GetType() == WeekName::PLAGUE )
         message += _( " All populations are halved." );
     else
         message += _( " All dwellings increase population." );
