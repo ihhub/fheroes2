@@ -207,7 +207,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
     else {
         // Set passable cells.
         for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
-            GetPath( unit, Position::GetCorrect( unit, idx ), false );
+            GetPath( unit, Position::GetPositionWhenMoved( unit, idx ), false );
         }
     }
 }
@@ -524,40 +524,20 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
     }
     else if ( attacker.isAllAdjacentCellsAttack() ) {
-        Indexes aroundAttacker;
-        if ( !attacker.isWide() ) {
-            // no standard HOMM2 monser fits this case
-            aroundAttacker = GetAroundIndexes( from );
-        }
-        else {
-            // finding out where the tail of the unit will be
-            const Cell * currentHead = attacker.GetPosition().GetHead();
-            const int32_t currentPositionHeadX = currentHead->GetIndex() % ARENAW;
-            const int32_t newPositionHeadX = from % ARENAW;
-            const int32_t newPositionTailIndex
-                = ( newPositionHeadX == currentPositionHeadX )
-                      ? ( from + attacker.GetPosition().GetTail()->GetIndex() % ARENAW - attacker.GetPosition().GetHead()->GetIndex() % ARENAW )
-                      : ( newPositionHeadX < currentPositionHeadX ? from + 1 : from - 1 );
+        Position position = Position::GetPositionWhenMoved( attacker, from );
+        Indexes aroundAttacker = GetAroundIndexes( position );
 
-            // looking up the list of indices adjacent to the monster that is 2-hexes wide
-            aroundAttacker = GetAroundIndexes( from, newPositionTailIndex );
-            const Indexes & tail = GetAroundIndexes( newPositionTailIndex, from );
-            aroundAttacker.insert( aroundAttacker.end(), tail.begin(), tail.end() );
-            std::sort( aroundAttacker.begin(), aroundAttacker.end() );
-            aroundAttacker.erase( std::unique( aroundAttacker.begin(), aroundAttacker.end() ), aroundAttacker.end() );
-        }
-
-        std::set<Unit *> unitsUnderAttack;
+        std::set<const Unit *> unitsUnderAttack;
         Board * board = Arena::GetBoard();
-        for ( int32_t index : aroundAttacker ) {
-            Cell & cell = board->at( index );
+        for ( const int32_t index : aroundAttacker ) {
+            const Cell & cell = board->at( index );
             if ( cell.GetUnit() != nullptr && cell.GetUnit()->GetColor() != attacker.GetColor() ) {
                 unitsUnderAttack.insert( cell.GetUnit() );
             }
         }
 
         int32_t attackValue = 0;
-        for ( Unit * unit : unitsUnderAttack ) {
+        for ( const Unit * unit : unitsUnderAttack ) {
             attackValue += unit->GetScoreQuality( attacker );
         }
         return attackValue;
@@ -1064,10 +1044,15 @@ Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 
 Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & b )
 {
-    const int headIdx = b.GetHeadIndex();
+    return GetAroundIndexes( b.GetPosition() );
+}
 
-    if ( b.isWide() ) {
-        const int tailIdx = b.GetTailIndex();
+Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
+{
+    const int headIdx = position.GetHead()->GetIndex();
+
+    if ( position.GetTail() ) {
+        const int tailIdx = position.GetTail()->GetIndex();
 
         Indexes around = GetAroundIndexes( headIdx, tailIdx );
         const Indexes & tail = GetAroundIndexes( tailIdx, headIdx );

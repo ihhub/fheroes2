@@ -92,7 +92,8 @@ namespace Battle
         static s32 GetIndexDirection( s32, int );
         static Indexes GetDistanceIndexes( s32, u32 );
         static Indexes GetAroundIndexes( s32 center, s32 ignore = -1 );
-        static Indexes GetAroundIndexes( const Unit & );
+        static Indexes GetAroundIndexes( const Unit & unit );
+        static Indexes GetAroundIndexes( const Position & position );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
 
