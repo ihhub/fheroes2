@@ -3332,7 +3332,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Zombies you spend several hours searching the graves and "
+"You spend several hours searching the graves and "
 "find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
@@ -3345,7 +3345,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Ghosts you spend several hours sifting through the debris "
+"You spend several hours sifting through the debris "
 "and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
@@ -3359,7 +3359,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Skeletons you spend several hours sifting through the "
+"You spend several hours sifting through the "
 "debris and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
