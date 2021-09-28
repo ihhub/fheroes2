@@ -50,50 +50,7 @@ enum
     ALIGN_RIGHT
 };
 
-class TextInterface
-{
-public:
-    explicit TextInterface( int ft = Font::BIG );
-    virtual ~TextInterface() = default;
-
-    virtual void SetText( const std::string & ) = 0;
-    virtual void SetFont( int ) = 0;
-    virtual void Clear( void ) = 0;
-
-    virtual int w() const = 0;
-    virtual int h() const = 0;
-    virtual size_t Size() const = 0;
-
-    virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) = 0;
-
-protected:
-    int font;
-};
-
-class TextAscii : public TextInterface
-{
-public:
-    TextAscii() = default;
-    TextAscii( const std::string &, int = Font::BIG );
-
-    void SetText( const std::string & ) override;
-    void SetFont( int ) override;
-    void Clear( void ) override;
-
-    int w() const override;
-    int h() const override;
-    size_t Size( void ) const override;
-
-    int w( size_t s, size_t c ) const;
-    int h( int ) const;
-
-    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
-    static int CharWidth( const uint8_t character, const int ft );
-    static int FontHeight( const int ft );
-
-private:
-    std::string message;
-};
+class TextAscii;
 
 class Text
 {
@@ -130,7 +87,7 @@ public:
     static int32_t getFitWidth( const std::string & text, const int fontId, const int32_t width_ );
 
 protected:
-    TextInterface * message;
+    TextAscii * message;
     u32 gw;
     u32 gh;
 };
@@ -170,16 +127,6 @@ public:
 
     void Set( const std::string &, int, uint32_t width_ );
     void SetAlign( int type );
-
-    int32_t x() const
-    {
-        return fheroes2::Rect::x;
-    }
-
-    int32_t y() const
-    {
-        return fheroes2::Rect::y;
-    }
 
     int32_t w() const
     {

@@ -25,6 +25,7 @@
 #include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "game.h"
@@ -130,10 +131,10 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
-            result = Game::CompleteCampaignScenario();
+            result = Game::CompleteCampaignScenario( false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
-            result = Game::CompleteCampaignScenario();
+            result = Game::CompleteCampaignScenario( true );
             if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN, false );
             }
@@ -296,12 +297,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             }
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
-            if ( Dialog::SelectResolution() ) {
-                conf.Save( "fheroes2.cfg" );
-                // force interface to reset area and positions
-                Interface::Basic::Get().Reset();
-                return fheroes2::GameMode::MAIN_MENU;
-            }
+            fheroes2::openGameSettings();
+
+            // force interface to reset area and positions
+            Interface::Basic::Get().Reset();
+            return fheroes2::GameMode::MAIN_MENU;
         }
 
         // right info
@@ -316,7 +316,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         else if ( le.MousePressRight( resolutionArea ) )
-            Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );

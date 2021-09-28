@@ -98,9 +98,12 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::HELMET_ANDURAN );
             break;
         case 6:
-            // will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // Will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // If we get all the parts, we'll obtain the Battle Garb award while removing the awards for the individual parts
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN );
+
+            // seems that Kraeger is a custom name for Dainwin in this case
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
             break;
         }
 
@@ -193,11 +196,10 @@ namespace
                                                              { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "GOOD07QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        // NOTE: In Roland's Campaign, scenario 8 is drawn above scenario 7, so we emplace_back scenario 8 first
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
-                                    rolandCampaignDescription[7], emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
         scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignScenarioNames[6],
                                     rolandCampaignDescription[6], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
+                                    rolandCampaignDescription[7], emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
         scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignScenarioNames[8],
                                     rolandCampaignDescription[8],
                                     Campaign::VideoSequence{ { "GOOD09W.SMK", Video::VideoAction::IGNORE_VIDEO },
@@ -493,9 +495,30 @@ namespace Campaign
 {
     CampaignData::CampaignData()
         : _campaignID( 0 )
-        , _campaignDescription()
-        , _scenarios()
     {}
+
+    // this is used to get awards that are not directly obtainable via scenario clear, such as assembling artifacts
+    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getExtraCampaignAwardData( const int campaignID )
+    {
+        assert( campaignID >= 0 );
+
+        switch ( campaignID ) {
+        case PRICE_OF_LOYALTY_CAMPAIGN: {
+            std::vector<Campaign::CampaignAwardData> extraAwards;
+            extraAwards.emplace_back( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
+            return extraAwards;
+        }
+        case ROLAND_CAMPAIGN:
+        case ARCHIBALD_CAMPAIGN:
+        case DESCENDANTS_CAMPAIGN:
+        case WIZARDS_ISLE_CAMPAIGN:
+        case VOYAGE_HOME_CAMPAIGN:
+        default:
+            break;
+        }
+
+        return std::vector<Campaign::CampaignAwardData>();
+    }
 
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
     {

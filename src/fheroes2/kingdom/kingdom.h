@@ -54,7 +54,7 @@ public:
         // UNDEF      = 0x0001,
         IDENTIFYHERO = 0x0002,
         // UNUSED = 0x0004,
-        OVERVIEWCSTL = 0x0008
+        KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
     };
 
     Kingdom();
@@ -63,9 +63,8 @@ public:
     void Init( int color );
     void clear( void );
 
-    void OverviewDialog( void );
+    void openOverviewDialog();
 
-    void UpdateStartingResource( void );
     bool isPlay( void ) const;
     bool isLoss( void ) const;
     bool AllowPayment( const Funds & ) const;
@@ -79,7 +78,6 @@ public:
     Heroes * GetLastLostHero( void ) const;
     Heroes * GetLastBattleWinHero() const;
 
-    const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
     Monster GetStrongestMonster() const;
@@ -141,17 +139,16 @@ public:
     void ActionNewWeek( void );
     void ActionNewMonth( void );
 
-    void SetVisited( s32 index, int object = MP2::OBJ_ZERO );
-    u32 CountVisitedObjects( int object ) const;
-    bool isVisited( int object ) const;
+    void SetVisited( s32 index, const MP2::MapObjectType objectType );
+    uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
+    bool isVisited( const MP2::MapObjectType objectType ) const;
     bool isVisited( const Maps::Tiles & ) const;
-    bool isVisited( s32, int obj ) const;
+    bool isVisited( s32, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const;
+    bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
     bool HeroesMayStillMove( void ) const;
 
-    const Puzzle & PuzzleMaps( void ) const;
     Puzzle & PuzzleMaps( void );
 
     void SetVisitTravelersTent( int color );
@@ -163,9 +160,10 @@ public:
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
     static u32 GetMaxHeroes( void );
-    static cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
 
 private:
+    cost_t _getKingdomStartingResources( const int difficulty );
+
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
@@ -187,6 +185,9 @@ private:
     u32 visited_tents_colors;
 
     KingdomHeroes heroes_cond_loss;
+
+    // Used to remember which item was selected in Kingdom View dialog.
+    int _topItemInKingdomView;
 };
 
 class Kingdoms
@@ -212,7 +213,7 @@ public:
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
 
-    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const int objectType );
+    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );

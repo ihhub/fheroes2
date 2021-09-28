@@ -55,7 +55,8 @@ namespace Interface
     {
     public:
         explicit GameArea( Basic & );
-        void Build( void );
+
+        void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
         const fheroes2::Rect & GetROI() const // returns visible Game Area ROI in pixels
         {
@@ -102,7 +103,7 @@ namespace Interface
 
         fheroes2::Rect RectFixed( fheroes2::Point & dst, int rw, int rh ) const;
 
-        static fheroes2::Image GenerateUltimateArtifactAreaSurface( int32_t index );
+        static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
 
         int32_t GetValidTileIdFromPoint( const fheroes2::Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         fheroes2::Point GetRelativeTilePosition( const fheroes2::Point & tileId ) const; // in relation to screen

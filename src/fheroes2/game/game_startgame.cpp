@@ -194,7 +194,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
                 Game::EnvironmentSoundMixer();
                 AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
             }
-        } break;
+            break;
+        }
 
         case GameFocus::CASTLE: {
             const Castle * focusedCastle = Interface::GetFocusCastle();
@@ -202,7 +203,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
             Game::EnvironmentSoundMixer();
             AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -229,48 +231,46 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
-    if ( it != myHeroes.end() ) {
-        int result = Dialog::ZERO;
+    int result = Dialog::ZERO;
 
-        while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false, needFade, disableDismiss );
-            if ( needFade )
-                needFade = false;
+    while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss );
+        if ( needFade )
+            needFade = false;
 
-            switch ( result ) {
-            case Dialog::PREV:
-                if ( it == myHeroes.begin() )
-                    it = myHeroes.end();
-                --it;
-                break;
+        switch ( result ) {
+        case Dialog::PREV:
+            if ( it == myHeroes.begin() )
+                it = myHeroes.end();
+            --it;
+            break;
 
-            case Dialog::NEXT:
-                ++it;
-                if ( it == myHeroes.end() )
-                    it = myHeroes.begin();
-                break;
-
-            case Dialog::DISMISS:
-                AGG::PlaySound( M82::KILLFADE );
-
-                ( *it )->GetPath().Hide();
-                gameArea.SetRedraw();
-
-                if ( windowIsGameWorld ) {
-                    ( *it )->FadeOut();
-                }
-
-                ( *it )->SetFreeman( 0 );
+        case Dialog::NEXT:
+            ++it;
+            if ( it == myHeroes.end() )
                 it = myHeroes.begin();
+            break;
 
-                updateFocus = true;
+        case Dialog::DISMISS:
+            AGG::PlaySound( M82::KILLFADE );
 
-                result = Dialog::CANCEL;
-                break;
+            ( *it )->GetPath().Hide();
+            gameArea.SetRedraw();
 
-            default:
-                break;
+            if ( windowIsGameWorld ) {
+                ( *it )->FadeOut();
             }
+
+            ( *it )->SetFreeman( 0 );
+            it = myHeroes.end();
+
+            updateFocus = true;
+
+            result = Dialog::CANCEL;
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -364,14 +364,16 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
 
         if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-    } break;
+        break;
+    }
 
     case MP2::OBJ_HEROES: {
         const Heroes * heroes = tile.GetHeroes();
 
         if ( nullptr != heroes )
             return heroes->GetColor() == from_castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
-    } break;
+        break;
+    }
 
     default:
         break;
@@ -382,7 +384,6 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
 
 int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const Maps::Tiles & tile )
 {
-    const Settings & conf = Settings::Get();
     const bool water = tile.isWater();
 
     switch ( tile.GetObject() ) {
@@ -398,7 +399,8 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
         if ( castle )
             return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-    } break;
+        break;
+    }
 
     case MP2::OBJ_HEROES: {
         const Heroes * to_hero = tile.GetHeroes();
@@ -411,11 +413,12 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
             else if ( from_hero.GetColor() == to_hero->GetColor() )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( from_hero.isFriends( to_hero->GetColor() ) )
-                return conf.ExtUnionsAllowHeroesMeetings() ? static_cast<int>( Cursor::CURSOR_HERO_MEET ) : static_cast<int>( Cursor::POINTER );
+                return Cursor::POINTER;
             else
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_COAST:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -467,9 +470,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
             else if ( from_hero.isFriends( castle->GetColor() ) ) {
-                return Settings::Get().ExtUnionsAllowCastleVisiting()
-                           ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
-                           : Cursor::POINTER;
+                return Cursor::POINTER;
             }
             else if ( castle->GetActualArmy().isValid() ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
@@ -478,7 +479,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_HEROES: {
         const Heroes * to_hero = tile.GetHeroes();
@@ -493,17 +495,18 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
             }
             else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-                return Settings::Get().ExtUnionsAllowHeroesMeetings() ? newcur : Cursor::POINTER;
+                return Cursor::POINTER;
             }
             else
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-    } break;
+        break;
+    }
 
     case MP2::OBJ_BOAT:
         return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-
+    case MP2::OBJ_BARRIER:
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
     default:
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
@@ -558,7 +561,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // draw interface
-    gameArea.Build();
+    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
 
     radar.Build();
     radar.SetHide( true );
@@ -610,9 +613,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           std::endl
-                               << world.DateString() << ", "
-                               << "color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+                           world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
                 radar.SetHide( true );
                 radar.SetRedraw();
@@ -843,6 +844,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             // cast spell
             else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
                 EventCastSpell();
+            // kingdom overview
+            else if ( HotKeyPressEvent( Game::EVENT_KINGDOM_INFO ) )
+                EventKingdomInfo();
+            // view world
+            else if ( HotKeyPressEvent( Game::EVENT_VIEW_WORLD ) )
+                EventViewWorld();
             // show/hide control panel
             else if ( HotKeyPressEvent( Game::EVENT_CTRLPANEL ) )
                 EventSwitchShowControlPanel();
@@ -1167,12 +1174,13 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
                 Cursor::Get().SetThemes( Cursor::HEROES );
             }
         }
-    } break;
+        break;
+    }
 
     case Cursor::CASTLE: {
         // correct index for castle
-        const int tileObjId = tile.GetObject();
-        if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
+        const MP2::MapObjectType objectType = tile.GetObject();
+        if ( MP2::OBJN_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
             break;
 
         Castle * to_castle = world.getCastle( tile.GetCenter() );
@@ -1188,7 +1196,8 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
             Game::OpenCastleDialog( *to_castle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
-    } break;
+        break;
+    }
     case Cursor::CURSOR_HERO_FIGHT:
     case Cursor::CURSOR_HERO_MOVE:
     case Cursor::CURSOR_HERO_BOAT:
@@ -1235,16 +1244,18 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
                 if ( castle )
-                    Dialog::QuickInfo( *castle );
+                    Dialog::QuickInfo( *castle, fheroes2::Rect() );
                 else
                     Dialog::QuickInfo( tile );
-            } break;
+                break;
+            }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes );
-            } break;
+                    Dialog::QuickInfo( *heroes, fheroes2::Rect() );
+                break;
+            }
 
             default:
                 Dialog::QuickInfo( tile );

@@ -31,12 +31,30 @@
 
 namespace Interface
 {
-    struct ListBasic
+    class ListBasic
     {
+    public:
+        ListBasic()
+            : _currentId( -1 )
+            , _topId( -1 )
+        {
+            // Do nothing.
+        }
+
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
-        virtual void Redraw( void ) = 0;
+        virtual void Redraw() = 0;
         virtual bool QueueEventProcessing( void ) = 0;
+
+        int getTopId() const
+        {
+            return _topId;
+        }
+
+    protected:
+        int _currentId;
+
+        int _topId;
     };
 
     template <class Item>
@@ -46,8 +64,6 @@ namespace Interface
         explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
             : needRedraw( false )
             , content( nullptr )
-            , _currentId( -1 )
-            , _topId( -1 )
             , maxItems( 0 )
             , ptRedraw( pt )
             , useHotkeys( true )
@@ -63,8 +79,8 @@ namespace Interface
         virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
         virtual void RedrawBackground( const fheroes2::Point & ) = 0;
 
-        virtual void ActionCurrentUp( void ) = 0;
-        virtual void ActionCurrentDn( void ) = 0;
+        virtual void ActionCurrentUp() = 0;
+        virtual void ActionCurrentDn() = 0;
 
         virtual void ActionListDoubleClick( Item & ) = 0;
         virtual void ActionListSingleClick( Item & ) = 0;
@@ -138,7 +154,7 @@ namespace Interface
                 _currentId = 0;
         }
 
-        void Reset( void )
+        void Reset()
         {
             if ( content == nullptr || content->empty() ) { // empty content. Must be non-initialized array
                 _currentId = -1;
@@ -163,7 +179,7 @@ namespace Interface
             useHotkeys = !f;
         }
 
-        void Redraw( void ) override
+        void Redraw() override
         {
             needRedraw = false;
 
@@ -241,10 +257,26 @@ namespace Interface
                 else if ( _topId + maxItems <= _currentId ) { // scroll down, put current id at bottom
                     _topId = _currentId + 1 - maxItems;
                 }
-
-                UpdateScrollbarRange();
-                _scrollbar.moveToIndex( _topId );
             }
+
+            UpdateScrollbarRange();
+            _scrollbar.moveToIndex( _topId );
+        }
+
+        // Move visible area to the position with given element ID being on the top of the list.
+        void setTopVisibleItem( const int topId )
+        {
+            Verify();
+
+            if ( !IsValid() ) {
+                Reset();
+                return;
+            }
+
+            _topId = std::max( 0, std::min( topId, _size() - maxItems ) );
+
+            UpdateScrollbarRange();
+            _scrollbar.moveToIndex( _topId );
         }
 
         void SetCurrent( const Item & item )
@@ -423,8 +455,6 @@ namespace Interface
 
     private:
         std::vector<Item> * content;
-        int _currentId;
-        int _topId;
         int maxItems;
 
         fheroes2::Point ptRedraw;

@@ -55,7 +55,8 @@ namespace
             const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
-        } break;
+            break;
+        }
 
         case GameOver::WINS_HERO: {
             body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
@@ -96,7 +97,7 @@ namespace
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
     }
 
-    void DialogLoss( uint32_t cond, int color )
+    void DialogLoss( uint32_t cond )
     {
         const Settings & conf = Settings::Get();
         std::string body;
@@ -140,14 +141,6 @@ namespace
             const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
-            break;
-        }
-
-        case GameOver::LOSS_STARTHERO: {
-            const Heroes * hero = world.GetKingdom( color ).GetFirstHeroStartCondLoss();
-            body = _( "You have lost the hero %{name}.\nYour quest is over." );
-            if ( hero )
-                StringReplace( body, "%{name}", hero->GetName() );
             break;
         }
 
@@ -398,7 +391,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
                     // This case was already handled at the end of the Interface::Basic::HumanTurn()
                     if ( !( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) ) {
-                        DialogLoss( result, humanColors );
+                        DialogLoss( result );
                     }
 
                     AGG::ResetMixer();
@@ -459,7 +452,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 res = fheroes2::GameMode::MAIN_MENU;
             }
             else if ( multiplayerResult & GameOver::LOSS ) {
-                DialogLoss( multiplayerResult, currentColor );
+                DialogLoss( multiplayerResult );
 
                 AGG::ResetMixer();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );

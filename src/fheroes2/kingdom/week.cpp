@@ -28,88 +28,62 @@
 
 const char * Week::GetName( void ) const
 {
-    const char * str_name[] = {"Unnamed",
-                               _( "week|PLAGUE" ),
-                               _( "week|Ant" ),
-                               _( "week|Grasshopper" ),
-                               _( "week|Dragonfly" ),
-                               _( "week|Spider" ),
-                               _( "week|Butterfly" ),
-                               _( "week|Bumblebee" ),
-                               _( "week|Locust" ),
-                               _( "week|Earthworm" ),
-                               _( "week|Hornet" ),
-                               _( "week|Beetle" ),
-                               _( "week|Squirrel" ),
-                               _( "week|Rabbit" ),
-                               _( "week|Gopher" ),
-                               _( "week|Badger" ),
-                               _( "week|Eagle" ),
-                               _( "week|Weasel" ),
-                               _( "week|Raven" ),
-                               _( "week|Mongoose" ),
-                               _( "week|Aardvark" ),
-                               _( "week|Lizard" ),
-                               _( "week|Tortoise" ),
-                               _( "week|Hedgehog" ),
-                               _( "week|Condor" )};
-
     switch ( first ) {
     case PLAGUE:
-        return str_name[1];
+        return _( "week|PLAGUE" );
     case ANT:
-        return str_name[2];
+        return _( "week|Ant" );
     case GRASSHOPPER:
-        return str_name[3];
+        return _( "week|Grasshopper" );
     case DRAGONFLY:
-        return str_name[4];
+        return _( "week|Dragonfly" );
     case SPIDER:
-        return str_name[5];
+        return _( "week|Spider" );
     case BUTTERFLY:
-        return str_name[6];
+        return _( "week|Butterfly" );
     case BUMBLEBEE:
-        return str_name[7];
+        return _( "week|Bumblebee" );
     case LOCUST:
-        return str_name[8];
+        return _( "week|Locust" );
     case EARTHWORM:
-        return str_name[9];
+        return _( "week|Earthworm" );
     case HORNET:
-        return str_name[10];
+        return _( "week|Hornet" );
     case BEETLE:
-        return str_name[11];
+        return _( "week|Beetle" );
     case SQUIRREL:
-        return str_name[12];
+        return _( "week|Squirrel" );
     case RABBIT:
-        return str_name[13];
+        return _( "week|Rabbit" );
     case GOPHER:
-        return str_name[14];
+        return _( "week|Gopher" );
     case BADGER:
-        return str_name[15];
+        return _( "week|Badger" );
     case EAGLE:
-        return str_name[16];
+        return _( "week|Eagle" );
     case WEASEL:
-        return str_name[17];
+        return _( "week|Weasel" );
     case RAVEN:
-        return str_name[18];
+        return _( "week|Raven" );
     case MONGOOSE:
-        return str_name[19];
+        return _( "week|Mongoose" );
     case AARDVARK:
-        return str_name[20];
+        return _( "week|Aardvark" );
     case LIZARD:
-        return str_name[21];
+        return _( "week|Lizard" );
     case TORTOISE:
-        return str_name[22];
+        return _( "week|Tortoise" );
     case HEDGEHOG:
-        return str_name[23];
+        return _( "week|Hedgehog" );
     case CONDOR:
-        return str_name[24];
+        return _( "week|Condor" );
     case MONSTERS:
         return Monster( second ).GetName();
     default:
         break;
     }
 
-    return str_name[0];
+    return "Unnamed";
 }
 
 int Week::WeekRand( void )

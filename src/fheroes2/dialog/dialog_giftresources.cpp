@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -133,10 +131,7 @@ struct ResourceBar
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
     {
-        std::ostringstream os;
-
-        os << count;
-        Text text( os.str(), Font::SMALL );
+        Text text( std::to_string( count ), Font::SMALL );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::GetIndexSprite2( type ) );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
         text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
@@ -289,7 +284,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         event.first = world.CountDay() + 1;
         event.subsequent = 0;
         event.colors = selector.recipients;
-        event.message = "Gift from %{name}";
+        event.message = _( "Gift from %{name}" );
         const Player * player = Settings::Get().GetPlayers().Get( kingdom.GetColor() );
         if ( player )
             StringReplace( event.message, "%{name}", player->GetName() );

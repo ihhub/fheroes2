@@ -32,10 +32,10 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const bool toWater = tile.isWater();
-    const int object = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.GetObject();
 
     // Special cases: check if we can defeat the Hero/Monster and pass through
-    if ( object == MP2::OBJ_HEROES ) {
+    if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * otherHero = tile.GetHeroes();
         if ( otherHero ) {
             if ( otherHero->isFriends( color ) )
@@ -45,33 +45,33 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
         }
     }
 
-    if ( object == MP2::OBJ_MONSTER || ( object == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
+    if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
         return Army( tile ).GetStrength() > armyStrength;
 
     // check if AI has the key for the barrier
-    if ( object == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
+    if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
         return false;
 
     // if none of the special cases apply, check if tile can be moved on
-    if ( MP2::isNeedStayFront( object ) )
+    if ( MP2::isNeedStayFront( objectType ) )
         return true;
 
-    return ( fromWater && !toWater && object == MP2::OBJ_COAST );
+    return ( fromWater && !toWater && objectType == MP2::OBJ_COAST );
 }
 
 bool World::isTileBlocked( int tileIndex, bool fromWater ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const bool toWater = tile.isWater();
-    const int object = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.GetObject();
 
-    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || object == MP2::OBJ_BOAT )
+    if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT )
         return true;
 
-    if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
+    if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) )
         return true;
 
-    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
+    if ( fromWater && !toWater && objectType == MP2::OBJ_COAST )
         return true;
 
     return false;
@@ -170,7 +170,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[pathStart] = PathfindingNode( -1, 0, 0 );
+    _cache[pathStart] = PathfindingNode<MP2::MapObjectType>( -1, 0, MP2::MapObjectType::OBJ_ZERO );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( pathStart );
@@ -183,7 +183,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
 void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const Directions & directions = Direction::All();
-    const PathfindingNode & currentNode = _cache[currentNodeIdx];
+    const PathfindingNode<MP2::MapObjectType> & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
@@ -192,7 +192,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
                 continue;
 
             const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], _pathfindingSkill );
-            PathfindingNode & newNode = _cache[newIndex];
+            PathfindingNode<MP2::MapObjectType> & newNode = _cache[newIndex];
             if ( world.isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
                 const Maps::Tiles & tile = world.GetTiles( newIndex );
 
@@ -240,7 +240,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
     // trace the path from end point
     int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode & node = _cache[currentNode];
+        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
@@ -266,8 +266,8 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
-    // if current tile contains a monster, skip it
-    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER ) {
+    // if current tile contains a monster or a barrier, skip it
+    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER || _cache[currentNodeIdx]._objectID == MP2::OBJ_BARRIER ) {
         return;
     }
 
@@ -281,7 +281,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
             if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction, _currentColor ) ) {
                 // add straight to cache, can't move further from the monster
                 const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, _pathfindingSkill );
-                PathfindingNode & monsterNode = _cache[monsterIndex];
+                PathfindingNode<MP2::MapObjectType> & monsterNode = _cache[monsterIndex];
                 if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
                     monsterNode._from = currentNodeIdx;
                     monsterNode._cost = moveCost;
@@ -327,7 +327,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const bool isFirstNode = currentNodeIdx == pathStart;
-    PathfindingNode & currentNode = _cache[currentNodeIdx];
+    PathfindingNode<MP2::MapObjectType> & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
     auto protectionCheck = [this]( const int index ) {
@@ -368,7 +368,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
             if ( teleportIdx == pathStart )
                 continue;
 
-            PathfindingNode & teleportNode = _cache[teleportIdx];
+            PathfindingNode<MP2::MapObjectType> & teleportNode = _cache[teleportIdx];
 
             // check if move is actually faster through teleporter
             if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
@@ -496,10 +496,10 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     const Directions & directions = Direction::All();
 
     std::set<int> uniqueIndicies;
-    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, int object ) {
+    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, const MP2::MapObjectType objectType ) {
         // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), object ) ) {
-            result.emplace_back( index, object );
+        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
+            result.emplace_back( index, objectType );
         }
     };
 
@@ -509,7 +509,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     // trace the path from end point
     int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode & node = _cache[currentNode];
+        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
 
         validateAndAdd( currentNode, node._objectID );
 
@@ -517,7 +517,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNode, directions[i] ) ) {
                     const int newIndex = currentNode + _mapOffset[i];
-                    const PathfindingNode & adjacent = _cache[newIndex];
+                    const PathfindingNode<MP2::MapObjectType> & adjacent = _cache[newIndex];
 
                     if ( adjacent._cost == 0 || adjacent._objectID == 0 )
                         continue;
@@ -555,7 +555,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
             lastValidNode = currentNode;
         }
 
-        const PathfindingNode & node = _cache[currentNode];
+        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );

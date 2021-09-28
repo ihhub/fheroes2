@@ -654,27 +654,13 @@ void Castle::MageGuildEducateHero( HeroBase & hero ) const
     mageguild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
 }
 
+bool Castle::isFortificationBuild() const
+{
+    return race == Race::KNGT && isBuild( BUILD_SPEC );
+}
+
 const char * Castle::GetStringBuilding( u32 build, int race )
 {
-    const char * str_build[] = { _( "Thieves' Guild" ),
-                                 _( "Tavern" ),
-                                 _( "Shipyard" ),
-                                 _( "Well" ),
-                                 _( "Statue" ),
-                                 _( "Left Turret" ),
-                                 _( "Right Turret" ),
-                                 _( "Marketplace" ),
-                                 _( "Moat" ),
-                                 _( "Castle" ),
-                                 _( "Tent" ),
-                                 _( "Captain's Quarters" ),
-                                 _( "Mage Guild, Level 1" ),
-                                 _( "Mage Guild, Level 2" ),
-                                 _( "Mage Guild, Level 3" ),
-                                 _( "Mage Guild, Level 4" ),
-                                 _( "Mage Guild, Level 5" ),
-                                 "Unknown" };
-
     const char * str_wel2[] = { _( "Farm" ), _( "Garbage Heap" ), _( "Crystal Garden" ), _( "Waterfall" ), _( "Orchard" ), _( "Skull Pile" ) };
 
     const char * str_spec[] = { _( "Fortifications" ), _( "Coliseum" ), _( "Rainbow" ), _( "Dungeon" ), _( "Library" ), _( "Storm" ) };
@@ -723,8 +709,6 @@ const char * Castle::GetStringBuilding( u32 build, int race )
                                    "",
                                    "" };
 
-    const char * shrine = _( "Shrine" );
-
     u32 offset = 0;
 
     switch ( race ) {
@@ -752,41 +736,41 @@ const char * Castle::GetStringBuilding( u32 build, int race )
 
     switch ( build ) {
     case BUILD_SHRINE:
-        return shrine;
+        return _( "Shrine" );
     case BUILD_THIEVESGUILD:
-        return str_build[0];
+        return _( "Thieves' Guild" );
     case BUILD_TAVERN:
-        return str_build[1];
+        return _( "Tavern" );
     case BUILD_SHIPYARD:
-        return str_build[2];
+        return _( "Shipyard" );
     case BUILD_WELL:
-        return str_build[3];
+        return _( "Well" );
     case BUILD_STATUE:
-        return str_build[4];
+        return _( "Statue" );
     case BUILD_LEFTTURRET:
-        return str_build[5];
+        return _( "Left Turret" );
     case BUILD_RIGHTTURRET:
-        return str_build[6];
+        return _( "Right Turret" );
     case BUILD_MARKETPLACE:
-        return str_build[7];
+        return _( "Marketplace" );
     case BUILD_MOAT:
-        return str_build[8];
+        return _( "Moat" );
     case BUILD_CASTLE:
-        return str_build[9];
+        return _( "Castle" );
     case BUILD_TENT:
-        return str_build[10];
+        return _( "Tent" );
     case BUILD_CAPTAIN:
-        return str_build[11];
+        return _( "Captain's Quarters" );
     case BUILD_MAGEGUILD1:
-        return str_build[12];
+        return _( "Mage Guild, Level 1" );
     case BUILD_MAGEGUILD2:
-        return str_build[13];
+        return _( "Mage Guild, Level 2" );
     case BUILD_MAGEGUILD3:
-        return str_build[14];
+        return _( "Mage Guild, Level 3" );
     case BUILD_MAGEGUILD4:
-        return str_build[15];
+        return _( "Mage Guild, Level 4" );
     case BUILD_MAGEGUILD5:
-        return str_build[16];
+        return _( "Mage Guild, Level 5" );
 
     case BUILD_SPEC:
         return str_spec[offset];
@@ -823,27 +807,11 @@ const char * Castle::GetStringBuilding( u32 build, int race )
         break;
     }
 
-    return str_build[17];
+    return "Unknown";
 }
 
 const char * Castle::GetDescriptionBuilding( u32 build, int race )
 {
-    const char * desc_build[] = {
-        _( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information." ),
-        _( "The Tavern increases morale for troops defending the castle." ),
-        _( "The Shipyard allows ships to be built." ),
-        _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." ),
-        _( "The Statue increases your town's income by %{count} per day." ),
-        _( "The Left Turret provides extra firepower during castle combat." ),
-        _( "The Right Turret provides extra firepower during castle combat." ),
-        _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." ),
-        _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." ),
-        _( "The Castle improves town defense and increases income to %{count} gold per day." ),
-        _( "The Tent provides workers to build a castle, provided the materials and the gold are available." ),
-        _( "The Captain's Quarters provides a captain to assist in the castle's defense when no hero is present." ),
-        _( "The Mage Guild allows heroes to learn spells and replenish their spell points." ),
-        "Unknown" };
-
     const char * desc_wel2[] = { _( "The Farm increases production of Peasants by %{count} per week." ),
                                  _( "The Garbage Heap increases production of Goblins by %{count} per week." ),
                                  _( "The Crystal Garden increases production of Sprites by %{count} per week." ),
@@ -857,8 +825,6 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
                                  _( "The Dungeon increases the income of the town by %{count} / day." ),
                                  _( "The Library increases the number of spells in the Guild by one for each level of the guild." ),
                                  _( "The Storm adds +2 to the power of spells of a defending spell caster." ) };
-
-    const char * shrine_descr = _( "The Shrine increases the necromancy skill of all your necromancers by 10 percent." );
 
     u32 offset = 0;
 
@@ -887,37 +853,38 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
 
     switch ( build ) {
     case BUILD_SHRINE:
-        return shrine_descr;
+        return _( "The Shrine increases the necromancy skill of all your necromancers by 10 percent." );
     case BUILD_THIEVESGUILD:
-        return desc_build[0];
+        return _(
+            "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information." );
     case BUILD_TAVERN:
-        return desc_build[1];
+        return _( "The Tavern increases morale for troops defending the castle." );
     case BUILD_SHIPYARD:
-        return desc_build[2];
+        return _( "The Shipyard allows ships to be built." );
     case BUILD_WELL:
-        return desc_build[3];
+        return _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." );
     case BUILD_STATUE:
-        return desc_build[4];
+        return _( "The Statue increases your town's income by %{count} per day." );
     case BUILD_LEFTTURRET:
-        return desc_build[5];
+        return _( "The Left Turret provides extra firepower during castle combat." );
     case BUILD_RIGHTTURRET:
-        return desc_build[6];
+        return _( "The Right Turret provides extra firepower during castle combat." );
     case BUILD_MARKETPLACE:
-        return desc_build[7];
+        return _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." );
     case BUILD_MOAT:
-        return desc_build[8];
+        return _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." );
     case BUILD_CASTLE:
-        return desc_build[9];
+        return _( "The Castle improves town defense and increases income to %{count} gold per day." );
     case BUILD_TENT:
-        return desc_build[10];
+        return _( "The Tent provides workers to build a castle, provided the materials and the gold are available." );
     case BUILD_CAPTAIN:
-        return desc_build[11];
+        return _( "The Captain's Quarters provides a captain to assist in the castle's defense when no hero is present." );
     case BUILD_MAGEGUILD1:
     case BUILD_MAGEGUILD2:
     case BUILD_MAGEGUILD3:
     case BUILD_MAGEGUILD4:
     case BUILD_MAGEGUILD5:
-        return desc_build[12];
+        return _( "The Mage Guild allows heroes to learn spells and replenish their spell points." );
 
     case BUILD_SPEC:
         return desc_spec[offset];
@@ -928,7 +895,7 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
         break;
     }
 
-    return desc_build[13];
+    return "Unknown";
 }
 
 bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
@@ -1874,7 +1841,7 @@ int Castle::GetICNBuilding( u32 build, int race )
         case BUILD_SPEC:
             return ICN::TWNNSPEC;
         case BUILD_CAPTAIN:
-            return ICN::TWNNCAPT;
+            return ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS;
         case BUILD_WEL2:
             return ICN::TWNNWEL2;
         case BUILD_LEFTTURRET:
@@ -2450,7 +2417,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonus if there are any troops defending it
     if ( isCastle() && totalStrength > 1 ) {
-        const Battle::Tower tower( *this, Battle::TWR_CENTER );
+        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
 
         totalStrength += towerStr;
@@ -2871,13 +2838,15 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
             res.append( "\n \n" );
             res.append( Battle::Board::GetMoatInfo() );
         }
-    } break;
+        break;
+    }
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
-    } break;
+        break;
+    }
 
     default:
         break;

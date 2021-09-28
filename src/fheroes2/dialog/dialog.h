@@ -86,9 +86,9 @@ namespace Dialog
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
     // show info cell maps
-    void QuickInfo( const Maps::Tiles & tile );
-    void QuickInfo( const Castle & castle, const fheroes2::Point & position = fheroes2::Point() );
-    void QuickInfo( const Heroes & hero, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
+    void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
@@ -103,14 +103,14 @@ namespace Dialog
     int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
-    bool InputString( const std::string &, std::string &, const std::string & title = std::string() );
+    bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
     Troop RecruitMonster( const Monster &, u32 available, bool );
     void DwellingInfo( const Monster &, u32 available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, const bool saveLastTroop, uint32_t & redistributeCount, bool & useFastSplit );
+    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );

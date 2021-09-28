@@ -329,7 +329,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 }
 
 // Returns true if player want to restart the battle
-bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts, bool allowToCancel ) const
+bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -483,60 +483,56 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         }
     }
 
-    if ( transferArtifacts ) {
-        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
-        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
+    if ( !artifacts.empty() ) {
+        const HeroBase * winner = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
+        const HeroBase * loser = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
-        if ( hero1 == nullptr || hero2 == nullptr )
+        if ( winner == nullptr || loser == nullptr )
             return false;
 
-        BagArtifacts & bag1 = hero1->GetBagArtifacts();
-        BagArtifacts & bag2 = hero2->GetBagArtifacts();
+        const bool isWinnerHuman = winner && winner->isControlHuman();
 
         btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
-        btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
+        btn_ok.setPosition( pos_rt.x + 120, pos_rt.y + 410 );
 
-        for ( size_t i = 0; i < bag2.size(); ++i ) {
-            Artifact & art = bag2[i];
-
-            if ( art.isUltimate() ) {
-                art = Artifact::UNKNOWN;
-                continue;
-            }
-
-            if ( art.GetID() == Artifact::UNKNOWN || art.GetID() == Artifact::MAGIC_BOOK ) {
-                continue;
-            }
-
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
-            if ( bag1.end() != it ) {
-                *it = art;
-
+        for ( const Artifact & art : artifacts ) {
+            if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
                 btn_ok.draw();
 
-                Game::PlayPickupSound();
+                std::string artMsg;
+                if ( art.isUltimate() ) {
+                    if ( isWinnerHuman ) {
+                        artMsg = _( "As you reach for the %{name}, it mysteriously disappears." );
+                    }
+                    else {
+                        artMsg = _( "As your enemy reaches for the %{name}, it mysteriously disappears." );
+                    }
+                    StringReplace( artMsg, "%{name}", art.GetName() );
+                }
+                else {
+                    artMsg = _( "You have captured an enemy artifact!" );
+                    Game::PlayPickupSound();
+                }
 
-                TextBox box( _( "You have captured an enemy artifact!" ), Font::YELLOW_BIG, bsTextWidth );
+                TextBox box( artMsg, Font::YELLOW_BIG, bsTextWidth );
                 box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
 
-                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
                 const fheroes2::Point artifactOffset( pos_rt.x + 119, pos_rt.y + 310 );
 
-                fheroes2::Sprite image = border;
-                const int32_t borderSize = 5;
-                fheroes2::Blit( artifact, image, borderSize, borderSize );
-                fheroes2::Blit( image, display, artifactOffset.x, artifactOffset.y );
+                fheroes2::Blit( border, display, artifactOffset.x, artifactOffset.y );
+                fheroes2::Blit( artifact, display, artifactOffset.x + 8, artifactOffset.y + 8 );
 
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
-                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + image.height() + borderSize );
+                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + border.height() + 5 );
 
-                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
+                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
 
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
@@ -560,7 +556,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                     }
                 }
             }
-            art = Artifact::UNKNOWN;
         }
     }
     return false;

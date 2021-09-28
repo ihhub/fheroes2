@@ -53,13 +53,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
+
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
-        LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Point & mousePos = le.GetMouseCursor();
+        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
         if ( gameArea.GetROI() & mousePos ) {
             const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
             Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
@@ -160,7 +160,7 @@ void Interface::Basic::EventContinueMovement( void ) const
 void Interface::Basic::EventKingdomInfo( void ) const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    myKingdom.OverviewDialog();
+    myKingdom.openOverviewDialog();
 
     iconsPanel.SetRedraw();
 }
@@ -201,7 +201,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
+        EventViewWorld();
         break;
 
     case Dialog::PUZZLE:
@@ -236,6 +236,11 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     }
 
     return fheroes2::GameMode::CANCEL;
+}
+
+void Interface::Basic::EventViewWorld()
+{
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
 }
 
 fheroes2::GameMode Interface::Basic::EventFileDialog() const
@@ -382,24 +387,18 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction( void )
+void Interface::Basic::EventDefaultAction() const
 {
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
         // 1. action object
-        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
-            const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-
+        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
-            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
-                SetRedraw( REDRAW_HEROES );
-            SetRedraw( REDRAW_GAMEAREA );
         }
     }
-    else
+    else if ( GetFocusCastle() ) {
         // 2. town dialog
-        if ( GetFocusCastle() ) {
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
 }

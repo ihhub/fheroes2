@@ -25,6 +25,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
@@ -46,11 +47,24 @@ public:
     void RedrawItem( const u32 &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override {}
-    void ActionCurrentDn( void ) override {}
+    void ActionCurrentUp() override
+    {
+        // Do nothing.
+    }
+
+    void ActionCurrentDn() override
+    {
+        // Do nothing.
+    }
+
     void ActionListDoubleClick( u32 & ) override;
+
     void ActionListSingleClick( u32 & ) override;
-    void ActionListPressRight( u32 & ) override {}
+
+    void ActionListPressRight( u32 & ) override
+    {
+        // Do nothing.
+    }
 
     bool readonly;
     fheroes2::ImageRestorer _restorer;
@@ -70,7 +84,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
-    TextBox msg( conf.ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
+    TextBox msg( Settings::ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
@@ -83,18 +97,14 @@ void SettingsListBox::RedrawBackground( const fheroes2::Point & origin )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int window_h = 400;
-    const int ah = window_h - 54;
+    const int windowHeight = 400;
+    const int scrollbarHeight = windowHeight - 64 - 2 * 16; // up/down buttons are 16px tall
 
     _restorer.restore();
 
-    for ( int ii = 1; ii < ( window_h / 25 ); ++ii )
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 11 ), display, origin.x + 295, origin.y + 35 + ( 19 * ii ) );
-
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 10 ), display, origin.x + 295, origin.y + 46 );
-
-    const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
-    fheroes2::Blit( lowerPart, display, origin.x + 295, origin.y + ah - lowerPart.height() );
+    const fheroes2::Image & sprite = fheroes2::AGG::GetICN( ICN::ESCROLL, 1 );
+    fheroes2::Blit( sprite, 0, 0, display, origin.x + 295, origin.y + 41, 16, scrollbarHeight / 2 );
+    fheroes2::Blit( sprite, 0, sprite.height() - scrollbarHeight / 2, display, origin.x + 295, origin.y + 41 + scrollbarHeight / 2, 16, scrollbarHeight / 2 );
 }
 
 void SettingsListBox::ActionListDoubleClick( u32 & item )
@@ -164,15 +174,12 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );
 
-    states.push_back( Settings::UNIONS_ALLOW_HERO_MEETINGS );
-    states.push_back( Settings::UNIONS_ALLOW_CASTLE_VISITING );
-
     states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
+    states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
 
-    std::sort( states.begin(), states.end(),
-               [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
+    std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
 
     SettingsListBox listbox( area.getPosition(), readonly );
 
@@ -181,9 +188,9 @@ void Dialog::ExtSettings( bool readonly )
     const int ah = 340;
 
     listbox.RedrawBackground( area.getPosition() );
-    listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
-    listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 47 ) );
+    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, fheroes2::Point( area.x + 295, area.y + 25 ) );
+    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( area.x + 298, area.y + 44, 10, ah - 42 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
@@ -206,7 +213,8 @@ void Dialog::ExtSettings( bool readonly )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        if ( le.MouseClickLeft( buttonOk.area() ) ) {
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow ) {
             break;
         }
 

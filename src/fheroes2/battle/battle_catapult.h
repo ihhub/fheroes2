@@ -29,6 +29,10 @@
 #include "types.h"
 
 class HeroBase;
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
 
 namespace Battle
 {
@@ -47,7 +51,7 @@ namespace Battle
     class Catapult
     {
     public:
-        explicit Catapult( const HeroBase & hero );
+        explicit Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator );
 
         static fheroes2::Point GetTargetPosition( int target, bool hit );
 
@@ -64,6 +68,7 @@ namespace Battle
         u32 catShots;
         u32 doubleDamageChance;
         bool canMiss;
+        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 

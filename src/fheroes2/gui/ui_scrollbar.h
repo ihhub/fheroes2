@@ -43,7 +43,7 @@ namespace fheroes2
 
         void moveToPos( const Point & position );
 
-        // Update position of the scrollbar based on the index. Useful mouse movement and release.
+        // Update position of the scrollbar based on the index. Useful for mouse movement and release.
         bool updatePosition()
         {
             return moveToIndex( _currentIndex );

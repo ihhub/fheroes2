@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 
 #include "heroes_base.h"
 #include "mageguild.h"
@@ -36,7 +37,7 @@ void MageGuild::initialize( int race, bool libraryCap )
     general.clear();
     library.clear();
 
-    int spellCountByLevel[] = {3, 3, 2, 2, 1};
+    std::array<int, 5> spellCountByLevel = { 3, 3, 2, 2, 1 };
 
     const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
     const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
@@ -123,7 +124,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
         if ( !spell.isRaceCompatible( race ) )
             continue;
 
-        if ( spell.Level() != lvl || !spell.isEnabled() )
+        if ( spell.Level() != lvl )
             continue;
 
         if ( lookForAdv != spell.isCombat() )

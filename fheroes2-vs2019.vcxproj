@@ -199,7 +199,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
@@ -237,6 +236,7 @@
     <ClCompile Include="src\fheroes2\castle\captain.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_building.cpp" />
+    <ClCompile Include="src\fheroes2\castle\castle_building_info.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_dialog.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_mageguild.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_tavern.cpp" />
@@ -444,6 +444,7 @@
     <ClInclude Include="src\fheroes2\castle\buildinginfo.h" />
     <ClInclude Include="src\fheroes2\castle\captain.h" />
     <ClInclude Include="src\fheroes2\castle\castle.h" />
+    <ClInclude Include="src\fheroes2\castle\castle_building_info.h" />
     <ClInclude Include="src\fheroes2\castle\castle_heroes.h" />
     <ClInclude Include="src\fheroes2\castle\castle_ui.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />

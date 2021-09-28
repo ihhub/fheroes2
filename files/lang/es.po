@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-30 11:21+0200\n"
+"POT-Creation-Date: 2021-08-31 21:44+0800\n"
 "PO-Revision-Date: 2013-06-03 16:38+0000\n"
 "Last-Translator: elhoir <jfarroyo82@hotmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -122,14 +122,13 @@ msgstr "ejército|Demasiados"
 msgid "All %{race} troops +1"
 msgstr "Toda la tropa %{race +1"
 
-msgid "Troops of 3 alignments -1"
+#, fuzzy
+msgid "Multiple"
+msgstr "Multi"
+
+#, fuzzy
+msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Tropas de 3 líneas -1"
-
-msgid "Troops of 4 alignments -2"
-msgstr "Tropas de 4 líneas -2"
-
-msgid "Troops of 5 alignments -3"
-msgstr "Tropas de 5 líneas -3"
 
 #, fuzzy
 msgid "Some undead in group -1"
@@ -248,6 +247,9 @@ msgstr "Bajas en el campo de batalla."
 
 msgid "Attacker"
 msgstr "Agresor"
+
+msgid "None"
+msgstr "Ninguna"
 
 msgid "Defender"
 msgstr "Defensor"
@@ -500,10 +502,10 @@ msgstr ""
 "El hechizo %{spell} hace %{damage} puntos de daño a todas las criaturas "
 "vivas."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "¡El ataque del Unicornio ciega a %{name}!"
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "¡La mirada de la Medusa convierte a %{name} en piedra!"
 
 msgid "The Mummies' curse falls upon the %{name}!"
@@ -543,6 +545,9 @@ msgstr ""
 msgid "Break auto battle?"
 msgstr "Activar combate automático"
 
+msgid "Error"
+msgstr "Error"
+
 msgid "No spells to cast."
 msgstr "Sin hechizos que lanzar."
 
@@ -575,6 +580,13 @@ msgid ""
 msgstr ""
 "Mediante la observación del ojo de halcón, %{name} es capaz de aprender el "
 "hechizo mágico %{spell}."
+
+#, fuzzy
+msgid "Monsters"
+msgstr "Monstruo"
+
+msgid "N/A"
+msgstr ""
 
 msgid "Left Turret"
 msgstr "Torreón Izquierdo"
@@ -992,8 +1004,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The location of the great library has been dicovered! You must make your way "
-"to it, and reclaim the city of Chronos in which it lies."
+"The location of the great library has been discovered! You must make your "
+"way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
 
 msgid ""
@@ -1154,6 +1166,9 @@ msgid "Cannot build %{name} because castle is too far from water."
 msgstr ""
 "No se puede construir %{name} porque el castillo está demasiado lejos del "
 "agua."
+
+msgid "disable build."
+msgstr ""
 
 #, fuzzy
 msgid "Cannot afford %{name}."
@@ -1556,10 +1571,6 @@ msgid ""
 msgstr "El Santuario incrementa la habilidad de nigromancia."
 
 #, fuzzy
-msgid "Cannot recruit - you have already recruited a hero in the current week."
-msgstr "No se puede reclutar - Ya has reclutado un héroe esta semana"
-
-#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "No puedes reclutar, tienes demasiados Héroes."
 
@@ -1733,17 +1744,31 @@ msgstr "semana"
 msgid "Available"
 msgstr "Disponible"
 
+#, fuzzy
+msgid "View World"
+msgstr "Ver Todo"
+
 msgid "View the entire world."
 msgstr "Ver el mundo entero."
 
+msgid "Puzzle"
+msgstr ""
+
 msgid "View the obelisk puzzle."
 msgstr "Ver el puzzle del Obelisco"
+
+#, fuzzy
+msgid "Scenario Information"
+msgstr "Formación Desplegada"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Ver información del escenario que estás jugando actualmente."
 
 msgid "Dig for the Ultimate Artifact."
 msgstr "Cavar buscando el Artefacto Definitivo."
+
+msgid "Digging"
+msgstr ""
 
 msgid "Exit this menu without doing anything."
 msgstr "Cerrar este menú sin hacer cambios"
@@ -1874,6 +1899,47 @@ msgstr "Salir"
 msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr ""
 
+msgid "Language"
+msgstr ""
+
+#, fuzzy
+msgid "Resolution"
+msgstr "Revolución"
+
+#, fuzzy
+msgid "Experimental"
+msgstr "Elemental del Aire"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+#, fuzzy
+msgid "Select Game Language"
+msgstr "Descripción seleccionada"
+
+msgid "Change language of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Select Game Resolution"
+msgstr "Descripción seleccionada"
+
+msgid "Change resolution of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Experimental game settings."
+msgstr "Configuración del juego FHeroes2"
+
+#, fuzzy
+msgid "Attention"
+msgstr "\"Anexión\""
+
+msgid ""
+"Your version of Heroes of Might and Magic II does not support any languages "
+"except English."
+msgstr ""
+
 msgid ""
 "Map\n"
 "Difficulty"
@@ -1914,11 +1980,31 @@ msgstr ""
 "Condiciones\n"
 "de derrota"
 
+msgid "score: "
+msgstr ""
+
+msgid "First select recipients!"
+msgstr ""
+
 msgid "You cannot select %{resource}!"
 msgstr ""
 
 msgid "Select count %{resource}:"
 msgstr ""
+
+#, fuzzy
+msgid "Select Recipients"
+msgstr "Descripción seleccionada"
+
+msgid "Your Funds"
+msgstr ""
+
+msgid "Planned Gift"
+msgstr ""
+
+#, fuzzy
+msgid "Gift from %{name}"
+msgstr "Recluta %{name}"
 
 msgid "Set Guardian"
 msgstr "Establecer Guardián"
@@ -1966,6 +2052,12 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Te puedo ofrecer 1 unidad de %{resto} por %{count} unidades de %{resfrom}"
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "Qty to trade"
 msgstr "Cantidad a comerciar"
 
@@ -1990,6 +2082,9 @@ msgstr "protegido por %{count} %{monster}"
 
 msgid "(available: %{count})"
 msgstr "(disponibles: %{count})"
+
+msgid "(empty)"
+msgstr ""
 
 msgid "already learned"
 msgstr "ya se ha aprendido"
@@ -2026,9 +2121,6 @@ msgstr "Territorio Virgen"
 msgid "Defenders:"
 msgstr "Defensores:"
 
-msgid "None"
-msgstr "Ninguna"
-
 msgid "Unknown"
 msgstr ""
 
@@ -2045,9 +2137,8 @@ msgstr "Disponible: %{count}"
 msgid "Number to buy:"
 msgstr "NÚMERO"
 
-#, fuzzy
-msgid "Select Game Resolution"
-msgstr "Descripción seleccionada"
+msgid "MAX"
+msgstr ""
 
 msgid "How many troops to move?"
 msgstr "¿Cuántas tropas deseas mover?"
@@ -2202,83 +2293,25 @@ msgstr "Acumular una gran cantidad de dinero."
 msgid "Victory Condition"
 msgstr "Condiciones de victoria"
 
+#, fuzzy
+msgid "Experimental Game Settings"
+msgstr "Configuración del juego FHeroes2"
+
 msgid "one"
 msgstr "uno"
 
 msgid "two"
 msgstr "dos"
 
+msgid "off"
+msgstr "apagado"
+
 #, fuzzy
 msgid "Music"
 msgstr "música"
 
-msgid "Toggle ambient music level."
-msgstr ""
-
 msgid "Effects"
 msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
-
-msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
-
-#, fuzzy
-msgid "Hero Speed"
-msgstr "Velocidad del héroe"
-
-#, fuzzy
-msgid "Enemy Speed"
-msgstr "Velocidad"
-
-msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
-msgstr ""
-
-#, fuzzy
-msgid "Scroll Speed"
-msgstr "Velocidad de desplazamiento"
-
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Interface"
-msgstr "Interfaz"
-
-msgid "Toggle interface visibility."
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Botella"
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-#, fuzzy
-msgid "Exit this menu."
-msgstr "Esta unidad espera"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "off"
-msgstr "apagado"
 
 msgid "MIDI"
 msgstr ""
@@ -2290,11 +2323,26 @@ msgstr "Mansión"
 msgid "External"
 msgstr ""
 
+msgid "Music Type"
+msgstr ""
+
 msgid "Jump"
 msgstr ""
 
+#, fuzzy
+msgid "Hero Speed"
+msgstr "Velocidad del héroe"
+
 msgid "Don't Show"
 msgstr ""
+
+#, fuzzy
+msgid "Enemy Speed"
+msgstr "Velocidad"
+
+#, fuzzy
+msgid "Scroll Speed"
+msgstr "Velocidad de desplazamiento"
 
 msgid "Evil"
 msgstr "Mal"
@@ -2302,11 +2350,18 @@ msgstr "Mal"
 msgid "Good"
 msgstr "Bien"
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
 msgid "Hide"
 msgstr ""
 
 msgid "Show"
 msgstr ""
+
+msgid "Interface"
+msgstr "Interfaz"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2314,8 +2369,48 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
+#, fuzzy
+msgid "Battles"
+msgstr "Botella"
+
 msgid "Manual"
 msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Change the speed at which your heroes move on the main screen."
+msgstr ""
+
+msgid ""
+"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
+"I. movement at all."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Esta unidad espera"
+
+msgid "OK"
+msgstr "OK"
 
 msgid "Att."
 msgstr ""
@@ -2405,17 +2500,17 @@ msgstr "Mejor monstruo:"
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
-msgid "difficulty|Expert"
-msgstr "Experto"
+msgid "difficulty|Normal"
+msgstr "Normal"
 
 msgid "difficulty|Hard"
 msgstr "Difícil"
 
+msgid "difficulty|Expert"
+msgstr "Experto"
+
 msgid "difficulty|Impossible"
 msgstr "Imposible"
-
-msgid "difficulty|Normal"
-msgstr "Normal"
 
 #, fuzzy
 msgid "Map is loading..."
@@ -2430,6 +2525,33 @@ msgstr ""
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 
+msgid "Project Coordination and Core Development"
+msgstr ""
+
+msgid "QA and Support"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Visit us at "
+msgstr ""
+
+msgid "Special Thanks to"
+msgstr ""
+
+msgid "Original project before 0.7"
+msgstr ""
+
+msgid "Support us at"
+msgstr ""
+
+msgid "Connect with us at"
+msgstr ""
+
+msgid "Need help with the game?"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -2441,9 +2563,28 @@ msgid ""
 "of save files."
 msgstr ""
 
+msgid "Warning"
+msgstr "Advertencia"
+
 msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
+msgstr ""
+
+msgid "Usupported save format: "
+msgstr ""
+
+#, fuzzy
+msgid "Current game version: "
+msgstr "Modificadores actuales:"
+
+msgid "Last supported version: "
+msgstr ""
+
+msgid "This saved game is localized to '"
+msgstr ""
+
+msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
@@ -2534,8 +2675,9 @@ msgstr "Puntuaciones más altas"
 msgid "View the high score screen."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid "Change resolution of the game."
-msgstr ""
+#, fuzzy
+msgid "Game settings."
+msgstr "Ajustes"
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -2578,13 +2720,6 @@ msgstr "Enano de Combate"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "Configuración del juego FHeroes2"
-
-msgid "Settings"
-msgstr "Ajustes"
 
 msgid "2 Players"
 msgstr "2 jugadores"
@@ -2767,18 +2902,16 @@ msgstr ""
 "No consigas ganar para el final del mes &{month}, semana %{semana}, día "
 "%{day}."
 
-msgid "Lose the heroes: %{name}."
-msgstr "Piérdes los Héroes: %{name}."
-
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
 
+#, fuzzy
+msgid "Do you wish to continue the game?"
+msgstr "¿Quiéres comprar uno?"
+
 msgid "No maps available!"
 msgstr "¡Ningún mapa disponible!"
-
-msgid "Warning"
-msgstr "Advertencia"
 
 msgid "Click here to select which scenario to play."
 msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
@@ -2842,9 +2975,15 @@ msgstr "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
 
 #, fuzzy
 msgid ""
-"After regular growth, the population of %{monter} increases by %{count} "
+"After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
-msgstr "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
+msgid_plural ""
+"After regular growth, the population of %{monster} increases by %{count} "
+"percent!"
+msgstr[0] ""
+"Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
+msgstr[1] ""
+"Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
 
 #, fuzzy
 msgid "%{monster} population increases by +%{count}."
@@ -3068,6 +3207,9 @@ msgid "German"
 msgstr "Sherman"
 
 msgid "Russian"
+msgstr ""
+
+msgid ", FPS: "
 msgstr ""
 
 msgid "Ambrose"
@@ -4285,6 +4427,9 @@ msgstr ""
 "famoso ni suficientemente letrado para llegar a ver a mi maestro\" dice con "
 "desdén. \"Vuelve cuando te consideres suficientemente válido\"."
 
+msgid " and "
+msgstr " y "
+
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
 "masters of the fort. Your army now contains %{monsters2}."
@@ -4451,6 +4596,11 @@ msgstr ""
 
 msgid "Except for evidence of a terrible battle, the cave is empty."
 msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
+
+msgid ""
+"As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
+"makes his way towards you."
+msgstr ""
 
 msgid "He checks your pack, and sees that you have 1 cursed item."
 msgid_plural ""
@@ -4743,9 +4893,6 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} se reune con %{name2}"
 
-msgid " and "
-msgstr " y "
-
 msgid ""
 "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
 "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
@@ -4827,6 +4974,11 @@ msgid "The creature will join us..."
 msgid_plural "%{count} of the creatures will join us..."
 msgstr[0] "La criatura se unirá a nosotros..."
 msgstr[1] "%{count} de las criaturas se unirán a nosotros..."
+
+msgid ""
+"\n"
+" for a fee of %{gold} gold."
+msgstr ""
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
@@ -5176,17 +5328,17 @@ msgstr "Azul"
 msgid "Green"
 msgstr "Verde"
 
-msgid "Orange"
-msgstr "Naranja"
-
-msgid "Purple"
-msgstr "Morado"
-
 msgid "Red"
 msgstr "Rojo"
 
 msgid "Yellow"
 msgstr "Amarillo"
+
+msgid "Orange"
+msgstr "Naranja"
+
+msgid "Purple"
+msgstr "Morado"
 
 msgid "Aqua"
 msgstr "Agua"
@@ -5215,14 +5367,36 @@ msgstr ""
 msgid "Gold Per Day:"
 msgstr "Oro por día:"
 
+msgid "Heroes"
+msgstr "Héroes"
+
+#, fuzzy
+msgid "View Heroes."
+msgstr "Ver Heroes"
+
+#, fuzzy
+msgid "Towns/Castles"
+msgstr "Puerta de la Ciudad"
+
+#, fuzzy
+msgid "View Towns and Castles."
+msgstr "Ver Ciudades"
+
+#, fuzzy
+msgid "Exit"
+msgstr "Salir de la ciudad"
+
+msgid "luck|Cursed"
+msgstr "suerte|Maldito"
+
 msgid "luck|Awful"
 msgstr "suerte|Horrible"
 
 msgid "luck|Bad"
 msgstr "suerte|Malo"
 
-msgid "luck|Cursed"
-msgstr "suerte|Maldito"
+msgid "luck|Normal"
+msgstr "suerte|Normal"
 
 msgid "luck|Good"
 msgstr "suerte|bueno"
@@ -5232,9 +5406,6 @@ msgstr "suerte|Grande"
 
 msgid "luck|Irish"
 msgstr "suerte|Irlandés"
-
-msgid "luck|Normal"
-msgstr "suerte|Normal"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5257,26 +5428,26 @@ msgstr ""
 "Con Buena Suerte a veces tus tropas consegirán ataques afortunados "
 "duplicando su daño."
 
+msgid "morale|Treason"
+msgstr "moral|Traición"
+
 msgid "morale|Awful"
 msgstr "moral|Horrible"
-
-msgid "morale|Normal"
-msgstr "moral|Normal"
 
 msgid "morale|Poor"
 msgstr "moral|Pobre"
 
-msgid "morale|Treason"
-msgstr "moral|Traición"
-
-msgid "morale|Blood!"
-msgstr "moral|¡Sangre!"
+msgid "morale|Normal"
+msgstr "moral|Normal"
 
 msgid "morale|Good"
 msgstr "moral|Bueno"
 
 msgid "morale|Great"
 msgstr "moral|Grande"
+
+msgid "morale|Blood!"
+msgstr "moral|¡Sangre!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr "Con Baja Moral tus tropas puede paralizarse en combate."
@@ -5291,17 +5462,11 @@ msgstr ""
 msgid "Good morale may give your armies extra attacks in combat."
 msgstr "Con Moral Alta tus tropas podrán lograr ataques extra en combate."
 
-msgid "Barbarian"
-msgstr "Bárbaro"
-
 msgid "Knight"
 msgstr "Caballero"
 
-msgid "Multi"
-msgstr "Multi"
-
-msgid "Necromancer"
-msgstr "Nigromante"
+msgid "Barbarian"
+msgstr "Bárbaro"
 
 msgid "Sorceress"
 msgstr "Hechicera"
@@ -5312,35 +5477,41 @@ msgstr "Brujo"
 msgid "Wizard"
 msgstr "Mago"
 
-msgid "speed|Average"
-msgstr "velocidad|Media"
+msgid "Necromancer"
+msgstr "Nigromante"
 
-msgid "speed|Crawling"
-msgstr "velocidad|Arrastrando"
-
-msgid "speed|Fast"
-msgstr "velocidad|Rápido"
-
-msgid "speed|Slow"
-msgstr "velocidad|Lento"
+msgid "Multi"
+msgstr "Multi"
 
 msgid "speed|Standing"
 msgstr "velocidad|Fijo"
 
-msgid "speed|Very Fast"
-msgstr "velocidad|Muy rápido"
+msgid "speed|Crawling"
+msgstr "velocidad|Arrastrando"
 
 msgid "speed|Very Slow"
 msgstr "velocidad|Muy lento"
+
+msgid "speed|Slow"
+msgstr "velocidad|Lento"
+
+msgid "speed|Average"
+msgstr "velocidad|Media"
+
+msgid "speed|Fast"
+msgstr "velocidad|Rápido"
+
+msgid "speed|Very Fast"
+msgstr "velocidad|Muy rápido"
+
+msgid "speed|Ultra Fast"
+msgstr "velocidad|Ultra rápido"
 
 msgid "speed|Blazing"
 msgstr "velocidad|fugaz"
 
 msgid "speed|Instant"
 msgstr "velocidad|Instantáneo"
-
-msgid "speed|Ultra Fast"
-msgstr "velocidad|Ultra rápido"
 
 msgid "week|PLAGUE"
 msgstr "semana|PLAGA"
@@ -5487,8 +5658,11 @@ msgstr "Ciudad Dragón"
 msgid "Lighthouse"
 msgstr "Faro"
 
+#, fuzzy
 msgid "Water Wheel"
-msgstr "Molino de Agua"
+msgid_plural "Water Wheels"
+msgstr[0] "Molino de Agua"
+msgstr[1] "Molino de Agua"
 
 msgid "Mines"
 msgstr "Minas"
@@ -5511,8 +5685,11 @@ msgstr "Tienda del Desierto"
 msgid "Wagon Camp"
 msgstr "Carromato"
 
+#, fuzzy
 msgid "Windmill"
-msgstr "Molino de Viento"
+msgid_plural "Windmills"
+msgstr[0] "Molino de Viento"
+msgstr[1] "Molino de Viento"
 
 msgid "Random Town"
 msgstr "Cualquier torre"
@@ -5611,9 +5788,6 @@ msgstr ""
 
 msgid "Magic Well"
 msgstr "Pozo Mágico"
-
-msgid "Heroes"
-msgstr "Héroes"
 
 msgid "Nothing Special"
 msgstr "Nada especial"
@@ -5736,8 +5910,11 @@ msgstr ""
 msgid "Bottle"
 msgstr "Botella"
 
+#, fuzzy
 msgid "Magic Garden"
-msgstr "Jardín mágico"
+msgid_plural "Magic Gardens"
+msgstr[0] "Jardín mágico"
+msgstr[1] "Jardín mágico"
 
 msgid "Jail"
 msgstr "Cárcel"
@@ -6422,6 +6599,18 @@ msgstr ""
 msgid "% damage from %{spell} spell"
 msgstr ""
 
+#, c-format
+msgid "% immunity to "
+msgstr ""
+
+#, fuzzy
+msgid "Lightning"
+msgstr "Vara Relampagueante"
+
+#, fuzzy, c-format
+msgid "% damage from "
+msgstr "Elementales del Agua"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -6992,9 +7181,10 @@ msgstr[1] ""
 "Has tomado el control de una mina de cristal. Te proveerá con %{count} "
 "unidades de cristal al día."
 
+#, fuzzy
 msgid ""
-"You find an elaborate aontainer which housesan old vellum scroll. The runes "
-"on the container are very old, and the artistry with whitch it was put "
+"You find an elaborate container which houses an old vellum scroll. The runes "
+"on the container are very old, and the artistry with which it was put "
 "together is stunning. As you pull the scroll out, you feel imbued with "
 "magical power."
 msgstr ""
@@ -7753,9 +7943,6 @@ msgstr "juego: recordar el último foco."
 msgid "battle: show damage info"
 msgstr "juego: mostrar información del sistema"
 
-msgid "world: show visited content from objects"
-msgstr "mundo: ver contenido de objetos visitados"
-
 msgid "world: show terrain penalty"
 msgstr ""
 
@@ -7768,25 +7955,7 @@ msgstr "mundo: permitir establecer guardianes en objetos"
 msgid "world: Eagle Eye also works like Scholar in H3."
 msgstr ""
 
-msgid "world: ban for WeekOf/MonthOf Monsters"
-msgstr ""
-
-msgid "world: ban plagues months"
-msgstr ""
-
-msgid "world: Months Of Monsters do not place creatures on map"
-msgstr ""
-
 msgid "world: Crystal Ball also added Identify Hero and Visions spells"
-msgstr ""
-
-msgid "world: Starting heroes as Loss Conditions for Human Players"
-msgstr ""
-
-msgid "world: Only 1 hero can be hired by the one player every week"
-msgstr ""
-
-msgid "world: Each castle allows one hero to be recruited every week"
 msgstr ""
 
 msgid "world: Neutral armies scale with game difficulty"
@@ -7844,6 +8013,9 @@ msgid "battle: soft wait troop"
 msgstr "batalla: espera de tropa fluido"
 
 msgid "battle: reverse wait order (fast, average, slow)"
+msgstr ""
+
+msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"
@@ -7935,3984 +8107,5 @@ msgid ""
 "fheroes2/releases"
 msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
-"http://sf.net/projects/fheroes2"
-
-#~ msgid "Network"
-#~ msgstr "Red"
-
-#~ msgid ""
-#~ "Play a network game, where 2 players use their own computers connected "
-#~ "through a LAN (Local Area Network)."
-#~ msgstr ""
-#~ "Jugar una partida de red donde 2 jugadores usan sus propios PCs "
-#~ "conectados en una LAN. (Red de Área Local)."
-
-#~ msgid ""
-#~ "%{color} has fallen!\n"
-#~ "All is lost."
-#~ msgstr ""
-#~ "¡%{color} ha sido eliminado!\n"
-#~ "Todo está perdido."
-
-#~ msgid "Hero %{name} also got a %{count} experience."
-#~ msgstr "El héroe %{name} también obtubo %{count} de experiencia."
-
-#~ msgid "Spell cast"
-#~ msgstr "Lanzar hechizo"
-
-#~ msgid ", and get +2 defense"
-#~ msgstr ", y consigue +2 a la defensa"
-
-#~ msgid "MirrorImage ended"
-#~ msgstr "Reflejo terminado"
-
-#~ msgid "You don't have enough gold!"
-#~ msgstr "¡Tu no tienes suficiente oro!"
-
-#~ msgid ""
-#~ "Your troops can be upgraded, but it will cost you %{ratio} times the "
-#~ "difference in cost for each troop, rounded up to next highest number. Do "
-#~ "you wish to upgrade them?"
-#~ msgstr ""
-#~ "Tus tropas pueden mejorarse, pero te costará %{ratio} veces la diferencia "
-#~ "en coste para cada tropa, redondeando al alza. ¿Quieres actualizarlas?"
-
-#~ msgid "For the QVGA version is not available."
-#~ msgstr "Para la versión QVGA no está disponible."
-
-#~ msgid "Cost per troop:"
-#~ msgstr "Coste por tropa:"
-
-#~ msgid "sound"
-#~ msgstr "sonido"
-
-#~ msgid "ai speed"
-#~ msgstr "velocidad de la IA"
-
-#~ msgid "You have no room to carry another artifact!"
-#~ msgstr "¡No tienes espacio para llevar otro artefacto!"
-
-#~ msgid "View Morale Info"
-#~ msgstr "Ver Información sobre Moral"
-
-#~ msgid "View Luck Info"
-#~ msgstr "Ver información sobre Suerte"
-
-#~ msgid "Exit hero"
-#~ msgstr "Salir de la pantalla de Héroe."
-
-#~ msgid "Dismiss hero"
-#~ msgstr "Descartar Héroe"
-
-#~ msgid "Show prev heroes"
-#~ msgstr "Mostrar Héroes previos."
-
-#~ msgid "Bad Morale"
-#~ msgstr "Mala Moral"
-
-#~ msgid "Neutral Morale"
-#~ msgstr "Moral Neutral"
-
-#~ msgid "Bad Luck"
-#~ msgstr "Mala Suerte"
-
-#~ msgid "Neutral Luck"
-#~ msgstr "Suerte Neutral"
-
-#~ msgid "Good Luck"
-#~ msgstr "Buena Suerte"
-
-#~ msgid "This game is now in beta development version. ;)"
-#~ msgstr "Este juego está en fase Beta de desarrollo."
-
-#~ msgid "Water"
-#~ msgstr "Agua"
-
-#~ msgid "Ship Wreck"
-#~ msgstr "Naufragio"
-
-#~ msgid "Coast"
-#~ msgstr "Costa"
-
-#~ msgid "buy"
-#~ msgstr "comprar"
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid "This release is compiled without network support."
-#~ msgstr "Esta versión está compilada sin soporte para red."
-
-#~ msgid ""
-#~ "425 bottles of beer on the wall, 425 bottles of beer! If one of those "
-#~ "bottles should happen to fall, there'll be..."
-#~ msgstr ""
-#~ "425 botellas de cerveza sobre el muro, ¡425 botellas de cerveza! Si una "
-#~ "de las botellas llegara a caer, habría que ..."
-
-#~ msgid "A balanced scenario with lots of resources and land to explore."
-#~ msgstr ""
-#~ "Un escenario equilibrado con gran cantidad de recursos y terriorios para "
-#~ "explorar."
-
-#~ msgid ""
-#~ "A bandit army of gorgons jump you without warning.  they stone your "
-#~ "entire army demand 500 gold before they will release your comrads.  "
-#~ "Realizing that it is much cheeper to pay then rebuild your army you part "
-#~ "with the gold."
-#~ msgstr ""
-#~ "Un ejercito de bandidas gorgonas te asalta sin ningún aviso.  Y "
-#~ "petrifican tu ejercito entero demandando 500 de oro antes de liberar a "
-#~ "tus camaradas. Alegando que es más barato pagar que reconstruir tu "
-#~ "ejercito por tu cuenta con ese oro."
-
-#~ msgid "Abandon All Hope!"
-#~ msgstr "¡Abandona toda esperanza!"
-
-#~ msgid "Abandon All Hope Ye That Enter Here"
-#~ msgstr "!Abandonad toda esperanza aquellos que entréis aquí!"
-
-#~ msgid "A bit of crystal!"
-#~ msgstr "Un poco de cristal."
-
-#~ msgid "A bit of mercury!"
-#~ msgstr "¡Un poco de mercurio!"
-
-#~ msgid "A bit of sulfur!"
-#~ msgstr "¡Un poco de azufre!"
-
-#~ msgid ""
-#~ "Above you looms the ancient Ice Palace.  Dimly remembered myth speaks of "
-#~ "a Prince who rejected the advances of the Winter Goddess, and thus he and "
-#~ "his domain were cursed to remain shrouded in ice, hidden in a forgotten "
-#~ "corner of the world.  It is said that he can only be rescued by a hero "
-#~ "who is both clever and bold.  Are you that one?  Do you dare enter this "
-#~ "frozen domain?"
-#~ msgstr ""
-#~ "Sobre ti se avecina el antiguo Palacio de Hielo. El mito, borrosamente "
-#~ "recordado, habla de un Príncipe que rechazó los avances de la Diosa del "
-#~ "Invierto. De este modo él y su dominio fueron maldecidos a permanecer "
-#~ "envueltos en hielo ocultos en una olvidada esquina del mundo. Se dice que "
-#~ "él sólo puede ser rescatado por un héroe que sea tanto listo como audaz. "
-#~ "¿Eres tú ese héroe?, ¿Te atreves a entrar en este dominio helado?"
-
-#~ msgid "A cache of crystal!"
-#~ msgstr "¡Un alijo de crital!"
-
-#~ msgid "A cache of gems!"
-#~ msgstr "¡Un alijo de gemas!"
-
-#~ msgid "A cache of gold!"
-#~ msgstr "¡Un alijo de oro!"
-
-#~ msgid "A cache of mercury!"
-#~ msgstr "¡Un alijo de mercurio!"
-
-#~ msgid "A cache of sulfur!"
-#~ msgstr "¡Un alijo de azufre!"
-
-#~ msgid ""
-#~ "A chance to end a bitter war has finally arrived as a new resource-laden "
-#~ "land has been discovered."
-#~ msgstr ""
-#~ "Una oportunidad para finalizar esta amarga querra se ha presentado "
-#~ "finalmente puesto que un nuevo territorio repleto de recursos ha sido "
-#~ "descubierto."
-
-#~ msgid "A chunk of gold!"
-#~ msgstr "¡Una buena cantidad de oro!"
-
-#~ msgid "A chunk of ore!"
-#~ msgstr "¡Una buena mena de hierro!"
-
-#~ msgid "A couple of gems!"
-#~ msgstr "¡Un par de gemas!"
-
-#~ msgid "\"Act of Desperation\""
-#~ msgstr "\"Acto de desesperación\""
-
-#~ msgid ""
-#~ "A desert isle rich in resources rewards the quick.  Just be sure to watch "
-#~ "your back!"
-#~ msgstr ""
-#~ "Una isla desierta rica en recursos recompensa la rapidez. ¡Asegúrate de "
-#~ "vigilar tu espalda!"
-
-#~ msgid "A dolphin playfully jumps into the air."
-#~ msgstr "Un delfín alegremente da un brinco en el aire."
-
-#~ msgid ""
-#~ "A Dragon, A Cyclops, or an Undead. King of the Centaurs, His name is ....?"
-#~ msgstr ""
-#~ "Un dragón, un Cíclope o un Nomuerto. Rey de los Centauros, ¿Su nombre "
-#~ "es ...?"
-
-#~ msgid "A flight of dragons circles overhead."
-#~ msgstr "Una bandada de dragones sobrevuela en círculo."
-
-#~ msgid "A flock of seagulls circle overhead."
-#~ msgstr "Una bandada de gaviotas sobrevuelta en círculo."
-
-#~ msgid "A friendly dolphin splashes alongside the ship."
-#~ msgstr "Un delfín amistoso chapotea alredor del barco."
-
-#~ msgid ""
-#~ "After a long search of the island, I have discovered that there is no way "
-#~ "for me to escape without help.  I can not steal a ship from one of the "
-#~ "coastal castles, and I dare not venture into the desert unless I wish to "
-#~ "become Dragon food.  Should anyone find this, I beg of you, please send a "
-#~ "ship and get me off this cursed island!  -Sir Christian"
-#~ msgstr ""
-#~ "Después de una larga busqueda por la isla, me he dado cuenta de que no "
-#~ "hay manera de escaparse sin ayuda. No puedo robar un barco de los "
-#~ "castillos de la costa y no me atrevo a aventurarme en el desierto; a no "
-#~ "ser que desee convertirme en comida de dragón. Si alguien encuentra esto, "
-#~ "te ruego, envíame un barco y sácame de esta isla maldita! - Sir Christian."
-
-#~ msgid ""
-#~ "After centuries of friendship, the Wizards have suddenly decided to stop "
-#~ "sharing their Library with the rest of the world.  This can't be good!"
-#~ msgstr ""
-#~ "Después de siglos de amistad, los Magos deciden dejar de compartir su "
-#~ "Biblioteca con el resto del mundo. ¡Esto no puede ser bueno!"
-
-#~ msgid ""
-#~ "After many years of peace, you discover that your sworn enemy from across "
-#~ "the sea has chosen to invade your homeland by raising up the ocean floor "
-#~ "to bridge the distance! You must not let them gain a foothold on this "
-#~ "continent, in fact, your King has ordered you to establish a foothold on "
-#~ "theirs!  To make matters worse, two of your OWN towns have thrown in "
-#~ "their lots with the enemy..."
-#~ msgstr ""
-#~ "Tras muchos años de paz, descubres que tu enemigo jurado de allende los "
-#~ "mares ha elegido invadir tu patria elevando el fondo del océano y cubrir "
-#~ "así la distancia. No debes permitirle poner el pie en este continente, de "
-#~ "hecho, ¡tu Rey te ha ordenado invadir el suyo! Para empeorar las cosas, "
-#~ "dos de tus propias ciudades se han pasado al enemigo..."
-
-#~ msgid ""
-#~ "After you return from a scouting trip, your Seneschal hurries to greet "
-#~ "you.  \"My Lord, in your absence I signed an agreement in your name with "
-#~ "a Master Merchant.  If we supply him with the resources he needs, through "
-#~ "trading, he can return the resources to us in a week or so, plus some "
-#~ "additional ones.\"  The Seneschal eyes you anxiously.  You hesitate, then "
-#~ "nod slowly, \"Good, we can use more resources>\""
-#~ msgstr ""
-#~ "Al volver de una partida de exploración, tu Senescal se apresura a "
-#~ "encontrarte. \"Mi Señor, en vuestra ausencia he firmado un acuerdo en "
-#~ "vuestro nombre con un Mercader Maestro. Si le proporcionamos los recursos "
-#~ "que necesita, a través del comercio, nos puede devolver dichos recursos "
-#~ "en una semana o así, además de algunos otros adicionales\". El Senescal "
-#~ "te mira con ansiedad. Tú dudas, y luego asientes lentamente, \"Bien, "
-#~ "podemos usar más recursos\""
-
-#~ msgid "A ghostly pirate ship appears and sails on by."
-#~ msgstr "Aparece un barco fantasma y pasa de largo."
-
-#~ msgid ""
-#~ "A Gift from your King, and a note that reads \"Use these resources "
-#~ "wisely, It's all we have left\"."
-#~ msgstr ""
-#~ "Un presente de tu Rey y una nota que dice: \"Usa estos recursos "
-#~ "sabiamente, es todo lo que me queda\"."
-
-#~ msgid ""
-#~ "A gift of gold, m'lord, from the people of Enroth, to the people of "
-#~ "Enroth.  Good luck, and may God save true King Roland!"
-#~ msgstr ""
-#~ "Un presente de oro, Señor, de las gentes de Enroth para las gentes de "
-#~ "Enroth. ¡Buena suerte y que Dios guarde al verdadero Rey Roland!"
-
-#~ msgid "A glint by a tree catches your eye..."
-#~ msgstr "Un destello en un árbol te llama la atención..."
-
-#~ msgid "A gold cache!"
-#~ msgstr "Un alijo de oro."
-
-#~ msgid "A gold chunk!"
-#~ msgstr "¡Un poco de oro!"
-
-#~ msgid "A gold nugget!"
-#~ msgstr "¡Unas pepitas de oro!"
-
-#~ msgid ""
-#~ "A great Black dragon stands before you. It speaks in a suprisingly soft "
-#~ "voice, saying, \"The elves believe they have sent another hero to reclaim "
-#~ "their prize. I believe they have sent me another meal.\""
-#~ msgstr ""
-#~ "Un fantástico Dragón negro está de pie delante tuyo. Habla con una "
-#~ "sorprendentemente suave voz, diciendo, \"Los elfos creen que han mandado "
-#~ "a otro héroe para reclamar su recompensa. Yo creo que me han enviado otra "
-#~ "comida.\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approaches you, \"We are in dire need of your "
-#~ "assistance.  Our castle to the north has been overrun and our Lord "
-#~ "killed.  Please help us regain our homes!  There are still women and "
-#~ "children there!  Take what we have to help!\""
-#~ msgstr ""
-#~ "Un grupo de campesinos se te acerca, \"Necesitamos vuestra ayuda. Nuestro "
-#~ "castillo, al norte, ha sido ocupado y nuestro Señor, asesinado. Por "
-#~ "favor, ¡ayudadnos a recuperar nuestros hogares! ¡Aún hay mujeres y niños "
-#~ "allí! ¡Tomad lo que tenemos para ayudar!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approach you, \"We are in dire need of your "
-#~ "assistance.  Our castle to the east has been overrun and our Lord "
-#~ "killed.  Please help us regain our homes!  There are still women and "
-#~ "children there!  Take what we have to help!\""
-#~ msgstr ""
-#~ "Un grupo de campesinos se te acerca, \"Necesitamos vuestra ayuda. Nuestro "
-#~ "castillo, al este, ha sido ocupado y nuestro Señor, asesinado. Por favor, "
-#~ "¡ayudadnos a recuperar nuestros hogares! ¡Aún hay mujeres y niños allí! "
-#~ "¡Tomad lo que tenemos para ayudar!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approach you, \"We are in dire need of your "
-#~ "assistance. Our castle to the east has been overrun and our Lord killed. "
-#~ "Please help us regain our homes! There are still women and children "
-#~ "there! Take what we have to help!\""
-#~ msgstr ""
-#~ "Un grupo de campesinos se te acerca, \"Necesitamos vuestra ayuda. Nuestro "
-#~ "castillo, al este, ha sido ocupado y nuestro Señor, asesinado. Por favor, "
-#~ "¡ayudadnos a recuperar nuestros hogares! ¡Aún hay mujeres y niños allí! "
-#~ "¡Tomad lo que tenemos para ayudar!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approach you, We are in dire need of your "
-#~ "assistance.  Our castle to the northeast has been overrun and our Lord "
-#~ "killed.  Please help us regain our homes!  There are still women and "
-#~ "children there!  Take what we have to help!\""
-#~ msgstr ""
-#~ "Un grupo de campesinos se te acerca, \"Necesitamos vuestra ayuda. Nuestro "
-#~ "castillo, al noreste, ha sido ocupado y nuestro Señor, asesinado. Por "
-#~ "favor, ¡ayudadnos a recuperar nuestros hogares! ¡Aún hay mujeres y niños "
-#~ "allí! ¡Tomad lo que tenemos para ayudar!\""
-
-#~ msgid "A handful of gems!"
-#~ msgstr "¡Un puñado de gemas!"
-
-#~ msgid ""
-#~ "Ah, you stumble across something buried in the sand.  As you dig it up "
-#~ "you discover a small pile of gems and crystal."
-#~ msgstr ""
-#~ "Ah, tropiezas con algo semienterrado en la arena. Al desenterrarlo "
-#~ "descubres una pequeña pila de gemas y cristal."
-
-#~ msgid ""
-#~ "A Knight and Necromancer team up against the Barbarian and Sorceress. "
-#~ "(Blue and Green vs Red and Yellow)"
-#~ msgstr ""
-#~ "Un Caballero y un Necromante unen sus fuerzas contra el Bárbaro y la "
-#~ "Hechicera. (Azul y Verde vs Rojo y Amarillo)"
-
-#~ msgid ""
-#~ "A large contingent of the king's guard approaches you.  \"Ahh, we have "
-#~ "finally caught up to you.  The king requires tribute from all of his "
-#~ "vassals and you have been negligent far too long.\""
-#~ msgstr ""
-#~ "Se te acerca un gran contingente de la guardia del rey. \"Ah, al final os "
-#~ "alcanzamos. El rey exige tributo de todos sus vasallos, y vos habéis sido "
-#~ "negligente por demasiado tiempo.\""
-
-#~ msgid ""
-#~ "A large map with lots of resources and treasure. Exploration and victory "
-#~ "will require many heroes."
-#~ msgstr ""
-#~ "Un mapa grande con muchos recursos y tesoros. La exploración y la "
-#~ "victoria requerirán muchos héroes."
-
-#~ msgid "A legion of peasants stands between you and this unclaimed island."
-#~ msgstr ""
-#~ "Una legión de campesinos es el único obstaculo entre tú y esta tierra no "
-#~ "reclamada."
-
-#~ msgid "Algary"
-#~ msgstr "Algary"
-
-#~ msgid "A little bit closer..."
-#~ msgstr "Un poco más cerca ..."
-
-#~ msgid "All mines are grouped by type. Trade is your only hope."
-#~ msgstr ""
-#~ "Todas las minas están agrupadas por tipo. El comercio es tu única "
-#~ "esperanza."
-
-#~ msgid "A lump of crystal!"
-#~ msgstr "¡Un trozo de cristal!"
-
-#~ msgid "A lump of gold!"
-#~ msgstr "¡Un trozo de oro!"
-
-#~ msgid "A lump of mercury!"
-#~ msgstr "¡Un trozo de mercurio!"
-
-#~ msgid ""
-#~ "A man appears from behind the sand dune. \"At last,\" he says, \"Someone "
-#~ "has come to rescue me! I am forever grateful. Alas all I have to offer "
-#~ "you in return are these souvenirs from my wrecked ship.\""
-#~ msgstr ""
-#~ "Un hombre aparece por detrás de la duna. Dice: \"¡Por fin alguien ha "
-#~ "venido a rescatarme! estaré siempre en deuda contigo. Ay, todo lo que "
-#~ "tengo para ofrecerte a cambio son estos objetos de mi barco siniestrado\"."
-
-#~ msgid ""
-#~ "A man is laying on the ground, near death. He looks to you and speaks, "
-#~ "\"Please help my companions! Please... they can't...cough...get away "
-#~ "from...cough...the drag...\" With that, he dies."
-#~ msgstr ""
-#~ "Un hombre permanece tumbado en el suelo moribundo. Justo antes de morir "
-#~ "te mira y dicer: \"por favor, ayuda a mis compañeros, por favor ... ellos "
-#~ "no pueden  ... huir de ... el avance."
-
-#~ msgid ""
-#~ "A merchant caravan arrives, bringing gold and supplies, however, no one "
-#~ "can seem to remember where they came from.  You silently praise this "
-#~ "anonymous benefactor and continue your duties."
-#~ msgstr ""
-#~ "Una caravana mercante llega trayendo oro y suministros. Sin embargo, "
-#~ "nadie puede parecer recordar de dónde vienen. En silencio alabas a este "
-#~ "anónimo benefactor y continúas con tus deberes."
-
-#~ msgid "a mirror"
-#~ msgstr "un espejo"
-
-#~ msgid "An albatross flies ahead of the ship for a while"
-#~ msgstr "Un albatros sobrevuela el barco por un momento."
-
-#~ msgid "Anduran"
-#~ msgstr "Anduran"
-
-#~ msgid ""
-#~ "An enemy from across the sea has seized half your towns.  Can you put "
-#~ "aside your own feud with your brother to fight this common enemy?"
-#~ msgstr ""
-#~ "Un enemigo de allende los mares ha conquistado la mitad de tus ciudades. "
-#~ "¿Puedes dejar a un lado la enemistad con tu hermano para enfrentar a este "
-#~ "enemigo común?"
-
-#~ msgid ""
-#~ "An old elf is sitting on a rock in a glen, pounding on the shackles on "
-#~ "his feet with a stone. You help him remove them and ask him his tale. "
-#~ "\"I'm a deserter from Drakonia's army. She has enslaved all the elves to "
-#~ "support her madness. She must be stopped.\" Then he slips into the woods "
-#~ "without a sound, leaving behind just his cloak."
-#~ msgstr ""
-#~ "Un elfo anciano está sentado sobre una roca en una cañada, golpeando los "
-#~ "grilletes de sus pies con una piedra. Le ayudas a quitárselos y le "
-#~ "preguntas por su historia. \"Soy un desertor del ejercito de Drakonia. "
-#~ "Ella ha esclavizado a todos los elfos para mantener su locura. Debe ser "
-#~ "detenida\". Entonces se desliza hacia el interior del bosque sin hacer "
-#~ "ningún sonido, dejando tras de sí solamente su capa."
-
-#~ msgid "Antioch"
-#~ msgstr "Antioch"
-
-#~ msgid "A piece of crystal!"
-#~ msgstr "¡Un poco de cristal!"
-
-#~ msgid "A pile of crystal!"
-#~ msgstr "¡Una pila de Cristal!"
-
-#~ msgid "A pile of gems!"
-#~ msgstr "¡Una pila de Gemas!"
-
-#~ msgid "A pile of gold!"
-#~ msgstr "¡Una pila de Oro!"
-
-#~ msgid ""
-#~ "A plague of undead is upon us. Who will unite the living against the dead?"
-#~ msgstr ""
-#~ "Una plaga de nomuertos está sobre nosotros ¿Quién unirá a los vivos "
-#~ "contra los muertos?"
-
-#~ msgid "A quantity of crystal!"
-#~ msgstr "¡Algo de cristal!"
-
-#~ msgid "A quantity of mercury!"
-#~ msgstr "¡Algo de mercurio!"
-
-#~ msgid "A quantity of sulfur!"
-#~ msgstr "¡Algo de azufre!"
-
-#~ msgid ""
-#~ "Archibald has also sent an army to find the Crown, you must find it first "
-#~ "or all is lost."
-#~ msgstr ""
-#~ "Archibald también ha enviado un ejército para hallar la corona, debes "
-#~ "encontrarla antes o todo estará perdido."
-
-#~ msgid "Archibald is hiding at the end of the river."
-#~ msgstr "Archibald se esconde al final del río."
-
-#~ msgid ""
-#~ "A resource rich valley keeps the Wizard and the Necromancer apart. Your "
-#~ "opponent's army will arrive in 3 months so hurry."
-#~ msgstr ""
-#~ "Un valle rico en recursos mantiene separados al Mago y al Necromante. El "
-#~ "ejército de tus enemigos llegará en 3 meses, así que apresúrate."
-
-#~ msgid "Arm of the Crusader"
-#~ msgstr "Arma de Cruzado"
-
-#~ msgid "Arm of the Cyclops"
-#~ msgstr "Arma de Cíclope"
-
-#~ msgid "Arm of the Dragon"
-#~ msgstr "Arma de Dragón"
-
-#~ msgid "Arm of the Phoenix"
-#~ msgstr "Arma de Fénix"
-
-#~ msgid "Arm of the Titan"
-#~ msgstr "Arma de Titán"
-
-#~ msgid "Arr' Here be pirates gold buried."
-#~ msgstr "Arrg, aquí esta enterrado el oro de los piratas."
-
-#~ msgid "A shipment of wood has arrived from your kingdom!"
-#~ msgstr "¡Un cargamento de madera ha llegado desde tu Reino!"
-
-#~ msgid ""
-#~ "A splash in the seaweed alerts you to a mermaid waving in a friendly "
-#~ "manner. \"Oh, I thought you were Ahab.\" She is surprised, but quickly "
-#~ "composes herself. \"Well, if you meet him, give him these treasures I "
-#~ "have collected.\""
-#~ msgstr ""
-#~ "Un chapoteo entre las algas te llama la atención, y ves a una sirena "
-#~ "saludando de manera amistosa. \"Oh, pensé que eras Ahab.\" Ella se "
-#~ "muestra sorprendida, pero rápidamente recupera la compostura. \"Bien, si "
-#~ "te lo encuentras, dale estos tesoros que he recogido.\""
-
-#~ msgid "Assassins tried to kill our ally."
-#~ msgstr "Unos asesinos intentaron asesinar a nuestro aliado."
-
-#~ msgid "Astircaer"
-#~ msgstr "Astircaer"
-
-#~ msgid ""
-#~ "A stranded Wizard with only a small force must conquer an entire "
-#~ "continent of hostile forces."
-#~ msgstr ""
-#~ "Un Mago abandonado con unas fuerzas pequeñas debe conquistar un "
-#~ "continente entero repleto de fuerzas enemigas."
-
-#~ msgid ""
-#~ "A supply ship has arrived from the homeland!  You send word home that all "
-#~ "is well."
-#~ msgstr ""
-#~ "Un barco de suministros ha llegado desde la patria. Das aviso de que todo "
-#~ "está correcto."
-
-#~ msgid ""
-#~ "As you approach the barrier, you see the old elf you helped free. This "
-#~ "time, however, you see that he is wearing a cape of fine weave, and a "
-#~ "wooden crown is on his head. He sees your forces, and says \"Take this "
-#~ "sword, and with it, strike down Drakonia and help free my people.\" The "
-#~ "old elf then strides regally into the woods."
-#~ msgstr ""
-#~ "Al acercarte a la barrera, ves al viejo elfo al que ayudaste a liberarse. "
-#~ "Esta vez, en cambio, ves que viste una capa de fino tejido, y luce una "
-#~ "corona de madera en su cabeza. Al ver tus fuerzas, te dice: \"Toma esta "
-#~ "espada, y con ella, golpea Drakonia y libera a mi gente.\" El viejo elfo "
-#~ "regresa, majestuosamente, al interior del bosque."
-
-#~ msgid ""
-#~ "As you approach the gates of the Ice Palace, one of your troops points in "
-#~ "terror.  You watch in awe as great slabs of ice separate from the castle "
-#~ "walls with loud cracking reports and crash to the ground.  Soon the ice "
-#~ "is gone and the sun begins to peak through the gloom.  The deathly "
-#~ "silence that must have ruled these lands for centuries ends as birds "
-#~ "begin to sing.  From inside you hear the sounds of life."
-#~ msgstr ""
-#~ "Al acercarte a las puertas del Palacio de Hielo, uno de tus hombres "
-#~ "señala aterrorizado. Observas, asombrado, cómo enormes losas de hielo se "
-#~ "separan de los muros del castillo con un ruido ensordecedor, y se "
-#~ "estrellan contra el suelo. En poco tiempo ha desaparecido el hielo, y el "
-#~ "sol comienza a despuntar a través de la penumbra. El mortal silencio que "
-#~ "ha dominado estas tierras durante siglos finaliza al comenzar a cantar "
-#~ "los pájaros. Desde dentro oyes los sonidos de la vida."
-
-#~ msgid ""
-#~ "As you approach the tent, the leader of the nomads comes out to greet "
-#~ "you. He says, \"It was prophecied many years ago that a great hero would "
-#~ "come to greet us in our sacred valley, and we would prosper afterwords. "
-#~ "Now it has come to pass, and we offer you these gifts as tokens of our "
-#~ "thanks.\""
-#~ msgstr ""
-#~ "Al acercarte a la tienda, el líder de los nómadas sale a recibirte. Te "
-#~ "dice \"Hace muchos años se profetizó que un gran héroe llegaría para "
-#~ "encontrarnos en nuestro valle sagrado, y que prosperaríamos tras ello. "
-#~ "Ahora esto ha sucedido, y te ofrecemos estos regalos como muestra de "
-#~ "nuestra gratitud\"."
-
-#~ msgid ""
-#~ "As you approach,  you hear whispered mentions of \"the wild barbarian who "
-#~ "passed this way months before\". One of the villagers approaches you and "
-#~ "hands you an object, saying \"The wild one dropped this. You must be his "
-#~ "kin. Therefore I give it to you. But beware! Many in the village will not "
-#~ "be as friendly as I.\""
-#~ msgstr ""
-#~ "Al acercarte, oyes susurros que mencionan al \"bárbaro salvaje que pasó "
-#~ "por este camino meses atrás\". Uno de los habitantes del pueblo se te "
-#~ "acerca y te da un objeto, diciendo \"El salvaje dejó caer esto. Tú debes "
-#~ "ser de su calaña. Por eso, te lo entrego. Pero cuidado. Muchos en el "
-#~ "pueblo no serán tan amistosos como yo.\""
-
-#~ msgid ""
-#~ "As you break your fast your sage rushes in, \"Good news, my lord!  I have "
-#~ "translated the message.  Two great heroes were imprisoned many years "
-#~ "ago.  They lie sleeping - still guarded by magic barriers and monsters.  "
-#~ "My lord, they lie nearby- in between our ally and us.  If we could free "
-#~ "them, they would surely aid us against our enemies!  The password to the "
-#~ "first magic barrier can be learned at the Aqua Traveller's Tent.\""
-#~ msgstr ""
-#~ "Mientras estás desayunando, tu consejero entra apresuradamente, \"¡Buenas "
-#~ "noticias, mi señor! He traducido el mensaje. Dos grandes héroes fueron "
-#~ "apresados hace muchos años. Aún duermen - guardados por barreras mágicas "
-#~ "y monstruos. Mi señor, están cerca, entre nuestro aliado y nosotros. Si "
-#~ "puiéramos liberarlos, seguramente nos ayudarían contra nuestros enemigos. "
-#~ "La contraseña para la primera barrera mágica puede aprenderse en la "
-#~ "Tienda de Agua del Viajero.\""
-
-#~ msgid ""
-#~ "As you enter the small clearing, you see a familiar figure talking to a "
-#~ "group of halflings and soldiers. You stay awhile and listen to his "
-#~ "speech. \"The time to throw off these chains of tyranny is now! We must "
-#~ "strike at the heart of her empire, and destroy the evil that she has "
-#~ "brought to our land.\" As the old elf finishes speaking, he gets up from "
-#~ "his mossy seat and once again, blends into the woods with incredible "
-#~ "grace."
-#~ msgstr ""
-#~ "Mientras entras en el pequeño descampado ves una figura familiar que "
-#~ "comanda un grupo de Medianos y soldados. Te alejas mientras y escuchas su "
-#~ "conversación: \"El tiempo de romper estas cadenas de tiranía ha llegado"
-#~ "\". \"Debemos atacar el corazón del Imperio y destruir el mal que ha "
-#~ "traido a nuestra tierra\". Cuando el anciano elfo acaba su discurso se "
-#~ "levanta del asiento y de nuevo se camufla en el bosque con increible "
-#~ "habilidad."
-
-#~ msgid ""
-#~ "As you lay down to nap after a long battle, you notice a lucky four-leaf "
-#~ "clover."
-#~ msgstr ""
-#~ "Al ir a descansar después de una larga batalal, encuentras un trébol de "
-#~ "la suerte de cuatro hojas."
-
-#~ msgid ""
-#~ "As you make  your way through the last of the golemn debris, a group of "
-#~ "halflings runs towards you carrying fruit and flowers. \"Thank you so "
-#~ "much!\" Their leader exclaims, \"We've been trapped in here for ever! "
-#~ "Come by our homes, we'll pack up and go with you!\""
-#~ msgstr ""
-#~ "Al abrirte paso a través de los restos del gólem, un grupo de medianos "
-#~ "corre hacia ti trayendo flores y frutas. \"¡Muchas gracias!\" Su líder "
-#~ "exclama: \"¡Hemos estado atrapados aquí por siempre! ¡Pásate por nuestros "
-#~ "hogares, recogeremos nuestras cosas e iremos contigo!\""
-
-#~ msgid ""
-#~ "As you make your way to the shrine, some very thin and hollow-eyed men "
-#~ "come out of the flower patch and stare at you.  Seeing that you want the "
-#~ "gold, one of them says to you \"Hey, man, if you're, like, so lusty for "
-#~ "earthly wealth, then, like, have this too.\" You graciously take what "
-#~ "they have offered and back out of the clearing."
-#~ msgstr ""
-#~ "Al abrirte camino hasta el altar, un hombre muy flaco y ojeroso sale de "
-#~ "entre las flores y te mira fijamente. Viendo que quieres el oro, uno de "
-#~ "ellos te dice \"Eh, hombre, si estás tan ansioso por las riquezas "
-#~ "terrenales, entonces ten también esto.\" Agradecido, tomas lo que te "
-#~ "ofrecen y sales del claro."
-
-#~ msgid ""
-#~ "As you prepare your lands to fight the onslaught from the South, a "
-#~ "curious message appears on your table in the Great Hall of your Castle.  "
-#~ "Written in some ancient language, none but your sage can make any sense "
-#~ "of it.  She promises to have the words deciphered by tomorrow..."
-#~ msgstr ""
-#~ "Mientras preparas tus tierras para combatir la invasión del Sur, aparece "
-#~ "un curioso mensaje en la mesa del Gran Salón de tu Castillo. Escrito en "
-#~ "algún lenguaje antiguo, sólo tu [SAGE] sabio sabe encontrarle sentido. Te "
-#~ "promete tener las palabras descifradas para mañana..."
-
-#~ msgid "A three hour tour, a three hour tour..."
-#~ msgstr "Un recorrido de tres horas, un recorrido de tres horas..."
-
-#~ msgid ""
-#~ "A tiny gnome points to a chunk of crystal you otherwise would have "
-#~ "overlooked!"
-#~ msgstr ""
-#~ "Un gnomo diminuto te señala un trozo de cristal que de otro modo hubieras "
-#~ "pasado por alto."
-
-#~ msgid "Atlantium"
-#~ msgstr "Atlantium"
-
-#~ msgid ""
-#~ "At last, the king is dead.  For years you have planned his demise, but "
-#~ "now it is done, and there is no heir to take his place, though the "
-#~ "Knights to the south believe that they are the rightful successors.  A "
-#~ "wealth in wood (to the south) and ore (in the northern mountains) "
-#~ "provides you with trade goods, and your isolation has allowed you to "
-#~ "prepare your forces of darkness for this day.  Go, now, and fulfill your "
-#~ "destiny!"
-#~ msgstr ""
-#~ "Por fin, el rey ha muerto. Durante años planeaste su fallecimiento, pero "
-#~ "ahora lo has conseguido, y no hay heredero que ocupe su lugar, aunque los "
-#~ "Caballeros del sur creen que ellos son sus sucesores legítimos. La "
-#~ "abundante madera (al sur) y mineral (en las montañas del norte) te "
-#~ "proporcionan bienes de comercio, y tu aislamiento te ha permitido "
-#~ "preparar tus fuerzas de oscuridad para este día. ¡Ve ahora, y cumple tu "
-#~ "destino!"
-
-#~ msgid ""
-#~ "At the base of the mountain you see something that glitters.   You "
-#~ "discover an ancient pile of offerings to the gods."
-#~ msgstr ""
-#~ "Ves algo que brilla en la base de la montaña. Descubres una antigua pila "
-#~ "de ofrendas a los Dioses."
-
-#~ msgid "Avalon"
-#~ msgstr "Avalon"
-
-#~ msgid "Avone"
-#~ msgstr "Avone"
-
-#~ msgid ""
-#~ "A wild magic has allowed a bridge to form between two lands...  Your one "
-#~ "hope is to capture castle \"Black Fang\"."
-#~ msgstr ""
-#~ "Una magia salvaje ha permitido que se formara un puente entre dos "
-#~ "tierras... Tu única esperanza es capturar el castillo \"Colmillo Negro\"."
-
-#~ msgid "Barbarian's castle lies to the south."
-#~ msgstr "El castillo de los bárbaros se encuentra al sur."
-
-#~ msgid ""
-#~ "Barbarians from the north threaten all civilization. Can you repel the "
-#~ "hordes?"
-#~ msgstr ""
-#~ "Bárbaros del norte amenazan toda civilización. ¿Puedes repeler sus hordas?"
-
-#~ msgid "Barrowton"
-#~ msgstr "Barrowton"
-
-#~ msgid "Basenji"
-#~ msgstr "Basenji"
-
-#~ msgid "Bayside"
-#~ msgstr "Junto a la bahía"
-
-#~ msgid "Baywatch"
-#~ msgstr "Vigilantes de la playa"
-
-#~ msgid ""
-#~ "Because the Darkscale Valley is so barren, the Emperor will be sending "
-#~ "wood to you every week. Use it wisely, for it is all you shall have."
-#~ msgstr ""
-#~ "Al ser el Valle Escamaoscura tan desolado el Emperador te enviará madera "
-#~ "cada semana. Úsala con sabiduría, pues es toda la que tendrás."
-
-#~ msgid ""
-#~ "Before questing for the orb of negation, you must first crush the local "
-#~ "opposition. After the Sorceresses are removed from the earth, go east "
-#~ "where legend says the orb lies.  You may expect a convoy of supplies in a "
-#~ "week or so to aid your conquest."
-#~ msgstr ""
-#~ "Antes de partir en busca de el Orbe de Negación, primero debes aplastar "
-#~ "la oposición local. Una vez que las Hechiceras hayan sido eliminadas de "
-#~ "la faz de la Tierra, dirígete al este, donde dice la leyenda que se "
-#~ "encuentra el orbe. Puedes esperar que un convoy con suministros llegue en "
-#~ "cosa de una semana para ayudarte con tu conquista."
-
-#~ msgid ""
-#~ "Before you may pass, the spirit guardian of this valley demands tribute."
-#~ msgstr ""
-#~ "Antes de dejarte pasar, el espíritu guardián de este valle demanda "
-#~ "tributo."
-
-#~ msgid "Being held...."
-#~ msgstr "Ser retenido..."
-
-#~ msgid "Beltway"
-#~ msgstr "Beltway"
-
-#~ msgid "Beware -- Entering Hyrda Country"
-#~ msgstr "Precaución -- Está entrando en el País de Hyrda"
-
-#~ msgid "Beware for whom the bell trolls."
-#~ msgstr "Cuidado con por quién trolean las campanas."
-
-#~ msgid "Beware of Pirates!"
-#~ msgstr "¡Cuidado con los Piratas!"
-
-#~ msgid "Beware of thieves!"
-#~ msgstr "¡Cuidado con los ladrones!"
-
-#~ msgid "Beware of traps ahead."
-#~ msgstr "Cuidado con las trampas."
-
-#~ msgid "Beware of Warlocks"
-#~ msgstr "¡Cuidado con los hechiceros!"
-
-#~ msgid "Beware the deadly swamps!"
-#~ msgstr "¡Cuidado con los pantanos mortíferos!"
-
-#~ msgid "Beware the Domain of Dragons"
-#~ msgstr "Cuidado con el Dominio de los Dragones"
-
-#~ msgid "Beware the Dragon Leader"
-#~ msgstr "Cuidado cno el Líder Dragon"
-
-#~ msgid "Beware the edge of the world!"
-#~ msgstr "¡Cuidado con el borde del mundo!"
-
-#~ msgid "Beware the moors and stick to the roads."
-#~ msgstr "Cuidado con los páramos y manténte en las carreteras."
-
-#~ msgid "Beware the rocks"
-#~ msgstr "Cuidado con las rocas"
-
-#~ msgid "Beware the sirens!!!"
-#~ msgstr "¡¡Cuidado con las sirenas!!"
-
-#~ msgid "Beware the sirens!"
-#~ msgstr "¡Cuidado con las sirenas!"
-
-#~ msgid "Beware, the whirlpool may not take you into a friendly embrace."
-#~ msgstr "Cuidado, el torbellino puede que no te dé un abrazo amigable."
-
-#~ msgid "Beyond here be Dragons!"
-#~ msgstr "¡Más allá de aqui estan los dragones!"
-
-#~ msgid "Beyond the door, there be Dragons. BEWARE!"
-#~ msgstr "Más allá de la puerta hay Dragones. ¡CUIDADO!"
-
-#~ msgid "Big Oak"
-#~ msgstr "Roble Grande"
-
-#~ msgid "Blackburn"
-#~ msgstr "Blackburn"
-
-#~ msgid "Blackfang"
-#~ msgstr "Colmillonegro"
-
-#~ msgid "Black Fang"
-#~ msgstr "Comillo Negro"
-
-#~ msgid "Black Oak"
-#~ msgstr "Roble Negro"
-
-#~ msgid "Blackridge"
-#~ msgstr "Crestanegra"
-
-#~ msgid "Blacksford"
-#~ msgstr "Vadonegro"
-
-#~ msgid "Black Vein"
-#~ msgstr "Vena Negra"
-
-#~ msgid "Blackwind"
-#~ msgstr "Vientonegro"
-
-#~ msgid "Bloodreign"
-#~ msgstr "Reinosangriento"
-
-#~ msgid "Boats my be needed to access some parts of this peninsula."
-#~ msgstr ""
-#~ "Se necesitarán botes para acceder a algunas partes de esta península."
-
-#~ msgid "Boats Sold Here            Inquire Within"
-#~ msgstr "Se venden botes. Razón aquí."
-
-#~ msgid "BoneVille"
-#~ msgstr "VillaHuesos"
-
-#~ msgid "Bridge out!"
-#~ msgstr "¡Puente ausente!"
-
-#~ msgid "Bridge Out!"
-#~ msgstr "¡Puente fuera!"
-
-#~ msgid "Brindamoor"
-#~ msgstr "Brindamoor"
-
-#~ msgid "Brownston"
-#~ msgstr "Brownston"
-
-#~ msgid "Buried Treasure!"
-#~ msgstr "¡Tesoro enterrado!"
-
-#~ msgid "Burlock"
-#~ msgstr "Burlock"
-
-#~ msgid "Burton"
-#~ msgstr "Burton"
-
-#~ msgid ""
-#~ "Capture the necromancer's dreaded castle \"Death Gate\" and free the land "
-#~ "from the undead plague."
-#~ msgstr ""
-#~ "Captura el temido castillo del necromante \"Puerta de la Muerte\" y "
-#~ "libera la tierra de la plaga de no-muertos."
-
-#~ msgid "Cathcart"
-#~ msgstr "Cathcart"
-
-#~ msgid "Chandler"
-#~ msgstr "Chandler"
-
-#~ msgid "Chilton"
-#~ msgstr "Chilton"
-
-#~ msgid "Chronos"
-#~ msgstr "Chronos"
-
-#~ msgid "Come and...."
-#~ msgstr "Ven y..."
-
-#~ msgid ""
-#~ "Compared to the rest of the villages in this land, this village seems "
-#~ "grand, but in any other land it would seem poor. From here you can see "
-#~ "the tall spires of the Warlock's tower of Dragons."
-#~ msgstr ""
-#~ "Comparada con el resto de los pueblos de esta tierra, este pueblo parece "
-#~ "grande, pero en cualquier otra parte se le consideraría pobre. Desde aquí "
-#~ "puedes ver las altas espiras de la torre de Dragones del Hechicero."
-
-#~ msgid "Complete"
-#~ msgstr "Completo"
-
-#~ msgid "Condemned!"
-#~ msgstr "¡Condenado!"
-
-#~ msgid ""
-#~ "Congratulations! After navigating the treacherous coast, you have "
-#~ "established trade between the north and south."
-#~ msgstr ""
-#~ "¡Enhorabuena! Después de navegar por la traicionera costa, has "
-#~ "establecido rutas de comercio entre el norte y el sur."
-
-#~ msgid "Corackston"
-#~ msgstr "Corackston"
-
-#~ msgid "Crossroads"
-#~ msgstr "Encrucijada"
-
-#~ msgid "Crossroads North"
-#~ msgstr "Encrucijada Norte"
-
-#~ msgid "Crossroads South"
-#~ msgstr "Encrucijada Sur"
-
-#~ msgid "Danger a whirlpool destroyed my ship."
-#~ msgstr "Peligro, un remolino destruyó mi barco."
-
-#~ msgid "Danger, Dragons abound!"
-#~ msgstr "¡Peligro, abundancia de Dragones!"
-
-#~ msgid "DANGER!  QUICKSAND!"
-#~ msgstr "¡PELIGRO! ¡ARENAS MOVEDIZAS!"
-
-#~ msgid "Danger! Troll bridge ahead!"
-#~ msgstr "¡Peligro! ¡Puente de troll delante!"
-
-#~ msgid "Danger - Turn Back Now"
-#~ msgstr "Peligro - Vuelve Atrás Ahora"
-
-#~ msgid "Dark clouds loom overhead as you enter this valley."
-#~ msgstr "Oscuras nubes se ciernen sobre tu cabeza al entrar en este valle."
-
-#~ msgid "Dead Pine"
-#~ msgstr "Pino Muerto"
-
-#~ msgid ""
-#~ "Dear Diary,                           I found a mermaid today.  She was "
-#~ "floating in a patch of seaweed next to a rock.  A very friendly sort of "
-#~ "creature too!  Gave me all sorts of lovely gems and jewelry!  She said to "
-#~ "come back again sometime for more of the sea riches.  Wow. Ahab"
-#~ msgstr ""
-#~ "Querido Diario: hoy he encontrado una sirena. Estaba flotando en un "
-#~ "bancal de algas, junto a una roca. ¡Es una criatura muy amistosa! ¡Me "
-#~ "entregó todo tipo de gemas y joyería! Ella dijo que volviera más tarde a "
-#~ "por más riquezas del mar. Vaya. Ahab"
-
-#~ msgid "Deathgate"
-#~ msgstr "Puerta de la muerte"
-
-#~ msgid "DeathGate"
-#~ msgstr "Puerta de la Muerte"
-
-#~ msgid "Decisions"
-#~ msgstr "Decisiones"
-
-#~ msgid "\"Defender\""
-#~ msgstr "\"Defensor\""
-
-#~ msgid ""
-#~ "Detour! Mountain pass to the East has been known to have avalanches! For "
-#~ "your own safety, follow the road South."
-#~ msgstr ""
-#~ "¡Desvío! El paso de montaña al Este es conocido por sus avalanchas. Por "
-#~ "tu propia seguridad, sigue la carretera al Sur."
-
-#~ msgid "Detour! Troll bridge ahead!"
-#~ msgstr "¡Desvio! ¡Puente de troll delante!"
-
-#~ msgid "DirtWater"
-#~ msgstr "Aguasucia"
-
-#~ msgid "Dominion"
-#~ msgstr "Dominio"
-
-#~ msgid "Do Not Enter!"
-#~ msgstr "¡No Entrar!"
-
-#~ msgid "Do not remove coins from fountain."
-#~ msgstr "No se lleven las monedas de la fuente."
-
-#~ msgid "Dragadune"
-#~ msgstr "Dragadune"
-
-#~ msgid "Dragonburg"
-#~ msgstr "Dragomburgo"
-
-#~ msgid "Dragon City lies beyond the Scorpion Hills."
-#~ msgstr "Ciudad Dragón se encuentra más allá de las Colinas Escorpión."
-
-#~ msgid "Dragon Hill"
-#~ msgstr "Colina del Dragón"
-
-#~ msgid "Dragon Rider"
-#~ msgstr "Jinete de Dragones"
-
-#~ msgid "Dragons Everywhere!"
-#~ msgstr "¡Dragones por todos lados!"
-
-#~ msgid "Dragon's Eye"
-#~ msgstr "Ojo de Dragón"
-
-#~ msgid "Dragontooth"
-#~ msgstr "Diente de Dragón"
-
-#~ msgid "Dragon Town"
-#~ msgstr "Ciudad Dragón"
-
-#~ msgid "Dragonville"
-#~ msgstr "Pueblo Dragón"
-
-#~ msgid "Dragon Wars"
-#~ msgstr "Guerras Dragón"
-
-#~ msgid "Dragon Watch"
-#~ msgstr "Guardian Dragón"
-
-#~ msgid "Drakoran"
-#~ msgstr "Drakoran"
-
-#~ msgid "Dwarfhall"
-#~ msgstr "Dwarfhall"
-
-#~ msgid "Dwarfhall, Domain of the dwarf King."
-#~ msgstr "Dwarfhall, Dominio del Rey Enano."
-
-#~ msgid "Dwarf Hall, domain of the dwarf King."
-#~ msgstr "Camara Enana, dominio del Rey enano."
-
-#~ msgid "Eatio"
-#~ msgstr "Eatio"
-
-#~ msgid "Edgewood"
-#~ msgstr "Edgewood"
-
-#~ msgid "Elk's Head"
-#~ msgstr "Cabeza de Alce"
-
-#~ msgid "Elowyn"
-#~ msgstr "Elowyn"
-
-#~ msgid "Enroth"
-#~ msgstr "Enroth"
-
-#~ msgid "Entering Praires of the Middlelands"
-#~ msgstr "Entrando en las Praderas de las Tierras Medias"
-
-#~ msgid "Entering the Valley of Magic"
-#~ msgstr "Entrando en el Valle de la Magia"
-
-#~ msgid "Erliquin"
-#~ msgstr "Erliquin"
-
-#~ msgid "Evil Igor"
-#~ msgstr "Malvado Igor"
-
-#~ msgid "Fadlan"
-#~ msgstr "Fadlan"
-
-#~ msgid "Fantasy Island."
-#~ msgstr "Isla de Fantasía."
-
-#~ msgid "Farlien"
-#~ msgstr "Farlien"
-
-#~ msgid ""
-#~ "Federal express, when it absolutely positively has to be there turn one."
-#~ msgstr ""
-#~ "Federal Express, cuando absolutamente y positivamente tiene que estar "
-#~ "allí en el turno uno."
-
-#~ msgid "Fenton"
-#~ msgstr "Fenton"
-
-#~ msgid "Fetid Elm"
-#~ msgstr "Olmo Fétido"
-
-#~ msgid ""
-#~ "Final message from Overlord. \"The royal executioners are on their way. "
-#~ "My gold, the land or your head- it's your choice.\""
-#~ msgstr ""
-#~ "Mensaje final del Jefe Supremo: \"Los ejecutores reales están en camino. "
-#~ "Mi oro, la tierra o vuestra cabeza - vos elegís.\""
-
-#~ msgid "Find and defeat the Pirate Leader!"
-#~ msgstr "¡Busca y derrota al Líder Pirata!"
-
-#~ msgid "Find and destroy the evil beings who rule the wastelands."
-#~ msgstr ""
-#~ "Busca y destruye a las malvadas criaturas que gobiernan los páramos."
-
-#~ msgid "Find the center island."
-#~ msgstr "Encuentra la isla central."
-
-#~ msgid ""
-#~ "Find the Ultimate Artifact and be proclaimed King, or smash the "
-#~ "opposition and take control."
-#~ msgstr ""
-#~ "Encuentra el Artefacto Definitivo y sé proclamado Rey, o aplasta la "
-#~ "oposción y toma el control."
-
-#~ msgid "Fire King"
-#~ msgstr "Rey de Fuego"
-
-#~ msgid "Five heroes vie for control of a familiar land."
-#~ msgstr "Cinco héroes rivalizan por controlar una tierra familiar."
-
-#~ msgid "Fool's Gold"
-#~ msgstr "El Oro de los Necios"
-
-#~ msgid ""
-#~ "For a total of 400,000 gold your opponents will become \"loyal\" "
-#~ "subjects, otherwise... let them eat cake!"
-#~ msgstr ""
-#~ "Por un total de 400.000 de oro, tus oponentes se volverán sujetos \"leales"
-#~ "\", si no... ¡Qué coman pasteles!"
-
-#~ msgid ""
-#~ "For centuries, the Wizards of the North have maintained a vast library "
-#~ "for all the world to share.  Now, however, they have closed their doors, "
-#~ "and issued declarations of war to each of the other rulers of the land.  "
-#~ "To make matters worse, rather than ally with you to face the Wizards, "
-#~ "each of the others have decided to go forth on their own in an effort to "
-#~ "conquer this land for themselves!  Prepare your forces, commander, for "
-#~ "you now stand alone."
-#~ msgstr ""
-#~ "Durante siglos, los Magos del Norte han mantenido una enorme biblioteca "
-#~ "para compartirla con el mundo. Ahora, sin embargo, han cerrado sus "
-#~ "puertas, y han enviado declaraciones de guerra a cada uno de los otros "
-#~ "señores de la tierra. Para empeorar las cosas, en lugar de aliarse "
-#~ "contigo para enfrentar a los Magos, cada uno de los otros ha decidido ir "
-#~ "por su cuenta, ¡en un intento de conquistar esta tierra para sí mismos! "
-#~ "Prepara tus fuerzas, comandante, pues ahora estás solo."
-
-#~ msgid ""
-#~ "For decades you have studied, learned, and allowed yourself to be ruled "
-#~ "by that pitiful excuse for a king, knowing that one day the time would "
-#~ "come for you to sit on the throne.  That time is now, for the king is "
-#~ "dead and without an heir.  You have the advantage of isolation from the "
-#~ "rest of the kingdom, but beware the miles of coastline that could leave "
-#~ "you vulnerable to attack.  Go, now, and wipe your enemies from this land!"
-#~ msgstr ""
-#~ "Durante décadas has estudiado, aprendido, y permitido a esa patética "
-#~ "excusa de Rey gobernarte, sabedor de que un tiempo llegaría en el que "
-#~ "serías tú quien se sentaría en el trono. Ese tiempo ha llegado, pues el "
-#~ "rey ha muerto sin heredero. Tienes la ventaja del aislamiento del resto "
-#~ "del reino, pero cuidado con las millas de costa que podrían dejarte "
-#~ "vulnerable al ataque. ¡Ve ahora, y barre de esta tierra a tus enemigos!"
-
-#~ msgid "Forder Oaks"
-#~ msgstr "Forder Oaks"
-
-#~ msgid "Forestria"
-#~ msgstr "Forestria"
-
-#~ msgid "For Honor"
-#~ msgstr "Por Honor"
-
-#~ msgid ""
-#~ "For information about Ye Rich lands to the south, speak to Alponse at the "
-#~ "Golden Goose Tavern. Excellent views, plentiful water."
-#~ msgstr ""
-#~ "Para obtener información acerca de las Ricas tierras al sur, habla con "
-#~ "Alponse en la Taberna del Ganso Dorado. Excelentes vistas, abundante agua."
-
-#~ msgid "Forsaken Lands"
-#~ msgstr "Tierras Olvidadas"
-
-#~ msgid "For sale."
-#~ msgstr "Se vende."
-
-#~ msgid "Fortress Isle"
-#~ msgstr "Isla Fortaleza"
-
-#~ msgid ""
-#~ "For years, you have existed peacefully in the Forest of Dreams, knowing "
-#~ "that your king was the kindest and strongest ruler the land had seen in "
-#~ "centuries.  Now, however, his reign is at an end, and there is no heir to "
-#~ "succeed him.  You realize that a power struggle is coming, and that you "
-#~ "must brace yourself for war, and prevent those who would harm this land "
-#~ "from coming into power!"
-#~ msgstr ""
-#~ "Durante años, has vivido en paz en el Bosque de los Sueños, sabiendo que "
-#~ "tu rey era el más amable y poderoso gobernante que la tierra hubiera "
-#~ "visto en siglos. Ahora, sin embargo, su reinado finaliza, y no hay "
-#~ "heredero que le suceda. Eres consciente de que se acerca una lucha por el "
-#~ "poder, y que debes aprestarte al combate, para prevenir que los que "
-#~ "dañarían esta tierra lleguen al poder."
-
-#~ msgid ""
-#~ "For years, you've been able to keep your subjects \"appeased.\"  Now "
-#~ "however, you discover not only that your entire kingdom has turned "
-#~ "against you, but most of your outer towns have fallen to the different "
-#~ "factions.  To make matters worse, all your gold suddenly seems to be "
-#~ "missing from the treasury!"
-#~ msgstr ""
-#~ "Durante años has sido capaz de mantener a tus súbditos \"complacidos\". "
-#~ "Sin embargo, ahora descubres no sólo que todo tu reino se ha vuelto "
-#~ "contra ti, sino que tus ciudades más lejanas han caído a manos de "
-#~ "distintas facciones. Para empeorar las cosas, ¡parece que ha desaparecido "
-#~ "todo tu oro del tesoro!"
-
-#~ msgid "Fountainhead"
-#~ msgstr "Cabezafuente"
-
-#~ msgid "Four kingdoms race to capture the island of Sharkania."
-#~ msgstr "Cuatro reinos compiten para capturar la isla de Sharkania."
-
-#~ msgid "Four lakes have castles, three have treasure."
-#~ msgstr "Cuatro lagos tienen castillos, tres tienen tesoros."
-
-#~ msgid "Four players must work together to assault the Wizards' Stronghold."
-#~ msgstr ""
-#~ "Para asaltar la Fortaleza de los Magos han de trabajar juntos cuatro "
-#~ "jugadores."
-
-#~ msgid "Frozenpeak"
-#~ msgstr "Picohelado"
-
-#~ msgid "Galveston"
-#~ msgstr "Galveston"
-
-#~ msgid "Garamok"
-#~ msgstr "Garamok"
-
-#~ msgid "Gate"
-#~ msgstr "Puerta"
-
-#~ msgid "Gate to the Isle of Knowledge"
-#~ msgstr "Puerta a la Isla del Conocimiento"
-
-#~ msgid "Gate to The Isle of Knowledge"
-#~ msgstr "Puerta a La Isla del Conocimiento"
-
-#~ msgid "Gaurdian"
-#~ msgstr "Guardián"
-
-#~ msgid "Gavonshire"
-#~ msgstr "Gavonshire"
-
-#~ msgid "Glastonbury"
-#~ msgstr "Glastonbury"
-
-#~ msgid "Go away!"
-#~ msgstr "¡Largo!"
-
-#~ msgid "GO AWAY!"
-#~ msgstr "¡LARGO!"
-
-#~ msgid "Goblin Island"
-#~ msgstr "Isla Goblin"
-
-#~ msgid "Goblin King"
-#~ msgstr "Rey Goblin"
-
-#~ msgid "Go Home!"
-#~ msgstr "¡Vete a casa!"
-
-#~ msgid "Go north to find the lost gold-mine."
-#~ msgstr "Dirígete al norte para encontrar la mina de oro perdida."
-
-#~ msgid "Good vs. Evil"
-#~ msgstr "Bien vs. Mal"
-
-#~ msgid "Gorgomar"
-#~ msgstr "Gorgomar"
-
-#~ msgid "Greed"
-#~ msgstr "Codicia"
-
-#~ msgid "Green bonus stuff"
-#~ msgstr "Bonificación del verde"
-
-#~ msgid "Green gets stuff"
-#~ msgstr "El verde obtiene cosas"
-
-#~ msgid "Greenroot"
-#~ msgstr "Raízverde"
-
-#~ msgid "Green's Allowance"
-#~ msgstr "Complemento del Verde"
-
-#~ msgid "Green's Groceries"
-#~ msgstr "Provisiones del Verde"
-
-#~ msgid "green stuff"
-#~ msgstr "cosa verde"
-
-#~ msgid "Green stuff"
-#~ msgstr "Cosa verde"
-
-#~ msgid "Greywind"
-#~ msgstr "Vientogris"
-
-#~ msgid "Grim"
-#~ msgstr "Siniestro"
-
-#~ msgid "Grrr, Blazzer, Grrupt. Be gone with you!"
-#~ msgstr "Grrr, Blazzer, Grrupt. ¡Se ha ido contigo!"
-
-#~ msgid "Guardian War"
-#~ msgstr "Guerra de Guardianes"
-
-#~ msgid "Gungtooth"
-#~ msgstr "Gungtooth"
-
-#~ msgid "Hail Unicorns!"
-#~ msgstr "¡Hurra por los Unicornios!"
-
-#~ msgid "Hampshire"
-#~ msgstr "Hampshire"
-
-#~ msgid "Have fun storming the castle!"
-#~ msgstr "¡Diviértete asaltando el castillo!"
-
-#~ msgid "Havenwood"
-#~ msgstr "Havenwood"
-
-#~ msgid "Hawkins"
-#~ msgstr "Hawkins"
-
-#~ msgid "Help!"
-#~ msgstr "¡Ayuda!"
-
-#~ msgid "Help me...."
-#~ msgstr "Ayúdame..."
-
-#~ msgid ""
-#~ "Help peasant farmers regain their castle and land, else they'll take your "
-#~ "crops."
-#~ msgstr ""
-#~ "Ayuda a los campesinos a recuperar su castillo y sus tierras, o de otro "
-#~ "modo tomarán tus cosechas."
-
-#~ msgid "Hero's Hall"
-#~ msgstr "Salón de los Héroes"
-
-#~ msgid ""
-#~ "High in the snowy crags, you meet an old witch who, in return for a "
-#~ "trinket of yours, gives you a powerful magical object she used to use as "
-#~ "a footstool before she was exiled into the mountains by her own "
-#~ "townspeople."
-#~ msgstr ""
-#~ "En lo alto de los riscos nevados te encuentras con una vieja bruja, que a "
-#~ "cambio de un pendiente, te da un poderoso objeto mágico que solía usar "
-#~ "como escabel antes de ser exiliada a las montañas por sus propios vecinos."
-
-#~ msgid "Hillstone"
-#~ msgstr "Colinapedregosa"
-
-#~ msgid "Hilltop"
-#~ msgstr "Cumbre"
-
-#~ msgid "Hilltown"
-#~ msgstr "Hilltown"
-
-#~ msgid "Horizon"
-#~ msgstr "Horizonte"
-
-#~ msgid "Hot Spot"
-#~ msgstr "Punto Caliente"
-
-#~ msgid "Hungry dragons await.  Welcome, food."
-#~ msgstr "Dragones hambrientos esperan. Bienvenida, comida."
-
-#~ msgid "Hurry, no time to wait.  This way to the dock."
-#~ msgstr "Apresúrate, no hay tiempo para esperar. Al muelle."
-
-#~ msgid "Hurry up! Few days are left before the enemy's army arrives."
-#~ msgstr "¡Date prisa! Quedan pocos días para que el ejercito enemigo llegue."
-
-#~ msgid "I am...."
-#~ msgstr "Yo soy..."
-
-#~ msgid ""
-#~ "I am one of the few remaining survivors of the wrecked pleasure ship, "
-#~ "Exhorbitance. I think we'll all be dead of hunger soon, for we are out of "
-#~ "caviar. We ate the chef yesterday."
-#~ msgstr ""
-#~ "Soy uno de los pocos supervivientes del naufragio del crucero de placer "
-#~ "Exhorbitance. Creo que pronto moriremos de hambre, pues se nos ha acabado "
-#~ "el caviar. Ayer nos comimos al chef."
-
-#~ msgid "Ibn Fadlan"
-#~ msgstr "Ibn Fadlan"
-
-#~ msgid "Ice Palace"
-#~ msgstr "Palacio de Hielo"
-
-#~ msgid "Ice Prince"
-#~ msgstr "Príncipe de Hielo"
-
-#~ msgid "Icy lands ahead."
-#~ msgstr "Tierras heladas más adelante."
-
-#~ msgid "I didn't do it!"
-#~ msgstr "¡Yo no he sido!"
-
-#~ msgid ""
-#~ "If three heroes could dig six holes in three days, how long would it take "
-#~ "six heroes to dig twelve holes?"
-#~ msgstr ""
-#~ "Si tres héroes pueden cavar seis hoyos en tres días, ¿cuánto le llevará a "
-#~ "seis héroes cavar doce hoyos?"
-
-#~ msgid "If you free a hero, they may help..."
-#~ msgstr "Si liberaras a un héroe, ellos tal vez ayudarían..."
-
-#~ msgid ""
-#~ "If you value your lives, for God's sake, Don't go through this whirlpool!"
-#~ msgstr ""
-#~ "Si teneis aprecio a la vida, por el amor de Dios, ¡no atraveseis este "
-#~ "remolino!"
-
-#~ msgid "Income for Yellow."
-#~ msgstr "Ingresos para el Amarillo"
-
-#~ msgid "In the hole you find a chunk of ore!"
-#~ msgstr "¡Encuentras una mena de mineral en el agujero!"
-
-#~ msgid "In the stream you find an old compass!"
-#~ msgstr "¡Encuentras una brújula en la corriente!"
-
-#~ msgid "In this glen live some very naughty halflings. Stay Away!"
-#~ msgstr "En esta cañada vivlen algunos traviesos Medianos. ¡Aléjate!"
-
-#~ msgid ""
-#~ "In two more weeks, if you have not located Joseph, your kingdom will "
-#~ "surely lose its current battle with Harondale."
-#~ msgstr ""
-#~ "Si en dos semanas no has localizado a Joseph, tu reino perderá con "
-#~ "seguridad su batalla en curso con Harondale."
-
-#~ msgid "I see you, you see me."
-#~ msgstr "Te veo, me ves."
-
-#~ msgid "Is it something I said? Go back and I will forget the whole thing."
-#~ msgstr "¿Es algo que dije? Vuelve atrás y olvidaré todo el asunto."
-
-#~ msgid "IslandHome"
-#~ msgstr "IslaHogar"
-
-#~ msgid "Island of the meek"
-#~ msgstr "Isla de los mansos"
-
-#~ msgid "Island of Wolcott"
-#~ msgstr "Isla de Wolcott"
-
-#~ msgid "Isle Maze"
-#~ msgstr "Isla Laberinto"
-
-#~ msgid "Isle of Knowledge"
-#~ msgstr "Isla de Conocimiento"
-
-#~ msgid ""
-#~ "It has become apparent that if all your enemies were eliminated, you "
-#~ "would have all the time you need to find the Ultimate Artifact."
-#~ msgstr ""
-#~ "Es bastante claro que si todos tus enemigos fueran eliminados, tendrías "
-#~ "todo el tiempo que necesitas para encontrar el Artefacto Definitivo."
-
-#~ msgid ""
-#~ "It is obvious that the mage that once was here had won many battles!  "
-#~ "There, upon his hand, is a most powerful ring!"
-#~ msgstr ""
-#~ "¡Es obvio que el mago que estuvo una vez aquí ganó muchas batallas! Ahí, "
-#~ "en su mano, ¡hay un poderoso anillo!"
-
-#~ msgid ""
-#~ "It is rumored that a bridge of land used to exist between the two "
-#~ "continents, but that a wild magic caused it to sink into the sea, taking "
-#~ "with it all those who used to inhabit it.  To try to raise this bridge is "
-#~ "to invite a curse upon the world!  The spirits of the dead will haunt us "
-#~ "all!"
-#~ msgstr ""
-#~ "Se rumorea que solía haber un puente de tierra entre los dos continentes, "
-#~ "pero que una magia salvaje lo hizo hundirse en el mar, llevándose consigo "
-#~ "a todos los que vivían allí. ¡Intentar levantar este puente es atraer una "
-#~ "maldición sobre el mundo! ¡Los espíritus de los muertos nos atormentarán "
-#~ "a todos!"
-
-#~ msgid ""
-#~ "It is said that King Zealot found the gods' artifact once and it let him "
-#~ "rule for 100 years."
-#~ msgstr ""
-#~ "Se dice que el Rey Fanático encontró el artefacto de los dioses, y éste "
-#~ "le permitió gobernar por 100 años."
-
-#~ msgid ""
-#~ "It looks like there used to be an ore mine here but all you see now is a "
-#~ "hole in the ground and some minerals scattered around."
-#~ msgstr ""
-#~ "Parece que aquí había una mina de mineral, pero todo lo que ves ahora es "
-#~ "un agujero en la tierra y algunos minerales desperdigados."
-
-#~ msgid ""
-#~ "It's a battle for supremacy as the Blue and Green heroes take on Red and "
-#~ "Orange in team competition!"
-#~ msgstr ""
-#~ "¡Es una batalla por la supremacía donde los heroes Azul y Verde se "
-#~ "enfrentan a los heroes Rojo y Naranja en una competición por equipos!"
-
-#~ msgid "It's windy at the top.  Defend, Divide, and Conquer."
-#~ msgstr "Hace viento en la cima. Defiende, Divide, y Conquista."
-
-#~ msgid "IvanHome"
-#~ msgstr "CasaIván"
-
-#~ msgid "Ivan lives in the desert."
-#~ msgstr "Ivan vive en el desierto."
-
-#~ msgid ""
-#~ "I, Wilgatus, besiege you - do not fight me for I am all powerful and will "
-#~ "destroy you if you persue me.  I will demonstrate my power."
-#~ msgstr ""
-#~ "Yo, Wilgatus, te acecho - no luches contra mí, pues soy poderoso y te "
-#~ "destruiré si me persigues. Te demostraré mi poder."
-
-#~ msgid "I Would Go That Way If I Were You."
-#~ msgstr "Yo en tu lugar iría por ese camino."
-
-#~ msgid "Jarkonas VI"
-#~ msgstr "Jarkonas VI"
-
-#~ msgid "Jolly Roger was here"
-#~ msgstr "Jolly Roger estuvo aquí"
-
-#~ msgid "Jungomar"
-#~ msgstr "Jungomar"
-
-#~ msgid "Just 30 days left!"
-#~ msgstr "¡Sólo te quedan 30 días!"
-
-#~ msgid "Just ONE week left!"
-#~ msgstr "¡Sólo te queda 1 semana!"
-
-#~ msgid "Kastor"
-#~ msgstr "Kastor"
-
-#~ msgid "Keep going south"
-#~ msgstr "Sigue hacia el sur"
-
-#~ msgid "Keep Off The Grass!"
-#~ msgstr "¡Prohibido pisar la hierba!"
-
-#~ msgid "Keep Out!"
-#~ msgstr "¡Largo!"
-
-#~ msgid "King John"
-#~ msgstr "Rey John"
-
-#~ msgid "King of Death"
-#~ msgstr "Rey de la Muerte"
-
-#~ msgid "Knight's Trail."
-#~ msgstr "La Pista del Caballero."
-
-#~ msgid "Knight stuff"
-#~ msgstr "Cosas del caballero"
-
-#~ msgid "Lakeside"
-#~ msgstr "Lakeside"
-
-#~ msgid "Land's Edge"
-#~ msgstr "El Borde de la Tierra"
-
-#~ msgid "Land teleporters will get you to your destination sooner."
-#~ msgstr "Los teleportadores terrestres te llevarán más pronto a tu destino."
-
-#~ msgid "Lankershire"
-#~ msgstr "Lankershire"
-
-#~ msgid "Lavalor"
-#~ msgstr "Lavalor"
-
-#~ msgid "Like, Stuff And Junk?"
-#~ msgstr "¿Quiere, Cosas y Trastos?"
-
-#~ msgid ""
-#~ "Living on the outskirts of the kingdom, you are considered an unwelcome "
-#~ "outcast by the other leaders of the realm, though you always showed your "
-#~ "support for the king.  Now, however, the king is dead, and many of those "
-#~ "who spoke out againt him seek to seize his throne for themselves.  You "
-#~ "have a vast desert at your back, rich with gems, and the advantage that "
-#~ "many do not consider you a threat.  Go, now, and show them how wrong they "
-#~ "are!"
-#~ msgstr ""
-#~ "Al vivir en las afueras del reino, eres considerado como un paria por los "
-#~ "otros líderes del reino, aunque siempre has mostrado tu apoyo al rey. Sin "
-#~ "embargo, ahora el rey está muerto, y muchos de los que hablaban en su "
-#~ "contra buscan ocupar el trono. Tienes un vasto desierto a tu espalda, "
-#~ "rico en gemas, y la ventaja de que muchos no te consideran una amenaza. "
-#~ "Ve ahora, y ¡muéstrales cuánto se equivocan!"
-
-#~ msgid ""
-#~ "Log go up... Log go down... Log go up... Log go down...  "
-#~ "OOoohhhhhhhh........"
-#~ msgstr ""
-#~ "Tronco sube... Tronco baja... Tronco sube... Tronco baja... "
-#~ "OOoohhhhhhhh........."
-
-#~ msgid "Lombard"
-#~ msgstr "Lombardo"
-
-#~ msgid "Long live Roland the true King!"
-#~ msgstr "¡Larga vida a Roland, el auténtico Rey!"
-
-#~ msgid "Long live Roland the true King."
-#~ msgstr "Larga vida a Roland, el auténtico Rey."
-
-#~ msgid "Look before you leap."
-#~ msgstr "Mira antes de saltar."
-
-#~ msgid "Look out!"
-#~ msgstr "¡Cuidado!"
-
-#~ msgid "Lord Alberon"
-#~ msgstr "Lord Alberon"
-
-#~ msgid ""
-#~ "Lord Alberon calls you into his war room. He says, \"I am glad you have "
-#~ "chosen to remain loyal to me, but this war is a terrible one for my "
-#~ "kingdom. Already, the sorceress' towns to the Northeast have become "
-#~ "unsure about their loyalties, and will not pledge allegiance to either "
-#~ "side. This is hard on our cities as most of the wood in the land comes "
-#~ "from these towns. We will need to recover their sawmills and take their "
-#~ "towns by force.\""
-#~ msgstr ""
-#~ "Lord Alberon te convoca a su gabinete de guerra. Te dice, \"Estoy "
-#~ "orgulloso de que hayas elegido mantenerte leal a mí, pero esta guerra "
-#~ "está siendo terrible para mi reino. Las ciudades de la hechicera al "
-#~ "noreste dudan acerca de su lealtad, y no rendirán pleitesía a ningún "
-#~ "bando. Esto va a ser duro para nuestras ciudades, pues la mayoría de la "
-#~ "madera proviene de esas ciudades. Necesitamos recuperar sus aserraderos y "
-#~ "tomar sus ciudades por la fuerza.\""
-
-#~ msgid "Lord Haart"
-#~ msgstr "Lord Haart"
-
-#~ msgid "Lord Kreager"
-#~ msgstr "Lord Kreager"
-
-#~ msgid ""
-#~ "Lord, messages have begun pouring in from our spies in the other island "
-#~ "courts.  They have learned of a new volcanic island with vast amounts of "
-#~ "reasources.  Your Majesty, with these new reasources we could put an end "
-#~ "to a century of war between the islands, and reunite them under your "
-#~ "rightful rule."
-#~ msgstr ""
-#~ "Señor, nos están llegando mensajes de nuestros espías en las cortes de "
-#~ "las otras islas. Han tenido conocimiento de una nueva isla volcánica con "
-#~ "un cantidad enorme de recursos. Su Majestad, con esos nuevos recursos "
-#~ "podríamos poner fin a un siglo de guerra entre las islas, y reunirlas "
-#~ "bajo vuestro justo dominio."
-
-#~ msgid "Lost Continent"
-#~ msgstr "Continente Perdido"
-
-#~ msgid "Lost Gold- Mine"
-#~ msgstr "Mina de oro perdida"
-
-#~ msgid "Lost Island."
-#~ msgstr "Isla Perdida"
-
-#~ msgid "Lost Relic"
-#~ msgstr "Reliquia Perdida"
-
-#~ msgid "Maelstrom of Deceit"
-#~ msgstr "Vortice del Engaño"
-
-#~ msgid "Maelstrom of Misery"
-#~ msgstr "Vortice de la Miseria"
-
-#~ msgid "Magic"
-#~ msgstr "Magia"
-
-#~ msgid "Magic Three"
-#~ msgstr "Árbol Mágico"
-
-#~ msgid ""
-#~ "Many dust plumes rise from the floor of this small valley. You see "
-#~ "various bands of nomads roaming about, and in the distant, the bright "
-#~ "flames of their camp."
-#~ msgstr ""
-#~ "Se alzan muchos penachos de polvo desde el suelo de este pequeño valle. "
-#~ "Ves varios grupos de nómadas vagando, y en la distancia, las brillantes "
-#~ "hogueras de su campamento."
-
-#~ msgid ""
-#~ "Many guardians stand between you and your enemies, but anybody can sneak "
-#~ "through the back door!"
-#~ msgstr ""
-#~ "Hay muchos guardias entre ti y tus enemigos, ¡pero cualquiera podría "
-#~ "entrar a escondidas por la puerta trasera!"
-
-#~ msgid "Many that have gone through this door have never returned."
-#~ msgstr "Muchos de los que han franqueado esta puerte nunca regresaron."
-
-#~ msgid ""
-#~ "Many years ago, a couple of mages had a \"duel\" that forever changed the "
-#~ "lake at the center of this continent.  Hearty adventurers might find "
-#~ "interesting treasure there!"
-#~ msgstr ""
-#~ "Hace muchos años, unos cuantos magos mantuvieron un \"duelo\" que cambió "
-#~ "por siempre el lago del centro de este continente. Los aventureros más "
-#~ "osados podrían encontrar tesoros interesantes aquí."
-
-#~ msgid ""
-#~ "Many years ago, a falling star crashed near here.  Only now the area is "
-#~ "safe enough to explore.  Rumor has it a castle exist where the star fell."
-#~ msgstr ""
-#~ "Hace muchos años cayó una estrella cerca de aquí. Sólo ahora es seguro "
-#~ "explorar la zona. Se rumorea que existe un castillo donde cayó la "
-#~ "estrella."
-
-#~ msgid ""
-#~ "Many years ago, your father, the King, died in a freak hunting accident.  "
-#~ "Since then, you and your brother have jointly ruled his kingdom, but both "
-#~ "of you have been seeking a way to seize the throne for yourself.  You got "
-#~ "your wish.  Attackers from across the sea have captured more than half "
-#~ "your towns and castles, effectively dividing the continent in two.  Now "
-#~ "is the time to repel these invaders and do away with your brother once "
-#~ "and for all!"
-#~ msgstr ""
-#~ "Hace muchos años, tu padre, el Rey, murió en un extraño accidente de "
-#~ "caza. Desde entonces, tu hermano y tú habéis gobernado conjuntamente el "
-#~ "reino, pero los dos habéis estado buscando la manera de conseguir el "
-#~ "trono para sí. Conseguiste tu deseo. Atacantes de más allá del mar han "
-#~ "capturado más de la mitad de tus ciudades y castillos, dividiendo "
-#~ "efectivamente el continente en dos. ¡Ahora es el momento de repeler a los "
-#~ "invasores y acabar con tu hermano de una vez por todas!"
-
-#~ msgid "Marco"
-#~ msgstr "Marco"
-
-#~ msgid "Marsh Home"
-#~ msgstr "Hogar del Pantano"
-
-#~ msgid "Mayland"
-#~ msgstr "Mayland"
-
-#~ msgid "Meramec"
-#~ msgstr "Meramec"
-
-#~ msgid "Message from Archibald. \" Do not dare to return without my Crown.\""
-#~ msgstr "Mensaje de Archibald. \"No te atrevas a volver sin mi Corona.\""
-
-#~ msgid ""
-#~ "Message from Archibald. \" General, thank you for bringing me this lovely "
-#~ "gift. I have decided to participate directly in the capture of my brother "
-#~ "Roland. Since your military advice has taken us this far, I will follow "
-#~ "your orders to the letter.\""
-#~ msgstr ""
-#~ "Mensaje de Archibald. \" General, gracias por traerme este adorable "
-#~ "regalo. He decidido participar directamente en la captura de mi hermano "
-#~ "Roland. Dado que vuestro consejo militar nos ha llevado tan lejos, "
-#~ "seguiré vuestras órdenes al pie de la letra.\""
-
-#~ msgid "Message from Overlord. \"STILL WAITING FOR MY GOLD!\""
-#~ msgstr "Mensaje del Jefe Supremo. \"¡SIGO ESPERANDO MI ORO!\""
-
-#~ msgid "Message from Overlord. \"WHERE'S MY GOLD?\""
-#~ msgstr "Mensaje del Jefe Supremo. \"¿DÓNDE ESTÁ MI ORO?\""
-
-#~ msgid ""
-#~ "Message from Roland. \"General, circumstances permit me to take a hand in "
-#~ "the events of this final conflict. I have your spoils of war with me and "
-#~ "I will follow your advice explicitly.\""
-#~ msgstr ""
-#~ "Mensaje de Roland. \"General, las circunstancias me permiten echar una "
-#~ "mano en los eventos de este conflicto final. Tengo vuestro botín de "
-#~ "guerra conmigo, y seguiré vuestro consejo al pie de la letra.\""
-
-#~ msgid ""
-#~ "Message from Roland.  \"General, I have sent most of our troops and "
-#~ "material ahead to the region of the final conflict with Archibald.  "
-#~ "Unfortunately, Lord Corlagon has cut us off from the rest of our army.  I "
-#~ "will be awaiting your victory in a castle across the west river.  I "
-#~ "should be safe from attack.\""
-#~ msgstr ""
-#~ "Mensaje de Roland. \"General, he enviado a la mayor parte de nuestras "
-#~ "tropas y materiales adelante, a la región del conflicto final con "
-#~ "Archibald. Desafortunadamente, Lord Corlagon nos ha aislado del resto de "
-#~ "nuestro ejército. Estaré esperando vuestra victoria en un castillo al "
-#~ "oeste del río. Debería de estar a salvo de ataques.\""
-
-#~ msgid ""
-#~ "Message from Roland. \" We cannot hope to defeat Archibald without the "
-#~ "Crown, I'm counting on you.\""
-#~ msgstr ""
-#~ "Mensaje de Roland: \"No podemos esperar derrotar a Archibald sin la "
-#~ "Corona. Cuento con vos.\""
-
-#~ msgid "Middle Gate"
-#~ msgstr "Puerta Media"
-
-#~ msgid "Middleton"
-#~ msgstr "Middleton"
-
-#~ msgid "Middletown"
-#~ msgstr "Middletown"
-
-#~ msgid "Might vs. Magic"
-#~ msgstr "Poder vs. Magia"
-
-#~ msgid "Mineral Wars"
-#~ msgstr "Guerras de Minerales"
-
-#~ msgid "Mirkosov"
-#~ msgstr "Mirkosov"
-
-#~ msgid "mirror"
-#~ msgstr "espejo"
-
-#~ msgid "Money For Red"
-#~ msgstr "Dinero para el Rojo"
-
-#~ msgid "MONEY, MONEY, MONEY!"
-#~ msgstr "¡DINERO, DINERO, DINERO!"
-
-#~ msgid "Morale becomes even lower as the endless cliffs move past."
-#~ msgstr "La moral baja aún más a medida que los riscos sin fin pasan."
-
-#~ msgid ""
-#~ "More water than land, you'll still spend lots of time on foot as you "
-#~ "search a literal horde of islands."
-#~ msgstr ""
-#~ "Más agua que tierra, aún pasarás un montón de tiempo a pie buscando por, "
-#~ "literalmente, una horda de islas."
-
-#~ msgid "Mountain king"
-#~ msgstr "Rey de la montaña"
-
-#~ msgid "Mountainview"
-#~ msgstr "Vistamontaña"
-
-#~ msgid "Mr Ed"
-#~ msgstr "Sr. Ed"
-
-#~ msgid "Mr. Yellow's Income"
-#~ msgstr "Ingresos del Sr. Amarillo"
-
-#~ msgid "Murray's resort Isle!"
-#~ msgstr "La isla de vacaciones de Murray"
-
-#~ msgid ""
-#~ "Mutiny!  The crew has dumped off my precious cargo into the sea!  Thank "
-#~ "goodness it floats - when I've rid of them, I'll come back to pick it up!"
-#~ msgstr ""
-#~ "¡Motín! ¡La tripulación ha lanzado mi preciosa carga por la borda! "
-#~ "Gracias a Dios, flota - cuando me haya ocupado de ellos, ¡volveré a "
-#~ "recogerla!"
-
-#~ msgid ""
-#~ "My leige, our scouts report three other lords are attacking from the "
-#~ "south. They work in conjuction with each other to eliminate us! We must "
-#~ "keep this castle and remove the threat of the enemy. We wish you luck!"
-#~ msgstr ""
-#~ "Mi señor, nuestros exploradores nos informan de que otros tres señores "
-#~ "están atacando desde el sur. Trabajan en conjunción los unos con los "
-#~ "otros para eliminarnos. Debemos mantener este castillo, y eliminar la "
-#~ "amenaza del enemigo. ¡Os deseamos suerte!"
-
-#~ msgid ""
-#~ "My leige, we have established a foothold (which we cannot afford to lose) "
-#~ "and all of our Heroes have joined us. The king has made us the offer to "
-#~ "purchase this land for 200,000 gold or we may take it by force. The local "
-#~ "lords have been fighting and each wants to be the one that defeats us. "
-#~ "Now all the local armies have arrived on the beach, creating a state of "
-#~ "complete Pandemonium!"
-#~ msgstr ""
-#~ "Mi señor, hemos establecido una avanzadilla (que no podemos permitirnos "
-#~ "perder) y todos nuestros Héroes se nos han unido. El rey nos ha ofrecido "
-#~ "esta tierra por 200,000 piezas de oro, o podemos tomarla por la fuerza. "
-#~ "Los señores locales han estado luchando y todos quieren ser el que nos "
-#~ "derrote. Todos los ejércitos locales han llegado a la playa, creando un "
-#~ "completo pandemonio."
-
-#~ msgid "My Treasure Is Buried Beneath Three Palm Trees"
-#~ msgstr "Mi tesoro está enterrado bajo tres palmeras"
-
-#~ msgid "\"Necromancers!\""
-#~ msgstr "\"¡Necromantes!\""
-
-#~ msgid "New Dawn"
-#~ msgstr "Nuevo Amanecer"
-
-#~ msgid "New Enemies"
-#~ msgstr "Nuevos Enemigos"
-
-#~ msgid "New Vertigo"
-#~ msgstr "Nuevo Vértigo"
-
-#~ msgid "Nightshadow"
-#~ msgstr "Sombranocturna"
-
-#~ msgid "No Description"
-#~ msgstr "Sin Descripción"
-
-#~ msgid "No Fishing!"
-#~ msgstr "¡Prohibido pescar!"
-
-#~ msgid "No gems, crystal, or mercury for red."
-#~ msgstr "Sin gemas, cristal, o mercurio para el rojo."
-
-#~ msgid ""
-#~ "None of the four leaders like being stuck in a land that has only one "
-#~ "season."
-#~ msgstr ""
-#~ "A ninguno de los cuatro líderes le gusta estar atascado en una tierra en "
-#~ "la que sólo hay una estación."
-
-#~ msgid "NO, Not That Way. This Way."
-#~ msgstr "NO, No Por Ese Camino. Por este camino."
-
-#~ msgid "No one has ever made it out of the deadly swamps alive!"
-#~ msgstr "¡Nadie ha salido con vida de los mortíferos pantanos!"
-
-#~ msgid "Noraston"
-#~ msgstr "Noraston"
-
-#~ msgid "North Road"
-#~ msgstr "Carretera Norte"
-
-#~ msgid "North vs. South"
-#~ msgstr "Norte vs. Sur"
-
-#~ msgid "No stuff for red"
-#~ msgstr "Sin cosas para el rojo"
-
-#~ msgid "No swimming."
-#~ msgstr "Prohibido nadar."
-
-#~ msgid "Notice- Those who put messages in bottles will be tortured."
-#~ msgstr "Aviso: los que pongan mensajes en botellas serán torturados."
-
-#~ msgid "No Trespassing"
-#~ msgstr "Prohibido el paso"
-
-#~ msgid "No tresspath...  No tree...  No thresh...  GO AWAY!"
-#~ msgstr ""
-#~ "Prohibido el pazo... prohibido el paxo... prohibido el pa... ¡FUERA!"
-
-#~ msgid "Now leaving Swamplands of the Eternial"
-#~ msgstr "Está usted dejando los Pantanos del Eterno"
-
-#~ msgid "Obsidian"
-#~ msgstr "Obsidiana"
-
-#~ msgid "Of the necromancers...."
-#~ msgstr "De los necromantes..."
-
-#~ msgid "Ogrehild"
-#~ msgstr "Ogrehild"
-
-#~ msgid "Olympus"
-#~ msgstr "Olimpo"
-
-#~ msgid ""
-#~ "One of the seers in your castle comes to you in the morning with urgent "
-#~ "news. Your one time comrade, the wizard Joseph, and his armies have been "
-#~ "imprisoned in a jail nearby. His power would surely aid you in your quest "
-#~ "to reclaim the library, you think to yourself. Perhaps there is a way to "
-#~ "rescue him..."
-#~ msgstr ""
-#~ "Uno de los videntes de tu castillo viene a verte por la mañana con "
-#~ "noticias urgentes. Tu antiguo camarada, el mago Joseph, junto a sus "
-#~ "ejércitos,  han sido aprisionados en una cárcel cercana. Su poder "
-#~ "seguramente te ayudaría en tu misión de reclamar la biblioteca, piensas "
-#~ "para ti. Tal vez haya alguna forma de rescatarle..."
-
-#~ msgid ""
-#~ "One of your aides reports that the Castle of Farlien is located on the "
-#~ "northeast spur of this island, and is a stronghold for the enemy. He "
-#~ "urges you to take it out as soon as possible, and then move onto other "
-#~ "islands."
-#~ msgstr ""
-#~ "Uno de tus ayudantes te informa de que el Castillo de Farlien se "
-#~ "encuentra en el espolón noreste de la isla, y que es un bastión del "
-#~ "enemigo. Te urge a tomarlo tan pronto como sea posible, y seguir a "
-#~ "continuación a las otras islas."
-
-#~ msgid ""
-#~ "One of your \"allies\" has joined Archibald.  You now face an opponent "
-#~ "with three castles to your one.  Good luck!"
-#~ msgstr ""
-#~ "Uno de tus \"aliados\" se ha unido a Archibald. Ahora te enfrentas a un "
-#~ "oponente con tres castillos, por el único tuyo. ¡Buena suerte!"
-
-#~ msgid ""
-#~ "One of your \"Allies\" has joined Roland. You are now facing three "
-#~ "castles, all belonging to the enemy. Good luck!"
-#~ msgstr ""
-#~ "Uno de tus \"Aliados\" se ha unido a Roland. Ahora te enfrentas a tres "
-#~ "castillos, todos pertenecientes al enemigo. ¡Buena suerte!Un"
-
-#~ msgid "One of your loyal goblins has brought you an armload of crystal!"
-#~ msgstr "¡Uno de tus leales goblins te ha traído una brazada de cristales!"
-
-#~ msgid ""
-#~ "One of your loyal subjects, a fairy tells you where to find a cache of "
-#~ "mercury!"
-#~ msgstr ""
-#~ "¡Uno de tus leales súbditos, un hada, te dice dónde encontrar una buena "
-#~ "cantidad de mercurio!"
-
-#~ msgid ""
-#~ "One of your scouts reports a tiny cave nearby. Upon investigating, you "
-#~ "discover a small cache of goods. In the dirt by them is etched 'Ivan'."
-#~ msgstr ""
-#~ "Uno de tus esploradores te informa de la existencia de una pequeña cueva "
-#~ "en los alrededores. Tras investigar, descubres un escondrijo con varias "
-#~ "cosas. En la tierra, a su lado, está escrito \"Ivan\"."
-
-#~ msgid ""
-#~ "One of your troops stubs its paw on something buried here.  After a few "
-#~ "hours of digging you unearth a cache of treasure!"
-#~ msgstr ""
-#~ "Una de tus tropas tropieza con algo medio enterrado. Después de unas "
-#~ "cuantas horas de excavación, desentierras un escondite de tesoros."
-
-#~ msgid "Only a month remains in which to find Joseph."
-#~ msgstr "Sólo queda un mes para encontrar a Joseph."
-
-#~ msgid "On quite days, Nubbie the sea monster can be seen!"
-#~ msgstr "¡Puede verse bastantes días a Nubbie el monstruo marino!"
-
-#~ msgid "Orange stuff"
-#~ msgstr "Cosas del Naranja"
-
-#~ msgid "Orcville"
-#~ msgstr "Villaorcos"
-
-#~ msgid "Ostoroth"
-#~ msgstr "Ostoroth"
-
-#~ msgid "Other than the dragons, the elves don't have any enemies."
-#~ msgstr "Aparte de los dragones, los elfos no tienen enemigos."
-
-#~ msgid "Our ally was greatly weakened when his resources were plundered."
-#~ msgstr ""
-#~ "Nuestro aliado fue muy debilitado cuando sus recursos fueron saqueados."
-
-#~ msgid "Our reinforcements were lost in a storm, we salvaged all we could!"
-#~ msgstr ""
-#~ "Nuestros refuerzos se perdieron en una tormenta, salvamos todo lo que "
-#~ "pudimos."
-
-#~ msgid ""
-#~ "Our spies have discovered that the barbarian hordes are now receiving "
-#~ "support from kraeger! You must hurry and find the third piece before your "
-#~ "forces here are crushed!"
-#~ msgstr ""
-#~ "Nuestros espías han descubierto que las hordas bárbaras reciben apoyo de "
-#~ "Kraeger. ¡Debes apresurarte y encontrar la tercera pieza antes de que tus "
-#~ "fuerzas aquí sean aplastadas!"
-
-#~ msgid "Overlord"
-#~ msgstr "Señor"
-
-#~ msgid "Pandemonium"
-#~ msgstr "Pandemonium"
-
-#~ msgid "Paper can gain you what wood and sail cannot."
-#~ msgstr "El papel te puede dar lo que la madera y las velas no te han dado."
-
-#~ msgid "Peacekeeper"
-#~ msgstr "Pacificador"
-
-#~ msgid "\"Peasants!\""
-#~ msgstr "\"¡Campesinos!\""
-
-#~ msgid "Peasantsville"
-#~ msgstr "Villacampesinos"
-
-#~ msgid "Perenor"
-#~ msgstr "Perenor"
-
-#~ msgid "Pet Cemetary"
-#~ msgstr "Cementerio de Animales"
-
-#~ msgid "Pick one of four Knights in this large and inhospitable land."
-#~ msgstr ""
-#~ "Elige uno de entre cuatro Caballeros en esta inhóspita y enorme tierra."
-
-#~ msgid "Pig's Eye"
-#~ msgstr "Ojo de Cerdo"
-
-#~ msgid "Pinehurst"
-#~ msgstr "Pinehurst"
-
-#~ msgid "Pirate's Cove"
-#~ msgstr "Ensenada del Pirata"
-
-#~ msgid "Pirate Utopia"
-#~ msgstr "Utopía pirata"
-
-#~ msgid "Pirites strike and take the gold from you holds."
-#~ msgstr "Te atacan piratas y se llevan el oro de tus bodegas."
-
-#~ msgid "Pixie"
-#~ msgstr "Duendecillo"
-
-#~ msgid ""
-#~ "Play the Knight or Barbarian in an alliance in this classic duel against "
-#~ "the four spell casters. (Blue and Green vs Red)"
-#~ msgstr ""
-#~ "Juega con el Caballero o con el Bárbaro en una alianza en este duelo "
-#~ "clásico contra los cuatro lanzadores de hechizoc (Azul y Verde vs Rojo)"
-
-#~ msgid "Please...."
-#~ msgstr "Por favor..."
-
-#~ msgid ""
-#~ "Plenty of resources and lots of ground to cover. Watch out for Orange and "
-#~ "Purple!"
-#~ msgstr ""
-#~ "Muchos recursos y un montón de tierra que cubrir. ¡Cuidado con los "
-#~ "Naranjas y los Púrpura!"
-
-#~ msgid "Portals"
-#~ msgstr "Portales"
-
-#~ msgid "Portsmith"
-#~ msgstr "Portsmith"
-
-#~ msgid "POSION - DO NOT DRINK"
-#~ msgstr "VENENO - NO BEBER"
-
-#~ msgid "Powerful magic lies southwest of here in the Valley of the Kings."
-#~ msgstr ""
-#~ "Una magia poderosa se halla al suroeste de aquí, en el Valle de los Reyes."
-
-#~ msgid "Prisoner on...."
-#~ msgstr "Prisionero en..."
-
-#~ msgid "Quick Silver"
-#~ msgstr "Mercurio"
-
-#~ msgid "Realm of the Undead.  Fresh blood welcome."
-#~ msgstr "Dominios de los No-Muertos. Sangre fresca bienvenida."
-
-#~ msgid "Red player sympathizes with the undead cause."
-#~ msgstr "El jugador rojo simpatiza con la causa de los no-muertos."
-
-#~ msgid "Red's Connection"
-#~ msgstr "Conexiones del Rojo"
-
-#~ msgid "Redshield"
-#~ msgstr "Escudorrojo"
-
-#~ msgid "Red's Rubles"
-#~ msgstr "Rublos del Rojo"
-
-#~ msgid "Red stuff"
-#~ msgstr "Cosas del Rojo"
-
-#~ msgid ""
-#~ "Regrettably, you have no castle with which to begin your assault. "
-#~ "Fortunately, however, Kraeger's forces are weak here in the south, and "
-#~ "you have bribed a rebel necromancer to aid you in the beginning of your "
-#~ "conquest."
-#~ msgstr ""
-#~ "Lamentablemente, no tienes ningún castillo con el que comenzar tu asalto. "
-#~ "Por suerte, las fuerzas de Kraeger son débiles aquí, en el sur, y has "
-#~ "sobornado a un necromante rebelde para que te ayude en los comienzos de "
-#~ "tus conquistas."
-
-#~ msgid "Reinforcements have arrived, Gold from the homelands!"
-#~ msgstr "Han llegado refuerzos, ¡oro desde casa!"
-
-#~ msgid ""
-#~ "Remains of a long since dead wizard have attracted an ancient artifact.  "
-#~ "This artifact has now attached itself to you!"
-#~ msgstr ""
-#~ "Los restos de un mago muerto hace mucho han atraído un artefacto antiguo. "
-#~ "¡El artefacto se ha vinculado ahora a ti!"
-
-#~ msgid ""
-#~ "Remember, you're searching for the Ultimate Artifact... don't get "
-#~ "distracted!"
-#~ msgstr ""
-#~ "Recuerda que estás buscando el Artefacto Definitivo... ¡No te distraigas!"
-
-#~ msgid ""
-#~ "Rendall Koski was here. 1997.  Northampton, Massachusetts There is a "
-#~ "powerful artifact in the southeastern corner of the world.  Go for it, "
-#~ "explorer!"
-#~ msgstr ""
-#~ "Rendall Koski estuvo aquí. 1997. Northampton, Massachusetts. Hay un "
-#~ "poderoso artefacto en la esquina sureste del mundo. ¡Ve por él, "
-#~ "explorador!"
-
-#~ msgid ""
-#~ "Reports from your spies tell of enemies on the march.  As you rush to the "
-#~ "castle courtyard to prepare your armies, you are intercepted by your "
-#~ "Chaplain.  \"My Lord, I have received word that we should send what "
-#~ "Heroes we can to the Isle of Knowledge.   The Scholars there have agreed "
-#~ "to teach them so they will be strong for the battles ahead of us.\"  You "
-#~ "thank the Chaplain for the information and head thoughtfully into the "
-#~ "courtyard."
-#~ msgstr ""
-#~ "Recibes informes de tus espías que advierten de enemigos en marcha. Al "
-#~ "apresurarte al patio del castillo para preparar tus ejércitos, te "
-#~ "intercepta tu Capellán. \"Mi señor, he recibido noticias que aconsejan "
-#~ "enviar los Héroes que podamos a la Isla del Conocimiento. Los eruditos de "
-#~ "allí están de acuerdo en enseñarles, con lo que serán fuertes en las "
-#~ "batallas que nos esperan.\" Le das las gracias al Capellá por la "
-#~ "información, y de diriges pensativo al patio."
-
-#~ msgid "Restricted Area, Do Not Enter!"
-#~ msgstr "¡Área restringida, prohibido el paso!"
-
-#~ msgid "Rest stop."
-#~ msgstr "Parada de descanso."
-
-#~ msgid "Revolution"
-#~ msgstr "Revolución"
-
-#~ msgid "Right thinking - he who takes the riskes deserves the rewards."
-#~ msgstr "Lo correcto - quien asuma los riesgos se merece las recompensas."
-
-#~ msgid "River Crossing"
-#~ msgstr "Vado"
-
-#~ msgid "Road to Isle of Knowledge"
-#~ msgstr "Carretera a la Isla del Conocimiento"
-
-#~ msgid "Road to the Isle of Knowledge"
-#~ msgstr "Camino a la Isla del Conocimiento"
-
-#~ msgid ""
-#~ "Robbers have looted your treasury and you have lost valuable resources."
-#~ msgstr "Algún ladrón ha saqueado tu tesoro y has perdido valiosos recursos."
-
-#~ msgid "Robbers have looted your treasury, stealing valuable resources."
-#~ msgstr "Los ladrones han saqueado tu tesoro, robando valiosos recursos."
-
-#~ msgid "Roc Haven"
-#~ msgstr "Roc Haven"
-
-#~ msgid "Rogar"
-#~ msgstr "Rogar"
-
-#~ msgid "Roscomon"
-#~ msgstr "Roscomon"
-
-#~ msgid "Rotten Birch"
-#~ msgstr "Abedul Podrido"
-
-#~ msgid ""
-#~ "Rumors abound and your faithful hero Sandro is now highly regarded by the "
-#~ "masses. Should Sandro desert you, all will be lost."
-#~ msgstr ""
-#~ "Los rumores abundan y tu leal héroe Sandro es aclamado por las masas. En "
-#~ "caso de que Sandro desertara, todo se perdería."
-
-#~ msgid "Sands of Time"
-#~ msgstr "Arenas del Tiempo"
-
-#~ msgid "Sansobar"
-#~ msgstr "Sansobar"
-
-#~ msgid "Scabsdale"
-#~ msgstr "Scabsdale"
-
-#~ msgid "Scorched Earth"
-#~ msgstr "Tierras flageladas"
-
-#~ msgid ""
-#~ "Scouts have reported a town to the North.  They have also heard some "
-#~ "disturbing news.  Their seems to be a war raging in this area."
-#~ msgstr ""
-#~ "Los exploradores informan de que hay una ciudad al Norte. También han "
-#~ "oído noticias inquietantes. Parece que hay una guerra en curso en este "
-#~ "área."
-
-#~ msgid ""
-#~ "Scouts report the enemy's stronghold lies to the Southwest. Our swift "
-#~ "arrival has caught them by surprise. If you move quickly their resistance "
-#~ "will be minimal."
-#~ msgstr ""
-#~ "Los exploradores informan de que el bastión enemigo se encuentra al "
-#~ "Suroeste. Nuestra rápida llegada los ha cogido por sorpresa. Si te mueves "
-#~ "rápidamente su resistencia será mínima."
-
-#~ msgid ""
-#~ "Scouts report the notorious necromancer \"Wyrm\" has been sighted to the "
-#~ "northeast."
-#~ msgstr ""
-#~ "Los exploradores informan de que el notorio necromante \"Wyrm\" ha sido "
-#~ "visto al noreste."
-
-#~ msgid "Scummy"
-#~ msgstr "Espumoso"
-
-#~ msgid ""
-#~ "Searching in the dust of this abandoned campsite, you find a magic scroll."
-#~ msgstr ""
-#~ "Rebuscando en el polvo de este sitio de acampada abandonado, encuentras "
-#~ "un pergamino mágico."
-
-#~ msgid "Seasons Change"
-#~ msgstr "Cambio de Estaciones"
-
-#~ msgid "Secret Mountain Pass"
-#~ msgstr "Paso Secreto de Montaña"
-
-#~ msgid ""
-#~ "Seek out the Ultimate Artifact to be victorious in this strangely shaped "
-#~ "land."
-#~ msgstr ""
-#~ "Busca el Artefacto Definitivo para obtener la victoria en esta tierra con "
-#~ "formas raras."
-
-#~ msgid ""
-#~ "Seek the great library, for only with the guidance of the musty tomes "
-#~ "therin will you find the means to reveal and bind the fount to your will."
-#~ msgstr ""
-#~ "Busca la gran bilioteca, pues sólo con la guía de sus mohosos tomos "
-#~ "encontrarás la manera de revelar y vincular la fuente a tu voluntad."
-
-#~ msgid "Sharkania"
-#~ msgstr "Sharkania"
-
-#~ msgid "Sheltemburg"
-#~ msgstr "Sheltemburg"
-
-#~ msgid ""
-#~ "Should this message ever reach home, please know that this has become a "
-#~ "hostile place since the King's death.  No less than six factions are at "
-#~ "war with each other, each seeking to be the King's successor.  Beware "
-#~ "especially of the Barbarians and the Necromancers who control the north, "
-#~ "their regions are easily defended and they have a wealth of gold and "
-#~ "gems.  Do not venture to this land without a sizeable force.  -Sir "
-#~ "Christian"
-#~ msgstr ""
-#~ "En caso de que este mensaje llegue alguna vez a casa, por favor, has de "
-#~ "saber que este se ha convertido en un lugar hostil desde la muerte del "
-#~ "Rey. Al menos seis facciones están en guerra con las demás, cada cual "
-#~ "buscando ser la sucesora del Rey. Cuidado especialmente con los Bárbaros "
-#~ "y los Necromantes que controlan el norte, sus regiones se defienden "
-#~ "fácilmente y tienen grandes riquezas en forma de oro y gemas. No te "
-#~ "aventures en esa tierra sin unas fuerzas considerables. -Sir Christian"
-
-#~ msgid ""
-#~ "Six factions have established a foothold on a huge, unexplored "
-#~ "continent.  Can you eliminate the other five?"
-#~ msgstr ""
-#~ "Seis facciones han establecido una cabeza de playa en un enorme e "
-#~ "inexplorado continente. ¿Puedes eliminar a las otras cinco?"
-
-#~ msgid ""
-#~ "Six heroes with large armies prepare to slug it out for total domination!"
-#~ msgstr ""
-#~ "¡Seis héroes con grandes ejércitos se preparan para combatir por la "
-#~ "dominación total!"
-
-#~ msgid "Skirmish"
-#~ msgstr "Escaramuza"
-
-#~ msgid "Slippery when wet."
-#~ msgstr "Resbaladizo cuando está húmedo."
-
-#~ msgid "Slugfest"
-#~ msgstr "Slugfest"
-
-#~ msgid ""
-#~ "Snagged on a thorny bush, you discover a scrap of cloth. The design on it "
-#~ "looks like the coat of arms of Ivan's house!"
-#~ msgstr ""
-#~ "Descubres un trozo de tela, enganchado en un arbusto espinoso. El diseño "
-#~ "que tiene parece el escudo de armas de la casa de Iván."
-
-#~ msgid "Snowdrop"
-#~ msgstr "Copo de nieve"
-
-#~ msgid "Somebody has stuffed a pile of gems in the ditch!"
-#~ msgstr "¡Alguien ha metido un montón de gemas en la zanja!"
-
-#~ msgid "Some crystal!"
-#~ msgstr "¡Algunos cristales!"
-
-#~ msgid "Some gems!"
-#~ msgstr "¡Algunas gemas!"
-
-#~ msgid ""
-#~ "Someone has stolen 100 wood and 77 ore from you. Ah, that's nothing. "
-#~ "Let's keep going."
-#~ msgstr ""
-#~ "Alguien te ha robado 100 de madera y 77 de mineral. Ah, eso no es nada. "
-#~ "Prosigamos."
-
-#~ msgid ""
-#~ "Someone has stolen gold and resources from  the palace treasury!  You "
-#~ "suspect your enemies, but you can't know for certain."
-#~ msgstr ""
-#~ "Alguien ha robado oro y recursos del tesoro de palacio. Sospechas de tus "
-#~ "enemigos, pero no puedes saberlo con certeza."
-
-#~ msgid "Someone is playing a pan flute around here."
-#~ msgstr "Alguien está tocando una flauta cerca de aquí."
-
-#~ msgid ""
-#~ "Someone notices a piece of parchment lying behind a clump of grass. You "
-#~ "pick it up. It looks to be a page from a journal, and it reads, \"...made "
-#~ "it past the first guardians. Hopefully will reach the ancient desert city "
-#~ "soon. Only hope my forces are strong enough to survive...\""
-#~ msgstr ""
-#~ "Alguien se encuentra con un trozo de pergamino, tirado entre unas "
-#~ "hierbas. Lo recoges. Parece ser una página de un diario, y en ella se lee "
-#~ "\"...hemos pasado los primeros guardias. Con suerte, pronto llegaremos a "
-#~ "la antigua ciudad del desierto. Sólo espero tener fuerzas suficientes "
-#~ "para sobrevivir...\""
-
-#~ msgid "Some ore!"
-#~ msgstr "¡Algunos minerales!"
-
-#~ msgid "Some sulfur!"
-#~ msgstr "¡Algo de azufre!"
-
-#~ msgid ""
-#~ "Some unlucky adventurers have been captured and imprisoned in these lands."
-#~ msgstr ""
-#~ "Algunos desdichados aventureros han sido capturados y encerrados en estas "
-#~ "tierras."
-
-#~ msgid "Sorceress Forest.  Show respect for nature!"
-#~ msgstr "Bosque de Hechiceras. ¡Muestra respeto por la naturaleza!"
-
-#~ msgid "Sorpigal"
-#~ msgstr "Sorpigal"
-
-#~ msgid "South Mill"
-#~ msgstr "Molino Sur"
-
-#~ msgid "So you think you're smart?"
-#~ msgstr "¿Te crees listo?"
-
-#~ msgid "Spector"
-#~ msgstr "Spector"
-
-#~ msgid ""
-#~ "Spies report Roland has sent a hero to search for the Crown. If he finds "
-#~ "it first, all is lost!"
-#~ msgstr ""
-#~ "Los espías informan de Roland ha enviado un héroe en busca de la Corona. "
-#~ "¡Si él la encuentra primero, todo se habrá perdido!"
-
-#~ msgid "Spirit City"
-#~ msgstr "Ciudad espíritu"
-
-#~ msgid "Spy Tower - see what your competition is doing!"
-#~ msgstr "Torre Espía - ¡ve lo que está haciendo tu competencia!"
-
-#~ msgid "Stairs"
-#~ msgstr "Escaleras"
-
-#~ msgid ""
-#~ "Start with five castles!  How could you lose!?  Oh yeah, everyone else "
-#~ "starts with five, too."
-#~ msgstr ""
-#~ "¡Comienzas con cinco castillos! ¿Cómo podrías perder? Ah, sí, todos los "
-#~ "demás comienzan también con cinco castillos."
-
-#~ msgid "Stick to the road!"
-#~ msgstr "¡Sigue la carretera!"
-
-#~ msgid "Stromgild"
-#~ msgstr "Stromgild"
-
-#~ msgid "Stromhild"
-#~ msgstr "Stromhild"
-
-#~ msgid "Stronghold"
-#~ msgstr "Bastión"
-
-#~ msgid "Stuff for red"
-#~ msgstr "Cosas para el rojo"
-
-#~ msgid "Subbaculcha"
-#~ msgstr "Subbaculcha"
-
-#~ msgid "Surf and Turf"
-#~ msgstr "Tierra y Mar."
-
-#~ msgid "Swimming near the kelp is a pod of dolphins."
-#~ msgstr "Hay un grupo de delfines nadando junto a las algas."
-
-#~ msgid "Tacma"
-#~ msgstr "Tacma"
-
-#~ msgid "Tchudes"
-#~ msgstr "Tchudes"
-
-#~ msgid "Teleporters"
-#~ msgstr "Teleportadores"
-
-#~ msgid "Terra Firma"
-#~ msgstr "Terra Firma"
-
-#~ msgid ""
-#~ "The alliance has crumbled and all are at war. Lots of resources but "
-#~ "little time to prepare."
-#~ msgstr ""
-#~ "La alianza se ha roto y todos están en guerra. Hay muchos recursos pero "
-#~ "poco tiempo para prepararse."
-
-#~ msgid ""
-#~ "The ancient King Zealot had the artifact of the gods and then hid it in "
-#~ "his old age so that it could not be used by others."
-#~ msgstr ""
-#~ "El antiguo Rey Fanático tenía el artefacto de los dioses, y lo escondió "
-#~ "en sus últimos días de tal modo que no pudiera ser usado por otros."
-
-#~ msgid "The Back Door"
-#~ msgstr "La Puerta Trasera"
-
-#~ msgid ""
-#~ "The Barbarian's lands are being invaded. Are you strong enough to resist "
-#~ "the invasion?"
-#~ msgstr ""
-#~ "Las tierras de los Bárbaros están siendo invadidas. ¿Eres lo "
-#~ "suficientemente fuerte como para resistir la invasión?"
-
-#~ msgid ""
-#~ "The castle of Drakonran in the east has been taken by the barbarians! Two "
-#~ "other towns to the west have also been taken, but the barbarian armies "
-#~ "were fairly decimated in the process."
-#~ msgstr ""
-#~ "El castillo de Drakonran al este ha caído en manos de los bárbaros. "
-#~ "También han tomado otras dos ciudades al oeste, pero los ejércitos "
-#~ "bárbaros sufrieron grandes bajas en el proceso."
-
-#~ msgid "The center island is rumored to harbor great spells."
-#~ msgstr "Se rumorea que la isla central concentra grandes hechizos."
-
-#~ msgid "The Citadel"
-#~ msgstr "La Ciudadela"
-
-#~ msgid "The cities of the plains."
-#~ msgstr "Las ciudades de las planicies."
-
-#~ msgid "The Clearing"
-#~ msgstr "La limpieza"
-
-#~ msgid ""
-#~ "The convoy has at long last arrived. Regretably, it has been beset by "
-#~ "bandits on its journey here, and has far less supplies than we had hoped. "
-#~ "Make your way south, for our spies have found rich mines there."
-#~ msgstr ""
-#~ "Al fin ha llegado el convoy. Lamentablemente, ha sido hostigado por "
-#~ "bandidos durante el camino, y tiene muchos menos recursos de los que "
-#~ "esperábamos. Ábrete camino hacia el sur, pues nuestros espías han "
-#~ "encontrado ricas minas allí."
-
-#~ msgid ""
-#~ "The convoy should have been here by now! Let us hope that it is safe and "
-#~ "still on its way."
-#~ msgstr ""
-#~ "¡Ya debiera de haber llegado el convoy! Esperemos que esté a salvo y aún "
-#~ "en marcha."
-
-#~ msgid ""
-#~ "The country lords have allied and pooled their resources into one "
-#~ "command. Not only have they massed their forces in the north, but they "
-#~ "have sent a knight to the west to steal your supplies. Scouts report a "
-#~ "castle to the east that would be ideal as a base of operations."
-#~ msgstr ""
-#~ "Los Señores se han aliado y reunido sus recursos bajo un mismo mando. No "
-#~ "sólo han aglutinado sus fuerzas en el norte, sino que también han enviado "
-#~ "un caballero al oeste para robar tus suministros. Los exploradores "
-#~ "informan de que hay un castillo al este que sería ideal como base de "
-#~ "operaciones."
-
-#~ msgid ""
-#~ "The crew are unworthy!  I am not going down with the ship! -The Captain"
-#~ msgstr ""
-#~ "¡La tripulación es indigna! ¡No me voy a hundir con el barco! - El Capitán"
-
-#~ msgid ""
-#~ "The day you have feared has finally arrived.  The king, who you have "
-#~ "faithfully served, has died, leaving no heir to his throne.  As his "
-#~ "captain, you feel that this job should now be yours, but several factions "
-#~ "even now are preparing for conquest.  You are at the center of the trade "
-#~ "routes, having the sea to the south and the great forest to the north.  "
-#~ "Go, now, Commander, and claim what is rightfully yours!"
-#~ msgstr ""
-#~ "El día que tanto temías ha llegado al fin. El rey, a quien serviste con "
-#~ "lealtad, ha muerto, sin dejar heredero alguno al trono. Como su capitán, "
-#~ "piensas que este trabajo debiera de ser tuyo, pero varias facciones se "
-#~ "están preparando ahora mismo para conquistar. Estás en el centro de las "
-#~ "rutas comerciales, tienes el mar al sur y el gran bosque al norte. Ve "
-#~ "ahora, Comandante, y reclama lo que es tuyo por derecho."
-
-#~ msgid ""
-#~ "The diplomats who were sent here ahead of you report that the elves will "
-#~ "only cooperate with you if you will recover the golden bow for them. It "
-#~ "was stolen by their enemies, the Dragons and hidden behind magic barriers."
-#~ msgstr ""
-#~ "Los diplomáticos que se enviaron antes de ti te informan de que los elfos "
-#~ "sólo cooperarán si les recuperas el arco dorado. Fue robado por sus "
-#~ "enemigos, los Dragones, y escondido tras barreras mágicas."
-
-#~ msgid "The Eastern Town."
-#~ msgstr "La ciudad oriental"
-
-#~ msgid "The edge of the world is your edge.  But prepare to be prepared."
-#~ msgstr "El borde del mundo es tu frontera. Pero prepárate para prepararte."
-
-#~ msgid "The Enchanted Forest."
-#~ msgstr "El Bosque Encantado"
-
-#~ msgid "The End of the World is Nigh!"
-#~ msgstr "¡El fin del mundo está cerca!"
-
-#~ msgid "The End of the World is Nigh"
-#~ msgstr "El fin del mundo está cerca"
-
-#~ msgid ""
-#~ "The Epic battle against Your Rival! Eliminate everything! Total Warfare! "
-#~ "Don't Lose your first hero!"
-#~ msgstr ""
-#~ "¡La batalla Épica contra Tu Rival! ¡Elimina todo! ¡Guerra Total! ¡No "
-#~ "pierdas a tu primer héroe!"
-
-#~ msgid ""
-#~ "The Fire King is an ally to the dragons, and will help a friend of theirs."
-#~ msgstr ""
-#~ "El Rey de Fuego es aliado de los dragones, y ayudarán a un amigo suyo."
-
-#~ msgid "The First One To Take Astircaer Wins!"
-#~ msgstr "¡El primero en capturar Astircaer gana!"
-
-#~ msgid ""
-#~ "The first piece of the artifact now lies in the hands of the Unholy Order "
-#~ "of Warlocks. You must annihilate them, and their allies to the north. "
-#~ "They will surely give us what we seek in exchange for their feeble lives."
-#~ msgstr ""
-#~ "El primer fragmento del artefacto se encuentra ahora en las manos de la "
-#~ "Impía Orden de Brujos. Debes aniquilarlos, a ellos y a sus aliados del "
-#~ "norte. Seguramente nos darán lo que buscamos a cambio de sus patéticas "
-#~ "vidas."
-
-#~ msgid ""
-#~ "The Fortune of Infamous Uae was buried on one of these islands. She died "
-#~ "without ever revealing it.  Find it before the other cutthroats."
-#~ msgstr ""
-#~ "La Fortuna de la Infame Uae fue enterrada en una de estas islas. Ella "
-#~ "murió sin reverlársela a nadie. Encuéntrala antes que los otros asesinos."
-
-#~ msgid "The four factions race to capture a mystical castle."
-#~ msgstr "Las cuatro facciones se apresuran a capturar un castillo místico."
-
-#~ msgid ""
-#~ "The four spell casters face off with substantial starting armies. Can the "
-#~ "crusaders keep the peace?"
-#~ msgstr ""
-#~ "Los cuatro conjuradores se enfrentan con ejércitos iniciales importantes. "
-#~ "¿Pueden mantener el ritmo los cruzados?"
-
-#~ msgid ""
-#~ "The Gods have given you 6 months to prove yourself. Good or Evil - who "
-#~ "shall prevail? (Blue,Green and Red vs Yellow, Orange and Purple)"
-#~ msgstr ""
-#~ "Los Dioses te han dado 6 meses para ponerte a prueba. Bien o Mal - ¿Quién "
-#~ "prevalecerá? (Azul, Verde y Rojo vs. Amarillo, Naranja y Púrpura)"
-
-#~ msgid ""
-#~ "The gods have granted this world a great artifact, to find it means "
-#~ "victory."
-#~ msgstr ""
-#~ "Los dioses han otorgado a este mundo un gran artefacto, encontrarlo "
-#~ "significa la victoria."
-
-#~ msgid "The Gods themselves will aid us in this War."
-#~ msgstr "Los Dioses en persona nos ayudarán en esta Guerra."
-
-#~ msgid "The guardians of Dragon Isle reside in the jungle."
-#~ msgstr "Los guardianes de la Isla Dragón residen en la jungla."
-
-#~ msgid "The Ice Prince stands frozen in some forgotten corner of the world."
-#~ msgstr ""
-#~ "El Príncipe del Hielo está congelado en algún rincón olvidado del mundo."
-
-#~ msgid "The island...."
-#~ msgstr "La isla..."
-
-#~ msgid "The Island of Lost Reason"
-#~ msgstr "La Isla de la Razón Perdida"
-
-#~ msgid "The islands have much wealth."
-#~ msgstr "Las islas tienen muchas riquezas."
-
-#~ msgid "The Isle of Armoria"
-#~ msgstr "La Isla de Armoria"
-
-#~ msgid "The key to success is rubbing enough lamps."
-#~ msgstr "El secreto del éxito es frotar las suficientes lámparas."
-
-#~ msgid ""
-#~ "The King has declared you his hier apparent and champion. You must seek "
-#~ "out and destroy your common enemy, Wilgatus and his Castle, Mirkosov, the "
-#~ "source of his power."
-#~ msgstr ""
-#~ "El Rey te ha declarado su heredero y campeón. Debes de buscar y destruir "
-#~ "a nuestro enemigo común, Wilgatus, y su castillo, Mirkosov, la fuente de "
-#~ "su poder."
-
-#~ msgid ""
-#~ "The King is dead, his kingdom has been shattered, and six leaders seek to "
-#~ "seize power for themselves."
-#~ msgstr ""
-#~ "El Rey ha muerto, su reino se ha hecho pedazos, y seis líderes buscan el "
-#~ "poder para sí."
-
-#~ msgid "The Kings Road."
-#~ msgstr "La Carretera del Rey"
-
-#~ msgid ""
-#~ "The King will sell you this land for 200,000 gold or you can take it by "
-#~ "force. The choice is yours."
-#~ msgstr ""
-#~ "El Rey te venderá esta tierra por 200,000 piezas de oro, o puedes tomarla "
-#~ "por la fuerza. La elección es vuestra."
-
-#~ msgid "The land of Heroes II."
-#~ msgstr "La tierra de Heroes II."
-
-#~ msgid "The Lost Castle of the Ancients"
-#~ msgstr "El Castillo Perdido de los Antiguos"
-
-#~ msgid ""
-#~ "The mage wars have caused a great turmoil.  This island has become a "
-#~ "central flux of magical power.  Be wary all those that enter upon here."
-#~ msgstr ""
-#~ "Las guerras de los magos han causado grandes desórdenes. La isla se ha "
-#~ "convertido en un vórtice central de poder mágico. Cuidado a todos los que "
-#~ "entren aquí."
-
-#~ msgid ""
-#~ "The mage wars have caused great turmoil.  This island has become a "
-#~ "central flux of magical power.  Be wary all those that enter upon here."
-#~ msgstr ""
-#~ "Las guerras de los magos han causado grandes desórdenes. La isla se ha "
-#~ "convertido en un vórtice central de poder mágico. Cuidado a todos los que "
-#~ "entren aquí."
-
-#~ msgid ""
-#~ "The Master Merchant arrives and takes the resources he needs for trade.  "
-#~ "Plus a little gold for expenses..."
-#~ msgstr ""
-#~ "Llega el maestro mercader y se lleva los recursos necesarios para "
-#~ "comerciar. Y un poco de oro más para gastos..."
-
-#~ msgid ""
-#~ "The Master Merchant arrives and takes the resources he needs for "
-#~ "trading.  Plus a little more gold for expenses..."
-#~ msgstr ""
-#~ "Llega el maestro mercader y se lleva los recursos necesarios para "
-#~ "comerciar. Y algo más de oro para gastos..."
-
-#~ msgid ""
-#~ "The Master Merchant arrives at your Castle.  He tells you tall tales of "
-#~ "travel, full of outrageous lies.  He also gives you, your share of the "
-#~ "profits..."
-#~ msgstr ""
-#~ "El maestro mercader llega a tu castillo. Te cuenta grandes historias de "
-#~ "viajes, llenas de escandalosas mentiras. También te da tu parte de las "
-#~ "ganancias..."
-
-#~ msgid ""
-#~ "The Master Merchant arrives back at your Castle.  He tells you tall tales "
-#~ "of faraway places full of outrageous lies.  He also gives you, your share "
-#~ "of the profits..."
-#~ msgstr ""
-#~ "El maestro mercader vuelve a tu castillo. Te cuenta grandes historias "
-#~ "sobre lugares lejanos llenas de escandalosas mentiras."
-
-#~ msgid ""
-#~ "The Medusas have the password and they can be found just to the west."
-#~ msgstr "Las Medusas tienen la contraseña y se las puede encontrar al oeste."
-
-#~ msgid "The more there is the less you see."
-#~ msgstr "Mientras más hay menos ves."
-
-#~ msgid "The North Road to Roland's castle."
-#~ msgstr "La Carretera Norte al castillo de Roland."
-
-#~ msgid ""
-#~ "The note in this bottle has become mostly indecipherable. All you can "
-#~ "make out are references to deadly pirates, and hidden gold mines."
-#~ msgstr ""
-#~ "La nota de la botella está prácticamente indescifrable. Todo lo que "
-#~ "puedes interpretar hace referencia a piratas mortales, y minas de oro "
-#~ "ocultas."
-
-#~ msgid ""
-#~ "The Overlord has given you 4 months to conquer this land or deliver to "
-#~ "him the sum of 150,000 gold."
-#~ msgstr ""
-#~ "El Jefe Supremo te ha dado cuatro meses para conquistar esta tierra, o "
-#~ "enviarle la suma de 150,000 piezas de oro."
-
-#~ msgid "The Queen's Road."
-#~ msgstr "El Camino de la Reina."
-
-#~ msgid "The Realm of Air is barred, but you may appeal here for help."
-#~ msgstr "El Reino del Aire está prohibido, pero puedes buscar ayuda aquí."
-
-#~ msgid ""
-#~ "There are three enemy castles to the north. Capture them in the name of "
-#~ "Roland the true king!"
-#~ msgstr ""
-#~ "Hay tres castillos enemigos al norte. ¡Captúralos en nombre de Roland, el "
-#~ "rey verdadero!"
-
-#~ msgid ""
-#~ "The Red Tide of War rolls North.  Stopping the flood seems hopeless.  "
-#~ "Yet, Honor demands you and your ally die trying."
-#~ msgstr ""
-#~ "La Marea Roja de la Guerra avanza hacia el Norte. Tratar de detener la "
-#~ "avalancha parece imposible. Aún así, el honor exige que tú y tua aliado "
-#~ "mueran intentándolo."
-
-#~ msgid "There is hidden treasure south of the Blue Lord's Sawmill."
-#~ msgstr "Hay tesoros escondidos al sur de la Serrería del Señor Azul."
-
-#~ msgid "There's a warm wind blowing from the south."
-#~ msgstr "Sopla un viento cálido del sur."
-
-#~ msgid ""
-#~ "There's a Wizard living in the north who is behind this peasant revolt."
-#~ msgstr ""
-#~ "Hay un Mago que vive en el norte que está detrás de esta revuelta de "
-#~ "campesinos."
-
-#~ msgid ""
-#~ "There used to be a mine here, but it has long since run out of ore.  You "
-#~ "are only able to scavenge 5 units of ore from the old site."
-#~ msgstr ""
-#~ "Aquí solía haber una mina, pero hace tiempo que está agotada. Apenas eres "
-#~ "capaz de conseguir 5 unidades de mineral de el viejo lugar."
-
-#~ msgid "There was a shipreck in the far east waters recently."
-#~ msgstr "Hubo un naufragio en aguas orientales hace poco."
-
-#~ msgid "The River Styx"
-#~ msgstr "El Río Estigio"
-
-#~ msgid "The roars of several dragons echo from the towers."
-#~ msgstr "El eco de los rugidos de varios dragones retumba desde las torres."
-
-#~ msgid "The Royal Gardens."
-#~ msgstr "Los Jardines Reales."
-
-#~ msgid ""
-#~ "The Scholars, Priests, and Priestesses of the Isle have given you what "
-#~ "they can to help you against your enemies."
-#~ msgstr ""
-#~ "Los Eruditos, Sacerdotes y Sacerdotisas de la isla te han dado lo que han "
-#~ "podido para ayudarte contra tus enemigos."
-
-#~ msgid ""
-#~ "The Scholars, Priests, and Priestesses of the Isle have given you what "
-#~ "they can to help you defend against your enemies."
-#~ msgstr ""
-#~ "Los Eruditos, Sacerdotes y Sacerdotisas de la isla te han dado lo que han "
-#~ "podido para ayudarte a defenderte de tus enemigos."
-
-#~ msgid "These lands are beholden to Lord Kraeger."
-#~ msgstr "Estas tierras son vigiladas por Lord Kraeger."
-
-#~ msgid ""
-#~ "These lands are desolate and for the most part devoid of resources. Not "
-#~ "even the bravest heroes dare to venture into them, and plants are rare "
-#~ "and precious here. Who knows what else awaits?"
-#~ msgstr ""
-#~ "Estas tierras están desiertas y en general carecen de recursos. Ni "
-#~ "siquiera los héroes más valientes se atreven a adentrarse en ellas, "
-#~ "además las plantas son escasas aquí. ¿Quién sabe qué mas aguarda?"
-
-#~ msgid "The Table in the Great Hall of the Castle is Haunted."
-#~ msgstr "La Mesa del Gran Salón del Castillo está Embrujada."
-
-#~ msgid ""
-#~ "The third piece of the artifact is somewhere to the north, that much we "
-#~ "know. We are still unsure of its exact location, but our spies are out "
-#~ "gathering information. The forces in this area are too strong to be "
-#~ "completely subjugated, so take what you can and hold on to it tightly."
-#~ msgstr ""
-#~ "Por lo que sabemos, la tercera pieza del artefacto está en algún lugar al "
-#~ "norte. Aún no sabemos su ubicación exacta, pero nuestros espías están "
-#~ "reuniendo información. Las fuerzas en el área son demasiado fuertes para "
-#~ "ser completamente sometidas, así que coge lo que puedas y agárralo fuerte."
-
-#~ msgid ""
-#~ "The troops have sworn their allegiance, but should lose a battle they "
-#~ "will lose faith and our cause will be lost."
-#~ msgstr ""
-#~ "Las tropas nos han jurado lealtad, pero en caso de que perdieran una "
-#~ "batalla, también perderían la fe y nuestra causa se perdería."
-
-#~ msgid "The Valley of Aruk."
-#~ msgstr "El Valle de Aruk."
-
-#~ msgid ""
-#~ "The Valley of Magic holds many surprises.  You discover an old pair of "
-#~ "boots sticking out of the sand."
-#~ msgstr ""
-#~ "El Valle de la Magia esconde muchas sorpresas. Descubres un viejo par de "
-#~ "botas sobresaliendo de la arena."
-
-#~ msgid "The Valley of Tresures"
-#~ msgstr "El Valle de los Tesoros"
-
-#~ msgid "The Wasteland"
-#~ msgstr "El Yermo"
-
-#~ msgid "The way of magic"
-#~ msgstr "El camino de la mágia"
-
-#~ msgid "The way of might"
-#~ msgstr "El camino del poder"
-
-#~ msgid "The way of numbers"
-#~ msgstr "El camino de los números"
-
-#~ msgid "The western town."
-#~ msgstr "Oeste de la ciudad"
-
-#~ msgid "The winds howl in mourning around the shipwreck."
-#~ msgstr "El viento aúlla un lamento en torno al pecio."
-
-#~ msgid "The wizard has an island in the southeast."
-#~ msgstr "El mago tiene una isla al sureste."
-
-#~ msgid ""
-#~ "The Wizards who have captured the Necromancers' town have wasted no time "
-#~ "in building defenses designed to stop you, and their last castle has just "
-#~ "been completed. Fortunately only a Captain of the Guard and a small "
-#~ "garrison are currently present.  If you hurry, you should be able to "
-#~ "capture the castle before they have a chance to reinforce it!"
-#~ msgstr ""
-#~ "Los Magos que capturaron la ciudad del Necromante no han perdido el "
-#~ "tiempo para construir defensas destinadas a detenerte, y su último "
-#~ "castillo acaba de completarse. Afortunadamente sólo están presentes ahora "
-#~ "mismo un Capitán de la Guardia y una pequeña guarnición. Si te apresuras, "
-#~ "debieras de poder capturar el castillo antes de que tengan oportunidad de "
-#~ "enviar refuerzos."
-
-#~ msgid "The wood has arrived."
-#~ msgstr "Ha llegado la madera."
-
-#~ msgid "The writing on this sign is too faded to read."
-#~ msgstr "Esta señal está demasiado desgastada como para leerse."
-
-#~ msgid "The Yellow Lord has the Ultimate Artifact."
-#~ msgstr "El Señor Amarillo tiene en su poder el Artefacto Definitivo."
-
-#~ msgid "They say there's mermaids in these waters..."
-#~ msgstr "Dicen que hay sirenas en esas aguas..."
-
-#~ msgid ""
-#~ "This area is rich in resources. Explore, but beware, a castle left "
-#~ "undefended will quickly fall."
-#~ msgstr ""
-#~ "Este área es rica en recursos. Explórala pero ten cuidado, un castillo no "
-#~ "defendido caerá rapidaménte."
-
-#~ msgid ""
-#~ "This area must be secured for the sake of the Empire. Our spies have "
-#~ "reported a discord between The kingdom of the knights to the north, and "
-#~ "that of the oppressive sorceresses to the northeast. Perhaps this feud "
-#~ "can be exploited for our gain..."
-#~ msgstr ""
-#~ "Esta área debe ser segura por el bien del Imperio. Nuestros espías han "
-#~ "informado de un desacuerdo entre El Reino de los caballeros del norte, y "
-#~ "la opresiva hechicera del noreste. Quizás esta contienda pueda ser "
-#~ "explotada para nuestro beneficio..."
-
-#~ msgid "This bottle is empty."
-#~ msgstr "La botella está vacía."
-
-#~ msgid ""
-#~ "This is the last week you have to find the rebel wizard Joseph! Good Luck "
-#~ "in your quest."
-#~ msgstr ""
-#~ "Esta es la última semana que tienes para encontrar al mago rebelde "
-#~ "Joseph. Buena suerte en tu búsqueda."
-
-#~ msgid ""
-#~ "This land and all others are now under the sole ownership of Ibn Fadlan, "
-#~ "the Undead King. Any disregard for his magesty's soverign rule is to be "
-#~ "punished by death most horrendous."
-#~ msgstr ""
-#~ "Esta tierra y todas las demás están ahora bajo la única propiedad de Ibn "
-#~ "Fadlan, el Rey No-muerto. Cualquier descuido a la soberanía de su "
-#~ "majestad será castigado con la más horrenda de las muertes."
-
-#~ msgid ""
-#~ "This land has been claimed by the nation of Neroli. Interlopers are "
-#~ "UNWELCOME."
-#~ msgstr ""
-#~ "Esta tierra ha sido reclamada por la nación de Neroli. Los intrusos NO "
-#~ "SON BIENVENIDOS."
-
-#~ msgid ""
-#~ "This rugged land will have rivals fighting the terrain as well as each "
-#~ "other."
-#~ msgstr ""
-#~ "Esta áspera tierra tendrá rivales luchando tanto con el terreno como "
-#~ "contra los demás."
-
-#~ msgid ""
-#~ "This rundown village looks like it was once the epicenter of an enormous, "
-#~ "but now ruined, city. Under a pile of rubble you find an object which "
-#~ "looks like it has lain there for ages."
-#~ msgstr ""
-#~ "Este pueblo parece que una vez fue el centro de una ciudad enorme, pero "
-#~ "hoy en día arruinada. Bajo un montón de escombros encuentras un objeto "
-#~ "que parece haber estado allí por siglos."
-
-#~ msgid ""
-#~ "This spot overlooks an old quarry.  This was one of the only places in "
-#~ "the world where ore could be taken right out of the ground.  "
-#~ "Unfortunately the jungle has reclaimed the quarry and it is unusable.  "
-#~ "You collect the last of the ore and depart."
-#~ msgstr ""
-#~ "Desde este lugar se domina una vieja guarnición. Este era uno de los "
-#~ "pocos lugares del mundo en los que se podían extraer minerales "
-#~ "directamente de la tierra. Desafortunadamente, la selva ha reclamado la "
-#~ "guarnición y es inutilizable. Recoges el resto de minerales que queda, y "
-#~ "partes."
-
-#~ msgid ""
-#~ "This twisted maze of sorceress towns has three factions struggling for "
-#~ "sole control.  Use your resources wisely!"
-#~ msgstr ""
-#~ "Este laberinto retorcido de ciudades de hechiceras tiene tres facciones "
-#~ "luchando por la supremación. ¡Usa con sabiduría tus recursos!"
-
-#~ msgid ""
-#~ "This village appears to be in little better shape than the first one you "
-#~ "saw. As you approach the village an old man hands you a slip of paper, "
-#~ "with the following message, \"Joseph lives in the town of IslandHome.\""
-#~ msgstr ""
-#~ "El poblado parece estar en mejor forma que el primero que vistes. A "
-#~ "medida que te acercas al poblado y anciano te entrega un trozo de papel "
-#~ "con el siguiente mensaje, \"Joseph vive en la ciudad de IslandHome\"."
-
-#~ msgid ""
-#~ "This village is in extremely poor shape. There is no chance of getting "
-#~ "more than some of the lesser creatures here."
-#~ msgstr ""
-#~ "Esta aldea está en pésimo estado. No hay ninguna oportunidad de encontrar "
-#~ "aquí más que algunas criaturas menores."
-
-#~ msgid "This way to the Necromancer Forest."
-#~ msgstr "Al Bosque del Necromante."
-
-#~ msgid "Those who seek knowledge are welcome to the city of Chronos."
-#~ msgstr ""
-#~ "Sean bienvenidos a la ciudad de Chronos aquellos que buscan conocimiento."
-
-#~ msgid "Timberhill"
-#~ msgstr "Timberhill"
-
-#~ msgid "Time for a refreshing drink."
-#~ msgstr "Hora de una bebida refrescante."
-
-#~ msgid "Time is running out! The enemy's reinforcements are almost here."
-#~ msgstr "¡Se acaba el tiempo! Los refuerzos del enemigo casi están aquí."
-
-#~ msgid "To pass you must pay troll."
-#~ msgstr "Para pasar debes pagar al trol."
-
-#~ msgid "TreeHome"
-#~ msgstr "Casa del árbol"
-
-#~ msgid "Trespassers will be EATEN!"
-#~ msgstr "¡Los intrusos serán DEVORADOS!"
-
-#~ msgid "Trilobar"
-#~ msgstr "Trilobar"
-
-#~ msgid "Troy"
-#~ msgstr "Troya"
-
-#~ msgid "Tundara"
-#~ msgstr "Tundara"
-
-#~ msgid "Turn back, friend, while you still can!"
-#~ msgstr "¡Da la vuelta, amigo, mientras puedas!"
-
-#~ msgid "Turn Back Now!"
-#~ msgstr "¡Da la vuelta ya!"
-
-#~ msgid "Turn Back Now or all will be LOST!"
-#~ msgstr "¡Da la vuelta ya o todo se habrá perdido!"
-
-#~ msgid "Turn Back or DIE!"
-#~ msgstr "¡Da la vuelta o MUERE!"
-
-#~ msgid "Turn Back or else!"
-#~ msgstr "Retírate"
-
-#~ msgid "Turn back, you fool."
-#~ msgstr "Da la vuelta, idiota."
-
-#~ msgid "Uncle Leo"
-#~ msgstr "Tío Leo"
-
-#~ msgid "Uncle Milty"
-#~ msgstr "Tío Milty"
-
-#~ msgid "Unholy Alliance"
-#~ msgstr "Alianza Impía"
-
-#~ msgid "Valley of Death"
-#~ msgstr "Valle de la Muerte"
-
-#~ msgid "Valley Of The Damned"
-#~ msgstr "Valle de los Condenados"
-
-#~ msgid "Valley of the Kings."
-#~ msgstr "Valle de los Reyes."
-
-#~ msgid "Vaultius"
-#~ msgstr "Vaultius"
-
-#~ msgid "Vertigo"
-#~ msgstr "Vértigo"
-
-#~ msgid "Vikings!"
-#~ msgstr "¡Vikingos!"
-
-#~ msgid "Viper's Nest"
-#~ msgstr "Nido de Víboras"
-
-#~ msgid "Vulcania"
-#~ msgstr "Vulcania"
-
-#~ msgid "Warrior Knight"
-#~ msgstr "Caballero Guerrero"
-
-#~ msgid "Wastelands"
-#~ msgstr "Yermos"
-
-#~ msgid ""
-#~ "\"We are at the edge of the world!\"  they scream.  \"What are we doing "
-#~ "here?\""
-#~ msgstr ""
-#~ "\"¡Estamos en el borde del mundo!\", gritan. \"¿Qué estamos haciendo aquí?"
-#~ "\""
-
-#~ msgid "Weddington"
-#~ msgstr "Weddington"
-
-#~ msgid ""
-#~ "We found a weakness my lord. Capture castle Black Fang and victory is "
-#~ "ours."
-#~ msgstr ""
-#~ "Encontramos un punto débil, mi Señor. Capturad el castillo Colmillo Negro "
-#~ "y la victoria será nuestra."
-
-#~ msgid ""
-#~ "We have just learned that the artifact is on an island north of this "
-#~ "continent. However, there does not appear to be any means to get there. "
-#~ "Stay very alert for any possible way across the narrow channel."
-#~ msgstr ""
-#~ "Acabamos de enterarnos de que el artefacto está en una isla al norte de "
-#~ "este continente. Sin embargo, no parece haber manera de llegar allí. "
-#~ "Mantente alerta por si hubiera alguna manera de cruzar el estrecho canal."
-
-#~ msgid ""
-#~ "Welcome back general.  Have you finished the conquest of the northern "
-#~ "lands?  What? you still have not finished your mission!  Get back there "
-#~ "and teach those rebels a lesson!"
-#~ msgstr ""
-#~ "Bienvenido de vuelta, general. ¿Habéis completado la conquista de las "
-#~ "tierras del norte? ¿Qué? ¡Aún no habéis terminado vuestra misión! "
-#~ "¡Regresad, y dad a esos rebeldes una lección!"
-
-#~ msgid "Welcome to Li'l Alctatraz! Vistors NOT welcome."
-#~ msgstr ""
-#~ "Bienvenidos a la Pequeña Alctatraz. Los visitantes NO son bienvenidos."
-
-#~ msgid ""
-#~ "Welcome to Power Island. He who controls this Isle controls the Seven "
-#~ "Lakes!"
-#~ msgstr ""
-#~ "Bienvenido a la Isla del Poder. ¡Quien controle esta Isla controlará los "
-#~ "Siete Lagos!"
-
-#~ msgid "Welcome to the sandy Isle."
-#~ msgstr "Bienvenidos a la Isla Arenosa."
-
-#~ msgid "Welcome to the sorceress' guild."
-#~ msgstr "Bienvenido al gremio de hechiceras."
-
-#~ msgid "Welcome to the Spiral Isles"
-#~ msgstr "Bienvenido a las Islas Espirales"
-
-#~ msgid ""
-#~ "Welcome to the wounderous Kitisland range.  Eruptions each day, beware of "
-#~ "dragons."
-#~ msgstr ""
-#~ "Bienvenido a la maravillosa cordillera de Kitisland. Erupciones diarias, "
-#~ "cuidado con los dragones."
-
-#~ msgid "Welcome to Windfall Island!"
-#~ msgstr "¡Bienvenido a la Windfall Island!"
-
-#~ msgid "Welcome to your DOOM!"
-#~ msgstr "¡Bienvenido a tu MUERTE!"
-
-#~ msgid "We'll join you - for the right price."
-#~ msgstr "Nos uniremos a ti - por el precio justo."
-
-#~ msgid "Westfork"
-#~ msgstr "Westfork"
-
-#~ msgid "Westmoor"
-#~ msgstr "Westmoor"
-
-#~ msgid "We told you not to drink!"
-#~ msgstr "¡Te dijimos que no bebieras!"
-
-#~ msgid "What are you doing here?"
-#~ msgstr "¿Qué estás haciendo aquí?"
-
-#~ msgid ""
-#~ "What cannot be seen but only heard, and will not speak until spoken to?"
-#~ msgstr "¿Qué no puede verse sino oírse, y no hablará hasta que se le hable?"
-
-#~ msgid "What everyday word is most often pronounced incorrectly?"
-#~ msgstr ""
-#~ "¿Qué palabra cotidiana se pronuncia de forma incorrecta más a menudo?"
-
-#~ msgid "What goes up and down but never moves?"
-#~ msgstr "¿Qué va arriba y abajo pero nunca se mueve?"
-
-#~ msgid ""
-#~ "What good fortune!  You've discovered a long-abandoned settlement.  To "
-#~ "your surprise, you discover that the previous inhabitants left some of "
-#~ "their resources behind when they departed!"
-#~ msgstr ""
-#~ "¡Qué buena fortuna! Has descubierto un asentamiento abandonado hace mucho "
-#~ "tiempo. Para tu sorpresa, descubres que los habitantes anteriores dejaron "
-#~ "atrás algunos de sus recursos cuando se fueron."
-
-#~ msgid "What is always coming but never arrives?"
-#~ msgstr "¿Qué está viniendo siempre, pero nunca llega?"
-
-#~ msgid "What is the Sum of all Numbers from 1 to 200?"
-#~ msgstr "¿Cuál es la suma de todos los números de 1 a 200?"
-
-#~ msgid "What's another word for pirate treasure?"
-#~ msgstr "¿Otra palabra para tesoro pirata?"
-
-#~ msgid "What's behind door number one?"
-#~ msgstr "¿Qué hay detrás de la puerta número uno?"
-
-#~ msgid "What's this? A pile of gems?"
-#~ msgstr "¿Qué es esto? ¿Una montaña de gemas?"
-
-#~ msgid "What's this? Someone has left a pile of wood here!"
-#~ msgstr "¿Qué es esto? ¡Alguien ha dejado una pila de madera aquí!"
-
-#~ msgid ""
-#~ "What team won Super Bowl XXI and Super Bowl XXV?  (Hint... a Wizard might "
-#~ "have these troops in his army)"
-#~ msgstr ""
-#~ "¿Qué equipo ganó la XXI y la XXV Super Bowl? (Pista... un mago podría "
-#~ "tener estas tropas en su ejército)"
-
-#~ msgid "What turns everything around but does not move?"
-#~ msgstr "¿Qué cambia todo a su alrededor pero no se mueve?"
-
-#~ msgid ""
-#~ "What walks in the morning on four legs, two in the afternoon and three in "
-#~ "the evening?"
-#~ msgstr ""
-#~ "¿Qué camina por la mañana a cuatro patas, sobre dos por la tarde, y a "
-#~ "tres de noche?"
-
-#~ msgid "What?  What's this?  Something at the bottom of this pool..."
-#~ msgstr "¿Qué? ¿Qué es eso? Hay algo en el fondo de este estanque..."
-
-#~ msgid "When you're ready, take the teleport to the Island's Hot Spot!"
-#~ msgstr ""
-#~ "Cuando estés listo, ¡usa el teletransporte y ve al Punto Caliente de la "
-#~ "Isla!"
-
-#~ msgid ""
-#~ "When you think yourself invincible, walk through this gate.  Even then, "
-#~ "prepare to meet your bitter end."
-#~ msgstr ""
-#~ "Cuando creas que eres invencible, cruza esta puerta. Incluso entonces, "
-#~ "prepárate para encontrarte con tu amargo final."
-
-#~ msgid "Where am I?"
-#~ msgstr "¿Dónde estoy?"
-
-#~ msgid ""
-#~ "While traveling a mesenger meets you on the road.  His message tells of a "
-#~ "new ally from an island far to the south.  This ally can not offer forces "
-#~ "to your battle but has agreed to send some support in the form of gold "
-#~ "and crystal."
-#~ msgstr ""
-#~ "Mientras viajas te cruzas con un mensajero en el camino. Su mensaje trata "
-#~ "de un nuevo aliado proveniente de una isla al sur. Este aliado no puede "
-#~ "ofrecer fuerzas para tu batellón pero se compromete a enviar ayuda en "
-#~ "forma de oro y cristales."
-
-#~ msgid "Whiteshield"
-#~ msgstr "Escudoblanco"
-
-#~ msgid "Whittingham"
-#~ msgstr "Whittingham"
-
-#~ msgid "Who am I?"
-#~ msgstr "¿Quién soy?"
-
-#~ msgid "Who is the true King?"
-#~ msgstr "¿Quién es el Rey verdadero?"
-
-#~ msgid ""
-#~ "\"Why have we come this way?\"  asks the first mate.  You have no answer."
-#~ msgstr ""
-#~ "\"¿Por qué hemos venido por aquí?\" pregunta el primer amigo. No tienes "
-#~ "contestación."
-
-#~ msgid "Wilasher"
-#~ msgstr "Wilasher"
-
-#~ msgid "Wildabar"
-#~ msgstr "Wildabar"
-
-#~ msgid "Wilgatus"
-#~ msgstr "Wilgatus"
-
-#~ msgid "Willow"
-#~ msgstr "Sauce"
-
-#~ msgid "Winterkill"
-#~ msgstr "Winterkill"
-
-#~ msgid "Winterlands"
-#~ msgstr "Winterlands"
-
-#~ msgid "Witch Hunt"
-#~ msgstr "Caza de Brujas"
-
-#~ msgid ""
-#~ "With the year long eruption of Mt. Kitisland, your three worst enemies "
-#~ "now have a ground bridge to your eastern contenent."
-#~ msgstr ""
-#~ "Con la erupción de un año del Monte Kitisland, tus tres peores enemigos "
-#~ "tienen ahora un puente de roca hasta tu continente oriental."
-
-#~ msgid "Woodhaven"
-#~ msgstr "Woodhaven"
-
-#~ msgid "Woodstock"
-#~ msgstr "Woodstock"
-
-#~ msgid "Wow, somebody has left a pile of wood here!"
-#~ msgstr "¡Vaya!, ¡alguien ha dejado una pila de madera aquí!"
-
-#~ msgid "Wyrm"
-#~ msgstr "Wyrm"
-
-#~ msgid "Xabran"
-#~ msgstr "Xabran"
-
-#~ msgid "Ye old fish liver oil."
-#~ msgstr "Aceite de hígado de bacalao."
-
-#~ msgid "Yorksford"
-#~ msgstr "Yorksford"
-
-#~ msgid ""
-#~ "You and your ally's families were given custody of The Isle of "
-#~ "Knowledge.  Other Lords feel the time has come for new guardians..."
-#~ msgstr ""
-#~ "A tu familia y la de tus aliados se le dio en custodia la Isla del "
-#~ "Conocimiento. Otros Señores piensan que ha llegado la hora de que tenga "
-#~ "nuevos guardianes..."
-
-#~ msgid "You are a fool to come here!"
-#~ msgstr "¡Eres un necio por haber venido aquí!"
-
-#~ msgid "You are fighting on the side of your king!"
-#~ msgstr "¡Estás luchando en el bando de tu rey!"
-
-#~ msgid "You are fighting on the side of your sister!"
-#~ msgstr "¡Estás luchando en el bando de tu hermana!"
-
-#~ msgid "You are now entering the domain of Prince Roland. Have a nice day."
-#~ msgstr ""
-#~ "Está usted entrando en los dominios del Príncipe Roland. Que tenga un "
-#~ "buen día."
-
-#~ msgid ""
-#~ "You are now entering the domain of Prince Roland. Have a pleasant stay."
-#~ msgstr ""
-#~ "Está usted entrando en los dominios del Príncipe Roland. Que tenga una "
-#~ "estancia agradable."
-
-#~ msgid ""
-#~ "You bribe the entrance guards of this dingy prison camp. They agree to "
-#~ "look the other way for a little while."
-#~ msgstr ""
-#~ "Sobornas a los guardias de la entrada de este sucio campo de prisioneros. "
-#~ "Están de acuerdo en mirar para otro lado durante un rato."
-
-#~ msgid ""
-#~ "You come across the dead remains of what was appearantly a powerful "
-#~ "wizard!  You wonder if it's safe to continue."
-#~ msgstr ""
-#~ "Te encuentras con los restos de lo que aparentemente fue un poderoso "
-#~ "mago. Te planteas si es seguro seguir adelante."
-
-#~ msgid ""
-#~ "You face three opponents in this scenario. Capture their castles and "
-#~ "their heroes to prove your worthiness to Archibald."
-#~ msgstr ""
-#~ "Te enfrentas a tres oponentes en este escenario. Captura sus castillos y "
-#~ "sus héroes para probar tu valía ante Archibald."
-
-#~ msgid ""
-#~ "You find an old signpost in the midst of a thicket that reads \"Warlock "
-#~ "Wood, West.  Barbarian Fields, East.\""
-#~ msgstr ""
-#~ "Encuentras en medio de la espesura una señal que lee \"Bosque de los "
-#~ "Brujos, al Oeste. Campos de los Bárbaros, Este.\""
-
-#~ msgid ""
-#~ "You find a note in the bottle! It reads, \"My ship has been wrecked by "
-#~ "the notorious pirates in this area! I am stranded on a small and barren "
-#~ "island. Please, I beg you to come and rescue me!\""
-#~ msgstr ""
-#~ "¡Encuentras una nota en la botella! En ella se lee: \"Mi barco ha sido "
-#~ "hundido por los famosos piratas de este área. Estoy perdido en una "
-#~ "pequeña isla. ¡Por favor, te ruego que vengas y me rescates!"
-
-#~ msgid "You found something!"
-#~ msgstr "¡Has encontrado algo!"
-
-#~ msgid "You found Treasure!"
-#~ msgstr "¡Has encontrado Tesoros!"
-
-#~ msgid ""
-#~ "You have been ordered here to claim this land in the name of your King "
-#~ "and recover any riches that you might find.  However, five other Kings "
-#~ "and Queens have also sent their heroes to this land, so you must watch "
-#~ "out for them as well as the natives!"
-#~ msgstr ""
-#~ "Has sido enviado aquí para reclamar esta tierra en nombre de tu Rey, y "
-#~ "obtener cualquier riqueza que pudieras encontrar. Sin embargo, otros "
-#~ "cinco Reyes y Reinas han enviado también a sus héroes a esta tierra, así "
-#~ "que debes de vigilar tanto a ellos como a los nativos."
-
-#~ msgid "You have found what someone else has lost..."
-#~ msgstr "Has encontrado lo que alguien perdió..."
-
-#~ msgid ""
-#~ "You have hired a barbarian of great power to aid you in this, your last "
-#~ "quest. His origins are unknown to you, but you sense strong nobility "
-#~ "beneath the furs and dirt that cover him. In addition, the famous "
-#~ "explorer, Marco the wizard, is rumored to have wrecked his ship in this "
-#~ "new land. Finding him would prove to be a much needed boon to your cause."
-#~ msgstr ""
-#~ "Has contratado a un poderoso bárbaro para que te ayude con ésta, tu "
-#~ "última búsqueda. Sus orígenes te son desconocidos, pero eres capaz de "
-#~ "sentir la fuerte nobleza bajo las pieles y la suciedad que le cubren. "
-#~ "Además, Marco el Mago, el famoso explorador, naufragó frente a estas "
-#~ "tierras. Encontrarle sería una bendición para tu causa."
-
-#~ msgid ""
-#~ "You have just 8 weeks  to build your army and conquer a town on the other "
-#~ "side of a distant river.  There are three paths to take, which will you "
-#~ "choose?"
-#~ msgstr ""
-#~ "Sólo dispones de 8 semanas para formar tu ejército y conquistar una "
-#~ "ciudad del otro lado del lejano rio. Hay tres caminos a seguir, ¿cuál "
-#~ "escojerás?"
-
-#~ msgid ""
-#~ "You have just 8 weeks to build your army and conquer a town on the other "
-#~ "side of a distant river.  There are three paths to take, which will you "
-#~ "choose?"
-#~ msgstr ""
-#~ "Sólo dispones de 8 semanas para formar tu ejército y conquistar una "
-#~ "ciudad del otro lado del lejano rio. Hay tres caminos a seguir, ¿cuál "
-#~ "escojerás?"
-
-#~ msgid "You have recieved a shipment of supplies from your kingdom!"
-#~ msgstr "¡Has recibido un cargamento con suministris desde tu reino!"
-
-#~ msgid ""
-#~ "You have six months to destroy the Necromancer Stronghold in the heart of "
-#~ "the valley."
-#~ msgstr ""
-#~ "Tienes seis meses para destruir la Fortaleza del Necromante, en el "
-#~ "corazón de este valle."
-
-#~ msgid ""
-#~ "You notice that mines and resources in the elvish lands are few, and you "
-#~ "send word to your kingdom that you will need extra supplies. They should "
-#~ "respond within a fortnight."
-#~ msgstr ""
-#~ "Te das cuenta de que las minas y los recursos de las tierras elfas son "
-#~ "escasos, y envías un mensaje a tu reino de que necesitarás recursos "
-#~ "extra. Debieran de responderte en una quincena."
-
-#~ msgid ""
-#~ "Your advisor approaches you smiling greatly, \"My liege! The peasants are "
-#~ "making money in the market, and are finally paying taxes!\""
-#~ msgstr ""
-#~ "Tu consejero se acerca, sonriendo ampliamente: \"¡Mi Señor! Los "
-#~ "campesinos están haciendo dinero en el mercado, y !por fin están pagando "
-#~ "impuestos!\""
-
-#~ msgid ""
-#~ "Your castle, founded inside the center of a mile wide crater, is besieged "
-#~ "by those who desire your mineral wealth."
-#~ msgstr ""
-#~ "Tu castillo, fundado en el interior del centro de un cráter de más de una "
-#~ "milla de ancho, está siendo asediado por aquellos que ansían tu riqueza "
-#~ "mineral."
-
-#~ msgid "Your castle is the last outpost in the area, Don't lose it!"
-#~ msgstr "¡Tu castillo es el ultimo bastión de la zona, no lo pierdas!"
-
-#~ msgid "Your crew begins to grumble."
-#~ msgstr "Tu equipo empieza a quejarse."
-
-#~ msgid "You're almost there!"
-#~ msgstr "¡Ya casi ha terminado!"
-
-#~ msgid "Your king has sent supplies to aid the war effort."
-#~ msgstr "Su rey ha enviado suministros para ayudar en la guerra."
-
-#~ msgid ""
-#~ "Your opponents are allied against you and each is twice as powerful as "
-#~ "his predecessor! Is it possible to win?"
-#~ msgstr ""
-#~ "Tus oponentes se han aliado contra ti, ¡y cada uno es el doble de "
-#~ "poderoso que su predecesor! ¿Es posible vencer?"
-
-#~ msgid ""
-#~ "Your scouts return with grim news.  The natives of this land are "
-#~ "currently at war with each other, and they like outsiders even less than "
-#~ "they like each other!  Congratulations, Commander, you're at war!"
-#~ msgstr ""
-#~ "Tus exploradores regresan con noticias horrendas. Los nativos de estas "
-#~ "tierras están actualmente en guerra los unos con los otros, y los "
-#~ "extranjeros les gustan aún menos. ¡Enhorabuena, Comandante, estás en "
-#~ "guerra!"
-
-#~ msgid ""
-#~ "Your town is undefended and your heroes are scattered.  Do you attack or "
-#~ "defend?"
-#~ msgstr ""
-#~ "Tu ciudad no tiene defensa y tus héroes están desperdigados. ¿Atacas o "
-#~ "defiendes?"
-
-#~ msgid ""
-#~ "Your treasury has been looted by robbers and you have lost valuable "
-#~ "resources."
-#~ msgstr ""
-#~ "Tu tesoro ha sido saqueado por ladrones y has perdido valiosos recursos."
-
-#~ msgid "Your troops begin to wonder about your sanity."
-#~ msgstr "Tus tropas empiezan a preguntarse acerca de su cordura."
-
-#~ msgid ""
-#~ "You see a family of refugees making their way from the beach. You ask "
-#~ "them about their plight and they tell you that they are from a once great "
-#~ "city called Moss Side. They tell you that the castle was destroyed in a "
-#~ "great conflagration, and they fled for fear of their lives."
-#~ msgstr ""
-#~ "Ves a una familia de refugiados abriéndose camino desde la playa. Les "
-#~ "preguntas por su situación, y te dicen que son de una ciudad que fue "
-#~ "grande llamada Moss Side. También te cuentan que el castillo fue "
-#~ "destruido en una gran conflagración, y que huyeron al temer por sus vidas."
-
-#~ msgid ""
-#~ "You see the mast of ancient ship here.  On further investigation you find "
-#~ "that the ships holds are full of gems.  The hours pass as your crue "
-#~ "liberates the treasure."
-#~ msgstr ""
-#~ "Ves el mástil de un navío antiguo. Tras investigar más, encuentras las "
-#~ "bodegas del barco repletas de gemas. Pasan las horas mientras tus hombres "
-#~ "liberan el tesoro."
-
-#~ msgid ""
-#~ "You see the remains of a burned out sawmill here.  All you can salvage is "
-#~ "some ofwood left for scrap."
-#~ msgstr ""
-#~ "Ves los restos calcinados de un aserradero. Lo único que puedes recuperar "
-#~ "es algo de madera."
-
-#~ msgid ""
-#~ "You see the remains of an old sawmill, but it is obvious that you will "
-#~ "not be able to make it work again."
-#~ msgstr ""
-#~ "Ves los restos de un viejo aserradero, pero es obvio que no podrás "
-#~ "ponerlo en marcha de nuevo."
-
-#~ msgid ""
-#~ "You see the remains of an old sawmill just to realize that it will no "
-#~ "longer produce.  You gather the ramains and move on."
-#~ msgstr ""
-#~ "Ves los restos de un viejo aserradero, sólo para darte cuenta de que no "
-#~ "volverá a producir. Recoges los restos y sigues tu camino."
-
-#~ msgid ""
-#~ "You send this letter back to the king,\"A month has passed and we have "
-#~ "not discovered the wizard Joseph. I only hope that we are able to locate "
-#~ "him in time to aid us in our struggle.\""
-#~ msgstr ""
-#~ "Envías esta carta de vuelta al rey, \"Ha pasado un mes y no hemos "
-#~ "descubierto al mago Joseph. Sólo espero que seamos capaces de encontrarlo "
-#~ "a tiempo para que nos ayude en nuestra lucha.\""
-
-#~ msgid "You should turn back."
-#~ msgstr "Deberías volver."
-
-#~ msgid "You uncover a compass in the grass!"
-#~ msgstr "¡Has descubierto una brújula en el cesped!"
-
-#~ msgid "You've been warned!"
-#~ msgstr "¡Se te ha advertido!"
-
-#~ msgid ""
-#~ "You've received a message from the guild. \"Thank God you've arrived! "
-#~ "We're under seige from two enemies from the north and one from across the "
-#~ "sea. Please save us, you're our only hope.\""
-#~ msgstr ""
-#~ "Has recibido un mensaje del gremio. \"¡Gracias a Dios que has llegado! "
-#~ "Estamos bajo asedio de dos enemigos del norte y uno de más allá del mar. "
-#~ "Por favor, sálvanos, ¡eres nuestra única esperanza.\""
-
-#~ msgid ""
-#~ "You've ruled with an iron fist (and an army of undead), but now your "
-#~ "kingdom has turned against you!"
-#~ msgstr ""
-#~ "Has gobernado con puño de hierro (y un ejército de no-muertos), ¡pero "
-#~ "ahora tu reino se ha vuelto contra ti!"
-
-#~ msgid ""
-#~ "You will need a stronger army than that, mortal, to step through this "
-#~ "portal."
-#~ msgstr ""
-#~ "Necesitarás un ejército más fuerte que ese, mortal, para cruzar este "
-#~ "portal."
-
-#~ msgid "Blind "
-#~ msgstr "Ceguera "
-
-#~ msgid "game: also confirm autosave"
-#~ msgstr "juego: también confirmar el autoguardado"
-
-#~ msgid "world: abandoned mine random resource"
-#~ msgstr "mundo: mina abandonada con recursos aleatorios"
-
-#~ msgid "world: save count monster after battle"
-#~ msgstr "mundo: guardar cantidad de monstruos después de la batalla"
-
-#~ msgid "world: no in-built requirements or guardians for placed artifacts"
-#~ msgstr "mundo: sin requisitos in-situ o guardianes para artefactos ubicados"
-
-#~ msgid "castle: allow buy from well"
-#~ msgstr "castillo: permitir comprar desde el pozo"
-
-#~ msgid "heroes: learn new spells with day"
-#~ msgstr "Los héroes: aprenden nuevos hechizos día a día."
-
-#~ msgid "battle: high objects are an obstacle for archers"
-#~ msgstr "batalla: objetos altos son un obstáculo para arqueros"
-
-#~ msgid "battle: merge armies for hero from castle"
-#~ msgstr "batalla: fusionar ejércitos para el héroe desde el castillo"
-
-#~ msgid "battle: magical creature resists (20%) the same magic"
-#~ msgstr "batalla: criatura mágica resiste (20%) la misma magia"
-
-#~ msgid "game: show SDL logo"
-#~ msgstr "juego: mostrar logo de SDL"
-
-#~ msgid "game: also use dynamic interface for castles"
-#~ msgstr "juego: también usar interfaz dinámica para castillos"
-
-#~ msgid "pocketpc: hide cursor"
-#~ msgstr "pocketpc: ocultar cursor"
-
-#~ msgid "pocketpc: tap mode"
-#~ msgstr "pocketpc: modo de pulsación"
-
-#~ msgid "pocketpc: low memory"
-#~ msgstr "tap: poca memoria"
-
-#~ msgid "New Map"
-#~ msgstr "Nuevo mapa"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Crear un nuevo mapa desde cero o utilizando el generador aleatorio de "
-#~ "mapas."
-
-#~ msgid "Load Map"
-#~ msgstr "Cargar mapa"
-
-#~ msgid "Load an existing map."
-#~ msgstr "Cargar un mapa existente."
-
-#~ msgid "Quit out of the map editor."
-#~ msgstr "Salir del editor de mapas."
-
-#~ msgid "Create a map that is %{size} squares wide by %{size} squares high."
-#~ msgstr ""
-#~ "Crear un mapa que sea %{size} casillas de ancho por %{size} casillas de "
-#~ "alto."
-
-#~ msgid "Magnify"
-#~ msgstr "Aumentar el zoom"
-
-#~ msgid "Change between zoom and normal view."
-#~ msgstr "Cambiar entre zoom y vista normal"
-
-#~ msgid "Undo"
-#~ msgstr "Deshacer"
-
-#~ msgid "Undo your last action. Press againt to redo the action."
-#~ msgstr "Deshacer tu última acción. Pulsa de nuevo para rehacer la acción."
-
-#~ msgid "New"
-#~ msgstr "Nuevo"
-
-#~ msgid "Start a new map from scratch."
-#~ msgstr "Comenzar un mapa desde cero"
-
-#~ msgid "Specifications"
-#~ msgstr "Especificaciones"
-
-#~ msgid "Edit maps title, description, and other general information."
-#~ msgstr "Editar título del mapa, descripción y otra información general."
-
-#~ msgid ""
-#~ "Open the file options menu, where you can save or load maps, or quit out "
-#~ "of the editor."
-#~ msgstr ""
-#~ "Abrir el menú opciones de archivo donde puedes grabar o cargar mapas o "
-#~ "salir del editor."
-
-#~ msgid "View the editor system options, which let you customize the editor."
-#~ msgstr ""
-#~ "Ver las opciones del sistema de edición, las cuales te permiten "
-#~ "personalizar el editor."
-
-#~ msgid "Terrain Mode"
-#~ msgstr "Modo Terreno:"
-
-#~ msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-#~ msgstr "Úsalo para situar zonas de pastos, fluviales etc en el mapa."
-
-#~ msgid "Object Mode"
-#~ msgstr "Modo Objetos"
-
-#~ msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
-#~ msgstr ""
-#~ "Úsalo para situar objetos (montañas, árboles, tesoros etc.) en el mapa."
-
-#~ msgid "Detail Mode"
-#~ msgstr "Modo Detalle"
-
-#~ msgid "Used for special editing of monsters, heroes and towns."
-#~ msgstr "Úsalo para edición especial de monstruos, héroes y ciudades."
-
-#~ msgid "Stream Mode"
-#~ msgstr "Modo Fluvial."
-
-#~ msgid "Allows you to draw streams by clicking and dragging."
-#~ msgstr "Permite trazar arroyos cliqueando y arrastrando."
-
-#~ msgid "Road Mode"
-#~ msgstr "Modo Caminos."
-
-#~ msgid "Allows you to draw roads by clicking and dragging."
-#~ msgstr "Permite dibujar caminos cliqueando y arrastrando."
-
-#~ msgid "Erase Mode"
-#~ msgstr "Modo Borrado."
-
-#~ msgid "Used to erase objects of the map."
-#~ msgstr "Úsalo para quitar objetos del mapa."
-
-#~ msgid "Traversable only by boat."
-#~ msgstr "Arribable sólo en barco."
-
-#~ msgid "No special modifiers."
-#~ msgstr "Ningún modificador especial"
-
-#~ msgid ""
-#~ "Cost 1.5 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Cuesta 1.5 veces del movimiento normal para todos los héroes. (La "
-#~ "Orientación reduce o elimina la penalización.)"
-
-#~ msgid ""
-#~ "Cost 1.75 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Cuesta 1.75 veces del movimiento normal para todos los héroes. (La "
-#~ "Orientación reduce o elimina la penalización.)"
-
-#~ msgid ""
-#~ "Cost 1.25 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Cuesta 1.25 veces del movimiento normal para todos los héroes. (La "
-#~ "Orientación reduce o elimina la penalización.)"
-
-#~ msgid ""
-#~ "Cost 2 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Cuesta 2 veces del movimiento normal para todos los héroes. (La "
-#~ "Orientación reduce o elimina la penalización.)"
-
-#~ msgid "Water Objects"
-#~ msgstr "Objetos para zonas fluviales."
-
-#~ msgid "Used to select objects most appropriate for use on water."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados en zonas fluviales o "
-#~ "marítimas."
-
-#~ msgid "Grass Objects"
-#~ msgstr "Objetos para pastizales"
-
-#~ msgid "Used to select objects most appropriate for use on grass."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para zonas de pastos."
-
-#~ msgid "Snow Objects"
-#~ msgstr "Objetos para parajes nevados."
-
-#~ msgid "Used to select objects most appropriate for use on snow."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para parajes nevados."
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Objetos para parajes pantanosos."
-
-#~ msgid "Used to select objects most appropriate for use on swamp."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para parajes pantanosos."
-
-#~ msgid "Lava Objects"
-#~ msgstr "Objetos para parajes volcánicos."
-
-#~ msgid "Used to select objects most appropriate for use on lava."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para parajes volcánicos."
-
-#~ msgid "Desert Objects"
-#~ msgstr "Objetos para parajes deserticos."
-
-#~ msgid "Used to select objects most appropriate for use on desert."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para parajes desérticos."
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Objetos para zona arcillosa."
-
-#~ msgid "Used to select objects most appropriate for use on dirt."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para emplear en zonas "
-#~ "arcillosas."
-
-#~ msgid "Wasteland Objects"
-#~ msgstr "Objetos para parajes Baldíos."
-
-#~ msgid "Used to select objects most appropriate for use on wasteland."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para parajes baldíos."
-
-#~ msgid "Beach Objects"
-#~ msgstr "Objetos para Playas."
-
-#~ msgid "Used to select objects most appropriate for use on beach."
-#~ msgstr ""
-#~ "Úsalo para seleccionar los objetos más apropiados para zonas de playa."
-
-#~ msgid "Towns"
-#~ msgstr "Pueblos"
-
-#~ msgid "Used to place a town or castle."
-#~ msgstr "Úsalo para situar una ciudad o castillo."
-
-#~ msgid "Used to place a monster group."
-#~ msgstr "Úsalo para situar un grupo de monstruos."
-
-#~ msgid "Used to place a hero."
-#~ msgstr "Úsalo para situar un héroe."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Úsalo para situar un artefacto."
-
-#~ msgid "Treasures"
-#~ msgstr "Tesoros."
-
-#~ msgid "Used to place a resource or treasure."
-#~ msgstr "Úsalo para situar un recurso o tesoro."
-
-#~ msgid "Stone"
-#~ msgstr "Piedra"
-
-#~ msgid "Stone spell from Medusa."
-#~ msgstr "Hechizo de Piedra de Medusa."
+"https://github.com/ihhub/\n"
+"fheroes2/releases"

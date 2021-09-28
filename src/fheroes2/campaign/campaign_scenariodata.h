@@ -106,11 +106,6 @@ namespace Campaign
             return _bonuses;
         }
 
-        const std::string & getFileName() const
-        {
-            return _fileName;
-        }
-
         int getScenarioID() const
         {
             return _scenarioID;

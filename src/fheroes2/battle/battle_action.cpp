@@ -142,40 +142,40 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
 void Battle::Arena::ApplyAction( Command & cmd )
 {
     switch ( cmd.GetType() ) {
-    case MSG_BATTLE_CAST:
+    case CommandType::MSG_BATTLE_CAST:
         ApplyActionSpellCast( cmd );
         break;
-    case MSG_BATTLE_ATTACK:
+    case CommandType::MSG_BATTLE_ATTACK:
         ApplyActionAttack( cmd );
         break;
-    case MSG_BATTLE_MOVE:
+    case CommandType::MSG_BATTLE_MOVE:
         ApplyActionMove( cmd );
         break;
-    case MSG_BATTLE_SKIP:
+    case CommandType::MSG_BATTLE_SKIP:
         ApplyActionSkip( cmd );
         break;
-    case MSG_BATTLE_END_TURN:
+    case CommandType::MSG_BATTLE_END_TURN:
         ApplyActionEnd( cmd );
         break;
-    case MSG_BATTLE_MORALE:
+    case CommandType::MSG_BATTLE_MORALE:
         ApplyActionMorale( cmd );
         break;
 
-    case MSG_BATTLE_TOWER:
+    case CommandType::MSG_BATTLE_TOWER:
         ApplyActionTower( cmd );
         break;
-    case MSG_BATTLE_CATAPULT:
+    case CommandType::MSG_BATTLE_CATAPULT:
         ApplyActionCatapult( cmd );
         break;
 
-    case MSG_BATTLE_RETREAT:
+    case CommandType::MSG_BATTLE_RETREAT:
         ApplyActionRetreat( cmd );
         break;
-    case MSG_BATTLE_SURRENDER:
+    case CommandType::MSG_BATTLE_SURRENDER:
         ApplyActionSurrender( cmd );
         break;
 
-    case MSG_BATTLE_AUTO:
+    case CommandType::MSG_BATTLE_AUTO:
         ApplyActionAutoBattle( cmd );
         break;
 
@@ -227,7 +227,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         usage_spells.Append( spell );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    spell.GetName() << ", "
                                    << "incorrect param" );
     }
@@ -293,7 +293,6 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
     const int32_t dst = cmd.GetValue();
-    const int32_t path_size = cmd.GetValue();
 
     Battle::Unit * b = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
@@ -338,16 +337,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             pos2 = pos1;
         }
         else {
-            Indexes path;
-
-            // check path
-            if ( 0 == path_size ) {
-                path = GetPath( *b, pos1 );
-                cmd = Command( MSG_BATTLE_MOVE, b->GetUID(), dst, path );
-            }
-            else
-                for ( int index = 0; index < path_size; ++index )
-                    path.push_back( cmd.GetValue() );
+            const Indexes path = GetPath( *b, pos1 );
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -457,7 +447,7 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
         }
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "incorrect param"
                        << ": "
                        << "uid: "
@@ -761,7 +751,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         // check abroads
         case Spell::FIREBALL:
@@ -784,7 +775,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         // check all troops
         case Spell::DEATHRIPPLE:
@@ -814,7 +806,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( playResistSound ) {
                 *playResistSound = false;
             }
-        } break;
+            break;
+        }
 
         default:
             break;
@@ -825,7 +818,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         for ( auto & tgt : targets ) {
             const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
-            if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
+            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
                 tgt.resist = true;
             }
         }
@@ -993,7 +986,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
     const HeroBase * commander = GetCurrentCommander();
     const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
-    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
+    const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );

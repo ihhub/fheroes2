@@ -126,7 +126,7 @@ void Interface::Basic::SetHideInterface( bool f )
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
-    gameArea.Build();
+    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
 }
 
 Interface::Basic & Interface::Basic::Get( void )

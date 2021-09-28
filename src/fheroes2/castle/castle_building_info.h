@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,23 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "til.h"
+#pragma once
 
-namespace TIL
-{
-    const struct
-    {
-        int type;
-        const char * string;
-    } tilmap[] = {
-        {UNKNOWN, "UNKNOWN"},
-        {CLOF32, "CLOF32.TIL"},
-        {GROUND32, "GROUND32.TIL"},
-        {STON, "STON.TIL"},
-    };
-}
+#include "castle.h"
 
-const char * TIL::GetString( int til )
+namespace fheroes2
 {
-    return UNKNOWN <= til && LASTTIL > til ? tilmap[til].string : "CUSTOM";
+    Rect getCastleBuildingArea( const int race, const building_t buildingId );
 }

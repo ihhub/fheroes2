@@ -28,6 +28,7 @@
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
+#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
@@ -51,7 +52,7 @@ namespace Maps
 {
     struct TilesAddon
     {
-        enum level_t
+        enum level_t : uint8_t
         {
             GROUND = 0,
             DOWN = 1,
@@ -60,7 +61,7 @@ namespace Maps
         };
 
         TilesAddon();
-        TilesAddon( int lv, u32 gid, int obj, u32 ii );
+        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
         TilesAddon( const TilesAddon & ta );
 
         ~TilesAddon() = default;
@@ -85,10 +86,10 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
 
-        u32 uniq;
-        u8 level;
-        u8 object;
-        u8 index;
+        uint32_t uniq;
+        uint8_t level;
+        uint8_t object;
+        uint8_t index;
     };
 
     struct Addons : public std::list<TilesAddon>
@@ -109,7 +110,7 @@ namespace Maps
         }
 
         fheroes2::Point GetCenter( void ) const;
-        int GetObject( bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
@@ -143,20 +144,20 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface( void ) const;
 
-        bool isObject( int obj ) const;
+        bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
         bool isRoad() const;
         bool isStream( void ) const;
-        bool isShadow( void ) const;
+        bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-        void SetObject( int object );
+        void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
         {
@@ -185,7 +186,7 @@ namespace Maps
         bool doesObjectExist( const uint32_t uid ) const;
 
         // ICN::FLAGS32 version
-        void CaptureFlags32( int obj, int col );
+        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
 
         // Removes all ICN::FLAGS32 objects from this tile.
         void removeFlags();
@@ -204,7 +205,7 @@ namespace Maps
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
+        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -287,9 +288,13 @@ namespace Maps
 
         uint32_t getObjectIdByICNType( const int icnId ) const;
 
+        std::vector<uint8_t> getValidTileSets() const;
+
+        bool containsTileSet( const std::vector<uint8_t> & tileSets ) const;
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
+        static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
@@ -304,7 +309,7 @@ namespace Maps
         TilesAddon * FindFlags( void );
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( u32 index, bool );
+        void CorrectFlags32( const int col, const u32 index, const bool up );
         void RemoveJailSprite( void );
 
         void QuantitySetVariant( int );
@@ -313,6 +318,8 @@ namespace Maps
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
+
+        bool isTallObject() const;
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
@@ -354,10 +361,6 @@ namespace Maps
         uint32_t _region = 0;
 
         uint8_t _level = 0;
-
-#ifdef WITH_DEBUG
-        uint8_t impassableTileRule = 0;
-#endif
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

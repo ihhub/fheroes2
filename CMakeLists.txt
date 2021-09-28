@@ -1,8 +1,12 @@
 # For descent FetchContent()
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.6 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.7 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12")
+    cmake_policy(SET CMP0074 NEW)
+endif()
 
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -38,6 +42,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(src)
 
+file(GLOB H2D_FILES ${CMAKE_SOURCE_DIR}/files/data/*.h2d)
+install(
+	FILES ${H2D_FILES}
+	DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
+	)
 install(
 	FILES docs/README.txt LICENSE changelog.txt
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}

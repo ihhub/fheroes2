@@ -27,6 +27,7 @@
 
 #include "agg.h"
 #include "game_mode.h"
+#include "mp2.h"
 #include "mus.h"
 #include "types.h"
 
@@ -103,6 +104,8 @@ namespace Game
         EVENT_INFOGAME,
         EVENT_DIGARTIFACT,
         EVENT_CASTSPELL,
+        EVENT_KINGDOM_INFO,
+        EVENT_VIEW_WORLD,
         EVENT_DEFAULTACTION,
         EVENT_OPENFOCUS,
         EVENT_SYSTEMOPTIONS,
@@ -184,12 +187,12 @@ namespace Game
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
-    fheroes2::GameMode CompleteCampaignScenario();
+    fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 
-    void EnvironmentSoundMixer( void );
+    void EnvironmentSoundMixer();
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );
@@ -251,10 +254,10 @@ namespace Game
         {
             FadeTask();
 
-            FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_, bool fadeIn_,
-                      uint8_t objectTileset_ );
+            FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
+                      bool fadeIn_, uint8_t objectTileset_ );
 
-            int object;
+            MP2::MapObjectType object;
             uint32_t objectIndex;
             uint32_t animationIndex;
             int32_t fromIndex;
@@ -267,7 +270,7 @@ namespace Game
 
         const FadeTask & GetFadeTask();
 
-        void PrepareFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PrepareFadeTask( const MP2::MapObjectType object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
         void PerformFadeTask();
     }
 

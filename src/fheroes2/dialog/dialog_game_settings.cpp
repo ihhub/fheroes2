@@ -23,6 +23,7 @@
 #include "dialog.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "game.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -48,7 +49,8 @@ namespace
 
     void drawBackground( const fheroes2::StandardWindow & window )
     {
-        const fheroes2::Sprite & settingsImage = fheroes2::AGG::GetICN( ICN::SPANBKG, 0 );
+        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const fheroes2::Sprite & settingsImage = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 0 );
         const fheroes2::Rect & windowRoi = window.activeArea();
 
         Copy( settingsImage, 16, 16, fheroes2::Display::instance(), windowRoi.x, windowRoi.y, 289, 120 );
@@ -120,10 +122,13 @@ namespace
         fheroes2::StandardWindow window( 289, 163, display );
         const fheroes2::Rect windowRoi = window.activeArea();
 
-        const fheroes2::Sprite & buttonOkayImage = fheroes2::AGG::GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0 );
+        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+
+        const fheroes2::Sprite & buttonOkayImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
         fheroes2::Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
-                                     ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1 );
+                                     buttonIcnId, 0, 1 );
 
         window.render();
         drawBackground( window );
@@ -146,7 +151,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {

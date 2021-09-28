@@ -35,7 +35,10 @@ namespace fheroes2
     protected:
         void updateSubscription();
 
-        virtual void senderUpdate( const ActionObject * ) {}
+        virtual void senderUpdate( const ActionObject * )
+        {
+            // Do nothing.
+        }
 
     private:
         ActionObject * _receiver;

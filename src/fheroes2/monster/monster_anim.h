@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <array>
 #include <list>
 
 #include "battle_animation.h"
@@ -66,6 +67,8 @@ namespace Monster_Info
 
 namespace fheroes2
 {
+    const std::array<uint8_t, 15> & getMonsterAnimationSequence();
+
     class RandomMonsterAnimation
     {
     public:

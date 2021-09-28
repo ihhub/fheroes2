@@ -151,9 +151,9 @@ MeetingButton::MeetingButton( s32 px, s32 py )
 
 SwapButton::SwapButton( s32 px, s32 py )
 {
-    const fheroes2::Sprite & sprite = GetMeetingSprite();
-    // Custom graphics: rotate existing sprtie
-    // sf = GetMeetingSprite().RenderRotate( 1 );
+    const fheroes2::Sprite & in = GetMeetingSprite();
+    fheroes2::Sprite sprite( in.height(), in.width() );
+    Transpose( in, sprite );
     setSprite( sprite, sprite );
     setPosition( px, py );
 }
@@ -255,8 +255,8 @@ int Castle::OpenDialog( bool readonly )
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
     // button swap
-    SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
-    MeetingButton buttonMeeting( cur_pt.x + 88, cur_pt.y + 345 );
+    SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 348 );
+    MeetingButton buttonMeeting( cur_pt.x + 88, cur_pt.y + 346 );
 
     if ( heroes.Guest() && heroes.Guard() && !readonly ) {
         buttonSwap.draw();
@@ -449,7 +449,7 @@ int Castle::OpenDialog( bool readonly )
             for ( auto it = cacheBuildings.cbegin(); it != cacheBuildings.cend(); ++it ) {
                 if ( BUILD_MAGEGUILD & ( *it ).id ) {
                     const int mageGuildLevel = GetLevelMageGuild();
-                    if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
+                    if ( mageGuildLevel > 0 && ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
                         if ( le.MouseClickLeft( ( *it ).coord ) || getPressedBuildingHotkey() == BUILD_MAGEGUILD ) {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             bool noFreeSpaceForMagicBook = false;
@@ -603,7 +603,8 @@ int Castle::OpenDialog( bool readonly )
                                     RedrawResourcePanel( cur_pt );
                                     alphaHero = 0;
                                 }
-                            } break;
+                                break;
+                            }
 
                             default:
                                 break;

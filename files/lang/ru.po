@@ -1,4 +1,4 @@
-# translation of fheroes2.po to
+# Russian translation of fheroes2
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-02 09:09+0200\n"
+"POT-Creation-Date: 2021-08-31 21:44+0800\n"
 "PO-Revision-Date: 2021-08-02 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -124,14 +124,13 @@ msgstr "Тысячи"
 msgid "All %{race} troops +1"
 msgstr "Все отряды одной расы +1"
 
-msgid "Troops of 3 alignments -1"
-msgstr "Отряды 3-х рас -1"
+#, fuzzy
+msgid "Multiple"
+msgstr "Мульти"
 
-msgid "Troops of 4 alignments -2"
-msgstr "Отряды 4-х рас -2"
-
-msgid "Troops of 5 alignments -3"
-msgstr "Отряды 5-и рас -3"
+#, fuzzy
+msgid "Troops of %{count} alignments -%{penalty}"
+msgstr "Отряды %{count} рас -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "В армии нежить -1"
@@ -244,6 +243,9 @@ msgstr "Потери"
 
 msgid "Attacker"
 msgstr "Атакующий"
+
+msgid "None"
+msgstr "Ничего"
 
 msgid "Defender"
 msgstr "Защитник"
@@ -472,10 +474,10 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона всем живым существам."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "%{name} ослеплены Единорогами!"
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "%{name} обращены в камень взглядом медузы!"
 
 msgid "The Mummies' curse falls upon the %{name}!"
@@ -511,6 +513,9 @@ msgstr "Фантомный отряд уничтожен!"
 msgid "Break auto battle?"
 msgstr "Остановить автобитву?"
 
+msgid "Error"
+msgstr "Ошибка"
+
 msgid "No spells to cast."
 msgstr "Нет заклинаний."
 
@@ -540,6 +545,12 @@ msgid ""
 "%{spell}."
 msgstr ""
 "Благодаря орлиному взору, %{name} смог выучить заклинание \"%{spell}\"."
+
+msgid "Monsters"
+msgstr "Монстры"
+
+msgid "N/A"
+msgstr "Н/Д"
 
 msgid "Left Turret"
 msgstr "Левая Башня"
@@ -1180,6 +1191,9 @@ msgstr "Для этого вам нужно сперва построить за
 msgid "Cannot build %{name} because castle is too far from water."
 msgstr "%{name} невозможно построить, потому что замок слишком далеко от воды."
 
+msgid "disable build."
+msgstr ""
+
 msgid "Cannot afford %{name}."
 msgstr "Недостаточно золота для найма %{name}."
 
@@ -1714,17 +1728,32 @@ msgstr "неделя"
 msgid "Available"
 msgstr "Доступно"
 
+#, fuzzy
+msgid "View World"
+msgstr "Показать все"
+
 msgid "View the entire world."
 msgstr "Обзор мира."
 
+msgid "Puzzle"
+msgstr ""
+
 msgid "View the obelisk puzzle."
 msgstr "Показать мозаику."
+
+#, fuzzy
+msgid "Scenario Information"
+msgstr "Информация о сценарии"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Описание текущего сценария."
 
 msgid "Dig for the Ultimate Artifact."
 msgstr "Копать в поисках  Уникального Артефакта."
+
+#, fuzzy
+msgid "Digging"
+msgstr "(можно копать)"
 
 msgid "Exit this menu without doing anything."
 msgstr "Выход, без изменений."
@@ -1849,6 +1878,46 @@ msgstr "Выход"
 msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr "Выйдите из Free Heroes of Might and Magic II."
 
+msgid "Language"
+msgstr "Язык"
+
+#, fuzzy
+msgid "Resolution"
+msgstr "Разрешение"
+
+#, fuzzy
+msgid "Experimental"
+msgstr "Экспериментальные"
+
+msgid "Settings"
+msgstr "Настройки"
+
+#, fuzzy
+msgid "Select Game Language"
+msgstr "Выберите язык игры:"
+
+#, fuzzy
+msgid "Change language of the game."
+msgstr "Изменить язык интерфейса."
+
+msgid "Select Game Resolution"
+msgstr "Выбор разрешения экрана"
+
+msgid "Change resolution of the game."
+msgstr "Изменить разрешение экрана."
+
+msgid "Experimental game settings."
+msgstr "Экспериментальные настройки игры."
+
+#, fuzzy
+msgid "Attention"
+msgstr "Внимание"
+
+msgid ""
+"Your version of Heroes of Might and Magic II does not support any languages "
+"except English."
+msgstr ""
+
 msgid ""
 "Map\n"
 "Difficulty"
@@ -1889,11 +1958,31 @@ msgstr ""
 "Условия\n"
 "поражения"
 
+msgid "score: "
+msgstr ""
+
+msgid "First select recipients!"
+msgstr ""
+
 msgid "You cannot select %{resource}!"
 msgstr "Вы не можете выбрать %{resource}!"
 
 msgid "Select count %{resource}:"
 msgstr "Выберите количество %{resource}:"
+
+#, fuzzy
+msgid "Select Recipients"
+msgstr "Описание"
+
+msgid "Your Funds"
+msgstr ""
+
+msgid "Planned Gift"
+msgstr ""
+
+#, fuzzy
+msgid "Gift from %{name}"
+msgstr "Дар от %{name}"
 
 msgid "Set Guardian"
 msgstr "Установить Охрану"
@@ -1940,6 +2029,12 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Я могу дать вам за одну единицу %{resto} %{count} единиц(у) %{resfrom}."
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "Qty to trade"
 msgstr "Перейти к торговле"
 
@@ -1963,6 +2058,9 @@ msgstr "охраняет %{count} %{monster}"
 
 msgid "(available: %{count})"
 msgstr "(Доступно: %{count})"
+
+msgid "(empty)"
+msgstr ""
 
 msgid "already learned"
 msgstr "уже выучено"
@@ -1997,9 +2095,6 @@ msgstr "Терра Инкогнито"
 msgid "Defenders:"
 msgstr "Защитники:"
 
-msgid "None"
-msgstr "Ничего"
-
 msgid "Unknown"
 msgstr "Неизвестный"
 
@@ -2015,8 +2110,8 @@ msgstr "Доступно: %{count}"
 msgid "Number to buy:"
 msgstr "Купить:"
 
-msgid "Select Game Resolution"
-msgstr "Выбор Разрешения Экрана"
+msgid "MAX"
+msgstr ""
 
 msgid "How many troops to move?"
 msgstr "Сколько войнов перенести?"
@@ -2163,79 +2258,24 @@ msgstr "Накопить крупные запасы золота."
 msgid "Victory Condition"
 msgstr "Условия победы"
 
+#, fuzzy
+msgid "Experimental Game Settings"
+msgstr "Экспериментальные настройки игры."
+
 msgid "one"
 msgstr "1"
 
 msgid "two"
 msgstr "2"
 
+msgid "off"
+msgstr "выкл."
+
 msgid "Music"
 msgstr "Музыка"
 
-msgid "Toggle ambient music level."
-msgstr "Уровень музыки."
-
 msgid "Effects"
 msgstr "Эффекты"
-
-msgid "Toggle foreground sounds level."
-msgstr "Уровень звуков."
-
-msgid "Change the type of music."
-msgstr "Изменить тип музыки."
-
-msgid "Music Type"
-msgstr "Тип музыки"
-
-msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
-"Изменить скорость, с которой ваши герои перемещаются по главному экрану."
-
-msgid "Hero Speed"
-msgstr "Скор. Героев"
-
-msgid "Enemy Speed"
-msgstr "Скор. Врагов"
-
-msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
-msgstr ""
-"Устанавливает скорость, с которой двигаются герои A.I.  Вы также можете "
-"выбрать не просматривать движение A.I. вовсе."
-
-msgid "Scroll Speed"
-msgstr "Скор. Прокрутки"
-
-msgid "Sets the speed at which you scroll the window."
-msgstr "Устанавливает скорость, с которой вы прокрутите окно."
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Переключить тип интерфейса, который вы хотите использовать."
-
-msgid "Interface"
-msgstr "Интерфейс"
-
-msgid "Toggle interface visibility."
-msgstr "Показать/скрыть интерфейс."
-
-msgid "Battles"
-msgstr "Битвы"
-
-msgid "Toggle instant battle mode."
-msgstr "Режим мгновенного боя."
-
-msgid "Exit this menu."
-msgstr "Выход из меню."
-
-msgid "OK"
-msgstr "ОК"
-
-msgid "off"
-msgstr "выкл."
 
 msgid "MIDI"
 msgstr "MIDI"
@@ -2246,11 +2286,23 @@ msgstr "Расширение MIDI"
 msgid "External"
 msgstr "Внешний"
 
+msgid "Music Type"
+msgstr "Тип музыки"
+
 msgid "Jump"
 msgstr "Н"
 
+msgid "Hero Speed"
+msgstr "Скор. Героев"
+
 msgid "Don't Show"
 msgstr "Скрыть"
+
+msgid "Enemy Speed"
+msgstr "Скор. Врагов"
+
+msgid "Scroll Speed"
+msgstr "Скор. Прокрутки"
 
 msgid "Evil"
 msgstr "Злой"
@@ -2258,11 +2310,17 @@ msgstr "Злой"
 msgid "Good"
 msgstr "Добрый"
 
+msgid "Interface Type"
+msgstr "Интерфейс"
+
 msgid "Hide"
 msgstr "Скрыть"
 
 msgid "Show"
 msgstr "Показать"
+
+msgid "Interface"
+msgstr "Интерфейс"
 
 msgid "Auto Resolve"
 msgstr "Автобитва"
@@ -2270,8 +2328,49 @@ msgstr "Автобитва"
 msgid "Auto, No Spells"
 msgstr "Авто без Магии"
 
+msgid "Battles"
+msgstr "Битвы"
+
 msgid "Manual"
 msgstr "Вручную"
+
+msgid "Toggle ambient music level."
+msgstr "Уровень музыки."
+
+msgid "Toggle foreground sounds level."
+msgstr "Уровень звуков."
+
+msgid "Change the type of music."
+msgstr "Изменить тип музыки."
+
+msgid "Change the speed at which your heroes move on the main screen."
+msgstr ""
+"Изменить скорость, с которой ваши герои перемещаются по главному экрану."
+
+msgid ""
+"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
+"I. movement at all."
+msgstr ""
+"Устанавливает скорость, с которой двигаются герои A.I.  Вы также можете "
+"выбрать не просматривать движение A.I. вовсе."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Устанавливает скорость, с которой вы прокрутите окно."
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Переключить тип интерфейса, который вы хотите использовать."
+
+msgid "Toggle interface visibility."
+msgstr "Показать/скрыть интерфейс."
+
+msgid "Toggle instant battle mode."
+msgstr "Режим мгновенного боя."
+
+msgid "Exit this menu."
+msgstr "Выход из меню."
+
+msgid "OK"
+msgstr "ОК"
 
 msgid "Att."
 msgstr "Атк."
@@ -2357,17 +2456,17 @@ msgstr "Лучший отряд:"
 msgid "difficulty|Easy"
 msgstr "Простая"
 
-msgid "difficulty|Expert"
-msgstr "Эксперт"
+msgid "difficulty|Normal"
+msgstr "Нормальная"
 
 msgid "difficulty|Hard"
 msgstr "Сложная"
 
+msgid "difficulty|Expert"
+msgstr "Эксперт"
+
 msgid "difficulty|Impossible"
 msgstr "Невозможная"
-
-msgid "difficulty|Normal"
-msgstr "Нормальная"
 
 msgid "Map is loading..."
 msgstr "Загрузка..."
@@ -2380,6 +2479,33 @@ msgstr "Сбой загрузки сценария кампании"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr "Пожалуйста, убедитесь, что файлы кампании верны и присутствуют."
+
+msgid "Project Coordination and Core Development"
+msgstr ""
+
+msgid "QA and Support"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Visit us at "
+msgstr ""
+
+msgid "Special Thanks to"
+msgstr ""
+
+msgid "Original project before 0.7"
+msgstr ""
+
+msgid "Support us at"
+msgstr ""
+
+msgid "Connect with us at"
+msgstr ""
+
+msgid "Need help with the game?"
+msgstr ""
 
 msgid "Unknown Hero"
 msgstr "Неизвестный Герой"
@@ -2394,12 +2520,31 @@ msgstr ""
 "Недействительный тип файла. Пожалуйста, убедитесь, что вы используете "
 "последнюю версию файлов."
 
+msgid "Warning"
+msgstr "Внимание"
+
 msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
 msgstr ""
 "Этот файл сохранен в версии \"Price Loyalty\".\n"
 "Некоторые возможности игры будут недоступны."
+
+msgid "Usupported save format: "
+msgstr ""
+
+#, fuzzy
+msgid "Current game version: "
+msgstr "Текущие модификаторы морали:"
+
+msgid "Last supported version: "
+msgstr ""
+
+msgid "This saved game is localized to '"
+msgstr ""
+
+msgid "' language, but the current language of the game is '"
+msgstr ""
 
 msgid "Hot Seat"
 msgstr "За одним ПК"
@@ -2494,8 +2639,9 @@ msgstr "Счет"
 msgid "View the high score screen."
 msgstr "Просмотр лучших результатов."
 
-msgid "Change resolution of the game."
-msgstr "Изменить разрешение экрана."
+#, fuzzy
+msgid "Game settings."
+msgstr "Добро Пожаловать!"
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -2536,12 +2682,6 @@ msgstr "Простая битва"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Настройте и играйте в битву без загрузки карты."
-
-msgid "Experimental game settings."
-msgstr "Экспериментальные настройки игры."
-
-msgid "Settings"
-msgstr "Настройки"
 
 msgid "2 Players"
 msgstr "2 игрока"
@@ -2710,11 +2850,12 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} игрок побеждён!"
 
+#, fuzzy
+msgid "Do you wish to continue the game?"
+msgstr "Желаете купить?"
+
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
-
-msgid "Warning"
-msgstr "Внимание"
 
 msgid "Click here to select which scenario to play."
 msgstr "Нажмите сюда чтобы выбрать сценарий."
@@ -2999,6 +3140,9 @@ msgstr "Немецкий"
 
 msgid "Russian"
 msgstr "Русский"
+
+msgid ", FPS: "
+msgstr ""
 
 msgid "Ambrose"
 msgstr "Амброс"
@@ -4185,6 +4329,9 @@ msgstr ""
 "такой уж дипломат, чтобы мой хозяин принял вас,\" - фыркнул он. - "
 "\"Возвращайтесь, когда сочтете себя достойным.\""
 
+msgid " and "
+msgstr " и "
+
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
 "masters of the fort. Your army now contains %{monsters2}."
@@ -4359,6 +4506,11 @@ msgstr ""
 
 msgid "Except for evidence of a terrible battle, the cave is empty."
 msgstr "Если не считать следов ужасной битвы, пещера пуста."
+
+msgid ""
+"As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
+"makes his way towards you."
+msgstr ""
 
 msgid "He checks your pack, and sees that you have 1 cursed item."
 msgid_plural ""
@@ -4634,9 +4786,6 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
 
-msgid " and "
-msgstr " и "
-
 msgid ""
 "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
 "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
@@ -4717,6 +4866,11 @@ msgid_plural "%{count} of the creatures will join us..."
 msgstr[0] "%{count} монстр присоединится к Вам..."
 msgstr[1] "%{count} монстра присоединится к Вам..."
 msgstr[2] "%{count} монстров присоединится к Вам..."
+
+msgid ""
+"\n"
+" for a fee of %{gold} gold."
+msgstr ""
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Эта трусливая армия убежит от Вас..."
@@ -5050,17 +5204,17 @@ msgstr "Синий"
 msgid "Green"
 msgstr "Зеленый"
 
-msgid "Orange"
-msgstr "Оранжевый"
-
-msgid "Purple"
-msgstr "Фиолетовый"
-
 msgid "Red"
 msgstr "Красный"
 
 msgid "Yellow"
 msgstr "Желтый"
+
+msgid "Orange"
+msgstr "Оранжевый"
+
+msgid "Purple"
+msgstr "Фиолетовый"
 
 msgid "Aqua"
 msgstr "Изумрудный"
@@ -5089,14 +5243,36 @@ msgstr "Гарнизон"
 msgid "Gold Per Day:"
 msgstr "Доход золота в день:"
 
+msgid "Heroes"
+msgstr "Герои"
+
+#, fuzzy
+msgid "View Heroes."
+msgstr "Показать героев"
+
+#, fuzzy
+msgid "Towns/Castles"
+msgstr "Город/Замок"
+
+#, fuzzy
+msgid "View Towns and Castles."
+msgstr "Показать города"
+
+#, fuzzy
+msgid "Exit"
+msgstr "Покинуть Город"
+
+msgid "luck|Cursed"
+msgstr "Проклятая"
+
 msgid "luck|Awful"
 msgstr "Ужасная"
 
 msgid "luck|Bad"
 msgstr "Плохая"
 
-msgid "luck|Cursed"
-msgstr "Проклятая"
+msgid "luck|Normal"
+msgstr "Нормальная"
 
 msgid "luck|Good"
 msgstr "Хорошая"
@@ -5106,9 +5282,6 @@ msgstr "Отличная"
 
 msgid "luck|Irish"
 msgstr "Фортуна!"
-
-msgid "luck|Normal"
-msgstr "Нормальная"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5131,26 +5304,26 @@ msgstr ""
 "Хорошая удача иногда позволяет вашим отрядам проводить удачные атаки в "
 "сражении, наносящие двойной урон."
 
+msgid "morale|Treason"
+msgstr "В панике!"
+
 msgid "morale|Awful"
 msgstr "Ужасная"
-
-msgid "morale|Normal"
-msgstr "Нормальная"
 
 msgid "morale|Poor"
 msgstr "Плохая"
 
-msgid "morale|Treason"
-msgstr "В панике!"
-
-msgid "morale|Blood!"
-msgstr "В Бой!"
+msgid "morale|Normal"
+msgstr "Нормальная"
 
 msgid "morale|Good"
 msgstr "Хорошая"
 
 msgid "morale|Great"
 msgstr "Отличная"
+
+msgid "morale|Blood!"
+msgstr "В Бой!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr "Плохая мораль может заставить отряд застыть на месте от ужаса."
@@ -5167,17 +5340,11 @@ msgstr ""
 "Хорошая мораль может дать вашим войскам возможность дополнительной атаки в "
 "сражении."
 
-msgid "Barbarian"
-msgstr "Варвар"
-
 msgid "Knight"
 msgstr "Рыцарь"
 
-msgid "Multi"
-msgstr "Мульти"
-
-msgid "Necromancer"
-msgstr "Некромант"
+msgid "Barbarian"
+msgstr "Варвар"
 
 msgid "Sorceress"
 msgstr "Колдунья"
@@ -5188,35 +5355,41 @@ msgstr "Чародей"
 msgid "Wizard"
 msgstr "Волшебник"
 
-msgid "speed|Average"
-msgstr "Средняя"
+msgid "Necromancer"
+msgstr "Некромант"
 
-msgid "speed|Crawling"
-msgstr "Оч. Низкая -1"
-
-msgid "speed|Fast"
-msgstr "Быстрая"
-
-msgid "speed|Slow"
-msgstr "Низкая"
+msgid "Multi"
+msgstr "Мульти"
 
 msgid "speed|Standing"
 msgstr "Оч. Низкая -2"
 
-msgid "speed|Very Fast"
-msgstr "Оч. Быстрая"
+msgid "speed|Crawling"
+msgstr "Оч. Низкая -1"
 
 msgid "speed|Very Slow"
 msgstr "Оч. Низкая"
+
+msgid "speed|Slow"
+msgstr "Низкая"
+
+msgid "speed|Average"
+msgstr "Средняя"
+
+msgid "speed|Fast"
+msgstr "Быстрая"
+
+msgid "speed|Very Fast"
+msgstr "Оч. Быстрая"
+
+msgid "speed|Ultra Fast"
+msgstr "Ультра"
 
 msgid "speed|Blazing"
 msgstr "Ультра +1"
 
 msgid "speed|Instant"
 msgstr "Ультра +2"
-
-msgid "speed|Ultra Fast"
-msgstr "Ультра"
 
 msgid "week|PLAGUE"
 msgstr "ЧУМЫ"
@@ -5362,8 +5535,12 @@ msgstr "Драконий город"
 msgid "Lighthouse"
 msgstr "Маяк"
 
+#, fuzzy
 msgid "Water Wheel"
-msgstr "Водяная мельница"
+msgid_plural "Water Wheels"
+msgstr[0] "Водяная мельница"
+msgstr[1] "Водяная мельница"
+msgstr[2] "Водяная мельница"
 
 msgid "Mines"
 msgstr "Шахты"
@@ -5386,8 +5563,12 @@ msgstr "Шатер"
 msgid "Wagon Camp"
 msgstr "Вагоны"
 
+#, fuzzy
 msgid "Windmill"
-msgstr "Ветряная мельница"
+msgid_plural "Windmills"
+msgstr[0] "Ветряная мельница"
+msgstr[1] "Ветряная мельница"
+msgstr[2] "Ветряная мельница"
 
 msgid "Random Town"
 msgstr "Случайный город"
@@ -5484,9 +5665,6 @@ msgstr "Монолиты"
 
 msgid "Magic Well"
 msgstr "Волшебный колодец"
-
-msgid "Heroes"
-msgstr "Герои"
 
 msgid "Nothing Special"
 msgstr "Ничего особенного"
@@ -5608,8 +5786,12 @@ msgstr "Тонущий матрос"
 msgid "Bottle"
 msgstr "Бутылка"
 
+#, fuzzy
 msgid "Magic Garden"
-msgstr "Волшебный сад"
+msgid_plural "Magic Gardens"
+msgstr[0] "Волшебный сад"
+msgstr[1] "Волшебный сад"
+msgstr[2] "Волшебный сад"
 
 msgid "Jail"
 msgstr "Тюрьма"
@@ -6205,6 +6387,18 @@ msgstr "200% урона от заклинаний Холода"
 
 msgid "% damage from %{spell} spell"
 msgstr "% урона от заклинания %{spell}"
+
+#, fuzzy, c-format
+msgid "% immunity to "
+msgstr "% устойчивости к заклинанию %{spell}"
+
+#, fuzzy
+msgid "Lightning"
+msgstr "Жезл Молний"
+
+#, fuzzy, c-format
+msgid "% damage from "
+msgstr "200% урона от заклинаний Огня"
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
@@ -7663,6 +7857,9 @@ msgstr "битва: использовать альтернативный про
 msgid "battle: reverse wait order (fast, average, slow)"
 msgstr "битва: обратный порядок после ожидания (первый быстрый)"
 
+msgid "battle: deterministic events"
+msgstr ""
+
 msgid "game: show system info"
 msgstr "игра: показать информационную строку (время, память и т.п.)"
 
@@ -7746,2831 +7943,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Cannot recruit - you have already recruited a hero in the current week."
-#~ msgstr "Найм невозможен. На этой неделе Вы уже нанимали героя."
-
-#~ msgid "Lose the heroes: %{name}."
-#~ msgstr "Потерять следующих героев: %{name}."
-
-#~ msgid "world: show visited content from objects"
-#~ msgstr "мир: показать доп. информацию о объектах (правый клик)"
-
-#~ msgid "world: ban for WeekOf/MonthOf Monsters"
-#~ msgstr ""
-#~ "мир: отключить дополнительную прибавку существ в начале Недели/Месяца "
-#~ "Монстров"
-
-#~ msgid "world: ban plagues months"
-#~ msgstr "мир: отключить месяц Чумы"
-
-#~ msgid "world: Months Of Monsters do not place creatures on map"
-#~ msgstr ""
-#~ "мир: отключить добавление дополнительных существ на карту после начала "
-#~ "Месяца Монстров"
-
-#~ msgid "world: Starting heroes as Loss Conditions for Human Players"
-#~ msgstr "мир: потеря начальных героев сценария приводит к поражению"
-
-#~ msgid "world: Only 1 hero can be hired by the one player every week"
-#~ msgstr "мир: возможен найм только 1 героя в неделю"
-
-#~ msgid "world: Each castle allows one hero to be recruited every week"
-#~ msgstr "мир: каждый город разрешает покупку одного героя в неделю"
-
-#~ msgid ""
-#~ "%{color} has fallen!\n"
-#~ "All is lost."
-#~ msgstr ""
-#~ "%{color} повержен!\n"
-#~ "Все потеряно..."
-
-#~ msgid "CD Stereo"
-#~ msgstr "CD Стерео"
-
-#~ msgid "Network"
-#~ msgstr "Сеть"
-
-#~ msgid ""
-#~ "Play a network game, where 2 players use their own computers connected "
-#~ "through a LAN (Local Area Network)."
-#~ msgstr ""
-#~ "Сетевая игра, в которой 2 игрока используют свои собственные компьютеры, "
-#~ "соединенные через LAN (локальную сеть)."
-
-#, fuzzy
-#~ msgid "Hero %{name} also got a %{count} experience."
-#~ msgstr "Герой %{name} также получает %{count} опыта."
-
-#~ msgid ", and get +2 defense"
-#~ msgstr ", а также получает +2 к защите"
-
-#~ msgid "You don't have enough gold!"
-#~ msgstr "Вам не хватает золота!"
-
-#~ msgid ""
-#~ "Your troops can be upgraded, but it will cost you %{ratio} times the "
-#~ "difference in cost for each troop, rounded up to next highest number. Do "
-#~ "you wish to upgrade them?"
-#~ msgstr ""
-#~ "Ваши воины могут быть улушены, но это будет стоить Вам %{ratio} кратной "
-#~ "разницы в цене за каждого воина, округлённой в большую сторону. Вы всё "
-#~ "ещё желаете улучшить?"
-
-#~ msgid "For the QVGA version is not available."
-#~ msgstr "Для версии QVGA пока недоступно."
-
-#~ msgid "Cost per troop:"
-#~ msgstr "Цена за войско:"
-
-#~ msgid "sound"
-#~ msgstr "Звук"
-
-#~ msgid "ai speed"
-#~ msgstr "скорость AI"
-
-#~ msgid "You have no room to carry another artifact!"
-#~ msgstr "В вашей сумке нет места для еще одного артефакта."
-
-#~ msgid "View Morale Info"
-#~ msgstr "Мораль"
-
-#~ msgid "View Luck Info"
-#~ msgstr "Удача"
-
-#~ msgid "Exit hero"
-#~ msgstr "Закрыть"
-
-#~ msgid "Dismiss hero"
-#~ msgstr "Уволить"
-
-#~ msgid "Show prev heroes"
-#~ msgstr "Предыдущий герой"
-
-#~ msgid "Water"
-#~ msgstr "Вода"
-
-#~ msgid "Ship Wreck"
-#~ msgstr "Кораблекрушение"
-
-#~ msgid "Coast"
-#~ msgstr "Побережье"
-
-#~ msgid "buy"
-#~ msgstr "купить"
-
-#~ msgid "Error"
-#~ msgstr "Ошибка"
-
-#~ msgid "This release is compiled without network support."
-#~ msgstr "Эта версия игры не поддерживает игру по сети."
-
-#~ msgid ""
-#~ "425 bottles of beer on the wall, 425 bottles of beer! If one of those "
-#~ "bottles should happen to fall, there'll be..."
-#~ msgstr ""
-#~ "425 бутылок пива, 425 бутылок пива! Если одна из этих бутылок упадет, там "
-#~ "что то будет ..."
-
-#~ msgid "A balanced scenario with lots of resources and land to explore."
-#~ msgstr "Сбалансированный сценарий с множеством ресурсов для развития."
-
-#~ msgid ""
-#~ "A bandit army of gorgons jump you without warning.  they stone your "
-#~ "entire army demand 500 gold before they will release your comrads.  "
-#~ "Realizing that it is much cheeper to pay then rebuild your army you part "
-#~ "with the gold."
-#~ msgstr ""
-#~ "Бандитская армия горгон набрасыввается на Вас без предупреждения, они "
-#~ "превращают в камень всю вашу армию  и требуют 500 золотых взамен на "
-#~ "освобождение ваших товарищей. Осознавая, что заплатить будет намного "
-#~ "выгоднее, чем перестраивать всю армию, вы делитесь золотом."
-
-#~ msgid "Abandon All Hope!"
-#~ msgstr "Безнадёга!!"
-
-#~ msgid "Abandon All Hope Ye That Enter Here"
-#~ msgstr "Оставь всякую надежду, сюда входящий!"
-
-#~ msgid "A bit of crystal!"
-#~ msgstr "Немного кристаллов!"
-
-#~ msgid "A bit of mercury!"
-#~ msgstr "Немного ртути!"
-
-#~ msgid "A bit of sulfur!"
-#~ msgstr "Немного серы!"
-
-#~ msgid ""
-#~ "Above you looms the ancient Ice Palace.  Dimly remembered myth speaks of "
-#~ "a Prince who rejected the advances of the Winter Goddess, and thus he and "
-#~ "his domain were cursed to remain shrouded in ice, hidden in a forgotten "
-#~ "corner of the world.  It is said that he can only be rescued by a hero "
-#~ "who is both clever and bold.  Are you that one?  Do you dare enter this "
-#~ "frozen domain?"
-#~ msgstr ""
-#~ "Перед Вами - древний Ледяной Дворец. Частично сохранившийся миф "
-#~ "повествует о Принце, который не признал достижений Зимней Богини и  был "
-#~ "проклят и обречен со своими владениями на вечное заточение во льду, "
-#~ "затерянный в забытом уголке мира. Говорится, что только герои, равно "
-#~ "обладающий умом и храбростью может освободить его. Может быть это Вы? Вы "
-#~ "отважитесь войти в Ледяные владения?"
-
-#~ msgid "A cache of crystal!"
-#~ msgstr "Кошелек с кристаллами!"
-
-#~ msgid "A cache of gems!"
-#~ msgstr "Кошелек с алмазами!"
-
-#~ msgid "A cache of gold!"
-#~ msgstr "Кошелек с золотом!"
-
-#~ msgid "A cache of mercury!"
-#~ msgstr "Банка с ртутью!"
-
-#~ msgid "A cache of sulfur!"
-#~ msgstr "Мешок с серой!"
-
-#~ msgid ""
-#~ "A chance to end a bitter war has finally arrived as a new resource-laden "
-#~ "land has been discovered."
-#~ msgstr ""
-#~ "Обнаружена Новая Земля. И наконец, появился шанс положить конец "
-#~ "ожесточенной войне за ресурсы."
-
-#~ msgid "A chunk of gold!"
-#~ msgstr "Немного золота!"
-
-#~ msgid "A chunk of ore!"
-#~ msgstr "Немного камня!"
-
-#~ msgid "A couple of gems!"
-#~ msgstr "Немного драгоценных камней!"
-
-#~ msgid "\"Act of Desperation\""
-#~ msgstr "\"Акт Отчаянья\""
-
-#~ msgid ""
-#~ "A desert isle rich in resources rewards the quick.  Just be sure to watch "
-#~ "your back!"
-#~ msgstr ""
-#~ "Пустынные острова богаты ресурсами. Только убедись, что почаще смотришь "
-#~ "назад!"
-
-#~ msgid "A dolphin playfully jumps into the air."
-#~ msgstr "Дельфин игриво прыгает в воздух."
-
-#~ msgid ""
-#~ "A Dragon, A Cyclops, or an Undead. King of the Centaurs, His name is ....?"
-#~ msgstr "Дракон, Циклоп, или Мертвец. Король Кентавров - Как Его Зовут....?"
-
-#~ msgid "A flight of dragons circles overhead."
-#~ msgstr "Пара драконов наворачивает кругами над вами."
-
-#~ msgid "A flock of seagulls circle overhead."
-#~ msgstr "Стая чаек кружится над головой."
-
-#~ msgid "A friendly dolphin splashes alongside the ship."
-#~ msgstr "Друзья дельфины плывут рядом с кораблем."
-
-#~ msgid ""
-#~ "After a long search of the island, I have discovered that there is no way "
-#~ "for me to escape without help.  I can not steal a ship from one of the "
-#~ "coastal castles, and I dare not venture into the desert unless I wish to "
-#~ "become Dragon food.  Should anyone find this, I beg of you, please send a "
-#~ "ship and get me off this cursed island!  -Sir Christian"
-#~ msgstr ""
-#~ "Я обшарил весь остров и понял, у меня нет способа отсюда выбраться без "
-#~ "посторонней помощи. Я не могу украсть лодку с одного из прибрежных "
-#~ "замков, и я не смею идти через пустыню где я стану пищей драконов. Если "
-#~ "кто нашел это, я прошу вас, пожалуйста, отправьте лодку и заберите меня с "
-#~ "этого проклятого острова! Сэр Христиан."
-
-#~ msgid ""
-#~ "After centuries of friendship, the Wizards have suddenly decided to stop "
-#~ "sharing their Library with the rest of the world.  This can't be good!"
-#~ msgstr ""
-#~ "После столетий мира и дружбы, Волшебники внезапно запретили, для "
-#~ "остального мира, доступ к их Библиотеке. Это плохой знак!"
-
-#~ msgid ""
-#~ "After many years of peace, you discover that your sworn enemy from across "
-#~ "the sea has chosen to invade your homeland by raising up the ocean floor "
-#~ "to bridge the distance! You must not let them gain a foothold on this "
-#~ "continent, in fact, your King has ordered you to establish a foothold on "
-#~ "theirs!  To make matters worse, two of your OWN towns have thrown in "
-#~ "their lots with the enemy..."
-#~ msgstr ""
-#~ "После многих лет мира, вы обнаружили, что враги решили вторгнуться из за "
-#~ "моря! Вы должны помешать их планам! Плохая новость, два ваших города уже "
-#~ "бросили жребий с врагом..."
-
-#~ msgid ""
-#~ "After you return from a scouting trip, your Seneschal hurries to greet "
-#~ "you.  \"My Lord, in your absence I signed an agreement in your name with "
-#~ "a Master Merchant.  If we supply him with the resources he needs, through "
-#~ "trading, he can return the resources to us in a week or so, plus some "
-#~ "additional ones.\"  The Seneschal eyes you anxiously.  You hesitate, then "
-#~ "nod slowly, \"Good, we can use more resources>\""
-#~ msgstr ""
-#~ "Вы вернулись с дальней разведки, и вас спешит поприветствовать советник: "
-#~ "\"Мой Лорд, во время Вашего отсутствия, я подписал соглашение, на Ваше "
-#~ "имя, с Боссом Торговцев. Если мы предоставим ему ресурсы, он обещает "
-#~ "вернуть все через неделю плюс некоторые проценты....\".\n"
-#~ "Советник посмотрел на Вас с тревогой в глазах... Вы медленно кивнули: "
-#~ "\"Хорошо, мы сможем использовать больше ресурсов\""
-
-#~ msgid "A ghostly pirate ship appears and sails on by."
-#~ msgstr "Вдруг появляется пиратский корабль призрак, и проплавает мимо."
-
-#~ msgid ""
-#~ "A Gift from your King, and a note that reads \"Use these resources "
-#~ "wisely, It's all we have left\"."
-#~ msgstr ""
-#~ "Вы получили Подарок от Короля, и записку, в которой написано: \"Используй "
-#~ "это разумно!\"."
-
-#~ msgid ""
-#~ "A gift of gold, m'lord, from the people of Enroth, to the people of "
-#~ "Enroth.  Good luck, and may God save true King Roland!"
-#~ msgstr ""
-#~ "Золото в подарок, мой Лорд, от народа Enroth, народу Enroth. Желаю удачи, "
-#~ "и пусть Бог сохранит истинного Короля  Роланда!"
-
-#~ msgid "A glint by a tree catches your eye..."
-#~ msgstr "Блеск по дереву бросается в глаза..."
-
-#~ msgid "A gold cache!"
-#~ msgstr "Кошелек золота!"
-
-#~ msgid "A gold chunk!"
-#~ msgstr "Немного золота!"
-
-#~ msgid "A gold nugget!"
-#~ msgstr "Самородок золота!"
-
-#~ msgid ""
-#~ "A great Black dragon stands before you. It speaks in a suprisingly soft "
-#~ "voice, saying, \"The elves believe they have sent another hero to reclaim "
-#~ "their prize. I believe they have sent me another meal.\""
-#~ msgstr ""
-#~ "Перед вами стоит Большой Черный Дракон. На удивление вам, он произносит "
-#~ "мягким тихим голосом: \"Эльфы думают, что направили еще одного героя "
-#~ "востребовать свой приз, Но Я Считаю, что они прислали мне еще один ужин!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approaches you, \"We are in dire need of your "
-#~ "assistance.  Our castle to the north has been overrun and our Lord "
-#~ "killed.  Please help us regain our homes!  There are still women and "
-#~ "children there!  Take what we have to help!\""
-#~ msgstr ""
-#~ "Группа крестьян обратилась к тебе: \"Мы нуждаемся в Вашей помощи. Наш "
-#~ "замок, на востоке, был разграблен и Лорда нашего убили. Пожалуйста, "
-#~ "помогите нам вернуть наши дома! Там остались наши женщины и дети, "
-#~ "помогите!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approach you, \"We are in dire need of your "
-#~ "assistance.  Our castle to the east has been overrun and our Lord "
-#~ "killed.  Please help us regain our homes!  There are still women and "
-#~ "children there!  Take what we have to help!\""
-#~ msgstr ""
-#~ "Группа крестьян обратилась к тебе: \"Мы нуждаемся в Вашей помощи. Наш "
-#~ "замок, на востоке, был разграблен и Лорда нашего убили. Пожалуйста, "
-#~ "помогите нам вернуть наши дома! Там остались наши женщины и дети, "
-#~ "помогите!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approach you, \"We are in dire need of your "
-#~ "assistance. Our castle to the east has been overrun and our Lord killed. "
-#~ "Please help us regain our homes! There are still women and children "
-#~ "there! Take what we have to help!\""
-#~ msgstr ""
-#~ "К Вам подошла группа крестьян, \"Мы нуждается в Вашей помощи. Наш замок, "
-#~ "на востоке, был разграблен, и Хозяина нашего убили. Пожалуйста, помогите "
-#~ "нам! Там осталось много женщин и детей! Мы готовы помоч!\""
-
-#~ msgid ""
-#~ "A group of peasant farmers approach you, We are in dire need of your "
-#~ "assistance.  Our castle to the northeast has been overrun and our Lord "
-#~ "killed.  Please help us regain our homes!  There are still women and "
-#~ "children there!  Take what we have to help!\""
-#~ msgstr ""
-#~ "К Вам подошла группа крестьян, \"Мы нуждается в Вашей помощи. Наш замок, "
-#~ "на северо востоке, был разграблен, и Хозяина нашего убили. Пожалуйста, "
-#~ "помогите нам! Там осталось много женщин и детей! Мы готовы помоч!\""
-
-#~ msgid "A handful of gems!"
-#~ msgstr "Горсть алмазов!"
-
-#~ msgid ""
-#~ "Ah, you stumble across something buried in the sand.  As you dig it up "
-#~ "you discover a small pile of gems and crystal."
-#~ msgstr ""
-#~ "Вау, Вы случайно нашли что-то в песке. Вы начали копать и обнаружили "
-#~ "небольшую груду драгоценных камней и кристаллов."
-
-#~ msgid ""
-#~ "A Knight and Necromancer team up against the Barbarian and Sorceress. "
-#~ "(Blue and Green vs Red and Yellow)"
-#~ msgstr ""
-#~ "Рыцарь и Некромант в команде против Варвара и Волшебницы. (Синий и "
-#~ "Зеленый vs Красный, Желтый)"
-
-#~ msgid ""
-#~ "A large contingent of the king's guard approaches you.  \"Ahh, we have "
-#~ "finally caught up to you.  The king requires tribute from all of his "
-#~ "vassals and you have been negligent far too long.\""
-#~ msgstr ""
-#~ "К Вам подошла большая толпа царской охраны. \"Ага подлец, наконец, мы "
-#~ "тебя поймали. Все вассалы должны платить дань, а Вы что то давно забили "
-#~ "на это...\""
-
-#~ msgid ""
-#~ "A large map with lots of resources and treasure. Exploration and victory "
-#~ "will require many heroes."
-#~ msgstr ""
-#~ "Большая карта где много ресурсов и сокровищ. Для разведки и победы "
-#~ "потребуется много Героев."
-
-#~ msgid "A legion of peasants stands between you and this unclaimed island."
-#~ msgstr "Легион крестьян стоит между вами и островом."
-
-#~ msgid "Algary"
-#~ msgstr "Алгари"
-
-#~ msgid "A little bit closer..."
-#~ msgstr "Немного ближе..."
-
-#~ msgid "All mines are grouped by type. Trade is your only hope."
-#~ msgstr ""
-#~ "Все шахты сгруппированы по типу. Торговля это Ваша единственная надежда."
-
-#~ msgid "A lump of crystal!"
-#~ msgstr "Куча кристаллов!"
-
-#~ msgid "A lump of gold!"
-#~ msgstr "Куча золота!"
-
-#~ msgid "A lump of mercury!"
-#~ msgstr "Куча ртути!"
-
-#~ msgid ""
-#~ "A man appears from behind the sand dune. \"At last,\" he says, \"Someone "
-#~ "has come to rescue me! I am forever grateful. Alas all I have to offer "
-#~ "you in return are these souvenirs from my wrecked ship.\""
-#~ msgstr ""
-#~ "Из-за песчаных дюн появился оборванец. \"О! Наконец то\" - говорит он, "
-#~ "\"Кто-то пришел, чтобы спасти меня! Мои благодарности! Увы... все что я "
-#~ "могу предложить Вам .. так это сувениры с моего погибшего корабля...\""
-
-#~ msgid ""
-#~ "A man is laying on the ground, near death. He looks to you and speaks, "
-#~ "\"Please help my companions! Please... they can't...cough...get away "
-#~ "from...cough...the drag...\" With that, he dies."
-#~ msgstr ""
-#~ "На земле лежит умирающий человек. Он видит Вас и произносит, "
-#~ "\"Пожалуйста, помоги моим товарищам! Пожалуйста... они не могут... "
-#~ "кхе...  кхе.. кхе... ужасный кашель... сопротивление...\", и после этих "
-#~ "слов он умерирает."
-
-#~ msgid ""
-#~ "A merchant caravan arrives, bringing gold and supplies, however, no one "
-#~ "can seem to remember where they came from.  You silently praise this "
-#~ "anonymous benefactor and continue your duties."
-#~ msgstr ""
-#~ "Прибыл караван купцов, никто не знает откуда они, но их золото и товары "
-#~ "пригодятся."
-
-#~ msgid "a mirror"
-#~ msgstr "зеркало"
-
-#~ msgid "An albatross flies ahead of the ship for a while"
-#~ msgstr "Альбатрос летит некоторое время перед судном"
-
-#~ msgid "Anduran"
-#~ msgstr "Андуран"
-
-#~ msgid ""
-#~ "An enemy from across the sea has seized half your towns.  Can you put "
-#~ "aside your own feud with your brother to fight this common enemy?"
-#~ msgstr ""
-#~ "Враг из за моря захватил половину страны. Вы сможете отложить вражду, с "
-#~ "собственным братом, для борьбы с этим общим врагом?"
-
-#~ msgid ""
-#~ "An old elf is sitting on a rock in a glen, pounding on the shackles on "
-#~ "his feet with a stone. You help him remove them and ask him his tale. "
-#~ "\"I'm a deserter from Drakonia's army. She has enslaved all the elves to "
-#~ "support her madness. She must be stopped.\" Then he slips into the woods "
-#~ "without a sound, leaving behind just his cloak."
-#~ msgstr ""
-#~ "На скале сидит старый эльф, стуча кандалами по камню. Вы помогаете ему "
-#~ "удалить кандалы, и он рассказал Вам: \"Я дезертир из армии Драконии. Она "
-#~ "безумна, и поработила всех эльфов. Ее нужно остановить\". Он оставил Вам "
-#~ "свой плащ, и скрытно уходит в лес."
-
-#~ msgid "Antioch"
-#~ msgstr "Антиош"
-
-#~ msgid "A piece of crystal!"
-#~ msgstr "Кусочек кристалла!"
-
-#~ msgid "A pile of crystal!"
-#~ msgstr "Куча кристаллов!"
-
-#~ msgid "A pile of gems!"
-#~ msgstr "Куча драгоценных камней!"
-
-#~ msgid "A pile of gold!"
-#~ msgstr "Куча золота!"
-
-#~ msgid ""
-#~ "A plague of undead is upon us. Who will unite the living against the dead?"
-#~ msgstr "Тьма нежити идет на нас. Кто объединит Живых против Мертвых?"
-
-#~ msgid "A quantity of crystal!"
-#~ msgstr "Много кристаллов!"
-
-#~ msgid "A quantity of mercury!"
-#~ msgstr "Много ртути!"
-
-#~ msgid "A quantity of sulfur!"
-#~ msgstr "Много серы!"
-
-#~ msgid ""
-#~ "Archibald has also sent an army to find the Crown, you must find it first "
-#~ "or all is lost."
-#~ msgstr ""
-#~ "Арчибальд направил свою армию на поиски Короны. Вы должны найти этот "
-#~ "артефакт первым."
-
-#~ msgid "Archibald is hiding at the end of the river."
-#~ msgstr "Арчибальд скрывается в конце реки."
-
-#~ msgid ""
-#~ "A resource rich valley keeps the Wizard and the Necromancer apart. Your "
-#~ "opponent's army will arrive in 3 months so hurry."
-#~ msgstr ""
-#~ "Богатая ресурсами долина разделяет Волшебника и Некроманта друг от друга. "
-#~ "У Вас есть 3 месяца."
-
-#~ msgid "Arm of the Crusader"
-#~ msgstr "Рука Рыцаря"
-
-#~ msgid "Arm of the Cyclops"
-#~ msgstr "Рука Циклопа"
-
-#~ msgid "Arm of the Dragon"
-#~ msgstr "Крыло Дракона"
-
-#~ msgid "Arm of the Phoenix"
-#~ msgstr "Крыло Феникса"
-
-#~ msgid "Arm of the Titan"
-#~ msgstr "Рука Титана"
-
-#~ msgid "Arr' Here be pirates gold buried."
-#~ msgstr "Арр.. Здесь спрятяно золото пиратов!"
-
-#~ msgid "A shipment of wood has arrived from your kingdom!"
-#~ msgstr "Древесина прибыла от Вашего Королевства!"
-
-#~ msgid ""
-#~ "A splash in the seaweed alerts you to a mermaid waving in a friendly "
-#~ "manner. \"Oh, I thought you were Ahab.\" She is surprised, but quickly "
-#~ "composes herself. \"Well, if you meet him, give him these treasures I "
-#~ "have collected.\""
-#~ msgstr ""
-#~ "Плеск в морских водорослях, предупреждает Вас о русалке. \"О, я думала, "
-#~ "что ты Ахаб\". Она удивилась, но быстро сочиняет сама. \"Хорошо, если ты "
-#~ "ним встретишься, передай эти сокровища...\""
-
-#~ msgid "Assassins tried to kill our ally."
-#~ msgstr "Убийцы пытались убить нашего союзника."
-
-#~ msgid "Astircaer"
-#~ msgstr "Астиркаер"
-
-#~ msgid ""
-#~ "A stranded Wizard with only a small force must conquer an entire "
-#~ "continent of hostile forces."
-#~ msgstr ""
-#~ "Нищий Волшебник с небольшой армией должен покорить весь континент "
-#~ "враждебных сил."
-
-#~ msgid ""
-#~ "A supply ship has arrived from the homeland!  You send word home that all "
-#~ "is well."
-#~ msgstr ""
-#~ "Прибыл корабль с грузом! Вы отправляете с ним послание, что все хорошо."
-
-#~ msgid ""
-#~ "As you approach the barrier, you see the old elf you helped free. This "
-#~ "time, however, you see that he is wearing a cape of fine weave, and a "
-#~ "wooden crown is on his head. He sees your forces, and says \"Take this "
-#~ "sword, and with it, strike down Drakonia and help free my people.\" The "
-#~ "old elf then strides regally into the woods."
-#~ msgstr ""
-#~ "Вы видите старого эльфа, в в плаще из тонкой ткани, и с деревянной "
-#~ "короной на голове. Он говорит: \"Возьми этот меч, а вместе с ним победу "
-#~ "над Драконией! Помоги освободить мой Народ\". После этого, он царственно "
-#~ "ушел в лес."
-
-#~ msgid ""
-#~ "As you approach the gates of the Ice Palace, one of your troops points in "
-#~ "terror.  You watch in awe as great slabs of ice separate from the castle "
-#~ "walls with loud cracking reports and crash to the ground.  Soon the ice "
-#~ "is gone and the sun begins to peak through the gloom.  The deathly "
-#~ "silence that must have ruled these lands for centuries ends as birds "
-#~ "begin to sing.  From inside you hear the sounds of life."
-#~ msgstr ""
-#~ "Вы приближаетесь к воротам Ледового Дворца. Ваши воины застыли в ужасе и "
-#~ "Вы смотрите в страхе, как большие ледовые плиты, отделяются от Дворца и с "
-#~ "громким грохотом и падают на землю. Вскоре весь лед ушел, и солнце "
-#~ "начинает светить во мраке. Гробовое молчание, которое на протяжении веков "
-#~ "присутствовало здесь, прерывается пением неизвестных птиц. Жизнь "
-#~ "возвращается..."
-
-#~ msgid ""
-#~ "As you approach the tent, the leader of the nomads comes out to greet "
-#~ "you. He says, \"It was prophecied many years ago that a great hero would "
-#~ "come to greet us in our sacred valley, and we would prosper afterwords. "
-#~ "Now it has come to pass, and we offer you these gifts as tokens of our "
-#~ "thanks.\""
-#~ msgstr ""
-#~ "Вы приближаетесь к палатке кочевников, из нее выходит Вождь. Он "
-#~ "произносит: \"Много лет назад было пророчество, к нам придет Великий "
-#~ "Герой, и мы будем процветать.. Теперь это свершилось, и мы предлагаем вам "
-#~ "эти подарки в знак благодарности.\""
-
-#~ msgid ""
-#~ "As you approach,  you hear whispered mentions of \"the wild barbarian who "
-#~ "passed this way months before\". One of the villagers approaches you and "
-#~ "hands you an object, saying \"The wild one dropped this. You must be his "
-#~ "kin. Therefore I give it to you. But beware! Many in the village will not "
-#~ "be as friendly as I.\""
-#~ msgstr ""
-#~ "Приближаясь, Вы слышите таинственные упоминания о \"диком варваре, чей "
-#~ "путь проходил здесь много месяцев назад\". Один из поселенцев "
-#~ "приближается к Вам и вручает предмет со словами - \"Дикарь обронил его. "
-#~ "Вы должно быть его родственник. Поэтому я отдаю его Вам. Но "
-#~ "остерегайтесь! Немногие из деревни будут дружелюбны к Вам так , как Я"
-
-#~ msgid ""
-#~ "As you break your fast your sage rushes in, \"Good news, my lord!  I have "
-#~ "translated the message.  Two great heroes were imprisoned many years "
-#~ "ago.  They lie sleeping - still guarded by magic barriers and monsters.  "
-#~ "My lord, they lie nearby- in between our ally and us.  If we could free "
-#~ "them, they would surely aid us against our enemies!  The password to the "
-#~ "first magic barrier can be learned at the Aqua Traveller's Tent.\""
-#~ msgstr ""
-#~ "Как только вы входите, к Вам подбегает слуга, \"Хорошие вести, Господин! "
-#~ "Я преревел послание. Двое великих героев были заточены много лет назад. "
-#~ "Они спят, по прежнему охраняемые магическими барьерами и чудовищами. "
-#~ "Господин, они лежат неподалеку, между союзниками и нами. Если бы Мы могли "
-#~ "свободить их, они наверняка поддержали бы нас против наших врагов! Пароль "
-#~ "к первому магическому барьеру можно узнать В Палатке Подводного Странника."
-
-#~ msgid ""
-#~ "As you enter the small clearing, you see a familiar figure talking to a "
-#~ "group of halflings and soldiers. You stay awhile and listen to his "
-#~ "speech. \"The time to throw off these chains of tyranny is now! We must "
-#~ "strike at the heart of her empire, and destroy the evil that she has "
-#~ "brought to our land.\" As the old elf finishes speaking, he gets up from "
-#~ "his mossy seat and once again, blends into the woods with incredible "
-#~ "grace."
-#~ msgstr ""
-#~ "Выходя к пашне, Вы видите знакомую фигуру, разговаривающую с группой "
-#~ "полуросликов и солдат. Вы останавливаетесь и подслушиваете разговор. "
-#~ "\"Настало время сбросить оковы Тирании! Мы должны нанести удар в сердце "
-#~ "ее империи и разгромить зло, которое она принесла в наши земли.\" "
-#~ "Заканчивая речь, старый эльф встает с мшистого пня и скрывается в лесу с "
-#~ "невероятной ловкостью."
-
-#~ msgid ""
-#~ "As you lay down to nap after a long battle, you notice a lucky four-leaf "
-#~ "clover."
-#~ msgstr ""
-#~ "Вы ложитесь подремать после длинного сражения, и замечаете четырехлистный "
-#~ "клевер, который приносит Удачу."
-
-#~ msgid ""
-#~ "As you make  your way through the last of the golemn debris, a group of "
-#~ "halflings runs towards you carrying fruit and flowers. \"Thank you so "
-#~ "much!\" Their leader exclaims, \"We've been trapped in here for ever! "
-#~ "Come by our homes, we'll pack up and go with you!\""
-#~ msgstr ""
-#~ "Как только Вы выбираетесь из-под обломков последнего голема, группа "
-#~ "половинчиков бежит к Вам, неся фрукты и цветы. \"Огромное Вам спасибо!\" "
-#~ "восклицает их лидер, \"Мы провели целую вечность в неволе! Заглядывайте в "
-#~ "гости и мы пойдём с Вами!\""
-
-#~ msgid ""
-#~ "As you make your way to the shrine, some very thin and hollow-eyed men "
-#~ "come out of the flower patch and stare at you.  Seeing that you want the "
-#~ "gold, one of them says to you \"Hey, man, if you're, like, so lusty for "
-#~ "earthly wealth, then, like, have this too.\" You graciously take what "
-#~ "they have offered and back out of the clearing."
-#~ msgstr ""
-#~ "По дороге в склеп Вы встречаете несколько очень худых людей с пустыми "
-#~ "глазами, которые вышли из палисадника и теперь пялятся на Вас. Видя, что "
-#~ "Вы хотите золото, один из них говорит Вам \"Эй, брат, если ты, типа, так "
-#~ "желаешь материальных благ, то тогда, типа, возьми ещё и вот это.\" Вы "
-#~ "элегантно принимаете то, что они Вам предлагают и уносите ноги."
-
-#~ msgid ""
-#~ "As you prepare your lands to fight the onslaught from the South, a "
-#~ "curious message appears on your table in the Great Hall of your Castle.  "
-#~ "Written in some ancient language, none but your sage can make any sense "
-#~ "of it.  She promises to have the words deciphered by tomorrow..."
-#~ msgstr ""
-#~ "Во время приготовлений Ваших земель к противостоянию бойне с Юга, "
-#~ "любопытное сообщение появляется на Вашем столе в Большой Зале Вашего "
-#~ "Замка. Оно написано на каком-то древнем языке и никто, кроме Вашего "
-#~ "мудреца не может ничего разобрать. Она обещает, что переведёт загадочные "
-#~ "слова к утру..."
-
-#~ msgid "A three hour tour, a three hour tour..."
-#~ msgstr "Трехчасовой тур, трехчасовой тур..."
-
-#~ msgid ""
-#~ "A tiny gnome points to a chunk of crystal you otherwise would have "
-#~ "overlooked!"
-#~ msgstr ""
-#~ "Маленький гном указывает на кусочек кристалла, который Вы, иначе, "
-#~ "пропустили бы!"
-
-#~ msgid "Atlantium"
-#~ msgstr "Атлантиум"
-
-#~ msgid ""
-#~ "At last, the king is dead.  For years you have planned his demise, but "
-#~ "now it is done, and there is no heir to take his place, though the "
-#~ "Knights to the south believe that they are the rightful successors.  A "
-#~ "wealth in wood (to the south) and ore (in the northern mountains) "
-#~ "provides you with trade goods, and your isolation has allowed you to "
-#~ "prepare your forces of darkness for this day.  Go, now, and fulfill your "
-#~ "destiny!"
-#~ msgstr ""
-#~ "Наконец-то, король пал. Годами Вы планировали его свержение и вот оно "
-#~ "свершилось, но нет преемника, чтобы занять его место, хотя Рыцари с юга и "
-#~ "считают, что они являются законными наследниками. Богатые леса (на юге) и "
-#~ "залежи руды (в северных горах) откроют Вам путь на рыночную арену, а Ваша "
-#~ "изолированность позволит Вам приготовить силы тьмы к этому дню. Идите же "
-#~ "и исполните своё предназначение!"
-
-#~ msgid ""
-#~ "At the base of the mountain you see something that glitters.   You "
-#~ "discover an ancient pile of offerings to the gods."
-#~ msgstr ""
-#~ "В основании горы Вы увидели кое-что блестящее. Там Вы обнаруживаете "
-#~ "древнюю груду, посланную вам богами."
-
-#~ msgid "Avalon"
-#~ msgstr "Авалон"
-
-#~ msgid "Avone"
-#~ msgstr "Авона"
-
-#~ msgid ""
-#~ "A wild magic has allowed a bridge to form between two lands...  Your one "
-#~ "hope is to capture castle \"Black Fang\"."
-#~ msgstr ""
-#~ "Необузданная магия сотворила мост между двумя землями... Ваша "
-#~ "единственная надежда - захватить замок \"Чёрный Клык\"."
-
-#~ msgid "Barbarian's castle lies to the south."
-#~ msgstr "Замок Варваров находится ближе к Югу."
-
-#~ msgid ""
-#~ "Barbarians from the north threaten all civilization. Can you repel the "
-#~ "hordes?"
-#~ msgstr ""
-#~ "Варвары с Севера угрожают всей цивилизации. Вы сможете отразить эти орды?"
-
-#~ msgid "Barrowton"
-#~ msgstr "Барраутаун"
-
-#~ msgid "Basenji"
-#~ msgstr "Басенджи"
-
-#~ msgid "Bayside"
-#~ msgstr "Байсид"
-
-#~ msgid "Baywatch"
-#~ msgstr "Байватч"
-
-#~ msgid ""
-#~ "Because the Darkscale Valley is so barren, the Emperor will be sending "
-#~ "wood to you every week. Use it wisely, for it is all you shall have."
-#~ msgstr ""
-#~ "Из-за того, что Долина Тёмной Чешуи так пустынна, Император будет "
-#~ "высылать Вам древесину каждую неделю. Расходуйте её мудро, кроме неё Вы "
-#~ "ничего не получите."
-
-#~ msgid ""
-#~ "Before questing for the orb of negation, you must first crush the local "
-#~ "opposition. After the Sorceresses are removed from the earth, go east "
-#~ "where legend says the orb lies.  You may expect a convoy of supplies in a "
-#~ "week or so to aid your conquest."
-#~ msgstr ""
-#~ "Перед походом за сферой отрицания, Вам необходимо сокрушить местную "
-#~ "оппозицию. После того, как все Волшебницы будут убиты, отправляйтесь на "
-#~ "восток, где, судя по легенде, находится сфера. Караван ресурсов в помощь "
-#~ "Вашему завоеванию прибудет через неделю или около того."
-
-#~ msgid ""
-#~ "Before you may pass, the spirit guardian of this valley demands tribute."
-#~ msgstr "Дух-страж требует плату за проход."
-
-#~ msgid "Being held...."
-#~ msgstr "Проходит..."
-
-#~ msgid "Beltway"
-#~ msgstr "Кольцевой путь"
-
-#~ msgid "Beware -- Entering Hyrda Country"
-#~ msgstr "Осторожно -- Здесь Страна Гидр"
-
-#~ msgid "Beware for whom the bell trolls."
-#~ msgstr "Осторожно, слышно рычание Троллей."
-
-#~ msgid "Beware of Pirates!"
-#~ msgstr "Остерегайся Пиратов!"
-
-#~ msgid "Beware of thieves!"
-#~ msgstr "Остерегайся Воров!"
-
-#~ msgid "Beware of traps ahead."
-#~ msgstr "Остерегайтесь ловушек"
-
-#~ msgid "Beware of Warlocks"
-#~ msgstr "Остерегайтесь Волшебников."
-
-#~ msgid "Beware the deadly swamps!"
-#~ msgstr "Осторожно, зедсь мертвая пустыня!"
-
-#~ msgid "Beware the Domain of Dragons"
-#~ msgstr "Остерегайтесь Владений Драконов"
-
-#~ msgid "Beware the Dragon Leader"
-#~ msgstr "Остерегайтесь Лидера Драконов"
-
-#~ msgid "Beware the edge of the world!"
-#~ msgstr "Остерегайся, здесь край мира!"
-
-#~ msgid "Beware the moors and stick to the roads."
-#~ msgstr "Остерегайся мавров и дураков на дороге."
-
-#~ msgid "Beware the rocks"
-#~ msgstr "Остерегайтесь рифов"
-
-#~ msgid "Beware the sirens!!!"
-#~ msgstr "Остерегайтесь Сирен!!!"
-
-#~ msgid "Beware the sirens!"
-#~ msgstr "Остерегайтесь Сиррен!!!"
-
-#~ msgid "Beware the whiporwill..."
-#~ msgstr "Остерегайтесь водоворотов..."
-
-#~ msgid "Beware, the whirlpool may not take you into a friendly embrace."
-#~ msgstr "Осторожно, здесь очень коварные водовороты."
-
-#~ msgid "Beyond here be Dragons!"
-#~ msgstr "Здесь обитают Драконы!"
-
-#~ msgid "Beyond the door, there be Dragons. BEWARE!"
-#~ msgstr "За сей дверью обитают Драконы. БЕРЕГИСЬ!"
-
-#~ msgid "Big Oak"
-#~ msgstr "Большой Дуб"
-
-#~ msgid "Blackburn"
-#~ msgstr "Блэкбурн"
-
-#~ msgid "Blackfang"
-#~ msgstr "Черный Клык"
-
-#~ msgid "Black Fang"
-#~ msgstr "Черный Клык"
-
-#~ msgid "Black Oak"
-#~ msgstr "Черный ДУб"
-
-#~ msgid "Blackridge"
-#~ msgstr "Блэкридж"
-
-#~ msgid "Blacksford"
-#~ msgstr "Блэкфорд"
-
-#~ msgid "Black Vein"
-#~ msgstr "Блэквейн"
-
-#~ msgid "Blackwind"
-#~ msgstr "Черный Ветер"
-
-#~ msgid "Bloodreign"
-#~ msgstr "Блудрейн"
-
-#~ msgid "Boats my be needed to access some parts of this peninsula."
-#~ msgstr ""
-#~ "Возможно, потребуется корабль, чтобы достичь некоторых земель этого "
-#~ "полуострова."
-
-#~ msgid "Boats Sold Here            Inquire Within"
-#~ msgstr "Продажа Кораблей Консультация На Месте"
-
-#~ msgid "BoneVille"
-#~ msgstr "КостеГрад"
-
-#~ msgid "Bridge out!"
-#~ msgstr "За Мост!"
-
-#~ msgid "Bridge Out!"
-#~ msgstr "За Мост!"
-
-#~ msgid "Brindamoor"
-#~ msgstr "Бриндамур"
-
-#~ msgid "Brownston"
-#~ msgstr "Браунстон"
-
-#~ msgid "Buried Treasure!"
-#~ msgstr "Клад!"
-
-#~ msgid "Burlock"
-#~ msgstr "Барлок"
-
-#~ msgid "Burton"
-#~ msgstr "Бартон"
-
-#~ msgid ""
-#~ "Capture the necromancer's dreaded castle \"Death Gate\" and free the land "
-#~ "from the undead plague."
-#~ msgstr ""
-#~ "Захватите ужасный замок колдунов \"Мертвые Ворота\" и освободите долину "
-#~ "от мертвой чумы."
-
-#~ msgid "Cathcart"
-#~ msgstr "Кечкарт"
-
-#~ msgid "Chandler"
-#~ msgstr "Чандлер"
-
-#~ msgid "Chilton"
-#~ msgstr "Чилтон"
-
-#~ msgid "Chronos"
-#~ msgstr "Хронос"
-
-#~ msgid "Come and...."
-#~ msgstr "Ну и ..."
-
-#~ msgid ""
-#~ "Compared to the rest of the villages in this land, this village seems "
-#~ "grand, but in any other land it would seem poor. From here you can see "
-#~ "the tall spires of the Warlock's tower of Dragons."
-#~ msgstr ""
-#~ "По сравнению с остальными деревнями, эта кажется богатой, но в любых "
-#~ "других землях она показалась бы нищей. Отсюда можно увидеть стройные "
-#~ "шпили Драконьей башни Чернокнижника."
-
-#~ msgid "Complete"
-#~ msgstr "Выполнено"
-
-#~ msgid "Condemned!"
-#~ msgstr "Осуждены!"
-
-#~ msgid ""
-#~ "Congratulations! After navigating the treacherous coast, you have "
-#~ "established trade between the north and south."
-#~ msgstr ""
-#~ "Поздравляем! После причаливания на коварное побережье, Вы установили "
-#~ "торговлю между Севером и Югом."
-
-#~ msgid "Corackston"
-#~ msgstr "Коракстон"
-
-#~ msgid "Crossroads"
-#~ msgstr "Перекресток"
-
-#~ msgid "Crossroads North"
-#~ msgstr "Северное Шоссе"
-
-#~ msgid "Crossroads South"
-#~ msgstr "Южное Шоссе"
-
-#~ msgid "Danger a whirlpool destroyed my ship."
-#~ msgstr "Опасный водоворот разрушил мой кораболь."
-
-#~ msgid "Danger, Dragons abound!"
-#~ msgstr "Опасность! Драконы вокруг.. ё маё!"
-
-#~ msgid "DANGER!  QUICKSAND!"
-#~ msgstr "Опасность! Зыбучие Пески!"
-
-#~ msgid "Danger! Troll bridge ahead!"
-#~ msgstr "Опасность! Впереди мост с Троллями!"
-
-#~ msgid "Danger - Turn Back Now"
-#~ msgstr "Опасность - Немедленно Возвращайся Назад"
-
-#~ msgid "Dark clouds loom overhead as you enter this valley."
-#~ msgstr ""
-#~ "Как только вы входите в долину, над головой появляется тень от облаков."
-
-#~ msgid "Dead Pine"
-#~ msgstr "Мертвая Сосна"
-
-#~ msgid ""
-#~ "Dear Diary,                           I found a mermaid today.  She was "
-#~ "floating in a patch of seaweed next to a rock.  A very friendly sort of "
-#~ "creature too!  Gave me all sorts of lovely gems and jewelry!  She said to "
-#~ "come back again sometime for more of the sea riches.  Wow. Ahab"
-#~ msgstr ""
-#~ "Дорогой дневник, сегодня я встретил русалку. Она плавала в морских "
-#~ "водорослях неподалёку от скал. Она оказалась очень дружелюбной! Подарила "
-#~ "мне драгоценных камней и золотых украшений! А ещё сказала возвращаться "
-#~ "когда-нибудь за добавкой морских сокровищ. Блин."
-
-#~ msgid "Deathgate"
-#~ msgstr "Ворота Мертвецов"
-
-#~ msgid "DeathGate"
-#~ msgstr "Ворота Мертвецов"
-
-#~ msgid "Decisions"
-#~ msgstr "Решения"
-
-#~ msgid "\"Defender\""
-#~ msgstr "\"Защитник\""
-
-#~ msgid ""
-#~ "Detour! Mountain pass to the East has been known to have avalanches! For "
-#~ "your own safety, follow the road South."
-#~ msgstr ""
-#~ "В объезд! Горный проход на Востоке закрыт, опасность лавин! Следуйте "
-#~ "дорогой Юга."
-
-#~ msgid "Detour! Troll bridge ahead!"
-#~ msgstr "В объезд! Впереди мост троллей!"
-
-#~ msgid "DirtWater"
-#~ msgstr "Грязная Вода"
-
-#~ msgid "Dominion"
-#~ msgstr "Власть"
-
-#~ msgid "Do Not Enter!"
-#~ msgstr "Вход Запрешен!"
-
-#~ msgid "Do not remove coins from fountain."
-#~ msgstr "Не забирайте монеты из фонтана."
-
-#~ msgid "Dragadune"
-#~ msgstr "Драгадун"
-
-#~ msgid "Dragonburg"
-#~ msgstr "Драконье Клеймо"
-
-#~ msgid "Dragon City lies beyond the Scorpion Hills."
-#~ msgstr "Город Драконов находится за пределами Скорпион Хиллз."
-
-#~ msgid "Dragon Hill"
-#~ msgstr "Драконья Горка"
-
-#~ msgid "Dragon Rider"
-#~ msgstr "Драконья Река"
-
-#~ msgid "Dragons Everywhere!"
-#~ msgstr "Везде Драконы!"
-
-#~ msgid "Dragon's Eye"
-#~ msgstr "Глаз Дракона"
-
-#~ msgid "Dragontooth"
-#~ msgstr "Драконий Зуб"
-
-#~ msgid "Dragon Town"
-#~ msgstr "Город Драконов"
-
-#~ msgid "Dragonville"
-#~ msgstr "Деревьня Драконов"
-
-#~ msgid "Dragon Wars"
-#~ msgstr "Битва Драконов"
-
-#~ msgid "Dragon Watch"
-#~ msgstr "Стража Драконов"
-
-#~ msgid "Drakoran"
-#~ msgstr "Дракоран"
-
-#~ msgid "Dwarfhall"
-#~ msgstr "Город Гномов"
-
-#~ msgid "Dwarfhall, Domain of the dwarf King."
-#~ msgstr "Город Гномов, владения Короля Гномов."
-
-#~ msgid "Dwarf Hall, domain of the dwarf King."
-#~ msgstr "Город Гномов, владения Короля Гномов."
-
-#~ msgid "Eatio"
-#~ msgstr "Поедун"
-
-#~ msgid "Edgewood"
-#~ msgstr "Эджвуд"
-
-#~ msgid "Elk's Head"
-#~ msgstr "Голова Элка"
-
-#~ msgid "Elowyn"
-#~ msgstr "Эловин"
-
-#~ msgid "Enroth"
-#~ msgstr "Земля"
-
-#~ msgid "Entering high in the desert"
-#~ msgstr "Вступаете в плато в пустыне"
-
-#~ msgid "Entering Praires of the Middlelands"
-#~ msgstr "Вступаете в Прерии Срединных Земель"
-
-#~ msgid "Entering the desert high"
-#~ msgstr "Вступаете в пустынное плато"
-
-#~ msgid "Entering the high desert"
-#~ msgstr "Вступаете в пустыню на плато"
-
-#~ msgid "Entering the higher desert"
-#~ msgstr "Вступаете в пустыню над плато"
-
-#~ msgid "Entering the Valley of Magic"
-#~ msgstr "Вступаете в Долину Магии"
-
-#~ msgid "Erliquin"
-#~ msgstr "Эрликвин"
-
-#~ msgid "Evil Igor"
-#~ msgstr "Злой Игор"
-
-#~ msgid "Fadlan"
-#~ msgstr "Фадлан"
-
-#~ msgid "Fantasy Island."
-#~ msgstr "Остров Фантазии."
-
-#~ msgid "Farlien"
-#~ msgstr "Фарлин"
-
-#~ msgid "fedx comp"
-#~ msgstr "Подачка для АИ"
-
-#~ msgid "Fedx for comp"
-#~ msgstr "Подачка для АИ"
-
-#~ msgid "Fenton"
-#~ msgstr "Фентон"
-
-#~ msgid "Fetid Elm"
-#~ msgstr "Зловонный Вяз"
-
-#~ msgid ""
-#~ "Final message from Overlord. \"The royal executioners are on their way. "
-#~ "My gold, the land or your head- it's your choice.\""
-#~ msgstr ""
-#~ "Последнее сообщение от Оверлорда. \"Королевские палачи уже выехали. Моё "
-#~ "золота и земля или твоя голова - выбор за тобой.\""
-
-#~ msgid "Find and defeat the Pirate Leader!"
-#~ msgstr "Найдите и убейте Лидера Пиратов!"
-
-#~ msgid "Find and destroy the evil beings who rule the wastelands."
-#~ msgstr "Найдите и уничтожьте злых существ, управляющих пустошами."
-
-#~ msgid "Find the center island."
-#~ msgstr "Найдите центральный остров."
-
-#~ msgid ""
-#~ "Find the Ultimate Artifact and be proclaimed King, or smash the "
-#~ "opposition and take control."
-#~ msgstr ""
-#~ "Найдите Главную Реликвию и будете провозглашены Королём или же уничтожьте "
-#~ "противников и захватите власть."
-
-#~ msgid "Fire King"
-#~ msgstr "Король Огня"
-
-#~ msgid "Five heroes vie for control of a familiar land."
-#~ msgstr "Пять героев сошлись в схватке за фамильные земли."
-
-#~ msgid "Fool's Gold"
-#~ msgstr "Золото дурака"
-
-#~ msgid ""
-#~ "For a total of 400,000 gold your opponents will become \"loyal\" "
-#~ "subjects, otherwise... let them eat cake!"
-#~ msgstr ""
-#~ "За 400,000 золотых Ваши соперники станут \"верноподданными\", или же... "
-#~ "задайте им жару!"
-
-#~ msgid ""
-#~ "For centuries, the Wizards of the North have maintained a vast library "
-#~ "for all the world to share.  Now, however, they have closed their doors, "
-#~ "and issued declarations of war to each of the other rulers of the land.  "
-#~ "To make matters worse, rather than ally with you to face the Wizards, "
-#~ "each of the others have decided to go forth on their own in an effort to "
-#~ "conquer this land for themselves!  Prepare your forces, commander, for "
-#~ "you now stand alone."
-#~ msgstr ""
-#~ "Веками, Волшебники Севера содержали огромную библиотеку, которую мог "
-#~ "посетить каждый. Как бы то ни было, сегодня они закрыли свои двери и "
-#~ "объявили войну всем остальным феодалам. Ещё хуже то, что вместо союза "
-#~ "против Волшебников, каждый из лордов решил в одиночку завоевать эти "
-#~ "земли! Готовьтесь к бою, командир, теперь Вы сам за себя."
-
-#~ msgid ""
-#~ "For decades you have studied, learned, and allowed yourself to be ruled "
-#~ "by that pitiful excuse for a king, knowing that one day the time would "
-#~ "come for you to sit on the throne.  That time is now, for the king is "
-#~ "dead and without an heir.  You have the advantage of isolation from the "
-#~ "rest of the kingdom, but beware the miles of coastline that could leave "
-#~ "you vulnerable to attack.  Go, now, and wipe your enemies from this land!"
-#~ msgstr ""
-#~ "Десятилетиями ты учился, готовился и позволял помыкать собой этим жалким "
-#~ "подобием короля, зная, что придёт день, когда ты сам займёшь трон. Пришло "
-#~ "время смерти короля и отсутствия наследника. У тебя преимущество "
-#~ "обособленности от остальной части королевства, но будь осторожен с милями "
-#~ "побережья - там ты уязвим к нападению. Иди же и сотри своих врагов с лица "
-#~ "этой земли!"
-
-#~ msgid "Forder Oaks"
-#~ msgstr "Фордер Окс"
-
-#~ msgid "Forestria"
-#~ msgstr "Форестия"
-
-#~ msgid "For Honor"
-#~ msgstr "За Честь"
-
-#~ msgid ""
-#~ "For information about Ye Rich lands to the south, speak to Alponse at the "
-#~ "Golden Goose Tavern. Excellent views, plentiful water."
-#~ msgstr ""
-#~ "Для получения информации о богатых землях на юге, поговорите с Альпонсом "
-#~ "в таверне Золотой Гусь. Отличная еда и выпивка..."
-
-#~ msgid "Forsaken Lands"
-#~ msgstr "Покинутые Земли"
-
-#~ msgid "For sale."
-#~ msgstr "Продается."
-
-#~ msgid "Fortress Isle"
-#~ msgstr "Остров Крепость"
-
-#~ msgid ""
-#~ "For years, you have existed peacefully in the Forest of Dreams, knowing "
-#~ "that your king was the kindest and strongest ruler the land had seen in "
-#~ "centuries.  Now, however, his reign is at an end, and there is no heir to "
-#~ "succeed him.  You realize that a power struggle is coming, and that you "
-#~ "must brace yourself for war, and prevent those who would harm this land "
-#~ "from coming into power!"
-#~ msgstr ""
-#~ "Годами Вы мирно жили в Лесу Сновидений, зная, что Ваш король самый "
-#~ "сильный и самый добрый правитель последних веков. Теперь же пришёл его "
-#~ "час, а у трона нет наследника. Вы понимаете, что грядёт междоусобица и Вы "
-#~ "должны воевать, чтобы не дать захватить трон тому, кто принесёт вред "
-#~ "королевству, придя к власти!"
-
-#~ msgid ""
-#~ "For years, you've been able to keep your subjects \"appeased.\"  Now "
-#~ "however, you discover not only that your entire kingdom has turned "
-#~ "against you, but most of your outer towns have fallen to the different "
-#~ "factions.  To make matters worse, all your gold suddenly seems to be "
-#~ "missing from the treasury!"
-#~ msgstr ""
-#~ "В течение многих лет, Вы спокойно правили королевством. Но сейчас все "
-#~ "царство обернулось против Вас,  большинство ваших городов отделилось. И "
-#~ "что хуже всего, Ваша казна пуста!"
-
-#~ msgid "Fountainhead"
-#~ msgstr "Фонтан"
-
-#~ msgid "Four kingdoms race to capture the island of Sharkania."
-#~ msgstr "Четыре королевства для захвата острова Sharkania."
-
-#~ msgid "Four lakes have castles, three have treasure."
-#~ msgstr "Четыре Замка с озером, три из них с сокровищами.."
-
-#~ msgid "Four players must work together to assault the Wizards' Stronghold."
-#~ msgstr "Четыре игрока должны сообща осадить цитадель волшебника"
-
-#~ msgid "Frozenpeak"
-#~ msgstr "Замерзший пик"
-
-#~ msgid "Full House"
-#~ msgstr "Все Дома"
-
-#~ msgid "Galveston"
-#~ msgstr "Гальвестон"
-
-#~ msgid "Garamok"
-#~ msgstr "Гарамок"
-
-#~ msgid "Gate"
-#~ msgstr "Ворота"
-
-#~ msgid "Gate to the Isle of Knowledge"
-#~ msgstr "Врата к Острову Познания"
-
-#~ msgid "Gate to The Isle of Knowledge"
-#~ msgstr "Врата к Острову Познания"
-
-#~ msgid "Gaurdian"
-#~ msgstr "Хранитель"
-
-#~ msgid "Gavonshire"
-#~ msgstr "Гейвоншир"
-
-#~ msgid "Glastonbury"
-#~ msgstr "Гластонбёри"
-
-#~ msgid "Go away!"
-#~ msgstr "Уходите!"
-
-#~ msgid "GO AWAY!"
-#~ msgstr "Пошел Прочь!"
-
-#~ msgid "Goblin Island"
-#~ msgstr "Гоблинский Остров"
-
-#~ msgid "Goblin King"
-#~ msgstr "Король Гоблинов"
-
-#~ msgid "Go Home!"
-#~ msgstr "Домой!"
-
-#~ msgid "Go north to find the lost gold-mine."
-#~ msgstr "Следуйте на север, чтобы найти потеряную золотую шахту"
-
-#~ msgid "Good vs. Evil"
-#~ msgstr "Добро против Зла"
-
-#~ msgid "Gorgomar"
-#~ msgstr "Горгомар"
-
-#~ msgid "Greed"
-#~ msgstr "Жадность"
-
-#~ msgid "Green bonus stuff"
-#~ msgstr "хабар для Зеленого"
-
-#~ msgid "Green gets stuff"
-#~ msgstr "хабар для Зеленого"
-
-#~ msgid "Greenroot"
-#~ msgstr "Гринрут"
-
-#~ msgid "Green's Allowance"
-#~ msgstr "Зеленым Разрешено"
-
-#~ msgid "Green's Groceries"
-#~ msgstr "Зеленая Лавка"
-
-#~ msgid "green stuff"
-#~ msgstr "хабар для Зеленого"
-
-#~ msgid "Green stuff"
-#~ msgstr "хабар для Зеленого"
-
-#~ msgid "Greywind"
-#~ msgstr "Грейвинд"
-
-#~ msgid "Grim"
-#~ msgstr "Грим"
-
-#~ msgid "Grrr, Blazzer, Grrupt. Be gone with you!"
-#~ msgstr "Гррр, Блаззер, Гррапт. Мы идём с твоя!"
-
-#~ msgid "Guardian War"
-#~ msgstr "Война Стражей"
-
-#~ msgid "Gungtooth"
-#~ msgstr "Гангтус"
-
-#~ msgid "Hail Unicorns!"
-#~ msgstr "Слава Единорогам!"
-
-#~ msgid "Hampshire"
-#~ msgstr "Хэмпшир"
-
-#~ msgid "Have fun storming the castle!"
-#~ msgstr "Веселитесь, осаждая замок!"
-
-#~ msgid "Havenwood"
-#~ msgstr "Хэйвенвуд"
-
-#~ msgid "Hawkins"
-#~ msgstr "Хокинс"
-
-#~ msgid "Help!"
-#~ msgstr "На помощь!"
-
-#~ msgid "Help me...."
-#~ msgstr "Помогите мне..."
-
-#~ msgid ""
-#~ "Help peasant farmers regain their castle and land, else they'll take your "
-#~ "crops."
-#~ msgstr ""
-#~ "Помогите крестьянам вернуть свой замок и земли, или они отберут ваш урожай"
-
-#~ msgid "Hero's Hall"
-#~ msgstr "Зал героев"
-
-#~ msgid ""
-#~ "High in the snowy crags, you meet an old witch who, in return for a "
-#~ "trinket of yours, gives you a powerful magical object she used to use as "
-#~ "a footstool before she was exiled into the mountains by her own "
-#~ "townspeople."
-#~ msgstr ""
-#~ "Высоко в снежных горах, Вы встречаете старую ведьму, которая в обмен на "
-#~ "Ваш медальон даёт Вам могущественный магический объект, который она "
-#~ "использовала в качестве костыля до того, как её изгнали в горы её "
-#~ "соотечественники."
-
-#~ msgid "Hillstone"
-#~ msgstr "Хиллстон"
-
-#~ msgid "Hilltop"
-#~ msgstr "Холмовершье"
-
-#~ msgid "Hilltown"
-#~ msgstr "Хилтаун"
-
-#~ msgid "Horizon"
-#~ msgstr "Горизонт"
-
-#~ msgid "Hungry dragons await.  Welcome, food."
-#~ msgstr "Голодные драконы ждут. Добро пожаловать, Вы моя еда."
-
-#~ msgid "Hurry, no time to wait.  This way to the dock."
-#~ msgstr "Скорее, нет времени ждать. Вот дорога к верфи."
-
-#~ msgid "Hurry up! Few days are left before the enemy's army arrives."
-#~ msgstr "Быстрей же! Осталось несколько дней до прибытия вражеской армии."
-
-#~ msgid "I am...."
-#~ msgstr "Я..."
-
-#~ msgid ""
-#~ "I am one of the few remaining survivors of the wrecked pleasure ship, "
-#~ "Exhorbitance. I think we'll all be dead of hunger soon, for we are out of "
-#~ "caviar. We ate the chef yesterday."
-#~ msgstr ""
-#~ "Я - один из выживших после крушения корабля Эксхорбитанс. Я думаю, мы все "
-#~ "умрём голодной смертью в скором времени, так как провиант кончился. Вчера "
-#~ "мы съели кока."
-
-#~ msgid "Ibn Fadlan"
-#~ msgstr "Ибн Фадлан"
-
-#~ msgid "Ice Palace"
-#~ msgstr "Ледяной Дворец"
-
-#~ msgid "Ice Prince"
-#~ msgstr "Ледяной Принц"
-
-#~ msgid "Icy lands ahead."
-#~ msgstr "Снежные земли впереди."
-
-#~ msgid "I didn't do it!"
-#~ msgstr "Я не делал этого!"
-
-#~ msgid ""
-#~ "If three heroes could dig six holes in three days, how long would it take "
-#~ "six heroes to dig twelve holes?"
-#~ msgstr ""
-#~ "Если три героя могут выкопать шесть нор за три дня, за сколько шесть "
-#~ "героев выкопают 12 нор?"
-
-#~ msgid "If you free a hero, they may help..."
-#~ msgstr "Если вы освободите героя, он может вам помочь..."
-
-#~ msgid ""
-#~ "If you value your lives, for God's sake, Don't go through this whirlpool!"
-#~ msgstr ""
-#~ "Если вам дороги ваши жизни, то ради всего святого, НЕ плывите через "
-#~ "водоворот!"
-
-#~ msgid "Income for Yellow."
-#~ msgstr "Доход для Жёлтого."
-
-#~ msgid "In the hole you find a chunk of ore!"
-#~ msgstr "Вы обнаружили в яме глыбу руды!"
-
-#~ msgid "In the stream you find an old compass!"
-#~ msgstr "В потоке Вы обнаружили старый компас!"
-
-#~ msgid "In this glen live some very naughty halflings. Stay Away!"
-#~ msgstr ""
-#~ "В этой узкой горной долине живут непоседливые половинчики. Держись "
-#~ "подальше!"
-
-#~ msgid ""
-#~ "In two more weeks, if you have not located Joseph, your kingdom will "
-#~ "surely lose its current battle with Harondale."
-#~ msgstr ""
-#~ "Если вы не найдете Иосифа за две недели, ваше королевство погибнет в "
-#~ "сражении с Harondale."
-
-#~ msgid "I see you, you see me."
-#~ msgstr "Я вижу тебя, ты - меня"
-
-#~ msgid "Is it something I said? Go back and I will forget the whole thing."
-#~ msgstr "Что Я сказал? Вернитесь назад и я забуду все это."
-
-#~ msgid "IslandHome"
-#~ msgstr "ДомашнийОстров"
-
-#~ msgid "Island of the meek"
-#~ msgstr "Кроткий Остров"
-
-#~ msgid "Island of Wolcott"
-#~ msgstr "Остров Вулкут"
-
-#~ msgid "Isle Maze"
-#~ msgstr "Остров Лабиринт"
-
-#~ msgid "Isle of Knowledge"
-#~ msgstr "Остров Знания"
-
-#~ msgid ""
-#~ "It has become apparent that if all your enemies were eliminated, you "
-#~ "would have all the time you need to find the Ultimate Artifact."
-#~ msgstr ""
-#~ "Стало очевидным, что если бы все Ваши враги были устранены, у Вас было "
-#~ "полно времени, необходимого, чтобы найти Реликвию."
-
-#~ msgid ""
-#~ "It is obvious that the mage that once was here had won many battles!  "
-#~ "There, upon his hand, is a most powerful ring!"
-#~ msgstr ""
-#~ "Очевидно, что маг, побывавший здесь, выиграл множество битв! На его палец "
-#~ "надето могущественное кольцо."
-
-#~ msgid ""
-#~ "It is rumored that a bridge of land used to exist between the two "
-#~ "continents, but that a wild magic caused it to sink into the sea, taking "
-#~ "with it all those who used to inhabit it.  To try to raise this bridge is "
-#~ "to invite a curse upon the world!  The spirits of the dead will haunt us "
-#~ "all!"
-#~ msgstr ""
-#~ "Ходят слухи, что ранее существовал мост между двумя континентами, но "
-#~ "неподвластная магия потопила его на морское дно, забрав с собой всех, кто "
-#~ "его населял... Попытаться вернуть этот мост означает навлечь проклятье на "
-#~ "весь мир! Духи мёртвых будут преследовать всех нас!"
-
-#~ msgid ""
-#~ "It is said that King Zealot found the gods' artifact once and it let him "
-#~ "rule for 100 years."
-#~ msgstr ""
-#~ "Говорят, что король Zealot нашел Божественный Артифакт и правил в течение "
-#~ "100 лет."
-
-#~ msgid ""
-#~ "It looks like there used to be an ore mine here but all you see now is a "
-#~ "hole in the ground and some minerals scattered around."
-#~ msgstr ""
-#~ "Похоже здесь когда-то был рудник. Но все, что осталось от него, это "
-#~ "несколько разбросанных вокруг минералов и отверстие в земле."
-
-#~ msgid ""
-#~ "It's a battle for supremacy as the Blue and Green heroes take on Red and "
-#~ "Orange in team competition!"
-#~ msgstr "Это битва для команды Синих и Зеленых против Красных и Оранжевых!"
-
-#~ msgid "It's windy at the top.  Defend, Divide, and Conquer."
-#~ msgstr "Защити, Раздели, и Властвуй."
-
-#~ msgid "IvanHome"
-#~ msgstr "Дом Ивана"
-
-#~ msgid "Ivan lives in the desert."
-#~ msgstr "Иван живет в пустыне"
-
-#~ msgid "I Would Go That Way If I Were You."
-#~ msgstr "Я желаю идти с Вами, по по этому пути."
-
-#~ msgid "Jolly Roger was here"
-#~ msgstr "Здесь был Веселый Роджер"
-
-#~ msgid "Jungomar"
-#~ msgstr "Джунгомар"
-
-#~ msgid "Just 30 days left!"
-#~ msgstr "Осталось 30 дней!"
-
-#~ msgid "Just ONE week left!"
-#~ msgstr "Осталась всего ОДНА неделя!"
-
-#~ msgid "Kastor"
-#~ msgstr "Кастор"
-
-#~ msgid "Keep going south"
-#~ msgstr "Продолжайте идти на юг"
-
-#~ msgid "Keep Off The Grass!"
-#~ msgstr "Не ходите по траве!"
-
-#~ msgid "Keep Out!"
-#~ msgstr "Держись Подальше!"
-
-#~ msgid "King John"
-#~ msgstr "Король Джон"
-
-#~ msgid "King of Death"
-#~ msgstr "Король Мертвых"
-
-#~ msgid "Knight stuff"
-#~ msgstr "Хабар для Рыцаря"
-
-#~ msgid "Lakeside"
-#~ msgstr "Лейксайд"
-
-#~ msgid "Land teleporters will get you to your destination sooner."
-#~ msgstr "Телепорт приведет вас к месту назначения намного быстрее."
-
-#~ msgid "Lankershire"
-#~ msgstr "Ланкашир"
-
-#~ msgid "Lavalor"
-#~ msgstr "Лавалор"
-
-#~ msgid "Lombard"
-#~ msgstr "Ломбард"
-
-#~ msgid "Long live Roland the true King!"
-#~ msgstr "Долгой жизни королю Роланду!"
-
-#~ msgid "Long live Roland the true King."
-#~ msgstr "Долгой жизни королю Роланду!"
-
-#~ msgid "Look out!"
-#~ msgstr "Берегись!"
-
-#~ msgid "Lord Alberon"
-#~ msgstr "Лорд Алберон"
-
-#~ msgid "Lord Haart"
-#~ msgstr "Лорд Хаарт"
-
-#~ msgid "Lord Kreager"
-#~ msgstr "Лорд Крегер"
-
-#~ msgid "Lost Continent"
-#~ msgstr "Потерянный Континент"
-
-#~ msgid "Lost Gold- Mine"
-#~ msgstr "Затеряная золотая шахта"
-
-#~ msgid "Lost Island."
-#~ msgstr "Потерянный Остров."
-
-#~ msgid "Lost Relic"
-#~ msgstr "Утерянная Реликвия"
-
-#~ msgid "Magic"
-#~ msgstr "Магия"
-
-#~ msgid "Magic Three"
-#~ msgstr "Магическое Дерево"
-
-#~ msgid ""
-#~ "Many years ago, a couple of mages had a \"duel\" that forever changed the "
-#~ "lake at the center of this continent.  Hearty adventurers might find "
-#~ "interesting treasure there!"
-#~ msgstr ""
-#~ "Много лет назад несколько магов устроили \"дуэль\", навсегда изменившую "
-#~ "озеро в центре этого континента. Старательные путники могут там найти "
-#~ "интересное сокровище!"
-
-#~ msgid ""
-#~ "Many years ago, a falling star crashed near here.  Only now the area is "
-#~ "safe enough to explore.  Rumor has it a castle exist where the star fell."
-#~ msgstr ""
-#~ "Много лет назад недалеко отсюда упала звезда. Только сейчас эта область "
-#~ "стала достаточно безопасной для поисков. По слухам, там, на месте "
-#~ "падающей звезды, сейчас стоит замок."
-
-#~ msgid "Marco"
-#~ msgstr "Марко"
-
-#~ msgid "Meramec"
-#~ msgstr "Мерамек"
-
-#~ msgid "Middle Gate"
-#~ msgstr "Средние Ворота"
-
-#~ msgid "Middleton"
-#~ msgstr "Мидлтаун"
-
-#~ msgid "Middletown"
-#~ msgstr "Миддлтаун"
-
-#~ msgid "Might vs. Magic"
-#~ msgstr "Сила против Магии"
-
-#~ msgid "Mineral Wars"
-#~ msgstr "Война за Ресурсы"
-
-#~ msgid "Mirkosov"
-#~ msgstr "Миркосов"
-
-#~ msgid "mirror"
-#~ msgstr "зеркало"
-
-#~ msgid "Money For Red"
-#~ msgstr "Деньги для Красного"
-
-#~ msgid "MONEY, MONEY, MONEY!"
-#~ msgstr "Деньги, Деньги, Деньги!"
-
-#~ msgid "Mountain king"
-#~ msgstr "Король Горы"
-
-#~ msgid "\"Necromancers!\""
-#~ msgstr "\"Колдуны Пердуны!\""
-
-#~ msgid "New Enemies"
-#~ msgstr "Новые Враги"
-
-#~ msgid "No Description"
-#~ msgstr "Нет описания"
-
-#~ msgid "No Fishing!"
-#~ msgstr "Здесь рыбы нет!"
-
-#~ msgid "No gems, crystal, or mercury for red."
-#~ msgstr "Нет кристаллов, ртути и драгоценных камней для Красного."
-
-#~ msgid "Noraston"
-#~ msgstr "Норастун"
-
-#~ msgid "North Road"
-#~ msgstr "Северная Дорога"
-
-#~ msgid "North vs. South"
-#~ msgstr "Север или Юг"
-
-#~ msgid "No Trespassing"
-#~ msgstr "Не беспокоить."
-
-#~ msgid "No tresspath...  No tree...  No thresh...  GO AWAY!"
-#~ msgstr "Не беспе.. Не безбо... Небесполе... ИДИТЕ ПРОЧЬ!"
-
-#~ msgid "Ogrehild"
-#~ msgstr "Огрхилд"
-
-#~ msgid "Olympus"
-#~ msgstr "Олимп"
-
-#~ msgid "Orange stuff"
-#~ msgstr "хабар для Оранжевого"
-
-#~ msgid "Orcville"
-#~ msgstr "Орквиль"
-
-#~ msgid "Overlord"
-#~ msgstr "Повелитель"
-
-#~ msgid "Pandemonium"
-#~ msgstr "Столпотворение"
-
-#~ msgid "Peacekeeper"
-#~ msgstr "Пеаскипер"
-
-#~ msgid "\"Peasants!\""
-#~ msgstr "\"Крестьяне!\""
-
-#~ msgid "Pinehurst"
-#~ msgstr "Пайнхурст"
-
-#~ msgid "Pirate's Cove"
-#~ msgstr "Пиратская Бухта"
-
-#~ msgid "Pirate Utopia"
-#~ msgstr "Мечта Пиратов"
-
-#~ msgid "Pixie"
-#~ msgstr "Пиксия"
-
-#~ msgid "Please...."
-#~ msgstr "Пожалуйста..."
-
-#~ msgid "Portals"
-#~ msgstr "Порталы"
-
-#~ msgid "POSION - DO NOT DRINK"
-#~ msgstr "не пейте - это ЯД"
-
-#~ msgid "Red stuff"
-#~ msgstr "хабар для Красного"
-
-#~ msgid "Reinforcements have arrived, Gold from the homelands!"
-#~ msgstr "Прибыло подкрепление, прибыло золото от родины!"
-
-#~ msgid "Restricted Area, Do Not Enter!"
-#~ msgstr "Ограниченный доступ, не входить!"
-
-#~ msgid "Revolution"
-#~ msgstr "Революция"
-
-#~ msgid "Roc Haven"
-#~ msgstr "Тайное Убежище"
-
-#~ msgid "Sandcaster"
-#~ msgstr "Сандкастер"
-
-#~ msgid "Sands of Time"
-#~ msgstr "Пески времени"
-
-#~ msgid "Sansobar"
-#~ msgstr "Сансобр"
-
-#~ msgid "Scabsdale"
-#~ msgstr "Скабсдэл"
-
-#~ msgid "Scorched Earth"
-#~ msgstr "Выжженная земля"
-
-#~ msgid "Sharkania"
-#~ msgstr "Шаркания"
-
-#~ msgid "Sheltemburg"
-#~ msgstr "Шелтембург"
-
-#~ msgid "Sirein"
-#~ msgstr "Сирены"
-
-#~ msgid ""
-#~ "Six factions have established a foothold on a huge, unexplored "
-#~ "continent.  Can you eliminate the other five?"
-#~ msgstr ""
-#~ "Шесть конкурентов закрепились на большом, неизведанном континенте. Вы "
-#~ "сможете устранить всех?"
-
-#~ msgid ""
-#~ "Six heroes with large armies prepare to slug it out for total domination!"
-#~ msgstr ""
-#~ "Шесть героев с большими армиями готовы к войне для полного контроля!"
-
-#~ msgid "Skirmish"
-#~ msgstr "Скирмаш"
-
-#~ msgid "Slugfest"
-#~ msgstr "Слагфест"
-
-#~ msgid "Snowdrop"
-#~ msgstr "Сноудроп"
-
-#~ msgid "Some crystal!"
-#~ msgstr "Несколько кристаллов!"
-
-#~ msgid "Some gems!"
-#~ msgstr "Несколько драгоценных камней!"
-
-#~ msgid "Some ore!"
-#~ msgstr "Несколько каменной руды!"
-
-#~ msgid "Some sulfur!"
-#~ msgstr "Несколько серы!"
-
-#~ msgid "Sorpigal"
-#~ msgstr "Сорпигал"
-
-#~ msgid "South Mill"
-#~ msgstr "Южная Шахта"
-
-#~ msgid "So you think you're smart?"
-#~ msgstr "Похоже, ты считаешь себя умным?"
-
-#~ msgid "Spector"
-#~ msgstr "Спектор"
-
-#~ msgid "Stairs"
-#~ msgstr "Лесенка"
-
-#~ msgid "Stromgild"
-#~ msgstr "Стромхилд"
-
-#~ msgid "Stromhild"
-#~ msgstr "Стромхилд"
-
-#~ msgid "Stronghold"
-#~ msgstr "Крепость"
-
-#~ msgid "Stuff for red"
-#~ msgstr "хабар для Красного"
-
-#~ msgid "Stuff for Yellow"
-#~ msgstr "хабар для Желтого"
-
-#~ msgid "Stuff For Yellow"
-#~ msgstr "хабар для Желтого"
-
-#~ msgid "Teleporters"
-#~ msgstr "Телепорты"
-
-#~ msgid ""
-#~ "The alliance has crumbled and all are at war. Lots of resources but "
-#~ "little time to prepare."
-#~ msgstr ""
-#~ "Союз рухнул, и все в состоянии войны. Много ресурсов, но мало времени на "
-#~ "подготовку."
-
-#~ msgid "The center island is rumored to harbor great spells."
-#~ msgstr "Говорят что центральный остров таит много заклинаний."
-
-#~ msgid "The Citadel"
-#~ msgstr "Цитадель"
-
-#~ msgid ""
-#~ "The first piece of the artifact now lies in the hands of the Unholy Order "
-#~ "of Warlocks. You must annihilate them, and their allies to the north. "
-#~ "They will surely give us what we seek in exchange for their feeble lives."
-#~ msgstr ""
-#~ "Первый кусок от артефакта сейчас у Нечестивого Ордена Чернокнижников. Вы "
-#~ "должны уничтожить их, и их союзников на севере. Они отдадут нам все, к "
-#~ "чему мы стремимся, в обмен на их слабую жизнь."
-
-#~ msgid "The island...."
-#~ msgstr "Остров..."
-
-#~ msgid "The Island of Lost Reason"
-#~ msgstr "Остров Потерянных Решений"
-
-#~ msgid "The Isle of Armoria"
-#~ msgstr "Остров Армория"
-
-#~ msgid "The Kings Road."
-#~ msgstr "Королевская Дорога."
-
-#~ msgid "The land of Heroes II."
-#~ msgstr "Земля Героев II."
-
-#~ msgid "The way of magic"
-#~ msgstr "Дорога магии"
-
-#~ msgid "The way of might"
-#~ msgstr "Дорога силы"
-
-#~ msgid "The way of numbers"
-#~ msgstr "Дорога чисел"
-
-#~ msgid "The wizard has an island in the southeast."
-#~ msgstr "У волшебника есть остров на юго-востоке."
-
-#~ msgid "The wood has arrived."
-#~ msgstr "Дерево прибыло."
-
-#~ msgid "This bottle is empty."
-#~ msgstr "Бутылка пуста."
-
-#~ msgid "Timberhill"
-#~ msgstr "Тимберхилл"
-
-#~ msgid "TreeHome"
-#~ msgstr "Дерево Дом"
-
-#~ msgid "Troy"
-#~ msgstr "Троя"
-
-#~ msgid "Tundara"
-#~ msgstr "Тундра"
-
-#~ msgid "Turn back, friend, while you still can!"
-#~ msgstr "Возвращайся назад, друг,  пока еще можешь!"
-
-#~ msgid "Turn Back Now!"
-#~ msgstr "Возвращайся назад!"
-
-#~ msgid "Turn Back Now or all will be LOST!"
-#~ msgstr "Возвращайся назад или ПОГИБНЕШЬ!"
-
-#~ msgid "Turn Back or DIE!"
-#~ msgstr "Возвращайся назад или УМРЕШЬ!"
-
-#~ msgid "Turn Back or else!"
-#~ msgstr "Возвращайся назад иначе..."
-
-#~ msgid "Turn back, you fool."
-#~ msgstr "Возвращайся назад глупец."
-
-#~ msgid "Uncle Leo"
-#~ msgstr "Дядя Ли"
-
-#~ msgid "Uncle Milty"
-#~ msgstr "Дядя Милти"
-
-#~ msgid "Unholy Alliance"
-#~ msgstr "Нечестный Союз"
-
-#~ msgid "Valley of Death"
-#~ msgstr "Долина Смерти"
-
-#~ msgid "Valley of the Kings."
-#~ msgstr "Долина Королей"
-
-#~ msgid "Vaultius"
-#~ msgstr "Ваултиус"
-
-#~ msgid "Vertigo"
-#~ msgstr "Вертиго"
-
-#~ msgid "Vikings!"
-#~ msgstr "Викинги!"
-
-#~ msgid "Viper's Nest"
-#~ msgstr "Змеиное Гнездо"
-
-#~ msgid "Vulcania"
-#~ msgstr "Вулкания"
-
-#~ msgid "Warrior Knight"
-#~ msgstr "Воин Рыцарь"
-
-#~ msgid "Wastelands"
-#~ msgstr "Опустошенная Земля"
-
-#~ msgid "Watch out for Purple!"
-#~ msgstr "Следите внимательно за Фиолетовым!"
-
-#~ msgid "Weddington"
-#~ msgstr "Ведингтон"
-
-#~ msgid ""
-#~ "Welcome to Power Island. He who controls this Isle controls the Seven "
-#~ "Lakes!"
-#~ msgstr ""
-#~ "Добро пожаловать на Остров Власти. Тот, кто контролирует этот Остров - "
-#~ "контролирует Семь Озер!"
-
-#~ msgid "Welcome to the Sandbar."
-#~ msgstr "Добро пожаловать в Сандбар."
-
-#~ msgid "Welcome to the sandy Isle."
-#~ msgstr "Добро пожаловать на Оранжевый Остров."
-
-#~ msgid "Welcome to the sorceress' guild."
-#~ msgstr "Добро пожаловать в башню волшебницы."
-
-#~ msgid "Welcome to the Spiral Isles"
-#~ msgstr "Добро пожаловать на Спиральный Остров."
-
-#~ msgid ""
-#~ "Welcome to the wounderous Kitisland range.  Eruptions each day, beware of "
-#~ "dragons."
-#~ msgstr ""
-#~ "Добро пожаловать в Китисленд. Каждый день извержения вулканов, а также "
-#~ "остерегайтесь драконов."
-
-#~ msgid "Welcome to Windfall Island!"
-#~ msgstr "Добро пожаловать на Остров Буреломов!"
-
-#~ msgid "Welcome to your DOOM!"
-#~ msgstr "Добро пожаловать, здесь Ваша Погибель!"
-
-#~ msgid "Westmoor"
-#~ msgstr "Восточное Болото"
-
-#~ msgid "Where am I?"
-#~ msgstr "Где Я?"
-
-#~ msgid "Whittingham"
-#~ msgstr "Витингем"
-
-#~ msgid "Who am I?"
-#~ msgstr "Кто Я?"
-
-#~ msgid ""
-#~ "Who am I?...  Where am I?...  Oh no! My Ship!  Well it's consigned to the "
-#~ "ghosts of my dead crew now, at least I still have my lucky rabbits foot."
-#~ msgstr ""
-#~ "Кто Я?!... Где Я?!... Я попал.. мой корабль разбит, и сейчас он под "
-#~ "охраной моего мертвого экипажа. Моя судьба немного удачнее, лишь "
-#~ "благодаря кроличей лапке."
-
-#~ msgid "Who is the true King?"
-#~ msgstr "Кто из нас, настоящий Король?"
-
-#~ msgid "Wildabar"
-#~ msgstr "Вилдабар"
-
-#~ msgid "Willow"
-#~ msgstr "Виллоу"
-
-#~ msgid "Winterlands"
-#~ msgstr "Северные Страны"
-
-#~ msgid "Witch Hunt"
-#~ msgstr "Избушка"
-
-#~ msgid "Woodhaven"
-#~ msgstr "Вудхавен"
-
-#~ msgid "Wood's Lord"
-#~ msgstr "Деревянный Король"
-
-#~ msgid "Woodstock"
-#~ msgstr "Вудсток"
-
-#~ msgid "Woodville"
-#~ msgstr "Вудвиль"
-
-#~ msgid "Wow, somebody has left a pile of wood here!"
-#~ msgstr "Ого, ктото оставил тут дрова!"
-
-#~ msgid "Xabran"
-#~ msgstr "Ксабран"
-
-#~ msgid "Yellow gets some stuff"
-#~ msgstr "Желтый получил несколько материалов"
-
-#~ msgid "Yellow stuff"
-#~ msgstr "хабар для Желтого"
-
-#~ msgid "Yorksford"
-#~ msgstr "Йорксфорд"
-
-#~ msgid ""
-#~ "You and your ally's families were given custody of The Isle of "
-#~ "Knowledge.  Other Lords feel the time has come for new guardians..."
-#~ msgstr ""
-#~ "Опека над Островом Знания поручена Вам и семьям вашего союзника. Но "
-#~ "другие Лорды считают, что пришло время для новых хранителей..."
-
-#~ msgid "You are a fool to come here!"
-#~ msgstr "Ты настолько глуп, что изволил прийти сюда!"
-
-#~ msgid "You are fighting on the side of your king!"
-#~ msgstr "Вы сражаетесь на стороне вашего Короля!"
-
-#~ msgid "You are fighting on the side of your sister!"
-#~ msgstr "Вы сражаетесь на стороне своей сестры!"
-
-#~ msgid "You are now entering the domain of Prince Roland. Have a nice day."
-#~ msgstr "Вы прибываете во владения принца Роланда. Удачного дня!"
-
-#~ msgid ""
-#~ "You are now entering the domain of Prince Roland. Have a pleasant stay."
-#~ msgstr ""
-#~ "Вы прибываете во владения принца Роланда. Надеемся, что вам понравится."
-
-#~ msgid ""
-#~ "You bribe the entrance guards of this dingy prison camp. They agree to "
-#~ "look the other way for a little while."
-#~ msgstr ""
-#~ "Вы подкупили стражу у входа в этот грязный лагерь. Некоторое время они "
-#~ "будут считать ворон в небе."
-
-#~ msgid ""
-#~ "You can only reach your enemies via teleporters, but each jump is a leap "
-#~ "of faith."
-#~ msgstr ""
-#~ "Вы можете настигнуть врагов только через монолиты, но с каждым прыжком "
-#~ "вера все крепнет."
-
-#~ msgid ""
-#~ "You find a gleaming gold medalion buried in the  snow.  As you move to "
-#~ "put it on it changes to the Fizbin of Misfortune."
-#~ msgstr ""
-#~ "Вы увидели блестящий золотой медальон, лежащий в снегу. Вы подобрали его, "
-#~ "и узнаете это Медальон Несчастья."
-
-#~ msgid ""
-#~ "You find an old signpost in the midst of a thicket that reads \"Warlock "
-#~ "Wood, West.  Barbarian Fields, East.\""
-#~ msgstr ""
-#~ "Среди зарослей, Вы нашли старый указатель, который гласит: \"Колдун Вуд, "
-#~ "на Западе. Варвар Фиелд, на Востоке\"."
-
-#~ msgid ""
-#~ "You find a note in the bottle! It reads, \"My ship has been wrecked by "
-#~ "the notorious pirates in this area! I am stranded on a small and barren "
-#~ "island. Please, I beg you to come and rescue me!\""
-#~ msgstr ""
-#~ "Вы находите бутылку и в ней записка! Она гласит: \"Мое судно потерпело "
-#~ "крушение, благодаря пиратам! Я нахожусь на маленьком и пустынном острове. "
-#~ "Пожалуйста, спасите меня!\""
-
-#~ msgid "You found something!"
-#~ msgstr "Вы чтото нашли!"
-
-#~ msgid "You found Treasure!"
-#~ msgstr "Вы нашли Сокровища!"
-
-#~ msgid ""
-#~ "You have been ordered here to claim this land in the name of your King "
-#~ "and recover any riches that you might find.  However, five other Kings "
-#~ "and Queens have also sent their heroes to this land, so you must watch "
-#~ "out for them as well as the natives!"
-#~ msgstr ""
-#~ "Вам приказали исследовать и захватить эту землю, именем Короля. Однако, "
-#~ "пять других королевств также оспаривают права на эту землю, так что вы "
-#~ "должны следить и за ними, и за местными туземцами!"
-
-#~ msgid ""
-#~ "You have hired a barbarian of great power to aid you in this, your last "
-#~ "quest. His origins are unknown to you, but you sense strong nobility "
-#~ "beneath the furs and dirt that cover him. In addition, the famous "
-#~ "explorer, Marco the wizard, is rumored to have wrecked his ship in this "
-#~ "new land. Finding him would prove to be a much needed boon to your cause."
-#~ msgstr ""
-#~ "Вы наняли очень сильного Варвара, который согласился помочь в ваших "
-#~ "приключениях. Его происхождение неизвестно, но вы чувствуете под мехами и "
-#~ "грязью благородного человека. Так же в этих землях потерпел крушение "
-#~ "известный мореплаватель Волшебник Марко. его нужно найти, для вашего дела."
-
-#~ msgid ""
-#~ "You have just 8 weeks  to build your army and conquer a town on the other "
-#~ "side of a distant river.  There are three paths to take, which will you "
-#~ "choose?"
-#~ msgstr ""
-#~ "У вас есть 8 недель, чтобы построить свою армию и завоевать город на "
-#~ "другой стороне далекой реки.\n"
-#~ "Есть три пути выбора, который из них вы выберете?"
-
-#~ msgid ""
-#~ "You have just 8 weeks to build your army and conquer a town on the other "
-#~ "side of a distant river.  There are three paths to take, which will you "
-#~ "choose?"
-#~ msgstr ""
-#~ "У вас есть 8 недель, чтобы построить свою армию и завоевать город на "
-#~ "другой стороне далекой реки.\n"
-#~ "Есть три пути выбора, который из них вы выберете?"
-
-#~ msgid ""
-#~ "You have received a message from Archibald. \"General, these peasants "
-#~ "deserve punishment. Put them to the sword and let Corlagon have his way "
-#~ "with them.\""
-#~ msgstr ""
-#~ "Вы получили сообщение от Арчибальда. \"Мой Генерал, эти крестьяне "
-#~ "заслуживают наказания. Пусть Корлагон возьмет меч и поступает с ними по "
-#~ "своему\"."
-
-#~ msgid ""
-#~ "You have received a message from Archibald.  \" HOW DARE YOU BETRAY ME! I "
-#~ "will see your head on the block alongside your new master's once I have "
-#~ "won."
-#~ msgstr ""
-#~ "Вы получили сообщение от Арчибальда. \"Как смеешь ты предать меня! Скоро "
-#~ "Я увижу Вашу голову на плахе.\""
-
-#~ msgid ""
-#~ "You have received a message from Roland. \" I am shocked! I had thought "
-#~ "better of you, but I was terribly wrong. Now you'll have to live with "
-#~ "your dark decision for the rest of your life.\""
-#~ msgstr ""
-#~ "Вы получили сообщение от Роланда. \"Я в шоке! Я ошибся в Вас. Теперь вы "
-#~ "будете жить с этим решением всю оставшуюся короткую жизнь\"."
-
-#~ msgid "You have recieved a shipment of supplies from your kingdom!"
-#~ msgstr "Вы получили новый груз из Королевства!"
-
-#~ msgid ""
-#~ "You have recieved a shipment of supplies from your kingdom! There is a "
-#~ "note attached, \"These are all we could afford to send you from our "
-#~ "treasuries, as the war with Harondale is taxing us greatly. We will send "
-#~ "more in two weeks.\""
-#~ msgstr ""
-#~ "Вы получили новый груз из Королевства!  И письмо: \"Это все, что мы могли "
-#~ "позволить себе послать вам, эта война очень затратна для нас. Следующий "
-#~ "груз мы вышлем через две недели\"."
-
-#~ msgid ""
-#~ "You have six months to destroy the Necromancer Stronghold in the heart of "
-#~ "the valley."
-#~ msgstr ""
-#~ "У вас есть 6 месцев, чтобы уничтожить Крепость Некроманта, в самом сердце "
-#~ "долины."
-
-#~ msgid ""
-#~ "You have washed up on the beach after being shipwrecked. Your goal is to "
-#~ "find a way home."
-#~ msgstr ""
-#~ "После кораблекрушения Вас вынесло на пляж. Ваша задача - найти путь домой."
-
-#~ msgid ""
-#~ "You hear a low rumble, look up and see an avalanche!  You dive onto a "
-#~ "large patch of grass to avoid it.  While dusting yourself off, you "
-#~ "consider yourself quite lucky to be alive.  Luckier still to find a Four-"
-#~ "Leaf Clover stuck on your nose."
-#~ msgstr ""
-#~ "Вы слышите низкий гул, смотрите вверх и видите снежную лавину! Вы "
-#~ "прячетесь на большой лужайке, чтобы избежать ее. Лавина проносится мимо, "
-#~ "Вы счастливчик, у вас в носу застрял Четырехлистный Клевер."
-
-#~ msgid ""
-#~ "You hear a rumor from a peasant who lives in the town of Waystop. He "
-#~ "says, \"The pirates control most of the sulfur mines in this area. They "
-#~ "use it for the cannons on their bigger boats. If you want a mine, you'll "
-#~ "have to defeat them.\""
-#~ msgstr ""
-#~ "Ты услышал сплетни от крестьянина, который живет в городе Вайстоп. Он "
-#~ "рассказал что пираты контролируют большую часть шахт с серой в этой "
-#~ "области. Они используют его для своих пушек для кораблей. Рано или поздно "
-#~ "вам придется с ними столкнуться\"."
-
-#~ msgid "You hear melodic strains of elvish music as you enter this clearing."
-#~ msgstr "На поляне Вы слышите мелодичные звуки эльфийской музыки."
-
-#~ msgid ""
-#~ "You must, like, forsake your earthly wealth and, like, join us on the "
-#~ "island of the lotus eaters."
-#~ msgstr ""
-#~ "Вы должны все бросить и присоединиться к нам на острове Поедателей Лотуса."
-
-#~ msgid ""
-#~ "You must search the world for your mortal enemy, Wilgatus.  Can you find "
-#~ "him before its too late?"
-#~ msgstr ""
-#~ "Вы должны найти, Вашего смертельного врага, Вилгатуса. Сможете ли вы его "
-#~ "найти пока не поздно?"
-
-#~ msgid ""
-#~ "You notice some runes hastily scrawled into a rock by your feet, They "
-#~ "look like the initials of Uncle Ivan!"
-#~ msgstr ""
-#~ "Вы заметили несколько наскальных надписей, они выглядят: \"Здесь был Дядя "
-#~ "Ваня!\""
-
-#~ msgid ""
-#~ "You notice that mines and resources in the elvish lands are few, and you "
-#~ "send word to your kingdom that you will need extra supplies. They should "
-#~ "respond within a fortnight."
-#~ msgstr ""
-#~ "Вы заметили, что ресурсов на этой эльфийской земле осталось очень мало, и "
-#~ "вы отправили соообщение о помощи в кололевство. Вам должен придти ответ в "
-#~ "течении двух недель."
-
-#~ msgid ""
-#~ "Your advance scouts come riding back to you with the following news. They "
-#~ "believe they have found signs that Uncle Ivan was in this general area, "
-#~ "and that he made his way to the north many months ago. Also they say "
-#~ "there is a town nearby and many resources to the east."
-#~ msgstr ""
-#~ "Ваши разведчики вернулись с новостями. Они считают, что обнаружили "
-#~ "признаки того, что Дядя Ваня было здесь, и что двигался на север, "
-#~ "несколько месяцев назад. Кроме того, они сообщили, что рядом находится "
-#~ "город, и много ресусов на востоке."
-
-#~ msgid ""
-#~ "Your advisor approaches you, \"My liege, something must be done about "
-#~ "these peasants! They still refuse to work.  At this rate you won't have "
-#~ "anything to put in your daughter's dowry!\""
-#~ msgstr ""
-#~ "Советник подходит вам, \"Мои Сеньер, нужно что то делать! Эти крестьяне "
-#~ "по прежнему отказываются работать. При таком темпе работ, у вад небудет "
-#~ "приданного для вашей дочери!\""
-
-#~ msgid ""
-#~ "Your advisor approaches you smiling greatly, \"My liege! The peasants are "
-#~ "making money in the market, and are finally paying taxes!\""
-#~ msgstr ""
-#~ "lДовольный советник подходит к Вам, \"Мои Сеньер! Крестьяне начали "
-#~ "торговать на рынке! Налоги текут рекой!\""
-
-#~ msgid ""
-#~ "Your advisor approaches you with a long face, \"My liege, the peasant's "
-#~ "numbers are growing steadily.  All they do is take, take, take! We are "
-#~ "beginning to suffer dearly because of them.\""
-#~ msgstr ""
-#~ "К Вам подходит советник, с вытянутым лицом, \"Мой Сеньер! Число крестьян "
-#~ "постояннно увеличивается... Они все время просят, просят, и просят! Это "
-#~ "нам выходит очень дорого.\""
-
-#~ msgid ""
-#~ "Your advisor approaches you with some startling information, \"My liege, "
-#~ "the peasants are draining us. They do nothing, and take everything! We "
-#~ "must get them home. Your own citizens are beginning to suffer!\""
-#~ msgstr ""
-#~ "К вам подошел советник, с шокирующей информацией, \"Мои Сеньер!, "
-#~ "крестьяне занимаются грабежами. Они ничего не делают, и берут все! Мы "
-#~ "должны отправить их всех домой. Ваши граждане начинают страдать!\""
-
-#~ msgid ""
-#~ "Your arrival here was a surprise to those sworn to guard Dragon Isle, and "
-#~ "you were able to quickly capture one of their castles.  Use caution, "
-#~ "though, for two other guardians remain in this jungle."
-#~ msgstr ""
-#~ "Ваш приезд сюда, был неожиданностью для охраны Острова Драконов, и Вы "
-#~ "смогли быстро захватить один из своих замков. Соблюдайте осторожность, "
-#~ "два других захватчика все еще остаются поблизости."
-
-#~ msgid ""
-#~ "Your castle, founded inside the center of a mile wide crater, is besieged "
-#~ "by those who desire your mineral wealth."
-#~ msgstr ""
-#~ "Ваш замок, построенный в центре давно потухшего кратер, осаждают враги, "
-#~ "которые желают разграбить все ваше богатство."
-
-#~ msgid "Your castle is the last outpost in the area, Don't lose it!"
-#~ msgstr ""
-#~ "Ваш замок является последним форпостом в этом районе, Не Потеряйте Его!"
-
-#~ msgid "Your crew begins to grumble."
-#~ msgstr "Ваша команда начинает ворчать."
-
-#~ msgid ""
-#~ "Your crew seriously entertains thoughts of mutiny.  Your nights are "
-#~ "sleepless."
-#~ msgstr ""
-#~ "Вашу команду, все чаще и чаще, посещают мысли мысли о мятеже. Это время "
-#~ "бессонных ночей для вас."
-
-#~ msgid "You're almost there!"
-#~ msgstr "Вы почти у цели!"
-
-#~ msgid "You, recieve word that you have been robbed."
-#~ msgstr "Вы, получили письмо, в котором говориться, что Вас ограбили!"
-
-#~ msgid "You're getting colder."
-#~ msgstr "Вам становится холодно"
-
-#~ msgid "You're getting warmer."
-#~ msgstr "Вам становится теплее."
-
-#~ msgid ""
-#~ "You're here! Oh, thank you thank you thank you! I'm in the jail east of "
-#~ "the castle. Please hurry!"
-#~ msgstr ""
-#~ "Вы уже здесь! О, благодарю Вас, благодарю Вас! Я нахожусь в тюрьме к "
-#~ "востоку от замка. Пожалуйста, поспешите!"
-
-#~ msgid ""
-#~ "Your expedition has taken a turn for the worse... you now have no way to "
-#~ "get home!"
-#~ msgstr ""
-#~ "Ваша экспедиция закончилась очень плохо ... Теперь у Вас нет возможности "
-#~ "попасть домой!"
-
-#~ msgid ""
-#~ "Your forces are thinly spread in an effort to defend all the dwarf towns "
-#~ "(which may not be transformed into castles). Consolidate your forces and "
-#~ "smite the enemy before the towns fall."
-#~ msgstr ""
-#~ "Ваши силы расредоточены, для защиты Гномьих Поселений. Вам нужно "
-#~ "объединиться, и поразить противника, пока он не захватил все."
-
-#~ msgid ""
-#~ "Your horse stumbles and throws you from the saddle.  When you awaken you "
-#~ "find that you have hit your head on the Fizbin of Misfortune."
-#~ msgstr ""
-#~ "Ваш конь спотыкается и выбросает Вас из седла. Когда Вы пришли в "
-#~ "сознание, Вы обнаружите Мадальон Несчастья."
-
-#~ msgid "Your subjects contribute to your war effort!"
-#~ msgstr "Ваши субъекты способствуют военным усилиям!"
-
-#~ msgid ""
-#~ "Your town is undefended and your heroes are scattered.  Do you attack or "
-#~ "defend?"
-#~ msgstr ""
-#~ "Ваш город незащищен и герои разбросаны по стране. Что вам делать: "
-#~ "атаковать или обороняться?"
-
-#~ msgid ""
-#~ "Your treasury has been looted by robbers and you have lost valuable "
-#~ "resources."
-#~ msgstr ""
-#~ "Ваша казна была разграблена грабителями, и Вы потеряли ценные ресурсы."
-
-#~ msgid "Your troops begin to wonder about your sanity."
-#~ msgstr "Ваши войска начинают задумываться о Вашей вменяемости."
-
-#~ msgid ""
-#~ "You run aground on the rocks and have to use some wood to fix your boat."
-#~ msgstr ""
-#~ "Вы попали в кораблекрушение на скалах, и вам нужны дрова, чтобы починить "
-#~ "корабль."
-
-#~ msgid "You see something that could just be the elusive Nubbie!"
-#~ msgstr "Вы видите что-то, это как раз может быть неуловимая Nubbie!"
-
-#~ msgid ""
-#~ "You see the remains of a burned out sawmill here.  All you can salvage is "
-#~ "some ofwood left for scrap."
-#~ msgstr ""
-#~ "Вы видите остатки сгоревшей лесопики. Все что осталось, вы разобрали на "
-#~ "ресурсы."
-
-#~ msgid ""
-#~ "You see the remains of an old sawmill, but it is obvious that you will "
-#~ "not be able to make it work again."
-#~ msgstr ""
-#~ "Вы видите остатки старой лесопилки, и очевидно, что вы не сможете ее "
-#~ "отремонтировать."
-
-#~ msgid "You should turn back."
-#~ msgstr "Вам нужно вернуться назад."
-
-#~ msgid "You uncover a compass in the grass!"
-#~ msgstr "Вы обнаружили компас в траве!"
-
-#~ msgid "You've been warned!"
-#~ msgstr "Мы Вас предупредили!"
-
-#~ msgid ""
-#~ "You've received a message from the guild. \"Thank God you've arrived! "
-#~ "We're under seige from two enemies from the north and one from across the "
-#~ "sea. Please save us, you're our only hope.\""
-#~ msgstr ""
-#~ "Вы получили сообщение от гильдии. \"Слава Богу, что вы приехали! Сейчас "
-#~ "мы в осаде, один враг с севера, а другой из-за моря. Пожалуйста, помогите "
-#~ "нам, Вы наша единственная надежда!\""
-
-#~ msgid ""
-#~ "You've ruled with an iron fist (and an army of undead), but now your "
-#~ "kingdom has turned against you!"
-#~ msgstr ""
-#~ "Вы жестко правили королевством и армией из нежити, но теперь ваше "
-#~ "королевство превратилось против вас!"
-
-#~ msgid ""
-#~ "You've saved a group of miners from the dragons.  One of them approaches "
-#~ "you, \"Thank you so much for saving us!  We found this sulfer and sword "
-#~ "in the mine, then those dragons chased us!  I don't know how much longer "
-#~ "we could survive!\""
-#~ msgstr ""
-#~ "Вы спасли группа шахтеров от драконов. Один из них подходит вам,  "
-#~ "\"Благодярю Вас за наше спасение! Мы обнаружили этот меч в шахте, долго "
-#~ "здесь мы бы не продержались...\""
-
-#~ msgid ""
-#~ "You will need a stronger army than that, mortal, to step through this "
-#~ "portal."
-#~ msgstr "Вам нужна более сильная армия, чтобы пройти через этот портал."
-
-#~ msgid "Blind "
-#~ msgstr "Ослепить "
-
-#~ msgid "game: also confirm autosave"
-#~ msgstr "game: так же спрашивать для autosave"
-
-#~ msgid "game: battle mouse shadow"
-#~ msgstr "game: показать тень перемещения курсора на поле боя"
-
-#~ msgid "game: battle move shadow"
-#~ msgstr "game: показать тень возможных ходов на поле боя"
-
-#~ msgid "game: castle flash building"
-#~ msgstr "game: выделять активные постройки в городах"
-
-#~ msgid "world: abandoned mine random resource"
-#~ msgstr "world: для заброшенной шахты, возможны все виды ресурсов"
-
-#~ msgid "world: save count monster after battle"
-#~ msgstr "world: сохранить количество врагов, после поражения"
-
-#~ msgid "world: guardian objects gets +2 defense"
-#~ msgstr "world: защитники объектов всегда будут получать +2 к защите"
-
-#~ msgid "world: no in-built requirements or guardians for placed artifacts"
-#~ msgstr ""
-#~ "world: запретить встроенные условия (покупка или охрана) для артефактов"
-
-#~ msgid "world: only the first monster will attack (H2 bug)."
-#~ msgstr ""
-#~ "world: если несколько армий монстров вокруг героя, то одна битва за ход "
-#~ "(H2 bug)"
-
-#~ msgid "world: new version WeekOf (+growth)"
-#~ msgstr "world: новая версия прироста населения WeekOf (+ базовый прирост)"
-
-#~ msgid ""
-#~ "world: Artesian Springs have two separately visitable squares (h3 ver)"
-#~ msgstr ""
-#~ "world: объект Artesian Springs имеет два независимых источника (h3 ver)"
-
-#~ msgid "world: Outer creature dwellings should accumulate units"
-#~ msgstr ""
-#~ "world: количество монстров, во внешних жилищах, будет увеличиваться "
-#~ "каждую неделю"
-
-#~ msgid "world: use unique artifacts for morale/luck"
-#~ msgstr ""
-#~ "world: использовать уникальность для артифактов, влияющие на мораль/удачу"
-
-#~ msgid "castle: allow buy from well"
-#~ msgstr "castle: разрешить покупку армии через колодец"
-
-#~ msgid "castle: allow recruits special/expansion heroes"
-#~ msgstr "castle: разрешить найм специальных героев из кампаний"
-
-#~ msgid "heroes: learn new spells with day"
-#~ msgstr "heroes: выучить новые заклинания только после ночевки в городе"
-
-#~ msgid "heroes: surrendering gives some experience"
-#~ msgstr "heroes: сбежавщий также получает опыт"
-
-#~ msgid "heroes: recalculate movement points after creatures movement"
-#~ msgstr "heroes: пересчитывать MP после изменения армии"
-
-#~ msgid "heroes: allow pickup objects for patrol"
-#~ msgstr "heroes: разрешить патрулю поднимать объекты в своем радиусе"
-
-#~ msgid "heroes: after battle move to target cell"
-#~ msgstr "heroes: после битвы автоматически переходить на клетку цели"
-
-#~ msgid "battle: high objects are an obstacle for archers"
-#~ msgstr "battle: для высоких препятствий применить штраф при стрельбе"
-
-#~ msgid "battle: merge armies for hero from castle"
-#~ msgstr "battle: объединять армию города и героя при нападении противника"
-
-#~ msgid "battle: archmage can resists (20%) bad spells"
-#~ msgstr "battle: АрхиМаги имеют защиту (20%) от плохой магии"
-
-#~ msgid "battle: magical creature resists (20%) the same magic"
-#~ msgstr "battle: магические существа имеют защиту от этой же магии (20%)."
-
-#~ msgid "battle: skip increase +2 defense"
-#~ msgstr "battle: пропуск хода увеличивает защиту на +2"
-
-#~ msgid "game: show SDL logo"
-#~ msgstr "game: показать SDL logo при старте"
-
-#~ msgid "game: also use dynamic interface for castles"
-#~ msgstr "game: так же использовать динамическую тему для городов"
-
-#~ msgid "pocketpc: hide cursor"
-#~ msgstr "pocketpc: выключить курсор"
-
-#~ msgid "pocketpc: tap mode"
-#~ msgstr "pocketpc: включить tap режим"
-
-#~ msgid "pocketpc: drag&drop gamearea as scroll"
-#~ msgstr "pocketpc: drag&drop gamearea as scroll"
-
-#~ msgid "pocketpc: low memory"
-#~ msgstr "pocketpc: недостаточно памяти"
-
-#~ msgid "Shoot %{monster} (%{count} shot(s) left)"
-#~ msgstr "Стрелять в  %{monster} (осталось %{count} выстрелов)"
-
-#~ msgid "New Map"
-#~ msgstr "Новая карта"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Создать новую карту с нуля или использовать генератор случайных карт."
-
-#~ msgid "Load Map"
-#~ msgstr "Загрузить карту"
-
-#~ msgid "Load an existing map."
-#~ msgstr "Загрузить существующую карту"
-
-#~ msgid "Quit out of the map editor."
-#~ msgstr "Выйти из редактора карт"
-
-#~ msgid "Create a map that is %{size} squares wide by %{size} squares high."
-#~ msgstr "Созать карту %{size} квадратов шириной и %{size} квадратов высотой."
-
-#~ msgid "Magnify"
-#~ msgstr "Обзор"
-
-#~ msgid "Change between zoom and normal view."
-#~ msgstr "Переключение между увеличенным и нормальным обзором."
-
-#~ msgid "Undo"
-#~ msgstr "Отменить"
-
-#~ msgid "Undo your last action. Press againt to redo the action."
-#~ msgstr ""
-#~ "Отменяет последнее действие. Нажмите еще раз, чтобы вернуть это действие."
-
-#~ msgid "New"
-#~ msgstr "Новая карта"
-
-#~ msgid "Start a new map from scratch."
-#~ msgstr "Начать новую карту с нуля."
-
-#~ msgid "Specifications"
-#~ msgstr "Опции карты"
-
-#~ msgid "Edit maps title, description, and other general information."
-#~ msgstr "Редактирование заголовка, описания и другой информации о карте."
-
-#~ msgid ""
-#~ "Open the file options menu, where you can save or load maps, or quit out "
-#~ "of the editor."
-#~ msgstr ""
-#~ "Открыть найстройки файла карты, где вы можете сохранить или загрузить "
-#~ "карты, а так же выйти из редактора."
-
-#~ msgid "View the editor system options, which let you customize the editor."
-#~ msgstr "Изменение системных настроек редактора."
-
-#~ msgid "Terrain Mode"
-#~ msgstr "Почва"
-
-#~ msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-#~ msgstr "Используется для отрисовки травы, грязи, воды и т.д."
-
-#~ msgid "Object Mode"
-#~ msgstr "Объекты"
-
-#~ msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
-#~ msgstr ""
-#~ "Используется для размещения объектов (горы, деревья, сокровища и т.д.)"
-
-#~ msgid "Detail Mode"
-#~ msgstr "Информация"
-
-#~ msgid "Used for special editing of monsters, heroes and towns."
-#~ msgstr ""
-#~ "Используется для поределения специальных параметров монстров, героев и "
-#~ "городов."
-
-#~ msgid "Stream Mode"
-#~ msgstr "Потоки"
-
-#~ msgid "Allows you to draw streams by clicking and dragging."
-#~ msgstr "Позволяет разместить потоки воды и лавы."
-
-#~ msgid "Allows you to draw roads by clicking and dragging."
-#~ msgstr "Позволяет проложить дороги."
-
-#~ msgid "Erase Mode"
-#~ msgstr "Ластик"
-
-#~ msgid "Used to erase objects of the map."
-#~ msgstr "Используется для удаления объектов с карты."
-
-#~ msgid "Traversable only by boat."
-#~ msgstr "Путешествовать только на корабле."
-
-#~ msgid "No special modifiers."
-#~ msgstr "Нет особых модификаторов."
-
-#~ msgid ""
-#~ "Cost 1.5 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Затрачивается в 1,5 раза больше вермени от нормального движения всех "
-#~ "героев. (Навык следопыта снижает или игнорирует этот штраф.)"
-
-#~ msgid ""
-#~ "Cost 1.75 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Затрачивается в 1,75 раза больше вермени от нормального движения всех "
-#~ "героев. (Навык следопыта снижает или игнорирует этот штраф.)"
-
-#~ msgid ""
-#~ "Cost 1.25 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Затрачивается в 1,25 раза больше вермени от нормального движения всех "
-#~ "героев. (Навык следопыта снижает или игнорирует этот штраф.)"
-
-#~ msgid ""
-#~ "Cost 2 times normal movement for all heroes. (Pathfinding reduces or "
-#~ "eliminates the penalty.)"
-#~ msgstr ""
-#~ "Затрачивается в 2 раза больше вермени от нормального движения всех "
-#~ "героев. (Навык следопыта снижает или игнорирует этот штраф.)"
-
-#~ msgid "Water Objects"
-#~ msgstr "Водные объекты"
-
-#~ msgid "Used to select objects most appropriate for use on water."
-#~ msgstr "Используется для объектов, размещаемых на воде."
-
-#~ msgid "Grass Objects"
-#~ msgstr "Объекты травы."
-
-#~ msgid "Used to select objects most appropriate for use on grass."
-#~ msgstr "Используется для объектов, размещаемых на траве."
-
-#~ msgid "Snow Objects"
-#~ msgstr "Снежные объекты"
-
-#~ msgid "Used to select objects most appropriate for use on snow."
-#~ msgstr "Используется для объектов, размещаемых на снегу."
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Болотные объекты"
-
-#~ msgid "Used to select objects most appropriate for use on swamp."
-#~ msgstr "Используется для объектов, размещаемых на болотах."
-
-#~ msgid "Lava Objects"
-#~ msgstr "Лавовые объекты"
-
-#~ msgid "Used to select objects most appropriate for use on lava."
-#~ msgstr "Используется для объектов, размещаемых на лаве."
-
-#~ msgid "Desert Objects"
-#~ msgstr "Пустынные объекты"
-
-#~ msgid "Used to select objects most appropriate for use on desert."
-#~ msgstr "Используется для объектов, размещаемых в пустыне."
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Грязевые объекты"
-
-#~ msgid "Used to select objects most appropriate for use on dirt."
-#~ msgstr "Используется для объектов, размещаемых в грязи."
-
-#~ msgid "Wasteland Objects"
-#~ msgstr "Объекты пустоши"
-
-#~ msgid "Used to select objects most appropriate for use on wasteland."
-#~ msgstr "Используется для объектов, размещаемых в пустоши."
-
-#~ msgid "Beach Objects"
-#~ msgstr "Прибрежные объекты"
-
-#~ msgid "Used to select objects most appropriate for use on beach."
-#~ msgstr "Используется для объектов, размещаемых на берегу."
-
-#~ msgid "Towns"
-#~ msgstr "Города"
-
-#~ msgid "Used to place a town or castle."
-#~ msgstr "Используется для размещения города или замка."
-
-#~ msgid "Monsters"
-#~ msgstr "Монстры"
-
-#~ msgid "Used to place a monster group."
-#~ msgstr "Используется для размещения нейтральных групп монстров."
-
-#~ msgid "Used to place a hero."
-#~ msgstr "Используется для размещения героев."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Используется для размещения артефактов."
-
-#~ msgid "Treasures"
-#~ msgstr "Сокровища"
-
-#~ msgid "Used to place a resource or treasure."
-#~ msgstr "Используется для размещения ресурсов и сокровищ."
-
-#~ msgid "Stone"
-#~ msgstr "Окаменение"
-
-#~ msgid "Stone spell from Medusa."
-#~ msgstr "Каменное проклятие Медуз."
-
-#~ msgid "pocketpc: low display resolution (needs restart)"
-#~ msgstr "pocketpc: low display resolution (needs restart)"

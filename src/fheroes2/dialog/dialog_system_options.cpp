@@ -261,7 +261,8 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-            if ( le.MouseClickLeft( buttonOkay.area() ) ) {
+
+            if ( le.MouseClickLeft( buttonOkay.area() ) || HotKeyCloseWindow ) {
                 break;
             }
 

@@ -66,14 +66,12 @@ fheroes2::Rect Interface::GameArea::RectFixed( fheroes2::Point & dst, int rw, in
     return res.first;
 }
 
-void Interface::GameArea::Build( void )
+void Interface::GameArea::generate( const fheroes2::Size & screenSize, const bool withoutBorders )
 {
-    const fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( Settings::Get().ExtGameHideInterface() )
-        SetAreaPosition( 0, 0, display.width(), display.height() );
+    if ( withoutBorders )
+        SetAreaPosition( 0, 0, screenSize.width, screenSize.height );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
+        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, screenSize.width - RADARWIDTH - 3 * BORDERWIDTH, screenSize.height - 2 * BORDERWIDTH );
 }
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
@@ -227,9 +225,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            const int object = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.GetObject();
 
-            switch ( object ) {
+            switch ( objectType ) {
             case MP2::OBJ_ZERO: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -242,7 +240,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             case MP2::OBJ_BOAT: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -253,7 +252,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 else if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             case MP2::OBJ_MONSTER: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -264,7 +264,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawMonstersAndBoats ) {
                     monsterList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             case MP2::OBJ_HEROES: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -282,7 +283,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 else if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             default: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -293,7 +295,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawTop ) {
                     topList.emplace_back( &tile );
                 }
-            } break;
+                break;
+            }
             }
         }
     }
@@ -366,15 +369,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     for ( const Maps::Tiles * tile : drawList ) {
-        const int object = tile->GetObject();
-        if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+        const MP2::MapObjectType objectType = tile->GetObject();
+        if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
             const Heroes * hero = tile->GetHeroes();
             if ( hero ) {
                 const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
                 hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
             }
         }
-        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
+        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
             tile->RedrawBoatShadow( dst, tileROI, *this );
         }
     }
@@ -423,8 +426,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Heroes and boats.
     if ( drawTop || drawBottom ) {
         for ( const Maps::Tiles * tile : drawList ) {
-            const int object = tile->GetObject();
-            if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+            const MP2::MapObjectType objectType = tile->GetObject();
+            if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
                 const Heroes * hero = tile->GetHeroes();
                 if ( hero ) {
                     const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
@@ -437,7 +440,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
             }
-            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
+            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
                 tile->RedrawBoat( dst, tileROI, *this );
                 if ( drawTop ) {
                     tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
@@ -494,7 +497,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI );
+                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI, *this );
                 }
             }
         }
@@ -546,7 +549,7 @@ void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
     scrollDirection = 0;
 }
 
-fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_t index )
+fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" );
@@ -561,8 +564,8 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
 
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
-    fheroes2::Point pt = Maps::GetPoint( index );
-    gamearea.SetCenter( pt );
+    const fheroes2::Point pt = Maps::GetPoint( index );
+    gamearea.SetCenter( pt + offset );
 
     gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
 
@@ -636,7 +639,6 @@ void Interface::GameArea::SetScroll( int direct )
 
 void Interface::GameArea::QueueEventProcessing( void )
 {
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
@@ -644,7 +646,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     // change cusor if need
     if ( updateCursor || index != _prevIndexPos ) {
-        cursor.SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
+        Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -654,8 +656,6 @@ void Interface::GameArea::QueueEventProcessing( void )
         return;
 
     const Settings & conf = Settings::Get();
-
-    // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
@@ -691,8 +691,10 @@ void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 
 void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 {
-    int32_t offsetX = point.x - _middlePoint().x;
-    int32_t offsetY = point.y - _middlePoint().y;
+    const fheroes2::Point & middlePos = _middlePoint();
+
+    int32_t offsetX = point.x - middlePos.x;
+    int32_t offsetY = point.y - middlePos.y;
     if ( offsetX < _minLeftOffset )
         offsetX = _minLeftOffset;
     else if ( offsetX > _maxLeftOffset )

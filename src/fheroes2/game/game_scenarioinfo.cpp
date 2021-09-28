@@ -48,48 +48,105 @@
 #include "ui_tool.h"
 #include "world.h"
 
-void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false );
-void RedrawRatingInfo( TextSprite & );
-void RedrawDifficultyInfo( const fheroes2::Point & dst );
+namespace
+{
+    void updatePlayers( Players & players, const int humanPlayerCount )
+    {
+        if ( humanPlayerCount < 2 )
+            return;
 
-fheroes2::GameMode Game::SelectScenario( void )
+        int foundHumans = 0;
+
+        for ( size_t i = 0; i < players.size(); ++i ) {
+            if ( players[i]->isControlHuman() ) {
+                ++foundHumans;
+                if ( players[i]->isControlAI() )
+                    players[i]->SetControl( CONTROL_HUMAN );
+            }
+
+            if ( foundHumans == humanPlayerCount )
+                break;
+        }
+    }
+
+    size_t GetSelectedMapId( const MapsFileInfoList & lists )
+    {
+        const Settings & conf = Settings::Get();
+
+        const std::string & mapName = conf.CurrentFileInfo().name;
+        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        size_t mapId = 0;
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
+            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
+                return mapId;
+            }
+        }
+
+        return 0;
+    }
+
+    void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false )
+    {
+        const Settings & conf = Settings::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        if ( firstDraw ) {
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGHSBKG, 1 ), display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
+        }
+
+        // image panel
+        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+        fheroes2::Blit( panel, display, rt.x, rt.y );
+
+        // Redraw select button as the original image has a wrong position of it
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
+
+        // text scenario
+        Text text( _( "Scenario:" ), Font::BIG );
+        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 23 );
+
+        // maps name
+        text.Set( conf.MapsName() );
+        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 46 );
+
+        // text game difficulty
+        text.Set( _( "Game Difficulty:" ) );
+        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 75 );
+
+        // text opponents
+        text.Set( _( "Opponents:" ), Font::BIG );
+        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 181 );
+
+        // text class
+        text.Set( _( "Class:" ), Font::BIG );
+        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 262 );
+    }
+
+    void RedrawDifficultyInfo( const fheroes2::Point & dst )
+    {
+        const uint32_t width = 65;
+        const uint32_t height = 69;
+
+        for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
+            const uint32_t offset = current * ( width + 12 );
+            Text text( Difficulty::String( current ), Font::SMALL );
+            text.Blit( dst.x + offset + ( width - text.w() ) / 2, dst.y + height );
+        }
+    }
+
+    void RedrawRatingInfo( TextSprite & sprite )
+    {
+        sprite.Hide();
+        std::string str( _( "Rating %{rating}%" ) );
+        StringReplace( str, "%{rating}", Game::GetRating() );
+        sprite.SetText( str );
+        sprite.Show();
+    }
+}
+
+fheroes2::GameMode Game::SelectScenario()
 {
     return fheroes2::GameMode::SCENARIO_INFO;
-}
-
-void updatePlayers( Players & players, const int humanPlayerCount )
-{
-    if ( humanPlayerCount < 2 )
-        return;
-
-    int foundHumans = 0;
-
-    for ( size_t i = 0; i < players.size(); ++i ) {
-        if ( players[i]->isControlHuman() ) {
-            ++foundHumans;
-            if ( players[i]->isControlAI() )
-                players[i]->SetControl( CONTROL_HUMAN );
-        }
-
-        if ( foundHumans == humanPlayerCount )
-            break;
-    }
-}
-
-size_t GetSelectedMapId( MapsFileInfoList & lists )
-{
-    const Settings & conf = Settings::Get();
-
-    const std::string & mapName = conf.CurrentFileInfo().name;
-    const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-    size_t mapId = 0;
-    for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-        if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-            return mapId;
-        }
-    }
-
-    return 0;
 }
 
 fheroes2::GameMode Game::ScenarioInfo()
@@ -98,8 +155,8 @@ fheroes2::GameMode Game::ScenarioInfo()
 
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    MapsFileInfoList lists;
-    if ( !PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {
+    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( conf.IsGameType( Game::TYPE_MULTI ) );
+    if ( lists.empty() ) {
         Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
@@ -347,62 +404,4 @@ fheroes2::GameMode Game::ScenarioInfo()
 int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )
 {
     return currentId * width * KINGDOMMAX / totalCount + ( width * ( KINGDOMMAX - totalCount ) / ( 2 * totalCount ) );
-}
-
-void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw )
-{
-    const Settings & conf = Settings::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( firstDraw ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGHSBKG, 1 ), display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
-    }
-
-    // image panel
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-    fheroes2::Blit( panel, display, rt.x, rt.y );
-
-    // Redraw select button as the original image has a wrong position of it
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
-
-    // text scenario
-    Text text( _( "Scenario:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 23 );
-
-    // maps name
-    text.Set( conf.MapsName() );
-    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 46 );
-
-    // text game difficulty
-    text.Set( _( "Game Difficulty:" ) );
-    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 75 );
-
-    // text opponents
-    text.Set( _( "Opponents:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 181 );
-
-    // text class
-    text.Set( _( "Class:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 262 );
-}
-
-void RedrawDifficultyInfo( const fheroes2::Point & dst )
-{
-    const uint32_t width = 65;
-    const uint32_t height = 69;
-
-    for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-        const uint32_t offset = current * ( width + 12 );
-        Text text( Difficulty::String( current ), Font::SMALL );
-        text.Blit( dst.x + offset + ( width - text.w() ) / 2, dst.y + height );
-    }
-}
-
-void RedrawRatingInfo( TextSprite & sprite )
-{
-    sprite.Hide();
-    std::string str( _( "Rating %{rating}%" ) );
-    StringReplace( str, "%{rating}", Game::GetRating() );
-    sprite.SetText( str );
-    sprite.Show();
 }
