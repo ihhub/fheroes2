@@ -336,6 +336,8 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
+    week_next = Week::RandomWeek( *this, false );
+
     // initialize all heroes
     vec_heroes.Init();
 
@@ -374,7 +376,7 @@ void World::Reset( void )
     month = 0;
 
     week_current = Week( WeekName::TORTOISE );
-    week_next = Week::RandomWeek( false );
+    week_next = Week::RandomWeek( *this, false );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -678,7 +680,7 @@ void World::NewDay( void )
 void World::NewWeek( void )
 {
     // update week type
-    week_next = Week::RandomWeek( LastWeek() );
+    week_next = Week::RandomWeek( *this, LastWeek() );
     week_current = week_next;
 
     if ( 1 < week ) {
