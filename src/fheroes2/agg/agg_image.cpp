@@ -984,6 +984,16 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::ESCROLL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 4 ) {
+                    // fix missing black border on the right side of the "up" button
+                    Sprite & out = _icnVsSprite[id][4];
+                    if ( out.width() == 16 && out.height() == 16 ) {
+                        Copy( out, 0, 0, out, 15, 0, 1, 16 );
+                    }
+                }
+                return true;
             default:
                 break;
             }
