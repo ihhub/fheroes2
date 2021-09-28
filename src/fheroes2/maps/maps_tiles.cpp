@@ -2492,7 +2492,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     }
 
     // Most likely we have a broken object put by an editor.
-    VERBOSE_LOG( "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." );
     return -1;
 }
 
