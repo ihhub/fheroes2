@@ -70,8 +70,8 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice.
 
-* If you have a legally purchased copy of the original game, run the `homm2_windows.bat` script supplied in the ZIP archive. This
-  script will try to perform an automatic search for an existing installation of the original game and extract all the necessary
+* If you have a legally purchased copy of the original game, run the `extract_homm2_resources.bat` script supplied in the ZIP archive.
+  This script will try to perform an automatic search for an existing installation of the original game and extract all the necessary
   resource files. If it can't find an existing installation, you will be prompted to enter the location of the original game manually.
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
