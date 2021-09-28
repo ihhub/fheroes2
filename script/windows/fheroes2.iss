@@ -33,8 +33,8 @@ Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Micro
 Source: "..\..\docs\README.txt"; DestDir: "{app}"; Flags: isreadme
 Source: "..\demo\demo_windows.bat"; DestDir: "{app}"
 Source: "..\demo\demo_windows.ps1"; DestDir: "{app}"
-Source: "..\homm2\anim_extract_windows.bat"; DestDir: "{app}"
-Source: "..\homm2\anim_extract_windows.ps1"; DestDir: "{app}"
+Source: "..\homm2\extract_homm2_anim.bat"; DestDir: "{app}"
+Source: "..\homm2\extract_homm2_anim.ps1"; DestDir: "{app}"
 Source: "..\homm2\extract_homm2_resources.bat"; DestDir: "{app}"
 Source: "..\homm2\extract_homm2_resources.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
@@ -56,7 +56,7 @@ Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppN
 
 [Run]
 Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser; Check: IsNotInstalledToTheDirectoryOfTheOriginalGame
-Filename: "{app}\anim_extract_windows.bat"; Description: "Extract video files from the original HoMM2 distribution"; Flags: postinstall runascurrentuser; Check: FileExists(ExpandConstant('{app}\homm2.gog'))
+Filename: "{app}\extract_homm2_anim.bat"; Description: "Extract video files from the original HoMM2 distribution"; Flags: postinstall runascurrentuser; Check: FileExists(ExpandConstant('{app}\homm2.gog'))
 
 [Code]
 function IsNotInstalledToTheDirectoryOfTheOriginalGame: Boolean;
