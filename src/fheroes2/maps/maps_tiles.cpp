@@ -203,18 +203,15 @@ namespace
         return false;
     }
 
-    bool isDetachedObject( const MP2::MapObjectType objectType )
+    bool isDetachedObjectType( const MP2::MapObjectType objectType )
     {
         // Some objects do not take into account other objects below them.
         switch ( objectType ) {
         case MP2::OBJ_CASTLE:
-        case MP2::OBJN_CASTLE:
         case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJN_WAGONCAMP:
         case MP2::OBJ_FAERIERING:
-        case MP2::OBJN_FAERIERING:
         case MP2::OBJ_MINES:
-        case MP2::OBJN_MINES:
+        case MP2::OBJ_SAWMILL:
             return true;
         default:
             break;
@@ -846,7 +843,7 @@ void Maps::Tiles::updatePassability()
 
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( !isDetachedObject( objectType ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
+            if ( !isDetachedObject() && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
                 const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
@@ -2436,6 +2433,94 @@ bool Maps::Tiles::isTallObject() const
             if ( addon.uniq == tileUID ) {
                 return true;
             }
+        }
+    }
+
+    return false;
+}
+
+int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
+{
+    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
+
+    if ( correctedObjectType == objectType ) {
+        // Nothing to do.
+        return tile._index;
+    }
+
+    // This is non-main tile of an action object. We have to find the main tile.
+    // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
+    const int32_t radiusOfSearch = 3;
+
+    // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
+    std::vector<uint32_t> uids;
+    const Maps::Addons & level2Addons = tile.getLevel2Addons();
+    const Maps::Addons & level1Addons = tile.getLevel1Addons();
+
+    for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
+        if ( iter->uniq != 0 ) {
+            uids.emplace_back( iter->uniq );
+        }
+    }
+
+    if ( tile.GetObjectUID() != 0 ) {
+        uids.emplace_back( tile.GetObjectUID() );
+    }
+
+    for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
+        if ( iter->uniq != 0 ) {
+            uids.emplace_back( iter->uniq );
+        }
+    }
+
+    const int32_t tileIndex = tile.GetIndex();
+    const int32_t mapWidth = world.w();
+
+    assert( correctedObjectType > objectType );
+
+    for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
+        for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
+            const int32_t index = tileIndex + y * mapWidth + x;
+            if ( Maps::isValidAbsIndex( index ) ) {
+                const Maps::Tiles & foundTile = world.GetTiles( index );
+                if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
+                    return foundTile._index;
+                }
+            }
+        }
+    }
+
+    // Most likely we have a broken object put by an editor.
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." );
+    return -1;
+}
+
+bool Maps::Tiles::isDetachedObject() const
+{
+    const MP2::MapObjectType objectType = GetObject( false );
+    if ( isDetachedObjectType( objectType ) ) {
+        return true;
+    }
+
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
+    if ( !isDetachedObjectType( correctedObjectType ) ) {
+        return false;
+    }
+
+    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( *this );
+    if ( mainTileIndex == -1 ) {
+        return false;
+    }
+
+    const uint32_t objectUID = world.GetTiles( mainTileIndex ).GetObjectUID();
+    if ( uniq == objectUID ) {
+        return ( ( _level >> 1 ) & 1 ) == 0;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.uniq == objectUID ) {
+            return ( ( addon.level >> 1 ) & 1 ) == 0;
         }
     }
 
