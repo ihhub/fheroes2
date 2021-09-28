@@ -281,7 +281,7 @@ Week Week::RandomWeek( const bool isNewMonth )
             return { weekName, RandomMonsterMonthOf() };
         }
 
-        return return { weekName, RandomMonsterWeekOf() };
+        return { weekName, RandomMonsterWeekOf() };
     }
 
     return { weekName, Monster::UNKNOWN };
