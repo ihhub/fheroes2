@@ -56,7 +56,7 @@ Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppN
 
 [Run]
 Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser; Check: IsNotInstalledToTheDirectoryOfTheOriginalGame
-Filename: "{app}\extract_homm2_anim.bat"; Description: "Extract video files from the original HoMM2 distribution"; Flags: postinstall runascurrentuser; Check: FileExists(ExpandConstant('{app}\homm2.gog'))
+Filename: "{app}\extract_homm2_anim.bat"; Description: "Extract video files from the original HoMM2 distribution"; Flags: postinstall runascurrentuser; Check: IsInstalledToTheDirectoryWithAnimationResources
 
 [Code]
 function IsNotInstalledToTheDirectoryOfTheOriginalGame: Boolean;
@@ -64,4 +64,12 @@ begin
     result := not FileExists(ExpandConstant('{app}\HEROES2.EXE')) or
               not DirExists(ExpandConstant('{app}\DATA')) or
               not DirExists(ExpandConstant('{app}\MAPS'));
+end;
+
+function IsInstalledToTheDirectoryWithAnimationResources: Boolean;
+begin
+    result := DirExists(ExpandConstant('{app}\MUSIC')) and
+              FileExists(ExpandConstant('{app}\homm2.ins')) and
+              FileExists(ExpandConstant('{app}\homm2.gog')) and
+              FileExists(ExpandConstant('{app}\DOSBOX\DOSBox.exe'));
 end;
