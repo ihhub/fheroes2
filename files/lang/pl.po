@@ -254,7 +254,6 @@ msgstr "Obrońca"
 msgid "You have captured an enemy artifact!"
 msgstr "Udało ci się zdobyć artfeakt przeciwnika!"
 
-#, fuzzy
 msgid "Necromancy!"
 msgstr "Nekromancja!"
 
@@ -342,20 +341,18 @@ msgstr "Brakuje złota (%{gold})"
 msgid "%{name} states:"
 msgstr "%{name} oznajmia:"
 
-#, fuzzy
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"Przystanę na Twoją propozycję i oszczędzę Ciebie oraz Twój oddział za "
-"%{price} złota."
+"Przyjmę twą kapitulację i pozwolę ci odejść wraz z twą armią za cenę "
+"%{price} szt. złota."
 
 msgid "View %{monster} info."
 msgstr "Informacje o jednostce: {monster}."
 
-#, fuzzy
 msgid "Shoot %{monster}"
-msgstr "Strzelaj %{monster}"
+msgstr "Strzelaj do %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
@@ -391,10 +388,10 @@ msgid "Select Spell Target"
 msgstr "Wybierz cel zaklęcia"
 
 msgid "View Ballista Info"
-msgstr ""
+msgstr "Informacje o baliście"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Balista"
 
 msgid "Auto combat"
 msgstr "Automatyczna walka"
@@ -417,39 +414,33 @@ msgstr "Ukryj logi"
 msgid "Show logs"
 msgstr "Pokaż logi"
 
-#, fuzzy
 msgid "%{color} casts a spell: %{spell}"
-msgstr "%{color} rzuconych zaklęć: %{spell}"
+msgstr "%{color} rzuca zaklęcie: %{spell}"
 
-#, fuzzy
 msgid "%{name} skip the turn"
 msgstr "%{name} pomija turę"
 
-#, fuzzy
 msgid "%{name} wait their turn"
 msgstr "%{name} czeka na swoją kolej"
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "Jednostka %{attacker} zadaje %{damage} pkt. obrażeń."
 
-#, fuzzy
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] "%{count} stworzenie ginie"
+msgstr[0] "1 stworzenie ginie."
 msgstr[1] "%{count} stworzenia giną."
 msgstr[2] "%{count} stworzeń ginie."
 
-#, fuzzy
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] "jeden %{defender} ginie"
+msgstr[0] "1 %{defender} ginie."
 msgstr[1] "%{count} %{defender} ginie."
 msgstr[2] "%{count} %{defender} ginie."
 
 msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr "Przenieść %{monster}: %{src}, %{dst}"
+msgstr "Przemieść %{monster}: %{src}, %{dst}"
 
-#, fuzzy
 msgid "Moved %{monster}"
 msgstr "Przemieść jednostkę (%{monster}) tutaj."
 
@@ -462,29 +453,24 @@ msgstr "%{name} rzuca zaklęcie '%{spell}' na: %{troop}."
 msgid "%{name} casts %{spell}."
 msgstr "%{name} rzuca zaklęcie '%{spell}'."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr "Czar %{spell} zadaje %{damage} pkt. obrażeń nieumarłej istocie."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr ""
-"Czar %{spell} zadaje %{damage} pkt. obrażeń wszystkim nieumarłym istotom."
+"Czar %{spell} zadaje %{damage} pkt. obrażeń każdej nieumarłej istotcie."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
 msgstr "Czar %{spell} zadaje %{damage} pkt. obrażeń, %{count} stworzeń ginie."
 
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to one living creature."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń żywej istocie."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} zadaje %{damage} pkt. obrażeń wszystkim żywym istotom."
+msgstr "%{spell} zadaje %{damage} pkt. obrażeń każdej żywej istocie."
 
 msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "Atak jednorożców oślepia jednostkę (%{name})!"
@@ -506,7 +492,6 @@ msgstr ""
 msgid "Bad luck descends on the %{attacker}"
 msgstr "Tej jednostce (%{attacker}) nie sprzyja los."
 
-#, fuzzy
 msgid "Good luck shines on the %{attacker}"
 msgstr "Tej jednostce (%{attacker}) sprzyja szczęście."
 
@@ -516,9 +501,8 @@ msgstr "Wysokie morale pozwala jednostce (%{monster}) na dodatkowy atak."
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Niskie morale sprawia, że jednostka (%{monster}) zamiera w panice."
 
-#, fuzzy
 msgid "%{tower} does %{damage} damage."
-msgstr "Wieża zadaje %{damage} pkt. obrażeń."
+msgstr "%{tower} zadaje %{damage} pkt. obrażeń."
 
 #, fuzzy
 msgid "The mirror image is created"
@@ -582,7 +566,7 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr "%{name} strzela z siłą %{count} Łuczników"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr "każda z bonusem +%{attack} do siły ataku."
+msgstr "z których każdy ma +%{attack} premii do siły ataku."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -2012,7 +1996,6 @@ msgstr "nd."
 msgid "guarded by "
 msgstr ""
 
-#, fuzzy
 msgid "guarded by %{count} %{monster}"
 msgstr "Strażnicy: %{monster} (%{count})"
 
@@ -2037,9 +2020,8 @@ msgstr "(już odwiedzono)"
 msgid "(not visited)"
 msgstr "(nie odwiedzono)"
 
-#, fuzzy
 msgid "Road"
-msgstr "Tryb dróg"
+msgstr "Droga"
 
 msgid "(digging ok)"
 msgstr "(można kopać)"
@@ -2050,7 +2032,6 @@ msgstr "(nie można kopać)"
 msgid "penalty: %{cost}"
 msgstr "kary: %{cost}"
 
-#, fuzzy
 msgid "Uncharted Territory"
 msgstr "Niezbadane terytorium"
 
@@ -2060,9 +2041,8 @@ msgstr "Obrońcy:"
 msgid "Unknown"
 msgstr "Nieznany"
 
-#, fuzzy
 msgid "%{name} (Level %{level})"
-msgstr "%{name} ( Poziom %{level} )"
+msgstr "%{name} (poziom %{level})"
 
 msgid "Move Points"
 msgstr "Ptk. ruchu"
@@ -2094,7 +2074,6 @@ msgstr "Czy na pewno chcesz usunąć plik:"
 msgid "Warning!"
 msgstr "Uwaga!"
 
-#, fuzzy
 msgid "Map difficulty:"
 msgstr "Trudność:"
 
@@ -2104,28 +2083,24 @@ msgstr "Brak map o tym rozmiarze"
 msgid "Small Maps"
 msgstr "Małe mapy"
 
-#, fuzzy
 msgid "View only maps of size small (36 x 36)."
 msgstr "Pokaż tylko małe mapy (36 x 36)."
 
 msgid "Medium Maps"
 msgstr "Średnie mapy"
 
-#, fuzzy
 msgid "View only maps of size medium (72 x 72)."
 msgstr "Pokaż tylko średnie mapy (72 x 72)."
 
 msgid "Large Maps"
 msgstr "Duże mapy"
 
-#, fuzzy
 msgid "View only maps of size large (108 x 108)."
 msgstr "Pokaż tylko duże mapy (108 x 108)."
 
 msgid "Extra Large Maps"
 msgstr "Bardzo duże mapy"
 
-#, fuzzy
 msgid "View only maps of size extra large (144 x 144)."
 msgstr "Pokaż tylko bardzo duże mapy (144 x 144)."
 
@@ -2834,9 +2809,8 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 "Brak zwycięstwa do końca miesiąca %{month}, tygodnia %{week}, dnia %{day}."
 
-#, fuzzy
 msgid "%{color} player has been vanquished!"
-msgstr "%{color} zostaje wygnany!"
+msgstr "%{color} gracz zostaje wygnany!"
 
 msgid "Do you wish to continue the game?"
 msgstr "Czy chcesz kontynuować grę?"
@@ -2944,9 +2918,8 @@ msgstr ""
 "%{color}, masz tylko %{day} dni na podbicie jakiegoś miasta, albo dojdzie do "
 "twego wygnania z tej krainy."
 
-#, fuzzy
 msgid "%{color} player's turn."
-msgstr "%{color} - nowa tura."
+msgstr "%{color} gracz - nowa tura."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -4714,9 +4687,8 @@ msgstr ""
 "To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
 "możesz go rzucić."
 
-#, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
-msgstr "%{name}, %{race} ( Poziom %{level} )"
+msgstr "%{name}, %{race} (poziom %{level})"
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
@@ -7455,7 +7427,7 @@ msgid "Resurrect True"
 msgstr "Prawdziwe wskrzeszenie"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr "Na stałe wskrzesza zabite/uszkodzone jednostki."
+msgstr "Na stałe wskrzesza z uszkodzonej lub zniszczonej jednostki nieumarłych."
 
 msgid "Haste"
 msgstr "Przyspieszenie"
