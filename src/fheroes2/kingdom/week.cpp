@@ -276,8 +276,15 @@ const char * Week::GetName( void ) const
 Week Week::RandomWeek( const bool isNewMonth )
 {
     const WeekName weekName = isNewMonth ? MonthRand( world ) : WeekRand( world );
-    const Monster::monster_t monster = ( weekName == WeekName::MONSTERS ) ? ( isNewMonth ? RandomMonsterMonthOf() : RandomMonsterWeekOf() ) : Monster::UNKNOWN;
-    return Week( weekName, monster );
+    if ( weekName == WeekName::MONSTERS ) {
+        if ( isNewMonth ) {
+            return { weekName, RandomMonsterMonthOf() };
+        }
+        
+        return return { weekName, RandomMonsterWeekOf() };
+    }
+    
+    return { weekName, Monster::UNKNOWN };
 }
 
 StreamBase & operator>>( StreamBase & stream, Week & week )
