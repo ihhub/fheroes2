@@ -78,7 +78,7 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
   be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
-  by running the `demo_windows.bat` script supplied in the ZIP archive.
+  by running the `download_demo_version.bat` script supplied in the ZIP archive.
 
 <a name="macos"></a>
 ## macOS
@@ -105,8 +105,8 @@ Then follow the instructions on the screen.
 
 * If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of
   them may be missing depending on the version of the original game) from the original game directory to the fheroes2 installation
-  directory. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script
-  supplied in the ZIP archive.
+  directory. Otherwise, you can download and install the demo version of the original game by running the `download_demo_version.sh`
+  script supplied in the ZIP archive.
 
 <a name="linux"></a>
 ## Linux
@@ -139,7 +139,7 @@ makepkg -si
 If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
 be missing depending on the version of the original game) from the original game directory to the `$XDG_DATA_HOME/fheroes2` (usually
 `~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the
-`/usr/share/fheroes2/demo_unix.sh` script.
+`/usr/share/fheroes2/download_demo_version.sh` script.
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
@@ -166,7 +166,7 @@ be missing depending on the version of the original game) from the original game
 * After all dependencies are installed, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending
   on the version of the original game) from the original game directory to the fheroes2 installation directory if you have a legally
   purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the
-  `demo_unix.sh` script supplied in the ZIP archive.
+  `download_demo_version.sh` script supplied in the ZIP archive.
 
 <a name="playstation-vita"></a>
 ## PlayStation Vita
