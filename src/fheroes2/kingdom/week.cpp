@@ -275,14 +275,14 @@ const char * Week::GetName( void ) const
 
 Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth )
 {
-    size_t weekTypeSeed = 3452378332445; // random value to add salt
+    size_t weekTypeSeed = 34582445; // random value to add salt
     fheroes2::hashCombine( weekTypeSeed, worldInstance.GetMapSeed() );
     fheroes2::hashCombine( weekTypeSeed, worldInstance.GetDay() );
 
     const WeekName weekName = isNewMonth ? MonthRand( worldInstance, weekTypeSeed ) : WeekRand( worldInstance, weekTypeSeed );
 
     if ( weekName == WeekName::MONSTERS ) {
-        size_t monsterTypeSeed = 2846389468731; // random value to add salt
+        size_t monsterTypeSeed = 284631; // random value to add salt
         fheroes2::hashCombine( monsterTypeSeed, worldInstance.GetMapSeed() );
         fheroes2::hashCombine( monsterTypeSeed, worldInstance.GetDay() );
 
