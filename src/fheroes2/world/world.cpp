@@ -373,8 +373,8 @@ void World::Reset( void )
     week = 0;
     month = 0;
 
-    week_current = Week::TORTOISE;
-    week_next = Week::WeekRand();
+    week_current = Week( WeekName::TORTOISE );
+    week_next = Week::RandomWeek( false );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -678,13 +678,7 @@ void World::NewDay( void )
 void World::NewWeek( void )
 {
     // update week type
-    week_current = week_next;
-    const int type = LastWeek() ? Week::MonthRand() : Week::WeekRand();
-    if ( Week::MONSTERS == type )
-        week_next = Week( type, LastWeek() ? Monster::Rand4MonthOf() : Monster::Rand4WeekOf() );
-    else
-        week_next = Week( type );
-
+    week_next = Week::RandomWeek( LastWeek() );
     week_current = week_next;
 
     if ( 1 < week ) {
@@ -710,7 +704,7 @@ void World::NewWeek( void )
 void World::NewMonth( void )
 {
     // skip first month
-    if ( 1 < week && week_current.GetType() == Week::MONSTERS )
+    if ( 1 < week && week_current.GetType() == WeekName::MONSTERS )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns

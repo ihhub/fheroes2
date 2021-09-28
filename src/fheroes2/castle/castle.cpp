@@ -532,7 +532,7 @@ void Castle::ActionNewWeek( void )
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
-    if ( world.GetWeekType().GetType() != Week::PLAGUE ) {
+    if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
         const u32 dwellings1[] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
         u32 * dw = nullptr;
 
@@ -560,7 +560,7 @@ void Castle::ActionNewWeek( void )
             }
 
         // Week Of
-        if ( world.GetWeekType().GetType() == Week::MONSTERS && !world.BeginMonth() ) {
+        if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
             const u32 dwellings2[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
                                        DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
 
@@ -587,14 +587,13 @@ void Castle::ActionNewWeek( void )
 void Castle::ActionNewMonth( void )
 {
     // population halved
-    if ( world.GetWeekType().GetType() == Week::PLAGUE ) {
+    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
         for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )
-            if ( dwelling[ii] )
-                dwelling[ii] /= 2;
+            dwelling[ii] /= 2;
     }
     else
         // Month Of
-        if ( world.GetWeekType().GetType() == Week::MONSTERS ) {
+        if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
         const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
                                   DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
         u32 * dw = nullptr;

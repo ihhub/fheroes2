@@ -195,8 +195,6 @@ public:
     int GetMonsterSprite() const;
 
     static Monster Rand( const LevelType type );
-    static u32 Rand4WeekOf( void );
-    static u32 Rand4MonthOf( void );
 
     static u32 GetCountFromHitPoints( const Monster &, u32 );
 
