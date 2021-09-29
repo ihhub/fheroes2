@@ -60,7 +60,6 @@ namespace
                 fheroes2::Blit( in, inX, inY, out, outX + x * inWidth, outY + y * inHeight, restWidth, restHeight );
             }
         }
-        fheroes2::DrawRect( out, fheroes2::Rect( outX, outY, width, height ), 214 );
     }
 }
 
