@@ -92,12 +92,6 @@ namespace
 
 namespace HighScore
 {
-    HighScoreDataContainer & HighScoreDataContainer::Get()
-    {
-        static HighScoreDataContainer instance;
-        return instance;
-    }
-
     StreamBase & operator<<( StreamBase & msg, const HighScoreStandardData & data )
     {
         return msg << data._player << data._scenarioName << data._localTime << data._days << data._rating;

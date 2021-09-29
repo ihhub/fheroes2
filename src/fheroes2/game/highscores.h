@@ -43,7 +43,7 @@ namespace HighScore
 
         std::string _player;
         std::string _scenarioName;
-        uint64_t _localTime;
+        uint32_t _localTime;
         uint32_t _days;
         uint32_t _rating;
     };
@@ -61,7 +61,7 @@ namespace HighScore
 
         std::string _player;
         std::string _campaignName;
-        uint64_t _localTime;
+        uint32_t _localTime;
         uint32_t _days;
     };
 
