@@ -268,8 +268,10 @@ namespace AI
                     recruit = recruitmentCastle->RecruitHero( firstRecruit );
                 }
 
-                if ( recruit && !slowEarlyGame )
+                if ( recruit && !slowEarlyGame ) {
+                    CastleTurn( *recruitmentCastle, castlesInDanger.find( recruitmentCastle->GetIndex() ) != castlesInDanger.end() );
                     ReinforceHeroInCastle( *recruit, *recruitmentCastle, kingdom.GetFunds() );
+                }
             }
         }
 
