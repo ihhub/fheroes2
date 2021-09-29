@@ -50,6 +50,7 @@ namespace
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
+
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
@@ -73,9 +74,9 @@ namespace
     {
         std::vector<int32_t> suitableIds;
 
-        const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
 
-        for ( const int32_t indexId : tiles ) {
+        for ( const int32_t indexId : indexes ) {
             // If allDirections is false, we should only consider tiles below the current object
             if ( !allDirections && indexId < tileId + world.w() - 2 ) {
                 continue;
@@ -109,8 +110,10 @@ namespace
     int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
-        const MapsIndexes & suitableIds = Maps::getAroundIndexes( tileId );
-        for ( const int32_t indexId : suitableIds ) {
+
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
+
+        for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
                 continue;
