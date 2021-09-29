@@ -174,12 +174,12 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         srcrt.y += TILEWIDTH;
 
         srcrt.width = BORDERWIDTH;
-        srcrt.height = 33;
+        srcrt.height = 35;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
         srcrt.y += srcrt.height;
 
-        srcrt.height = 8;
+        srcrt.height = 6;
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
@@ -233,7 +233,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += vertRepeatHeightTop;
     srcrt.y += TILEWIDTH;
 
-    srcrt.height = isEvilInterface ? 33 : 50; // middle border is special on good interface due to all the green leaves
+    srcrt.height = isEvilInterface ? 35 : 50;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // hide embranchment
@@ -247,7 +247,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.y += srcrt.height;
 
     if ( isEvilInterface ) {
-        srcrt.height = 8;
+        srcrt.height = 6;
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
@@ -279,7 +279,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height;
         srcrt.y += srcrt.height;
 
-        srcrt.height = 8;
+        srcrt.height = 8; // middle border is special on good interface due to all the green leaves
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
@@ -304,7 +304,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += vertRepeatHeightTop;
     srcrt.y += TILEWIDTH;
 
-    srcrt.height = isEvilInterface ? 33 : 50;
+    srcrt.height = isEvilInterface ? 35 : 50;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // hide embranchment
@@ -318,7 +318,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.y += srcrt.height;
 
     if ( isEvilInterface ) {
-        srcrt.height = 8;
+        srcrt.height = 6;
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
         dstpt.y += srcrt.height + vertPadHeight;
         srcrt.y += srcrt.height;
