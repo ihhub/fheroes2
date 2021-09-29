@@ -43,7 +43,7 @@ namespace HighScore
 
         std::string _player;
         std::string _scenarioName;
-        uint32_t _localTime;
+        uint64_t _localTime;
         uint32_t _days;
         uint32_t _rating;
     };
@@ -61,7 +61,7 @@ namespace HighScore
 
         std::string _player;
         std::string _campaignName;
-        uint32_t _localTime;
+        uint64_t _localTime;
         uint32_t _days;
     };
 
@@ -88,7 +88,6 @@ namespace HighScore
             return _highScoresCampaign;
         }
 
-        static HighScoreDataContainer & Get();
         static Monster getMonsterByRating( const size_t rating );
         static Monster getMonsterByDay( const size_t dayCount );
 

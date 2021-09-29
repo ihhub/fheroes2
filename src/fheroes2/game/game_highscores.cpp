@@ -55,8 +55,9 @@
 namespace
 {
     const std::string highScoreFileName = "fheroes2.hgs";
+    HighScore::HighScoreDataContainer highScoreDataContainer;
 
-    void RedrawHighScoresStandard( HighScore::HighScoreDataContainer & dataContainer, int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId )
+    void RedrawHighScoresStandard( int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId )
     {
         ++monsterAnimationFrameId;
 
@@ -70,7 +71,7 @@ namespace
         text.Set( Font::BIG );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        const std::vector<HighScore::HighScoreStandardData> & highScores = dataContainer.GetHighScoresStandard();
+        const std::vector<HighScore::HighScoreStandardData> & highScores = highScoreDataContainer.GetHighScoresStandard();
 
         for ( size_t i = 0; i < highScores.size(); ++i ) {
             const HighScore::HighScoreStandardData & hgs = highScores[i];
@@ -102,7 +103,7 @@ namespace
         }
     }
 
-    void RedrawHighScoresCampaign( HighScore::HighScoreDataContainer & dataContainer, int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId )
+    void RedrawHighScoresCampaign( int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId )
     {
         ++monsterAnimationFrameId;
 
@@ -116,7 +117,7 @@ namespace
         text.Set( Font::BIG );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        const std::vector<HighScore::HighScoreCampaignData> & highScores = dataContainer.GetHighScoresCampaign();
+        const std::vector<HighScore::HighScoreCampaignData> & highScores = highScoreDataContainer.GetHighScoresCampaign();
 
         for ( size_t i = 0; i < highScores.size(); ++i ) {
             const HighScore::HighScoreCampaignData & hgs = highScores[i];
@@ -164,8 +165,7 @@ fheroes2::GameMode Game::HighScoresStandard()
 
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
 
-    HighScore::HighScoreDataContainer & dataContainer = HighScore::HighScoreDataContainer::Get();
-    dataContainer.Load( highScoreDataPath );
+    highScoreDataContainer.Load( highScoreDataPath );
     uint32_t monsterAnimationFrameId = 0;
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
@@ -174,7 +174,7 @@ fheroes2::GameMode Game::HighScoresStandard()
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
-    RedrawHighScoresStandard( dataContainer, top.x, top.y, monsterAnimationFrameId );
+    RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
 
     fheroes2::Button buttonCampaign( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
@@ -194,9 +194,9 @@ fheroes2::GameMode Game::HighScoresStandard()
 
         const uint32_t rating = GetGameOverScores();
         const uint32_t days = world.CountDay();
-        dataContainer.RegisterScoreStandard( player, Settings::Get().CurrentFileInfo().name, days, rating );
-        dataContainer.Save( highScoreDataPath );
-        RedrawHighScoresStandard( dataContainer, top.x, top.y, monsterAnimationFrameId );
+        highScoreDataContainer.RegisterScoreStandard( player, Settings::Get().CurrentFileInfo().name, days, rating );
+        highScoreDataContainer.Save( highScoreDataPath );
+        RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
         buttonCampaign.draw();
         buttonExit.draw();
         display.render();
@@ -228,7 +228,7 @@ fheroes2::GameMode Game::HighScoresStandard()
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            RedrawHighScoresStandard( dataContainer, top.x, top.y, monsterAnimationFrameId );
+            RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
             display.render();
         }
     }
@@ -254,8 +254,7 @@ fheroes2::GameMode Game::HighScoresCampaign()
 
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
 
-    HighScore::HighScoreDataContainer & dataContainer = HighScore::HighScoreDataContainer::Get();
-    dataContainer.Load( highScoreDataPath );
+    highScoreDataContainer.Load( highScoreDataPath );
     uint32_t monsterAnimationFrameId = 0;
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
@@ -264,7 +263,7 @@ fheroes2::GameMode Game::HighScoresCampaign()
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
-    RedrawHighScoresCampaign( dataContainer, top.x, top.y, monsterAnimationFrameId );
+    RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
 
     fheroes2::Button buttonStandard( top.x + 8, top.y + 315, ICN::HISCORE, 2, 1 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
@@ -285,10 +284,10 @@ fheroes2::GameMode Game::HighScoresCampaign()
         const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( campaignSaveData.getCampaignID() );
 
-        dataContainer.RegisterScoreCampaign( player, campaignData.getCampaignName(), campaignSaveData.getDaysPassed() );
-        dataContainer.Save( highScoreDataPath );
+        highScoreDataContainer.RegisterScoreCampaign( player, campaignData.getCampaignName(), campaignSaveData.getDaysPassed() );
+        highScoreDataContainer.Save( highScoreDataPath );
 
-        RedrawHighScoresCampaign( dataContainer, top.x, top.y, monsterAnimationFrameId );
+        RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
         buttonStandard.draw();
         buttonExit.draw();
         display.render();
@@ -320,7 +319,7 @@ fheroes2::GameMode Game::HighScoresCampaign()
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            RedrawHighScoresCampaign( dataContainer, top.x, top.y, monsterAnimationFrameId );
+            RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
             display.render();
         }
     }
