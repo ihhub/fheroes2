@@ -58,6 +58,7 @@ namespace
             Army::SwapTroops( troopFrom, troopTarget );
         }
         else if ( !troopTarget.isValid() && troopFrom.GetCount() == 2 ) {
+            // a player splits a slot with two monsters into an empty slot; move one monster into the source slot to the target slot.
             troopFrom.SetCount( 1 );
             troopTarget.Set( troopFrom.GetMonster(), 1 );
         }
@@ -69,14 +70,14 @@ namespace
 
             const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
             uint32_t redistributeCount = troopFrom.GetCount() / 2;
+            const uint32_t halfOverallCount = overallCount / 2;
 
-            // if the same type, then display how many troops should be moved from one slot to another (if redistributeCount > 1 then the Min button is displayed by
-            // default)
             if ( isSameTroopType ) {
-                redistributeCount
-                    = ( overallCount / 2 ) > troopTarget.GetCount() ? ( overallCount / 2 ) - troopTarget.GetCount() : troopTarget.GetCount() - ( overallCount / 2 );
+                // if the same type, then display how many troops should be moved from one slot to another (if redistributeCount > 1 then the Min button is displayed by
+                // default)
+                redistributeCount = halfOverallCount > troopTarget.GetCount() ? halfOverallCount - troopTarget.GetCount() : troopTarget.GetCount() - halfOverallCount;
 
-                // possible when merging two slots of the same unit and there is a count difference, ie. 2 Titan + 14 Titans
+                // possible when merging two slots of the same unit and there is a count difference, ie. 2 troops + 14 troops
                 if ( redistributeCount > maxCount )
                     redistributeCount = maxCount;
             }
