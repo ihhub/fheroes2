@@ -141,17 +141,14 @@ namespace HighScore
     {
         ZStreamFile hdata;
         hdata.setbigendian( true );
-        hdata << static_cast<uint16_t>( HGS_ID2 ) << _highScoresStandard << _highScoresCampaign;
-        if ( hdata.fail() || !hdata.write( fileName ) )
-            return false;
+        hdata << HGS_ID2 << _highScoresStandard << _highScoresCampaign;
 
-        return true;
+        return !hdata.fail() && hdata.write( fileName );
     }
 
     void HighScoreDataContainer::RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
     {
         HighScoreStandardData highScore;
-        std::vector<HighScoreStandardData> & highScores = _highScoresStandard;
 
         highScore._player = playerName;
         highScore._scenarioName = scenarioName;
@@ -160,19 +157,18 @@ namespace HighScore
         highScore._rating = rating;
 
         // duplicate score
-        if ( highScores.end() != std::find( highScores.begin(), highScores.end(), highScore ) )
+        if ( _highScoresStandard.end() != std::find( _highScoresStandard.begin(), _highScoresStandard.end(), highScore ) )
             return;
 
-        highScores.emplace_back( highScore );
-        std::sort( highScores.begin(), highScores.end(), RatingSort );
-        if ( highScores.size() > HGS_MAX )
-            highScores.resize( HGS_MAX );
+        _highScoresStandard.emplace_back( highScore );
+        std::sort( _highScoresStandard.begin(), _highScoresStandard.end(), RatingSort );
+        if ( _highScoresStandard.size() > HGS_MAX )
+            _highScoresStandard.resize( HGS_MAX );
     }
 
     void HighScoreDataContainer::RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days )
     {
         HighScoreCampaignData highScore;
-        std::vector<HighScoreCampaignData> & highScores = _highScoresCampaign;
 
         highScore._player = playerName;
         highScore._campaignName = campaignName;
@@ -180,13 +176,13 @@ namespace HighScore
         highScore._days = days;
 
         // duplicate score
-        if ( highScores.end() != std::find( highScores.begin(), highScores.end(), highScore ) )
+        if ( _highScoresCampaign.end() != std::find( _highScoresCampaign.begin(), _highScoresCampaign.end(), highScore ) )
             return;
 
-        highScores.emplace_back( highScore );
-        std::sort( highScores.begin(), highScores.end(), DaysSort );
-        if ( highScores.size() > HGS_MAX )
-            highScores.resize( HGS_MAX );
+        _highScoresCampaign.emplace_back( highScore );
+        std::sort( _highScoresCampaign.begin(), _highScoresCampaign.end(), DaysSort );
+        if ( _highScoresCampaign.size() > HGS_MAX )
+            _highScoresCampaign.resize( HGS_MAX );
     }
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
@@ -218,11 +214,11 @@ namespace HighScore
                 }
 
                 ratingSoFar += ratingIncrementCount;
-                monsterRatings.emplace_back( std::make_pair( ratingSoFar, monstersInRanking[i] ) );
+                monsterRatings.emplace_back( ratingSoFar, monstersInRanking[i] );
             }
         }
 
-        std::pair<size_t, Monster::monster_t> lastData = monsterRatings.back();
+        const std::pair<size_t, Monster::monster_t> & lastData = monsterRatings.back();
 
         if ( rating >= lastData.first )
             return Monster( lastData.second );
@@ -274,7 +270,7 @@ namespace HighScore
                 }
 
                 daySoFar += dayIncrementCount;
-                monsterDays.emplace_back( std::make_pair( daySoFar, monstersInRanking[i] ) );
+                monsterDays.emplace_back( daySoFar, monstersInRanking[i] );
             }
         }
 

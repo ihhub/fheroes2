@@ -78,12 +78,12 @@ namespace HighScore
         void RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
         void RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days );
 
-        const std::vector<HighScoreStandardData> & GetHighScoresStandard()
+        const std::vector<HighScoreStandardData> & GetHighScoresStandard() const
         {
             return _highScoresStandard;
         }
 
-        const std::vector<HighScoreCampaignData> & GetHighScoresCampaign()
+        const std::vector<HighScoreCampaignData> & GetHighScoresCampaign() const
         {
             return _highScoresCampaign;
         }

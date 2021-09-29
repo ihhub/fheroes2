@@ -110,7 +110,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // image background
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 4 ), display, ox, oy );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 7 ), display, ox + 50, oy + 31 );
 
         Text text;
