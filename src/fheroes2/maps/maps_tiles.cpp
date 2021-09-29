@@ -212,6 +212,10 @@ namespace
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
+        case MP2::OBJ_WATERALTAR:
+        case MP2::OBJ_AIRALTAR:
+        case MP2::OBJ_FIREALTAR:
+        case MP2::OBJ_EARTHALTAR:
             return true;
         default:
             break;
