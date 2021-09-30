@@ -2834,7 +2834,7 @@ void ActionToAlchemistsTower( Heroes & hero )
     const char * title = MP2::StringObject( MP2::OBJ_ALCHEMYTOWER );
 
     if ( cursed ) {
-        payment_t payment = PaymentConditions::ForAlchemist();
+        const payment_t payment = PaymentConditions::ForAlchemist();
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             std::string msg = _( "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you." );
@@ -2850,15 +2850,18 @@ void ActionToAlchemistsTower( Heroes & hero )
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
 
-                for ( BagArtifacts::iterator it = bag.begin(); it != bag.end(); ++it ) {
-                    if ( it->isAlchemistRemove() ) {
-                        *it = Artifact::UNKNOWN;
+                for ( Artifact & artifact : bag ) {
+                    if ( artifact.isAlchemistRemove() ) {
+                        artifact = Artifact::UNKNOWN;
                     }
                 }
+
+                Dialog::Message( title, _( "He grabs all cursed artifacts and throws them into his magical pot." ), Font::BIG, Dialog::OK );
             }
         }
-        else
+        else {
             Dialog::Message( title, _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
+        }
     }
     else {
         Dialog::Message( title, _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
