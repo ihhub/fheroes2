@@ -1747,12 +1747,14 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     hero.GetKingdom().OddFundsResource( payment );
                 }
                 else {
-                    Dialog::Message( _( "Artifact" ), _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
+                    Dialog::Message( _( "Artifact" ),
+                                     _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
                                      Font::BIG, Dialog::OK );
                 }
             }
             else
-                Dialog::Message( _( "Artifact" ), _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ), Font::BIG, Dialog::OK );
+                Dialog::Message( _( "Artifact" ), _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ), Font::BIG,
+                                 Dialog::OK );
         }
         else
             // 4,5 - need have skill wisard or leadership,
