@@ -1712,7 +1712,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
     if ( hero.IsFullBagArtifacts() )
-        Dialog::Message( "", _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Artifact" ), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
     else {
         u32 cond = tile.QuantityVariant();
         Artifact art = tile.QuantityArtifact();
@@ -1741,18 +1741,20 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             msg.append( _( "Do you wish to buy this artifact?" ) );
 
             AGG::PlaySound( M82::EXPERNCE );
-            if ( Dialog::YES == Dialog::ArtifactInfo( "", msg, art, Dialog::YES | Dialog::NO ) ) {
+            if ( Dialog::YES == Dialog::ArtifactInfo( _( "Artifact" ), msg, art, Dialog::YES | Dialog::NO ) ) {
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;
                     hero.GetKingdom().OddFundsResource( payment );
                 }
                 else {
-                    Dialog::Message( "", _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
+                    Dialog::Message( _( "Artifact" ),
+                                     _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
                                      Font::BIG, Dialog::OK );
                 }
             }
             else
-                Dialog::Message( "", _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ), Font::BIG, Dialog::OK );
+                Dialog::Message( _( "Artifact" ), _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ), Font::BIG,
+                                 Dialog::OK );
         }
         else
             // 4,5 - need have skill wisard or leadership,
@@ -1776,7 +1778,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     msg = "FIXME: (unknown condition): %{art}";
 
                 StringReplace( msg, "%{art}", art.GetName() );
-                Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::OK );
             }
         }
         else
@@ -1788,14 +1790,14 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
 
             if ( troop ) {
                 if ( Monster::ROGUE == troop->GetID() )
-                    Dialog::Message( "",
+                    Dialog::Message( _( "Artifact" ),
                                      _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
                                      Font::BIG, Dialog::OK );
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
                     StringReplace( msg, "%{monster}", troop->GetName() );
-                    battle = ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) );
+                    battle = ( Dialog::YES == Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
 
@@ -1815,7 +1817,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 }
             }
             else {
-                Dialog::Message( "", _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Font::BIG, Dialog::OK );
+                Dialog::Message( _( "Artifact" ), _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Font::BIG, Dialog::OK );
             }
         }
         else {
@@ -1827,7 +1829,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 msg.append( art.GetName() );
             }
 
-            Dialog::ArtifactInfo( "", msg, art );
+            Dialog::ArtifactInfo( _( "Artifact" ), msg, art );
             result = true;
         }
 
