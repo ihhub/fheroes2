@@ -50,6 +50,7 @@ namespace
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
+
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
@@ -73,33 +74,30 @@ namespace
     {
         std::vector<int32_t> suitableIds;
 
-        if ( allDirections ) {
-            const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
-            for ( const int32_t indexId : tiles ) {
-                const Maps::Tiles & indexedTile = mapTiles[indexId];
-                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
-                    continue;
-                }
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
 
-                suitableIds.emplace_back( indexId );
+        for ( const int32_t indexId : indexes ) {
+            // If allDirections is false, we should only consider tiles below the current object
+            if ( !allDirections && indexId < tileId + world.w() - 2 ) {
+                continue;
             }
-        }
-        else {
-            const int32_t width = world.w();
-            const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
-            for ( const int32_t indexId : tiles ) {
-                if ( indexId < tileId + width - 2 ) {
-                    // Only tiles which are lower than current object.
-                    continue;
-                }
 
-                const Maps::Tiles & indexedTile = mapTiles[indexId];
-                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
-                    continue;
-                }
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
 
-                suitableIds.emplace_back( indexId );
+            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                continue;
             }
+
+            // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
+            if ( indexedTile.GetObject( false ) == MP2::OBJ_COAST ) {
+                const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
+
+                if ( coastTiles.empty() ) {
+                    continue;
+                }
+            }
+
+            suitableIds.emplace_back( indexId );
         }
 
         if ( suitableIds.empty() ) {
@@ -112,8 +110,10 @@ namespace
     int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
-        const MapsIndexes & suitableIds = Maps::getAroundIndexes( tileId );
-        for ( const int32_t indexId : suitableIds ) {
+
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
+
+        for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
                 continue;
