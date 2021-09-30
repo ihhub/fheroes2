@@ -55,7 +55,7 @@ namespace Battle
     void DialogBattleSettings( void );
     bool DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom );
 
-    enum HeroAnimation
+    enum HeroAnimation : uint32_t
     {
         OP_JOY,
         OP_CAST_MASS,
@@ -111,7 +111,7 @@ namespace Battle
         int _animationType;
         RandomizedDelay _idleTimer;
 
-        int icn;
+        int _heroIcnId;
         bool reflect;
         fheroes2::Rect pos;
         fheroes2::Point _offset;
