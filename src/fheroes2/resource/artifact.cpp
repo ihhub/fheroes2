@@ -876,15 +876,11 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
         SetItemSize( sprite.width(), sprite.height() );
 
-        // Since the original image is by 1 pixel bigger in width and height we make a new copy of it.
-        const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
-        const int32_t correctedWidth = selectionImage.width() - 1;
-        const int32_t correctedHeight = selectionImage.height() - 1;
-        spcursor.resize( correctedWidth, correctedHeight );
-        fheroes2::Copy( selectionImage, 0, 0, spcursor, 0, 0, correctedWidth - 3, correctedHeight - 3 );
-        fheroes2::Copy( selectionImage, correctedWidth - 2, 0, spcursor, correctedWidth - 3, 0, 3, correctedHeight - 3 );
-        fheroes2::Copy( selectionImage, 0, correctedHeight - 2, spcursor, 0, correctedHeight - 3, correctedWidth - 3, 3 );
-        fheroes2::Copy( selectionImage, correctedWidth - 2, correctedHeight - 2, spcursor, correctedHeight - 3, correctedWidth - 3, 3, 3 );
+        spcursor.resize( 70, 70 );
+        spcursor.reset();
+        fheroes2::DrawRect( spcursor, { 0, 0, 70, 70 }, 190 );
+        fheroes2::DrawRect( spcursor, { 1, 1, 68, 68 }, 180 );
+        fheroes2::DrawRect( spcursor, { 2, 2, 66, 66 }, 190 );
     }
 }
 

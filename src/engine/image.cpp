@@ -1452,15 +1452,10 @@ namespace fheroes2
         if ( image.empty() || roi.width < 1 || roi.height < 1 )
             return;
 
-        const Point point1( roi.x, roi.y );
-        const Point point2( roi.x + roi.width, roi.y );
-        const Point point3( roi.x + roi.width, roi.y + roi.height );
-        const Point point4( roi.x, roi.y + roi.height );
-
-        DrawLine( image, point1, point2, value );
-        DrawLine( image, point2, point3, value );
-        DrawLine( image, point3, point4, value );
-        DrawLine( image, point4, point1, value );
+        DrawLine( image, { roi.x, roi.y }, { roi.x + roi.width, roi.y }, value, roi );
+        DrawLine( image, { roi.x, roi.y }, { roi.x, roi.y + roi.height }, value, roi );
+        DrawLine( image, { roi.x + roi.width - 1, roi.y }, { roi.x + roi.width - 1, roi.y + roi.height }, value, roi );
+        DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
     Image ExtractCommonPattern( const std::vector<Image> & input )
