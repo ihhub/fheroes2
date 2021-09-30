@@ -523,16 +523,17 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
         return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
     }
-    else if ( attacker.isAllAdjacentCellsAttack() ) {
+
+    if ( attacker.isAllAdjacentCellsAttack() ) {
         Position position = Position::GetPositionWhenMoved( attacker, from );
         Indexes aroundAttacker = GetAroundIndexes( position );
 
         std::set<const Unit *> unitsUnderAttack;
         Board * board = Arena::GetBoard();
         for ( const int32_t index : aroundAttacker ) {
-            const Cell & cell = board->at( index );
-            if ( cell.GetUnit() != nullptr && cell.GetUnit()->GetColor() != attacker.GetColor() ) {
-                unitsUnderAttack.insert( cell.GetUnit() );
+            const Unit * unit = board->at( index ).GetUnit();
+            if ( unit != nullptr && unit->GetColor() != attacker.GetColor() ) {
+                unitsUnderAttack.insert( unit );
             }
         }
 
