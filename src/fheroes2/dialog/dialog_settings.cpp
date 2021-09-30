@@ -29,6 +29,7 @@
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "pal.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
@@ -83,6 +84,11 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     fheroes2::Blit( cell, display, ox, oy );
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
+
+    if ( !isActive ) {
+        // Gray out the option icon.
+        fheroes2::ApplyPalette( display, ox, oy, display, ox, oy, cell.width(), cell.height(), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+    }
 
     TextBox msg( Settings::ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
