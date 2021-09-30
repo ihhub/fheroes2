@@ -2856,7 +2856,8 @@ void ActionToAlchemistsTower( Heroes & hero )
                     }
                 }
 
-                msg = _n( "He grabs the cursed artifact and throws it into his magical pot.", "He grabs all cursed artifacts and throws them into his magical pot.", cursed );
+                msg = _n( "He grabs the cursed artifact and throws it into his magical pot.", "He grabs all cursed artifacts and throws them into his magical pot.",
+                          cursed );
 
                 Dialog::Message( title, msg, Font::BIG, Dialog::OK );
             }
