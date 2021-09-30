@@ -994,6 +994,28 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::MAP_TYPE_ICON: {
+                // TODO: add a new icon for the Resurrection add-on map type.
+                _icnVsSprite[id].resize( 2 );
+                for ( Sprite & icon : _icnVsSprite[id] ) {
+                    icon.resize( 17, 17 );
+                    icon.fill( 0 );
+                }
+
+                const Sprite & successionWarsIcon = GetICN( ICN::ARTFX, 6 );
+                const Sprite & priceOfLoyaltyIcon = GetICN( ICN::ARTFX, 90 );
+
+                if ( !successionWarsIcon.empty() ) {
+                    Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
+                }
+
+                if ( !priceOfLoyaltyIcon.empty() ) {
+                    Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
+                }
+
+                return true;
+            }
+
             default:
                 break;
             }
