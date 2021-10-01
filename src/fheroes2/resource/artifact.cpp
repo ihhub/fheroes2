@@ -875,7 +875,12 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
         SetItemSize( sprite.width(), sprite.height() );
-        spcursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+
+        spcursor.resize( 70, 70 );
+        spcursor.reset();
+        fheroes2::DrawRect( spcursor, { 0, 0, 70, 70 }, 190 );
+        fheroes2::DrawRect( spcursor, { 1, 1, 68, 68 }, 180 );
+        fheroes2::DrawRect( spcursor, { 2, 2, 66, 66 }, 190 );
     }
 }
 
