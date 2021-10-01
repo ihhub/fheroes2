@@ -71,7 +71,7 @@ namespace Battle
 
         static std::string GetMoatInfo( void );
 
-        static Cell * GetCell( s32, int = CENTER );
+        static Cell * GetCell( s32 position, int dir = CENTER );
         static bool isNearIndexes( s32, s32 );
         static bool isValidIndex( s32 );
         static bool isCastleIndex( s32 );
