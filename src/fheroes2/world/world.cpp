@@ -43,6 +43,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -336,7 +337,7 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
-    week_next = Week::RandomWeek( *this, false );
+    week_next = Week::RandomWeek( *this, false, _week_seed );
 
     // initialize all heroes
     vec_heroes.Init();
@@ -346,6 +347,9 @@ void World::Defaults( void )
 
 void World::Reset( void )
 {
+    width = 0;
+    height = 0;
+
     // maps tiles
     vec_tiles.clear();
 
@@ -376,7 +380,7 @@ void World::Reset( void )
     month = 0;
 
     week_current = Week( WeekName::TORTOISE );
-    week_next = Week::RandomWeek( *this, false );
+    week_next = Week::RandomWeek( *this, false, _week_seed );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -679,8 +683,17 @@ void World::NewDay( void )
 
 void World::NewWeek( void )
 {
+    // update week seed: it depends on the current day and the  state of the map
+    _week_seed = _seed;
+    fheroes2::hashCombine( _week_seed, day );
+    for ( int x = 0; x < width; ++x ) {
+        for ( int y = 0; y < height; ++y ) {
+            fheroes2::hashCombine( _week_seed, GetTiles( x, y ).GetQuantity1() );
+        }
+    }
+
     // update week type
-    week_next = Week::RandomWeek( *this, LastWeek() );
+    week_next = Week::RandomWeek( *this, LastWeek(), _week_seed );
     week_current = week_next;
 
     if ( 1 < week ) {
