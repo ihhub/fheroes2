@@ -2843,7 +2843,8 @@ void ActionToAlchemistsTower( Heroes & hero )
                 _n( "He checks your pack, and sees that you have 1 cursed item.", "He checks your pack, and sees that you have %{count} cursed items.", cursed ) );
             StringReplace( msg, "%{count}", cursed );
             msg += '\n';
-            msg.append( _( "For %{gold} gold, the alchemist will remove it for you. Do you pay?" ) );
+            msg.append( _n( "For %{gold} gold, the alchemist will remove it for you. Do you pay?",
+                            "For %{gold} gold, the alchemist will remove them for you. Do you pay?", cursed ) );
             StringReplace( msg, "%{gold}", payment.gold );
 
             if ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
@@ -2856,7 +2857,8 @@ void ActionToAlchemistsTower( Heroes & hero )
                     }
                 }
 
-                msg = _n( "He grabs the cursed artifact and throws it into his magical pot.", "He grabs all cursed artifacts and throws them into his magical pot.",
+                msg = _n( "After you consent to pay the requested amount of gold, the alchemis grabs the cursed artifact and throws it into his magical pot.",
+                          "After you consent to pay the requested amount of gold, the alchemis grabs all cursed artifacts and throws them into his magical pot.",
                           cursed );
 
                 Dialog::Message( title, msg, Font::BIG, Dialog::OK );
