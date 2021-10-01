@@ -1677,30 +1677,15 @@ void Battle::Interface::RedrawCover()
 
             if ( _currentUnit->isDoubleCellAttack() ) {
                 // We have to invert the direction.
-                int attackDirection = 0;
-                if ( direction == TOP_LEFT ) {
-                    attackDirection = BOTTOM_RIGHT;
-                }
-                else if ( direction == TOP_RIGHT ) {
-                    attackDirection = BOTTOM_LEFT;
-                }
-                else if ( direction == BOTTOM_LEFT ) {
-                    attackDirection = TOP_RIGHT;
-                }
-                else if ( direction == BOTTOM_RIGHT ) {
-                    attackDirection = TOP_LEFT;
-                }
-                else if ( direction == LEFT ) {
-                    attackDirection = RIGHT;
-                }
-                else if ( direction == RIGHT ) {
-                    attackDirection = LEFT;
-                }
-                else {
-                    assert( 0 );
+                int attackDirection = Board::GetDirection( pos.GetHead()->GetIndex(), index_pos );
+                if ( attackDirection == 0 ) {
+                    // It happens when a creature needs to swap tail and head for an attack move.
+                    attackDirection = Board::GetDirection( pos.GetTail()->GetIndex(), index_pos );
                 }
 
-                const Cell * secondAttackedCell = Board::GetCell( cell->GetIndex(), attackDirection );
+                assert( attackDirection != 0 );
+
+                const Cell * secondAttackedCell = Board::GetCell( index_pos, attackDirection );
                 if ( secondAttackedCell != nullptr ) {
                     highlightCells.emplace( secondAttackedCell );
                 }
