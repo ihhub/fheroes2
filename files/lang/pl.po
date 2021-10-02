@@ -3797,13 +3797,6 @@ msgstr ""
 "się o przybrzeżne skały. Czy chcesz przeszukać wrak?"
 
 msgid ""
-"You spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
-msgstr ""
-"Po pokonaniu szkieletów spędzasz wiele godzin na przeszukiwaniu wraku, lecz "
-"nic nie znajdujesz. Ten akt profanacji obniża morale twojej armii."
-
-msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
 msgstr ""
 "Po pokonaniu szkieletów przeszukujesz wrak i znajdujesz coś wartościowego!"

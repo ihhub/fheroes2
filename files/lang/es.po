@@ -3875,13 +3875,6 @@ msgstr ""
 "las rocas. ¿Deseas buscar en la nave?"
 
 msgid ""
-"You spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
-msgstr ""
-"Después de derrotar a los esqueletos y pasar varias horas tamizando sus "
-"restos sin premio la moral de tu ejército baja por tan despreciable acto."
-
-msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
 msgstr ""
 "!Después de derrotar a los esqueletos tamizas sus restos y encuentras algo!"

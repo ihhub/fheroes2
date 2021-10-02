@@ -3359,11 +3359,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
-msgstr ""
-
-msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
 msgstr ""
 

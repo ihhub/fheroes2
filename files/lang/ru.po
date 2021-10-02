@@ -3793,13 +3793,6 @@ msgstr ""
 "покачиваемый прибоем на скалах. Желаете обыскать корабль?"
 
 msgid ""
-"You spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
-msgstr ""
-"Совладав со скелетами, Вы тратите несколько часов, обыскивая останки, но "
-"ничего не находите. Сей презренный акт снижает мораль вашей армии."
-
-msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
 msgstr "Совладав со скелетами, вы обыскали останки корабля и кое-что нашли!"
 
