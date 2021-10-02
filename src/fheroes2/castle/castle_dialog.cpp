@@ -755,19 +755,19 @@ fheroes2::Rect Castle::RedrawResourcePanel( const fheroes2::Point & pt ) const
     text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
 
     text.set( std::to_string( kingdomTreasures.sulfur ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-    text.draw( rightColumnOffset + ( maxWidth -  text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
+    text.draw( rightColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
 
     text.set( std::to_string( kingdomTreasures.crystal ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
 
     text.set( std::to_string( kingdomTreasures.mercury ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-    text.draw( rightColumnOffset + ( maxWidth -  text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
+    text.draw( rightColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
 
     text.set( std::to_string( kingdomTreasures.ore ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
 
     text.set( std::to_string( kingdomTreasures.gems ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-    text.draw( rightColumnOffset + ( maxWidth -  text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
+    text.draw( rightColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
 
     text.set( std::to_string( kingdomTreasures.gold ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + offsetY[3] + goldImage.height() + 1, display );
