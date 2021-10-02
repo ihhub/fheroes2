@@ -2857,8 +2857,8 @@ void ActionToAlchemistsTower( Heroes & hero )
                     }
                 }
 
-                msg = _n( "After you consent to pay the requested amount of gold, the alchemis grabs the cursed artifact and throws it into his magical pot.",
-                          "After you consent to pay the requested amount of gold, the alchemis grabs all cursed artifacts and throws them into his magical pot.",
+                msg = _n( "After you consent to pay the requested amount of gold, the alchemist grabs the cursed artifact and throws it into his magical cauldron.",
+                          "After you consent to pay the requested amount of gold, the alchemist grabs all cursed artifacts and throws them into his magical cauldron.",
                           cursed );
 
                 Dialog::Message( title, msg, Font::BIG, Dialog::OK );
