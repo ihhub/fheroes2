@@ -726,9 +726,12 @@ fheroes2::Rect Castle::RedrawResourcePanel( const fheroes2::Point & pt ) const
     // Maximum width is 39 pixels (except gold), maximum height is 32 pixels
     const int32_t maxWidth = 39;
     const int32_t maxHeight = 32;
-    const int32_t fontHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
     const int32_t leftColumnOffset = roi.x + 1;
     const int32_t rightColumnOffset = roi.x + 1 + maxWidth + 2;
+
+    const fheroes2::FontType fontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE );
+    const int32_t fontHeight = fheroes2::Text( std::string(), fontType ).height();
+
     const std::array<int32_t, 4> offsetY = { 1, 1 + maxHeight + fontHeight, 1 + ( maxHeight + fontHeight ) * 2, 1 + ( maxHeight + fontHeight ) * 3 };
 
     const fheroes2::Sprite & woodImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
@@ -751,25 +754,25 @@ fheroes2::Rect Castle::RedrawResourcePanel( const fheroes2::Point & pt ) const
     fheroes2::Blit( goldImage, display, roi.x + ( roi.width - goldImage.width() ) / 2, roi.y + offsetY[3] );
 
     fheroes2::Text text;
-    text.set( std::to_string( kingdomTreasures.wood ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.wood ), fontType );
     text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
 
-    text.set( std::to_string( kingdomTreasures.sulfur ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.sulfur ), fontType );
     text.draw( rightColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
 
-    text.set( std::to_string( kingdomTreasures.crystal ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.crystal ), fontType );
     text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
 
-    text.set( std::to_string( kingdomTreasures.mercury ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.mercury ), fontType );
     text.draw( rightColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
 
-    text.set( std::to_string( kingdomTreasures.ore ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.ore ), fontType );
     text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
 
-    text.set( std::to_string( kingdomTreasures.gems ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.gems ), fontType );
     text.draw( rightColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
 
-    text.set( std::to_string( kingdomTreasures.gold ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( kingdomTreasures.gold ), fontType );
     text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + offsetY[3] + goldImage.height() + 1, display );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TREASURY, 1 ), display, roi.x + 1, roi.y + 166 );
