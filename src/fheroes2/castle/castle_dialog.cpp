@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <string>
 
 #include "agg.h"
@@ -42,6 +43,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -713,100 +715,64 @@ int Castle::OpenDialog( bool readonly )
     return result;
 }
 
-/* redraw resource info panel */
 fheroes2::Rect Castle::RedrawResourcePanel( const fheroes2::Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Funds & resource = world.GetKingdom( GetColor() ).GetFunds();
+    const Funds & kingdomTreasures = world.GetKingdom( GetColor() ).GetFunds();
 
-    fheroes2::Point dst_pt = pt;
+    const fheroes2::Rect roi( pt.x + 552, pt.y + 262, 82, 192 );
+    fheroes2::Fill( display, roi.x, roi.y, roi.width, roi.height, 0 );
 
-    fheroes2::Rect src_rt( dst_pt.x + 552, dst_pt.y + 262, 82, 192 );
-    fheroes2::Fill( display, src_rt.x, src_rt.y, src_rt.width, src_rt.height, 0 );
+    // Maximum width is 39 pixels (except gold), maximum height is 32 pixels
+    const int32_t maxWidth = 39;
+    const int32_t maxHeight = 32;
+    const int32_t fontHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+    const int32_t leftColumnOffset = roi.x + 1;
+    const int32_t rightColumnOffset = roi.x + 1 + maxWidth + 2;
+    const std::array<int32_t, 4> offsetY = { 1, 1 + maxHeight + fontHeight, 1 + ( maxHeight + fontHeight ) * 2, 1 + ( maxHeight + fontHeight ) * 3 };
 
-    Text text;
+    const fheroes2::Sprite & woodImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
+    const fheroes2::Sprite & mercuryImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
+    const fheroes2::Sprite & oreImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
+    const fheroes2::Sprite & sulfurImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
+    const fheroes2::Sprite & crystalImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
+    const fheroes2::Sprite & gemsImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
+    const fheroes2::Sprite & goldImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
 
-    // sprite wood
-    dst_pt.x = src_rt.x + 1;
-    dst_pt.y = src_rt.y + 10;
-    const fheroes2::Sprite & wood = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
-    fheroes2::Blit( wood, display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( woodImage, display, leftColumnOffset + ( maxWidth - woodImage.width() ) / 2, roi.y + offsetY[0] + maxHeight - woodImage.height() );
+    fheroes2::Blit( sulfurImage, display, rightColumnOffset + ( maxWidth - sulfurImage.width() ) / 2, roi.y + offsetY[0] + maxHeight - sulfurImage.height() );
 
-    // count wood
-    text.Set( std::to_string( resource.wood ), Font::SMALL );
-    dst_pt.y += 22;
-    text.Blit( dst_pt.x + ( wood.width() - text.w() ) / 2, dst_pt.y );
+    fheroes2::Blit( crystalImage, display, leftColumnOffset + ( maxWidth - crystalImage.width() ) / 2, roi.y + offsetY[1] + maxHeight - crystalImage.height() );
+    fheroes2::Blit( mercuryImage, display, rightColumnOffset + ( maxWidth - mercuryImage.width() ) / 2, roi.y + offsetY[1] + maxHeight - mercuryImage.height() );
 
-    // sprite sulfur
-    dst_pt.x = src_rt.x + 42;
-    dst_pt.y = src_rt.y + 6;
-    const fheroes2::Sprite & sulfur = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
-    fheroes2::Blit( sulfur, display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( oreImage, display, leftColumnOffset + ( maxWidth - oreImage.width() ) / 2, roi.y + offsetY[2] + maxHeight - oreImage.height() );
+    fheroes2::Blit( gemsImage, display, rightColumnOffset + ( maxWidth - gemsImage.width() ) / 2, roi.y + offsetY[2] + maxHeight - gemsImage.height() );
 
-    // count sulfur
-    text.Set( std::to_string( resource.sulfur ) );
-    dst_pt.y += 26;
-    text.Blit( dst_pt.x + ( sulfur.width() - text.w() ) / 2, dst_pt.y );
+    fheroes2::Blit( goldImage, display, roi.x + ( roi.width - goldImage.width() ) / 2, roi.y + offsetY[3] );
 
-    // sprite crystal
-    dst_pt.x = src_rt.x + 1;
-    dst_pt.y = src_rt.y + 45;
-    const fheroes2::Sprite & crystal = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
-    fheroes2::Blit( crystal, display, dst_pt.x, dst_pt.y );
+    fheroes2::Text text;
+    text.set( std::to_string( kingdomTreasures.wood ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
 
-    // count crystal
-    text.Set( std::to_string( resource.crystal ) );
-    dst_pt.y += 33;
-    text.Blit( dst_pt.x + ( crystal.width() - text.w() ) / 2, dst_pt.y );
+    text.set( std::to_string( kingdomTreasures.sulfur ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( rightColumnOffset + ( maxWidth -  text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, display );
 
-    // sprite mercury
-    dst_pt.x = src_rt.x + 44;
-    dst_pt.y = src_rt.y + 47;
-    const fheroes2::Sprite & mercury = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
-    fheroes2::Blit( mercury, display, dst_pt.x, dst_pt.y );
+    text.set( std::to_string( kingdomTreasures.crystal ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
 
-    // count mercury
-    text.Set( std::to_string( resource.mercury ) );
-    dst_pt.y += 34;
-    text.Blit( dst_pt.x + ( mercury.width() - text.w() ) / 2, dst_pt.y );
+    text.set( std::to_string( kingdomTreasures.mercury ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( rightColumnOffset + ( maxWidth -  text.width() ) / 2, roi.y + offsetY[1] + maxHeight + 1, display );
 
-    // sprite ore
-    dst_pt.x = src_rt.x + 1;
-    dst_pt.y = src_rt.y + 92;
-    const fheroes2::Sprite & ore = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
-    fheroes2::Blit( ore, display, dst_pt.x, dst_pt.y );
+    text.set( std::to_string( kingdomTreasures.ore ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
 
-    // count ore
-    text.Set( std::to_string( resource.ore ) );
-    dst_pt.y += 26;
-    text.Blit( dst_pt.x + ( ore.width() - text.w() ) / 2, dst_pt.y );
+    text.set( std::to_string( kingdomTreasures.gems ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( rightColumnOffset + ( maxWidth -  text.width() ) / 2, roi.y + offsetY[2] + maxHeight + 1, display );
 
-    // sprite gems
-    dst_pt.x = src_rt.x + 45;
-    dst_pt.y = src_rt.y + 92;
-    const fheroes2::Sprite & gems = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
-    fheroes2::Blit( gems, display, dst_pt.x, dst_pt.y );
+    text.set( std::to_string( kingdomTreasures.gold ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + offsetY[3] + goldImage.height() + 1, display );
 
-    // count gems
-    text.Set( std::to_string( resource.gems ) );
-    dst_pt.y += 26;
-    text.Blit( dst_pt.x + ( gems.width() - text.w() ) / 2, dst_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TREASURY, 1 ), display, roi.x + 1, roi.y + 166 );
 
-    // sprite gold
-    dst_pt.x = src_rt.x + 6;
-    dst_pt.y = src_rt.y + 130;
-    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-    fheroes2::Blit( gold, display, dst_pt.x, dst_pt.y );
-
-    // count gold
-    text.Set( std::to_string( resource.gold ) );
-    dst_pt.y += 24;
-    text.Blit( dst_pt.x + ( gold.width() - text.w() ) / 2, dst_pt.y );
-
-    // sprite button exit
-    dst_pt.x = src_rt.x + 1;
-    dst_pt.y = src_rt.y + 166;
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TREASURY, 1 ), display, dst_pt.x, dst_pt.y );
-
-    return src_rt;
+    return roi;
 }
