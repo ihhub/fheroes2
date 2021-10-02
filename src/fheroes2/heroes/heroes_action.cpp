@@ -2736,8 +2736,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
             u32 gold = tile.QuantityGold();
             std::string msg;
 
-            if ( variant == 2 && hero.IsFullBagArtifacts() )
-                variant = 3;
+            if ( variant == 3 && hero.IsFullBagArtifacts() )
+                variant = 2;
 
             if (
                 Dialog::YES
@@ -2771,6 +2771,16 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
             }
             else if ( 2 == variant ) {
                 const u32 exp = 1000;
+                msg = _(
+                    "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
+                StringReplace( msg, "%{exp}", exp );
+                StringReplace( msg, "%{count}", gold );
+                DialogGoldWithExp( "", msg, gold, exp );
+                hero.IncreaseExperience( exp );
+                hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
+            }
+            else if ( 3 == variant ) {
+                const u32 exp = 1000;
                 const Artifact & art = tile.QuantityArtifact();
                 msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
@@ -2779,16 +2789,6 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
                     DialogArtifactWithExp( "", msg, art, exp );
                 hero.PickupArtifact( art );
                 hero.IncreaseExperience( exp );
-            }
-            else if ( 3 == variant ) {
-                const u32 exp = 1000;
-                msg = _(
-                    "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
-                StringReplace( msg, "%{exp}", exp );
-                StringReplace( msg, "%{count}", gold );
-                DialogGoldWithExp( "", msg, gold, exp );
-                hero.IncreaseExperience( exp );
-                hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
             else {
                 bool remove = true;
