@@ -67,7 +67,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
 void ActionToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToSign( const Heroes & hero, s32 dst_index );
-void ActionToMagicWell( Heroes & hero, s32 dst_index );
+void ActionToMagicWell( Heroes & hero, int32_t dst_index );
 void ActionToTradingPost( const Heroes & hero );
 void ActionToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
@@ -1420,11 +1420,11 @@ void ActionToSign( const Heroes & hero, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToMagicWell( Heroes & hero, s32 dst_index )
+void ActionToMagicWell( Heroes & hero, int32_t dst_index )
 {
-    const u32 max = hero.GetMaxSpellPoints();
+    const uint32_t max = hero.GetMaxSpellPoints();
 
-    if ( hero.GetSpellPoints() == max ) {
+    if ( hero.GetSpellPoints() >= max ) {
         Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A drink at the well is supposed to restore your spell points, but you are already at maximum." ),
                          Font::BIG, Dialog::OK );
     }
