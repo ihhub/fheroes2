@@ -55,6 +55,8 @@ enum class WeekName : int
     MONSTERS // week of "monster"
 };
 
+class World;
+
 struct Week
 {
     Week( const WeekName type = WeekName::UNNAMED, const Monster::monster_t monster = Monster::UNKNOWN )
@@ -74,7 +76,7 @@ struct Week
 
     const char * GetName() const;
 
-    static Week RandomWeek( const bool isNewMonth );
+    static Week RandomWeek( const World & world, const bool isNewMonth, const size_t weekSeed );
 
     friend StreamBase & operator>>( StreamBase & stream, Week & week );
 
