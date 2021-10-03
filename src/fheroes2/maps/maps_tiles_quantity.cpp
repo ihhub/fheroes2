@@ -233,7 +233,6 @@ u32 Maps::Tiles::QuantityGold( void ) const
     case MP2::OBJ_DAEMONCAVE:
         switch ( QuantityVariant() ) {
         case 2:
-        case 3:
         case 4:
             return 2500;
         default:
