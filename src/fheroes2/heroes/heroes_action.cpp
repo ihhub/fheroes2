@@ -2728,9 +2728,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
 
     std::string header = MP2::StringObject( objectType );
     if ( Dialog::YES
-         == Dialog::Message( header,
-                             _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
-                             Dialog::YES | Dialog::NO ) ) {
+         == Dialog::Message( header, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
         uint32_t variant = tile.QuantityVariant();
 
         if ( variant ) {
