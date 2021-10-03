@@ -91,7 +91,7 @@ void ActionToEvent( Heroes & hero, s32 dst_index );
 void ActionToObelisk( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType );
-void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToAlchemistsTower( Heroes & hero );
 void ActionToStables( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToArena( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
@@ -2720,20 +2720,20 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
     AGG::PlayMusic( MUS::DEMONCAVE, false );
 
+    const std::string header = MP2::StringObject( objectType );
     if ( Dialog::YES
-         == Dialog::Message( MP2::StringObject( objectType ),
-                             _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
+         == Dialog::Message( header, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
                              Dialog::YES | Dialog::NO ) ) {
-        u32 variant = tile.QuantityVariant();
+        uint32_t variant = tile.QuantityVariant();
 
         if ( variant ) {
-            u32 gold = tile.QuantityGold();
+            uint32_t gold = tile.QuantityGold();
             std::string msg;
 
             if ( variant == 3 && hero.IsFullBagArtifacts() )
@@ -2742,7 +2742,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
             if (
                 Dialog::YES
                 == Dialog::Message(
-                    "",
+                    header,
                     _( "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, \"you will fight and surely die. But I will give you a choice of deaths. You may fight me, or you may fight my servants. Do you prefer to fight my servants?\"" ),
                     Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 // battle with earth elements
@@ -2754,7 +2754,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
                     StringReplace( msg, "%{count}", gold );
-                    DialogWithGold( "", msg, gold );
+                    DialogWithGold( header, msg, gold );
                     hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
                 }
                 else {
@@ -2763,30 +2763,30 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
             }
             // check variants
             else if ( 1 == variant ) {
-                const u32 exp = 1000;
+                const uint32_t exp = 1000;
                 msg = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
                 StringReplace( msg, "%{exp}", exp );
-                DialogWithExp( "", msg, exp );
+                DialogWithExp( header, msg, exp );
                 hero.IncreaseExperience( exp );
             }
             else if ( 2 == variant ) {
-                const u32 exp = 1000;
+                const uint32_t exp = 1000;
                 msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
                 StringReplace( msg, "%{exp}", exp );
                 StringReplace( msg, "%{count}", gold );
-                DialogGoldWithExp( "", msg, gold, exp );
+                DialogGoldWithExp( header, msg, gold, exp );
                 hero.IncreaseExperience( exp );
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
             else if ( 3 == variant ) {
-                const u32 exp = 1000;
+                const uint32_t exp = 1000;
                 const Artifact & art = tile.QuantityArtifact();
                 msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
                 StringReplace( msg, "%{art}", art.GetName() );
                 if ( art.isValid() )
-                    DialogArtifactWithExp( "", msg, art, exp );
+                    DialogArtifactWithExp( header, msg, art, exp );
                 hero.PickupArtifact( art );
                 hero.IncreaseExperience( exp );
             }
@@ -2802,13 +2802,13 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
                 StringReplace( msg, "%{count}", gold );
 
                 if ( allow ) {
-                    if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                    if ( Dialog::YES == Dialog::Message( header, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                         remove = false;
                         kingdom.OddFundsResource( payment );
                     }
                 }
                 else
-                    Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                    Dialog::Message( header, msg, Font::BIG, Dialog::OK );
 
                 if ( remove ) {
                     Battle::Result res;
@@ -2820,7 +2820,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, s32
             tile.QuantityReset();
         }
         else
-            Dialog::Message( "", _( "Except for evidence of a terrible battle, the cave is empty." ), Font::BIG, Dialog::OK );
+            Dialog::Message( header, _( "Except for evidence of a terrible battle, the cave is empty." ), Font::BIG, Dialog::OK );
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
