@@ -732,7 +732,7 @@ fheroes2::Rect Castle::RedrawResourcePanel( const fheroes2::Point & pt ) const
     const fheroes2::FontType fontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE );
     const int32_t fontHeight = fheroes2::Text( std::string(), fontType ).height();
 
-    const std::array<int32_t, 4> offsetY = { 1, 1 + maxHeight + fontHeight, 1 + ( maxHeight + fontHeight ) * 2, 1 + ( maxHeight + fontHeight ) * 3 };
+    const std::array<int32_t, 4> offsetY = { 1 - 1, 1 + maxHeight + fontHeight + 1, 1 + ( maxHeight + fontHeight ) * 2 - 2, 1 + ( maxHeight + fontHeight ) * 3 };
 
     const fheroes2::Sprite & woodImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
     const fheroes2::Sprite & mercuryImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
