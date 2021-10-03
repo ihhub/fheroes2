@@ -366,7 +366,7 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
 /* is visited cell */
 bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 {
-    return isVisited( tile.GetIndex(), tile.GetObject() );
+    return isVisited( tile.GetIndex(), tile.GetObject( false ) );
 }
 
 bool Kingdom::isVisited( s32 index, const MP2::MapObjectType objectType ) const
