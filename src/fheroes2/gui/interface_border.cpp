@@ -41,23 +41,21 @@ namespace
         const int32_t countY = height / inHeight;
         const int32_t restWidth = width % inWidth;
         const int32_t restHeight = height % inHeight;
-        int32_t x;
-        int32_t y;
 
-        for ( y = 0; y < countY; ++y ) {
-            for ( x = 0; x < countX; ++x ) {
+        for ( int32_t y = 0; y < countY; ++y ) {
+            for ( int32_t x = 0; x < countX; ++x ) {
                 fheroes2::Blit( in, inX, inY, out, outX + x * inWidth, outY + y * inHeight, inWidth, inHeight );
             }
             if ( restWidth != 0 ) {
-                fheroes2::Blit( in, inX, inY, out, outX + x * inWidth, outY + y * inHeight, restWidth, inHeight );
+                fheroes2::Blit( in, inX, inY, out, outX + width - restWidth, outY + y * inHeight, restWidth, inHeight );
             }
         }
         if ( restHeight != 0 ) {
-            for ( x = 0; x < countX; ++x ) {
-                fheroes2::Blit( in, inX, inY, out, outX + x * inWidth, outY + y * inHeight, inWidth, restHeight );
+            for ( int32_t x = 0; x < countX; ++x ) {
+                fheroes2::Blit( in, inX, inY, out, outX + x * inWidth, outY + height - restHeight, inWidth, restHeight );
             }
             if ( restWidth != 0 ) {
-                fheroes2::Blit( in, inX, inY, out, outX + x * inWidth, outY + y * inHeight, restWidth, restHeight );
+                fheroes2::Blit( in, inX, inY, out, outX + width - restWidth, outY + height - restHeight, restWidth, restHeight );
             }
         }
     }
