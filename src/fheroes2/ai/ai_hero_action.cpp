@@ -902,12 +902,15 @@ namespace AI
         // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
         // So we get the list of them and remove those which are unsuitable.
         MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
-        teleports.erase( std::remove_if( teleports.begin(), teleports.end(), [endIndex, heroColor]( const int32_t index ) {
-            if ( endIndex == index ) {
-                return false;
-            }
-            const Maps::Tiles & tile = world.GetTiles( index );
-            return !tile.isFog( heroColor ) && tile.GetObject() != MP2::OBJ_HEROES; } ), teleports.end() );
+        teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
+                                         [endIndex, heroColor]( const int32_t index ) {
+                                             if ( endIndex == index ) {
+                                                 return false;
+                                             }
+                                             const Maps::Tiles & tile = world.GetTiles( index );
+                                             return !tile.isFog( heroColor ) && tile.GetObject() != MP2::OBJ_HEROES;
+                                         } ),
+                         teleports.end() );
 
         if ( teleports.empty() ) {
             DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
