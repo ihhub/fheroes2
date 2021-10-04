@@ -4,7 +4,7 @@ skip_commits:
   - .gitignore
   - .github/workflows/*
   - sonar-project.properties
-  - docs/*
+#  - docs/*
 
 skip_tags: true
 
