@@ -39,14 +39,10 @@ ru.mo: ru.po
 	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
-# German has locale-specific transliteration rules (ä -> ae, etc)
+# German uses CP1252
 de.mo: de.po
-	sed -e 's/ä/ae/g' $< > $<.tmp
-	sed -i~ -e 's/ö/oe/g' $<.tmp
-	sed -i~ -e 's/ü/ue/g' $<.tmp
-	sed -i~ -e 's/Ö/Oe/g' $<.tmp
-	sed -i~ -e 's/Ü/Ue/g' $<.tmp
-	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=de.CP1252 LC_ALL=de.CP1252 LC_CTYPE=de.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # Norwegian has locale-specific transliteration rules (æ -> ae, etc)

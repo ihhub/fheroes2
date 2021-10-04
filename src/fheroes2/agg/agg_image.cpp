@@ -1375,7 +1375,7 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
+                int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
                 if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
@@ -1385,6 +1385,19 @@ namespace fheroes2
                     std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
                     imageArray.erase( imageArray.begin() + 192 );
+                }
+                // German version uses CP1252
+                verifiedFontWidth = ( id == ICN::FONT ) ? 10 : 7;
+                if ( imageArray.size() == 103 && imageArray[99].width() == verifiedFontWidth ) {
+                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xFC - 0x80, imageArray[0] );
+                    std::swap( imageArray[0xC4 - 0x20], imageArray[100 + 0xFC - 0x80] );
+                    std::swap( imageArray[0xD6 - 0x20], imageArray[101 + 0xFC - 0x80] );
+                    std::swap( imageArray[0xDC - 0x20], imageArray[102 + 0xFC - 0x80] );
+                    std::swap( imageArray[0xDF - 0x20], imageArray[99 + 0xFC - 0x80] );
+                    std::swap( imageArray[0xE4 - 0x20], imageArray[96 + 0xFC - 0x80] );
+                    std::swap( imageArray[0xF6 - 0x20], imageArray[97 + 0xFC - 0x80] );
+                    std::swap( imageArray[0xFC - 0x20], imageArray[98 + 0xFC - 0x80] );
+                    imageArray.erase( imageArray.begin() + 0xFC - 0x20 + 1, imageArray.end() );
                 }
                 return true;
             }
