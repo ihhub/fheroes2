@@ -248,6 +248,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             // reset random seed
             randomGenerator.UpdateSeed( battleSeed );
 
+            // Reset artifacts that are planned for transfer
+            artifactsToTransfer.clear();
+
             arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true, randomGenerator ) );
 
             while ( arena->BattleValid() ) {
