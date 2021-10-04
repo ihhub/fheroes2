@@ -1669,9 +1669,8 @@ msgstr ""
 msgid "No monsters available for purchase."
 msgstr ""
 
-#, fuzzy
 msgid "Buy Monsters"
-msgstr "Kup potwory:"
+msgstr "Kup potwory"
 
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
@@ -2050,7 +2049,6 @@ msgstr "(nie można kopać)"
 msgid "penalty: %{cost}"
 msgstr "kary: %{cost}"
 
-#, fuzzy
 msgid "Uncharted Territory"
 msgstr "Niezbadane terytorium"
 
@@ -2060,9 +2058,8 @@ msgstr "Obrońcy:"
 msgid "Unknown"
 msgstr "Nieznany"
 
-#, fuzzy
 msgid "%{name} (Level %{level})"
-msgstr "%{name} ( Poziom %{level} )"
+msgstr "%{name} (poziom %{level})"
 
 msgid "Move Points"
 msgstr "Ptk. ruchu"
@@ -2094,9 +2091,8 @@ msgstr "Czy na pewno chcesz usunąć plik:"
 msgid "Warning!"
 msgstr "Uwaga!"
 
-#, fuzzy
 msgid "Map difficulty:"
-msgstr "Trudność:"
+msgstr "Poziom:"
 
 msgid "No maps exist at that size"
 msgstr "Brak map o tym rozmiarze"
@@ -2349,36 +2345,33 @@ msgstr "Obr."
 msgid "Power"
 msgstr "Moc"
 
-#, fuzzy
 msgid "Knowl"
-msgstr "Wiedza"
+msgstr "Wiedz"
 
 msgid "Human"
 msgstr "Człowiek"
 
 msgid "1st"
-msgstr "pierwszy"
+msgstr "1."
 
 msgid "2nd"
-msgstr "drugi"
+msgstr "2."
 
 msgid "3rd"
-msgstr "trzeci"
+msgstr "3."
 
 msgid "4th"
-msgstr "czwarty"
+msgstr "4."
 
 msgid "5th"
-msgstr "piąty"
+msgstr "5."
 
 msgid "6th"
-msgstr "szósty"
+msgstr "6."
 
-#, fuzzy
 msgid "Oracle: Player Rankings"
-msgstr "Gildia złodziei - ranking graczy"
+msgstr "Wyrocznia - ranking graczy"
 
-#, fuzzy
 msgid "Thieves' Guild: Player Rankings"
 msgstr "Gildia złodziei - ranking graczy"
 
@@ -2403,7 +2396,6 @@ msgstr "Klejn., kr., siar. i rtęć:"
 msgid "Obelisks Found:"
 msgstr "Znalezione obeliski:"
 
-#, fuzzy
 msgid "Artifacts:"
 msgstr "Artefakty:"
 
@@ -3017,10 +3009,9 @@ msgstr ""
 msgid "Are you sure you want to quit?"
 msgstr "Czy na pewno chcesz wyjść?"
 
-#, fuzzy
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
-"Czy na pewno chcesz rozpocząć od nowa? (Aktualna rozgrywka zostanie "
+"Czy na pewno chcesz rozpocząć od nowa? (aktualna rozgrywka zostanie "
 "przerwana)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
@@ -4445,6 +4436,9 @@ msgid ""
 "your journey, the seer activates his crystal ball, allowing you to see the "
 "strengths and weaknesses of your opponents."
 msgstr ""
+"Pomiędzy drzewami siedzi niewidomy prorok. Gdy wyjaśniasz mu cel swej "
+"podróży, prorok uaktywnia kryszczałową kulę, w której możesz zobaczyć "
+"słabe i mocne punkty twych przeciwników."
 
 msgid ""
 "The entrance to the cave is dark, and a foul, sulfurous smell issues from "
@@ -4714,9 +4708,8 @@ msgstr ""
 "To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
 "możesz go rzucić."
 
-#, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
-msgstr "%{name}, %{race} ( Poziom %{level} )"
+msgstr "%{name}, %{race} (poziom %{level})"
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
@@ -4776,17 +4769,14 @@ msgstr "%{morale} Morale"
 msgid "%{luck} Luck"
 msgstr "%{luck} Szczęście"
 
-#, fuzzy
 msgid "Current Luck Modifiers:"
-msgstr "Aktualne modyfikatory:"
+msgstr "Obecne modyfikatory szczęścia:"
 
-#, fuzzy
 msgid "Current Morale Modifiers:"
-msgstr "Aktualne modyfikatory:"
+msgstr "Obecne modyfikatory morale:"
 
-#, fuzzy
 msgid "Entire army is undead, so morale does not apply."
-msgstr "Wszystkie oddziały są nieumarłe, więc morale nie mają znaczenia."
+msgstr "Wszystkie oddziały to nieumarli, na których nie wpływa morale."
 
 msgid ""
 "Current experience %{exp1}.\n"
@@ -5704,7 +5694,7 @@ msgid "Dwarf Cottage"
 msgstr "Domek krasnoludów"
 
 msgid "Stone Liths"
-msgstr "Kamienny Lith"
+msgstr "Głazy"
 
 msgid "Magic Well"
 msgstr "Magiczna studnia"
@@ -6455,50 +6445,47 @@ msgid "% chance to cast %{spell} spell"
 msgstr "%{color} rzuconych zaklęć: %{spell}"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Regeneruje się"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "Atakuje zionięciem"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Latający"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Zawsze kontratakuje"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Atakuje wszystkich przyległych przeciwników"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Brak kar w walce wręcz"
 
-#, fuzzy
 msgid "Dragon"
-msgstr "Czerwony smok"
+msgstr "Smok"
 
-#, fuzzy
 msgid "Undead"
-msgstr "Nieumarli"
+msgstr "Nieumarły"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Powstrzymuje kontratak"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Wysysa życie"
 
-#, fuzzy
 msgid "Cloud attack"
-msgstr "Zamek w chmurach"
+msgstr "Atak trującą chmurą"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Obniża morale przeciwnika o "
 
 #, c-format
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% szans na unicestwienie połowy atakowanego oddziału"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Pożeracz dusz"
 
 #, fuzzy
 msgid "Elemental"
