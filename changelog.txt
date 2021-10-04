@@ -1,3 +1,60 @@
+version 0.9.8 (05 October 2021)
+- correct resource position in castle window
+- new week status is not changed while reloading the same save file
+- add headers for all Daemon Cave dialogs
+- fix rewards in the Daemon Cave
+- fix Waterwheel incorrect visited status
+- fix spell points reduction while visiting a well with more than maximum spell points
+- add confirmation message in Alchemist Tower
+- add cell hilghlighting for monsters with double cell attack ability
+- add correct evaluation of an AI hero recruitment and meeting
+- fix artifact selection area
+- add a title to all artifact related windows
+- grey out experimental disabled option
+- show map type icons in New Map lists
+- do not place wandering troops on coast tile if there are no other coast tiles nearby
+- develop a castle during AI hero purchase
+- fix Altars' passabilities
+- fix AI hero being stuck on Stoneliths
+- fix passabilities of action objects
+- add Windows scripts to automatically copy & extract all necessary assets from original HoMM2 distributions
+- fix unresponsive application during AI turn while attacking an object with guards
+- fix active building area in castle construction window
+- AI can now visit Pyramids
+- fix scrollbar rendering in select lists
+- replace scrollbar in Experimental Settings dialog
+- unselect initial town in the Town Portal spell list
+- fix troop position in the Pyramid
+- fix bridge animation during battle
+- fix deterministic battle outcome
+- fix an empty list of heroes in the Kingdom Overview after the dismissal or loss of a hero
+- fix passability for tall objects
+- fix Roland campaign awards after ending scenarios 7 and 8
+- set 15 character limit when inputing player name in High Scores
+- correct battle speed change for monsters
+- fix incorrect level of Lightning Rod artifact
+- correct castle building' active area
+- fix passabilities related to cracks
+- align UI elements on artifact combat outcome dialog
+- add Spell description window in monster info dialog
+- fix scrollbar position after dismissing a hero
+- add logic for ENTER and SPACE keys for a hero on World Map
+- add hotkey for View World dialog
+- fix some cases with Tree passabilities
+- update Polish translation
+- fix post battle crash
+- fix incorrect rendering for game settings window with evil interface
+- fix appearance of sounds of the sea when a hero stands close to map's edge
+- display a message about Ultimate Artifact after the battle
+- fix adventure border rendering on higher resolutions
+- fix incrementing days spent value after reloading a campaign save
+- lock mouse within the window in multi-monitor setup
+- fix passability of mines
+- fix an ability to attack a monster through a barrier
+- allow hero to traverse Stone Liths and Whirlpools even if he has no movement points left
+- fix black edges in View World
+- fix passability for tiles with shadows only
+
 version 0.9.7 (05 September 2021)
 - add popup dialogs for buttons in High Scores and save files manipulation windows
 - fix Faerie Ring passability
