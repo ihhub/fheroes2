@@ -460,7 +460,10 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
                 else {
-                    return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MOVE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                    const bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+
+                    return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
+                                                   from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 }
             }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
