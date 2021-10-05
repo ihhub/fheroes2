@@ -908,7 +908,9 @@ namespace AI
                                                  return false;
                                              }
                                              const Maps::Tiles & tile = world.GetTiles( index );
-                                             return !tile.isFog( heroColor ) && tile.GetObject() != MP2::OBJ_HEROES;
+                                             assert( tile.GetObject() != MP2::OBJ_HEROES );
+
+                                             return !tile.isFog( heroColor );
                                          } ),
                          teleports.end() );
 
