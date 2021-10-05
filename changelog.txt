@@ -1,4 +1,5 @@
 version 0.9.8 (05 October 2021)
+- fix a case when a hero loses his artifacts after retreat in multiplayer mode
 - fix monster position on World Map
 - correct resource position in castle window
 - new week status is not changed while reloading the same save file
@@ -431,7 +432,7 @@ version 0.9.2 (04 April 2021)
 - allow to use mouse wheel anywhere for split troop dialog
 - fix logic of placing monsters for a New Month
 - fix Kingdom Overview selection drawings
-- dix boat drawing issues
+- fix boat drawing issues
 - do not hide mouse cursor if the Skill Info dialog called from the Level Up dialog contains OK button
 - fix incorrect drawings for battle OKAY button
 - fix rendering of the Castle Captain's spell points bar
@@ -613,7 +614,7 @@ version 0.9.0 (04 February 2021)
 - add initial Nintendo Switch support
 - fix Battle Only mode UI
 - fix logic in mouse button press
-- make interface itemsbar adjustment while fixing some split logics
+- make interface itemsbar adjustment while fixing some split logic
 - add FPS display support
 - fix clickable area for Heroes and Castles in their lists
 - differentiate save files based on game type
@@ -667,7 +668,7 @@ version 0.8.4 (23 December 2020)
 - fix rendering and mouse behavior for SDL2
 - fix elements layout for surrendering dialog
 - fix shadow under battle summary dialog
-- fix surrending cost calculation
+- fix surrendering cost calculation
 - fix Wagon sounds
 - fix castle and hero interaction with mouse in Kingdom Overview
 - play sound only after a battle with a monster to grab an artifact
@@ -907,7 +908,7 @@ version 0.8.2 (04 October 2020)
 - fix graphical issues in big text font
 - fix creature animation going out of window
 - fix few scenario information window UI issues
-- optimise video playback
+- optimize video playback
 - fix map size button state selection
 - fix New Game window UI elements
 - fix a crash while downgrading resolution in 8-bit mode
