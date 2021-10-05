@@ -821,7 +821,6 @@ namespace AI
                 const Troop & troop = tile.QuantityTroop();
                 Army army;
                 army.JoinTroop( troop );
-                army.SetColor( tile.QuantityColor() );
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
 

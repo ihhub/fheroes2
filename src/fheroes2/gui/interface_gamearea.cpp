@@ -409,11 +409,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
             const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
-            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + 30, mp, false, fadeTask.alpha );
 
             if ( fadeTask.animationIndex ) {
                 const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.animationIndex );
-                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + 30, mp, false, fadeTask.alpha );
             }
         }
     }
@@ -639,7 +639,6 @@ void Interface::GameArea::SetScroll( int direct )
 
 void Interface::GameArea::QueueEventProcessing( void )
 {
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
@@ -647,7 +646,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     // change cusor if need
     if ( updateCursor || index != _prevIndexPos ) {
-        cursor.SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
+        Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -657,8 +656,6 @@ void Interface::GameArea::QueueEventProcessing( void )
         return;
 
     const Settings & conf = Settings::Get();
-
-    // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
@@ -694,8 +691,10 @@ void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 
 void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 {
-    int32_t offsetX = point.x - _middlePoint().x;
-    int32_t offsetY = point.y - _middlePoint().y;
+    const fheroes2::Point & middlePos = _middlePoint();
+
+    int32_t offsetX = point.x - middlePos.x;
+    int32_t offsetY = point.y - middlePos.y;
     if ( offsetX < _minLeftOffset )
         offsetX = _minLeftOffset;
     else if ( offsetX > _maxLeftOffset )

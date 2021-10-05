@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <sstream>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>

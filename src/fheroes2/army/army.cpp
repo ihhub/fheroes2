@@ -815,11 +815,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
-        at( 0 )->Set( Monster::ROYAL_MUMMY, 10 );
-        at( 1 )->Set( Monster::VAMPIRE_LORD, 10 );
+        at( 0 )->Set( Monster::VAMPIRE_LORD, 10 );
+        at( 1 )->Set( Monster::ROYAL_MUMMY, 10 );
         at( 2 )->Set( Monster::ROYAL_MUMMY, 10 );
-        at( 3 )->Set( Monster::VAMPIRE_LORD, 10 );
-        at( 4 )->Set( Monster::ROYAL_MUMMY, 10 );
+        at( 3 )->Set( Monster::ROYAL_MUMMY, 10 );
+        at( 4 )->Set( Monster::VAMPIRE_LORD, 10 );
         break;
 
     case MP2::OBJ_GRAVEYARD:

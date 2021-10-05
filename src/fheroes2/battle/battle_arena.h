@@ -64,7 +64,7 @@ namespace Battle
         }
 
     private:
-        uint32_t _id{ 0 };
+        uint32_t _id{ 1 };
     };
 
     class Arena

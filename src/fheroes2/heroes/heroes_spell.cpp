@@ -70,11 +70,11 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
-    CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const bool isEvilInterface )
+    CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
         : Interface::ListBox<int32_t>( offset )
         , result( res )
-        , _townFrameIcnId( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD )
-        , _listBoxIcnId( isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX )
+        , _townFrameIcnId( townFrameIcnId )
+        , _listBoxIcnId( listBoxIcnId )
         , _area( area )
     {}
 
@@ -143,17 +143,17 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     Text text( _( "Town Portal" ), Font::YELLOW_BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 5 );
+    text.Blit( dst.x + 145 - text.w() / 2, dst.y + 5 );
 
     text.Set( _( "Select town to port to." ), Font::BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 25 );
+    text.Blit( dst.x + 145 - text.w() / 2, dst.y + 25 );
 
     const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( _listBoxIcnId, 0 );
     const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( _listBoxIcnId, 1 );
     const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( _listBoxIcnId, 2 );
 
     int32_t offsetY = 45;
-    fheroes2::Blit( upperPart, display, dst.x + 2, dst.y + offsetY );
+    fheroes2::Blit( upperPart, display, dst.x + 7, dst.y + offsetY );
 
     offsetY += upperPart.height();
 
@@ -161,11 +161,11 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     int32_t middlePartCount = ( totalHeight - upperPart.height() - lowerPart.height() + middlePart.height() - 1 ) / middlePart.height();
 
     for ( int32_t i = 0; i < middlePartCount; ++i ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( _listBoxIcnId, 1 ), display, dst.x + 2, dst.y + offsetY );
+        fheroes2::Blit( fheroes2::AGG::GetICN( _listBoxIcnId, 1 ), display, dst.x + 7, dst.y + offsetY );
         offsetY += middlePart.height();
     }
 
-    fheroes2::Blit( lowerPart, display, dst.x + 2, dst.y + totalHeight - lowerPart.height() + 45 );
+    fheroes2::Blit( lowerPart, display, dst.x + 7, dst.y + totalHeight - lowerPart.height() + 45 );
 
     const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 3 );
     const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 5 );
@@ -177,18 +177,18 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     const fheroes2::Sprite & lowerScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 9 );
 
     offsetY = upperScrollbarArrow.height() + 44;
-    fheroes2::Blit( upperScrollbar, display, dst.x + 256, dst.y + offsetY );
+    fheroes2::Blit( upperScrollbar, display, dst.x + 262, dst.y + offsetY );
     offsetY += upperScrollbar.height();
 
     middlePartCount = ( totalHeight - upperScrollbar.height() - lowerScrollbar.height() + middleScrollbar.height() - 1 ) / middleScrollbar.height();
 
     for ( int32_t i = 0; i < middlePartCount; ++i ) {
-        fheroes2::Blit( middleScrollbar, display, dst.x + 256, dst.y + offsetY );
+        fheroes2::Blit( middleScrollbar, display, dst.x + 262, dst.y + offsetY );
         offsetY += middleScrollbar.height();
     }
 
     offsetY = upperScrollbarArrow.height() + 44 + totalHeight - lowerScrollbar.height();
-    fheroes2::Blit( lowerScrollbar, display, dst.x + 256, dst.y + offsetY );
+    fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -512,26 +512,28 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 280, 250 ) );
+    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 250 ) );
 
     const fheroes2::Rect & area = frameborder->activeArea();
     int result = Dialog::ZERO;
 
-    CastleIndexListBox listbox( frameborder->windowArea(), area.getPosition(), result, isEvilInterface );
+    const int townIcnId = isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD;
+    const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
+    CastleIndexListBox listbox( frameborder->windowArea(), area.getPosition(), result, townIcnId, listIcnId );
 
-    const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-    listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
-    listbox.SetScrollButtonDn( listId, 5, 6, fheroes2::Point( area.x + 256, area.y + 190 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( listId, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 119 ) );
+    listbox.SetScrollButtonUp( listIcnId, 3, 4, fheroes2::Point( area.x + 262, area.y + 45 ) );
+    listbox.SetScrollButtonDn( listIcnId, 5, 6, fheroes2::Point( area.x + 262, area.y + 190 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( listIcnId, 10 ), fheroes2::Rect( area.x + 266, area.y + 68, 14, 119 ) );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 11, area.y + 49, 250, 160 ) );
     listbox.SetListContent( castles );
+    listbox.Unselect();
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    btnGroups.createButton( area.x, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
-    btnGroups.createButton( area.x + 182, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1,
+    btnGroups.createButton( area.x + 5, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
+    btnGroups.createButton( area.x + 187, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1,
                             Dialog::CANCEL );
     btnGroups.draw();
 

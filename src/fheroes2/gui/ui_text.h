@@ -104,6 +104,8 @@ namespace fheroes2
 
         bool empty() const override;
 
+        void set( const std::string & text, const FontType fontType );
+
     private:
         std::string _text;
 

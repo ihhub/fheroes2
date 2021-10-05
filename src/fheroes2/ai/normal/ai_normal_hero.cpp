@@ -348,7 +348,13 @@ namespace
             }
             break;
 
-            // TODO: add evaluation for MP2::OBJ_PYRAMID.
+        case MP2::OBJ_PYRAMID:
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
+                Army enemy( tile );
+                return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
+                       && army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+            }
+            break;
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
@@ -736,6 +742,9 @@ namespace AI
             }
             return 500;
         }
+        else if ( objectType == MP2::OBJ_PYRAMID ) {
+            return 1500;
+        }
 
         // TODO: add support for all possible objects.
 
@@ -974,6 +983,9 @@ namespace AI
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return 250;
+        }
+        else if ( objectType == MP2::OBJ_PYRAMID ) {
+            return 10000;
         }
 
         // TODO: add support for all possible objects.

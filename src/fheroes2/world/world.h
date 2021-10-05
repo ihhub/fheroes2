@@ -335,7 +335,8 @@ private:
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 
-    uint32_t _seed;
+    uint32_t _seed{ 0 }; // global seed for the map
+    size_t _weekSeed{ 0 }; // global seed for the map, for this week
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );
