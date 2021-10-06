@@ -29,10 +29,12 @@
 #include "bin_info.h"
 #include "cursor.h"
 #include "embedded_image.h"
+#include "editor_pick_object.h"
 #include "engine.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "icn.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -201,6 +203,10 @@ int main( int argc, char ** argv )
 
             // init game data
             Game::Init();
+
+            if ( conf.isEditorMode() ) {
+                fheroes2::showObjects( fheroes2::getObjects( ICN::OBJNCRCK ), ICN::OBJNCRCK );
+            }
 
             if ( conf.isShowIntro() ) {
                 fheroes2::showTeamInfo();

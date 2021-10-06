@@ -47,8 +47,8 @@ namespace
         GLOBAL_FIRST_RUN = 0x00000001,
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
+        GLOBAL_EDITOR_MODE = 0x00000008,
 
-        // UNUSED = 0x00000008,
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
 
@@ -308,6 +308,15 @@ bool Settings::Read( const std::string & filename )
         }
         else {
             opt_global.ResetModes( GLOBAL_SHOW_INTRO );
+        }
+    }
+
+    if ( config.Exists( "editor" ) ) {
+        if ( config.StrParams( "editor" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_EDITOR_MODE );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_EDITOR_MODE );
         }
     }
 
@@ -1342,6 +1351,11 @@ bool Settings::isFirstGameRun() const
 bool Settings::isShowIntro() const
 {
     return opt_global.Modes( GLOBAL_SHOW_INTRO );
+}
+
+bool Settings::isEditorMode() const
+{
+    return opt_global.Modes( GLOBAL_EDITOR_MODE );
 }
 
 void Settings::resetFirstGameRun()
