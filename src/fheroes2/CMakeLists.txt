@@ -23,6 +23,7 @@ target_include_directories(fheroes2 PRIVATE
 	campaign
 	castle
 	dialog
+	editor
 	game
 	gui
 	h2d
