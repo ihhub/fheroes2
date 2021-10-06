@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
 
 #include "agg.h"
@@ -887,23 +888,40 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToTeleports( Heroes & hero, s32 index_from )
+    void AIToTeleports( Heroes & hero, const int32_t startIndex )
     {
-        int indexTo = world.NextTeleport( index_from );
-
         const Route::Path & path = hero.GetPath();
-        if ( !path.empty() ) {
-            const int dest = path.front().GetIndex();
-            while ( indexTo != dest ) {
-                indexTo = world.NextTeleport( index_from );
-                const Maps::Tiles & tile = world.GetTiles( indexTo );
-                if ( index_from == indexTo || tile.isFog( hero.GetColor() ) || tile.GetObject() == MP2::OBJ_HEROES )
-                    break;
-            }
+        if ( path.empty() ) {
+            // Hero is not moving anywhere.
+            return;
         }
 
-        if ( index_from == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
+        const int32_t endIndex = path.front().GetIndex();
+        const int32_t heroColor = hero.GetColor();
+
+        // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
+        // So we get the list of them and remove those which are unsuitable.
+        MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
+        teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
+                                         [endIndex, heroColor]( const int32_t index ) {
+                                             if ( endIndex == index ) {
+                                                 return false;
+                                             }
+                                             const Maps::Tiles & tile = world.GetTiles( index );
+                                             assert( tile.GetObject() != MP2::OBJ_HEROES );
+
+                                             return !tile.isFog( heroColor );
+                                         } ),
+                         teleports.end() );
+
+        if ( teleports.empty() ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
+            return;
+        }
+
+        const int32_t indexTo = Rand::Get( teleports );
+        if ( startIndex == indexTo ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has teleportation tile the same as starting position: " << startIndex );
             return;
         }
 
