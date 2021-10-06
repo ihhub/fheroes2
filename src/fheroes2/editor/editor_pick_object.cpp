@@ -101,7 +101,7 @@ namespace fheroes2
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( 1 ) {
+        while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 break;
             }
