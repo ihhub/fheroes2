@@ -20,13 +20,13 @@ msgstr ""
 "X-Generator: Launchpad (build Unknown)\n"
 
 msgid "Warrior"
-msgstr ""
+msgstr "Guerreiro"
 
 msgid "Builder"
-msgstr ""
+msgstr "Construtor"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Explorador"
 
 msgid ""
 "A few\n"
@@ -153,16 +153,16 @@ msgid "Cannot move last troop"
 msgstr "Não é possível mover o último exército à fortaleza"
 
 msgid "%{name} half the enemy troops!"
-msgstr ""
+msgstr "%{name} metade das tropas inimigas"
 
 msgid "Set auto battle off"
-msgstr ""
+msgstr "Desligar batalha automática"
 
 msgid "Set auto battle on"
-msgstr ""
+msgstr "Ligar batalha automática"
 
 msgid "spell failed!"
-msgstr ""
+msgstr "feitiço falhou!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -170,16 +170,16 @@ msgid ""
 msgstr ""
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Você já lançou um feitiço nesse round."
 
 msgid "That spell will affect no one!"
 msgstr "Esta magia não afetará ninguem!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Você só pode convocar um tipo de elemento por combate."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""
+msgstr "Não há espaço adjacente aberto para o seu herói lançar um elemento."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -190,7 +190,7 @@ msgid "Speed"
 msgstr "Veloc."
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Velocidade: %{speed}"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -203,29 +203,29 @@ msgid "Shadow Movement"
 msgstr "Continuar a Andar"
 
 msgid "Shadow Cursor"
-msgstr ""
+msgstr "Sombra do cursos"
 
 #, fuzzy
 msgid "Off"
 msgstr "off"
 
 msgid "On"
-msgstr ""
+msgstr "Ligado"
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "O inimigo desistiu!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "O inimigo fugiu!"
 
 msgid "A glorious victory!"
 msgstr "Uma vitoria gloriosa!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "Pelo valor em combate, %{name} recebe %{exp} de experiência."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "O covarde %{name} fugiu da batalha."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} rende-se ao inimigo, e retira-se na vergonha."
@@ -300,7 +300,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Tela do herói"
 
 #, fuzzy
 msgid ""
@@ -327,16 +327,16 @@ msgstr ""
 "suas criaturas vivas estarão disponíveis para recrutar novamente."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Abra tela do herói para ver todas as informações sobre."
 
 msgid "Return to the battle."
 msgstr "Retornar à batalha."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Sem ouro o suficiente (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} estados:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
@@ -344,36 +344,36 @@ msgid ""
 msgstr ""
 
 msgid "View %{monster} info."
-msgstr ""
+msgstr "Ver informação de %{monster} "
 
 #, fuzzy
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Atirar em %{monster}"
 "Muitos de\n"
 "%{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(Resta 1 tiro)"
+msgstr[1] "(Restam %{count} tiros"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Atacar %{monster}"
 
 msgid "Fly %{monster} here."
 msgstr ""
 
 msgid "Move %{monster} here."
-msgstr ""
+msgstr "Mover %{monster} daqui."
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Turno %{turn}"
 
 msgid "Teleport Here"
-msgstr ""
+msgstr "Se teleportar pra cá"
 
 msgid "Invalid Teleport Destination"
-msgstr ""
+msgstr "Destino de Teleporte Inválido"
 
 msgid "Cast %{spell} on %{monster}"
 msgstr ""
@@ -391,10 +391,10 @@ msgid "Ballista"
 msgstr ""
 
 msgid "Auto combat"
-msgstr ""
+msgstr "Combate automático"
 
 msgid "Customize system options."
-msgstr ""
+msgstr "Customizar opções do sistema."
 
 #, fuzzy
 msgid "Wait this unit"
@@ -407,10 +407,10 @@ msgid "View Opposing Hero"
 msgstr "Ver Heróis oponentes"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Esconder logs"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Mostrar logs"
 
 msgid "%{color} casts a spell: %{spell}"
 msgstr ""
@@ -446,7 +446,7 @@ msgstr ""
 "%{monster}"
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} resisitiu ao feitiço!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr ""
@@ -464,10 +464,10 @@ msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
 msgstr ""
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "O %{spell} fez %{damage} de dano."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "O %{spell} fez %{damage} de dano a uma criatura viva." 
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr ""
@@ -482,7 +482,7 @@ msgid "The Mummies' curse falls upon the %{name}!"
 msgstr ""
 
 msgid "The %{name} are paralyzed by the Cyclopes!"
-msgstr ""
+msgstr "%{name} está paralisado pelos Cyclopes!" 
 
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
@@ -500,19 +500,19 @@ msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr ""
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} causou %{damage} damage."
 
 msgid "The mirror image is created"
-msgstr ""
+msgstr "A imagem no espelho está criada"
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "A imagem no espelho está destruída!"
 
 msgid "Break auto battle?"
 msgstr ""
 
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 msgid "No spells to cast."
 msgstr ""
@@ -533,7 +533,7 @@ msgid "Damage: %{max}"
 msgstr "Dia: %{day}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Dano: %{min} - %{max}"
 
 #, fuzzy
 msgid "Perish: %{max}"
@@ -1663,7 +1663,7 @@ msgid "Exit this menu without doing anything."
 msgstr "Sair do menu sem fazer nada."
 
 msgid "Arena"
-msgstr ""
+msgstr "Arena"
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
@@ -1684,7 +1684,7 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Shots"
-msgstr ""
+msgstr "Tiros"
 
 msgid "Shots Left"
 msgstr "Tiros restantes"
@@ -1762,7 +1762,7 @@ msgid "Load Game"
 msgstr "Carregar Jogo"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Sem arquivos salvos para carregar"
 
 msgid "New Game"
 msgstr "Novo Jogo"
@@ -1778,7 +1778,7 @@ msgid "Save Game"
 msgstr "Novo Jogo"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Salvar o jogo atual."
 
 msgid "Quit"
 msgstr "Sair"
@@ -1787,31 +1787,31 @@ msgid "Quit out of Free Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Resolução"
 
 msgid "Experimental"
-msgstr ""
+msgstr "Experimental"
 
 msgid "Settings"
-msgstr ""
+msgstr "Configurações"
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Selecione o idioma do jogo"
 
 msgid "Change language of the game."
-msgstr ""
+msgstr "Mudar o idioma do jogo."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Selecione a resolução do jogo"
 
 msgid "Change resolution of the game."
-msgstr ""
+msgstr "Mudar a resolução do jogo."
 
 msgid "Experimental game settings."
-msgstr ""
+msgstr "Configurações experimentais do jogo."
 
 #, fuzzy
 msgid "Attention"
@@ -1867,19 +1867,19 @@ msgstr ""
 "Derrota"
 
 msgid "score: "
-msgstr ""
+msgstr "pontuação:"
 
 msgid "First select recipients!"
 msgstr ""
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Você não pode selecionar %{resource}!"
 
 msgid "Select count %{resource}:"
 msgstr ""
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Selecione os recipientes"
 
 msgid "Your Funds"
 msgstr ""
@@ -1892,13 +1892,13 @@ msgid "Gift from %{name}"
 msgstr "Recruta %{name}"
 
 msgid "Set Guardian"
-msgstr ""
+msgstr "Selecione o Guardião"
 
 msgid "Your army too big!"
-msgstr ""
+msgstr "Sua arma é muito grande!"
 
 msgid "Choose game language:"
-msgstr ""
+msgstr "Escolha o idioma do jogo:"
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -1907,13 +1907,13 @@ msgid "%{skill} +1"
 msgstr ""
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "Você aprendeu ${skill}."
 
 msgid "You may learn either:"
 msgstr ""
 
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -1938,10 +1938,10 @@ msgstr ""
 "%{resfrom}."
 
 msgid "max"
-msgstr ""
+msgstr "máximo"
 
 msgid "min"
-msgstr ""
+msgstr "mínimo"
 
 msgid "Qty to trade"
 msgstr "Qtd a trocar"
@@ -1972,13 +1972,13 @@ msgid "(empty)"
 msgstr "Vazio"
 
 msgid "already learned"
-msgstr ""
+msgstr "já aprendeu"
 
 msgid "already knows this skill"
-msgstr ""
+msgstr "já sabe essa habilidade"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "já tem o máximo de habilidades"
 
 msgid "(already visited)"
 msgstr "(Já Visitado)"
@@ -2024,7 +2024,7 @@ msgid "Number to buy:"
 msgstr "Qtd. à Comprar:"
 
 msgid "MAX"
-msgstr ""
+msgstr "MÁXIMO"
 
 msgid "How many troops to move?"
 msgstr "Mover quantas tropas?"
@@ -6777,13 +6777,13 @@ msgid "This item can't be traded."
 msgstr ""
 
 msgid "Crystal"
-msgstr ""
+msgstr "Cristal"
 
 msgid "Gems"
-msgstr ""
+msgstr "Gemas"
 
 msgid "Mercury"
-msgstr ""
+msgstr "Mercúrio"
 
 msgid "Ore"
 msgstr ""
@@ -6792,7 +6792,7 @@ msgid "Sulfur"
 msgstr ""
 
 msgid "Wood"
-msgstr ""
+msgstr "Madeira"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -7395,7 +7395,7 @@ msgid "The dark side is stronger."
 msgstr ""
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "O fim do mundo está próximo."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr ""
@@ -7404,10 +7404,10 @@ msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr ""
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Ele disse à ela: Yada yada yada... e então ela disse: Blah, blah, blah..."
 
 msgid "An unknown force is being ressurected..."
-msgstr ""
+msgstr "Uma força misteriosa está ressuscitando..."
 
 msgid ""
 "Check the newest version of game at\n"
