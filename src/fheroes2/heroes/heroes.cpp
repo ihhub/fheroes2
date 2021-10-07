@@ -1574,21 +1574,8 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
         switch ( type ) {
         case PORT_BIG:
             return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
-        case PORT_MEDIUM: {
-            // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
-            // TODO: find a better way to store these images, ideally in agg_image.cpp file.
-            static std::map<int, fheroes2::Sprite> mediumSizePortait;
-            auto iter = mediumSizePortait.find( id );
-            if ( iter != mediumSizePortait.end() ) {
-                return iter->second;
-            }
-
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
-            fheroes2::Sprite output( 50, 47 );
-            fheroes2::Resize( original, output );
-
-            return mediumSizePortait.emplace( id, std::move( output ) ).first->second;
-        }
+        case PORT_MEDIUM:
+            return fheroes2::AGG::GetICN( ICN::PORTMEDI, id );
         case PORT_SMALL:
             return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
         default:
