@@ -39,9 +39,9 @@ namespace
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
-        = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },  { "de", fheroes2::SupportedLanguage::German },
-            { "german", fheroes2::SupportedLanguage::German }, { "fr", fheroes2::SupportedLanguage::French },      { "french", fheroes2::SupportedLanguage::French },
-            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
+        = { { "pl", fheroes2::SupportedLanguage::Polish },      { "polish", fheroes2::SupportedLanguage::Polish },   { "de", fheroes2::SupportedLanguage::German },
+            { "german", fheroes2::SupportedLanguage::German },  { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },     { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
             { "italian", fheroes2::SupportedLanguage::Italian } };
 
     class LanguageSwitcher
