@@ -656,11 +656,9 @@ int Castle::OpenDialog( bool readonly )
         // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
         // In this case we must revert the queue and finding the first suitable building.
         for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-            if ( isBuild( it->id ) ) {
-                if ( le.MouseCursor( it->coord ) ) {
-                    statusMessage = buildingStatusMessage( race, it->id );
-                    break;
-                }
+            if ( isBuild( it->id ) && le.MouseCursor( it->coord ) ) {
+                statusMessage = buildingStatusMessage( race, it->id );
+                break;
             }
         }
 
