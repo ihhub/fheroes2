@@ -34,13 +34,15 @@ namespace
                                                                             { 0x04745D1D, fheroes2::SupportedLanguage::German }, // GoG version
                                                                             { 0x88774771, fheroes2::SupportedLanguage::Polish }, // GoG version
                                                                             { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
-                                                                            { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } }; // Buka version
+                                                                            { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian }, // Buka version
+                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Italian } };
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
         = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },  { "de", fheroes2::SupportedLanguage::German },
             { "german", fheroes2::SupportedLanguage::German }, { "fr", fheroes2::SupportedLanguage::French },      { "french", fheroes2::SupportedLanguage::French },
-            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian } };
+            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
+            { "italian", fheroes2::SupportedLanguage::Italian } };
 
     class LanguageSwitcher
     {
@@ -101,6 +103,8 @@ namespace fheroes2
             return _( "German" );
         case SupportedLanguage::Russian:
             return _( "Russian" );
+        case SupportedLanguage::Italian:
+            return _( "Italian" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -121,6 +125,8 @@ namespace fheroes2
             return "de";
         case SupportedLanguage::Russian:
             return "ru";
+        case SupportedLanguage::Italian:
+            return "it";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
