@@ -210,9 +210,8 @@ fheroes2::GameMode Game::HighScoresStandard()
         // key code info
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
             Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
-        if ( buttonCampaign.isEnabled() ) {
-            le.MousePressLeft( buttonCampaign.area() ) ? buttonCampaign.drawOnPress() : buttonCampaign.drawOnRelease();
-        }
+
+        le.MousePressLeft( buttonCampaign.area() ) ? buttonCampaign.drawOnPress() : buttonCampaign.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
@@ -265,7 +264,7 @@ fheroes2::GameMode Game::HighScoresCampaign()
 
     RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
 
-    fheroes2::Button buttonStandard( top.x + 8, top.y + 315, ICN::HISCORE, 2, 1 );
+    fheroes2::Button buttonStandard( top.x + 8, top.y + 315, ICN::HISCORE, 2, 3 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
 
     buttonStandard.draw();
@@ -301,9 +300,8 @@ fheroes2::GameMode Game::HighScoresCampaign()
         // key code info
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
             Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
-        if ( buttonStandard.isEnabled() ) {
-            le.MousePressLeft( buttonStandard.area() ) ? buttonStandard.drawOnPress() : buttonStandard.drawOnRelease();
-        }
+
+        le.MousePressLeft( buttonStandard.area() ) ? buttonStandard.drawOnPress() : buttonStandard.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
