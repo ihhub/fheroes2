@@ -22,7 +22,15 @@
 
 #include "castle.h"
 
+enum class GameVersion : int;
+
 namespace fheroes2
 {
     Rect getCastleBuildingArea( const int race, const building_t buildingId );
+
+    const char * getBuildingName( const int race, const building_t buildingId );
+
+    const char * getBuildingDescription( const int race, const building_t buildingId );
+
+    std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version );
 }

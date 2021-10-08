@@ -60,7 +60,6 @@ namespace
     bool updateSoundsOnFocusUpdate = true;
     std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
-    u32 castle_animation_frame = 0;
     u32 maps_animation_frame = 0;
 
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
@@ -341,11 +340,6 @@ const Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTa
 u32 & Game::MapsAnimationFrame( void )
 {
     return maps_animation_frame;
-}
-
-u32 & Game::CastleAnimationFrame( void )
-{
-    return castle_animation_frame;
 }
 
 // play environment sounds from the game area in focus

@@ -492,7 +492,7 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
