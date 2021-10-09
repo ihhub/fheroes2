@@ -27,6 +27,7 @@
 #include "game.h"
 #include "game_over.h"
 #include "icn.h"
+#include "image_tool.h"
 #include "localevent.h"
 #include "maps.h"
 #include "player_info.h"
@@ -112,6 +113,9 @@ void Dialog::GameInfo( void )
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
     fheroes2::Button buttonCfg( pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
+
+    const fheroes2::Sprite configBtnShadow = fheroes2::addShadow( fheroes2::AGG::GetICN( ICN::BTNCONFIG, 0 ), fheroes2::Point( -4, 4 ), 3 );
+    fheroes2::Blit( configBtnShadow, display, buttonCfg.area().x - 4, buttonCfg.area().y );
 
     buttonOk.draw();
     buttonCfg.draw();

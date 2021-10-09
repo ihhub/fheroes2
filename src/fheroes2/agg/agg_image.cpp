@@ -366,6 +366,19 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::REQUESTS, 1 + i );
 
+                    // cut out top-left and bottom-right corners
+                    if ( !out.singleLayer() ) {
+                        const int cornerSize = 3;
+                        for ( int y = 0; y < cornerSize; ++y ) {
+                            for ( int x = 0; x < cornerSize; ++x ) {
+                                if ( x >= y ) {
+                                    SetTransformPixel( out, cornerSize - x, y, 1 );
+                                    SetTransformPixel( out, ( out.width() - 1 ) - cornerSize + x, ( out.height() - 1 ) - y, 1 );
+                                }
+                            }
+                        }
+                    }
+
                     // add 'config'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
                 }
