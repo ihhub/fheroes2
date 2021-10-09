@@ -39,7 +39,7 @@ bool ObjTree::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjTree::isShadow( u32 index )
+bool ObjTree::isShadow( const uint8_t index )
 {
     const u8 shadows[] = {0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34};
     return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );

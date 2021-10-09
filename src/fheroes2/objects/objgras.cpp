@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
@@ -48,10 +49,11 @@ bool ObjGras::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjGras::isShadow( u32 index )
+bool ObjGras::isShadow( const uint8_t index )
 {
-    const u8 shadows2[] = {0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 50, 76, 79, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147};
-    return std::end( shadows2 ) != std::find( shadows2, std::end( shadows2 ), index );
+    const std::set<uint8_t> shadows{ 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 50, 76, 79, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143,
+                                     145, 147 };
+    return shadows.count( index ) > 0;
 }
 
 int ObjGra2::GetPassable( u32 index )
@@ -70,10 +72,11 @@ bool ObjGra2::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjGra2::isShadow( u32 index )
+bool ObjGra2::isShadow( const uint8_t index )
 {
-    const u8 shadows1[] = {5, 19, 20, 31, 33, 47, 51, 70, 77, 91, 100, 107, 124, 128};
-    return std::end( shadows1 ) != std::find( shadows1, std::end( shadows1 ), index );
+    const std::set<uint8_t> shadows{ 5, 14, 19, 20, 23, 27, 28, 31, 32, 33, 34, 35, 36, 37, 38, 43, 47, 48, 49, 50, 51, 52, 53, 54, 63, 70, 71, 72, 73, 74, 75, 76, 77,
+                                     78, 79, 80, 81, 82, 83, 91, 93, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 121, 124, 128 };
+    return shadows.count( index ) > 0;
 }
 
 int ObjGras::GetActionObject( u32 index )

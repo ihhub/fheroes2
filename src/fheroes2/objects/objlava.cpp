@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
@@ -41,10 +42,11 @@ bool ObjLav2::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjLav2::isShadow( u32 index )
+bool ObjLav2::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {0, 7, 14, 29, 33, 44, 55, 78};
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    const std::set<uint8_t> shadows{ 0, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 29, 33, 34, 38, 39, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
+                                     57, 58, 59, 60, 61, 62, 63, 64, 65, 72, 77, 78};
+    return shadows.count( index ) > 0;
 }
 
 int ObjLav3::GetPassable( u32 index )
@@ -62,10 +64,15 @@ bool ObjLav3::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjLav3::isShadow( u32 index )
+bool ObjLav3::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 165, 180, 195, 210, 225, 243};
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    const std::set<uint8_t> shadows{ 0, 1, 2, 3, 4, 15, 16, 17, 18, 19, 30, 31, 32, 33, 34, 38, 45, 46, 47, 48, 49, 50, 57, 58, 59, 60, 61, 62, 63, 64, 75, 76, 77, 90,
+                                     91, 92, 93, 105, 106, 107, 108, 109, 110, 111, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
+                                     133, 134, 135, 136, 137, 138, 139, 142, 143, 144, 145, 146, 147, 148, 149, 165, 166, 167, 168, 176, 177, 178, 179, 180, 181, 182,
+                                     183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208,
+                                     209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234,
+                                     235, 236, 237, 238, 239, 243 };
+    return shadows.count( index ) > 0;
 }
 
 int ObjLava::GetPassable( u32 index )
@@ -86,10 +93,10 @@ bool ObjLava::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjLava::isShadow( u32 index )
+bool ObjLava::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {10, 11, 45, 49, 77, 109, 113, 116};
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    const std::set<uint8_t> shadows{ 10, 11, 45, 49, 78, 79, 80, 81, 82, 109, 113, 116 };
+    return shadows.count( index ) > 0;
 }
 
 int ObjLav2::GetActionObject( u32 )

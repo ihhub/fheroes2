@@ -29,7 +29,7 @@ namespace ObjXlc1
 {
     int GetPassable( u32 index );
     bool isAction( u32 index );
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     int GetActionObject( u32 index );
 }
 
@@ -37,7 +37,7 @@ namespace ObjXlc2
 {
     int GetPassable( u32 index );
     bool isAction( u32 index );
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     int GetActionObject( u32 index );
 }
 
@@ -45,7 +45,7 @@ namespace ObjXlc3
 {
     int GetPassable( u32 index );
     bool isAction( u32 index );
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     int GetActionObject( u32 index );
 }
 

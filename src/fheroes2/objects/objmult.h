@@ -27,7 +27,7 @@
 
 namespace ObjMult
 {
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     bool isAction( u32 index );
     int GetPassable( u32 index );
     int GetActionObject( u32 index );
@@ -35,7 +35,7 @@ namespace ObjMult
 
 namespace ObjMul2
 {
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     bool isAction( u32 index );
     int GetPassable( u32 index );
     int GetActionObject( u32 index );

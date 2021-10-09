@@ -48,8 +48,11 @@
 #include "objdsrt.h"
 #include "objgras.h"
 #include "objmult.h"
+#include "objlava.h"
 #include "objsnow.h"
 #include "objswmp.h"
+#include "objtown.h"
+#include "objxloc.h"
 #include "objwatr.h"
 #include "race.h"
 #include "save_format_version.h"
@@ -65,6 +68,153 @@
 
 namespace
 {
+    bool isValidShadowSprite( const int icn, const uint8_t icnIndex )
+    {
+        switch ( icn ) {
+        case ICN::MTNDSRT:
+        case ICN::MTNGRAS:
+        case ICN::MTNLAVA:
+        case ICN::MTNMULT:
+        case ICN::MTNSNOW:
+        case ICN::MTNSWMP:
+            return ObjMnts1::isShadow( icnIndex );
+        case ICN::MTNCRCK:
+        case ICN::MTNDIRT:
+            return ObjMnts2::isShadow( icnIndex );
+        case ICN::TREDECI:
+        case ICN::TREEVIL:
+        case ICN::TREFALL:
+        case ICN::TREFIR:
+        case ICN::TREJNGL:
+        case ICN::TRESNOW:
+            return ObjTree::isShadow( icnIndex );
+        case ICN::OBJNCRCK:
+            return ObjCrck::isShadow( icnIndex );
+        case ICN::OBJNDIRT:
+            return ObjDirt::isShadow( icnIndex );
+        case ICN::OBJNDSRT:
+            return ObjDsrt::isShadow( icnIndex );
+        case ICN::OBJNGRA2:
+            return ObjGra2::isShadow( icnIndex );
+        case ICN::OBJNGRAS:
+            return ObjGras::isShadow( icnIndex );
+        case ICN::OBJNMUL2:
+            return ObjMul2::isShadow( icnIndex );
+        case ICN::OBJNMULT:
+            return ObjMult::isShadow( icnIndex );
+        case ICN::OBJNSNOW:
+            return ObjSnow::isShadow( icnIndex );
+        case ICN::OBJNSWMP:
+            return ObjSwmp::isShadow( icnIndex );
+        case ICN::OBJNWAT2:
+            return ObjWat2::isShadow( icnIndex );
+        case ICN::OBJNWATR:
+            return ObjWatr::isShadow( icnIndex );
+        case ICN::OBJNARTI:
+        case ICN::OBJNRSRC:
+            return 0 == ( icnIndex % 2 );
+        case ICN::OBJNTWRD:
+            return icnIndex > 31;
+        case ICN::X_LOC1:
+            return ObjXlc1::isShadow( icnIndex );
+        case ICN::X_LOC2:
+            return ObjXlc2::isShadow( icnIndex );
+        case ICN::X_LOC3:
+            return ObjXlc3::isShadow( icnIndex );
+        case ICN::OBJNTOWN:
+            return ObjTown::isShadow( icnIndex );
+        case ICN::OBJNLAVA:
+            return ObjLava::isShadow( icnIndex );
+        case ICN::OBJNLAV2:
+            return ObjLav2::isShadow( icnIndex );
+        case ICN::OBJNLAV3:
+            return ObjLav3::isShadow( icnIndex );
+        case ICN::OBJNTWSH:
+            return true;
+        case ICN::STREAM:
+        case ICN::OBJNTWBA:
+        case ICN::ROAD:
+        case ICN::EXTRAOVR:
+        case ICN::MONS32:
+            return false;
+        default:
+            break;
+        }
+
+        // Did you add a new type of objects into the game?
+        assert( 0 );
+        return false;
+    }
+
+#if defined( VERIFY_SHADOW_SPRITES )
+    // Define VERIFY_SHADOW_SPRITES macro to be able to use these functions.
+    bool isShadowImage( const fheroes2::Image & image )
+    {
+        // The image can't be empty.
+        assert( !image.empty() );
+        if ( image.empty() )
+            return false;
+
+        const uint8_t * data = image.transform();
+        const uint8_t * dataEnd = data + image.width() * image.height();
+
+        size_t transformCounter = 0;
+
+        for ( ; data != dataEnd; ++data ) {
+            if ( *data == 0 ) {
+                return false;
+            }
+            else if ( *data != 1 ) {
+                ++transformCounter;
+            }
+        }
+
+        if ( transformCounter == 0 ) {
+            assert( image.width() == 1 && image.height() == 1 );
+        }
+
+        return true;
+    }
+
+    // Use this function to verify the correctness of data being returned by isValidShadowSprite function.
+    void findAllShadowImages()
+    {
+        static bool completed = false;
+        if ( completed ) {
+            return;
+        }
+
+        const std::vector<int32_t> icnIds = { ICN::MTNDSRT, ICN::MTNGRAS, ICN::MTNLAVA, ICN::MTNMULT, ICN::MTNSNOW, ICN::MTNSWMP, ICN::MTNCRCK, ICN::MTNDIRT,
+                                              ICN::TREDECI, ICN::TREEVIL, ICN::TREFALL, ICN::TREFIR, ICN::TREJNGL, ICN::TRESNOW, ICN::OBJNCRCK, ICN::OBJNDIRT,
+                                              ICN::OBJNDSRT, ICN::OBJNGRA2, ICN::OBJNGRAS, ICN::OBJNMUL2, ICN::OBJNMULT, ICN::OBJNSNOW, ICN::OBJNSWMP, ICN::OBJNWAT2,
+                                              ICN::OBJNWATR, ICN::OBJNARTI, ICN::OBJNRSRC, ICN::OBJNTWRD, ICN::OBJNTWSH, ICN::STREAM, ICN::OBJNTWBA, ICN::ROAD,
+                                              ICN::EXTRAOVR, ICN::X_LOC1, ICN::X_LOC2, ICN::X_LOC3, ICN::OBJNTOWN, ICN::OBJNLAVA, ICN::OBJNLAV2, ICN::OBJNLAV3,
+                                              ICN::MONS32 };
+
+        for ( const int32_t icnId : icnIds ) {
+            const uint32_t maxIndex = fheroes2::AGG::GetICNCount( icnId );
+            assert( maxIndex != 0 );
+
+            std::string output;
+
+            for ( uint32_t i = 0; i < maxIndex; i++ ) {
+                if ( isValidShadowSprite( icnId, i ) != isShadowImage( fheroes2::AGG::GetICN( icnId, i ) ) ) {
+                    output += std::to_string( i );
+                    output += ", ";
+                }
+            }
+
+            if ( output.empty() ) {
+                continue;
+            }
+
+            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output );
+        }
+
+        completed = true;
+    }
+#endif
+
     bool contains( const int base, const int value )
     {
         return ( base & value ) == value;
@@ -420,64 +570,7 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 
 bool Maps::Tiles::isShadowSprite( const int icn, const uint8_t icnIndex )
 {
-    switch ( icn ) {
-    case ICN::MTNDSRT:
-    case ICN::MTNGRAS:
-    case ICN::MTNLAVA:
-    case ICN::MTNMULT:
-    case ICN::MTNSNOW:
-    case ICN::MTNSWMP:
-        return ObjMnts1::isShadow( icnIndex );
-
-    case ICN::MTNCRCK:
-    case ICN::MTNDIRT:
-        return ObjMnts2::isShadow( icnIndex );
-
-    case ICN::TREDECI:
-    case ICN::TREEVIL:
-    case ICN::TREFALL:
-    case ICN::TREFIR:
-    case ICN::TREJNGL:
-    case ICN::TRESNOW:
-        return ObjTree::isShadow( icnIndex );
-
-    case ICN::OBJNCRCK:
-        return ObjCrck::isShadow( icnIndex );
-    case ICN::OBJNDIRT:
-        return ObjDirt::isShadow( icnIndex );
-    case ICN::OBJNDSRT:
-        return ObjDsrt::isShadow( icnIndex );
-    case ICN::OBJNGRA2:
-        return ObjGra2::isShadow( icnIndex );
-    case ICN::OBJNGRAS:
-        return ObjGras::isShadow( icnIndex );
-    case ICN::OBJNMUL2:
-        return ObjMul2::isShadow( icnIndex );
-    case ICN::OBJNMULT:
-        return ObjMult::isShadow( icnIndex );
-    case ICN::OBJNSNOW:
-        return ObjSnow::isShadow( icnIndex );
-    case ICN::OBJNSWMP:
-        return ObjSwmp::isShadow( icnIndex );
-    case ICN::OBJNWAT2:
-        return ObjWat2::isShadow( icnIndex );
-    case ICN::OBJNWATR:
-        return ObjWatr::isShadow( icnIndex );
-
-    case ICN::OBJNARTI:
-    case ICN::OBJNRSRC:
-        return 0 == ( icnIndex % 2 );
-
-    case ICN::OBJNTWRD:
-        return icnIndex > 31;
-    case ICN::OBJNTWSH:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    return isValidShadowSprite( icn, icnIndex );
 }
 
 bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex )
@@ -815,7 +908,7 @@ void Maps::Tiles::updatePassability()
 
     const MP2::MapObjectType objectType = GetObject( false );
     const bool isActionObject = MP2::isActionObject( objectType );
-    if ( !isActionObject && !isShadow() && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
+    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 && !isShadow() ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
@@ -2423,18 +2516,18 @@ bool Maps::Tiles::isTallObject() const
 
     const Tiles & topTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
     for ( const uint32_t tileUID : tileUIDs ) {
-        if ( topTile.uniq == tileUID ) {
+        if ( topTile.uniq == tileUID && !topTile.isShadowSprite( topTile.objectTileset, topTile.objectIndex ) ) {
             return true;
         }
 
         for ( const TilesAddon & addon : topTile.addons_level1 ) {
-            if ( addon.uniq == tileUID ) {
+            if ( addon.uniq == tileUID && !TilesAddon::isShadow( addon ) ) {
                 return true;
             }
         }
 
         for ( const TilesAddon & addon : topTile.addons_level2 ) {
-            if ( addon.uniq == tileUID ) {
+            if ( addon.uniq == tileUID && !TilesAddon::isShadow( addon ) ) {
                 return true;
             }
         }

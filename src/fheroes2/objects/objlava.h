@@ -28,7 +28,7 @@
 namespace ObjLav2
 {
     bool isAction( u32 index );
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     int GetPassable( u32 index );
     int GetActionObject( u32 index );
 }
@@ -36,7 +36,7 @@ namespace ObjLav2
 namespace ObjLav3
 {
     bool isAction( u32 index );
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     int GetPassable( u32 index );
     int GetActionObject( u32 index );
 }
@@ -44,7 +44,7 @@ namespace ObjLav3
 namespace ObjLava
 {
     bool isAction( u32 index );
-    bool isShadow( u32 index );
+    bool isShadow( const uint8_t index );
     int GetPassable( u32 index );
     int GetActionObject( u32 index );
 }

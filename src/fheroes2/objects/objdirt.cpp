@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
@@ -45,12 +46,13 @@ bool ObjDirt::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjDirt::isShadow( u32 index )
+bool ObjDirt::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {0,  1,  5,   6,   14,  47,  52,  59,  62,  65,  68,  70,  72,  75,  78,  81,  84,  87, 91,
-                          94, 97, 100, 103, 111, 114, 117, 126, 128, 136, 149, 150, 161, 165, 177, 181, 196, 200};
+    const std::set<uint8_t> shadows{ 0,  1,  5,   6,   14,  47,  52,  59,  62,  65,  68,  70,  72,  75,  78,  81,  84,  87, 91, 94, 97, 100, 103, 111, 114, 117, 126,
+                                     128, 136, 149, 150, 153, 157, 158, 161, 162, 163, 164, 165, 166, 167, 168, 173, 177, 178, 179, 180, 181, 182, 183, 184, 193, 196,
+                                     200 };
 
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    return shadows.count( index ) > 0;
 }
 
 int ObjDirt::GetActionObject( u32 index )
