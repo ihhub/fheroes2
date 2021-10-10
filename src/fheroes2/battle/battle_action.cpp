@@ -300,7 +300,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
         Position pos1, pos2;
         const s32 head = b->GetHeadIndex();
-        pos1 = Position::GetCorrect( *b, dst );
+        pos1 = Position::GetPositionWhenMoved( *b, dst );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 )
@@ -960,7 +960,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     const Spell spell( Spell::TELEPORT );
 
     if ( b ) {
-        Position pos = Position::GetCorrect( *b, dst );
+        Position pos = Position::GetPositionWhenMoved( *b, dst );
         if ( b->isReflect() != pos.isReflect() )
             pos.Swap();
 
@@ -1017,7 +1017,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         Indexes::const_iterator it
             = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
         if ( it != distances.end() ) {
-            const Position pos = Position::GetCorrect( *troop, *it );
+            const Position pos = Position::GetPositionWhenMoved( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
             if ( interface )
