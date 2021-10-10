@@ -216,6 +216,7 @@ namespace
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
         case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_ALCHEMYLAB:
             return true;
         default:
             break;
