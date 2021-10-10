@@ -136,6 +136,7 @@ namespace
         case ICN::ROAD:
         case ICN::EXTRAOVR:
         case ICN::MONS32:
+        case ICN::BOAT32:
             return false;
         default:
             break;
@@ -2529,6 +2530,12 @@ bool Maps::Tiles::isTallObject() const
     }
 
     for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.uniq != 0 && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
+            tileUIDs.emplace_back( addon.uniq );
+        }
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
         if ( addon.uniq != 0 && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
             tileUIDs.emplace_back( addon.uniq );
         }
