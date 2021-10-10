@@ -26,7 +26,7 @@
 
 #include <set>
 
-int ObjTown::GetPassable( u32 index0 )
+int ObjTown::GetPassable( const uint8_t index0 )
 {
     u32 index = index0 % 32;
 
@@ -41,7 +41,7 @@ int ObjTown::GetPassable( u32 index0 )
     return DIRECTION_ALL;
 }
 
-int ObjTwba::GetPassable( u32 index0 )
+int ObjTwba::GetPassable( const uint8_t index0 )
 {
     u32 index = index0 % 10;
 

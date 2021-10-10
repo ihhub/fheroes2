@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objsnow.h"
 
-int ObjSnow::GetPassable( u32 index )
+int ObjSnow::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {22, 26, 27, 28, 30, 32, 34, 35, 37, 38, 39, 81, 82, 83, 84, 197, 198};
     const u8 restricted[] = {2,  12, 41, 42, 43, 44, 45, 49, 50, 55,  56,  57,  60,  64,  65,  68,  71,  74,  77,  80, 85,

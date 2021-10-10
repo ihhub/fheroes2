@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objxloc.h"
 
-int ObjXlc1::GetPassable( u32 index )
+int ObjXlc1::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {40, 49, 50};
     const u8 restricted[] = {69, 71, 75, 76, 85, 103, 117, 119, 126, 128, 134, 136};
@@ -53,7 +53,7 @@ bool ObjXlc1::isShadow( const uint8_t index )
     return shadows.count( index ) > 0;
 }
 
-int ObjXlc2::GetPassable( u32 index )
+int ObjXlc2::GetPassable( const uint8_t index )
 {
     const u8 restricted[] = {3, 8, 28, 46, 92, 102};
 
@@ -76,7 +76,7 @@ bool ObjXlc2::isShadow( const uint8_t index )
     return shadows.count( index ) > 0;
 }
 
-int ObjXlc3::GetPassable( u32 index )
+int ObjXlc3::GetPassable( const uint8_t index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;

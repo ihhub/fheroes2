@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objswmp.h"
 
-int ObjSwmp::GetPassable( u32 index )
+int ObjSwmp::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {88, 89, 90, 91, 94, 95, 96, 97, 98, 108, 109, 110, 112, 113, 115, 116, 118, 119, 122, 123, 143, 144};
     const u8 restricted[] = {32,  33,  67,  74,  82,  85,  100, 101, 102, 103, 104, 105, 126, 128, 129, 131, 133, 134, 135, 137, 138, 139, 145, 146,

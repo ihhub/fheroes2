@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objcrck.h"
 
-int ObjCrck::GetPassable( u32 index )
+int ObjCrck::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {58, 59, 63, 64, 65, 76, 77, 78, 80, 91, 102, 113, 124, 135, 182, 183, 185, 221, 222, 223, 227, 228, 229, 230, 238, 241, 242, 245};
     const u8 restricted[] = {5,  6,  10, 11, 14, 16, 17, 18,  21,  22,  24,  25,  29,  30,  31,  32,  34,  35,  37,  38,  40,  41,  42,  43,  46,  49,  52, 55,

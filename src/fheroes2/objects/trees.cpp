@@ -26,7 +26,7 @@
 #include "mp2.h"
 #include "trees.h"
 
-int ObjTree::GetPassable( u32 index )
+int ObjTree::GetPassable( const uint8_t index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;

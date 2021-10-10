@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objmult.h"
 
-int ObjMult::GetPassable( u32 index )
+int ObjMult::GetPassable( const uint8_t index )
 {
     const u8 restricted[] = {2, 4, 58, 63, 64, 65, 70, 72, 73, 89, 104};
 
@@ -53,7 +53,7 @@ bool ObjMult::isShadow( const uint8_t index )
     return shadows.count( index ) > 0;
 }
 
-int ObjMul2::GetPassable( u32 index )
+int ObjMul2::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {46, 76, 77, 124, 125, 126, 221, 213};
     const u8 restricted[] = {16, 18, 19, 25, 27, 51, 52, 53, 55, 57, 78, 79, 81, 98, 105, 128, 136, 187, 207, 209, 214, 215, 217};

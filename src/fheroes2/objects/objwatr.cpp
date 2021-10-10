@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objwatr.h"
 
-int ObjWat2::GetPassable( u32 index )
+int ObjWat2::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {11, 12, 19, 22};
     const u8 restricted[] = {2, 20};
@@ -44,7 +44,7 @@ int ObjWat2::GetPassable( u32 index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-int ObjWatr::GetPassable( u32 index )
+int ObjWatr::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {11, 12, 19, 22};
     const u8 restricted[] = {69, 182, 183, 185, 186, 187, 248};

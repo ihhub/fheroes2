@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objlava.h"
 
-int ObjLav2::GetPassable( u32 index )
+int ObjLav2::GetPassable( const uint8_t index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -49,7 +49,7 @@ bool ObjLav2::isShadow( const uint8_t index )
     return shadows.count( index ) > 0;
 }
 
-int ObjLav3::GetPassable( u32 index )
+int ObjLav3::GetPassable( const uint8_t index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -75,7 +75,7 @@ bool ObjLav3::isShadow( const uint8_t index )
     return shadows.count( index ) > 0;
 }
 
-int ObjLava::GetPassable( u32 index )
+int ObjLava::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {2, 3, 4, 5, 12, 13, 14, 15, 18, 27, 28, 29, 30, 31, 32, 39, 40, 41, 46, 47, 48, 53, 54, 57, 60, 61, 64, 65, 69, 70, 120, 121};
 

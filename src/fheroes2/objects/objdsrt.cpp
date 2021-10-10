@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objdsrt.h"
 
-int ObjDsrt::GetPassable( u32 index )
+int ObjDsrt::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {61, 89, 90, 91, 92, 93, 125, 126};
     const u8 restricted[] = {3,  6,  9,  12, 14, 15, 17, 18, 20, 21, 22, 24, 26, 28,  30,  31,  32,  34,  36,  39,  40,  42, 45,

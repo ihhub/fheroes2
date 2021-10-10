@@ -27,7 +27,7 @@
 #include "mp2.h"
 #include "objgras.h"
 
-int ObjGras::GetPassable( u32 index )
+int ObjGras::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {54, 55, 56, 57, 58, 65, 66, 67, 68};
     const u8 restricted[] = {
@@ -56,7 +56,7 @@ bool ObjGras::isShadow( const uint8_t index )
     return shadows.count( index ) > 0;
 }
 
-int ObjGra2::GetPassable( u32 index )
+int ObjGra2::GetPassable( const uint8_t index )
 {
     const u8 restricted[] = {2, 3, 6, 8, 22, 59};
     if ( isShadow( index ) )
