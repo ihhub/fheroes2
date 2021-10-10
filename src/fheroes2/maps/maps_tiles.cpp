@@ -47,13 +47,13 @@
 #include "objdirt.h"
 #include "objdsrt.h"
 #include "objgras.h"
-#include "objmult.h"
 #include "objlava.h"
+#include "objmult.h"
 #include "objsnow.h"
 #include "objswmp.h"
 #include "objtown.h"
-#include "objxloc.h"
 #include "objwatr.h"
+#include "objxloc.h"
 #include "race.h"
 #include "save_format_version.h"
 #include "serialize.h"
@@ -186,12 +186,12 @@ namespace
             return;
         }
 
-        const std::vector<int32_t> icnIds = { ICN::MTNDSRT, ICN::MTNGRAS, ICN::MTNLAVA, ICN::MTNMULT, ICN::MTNSNOW, ICN::MTNSWMP, ICN::MTNCRCK, ICN::MTNDIRT,
-                                              ICN::TREDECI, ICN::TREEVIL, ICN::TREFALL, ICN::TREFIR, ICN::TREJNGL, ICN::TRESNOW, ICN::OBJNCRCK, ICN::OBJNDIRT,
-                                              ICN::OBJNDSRT, ICN::OBJNGRA2, ICN::OBJNGRAS, ICN::OBJNMUL2, ICN::OBJNMULT, ICN::OBJNSNOW, ICN::OBJNSWMP, ICN::OBJNWAT2,
-                                              ICN::OBJNWATR, ICN::OBJNARTI, ICN::OBJNRSRC, ICN::OBJNTWRD, ICN::OBJNTWSH, ICN::STREAM, ICN::OBJNTWBA, ICN::ROAD,
-                                              ICN::EXTRAOVR, ICN::X_LOC1, ICN::X_LOC2, ICN::X_LOC3, ICN::OBJNTOWN, ICN::OBJNLAVA, ICN::OBJNLAV2, ICN::OBJNLAV3,
-                                              ICN::MONS32 };
+        const std::vector<int32_t> icnIds
+            = { ICN::MTNDSRT,  ICN::MTNGRAS,  ICN::MTNLAVA,  ICN::MTNMULT,  ICN::MTNSNOW,  ICN::MTNSWMP,  ICN::MTNCRCK,  ICN::MTNDIRT,  ICN::TREDECI,
+                ICN::TREEVIL,  ICN::TREFALL,  ICN::TREFIR,   ICN::TREJNGL,  ICN::TRESNOW,  ICN::OBJNCRCK, ICN::OBJNDIRT, ICN::OBJNDSRT, ICN::OBJNGRA2,
+                ICN::OBJNGRAS, ICN::OBJNMUL2, ICN::OBJNMULT, ICN::OBJNSNOW, ICN::OBJNSWMP, ICN::OBJNWAT2, ICN::OBJNWATR, ICN::OBJNARTI, ICN::OBJNRSRC,
+                ICN::OBJNTWRD, ICN::OBJNTWSH, ICN::STREAM,   ICN::OBJNTWBA, ICN::ROAD,     ICN::EXTRAOVR, ICN::X_LOC1,   ICN::X_LOC2,   ICN::X_LOC3,
+                ICN::OBJNTOWN, ICN::OBJNLAVA, ICN::OBJNLAV2, ICN::OBJNLAV3, ICN::MONS32 };
 
         for ( const int32_t icnId : icnIds ) {
             const uint32_t maxIndex = fheroes2::AGG::GetICNCount( icnId );
@@ -204,7 +204,7 @@ namespace
                 const bool hasAnimation = startIndex != 0;
                 bool isImageShadow = isShadowImage( fheroes2::AGG::GetICN( icnId, i ) );
                 if ( isImageShadow && hasAnimation ) {
-                    for ( uint32_t indexOffset = 1; ; ++indexOffset ) {
+                    for ( uint32_t indexOffset = 1;; ++indexOffset ) {
                         const uint32_t animationIndex = ICN::AnimationFrame( icnId, i, indexOffset, true );
                         if ( startIndex == animationIndex ) {
                             break;
@@ -1499,7 +1499,7 @@ std::string Maps::Tiles::String( void ) const
        << "level           : " << static_cast<int>( _level ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
-       << "shadow          : "  << isShadowSprite( objectTileset, objectIndex ) << std::endl
+       << "shadow          : " << isShadowSprite( objectTileset, objectIndex ) << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
 
     os << std::endl
