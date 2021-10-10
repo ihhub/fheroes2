@@ -411,6 +411,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
         }
+        currentPressedButton->press();
 
         listbox.Redraw();
         buttonOk.draw();
