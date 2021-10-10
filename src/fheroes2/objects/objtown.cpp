@@ -24,7 +24,9 @@
 #include "direction.h"
 #include "mp2.h"
 
-int ObjTown::GetPassable( u32 index0 )
+#include <set>
+
+int ObjTown::GetPassable( const uint8_t index0 )
 {
     u32 index = index0 % 32;
 
@@ -39,7 +41,7 @@ int ObjTown::GetPassable( u32 index0 )
     return DIRECTION_ALL;
 }
 
-int ObjTwba::GetPassable( u32 index0 )
+int ObjTwba::GetPassable( const uint8_t index0 )
 {
     u32 index = index0 % 10;
 
@@ -69,12 +71,13 @@ bool ObjTwba::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjTown::isShadow( u32 )
+bool ObjTown::isShadow( const uint8_t index )
 {
-    return false;
+    const std::set<uint32_t> shadows{ 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 };
+    return shadows.count( index ) > 0;
 }
 
-bool ObjTwba::isShadow( u32 )
+bool ObjTwba::isShadow( const uint8_t /*index*/ )
 {
     return false;
 }
