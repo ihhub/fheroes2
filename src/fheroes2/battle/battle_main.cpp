@@ -223,9 +223,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+    bool loserAbandoned = !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result );
 
     std::vector<Artifact> artifactsToTransfer;
-    if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
+    if ( hero_wins && hero_loss && loserAbandoned && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
         artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
     }
 
@@ -262,8 +263,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
             hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+            loserAbandoned = !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result );
 
-            if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
+            if ( hero_wins && hero_loss && loserAbandoned && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
                 artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
             }
         }
@@ -284,7 +286,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
-    if ( hero_wins != nullptr && hero_loss != nullptr ) {
+    if ( hero_wins != nullptr && hero_loss != nullptr && loserAbandoned ) {
         transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
     }
 
