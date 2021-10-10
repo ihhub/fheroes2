@@ -178,7 +178,7 @@ public:
     bool isTwiceAttack( void ) const;
     bool isRegenerating( void ) const;
     bool isDoubleCellAttack( void ) const;
-    bool isAllAdjacentCellsAttack( void ) const;
+    bool isAllAdjacentCellsAttack() const;
     bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
