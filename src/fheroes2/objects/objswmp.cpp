@@ -49,7 +49,7 @@ bool ObjSwmp::isAction( u32 index )
 
 bool ObjSwmp::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 0, 2, 3, 14, 15, 16, 17, 18, 19, 20, 21, 31, 34, 43, 44, 45, 46, 47, 48, 49, 66, 83, 125, 127, 130, 132, 136, 141, 163, 170, 175,
+    const std::set<uint8_t> shadows{ 2, 3, 14, 15, 16, 17, 18, 19, 20, 21, 31, 43, 44, 45, 46, 47, 48, 49, 66, 83, 125, 127, 130, 132, 136, 141, 163, 170, 175,
                                      178, 195, 197, 202, 204, 207, 211, 215 };
 
     return shadows.count( index ) > 0;

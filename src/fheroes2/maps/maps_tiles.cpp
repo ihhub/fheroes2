@@ -171,6 +171,7 @@ namespace
 
         if ( transformCounter == 0 ) {
             assert( image.width() == 1 && image.height() == 1 );
+            return true;
         }
 
         return true;
@@ -198,7 +199,24 @@ namespace
             std::string output;
 
             for ( uint32_t i = 0; i < maxIndex; i++ ) {
-                if ( isValidShadowSprite( icnId, i ) != isShadowImage( fheroes2::AGG::GetICN( icnId, i ) ) ) {
+                const uint32_t startIndex = ICN::AnimationFrame( icnId, i, 0, true );
+                const bool hasAnimation = startIndex != 0;
+                bool isImageShadow = isShadowImage( fheroes2::AGG::GetICN( icnId, i ) );
+                if ( isImageShadow && hasAnimation ) {
+                    for ( uint32_t indexOffset = 1; ; ++indexOffset ) {
+                        const uint32_t animationIndex = ICN::AnimationFrame( icnId, i, indexOffset, true );
+                        if ( startIndex == animationIndex ) {
+                            break;
+                        }
+
+                        if ( !isShadowImage( fheroes2::AGG::GetICN( icnId, animationIndex ) ) ) {
+                            isImageShadow = false;
+                            break;
+                        }
+                    }
+                }
+
+                if ( isValidShadowSprite( icnId, i ) != isImageShadow ) {
                     output += std::to_string( i );
                     output += ", ";
                 }
@@ -410,7 +428,8 @@ std::string Maps::TilesAddon::String( int lvl ) const
        << "uniq            : " << uniq << std::endl
        << "tileset         : " << static_cast<int>( object ) << ", (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
-       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl;
+       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl
+       << "shadow          : " << isShadow( *this ) << std::endl;
     return os.str();
 }
 
@@ -1479,6 +1498,7 @@ std::string Maps::Tiles::String( void ) const
        << "level           : " << static_cast<int>( _level ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
+       << "shadow          : "  << isShadowSprite( objectTileset, objectIndex ) << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
 
     os << std::endl

@@ -36,193 +36,147 @@ int MP2::GetICNObject( int tileset )
     // reserverd
     case 0:
         return ICN::UNKNOWN;
-
     // custom: boat sprite
     case 6:
         return ICN::BOAT32;
-
     // artifact
     case 11:
         return ICN::OBJNARTI;
-
     // monster
     case 12:
         return ICN::MONS32;
-
     // castle flags
     case 14:
         return ICN::FLAG32;
-
     // heroes
     case 21:
         return ICN::MINIHERO;
-
     // mountains: snow
     case 22:
         return ICN::MTNSNOW;
-
     // mountains: swamp
     case 23:
         return ICN::MTNSWMP;
-
     // mountains: lava
     case 24:
         return ICN::MTNLAVA;
-
     // mountains: desert
     case 25:
         return ICN::MTNDSRT;
-
     // mountains: dirt
     case 26:
         return ICN::MTNDIRT;
-
     // mountains: all terrains
     case 27:
         return ICN::MTNMULT;
-
     // mines
     case 29:
         return ICN::EXTRAOVR;
-
     // road
     case 30:
         return ICN::ROAD;
-
     // relief: crck
     case 31:
         return ICN::MTNCRCK;
-
     // relief: gras
     case 32:
         return ICN::MTNGRAS;
-
     // trees jungle
     case 33:
         return ICN::TREJNGL;
-
     // trees evil
     case 34:
         return ICN::TREEVIL;
-
     // castle and town sprites
     case 35:
         return ICN::OBJNTOWN;
-
     // castle base
     case 36:
         return ICN::OBJNTWBA;
-
     // castle shadow
     case 37:
         return ICN::OBJNTWSH;
-
     // random castle
     case 38:
         return ICN::OBJNTWRD;
-
     // mine guardians (elementals)
     case 39:
         return ICN::OBJNXTRA;
-
     // water object
     case 40:
         return ICN::OBJNWAT2;
-
     // object other
     case 41:
         return ICN::OBJNMUL2;
-
     // trees snow
     case 42:
         return ICN::TRESNOW;
-
     // trees trefir
     case 43:
         return ICN::TREFIR;
-
     // trees
     case 44:
         return ICN::TREFALL;
-
     // river
     case 45:
         return ICN::STREAM;
-
     // resource
     case 46:
         return ICN::OBJNRSRC;
-
     // gras object
     case 48:
         return ICN::OBJNGRA2;
-
     // trees tredeci
     case 49:
         return ICN::TREDECI;
-
     // sea object
     case 50:
         return ICN::OBJNWATR;
-
     // vegetation gras
     case 51:
         return ICN::OBJNGRAS;
-
     // object on snow
     case 52:
         return ICN::OBJNSNOW;
-
     // object on swamp
     case 53:
         return ICN::OBJNSWMP;
-
     // object on lava
     case 54:
         return ICN::OBJNLAVA;
-
     // object on desert
     case 55:
         return ICN::OBJNDSRT;
-
     // object on dirt
     case 56:
         return ICN::OBJNDIRT;
-
     // object on crck
     case 57:
         return ICN::OBJNCRCK;
-
     // object on lava
     case 58:
         return ICN::OBJNLAV3;
-
     // object on earth
     case 59:
         return ICN::OBJNMULT;
-
     //  object on lava
     case 60:
         return ICN::OBJNLAV2;
-
     // extra objects for loyalty version
     case 61:
         if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC1;
         break;
-
     // extra objects for loyalty version
     case 62:
         if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC2;
         break;
-
     // extra objects for loyalty version
     case 63:
         if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC3;
         break;
-
     default:
         break;
     }
@@ -735,8 +689,7 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_WATERWHEEL:
     case OBJ_WINDMILL:
     case OBJ_ARTESIANSPRING:
-
-        // join army
+    // join army
     case OBJ_WATCHTOWER:
     case OBJ_EXCAVATION:
     case OBJ_CAVE:
@@ -747,7 +700,6 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_HALFLINGHOLE:
     case OBJ_PEASANTHUT:
     case OBJ_THATCHEDHUT:
-
     // recruit army
     case OBJ_RUINS:
     case OBJ_TREECITY:
@@ -758,18 +710,14 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_FIREALTAR:
     case OBJ_EARTHALTAR:
     case OBJ_BARROWMOUNDS:
-
     // battle and recruit army
     case OBJ_DRAGONCITY:
     case OBJ_CITYDEAD:
     case OBJ_TROLLBRIDGE:
-
     // for AI
     case OBJ_COAST:
     case OBJ_HEROES:
-
         return true;
-
     default:
         break;
     }
