@@ -32,7 +32,7 @@
     Mnts2: MTNCRCK, MTNDIRT
 */
 
-int ObjMnts1::GetPassable( int icn, u32 index )
+int ObjMnts1::GetPassable( int icn, const uint8_t index )
 {
     const u8 disabled2[] = {6, 7, 8, 9, 14, 15, 16, 28, 29, 30, 31, 33, 34, 35, 47, 48, 56, 57, 64, 67, 68, 69, 82};
 
@@ -46,7 +46,7 @@ int ObjMnts1::GetPassable( int icn, u32 index )
     return std::end( disabled2 ) != std::find( disabled2, std::end( disabled2 ), index ) ? 0 : DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
 
-int ObjMnts2::GetPassable( int icn, u32 index )
+int ObjMnts2::GetPassable( int icn, const uint8_t index )
 {
     const u8 disabled1[] = {6, 7, 8, 9, 14, 15, 16, 28, 29, 30, 31, 33, 34, 35, 50, 51, 52, 65, 77, 78, 87, 94, 99, 112};
 
