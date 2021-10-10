@@ -114,8 +114,9 @@ void Dialog::GameInfo( void )
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
     fheroes2::Button buttonCfg( pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
 
-    const fheroes2::Sprite configBtnShadow = fheroes2::addShadow( fheroes2::AGG::GetICN( ICN::BTNCONFIG, 0 ), fheroes2::Point( -4, 4 ), 3 );
-    fheroes2::Blit( configBtnShadow, display, buttonCfg.area().x - 4, buttonCfg.area().y );
+    // copy OKAY button together with its shadow to the place where we put our CONFIG button:
+    const fheroes2::Rect & cfgArea = buttonCfg.area();
+    fheroes2::Blit( box, 178 - 5, 426, display, cfgArea.x - 5, cfgArea.y, cfgArea.width + 5, cfgArea.height + 5 );
 
     buttonOk.draw();
     buttonCfg.draw();
