@@ -70,6 +70,11 @@ namespace
 {
     bool isValidShadowSprite( const int icn, const uint8_t icnIndex )
     {
+        if ( icn == 0 ) {
+            // Special case when no objects exist.
+            return false;
+        }
+
         switch ( icn ) {
         case ICN::MTNDSRT:
         case ICN::MTNGRAS:
