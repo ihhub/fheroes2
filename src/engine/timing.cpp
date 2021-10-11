@@ -114,7 +114,7 @@ namespace fheroes2
 
     Timer::~Timer()
     {
-        delete _timer;
+        delete static_cast<TimerImp *>( _timer );
     }
 
     bool Timer::valid() const

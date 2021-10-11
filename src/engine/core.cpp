@@ -23,8 +23,8 @@
 #include <SDL.h>
 #include <SDL_version.h>
 
-#include "core.h"
 #include "audio.h"
+#include "core.h"
 #include "localevent.h"
 #include "logging.h"
 
