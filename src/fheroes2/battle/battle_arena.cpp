@@ -1156,30 +1156,38 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 
 bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const
 {
-    if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
-        return false;
-
-    // check golden bow artifact
-    const HeroBase * hero = attacker.GetCommander();
-    if ( hero && hero->hasArtifact( Artifact::GOLDEN_BOW ) )
-        return false;
-
+    // no castle - no castle walls, penalty does not apply
     if ( castle == nullptr ) {
         return false;
     }
 
-    // archery skill
-    if ( hero && hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+    // penalty does not apply to towers
+    if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
         return false;
 
-    // attacker is castle owner
-    if ( attacker.GetColor() == castle->GetColor() && !attacker.OutOfWalls() )
-        return false;
+    // penalty does not apply if the attacker's hero has certain artifacts or skills
+    const HeroBase * hero = attacker.GetCommander();
+    if ( hero ) {
+        // golden bow artifact
+        if ( hero->hasArtifact( Artifact::GOLDEN_BOW ) )
+            return false;
 
-    if ( defender.GetColor() == castle->GetColor() && defender.OutOfWalls() )
-        return false;
+        // archery skill
+        if ( hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+            return false;
+    }
 
-    // check castle walls defensed
+    // penalty does not apply if the attacking unit (be it a castle attacker or a castle defender) is inside the castle walls
+    if ( !attacker.OutOfWalls() ) {
+        return false;
+    }
+
+    // penalty does not apply if both units are on the same side relative to the castle walls
+    if ( attacker.OutOfWalls() == defender.OutOfWalls() ) {
+        return false;
+    }
+
+    // penalty does not apply if the target unit is exposed due to the broken castle wall
     const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
