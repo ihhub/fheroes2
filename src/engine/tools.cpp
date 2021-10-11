@@ -31,6 +31,8 @@
 #include "logging.h"
 #include "tools.h"
 
+#include <SDL.h>
+
 /* trim left right space */
 std::string StringTrim( std::string str )
 {
@@ -194,6 +196,44 @@ std::string InsertString( const std::string & src, size_t pos, const char * c )
 int Sign( int s )
 {
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
+}
+
+bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
+{
+    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "wb" );
+
+    if ( rw && 1 == SDL_RWwrite( rw, &data[0], static_cast<int>( data.size() ), 1 ) )
+        SDL_RWclose( rw );
+    else {
+        ERROR_LOG( SDL_GetError() );
+        return false;
+    }
+
+    return true;
+}
+
+std::vector<u8> LoadFileToMem( const std::string & file )
+{
+    std::vector<u8> data;
+    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
+    if ( rw == nullptr ) {
+        ERROR_LOG( SDL_GetError() );
+        return data;
+    }
+
+    const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
+    if ( length < 0 )
+        ERROR_LOG( SDL_GetError() );
+
+    if ( length > 0 ) {
+        data.resize( length );
+        SDL_RWseek( rw, 0, RW_SEEK_SET );
+        SDL_RWread( rw, &data[0], static_cast<int>( data.size() ), 1 );
+    }
+
+    SDL_RWclose( rw );
+
+    return data;
 }
 
 namespace fheroes2
