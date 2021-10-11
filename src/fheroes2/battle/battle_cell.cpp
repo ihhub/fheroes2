@@ -83,26 +83,26 @@ fheroes2::Rect Battle::Position::GetRect( void ) const
     return fheroes2::Rect();
 }
 
-Battle::Position Battle::Position::GetPositionWhenMoved( const Unit & unit, const int32_t headIndex )
+Battle::Position Battle::Position::GetPositionWhenMoved( const Unit & unit, const int32_t dst )
 {
     Position result;
 
-    result.first = Board::GetCell( headIndex );
+    result.first = Board::GetCell( dst );
 
     if ( result.first && unit.isWide() ) {
-        result.second = Board::GetCell( headIndex, unit.isReflect() ? RIGHT : LEFT );
+        result.second = Board::GetCell( dst, unit.isReflect() ? RIGHT : LEFT );
 
         if ( !result.second || ( result.second != unit.GetPosition().GetHead() && !result.second->isPassable1( true ) ) ) {
-            result.second = Board::GetCell( headIndex, unit.isReflect() ? LEFT : RIGHT );
+            result.second = Board::GetCell( dst, unit.isReflect() ? LEFT : RIGHT );
 
             if ( !result.second )
-                result.second = Board::GetCell( headIndex, unit.isReflect() ? RIGHT : LEFT );
+                result.second = Board::GetCell( dst, unit.isReflect() ? RIGHT : LEFT );
 
             if ( result.second ) {
                 std::swap( result.first, result.second );
             }
             else {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "nullptr pointer, " << unit.String() << ", dst: " << headIndex );
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "nullptr pointer, " << unit.String() << ", dst: " << dst );
             }
         }
     }
