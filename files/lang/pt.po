@@ -153,7 +153,7 @@ msgid "Cannot move last troop"
 msgstr "Não é possível mover o último exército à fortaleza"
 
 msgid "%{name} half the enemy troops!"
-msgstr "%{name} metade das tropas inimigas"
+msgstr "%{name} metade das tropas inimigas!"
 
 msgid "Set auto battle off"
 msgstr "Desligar batalha automática"
@@ -176,10 +176,10 @@ msgid "That spell will affect no one!"
 msgstr "Esta magia não afetará ninguem!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Você só pode convocar um tipo de elemento por combate."
+msgstr "Você só pode convocar um tipo de Elemento por combate."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr "Não há espaço adjacente aberto para o seu herói lançar um elemento."
+msgstr "Não há espaço adjacente aberto para o seu herói lançar um Elemento."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -190,7 +190,7 @@ msgid "Speed"
 msgstr "Veloc."
 
 msgid "Speed: %{speed}"
-msgstr "Velocidade: %{speed}"
+msgstr "Rapidez: %{speed}"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -203,7 +203,7 @@ msgid "Shadow Movement"
 msgstr "Continuar a Andar"
 
 msgid "Shadow Cursor"
-msgstr "Sombra do cursos"
+msgstr "Sombra do cursor"
 
 #, fuzzy
 msgid "Off"
@@ -482,7 +482,7 @@ msgid "The Mummies' curse falls upon the %{name}!"
 msgstr ""
 
 msgid "The %{name} are paralyzed by the Cyclopes!"
-msgstr "%{name} está paralisado pelos Cyclopes!" 
+msgstr "%{name} está paralisado pelos Ciclopes!" 
 
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
@@ -1762,7 +1762,7 @@ msgid "Load Game"
 msgstr "Carregar Jogo"
 
 msgid "No save files to load."
-msgstr "Sem arquivos salvos para carregar"
+msgstr "Sem arquivos salvos para carregar."
 
 msgid "New Game"
 msgstr "Novo Jogo"
@@ -2024,7 +2024,7 @@ msgid "Number to buy:"
 msgstr "Qtd. à Comprar:"
 
 msgid "MAX"
-msgstr "MÁXIMO"
+msgstr "MÁX"
 
 msgid "How many troops to move?"
 msgstr "Mover quantas tropas?"
