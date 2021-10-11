@@ -374,6 +374,15 @@ int Castle::OpenDialog( bool readonly )
             else if ( le.MousePressRight( resActiveArea ) ) {
                 Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), 0 );
             }
+            else if ( le.MousePressRight( buttonExit.area() ) ) {
+                Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+            }
+            else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
+                Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
+            }
+            else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
+                Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
+            }
 
             // selector troops event
             if ( ( selectArmy2.isValid()
