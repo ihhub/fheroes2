@@ -79,15 +79,8 @@ namespace
         return artifacts;
     }
 
-    void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag, const std::vector<Artifact> & artifacts )
+    void transferArtifacts( BagArtifacts & winnerBag, const std::vector<Artifact> & artifacts )
     {
-        // Clear loser's artifact bag.
-        for ( Artifact & artifact : loserBag ) {
-            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
-                artifact = Artifact::UNKNOWN;
-            }
-        }
-
         size_t artifactPos = 0;
 
         for ( Artifact & artifact : winnerBag ) {
@@ -103,6 +96,15 @@ namespace
             }
             if ( artifactPos >= artifacts.size() ) {
                 break;
+            }
+        }
+    }
+
+    void clearArtifacts( BagArtifacts & bag )
+    {
+        for ( Artifact & artifact : bag ) {
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
+                artifact = Artifact::UNKNOWN;
             }
         }
     }
@@ -286,8 +288,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
+    // if both armies had heroes and the defeated hero didn't flee or surrender: capture the artifacts
     if ( hero_wins != nullptr && hero_loss != nullptr && loserAbandoned ) {
-        transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
+        clearArtifacts( hero_loss->GetBagArtifacts() );
+        transferArtifacts( hero_wins->GetBagArtifacts(), artifactsToTransfer );
     }
 
     // save count troop
