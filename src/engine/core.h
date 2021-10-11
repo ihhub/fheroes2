@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,24 +17,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2ENGINE_H
-#define H2ENGINE_H
+#pragma once
 
-#include <SDL.h>
+#include <set>
 
-#define INIT_VIDEO SDL_INIT_VIDEO
-#define INIT_AUDIO SDL_INIT_AUDIO
-#define INIT_GAMECONTROLLER SDL_INIT_GAMECONTROLLER
-
-namespace SDL
+namespace fheroes2
 {
-    bool Init( const uint32_t system = INIT_VIDEO );
-    void Quit();
+    enum class SystemInitializationComponent : int
+    {
+        Audio,
+        Video,
+        GameController
+    };
 
-    bool SubSystem( const uint32_t system );
+    // Used only for certain platforms.
+    void initHardware();
+    void freeHardware();
+
+    bool initCore( const std::set<SystemInitializationComponent> & components );
+    void freeCore();
+
+    bool isComponentInitialized( const SystemInitializationComponent component );
 }
-
-void InitHardware();
-void CloseHardware();
-
-#endif

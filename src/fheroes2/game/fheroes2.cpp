@@ -27,9 +27,9 @@
 #include "agg.h"
 #include "audio.h"
 #include "bin_info.h"
+#include "core.h"
 #include "cursor.h"
 #include "embedded_image.h"
-#include "engine.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
@@ -114,7 +114,7 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    InitHardware();
+    fheroes2::initHardware();
     Logging::InitLog();
 
     DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
@@ -145,16 +145,16 @@ int main( int argc, char ** argv )
             }
     }
 
-    u32 subsystem = INIT_VIDEO | INIT_AUDIO;
+    std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio, fheroes2::SystemInitializationComponent::Video };
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
-    subsystem |= INIT_GAMECONTROLLER;
+    coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 
-    if ( SDL::Init( subsystem ) ) {
+    if ( fheroes2::initCore( coreComponents ) ) {
         try
         {
-            std::atexit( SDL::Quit );
+            std::atexit( fheroes2::freeCore );
 
             conf.setGameLanguage( conf.getGameLanguage() );
 
@@ -219,7 +219,7 @@ int main( int argc, char ** argv )
     }
 
     fheroes2::Display::instance().release();
-    CloseHardware();
+    fheroes2::freeHardware();
 
     return EXIT_SUCCESS;
 }
