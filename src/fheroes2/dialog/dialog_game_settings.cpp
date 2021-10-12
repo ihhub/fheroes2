@@ -27,6 +27,7 @@
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
+#include "image_tool.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
@@ -123,11 +124,10 @@ namespace
         const fheroes2::Rect windowRoi = window.activeArea();
 
         const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-        const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-
+        const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
         const fheroes2::Sprite & buttonOkayImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
-        fheroes2::Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
+        fheroes2::Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 6 - buttonOkayImage.height(),
                                      buttonIcnId, 0, 1 );
 
         window.render();
@@ -135,7 +135,12 @@ namespace
         drawLanguage( window );
         drawResolution( window );
         drawOptions( window );
+
+        const fheroes2::Point btnShadowOffset( -4, 6 );
+        fheroes2::Sprite btnOkWithShadow = fheroes2::addShadow( buttonOkayImage, btnShadowOffset, 3 );
+        fheroes2::Blit( btnOkWithShadow, display, okayButton.area().x + btnShadowOffset.x, okayButton.area().y );
         okayButton.draw();
+
         display.render();
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );

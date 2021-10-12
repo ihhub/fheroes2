@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "icn.h"
+#include "image_tool.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "pal.h"
@@ -211,6 +212,10 @@ void Dialog::ExtSettings( bool readonly )
 
     fheroes2::Button buttonOk( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(), buttonIcnId,
                                0, 1 );
+
+    const fheroes2::Point btnShadowOffset( -4, 6 );
+    fheroes2::Sprite btnOkWithShadow = fheroes2::addShadow( buttonSprite, btnShadowOffset, 3 );
+    fheroes2::Blit( btnOkWithShadow, display, buttonOk.area().x + btnShadowOffset.x, buttonOk.area().y );
 
     buttonOk.draw();
 
