@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "image.h"
 
 namespace fheroes2
