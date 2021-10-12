@@ -288,10 +288,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
-    // if both armies had heroes and the defeated hero didn't flee or surrender: capture the artifacts
-    if ( hero_wins != nullptr && hero_loss != nullptr && loserAbandoned ) {
+    if ( hero_loss != nullptr && loserAbandoned ) {
+        // if a hero lost the battle and didn't flee or surrender, they lose all artifacts
         clearArtifacts( hero_loss->GetBagArtifacts() );
-        transferArtifacts( hero_wins->GetBagArtifacts(), artifactsToTransfer );
+
+        // if the other army also had a hero, some artifacts may be caputred by them
+        if ( hero_wins != nullptr ) {
+            transferArtifacts( hero_wins->GetBagArtifacts(), artifactsToTransfer );
+        }
     }
 
     // save count troop
