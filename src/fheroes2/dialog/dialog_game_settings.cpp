@@ -27,7 +27,6 @@
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
-#include "image_tool.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
@@ -36,6 +35,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 
 namespace
@@ -135,10 +135,7 @@ namespace
         drawLanguage( window );
         drawResolution( window );
         drawOptions( window );
-
-        const fheroes2::Point btnShadowOffset( -4, 6 );
-        fheroes2::Sprite btnOkWithShadow = fheroes2::addShadow( buttonOkayImage, btnShadowOffset, 3 );
-        fheroes2::Blit( btnOkWithShadow, display, okayButton.area().x + btnShadowOffset.x, okayButton.area().y );
+        fheroes2::drawButtonWithShadow( buttonOkayImage, display, okayButton.area() );
         okayButton.draw();
 
         display.render();

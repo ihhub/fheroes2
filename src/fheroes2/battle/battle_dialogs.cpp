@@ -34,7 +34,6 @@
 #include "game_delays.h"
 #include "heroes.h"
 #include "icn.h"
-#include "image_tool.h"
 #include "kingdom.h"
 #include "luck.h"
 #include "morale.h"
@@ -44,6 +43,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -455,13 +455,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
         fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
 
-        const fheroes2::Point btnShadowOffset( -4, 6 );
-
-        fheroes2::Sprite btnOkWithShadow = fheroes2::addShadow( fheroes2::AGG::GetICN( buttonOkICN, 1 ), btnShadowOffset, 3 );
-        fheroes2::Blit( btnOkWithShadow, display, btnOk.area().x + btnShadowOffset.x, btnOk.area().y );
-
-        fheroes2::Sprite btnCancelWithShadow = fheroes2::addShadow( fheroes2::AGG::GetICN( buttonCancelICN, 1 ), btnShadowOffset, 3 );
-        fheroes2::Blit( btnCancelWithShadow, display, btnCancel.area().x + btnShadowOffset.x, btnCancel.area().y );
+        fheroes2::drawButtonWithShadow( fheroes2::AGG::GetICN( buttonOkICN, 1 ), display, btnOk.area() );
+        fheroes2::drawButtonWithShadow( fheroes2::AGG::GetICN( buttonCancelICN, 1 ), display, btnCancel.area() );
 
         btnCancel.draw();
     }

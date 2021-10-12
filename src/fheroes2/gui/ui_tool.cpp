@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "ui_tool.h"
+#include "image_tool.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
@@ -379,5 +380,13 @@ namespace fheroes2
     void PostRenderSystemInfo()
     {
         systemInfoRenderer.postRender();
+    }
+
+    void drawButtonWithShadow( const Image & image, Image & out, const Rect & buttonArea )
+    {
+        const Point offset( -4, 6 );
+
+        Sprite btnWithShadow = addShadow( image, offset, 3 );
+        Blit( btnWithShadow, out, buttonArea.x + offset.x, buttonArea.y );
     }
 }
