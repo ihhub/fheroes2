@@ -292,7 +292,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // if a hero lost the battle and didn't flee or surrender, they lose all artifacts
         clearArtifacts( hero_loss->GetBagArtifacts() );
 
-        // if the other army also had a hero, some artifacts may be caputred by them
+        // if the other army also had a hero, some artifacts may be captured by them
         if ( hero_wins != nullptr ) {
             transferArtifacts( hero_wins->GetBagArtifacts(), artifactsToTransfer );
         }
