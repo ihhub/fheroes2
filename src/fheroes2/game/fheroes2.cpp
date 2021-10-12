@@ -31,6 +31,7 @@
 #include "embedded_image.h"
 #include "engine.h"
 #include "game.h"
+#include "game_highscores.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "localevent.h"
@@ -126,6 +127,9 @@ int main( int argc, char ** argv )
     InitDataDir();
     ReadConfigs();
 
+    // generates the default high score list if necessary
+    GenerateDefaultHighScoreForStandard();
+
     // getopt
     {
         int opt;
@@ -152,8 +156,7 @@ int main( int argc, char ** argv )
 #endif
 
     if ( SDL::Init( subsystem ) ) {
-        try
-        {
+        try {
             std::atexit( SDL::Quit );
 
             conf.setGameLanguage( conf.getGameLanguage() );
