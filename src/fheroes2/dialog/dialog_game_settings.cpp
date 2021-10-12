@@ -137,7 +137,6 @@ namespace
         drawOptions( window );
         fheroes2::drawButtonWithShadow( buttonOkayImage, display, okayButton.area() );
         okayButton.draw();
-
         display.render();
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
