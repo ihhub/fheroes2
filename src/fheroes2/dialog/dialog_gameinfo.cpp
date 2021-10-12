@@ -116,7 +116,7 @@ void Dialog::GameInfo( void )
 
     // copy OKAY button together with its shadow to the place where we put our CONFIG button:
     const fheroes2::Rect & cfgArea = buttonCfg.area();
-    fheroes2::Blit( box, 178 - 5, 426, display, cfgArea.x - 5, cfgArea.y, cfgArea.width + 5, cfgArea.height + 5 );
+    fheroes2::Blit( box, 178 - 4, 426, display, cfgArea.x - 4, cfgArea.y, cfgArea.width + 4, cfgArea.height + 6 );
 
     buttonOk.draw();
     buttonCfg.draw();
