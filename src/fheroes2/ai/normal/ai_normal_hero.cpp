@@ -1235,7 +1235,6 @@ namespace AI
 
             _pathfinder.reEvaluateIfNeeded( *bestHero );
             bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
-            const int32_t idxToErase = bestHero->GetPath().GetDestinationIndex();
 
             const size_t heroesBefore = heroes.size();
 
