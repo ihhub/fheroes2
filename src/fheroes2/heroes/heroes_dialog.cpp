@@ -335,7 +335,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
 
         // status message
         if ( le.MouseCursor( portPos ) )
-            message = _( "View Stats" );
+            message = _( "Hero Screen" );
         else if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
             message = fheroes2::MoraleString( army.GetMorale() );
         }
