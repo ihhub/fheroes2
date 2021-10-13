@@ -330,6 +330,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // update army
     if ( commander1 && commander1->isHeroes() ) {
+        army1.resetInvalidMonsters();
         // hard reset army
         if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
             army1.Reset( false );
@@ -337,6 +338,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // update army
     if ( commander2 && commander2->isHeroes() ) {
+        army2.resetInvalidMonsters();
         // hard reset army
         if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
             army2.Reset( false );

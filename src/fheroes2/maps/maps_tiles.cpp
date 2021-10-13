@@ -142,6 +142,7 @@ namespace
         case ICN::EXTRAOVR:
         case ICN::MONS32:
         case ICN::BOAT32:
+        case ICN::FLAG32:
             return false;
         default:
             break;
