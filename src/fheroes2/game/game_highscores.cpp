@@ -33,7 +33,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_highscores.h"
 #include "game_over.h"
 #include "icn.h"
 #ifdef WITH_DEBUG
@@ -531,28 +530,4 @@ fheroes2::GameMode Game::HighScores()
     }
 
     return fheroes2::GameMode::QUIT_GAME;
-}
-
-void GenerateDefaultHighScoreForStandard()
-{
-    HGSData hgs;
-
-    const std::string highScoreDataPath = System::ConcatePath( Game::GetSaveDir(), "fheroes2.hgs" );
-
-    // generate the default high score list only when there is no high score file
-    if ( hgs.Load( highScoreDataPath ) )
-        return;
-
-    hgs.ScoreRegistry( "Lord Kilburn", "Beltway", 70, 150 );
-    hgs.ScoreRegistry( "Tsabu", "Deathgate", 80, 140 );
-    hgs.ScoreRegistry( "Sir Galant", "Enroth", 90, 130 );
-    hgs.ScoreRegistry( "Thundax", "Lost Continent", 100, 120 );
-    hgs.ScoreRegistry( "Lord Haart", "Mountain King", 120, 110 );
-    hgs.ScoreRegistry( "Ariel", "Pandemonium", 140, 100 );
-    hgs.ScoreRegistry( "Rebecca", "Terra Firma", 160, 90 );
-    hgs.ScoreRegistry( "Sandro", "The Clearing", 180, 80 );
-    hgs.ScoreRegistry( "Crodo", "Vikings!", 200, 70 );
-    hgs.ScoreRegistry( "Barock", "Wastelands", 240, 60 );
-
-    hgs.Save( highScoreDataPath );
 }

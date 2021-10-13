@@ -459,7 +459,6 @@
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
     <ClInclude Include="src\fheroes2\game\game_delays.h" />
-    <ClInclude Include="src\fheroes2\game\game_highscores.h" />
     <ClInclude Include="src\fheroes2\game\game_interface.h" />
     <ClInclude Include="src\fheroes2\game\game_io.h" />
     <ClInclude Include="src\fheroes2\game\game_logo.h" />
