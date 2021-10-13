@@ -890,29 +890,27 @@ namespace AI
 
     void AIToTeleports( Heroes & hero, const int32_t startIndex )
     {
-        const Route::Path & path = hero.GetPath();
-        if ( path.empty() ) {
-            // Hero is not moving anywhere.
-            return;
-        }
-
-        const int32_t endIndex = path.front().GetIndex();
-        const int32_t heroColor = hero.GetColor();
-
-        // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
-        // So we get the list of them and remove those which are unsuitable.
         MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
-        teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
-                                         [endIndex, heroColor]( const int32_t index ) {
-                                             if ( endIndex == index ) {
-                                                 return false;
-                                             }
-                                             const Maps::Tiles & tile = world.GetTiles( index );
-                                             assert( tile.GetObject() != MP2::OBJ_HEROES );
 
-                                             return !tile.isFog( heroColor );
-                                         } ),
-                         teleports.end() );
+        const Route::Path & path = hero.GetPath();
+        if ( !path.empty() ) {
+            // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
+            // So we get the list of them and remove those which are unsuitable.
+            const int32_t endIndex = path.front().GetIndex();
+            const int32_t heroColor = hero.GetColor();
+
+            teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
+                                             [endIndex, heroColor]( const int32_t index ) {
+                                                 if ( endIndex == index ) {
+                                                     return false;
+                                                 }
+                                                 const Maps::Tiles & tile = world.GetTiles( index );
+                                                 assert( tile.GetObject() != MP2::OBJ_HEROES );
+
+                                                 return !tile.isFog( heroColor );
+                                             } ),
+                             teleports.end() );
+        }
 
         if ( teleports.empty() ) {
             DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
