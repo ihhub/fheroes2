@@ -22,6 +22,7 @@
 #ifndef H2TOOLS_H
 #define H2TOOLS_H
 
+#include <bitset>
 #include <list>
 #include <string>
 #include <vector>
@@ -77,6 +78,25 @@ namespace fheroes2
     {
         std::hash<T> hasher;
         seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
+
+    template <size_t N>
+    std::bitset<N> makeBitsetFromVector( const std::vector<int> & vector )
+    {
+        std::bitset<N> result;
+        for ( const int index : vector ) {
+            result.set( index, true );
+        }
+        return result;
+    }
+
+    template <size_t N>
+    bool isInBitset( const std::bitset<N> & bitset, const uint8_t index )
+    {
+        if ( index >= N ) {
+            return false;
+        }
+        return bitset[index];
     }
 }
 
