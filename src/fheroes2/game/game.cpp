@@ -369,6 +369,37 @@ void Game::EnvironmentSoundMixer()
     AGG::LoadLOOPXXSounds( reserved_vols, true );
 }
 
+void Game::restoreSoundsForCurrentFocus()
+{
+    AGG::ResetMixer();
+
+    switch ( Interface::GetFocusType() ) {
+    case GameFocus::HEROES: {
+        const Heroes * focusedHero = Interface::GetFocusHeroes();
+        assert( focusedHero != nullptr );
+
+        const int heroIndexPos = focusedHero->GetIndex();
+        if ( heroIndexPos >= 0 ) {
+            Game::EnvironmentSoundMixer();
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+        }
+        break;
+    }
+
+    case GameFocus::CASTLE: {
+        const Castle * focusedCastle = Interface::GetFocusCastle();
+        assert( focusedCastle != nullptr );
+
+        Game::EnvironmentSoundMixer();
+        AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
 u32 Game::GetRating( void )
 {
     const Settings & conf = Settings::Get();
