@@ -119,7 +119,7 @@ namespace AI
     void AIToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToPyramid( Heroes & hero, s32 dst_index );
-    void AIToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+    void AIToGoodLuckObject( Heroes & hero, s32 dst_index );
     void AIToObelisk( Heroes & hero, const Maps::Tiles & tile );
     void AIToTreeKnowledge( Heroes & hero, s32 dst_index );
     void AIToDaemonCave( Heroes & hero, s32 dst_index );
@@ -140,6 +140,7 @@ namespace AI
     void AIWhirlpoolTroopLooseEffect( Heroes & hero );
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
+    void AIToAlchemistTower( Heroes & hero );
 
     int AISelectPrimarySkill( const Heroes & hero )
     {
@@ -363,7 +364,7 @@ namespace AI
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_IDOL:
         case MP2::OBJ_MERMAID:
-            AIToGoodLuckObject( hero, objectType, dst_index );
+            AIToGoodLuckObject( hero, dst_index );
             break;
 
         // morale modification
@@ -473,13 +474,15 @@ namespace AI
         case MP2::OBJ_HUTMAGI:
             AIToHutMagi( hero, objectType, dst_index );
             break;
+        case MP2::OBJ_ALCHEMYTOWER:
+            AIToAlchemistTower( hero );
+            break;
 
         case MP2::OBJ_ORACLE:
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_SIRENS:
-        case MP2::OBJ_ALCHEMYTOWER:
             // AI has no advantage or knowledge to use this object.
             break;
         default:
@@ -1085,18 +1088,17 @@ namespace AI
              // check valid level spell and wisdom skill
              !( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
             hero.AppendSpellToBook( spell );
-
-            // All heroes will know which spell is here.
-            hero.SetVisited( dst_index, Visit::GLOBAL );
         }
+
+        // All heroes will know which spell is here.
+        hero.SetVisited( dst_index, Visit::GLOBAL );
+
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+    void AIToGoodLuckObject( Heroes & hero, s32 dst_index )
     {
-        // check already visited
-        if ( !hero.isObjectTypeVisited( objectType ) )
-            hero.SetVisited( dst_index );
+        hero.SetVisited( dst_index );
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
@@ -1133,24 +1135,24 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( hero.GetSpellPoints() != max &&
-             // check already visited
-             !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
-            hero.SetVisited( dst_index );
+        if ( hero.GetSpellPoints() < max && !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
             hero.SetSpellPoints( max );
         }
+
+        hero.SetVisited( dst_index );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+    void AIToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         const u32 max = hero.GetMaxSpellPoints();
 
         if ( !world.isAnyKingdomVisited( objectType, dst_index ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
-            hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
         }
+
+        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1770,5 +1772,28 @@ namespace AI
                 Maps::ClearFog( index, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
             }
         }
+    }
+
+    void AIToAlchemistTower( Heroes & hero )
+    {
+        BagArtifacts & bag = hero.GetBagArtifacts();
+        const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
+        if ( cursed == 0 ) {
+            return;
+        }
+
+        const payment_t payment = PaymentConditions::ForAlchemist();
+
+        if ( hero.GetKingdom().AllowPayment( payment ) ) {
+            hero.GetKingdom().OddFundsResource( payment );
+
+            for ( Artifact & artifact : bag ) {
+                if ( artifact.isAlchemistRemove() ) {
+                    artifact = Artifact::UNKNOWN;
+                }
+            }
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." );
     }
 }
