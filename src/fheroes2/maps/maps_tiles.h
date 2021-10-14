@@ -305,6 +305,8 @@ namespace Maps
         static void UpdateAbandoneMineSprite( Tiles & tile );
         static void FixedPreload( Tiles & tile );
 
+        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
+
     private:
         TilesAddon * FindFlags( void );
 
@@ -320,6 +322,8 @@ namespace Maps
         void QuantitySetResource( int, u32 );
 
         bool isTallObject() const;
+
+        bool isDetachedObject() const;
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );

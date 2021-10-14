@@ -261,7 +261,7 @@ int GetIndexBuildingSprite( u32 build )
 BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     : castle( c )
     , building( b )
-    , area( 0, 0, 135, 57 )
+    , area( 0, 0, 135, 70 )
     , bcond( ALLOW_BUILD )
 {
     if ( IsDwelling() )

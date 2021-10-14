@@ -1538,11 +1538,6 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     if ( Modes( SP_ANTIMAGIC ) )
         return 100;
 
-    const uint32_t spellImmunity = fheroes2::getSpellResistance( id, spell.GetID() );
-    if ( spellImmunity > 0 ) {
-        return spellImmunity;
-    }
-
     switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
@@ -1571,7 +1566,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
     }
 
-    return 0;
+    return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
 int Battle::Unit::GetSpellMagic() const

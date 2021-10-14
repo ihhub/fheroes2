@@ -300,7 +300,7 @@ void ShowNewWeekDialog( void )
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
-    if ( week.GetType() == Week::MONSTERS ) {
+    if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
         const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
@@ -317,7 +317,7 @@ void ShowNewWeekDialog( void )
         }
     }
 
-    if ( week.GetType() == Week::PLAGUE )
+    if ( week.GetType() == WeekName::PLAGUE )
         message += _( " All populations are halved." );
     else
         message += _( " All dwellings increase population." );
@@ -460,7 +460,10 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
                 else {
-                    return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MOVE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                    const bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+
+                    return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
+                                                   from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 }
             }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {

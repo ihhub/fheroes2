@@ -213,6 +213,12 @@ namespace AI
             heroLimit = 2;
 
         // Step 3. Do some hero stuff.
+
+        // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
+        for ( Heroes * hero : heroes ) {
+            HeroesActionComplete( *hero );
+        }
+
         setHeroRoles( heroes );
 
         const bool moreTasksForHeroes = HeroesTurn( heroes );
@@ -268,8 +274,10 @@ namespace AI
                     recruit = recruitmentCastle->RecruitHero( firstRecruit );
                 }
 
-                if ( recruit && !slowEarlyGame )
+                if ( recruit && !slowEarlyGame ) {
+                    CastleTurn( *recruitmentCastle, castlesInDanger.find( recruitmentCastle->GetIndex() ) != castlesInDanger.end() );
                     ReinforceHeroInCastle( *recruit, *recruitmentCastle, kingdom.GetFunds() );
+                }
             }
         }
 

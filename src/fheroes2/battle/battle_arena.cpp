@@ -238,7 +238,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
         towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
         towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
         towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
-        const bool fortification = castle->isFortificationBuild();
+
         catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), _randomGenerator ) : nullptr;
         bridge = new Bridge();
 
@@ -246,10 +246,11 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
         // tower
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
@@ -1155,30 +1156,38 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 
 bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const
 {
-    if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
-        return false;
-
-    // check golden bow artifact
-    const HeroBase * hero = attacker.GetCommander();
-    if ( hero && hero->hasArtifact( Artifact::GOLDEN_BOW ) )
-        return false;
-
+    // no castle - no castle walls, penalty does not apply
     if ( castle == nullptr ) {
         return false;
     }
 
-    // archery skill
-    if ( hero && hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+    // penalty does not apply to towers
+    if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
         return false;
 
-    // attacker is castle owner
-    if ( attacker.GetColor() == castle->GetColor() && !attacker.OutOfWalls() )
-        return false;
+    // penalty does not apply if the attacker's hero has certain artifacts or skills
+    const HeroBase * hero = attacker.GetCommander();
+    if ( hero ) {
+        // golden bow artifact
+        if ( hero->hasArtifact( Artifact::GOLDEN_BOW ) )
+            return false;
 
-    if ( defender.GetColor() == castle->GetColor() && defender.OutOfWalls() )
-        return false;
+        // archery skill
+        if ( hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+            return false;
+    }
 
-    // check castle walls defensed
+    // penalty does not apply if the attacking unit (be it a castle attacker or a castle defender) is inside the castle walls
+    if ( !attacker.OutOfWalls() ) {
+        return false;
+    }
+
+    // penalty does not apply if both units are on the same side relative to the castle walls
+    if ( attacker.OutOfWalls() == defender.OutOfWalls() ) {
+        return false;
+    }
+
+    // penalty does not apply if the target unit is exposed due to the broken castle wall
     const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {

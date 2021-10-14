@@ -43,6 +43,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -50,6 +51,7 @@ namespace
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
+
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
@@ -73,33 +75,30 @@ namespace
     {
         std::vector<int32_t> suitableIds;
 
-        if ( allDirections ) {
-            const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
-            for ( const int32_t indexId : tiles ) {
-                const Maps::Tiles & indexedTile = mapTiles[indexId];
-                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
-                    continue;
-                }
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
 
-                suitableIds.emplace_back( indexId );
+        for ( const int32_t indexId : indexes ) {
+            // If allDirections is false, we should only consider tiles below the current object
+            if ( !allDirections && indexId < tileId + world.w() - 2 ) {
+                continue;
             }
-        }
-        else {
-            const int32_t width = world.w();
-            const MapsIndexes & tiles = Maps::getAroundIndexes( tileId );
-            for ( const int32_t indexId : tiles ) {
-                if ( indexId < tileId + width - 2 ) {
-                    // Only tiles which are lower than current object.
-                    continue;
-                }
 
-                const Maps::Tiles & indexedTile = mapTiles[indexId];
-                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
-                    continue;
-                }
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
 
-                suitableIds.emplace_back( indexId );
+            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                continue;
             }
+
+            // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
+            if ( indexedTile.GetObject( false ) == MP2::OBJ_COAST ) {
+                const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
+
+                if ( coastTiles.empty() ) {
+                    continue;
+                }
+            }
+
+            suitableIds.emplace_back( indexId );
         }
 
         if ( suitableIds.empty() ) {
@@ -112,8 +111,10 @@ namespace
     int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
-        const MapsIndexes & suitableIds = Maps::getAroundIndexes( tileId );
-        for ( const int32_t indexId : suitableIds ) {
+
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
+
+        for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
                 continue;
@@ -336,6 +337,8 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
+    week_next = Week::RandomWeek( *this, false, _weekSeed );
+
     // initialize all heroes
     vec_heroes.Init();
 
@@ -344,6 +347,9 @@ void World::Defaults( void )
 
 void World::Reset( void )
 {
+    width = 0;
+    height = 0;
+
     // maps tiles
     vec_tiles.clear();
 
@@ -373,8 +379,8 @@ void World::Reset( void )
     week = 0;
     month = 0;
 
-    week_current = Week::TORTOISE;
-    week_next = Week::WeekRand();
+    week_current = Week( WeekName::TORTOISE );
+    week_next = Week::RandomWeek( *this, false, _weekSeed );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -677,14 +683,15 @@ void World::NewDay( void )
 
 void World::NewWeek( void )
 {
-    // update week type
-    week_current = week_next;
-    const int type = LastWeek() ? Week::MonthRand() : Week::WeekRand();
-    if ( Week::MONSTERS == type )
-        week_next = Week( type, LastWeek() ? Monster::Rand4MonthOf() : Monster::Rand4WeekOf() );
-    else
-        week_next = Week( type );
+    // update week seed: it depends on the current day and the state of the map
+    _weekSeed = _seed;
+    fheroes2::hashCombine( _weekSeed, day );
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
+    }
 
+    // update week type
+    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
     week_current = week_next;
 
     if ( 1 < week ) {
@@ -710,7 +717,7 @@ void World::NewWeek( void )
 void World::NewMonth( void )
 {
     // skip first month
-    if ( 1 < week && week_current.GetType() == Week::MONSTERS )
+    if ( 1 < week && week_current.GetType() == WeekName::MONSTERS )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns

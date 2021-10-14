@@ -344,14 +344,12 @@ namespace Battle
             return staticAnim;
 
         const int heroType = matchHeroType( hero );
-        static std::vector<int> sorrowAnim;
-        if ( sorrowAnim.empty() ) {
-            const int sorrowArray[9] = {2, 3, 4, 5, 4, 5, 4, 3, 2};
-            sorrowAnim.insert( sorrowAnim.begin(), sorrowArray, sorrowArray + 9 );
-        }
 
-        if ( animation == OP_SORROW )
+        if ( animation == OP_SORROW ) {
+            static const std::vector<int> sorrowAnim = { 2, 3, 4, 5, 4, 5, 4, 3, 2 };
+
             return ( heroType == CAPTAIN ) ? staticAnim : sorrowAnim;
+        }
 
         static std::vector<int> heroTypeAnim[7][9];
 
@@ -584,35 +582,37 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
     , _animationType( OP_STATIC )
     , _idleTimer( 8000 )
-    , icn( ICN::UNKNOWN )
+    , _heroIcnId( ICN::UNKNOWN )
     , reflect( r )
     , _offset( area.x, area.y )
 {
     const bool isCaptain = b->isCaptain();
     switch ( b->GetRace() ) {
     case Race::KNGT:
-        icn = isCaptain ? ICN::CMBTCAPK : ICN::CMBTHROK;
+        _heroIcnId = isCaptain ? ICN::CMBTCAPK : ICN::CMBTHROK;
         break;
     case Race::BARB:
-        icn = isCaptain ? ICN::CMBTCAPB : ICN::CMBTHROB;
+        _heroIcnId = isCaptain ? ICN::CMBTCAPB : ICN::CMBTHROB;
         break;
     case Race::SORC:
-        icn = isCaptain ? ICN::CMBTCAPS : ICN::CMBTHROS;
+        _heroIcnId = isCaptain ? ICN::CMBTCAPS : ICN::CMBTHROS;
         break;
     case Race::WRLK:
-        icn = isCaptain ? ICN::CMBTCAPW : ICN::CMBTHROW;
+        _heroIcnId = isCaptain ? ICN::CMBTCAPW : ICN::CMBTHROW;
         break;
     case Race::WZRD:
-        icn = isCaptain ? ICN::CMBTCAPZ : ICN::CMBTHROZ;
+        _heroIcnId = isCaptain ? ICN::CMBTCAPZ : ICN::CMBTHROZ;
         break;
     case Race::NECR:
-        icn = isCaptain ? ICN::CMBTCAPN : ICN::CMBTHRON;
+        _heroIcnId = isCaptain ? ICN::CMBTCAPN : ICN::CMBTHRON;
         break;
     default:
+        // Did you add a new faction? Add the logic here.
+        assert( 0 );
         break;
     }
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
 
     if ( reflect ) {
         pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.width() );
@@ -704,7 +704,7 @@ fheroes2::Point Battle::OpponentSprite::GetCastPosition( void ) const
 
 void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
 {
-    const fheroes2::Sprite & hero = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
+    const fheroes2::Sprite & hero = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
 
     fheroes2::Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -911,6 +911,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( nullptr )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
+    , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
 {
     const Settings & conf = Settings::Get();
 
@@ -1550,9 +1551,14 @@ void Battle::Interface::RedrawCover()
     RedrawCoverBoard( conf, board );
 
     const Bridge * bridge = Arena::GetBridge();
-    // bridge
-    if ( bridge && bridge->isDown() ) {
-        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), bridge->isDestroy() ? 24 : 21 );
+    if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
+        uint32_t spriteIndex = bridge->isDestroy() ? BridgeMovementAnimation::DESTROYED : BridgeMovementAnimation::DOWN_POSITION;
+
+        if ( _bridgeAnimation.animationIsRequired ) {
+            spriteIndex = _bridgeAnimation.currentFrameId;
+        }
+
+        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), spriteIndex );
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
@@ -1667,6 +1673,22 @@ void Battle::Interface::RedrawCover()
                 assert( pos.GetTail() != nullptr );
 
                 highlightCells.emplace( pos.GetTail() );
+            }
+
+            if ( _currentUnit->isDoubleCellAttack() ) {
+                // We have to invert the direction.
+                int attackDirection = Board::GetDirection( pos.GetHead()->GetIndex(), index_pos );
+                if ( attackDirection == 0 ) {
+                    // It happens when a creature needs to swap tail and head for an attack move.
+                    attackDirection = Board::GetDirection( pos.GetTail()->GetIndex(), index_pos );
+                }
+
+                assert( attackDirection != 0 );
+
+                const Cell * secondAttackedCell = Board::GetCell( index_pos, attackDirection );
+                if ( secondAttackedCell != nullptr ) {
+                    highlightCells.emplace( secondAttackedCell );
+                }
             }
         }
         else {
@@ -4780,41 +4802,42 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     }
 }
 
-void Battle::Interface::RedrawBridgeAnimation( bool down )
+void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    uint32_t frame = down ? 23 : 21;
+    _bridgeAnimation.animationIsRequired = true;
 
-    if ( down )
+    _bridgeAnimation.currentFrameId = bridgeDownAnimation ? BridgeMovementAnimation::UP_POSITION : BridgeMovementAnimation::DOWN_POSITION;
+
+    if ( bridgeDownAnimation )
         AGG::PlaySound( M82::DRAWBRG );
 
     while ( le.HandleEvents() ) {
-        if ( down ) {
-            if ( frame < 21 )
+        if ( bridgeDownAnimation ) {
+            if ( _bridgeAnimation.currentFrameId < BridgeMovementAnimation::DOWN_POSITION )
                 break;
         }
         else {
-            if ( frame > 23 )
+            if ( _bridgeAnimation.currentFrameId > BridgeMovementAnimation::UP_POSITION )
                 break;
         }
 
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
-            RedrawPartialStart();
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
-            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
-            RedrawPartialFinish();
+            Redraw();
 
-            if ( down )
-                --frame;
+            if ( bridgeDownAnimation )
+                --_bridgeAnimation.currentFrameId;
             else
-                ++frame;
+                ++_bridgeAnimation.currentFrameId;
         }
     }
 
-    if ( !down )
+    _bridgeAnimation.animationIsRequired = false;
+
+    if ( !bridgeDownAnimation )
         AGG::PlaySound( M82::DRAWBRG );
 }
 

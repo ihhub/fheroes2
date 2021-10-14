@@ -128,7 +128,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::MAIN_MENU, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario( false );

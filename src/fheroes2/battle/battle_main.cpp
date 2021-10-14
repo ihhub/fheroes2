@@ -79,15 +79,8 @@ namespace
         return artifacts;
     }
 
-    void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag, const std::vector<Artifact> & artifacts )
+    void transferArtifacts( BagArtifacts & winnerBag, const std::vector<Artifact> & artifacts )
     {
-        // Clear loser's artifact bag.
-        for ( Artifact & artifact : loserBag ) {
-            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
-                artifact = Artifact::UNKNOWN;
-            }
-        }
-
         size_t artifactPos = 0;
 
         for ( Artifact & artifact : winnerBag ) {
@@ -103,6 +96,15 @@ namespace
             }
             if ( artifactPos >= artifacts.size() ) {
                 break;
+            }
+        }
+    }
+
+    void clearArtifacts( BagArtifacts & bag )
+    {
+        for ( Artifact & artifact : bag ) {
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
+                artifact = Artifact::UNKNOWN;
             }
         }
     }
@@ -221,14 +223,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         }
         result = arena.GetResult();
 
-        HeroBase * winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
-        HeroBase * loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
-        uint32_t loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+        HeroBase * const winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+        HeroBase * const loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
+        const uint32_t lossResult = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+        const bool loserAbandoned = !( ( RESULT_RETREAT | RESULT_SURRENDER ) & lossResult );
 
-        std::vector<Artifact> artifactsToTransfer;
-        if ( winnerHero && loserHero && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && winnerHero->isHeroes() && loserHero->isHeroes() ) {
-            artifactsToTransfer = planArtifactTransfer( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts() );
-        }
+        const std::vector<Artifact> artifactsToTransfer = winnerHero && loserHero && loserAbandoned && winnerHero->isHeroes() && loserHero->isHeroes()
+                                                              ? planArtifactTransfer( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts() )
+                                                              : std::vector<Artifact>();
 
         if ( showBattle ) {
             // fade arena
@@ -251,8 +253,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         }
         isBattleOver = true;
 
-        if ( winnerHero != nullptr && loserHero != nullptr ) {
-            transferArtifacts( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts(), artifactsToTransfer );
+        if ( loserHero != nullptr && loserAbandoned ) {
+            // if a hero lost the battle and didn't flee or surrender, they lose all artifacts
+            clearArtifacts( loserHero->GetBagArtifacts() );
+
+            // if the other army also had a hero, some artifacts may be captured by them
+            if ( winnerHero != nullptr ) {
+                transferArtifacts( winnerHero->GetBagArtifacts(), artifactsToTransfer );
+            }
         }
 
         // save count troop
@@ -298,6 +306,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // update army
     if ( commander1 && commander1->isHeroes() ) {
+        army1.resetInvalidMonsters();
         // hard reset army
         if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
             army1.Reset( false );
@@ -305,6 +314,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // update army
     if ( commander2 && commander2->isHeroes() ) {
+        army2.resetInvalidMonsters();
         // hard reset army
         if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
             army2.Reset( false );

@@ -198,7 +198,6 @@ namespace Game
     void DialogPlayers( int color, std::string );
     void SetCurrentMusic( const int mus );
     int CurrentMusic();
-    u32 & CastleAnimationFrame( void );
     u32 & MapsAnimationFrame( void );
     u32 GetRating( void );
     u32 GetGameOverScores( void );

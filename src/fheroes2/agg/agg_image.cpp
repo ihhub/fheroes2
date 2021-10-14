@@ -624,6 +624,14 @@ namespace fheroes2
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 7 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
                 return true;
+            case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 2 ), 6, 0, 108, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 3 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
             case ICN::NON_UNIFORM_EVIL_OKAY_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 4 ), 4, 0, 96, 25 );
@@ -638,6 +646,14 @@ namespace fheroes2
                 _icnVsSprite[id][0].setPosition( 0, 0 );
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 7 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::NON_UNIFORM_EVIL_RESTART_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 2 ), 4, 0, 108, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 3 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
                 return true;
             case ICN::UNIFORM_GOOD_MAX_BUTTON: {
@@ -984,6 +1000,38 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::ESCROLL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 4 ) {
+                    // fix missing black border on the right side of the "up" button
+                    Sprite & out = _icnVsSprite[id][4];
+                    if ( out.width() == 16 && out.height() == 16 ) {
+                        Copy( out, 0, 0, out, 15, 0, 1, 16 );
+                    }
+                }
+                return true;
+            case ICN::MAP_TYPE_ICON: {
+                // TODO: add a new icon for the Resurrection add-on map type.
+                _icnVsSprite[id].resize( 2 );
+                for ( Sprite & icon : _icnVsSprite[id] ) {
+                    icon.resize( 17, 17 );
+                    icon.fill( 0 );
+                }
+
+                const Sprite & successionWarsIcon = GetICN( ICN::ARTFX, 6 );
+                const Sprite & priceOfLoyaltyIcon = GetICN( ICN::ARTFX, 90 );
+
+                if ( !successionWarsIcon.empty() ) {
+                    Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
+                }
+
+                if ( !priceOfLoyaltyIcon.empty() ) {
+                    Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
+                }
+
+                return true;
+            }
+
             default:
                 break;
             }
