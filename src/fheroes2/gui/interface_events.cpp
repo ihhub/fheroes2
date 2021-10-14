@@ -213,9 +213,13 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
             fheroes2::Display & display = fheroes2::Display::instance();
             fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
+            AGG::ResetMixer();
+
             const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
             if ( returnMode == fheroes2::GameMode::CANCEL ) {
                 saver.restore();
+
+                Game::restoreSoundsForCurrentFocus();
             }
             else {
                 saver.reset();
