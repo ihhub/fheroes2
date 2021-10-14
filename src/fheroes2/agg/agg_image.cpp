@@ -28,6 +28,7 @@
 #include "agg_file.h"
 #include "agg_image.h"
 #include "h2d.h"
+#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
@@ -1015,6 +1016,20 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::PORTMEDI: {
+                // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
+                _icnVsSprite[id].resize( Heroes::DEBUG_HERO + 1 );
+                for ( int i = 0; i < Heroes::DEBUG_HERO; ++i ) {
+                    const int icnPortId = ICN::PORTxxxx( i );
+                    if ( icnPortId != ICN::UNKNOWN ) {
+                        Sprite & out = _icnVsSprite[id][i];
+                        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( icnPortId, 0 );
+                        out.resize( 50, 47 );
+                        fheroes2::Resize( original, out );
+                    }
+                }
+                return true;
+            }
 
             default:
                 break;
@@ -1117,23 +1132,6 @@ namespace fheroes2
         {
             if ( !IsValidICNId( icnId ) ) {
                 return errorImage;
-            }
-
-            if ( icnId == ICN::PORTMEDI ) {
-                const int icnPortId = ICN::PORTxxxx( index );
-                if ( icnPortId == ICN::UNKNOWN ) {
-                    return errorImage;
-                }
-                if ( _icnVsSprite[icnId].size() < index + 1 ) {
-                    _icnVsSprite[icnId].resize( index + 1 );
-                }
-                Sprite & out = _icnVsSprite[icnId][index];
-                if ( out.empty() ) {
-                    const fheroes2::Sprite & original = fheroes2::AGG::GetICN( icnPortId, 0 );
-                    out.resize( 50, 47 );
-                    fheroes2::Resize( original, out );
-                }
-                return out;
             }
 
             if ( index >= GetMaximumICNIndex( icnId ) ) {
