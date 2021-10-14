@@ -109,6 +109,8 @@ private:
         const size_t id = std::min( rating, _monsterRating.size() - 1 );
         return Monster( _monsterRating[id] );
     }
+
+    void populateHighScoresStandard();
 };
 
 HGSData::HGSData()
@@ -348,17 +350,21 @@ HGSData::HGSData()
 bool HGSData::Load( const std::string & fn )
 {
     ZStreamFile hdata;
-    if ( !hdata.read( fn ) )
-        return false;
 
-    hdata.setbigendian( true );
-    u16 hgs_id = 0;
+    if ( hdata.read( fn ) ) {
+        hdata.setbigendian( true );
+        u16 hgs_id = 0;
 
-    hdata >> hgs_id;
+        hdata >> hgs_id;
 
-    if ( hgs_id == HGS_ID ) {
-        hdata >> list;
-        return !hdata.fail();
+        if ( hgs_id == HGS_ID ) {
+            hdata >> list;
+            return !hdata.fail();
+        }
+    }
+    else {
+        populateHighScoresStandard();
+        Save( fn );
     }
 
     return false;
@@ -442,6 +448,20 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
 
         oy += 40;
     }
+}
+
+void HGSData::populateHighScoresStandard()
+{
+    ScoreRegistry( "Lord Kilburn", "Beltway", 70, 150 );
+    ScoreRegistry( "Tsabu", "Deathgate", 80, 140 );
+    ScoreRegistry( "Sir Galant", "Enroth", 90, 130 );
+    ScoreRegistry( "Thundax", "Lost Continent", 100, 120 );
+    ScoreRegistry( "Lord Haart", "Mountain King", 120, 110 );
+    ScoreRegistry( "Ariel", "Pandemonium", 140, 100 );
+    ScoreRegistry( "Rebecca", "Terra Firma", 160, 90 );
+    ScoreRegistry( "Sandro", "The Clearing", 180, 80 );
+    ScoreRegistry( "Crodo", "Vikings!", 200, 70 );
+    ScoreRegistry( "Barock", "Wastelands", 240, 60 );
 }
 
 fheroes2::GameMode Game::HighScores()
