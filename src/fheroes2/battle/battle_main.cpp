@@ -79,15 +79,8 @@ namespace
         return artifacts;
     }
 
-    void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag, const std::vector<Artifact> & artifacts )
+    void transferArtifacts( BagArtifacts & winnerBag, const std::vector<Artifact> & artifacts )
     {
-        // Clear loser's artifact bag.
-        for ( Artifact & artifact : loserBag ) {
-            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
-                artifact = Artifact::UNKNOWN;
-            }
-        }
-
         size_t artifactPos = 0;
 
         for ( Artifact & artifact : winnerBag ) {
@@ -103,6 +96,15 @@ namespace
             }
             if ( artifactPos >= artifacts.size() ) {
                 break;
+            }
+        }
+    }
+
+    void clearArtifacts( BagArtifacts & bag )
+    {
+        for ( Artifact & artifact : bag ) {
+            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
+                artifact = Artifact::UNKNOWN;
             }
         }
     }
@@ -223,9 +225,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+    bool loserAbandoned = !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result );
 
     std::vector<Artifact> artifactsToTransfer;
-    if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
+    if ( hero_wins && hero_loss && loserAbandoned && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
         artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
     }
 
@@ -262,8 +265,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
             hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+            loserAbandoned = !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result );
 
-            if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
+            if ( hero_wins && hero_loss && loserAbandoned && hero_wins->isHeroes() && hero_loss->isHeroes() ) {
                 artifactsToTransfer = planArtifactTransfer( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts() );
             }
         }
@@ -284,8 +288,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->DialogBattleSummary( result, artifactsToTransfer, false );
     }
 
-    if ( hero_wins != nullptr && hero_loss != nullptr ) {
-        transferArtifacts( hero_wins->GetBagArtifacts(), hero_loss->GetBagArtifacts(), artifactsToTransfer );
+    if ( hero_loss != nullptr && loserAbandoned ) {
+        // if a hero lost the battle and didn't flee or surrender, they lose all artifacts
+        clearArtifacts( hero_loss->GetBagArtifacts() );
+
+        // if the other army also had a hero, some artifacts may be captured by them
+        if ( hero_wins != nullptr ) {
+            transferArtifacts( hero_wins->GetBagArtifacts(), artifactsToTransfer );
+        }
     }
 
     // save count troop
