@@ -442,17 +442,18 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
-fheroes2::GameMode Game::CompleteCampaignScenario()
+fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile )
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
-    saveData.addCurrentMapToFinished();
-    saveData.addDaysPassed( world.CountDay() );
+    if ( !isLoadingSaveFile ) {
+        saveData.addCurrentMapToFinished();
+        saveData.addDaysPassed( world.CountDay() );
+        Game::SaveCompletedCampaignScenario();
+    }
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
-
-    Game::SaveCompletedCampaignScenario();
 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards
         = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
@@ -661,12 +662,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
 
         if ( allowToRestart ) {
             le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
-        }
-        else {
-            le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
         }
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {

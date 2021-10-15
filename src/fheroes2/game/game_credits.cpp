@@ -294,7 +294,7 @@ namespace
         fheroes2::ApplyPalette( labyrinth, 2 );
         fheroes2::Blit( labyrinth, output, ( columnStep - labyrinth.width() ) / 2, offsetY );
 
-        offsetY = textInitialOffsetY + 70;
+        offsetY = textInitialOffsetY + 65;
 
         title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, output.width() - columnStep );
         title.Blit( columnStep + ( output.width() - columnStep - title.w() ) / 2, offsetY, output );
@@ -304,6 +304,7 @@ namespace
                                         "Lipatov Kiril\n"
                                         "Aleksei Mazur\n"
                                         "William Hoskinson\n"
+                                        "Brandon Wright\n"
                                         "and many-many other supporters!" );
 
         name.Set( contributors, Font::BIG, output.width() - columnStep );

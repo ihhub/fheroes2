@@ -25,6 +25,7 @@
 #include "agg_image.h"
 #include "buildinginfo.h"
 #include "castle.h"
+#include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -412,7 +413,7 @@ u32 Castle::OpenTown( void )
     buttonExit.draw();
 
     // redraw resource panel
-    const fheroes2::Rect & rectResource = RedrawResourcePanel( cur_pt );
+    const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
     display.render();
@@ -432,6 +433,9 @@ u32 Castle::OpenTown( void )
         }
         else if ( le.MousePressRight( resActiveArea ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+        }
+        else if ( le.MousePressRight( buttonExit.area() ) ) {
+            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
 
         // click left

@@ -378,6 +378,10 @@ int Artifact::LoyaltyLevel( void ) const
 
 int Artifact::Level( void ) const
 {
+    if ( isUltimate() ) {
+        return ART_ULTIMATE;
+    }
+
     switch ( id ) {
     case MEDAL_VALOR:
     case MEDAL_COURAGE:
@@ -399,13 +403,13 @@ int Artifact::Level( void ) const
     case HOLY_PENDANT:
     case PENDANT_FREE_WILL:
     case PENDANT_LIFE:
+    case SERENITY_PENDANT:
+    case SEEING_EYE_PENDANT:
+    case KINETIC_PENDANT:
     case PENDANT_DEATH:
     case GOLDEN_BOW:
     case TELESCOPE:
-    case SERENITY_PENDANT:
     case STATESMAN_QUILL:
-    case KINETIC_PENDANT:
-    case SEEING_EYE_PENDANT:
         return ART_LEVEL1;
 
     case CASTER_BRACELET:
@@ -415,20 +419,21 @@ int Artifact::Level( void ) const
     case MINOR_SCROLL:
     case ENDLESS_PURSE_GOLD:
     case SAILORS_ASTROLABE_MOBILITY:
+    case EVIL_EYE:
+    case GOLD_WATCH:
+    case SKULLCAP:
+    case EVERCOLD_ICICLE:
+    case EVERHOT_LAVA_ROCK:
+    case LIGHTNING_ROD:
+    case ANKH:
+    case BOOK_ELEMENTS:
+    case ELEMENTAL_RING:
+    case POWER_RING:
+    case AMMO_CART:
     case ENDLESS_CORD_WOOD:
     case ENDLESS_CART_ORE:
     case SPIKED_HELM:
     case WHITE_PEARL:
-    case EVIL_EYE:
-    case GOLD_WATCH:
-    case ANKH:
-    case BOOK_ELEMENTS:
-    case ELEMENTAL_RING:
-    case SKULLCAP:
-    case EVERCOLD_ICICLE:
-    case POWER_RING:
-    case AMMO_CART:
-    case EVERHOT_LAVA_ROCK:
         return ART_LEVEL2;
 
     case ARCANE_NECKLACE:
@@ -444,26 +449,15 @@ int Artifact::Level( void ) const
     case NOMAD_BOOTS_MOBILITY:
     case TRAVELER_BOOTS_MOBILITY:
     case TRUE_COMPASS_MOBILITY:
-    case ENDLESS_POUCH_SULFUR:
-    case ENDLESS_POUCH_GEMS:
-    case ENDLESS_POUCH_CRYSTAL:
-    case ENDLESS_VIAL_MERCURY:
-    case SPIKED_SHIELD:
-    case BLACK_PEARL:
-    case LIGHTNING_ROD:
     case WAND_NEGATION:
     case WIZARD_HAT:
+    case ENDLESS_POUCH_SULFUR:
+    case ENDLESS_VIAL_MERCURY:
+    case ENDLESS_POUCH_GEMS:
+    case ENDLESS_POUCH_CRYSTAL:
+    case SPIKED_SHIELD:
+    case BLACK_PEARL:
         return ART_LEVEL3;
-
-    case ULTIMATE_BOOK:
-    case ULTIMATE_SWORD:
-    case ULTIMATE_CLOAK:
-    case ULTIMATE_WAND:
-    case ULTIMATE_SHIELD:
-    case ULTIMATE_STAFF:
-    case ULTIMATE_CROWN:
-    case GOLDEN_GOOSE:
-        return ART_ULTIMATE;
 
     // no random
     case MAGIC_BOOK:
@@ -881,7 +875,12 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
         SetItemSize( sprite.width(), sprite.height() );
-        spcursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+
+        spcursor.resize( 70, 70 );
+        spcursor.reset();
+        fheroes2::DrawRect( spcursor, { 0, 0, 70, 70 }, 190 );
+        fheroes2::DrawRect( spcursor, { 1, 1, 68, 68 }, 180 );
+        fheroes2::DrawRect( spcursor, { 2, 2, 66, 66 }, 190 );
     }
 }
 
@@ -986,8 +985,6 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
         else if ( _hero->CanLearnSpell( spell ) ) {
-            payment_t cost = spell.GetCost();
-            u32 answer = 0;
             std::string text = _(
                 "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
 
@@ -995,18 +992,12 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             StringReplace( text, "%{sp}", spell.SpellPoint() );
 
             if ( spell.MovePoint() ) {
-                text.append( "\n" );
-                text.append( "Move point: %{mp}" );
+                text += '\n';
+                text.append( _( "Move points: %{mp}" ) );
                 StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
-            const std::string title = _( "Transcribe Spell Scroll" );
-
-            if ( cost.GetValidItemsCount() )
-                answer = Dialog::ResourceInfo( title, text, cost, Dialog::YES | Dialog::NO );
-            else
-                answer = Dialog::Message( title, text, Font::BIG, Dialog::YES | Dialog::NO );
-
+            const uint32_t answer = Dialog::Message( _( "Transcribe Spell Scroll" ), text, Font::BIG, Dialog::YES | Dialog::NO );
             if ( answer == Dialog::YES )
                 const_cast<Heroes *>( _hero )->TranscribeScroll( art );
         }

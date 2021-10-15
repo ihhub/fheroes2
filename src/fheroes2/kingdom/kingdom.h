@@ -65,7 +65,6 @@ public:
 
     void openOverviewDialog();
 
-    void UpdateStartingResource( void );
     bool isPlay( void ) const;
     bool isLoss( void ) const;
     bool AllowPayment( const Funds & ) const;
@@ -79,7 +78,6 @@ public:
     Heroes * GetLastLostHero( void ) const;
     Heroes * GetLastBattleWinHero() const;
 
-    const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
     Monster GetStrongestMonster() const;
@@ -142,7 +140,7 @@ public:
     void ActionNewMonth( void );
 
     void SetVisited( s32 index, const MP2::MapObjectType objectType );
-    u32 CountVisitedObjects( const MP2::MapObjectType objectType ) const;
+    uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
     bool isVisited( const Maps::Tiles & ) const;
     bool isVisited( s32, const MP2::MapObjectType objectType ) const;
@@ -162,9 +160,10 @@ public:
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
     static u32 GetMaxHeroes( void );
-    static cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
 
 private:
+    cost_t _getKingdomStartingResources( const int difficulty );
+
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 

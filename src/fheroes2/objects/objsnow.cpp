@@ -21,12 +21,13 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
 #include "objsnow.h"
 
-int ObjSnow::GetPassable( u32 index )
+int ObjSnow::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {22, 26, 27, 28, 30, 32, 34, 35, 37, 38, 39, 81, 82, 83, 84, 197, 198};
     const u8 restricted[] = {2,  12, 41, 42, 43, 44, 45, 49, 50, 55,  56,  57,  60,  64,  65,  68,  71,  74,  77,  80, 85,
@@ -45,11 +46,12 @@ bool ObjSnow::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjSnow::isShadow( u32 index )
+bool ObjSnow::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {21, 25, 29, 31, 33, 36, 40, 48, 54, 59, 63, 67, 70, 73, 76, 79, 104, 108, 120, 124, 137, 140, 142, 144, 148, 193, 203, 207};
+    const std::set<uint8_t> shadows{ 21,  25,  29,  31,  33,  36,  40,  48,  54,  59,  63,  67,  70,  73,  76,  79,  101, 104, 105, 106, 107,
+                                     108, 109, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 137, 140, 142, 144, 148, 193, 203, 207 };
 
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    return shadows.count( index ) > 0;
 }
 
 int ObjSnow::GetActionObject( u32 index )

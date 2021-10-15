@@ -53,13 +53,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
+
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
-        LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Point & mousePos = le.GetMouseCursor();
+        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
         if ( gameArea.GetROI() & mousePos ) {
             const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
             Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
@@ -201,7 +201,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
+        EventViewWorld();
         break;
 
     case Dialog::PUZZLE:
@@ -213,9 +213,13 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
             fheroes2::Display & display = fheroes2::Display::instance();
             fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
+            AGG::ResetMixer();
+
             const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
             if ( returnMode == fheroes2::GameMode::CANCEL ) {
                 saver.restore();
+
+                Game::restoreSoundsForCurrentFocus();
             }
             else {
                 saver.reset();
@@ -236,6 +240,11 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     }
 
     return fheroes2::GameMode::CANCEL;
+}
+
+void Interface::Basic::EventViewWorld()
+{
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
 }
 
 fheroes2::GameMode Interface::Basic::EventFileDialog() const
@@ -382,7 +391,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction( void )
+void Interface::Basic::EventDefaultAction() const
 {
     Heroes * hero = GetFocusHeroes();
 

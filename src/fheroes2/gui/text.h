@@ -128,16 +128,6 @@ public:
     void Set( const std::string &, int, uint32_t width_ );
     void SetAlign( int type );
 
-    int32_t x() const
-    {
-        return fheroes2::Rect::x;
-    }
-
-    int32_t y() const
-    {
-        return fheroes2::Rect::y;
-    }
-
     int32_t w() const
     {
         return fheroes2::Rect::width;

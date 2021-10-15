@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 
 #include "ai.h"
 #include "battle.h"
@@ -56,7 +57,7 @@ Kingdom::Kingdom()
     , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
-    , _topItemInKingdomView( 0 )
+    , _topItemInKingdomView( -1 )
 {
     heroes_cond_loss.reserve( 4 );
 }
@@ -69,8 +70,7 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-
-        UpdateStartingResource();
+        resource = _getKingdomStartingResources( Game::getDifficulty() );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
@@ -110,11 +110,6 @@ int Kingdom::GetColor( void ) const
 int Kingdom::GetRace( void ) const
 {
     return Players::GetPlayerRace( GetColor() );
-}
-
-void Kingdom::UpdateStartingResource( void )
-{
-    resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
@@ -252,14 +247,6 @@ void Kingdom::AddHeroes( Heroes * hero )
     }
 }
 
-const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
-{
-    for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
-        if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
-            return *it;
-    return nullptr;
-}
-
 void Kingdom::RemoveHeroes( const Heroes * hero )
 {
     if ( hero ) {
@@ -379,7 +366,7 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
 /* is visited cell */
 bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 {
-    return isVisited( tile.GetIndex(), tile.GetObject() );
+    return isVisited( tile.GetIndex(), tile.GetObject( false ) );
 }
 
 bool Kingdom::isVisited( s32 index, const MP2::MapObjectType objectType ) const
@@ -394,9 +381,10 @@ bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
+uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
+    // Safe to downcast as we don't deal with gigantic amount of data.
+    return static_cast<uint32_t>( std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } ) );
 }
 
 /* set visited cell */
@@ -417,7 +405,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         const int tileColor = tile.QuantityColor();
-        if ( !Settings::Get().ExtUnionsAllowCastleVisiting() && Players::isFriends( color, tileColor ) ) {
+        if ( Players::isFriends( color, tileColor ) ) {
             // false only if alliance castles can't be visited
             return color == tileColor;
         }
@@ -619,25 +607,17 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_ARTIFACTS & type ) {
         // find artifacts
-        const int artifacts[] = {Artifact::GOLDEN_GOOSE,
-                                 Artifact::ENDLESS_SACK_GOLD,
-                                 Artifact::ENDLESS_BAG_GOLD,
-                                 Artifact::ENDLESS_PURSE_GOLD,
-                                 Artifact::ENDLESS_POUCH_SULFUR,
-                                 Artifact::ENDLESS_VIAL_MERCURY,
-                                 Artifact::ENDLESS_POUCH_GEMS,
-                                 Artifact::ENDLESS_CORD_WOOD,
-                                 Artifact::ENDLESS_CART_ORE,
-                                 Artifact::ENDLESS_POUCH_CRYSTAL,
-                                 Artifact::UNKNOWN};
+        const std::array<int, 10> artifacts
+            = { Artifact::GOLDEN_GOOSE,         Artifact::ENDLESS_SACK_GOLD,    Artifact::ENDLESS_BAG_GOLD,   Artifact::ENDLESS_PURSE_GOLD,
+                Artifact::ENDLESS_POUCH_SULFUR, Artifact::ENDLESS_VIAL_MERCURY, Artifact::ENDLESS_POUCH_GEMS, Artifact::ENDLESS_CORD_WOOD,
+                Artifact::ENDLESS_CART_ORE,     Artifact::ENDLESS_POUCH_CRYSTAL };
 
-        for ( u32 index = 0; artifacts[index] != Artifact::UNKNOWN; ++index )
-            for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).artifactCount( Artifact( artifacts[index] ) );
-
-        // TAX_LIEN
-        for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).artifactCount( Artifact( Artifact::TAX_LIEN ) );
+        for ( const Heroes * hero : heroes ) {
+            for ( const int art : artifacts )
+                totalIncome += ProfitConditions::FromArtifact( art ) * hero->artifactCount( Artifact( art ) );
+            // TAX_LIEN
+            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
+        }
     }
 
     if ( INCOME_HEROSKILLS & type ) {
@@ -891,7 +871,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
+cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
 {
     static cost_t startingResourcesSet[] = {{10000, 30, 10, 30, 10, 10, 10},
                                             {7500, 20, 5, 20, 5, 5, 5},
@@ -901,7 +881,7 @@ cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
                                             // ai resource
                                             {10000, 30, 10, 30, 10, 10, 10}};
 
-    if ( isAIKingdom )
+    if ( isControlAI() )
         return startingResourcesSet[5];
 
     switch ( difficulty ) {
@@ -939,7 +919,7 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
         msg >> kingdom._topItemInKingdomView;
     }
     else {
-        kingdom._topItemInKingdomView = 0;
+        kingdom._topItemInKingdomView = -1;
     }
 
     return msg;

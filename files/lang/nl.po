@@ -431,10 +431,10 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr ""
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr ""
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr ""
 
 msgid "The Mummies' curse falls upon the %{name}!"
@@ -6985,21 +6985,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Pack"
-#~ msgstr "Inpakken"
-
-#~ msgid "Lots"
-#~ msgstr "Veel"
-
-#~ msgid "Few"
-#~ msgstr "Weinig"
-
-#~ msgid "Several"
-#~ msgstr "Enkele"
-
-#~ msgid "Swarm"
-#~ msgstr "Zwerm"
-
-#~ msgid "Legion"
-#~ msgstr "Legioen"

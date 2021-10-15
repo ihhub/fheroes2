@@ -1029,10 +1029,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: in Arena can choose any of primary skills" );
-    case Settings::UNIONS_ALLOW_HERO_MEETINGS:
-        return _( "unions: allow meeting heroes" );
-    case Settings::UNIONS_ALLOW_CASTLE_VISITING:
-        return _( "unions: allow castle visiting" );
     case Settings::BATTLE_SHOW_ARMY_ORDER:
         return _( "battle: show army order" );
     case Settings::BATTLE_SOFT_WAITING:
@@ -1157,16 +1153,6 @@ bool Settings::ExtHeroRecruitCostDependedFromLevel() const
 bool Settings::ExtHeroRememberPointsForRetreating() const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
-}
-
-bool Settings::ExtUnionsAllowCastleVisiting() const
-{
-    return ExtModes( UNIONS_ALLOW_CASTLE_VISITING );
-}
-
-bool Settings::ExtUnionsAllowHeroesMeetings() const
-{
-    return ExtModes( UNIONS_ALLOW_HERO_MEETINGS );
 }
 
 bool Settings::ExtBattleShowDamage() const
@@ -1379,8 +1365,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     u32 opt_game = 0; // skip: settings
 
     // map file
-    msg >> conf.current_maps_file >> conf.current_maps_file._version >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game
-        >> conf.opt_world >> conf.opt_battle >> conf.opt_addons >> conf.players;
+    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
+        >> conf.opt_addons >> conf.players;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

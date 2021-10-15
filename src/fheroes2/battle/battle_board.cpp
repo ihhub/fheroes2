@@ -207,7 +207,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
     else {
         // Set passable cells.
         for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
-            GetPath( unit, Position::GetCorrect( unit, idx ), false );
+            GetPath( unit, Position::GetPositionWhenMoved( unit, idx ), false );
         }
     }
 }
@@ -522,6 +522,26 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
     if ( attacker.isDoubleCellAttack() ) {
         const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
         return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
+    }
+
+    if ( attacker.isAllAdjacentCellsAttack() ) {
+        Position position = Position::GetPositionWhenMoved( attacker, from );
+        Indexes aroundAttacker = GetAroundIndexes( position );
+
+        std::set<const Unit *> unitsUnderAttack;
+        Board * board = Arena::GetBoard();
+        for ( const int32_t index : aroundAttacker ) {
+            const Unit * unit = board->at( index ).GetUnit();
+            if ( unit != nullptr && unit->GetColor() != attacker.GetColor() ) {
+                unitsUnderAttack.insert( unit );
+            }
+        }
+
+        int32_t attackValue = 0;
+        for ( const Unit * unit : unitsUnderAttack ) {
+            attackValue += unit->GetScoreQuality( attacker );
+        }
+        return attackValue;
     }
     return target.GetScoreQuality( attacker );
 }
@@ -1025,10 +1045,15 @@ Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 
 Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & b )
 {
-    const int headIdx = b.GetHeadIndex();
+    return GetAroundIndexes( b.GetPosition() );
+}
 
-    if ( b.isWide() ) {
-        const int tailIdx = b.GetTailIndex();
+Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
+{
+    const int headIdx = position.GetHead()->GetIndex();
+
+    if ( position.GetTail() ) {
+        const int tailIdx = position.GetTail()->GetIndex();
 
         Indexes around = GetAroundIndexes( headIdx, tailIdx );
         const Indexes & tail = GetAroundIndexes( tailIdx, headIdx );

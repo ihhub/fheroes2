@@ -165,9 +165,9 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     size_h = f.size_h;
     difficulty = f.difficulty;
 
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
-        races[ii] = f.races[ii];
-        unions[ii] = f.unions[ii];
+    for ( int32_t i = 0; i < KINGDOMMAX; ++i ) {
+        races[i] = f.races[i];
+        unions[i] = f.unions[i];
     }
 
     kingdom_colors = f.kingdom_colors;
@@ -214,9 +214,9 @@ void Maps::FileInfo::Reset( void )
 
     _version = GameVersion::SUCCESSION_WARS;
 
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
-        races[ii] = Race::NONE;
-        unions[ii] = ByteToColor( ii );
+    for ( int32_t i = 0; i < KINGDOMMAX; ++i ) {
+        races[i] = Race::NONE;
+        unions[i] = ByteToColor( i );
     }
 }
 
@@ -595,7 +595,6 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
     msg << fi.kingdom_colors << fi.allow_human_colors << fi.allow_comp_colors << fi.rnd_races << fi.conditions_wins << fi.comp_also_wins << fi.allow_normal_victory
         << fi.wins1 << fi.wins2 << fi.conditions_loss << fi.loss1 << fi.loss2 << fi.localtime << fi.startWithHeroInEachCastle;
 
-    // Please take a note that game version is written to save files starting from FORMAT_VERSION_094_RELEASE.
     msg << static_cast<int>( fi._version );
 
     return msg;
@@ -614,9 +613,9 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     msg >> fi.kingdom_colors >> fi.allow_human_colors >> fi.allow_comp_colors >> fi.rnd_races >> fi.conditions_wins >> fi.comp_also_wins >> fi.allow_normal_victory
         >> fi.wins1 >> fi.wins2 >> fi.conditions_loss >> fi.loss1 >> fi.loss2 >> fi.localtime >> fi.startWithHeroInEachCastle;
 
-    // Versions of FileInfo before FORMAT_VERSION_094_RELEASE do not contain GameVersion flag and in this case the only to properly support it is to load separately.
-    // Please take a look at HeaderSAV class in game_io.cpp file.
-    // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE add GameVersion loading code here and remove the separate function below.
+    int temp = 0;
+    msg >> temp;
+    fi._version = static_cast<GameVersion>( temp );
     return msg;
 }
 
@@ -655,12 +654,4 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
 
     return result;
-}
-
-StreamBase & operator>>( StreamBase & stream, GameVersion & version )
-{
-    int temp = 0;
-    stream >> temp;
-    version = static_cast<GameVersion>( temp );
-    return stream;
 }

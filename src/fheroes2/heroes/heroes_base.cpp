@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <sstream>
 
 #include "army.h"
 #include "castle.h"
@@ -413,54 +412,42 @@ double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
 {
-    const Kingdom & kingdom = world.GetKingdom( GetColor() );
-
-    if ( res ) {
-        std::ostringstream os;
-
-        if ( HaveSpellBook() ) {
-            if ( HaveSpell( spell ) ) {
-                if ( HaveSpellPoints( spell ) ) {
-                    if ( spell.MovePoint() <= move_point ) {
-                        if ( kingdom.AllowPayment( spell.GetCost() ) )
-                            return true;
-                        else
-                            os << "resource"
-                               << " "
-                               << "failed";
-                    }
-                    else
-                        os << "move points"
-                           << " "
-                           << "failed";
-                }
-                else
-                    os << _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
-            }
-            else
-                os << "spell"
-                   << " "
-                   << "not found";
+    if ( !HaveSpellBook() ) {
+        if ( res ) {
+            *res = _( "Spell book is not present." );
         }
-        else
-            os << "spell book"
-               << " "
-               << "not found";
-        *res = os.str();
         return false;
     }
 
-    return HaveSpellBook() && HaveSpell( spell ) && HaveSpellPoints( spell ) && kingdom.AllowPayment( spell.GetCost() );
+    if ( !HaveSpell( spell ) ) {
+        if ( res ) {
+            *res = _( "The spell is not found." );
+        }
+        return false;
+    }
+
+    if ( !HaveSpellPoints( spell ) ) {
+        if ( res ) {
+            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+        }
+        return false;
+    }
+
+    if ( move_point < spell.MovePoint() ) {
+        if ( res ) {
+            *res = _( "Not enough move points." );
+        }
+        return false;
+    }
+
+    if ( res ) {
+        res->clear();
+    }
+    return true;
 }
 
 void HeroBase::SpellCasted( const Spell & spell )
 {
-    // resource cost
-    Kingdom & kingdom = world.GetKingdom( GetColor() );
-    const payment_t & cost = spell.GetCost();
-    if ( cost.GetValidItemsCount() )
-        kingdom.OddFundsResource( cost );
-
     // spell point cost
     magic_point -= ( spell.SpellPoint( this ) < magic_point ? spell.SpellPoint( this ) : magic_point );
 
@@ -474,7 +461,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
     Spell spell = art.GetSpell();
 
     if ( spell.isValid() && CanCastSpell( spell ) ) {
-        int learning = GetLevelSkill( Skill::Secondary::LEARNING );
+        int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
         return ( ( 3 < spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
                  || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
@@ -485,7 +472,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
 
 bool HeroBase::CanTeachSpell( const Spell & spell ) const
 {
-    int learning = GetLevelSkill( Skill::Secondary::LEARNING );
+    int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
     return ( ( 4 == spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
              || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );

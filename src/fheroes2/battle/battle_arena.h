@@ -51,6 +51,22 @@ namespace Battle
     {
     };
 
+    class TroopsUidGenerator
+    {
+    public:
+        TroopsUidGenerator() = default;
+        TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+        TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
+
+        uint32_t GetUnique()
+        {
+            return _id++;
+        }
+
+    private:
+        uint32_t _id{ 1 };
+    };
+
     class Arena
     {
     public:
@@ -93,7 +109,7 @@ namespace Battle
 
         const SpellStorage & GetUsageSpells( void ) const;
 
-        bool DialogBattleSummary( const Result & res, bool transferArtifacts, bool allowToCancel ) const;
+        bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
         void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
 
@@ -229,6 +245,8 @@ namespace Battle
         bool end_turn;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
+
+        TroopsUidGenerator _uidGenerator;
 
         enum
         {

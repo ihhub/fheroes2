@@ -457,10 +457,10 @@ msgstr "%{spell} způsobil %{value} škod."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} způsobil %{value} škod."
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr ""
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr ""
 
 msgid "The Mummies' curse falls upon the %{name}!"
@@ -7130,129 +7130,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Network"
-#~ msgstr "Síť"
-
-#~ msgid "sound"
-#~ msgstr "zvuk"
-
-#, fuzzy
-#~ msgid "ai speed"
-#~ msgstr "Rychlost"
-
-#~ msgid "Water"
-#~ msgstr "Voda"
-
-#~ msgid "New Map"
-#~ msgstr "Nová Mapa"
-
-#~ msgid "Undo"
-#~ msgstr "Vrátit"
-
-#~ msgid "New"
-#~ msgstr "Nový"
-
-#~ msgid "Towns"
-#~ msgstr "Města"
-
-#~ msgid "Treasures"
-#~ msgstr "Poklady"
-
-#~ msgid "Legion"
-#~ msgstr "Legie"
-
-#~ msgid "Lots"
-#~ msgstr "Mnoho"
-
-#~ msgid "Throng"
-#~ msgstr "Zástup"
-
-#~ msgid "Pack"
-#~ msgstr "Houf"
-
-#~ msgid "Few"
-#~ msgstr "Málo"
-
-#~ msgid "Several"
-#~ msgstr "Několik"
-
-#~ msgid "Swarm"
-#~ msgstr "Dav"
-
-#~ msgid "%{move} %{name} here."
-#~ msgstr "%{move} %{name} sem."
-
-#~ msgid "Move"
-#~ msgstr "Přesunout"
-
-#~ msgid "The Farm increases production of Peasants by 8 per week."
-#~ msgstr "Farma zvyšuje produkci sedláků o osm týdně."
-
-#~ msgid ""
-#~ "The Castle improves town defense and increases income to 1000 gold per "
-#~ "day."
-#~ msgstr ""
-#~ "Hrad zlepšuje obranu města a zvyšuje příjem města na 1000 zlatých denně."
-
-#~ msgid "The Waterfall increases production of Centaurs by 8 per week."
-#~ msgstr "Vodopád zvyšuje produkci kentaurů o osm týdně."
-
-#~ msgid "The Orchard increases production of Halflings by 8 per week."
-#~ msgstr "Ovocný sad zvyšuje produkci hobitů o osm týdně."
-
-#~ msgid "The Dungeon increases the income of the town by 500 / day."
-#~ msgstr "Kobka zvyšuje příjem města o 500 denně."
-
-#~ msgid "Normal"
-#~ msgstr "Normální"
-
-#~ msgid "Easy"
-#~ msgstr "Jednoduchá"
-
-#~ msgid "Hard"
-#~ msgstr "Náročná"
-
-#~ msgid "Impossible"
-#~ msgstr "Nehratelná"
-
-#~ msgid "Low morale causes the %{name} to freeze in panic."
-#~ msgstr "Nízká morálka způsobila, že %{name} ztuhl strachem."
-
-#~ msgid "High morale enables the %{name} to attack again."
-#~ msgstr "Díky vysoké morálce může %{name} znovu zaútočit."
-
-#~ msgid "does"
-#~ msgstr "způsobil"
-
-#~ msgid "destroy"
-#~ msgstr "zničit"
-
-#~ msgid "%{name} %{destroys} half the enemy troops!"
-#~ msgstr "%{name} %{destroys} polovinu nepřátelských jednotek!"
-
-#~ msgid "destroys"
-#~ msgstr "zničil"
-
-#~ msgid "perish"
-#~ msgstr "zěmřít"
-
-#~ msgid "perishes"
-#~ msgstr "zemřel"
-
-#~ msgid "Auto Combat"
-#~ msgstr "Automatický boj"
-
-#~ msgid "do"
-#~ msgstr "způsobit"
-
-#~ msgid "Allows the computer to fight out the battle for you."
-#~ msgstr "Dovolí počítači vybojovat bitvu za vás."
-
-#~ msgid "Allows you to customize the combat screen."
-#~ msgstr "Dovolí vám nastavit bitevní obrazovku"
-
-#~ msgid ""
-#~ "The Well increases the growth rate of all dwellings by 2 creatures per "
-#~ "week."
-#~ msgstr "Studna zvyšuje tempo růstu všech obydlí o dvě nestvůry týdně."

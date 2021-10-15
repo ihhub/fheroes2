@@ -20,36 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <iostream>
-#include <sstream>
-
 #include "heroes.h"
 #include "maps.h"
 #include "route.h"
 #include "serialize.h"
 #include "world.h"
 
-s32 Route::Step::GetIndex( void ) const
-{
-    return currentIndex;
-}
-
-s32 Route::Step::GetFrom( void ) const
-{
-    return from;
-}
-
-int Route::Step::GetDirection( void ) const
-{
-    return direction;
-}
-
-u32 Route::Step::GetPenalty( void ) const
-{
-    return penalty;
-}
-
-/* construct */
 Route::Path::Path( const Heroes & h )
     : hero( &h )
     , dst( h.GetIndex() )
@@ -418,16 +394,24 @@ int Route::Path::GetAllowedSteps( void ) const
 
 std::string Route::Path::String( void ) const
 {
-    std::ostringstream os;
+    std::string output( "from: " );
+    output += std::to_string( hero->GetIndex() );
+    output += ", to: ";
+    output += std::to_string( GetLastIndex() );
+    output += ", obj: ";
+    output += MP2::StringObject( world.GetTiles( dst ).GetObject() );
+    output += ", dump: ";
 
-    os << "from: " << hero->GetIndex() << ", to: " << GetLastIndex() << ", obj: " << MP2::StringObject( world.GetTiles( dst ).GetObject() ) << ", dump: ";
+    for ( const Step & step : *this ) {
+        output += Direction::String( step.GetDirection() );
+        output += '(';
+        output += std::to_string( step.GetPenalty() );
+        output += ')';
+    }
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << Direction::String( ( *it ).GetDirection() ) << "(" << ( *it ).GetPenalty() << ")"
-           << ", ";
+    output += "end";
 
-    os << "end";
-    return os.str();
+    return output;
 }
 
 bool StepIsObstacle( const Route::Step & s )
