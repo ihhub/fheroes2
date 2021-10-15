@@ -402,6 +402,7 @@ namespace
         case MP2::OBJ_HUTMAGI:
             return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
         case MP2::OBJ_TRADINGPOST:
+        case MP2::OBJ_SPHINX:
             // TODO: AI doesn't know how it use it properly.
             return false;
         case MP2::OBJ_ORACLE:
