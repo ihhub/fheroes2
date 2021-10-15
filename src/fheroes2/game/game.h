@@ -193,6 +193,7 @@ namespace Game
     bool isPriceOfLoyaltyCampaignPresent();
 
     void EnvironmentSoundMixer();
+    void restoreSoundsForCurrentFocus();
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );

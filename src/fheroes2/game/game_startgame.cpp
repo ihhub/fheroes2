@@ -182,33 +182,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     }
     else {
         // If we don't update focus, we still have to restore environment sounds and terrain music theme
-        AGG::ResetMixer();
-
-        switch ( Interface::GetFocusType() ) {
-        case GameFocus::HEROES: {
-            const Heroes * focusedHero = Interface::GetFocusHeroes();
-            assert( focusedHero != nullptr );
-
-            const int heroIndexPos = focusedHero->GetIndex();
-            if ( heroIndexPos >= 0 ) {
-                Game::EnvironmentSoundMixer();
-                AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
-            }
-            break;
-        }
-
-        case GameFocus::CASTLE: {
-            const Castle * focusedCastle = Interface::GetFocusCastle();
-            assert( focusedCastle != nullptr );
-
-            Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
-            break;
-        }
-
-        default:
-            break;
-        }
+        restoreSoundsForCurrentFocus();
     }
 
     basicInterface.RedrawFocus();

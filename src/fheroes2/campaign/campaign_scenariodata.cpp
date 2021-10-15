@@ -335,6 +335,10 @@ namespace
             return _( "Defender Helm" );
         case Artifact::POWER_AXE:
             return _( "Power Axe" );
+        case Artifact::STEALTH_SHIELD:
+            return _( "Stealth Shield" );
+        case Artifact::NOMAD_BOOTS_MOBILITY:
+            return _( "Nomad Boots" );
         default:
             return Artifact( artifactId ).GetName();
         }
