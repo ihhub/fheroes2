@@ -418,6 +418,7 @@ namespace
             return cursed > 0 && hero.GetKingdom().AllowPayment( payment );
         }
         default:
+            // Did you add a new action object but forget to add AI interaction for it?
             assert( 0 );
             break;
         }
