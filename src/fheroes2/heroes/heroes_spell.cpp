@@ -512,7 +512,7 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 250 ) );
+    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
 
     const fheroes2::Rect & area = frameborder->activeArea();
     int result = Dialog::ZERO;
@@ -531,16 +531,22 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
-    fheroes2::ButtonGroup btnGroups;
-    btnGroups.createButton( area.x + 5, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
-    btnGroups.createButton( area.x + 187, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1,
-                            Dialog::CANCEL );
-    btnGroups.draw();
+    const int okayButtonIcn = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelButtonIcn = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+
+    fheroes2::ButtonGroup btnGroup;
+    btnGroup.createButton( area.x + 5, area.y + 222, okayButtonIcn, 0, 1, Dialog::OK );
+    btnGroup.createButton( area.x + 187, area.y + 222, cancelButtonIcn, 0, 1, Dialog::CANCEL );
+
+    drawButtonWithShadow( fheroes2::AGG::GetICN( okayButtonIcn, 0 ), display, btnGroup.button( 0 ).area() );
+    drawButtonWithShadow( fheroes2::AGG::GetICN( cancelButtonIcn, 0 ), display, btnGroup.button( 1 ).area() );
+
+    btnGroup.draw();
 
     display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.processEvents();
+        result = btnGroup.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !listbox.IsNeedRedraw() ) {
