@@ -340,58 +340,72 @@ int Castle::OpenDialog( bool readonly )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
+        // Finish fade animation
+        if ( le.MousePressLeft() || le.MousePressRight() ) {
+            if ( alphaHero != 255 ) {
+                alphaHero = 255;
+                fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
+            }
+            const uint32_t build = fadeBuilding.GetBuild();
+            if ( build != BUILD_NOTHING ) {
+                BuyBuilding( build );
+                if ( BUILD_CAPTAIN == build ) {
+                    RedrawIcons( *this, heroes, cur_pt );
+                    display.render();
+                }
+                fadeBuilding.StopFadeBuilding();
+            }
+        }
 
-        // During hero purchase or building construction disable any interaction
-        if ( alphaHero >= 255 && fadeBuilding.IsFadeDone() ) {
-            if ( buttonPrevCastle.isEnabled() ) {
-                le.MousePressLeft( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
-            }
-            if ( buttonNextCastle.isEnabled() ) {
-                le.MousePressLeft( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
-            }
+        if ( buttonPrevCastle.isEnabled() ) {
+            le.MousePressLeft( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
+        }
+        if ( buttonNextCastle.isEnabled() ) {
+            le.MousePressLeft( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
+        }
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-            // Check buttons for closing this castle's window.
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-                result = Dialog::CANCEL;
-                break;
-            }
-            if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
-                result = Dialog::PREV;
-                break;
-            }
-            if ( buttonNextCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
-                result = Dialog::NEXT;
-                break;
-            }
+        // Check buttons for closing this castle's window.
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            result = Dialog::CANCEL;
+            break;
+        }
+        if ( buttonPrevCastle.isEnabled()
+             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+            result = Dialog::PREV;
+            break;
+        }
+        if ( buttonNextCastle.isEnabled()
+             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+            result = Dialog::NEXT;
+            break;
+        }
 
-            if ( le.MouseClickLeft( resActiveArea ) ) {
-                fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), Dialog::OK );
-            }
-            else if ( le.MousePressRight( resActiveArea ) ) {
-                Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), 0 );
-            }
-            else if ( le.MousePressRight( buttonExit.area() ) ) {
-                Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
-            }
-            else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
-                Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
-            }
-            else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
-                Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
-            }
+        if ( le.MouseClickLeft( resActiveArea ) ) {
+            fheroes2::ButtonRestorer exitRestorer( buttonExit );
+            Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), Dialog::OK );
+        }
+        else if ( le.MousePressRight( resActiveArea ) ) {
+            Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), 0 );
+        }
+        else if ( le.MousePressRight( buttonExit.area() ) ) {
+            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
+            Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
+            Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
+        }
 
-            // selector troops event
-            if ( ( selectArmy2.isValid()
-                   && ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2, &statusMessage ) )
-                        || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1, &statusMessage ) ) ) )
-                 || ( !selectArmy2.isValid() && le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( &statusMessage ) ) ) {
-                need_redraw = true;
-            }
+        // selector troops event
+        if ( ( selectArmy2.isValid()
+               && ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2, &statusMessage ) )
+                    || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1, &statusMessage ) ) ) )
+             || ( !selectArmy2.isValid() && le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( &statusMessage ) ) ) {
+            need_redraw = true;
+        }
 
         if ( conf.ExtCastleAllowGuardians() && !readonly ) {
             Army * army1 = nullptr;
@@ -409,188 +423,220 @@ int Castle::OpenDialog( bool readonly )
                     need_redraw = true;
                 }
             }
-
-            if ( !readonly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
-                // View guardian.
-                openHeroDialog( selectArmy1, selectArmy2, *heroes.Guard() );
-                need_redraw = true;
+            else
+                // move hero to guardian
+                if ( heroes.Guest() && !heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
+                if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
+                    // FIXME: correct message
+                    Dialog::Message( _( "Join Error" ), _( "Army is full" ), Font::BIG, Dialog::OK );
+                }
+                else {
+                    SwapCastleHeroes( heroes );
+                    army1 = &heroes.Guard()->GetArmy();
+                }
             }
-            else if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
-                // View hero.
-                openHeroDialog( selectArmy1, selectArmy2, *heroes.Guest() );
+            else
+                // move guardian to hero
+                if ( !heroes.Guest() && heroes.Guard() && le.MouseClickLeft( rectSign2 ) ) {
+                SwapCastleHeroes( heroes );
+                army2 = &heroes.Guest()->GetArmy();
+            }
+
+            if ( army1 || army2 ) {
+                if ( selectArmy1.isSelected() )
+                    selectArmy1.ResetSelected();
+                if ( selectArmy2.isValid() && selectArmy2.isSelected() )
+                    selectArmy2.ResetSelected();
+
+                if ( army1 && army2 ) {
+                    selectArmy1.SetArmy( army1 );
+                    selectArmy2.SetArmy( army2 );
+                }
+                else if ( army1 ) {
+                    selectArmy1.SetArmy( army1 );
+                    selectArmy2.SetArmy( nullptr );
+                }
+                else if ( army2 ) {
+                    selectArmy1.SetArmy( &army );
+                    selectArmy2.SetArmy( army2 );
+                }
+
+                RedrawIcons( *this, heroes, cur_pt );
                 need_redraw = true;
             }
         }
 
-            // Get pressed hotkey.
-            const building_t hotKeyBuilding = getPressedBuildingHotkey();
+        if ( !readonly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
+            // View guardian.
+            openHeroDialog( selectArmy1, selectArmy2, *heroes.Guard() );
+            need_redraw = true;
+        }
+        else if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
+            // View hero.
+            openHeroDialog( selectArmy1, selectArmy2, *heroes.Guest() );
+            need_redraw = true;
+        }
 
-            // Interaction with buildings.
-            // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
-            // In this case we must revert the queue and finding the first suitable building.
-            for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-                if ( !isBuild( it->id ) ) {
-                    continue;
+        // Get pressed hotkey.
+        const building_t hotKeyBuilding = getPressedBuildingHotkey();
+
+        // Interaction with buildings.
+        // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
+        // In this case we must revert the queue and finding the first suitable building.
+        for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
+            if ( !isBuild( it->id ) ) {
+                continue;
+            }
+
+            const uint32_t monsterDwelling = GetActualDwelling( it->id );
+            const bool isMonsterDwelling = ( monsterDwelling != BUILD_NOTHING );
+
+            if ( le.MousePressRight( it->coord ) ) {
+                // Check mouse right click.
+                if ( isMonsterDwelling ) {
+                    Dialog::DwellingInfo( Monster( race, it->id ), getMonstersInDwelling( it->id ) );
+                }
+                else {
+                    Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG );
                 }
 
-                const uint32_t monsterDwelling = GetActualDwelling( it->id );
-                const bool isMonsterDwelling = ( monsterDwelling != BUILD_NOTHING );
+                // Nothing we need to do after.
+                break;
+            }
 
-                if ( le.MousePressRight( it->coord ) ) {
-                    // Check mouse right click.
-                    if ( isMonsterDwelling ) {
-                        Dialog::DwellingInfo( Monster( race, it->id ), getMonstersInDwelling( it->id ) );
-                    }
-                    else {
-                        Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG );
-                    }
+            const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
 
-                    // Nothing we need to do after.
-                    break;
+            if ( le.MouseClickLeft( it->coord ) || hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) ) {
+                if ( selectArmy1.isSelected() )
+                    selectArmy1.ResetSelected();
+                if ( selectArmy2.isValid() && selectArmy2.isSelected() )
+                    selectArmy2.ResetSelected();
+
+                if ( readonly && ( it->id & ( BUILD_SHIPYARD | BUILD_MARKETPLACE | BUILD_WELL | BUILD_TENT | BUILD_CASTLE ) ) ) {
+                    Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG, Dialog::OK );
                 }
+                else if ( isMagicGuild ) {
+                    fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
-                const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
+                    verifyMagicBookPresence( *this, heroes );
 
-                if ( le.MouseClickLeft( it->coord ) || hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) ) {
-                    if ( selectArmy1.isSelected() )
-                        selectArmy1.ResetSelected();
-                    if ( selectArmy2.isValid() && selectArmy2.isSelected() )
-                        selectArmy2.ResetSelected();
-
-                    if ( readonly && ( it->id & ( BUILD_SHIPYARD | BUILD_MARKETPLACE | BUILD_WELL | BUILD_TENT | BUILD_CASTLE ) ) ) {
-                        Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG, Dialog::OK );
-                    }
-                    else if ( isMagicGuild ) {
+                    OpenMageGuild( heroes );
+                }
+                else if ( isMonsterDwelling ) {
+                    if ( !readonly ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
-                        verifyMagicBookPresence( *this, heroes );
-
-                        OpenMageGuild( heroes );
-                    }
-                    else if ( isMonsterDwelling ) {
-                        if ( !readonly ) {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-
-                            const Troop monsterToRecruit = Dialog::RecruitMonster( Monster( race, monsterDwelling ), getMonstersInDwelling( it->id ), true );
-                            if ( Castle::RecruitMonster( monsterToRecruit ) ) {
-                                need_redraw = true;
-                            }
-                        }
-                    }
-                    else {
-                        switch ( it->id ) {
-                        case BUILD_THIEVESGUILD:
-                            Dialog::ThievesGuild( false );
-                            break;
-
-                        case BUILD_TAVERN: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            OpenTavern();
-                            break;
-                        }
-
-                        case BUILD_CAPTAIN:
-                        case BUILD_STATUE:
-                        case BUILD_WEL2:
-                        case BUILD_MOAT:
-                        case BUILD_SPEC:
-                        case BUILD_SHRINE: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG, Dialog::OK );
-                            break;
-                        }
-
-                        case BUILD_SHIPYARD: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
-                                BuyBoat();
-                                fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
-                            }
-                            break;
-                        }
-
-                        case BUILD_MARKETPLACE: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            Dialog::Marketplace( GetKingdom(), false );
+                        const Troop monsterToRecruit = Dialog::RecruitMonster( Monster( race, monsterDwelling ), getMonstersInDwelling( it->id ), true );
+                        if ( Castle::RecruitMonster( monsterToRecruit ) ) {
                             need_redraw = true;
-                            break;
-                        }
-
-                        case BUILD_WELL:
-                            OpenWell();
-                            need_redraw = true;
-                            break;
-
-                        case BUILD_TENT: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            if ( !Modes( ALLOWCASTLE ) ) {
-                                Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
-                            }
-                            else if ( Dialog::OK == DialogBuyCastle( true ) ) {
-                                AGG::PlaySound( M82::BUILDTWN );
-                                fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
-                            }
-                            break;
-                        }
-
-                        case BUILD_CASTLE: {
-                            uint32_t build = fadeBuilding.GetBuild();
-                            if ( build != BUILD_NOTHING ) {
-                                BuyBuilding( build );
-                                if ( BUILD_CAPTAIN == build ) {
-                                    RedrawIcons( *this, heroes, cur_pt );
-                                    display.render();
-                                }
-                            }
-                            fadeBuilding.StopFadeBuilding();
-                            const Heroes * prev = heroes.Guest();
-                            build = OpenTown();
-                            heroes = world.GetHeroes( *this );
-                            const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
-                            if ( BUILD_NOTHING != build ) {
-                                AGG::PlaySound( M82::BUILDTWN );
-                                fadeBuilding.StartFadeBuilding( build );
-                            }
-
-                            if ( buyhero ) {
-                                if ( prev ) {
-                                    selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
-                                    selectArmy2.SetArmy( nullptr );
-                                    RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
-                                    selectArmy1.Redraw();
-                                    if ( selectArmy2.isValid() )
-                                        selectArmy2.Redraw();
-                                    display.render();
-                                }
-                                selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
-                                AGG::PlaySound( M82::BUILDTWN );
-
-                                // animate fade in for hero army bar
-                                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
-                                const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
-                                if ( !port.empty() )
-                                    fheroes2::Blit( port, surfaceHero, 5, 5 );
-
-                                const fheroes2::Point savept = selectArmy2.GetPos();
-                                selectArmy2.SetPos( 112, 5 );
-                                selectArmy2.Redraw( surfaceHero );
-                                selectArmy2.SetPos( savept.x, savept.y );
-
-                                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
-                                alphaHero = 0;
-                            }
-                            break;
-                        }
-
-                        default:
-                            // Some new building?
-                            assert( 0 );
-                            break;
                         }
                     }
-
-                    break;
                 }
+                else {
+                    switch ( it->id ) {
+                    case BUILD_THIEVESGUILD:
+                        Dialog::ThievesGuild( false );
+                        break;
+
+                    case BUILD_TAVERN: {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        OpenTavern();
+                        break;
+                    }
+
+                    case BUILD_CAPTAIN:
+                    case BUILD_STATUE:
+                    case BUILD_WEL2:
+                    case BUILD_MOAT:
+                    case BUILD_SPEC:
+                    case BUILD_SHRINE: {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG, Dialog::OK );
+                        break;
+                    }
+
+                    case BUILD_SHIPYARD: {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
+                            BuyBoat();
+                            fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
+                        }
+                        break;
+                    }
+
+                    case BUILD_MARKETPLACE: {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        Dialog::Marketplace( GetKingdom(), false );
+                        need_redraw = true;
+                        break;
+                    }
+
+                    case BUILD_WELL:
+                        OpenWell();
+                        need_redraw = true;
+                        break;
+
+                    case BUILD_TENT: {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        if ( !Modes( ALLOWCASTLE ) ) {
+                            Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
+                        }
+                        else if ( Dialog::OK == DialogBuyCastle( true ) ) {
+                            AGG::PlaySound( M82::BUILDTWN );
+                            fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
+                        }
+                        break;
+                    }
+
+                    case BUILD_CASTLE: {
+                        const Heroes * prev = heroes.Guest();
+                        const uint32_t build = OpenTown();
+                        heroes = world.GetHeroes( *this );
+                        const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
+
+                        if ( BUILD_NOTHING != build ) {
+                            AGG::PlaySound( M82::BUILDTWN );
+                            fadeBuilding.StartFadeBuilding( build );
+                        }
+
+                        if ( buyhero ) {
+                            if ( prev ) {
+                                selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
+                                selectArmy2.SetArmy( nullptr );
+                                RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
+                                selectArmy1.Redraw();
+                                if ( selectArmy2.isValid() )
+                                    selectArmy2.Redraw();
+                                display.render();
+                            }
+                            selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
+                            AGG::PlaySound( M82::BUILDTWN );
+
+                            // animate fade in for hero army bar
+                            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
+                            const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
+                            if ( !port.empty() )
+                                fheroes2::Blit( port, surfaceHero, 5, 5 );
+
+                            const fheroes2::Point savept = selectArmy2.GetPos();
+                            selectArmy2.SetPos( 112, 5 );
+                            selectArmy2.Redraw( surfaceHero );
+                            selectArmy2.SetPos( savept.x, savept.y );
+
+                            fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
+                            alphaHero = 0;
+                        }
+                        break;
+                    }
+
+                    default:
+                        // Some new building?
+                        assert( 0 );
+                        break;
+                    }
+                }
+
+                break;
             }
         }
 
