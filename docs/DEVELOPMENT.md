@@ -13,6 +13,23 @@ Please follow the instructions below to be able to build the project from source
 * Open the file `fheroes2-vs2015.vcxproj` or `fheroes2-vs2019.vcxproj` depending on the version of Microsoft Visual
   Studio installed and build the project.
 
+#### Visual Studio development on Windows
+
+After executing the `download_demo_version.bat` script, the demo version files will be downloaded and extracted to
+a folder called `.\demo` within the project root folder.  The script will also copy to project root directory the
+minimum required files for development purposes (namely, the `data` and `maps` directories).  By default, the
+Visual Studio project will automatically copy these folders to the build directory (i.e. `.\build\x64\Debug-SDL2`)
+so they are available for testing.
+
+If you have a copy of the original game and wish to include its files in your development (such as the CD music,
+extra maps, and animations), then you need to make these original game files available to the build.
+
+You have two options:
+1. Copy the files to the `~\{USER_FOLDER}\AppData\Roaming\fheroes2` directory.
+	* The files will be used at runtime by the build and will not be removed by cleaning the solution.
+2. Copy the files to the build directory (i.e. `.\build\x64\Debug-SDL2`).
+	* The files will need to be copied again to the build directory after cleaning the solution.
+
 ### macOS and Linux
 
 * Depending on your OS, run the following scripts to install the dependencies required for the build:
