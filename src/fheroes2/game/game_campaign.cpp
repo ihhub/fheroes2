@@ -614,13 +614,15 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     if ( allowToRestart ) {
         buttonOk.disable();
+        buttonOk.hide();
         buttonRestart.draw();
     }
     else {
+        buttonRestart.disable();
         buttonRestart.hide();
+        buttonOk.draw();
     }
 
-    buttonOk.draw();
     buttonCancel.draw();
 
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
