@@ -330,7 +330,7 @@ namespace
         case Artifact::FIZBIN_MISFORTUNE:
             return _( "Fizbin of Misfortune" );
         case Artifact::MAGE_RING:
-            return _( "Mage's ring" );
+            return _( "Mage's Ring" );
         case Artifact::DEFENDER_HELM:
             return _( "Defender Helm" );
         case Artifact::POWER_AXE:
