@@ -390,11 +390,9 @@ fheroes2::GameMode Game::SelectScenario()
 
 fheroes2::GameMode Game::ScenarioInfo()
 {
-    Settings & conf = Settings::Get();
-
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( conf.IsGameType( Game::TYPE_MULTI ) );
+    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( lists.empty() ) {
         Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
