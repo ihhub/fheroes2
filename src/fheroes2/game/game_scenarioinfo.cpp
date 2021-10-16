@@ -248,16 +248,16 @@ namespace
 
         fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
         LocalEvent & le = LocalEvent::Get();
-        while ( 1 ) {
+        while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    if ( conf.ExtGameUseFade() )
+                    if ( conf.ExtGameUseFade() ) {
                         fheroes2::FadeDisplay();
+                    }
                     return fheroes2::GameMode::QUIT_GAME;
                 }
-                else {
-                    continue;
-                }
+
+                continue;
             }
 
             // press button
