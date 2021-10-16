@@ -89,15 +89,6 @@ namespace fheroes2
         }
         return result;
     }
-
-    template <size_t N>
-    bool isInBitset( const std::bitset<N> & bitset, const uint8_t index )
-    {
-        if ( index >= N ) {
-            return false;
-        }
-        return bitset[index];
-    }
 }
 
 #endif

@@ -26,6 +26,13 @@
 #include "direction.h"
 #include "mp2.h"
 #include "objgras.h"
+#include "tools.h"
+
+namespace
+{
+    const std::bitset<256> ObjGrasShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 50, 76, 79, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 } );
+}
 
 int ObjGras::GetPassable( const uint8_t index )
 {
@@ -51,9 +58,7 @@ bool ObjGras::isAction( u32 index )
 
 bool ObjGras::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 0,  4,  29,  32,  36,  39,  42,  44,  46,  48,  50,  76,  79,  82,  88,  92,
-                                     94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 };
-    return shadows.count( index ) > 0;
+    return ObjGrasShadowBitset[index];
 }
 
 int ObjGra2::GetPassable( const uint8_t index )

@@ -26,6 +26,14 @@
 #include "direction.h"
 #include "mp2.h"
 #include "objlava.h"
+#include "tools.h"
+
+namespace
+{
+    const std::bitset<256> ObjLavaShadowBitset
+        = fheroes2::makeBitsetFromVector<256>( { 7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 29, 34, 38, 39, 43, 44, 45, 46,
+                                                 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 72, 77, 78 } );
+}
 
 int ObjLav2::GetPassable( const uint8_t index )
 {
@@ -44,9 +52,7 @@ bool ObjLav2::isAction( u32 index )
 
 bool ObjLav2::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 29, 34, 38, 39, 43, 44, 45, 46,
-                                     47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 72, 77, 78 };
-    return shadows.count( index ) > 0;
+    return ObjLavaShadowBitset[index];
 }
 
 int ObjLav3::GetPassable( const uint8_t index )
