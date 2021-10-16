@@ -187,12 +187,12 @@ namespace
             resetStartingSettings = true;
             const std::string & mapName = conf.CurrentFileInfo().name;
             const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-            for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
-                if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                    if ( mapIter->file == conf.CurrentFileInfo().file ) {
-                        conf.SetCurrentFileInfo( *mapIter );
+            for ( const Maps::FileInfo & mapInfo : lists ) {
+                if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.file ) == mapFileName ) ) {
+                    if ( mapInfo.file == conf.CurrentFileInfo().file ) {
+                        conf.SetCurrentFileInfo( mapInfo );
                         updatePlayers( players, humanPlayerCount );
-                        Game::LoadPlayers( mapIter->file, players );
+                        Game::LoadPlayers( mapInfo.file, players );
                         resetStartingSettings = false;
                         break;
                     }
