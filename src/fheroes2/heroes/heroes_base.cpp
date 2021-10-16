@@ -38,7 +38,7 @@ int ArtifactsModifiersResult( int type, const std::array<uint8_t, size> & arts, 
 {
     int result = 0;
 
-    for ( const Artifact & art : arts ) {
+    for ( const Artifact art : arts ) {
         if ( art.isValid() ) {
             const uint32_t acount = base.artifactCount( art );
             if ( acount ) {
