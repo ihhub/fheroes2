@@ -72,8 +72,8 @@ namespace
         return fheroes2::Size( bookPage.width() * 2, maximumHeight );
     }
 
-    void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py, const HeroBase & hero,
-                                bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
+    void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,
+                                const HeroBase & hero, bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
     {
         const uint32_t heroSpellPoints = hero.GetSpellPoints();
 
