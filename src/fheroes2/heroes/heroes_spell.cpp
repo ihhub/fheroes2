@@ -538,8 +538,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     btnGroup.createButton( area.x + 5, area.y + 222, okayButtonIcn, 0, 1, Dialog::OK );
     btnGroup.createButton( area.x + 187, area.y + 222, cancelButtonIcn, 0, 1, Dialog::CANCEL );
 
-    drawButtonWithShadow( fheroes2::AGG::GetICN( okayButtonIcn, 0 ), display, btnGroup.button( 0 ).area() );
-    drawButtonWithShadow( fheroes2::AGG::GetICN( cancelButtonIcn, 0 ), display, btnGroup.button( 1 ).area() );
+    drawButtonWithShadow( fheroes2::AGG::GetICN( okayButtonIcn, 1 ), display, btnGroup.button( 0 ).area() );
+    drawButtonWithShadow( fheroes2::AGG::GetICN( cancelButtonIcn, 1 ), display, btnGroup.button( 1 ).area() );
 
     btnGroup.draw();
 
