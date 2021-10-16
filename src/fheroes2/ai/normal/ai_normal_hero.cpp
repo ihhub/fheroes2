@@ -76,7 +76,7 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
-            return hero.isShipMaster() && !hero.isVisited( tile, Visit::GLOBAL );
+            return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
         case MP2::OBJ_WHIRLPOOL:
             return hero.isShipMaster() && !hero.isVisited( tile );
         case MP2::OBJ_COAST:
