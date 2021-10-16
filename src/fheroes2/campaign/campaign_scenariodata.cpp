@@ -339,6 +339,16 @@ namespace
             return _( "Stealth Shield" );
         case Artifact::NOMAD_BOOTS_MOBILITY:
             return _( "Nomad Boots" );
+        case Artifact::BALLISTA:
+            return _( "Ballista" );
+        case Artifact::CASTER_BRACELET:
+            return _( "Caster's Bracelet" );
+        case Artifact::FOREMOST_SCROLL:
+            return _( "Foremost Scroll" );
+        case Artifact::MAJOR_SCROLL:
+            return _( "Major Scroll" );
+        case Artifact::TRAVELER_BOOTS_MOBILITY:
+            return _( "Traveler's Boots" );
         default:
             return Artifact( artifactId ).GetName();
         }
