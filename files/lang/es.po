@@ -2672,7 +2672,7 @@ msgstr "Ver la pantalla de créditos"
 msgid "High Scores"
 msgstr "Puntuaciones más altas"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
 #, fuzzy

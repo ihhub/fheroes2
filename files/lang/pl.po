@@ -2580,7 +2580,7 @@ msgstr "Obejrzyj autorów gry"
 msgid "High Scores"
 msgstr "Najlepsze wyniki"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Obejrzyj najlepsze wyniki"
 
 msgid "Game settings."

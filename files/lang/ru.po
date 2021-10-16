@@ -2636,7 +2636,7 @@ msgstr "Просмотр окна авторов."
 msgid "High Scores"
 msgstr "Счет"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Просмотр лучших результатов."
 
 #, fuzzy

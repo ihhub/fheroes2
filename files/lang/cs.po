@@ -2458,7 +2458,7 @@ msgstr ""
 msgid "High Scores"
 msgstr "Nejlepší výsledky"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr ""
 
 msgid "Game settings."
