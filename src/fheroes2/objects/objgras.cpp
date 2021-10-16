@@ -32,6 +32,10 @@ namespace
 {
     const std::bitset<256> ObjGrasShadowBitset = fheroes2::makeBitsetFromVector<256>(
         { 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 50, 76, 79, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 } );
+
+    const std::bitset<256> ObjGra2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 5,  14, 19, 20, 28, 31, 32, 33, 34, 35,  36,  37,  38,  47,  48,  49,  50,  51,  52,  53,  54,  70,  71,  72,  73,  74, 75,
+          76, 77, 78, 79, 80, 81, 82, 83, 91, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 121, 124, 128 } );
 }
 
 int ObjGras::GetPassable( const uint8_t index )
@@ -79,9 +83,7 @@ bool ObjGra2::isAction( u32 index )
 
 bool ObjGra2::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 5,  14, 19, 20, 28, 31, 32, 33, 34, 35,  36,  37,  38,  47,  48,  49,  50,  51,  52,  53,  54,  70,  71,  72,  73,  74, 75,
-                                     76, 77, 78, 79, 80, 81, 82, 83, 91, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 121, 124, 128 };
-    return shadows.count( index ) > 0;
+    return ObjGra2ShadowBitset[index];
 }
 
 int ObjGras::GetActionObject( u32 index )
