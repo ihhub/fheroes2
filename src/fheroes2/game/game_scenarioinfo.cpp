@@ -143,7 +143,7 @@ namespace
         sprite.Show();
     }
 
-    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists)
+    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -332,9 +332,10 @@ namespace
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Font::BIG );
                 else if ( le.MousePressRight( rating.GetRect() ) )
-                    Dialog::Message( _( "Difficulty Rating" ),
-                                     _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
-                                     Font::BIG );
+                    Dialog::
+                        Message( _( "Difficulty Rating" ),
+                                 _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
+                                 Font::BIG );
                 else if ( le.MousePressRight( buttonOk.area() ) )
                     Dialog::Message( _( "OK" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
                 else if ( le.MousePressRight( buttonCancel.area() ) )
@@ -369,11 +370,15 @@ namespace
                 return world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
 
-            DEBUG_LOG( DBG_GAME, DBG_WARN, conf.MapsFile() << ", " << "unknown map format" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       conf.MapsFile() << ", "
+                                       << "unknown map format" );
             return fheroes2::GameMode::MAIN_MENU;
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_WARN, conf.MapsFile() << ", " << "unknown map format" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   conf.MapsFile() << ", "
+                                   << "unknown map format" );
         return fheroes2::GameMode::MAIN_MENU;
     }
 }
