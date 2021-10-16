@@ -99,6 +99,8 @@ public:
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
 
+    void populateHighScoresStandard();
+
 private:
     uint32_t _monsterAnimationFrameId;
     std::vector<hgs_t> list;
@@ -109,8 +111,6 @@ private:
         const size_t id = std::min( rating, _monsterRating.size() - 1 );
         return Monster( _monsterRating[id] );
     }
-
-    void populateHighScoresStandard();
 };
 
 HGSData::HGSData()
@@ -350,21 +350,17 @@ HGSData::HGSData()
 bool HGSData::Load( const std::string & fn )
 {
     ZStreamFile hdata;
+    if ( !hdata.read( fn ) )
+        return false;
 
-    if ( hdata.read( fn ) ) {
-        hdata.setbigendian( true );
-        u16 hgs_id = 0;
+    hdata.setbigendian( true );
+    u16 hgs_id = 0;
 
-        hdata >> hgs_id;
+    hdata >> hgs_id;
 
-        if ( hgs_id == HGS_ID ) {
-            hdata >> list;
-            return !hdata.fail();
-        }
-    }
-    else {
-        populateHighScoresStandard();
-        Save( fn );
+    if ( hgs_id == HGS_ID ) {
+        hdata >> list;
+        return !hdata.fail();
     }
 
     return false;
@@ -483,7 +479,10 @@ fheroes2::GameMode Game::HighScores()
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    hgs.Load( highScoreDataPath );
+    if ( !hgs.Load( highScoreDataPath ) ) {
+        // Unable to load the file. Let's populate with the default values.
+        hgs.populateHighScoresStandard();
+    }
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
