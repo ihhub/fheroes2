@@ -217,6 +217,7 @@ namespace Translation
         LOCALE_LT,
         LOCALE_LV,
         LOCALE_MK,
+        LOCALE_NB,
         LOCALE_NL,
         LOCALE_PL,
         LOCALE_PT,
@@ -298,8 +299,10 @@ namespace Translation
             locale = LOCALE_LT;
         else if ( str == "lv" || str == "latvian" )
             locale = LOCALE_LV;
-        else if ( str == "mk" || str == "macedonia" )
+        else if ( str == "mk" || str == "macedonia" ) 
             locale = LOCALE_MK;
+        else if ( str == "nb" || str == "norwegian" )
+            locale = LOCALE_NB;
         else if ( str == "nl" || str == "dutch" )
             locale = LOCALE_NL;
         else if ( str == "pl" || str == "polish" )
@@ -394,6 +397,8 @@ namespace Translation
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LOCALE_MK:
                 return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
+            case LOCALE_NB:
+                return current->ngettext( str, ( n != 1 ) );
             case LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             default:
