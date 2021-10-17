@@ -299,7 +299,7 @@ namespace Translation
             locale = LOCALE_LT;
         else if ( str == "lv" || str == "latvian" )
             locale = LOCALE_LV;
-        else if ( str == "mk" || str == "macedonia" ) 
+        else if ( str == "mk" || str == "macedonia" )
             locale = LOCALE_MK;
         else if ( str == "nb" || str == "norwegian" )
             locale = LOCALE_NB;
