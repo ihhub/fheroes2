@@ -37,7 +37,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven Alliance" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven alliance" ) );
             break;
         case 5:
             obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
@@ -69,7 +69,7 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF );
             break;
         case 6:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, _( "Dragon Alliance" ) );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, _( "Dragon alliance" ) );
             break;
         case 8:
             obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN );
@@ -91,7 +91,7 @@ namespace
             obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BREASTPLATE_ANDURAN );
             break;
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven alliance" ) );
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS, Resource::WOOD, 2 );
             break;
         case 5:
@@ -141,7 +141,7 @@ namespace
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::LEGENDARY_SCEPTER );
             break;
         case 6:
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven alliance" ) );
             break;
         }
 
@@ -154,13 +154,13 @@ namespace
             = { _( "Force of Arms" ), _( "Annexation" ),   _( "Save the Dwarves" ), _( "Carator Mines" ),      _( "Turning Point" ),
                 _( "Defender" ),      _( "The Gauntlet" ), _( "The Crown" ),        _( "Corlagon's Defense" ), _( "Final Justice" ) };
         const std::string rolandCampaignDescription[10] = {
-            _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-               " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
+            _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother. They are not allied with each other, so they will spend"
+               " most of their time fighting with one another. Victory is yours when you have defeated all of their castles and heroes." ),
             _( "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
             _( "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
             _( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
             _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-            _( "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
+            _( "The Sorceress' Guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
             _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
             _( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
             _( "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
@@ -226,8 +226,8 @@ namespace
             = { _( "First Blood" ),   _( "Barbarian Wars" ), _( "Necromancers" ), _( "Slay the Dwarves" ), _( "Turning Point" ), _( "Rebellion" ),
                 _( "Dragon Master" ), _( "Country Lords" ),  _( "The Crown" ),    _( "Greater Glory" ),    _( "Apocalypse" ) };
         const std::string archibaldCampaignDescription[11] = {
-            _( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-               " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+            _( "King Archibald requires you to defeat the three enemies in this region. They are not allied with one another, so they will spend most of their energy fighting"
+               " amongst themselves. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
             _( "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
             _( "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
             _( "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
@@ -650,13 +650,13 @@ namespace Campaign
 
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE:
-            return Monster( _subType ).GetName() + std::string( _( " bane" ) );
+            return Monster( _subType ).GetName() + std::string( _( "bane" ) );
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE:
             return Monster( _subType ).GetName() + std::string( _( " alliance" ) );
         case CampaignAwardData::TYPE_GET_ARTIFACT:
             return Artifact( _subType ).GetName();
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-            return _( "Carry-over forces" );
+            return _( "Carry over forces" );
         case CampaignAwardData::TYPE_RESOURCE_BONUS:
             return Resource::String( _subType ) + std::string( _( " bonus" ) );
         case CampaignAwardData::TYPE_GET_SPELL:
@@ -724,7 +724,7 @@ namespace Campaign
         switch ( monsterId ) {
         case Monster::DWARF:
         case Monster::BATTLE_DWARF:
-            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may pass.\"" );
+            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may pass.\"" );
         case Monster::OGRE:
         case Monster::OGRE_LORD:
             return _( "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\"" );
@@ -732,11 +732,11 @@ namespace Campaign
         case Monster::RED_DRAGON:
         case Monster::BLACK_DRAGON:
             return _(
-                "The dragons see you and call out.  \"Our alliance with Archibald compels us to join you.  Unfortunately you have no room.  A pity!\"  They quickly scatter." );
+                "The dragons see you and call out. \"Our alliance with Archibald compels us to join you. Unfortunately you have no room. A pity!\" They quickly scatter." );
         case Monster::ELF:
         case Monster::GRAND_ELF:
             return _(
-                "The elves stand at attention as you approach.  Their leader calls to you and says, \"Let us not impede your progress, ally!  Move on, and may victory be yours.\"" );
+                "The elves stand at attention as you approach. Their leader calls to you and says, \"Let us not impede your progress, ally! Move on, and may victory be yours.\"" );
         default:
             break;
         }
@@ -750,7 +750,7 @@ namespace Campaign
         switch ( monsterId ) {
         case Monster::DWARF:
         case Monster::BATTLE_DWARF:
-            return _( "\"The Dwarfbane!!!!, run for your lives.\"" );
+            return _( "\"The Dwarfbane!! Run for your lives!\"" );
         default:
             break;
         }
