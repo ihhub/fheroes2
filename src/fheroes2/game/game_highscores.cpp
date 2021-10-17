@@ -482,6 +482,7 @@ fheroes2::GameMode Game::HighScores()
     if ( !hgs.Load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
         hgs.populateHighScoresStandard();
+        hgs.Save( highScoreDataPath );
     }
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
