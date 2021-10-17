@@ -614,15 +614,15 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
         for ( const Heroes * hero : heroes ) {
             for ( const int art : artifacts )
-                totalIncome += static_cast<Funds>(ProfitConditions::FromArtifact( art )) * hero->artifactCount( Artifact( art ) );
+                totalIncome += static_cast<Funds>( ProfitConditions::FromArtifact( art ) ) * hero->artifactCount( Artifact( art ) );
             // TAX_LIEN
-            totalIncome -= static_cast<Funds>(ProfitConditions::FromArtifact( Artifact::TAX_LIEN )) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
+            totalIncome -= static_cast<Funds>( ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) ) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
         }
     }
 
     if ( INCOME_HEROSKILLS & type ) {
         // estates skill bonus
-        for ( const auto & hero : heroes)
+        for ( const auto & hero : heroes )
             totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
     }
 
