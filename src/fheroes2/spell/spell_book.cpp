@@ -267,7 +267,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
         else if ( le.MousePressRight( next_list ) ) {
             Dialog::Message( "", _( "View next page" ), Font::BIG );
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        else if ( le.MouseClickLeft( clos_rt ) || HotKeyCloseWindow )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const s32 index = GetRectIndex( coords, le.GetMouseCursor() );
