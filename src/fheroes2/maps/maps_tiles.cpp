@@ -1530,7 +1530,7 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 /* check road */
 bool Maps::Tiles::isRoad() const
 {
-    return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
+    return ( tileIsRoad && !isStream() ) || mp2_object == MP2::OBJ_CASTLE;
 }
 
 bool Maps::Tiles::isStream( void ) const
