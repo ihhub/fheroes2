@@ -2595,7 +2595,7 @@ msgstr "Készítők listájának megjelenítése."
 msgid "High Scores"
 msgstr "Dicsőségtábla"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
 
 #, fuzzy
