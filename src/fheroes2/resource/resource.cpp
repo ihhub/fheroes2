@@ -212,6 +212,19 @@ Funds Funds::operator+( const Funds & pm ) const
     return res;
 }
 
+Funds & Funds::operator+=( const cost_t & cost )
+{
+    wood += cost.wood;
+    mercury += cost.mercury;
+    ore += cost.ore;
+    sulfur += cost.sulfur;
+    crystal += cost.crystal;
+    gems += cost.gems;
+    gold += cost.gold;
+
+    return *this;
+}
+
 Funds & Funds::operator+=( const Funds & pm )
 {
     wood += pm.wood;

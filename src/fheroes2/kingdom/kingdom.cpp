@@ -580,11 +580,11 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CAPTURED & type ) {
         // captured object
-        const int resources[]
-            = {Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN};
+        const std::array<int, 8> resources
+            = { Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN };
 
-        for ( u32 index = 0; resources[index] != Resource::UNKNOWN; ++index )
-            totalIncome += ProfitConditions::FromMine( resources[index] ) * world.CountCapturedMines( resources[index], GetColor() );
+        for ( const int res : resources )
+            totalIncome += static_cast<Funds>( ProfitConditions::FromMine( res ) ) * world.CountCapturedMines( res, GetColor() );
     }
 
     if ( INCOME_CASTLES & type ) {
@@ -614,16 +614,16 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
         for ( const Heroes * hero : heroes ) {
             for ( const int art : artifacts )
-                totalIncome += ProfitConditions::FromArtifact( art ) * hero->artifactCount( Artifact( art ) );
+                totalIncome += static_cast<Funds>(ProfitConditions::FromArtifact( art )) * hero->artifactCount( Artifact( art ) );
             // TAX_LIEN
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
+            totalIncome -= static_cast<Funds>(ProfitConditions::FromArtifact( Artifact::TAX_LIEN )) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
         }
     }
 
     if ( INCOME_HEROSKILLS & type ) {
         // estates skill bonus
-        for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+        for ( const auto & hero : heroes)
+            totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
     }
 
     if ( isControlAI() ) {

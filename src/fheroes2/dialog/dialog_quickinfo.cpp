@@ -86,7 +86,7 @@ namespace
 
     std::string GetMinesIncomeString( const int resourceType )
     {
-        const payment_t income = ProfitConditions::FromMine( resourceType );
+        const payment_t income = static_cast<payment_t>( ProfitConditions::FromMine( resourceType ) );
         const int32_t value = income.Get( resourceType );
 
         std::string res;

@@ -115,7 +115,7 @@ u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & st
     fheroes2::Blit( sprite, sf, 15, 0 );
 
     std::string perday = _( "%{count} / day" );
-    payment_t info = ProfitConditions::FromMine( res );
+    const payment_t info = static_cast<payment_t>( ProfitConditions::FromMine( res ) );
     const s32 * current = nullptr;
 
     switch ( res ) {

@@ -297,7 +297,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     case BUILD_CASTLE:
     case BUILD_STATUE:
     case BUILD_SPEC: {
-        const payment_t profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
+        const cost_t profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
         StringReplace( description, "%{count}", profit.gold );
         break;
     }

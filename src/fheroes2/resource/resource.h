@@ -76,6 +76,7 @@ public:
     Funds operator*( u32 mul ) const;
     Funds operator-( const Funds & ) const;
     Funds & operator+=( const Funds & );
+    Funds & operator+=( const cost_t & cost );
     Funds & operator*=( u32 mul );
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );

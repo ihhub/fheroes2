@@ -23,13 +23,11 @@
 #ifndef H2PROFIT_H
 #define H2PROFIT_H
 
-#include "payment.h"
-
 namespace ProfitConditions
 {
-    payment_t FromBuilding( u32, int );
-    payment_t FromArtifact( int );
-    payment_t FromMine( int );
+    cost_t FromBuilding( const uint32_t building, const int race );
+    cost_t FromArtifact( const int artifact );
+    cost_t FromMine( const int type );
 }
 
 #endif

@@ -2842,7 +2842,7 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const cost_t profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
         break;
     }
