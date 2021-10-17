@@ -2547,7 +2547,7 @@ msgstr "Ver tela dos créditos."
 msgid "High Scores"
 msgstr "Recordes"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Ver a tela de Records."
 
 msgid "Game settings."

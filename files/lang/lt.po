@@ -2433,7 +2433,7 @@ msgstr ""
 msgid "High Scores"
 msgstr "Geriausi rezultatai"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr ""
 
 msgid "Game settings."

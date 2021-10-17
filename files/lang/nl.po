@@ -2375,7 +2375,7 @@ msgstr ""
 msgid "High Scores"
 msgstr ""
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr ""
 
 msgid "Game settings."

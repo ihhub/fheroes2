@@ -2598,7 +2598,7 @@ msgstr "Visa \"Tack till\"-skärmen."
 msgid "High Scores"
 msgstr "Poänglistan"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
 
 #, fuzzy
