@@ -39,7 +39,8 @@ struct SpellBook : public SpellStorage
         ALL = ADVN | CMBT
     };
 
-    Spell Open( const HeroBase & hero, const Filter displayableSpells, bool canselect, std::function<void( const std::string & )> * statusCallback = nullptr ) const;
+    Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canselect,
+                const std::function<void( const std::string & )> * statusCallback = nullptr ) const;
     void Edit( const HeroBase & hero );
 
     SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
