@@ -30,13 +30,13 @@
 
 namespace
 {
-    const std::bitset<256> ObjLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 10, 11, 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
+    const std::bitset<256> objLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 10, 11, 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
 
-    const std::bitset<256> ObjLav2ShadowBitset
+    const std::bitset<256> objLav2ShadowBitset
         = fheroes2::makeBitsetFromVector<256>( { 7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 29, 34, 38, 39, 43, 44, 45, 46,
                                                  47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 72, 77, 78 } );
 
-    const std::bitset<256> ObjLav3ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+    const std::bitset<256> objLav3ShadowBitset = fheroes2::makeBitsetFromVector<256>(
         { 1,   2,   3,   4,   16,  17,  18,  19,  31,  32,  33,  34,  38,  46,  47,  48,  49,  50,  57,  58,  59,  61,  62,  63,  64,  76,  77,
           91,  92,  93,  106, 107, 108, 109, 110, 111, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
           134, 136, 137, 138, 139, 142, 143, 144, 145, 146, 147, 148, 149, 166, 167, 168, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
@@ -61,7 +61,7 @@ bool ObjLav2::isAction( u32 index )
 
 bool ObjLav2::isShadow( const uint8_t index )
 {
-    return ObjLav2ShadowBitset[index];
+    return objLav2ShadowBitset[index];
 }
 
 int ObjLav3::GetPassable( const uint8_t index )
@@ -81,7 +81,7 @@ bool ObjLav3::isAction( u32 index )
 
 bool ObjLav3::isShadow( const uint8_t index )
 {
-    return ObjLav3ShadowBitset[index];
+    return objLav3ShadowBitset[index];
 }
 
 int ObjLava::GetPassable( const uint8_t index )
@@ -104,7 +104,7 @@ bool ObjLava::isAction( u32 index )
 
 bool ObjLava::isShadow( const uint8_t index )
 {
-    return ObjLavaShadowBitset[index];
+    return objLavaShadowBitset[index];
 }
 
 int ObjLav2::GetActionObject( u32 )

@@ -30,7 +30,7 @@
 
 namespace
 {
-    const std::bitset<256> ObjSnowShadowBitset
+    const std::bitset<256> objSnowShadowBitset
         = fheroes2::makeBitsetFromVector<256>( { 21,  25,  29,  31,  33,  36,  40,  48,  54,  59,  63,  67,  70,  73,  76,  79,  101, 104, 105, 106, 107,
                                                  108, 109, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 137, 140, 142, 144, 148, 193, 203, 207 } );
 }
@@ -56,7 +56,7 @@ bool ObjSnow::isAction( u32 index )
 
 bool ObjSnow::isShadow( const uint8_t index )
 {
-    return ObjSnowShadowBitset[index];
+    return objSnowShadowBitset[index];
 }
 
 int ObjSnow::GetActionObject( u32 index )

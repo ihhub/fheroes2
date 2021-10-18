@@ -29,7 +29,7 @@
 
 namespace
 {
-    const std::bitset<256> ObjTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
+    const std::bitset<256> objTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
 }
 
 int ObjTree::GetPassable( const uint8_t index )
@@ -47,7 +47,7 @@ bool ObjTree::isAction( u32 index )
 
 bool ObjTree::isShadow( const uint8_t index )
 {
-    return ObjTreeShadowBitset[index];
+    return objTreeShadowBitset[index];
 }
 
 int ObjTree::GetActionObject( u32 )

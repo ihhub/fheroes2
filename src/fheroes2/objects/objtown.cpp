@@ -27,7 +27,7 @@
 
 namespace
 {
-    const std::bitset<256> ObTownShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 } );
+    const std::bitset<256> obTownShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 } );
 }
 
 int ObjTown::GetPassable( const uint8_t index0 )
@@ -77,7 +77,7 @@ bool ObjTwba::isAction( u32 index )
 
 bool ObjTown::isShadow( const uint8_t index )
 {
-    return ObTownShadowBitset[index];
+    return obTownShadowBitset[index];
 }
 
 bool ObjTwba::isShadow( const uint8_t /*index*/ )

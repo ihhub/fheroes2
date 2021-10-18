@@ -30,9 +30,9 @@
 
 namespace
 {
-    const std::bitset<256> ObjMnts1ShadowBitset
+    const std::bitset<256> objMnts1ShadowBitset
         = fheroes2::makeBitsetFromVector<256>( { 0, 5, 11, 17, 21, 26, 32, 38, 42, 45, 49, 52, 55, 59, 62, 65, 68, 71, 74, 75, 79, 80 } );
-    const std::bitset<256> ObjMnts2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+    const std::bitset<256> objMnts2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
         { 0, 5, 11, 17, 21, 26, 32, 38, 42, 46, 47, 53, 57, 58, 62, 68, 72, 75, 79, 82, 85, 89, 92, 95, 98, 101, 104, 105, 109, 110 } );
 }
 /*
@@ -89,10 +89,10 @@ MP2::MapObjectType ObjMnts2::GetActionObject( u32 )
 
 bool ObjMnts1::isShadow( const uint8_t index )
 {
-    return ObjMnts1ShadowBitset[index];
+    return objMnts1ShadowBitset[index];
 }
 
 bool ObjMnts2::isShadow( const uint8_t index )
 {
-    return ObjMnts2ShadowBitset[index];
+    return objMnts2ShadowBitset[index];
 }

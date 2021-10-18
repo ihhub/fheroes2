@@ -30,7 +30,7 @@
 
 namespace
 {
-    const std::bitset<256> ObjCrckShadowBitset
+    const std::bitset<256> objCrckShadowBitset
         = fheroes2::makeBitsetFromVector<256>( { 2, 9, 13, 15, 20, 23, 28, 33, 36, 39, 45, 48, 51, 54, 56, 73, 75, 79, 200, 201, 207, 237 } );
 }
 
@@ -57,7 +57,7 @@ bool ObjCrck::isAction( u32 index )
 
 bool ObjCrck::isShadow( const uint8_t index )
 {
-    return ObjCrckShadowBitset[index];
+    return objCrckShadowBitset[index];
 }
 
 int ObjCrck::GetActionObject( u32 index )
