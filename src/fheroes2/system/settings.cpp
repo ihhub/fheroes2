@@ -37,6 +37,11 @@
 #include "translations.h"
 #include "version.h"
 
+#if defined( _WIN32 )
+#include "find_steam_game.h"
+#define HEROES2_GOG_ID "1207658785"
+#endif
+
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
 
@@ -538,6 +543,15 @@ ListDirs Settings::GetRootDirs()
     const std::string & data = System::GetDataDirectory( "fheroes2" );
     if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
         dirs.push_back( data );
+
+    // game store directories
+#if defined( _WIN32 )
+    char gog_path[_FSG_PATH_MAX];
+    fsg_get_gog_game_path( gog_path, HEROES2_GOG_ID );
+    if ( strlen( gog_path ) > 0 ) {
+        dirs.push_back( std::string( gog_path ) );
+    }
+#endif
 
     return dirs;
 }

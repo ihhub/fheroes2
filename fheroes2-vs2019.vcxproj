@@ -545,6 +545,7 @@
     <ClInclude Include="src\fheroes2\spell\spell_book.h" />
     <ClInclude Include="src\fheroes2\spell\spell_storage.h" />
     <ClInclude Include="src\fheroes2\system\bitmodes.h" />
+    <ClInclude Include="src\fheroes2\system\find_steam_game.h" />
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\save_format_version.h" />
