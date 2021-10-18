@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "heroes.h"
 #include "icn.h"
 #include "race.h"
@@ -941,11 +943,14 @@ int ICN::PORTxxxx( int heroId )
 
     case Heroes::DEBUG_HERO:
         return ICN::PORT0059;
+    case Heroes::UNKNOWN:
+        return ICN::UNKNOWN;
 
     default:
         break;
     }
 
+    assert( 0 );
     return ICN::UNKNOWN;
 }
 

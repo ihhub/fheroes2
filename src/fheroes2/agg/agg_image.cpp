@@ -28,7 +28,6 @@
 #include "agg_file.h"
 #include "agg_image.h"
 #include "h2d.h"
-#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
@@ -1018,15 +1017,15 @@ namespace fheroes2
             }
             case ICN::PORTMEDI: {
                 // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
-                _icnVsSprite[id].resize( Heroes::DEBUG_HERO + 1 );
-                for ( int i = 0; i < Heroes::DEBUG_HERO; ++i ) {
-                    const int icnPortId = ICN::PORTxxxx( i );
-                    if ( icnPortId != ICN::UNKNOWN ) {
-                        Sprite & out = _icnVsSprite[id][i];
-                        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( icnPortId, 0 );
-                        out.resize( 50, 47 );
-                        fheroes2::Resize( original, out );
-                    }
+                int i = 0;
+                while ( 1 ) {
+                    const int icnPortId = ICN::PORTxxxx( i++ );
+                    if ( icnPortId == ICN::UNKNOWN )
+                        break;
+                    Sprite out( 50, 47 );
+                    const fheroes2::Sprite & original = fheroes2::AGG::GetICN( icnPortId, 0 );
+                    fheroes2::Resize( original, out, true );
+                    _icnVsSprite[id].emplace_back( out );
                 }
                 return true;
             }
