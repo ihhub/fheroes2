@@ -428,6 +428,11 @@ bool StepIsObstacle( const Route::Step & s )
         break;
     }
 
+    // consider the protected tile is an obstacle because the hero will not be able to step on it without a battle
+    if ( Maps::TileIsUnderProtection( index ) ) {
+        return true;
+    }
+
     return false;
 }
 
