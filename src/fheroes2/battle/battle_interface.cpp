@@ -2332,21 +2332,39 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Enable auto combat" );
         ButtonAutoAction( b, a );
+        
+        if ( le.MousePressRight() )
+        {
+            Dialog::Message( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Font::BIG );
+        }
     }
     else if ( le.MouseCursor( btn_settings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Customize system options" );
         ButtonSettingsAction();
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "System Options" ), _( "Allows you to customize the combat screen." ), Font::BIG );
+        }
     }
     else if ( conf.ExtBattleSoftWait() && le.MouseCursor( btn_wait.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Wait this unit" );
         ButtonWaitAction( a );
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ), Font::BIG );
+        }
     }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Skip this unit" );
         ButtonSkipAction( a );
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "Skip" ), _( "Skips the current creature. The current creature loses its turn and does not get to go again until the next round." ),
+                             Font::BIG );
+        }
     }
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
