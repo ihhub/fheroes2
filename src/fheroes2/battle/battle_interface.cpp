@@ -828,7 +828,7 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         if ( ( *it ).first ) {
             const fheroes2::Rect unitRoi = ( *it ).second + offset;
             if ( le.MouseCursor( unitRoi ) ) {
-                msg = _( "View %{monster} info." );
+                msg = _( "View %{monster} info" );
                 StringReplace( msg, "%{monster}", ( *it ).first->GetName() );
             }
 
@@ -2073,7 +2073,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
         if ( b_enemy ) {
             if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
-                statusMsg = _( "View %{monster} info." );
+                statusMsg = _( "View %{monster} info" );
                 StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                 return Cursor::WAR_INFO;
             }
@@ -2105,7 +2105,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
         }
         else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
-            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
+            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
             StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
             return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
         }
@@ -2310,7 +2310,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     const fheroes2::Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
     if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
-        msg = _( "View Ballista Info" );
+        msg = _( "View Ballista info" );
 
         if ( le.MouseClickLeft( mainTowerRect ) || le.MousePressRight( mainTowerRect ) ) {
             const Castle * cstl = Arena::GetCastle();
@@ -2330,12 +2330,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( le.MouseCursor( btn_auto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Auto combat" );
+        msg = _( "Enable auto combat" );
         ButtonAutoAction( b, a );
     }
     else if ( le.MouseCursor( btn_settings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Customize system options." );
+        msg = _( "Customize system options" );
         ButtonSettingsAction();
     }
     else if ( conf.ExtBattleSoftWait() && le.MouseCursor( btn_wait.area() ) ) {
@@ -2351,7 +2351,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
-            msg = _( "Hero's Options" );
+            msg = _( "View Hero's options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2360,7 +2360,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View Opposing Hero" );
+            msg = _( "View opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2377,7 +2377,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( opponent2 && le.MouseCursor( opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent2Area = opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
-            msg = _( "Hero's Options" );
+            msg = _( "View Hero's options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -2386,7 +2386,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View Opposing Hero" );
+            msg = _( "View opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
