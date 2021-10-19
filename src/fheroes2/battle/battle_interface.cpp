@@ -2741,10 +2741,10 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
     std::string msg;
     if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skip the turn" );
+        msg = _( "%{name} skip their turn." );
     }
     else {
-        msg = _( "%{name} wait their turn" );
+        msg = _( "%{name} wait their turn." );
     }
 
     StringReplace( msg, "%{name}", attacker.GetName() );
@@ -3608,7 +3608,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
     const fheroes2::Rect & pos = unit.GetRectPosition();
 
-    std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
+    std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}." ) : _( "Bad luck descends on the %{attacker}." );
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
@@ -3921,7 +3921,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         }
     }
 
-    status.SetMessage( _( "The mirror image is created" ), true );
+    status.SetMessage( _( "The mirror image is created." ), true );
 }
 
 void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )
