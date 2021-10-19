@@ -2572,7 +2572,8 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
     Kingdom & kingdom = hero.GetKingdom();
 
     if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
-        Dialog::Message( MP2::StringObject( objectType ), "empty", Font::BIG, Dialog::OK );
+        Dialog::Message( MP2::StringObject( objectType ), _( "The captain looks at you and tell you to go away \"You already have one map. That's enough.\"" ),
+                         Font::BIG, Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
         if (
