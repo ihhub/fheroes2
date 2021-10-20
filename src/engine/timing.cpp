@@ -24,7 +24,7 @@
 
 #include <SDL.h>
 
-namespace
+namespace fheroes2
 {
     struct TimerImp
     {
@@ -50,10 +50,7 @@ namespace
             }
         }
     };
-}
 
-namespace fheroes2
-{
     Time::Time()
         : _startTime( std::chrono::steady_clock::now() )
     {}
@@ -114,22 +111,22 @@ namespace fheroes2
 
     Timer::~Timer()
     {
-        delete static_cast<TimerImp *>( _timer );
+        delete _timer;
     }
 
     bool Timer::valid() const
     {
-        return static_cast<TimerImp *>( _timer )->valid();
+        return _timer->valid();
     }
 
     void Timer::run( uint32_t interval, uint32_t ( *fn )( uint32_t, void * ), void * param )
     {
-        static_cast<TimerImp *>( _timer )->run( interval, fn, param );
+        _timer->run( interval, fn, param );
     }
 
     void Timer::remove()
     {
-        static_cast<TimerImp *>( _timer )->remove();
+        _timer->remove();
     }
 
     void delayforMs( const uint32_t delayMs )

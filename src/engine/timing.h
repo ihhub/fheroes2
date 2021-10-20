@@ -64,6 +64,8 @@ namespace fheroes2
         uint64_t _delayMs;
     };
 
+    struct TimerImp;
+
     class Timer
     {
     public:
@@ -78,7 +80,7 @@ namespace fheroes2
         void remove();
 
     private:
-        void * _timer;
+        TimerImp * _timer;
     };
 
     void delayforMs( const uint32_t delayMs );

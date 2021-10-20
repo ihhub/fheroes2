@@ -97,7 +97,11 @@ namespace
     // For now only SDL library is supported.
     bool initCoreInternally( const std::set<fheroes2::SystemInitializationComponent> & components )
     {
-        if ( SDL_Init( getSDLInitFlags( components ) ) < 0 ) {
+        // Timers on SDL 1 don't work without explicit initialization. This is a workaround for it.
+        // TODO: replace SDL based timers by single-threaded implementation without timers at all.
+        const uint32_t sdlFlags = getSDLInitFlags( components ) | SDL_INIT_TIMER;
+
+        if ( SDL_Init( sdlFlags ) < 0 ) {
             ERROR_LOG( SDL_GetError() );
             return false;
         }
