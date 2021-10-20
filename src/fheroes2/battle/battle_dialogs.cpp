@@ -280,7 +280,7 @@ void Battle::DialogBattleSettings( void )
             RedrawBattleSettings( optionAreas );
             saveConfiguration = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok.area() ) ) {
+        else if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
         }
     }

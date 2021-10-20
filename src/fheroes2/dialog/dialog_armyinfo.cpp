@@ -241,7 +241,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
             // exit
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
                 result = Dialog::CANCEL;
                 break;
             }
