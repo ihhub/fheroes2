@@ -629,7 +629,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         buttonChoices.button( i ).draw();
 
     Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
-    textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
+    textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
     drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
