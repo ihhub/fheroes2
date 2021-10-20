@@ -177,7 +177,7 @@ namespace fheroes2
                     std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
                     std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
-                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
+                    imageArray.erase( imageArray.begin() + ( 128 + 0xC0 - 0x80 ) );
                 }
                 return true;
             }
