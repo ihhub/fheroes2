@@ -527,6 +527,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_LEANTO:
+        case MP2::OBJ_MAGELLANMAPS:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
