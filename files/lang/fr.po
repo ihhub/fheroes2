@@ -5904,7 +5904,7 @@ msgstr "Cabane de la sorcière"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Cartes de Magellan"
 
 msgid "Derelict Ship"

@@ -5818,7 +5818,7 @@ msgstr "Heksehytte"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Magellanske kart"
 
 msgid "Derelict Ship"

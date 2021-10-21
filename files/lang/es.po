@@ -5838,7 +5838,7 @@ msgstr "Choza de brujas"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Mapas de Magallanes"
 
 msgid "Derelict Ship"
