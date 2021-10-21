@@ -173,11 +173,11 @@ namespace fheroes2
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
-                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
-                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
-                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
+                    imageArray.insert( imageArray.begin() + 96, 64, imageArray[0] );
+                    std::swap( imageArray[136], imageArray[192] ); // Move sprites for chars 0xA8
+                    std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
-                    imageArray.erase( imageArray.begin() + ( 128 + 0xC0 - 0x80 ) );
+                    imageArray.erase( imageArray.begin() + 192 );
                 }
                 return true;
             }
