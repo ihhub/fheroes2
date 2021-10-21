@@ -1273,7 +1273,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
-    if ( Settings::Get().isCampaignGameType() ) {
+    if ( Settings::Get().isCampaignGameType() && hero.isControlHuman() ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
