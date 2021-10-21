@@ -287,7 +287,7 @@ void ShowNewWeekDialog( void )
                 message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n";
+            message += "\n \n";
         }
     }
 
