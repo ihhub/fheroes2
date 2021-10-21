@@ -106,6 +106,13 @@ namespace
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
     }
+
+    void freeResources()
+    {
+        fheroes2::Display::instance().release();
+        fheroes2::freeCore();
+        fheroes2::freeHardware();
+    }
 }
 
 #if defined( _MSC_VER )
@@ -114,112 +121,119 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    fheroes2::initHardware();
-    Logging::InitLog();
-
-    DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
-
-    Settings & conf = Settings::Get();
-    conf.SetProgramPath( argv[0] );
-
-    InitConfigDir();
-    InitDataDir();
-    ReadConfigs();
-
-    // getopt
+    try
     {
-        int opt;
-        while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
-            switch ( opt ) {
+        fheroes2::initHardware();
+        Logging::InitLog();
+
+        DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
+
+        Settings & conf = Settings::Get();
+        conf.SetProgramPath( argv[0] );
+
+        InitConfigDir();
+        InitDataDir();
+        ReadConfigs();
+
+        // getopt
+        {
+            int opt;
+            while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
+                switch ( opt ) {
 #ifndef BUILD_RELEASE
-            case 'd':
-                conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
-                break;
+                case 'd':
+                    conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
+                    break;
 #endif
-            case '?':
-            case 'h':
-                return PrintHelp( argv[0] );
+                case '?':
+                case 'h':
+                    return PrintHelp( argv[0] );
 
-            default:
-                break;
-            }
-    }
+                default:
+                    break;
+                }
+        }
 
-    std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio, fheroes2::SystemInitializationComponent::Video };
+        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio, fheroes2::SystemInitializationComponent::Video };
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
-    coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
+        coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 
-    if ( fheroes2::initCore( coreComponents ) ) {
-        try
-        {
-            std::atexit( fheroes2::freeCore );
-
-            conf.setGameLanguage( conf.getGameLanguage() );
-
-            if ( Audio::isValid() ) {
-                Mixer::SetChannels( 16 );
-                Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
-
-                Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-                Music::SetFadeIn( 900 );
-            }
-
-            fheroes2::Display & display = fheroes2::Display::instance();
-            if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
-                fheroes2::engine().toggleFullScreen();
-
-            display.resize( conf.VideoMode().width, conf.VideoMode().height );
-            display.fill( 0 ); // start from a black screen
-
-            fheroes2::engine().setTitle( GetCaption() );
-
-            SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
-
-            // Initialize local event processing.
-            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
-
-            // Update mouse cursor when switching between software emulation and OS mouse modes.
-            fheroes2::cursor().registerUpdater( Cursor::Refresh );
-
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
-            fheroes2::engine().setIcon( appIcon );
-
-            DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
-
-            // read data dir
-            if ( !AGG::Init() ) {
-                fheroes2::Display::instance().release();
-                return EXIT_FAILURE;
-            }
-
-            atexit( &AGG::Quit );
-
-            // load BIN data
-            Bin_Info::InitBinInfo();
-
-            // init game data
-            Game::Init();
-
-            if ( conf.isShowIntro() ) {
-                fheroes2::showTeamInfo();
-
-                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-            }
-
-            // init cursor
-            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-            Game::mainGameLoop( conf.isFirstGameRun() );
+        if ( !fheroes2::initCore( coreComponents ) ) {
+            fheroes2::freeHardware();
+            return EXIT_FAILURE;
         }
-        catch ( const std::exception & ex ) {
-            ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
+
+        conf.setGameLanguage( conf.getGameLanguage() );
+
+        if ( Audio::isValid() ) {
+            Mixer::SetChannels( 16 );
+            Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+
+            Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
+            Music::SetFadeIn( 900 );
         }
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
+            fheroes2::engine().toggleFullScreen();
+
+        display.resize( conf.VideoMode().width, conf.VideoMode().height );
+        display.fill( 0 ); // start from a black screen
+
+        fheroes2::engine().setTitle( GetCaption() );
+
+        SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
+
+        // Initialize local event processing.
+        LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+
+        // Update mouse cursor when switching between software emulation and OS mouse modes.
+        fheroes2::cursor().registerUpdater( Cursor::Refresh );
+
+        const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+        fheroes2::engine().setIcon( appIcon );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+
+        // read data dir
+        if ( !AGG::Init() ) {
+            ERROR_LOG( "AGG file reading failed. Closing the application..." );
+            freeResources();
+            return EXIT_FAILURE;
+        }
+
+        atexit( &AGG::Quit );
+
+        // load BIN data
+        Bin_Info::InitBinInfo();
+
+        // init game data
+        Game::Init();
+
+        if ( conf.isShowIntro() ) {
+            fheroes2::showTeamInfo();
+
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+        }
+
+        // init cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+        Game::mainGameLoop( conf.isFirstGameRun() );
+    }
+    catch ( const std::exception & ex ) {
+        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
     }
 
-    fheroes2::Display::instance().release();
-    fheroes2::freeHardware();
+    try
+    {
+        freeResources();
+    }
+    catch ( const std::exception & ex ) {
+        ERROR_LOG( "Exception '" << ex.what() << "' occured during application exiting." );
+    }
 
     return EXIT_SUCCESS;
 }
