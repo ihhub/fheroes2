@@ -949,7 +949,8 @@ int ICN::PORTxxxx( int heroId )
     default:
         break;
     }
-
+    
+    // Did you add a new hero? Please add the logic above.
     assert( 0 );
     return ICN::UNKNOWN;
 }
