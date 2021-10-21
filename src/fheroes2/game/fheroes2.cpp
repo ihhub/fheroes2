@@ -121,8 +121,7 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    try
-    {
+    try {
         fheroes2::initHardware();
         Logging::InitLog();
 
@@ -154,7 +153,8 @@ int main( int argc, char ** argv )
                 }
         }
 
-        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio, fheroes2::SystemInitializationComponent::Video };
+        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
+                                                                          fheroes2::SystemInitializationComponent::Video };
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
@@ -227,8 +227,7 @@ int main( int argc, char ** argv )
         ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
     }
 
-    try
-    {
+    try {
         freeResources();
     }
     catch ( const std::exception & ex ) {
