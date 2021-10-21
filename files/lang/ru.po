@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 21:44+0800\n"
+"POT-Creation-Date: 2021-10-20 22:34+0800\n"
 "PO-Revision-Date: 2021-08-02 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -94,32 +94,32 @@ msgstr ""
 "Легион\n"
 "%{monster}"
 
-msgid "army|Few"
-msgstr "Мало"
-
-msgid "army|Horde"
-msgstr "Орда"
-
-msgid "army|Lots"
-msgstr "Много"
+msgid "army|Several"
+msgstr "Немного"
 
 msgid "army|Pack"
 msgstr "Стая"
 
-msgid "army|Several"
-msgstr "Немного"
+msgid "army|Lots"
+msgstr "Много"
 
-msgid "army|Legion"
-msgstr "Легион"
-
-msgid "army|Swarm"
-msgstr "Туча"
+msgid "army|Horde"
+msgstr "Орда"
 
 msgid "army|Throng"
 msgstr "Толпа"
 
+msgid "army|Swarm"
+msgstr "Туча"
+
 msgid "army|Zounds"
 msgstr "Тысячи"
+
+msgid "army|Legion"
+msgstr "Легион"
+
+msgid "army|Few"
+msgstr "Мало"
 
 msgid "All %{race} troops +1"
 msgstr "Все отряды одной расы +1"
@@ -249,6 +249,12 @@ msgstr "Ничего"
 
 msgid "Defender"
 msgstr "Защитник"
+
+msgid "As you reach for the %{name}, it mysteriously disappears."
+msgstr ""
+
+msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
+msgstr ""
 
 msgid "You have captured an enemy artifact!"
 msgstr "Вы захватили вражеский артефакт!"
@@ -586,6 +592,10 @@ msgstr "Альянс Драконов"
 
 msgid "Elven Alliance"
 msgstr "Альянс Эльфов"
+
+#, fuzzy
+msgid "Kraeger defeated"
+msgstr " поражение"
 
 msgid "Wayward Son"
 msgstr "Блудный Сын"
@@ -1173,6 +1183,14 @@ msgstr "Шлем Защитника"
 msgid "Power Axe"
 msgstr "Топор Власти"
 
+#, fuzzy
+msgid "Stealth Shield"
+msgstr "Всемогущий Щит"
+
+#, fuzzy
+msgid "Nomad Boots"
+msgstr "Кочевников"
+
 msgid "Summon Earth"
 msgstr "Земной элементал"
 
@@ -1205,6 +1223,268 @@ msgstr "Невозможно построить: %{name}."
 
 msgid "Build %{name}."
 msgstr "Построить %{name}."
+
+msgid "Cannot recruit - guest to guard automove error."
+msgstr "Найм невозможен - guest to guard automove error."
+
+msgid "Cannot recruit - you already have a Hero in this town."
+msgstr "Найм невозможен. В замке уже есть герой."
+
+msgid "Cannot recruit - you have too many Heroes."
+msgstr "Найм невозможен. Вы уже имеете максимум героев."
+
+msgid "Cannot afford a Hero"
+msgstr "Недостаточно средств для найма"
+
+msgid "There is no room in the garrison for this army."
+msgstr "Нет места в гарнизоне."
+
+msgid "Fortifications"
+msgstr "Укрепления"
+
+msgid "Farm"
+msgstr "Ферма"
+
+msgid "Thatched Hut"
+msgstr "Мазанка"
+
+msgid "Archery Range"
+msgstr "Стрельбище"
+
+msgid "Upg. Archery Range"
+msgstr "Полигон"
+
+msgid "Blacksmith"
+msgstr "Кузница"
+
+msgid "Upg. Blacksmith"
+msgstr "Ковальня"
+
+msgid "Armory"
+msgstr "Оружейная"
+
+msgid "Upg. Armory"
+msgstr "Арсенал"
+
+msgid "Jousting Arena"
+msgstr "Арена"
+
+msgid "Upg. Jousting Arena"
+msgstr "Ресталище"
+
+msgid "Cathedral"
+msgstr "Собор"
+
+msgid "Upg. Cathedral"
+msgstr "Храм"
+
+msgid "Coliseum"
+msgstr "Колизей"
+
+msgid "Garbage Heap"
+msgstr "Свалка"
+
+msgid "Hut"
+msgstr "Хижина"
+
+msgid "Stick Hut"
+msgstr "Халупа"
+
+msgid "Upg. Stick Hut"
+msgstr "Хибара"
+
+msgid "Den"
+msgstr "Логово"
+
+msgid "Adobe"
+msgstr "Глинобитный дом"
+
+msgid "Upg. Adobe"
+msgstr "Логово огров"
+
+msgid "Bridge"
+msgstr "Мост"
+
+msgid "Upg. Bridge"
+msgstr "Царь-мост"
+
+msgid "Pyramid"
+msgstr "Пирамида"
+
+msgid "Rainbow"
+msgstr "Радуга"
+
+msgid "Crystal Garden"
+msgstr "Хрустальный Сад"
+
+msgid "Treehouse"
+msgstr "Дома-на-дереве"
+
+msgid "Cottage"
+msgstr "Избушка"
+
+msgid "Upg. Cottage"
+msgstr "Хоромы"
+
+msgid "Stonehenge"
+msgstr "Стоунхедж"
+
+msgid "Upg. Stonehenge"
+msgstr "Менгиры"
+
+msgid "Fenced Meadow"
+msgstr "Огороженная лужайка"
+
+msgid "Red Tower"
+msgstr "Красная башня"
+
+msgid "Dungeon"
+msgstr "Сокровищница"
+
+msgid "Waterfall"
+msgstr "Водопад"
+
+msgid "Cave"
+msgstr "Пещера"
+
+msgid "Crypt"
+msgstr "Склеп"
+
+msgid "Nest"
+msgstr "Гнездо"
+
+msgid "Maze"
+msgstr "Лабиринт"
+
+msgid "Upg. Maze"
+msgstr "Большой лабиринт"
+
+msgid "Swamp"
+msgstr "Болото"
+
+msgid "Green Tower"
+msgstr "Зеленая башня"
+
+msgid "Black Tower"
+msgstr "Черная башня"
+
+msgid "Library"
+msgstr "Библиотека"
+
+msgid "Orchard"
+msgstr "Цветник"
+
+msgid "Habitat"
+msgstr "Нора"
+
+msgid "Pen"
+msgstr "Хлев"
+
+msgid "Foundry"
+msgstr "Литейная"
+
+msgid "Upg. Foundry"
+msgstr "Фабрика"
+
+msgid "Cliff Nest"
+msgstr "Гнездовье"
+
+msgid "Ivory Tower"
+msgstr "Башня слоновой кости"
+
+msgid "Upg. Ivory Tower"
+msgstr "Обитель магов"
+
+msgid "Cloud Castle"
+msgstr "Небесный замок"
+
+msgid "Upg. Cloud Castle"
+msgstr "Небесный чертог"
+
+msgid "Storm"
+msgstr "Буря"
+
+msgid "Skull Pile"
+msgstr "Груда Черепов"
+
+msgid "Excavation"
+msgstr "Раскопки"
+
+msgid "Graveyard"
+msgstr "Кладбище"
+
+msgid "Upg. Graveyard"
+msgstr "Погост"
+
+msgid "Upg. Pyramid"
+msgstr "Великая пирамида"
+
+msgid "Mansion"
+msgstr "Особняк"
+
+msgid "Upg. Mansion"
+msgstr "Поместье"
+
+msgid "Mausoleum"
+msgstr "Мавзолей"
+
+msgid "Upg. Mausoleum"
+msgstr "Некрополь"
+
+msgid "Laboratory"
+msgstr "Лаборатория"
+
+msgid "Shrine"
+msgstr "Алтарь"
+
+msgid ""
+"The Fortifications increase the toughness of the walls, increasing the "
+"number of turns it takes to knock them down."
+msgstr ""
+"Укрепления увеличивают общую прочность стен, делая их более устойчивыми к "
+"разрушению."
+
+msgid "The Farm increases production of Peasants by %{count} per week."
+msgstr "Ферма увеличивает прирост Крестьян на %{count} в неделю."
+
+msgid ""
+"The Coliseum provides inspiring spectacles to defending troops, raising "
+"their morale by two during combat."
+msgstr ""
+"Представления, проводимые в колизее, увеличивают мораль защитников замка на "
+"2."
+
+msgid "The Garbage Heap increases production of Goblins by %{count} per week."
+msgstr "Свалка увеличивает прирост Гоблинов на %{count} в неделю."
+
+msgid "The Rainbow increases the luck of the defending units by two."
+msgstr "Радуга увеличивает удачу защитников замка на 2."
+
+msgid ""
+"The Crystal Garden increases production of Sprites by %{count} per week."
+msgstr "Хрустальный сад увеличивает прирост Фей на %{count} в неделю."
+
+msgid "The Dungeon increases the income of the town by %{count} / day."
+msgstr "Темница приносит в казну %{count} золотых ежедневно."
+
+msgid "The Waterfall increases production of Centaurs by %{count} per week."
+msgstr "Водопад увеличивает прирост Кентавров на %{count} в неделю."
+
+msgid ""
+"The Library increases the number of spells in the Guild by one for each "
+"level of the guild."
+msgstr ""
+"Библиотека увеличивает число заклинаний, доступных в гильдии магов, на одно "
+"заклинание для каждого уровня."
+
+msgid "The Orchard increases production of Halflings by %{count} per week."
+msgstr "Терновник увеличивает прирост Хоббитов на %{count} в неделю."
+
+msgid "The Storm adds +2 to the power of spells of a defending spell caster."
+msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
+
+msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr "Груда черепов увеличивает прирост Скелетов на %{count} в неделю."
 
 msgid "Thieves' Guild"
 msgstr "Гильдия Воров"
@@ -1251,203 +1531,10 @@ msgstr "Гильдия Магов 4 уровня"
 msgid "Mage Guild, Level 5"
 msgstr "Гильдия Магов 5 уровня"
 
-msgid "Crystal Garden"
-msgstr "Хрустальный Сад"
-
-msgid "Farm"
-msgstr "Ферма"
-
-msgid "Garbage Heap"
-msgstr "Свалка"
-
-msgid "Orchard"
-msgstr "Цветник"
-
-msgid "Skull Pile"
-msgstr "Груда Черепов"
-
-msgid "Waterfall"
-msgstr "Водопад"
-
-msgid "Coliseum"
-msgstr "Колизей"
-
-msgid "Dungeon"
-msgstr "Сокровищница"
-
-msgid "Fortifications"
-msgstr "Укрепления"
-
-msgid "Library"
-msgstr "Библиотека"
-
-msgid "Rainbow"
-msgstr "Радуга"
-
-msgid "Storm"
-msgstr "Буря"
-
-msgid "Cave"
-msgstr "Пещера"
-
-msgid "Excavation"
-msgstr "Раскопки"
-
-msgid "Habitat"
-msgstr "Нора"
-
-msgid "Hut"
-msgstr "Хижина"
-
-msgid "Thatched Hut"
-msgstr "Мазанка"
-
-msgid "Treehouse"
-msgstr "Дома-на-дереве"
-
-msgid "Archery Range"
-msgstr "Стрельбище"
-
-msgid "Cottage"
-msgstr "Избушка"
-
-msgid "Crypt"
-msgstr "Склеп"
-
-msgid "Graveyard"
-msgstr "Кладбище"
-
-msgid "Pen"
-msgstr "Хлев"
-
-msgid "Stick Hut"
-msgstr "Халупа"
-
-msgid "Blacksmith"
-msgstr "Кузница"
-
-msgid "Den"
-msgstr "Логово"
-
-msgid "Foundry"
-msgstr "Литейная"
-
-msgid "Nest"
-msgstr "Гнездо"
-
-msgid "Pyramid"
-msgstr "Пирамида"
-
-msgid "Adobe"
-msgstr "Глинобитный дом"
-
-msgid "Armory"
-msgstr "Оружейная"
-
-msgid "Cliff Nest"
-msgstr "Гнездовье"
-
-msgid "Mansion"
-msgstr "Особняк"
-
-msgid "Maze"
-msgstr "Лабиринт"
-
-msgid "Stonehenge"
-msgstr "Стоунхедж"
-
-msgid "Bridge"
-msgstr "Мост"
-
-msgid "Fenced Meadow"
-msgstr "Огороженная лужайка"
-
-msgid "Ivory Tower"
-msgstr "Башня слоновой кости"
-
-msgid "Jousting Arena"
-msgstr "Арена"
-
-msgid "Mausoleum"
-msgstr "Мавзолей"
-
-msgid "Swamp"
-msgstr "Болото"
-
-msgid "Cathedral"
-msgstr "Собор"
-
-msgid "Cloud Castle"
-msgstr "Небесный замок"
-
-msgid "Green Tower"
-msgstr "Зеленая башня"
-
-msgid "Laboratory"
-msgstr "Лаборатория"
-
-msgid "Red Tower"
-msgstr "Красная башня"
-
-msgid "Upg. Archery Range"
-msgstr "Полигон"
-
-msgid "Upg. Stick Hut"
-msgstr "Хибара"
-
-msgid "Upg. Cottage"
-msgstr "Хоромы"
-
-msgid "Upg. Graveyard"
-msgstr "Погост"
-
-msgid "Upg. Blacksmith"
-msgstr "Ковальня"
-
-msgid "Upg. Foundry"
-msgstr "Фабрика"
-
-msgid "Upg. Pyramid"
-msgstr "Великая пирамида"
-
-msgid "Upg. Armory"
-msgstr "Арсенал"
-
-msgid "Upg. Adobe"
-msgstr "Логово огров"
-
-msgid "Upg. Stonehenge"
-msgstr "Менгиры"
-
-msgid "Upg. Maze"
-msgstr "Большой лабиринт"
-
-msgid "Upg. Mansion"
-msgstr "Поместье"
-
-msgid "Upg. Jousting Arena"
-msgstr "Ресталище"
-
-msgid "Upg. Bridge"
-msgstr "Царь-мост"
-
-msgid "Upg. Ivory Tower"
-msgstr "Обитель магов"
-
-msgid "Upg. Mausoleum"
-msgstr "Некрополь"
-
-msgid "Upg. Cathedral"
-msgstr "Храм"
-
-msgid "Upg. Cloud Castle"
-msgstr "Небесный чертог"
-
-msgid "Black Tower"
-msgstr "Черная башня"
-
-msgid "Shrine"
-msgstr "Алтарь"
+msgid ""
+"The Shrine increases the necromancy skill of all your necromancers by 10 "
+"percent."
+msgstr "Алтарь увеличивает навык некромантии у всех ваших некромантов на 10%."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -1516,89 +1603,11 @@ msgid ""
 msgstr ""
 "Гильдия Магов позволяет героям учить заклинания и восполнять очки магии."
 
-msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr "Ферма увеличивает прирост Крестьян на %{count} в неделю."
-
-msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr "Свалка увеличивает прирост Гоблинов на %{count} в неделю."
-
-msgid ""
-"The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr "Хрустальный сад увеличивает прирост Фей на %{count} в неделю."
-
-msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr "Водопад увеличивает прирост Кентавров на %{count} в неделю."
-
-msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Терновник увеличивает прирост Хоббитов на %{count} в неделю."
-
-msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr "Груда черепов увеличивает прирост Скелетов на %{count} в неделю."
-
-msgid ""
-"The Fortifications increase the toughness of the walls, increasing the "
-"number of turns it takes to knock them down."
-msgstr ""
-"Укрепления увеличивают общую прочность стен, делая их более устойчивыми к "
-"разрушению."
-
-msgid ""
-"The Coliseum provides inspiring spectacles to defending troops, raising "
-"their morale by two during combat."
-msgstr ""
-"Представления, проводимые в колизее, увеличивают мораль защитников замка на "
-"2."
-
-msgid "The Rainbow increases the luck of the defending units by two."
-msgstr "Радуга увеличивает удачу защитников замка на 2."
-
-msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr "Темница приносит в казну %{count} золотых ежедневно."
-
-msgid ""
-"The Library increases the number of spells in the Guild by one for each "
-"level of the guild."
-msgstr ""
-"Библиотека увеличивает число заклинаний, доступных в гильдии магов, на одно "
-"заклинание для каждого уровня."
-
-msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
-
-msgid ""
-"The Shrine increases the necromancy skill of all your necromancers by 10 "
-"percent."
-msgstr "Алтарь увеличивает навык некромантии у всех ваших некромантов на 10%."
-
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Найм невозможен - guest to guard automove error."
-
-msgid "Cannot recruit - you already have a Hero in this town."
-msgstr "Найм невозможен. В замке уже есть герой."
-
-msgid "Cannot recruit - you have too many Heroes."
-msgstr "Найм невозможен. Вы уже имеете максимум героев."
-
-msgid "Cannot afford a Hero"
-msgstr "Недостаточно средств для найма"
-
-msgid "There is no room in the garrison for this army."
-msgstr "Нет места в гарнизоне."
-
 msgid "Recruit %{name}"
 msgstr "Нанять  %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Месяц: %{month}, Неделя: %{week}, День: %{day}"
-
-msgid "Income"
-msgstr "Доход"
-
-msgid "Army is full"
-msgstr "Нет места"
-
-msgid "Join Error"
-msgstr "Ошибка подключения"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
@@ -1606,6 +1615,36 @@ msgid ""
 msgstr ""
 "Чтобы Вас пропустили в Гильдию Магов, Вы должны купить книгу заклинаний, но "
 "к сожалению, Ваша сумка и так переполнена артифактами."
+
+msgid "Income"
+msgstr "Доход"
+
+#, fuzzy
+msgid "Exit"
+msgstr "Покинуть Город"
+
+msgid "Exit this menu."
+msgstr "Выход из меню."
+
+#, fuzzy
+msgid "Click to show next town."
+msgstr "Следующий город"
+
+msgid "Show next town"
+msgstr "Следующий город"
+
+#, fuzzy
+msgid "Click to show previous town."
+msgstr "Предыдущий город"
+
+msgid "Show previous town"
+msgstr "Предыдущий город"
+
+msgid "Army is full"
+msgstr "Нет места"
+
+msgid "Join Error"
+msgstr "Ошибка подключения"
 
 msgid "This town may not be upgraded to a castle."
 msgstr "В этом городе нельзя построить замок."
@@ -1621,12 +1660,6 @@ msgstr "Покинуть Город"
 
 msgid "Show Income"
 msgstr "Показать Доход"
-
-msgid "Show previous town"
-msgstr "Предыдущий город"
-
-msgid "Show next town"
-msgstr "Следующий город"
 
 msgid "Swap Heroes"
 msgstr "Переставить Героев"
@@ -2119,11 +2152,31 @@ msgstr "Сколько войнов перенести?"
 msgid "Fast separation into slots:"
 msgstr "Быстрое разделение:"
 
+msgid "Map: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Location: "
+msgstr ""
+
 msgid "File to Save:"
 msgstr "Сохранить файл:"
 
 msgid "File to Load:"
 msgstr "Загрузить файл:"
+
+#, fuzzy
+msgid "Click to save the current game."
+msgstr "Сохранить текущую игру."
+
+msgid "OK"
+msgstr "ОК"
+
+#, fuzzy
+msgid "Click to load a previously saved game."
+msgstr "Загрузка ранее сохраненной игры."
 
 msgid "Are you sure you want to delete file:"
 msgstr "Вы действительно хотите удалить файл:"
@@ -2196,6 +2249,15 @@ msgstr "Название Карты"
 
 msgid "The name of the currently selected map."
 msgstr "Название выбранной карты."
+
+msgid ""
+"Indicates whether the map is made for The Succession Wars or The Price of "
+"Loyalty version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Тип музыки"
 
 msgid "Selected Map Difficulty"
 msgstr "Сложность игры"
@@ -2366,12 +2428,6 @@ msgstr "Показать/скрыть интерфейс."
 msgid "Toggle instant battle mode."
 msgstr "Режим мгновенного боя."
 
-msgid "Exit this menu."
-msgstr "Выход из меню."
-
-msgid "OK"
-msgstr "ОК"
-
 msgid "Att."
 msgstr "Атк."
 
@@ -2512,6 +2568,14 @@ msgstr "Неизвестный Герой"
 
 msgid "Your Name"
 msgstr "Ваше Имя"
+
+#, fuzzy
+msgid "Campaign"
+msgstr "Кампания"
+
+#, fuzzy
+msgid "View High Scores for Campaigns."
+msgstr "Просмотр лучших результатов."
 
 msgid ""
 "Invalid file game type. Please ensure that you are running the latest type "
@@ -2854,8 +2918,20 @@ msgstr "%{color} игрок побеждён!"
 msgid "Do you wish to continue the game?"
 msgstr "Желаете купить?"
 
-msgid "No maps available!"
-msgstr "Нет доступных карт!"
+msgid "Scenario:"
+msgstr "Сценарий:"
+
+msgid "Game Difficulty:"
+msgstr "Сложность игры:"
+
+msgid "Opponents:"
+msgstr "Оппоненты:"
+
+msgid "Class:"
+msgstr "Класс:"
+
+msgid "Rating %{rating}%"
+msgstr "Рейтинг %{rating}%"
 
 msgid "Click here to select which scenario to play."
 msgstr "Нажмите сюда чтобы выбрать сценарий."
@@ -2891,20 +2967,8 @@ msgstr "Подтверждает заданные установки и начи
 msgid "Click to return to the main menu."
 msgstr "Нажмите для возврата в главное меню."
 
-msgid "Scenario:"
-msgstr "Сценарий:"
-
-msgid "Game Difficulty:"
-msgstr "Сложность игры:"
-
-msgid "Opponents:"
-msgstr "Оппоненты:"
-
-msgid "Class:"
-msgstr "Класс:"
-
-msgid "Rating %{rating}%"
-msgstr "Рейтинг %{rating}%"
+msgid "No maps available!"
+msgstr "Нет доступных карт!"
 
 msgid "Astrologers proclaim Month of the %{name}."
 msgstr "Астрологи объявили Месяц %{name}."
@@ -3141,6 +3205,10 @@ msgstr "Немецкий"
 msgid "Russian"
 msgstr "Русский"
 
+#, fuzzy
+msgid "Italian"
+msgstr " союз"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -3362,9 +3430,6 @@ msgstr "%{object} рейд"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у вас нет свободного места!"
-
-msgid "The three Anduran artifacts magically combine into one."
-msgstr "Три магических артифакта Андурана, объединяются в один."
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -3878,6 +3943,9 @@ msgid ""
 msgstr ""
 "Вы спасли жертву кораблекрушения от неминуемой гибели в безжалостном океане. "
 "Награда за вашу доброту - %{art}."
+
+msgid "Artifact"
+msgstr "Артефакты"
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr "Леприкон предлагает вам %{art} за скромную цену в %{gold} золотых."
@@ -4475,18 +4543,18 @@ msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and find the %{art} in the back of the cave."
-msgstr ""
-"Демон выкрикнул свой вызов и бросился в бой! После краткой, но отчаянной "
-"схватки вы прикончили чудовище и нашли %{art} в глубине пещеры."
-
-msgid ""
-"The Demon screams its challenge and attacks! After a short, desperate "
 "battle, you slay the monster and receive %{exp} experience points and "
 "%{count} gold."
 msgstr ""
 "Демон жутко кричит и бросается в атаку! После жестокой, но короткой битвы вы "
 "победили монстра и получили %{exp} очков опыта и %{count} золота."
+
+msgid ""
+"The Demon screams its challenge and attacks! After a short, desperate "
+"battle, you slay the monster and find the %{art} in the back of the cave."
+msgstr ""
+"Демон выкрикнул свой вызов и бросился в бой! После краткой, но отчаянной "
+"схватки вы прикончили чудовище и нашли %{art} в глубине пещеры."
 
 msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
@@ -4519,8 +4587,23 @@ msgstr[0] "Он проверяет Вас и видит %{count} проклят�
 msgstr[1] "Он проверяет Вас и видит %{count} проклятых артифакта."
 msgstr[2] "Он проверяет Вас и видит %{count} проклятых артифактов."
 
+#, fuzzy
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
-msgstr "За %{gold} золотом, алхимик поможет Вам. Вы заплатите?"
+msgid_plural ""
+"For %{gold} gold, the alchemist will remove them for you. Do you pay?"
+msgstr[0] "За %{gold} золотом, алхимик поможет Вам. Вы заплатите?"
+msgstr[1] "За %{gold} золотом, алхимик поможет Вам. Вы заплатите?"
+msgstr[2] "За %{gold} золотом, алхимик поможет Вам. Вы заплатите?"
+
+msgid ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"the cursed artifact and throws it into his magical cauldron."
+msgid_plural ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"all cursed artifacts and throws them into his magical cauldron."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid ""
 "You hear a voice from behind the locked door, \"You don't have enough gold "
@@ -4694,10 +4777,21 @@ msgstr ""
 "тайной магии. Сам БО обучал меня древним хитростям. У меня есть ответ, "
 "который Вы ищете.\""
 
+msgid "Spell book is not present."
+msgstr ""
+
+#, fuzzy
+msgid "The spell is not found."
+msgstr "Это заклинание уже используется."
+
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr "Заклинание требует %{mana} очков магии. У вас только %{point}."
+
+#, fuzzy
+msgid "Not enough move points."
+msgstr "Недостаточно средств для найма."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
@@ -4711,9 +4805,6 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Вы действительно хотите уволить героя?"
-
-msgid "View Stats"
-msgstr "Герой/Характеристика"
 
 msgid "View Experience Info"
 msgstr "Опыт"
@@ -4904,11 +4995,11 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr "Текущие Модификаторы:"
 
-msgid "skill|Advanced"
-msgstr "Продвинутый"
-
 msgid "skill|Basic"
 msgstr "Базовый"
+
+msgid "skill|Advanced"
+msgstr "Продвинутый"
 
 msgid "skill|Expert"
 msgstr "Эксперт"
@@ -5258,10 +5349,6 @@ msgstr "Город/Замок"
 msgid "View Towns and Castles."
 msgstr "Показать города"
 
-#, fuzzy
-msgid "Exit"
-msgstr "Покинуть Город"
-
 msgid "luck|Cursed"
 msgstr "Проклятая"
 
@@ -5360,6 +5447,12 @@ msgstr "Некромант"
 
 msgid "Multi"
 msgstr "Мульти"
+
+msgid "race|Random"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
 
 msgid "speed|Standing"
 msgstr "Оч. Низкая -2"
@@ -5463,23 +5556,8 @@ msgstr "Ёжа"
 msgid "week|Condor"
 msgstr "Кондора"
 
-msgid "Beach"
-msgstr "Побережье"
-
 msgid "Desert"
 msgstr "Пустыня"
-
-msgid "Dirt"
-msgstr "Грязь"
-
-msgid "Grass"
-msgstr "Трава"
-
-msgid "Lava"
-msgstr "Лава"
-
-msgid "Ocean"
-msgstr "Океан"
 
 msgid "Snow"
 msgstr "Снег"
@@ -5487,20 +5565,35 @@ msgstr "Снег"
 msgid "Wasteland"
 msgstr "Пустошь"
 
-msgid "maps|Custom Size"
-msgstr "Особый Размер"
+msgid "Beach"
+msgstr "Побережье"
 
-msgid "maps|Extra Large"
-msgstr "Очень Большая"
+msgid "Lava"
+msgstr "Лава"
 
-msgid "maps|Large"
-msgstr "Большая"
+msgid "Dirt"
+msgstr "Грязь"
+
+msgid "Grass"
+msgstr "Трава"
+
+msgid "Ocean"
+msgstr "Океан"
+
+msgid "maps|Small"
+msgstr "Маленькая"
 
 msgid "maps|Medium"
 msgstr "Средняя"
 
-msgid "maps|Small"
-msgstr "Маленькая"
+msgid "maps|Large"
+msgstr "Большая"
+
+msgid "maps|Extra Large"
+msgstr "Очень Большая"
+
+msgid "maps|Custom Size"
+msgstr "Особый Размер"
 
 msgid "Ore Mine"
 msgstr "Рудная Шахта"
@@ -5519,6 +5612,9 @@ msgstr "Золотая Шахта"
 
 msgid "Mine"
 msgstr "Шахта"
+
+msgid "No object"
+msgstr ""
 
 msgid "Alchemist Lab"
 msgstr "Лаборатория алхимика"
@@ -5750,14 +5846,45 @@ msgstr "Ресурс"
 msgid "Whirlpool"
 msgstr "Водоворот"
 
-msgid "Artifact"
-msgstr "Артефакты"
-
 msgid "Boat"
 msgstr "Корабль"
 
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Артефакты"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Ресурс"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Случайный Монстр 1"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Случайный Монстр 1"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Случайные Монстры"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Случайные Монстры"
+
 msgid "Standing Stones"
 msgstr "Стоячие камни"
+
+msgid "Event"
+msgstr ""
+
+msgid "Random Monster"
+msgstr "Случайный Монстр"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Найти уникальный артефакт."
 
 msgid "Idol"
 msgstr "Идол"
@@ -5792,6 +5919,15 @@ msgid_plural "Magic Gardens"
 msgstr[0] "Волшебный сад"
 msgstr[1] "Волшебный сад"
 msgstr[2] "Волшебный сад"
+
+msgid "Random Artifact - Treasure"
+msgstr ""
+
+msgid "Random Artifact - Minor"
+msgstr ""
+
+msgid "Random Artifact - Major"
+msgstr ""
 
 msgid "Jail"
 msgstr "Тюрьма"
@@ -6237,9 +6373,6 @@ msgstr "Водяной Элементал"
 msgid "Water Elementals"
 msgstr "Водяных Элементалов"
 
-msgid "Random Monster"
-msgstr "Случайный Монстр"
-
 msgid "Random Monsters"
 msgstr "Случайные Монстры"
 
@@ -6399,6 +6532,9 @@ msgstr "Жезл Молний"
 #, fuzzy, c-format
 msgid "% damage from "
 msgstr "200% урона от заклинаний Огня"
+
+msgid "The three Anduran artifacts magically combine into one."
+msgstr "Три магических артифакта Андурана, объединяются в один."
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
@@ -7186,6 +7322,10 @@ msgstr ""
 "Свиток будет уничтожен.\n"
 "Цена: %{sp} очков магии"
 
+#, fuzzy
+msgid "Move points: %{mp}"
+msgstr "Очки движ."
+
 msgid "Transcribe Spell Scroll"
 msgstr "Переписать Свиток Заклинания"
 
@@ -7204,11 +7344,8 @@ msgstr "Невозможно передать артефакт"
 msgid "This item can't be traded."
 msgstr "Эту вещь нельзя продать."
 
-msgid "Crystal"
-msgstr "Кристаллы"
-
-msgid "Gems"
-msgstr "Самоцветы"
+msgid "Wood"
+msgstr "Древесина"
 
 msgid "Mercury"
 msgstr "Ртуть"
@@ -7219,8 +7356,11 @@ msgstr "Руда"
 msgid "Sulfur"
 msgstr "Сера"
 
-msgid "Wood"
-msgstr "Древесина"
+msgid "Crystal"
+msgstr "Кристаллы"
+
+msgid "Gems"
+msgstr "Самоцветы"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -7522,15 +7662,15 @@ msgstr ""
 msgid "Death Ripple"
 msgstr "Дыхание Смерти"
 
+msgid "Death Wave"
+msgstr "Волна Смерти"
+
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
 "Наносит урон, больший чем Дыхание смерти, живым существам на поле боя. Цель "
 "= все поле. Урон = 10хСМ."
-
-msgid "Death Wave"
-msgstr "Волна Смерти"
 
 msgid "Dragon Slayer"
 msgstr "Убить Дракона"
@@ -7746,6 +7886,15 @@ msgstr ""
 "Призывает Водяных Элементалов охранять вашу шахту от врагов. Количество = "
 "4хСМ."
 
+#, fuzzy
+msgid "Petrification"
+msgstr "Укрепления"
+
+msgid ""
+"Turns the affected creature into stone.  A petrified creature receives half "
+"damage from a direct attack."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr "Нет заклинаний для применения."
 
@@ -7842,12 +7991,6 @@ msgstr "герои: возможность выучить свитки (необ
 msgid "heroes: in Arena can choose any of primary skills"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
 
-msgid "unions: allow meeting heroes"
-msgstr "союз: разрешить встречи для дружественных героев"
-
-msgid "unions: allow castle visiting"
-msgstr "союз: разрешить посещения дружественных замков"
-
 msgid "battle: show army order"
 msgstr "битва: показывать порядок армии"
 
@@ -7943,3 +8086,12 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "View Stats"
+#~ msgstr "Герой/Характеристика"
+
+#~ msgid "unions: allow meeting heroes"
+#~ msgstr "союз: разрешить встречи для дружественных героев"
+
+#~ msgid "unions: allow castle visiting"
+#~ msgstr "союз: разрешить посещения дружественных замков"
