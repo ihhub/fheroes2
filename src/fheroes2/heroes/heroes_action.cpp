@@ -2573,7 +2573,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
 
     if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
         Dialog::Message( MP2::StringObject( objectType ),
-                         _( "The captain looks at you with surprise and says, \"You already have all the maps I know about. Let me fish in peace now.\"" ), Font::BIG,
+                         _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ), Font::BIG,
                          Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {

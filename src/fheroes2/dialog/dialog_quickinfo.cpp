@@ -345,6 +345,16 @@ namespace
         return str;
     }
 
+    std::string showUniqueObjectVisitInfo( const MP2::MapObjectType objectType, const Kingdom & kingdom )
+    {
+        std::string str = MP2::StringObject( objectType );
+
+        str.append( "\n \n" );
+        str.append( kingdom.isVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+
+        return str;
+    }
+
     std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = BarrierColor::String( tile.QuantityColor() );
@@ -527,10 +537,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_LEANTO:
-        case MP2::OBJ_MAGELLANMAPS:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
-
+        case MP2::OBJ_MAGELLANMAPS:
+            name_object = showUniqueObjectVisitInfo( objectType, kingdom );
+            break;
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
