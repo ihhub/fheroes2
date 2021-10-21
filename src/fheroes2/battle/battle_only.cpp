@@ -234,6 +234,7 @@ bool Battle::Only::ChangeSettings( void )
                 u32 value = hero1->knowledge;
                 if ( Dialog::SelectCount( "Set Knowledge Skill", 0, primaryMaxValue, value ) ) {
                     hero1->knowledge = value;
+                    hero1->SetSpellPoints( hero1->knowledge * 10 );
                     redraw = true;
                 }
             }
@@ -265,6 +266,7 @@ bool Battle::Only::ChangeSettings( void )
                 u32 value = hero2->knowledge;
                 if ( Dialog::SelectCount( "Set Knowledge Skill", 0, primaryMaxValue, value ) ) {
                     hero2->knowledge = value;
+                    hero2->SetSpellPoints( hero2->knowledge * 10 );
                     redraw = true;
                 }
             }
