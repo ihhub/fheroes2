@@ -30,12 +30,19 @@ namespace fheroes2
         GameController
     };
 
-    // Used only for certain platforms.
-    void initHardware();
-    void freeHardware();
+    class HardwareInitializer
+    {
+    public:
+        HardwareInitializer();
+        ~HardwareInitializer();
+    };
 
-    bool initCore( const std::set<SystemInitializationComponent> & components );
-    void freeCore();
+    class CoreInitializer
+    {
+    public:
+        explicit CoreInitializer( const std::set<SystemInitializationComponent> & components );
+        ~CoreInitializer();
+    };
 
     bool isComponentInitialized( const SystemInitializationComponent component );
 }

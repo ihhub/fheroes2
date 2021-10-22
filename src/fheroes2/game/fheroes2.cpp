@@ -106,13 +106,6 @@ namespace
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
     }
-
-    void freeResources()
-    {
-        fheroes2::Display::instance().release();
-        fheroes2::freeCore();
-        fheroes2::freeHardware();
-    }
 }
 
 #if defined( _MSC_VER )
@@ -122,7 +115,7 @@ namespace
 int main( int argc, char ** argv )
 {
     try {
-        fheroes2::initHardware();
+        const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
         DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
@@ -160,10 +153,7 @@ int main( int argc, char ** argv )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 
-        if ( !fheroes2::initCore( coreComponents ) ) {
-            fheroes2::freeHardware();
-            return EXIT_FAILURE;
-        }
+        const fheroes2::CoreInitializer coreInitializer( coreComponents );
 
         conf.setGameLanguage( conf.getGameLanguage() );
 
@@ -200,7 +190,7 @@ int main( int argc, char ** argv )
         // read data dir
         if ( !AGG::Init() ) {
             ERROR_LOG( "AGG file reading failed. Closing the application..." );
-            freeResources();
+            fheroes2::Display::instance().release();
             return EXIT_FAILURE;
         }
 
@@ -222,16 +212,12 @@ int main( int argc, char ** argv )
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Game::mainGameLoop( conf.isFirstGameRun() );
+
+        fheroes2::Display::instance().release();
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
-    }
-
-    try {
-        freeResources();
-    }
-    catch ( const std::exception & ex ) {
-        ERROR_LOG( "Exception '" << ex.what() << "' occured during application exiting." );
+        return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;

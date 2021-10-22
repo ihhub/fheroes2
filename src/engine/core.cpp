@@ -152,22 +152,24 @@ namespace
 
 namespace fheroes2
 {
-    void initHardware()
+    HardwareInitializer::HardwareInitializer()
     {
         initHardwareInternally();
     }
 
-    void freeHardware()
+    HardwareInitializer::~HardwareInitializer()
     {
         freeHardwareInternally();
     }
 
-    bool initCore( const std::set<SystemInitializationComponent> & components )
+    CoreInitializer::CoreInitializer( const std::set<SystemInitializationComponent> & components )
     {
-        return initCoreInternally( components );
+        if ( !initCoreInternally( components ) ) {
+            throw std::logic_error( "Core module initialization failed." );
+        }
     }
 
-    void freeCore()
+    CoreInitializer::~CoreInitializer()
     {
         freeCoreInternally();
     }
