@@ -2586,6 +2586,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
             hero.SetVisited( dst_index, Visit::GLOBAL );
+            hero.setVisitedForAllies( dst_index );
         }
 
         Interface::Basic & I = Interface::Basic::Get();
