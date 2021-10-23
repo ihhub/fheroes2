@@ -34,6 +34,9 @@ namespace fheroes2
     {
     public:
         HardwareInitializer();
+        HardwareInitializer( const HardwareInitializer & ) = delete;
+        HardwareInitializer & operator=( const HardwareInitializer & ) = delete;
+
         ~HardwareInitializer();
     };
 
@@ -41,6 +44,9 @@ namespace fheroes2
     {
     public:
         explicit CoreInitializer( const std::set<SystemInitializationComponent> & components );
+        CoreInitializer( const CoreInitializer & ) = delete;
+        CoreInitializer & operator=( const CoreInitializer & ) = delete;
+
         ~CoreInitializer();
     };
 
