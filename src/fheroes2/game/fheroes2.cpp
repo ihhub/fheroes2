@@ -106,6 +106,43 @@ namespace
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
     }
+
+    class DisplayInitializer
+    {
+    public:
+        DisplayInitializer()
+        {
+            const Settings & conf = Settings::Get();
+
+            fheroes2::Display & display = fheroes2::Display::instance();
+            if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
+                fheroes2::engine().toggleFullScreen();
+
+            display.resize( conf.VideoMode().width, conf.VideoMode().height );
+            display.fill( 0 ); // start from a black screen
+
+            fheroes2::engine().setTitle( GetCaption() );
+
+            SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
+
+            // Initialize local event processing.
+            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+
+            // Update mouse cursor when switching between software emulation and OS mouse modes.
+            fheroes2::cursor().registerUpdater( Cursor::Refresh );
+
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+            fheroes2::engine().setIcon( appIcon );
+        }
+
+        DisplayInitializer( const DisplayInitializer & ) = delete;
+        DisplayInitializer & operator=( const DisplayInitializer & ) = delete;
+
+        ~DisplayInitializer()
+        {
+            fheroes2::Display::instance().release();
+        }
+    };
 }
 
 #if defined( _MSC_VER )
@@ -165,36 +202,11 @@ int main( int argc, char ** argv )
             Music::SetFadeIn( 900 );
         }
 
-        fheroes2::Display & display = fheroes2::Display::instance();
-        if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
-            fheroes2::engine().toggleFullScreen();
-
-        display.resize( conf.VideoMode().width, conf.VideoMode().height );
-        display.fill( 0 ); // start from a black screen
-
-        fheroes2::engine().setTitle( GetCaption() );
-
-        SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
-
-        // Initialize local event processing.
-        LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
-
-        // Update mouse cursor when switching between software emulation and OS mouse modes.
-        fheroes2::cursor().registerUpdater( Cursor::Refresh );
-
-        const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
-        fheroes2::engine().setIcon( appIcon );
-
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
 
-        // read data dir
-        if ( !AGG::Init() ) {
-            ERROR_LOG( "AGG file reading failed. Closing the application..." );
-            fheroes2::Display::instance().release();
-            return EXIT_FAILURE;
-        }
+        const DisplayInitializer displayInitializer;
 
-        atexit( &AGG::Quit );
+        const AGG::AGGInitializer aggInitializer;
 
         // load BIN data
         Bin_Info::InitBinInfo();
@@ -212,8 +224,6 @@ int main( int argc, char ** argv )
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Game::mainGameLoop( conf.isFirstGameRun() );
-
-        fheroes2::Display::instance().release();
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
