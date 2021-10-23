@@ -30,7 +30,6 @@ payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
     case BUILD_CASTLE:
         return { 1000, 0, 0, 0, 0, 0, 0 };
     case BUILD_TENT:
-        return { 250, 0, 0, 0, 0, 0, 0 };
     case BUILD_STATUE:
         return { 250, 0, 0, 0, 0, 0, 0 };
     case BUILD_SPEC:
