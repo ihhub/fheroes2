@@ -63,11 +63,11 @@ void Dialog::GameInfo( void )
     text.Set( _( "Game\nDifficulty" ), Font::SMALL, 80 );
     text.Blit( pt.x + 140, pt.y + 54 );
 
-    text.Set( _( "Rating" ), Font::SMALL, 80 );
-    text.Blit( pt.x + 230, pt.y + 61 );
+    text.Set( _( " \n" "Rating" ), Font::SMALL, 80 );
+    text.Blit( pt.x + 230, pt.y + 54 );
 
-    text.Set( _( "Map Size" ), Font::SMALL, 80 );
-    text.Blit( pt.x + 322, pt.y + 61 );
+    text.Set( _( " \n" "Map Size" ), Font::SMALL, 80 );
+    text.Blit( pt.x + 322, pt.y + 54 );
 
     text.Set( Difficulty::String( conf.MapsDifficulty() ), Font::SMALL, 80 );
     text.Blit( pt.x + 50, pt.y + 80 );
