@@ -5731,7 +5731,7 @@ msgstr "Chatka wiedźmy"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Mapy Magellana"
 
 msgid "Derelict Ship"

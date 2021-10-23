@@ -5723,7 +5723,7 @@ msgstr "Хижина Ведьмы"
 msgid "Xanadu"
 msgstr "Ксанаду"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Магеллан"
 
 msgid "Derelict Ship"

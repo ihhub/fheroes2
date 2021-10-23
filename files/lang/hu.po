@@ -5588,7 +5588,7 @@ msgstr ""
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Magellán Térképe"
 
 msgid "Derelict Ship"

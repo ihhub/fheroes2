@@ -316,7 +316,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Cave" );
     case OBJN_MAGELLANMAPS:
     case OBJ_MAGELLANMAPS:
-        return _( "Magellan Maps" );
+        return _( "Magellan's Maps" );
     case OBJN_DERELICTSHIP:
     case OBJ_DERELICTSHIP:
         return _( "Derelict Ship" );

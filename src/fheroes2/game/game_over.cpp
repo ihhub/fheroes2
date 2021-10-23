@@ -75,7 +75,7 @@ namespace
             case GameOver::WINS_ARTIFACT: {
                 body = _( "You have found the %{name}.\nYour quest is complete." );
                 if ( conf.WinsFindUltimateArtifact() )
-                    StringReplace( body, "%{name}", "Ultimate Artifact" );
+                    StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
                 else {
                     const Artifact art = conf.WinsFindArtifactID();
                     StringReplace( body, "%{name}", art.GetName() );
