@@ -1087,9 +1087,13 @@ u32 World::CountObeliskOnMaps( void )
 
 void World::ActionForMagellanMaps( int color )
 {
-    for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-        if ( ( *it ).isWater() )
-            ( *it ).ClearFog( color );
+    const int alliedColors = Players::GetPlayerFriends( color );
+
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        if ( tile.isWater() ) {
+            tile.ClearFog( alliedColors );
+        }
+    }
 }
 
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
