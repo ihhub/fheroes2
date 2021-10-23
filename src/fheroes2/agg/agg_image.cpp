@@ -967,7 +967,7 @@ namespace fheroes2
             case ICN::CSTLCAPW:
                 // Warlock captain quarters have bad pixels.
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() >= 1 ) {
+                if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 84 && original.height() == 81 ) {
                         replaceTranformPixel( original, 1692, 26 );
