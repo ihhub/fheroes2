@@ -897,13 +897,22 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::TROLL, 4 );
         break;
 
-    case MP2::OBJ_DRAGONCITY:
-        at( 0 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 1 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 2 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 3 )->Set( Monster::RED_DRAGON, 1 );
-        at( 4 )->Set( Monster::BLACK_DRAGON, 1 );
+    case MP2::OBJ_DRAGONCITY: {
+        uint32_t monsterCount = 1;
+        if ( Settings::Get().isCampaignGameType() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                monsterCount = 2;
+            }
+        }
+
+        at( 0 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 1 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 2 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 3 )->Set( Monster::RED_DRAGON, monsterCount );
+        at( 4 )->Set( Monster::BLACK_DRAGON, monsterCount );
         break;
+    }
 
     case MP2::OBJ_DAEMONCAVE:
         at( 0 )->Set( Monster::EARTH_ELEMENT, 2 );
