@@ -879,7 +879,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULTACTION ) )
-                EventDefaultAction();
+                res = EventDefaultAction( res );
             // open focus
             else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
                 EventOpenFocus();

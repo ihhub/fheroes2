@@ -710,7 +710,7 @@ void Heroes::ActionAfterBattle( void )
 {
     // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
-    //
+
     SetModes( ACTION );
 }
 
