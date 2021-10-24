@@ -5039,6 +5039,11 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
         uint32_t tmp1 = _attacker->CalculateMinDamage( *_defender );
         uint32_t tmp2 = _attacker->CalculateMaxDamage( *_defender );
 
+        if ( _attacker->Modes( SP_BLESS ) )
+            tmp1 = tmp2;
+        else if ( _attacker->Modes( SP_CURSE ) )
+            tmp2 = tmp1;
+
         std::string str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
         StringReplace( str, "%{min}", tmp1 );

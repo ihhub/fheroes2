@@ -2572,7 +2572,9 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
     Kingdom & kingdom = hero.GetKingdom();
 
     if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
-        Dialog::Message( MP2::StringObject( objectType ), "empty", Font::BIG, Dialog::OK );
+        Dialog::Message( MP2::StringObject( objectType ),
+                         _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ), Font::BIG,
+                         Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
         if (
@@ -2584,6 +2586,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
             hero.SetVisited( dst_index, Visit::GLOBAL );
+            hero.setVisitedForAllies( dst_index );
         }
 
         Interface::Basic & I = Interface::Basic::Get();

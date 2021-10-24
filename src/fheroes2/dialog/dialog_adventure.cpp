@@ -95,7 +95,7 @@ int Dialog::AdventureOptions( bool enabledig )
             result = Dialog::DIG;
             break;
         }
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyCloseWindow ) {
             result = Dialog::CANCEL;
             break;
         }

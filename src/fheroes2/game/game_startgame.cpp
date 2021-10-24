@@ -287,7 +287,7 @@ void ShowNewWeekDialog( void )
                 message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n";
+            message += "\n \n";
         }
     }
 
@@ -879,7 +879,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULTACTION ) )
-                EventDefaultAction();
+                res = EventDefaultAction( res );
             // open focus
             else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
                 EventOpenFocus();
