@@ -2353,7 +2353,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         ButtonWaitAction( a );
 
         if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ), Font::BIG );
+            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ),
+                             Font::BIG );
         }
     }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
