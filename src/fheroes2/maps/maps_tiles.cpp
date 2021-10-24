@@ -974,7 +974,7 @@ void Maps::Tiles::updatePassability()
                 if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                         if ( isShortObject( bottomTileObjectType ) ) {
-                            tilePassable &= ~( Direction::BOTTOM );
+                            tilePassable &= ~Direction::BOTTOM;
                         }
                         else {
                             tilePassable = 0;
@@ -984,11 +984,11 @@ void Maps::Tiles::updatePassability()
                 }
                 else if ( bottomTile.mp2_object != 0 && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-                    tilePassable &= ~( Direction::BOTTOM );
+                    tilePassable &= ~Direction::BOTTOM;
                 }
                 else if ( isShortObject( bottomTileObjectType )
                           || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
-                    tilePassable &= ~( Direction::BOTTOM );
+                    tilePassable &= ~Direction::BOTTOM;
                 }
                 else {
                     tilePassable = 0;
