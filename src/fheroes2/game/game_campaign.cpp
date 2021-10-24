@@ -589,7 +589,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const fheroes2::Point optionButtonOffset( 590, 199 );
     const int32_t optionButtonStep = 22;
 
-    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 8 );
+    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, allowToRestart ? 9 : 8 );
     fheroes2::Sprite releaseButton( pressedButton.width(), pressedButton.height(), pressedButton.x(), pressedButton.y() );
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
@@ -629,7 +629,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         buttonChoices.button( i ).draw();
 
     Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
-    textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
+    textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
     drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
@@ -669,14 +669,15 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         if ( allowToRestart ) {
             le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
         }
+        else {
+            for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+                if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
+                    buttonChoices.button( i ).press();
+                    optionButtonGroup.draw();
+                    scenarioBonus = bonusChoices[i];
 
-        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-            if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
-                buttonChoices.button( i ).press();
-                optionButtonGroup.draw();
-                scenarioBonus = bonusChoices[i];
-
-                break;
+                    break;
+                }
             }
         }
 

@@ -94,6 +94,12 @@ namespace Campaign
         uint32_t _daysPassed;
         ScenarioBonusData _currentScenarioBonus;
     };
+
+    // Call this function only when playing campaign scenario.
+    ScenarioVictoryCondition getCurrentScenarioVictoryCondition();
+
+    // Call this function only when playing campaign scenario.
+    ScenarioLossCondition getCurrentScenarioLossCondition();
 }
 
 #endif

@@ -47,7 +47,7 @@
 namespace
 {
     const size_t mapNameLength = 16;
-    const size_t mapDescriptionLength = 143;
+    const size_t mapDescriptionLength = 200;
 
     template <typename CharType>
     bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )

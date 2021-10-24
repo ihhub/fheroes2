@@ -710,7 +710,7 @@ void Heroes::ActionAfterBattle( void )
 {
     // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
-    //
+
     SetModes( ACTION );
 }
 
@@ -1603,7 +1603,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int type ) const
     return Heroes::GetPortrait( portrait, type );
 }
 
-void Heroes::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const
+void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
 {
     const fheroes2::Sprite & port = GetPortrait( portrait, type );
     fheroes2::Point mp;

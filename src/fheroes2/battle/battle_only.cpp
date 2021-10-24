@@ -181,7 +181,7 @@ bool Battle::Only::ChangeSettings( void )
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
             int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
-                Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
+                Dialog::Message( _( "Error" ), _( "Please, select other hero." ), Font::BIG, Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero1 = world.GetHeroes( hid );
@@ -194,7 +194,7 @@ bool Battle::Only::ChangeSettings( void )
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
             int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
-                Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
+                Dialog::Message( _( "Error" ), _( "Please, select other hero." ), Font::BIG, Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero2 = world.GetHeroes( hid );
@@ -234,6 +234,7 @@ bool Battle::Only::ChangeSettings( void )
                 u32 value = hero1->knowledge;
                 if ( Dialog::SelectCount( "Set Knowledge Skill", 0, primaryMaxValue, value ) ) {
                     hero1->knowledge = value;
+                    hero1->SetSpellPoints( hero1->knowledge * 10 );
                     redraw = true;
                 }
             }
@@ -265,6 +266,7 @@ bool Battle::Only::ChangeSettings( void )
                 u32 value = hero2->knowledge;
                 if ( Dialog::SelectCount( "Set Knowledge Skill", 0, primaryMaxValue, value ) ) {
                     hero2->knowledge = value;
+                    hero2->SetSpellPoints( hero2->knowledge * 10 );
                     redraw = true;
                 }
             }

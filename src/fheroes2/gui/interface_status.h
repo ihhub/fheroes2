@@ -24,7 +24,7 @@
 #define H2INTERFACE_STATUS_H
 
 #include "interface_border.h"
-#include "timer.h"
+#include "timing.h"
 
 namespace Interface
 {
@@ -78,7 +78,7 @@ namespace Interface
         uint32_t countLastResource;
         uint32_t turn_progress;
 
-        SDL::Timer timerShowLastResource;
+        fheroes2::Timer timerShowLastResource;
     };
 }
 

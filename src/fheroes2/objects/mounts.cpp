@@ -26,7 +26,15 @@
 #include "icn.h"
 #include "mounts.h"
 #include "mp2.h"
+#include "tools.h"
 
+namespace
+{
+    const std::bitset<256> objMnts1ShadowBitset
+        = fheroes2::makeBitsetFromVector<256>( { 0, 5, 11, 17, 21, 26, 32, 38, 42, 45, 49, 52, 55, 59, 62, 65, 68, 71, 74, 75, 79, 80 } );
+    const std::bitset<256> objMnts2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 0, 5, 11, 17, 21, 26, 32, 38, 42, 46, 47, 53, 57, 58, 62, 68, 72, 75, 79, 82, 85, 89, 92, 95, 98, 101, 104, 105, 109, 110 } );
+}
 /*
     Mnts1: MTNDSRT, MTNGRAS, MTNLAVA, MTNMULT, MTNSNOW, MTNSWMP
     Mnts2: MTNCRCK, MTNDIRT
@@ -81,12 +89,10 @@ MP2::MapObjectType ObjMnts2::GetActionObject( u32 )
 
 bool ObjMnts1::isShadow( const uint8_t index )
 {
-    const u8 shadows1[] = {0, 5, 11, 17, 21, 26, 32, 38, 42, 45, 49, 52, 55, 59, 62, 65, 68, 71, 74, 75, 79, 80};
-    return std::end( shadows1 ) != std::find( shadows1, std::end( shadows1 ), index );
+    return objMnts1ShadowBitset[index];
 }
 
 bool ObjMnts2::isShadow( const uint8_t index )
 {
-    const u8 shadows2[] = {0, 5, 11, 17, 21, 26, 32, 38, 42, 46, 47, 53, 57, 58, 62, 68, 72, 75, 79, 82, 85, 89, 92, 95, 98, 101, 104, 105, 109, 110};
-    return std::end( shadows2 ) != std::find( shadows2, std::end( shadows2 ), index );
+    return objMnts2ShadowBitset[index];
 }

@@ -23,6 +23,7 @@
 #include "serialize.h"
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -39,6 +40,8 @@ namespace fheroes2
 
         // Returns non-empty vector if requested file exists.
         std::vector<uint8_t> getFile( const std::string & fileName );
+
+        std::set<std::string> getAllFileNames() const;
 
     private:
         // Relationship between file name in non-capital letters and its offset from the start of the archive.
@@ -57,9 +60,14 @@ namespace fheroes2
 
         bool add( const std::string & name, const std::vector<uint8_t> & data );
 
+        // Add all entries from a H2D reader.
+        bool add( H2RReader & reader );
+
     private:
         std::map<std::string, std::vector<uint8_t>> _fileData;
     };
 
     bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image );
+
+    bool writeImageToH2D( H2Writer & writer, const std::string & name, const Sprite & image );
 }

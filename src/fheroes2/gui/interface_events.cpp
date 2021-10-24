@@ -391,7 +391,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction() const
+fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode ) const
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -399,12 +399,21 @@ void Interface::Basic::EventDefaultAction() const
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
+
+            // If a hero completed an action we must verify the condition for the scenario.
+            if ( hero->isAction() ) {
+                hero->ResetAction();
+                // check if the game is over after the hero's action
+                return GameOver::Result::Get().LocalCheckGameOver();
+            }
         }
     }
     else if ( GetFocusCastle() ) {
         // 2. town dialog
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
+
+    return gameMode;
 }
 
 void Interface::Basic::EventOpenFocus( void ) const
