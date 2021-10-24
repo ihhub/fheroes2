@@ -64,7 +64,7 @@ void Dialog::GameInfo( void )
     text.draw( pt.x + 140, pt.y + 56, 80, display );
 
     text.set( _( "\nRating" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-    text.draw( pt.x + 230, pt.y + 56, 80,  display);
+    text.draw( pt.x + 230, pt.y + 56, 80,  display );
 
     text.set( _( "\nMap Size" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 322, pt.y + 56, 80, display );
@@ -86,7 +86,7 @@ void Dialog::GameInfo( void )
 
     text.set( _( "Opponents" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 52, pt.y + 152, 350, display );
-    
+
     text.set( _( "Class" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 52, pt.y + 227, 350, display );
 
@@ -109,7 +109,6 @@ void Dialog::GameInfo( void )
 
     text.set( _( "score: " ) + std::to_string( Game::GetGameOverScores() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::YELLOW } );
     text.draw( pt.x + 385 - text.width(), pt.y + 436, 80, display );
-
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
     fheroes2::Button buttonCfg( pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
