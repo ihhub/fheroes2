@@ -49,20 +49,12 @@ namespace
     Artifact getUltimateArtifact()
     {
         if ( Settings::Get().isCampaignGameType() ) {
-            const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
-
-            const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-            const int scenarioId = campaignData.getCurrentScenarioID();
-            assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
-
-            if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-                const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-                if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
-                    return Artifact::ULTIMATE_CROWN;
-                }
-                else if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION ) {
-                    return Artifact::SPHERE_NEGATION;
-                }
+            const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
+                return Artifact::ULTIMATE_CROWN;
+            }
+            else if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION ) {
+                return Artifact::SPHERE_NEGATION;
             }
         }
 

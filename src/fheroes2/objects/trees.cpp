@@ -24,7 +24,13 @@
 
 #include "direction.h"
 #include "mp2.h"
+#include "tools.h"
 #include "trees.h"
+
+namespace
+{
+    const std::bitset<256> objTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
+}
 
 int ObjTree::GetPassable( const uint8_t index )
 {
@@ -41,8 +47,7 @@ bool ObjTree::isAction( u32 index )
 
 bool ObjTree::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34};
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    return objTreeShadowBitset[index];
 }
 
 int ObjTree::GetActionObject( u32 )

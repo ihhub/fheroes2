@@ -312,7 +312,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( buttonCredits.area() ) )
             Dialog::Message( _( "Credits" ), _( "View the credits screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonHighScores.area() ) )
-            Dialog::Message( _( "High Scores" ), _( "View the high score screen." ), Font::BIG );
+            Dialog::Message( _( "High Scores" ), _( "View the high scores screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         else if ( le.MousePressRight( resolutionArea ) )

@@ -64,5 +64,24 @@ namespace fheroes2
         uint64_t _delayMs;
     };
 
+    struct TimerImp;
+
+    class Timer
+    {
+    public:
+        Timer();
+        Timer( const Timer & ) = delete;
+        Timer & operator=( const Timer & ) = delete;
+        ~Timer();
+
+        bool valid() const;
+
+        void run( uint32_t interval, uint32_t ( *fn )( uint32_t, void * ), void * param = nullptr );
+        void remove();
+
+    private:
+        TimerImp * _timer;
+    };
+
     void delayforMs( const uint32_t delayMs );
 }

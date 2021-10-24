@@ -48,6 +48,18 @@ de.mo: de.po
 	sed -i -e 's/Ü/Ue/g' $<.tmp
 	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
+	
+# Norwegian has locale-specific transliteration rules (æ -> ae, etc)
+nb.mo: nb.po
+	sed -e 's/æ/ae/g' $< > $<.tmp
+	sed -i -e 's/ø/oe/g' $<.tmp
+	sed -i -e 's/å/aa/g' $<.tmp
+	sed -i -e 's/Æ/Ae/g' $<.tmp
+	sed -i -e 's/Ø/Oe/g' $<.tmp
+	sed -i -e 's/Å/Aa/g' $<.tmp
+	sed -i -e 's/é/e/g' $<.tmp
+	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules

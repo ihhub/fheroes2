@@ -203,6 +203,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
 
     if ( townIcnId != -1 ) {
+        // We shouldn't Blit this image. This is a background image so a normal Copy is enough.
         const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
         fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
     }
@@ -426,6 +427,12 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
         const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
         CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
+    }
+    else if ( castle.GetRace() == Race::BARB && BUILD_CAPTAIN == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
+        const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
+        CastleDialog::RedrawBuildingSpriteToArea( leftCaptainQuarters, dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width() + leftCaptainQuarters.x(),
+                                                  dst_pt.y + rightCaptainQuarters.y() + leftCaptainQuarters.y(), max, alpha );
     }
 }
 
