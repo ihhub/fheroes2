@@ -86,10 +86,9 @@ void Dialog::GameInfo( void )
 
     text.set( _( "Opponents" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 52, pt.y + 152, 350, display );
-
+    
     text.set( _( "Class" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 52, pt.y + 227, 350, display );
-
 
     Interface::PlayersInfo playersInfo( true, true, false );
 
