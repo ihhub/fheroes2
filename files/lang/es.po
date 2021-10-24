@@ -1140,9 +1140,6 @@ msgstr "Matadragones"
 msgid "Breastplate"
 msgstr "Peto de Anduran"
 
-msgid "Fizbin Medal"
-msgstr ""
-
 #, fuzzy (18 char max)
 msgid "Fizbin Medal"
 msgstr ""
