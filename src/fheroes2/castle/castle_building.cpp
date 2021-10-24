@@ -203,6 +203,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
 
     if ( townIcnId != -1 ) {
+        // We shouldn't Blit this image. This is a background image so a normal Copy is enough.
         const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
         fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
     }
