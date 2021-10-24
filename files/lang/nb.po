@@ -1198,10 +1198,14 @@ msgstr "Dragesverdet"
 msgid "Breastplate"
 msgstr "Brystplate"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr "Fizbinen av uflaks"
 
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr "Magikerens ring"
 
 msgid "Defender Helm"
@@ -6677,6 +6681,10 @@ msgstr "%{name} håver inn en inntekt på %{count} gull hver runde."
 msgid "Arcane Necklace of Magic"
 msgstr "Det mørke magihalskjedet"
 
+#, fuzzy (18 char max)
+msgid "Caster's Bracelet"
+msgstr "Fortryllerens magiarmbånd"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Fortryllerens magiarmbånd"
 
@@ -6740,11 +6748,19 @@ msgstr "Den gudommelige brystplata av beskyttelse"
 msgid "Minor Scroll of Knowledge"
 msgstr "Den mindre kunnskapsrullen"
 
+#, fuzzy (18 char max)
+msgid "Major Scroll"
+msgstr "Den større kunnskapsrullen"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Den større kunnskapsrullen"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Den overlegne kunnskapsrullen"
+
+#, fuzzy (18 char max)
+msgid "Foremost Scroll"
+msgstr "Den ypperste kunnskapsrullen"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Den ypperste kunnskapsrullen"
@@ -6766,6 +6782,10 @@ msgstr "Nomadens sko av bevegelighet"
 
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} øker flyttepoengene dine på land."
+
+#, fuzzy (18 char max)
+msgid "Traveler's Boots"
+msgstr "Den reisendes sko av bevegelighet"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Den reisendes sko av bevegelighet"

@@ -1084,11 +1084,15 @@ msgstr "Zabójca smoków"
 msgid "Breastplate"
 msgstr "Napierśnik Andurana"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin Nieszczęścia"
 
-#, fuzzy
-msgid "Mage's ring"
+#, fuzzy (18 char max)
+msgid "Mage's Ring"
 msgstr "Pierścień mocy maga"
 
 #, fuzzy
@@ -6681,6 +6685,10 @@ msgstr "%{name} dodaje przychód w wysokości %{count} sztuk złota na turę."
 msgid "Arcane Necklace of Magic"
 msgstr "Tajemny naszyjnik magii"
 
+#, fuzzy (18 char max)
+msgid "Caster's Bracelet"
+msgstr "Magiczna bransoleta czarodzieja"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Magiczna bransoleta czarodzieja"
 
@@ -6744,11 +6752,19 @@ msgstr "Boski napierśnik ochrony"
 msgid "Minor Scroll of Knowledge"
 msgstr "Pomniejszy zwój wiedzy"
 
+#, fuzzy (18 char max)
+msgid "Major Scroll"
+msgstr "Większy zwój wiedzy"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Większy zwój wiedzy"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Wspaniały zwój wiedzy"
+
+#, fuzzy (18 char max)
+msgid "Foremost Scroll"
+msgstr "Doskonały zwój wiedzy"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Doskonały zwój wiedzy"
@@ -6770,6 +6786,10 @@ msgstr "Buty mobilności nomada"
 
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} zwiększa twój zasięg ruchu na lądzie."
+
+#, fuzzy (18 char max)
+msgid "Traveler's Boots"
+msgstr "Buty mobilności podróżnika"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Buty mobilności podróżnika"

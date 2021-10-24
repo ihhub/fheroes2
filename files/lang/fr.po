@@ -1193,10 +1193,14 @@ msgstr "L'épée du Dragon"
 msgid "Breastplate"
 msgstr "Plastron Divin"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin de l'infortune"
 
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr "Anneau de Magicien"
 
 msgid "Defender Helm"
@@ -6772,6 +6776,10 @@ msgstr "La %{name} apporte un revenu de %{count} pièces d'or par tour."
 msgid "Arcane Necklace of Magic"
 msgstr "Obscur collier magique"
 
+#, fuzzy (18 char max)
+msgid "Caster's Bracelet"
+msgstr "Bracelet magique du jeteur de sorts"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Bracelet magique du jeteur de sorts"
 
@@ -6836,11 +6844,17 @@ msgstr "Plastron divin de protection"
 msgid "Minor Scroll of Knowledge"
 msgstr "Parchemin mineur"
 
+msgid "Major Scroll"
+msgstr "Parchemin majeur"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Parchemin majeur"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Parchemin supérieur"
+
+msgid "Foremost Scroll"
+msgstr "Parchemin ultime"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Parchemin ultime"
@@ -6863,6 +6877,10 @@ msgstr "Brodequins de nomade"
 msgid "The %{name} increase your movement on land."
 msgstr ""
 "Les %{name} augmentent le potentiel de déplacement d'un héros sur terre."
+
+#, fuzzy (18 char max)
+msgid "Traveler's Boots"
+msgstr "Bottes de sept lieues"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Bottes de sept lieues"
