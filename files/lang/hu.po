@@ -358,8 +358,8 @@ msgstr ""
 "Efogadom a megadásodat és gatantálom, hogy %{price} aranyért cserébe a "
 "csapatod szabadon távozhat."
 
-msgid "View %{monster} info."
-msgstr "Megmutatja %{monster} információját."
+msgid "View %{monster} info"
+msgstr "Megmutatja %{monster} információját"
 
 #, fuzzy
 msgid "Shoot %{monster}"

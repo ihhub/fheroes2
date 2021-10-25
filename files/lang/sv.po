@@ -362,8 +362,8 @@ msgstr ""
 "Jag kommer att acceptera din kapitulation och bevilja dig och dina trupper "
 "en säker passage för ett pris på %{price} guld."
 
-msgid "View %{monster} info."
-msgstr "Visa information om %{monster}."
+msgid "View %{monster} info"
+msgstr "Visa information om %{monster}"
 
 #, fuzzy
 msgid "Shoot %{monster}"

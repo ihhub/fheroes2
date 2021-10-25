@@ -365,8 +365,8 @@ msgstr ""
 "Aceptaré tu rendición y daré salvoconducto a ti y tus tropas por %{price} "
 "monedas de oro."
 
-msgid "View %{monster} info."
-msgstr "Ver información de %{monster}."
+msgid "View %{monster} info"
+msgstr "Ver información de %{monster}"
 
 #, fuzzy
 msgid "Shoot %{monster}"

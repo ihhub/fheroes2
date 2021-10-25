@@ -354,8 +354,8 @@ msgstr ""
 "Przyjmę twą kapitulację i pozwolę ci odejść wraz z twą armią za cenę "
 "%{price} szt. złota."
 
-msgid "View %{monster} info."
-msgstr "Informacje o jednostce: {monster}."
+msgid "View %{monster} info"
+msgstr "Informacje o jednostce: {monster}"
 
 msgid "Shoot %{monster}"
 msgstr "Strzelaj do %{monster}"

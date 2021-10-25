@@ -355,8 +355,8 @@ msgstr ""
 "\" J'accepterai votre reddition et vous accorderai, à vous et à vos troupes, "
 "un passage sûr pour le prix de %{price} pièces 'or. \""
 
-msgid "View %{monster} info."
-msgstr "Voir les infos de %{monster}."
+msgid "View %{monster} info"
+msgstr "Voir les infos de %{monster}"
 
 msgid "Shoot %{monster}"
 msgstr "Tirer sur %{monster}"

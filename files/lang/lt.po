@@ -323,8 +323,8 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
-msgstr "Žiūrėti %{monster} informaciją."
+msgid "View %{monster} info"
+msgstr "Žiūrėti %{monster} informaciją"
 
 #, fuzzy
 msgid "Shoot %{monster}"

@@ -316,7 +316,7 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
+msgid "View %{monster} info"
 msgstr ""
 
 msgid "Shoot %{monster}"

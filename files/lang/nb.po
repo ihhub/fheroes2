@@ -358,8 +358,8 @@ msgstr ""
 "\"Jeg aksepterer din overgivelse, og jeg gir deg og dine styrker fritt leide "
 "mot en pris på %{price} gull.\""
 
-msgid "View %{monster} info."
-msgstr "Vis info om %{monster}."
+msgid "View %{monster} info"
+msgstr "Vis info om %{monster}"
 
 # Bare skyt?
 msgid "Shoot %{monster}"

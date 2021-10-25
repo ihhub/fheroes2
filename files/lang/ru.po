@@ -354,8 +354,8 @@ msgstr ""
 "\"Я приму вашу капитуляцию и предоставлю безопасный проход вам и вашим "
 "войскам за %{price} золотом.\""
 
-msgid "View %{monster} info."
-msgstr "Показать информацию для %{monster}."
+msgid "View %{monster} info"
+msgstr "Показать информацию для %{monster}"
 
 msgid "Shoot %{monster}"
 msgstr ""
