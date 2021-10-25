@@ -43,7 +43,7 @@ std::string Color::String( int color )
     case Color::PURPLE:
         return _( "Purple" );
     case Color::UNUSED:
-        return "Uknown";
+        return "Unknown";
     }
 
     return "None";
