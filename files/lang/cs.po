@@ -386,6 +386,9 @@ msgstr ""
 msgid "Customize system options"
 msgstr ""
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 #, fuzzy
 msgid "Wait this unit"
 msgstr "Přeskočit tuto jednotku"

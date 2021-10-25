@@ -410,6 +410,9 @@ msgstr "Combate automático"
 msgid "Customize system options"
 msgstr "Customizar opções do sistema"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 #, fuzzy
 msgid "Wait this unit"
 msgstr "Passar a vez desta criatura"

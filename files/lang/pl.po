@@ -412,6 +412,9 @@ msgstr "Automatyczna walka"
 msgid "Customize system options"
 msgstr "Dostosuj ustawienia systemowe"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr "Zatrzymaj tą jednostkę"
 

@@ -415,6 +415,9 @@ msgstr "Автобитва"
 msgid "Customize system options"
 msgstr "Изменить настройки системы"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr "Подождать"
 

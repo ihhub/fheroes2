@@ -422,6 +422,9 @@ msgstr "Autom. strid"
 msgid "Customize system options"
 msgstr "Skräddarsy systeminställningarna"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr "Vänta denna enhet"
 

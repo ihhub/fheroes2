@@ -373,6 +373,9 @@ msgstr ""
 msgid "Customize system options"
 msgstr ""
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr ""
 

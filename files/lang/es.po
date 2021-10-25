@@ -425,6 +425,9 @@ msgstr "Combate automático"
 msgid "Customize system options"
 msgstr "Personalizar opciones del sistema"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr "Esta unidad espera"
 

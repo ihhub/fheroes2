@@ -416,6 +416,9 @@ msgstr "Autostrid"
 msgid "Customize system options"
 msgstr "Skreddersy systeminnstillinger"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr "Avvent denne stryken"
 

@@ -412,6 +412,9 @@ msgstr "Combat auto"
 msgid "Customize system options"
 msgstr "Modifier les options système"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
 msgid "Wait this unit"
 msgstr "Ce peloton attend"
 
