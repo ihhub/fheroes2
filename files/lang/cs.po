@@ -374,7 +374,7 @@ msgstr "Zobrazit informace o %{name}."
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Enable auto combat"
 msgstr ""
 
 msgid "Customize system options."

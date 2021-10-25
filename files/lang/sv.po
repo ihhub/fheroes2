@@ -408,11 +408,12 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Autom. strid"
 
-msgid "Customize system options."
-msgstr "Skräddarsy systeminställningarna."
+msgid "Customize system options"
+msgstr "Skräddarsy systeminställningarna"
 
 msgid "Wait this unit"
 msgstr "Vänta denna enhet"

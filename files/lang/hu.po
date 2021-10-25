@@ -403,10 +403,11 @@ msgstr "Morál információ"
 msgid "Ballista"
 msgstr "Dobógép"
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Automatikus harc"
 
-msgid "Customize system options."
+msgid "Customize system options"
 msgstr "Rendszerbeállítások testreszabása"
 
 msgid "Wait this unit"

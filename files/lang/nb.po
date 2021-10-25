@@ -402,11 +402,12 @@ msgstr "Vis info om ballist"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Autostrid"
 
-msgid "Customize system options."
-msgstr "Skreddersy systeminnstillinger."
+msgid "Customize system options"
+msgstr "Skreddersy systeminnstillinger"
 
 msgid "Wait this unit"
 msgstr "Avvent denne stryken"

@@ -411,11 +411,12 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Combate automático"
 
-msgid "Customize system options."
-msgstr "Personalizar opciones del sistema."
+msgid "Customize system options"
+msgstr "Personalizar opciones del sistema"
 
 msgid "Wait this unit"
 msgstr "Esta unidad espera"

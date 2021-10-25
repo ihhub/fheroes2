@@ -398,11 +398,12 @@ msgstr "Informacje o baliście"
 msgid "Ballista"
 msgstr "Balista"
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Automatyczna walka"
 
-msgid "Customize system options."
-msgstr "Dostosuj ustawienia systemowe."
+msgid "Customize system options"
+msgstr "Dostosuj ustawienia systemowe"
 
 msgid "Wait this unit"
 msgstr "Zatrzymaj tą jednostkę"

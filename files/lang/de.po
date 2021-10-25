@@ -359,10 +359,10 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Enable auto combat"
 msgstr ""
 
-msgid "Customize system options."
+msgid "Customize system options"
 msgstr ""
 
 msgid "Wait this unit"

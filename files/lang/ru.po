@@ -400,11 +400,12 @@ msgstr "Информация о баллисте"
 msgid "Ballista"
 msgstr "Баллиста"
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Автобитва"
 
-msgid "Customize system options."
-msgstr "Изменить настройки системы."
+msgid "Customize system options"
+msgstr "Изменить настройки системы"
 
 msgid "Wait this unit"
 msgstr "Подождать"

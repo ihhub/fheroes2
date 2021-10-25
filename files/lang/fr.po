@@ -398,11 +398,12 @@ msgstr "Voir les infos de la baliste"
 msgid "Ballista"
 msgstr "Baliste"
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Combat auto"
 
-msgid "Customize system options."
-msgstr "Modifier les options système."
+msgid "Customize system options"
+msgstr "Modifier les options système"
 
 msgid "Wait this unit"
 msgstr "Ce peloton attend"

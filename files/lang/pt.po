@@ -396,11 +396,12 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Combate automático"
 
-msgid "Customize system options."
-msgstr "Customizar opções do sistema."
+msgid "Customize system options"
+msgstr "Customizar opções do sistema"
 
 #, fuzzy
 msgid "Wait this unit"
