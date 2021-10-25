@@ -509,8 +509,8 @@ msgstr "Un faible moral empêche les %{monster} de bouger."
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} fait %{damage} dégât(s)."
 
-msgid "The mirror image is created"
-msgstr "L'image miroir est créée"
+msgid "The mirror image is created."
+msgstr "L'image miroir est créée."
 
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"

@@ -529,8 +529,8 @@ msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} sebzése %{dmg}"
 
 #, fuzzy
-msgid "The mirror image is created"
-msgstr "A Tükörkép varázslat nem sikerült!"
+msgid "The mirror image is created."
+msgstr "A Tükörkép varázslat nem sikerült."
 
 msgid "The mirror image is destroyed!"
 msgstr ""

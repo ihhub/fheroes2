@@ -543,8 +543,8 @@ msgid "%{tower} does %{damage} damage."
 msgstr "La torre ha causado %{damage} de daño."
 
 #, fuzzy
-msgid "The mirror image is created"
-msgstr "Reflejo creado"
+msgid "The mirror image is created."
+msgstr "Reflejo creado."
 
 msgid "The mirror image is destroyed!"
 msgstr ""

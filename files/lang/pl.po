@@ -512,8 +512,8 @@ msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} zadaje %{damage} pkt. obrażeń."
 
 #, fuzzy
-msgid "The mirror image is created"
-msgstr "Stworzono lustrzane odbicie"
+msgid "The mirror image is created."
+msgstr "Stworzono lustrzane odbicie."
 
 msgid "The mirror image is destroyed!"
 msgstr "Zniszczono lustrzane odbicie!"

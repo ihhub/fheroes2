@@ -518,8 +518,8 @@ msgstr "Dårlig kampånd gjør at troppen med %{monster} går i panikk."
 msgid "%{tower} does %{damage} damage."
 msgstr "Slottets %{tower} gjør %{damage} skadepoeng."
 
-msgid "The mirror image is created"
-msgstr "Speilbildet ble skapt"
+msgid "The mirror image is created."
+msgstr "Speilbildet ble skapt."
 
 msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"

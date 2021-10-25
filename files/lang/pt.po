@@ -510,8 +510,8 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} causou %{damage} damage."
 
-msgid "The mirror image is created"
-msgstr "A imagem no espelho está criada"
+msgid "The mirror image is created."
+msgstr "A imagem no espelho está criada."
 
 msgid "The mirror image is destroyed!"
 msgstr "A imagem no espelho está destruída!"

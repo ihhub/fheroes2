@@ -513,7 +513,7 @@ msgstr "Из-за низкой морали %{monster} застыли в пан�
 msgid "%{tower} does %{damage} damage."
 msgstr "Башня \"%{tower}\" наносит %{damage} урона."
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr "Фантомный отряд создан!"
 
 msgid "The mirror image is destroyed!"

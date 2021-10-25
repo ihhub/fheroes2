@@ -494,7 +494,7 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} způsobila %{dmg} škod."
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr ""
 
 msgid "The mirror image is destroyed!"

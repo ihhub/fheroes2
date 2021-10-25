@@ -530,8 +530,8 @@ msgid "%{tower} does %{damage} damage."
 msgstr "Torn tar %{damage} skada."
 
 #, fuzzy
-msgid "The mirror image is created"
-msgstr "Spegelbild skapad"
+msgid "The mirror image is created."
+msgstr "Spegelbild skapad."
 
 msgid "The mirror image is destroyed!"
 msgstr ""
