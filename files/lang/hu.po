@@ -295,7 +295,8 @@ msgstr "Szerencse"
 msgid "Spell Points"
 msgstr "Varázspontok"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Hős opciói"
 
 msgid "Cast Spell"

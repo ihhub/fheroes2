@@ -293,7 +293,8 @@ msgstr "Удача"
 msgid "Spell Points"
 msgstr "Очки магии"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Опции героя"
 
 msgid "Cast Spell"

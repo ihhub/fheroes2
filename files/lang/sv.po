@@ -298,7 +298,8 @@ msgstr "Tur"
 msgid "Spell Points"
 msgstr "Besvärjelsepoäng"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Hjältealternativ"
 
 msgid "Cast Spell"

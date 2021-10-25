@@ -298,7 +298,8 @@ msgstr "Flaks"
 msgid "Spell Points"
 msgstr "Mana"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Helteinnstillinger"
 
 msgid "Cast Spell"

@@ -300,7 +300,8 @@ msgstr "Suerte"
 msgid "Spell Points"
 msgstr "Maná"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Opciones del héroe"
 
 msgid "Cast Spell"

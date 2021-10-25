@@ -294,7 +294,8 @@ msgstr "Szczęście"
 msgid "Spell Points"
 msgstr "Ptk. magii"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Opcje bohatera"
 
 msgid "Cast Spell"

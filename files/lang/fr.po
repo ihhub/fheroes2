@@ -293,7 +293,8 @@ msgstr "Chance"
 msgid "Spell Points"
 msgstr "Pt de magie"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Options du héros"
 
 msgid "Cast Spell"

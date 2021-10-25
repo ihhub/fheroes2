@@ -266,7 +266,7 @@ msgstr ""
 msgid "Spell Points"
 msgstr ""
 
-msgid "Hero's Options"
+msgid "View Hero's options"
 msgstr ""
 
 msgid "Cast Spell"
