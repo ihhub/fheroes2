@@ -3090,6 +3090,9 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
 
 void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
+    // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
+    assert( hero.GetIndex() != dst_index );
+
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Kingdom & kingdom = hero.GetKingdom();
 
@@ -3101,20 +3104,11 @@ void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 
         Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
-        tile.SetObject( hero.GetMapsObject() );
-        hero.SetMapsObject( MP2::OBJ_ZERO );
         tile.RemoveObjectSprite();
+        tile.setAsEmpty();
 
+        AGG::PlaySound( M82::KILLFADE );
         Game::ObjectFadeAnimation::PerformFadeTask();
-
-        // TODO: fix pathfinding
-        if ( tile.GetIndex() == hero.GetIndex() ) {
-            tile.SetObject( MP2::OBJ_HEROES );
-        }
-        else {
-            tile.setAsEmpty();
-            hero.SetMapsObject( MP2::OBJ_HEROES );
-        }
     }
     else {
         Dialog::Message(
