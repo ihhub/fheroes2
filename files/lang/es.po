@@ -525,12 +525,12 @@ msgstr "¡El %{name} es paralizado por los Cíclopes!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "¡El Archimago dispersó todos los hechizos buenos en tu %{name}!"
 
-msgid "Bad luck descends on the %{attacker}"
-msgstr "La mala suerte desciende sobre %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
+msgstr "La mala suerte desciende sobre %{attacker}."
 
 #, fuzzy
-msgid "Good luck shines on the %{attacker}"
-msgstr "La buena suerte brilla sobre %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "La buena suerte brilla sobre %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "La alta moral permite a %{monster} atacar otra vez."

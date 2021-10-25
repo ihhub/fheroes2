@@ -496,10 +496,10 @@ msgstr ""
 "Arcymagowie rozpraszają wszystkie korzystne zaklęcia u tej jednostki "
 "(%{name})!"
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr "Tej jednostce (%{attacker}) nie sprzyja los."
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Good luck shines on the %{attacker}."
 msgstr "Tej jednostce (%{attacker}) sprzyja szczęście."
 
 msgid "High morale enables the %{monster} to attack again."

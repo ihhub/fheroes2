@@ -511,12 +511,12 @@ msgstr "A Küklopsz lebénítja a(z) %{name} lényt!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "A főmágus eloszlatja az összes pozitív varázslatot a %{name} lényről!"
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr "A %{attacker} lénynek balszerencséje van."
 
 #, fuzzy
-msgid "Good luck shines on the %{attacker}"
-msgstr "A Jó szerencse regyog a  %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "A Jó szerencse regyog a  %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "A jó morál következtében a(z) %{monster} újra támadhat."

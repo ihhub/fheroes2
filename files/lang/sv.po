@@ -512,12 +512,12 @@ msgstr "%{name} blev paralyserad av Cykloperna!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
-msgstr "Dålig lycka stiger ned på %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
+msgstr "Dålig lycka stiger ned på %{attacker}."
 
 #, fuzzy
-msgid "Good luck shines on the %{attacker}"
-msgstr "God lycka skiner på %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "God lycka skiner på %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "Hög moral låter %{monster} attackera igen."

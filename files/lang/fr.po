@@ -494,11 +494,11 @@ msgstr "%{name} sont paralysés par les Cyclopes !"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "Les Grands mages dissipent tous les bons sorts sur vos %{name} !"
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr "La malchance s'abat sur les %{attacker}."
 
-msgid "Good luck shines on the %{attacker}"
-msgstr "La chance sourit aux %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "La chance sourit aux %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "Un moral élevé permet aux %{monster} d'attaquer à nouveau."

@@ -498,11 +498,11 @@ msgstr "%{name} парализованы Циклопами!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "Архимаги рассеяли хорошую магию с отряда %{name}!"
 
-msgid "Bad luck descends on the %{attacker}"
-msgstr "Удача отвернулась от %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
+msgstr "Удача отвернулась от %{attacker}."
 
-msgid "Good luck shines on the %{attacker}"
-msgstr "Удача улыбнулась %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "Удача улыбнулась %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "Благодаря высокой морали %{monster} атакуют ещё раз."
