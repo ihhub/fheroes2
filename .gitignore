@@ -72,7 +72,7 @@ fheroes2.pot
 
 # demo directory
 script/demo/demo
-demo
+/demo
 
 # Installed packages for Visual Studio
 VisualStudio/packages/installed
