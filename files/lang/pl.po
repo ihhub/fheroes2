@@ -399,6 +399,12 @@ msgstr "Informacje o baliście"
 msgid "Ballista"
 msgstr "Balista"
 
+msgid "Auto Combat"
+msgstr "Automatyczna Walka"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
 #, fuzzy
 msgid "Enable auto combat"
 msgstr "Automatyczna walka"

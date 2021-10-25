@@ -361,6 +361,12 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
+msgid "Auto Combat"
+msgstr ""
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
 msgid "Enable auto combat"
 msgstr ""
 

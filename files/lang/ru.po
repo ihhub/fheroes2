@@ -402,6 +402,12 @@ msgstr "Информация о баллисте"
 msgid "Ballista"
 msgstr "Баллиста"
 
+msgid "Auto Combat"
+msgstr "Автобитва"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
 #, fuzzy
 msgid "Enable auto combat"
 msgstr "Автобитва"

@@ -404,6 +404,12 @@ msgstr "Morál információ"
 msgid "Ballista"
 msgstr "Dobógép"
 
+msgid "Auto Combat"
+msgstr "Automatikus Harc"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
 #, fuzzy
 msgid "Enable auto combat"
 msgstr "Automatikus harc"
