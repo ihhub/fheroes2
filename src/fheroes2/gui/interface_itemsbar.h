@@ -165,7 +165,7 @@ namespace Interface
 
     protected:
         using Items = std::list<Item *>;
-        typedef typename std::list<Item *>::iterator ItemsIterator;
+        using ItemsIterator = typename std::list<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
         Items items;
@@ -406,8 +406,8 @@ namespace Interface
         }
 
     protected:
-        typedef typename ItemsBar<Item>::ItemsIterator ItemsIterator;
-        typedef typename ItemsBar<Item>::ItemIterPos ItemIterPos;
+        using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
+        using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
 
         ItemsIterator topItem;
         ItemIterPos curItemPos;

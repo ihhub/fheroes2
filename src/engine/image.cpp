@@ -1877,8 +1877,7 @@ namespace fheroes2
                         const uint8_t * transformInX = transformInY + offsetIn;
 
                         if ( posX < widthIn - 1 && posY < heightRoiIn - 1 ) {
-                            if ( *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0
-                                 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
+                            if ( *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
                                 const double coeffX = posX - startX;
                                 const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
                                 const double coeff2 = coeffX * ( 1 - coeffY );
