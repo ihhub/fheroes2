@@ -118,7 +118,7 @@ namespace Game
 // Returns the difficulty level based on the type of game.
 int Game::getDifficulty()
 {
-    Settings & configuration = Settings::Get();
+    const Settings & configuration = Settings::Get();
 
     return ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
 }

@@ -26,56 +26,59 @@
 #include "logging.h"
 #include "zzlib.h"
 
-std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz )
+namespace
 {
-    std::vector<u8> res;
+    std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz = 0 )
+    {
+        std::vector<u8> res;
 
-    if ( src && srcsz ) {
-        if ( realsz )
-            res.reserve( realsz );
-        res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
-        uLong dstsz = static_cast<uLong>( res.size() );
-        int ret = Z_BUF_ERROR;
+        if ( src && srcsz ) {
+            if ( realsz )
+                res.reserve( realsz );
+            res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
+            uLong dstsz = static_cast<uLong>( res.size() );
+            int ret = Z_BUF_ERROR;
 
-        while ( Z_BUF_ERROR
-                == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
-            dstsz = static_cast<uLong>( res.size() * 2 );
-            res.resize( dstsz );
+            while ( Z_BUF_ERROR
+                    == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
+                dstsz = static_cast<uLong>( res.size() * 2 );
+                res.resize( dstsz );
+            }
+
+            if ( ret == Z_OK )
+                res.resize( dstsz );
+            else {
+                res.clear();
+                std::string errorDesc( "zlib error: " );
+                errorDesc += std::to_string( ret );
+                ERROR_LOG( errorDesc.c_str() );
+            }
         }
 
-        if ( ret == Z_OK )
-            res.resize( dstsz );
-        else {
-            res.clear();
-            std::string errorDesc( "zlib error: " );
-            errorDesc += std::to_string( ret );
-            ERROR_LOG( errorDesc.c_str() );
-        }
+        return res;
     }
 
-    return res;
-}
+    std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
+    {
+        std::vector<u8> res;
 
-std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
-{
-    std::vector<u8> res;
+        if ( src && srcsz ) {
+            res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
+            uLong dstsz = static_cast<uLong>( res.size() );
+            int ret = compress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
 
-    if ( src && srcsz ) {
-        res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
-        uLong dstsz = static_cast<uLong>( res.size() );
-        int ret = compress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
-
-        if ( ret == Z_OK )
-            res.resize( dstsz );
-        else {
-            res.clear();
-            std::string errorDesc( "zlib error: " );
-            errorDesc += std::to_string( ret );
-            ERROR_LOG( errorDesc.c_str() );
+            if ( ret == Z_OK )
+                res.resize( dstsz );
+            else {
+                res.clear();
+                std::string errorDesc( "zlib error: " );
+                errorDesc += std::to_string( ret );
+                ERROR_LOG( errorDesc.c_str() );
+            }
         }
-    }
 
-    return res;
+        return res;
+    }
 }
 
 bool ZStreamFile::read( const std::string & fn, size_t offset )

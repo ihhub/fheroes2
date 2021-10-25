@@ -100,13 +100,13 @@ namespace AGG
         ~AsyncSoundManager()
         {
             if ( _worker ) {
-                _mutex.lock();
+                {
+                    std::lock_guard<std::mutex> guard( _mutex );
 
-                _exitFlag = 1;
-                _runFlag = 1;
-                _workerNotification.notify_all();
-
-                _mutex.unlock();
+                    _exitFlag = 1;
+                    _runFlag = 1;
+                    _workerNotification.notify_all();
+                }
 
                 _worker->join();
                 _worker.reset();
@@ -239,10 +239,11 @@ namespace AGG
         {
             assert( manager != nullptr );
 
-            manager->_mutex.lock();
-            manager->_runFlag = 0;
-            manager->_masterNotification.notify_one();
-            manager->_mutex.unlock();
+            {
+                std::lock_guard<std::mutex> guard( manager->_mutex );
+                manager->_runFlag = 0;
+                manager->_masterNotification.notify_one();
+            }
 
             while ( manager->_exitFlag == 0 ) {
                 std::unique_lock<std::mutex> mutexLock( manager->_mutex );

@@ -459,10 +459,8 @@ Troop * Troops::GetFirstValid( void )
 
 Troop * Troops::GetWeakestTroop( void )
 {
-    iterator first, last, lowest;
-
-    first = begin();
-    last = end();
+    iterator first = begin();
+    iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -472,7 +470,8 @@ Troop * Troops::GetWeakestTroop( void )
 
     if ( first == end() )
         return nullptr;
-    lowest = first;
+
+    iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )

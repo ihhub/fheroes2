@@ -258,7 +258,7 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
             }
         }
 
-        Player * player = Settings::Get().GetPlayers().Get( GetColor() );
+        Player * player = Players::Get( GetColor() );
 
         if ( player && player->GetFocus().GetHeroes() == hero ) {
             player->GetFocus().Reset();
@@ -300,7 +300,7 @@ void Kingdom::RemoveCastle( const Castle * castle )
             }
         }
 
-        Player * player = Settings::Get().GetPlayers().Get( GetColor() );
+        Player * player = Players::Get( GetColor() );
 
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();

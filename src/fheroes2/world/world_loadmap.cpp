@@ -348,7 +348,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // count final mp2 blocks
     u32 countblock = 0;
-    while ( 1 ) {
+    while ( true ) {
         const u32 l = fs.get();
         const u32 h = fs.get();
 
