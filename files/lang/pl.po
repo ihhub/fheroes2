@@ -3763,7 +3763,7 @@ msgid ""
 "You spend several hours searching the graves and "
 "find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
-"Po pokonaniu zombie spędzasz wiele godzin na przeszukiwaniu grobów, lecz nic "
+"Spędzasz wiele godzin na przeszukiwaniu grobów, lecz nic "
 "nie znajdujesz. Ten akt profanacji obniża morale twojej armii."
 
 #, fuzzy
@@ -3782,7 +3782,7 @@ msgid ""
 "You spend several hours sifting through the debris "
 "and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
-"Po pokonaniu duchów spędzasz wiele godzin na przeszukiwaniu wraku, lecz nic "
+"Spędzasz wiele godzin na przeszukiwaniu wraku, lecz nic "
 "nie znajdujesz. Ten akt profanacji obniża morale twojej armii."
 
 msgid ""
