@@ -2332,7 +2332,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Enable auto combat" );
         ButtonAutoAction( b, a );
-        
+
         if ( le.MousePressRight() ) {
             Dialog::Message( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Font::BIG );
         }
