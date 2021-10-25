@@ -419,6 +419,12 @@ msgstr "Skreddersy systeminnstillinger"
 msgid "Allows you to customize the combat screen."
 msgstr ""
 
+msgid "Wait"
+msgid ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgid ""
+
 msgid "Wait this unit"
 msgstr "Avvent denne stryken"
 
