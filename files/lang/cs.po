@@ -383,7 +383,7 @@ msgstr ""
 msgid "Enable auto combat"
 msgstr ""
 
-msgid "Customize system options."
+msgid "Customize system options"
 msgstr ""
 
 #, fuzzy
