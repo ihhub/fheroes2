@@ -414,6 +414,9 @@ msgstr ""
 msgid "Enable auto combat"
 msgstr "Automatikus harc"
 
+msgid "Customize system options"
+msgstr "Rendszerbeállítások testreszabása"
+
 msgid "Allows you to customize the combat screen."
 msgstr ""
 
