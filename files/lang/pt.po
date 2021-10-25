@@ -411,7 +411,7 @@ msgstr "Passar a vez desta criatura"
 msgid "Skip this unit"
 msgstr "Passar a vez desta criatura"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Ver Heróis oponentes"
 
 msgid "Hide logs"

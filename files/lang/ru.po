@@ -414,7 +414,7 @@ msgstr "Подождать"
 msgid "Skip this unit"
 msgstr "Пропустить ход"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Просмотреть вражеского героя"
 
 msgid "Hide logs"

@@ -381,7 +381,7 @@ msgstr "Šis karys palauks"
 msgid "Skip this unit"
 msgstr "Šis karys praleis ėjimą"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"

@@ -373,7 +373,7 @@ msgstr ""
 msgid "Skip this unit"
 msgstr ""
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"

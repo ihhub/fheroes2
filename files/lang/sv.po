@@ -422,7 +422,7 @@ msgstr "Vänta denna enhet"
 msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Visa motstående hjälte"
 
 msgid "Hide logs"

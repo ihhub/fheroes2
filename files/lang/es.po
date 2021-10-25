@@ -425,7 +425,7 @@ msgstr "Esta unidad espera"
 msgid "Skip this unit"
 msgstr "Saltar el turno de esta unidad."
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Ver el Heroe Contrario"
 
 msgid "Hide logs"

@@ -412,7 +412,7 @@ msgstr "Ce peloton attend"
 msgid "Skip this unit"
 msgstr "Passer ce peloton"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Voir le héros adverse"
 
 msgid "Hide logs"

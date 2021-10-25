@@ -412,7 +412,7 @@ msgstr "Zatrzymaj tą jednostkę"
 msgid "Skip this unit"
 msgstr "Pomiń tę jednostkę"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Obejrzyj wrogiego bohatera"
 
 msgid "Hide logs"

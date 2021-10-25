@@ -416,7 +416,7 @@ msgstr "Avvent denne stryken"
 msgid "Skip this unit"
 msgstr "Hopp over denne styrken"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Vis motstanderhelt"
 
 msgid "Hide logs"

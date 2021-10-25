@@ -417,7 +417,7 @@ msgstr ""
 msgid "Skip this unit"
 msgstr "Egység kihagyása"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Ellenséges hős megmutatása"
 
 msgid "Hide logs"

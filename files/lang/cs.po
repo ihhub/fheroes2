@@ -387,7 +387,7 @@ msgstr "Přeskočit tuto jednotku"
 msgid "Skip this unit"
 msgstr "Přeskočit tuto jednotku"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"
