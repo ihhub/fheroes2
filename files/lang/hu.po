@@ -373,11 +373,11 @@ msgstr[1] ""
 msgid "Attack %{monster}"
 msgstr "%{monster} támad"
 
-msgid "Fly %{monster} here."
-msgstr "A %{monster} ide repül."
+msgid "Fly %{monster} here"
+msgstr "A %{monster} ide repül"
 
-msgid "Move %{monster} here."
-msgstr "A %{monster} ide menjen."
+msgid "Move %{monster} here"
+msgstr "A %{monster} ide menjen"
 
 msgid "Turn %{turn}"
 msgstr ""

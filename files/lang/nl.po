@@ -331,10 +331,10 @@ msgstr[1] ""
 msgid "Attack %{monster}"
 msgstr ""
 
-msgid "Fly %{monster} here."
+msgid "Fly %{monster} here"
 msgstr ""
 
-msgid "Move %{monster} here."
+msgid "Move %{monster} here"
 msgstr ""
 
 msgid "Turn %{turn}"

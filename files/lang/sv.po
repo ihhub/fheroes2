@@ -379,11 +379,11 @@ msgstr[1] ""
 msgid "Attack %{monster}"
 msgstr "Attackera %{monster}"
 
-msgid "Fly %{monster} here."
-msgstr "Flyg %{monster} hit."
+msgid "Fly %{monster} here"
+msgstr "Flyg %{monster} hit"
 
-msgid "Move %{monster} here."
-msgstr "Flytta %{monster} hit."
+msgid "Move %{monster} here"
+msgstr "Flytta %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Sväng %{turn}"

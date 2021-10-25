@@ -369,11 +369,11 @@ msgstr[2] "(pozostał %{count} strzałów)"
 msgid "Attack %{monster}"
 msgstr "Zaatakuj jednostkę (%{monster})"
 
-msgid "Fly %{monster} here."
-msgstr "Przefruń jednostką (%{monster}) tutaj."
+msgid "Fly %{monster} here"
+msgstr "Przefruń jednostką (%{monster}) tutaj"
 
-msgid "Move %{monster} here."
-msgstr "Przemieść jednostkę (%{monster}) tutaj."
+msgid "Move %{monster} here"
+msgstr "Przemieść jednostkę (%{monster}) tutaj"
 
 msgid "Turn %{turn}"
 msgstr "Tura %{turn}"

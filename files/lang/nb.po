@@ -373,11 +373,11 @@ msgstr[1] "(%{count} skudd igjen)"
 msgid "Attack %{monster}"
 msgstr "Angrip %{monster}"
 
-msgid "Fly %{monster} here."
-msgstr "Fly %{monster} hit."
+msgid "Fly %{monster} here"
+msgstr "Fly %{monster} hit"
 
-msgid "Move %{monster} here."
-msgstr "Flytt %{monster} hit."
+msgid "Move %{monster} here"
+msgstr "Flytt %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"

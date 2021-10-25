@@ -371,11 +371,11 @@ msgstr[2] "(осталось %{count} выстрелов)"
 msgid "Attack %{monster}"
 msgstr "Атаковать %{monster}"
 
-msgid "Fly %{monster} here."
-msgstr "Лететь сюда."
+msgid "Fly %{monster} here"
+msgstr "Лететь сюда"
 
-msgid "Move %{monster} here."
-msgstr "Идти сюда."
+msgid "Move %{monster} here"
+msgstr "Идти сюда"
 
 msgid "Turn %{turn}"
 msgstr "Turn %{turn}"
