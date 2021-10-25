@@ -260,9 +260,9 @@ void Battle::DialogBattleSettings( void )
             Dialog::Message( _( "Speed" ), _( "Set the speed of combat actions and animations." ), Font::BIG );
         }
         // For future use
-        //else if ( le.MousePressRight( optionAreas[1] ) ) {
-        //    Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
-        //}
+        // else if ( le.MousePressRight( optionAreas[1] ) ) {
+        //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
+        // }
         else if ( le.MouseClickLeft( optionAreas[2] ) ) {
             conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
