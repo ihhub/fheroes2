@@ -394,11 +394,11 @@ msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
 msgid "Cast %{spell}"
 msgstr "Varázsolj %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Varázslat célpontjának választása."
 
 #, fuzzy
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Morál információ"
 
 msgid "Ballista"

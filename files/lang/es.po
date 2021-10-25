@@ -403,10 +403,10 @@ msgstr "Lanzar %{spell} sobre %{monster}"
 msgid "Cast %{spell}"
 msgstr "Lanzar %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Seleccionar objetivo del hechizo"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr ""
 
 msgid "Ballista"

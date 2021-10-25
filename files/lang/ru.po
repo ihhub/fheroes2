@@ -393,10 +393,10 @@ msgstr "Применить \"%{spell}\" (цель: %{monster})"
 msgid "Cast %{spell}"
 msgstr "Произнести \"%{spell}\""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Выберите цель заклинания"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Информация о баллисте"
 
 msgid "Ballista"

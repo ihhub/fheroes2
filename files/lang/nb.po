@@ -394,10 +394,10 @@ msgstr "Kast %{spell} på %{monster}"
 msgid "Cast %{spell}"
 msgstr "Kast %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Velg trolldomsmål"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Vis info om ballist"
 
 msgid "Ballista"

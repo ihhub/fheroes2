@@ -2165,7 +2165,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         }
     }
 
-    statusMsg = _( "Select Spell Target" );
+    statusMsg = _( "Select spell target" );
 
     return Cursor::WAR_NONE;
 }

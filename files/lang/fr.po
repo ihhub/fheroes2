@@ -390,10 +390,10 @@ msgstr "Lancer %{spell} sur %{monster}"
 msgid "Cast %{spell}"
 msgstr "Lancer %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Sélectionner la cible du sort"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Voir les infos de la baliste"
 
 msgid "Ballista"
