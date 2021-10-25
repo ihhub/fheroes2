@@ -33,8 +33,6 @@ Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Micro
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.bat"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.ps1"; DestDir: "{app}"
-Source: "..\homm2\extract_homm2_dos_anim.bat"; DestDir: "{app}"
-Source: "..\homm2\extract_homm2_dos_anim.ps1"; DestDir: "{app}"
 Source: "..\homm2\extract_homm2_resources.bat"; DestDir: "{app}"
 Source: "..\homm2\extract_homm2_resources.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
