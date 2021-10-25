@@ -382,7 +382,7 @@ msgstr "A %{monster} ide menjen"
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleportálás Ide"
 
 msgid "Invalid Teleport Destination"

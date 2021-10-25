@@ -382,7 +382,7 @@ msgstr "Flytt %{monster} hit"
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleporter hit"
 
 msgid "Invalid Teleport Destination"

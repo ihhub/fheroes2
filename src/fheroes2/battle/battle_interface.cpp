@@ -2145,7 +2145,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             assert( unitToTeleport != nullptr );
 
             if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
-                statusMsg = _( "Teleport Here" );
+                statusMsg = _( "Teleport here" );
                 return Cursor::SP_TELEPORT;
             }
 

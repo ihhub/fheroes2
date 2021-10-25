@@ -380,7 +380,7 @@ msgstr "Идти сюда"
 msgid "Turn %{turn}"
 msgstr "Turn %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Телепортироваться сюда"
 
 msgid "Invalid Teleport Destination"

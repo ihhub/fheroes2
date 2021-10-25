@@ -378,7 +378,7 @@ msgstr "Przemieść jednostkę (%{monster}) tutaj"
 msgid "Turn %{turn}"
 msgstr "Tura %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleportuj w to miejsce"
 
 msgid "Invalid Teleport Destination"

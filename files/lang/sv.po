@@ -388,7 +388,7 @@ msgstr "Flytta %{monster} hit"
 msgid "Turn %{turn}"
 msgstr "Sväng %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleportera hit"
 
 msgid "Invalid Teleport Destination"

@@ -348,7 +348,7 @@ msgstr ""
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr ""
 
 msgid "Invalid Teleport Destination"
