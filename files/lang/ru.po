@@ -383,7 +383,8 @@ msgstr "Turn %{turn}"
 msgid "Teleport here"
 msgstr "Телепортироваться сюда"
 
-msgid "Invalid Teleport Destination"
+#, fuzzy
+msgid "Invalid teleport destination"
 msgstr "Неверная цель телепорта"
 
 msgid "Cast %{spell} on %{monster}"

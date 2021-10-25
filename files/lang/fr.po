@@ -381,7 +381,7 @@ msgstr "Tour %{turn}"
 msgid "Teleport here"
 msgstr "Téléporter ici"
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr "Destination de téléportation invalide"
 
 msgid "Cast %{spell} on %{monster}"

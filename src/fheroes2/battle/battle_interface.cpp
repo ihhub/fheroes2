@@ -2149,7 +2149,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
                 return Cursor::SP_TELEPORT;
             }
 
-            statusMsg = _( "Invalid Teleport Destination" );
+            statusMsg = _( "Invalid teleport destination" );
             return Cursor::WAR_NONE;
         }
         else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {

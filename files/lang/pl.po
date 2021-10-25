@@ -381,7 +381,7 @@ msgstr "Tura %{turn}"
 msgid "Teleport here"
 msgstr "Teleportuj w to miejsce"
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr "Teleportacja w to miejsce jest niemożliwa"
 
 msgid "Cast %{spell} on %{monster}"

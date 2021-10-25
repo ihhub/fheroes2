@@ -379,8 +379,8 @@ msgstr "Turno %{turn}"
 msgid "Teleport here"
 msgstr "Se teleportar pra cá"
 
-msgid "Invalid Teleport Destination"
-msgstr "Destino de Teleporte Inválido"
+msgid "Invalid teleport destination"
+msgstr "Destino de teleporte inválido"
 
 msgid "Cast %{spell} on %{monster}"
 msgstr ""

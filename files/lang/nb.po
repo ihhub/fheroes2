@@ -385,7 +385,7 @@ msgstr "Runde %{turn}"
 msgid "Teleport here"
 msgstr "Teleporter hit"
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr "Ugyldig teleporteringsmål"
 
 msgid "Cast %{spell} on %{monster}"

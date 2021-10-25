@@ -385,8 +385,8 @@ msgstr ""
 msgid "Teleport here"
 msgstr "Teleportálás Ide"
 
-msgid "Invalid Teleport Destination"
-msgstr "Helytelen Teleport Cél"
+msgid "Invalid teleport destination"
+msgstr "Helytelen teleport cél"
 
 msgid "Cast %{spell} on %{monster}"
 msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"

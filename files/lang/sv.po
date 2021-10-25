@@ -391,7 +391,7 @@ msgstr "Sväng %{turn}"
 msgid "Teleport here"
 msgstr "Teleportera hit"
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr "Ogiltig teleporteringsdestination"
 
 msgid "Cast %{spell} on %{monster}"
