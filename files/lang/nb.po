@@ -428,12 +428,12 @@ msgstr "Vis logg"
 msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} kaster en trolldom: %{spell}"
 
-msgid "%{name} skip the turn"
-msgstr "%{name} hopper over turen"
+msgid "%{name} skip their turn."
+msgstr "%{name} hopper over turen."
 
 # if only 1 monster: "... passe ..."
-msgid "%{name} wait their turn"
-msgstr "%{name} avventer"
+msgid "%{name} wait their turn."
+msgstr "%{name} avventer."
 
 # if only 1 monster: "... attend"
 msgid "%{attacker} do %{damage} damage."

@@ -427,11 +427,11 @@ msgstr "Показать журнал"
 msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} использует магию: %{spell}"
 
-msgid "%{name} skip the turn"
-msgstr "%{name} пропускает ход"
+msgid "%{name} skip their turn."
+msgstr "%{name} пропускает ход."
 
-msgid "%{name} wait their turn"
-msgstr "%{name} ждет хода"
+msgid "%{name} wait their turn."
+msgstr "%{name} ждет хода."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} наносит %{damage} урона."

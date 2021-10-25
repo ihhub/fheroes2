@@ -383,10 +383,10 @@ msgstr ""
 msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
-msgid "%{name} skip the turn"
+msgid "%{name} skip their turn."
 msgstr ""
 
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr ""
 
 msgid "%{attacker} do %{damage} damage."

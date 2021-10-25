@@ -431,11 +431,11 @@ msgid "%{color} casts a spell: %{spell}"
 msgstr "%{name} %{spell} -t  varázsol."
 
 #, fuzzy
-msgid "%{name} skip the turn"
-msgstr "%{name} kör kihagyása"
+msgid "%{name} skip their turn."
+msgstr "%{name} kör kihagyása."
 
 #, fuzzy
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr "%{name} várakozik."
 
 msgid "%{attacker} do %{damage} damage."

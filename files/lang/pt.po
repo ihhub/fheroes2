@@ -424,12 +424,12 @@ msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
 #, fuzzy
-msgid "%{name} skip the turn"
-msgstr "%{name} a %{race}"
+msgid "%{name} skip their turn."
+msgstr "%{name} a %{race}."
 
 #, fuzzy
-msgid "%{name} wait their turn"
-msgstr "%{name} a %{race}"
+msgid "%{name} wait their turn."
+msgstr "%{name} a %{race}."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr ""

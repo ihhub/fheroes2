@@ -424,11 +424,11 @@ msgstr "Pokaż logi"
 msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} rzuca zaklęcie: %{spell}"
 
-msgid "%{name} skip the turn"
-msgstr "%{name} pomija turę"
+msgid "%{name} skip their turn."
+msgstr "%{name} pomija turę."
 
-msgid "%{name} wait their turn"
-msgstr "%{name} czeka na swoją kolej"
+msgid "%{name} wait their turn."
+msgstr "%{name} czeka na swoją kolej."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "Jednostka %{attacker} zadaje %{damage} pkt. obrażeń."

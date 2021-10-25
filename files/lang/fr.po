@@ -424,12 +424,12 @@ msgstr "Afficher le journal"
 msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} lance un sort : %{spell}"
 
-msgid "%{name} skip the turn"
-msgstr "%{name} passent le tour"
+msgid "%{name} skip their turn."
+msgstr "%{name} passent le tour."
 
 # if only 1 monster: "... passe ..."
-msgid "%{name} wait their turn"
-msgstr "%{name} attendent"
+msgid "%{name} wait their turn."
+msgstr "%{name} attendent."
 
 # if only 1 monster: "... attend"
 msgid "%{attacker} do %{damage} damage."

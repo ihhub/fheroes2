@@ -436,12 +436,12 @@ msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} Kastar besvärjelse: %{spell}"
 
 #, fuzzy
-msgid "%{name} skip the turn"
-msgstr "%{name} hoppar över rundan"
+msgid "%{name} skip their turn."
+msgstr "%{name} hoppar över rundan."
 
 #, fuzzy
-msgid "%{name} wait their turn"
-msgstr "%{name} inväntar runda"
+msgid "%{name} wait their turn."
+msgstr "%{name} inväntar runda."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} tar %{damage} skada."
