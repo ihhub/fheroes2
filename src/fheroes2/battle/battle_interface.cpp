@@ -2362,7 +2362,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         ButtonSkipAction( a );
 
         if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Skip" ), _( "Skips the current creature. The current creature loses its turn and does not get to go again until the next round." ),
+            Dialog::Message( _( "Skip" ), _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
                              Font::BIG );
         }
     }

@@ -434,6 +434,12 @@ msgid ""
 msgid "Wait this unit"
 msgstr "Vänta denna enhet"
 
+msgid "Skip"
+msgid ""
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgid ""
+
 msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
 
