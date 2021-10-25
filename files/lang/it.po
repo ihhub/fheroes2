@@ -170,16 +170,37 @@ msgstr ""
 msgid "Speed: %{speed}"
 msgstr ""
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 msgid "Auto Spell Casting"
+msgstr ""
+
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
 msgstr ""
 
 msgid "Grid"
 msgstr ""
 
+msgid "Toggle the hex grid on or off.  The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
 msgid "Shadow Movement"
 msgstr ""
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
+msgstr ""
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 msgid "Off"
