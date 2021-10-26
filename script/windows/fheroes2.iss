@@ -53,52 +53,52 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\extract_homm2_resources.bat"; Flags: runascurrentuser; Check: UseAssetsFromOriginalGame
-Filename: "{app}\download_demo_version.bat"; Flags: runascurrentuser; Check: UseAssetsFromDemoVersion
+Filename: "{app}\extract_homm2_resources.bat"; Flags: runascurrentuser; Check: UseResourcesFromOriginalGame
+Filename: "{app}\download_demo_version.bat"; Flags: runascurrentuser; Check: UseResourcesFromDemoVersion
 
 [CustomMessages]
-AssetSettingsPageCaption=Game Asset Settings
-AssetSettingsPageDescription=Configure the source of the original game's assets
-UseAssetsFromOriginalGameRadioButtonCaption=Use assets from the original game
-UseAssetsFromOriginalGameLabelCaption=I have the original Heroes of Might and Magic II installed, use assets from the original game.
-UseAssetsFromDemoVersionRadioButtonCaption=Use assets from the demo version
-UseAssetsFromDemoVersionLabelCaption=I don't have the original Heroes of Might and Magic II, download the demo version of the game and use assets from it.
+ResourcesSettingsPageCaption=Game Resources Settings
+ResourcesSettingsPageDescription=Configure the source of the original game's resources
+UseResourcesFromOriginalGameRadioButtonCaption=Use resources from the original game
+UseResourcesFromOriginalGameLabelCaption=I already have the original Heroes of Might and Magic II installed, use resources from the original game.
+UseResourcesFromDemoVersionRadioButtonCaption=Use resources from the demo version
+UseResourcesFromDemoVersionLabelCaption=I don't have the original Heroes of Might and Magic II, download the demo version of the game and use resources from it.
 DoNothingRadioButtonCaption=Do nothing
-DoNothingLabelCaption=Do nothing, I'll figure it out on my own.
+DoNothingLabelCaption=I'll figure it out on my own.
 
 [Code]
 var
-    UseAssetsFromOriginalGameRadioButton: TRadioButton;
-    UseAssetsFromDemoVersionRadioButton: TRadioButton;
+    UseResourcesFromOriginalGameRadioButton: TRadioButton;
+    UseResourcesFromDemoVersionRadioButton: TRadioButton;
     DoNothingRadioButton: TRadioButton;
 
-function UseAssetsFromOriginalGame: Boolean;
+function UseResourcesFromOriginalGame: Boolean;
 begin
-    Result := UseAssetsFromOriginalGameRadioButton.Checked;
+    Result := UseResourcesFromOriginalGameRadioButton.Checked;
 end;
 
-function UseAssetsFromDemoVersion: Boolean;
+function UseResourcesFromDemoVersion: Boolean;
 begin
-    Result := UseAssetsFromDemoVersionRadioButton.Checked;
+    Result := UseResourcesFromDemoVersionRadioButton.Checked;
 end;
 
-procedure CreateAssetSettingsPage(PreviousPageId: Integer);
+procedure CreateResourcesSettingsPage(PreviousPageId: Integer);
 var
     VerticalOffset: Integer;
     Page: TWizardPage;
-    UseAssetsFromOriginalGameLabel: TLabel;
-    UseAssetsFromDemoVersionLabel: TLabel;
+    UseResourcesFromOriginalGameLabel: TLabel;
+    UseResourcesFromDemoVersionLabel: TLabel;
     DoNothingLabel: TLabel;
 begin
     VerticalOffset := 0;
 
-    Page := CreateCustomPage(PreviousPageId, ExpandConstant('{cm:AssetSettingsPageCaption}'), ExpandConstant('{cm:AssetSettingsPageDescription}'));
+    Page := CreateCustomPage(PreviousPageId, ExpandConstant('{cm:ResourcesSettingsPageCaption}'), ExpandConstant('{cm:ResourcesSettingsPageDescription}'));
 
-    UseAssetsFromOriginalGameRadioButton := TRadioButton.Create(Page);
-    with UseAssetsFromOriginalGameRadioButton do
+    UseResourcesFromOriginalGameRadioButton := TRadioButton.Create(Page);
+    with UseResourcesFromOriginalGameRadioButton do
     begin
         Parent := Page.Surface;
-        Caption := ExpandConstant('{cm:UseAssetsFromOriginalGameRadioButtonCaption}');
+        Caption := ExpandConstant('{cm:UseResourcesFromOriginalGameRadioButtonCaption}');
         Font.Style := [fsBold];
         Left := ScaleX(0);
         Top := ScaleY(VerticalOffset);
@@ -111,11 +111,11 @@ begin
 
     VerticalOffset := VerticalOffset + 24;
 
-    UseAssetsFromOriginalGameLabel := TLabel.Create(Page);
-    with UseAssetsFromOriginalGameLabel do
+    UseResourcesFromOriginalGameLabel := TLabel.Create(Page);
+    with UseResourcesFromOriginalGameLabel do
     begin
         Parent := Page.Surface;
-        Caption := ExpandConstant('{cm:UseAssetsFromOriginalGameLabelCaption}');
+        Caption := ExpandConstant('{cm:UseResourcesFromOriginalGameLabelCaption}');
         Left := ScaleX(16);
         Top := ScaleY(VerticalOffset);
         Width := Page.SurfaceWidth - Left * 2;
@@ -126,11 +126,11 @@ begin
 
     VerticalOffset := VerticalOffset + 48;
 
-    UseAssetsFromDemoVersionRadioButton := TRadioButton.Create(Page);
-    with UseAssetsFromDemoVersionRadioButton do
+    UseResourcesFromDemoVersionRadioButton := TRadioButton.Create(Page);
+    with UseResourcesFromDemoVersionRadioButton do
     begin
         Parent := Page.Surface;
-        Caption := ExpandConstant('{cm:UseAssetsFromDemoVersionRadioButtonCaption}');
+        Caption := ExpandConstant('{cm:UseResourcesFromDemoVersionRadioButtonCaption}');
         Font.Style := [fsBold];
         Left := ScaleX(0);
         Top := ScaleY(VerticalOffset);
@@ -141,11 +141,11 @@ begin
 
     VerticalOffset := VerticalOffset + 24;
 
-    UseAssetsFromDemoVersionLabel := TLabel.Create(Page);
-    with UseAssetsFromDemoVersionLabel do
+    UseResourcesFromDemoVersionLabel := TLabel.Create(Page);
+    with UseResourcesFromDemoVersionLabel do
     begin
         Parent := Page.Surface;
-        Caption := ExpandConstant('{cm:UseAssetsFromDemoVersionLabelCaption}');
+        Caption := ExpandConstant('{cm:UseResourcesFromDemoVersionLabelCaption}');
         Left := ScaleX(16);
         Top := ScaleY(VerticalOffset);
         Width := Page.SurfaceWidth - Left * 2;
@@ -187,5 +187,5 @@ end;
 
 procedure InitializeWizard();
 begin
-    CreateAssetSettingsPage(wpSelectTasks);
+    CreateResourcesSettingsPage(wpSelectTasks);
 end;
