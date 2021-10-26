@@ -44,13 +44,15 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 * After downloading the installer, launch it and follow the instructions.
 
-* During the installation process, you will be prompted to download and install the demo version of the original game (you can also do
-  this later by clicking the appropriate shortcut in the program's group in the Windows Start menu).
+* During the installation process, you will be prompted to extract game resources from the original game (select this option if you
+  already have a legally purchased copy of the original game installed), or download the demo version of the original game and extract
+  game resources from it (you can also do this later by clicking the appropriate shortcut in the program's group in the Windows Start
+  menu).
 
-* If you have a legally purchased copy of the original game, you can choose not to install the demo version, but to run the `Extract
-  game resources from the original HoMM2 distribution` shortcut in the program's group in the Windows Start menu. This script will try
-  to perform an automatic search for an existing installation of the original game and extract all the necessary resource files. If it
-  can't find an existing installation, you will be prompted to enter the location of the original game manually.
+* If you purchased a copy of the original game only after installing fheroes2, you can run the `Extract game resources from the
+  original HoMM2 distribution` shortcut in the program's group in the Windows Start menu. This script will try to perform an automatic
+  search for an existing installation of the original game and extract all the necessary resource files. If it can't find an existing
+  installation, you will be prompted to enter the location of the original game manually.
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
