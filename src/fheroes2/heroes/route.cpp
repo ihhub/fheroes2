@@ -34,7 +34,15 @@ Route::Path::Path( const Heroes & h )
 
 int Route::Path::GetFrontDirection( void ) const
 {
-    return empty() ? ( dst != hero->GetIndex() ? Maps::GetDirection( hero->GetIndex(), dst ) : Direction::CENTER ) : front().GetDirection();
+    if ( empty() ) {
+        if ( dst != hero->GetIndex() ) {
+            return Maps::GetDirection( hero->GetIndex(), dst );
+        }
+
+        return Direction::CENTER;
+    }
+
+    return front().GetDirection();
 }
 
 u32 Route::Path::GetFrontPenalty( void ) const

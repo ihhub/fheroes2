@@ -685,7 +685,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
                      teach.end() );
     }
 
-    std::string message, spells1, spells2;
+    std::string spells1;
+    std::string spells2;
 
     // learning
     for ( SpellStorage::const_iterator it = learn.begin(); it != learn.end(); ++it ) {
@@ -704,6 +705,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     }
 
     if ( teacher->isControlHuman() || learner->isControlHuman() ) {
+        std::string message;
+
         if ( !spells1.empty() && !spells2.empty() )
             message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns %{spells1} from %{learner}, and teaches %{spells2} to %{learner}." );
         else if ( !spells1.empty() )

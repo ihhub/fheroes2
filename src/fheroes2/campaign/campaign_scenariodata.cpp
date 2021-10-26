@@ -447,6 +447,10 @@ namespace Campaign
             return getWizardsIsleCampaignBonusData( scenarioID );
         case Campaign::DESCENDANTS_CAMPAIGN:
             return getDescendantsCampaignBonusData( scenarioID );
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
+            break;
         }
 
         // shouldn't be here unless we get an unsupported campaign

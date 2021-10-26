@@ -615,6 +615,8 @@ namespace Campaign
             return campaign;
         }
         default: {
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
             static const Campaign::CampaignData noCampaign;
             return noCampaign;
         }
@@ -686,12 +688,16 @@ namespace Campaign
             return getDescendantsCampaignAwardData( scenarioID );
         case WIZARDS_ISLE_CAMPAIGN:
             return getWizardsIsleCampaignAwardData( scenarioID );
-            // no campaign award for voyage home!
         case VOYAGE_HOME_CAMPAIGN:
+            // No campaign award for voyage home!
+            return {};
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
             break;
         }
 
-        return std::vector<Campaign::CampaignAwardData>();
+        return {};
     }
 
     const char * CampaignAwardData::getAllianceJoiningMessage( const int monsterId )

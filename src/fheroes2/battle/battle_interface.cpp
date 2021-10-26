@@ -3274,7 +3274,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
 
 void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
-    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
+    const Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     std::string msg;
 
