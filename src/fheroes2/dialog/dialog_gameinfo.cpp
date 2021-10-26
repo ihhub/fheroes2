@@ -63,10 +63,10 @@ void Dialog::GameInfo( void )
     text.set( _( "Game\nDifficulty" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 140, pt.y + 56, 80, display );
 
-    text.set( _( "\nRating" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( " \nRating" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 230, pt.y + 56, 80, display );
 
-    text.set( _( "\nMap Size" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( " \nMap Size" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 322, pt.y + 56, 80, display );
 
     text.set( Difficulty::String( conf.MapsDifficulty() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
