@@ -1173,7 +1173,7 @@ msgstr "Божественный Доспех"
 
 #, fuzzy (18 char max)
 msgid "Fizbin Medal"
-msgstr ""
+msgstr "Символ Неудачи"
 
 msgid "Fizbin of Misfortune"
 msgstr "Символ Неудачи"
@@ -6659,7 +6659,7 @@ msgstr "Малый Свиток Знания"
 
 #, fuzzy (18 char max)
 msgid "Major Scroll"
-msgstr "Большой Свиток Знания"
+msgstr "Большой Свиток"
 
 msgid "Major Scroll of Knowledge"
 msgstr "Большой Свиток Знания"
@@ -6669,7 +6669,7 @@ msgstr "Могущественный Свиток Знания"
 
 #, fuzzy (18 char max)
 msgid "Foremost Scroll"
-msgstr "Свиток Высшего Знания"
+msgstr "Высший Свиток"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Свиток Высшего Знания"
