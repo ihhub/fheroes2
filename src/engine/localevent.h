@@ -265,8 +265,8 @@ private:
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
 
-    void StopSounds();
-    void ResumeSounds();
+    static void StopSounds();
+    static void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     static int GlobalFilterEvents( void *, SDL_Event * );

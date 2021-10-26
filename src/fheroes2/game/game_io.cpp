@@ -274,7 +274,8 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
         return false;
     }
 
-    char major, minor;
+    char major;
+    char minor;
     fs >> major >> minor;
     const u16 savid = ( static_cast<u16>( major ) << 8 ) | static_cast<u16>( minor );
 

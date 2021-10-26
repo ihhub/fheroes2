@@ -663,7 +663,7 @@ const char * MP2::getPluralObjectName( const MapObjectType objectType, const siz
 
 bool MP2::isDayLife( const MapObjectType objectType )
 {
-    // FIXME: list day object life
+    // TODO: list day object life
     switch ( objectType ) {
     case OBJ_MAGICWELL:
         return true;
@@ -677,7 +677,7 @@ bool MP2::isDayLife( const MapObjectType objectType )
 
 bool MP2::isWeekLife( const MapObjectType objectType )
 {
-    // FIXME: list week object life
+    // TODO: list week object life
     switch ( objectType ) {
     case OBJ_STABLES:
     case OBJ_MAGICGARDEN:

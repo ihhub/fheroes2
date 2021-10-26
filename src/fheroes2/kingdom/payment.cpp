@@ -20,30 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
-
 #include "buildinginfo.h"
 #include "payment.h"
 #include "settings.h"
-
-struct paymentstats_t
-{
-    const char * id;
-    cost_t cost;
-};
-
-paymentstats_t _payments[] = {
-    { "buy_boat", { 1000, 10, 0, 0, 0, 0, 0 } },
-    { "buy_spell_book", { 500, 0, 0, 0, 0, 0, 0 } },
-    { "buy_spell_book_from_shrine1", { 1250, 0, 0, 0, 0, 0, 0 } },
-    { "buy_spell_book_from_shrine2", { 1000, 0, 0, 0, 0, 0, 0 } },
-    { "buy_spell_book_from_shrine3", { 750, 0, 0, 0, 0, 0, 0 } },
-    { "recruit_hero", { 2500, 0, 0, 0, 0, 0, 0 } },
-    { "recruit_level", { 500, 0, 0, 0, 0, 0, 0 } },
-    { "alchemist_payment", { 750, 0, 0, 0, 0, 0, 0 } },
-
-    { nullptr, { 0, 0, 0, 0, 0, 0, 0 } },
-};
 
 payment_t PaymentConditions::BuyBuilding( int race, u32 build )
 {
@@ -52,76 +31,40 @@ payment_t PaymentConditions::BuyBuilding( int race, u32 build )
 
 payment_t PaymentConditions::BuyBoat( void )
 {
-    payment_t result;
-    const paymentstats_t * ptr = &_payments[0];
-
-    while ( ptr->id && std::strcmp( "buy_boat", ptr->id ) )
-        ++ptr;
-    if ( ptr->id )
-        result = ptr->cost;
-
-    return result;
+    return payment_t( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
 }
 
 payment_t PaymentConditions::BuySpellBook( int shrine )
 {
-    payment_t result;
-    const paymentstats_t * ptr = &_payments[0];
-    const char * skey = nullptr;
-
     switch ( shrine ) {
     case 1:
-        skey = "buy_spell_book_from_shrine1";
-        break;
+        return payment_t( cost_t{ 1250, 0, 0, 0, 0, 0, 0 } );
     case 2:
-        skey = "buy_spell_book_from_shrine2";
-        break;
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case 3:
-        skey = "buy_spell_book_from_shrine3";
-        break;
+        return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
     default:
-        skey = "buy_spell_book";
         break;
     }
 
-    while ( ptr->id && std::strcmp( skey, ptr->id ) )
-        ++ptr;
-    if ( ptr->id )
-        result = ptr->cost;
-
-    return result;
+    return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 
 payment_t PaymentConditions::RecruitHero( int level )
 {
-    payment_t result;
-    const paymentstats_t * ptr = &_payments[0];
-    while ( ptr->id && std::strcmp( "recruit_hero", ptr->id ) )
-        ++ptr;
-    if ( ptr->id )
-        result = ptr->cost;
+    payment_t result( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
 
     // level price
-    if ( Settings::Get().ExtHeroRecruitCostDependedFromLevel() ) {
-        ptr = &_payments[0];
-        while ( ptr->id && std::strcmp( "recruit_level", ptr->id ) )
-            ++ptr;
-        if ( ptr && 1 < level ) {
-            if ( ptr->cost.gold )
-                result.gold += ( level - 1 ) * ptr->cost.gold;
-            if ( ptr->cost.wood )
-                result.wood += ( level - 1 ) * ptr->cost.wood;
-            if ( ptr->cost.mercury )
-                result.mercury += ( level - 1 ) * ptr->cost.mercury;
-            if ( ptr->cost.ore )
-                result.ore += ( level - 1 ) * ptr->cost.ore;
-            if ( ptr->cost.sulfur )
-                result.sulfur += ( level - 1 ) * ptr->cost.sulfur;
-            if ( ptr->cost.crystal )
-                result.crystal += ( level - 1 ) * ptr->cost.crystal;
-            if ( ptr->cost.gems )
-                result.gems += ( level - 1 ) * ptr->cost.gems;
-        }
+    if ( Settings::Get().ExtHeroRecruitCostDependedFromLevel() && level > 1 ) {
+        const payment_t perLevel( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
+
+        result.gold += ( level - 1 ) * perLevel.gold;
+        result.wood += ( level - 1 ) * perLevel.wood;
+        result.mercury += ( level - 1 ) * perLevel.mercury;
+        result.ore += ( level - 1 ) * perLevel.ore;
+        result.sulfur += ( level - 1 ) * perLevel.sulfur;
+        result.crystal += ( level - 1 ) * perLevel.crystal;
+        result.gems += ( level - 1 ) * perLevel.gems;
     }
 
     return result;
@@ -129,12 +72,5 @@ payment_t PaymentConditions::RecruitHero( int level )
 
 payment_t PaymentConditions::ForAlchemist()
 {
-    payment_t result;
-    const paymentstats_t * ptr = &_payments[0];
-    while ( ptr->id && std::strcmp( "alchemist_payment", ptr->id ) )
-        ++ptr;
-    if ( ptr->id )
-        result = ptr->cost;
-
-    return result;
+    return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
 }
