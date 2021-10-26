@@ -1932,7 +1932,7 @@ msgstr ""
 "Besorolás"
 
 msgid ""
-"\n"
+" \n"
 "Map Size"
 msgstr ""
 "Térkép\n"
