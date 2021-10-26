@@ -1789,10 +1789,12 @@ msgstr ""
 "Sudėtingumas"
 
 msgid ""
+" \n"
 "Rating"
 msgstr ""
 
 msgid ""
+" \n"
 "Map Size"
 msgstr ""
 "Pasaulio\n"
