@@ -1068,52 +1068,42 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-#, fuzzy
 msgid "Thunder Mace"
-msgstr "Grzmiąca maczuga dominium"
+msgstr "Grzm. maczuga"
 
-#, fuzzy
 msgid "Minor Scroll"
-msgstr "Pomniejszy zwój wiedzy"
+msgstr "Pomniejszy zwój"
 
-#, fuzzy
 msgid "Dragon Sword"
-msgstr "Zabójca smoków"
+msgstr "Smoczy miecz"
 
-#, fuzzy
 msgid "Breastplate"
-msgstr "Napierśnik Andurana"
+msgstr "Napierśnik"
 
-#, fuzzy (18 char max)
 msgid "Fizbin Medal"
-msgstr ""
+msgstr "Fizbin"
 
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin Nieszczęścia"
 
-#, fuzzy (18 char max)
 msgid "Mage's Ring"
-msgstr "Pierścień mocy maga"
+msgstr "Pierścień maga"
 
-#, fuzzy
 msgid "Defender Helm"
-msgstr "Obrońca"
+msgstr "Hełm obrońcy"
 
-#, fuzzy
 msgid "Power Axe"
-msgstr "Moc"
+msgstr "Potężny topór"
 
-#, fuzzy
 msgid "Stealth Shield"
-msgstr "Najzn. tarcza"
+msgstr "Maskuj. tarcza"
 
 #, fuzzy
 msgid "Nomad Boots"
 msgstr "Nomadowie"
 
-#, fuzzy
 msgid "Summon Earth"
-msgstr "Przywołanie łodzi"
+msgstr "Przyw. ziemi"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - tu rekrutuje się: %{monster}."
@@ -6685,9 +6675,8 @@ msgstr "%{name} dodaje przychód w wysokości %{count} sztuk złota na turę."
 msgid "Arcane Necklace of Magic"
 msgstr "Tajemny naszyjnik magii"
 
-#, fuzzy (18 char max)
 msgid "Caster's Bracelet"
-msgstr "Magiczna bransoleta czarodzieja"
+msgstr "Magiczna bransol"
 
 msgid "Caster's Bracelet of Magic"
 msgstr "Magiczna bransoleta czarodzieja"
@@ -6752,9 +6741,8 @@ msgstr "Boski napierśnik ochrony"
 msgid "Minor Scroll of Knowledge"
 msgstr "Pomniejszy zwój wiedzy"
 
-#, fuzzy (18 char max)
 msgid "Major Scroll"
-msgstr "Większy zwój wiedzy"
+msgstr "Większy zwój"
 
 msgid "Major Scroll of Knowledge"
 msgstr "Większy zwój wiedzy"
@@ -6762,9 +6750,8 @@ msgstr "Większy zwój wiedzy"
 msgid "Superior Scroll of Knowledge"
 msgstr "Wspaniały zwój wiedzy"
 
-#, fuzzy (18 char max)
 msgid "Foremost Scroll"
-msgstr "Doskonały zwój wiedzy"
+msgstr "Doskonały zwój"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Doskonały zwój wiedzy"
@@ -6787,9 +6774,8 @@ msgstr "Buty mobilności nomada"
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} zwiększa twój zasięg ruchu na lądzie."
 
-#, fuzzy (18 char max)
 msgid "Traveler's Boots"
-msgstr "Buty mobilności podróżnika"
+msgstr "Buty podróżnika"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Buty mobilności podróżnika"
