@@ -31,32 +31,32 @@ payment_t PaymentConditions::BuyBuilding( int race, u32 build )
 
 payment_t PaymentConditions::BuyBoat( void )
 {
-    return { 1000, 10, 0, 0, 0, 0, 0 };
+    return payment_t( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
 }
 
 payment_t PaymentConditions::BuySpellBook( int shrine )
 {
     switch ( shrine ) {
     case 1:
-        return { 1250, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 1250, 0, 0, 0, 0, 0, 0 } );
     case 2:
-        return { 1000, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case 3:
-        return { 750, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
     default:
         break;
     }
 
-    return { 500, 0, 0, 0, 0, 0, 0 };
+    return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 
 payment_t PaymentConditions::RecruitHero( int level )
 {
-    payment_t result = { 2500, 0, 0, 0, 0, 0, 0 };
+    payment_t result( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
 
     // level price
     if ( Settings::Get().ExtHeroRecruitCostDependedFromLevel() && level > 1 ) {
-        const payment_t perLevel = { 500, 0, 0, 0, 0, 0, 0 };
+        const payment_t perLevel( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
 
         result.gold += ( level - 1 ) * perLevel.gold;
         result.wood += ( level - 1 ) * perLevel.wood;
@@ -72,5 +72,5 @@ payment_t PaymentConditions::RecruitHero( int level )
 
 payment_t PaymentConditions::ForAlchemist()
 {
-    return { 750, 0, 0, 0, 0, 0, 0 };
+    return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
 }
