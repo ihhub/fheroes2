@@ -96,9 +96,8 @@ Then follow the instructions on the screen.
 
 <a name="macos-zip-archive"></a>
 ### macOS ZIP archive
-NOTE: x86_64 build. For Apple silicon you'll need to build locally the executable.
 
-* Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos10_15_sdl2.zip).
+* Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos10_15_sdl2_x86-64.zip).
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_1.sh` or
   `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries
