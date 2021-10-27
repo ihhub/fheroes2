@@ -68,21 +68,23 @@ DoNothingLabelCaption=I'll figure it out on my own.
 
 [Code]
 var
+    IsFreshInstallation: Boolean;
+    ResourcesSettingsPageID: Integer;
     UseResourcesFromOriginalGameRadioButton: TRadioButton;
     UseResourcesFromDemoVersionRadioButton: TRadioButton;
     DoNothingRadioButton: TRadioButton;
 
 function UseResourcesFromOriginalGame: Boolean;
 begin
-    Result := UseResourcesFromOriginalGameRadioButton.Checked;
+    Result := IsFreshInstallation and UseResourcesFromOriginalGameRadioButton.Checked;
 end;
 
 function UseResourcesFromDemoVersion: Boolean;
 begin
-    Result := UseResourcesFromDemoVersionRadioButton.Checked;
+    Result := IsFreshInstallation and UseResourcesFromDemoVersionRadioButton.Checked;
 end;
 
-procedure CreateResourcesSettingsPage(PreviousPageId: Integer);
+procedure CreateResourcesSettingsPage;
 var
     VerticalOffset: Integer;
     Page: TWizardPage;
@@ -92,7 +94,11 @@ var
 begin
     VerticalOffset := 0;
 
-    Page := CreateCustomPage(PreviousPageId, ExpandConstant('{cm:ResourcesSettingsPageCaption}'), ExpandConstant('{cm:ResourcesSettingsPageDescription}'));
+    Page := CreateCustomPage(wpSelectTasks, ExpandConstant('{cm:ResourcesSettingsPageCaption}'), ExpandConstant('{cm:ResourcesSettingsPageDescription}'));
+    with Page do
+    begin
+        ResourcesSettingsPageID := ID;
+    end;
 
     UseResourcesFromOriginalGameRadioButton := TRadioButton.Create(Page);
     with UseResourcesFromOriginalGameRadioButton do
@@ -185,7 +191,30 @@ begin
     end;
 end;
 
-procedure InitializeWizard();
+function ShouldSkipPage(PageID: Integer): Boolean;
 begin
-    CreateResourcesSettingsPage(wpSelectTasks);
+    if PageID = ResourcesSettingsPageID then
+        Result := not IsFreshInstallation
+    else
+        Result := False;
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+    { This logic relies on the assumption that the value of UsePreviousAppDir is yes }
+    if CurPageID = wpSelectDir then
+        IsFreshInstallation := True;
+end;
+
+procedure InitializeWizard;
+begin
+    CreateResourcesSettingsPage;
+end;
+
+function InitializeSetup: Boolean;
+begin
+    IsFreshInstallation := False;
+    ResourcesSettingsPageID := -1;
+
+    Result := True;
 end;
