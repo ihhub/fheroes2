@@ -29,8 +29,7 @@
 
 #include <cassert>
 
-/* return name icn object */
-int MP2::GetICNObject( int tileset )
+int MP2::GetICNObject( const uint8_t tileset )
 {
     switch ( tileset >> 2 ) {
     // reserverd
