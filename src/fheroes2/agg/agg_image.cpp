@@ -833,7 +833,7 @@ namespace fheroes2
                 _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
                 _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
                 _icnVsSprite[id][0].setPosition( -3, 0 );
-                _icnVsSprite[id][1].setPosition( -2, 1 );
+                _icnVsSprite[id][1].setPosition( -3, 1 );
 
                 return true;
             }
