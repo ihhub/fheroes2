@@ -1885,8 +1885,9 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
             break;
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
-                   << static_cast<int>( tile.objectIndex ) );
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
+                                                << static_cast<int>( tile.objectIndex ) );
         break;
     }
 

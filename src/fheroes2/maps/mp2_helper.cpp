@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "mp2.h"
 #include "mp2_helper.h"
+#include "mp2.h"
 #include "serialize.h"
 
 namespace MP2
