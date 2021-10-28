@@ -1734,12 +1734,10 @@ msgid ""
 msgstr ""
 
 msgid ""
-" \n"
 "Rating"
 msgstr ""
 
 msgid ""
-" \n"
 "Map Size"
 msgstr ""
 

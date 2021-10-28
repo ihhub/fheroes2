@@ -1926,17 +1926,13 @@ msgstr ""
 "ighetsgrad"
 
 msgid ""
-" \n"
 "Rating"
 msgstr ""
-" \n"
 "Betyg"
 
 msgid ""
-" \n"
 "Map Size"
 msgstr ""
-" \n"
 "Kartstorlek"
 
 msgid "Opponents"
