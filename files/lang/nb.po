@@ -1994,7 +1994,7 @@ msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
-"Brettets\n/"
+"Brettets\n"
 "utfordring"
 
 msgid ""
