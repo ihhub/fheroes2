@@ -197,37 +197,37 @@ msgid "Speed: %{speed}"
 msgstr "Vitesse : %{speed}"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Définir la vitesse des actions et animations de combat."
 
 msgid "Monster Info"
-msgstr ""
+msgstr "Informations sur la créature"
 
 msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr ""
+msgstr "Afficher les fenêtres d'information concernant les créatures actives et les créatures choisies."
 
 msgid "Auto Spell Casting"
 msgstr "Sorts auto"
 
 msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr ""
+msgstr "Activer ou désactiver le lancement de sorts pendant le combat automatique. (Remarque: cela n'affecte en aucun cas le lancement de sorts pour les héros de l'ordinateur, ni le combat rapide.)"
 
 msgid "Grid"
 msgstr "Grille"
 
 msgid "Toggle the hex grid on or off.  The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr ""
+msgstr "Activer ou désactiver l'affichage de la grille d'hexagones. Même désactivée, le jeu utilise cette grille pour les déplacements et certains sortilèges."
 
 msgid "Shadow Movement"
 msgstr "Ombre de mouvement"
 
 msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
+msgstr "Activer ou désactiver la zone ombragée indiquant où vos créatures peuvent se déplacer et attaquer."
 
 msgid "Shadow Cursor"
 msgstr "Curseur d'ombre"
 
 msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
-msgstr ""
+msgstr "Activer ou désactiver l'ombre montrant l'hexagone où est situé le curseur de la souris."
 
 msgid "Off"
 msgstr "Eteint"
