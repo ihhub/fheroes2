@@ -813,7 +813,7 @@ namespace fheroes2
                 input[1] = Flip( input[1], true, false );
                 input[3] = Flip( input[3], true, false );
 
-                Sprite out = ExtractCommonPattern( input );
+                Image out = ExtractCommonPattern( input );
 
                 // Here are 2 pixels which should be removed.
                 if ( out.width() == width && out.height() == height ) {
