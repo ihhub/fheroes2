@@ -384,13 +384,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // The original resources do not have such animated buttons so we have to create those.
     const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
     fheroes2::ButtonSprite moveArmyToHero2;
-    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 295, 270 ), windowOffset );
+    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 295, 268 ), windowOffset );
 
     fheroes2::ButtonSprite moveArmyToHero1;
     createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
 
     fheroes2::ButtonSprite moveArtifactsToHero2;
-    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 295, 363 ), windowOffset );
+    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 295, 361 ), windowOffset );
 
     fheroes2::ButtonSprite moveArtifactsToHero1;
     createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
