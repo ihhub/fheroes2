@@ -61,8 +61,8 @@ namespace
 
         fheroes2::Sprite pressedButton( width, height );
         fheroes2::Copy( buttonBackground, offset.x + offsetX, offset.y + offsetY, pressedButton, 0, 0, width, height );
-        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, originalPressedImage.x() - offsetX, originalPressedImage.y() - offsetY,
-                        originalPressedImage.width(), originalPressedImage.height() );
+        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, originalPressedImage.x() - offsetX, originalPressedImage.y() - offsetY, originalPressedImage.width(),
+                        originalPressedImage.height() );
 
         button.setPosition( screenOffset.x + offset.x + offsetX, screenOffset.y + offset.y + offsetY );
         button.setSprite( releasedButton, pressedButton );
