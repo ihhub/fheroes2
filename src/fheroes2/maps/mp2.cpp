@@ -1164,9 +1164,11 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     case OBJ_BOAT:
     case OBJ_BARRIER:
     case OBJ_JAIL:
-    case OBJ_SHIPWRECK:
     case OBJ_BUOY:
     case OBJ_SKELETON:
+    case OBJ_DERELICTSHIP:
+    case OBJ_MERMAID:
+    case OBJ_SIRENS:
         return true;
     default:
         break;
