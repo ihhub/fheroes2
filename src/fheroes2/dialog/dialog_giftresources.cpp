@@ -205,7 +205,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::StandardWindow frameborder( 320, 224 );
+    const fheroes2::StandardWindow frameborder( 320, 234 );
     const fheroes2::Rect box( frameborder.activeArea() );
 
     Funds funds1( kingdom.GetFunds() );
@@ -230,9 +230,12 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     ResourceBar info2( funds2, box.x + 25, box.y + 150 );
     info2.Redraw();
 
-    fheroes2::ButtonGroup btnGroups( box, Dialog::OK | Dialog::CANCEL );
-    btnGroups.button( 0 ).disable();
-    btnGroups.draw();
+    const int32_t border = 10;
+    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( box.x + border, box.y + border, box.width - 2 * border, box.height - 2 * border ), Dialog::OK | Dialog::CANCEL );
+    btnGroup.button( 0 ).disable();
+
+    btnGroup.drawShadows();
+    btnGroup.draw();
 
     display.render();
 
@@ -245,9 +248,9 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
             u32 new_count = Color::Count( selector.recipients );
 
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
-                btnGroups.button( 0 ).disable();
+                btnGroup.button( 0 ).disable();
             else
-                btnGroups.button( 0 ).enable();
+                btnGroup.button( 0 ).enable();
 
             if ( count != new_count ) {
                 funds1 = kingdom.GetFunds();
@@ -257,23 +260,23 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
                 count = new_count;
             }
 
-            btnGroups.draw();
+            btnGroup.draw();
             selector.Redraw();
             display.render();
         }
         else if ( info2.QueueEventProcessing( funds1, count ) ) {
             if ( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() )
-                btnGroups.button( 0 ).disable();
+                btnGroup.button( 0 ).disable();
             else
-                btnGroups.button( 0 ).enable();
+                btnGroup.button( 0 ).enable();
 
             info1.Redraw();
             info2.Redraw();
-            btnGroups.draw();
+            btnGroup.draw();
             display.render();
         }
 
-        result = btnGroups.processEvents();
+        result = btnGroup.processEvents();
     }
 
     if ( Dialog::OK == result ) {

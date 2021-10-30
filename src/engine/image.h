@@ -265,4 +265,9 @@ namespace fheroes2
     Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut );
 
     void Transpose( const Image & in, Image & out );
+
+    // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformValue );
+
+    Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformValue );
 }

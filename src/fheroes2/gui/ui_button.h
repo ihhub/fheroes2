@@ -57,12 +57,15 @@ namespace fheroes2
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnRelease( Image & output = Display::instance() );
 
+        void drawShadow( Image & output = Display::instance() ) const;
+
         Rect area() const;
 
     protected:
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
+        virtual const Sprite & _getShadow() const;
 
     private:
         int32_t _offsetX;
@@ -74,6 +77,7 @@ namespace fheroes2
 
         mutable const Sprite * _releasedSprite;
         mutable std::unique_ptr<Sprite> _disabledSprite;
+        mutable std::unique_ptr<Sprite> _shadowSprite;
     };
 
     class Button : public ButtonBase
@@ -130,6 +134,7 @@ namespace fheroes2
         void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+        void drawShadows( Image & area = Display::instance() ) const; // will draw on screen by default
 
         // Make sure that id is less than size!
         ButtonBase & button( size_t id );

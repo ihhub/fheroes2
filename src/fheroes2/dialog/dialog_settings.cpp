@@ -213,7 +213,7 @@ void Dialog::ExtSettings( bool readonly )
     fheroes2::Button buttonOk( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(), buttonIcnId,
                                0, 1 );
 
-    fheroes2::drawButtonWithShadow( buttonSprite, display, buttonOk.area() );
+    buttonOk.drawShadow();
     buttonOk.draw();
 
     display.render();

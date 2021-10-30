@@ -2089,4 +2089,48 @@ namespace fheroes2
             }
         }
     }
+
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformValue )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return in;
+
+        Sprite out = makeShadow( in, shadowOffset, transformValue );
+        Blit( in, out, -shadowOffset.x, 0 );
+
+        return out;
+    }
+
+    Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformValue )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return Sprite();
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        // Shadow has (-x, +y) offset.
+        Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
+        out.reset();
+
+        const int32_t widthOut = out.width();
+
+        const uint8_t * transformInY = in.transform();
+        const uint8_t * transformInYEnd = transformInY + width * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+
+        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 ) {
+                    *transformOutX = transformValue;
+                }
+            }
+        }
+
+        return out;
+    }
 }

@@ -170,8 +170,7 @@ bool Battle::Only::ChangeSettings( void )
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( ICN::SYSTEM, 1 );
     fheroes2::Button buttonStart( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
 
-    fheroes2::drawButtonWithShadow( buttonStartImage, display, buttonStart.area() );
-
+    buttonStart.drawShadow();
     buttonStart.draw();
 
     display.render();

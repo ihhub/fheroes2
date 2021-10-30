@@ -101,6 +101,4 @@ namespace fheroes2
 
     // Display post-render function to hide screen system info
     void PostRenderSystemInfo();
-
-    void drawButtonWithShadow( const Image & image, Image & out, const Rect & buttonArea );
 }

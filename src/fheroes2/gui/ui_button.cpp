@@ -37,6 +37,7 @@ namespace fheroes2
         , _isVisible( true )
         , _releasedSprite( nullptr )
         , _disabledSprite()
+        , _shadowSprite()
     {}
 
     bool ButtonBase::isEnabled() const
@@ -154,6 +155,15 @@ namespace fheroes2
         return false;
     }
 
+    void ButtonBase::drawShadow( Image & output ) const
+    {
+        if ( !isVisible() )
+            return;
+
+        const Sprite & shadow = _getShadow();
+        fheroes2::Blit( shadow, output, _offsetX + shadow.x(), _offsetY + shadow.y() );
+    }
+
     Rect ButtonBase::area() const
     {
         const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
@@ -170,6 +180,16 @@ namespace fheroes2
         }
 
         return *_disabledSprite.get();
+    }
+
+    const Sprite & ButtonBase::_getShadow() const
+    {
+        if ( !_shadowSprite ) {
+            // TODO: button corners have to be cleaned up for the perfect shadow
+            const Sprite & shadow = fheroes2::makeShadow( _getReleased(), fheroes2::Point( -4, 6 ), 3 );
+            _shadowSprite.reset( new Sprite( shadow ) );
+        }
+        return *_shadowSprite.get();
     }
 
     Button::Button( int32_t offsetX, int32_t offsetY )
@@ -310,6 +330,13 @@ namespace fheroes2
     {
         for ( size_t i = 0; i < _button.size(); ++i ) {
             _button[i]->draw( area );
+        }
+    }
+
+    void ButtonGroup::drawShadows( Image & area ) const
+    {
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            _button[i]->drawShadow( area );
         }
     }
 

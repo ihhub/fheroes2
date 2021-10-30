@@ -455,10 +455,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
         fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
 
-        fheroes2::drawButtonWithShadow( fheroes2::AGG::GetICN( buttonOkICN, 1 ), display, btnOk.area() );
-        fheroes2::drawButtonWithShadow( fheroes2::AGG::GetICN( buttonCancelICN, 1 ), display, btnCancel.area() );
-
+        btnCancel.drawShadow();
         btnCancel.draw();
+
+        // we only need to add shadow for OK button if we have two buttons in this dialog
+        btnOk.drawShadow();
     }
     btnOk.draw();
 

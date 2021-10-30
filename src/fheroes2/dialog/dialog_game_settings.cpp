@@ -135,7 +135,7 @@ namespace
         drawLanguage( window );
         drawResolution( window );
         drawOptions( window );
-        fheroes2::drawButtonWithShadow( buttonOkayImage, display, okayButton.area() );
+        okayButton.drawShadow();
         okayButton.draw();
         display.render();
 

@@ -381,12 +381,4 @@ namespace fheroes2
     {
         systemInfoRenderer.postRender();
     }
-
-    void drawButtonWithShadow( const Image & image, Image & out, const Rect & buttonArea )
-    {
-        const Point offset( -4, 6 );
-
-        Sprite btnWithShadow = addShadow( image, offset, 3 );
-        Blit( btnWithShadow, out, buttonArea.x + offset.x, buttonArea.y );
-    }
 }
