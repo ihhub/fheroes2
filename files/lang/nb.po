@@ -2004,13 +2004,10 @@ msgstr ""
 "Spillets\n"
 "utfordring"
 
-msgid ""
-"Rating"
-msgstr ""
-"Utbytte"
+msgid "Rating"
+msgstr "Utbytte"
 
-msgid ""
-"Map Size"
+msgid "Map Size"
 msgstr ""
 "Brettets\n"
 "størrelse"
@@ -2020,7 +2017,7 @@ msgstr ""
 msgid "Opponents"
 msgstr "Deltakere"
 
-# Slag?
+# Slag? Type?
 msgid "Class"
 msgstr "Helteslag"
 

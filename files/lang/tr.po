@@ -1733,12 +1733,10 @@ msgid ""
 "Difficulty"
 msgstr ""
 
-msgid ""
-"Rating"
+msgid "Rating" 
 msgstr ""
 
-msgid ""
-"Map Size"
+msgid "Map Size" 
 msgstr ""
 
 msgid "Opponents"
