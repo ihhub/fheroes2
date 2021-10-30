@@ -1190,7 +1190,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_FLOTSAM:
     case OBJ_WATERCHEST:
     case OBJ_BUOY:
-    case OBJ_WHIRLPOOL:
     case OBJ_BOTTLE:
     case OBJ_COAST:
     case OBJ_BOAT:
@@ -1273,6 +1272,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_MERMAID:
     case OBJ_WATERWHEEL:
     case OBJ_MAGELLANMAPS:
+    case OBJ_WHIRLPOOL:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
     case OBJ_CASTLE:
         return Direction::CENTER | Direction::BOTTOM;
