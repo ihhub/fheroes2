@@ -258,8 +258,6 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    fheroes2::DrawRect( display, area, 214 );
-
     display.render();
 
     int result = Dialog::ZERO;
