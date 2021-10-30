@@ -1867,10 +1867,10 @@ msgstr ""
 "Dificuldade\n"
 "do Jogo"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr "Grau"
 
-msgid "Map Size" 
+msgid "Map Size"
 msgstr ""
 "Tamano\n"
 "do Mapa"

@@ -2016,10 +2016,10 @@ msgstr ""
 "Jeu\n"
 "Difficulté"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr "Taux"
 
-msgid "Map Size" 
+msgid "Map Size"
 msgstr ""
 "Taille de\n"
 "la carte"

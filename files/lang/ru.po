@@ -1965,10 +1965,10 @@ msgstr ""
 "Сложность\n"
 "игры"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr "Рейтинг"
 
-msgid "Map Size" 
+msgid "Map Size"
 msgstr ""
 "Размер\n"
 "карты"

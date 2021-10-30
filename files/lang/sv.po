@@ -1925,10 +1925,10 @@ msgstr ""
 "Spel Svår-\n"
 "ighetsgrad"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr "Betyg"
 
-msgid "Map Size" 
+msgid "Map Size"
 msgstr "Kartstorlek"
 
 msgid "Opponents"

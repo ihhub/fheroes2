@@ -1924,10 +1924,10 @@ msgstr ""
 "Játék\n"
 "Nehézség"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr "Besorolás"
 
-msgid "Map Size" 
+msgid "Map Size"
 msgstr ""
 "Térkép\n"
 "mérete"

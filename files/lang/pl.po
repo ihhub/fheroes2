@@ -1906,7 +1906,7 @@ msgstr ""
 "Trudność\n"
 "gry"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr "Ocena"
 
 msgid "Map Size"

@@ -1788,10 +1788,10 @@ msgstr ""
 "Žaidimas\n"
 "Sudėtingumas"
 
-msgid "Rating" 
+msgid "Rating"
 msgstr ""
 
-msgid "Map Size" 
+msgid "Map Size"
 msgstr ""
 "Pasaulio\n"
 "dydis"
