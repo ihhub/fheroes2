@@ -138,11 +138,13 @@ namespace
             return true;
         case ICN::STREAM:
         case ICN::OBJNTWBA:
+        case ICN::OBJNXTRA:
         case ICN::ROAD:
         case ICN::EXTRAOVR:
         case ICN::MONS32:
         case ICN::BOAT32:
         case ICN::FLAG32:
+        case ICN::MINIHERO:
             return false;
         default:
             break;
