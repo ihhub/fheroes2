@@ -35,6 +35,9 @@ namespace MP2
         tile.level2IcnImageIndex = stream.get();
         tile.flags = stream.get();
         tile.mapObjectType = stream.get();
+        tile.nextAddonIndex = stream.getLE16();
+        tile.level1ObjectUID = stream.getLE32();
+        tile.level2ObjectUID = stream.getLE32();
     }
 
     void loadAddon( StreamBase & stream, mp2addon_t & addon )
