@@ -352,7 +352,7 @@ int Castle::OpenDialog( bool readonly )
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // Check buttons for closing this castle's window.
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
                 result = Dialog::CANCEL;
                 break;
             }
@@ -412,7 +412,7 @@ int Castle::OpenDialog( bool readonly )
                     // move hero to guardian
                     if ( heroes.Guest() && !heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
                     if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
-                        // FIXME: correct message
+                        // TODO: correct message
                         Dialog::Message( _( "Join Error" ), _( "Army is full" ), Font::BIG, Dialog::OK );
                     }
                     else {

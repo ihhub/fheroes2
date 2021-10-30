@@ -1349,7 +1349,8 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Spell & spell = tile.QuantitySpell();
-    std::string ask, msg;
+    std::string ask;
+    std::string msg;
 
     switch ( objectType ) {
     case MP2::OBJ_PYRAMID:
@@ -1511,7 +1512,9 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     u32 gold = tile.QuantityGold();
-    std::string ask, msg, win;
+    std::string ask;
+    std::string msg;
+    std::string win;
 
     switch ( objectType ) {
     case MP2::OBJ_GRAVEYARD:
@@ -1768,14 +1771,20 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 result = true;
             }
             else {
-                if ( skill.Skill() == Skill::Secondary::WISDOM )
+                if ( skill.Skill() == Skill::Secondary::WISDOM ) {
                     msg = _(
                         "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
-                else if ( skill.Skill() == Skill::Secondary::LEADERSHIP )
+                }
+                else if ( skill.Skill() == Skill::Secondary::LEADERSHIP ) {
                     msg = _(
                         "You've come across the spartan quarters of a retired soldier. The soldier tells you that he is willing to pass on the %{art} to the first true leader he meets." );
-                else
-                    msg = "FIXME: (unknown condition): %{art}";
+                }
+                else {
+                    // Did you add a new condition? If yes add a proper if-else branch.
+                    assert( 0 );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
+                    StringReplace( msg, "%{skill}", skill.GetName() );
+                }
 
                 StringReplace( msg, "%{art}", art.GetName() );
                 Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::OK );
@@ -2197,7 +2206,8 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
-    std::string msg_full, msg_void;
+    std::string msg_full;
+    std::string msg_void;
 
     switch ( objectType ) {
     case MP2::OBJ_RUINS:
@@ -2572,7 +2582,9 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
     Kingdom & kingdom = hero.GetKingdom();
 
     if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
-        Dialog::Message( MP2::StringObject( objectType ), "empty", Font::BIG, Dialog::OK );
+        Dialog::Message( MP2::StringObject( objectType ),
+                         _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ), Font::BIG,
+                         Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
         if (
@@ -2584,6 +2596,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
             hero.SetVisited( dst_index, Visit::GLOBAL );
+            hero.setVisitedForAllies( dst_index );
         }
 
         Interface::Basic & I = Interface::Basic::Get();
@@ -3087,6 +3100,9 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
 
 void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
+    // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
+    assert( hero.GetIndex() != dst_index );
+
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Kingdom & kingdom = hero.GetKingdom();
 
@@ -3098,20 +3114,11 @@ void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 
         Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
-        tile.SetObject( hero.GetMapsObject() );
-        hero.SetMapsObject( MP2::OBJ_ZERO );
         tile.RemoveObjectSprite();
+        tile.setAsEmpty();
 
+        AGG::PlaySound( M82::KILLFADE );
         Game::ObjectFadeAnimation::PerformFadeTask();
-
-        // TODO: fix pathfinding
-        if ( tile.GetIndex() == hero.GetIndex() ) {
-            tile.SetObject( MP2::OBJ_HEROES );
-        }
-        else {
-            tile.setAsEmpty();
-            hero.SetMapsObject( MP2::OBJ_HEROES );
-        }
     }
     else {
         Dialog::Message(

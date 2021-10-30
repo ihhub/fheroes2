@@ -312,10 +312,9 @@ namespace fheroes2
     std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step )
     {
         std::vector<Point> res;
-        Point pt1, pt2;
 
-        pt1 = from;
-        pt2 = Point( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
+        Point pt1( from );
+        Point pt2( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
         const std::vector<Point> & pts1 = GetLinePoints( pt1, pt2, step );
         res.insert( res.end(), pts1.begin(), pts1.end() );
 

@@ -355,7 +355,8 @@ u32 Castle::OpenTown( void )
     Heroes * lastLostHero = kingdom.GetLastLostHero();
     Heroes * hero2 = lastLostHero && lastLostHero != hero1 ? lastLostHero : kingdom.GetRecruits().GetHero2();
 
-    std::string not_allow1_msg, not_allow2_msg;
+    std::string not_allow1_msg;
+    std::string not_allow2_msg;
     const bool allow_buy_hero1 = hero1 ? AllowBuyHero( *hero1, &not_allow1_msg ) : false;
     const bool allow_buy_hero2 = hero2 ? AllowBuyHero( *hero2, &not_allow2_msg ) : false;
 

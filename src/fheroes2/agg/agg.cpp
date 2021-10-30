@@ -100,13 +100,13 @@ namespace AGG
         ~AsyncSoundManager()
         {
             if ( _worker ) {
-                _mutex.lock();
+                {
+                    std::lock_guard<std::mutex> guard( _mutex );
 
-                _exitFlag = 1;
-                _runFlag = 1;
-                _workerNotification.notify_all();
-
-                _mutex.unlock();
+                    _exitFlag = 1;
+                    _runFlag = 1;
+                    _workerNotification.notify_all();
+                }
 
                 _worker->join();
                 _worker.reset();
@@ -239,10 +239,11 @@ namespace AGG
         {
             assert( manager != nullptr );
 
-            manager->_mutex.lock();
-            manager->_runFlag = 0;
-            manager->_masterNotification.notify_one();
-            manager->_mutex.unlock();
+            {
+                std::lock_guard<std::mutex> guard( manager->_mutex );
+                manager->_runFlag = 0;
+                manager->_masterNotification.notify_one();
+            }
 
             while ( manager->_exitFlag == 0 ) {
                 std::unique_lock<std::mutex> mutexLock( manager->_mutex );
@@ -617,29 +618,28 @@ void AGG::ResetMixer()
     loop_sounds.reserve( 7 );
 }
 
-bool AGG::Init( void )
+AGG::AGGInitializer::AGGInitializer()
 {
-    // read data dir
-    if ( !ReadDataDir() ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "data files not found" );
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-        display.fill( 0 );
-        fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
-
-        LocalEvent & le = LocalEvent::Get();
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
-            ;
-
-        return false;
+    if ( ReadDataDir() ) {
+        return;
     }
 
-    return true;
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+    display.fill( 0 );
+    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+        // Do nothing.
+    }
+
+    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "No data files found." );
+    throw std::logic_error( "No data files found." );
 }
 
-void AGG::Quit( void )
+AGG::AGGInitializer::~AGGInitializer()
 {
     wav_cache.clear();
     mid_cache.clear();

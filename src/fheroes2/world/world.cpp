@@ -678,7 +678,7 @@ void World::NewDay( void )
 
     // remove deprecated events
     if ( day )
-        vec_eventsday.remove_if( [&]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+        vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
@@ -1087,9 +1087,13 @@ u32 World::CountObeliskOnMaps( void )
 
 void World::ActionForMagellanMaps( int color )
 {
-    for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-        if ( ( *it ).isWater() )
-            ( *it ).ClearFog( color );
+    const int alliedColors = Players::GetPlayerFriends( color );
+
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        if ( tile.isWater() ) {
+            tile.ClearFog( alliedColors );
+        }
+    }
 }
 
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
@@ -1219,23 +1223,14 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     const Settings & conf = Settings::Get();
 
     if ( conf.isCampaignGameType() ) {
-        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
-
-        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-        const int scenarioId = campaignData.getCurrentScenarioID();
-        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
-
-        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-                const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
-                if ( visited ) {
-                    return GameOver::WINS_SIDE;
-                }
-                else {
-                    return GameOver::COND_NONE;
-                }
+        const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+        if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+            if ( visited ) {
+                return GameOver::WINS_SIDE;
             }
+
+            return GameOver::COND_NONE;
         }
     }
 
@@ -1272,29 +1267,21 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
-        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+        const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
+        if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+            const KingdomCastles & castles = kingdom.GetCastles();
+            bool hasSorceressVillage = false;
 
-        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-        const int scenarioId = campaignData.getCurrentScenarioID();
-        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+            for ( size_t i = 0; i < castles.size(); ++i ) {
+                if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
+                    continue;
 
-        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-            const Campaign::ScenarioLossCondition lossCondition = scenarios[scenarioId].getLossCondition();
-            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-                const KingdomCastles & castles = kingdom.GetCastles();
-                bool hasSorceressVillage = false;
-
-                for ( size_t i = 0; i < castles.size(); ++i ) {
-                    if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
-                        continue;
-
-                    hasSorceressVillage = true;
-                    break;
-                }
-
-                if ( !hasSorceressVillage )
-                    return GameOver::LOSS_ALL;
+                hasSorceressVillage = true;
+                break;
             }
+
+            if ( !hasSorceressVillage )
+                return GameOver::LOSS_ALL;
         }
     }
 

@@ -157,7 +157,7 @@ namespace fheroes2
                 const uint8_t * inXEnd = inX + surface->w * 3;
 
                 for ( ; inX != inXEnd; inX += 3, ++outX ) {
-                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *( inX ) );
+                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
                 }
             }
         }
@@ -187,12 +187,12 @@ namespace fheroes2
                             *transformX = 2;
                         }
                         else {
-                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *( inX ) );
+                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
                             *transformX = 0;
                         }
                     }
                     else {
-                        *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *( inX ) );
+                        *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
                         *transformX = 0;
                     }
                 }
@@ -220,7 +220,7 @@ namespace fheroes2
 
         const uint8_t * dataEnd = data + sizeData;
 
-        while ( 1 ) {
+        while ( true ) {
             if ( 0 == *data ) { // 0x00 - end of row
                 imageData += width;
                 imageTransform += width;

@@ -459,10 +459,8 @@ Troop * Troops::GetFirstValid( void )
 
 Troop * Troops::GetWeakestTroop( void )
 {
-    iterator first, last, lowest;
-
-    first = begin();
-    last = end();
+    iterator first = begin();
+    iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -472,7 +470,8 @@ Troop * Troops::GetWeakestTroop( void )
 
     if ( first == end() )
         return nullptr;
-    lowest = first;
+
+    iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
@@ -897,13 +896,22 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::TROLL, 4 );
         break;
 
-    case MP2::OBJ_DRAGONCITY:
-        at( 0 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 1 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 2 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 3 )->Set( Monster::RED_DRAGON, 1 );
-        at( 4 )->Set( Monster::BLACK_DRAGON, 1 );
+    case MP2::OBJ_DRAGONCITY: {
+        uint32_t monsterCount = 1;
+        if ( Settings::Get().isCampaignGameType() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                monsterCount = 2;
+            }
+        }
+
+        at( 0 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 1 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 2 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 3 )->Set( Monster::RED_DRAGON, monsterCount );
+        at( 4 )->Set( Monster::BLACK_DRAGON, monsterCount );
         break;
+    }
 
     case MP2::OBJ_DAEMONCAVE:
         at( 0 )->Set( Monster::EARTH_ELEMENT, 2 );
@@ -1273,7 +1281,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
-    if ( Settings::Get().isCampaignGameType() ) {
+    if ( Settings::Get().isCampaignGameType() && hero.isControlHuman() ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {

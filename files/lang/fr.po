@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 21:44+0800\n"
+"POT-Creation-Date: 2021-10-20 22:34+0800\n"
 "PO-Revision-Date: 2021-08-02 10:23+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -91,32 +91,32 @@ msgstr ""
 "Une légion de\n"
 "%{monster}"
 
-msgid "army|Few"
-msgstr "Peu"
-
-msgid "army|Horde"
-msgstr "Horde"
-
-msgid "army|Lots"
-msgstr "Troupe"
+msgid "army|Several"
+msgstr "Plusieurs"
 
 msgid "army|Pack"
 msgstr "Groupe"
 
-msgid "army|Several"
-msgstr "Plusieurs"
+msgid "army|Lots"
+msgstr "Troupe"
 
-msgid "army|Legion"
-msgstr "Légion"
-
-msgid "army|Swarm"
-msgstr "Colonie"
+msgid "army|Horde"
+msgstr "Horde"
 
 msgid "army|Throng"
 msgstr "Foule"
 
+msgid "army|Swarm"
+msgstr "Colonie"
+
 msgid "army|Zounds"
 msgstr "Armée"
+
+msgid "army|Legion"
+msgstr "Légion"
+
+msgid "army|Few"
+msgstr "Peu"
 
 msgid "All %{race} troops +1"
 msgstr "+1 pour toutes les troupes %{race}"
@@ -249,6 +249,12 @@ msgstr "Aucun"
 
 msgid "Defender"
 msgstr "Défenseur"
+
+msgid "As you reach for the %{name}, it mysteriously disappears."
+msgstr ""
+
+msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
+msgstr ""
 
 msgid "You have captured an enemy artifact!"
 msgstr "Vous avez capturé un artéfact ennemi !"
@@ -588,6 +594,10 @@ msgstr "Alliance des Dragons"
 msgid "Elven Alliance"
 msgstr "Alliance des Elfes"
 
+#, fuzzy
+msgid "Kraeger defeated"
+msgstr " vaincu"
+
 msgid "Wayward Son"
 msgstr "Fils Dévoyé"
 
@@ -805,7 +815,7 @@ msgstr ""
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
-"City to win"
+"City to win."
 msgstr ""
 "Il y a deux ennemis alliés contre vous dans cette mission. Tous deux sont "
 "bien armés et cherchent à vous expulser de leur île. Évitez-les et capturez "
@@ -1195,6 +1205,14 @@ msgstr "Casque de Protection"
 msgid "Power Axe"
 msgstr "Puissante Hache"
 
+#, fuzzy
+msgid "Stealth Shield"
+msgstr "Ultime Bouclier"
+
+#, fuzzy
+msgid "Nomad Boots"
+msgstr "Nomades"
+
 msgid "Summon Earth"
 msgstr "Invoquer Terre"
 
@@ -1229,6 +1247,275 @@ msgstr "Impossible de construire %{name}."
 
 msgid "Build %{name}."
 msgstr "Construire %{name}."
+
+msgid "Cannot recruit - guest to guard automove error."
+msgstr "Impossible de recruter - place du capitaine de la garnison déjà prise."
+
+msgid "Cannot recruit - you already have a Hero in this town."
+msgstr "Impossible de recruter - vous avez déjà un héros dans ce village."
+
+msgid "Cannot recruit - you have too many Heroes."
+msgstr "Impossible de recruter - vous avez trop de héros."
+
+msgid "Cannot afford a Hero"
+msgstr "Imopssible de s'offrir un héros"
+
+msgid "There is no room in the garrison for this army."
+msgstr "Il n'y a pas de place dans la garnison pour cette armée."
+
+msgid "Fortifications"
+msgstr "Fortifications"
+
+msgid "Farm"
+msgstr "Ferme"
+
+msgid "Thatched Hut"
+msgstr "Grange"
+
+msgid "Archery Range"
+msgstr "Archerie"
+
+msgid "Upg. Archery Range"
+msgstr "Archerie renforcée"
+
+msgid "Blacksmith"
+msgstr "Forge"
+
+msgid "Upg. Blacksmith"
+msgstr "Forge renforcée"
+
+msgid "Armory"
+msgstr "Armurerie"
+
+msgid "Upg. Armory"
+msgstr "Armurerie renforcée"
+
+msgid "Jousting Arena"
+msgstr "Arène"
+
+msgid "Upg. Jousting Arena"
+msgstr "Arène améliorée"
+
+msgid "Cathedral"
+msgstr "Cathédrale"
+
+msgid "Upg. Cathedral"
+msgstr "Basilique"
+
+msgid "Coliseum"
+msgstr "Colisée"
+
+msgid "Garbage Heap"
+msgstr "Tas d'ordures"
+
+msgid "Hut"
+msgstr "Paillote"
+
+msgid "Stick Hut"
+msgstr "Hutte"
+
+msgid "Upg. Stick Hut"
+msgstr "Hutte renforcée"
+
+msgid "Den"
+msgstr "Tanière"
+
+msgid "Adobe"
+msgstr "Cahute"
+
+msgid "Upg. Adobe"
+msgstr "Cahute renforcée"
+
+msgid "Bridge"
+msgstr "Pont"
+
+msgid "Upg. Bridge"
+msgstr "Pont renforcé"
+
+msgid "Pyramid"
+msgstr "Pyramide"
+
+msgid "Rainbow"
+msgstr "Arc-en-ciel"
+
+msgid "Crystal Garden"
+msgstr "Jardin de Cristaux"
+
+msgid "Treehouse"
+msgstr "Cabane"
+
+msgid "Cottage"
+msgstr "Cottage"
+
+msgid "Upg. Cottage"
+msgstr "Cottage renforcé"
+
+msgid "Stonehenge"
+msgstr "Cromlech"
+
+msgid "Upg. Stonehenge"
+msgstr "Grand cromlech"
+
+msgid "Fenced Meadow"
+msgstr "Pré"
+
+msgid "Red Tower"
+msgstr "Tour rouge"
+
+msgid "Dungeon"
+msgstr "Donjon"
+
+msgid "Waterfall"
+msgstr "Chutes"
+
+msgid "Cave"
+msgstr "Grotte"
+
+msgid "Crypt"
+msgstr "Crypte"
+
+msgid "Nest"
+msgstr "Nid"
+
+msgid "Maze"
+msgstr "Labyrinthe"
+
+msgid "Upg. Maze"
+msgstr "Grand labyrinthe"
+
+msgid "Swamp"
+msgstr "Marais"
+
+msgid "Green Tower"
+msgstr "Tour verte"
+
+msgid "Black Tower"
+msgstr "Tour noire"
+
+msgid "Library"
+msgstr "Bibliothèque"
+
+msgid "Orchard"
+msgstr "Verger"
+
+msgid "Habitat"
+msgstr "Repaire"
+
+msgid "Pen"
+msgstr "Enclos"
+
+msgid "Foundry"
+msgstr "Fonderie"
+
+msgid "Upg. Foundry"
+msgstr "Fonderie renforcée"
+
+msgid "Cliff Nest"
+msgstr "Nid perché"
+
+msgid "Ivory Tower"
+msgstr "Tour d'ivoire"
+
+msgid "Upg. Ivory Tower"
+msgstr "Haute tour d'ivoire"
+
+msgid "Cloud Castle"
+msgstr "Château céleste"
+
+msgid "Upg. Cloud Castle"
+msgstr "Grand château céleste"
+
+msgid "Storm"
+msgstr "Tempête"
+
+msgid "Skull Pile"
+msgstr "Crânes empilés"
+
+msgid "Excavation"
+msgstr "Fouille"
+
+msgid "Graveyard"
+msgstr "Cimetière"
+
+msgid "Upg. Graveyard"
+msgstr "Grand cimetière"
+
+msgid "Upg. Pyramid"
+msgstr "Grande pyramide"
+
+msgid "Mansion"
+msgstr "Manoir"
+
+msgid "Upg. Mansion"
+msgstr "Grand manoir"
+
+msgid "Mausoleum"
+msgstr "Mausolée"
+
+msgid "Upg. Mausoleum"
+msgstr "Grand mausolée"
+
+msgid "Laboratory"
+msgstr "Laboratoire"
+
+msgid "Shrine"
+msgstr "Mausolée"
+
+msgid ""
+"The Fortifications increase the toughness of the walls, increasing the "
+"number of turns it takes to knock them down."
+msgstr ""
+"Les Fortifications augmentent la résistance des murs, augmentant le nombre "
+"de tours nécessaires pour les réduire en cendres."
+
+msgid "The Farm increases production of Peasants by %{count} per week."
+msgstr "La Ferme augmente la production de Paysans de %{count} par semaine."
+
+msgid ""
+"The Coliseum provides inspiring spectacles to defending troops, raising "
+"their morale by two during combat."
+msgstr ""
+"Le Colisée fournit des spectacles motivants aux troupes en défense, "
+"augmentant leur moral de deux pendant le combat."
+
+msgid "The Garbage Heap increases production of Goblins by %{count} per week."
+msgstr ""
+"Le Tas d'ordures augmente la production de Gobelins de %{count} par semaine."
+
+msgid "The Rainbow increases the luck of the defending units by two."
+msgstr "L'Arc-en-ciel augmente de deux la chance des créatures en défense."
+
+msgid ""
+"The Crystal Garden increases production of Sprites by %{count} per week."
+msgstr ""
+"Le Jardin de Cristaux augmente la production de Fées de %{count} par semaine."
+
+msgid "The Dungeon increases the income of the town by %{count} / day."
+msgstr ""
+"Le Donjon augmente les revenus de votre village de %{count} pièces par jour."
+
+msgid "The Waterfall increases production of Centaurs by %{count} per week."
+msgstr ""
+"Les Cascades augmentent la production de Centaures de %{count} par semaine."
+
+msgid ""
+"The Library increases the number of spells in the Guild by one for each "
+"level of the guild."
+msgstr ""
+"La Bibliothèque rajoute 1 sort à chaque niveau de la guilde des magiciens."
+
+msgid "The Orchard increases production of Halflings by %{count} per week."
+msgstr "Le Verger augmente la production de galopins de %{count} par semaine."
+
+msgid "The Storm adds +2 to the power of spells of a defending spell caster."
+msgstr ""
+"La Tempête ajoute +2 à la puissance des sortilèges d'un lanceur de sorts qui "
+"défend."
+
+msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
+"Les Crânes empilés augmentent la production de Squelettes de %{count} par "
+"semaine."
 
 msgid "Thieves' Guild"
 msgstr "Guilde des voleurs"
@@ -1275,203 +1562,12 @@ msgstr "Guilde des M. niv. 4"
 msgid "Mage Guild, Level 5"
 msgstr "Guilde des M. niv. 5"
 
-msgid "Crystal Garden"
-msgstr "Jardin de Cristaux"
-
-msgid "Farm"
-msgstr "Ferme"
-
-msgid "Garbage Heap"
-msgstr "Tas d'ordures"
-
-msgid "Orchard"
-msgstr "Verger"
-
-msgid "Skull Pile"
-msgstr "Crânes empilés"
-
-msgid "Waterfall"
-msgstr "Chutes"
-
-msgid "Coliseum"
-msgstr "Colisée"
-
-msgid "Dungeon"
-msgstr "Donjon"
-
-msgid "Fortifications"
-msgstr "Fortifications"
-
-msgid "Library"
-msgstr "Bibliothèque"
-
-msgid "Rainbow"
-msgstr "Arc-en-ciel"
-
-msgid "Storm"
-msgstr "Tempête"
-
-msgid "Cave"
-msgstr "Grotte"
-
-msgid "Excavation"
-msgstr "Fouille"
-
-msgid "Habitat"
-msgstr "Repaire"
-
-msgid "Hut"
-msgstr "Paillote"
-
-msgid "Thatched Hut"
-msgstr "Grange"
-
-msgid "Treehouse"
-msgstr "Cabane"
-
-msgid "Archery Range"
-msgstr "Archerie"
-
-msgid "Cottage"
-msgstr "Cottage"
-
-msgid "Crypt"
-msgstr "Crypte"
-
-msgid "Graveyard"
-msgstr "Cimetière"
-
-msgid "Pen"
-msgstr "Enclos"
-
-msgid "Stick Hut"
-msgstr "Hutte"
-
-msgid "Blacksmith"
-msgstr "Forge"
-
-msgid "Den"
-msgstr "Tanière"
-
-msgid "Foundry"
-msgstr "Fonderie"
-
-msgid "Nest"
-msgstr "Nid"
-
-msgid "Pyramid"
-msgstr "Pyramide"
-
-msgid "Adobe"
-msgstr "Cahute"
-
-msgid "Armory"
-msgstr "Armurerie"
-
-msgid "Cliff Nest"
-msgstr "Nid perché"
-
-msgid "Mansion"
-msgstr "Manoir"
-
-msgid "Maze"
-msgstr "Labyrinthe"
-
-msgid "Stonehenge"
-msgstr "Cromlech"
-
-msgid "Bridge"
-msgstr "Pont"
-
-msgid "Fenced Meadow"
-msgstr "Pré"
-
-msgid "Ivory Tower"
-msgstr "Tour d'ivoire"
-
-msgid "Jousting Arena"
-msgstr "Arène"
-
-msgid "Mausoleum"
-msgstr "Mausolée"
-
-msgid "Swamp"
-msgstr "Marais"
-
-msgid "Cathedral"
-msgstr "Cathédrale"
-
-msgid "Cloud Castle"
-msgstr "Château céleste"
-
-msgid "Green Tower"
-msgstr "Tour verte"
-
-msgid "Laboratory"
-msgstr "Laboratoire"
-
-msgid "Red Tower"
-msgstr "Tour rouge"
-
-msgid "Upg. Archery Range"
-msgstr "Archerie renforcée"
-
-msgid "Upg. Stick Hut"
-msgstr "Hutte renforcée"
-
-msgid "Upg. Cottage"
-msgstr "Cottage renforcé"
-
-msgid "Upg. Graveyard"
-msgstr "Grand cimetière"
-
-msgid "Upg. Blacksmith"
-msgstr "Forge renforcée"
-
-msgid "Upg. Foundry"
-msgstr "Fonderie renforcée"
-
-msgid "Upg. Pyramid"
-msgstr "Grande pyramide"
-
-msgid "Upg. Armory"
-msgstr "Armurerie renforcée"
-
-msgid "Upg. Adobe"
-msgstr "Cahute renforcée"
-
-msgid "Upg. Stonehenge"
-msgstr "Grand cromlech"
-
-msgid "Upg. Maze"
-msgstr "Grand labyrinthe"
-
-msgid "Upg. Mansion"
-msgstr "Grand manoir"
-
-msgid "Upg. Jousting Arena"
-msgstr "Arène améliorée"
-
-msgid "Upg. Bridge"
-msgstr "Pont renforcé"
-
-msgid "Upg. Ivory Tower"
-msgstr "Haute tour d'ivoire"
-
-msgid "Upg. Mausoleum"
-msgstr "Grand mausolée"
-
-msgid "Upg. Cathedral"
-msgstr "Basilique"
-
-msgid "Upg. Cloud Castle"
-msgstr "Grand château céleste"
-
-msgid "Black Tower"
-msgstr "Tour noire"
-
-msgid "Shrine"
-msgstr "Mausolée"
+msgid ""
+"The Shrine increases the necromancy skill of all your necromancers by 10 "
+"percent."
+msgstr ""
+"Le Mausolée augmente la puissance de nécromancie de tous les nécromanciens "
+"de 10 pour cents."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -1552,98 +1648,11 @@ msgstr ""
 "La guilde des Magiciens permet aux héros d'apprendre des sortilèges et de "
 "restaurer leurs points de magie."
 
-msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr "La Ferme augmente la production de Paysans de %{count} par semaine."
-
-msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
-"Le Tas d'ordures augmente la production de Gobelins de %{count} par semaine."
-
-msgid ""
-"The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
-"Le Jardin de Cristaux augmente la production de Fées de %{count} par semaine."
-
-msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
-"Les Cascades augmentent la production de Centaures de %{count} par semaine."
-
-msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Le Verger augmente la production de galopins de %{count} par semaine."
-
-msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
-"Les Crânes empilés augmentent la production de Squelettes de %{count} par "
-"semaine."
-
-msgid ""
-"The Fortifications increase the toughness of the walls, increasing the "
-"number of turns it takes to knock them down."
-msgstr ""
-"Les Fortifications augmentent la résistance des murs, augmentant le nombre "
-"de tours nécessaires pour les réduire en cendres."
-
-msgid ""
-"The Coliseum provides inspiring spectacles to defending troops, raising "
-"their morale by two during combat."
-msgstr ""
-"Le Colisée fournit des spectacles motivants aux troupes en défense, "
-"augmentant leur moral de deux pendant le combat."
-
-msgid "The Rainbow increases the luck of the defending units by two."
-msgstr "L'Arc-en-ciel augmente de deux la chance des créatures en défense."
-
-msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr ""
-"Le Donjon augmente les revenus de votre village de %{count} pièces par jour."
-
-msgid ""
-"The Library increases the number of spells in the Guild by one for each "
-"level of the guild."
-msgstr ""
-"La Bibliothèque rajoute 1 sort à chaque niveau de la guilde des magiciens."
-
-msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
-"La Tempête ajoute +2 à la puissance des sortilèges d'un lanceur de sorts qui "
-"défend."
-
-msgid ""
-"The Shrine increases the necromancy skill of all your necromancers by 10 "
-"percent."
-msgstr ""
-"Le Mausolée augmente la puissance de nécromancie de tous les nécromanciens "
-"de 10 pour cents."
-
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Impossible de recruter - place du capitaine de la garnison déjà prise."
-
-msgid "Cannot recruit - you already have a Hero in this town."
-msgstr "Impossible de recruter - vous avez déjà un héros dans ce village."
-
-msgid "Cannot recruit - you have too many Heroes."
-msgstr "Impossible de recruter - vous avez trop de héros."
-
-msgid "Cannot afford a Hero"
-msgstr "Imopssible de s'offrir un héros"
-
-msgid "There is no room in the garrison for this army."
-msgstr "Il n'y a pas de place dans la garnison pour cette armée."
-
 msgid "Recruit %{name}"
 msgstr "Recruter %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Mois : %{month}, Semaine : %{week}, Jour : %{day}"
-
-msgid "Income"
-msgstr "Revenu"
-
-msgid "Army is full"
-msgstr "Le peloton a atteint sa taille maximale"
-
-msgid "Join Error"
-msgstr "Erreur pour rejoindre"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
@@ -1652,6 +1661,36 @@ msgstr ""
 "Vous devez acheter un Grimoire pour utiliser la Guilde des Magiciens, mais "
 "vous n'avez actuellement pas de place pour un Grimoire. Essayez de donner un "
 "de vos artéfacts à un autre héros."
+
+msgid "Income"
+msgstr "Revenu"
+
+#, fuzzy
+msgid "Exit"
+msgstr "Quitter le village"
+
+msgid "Exit this menu."
+msgstr "Quitter ce menu."
+
+#, fuzzy
+msgid "Click to show next town."
+msgstr "Montrer le village suivant"
+
+msgid "Show next town"
+msgstr "Montrer le village suivant"
+
+#, fuzzy
+msgid "Click to show previous town."
+msgstr "Montrer le village précédent"
+
+msgid "Show previous town"
+msgstr "Montrer le village précédent"
+
+msgid "Army is full"
+msgstr "Le peloton a atteint sa taille maximale"
+
+msgid "Join Error"
+msgstr "Erreur pour rejoindre"
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Ce village ne peut pas être amélioré en château."
@@ -1667,12 +1706,6 @@ msgstr "Quitter le village"
 
 msgid "Show Income"
 msgstr "Afficher le revenu"
-
-msgid "Show previous town"
-msgstr "Montrer le village précédent"
-
-msgid "Show next town"
-msgstr "Montrer le village suivant"
 
 msgid "Swap Heroes"
 msgstr "Echanger héros"
@@ -2173,11 +2206,31 @@ msgstr "Combien de troupes à déplacer ?"
 msgid "Fast separation into slots:"
 msgstr "Séparation rapide des troupes :"
 
+msgid "Map: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Location: "
+msgstr ""
+
 msgid "File to Save:"
 msgstr "Fichier à sauvegarder :"
 
 msgid "File to Load:"
 msgstr "Fichier à charger :"
+
+#, fuzzy
+msgid "Click to save the current game."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "OK"
+msgstr "OK"
+
+#, fuzzy
+msgid "Click to load a previously saved game."
+msgstr "Charger une partie sauvegardée."
 
 msgid "Are you sure you want to delete file:"
 msgstr "Êtes vous sûr de vouloir effacer le fichier :"
@@ -2250,6 +2303,15 @@ msgstr "Nom choisi"
 
 msgid "The name of the currently selected map."
 msgstr "Le nom de la carte actuellement sélectionnée."
+
+msgid ""
+"Indicates whether the map is made for The Succession Wars or The Price of "
+"Loyalty version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Musique"
 
 msgid "Selected Map Difficulty"
 msgstr "Difficulté de la carte choisie"
@@ -2422,12 +2484,6 @@ msgstr "Visibilité d'Interface."
 msgid "Toggle instant battle mode."
 msgstr "Change les modes de combat instantané."
 
-msgid "Exit this menu."
-msgstr "Quitter ce menu."
-
-msgid "OK"
-msgstr "OK"
-
 msgid "Att."
 msgstr "Att."
 
@@ -2569,6 +2625,14 @@ msgstr "Héros Inconnu"
 msgid "Your Name"
 msgstr "Votre Nom"
 
+#, fuzzy
+msgid "Campaign"
+msgstr "Mode Campagne"
+
+#, fuzzy
+msgid "View High Scores for Campaigns."
+msgstr "Voir l'écran des meilleurs scores."
+
 msgid ""
 "Invalid file game type. Please ensure that you are running the latest type "
 "of save files."
@@ -2696,7 +2760,7 @@ msgstr "Voir l'écran des crédits."
 msgid "High Scores"
 msgstr "Meilleurs scores"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr "Voir l'écran des meilleurs scores."
 
 #, fuzzy
@@ -2924,8 +2988,20 @@ msgstr "Le joueur %{color} a été vaincu !"
 msgid "Do you wish to continue the game?"
 msgstr "Voulez-vous en acheter un ?"
 
-msgid "No maps available!"
-msgstr "Aucune carte disponible !"
+msgid "Scenario:"
+msgstr "Scénario :"
+
+msgid "Game Difficulty:"
+msgstr "Difficulté du jeu :"
+
+msgid "Opponents:"
+msgstr "Opposants :"
+
+msgid "Class:"
+msgstr "Alignement :"
+
+msgid "Rating %{rating}%"
+msgstr "Taux %{rating}%"
 
 msgid "Click here to select which scenario to play."
 msgstr "Cliquez ici pour sélectionner le scénario à jouer."
@@ -2962,20 +3038,8 @@ msgstr "Cliquez pour accepter ces paramètres et démarrer un nouveau jeu."
 msgid "Click to return to the main menu."
 msgstr "Cliquez pour revenir au menu principal."
 
-msgid "Scenario:"
-msgstr "Scénario :"
-
-msgid "Game Difficulty:"
-msgstr "Difficulté du jeu :"
-
-msgid "Opponents:"
-msgstr "Opposants :"
-
-msgid "Class:"
-msgstr "Alignement :"
-
-msgid "Rating %{rating}%"
-msgstr "Taux %{rating}%"
+msgid "No maps available!"
+msgstr "Aucune carte disponible !"
 
 msgid "Astrologers proclaim Month of the %{name}."
 msgstr "Les astrologues proclament le Mois %{name}."
@@ -3223,6 +3287,10 @@ msgstr "Allemand"
 msgid "Russian"
 msgstr "Russe"
 
+#, fuzzy
+msgid "Italian"
+msgstr " alliance"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -3445,9 +3513,6 @@ msgstr "%{object} pillé"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Vous ne pouvez pas ramasser cet artéfact, vous êtes déjà surchargé !"
-
-msgid "The three Anduran artifacts magically combine into one."
-msgstr "Les trois artéfacts d'Anduran se combinent magiquement en un seul."
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -3999,6 +4064,9 @@ msgstr ""
 "Vous avez tiré un survivant du naufrage d'une mort certaine dans un océan "
 "impitoyable. Reconnaissant, il vous récompense pour votre acte de "
 "gentillesse en vous donnant l'artéfact '%{art}'."
+
+msgid "Artifact"
+msgstr "Artéfact"
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
@@ -4619,19 +4687,19 @@ msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and find the %{art} in the back of the cave."
-msgstr ""
-"Le Démon crie son défi et attaque ! Après une courte bataille désespérée, "
-"vous tuez le monstre et trouvez l'artéfact '%{art}' à l'arrière de la grotte."
-
-msgid ""
-"The Demon screams its challenge and attacks! After a short, desperate "
 "battle, you slay the monster and receive %{exp} experience points and "
 "%{count} gold."
 msgstr ""
 "Le Démon crie son défi et attaque ! Après une courte bataille désespérée, "
 "vous tuez le monstre et recevez %{exp} points d'expérience et %{count} "
 "pièces d'or."
+
+msgid ""
+"The Demon screams its challenge and attacks! After a short, desperate "
+"battle, you slay the monster and find the %{art} in the back of the cave."
+msgstr ""
+"Le Démon crie son défi et attaque ! Après une courte bataille désespérée, "
+"vous tuez le monstre et trouvez l'artéfact '%{art}' à l'arrière de la grotte."
 
 msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
@@ -4664,9 +4732,23 @@ msgstr[0] "Il vérifie votre sac, et voit que vous avez un objet maudit."
 msgstr[1] ""
 "Il vérifie votre sac, et voit que vous avez %{count} objets maudits."
 
+#, fuzzy
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
-msgstr ""
+msgid_plural ""
+"For %{gold} gold, the alchemist will remove them for you. Do you pay?"
+msgstr[0] ""
 "Pour %{gold} pièces d'or, l'alchimiste l'enlèvera pour vous. Payez-vous ?"
+msgstr[1] ""
+"Pour %{gold} pièces d'or, l'alchimiste l'enlèvera pour vous. Payez-vous ?"
+
+msgid ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"the cursed artifact and throws it into his magical cauldron."
+msgid_plural ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"all cursed artifacts and throws them into his magical cauldron."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "You hear a voice from behind the locked door, \"You don't have enough gold "
@@ -4857,12 +4939,23 @@ msgstr ""
 "arcane. Un grand oracle m'a appris son talent. J'ai la réponse que vous "
 "cherchez.\""
 
+msgid "Spell book is not present."
+msgstr ""
+
+#, fuzzy
+msgid "The spell is not found."
+msgstr "Ce sort est déjà utilisé."
+
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
+
+#, fuzzy
+msgid "Not enough move points."
+msgstr "Pas assez de ressources pour acheter des créatures."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} le %{race} (niveau %{level})"
@@ -4876,9 +4969,6 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Êtes vous sûr de vouloir renvoyer ce héros ?"
-
-msgid "View Stats"
-msgstr "Voir Stats"
 
 msgid "View Experience Info"
 msgstr "Voir les infos de l'expérience"
@@ -5080,11 +5170,11 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr "Modificateurs actuels :"
 
-msgid "skill|Advanced"
-msgstr "Avancé"
-
 msgid "skill|Basic"
 msgstr "Principes"
+
+msgid "skill|Advanced"
+msgstr "Avancé"
 
 msgid "skill|Expert"
 msgstr "Expert"
@@ -5443,10 +5533,6 @@ msgstr "Village/Château"
 msgid "View Towns and Castles."
 msgstr "Voir Villages"
 
-#, fuzzy
-msgid "Exit"
-msgstr "Quitter le village"
-
 msgid "luck|Cursed"
 msgstr "Maudite"
 
@@ -5544,6 +5630,12 @@ msgstr "Nécromant"
 
 msgid "Multi"
 msgstr "Multi"
+
+msgid "race|Random"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
 
 msgid "speed|Standing"
 msgstr "Immobile"
@@ -5647,23 +5739,8 @@ msgstr "du Hérisson"
 msgid "week|Condor"
 msgstr "du Condor"
 
-msgid "Beach"
-msgstr "Plage"
-
 msgid "Desert"
 msgstr "Désert"
-
-msgid "Dirt"
-msgstr "Boue"
-
-msgid "Grass"
-msgstr "Herbe"
-
-msgid "Lava"
-msgstr "Lave"
-
-msgid "Ocean"
-msgstr "Océan"
 
 msgid "Snow"
 msgstr "Neige"
@@ -5671,20 +5748,35 @@ msgstr "Neige"
 msgid "Wasteland"
 msgstr "Terrain vague"
 
-msgid "maps|Custom Size"
-msgstr "Voir toutes les cartes, sans tenir compte de leur taille."
+msgid "Beach"
+msgstr "Plage"
 
-msgid "maps|Extra Large"
-msgstr "Très grande"
+msgid "Lava"
+msgstr "Lave"
 
-msgid "maps|Large"
-msgstr "Grande"
+msgid "Dirt"
+msgstr "Boue"
+
+msgid "Grass"
+msgstr "Herbe"
+
+msgid "Ocean"
+msgstr "Océan"
+
+msgid "maps|Small"
+msgstr "Petite"
 
 msgid "maps|Medium"
 msgstr "Moyenne"
 
-msgid "maps|Small"
-msgstr "Petite"
+msgid "maps|Large"
+msgstr "Grande"
+
+msgid "maps|Extra Large"
+msgstr "Très grande"
+
+msgid "maps|Custom Size"
+msgstr "Voir toutes les cartes, sans tenir compte de leur taille."
 
 msgid "Ore Mine"
 msgstr "Mine de fer"
@@ -5703,6 +5795,9 @@ msgstr "Mine d'Or"
 
 msgid "Mine"
 msgstr "Mine"
+
+msgid "No object"
+msgstr ""
 
 msgid "Alchemist Lab"
 msgstr "Laboratoire d'alchimiste"
@@ -5809,7 +5904,7 @@ msgstr "Cabane de la sorcière"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr "Cartes de Magellan"
 
 msgid "Derelict Ship"
@@ -5932,14 +6027,45 @@ msgstr "Ressource"
 msgid "Whirlpool"
 msgstr "Tourbillon"
 
-msgid "Artifact"
-msgstr "Artéfact"
-
 msgid "Boat"
 msgstr "Navire"
 
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Artéfact"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Ressource"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Monstre Aléatoire 1"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Monstre Aléatoire 1"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Monstres Aléatoires"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Monstres Aléatoires"
+
 msgid "Standing Stones"
 msgstr "Pierres dressées"
+
+msgid "Event"
+msgstr ""
+
+msgid "Random Monster"
+msgstr "Monstre Aléatoire"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Trouver l'ultime artéfact."
 
 msgid "Idol"
 msgstr "Idole"
@@ -5973,6 +6099,15 @@ msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Jardin magique"
 msgstr[1] "Jardin magique"
+
+msgid "Random Artifact - Treasure"
+msgstr ""
+
+msgid "Random Artifact - Minor"
+msgstr ""
+
+msgid "Random Artifact - Major"
+msgstr ""
 
 msgid "Jail"
 msgstr "Prison"
@@ -6418,9 +6553,6 @@ msgstr "Esprit de l'Eau"
 msgid "Water Elementals"
 msgstr "Esprits de l'Eau"
 
-msgid "Random Monster"
-msgstr "Monstre Aléatoire"
-
 msgid "Random Monsters"
 msgstr "Monstres Aléatoires"
 
@@ -6580,6 +6712,9 @@ msgstr "Baguette éclair"
 #, fuzzy, c-format
 msgid "% damage from "
 msgstr "200% des dégâts des sorts du Feu"
+
+msgid "The three Anduran artifacts magically combine into one."
+msgstr "Les trois artéfacts d'Anduran se combinent magiquement en un seul."
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "L'%{name} augmente votre connaissance de %{count}."
@@ -7392,6 +7527,10 @@ msgstr ""
 "Le parchemin de sort sera consommé.\n"
 " Coût en points de magie : %{sp}"
 
+#, fuzzy
+msgid "Move points: %{mp}"
+msgstr "Mouvement"
+
 msgid "Transcribe Spell Scroll"
 msgstr "Transcrire le Parchemin de sort"
 
@@ -7410,11 +7549,8 @@ msgstr "Impossible de déplacer l'artéfact"
 msgid "This item can't be traded."
 msgstr "Cet objet ne peut pas être échangé."
 
-msgid "Crystal"
-msgstr "Cristal"
-
-msgid "Gems"
-msgstr "Rubis"
+msgid "Wood"
+msgstr "Bois"
 
 msgid "Mercury"
 msgstr "Mercure"
@@ -7425,8 +7561,11 @@ msgstr "Fer"
 msgid "Sulfur"
 msgstr "Soufre"
 
-msgid "Wood"
-msgstr "Bois"
+msgid "Crystal"
+msgstr "Cristal"
+
+msgid "Gems"
+msgstr "Rubis"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -7700,15 +7839,15 @@ msgstr ""
 msgid "Death Ripple"
 msgstr "Onde mortelle"
 
+msgid "Death Wave"
+msgstr "Vague mortelle"
+
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
 "Blesse toutes les créatures vivantes (non mortes-vivantes) dans la "
 "bataille.  Ce sort est une version améliorée de Onde mortelle."
-
-msgid "Death Wave"
-msgstr "Vague mortelle"
 
 msgid "Dragon Slayer"
 msgstr "Anti-dragon"
@@ -7915,6 +8054,15 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 "Invoque les Esprits de l'Eau pour garder une mine contre les armées ennemies."
 
+#, fuzzy
+msgid "Petrification"
+msgstr "Fortifications"
+
+msgid ""
+"Turns the affected creature into stone.  A petrified creature receives half "
+"damage from a direct attack."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr "Aucun sort à lancer."
 
@@ -8013,12 +8161,6 @@ msgstr "héros : transcription des parchemins (avec l'Oeil d'Aigle)"
 msgid "heroes: in Arena can choose any of primary skills"
 msgstr "héros : l'arène permet de choisir parmi les compétences primaires"
 
-msgid "unions: allow meeting heroes"
-msgstr "alliances : rencontres des héros"
-
-msgid "unions: allow castle visiting"
-msgstr "alliances : visites des châteaux"
-
 msgid "battle: show army order"
 msgstr "combat : afficher l'ordre de l'armée"
 
@@ -8115,3 +8257,12 @@ msgstr ""
 "Cherchez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "View Stats"
+#~ msgstr "Voir Stats"
+
+#~ msgid "unions: allow meeting heroes"
+#~ msgstr "alliances : rencontres des héros"
+
+#~ msgid "unions: allow castle visiting"
+#~ msgstr "alliances : visites des châteaux"

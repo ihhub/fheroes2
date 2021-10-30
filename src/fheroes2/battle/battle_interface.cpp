@@ -3274,7 +3274,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
 
 void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
-    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
+    const Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     std::string msg;
 
@@ -5020,6 +5020,11 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
     if ( _redraw ) {
         uint32_t tmp1 = _attacker->CalculateMinDamage( *_defender );
         uint32_t tmp2 = _attacker->CalculateMaxDamage( *_defender );
+
+        if ( _attacker->Modes( SP_BLESS ) )
+            tmp1 = tmp2;
+        else if ( _attacker->Modes( SP_CURSE ) )
+            tmp2 = tmp1;
 
         std::string str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
