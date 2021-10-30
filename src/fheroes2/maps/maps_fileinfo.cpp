@@ -346,12 +346,6 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         MP2::mp2tile_t mp2tile;
         MP2::loadTile( fs, mp2tile );
 
-        // offset first addon
-        fs.getLE16();
-
-        mp2tile.level1ObjectUID = fs.getLE32();
-        mp2tile.level2ObjectUID = fs.getLE32();
-
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );
 
