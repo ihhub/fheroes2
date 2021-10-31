@@ -1807,7 +1807,9 @@ msgid "Rating"
 msgstr "Hodnocení"
 
 msgid "Map Size"
-msgstr "Velikost mapy"
+msgstr ""
+"Velikost\n"
+"mapy"
 
 msgid "Opponents"
 msgstr "Protivníci"

@@ -2020,7 +2020,9 @@ msgid "Rating"
 msgstr "Taux"
 
 msgid "Map Size"
-msgstr "Taille de la carte"
+msgstr ""
+"Taille de\n"
+"la carte"
 
 msgid "Opponents"
 msgstr "Opposants"

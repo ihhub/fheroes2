@@ -1792,7 +1792,9 @@ msgid "Rating"
 msgstr ""
 
 msgid "Map Size"
-msgstr "Pasaulio dydis"
+msgstr ""
+"Pasaulio\n"
+"dydis"
 
 msgid "Opponents"
 msgstr ""

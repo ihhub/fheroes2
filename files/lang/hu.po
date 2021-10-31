@@ -1928,7 +1928,9 @@ msgid "Rating"
 msgstr "Besorolás"
 
 msgid "Map Size"
-msgstr "Térkép mérete"
+msgstr ""
+"Térkép\n"
+"mérete"
 
 msgid "Opponents"
 msgstr "Ellenfelek"

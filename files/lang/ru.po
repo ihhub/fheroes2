@@ -1969,7 +1969,9 @@ msgid "Rating"
 msgstr "Рейтинг"
 
 msgid "Map Size"
-msgstr "Размер карты"
+msgstr ""
+"Размер\n"
+"карты"
 
 msgid "Opponents"
 msgstr "Оппоненты"

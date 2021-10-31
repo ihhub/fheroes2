@@ -1910,7 +1910,9 @@ msgid "Rating"
 msgstr "Ocena"
 
 msgid "Map Size"
-msgstr "Wielkość mapy"
+msgstr ""
+"Wielkość\n"
+"mapy"
 
 msgid "Opponents"
 msgstr "Przeciwnicy"
