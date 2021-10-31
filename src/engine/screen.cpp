@@ -80,29 +80,33 @@ namespace
 
     std::vector<fheroes2::Size> FilterResolutions( const std::set<fheroes2::Size> & resolutionSet )
     {
+        static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
+
         if ( resolutionSet.empty() ) {
-            const std::vector<fheroes2::Size> resolutions = {fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )};
-            return resolutions;
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
         std::vector<fheroes2::Size> resolutions( resolutionSet.begin(), resolutionSet.end() );
         std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         // Remove all resolutions lower than the original.
-        if ( resolutions.front().width >= fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height >= fheroes2::Display::DEFAULT_HEIGHT ) {
-            resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+        resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+
+        if ( resolutions.empty() ) {
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
         // If here is only one resolution and it is bigger than the original we failed to find any resolutions except the current.
         // In this case populate the list with missing resolutions.
         if ( resolutions.size() == 1 && resolutions.front().width > fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height > fheroes2::Display::DEFAULT_HEIGHT ) {
-            static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
             const std::vector<fheroes2::Size> possibleResolutions
-                = {fheroes2::Size( 640, 480 ), fheroes2::Size( 800, 600 ), fheroes2::Size( 1024, 768 ), fheroes2::Size( 1280, 960 ), fheroes2::Size( 1920, 1080 )};
+                = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                    { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+
             const fheroes2::Size currentResolution = resolutions.front();
             for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
                 if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
-                    break;
+                    continue;
                 }
                 resolutions.emplace_back( possibleResolutions[i] );
             }
@@ -559,6 +563,7 @@ namespace
             clear();
 
             const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
             if ( !resolutions.empty() ) {
                 const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
                 width_ = correctResolution.width;
@@ -873,6 +878,7 @@ namespace
             clear();
 
             const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
             if ( !resolutions.empty() ) {
                 const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
                 width_ = correctResolution.width;
@@ -1159,6 +1165,7 @@ namespace
             clear();
 
             const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
             if ( !resolutions.empty() ) {
                 const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
                 width_ = correctResolution.width;

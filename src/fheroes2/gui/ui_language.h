@@ -30,7 +30,8 @@ namespace fheroes2
         French, // GoG version
         Polish, // GoG version
         German, // GoG version
-        Russian // Buka and XXI Vek versions
+        Russian, // Buka and XXI Vek versions
+        Italian // Rare version?
     };
 
     // Game resources can support up to 2 languages. One of them is always English.

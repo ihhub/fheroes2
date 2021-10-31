@@ -247,7 +247,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
         }
 
         // exit
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return Dialog::CANCEL;
 
         // heroes troops
@@ -334,9 +334,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
 
         // status message
-        if ( le.MouseCursor( portPos ) )
-            message = _( "View Stats" );
-        else if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
+        if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
             message = fheroes2::MoraleString( army.GetMorale() );
         }
         else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {

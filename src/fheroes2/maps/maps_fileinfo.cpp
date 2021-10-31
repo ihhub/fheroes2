@@ -38,6 +38,7 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "mp2.h"
+#include "mp2_helper.h"
 #include "race.h"
 #include "serialize.h"
 #include "settings.h"
@@ -47,7 +48,7 @@
 namespace
 {
     const size_t mapNameLength = 16;
-    const size_t mapDescriptionLength = 143;
+    const size_t mapDescriptionLength = 200;
 
     template <typename CharType>
     bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
@@ -340,24 +341,10 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     // If the color is under computer control only we have to make it as an ally for human player.
     if ( conditions_loss == LOSS_HERO && conditions_wins == VICTORY_DEFEAT_EVERYONE && Colors( allow_human_colors ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
-        fs.seek( MP2OFFSETDATA + ( loss1 + loss2 * size_w ) * 20 );
+        fs.seek( MP2::MP2OFFSETDATA + ( loss1 + loss2 * size_w ) * 20 );
 
         MP2::mp2tile_t mp2tile;
-        mp2tile.tileIndex = fs.getLE16();
-        mp2tile.objectName1 = fs.get();
-        mp2tile.indexName1 = fs.get();
-        mp2tile.quantity1 = fs.get();
-        mp2tile.quantity2 = fs.get();
-        mp2tile.objectName2 = fs.get();
-        mp2tile.indexName2 = fs.get();
-        mp2tile.flags = fs.get();
-        mp2tile.mapObject = fs.get();
-
-        // offset first addon
-        fs.getLE16();
-
-        mp2tile.level1ObjectUID = fs.getLE32();
-        mp2tile.level2ObjectUID = fs.getLE32();
+        MP2::loadTile( fs, mp2tile );
 
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );

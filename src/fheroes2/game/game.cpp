@@ -60,7 +60,6 @@ namespace
     bool updateSoundsOnFocusUpdate = true;
     std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
-    u32 castle_animation_frame = 0;
     u32 maps_animation_frame = 0;
 
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
@@ -119,7 +118,7 @@ namespace Game
 // Returns the difficulty level based on the type of game.
 int Game::getDifficulty()
 {
-    Settings & configuration = Settings::Get();
+    const Settings & configuration = Settings::Get();
 
     return ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
 }
@@ -343,11 +342,6 @@ u32 & Game::MapsAnimationFrame( void )
     return maps_animation_frame;
 }
 
-u32 & Game::CastleAnimationFrame( void )
-{
-    return castle_animation_frame;
-}
-
 // play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
@@ -373,6 +367,37 @@ void Game::EnvironmentSoundMixer()
     }
 
     AGG::LoadLOOPXXSounds( reserved_vols, true );
+}
+
+void Game::restoreSoundsForCurrentFocus()
+{
+    AGG::ResetMixer();
+
+    switch ( Interface::GetFocusType() ) {
+    case GameFocus::HEROES: {
+        const Heroes * focusedHero = Interface::GetFocusHeroes();
+        assert( focusedHero != nullptr );
+
+        const int heroIndexPos = focusedHero->GetIndex();
+        if ( heroIndexPos >= 0 ) {
+            Game::EnvironmentSoundMixer();
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+        }
+        break;
+    }
+
+    case GameFocus::CASTLE: {
+        const Castle * focusedCastle = Interface::GetFocusCastle();
+        assert( focusedCastle != nullptr );
+
+        Game::EnvironmentSoundMixer();
+        AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 u32 Game::GetRating( void )

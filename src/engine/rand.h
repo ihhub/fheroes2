@@ -116,7 +116,7 @@ namespace Rand
     class DeterministicRandomGenerator
     {
     public:
-        DeterministicRandomGenerator( const size_t initialSeed );
+        explicit DeterministicRandomGenerator( const size_t initialSeed );
 
         // prevent accidental copies
         DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;

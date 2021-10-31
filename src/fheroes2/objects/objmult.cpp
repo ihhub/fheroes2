@@ -21,12 +21,25 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
 #include "objmult.h"
+#include "tools.h"
 
-int ObjMult::GetPassable( u32 index )
+namespace
+{
+    const std::bitset<256> objMultShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 1,  3,  15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54, 57,
+          61, 67, 68, 75, 77, 79, 81, 83, 97, 98, 99, 100, 101, 102, 103, 105, 106, 107, 108, 109, 110, 113, 115, 121, 122, 124, 125, 126, 127, 128, 129, 130 } );
+
+    const std::bitset<256> objMul2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 14,  17,  20,  24,  34,  36,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+          147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 164, 180, 181, 182, 183, 184, 185, 186, 189, 199, 200, 202, 206 } );
+}
+
+int ObjMult::GetPassable( const uint8_t index )
 {
     const u8 restricted[] = {2, 4, 58, 63, 64, 65, 70, 72, 73, 89, 104};
 
@@ -43,14 +56,12 @@ bool ObjMult::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjMult::isShadow( u32 index )
+bool ObjMult::isShadow( const uint8_t index )
 {
-    const u8 shadows2[] = {1, 3, 15, 25, 45, 54, 57, 61, 67, 68, 75, 77, 79, 81, 83, 97, 98, 105, 113, 115, 121, 122, 124};
-
-    return std::end( shadows2 ) != std::find( shadows2, std::end( shadows2 ), index );
+    return objMultShadowBitset[index];
 }
 
-int ObjMul2::GetPassable( u32 index )
+int ObjMul2::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {46, 76, 77, 124, 125, 126, 221, 213};
     const u8 restricted[] = {16, 18, 19, 25, 27, 51, 52, 53, 55, 57, 78, 79, 81, 98, 105, 128, 136, 187, 207, 209, 214, 215, 217};
@@ -68,11 +79,9 @@ bool ObjMul2::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjMul2::isShadow( u32 index )
+bool ObjMul2::isShadow( const uint8_t index )
 {
-    const u8 shadows1[] = {14, 17, 20, 24, 34, 36, 42, 43, 49, 50, 60, 71, 72, 113, 115, 118, 121, 123, 127, 161, 164, 180, 181, 189, 199, 200, 202, 206};
-
-    return std::end( shadows1 ) != std::find( shadows1, std::end( shadows1 ), index );
+    return objMul2ShadowBitset[index];
 }
 
 int ObjMul2::GetActionObject( u32 index )

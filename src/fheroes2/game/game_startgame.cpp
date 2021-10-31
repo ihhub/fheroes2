@@ -182,33 +182,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     }
     else {
         // If we don't update focus, we still have to restore environment sounds and terrain music theme
-        AGG::ResetMixer();
-
-        switch ( Interface::GetFocusType() ) {
-        case GameFocus::HEROES: {
-            const Heroes * focusedHero = Interface::GetFocusHeroes();
-            assert( focusedHero != nullptr );
-
-            const int heroIndexPos = focusedHero->GetIndex();
-            if ( heroIndexPos >= 0 ) {
-                Game::EnvironmentSoundMixer();
-                AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
-            }
-            break;
-        }
-
-        case GameFocus::CASTLE: {
-            const Castle * focusedCastle = Interface::GetFocusCastle();
-            assert( focusedCastle != nullptr );
-
-            Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
-            break;
-        }
-
-        default:
-            break;
-        }
+        restoreSoundsForCurrentFocus();
     }
 
     basicInterface.RedrawFocus();
@@ -313,7 +287,7 @@ void ShowNewWeekDialog( void )
                 message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n";
+            message += "\n \n";
         }
     }
 
@@ -905,7 +879,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULTACTION ) )
-                EventDefaultAction();
+                res = EventDefaultAction( res );
             // open focus
             else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
                 EventOpenFocus();

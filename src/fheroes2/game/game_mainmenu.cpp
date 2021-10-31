@@ -128,7 +128,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::MAIN_MENU, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario( false );
@@ -237,7 +237,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::ApplyPalette( highlightDoor, 8 );
 
     // mainmenu loop
-    while ( 1 ) {
+    while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )
@@ -312,7 +312,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( buttonCredits.area() ) )
             Dialog::Message( _( "Credits" ), _( "View the credits screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonHighScores.area() ) )
-            Dialog::Message( _( "High Scores" ), _( "View the high score screen." ), Font::BIG );
+            Dialog::Message( _( "High Scores" ), _( "View the high scores screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         else if ( le.MousePressRight( resolutionArea ) )

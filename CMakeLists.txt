@@ -74,7 +74,9 @@ if(WIN32)
 	install(
 		FILES script/demo/download_demo_version.bat script/demo/download_demo_version.ps1
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
-		FILES script/homm2/extract_homm2_dos_anim.bat script/homm2/extract_homm2_dos_anim.ps1 script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
+		)
+	install(
+		FILES script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 else(WIN32)

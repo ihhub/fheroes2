@@ -228,7 +228,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     case TWNWBOAT:
     case TWNZBOAT:
         return 1 + ticket % 9;
-
     case CMBTCAPB:
     case CMBTCAPK:
     case CMBTCAPN:
@@ -236,7 +235,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     case CMBTCAPW:
     case CMBTCAPZ:
         return 1 + ticket % 10;
-
     case CMBTHROB:
         return 1 + ticket % 18;
     case CMBTHROK:
@@ -249,7 +247,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         return 1 + ticket % 16;
     case CMBTHROZ:
         return 1 + ticket % 18;
-
     case HEROFL00:
     case HEROFL01:
     case HEROFL02:
@@ -258,21 +255,18 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     case HEROFL05:
     case HEROFL06:
         return ticket % 5;
-
     case TWNBDOCK:
     case TWNKDOCK:
     case TWNNDOCK:
     case TWNSDOCK:
     case TWNWDOCK:
     case TWNZDOCK:
-
     case TWNBEXT0:
     case TWNKEXT0:
     case TWNNEXT0:
     case TWNSEXT0:
     case TWNWEXT0:
     case TWNZEXT0:
-
     case TWNBCAPT:
     case TWNBDW_3:
     case TWNBDW_4:
@@ -308,7 +302,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     case TWNZTHIE:
     case TWNZUP_2:
         return 1 + ticket % 5;
-
     case TWNBCSTL:
     case TWNKDW_2:
     case TWNKUP_2:
@@ -318,14 +311,11 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     case TWNWWEL2:
     case TWNZTVRN:
         return 1 + ticket % 6;
-
     case TWNKDW_4:
     case TWNKUP_4:
         return 1 + ticket % 7;
-
     case TAVWIN:
         return 2 + ticket % 20;
-
     case CMBTLOS1:
         return 1 + ticket % 30;
     case CMBTLOS2:
@@ -340,35 +330,25 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         return 1 + ticket % 25;
     case CMBTSURR:
         return 1 + ticket % 20;
-
     case WINCMBT:
         return 1 + ticket % 20;
-
     case MINIMON:
         return start + 1 + ticket % 6;
-
     case TWNNMAGE:
         return start + 1 + ticket % 5;
-
     case TWNBMAGE:
         return 4 == start ? start + 1 + ticket % 8 : 0;
-
     case SHNGANIM:
         return 1 + ticket % 39;
-
     case BTNSHNGL:
         return start + ticket % 4;
-
     case OBJNHAUN:
         return ticket % 15;
-
     case OBJNWATR:
-
         switch ( start ) {
         // buttle
         case 0x00:
             return start + ( ticket % 11 ) + 1;
-
         // shadow
         case 0x0C:
         // chest
@@ -401,14 +381,12 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0xF1:
         case 0xF8:
             return start + ( ticket % 6 ) + 1;
-
         // seagull on stones
         case 0x76:
         case 0x86:
         case 0x96:
         case 0xA6:
             return start + ( ticket % 15 ) + 1;
-
         // whirlpool
         case 0xCA:
         case 0xCE:
@@ -417,25 +395,19 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0xDA:
         case 0xDE:
             return start + ( ticket % 3 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNWAT2:
-
         switch ( start ) {
         // sail broken ship (left)
         case 0x03:
         case 0x0C:
             return start + ( ticket % 6 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNCRCK:
-
         switch ( start ) {
         // pool of oil
         case 0x50:
@@ -452,13 +424,10 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         // shadow smoke
         case 0xCA:
             return start + ( ticket % 10 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNDIRT:
-
         switch ( start ) {
         // mill
         case 0x99:
@@ -472,25 +441,19 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0xB9:
         case 0xBD:
             return start + ( ticket % 3 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNDSRT:
-
         switch ( start ) {
         // campfire
         case 0x36:
         case 0x3D:
             return start + ( ticket % 6 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNGRA2:
-
         switch ( start ) {
         // mill
         case 0x17:
@@ -504,7 +467,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0x37:
         case 0x3B:
             return start + ( ticket % 3 ) + 1;
-
         // smoke from chimney
         case 0x3F:
         case 0x46:
@@ -519,13 +481,10 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         // peasanthunt
         case 0x72:
             return start + ( ticket % 6 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNLAV2:
-
         switch ( start ) {
         // middle volcano
         case 0x00:
@@ -535,7 +494,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         // lava
         case 0x15:
             return start + ( ticket % 6 ) + 1;
-
         // small volcano
         // shadow
         case 0x21:
@@ -544,13 +502,10 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0x37:
         case 0x43:
             return start + ( ticket % 10 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNLAV3:
-
         // big volcano
         switch ( start ) {
         // smoke
@@ -572,31 +527,24 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0xD2:
         case 0xE1:
             return start + ( ticket % 14 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNLAVA:
-
         switch ( start ) {
         // shadow of lava
         case 0x4E:
         case 0x58:
         case 0x62:
             return start + ( ticket % 9 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNMUL2:
-
         switch ( start ) {
         // lighthouse
         case 0x3D:
             return start + ( ticket % 9 ) + 1;
-
         // alchemytower
         case 0x1B:
         // watermill
@@ -613,17 +561,13 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         // shadow smoke
         case 0xB4:
             return start + ( ticket % 6 ) + 1;
-
         // magic garden
         case 0xBE:
             return quantity ? start + ( ticket % 6 ) + 1 : start + 7;
-
         default:
             return 0;
         }
-
     case OBJNMULT:
-
         switch ( start ) {
         // smoke
         case 0x05:
@@ -631,13 +575,11 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0x0F:
         case 0x19:
             return start + ( ticket % 9 ) + 1;
-
         // smoke
         case 0x24:
         // shadow
         case 0x2D:
             return start + ( ticket % 8 ) + 1;
-
         // smoke
         case 0x5A:
         // shadow
@@ -647,13 +589,10 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         // campfire
         case 0x83:
             return start + ( ticket % 6 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNSNOW:
-
         switch ( start ) {
         // firecamp
         case 0x04:
@@ -665,7 +604,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0xB1:
         case 0xB8:
             return start + ( ticket % 6 ) + 1;
-
         // mill
         case 0x60:
         case 0x64:
@@ -678,13 +616,10 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0x80:
         case 0x84:
             return start + ( ticket % 3 ) + 1;
-
         default:
             return 0;
         }
-
     case OBJNSWMP:
-
         switch ( start ) {
         // shadow
         case 0x00:
@@ -700,14 +635,11 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         case 0x43:
         case 0x4A:
             return start + ( ticket % 6 ) + 1;
-
         default:
             return 0;
         }
-
     // extra objects for loyalty version
     case X_LOC1:
-
         if ( Settings::Get().isPriceOfLoyaltySupported() )
             switch ( start ) {
             // alchemist tower
@@ -724,15 +656,12 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
             case 0x5E:
             case 0x67:
                 return start + ( ticket % 8 ) + 1;
-
             default:
                 return 0;
             }
         break;
-
     // extra objects for loyalty version
     case X_LOC2:
-
         if ( Settings::Get().isPriceOfLoyaltySupported() )
             switch ( start ) {
             // mermaid
@@ -749,7 +678,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
             case 0x5C:
             case 0x66:
                 return start + ( ticket % 8 ) + 1;
-
             default:
                 return 0;
             }
@@ -757,7 +685,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
 
     // extra objects for loyalty version
     case X_LOC3:
-
         if ( Settings::Get().isPriceOfLoyaltySupported() )
             switch ( start ) {
             // hut magi
@@ -769,7 +696,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
             case 0x29:
             case 0x32:
                 return start + ( ticket % 8 ) + 1;
-
             // barrier
             case 0x3C:
             case 0x42:
@@ -780,7 +706,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
             case 0x60:
             case 0x66:
                 return start + ( ticket % 4 ) + 1;
-
             default:
                 return 0;
             }
@@ -789,7 +714,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     default:
         break;
     }
-
     return 0;
 }
 

@@ -29,8 +29,15 @@
 
 namespace AGG
 {
-    bool Init( void );
-    void Quit( void );
+    class AGGInitializer
+    {
+    public:
+        AGGInitializer();
+        AGGInitializer( const AGGInitializer & ) = delete;
+        AGGInitializer & operator=( const AGGInitializer & ) = delete;
+
+        ~AGGInitializer();
+    };
 
     std::vector<uint8_t> LoadBINFRM( const char * frm_file );
 

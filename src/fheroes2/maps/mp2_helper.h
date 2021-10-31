@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,28 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#ifndef SDLTIMER_H
-#define SDLTIMER_H
+class StreamBase;
 
-#include "types.h"
-#include <SDL.h>
-
-namespace SDL
+namespace MP2
 {
-    class Timer
-    {
-    public:
-        Timer();
+    struct mp2tile_t;
+    struct mp2addon_t;
 
-        bool IsValid() const;
+    void loadTile( StreamBase & stream, mp2tile_t & tile );
 
-        void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
-        void Remove();
-
-    private:
-        SDL_TimerID id;
-    };
+    void loadAddon( StreamBase & stream, mp2addon_t & addon );
 }
-
-#endif

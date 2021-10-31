@@ -335,6 +335,10 @@ namespace
             return _( "Defender Helm" );
         case Artifact::POWER_AXE:
             return _( "Power Axe" );
+        case Artifact::STEALTH_SHIELD:
+            return _( "Stealth Shield" );
+        case Artifact::NOMAD_BOOTS_MOBILITY:
+            return _( "Nomad Boots" );
         default:
             return Artifact( artifactId ).GetName();
         }
@@ -443,6 +447,10 @@ namespace Campaign
             return getWizardsIsleCampaignBonusData( scenarioID );
         case Campaign::DESCENDANTS_CAMPAIGN:
             return getDescendantsCampaignBonusData( scenarioID );
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
+            break;
         }
 
         // shouldn't be here unless we get an unsupported campaign

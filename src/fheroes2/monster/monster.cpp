@@ -354,6 +354,8 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
             factor = 190;
             break;
         default:
+            // Did you add a new difficulty mode? Add the corresponding case above!
+            assert( 0 );
             break;
         }
 
@@ -426,6 +428,11 @@ bool Monster::isRegenerating() const
 bool Monster::isDoubleCellAttack() const
 {
     return isAbilityPresent( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+}
+
+bool Monster::isAllAdjacentCellsAttack() const
+{
+    return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
 }
 
 bool Monster::isAffectedByMorale() const

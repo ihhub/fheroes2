@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <string>
 #include <vector>
 
@@ -142,6 +143,249 @@ namespace
         sprite.SetText( str );
         sprite.Show();
     }
+
+    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
+    {
+        // setup cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+        const fheroes2::Rect rectPanel( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 93 );
+        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 202 );
+        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 282 );
+
+        const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+
+        const int32_t ngextraWidth = ngextra.width();
+        const int32_t ngextraHeight = ngextra.height();
+
+        // vector coord difficulty
+        std::vector<fheroes2::Rect> coordDifficulty;
+        coordDifficulty.reserve( 5 );
+
+        coordDifficulty.emplace_back( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+
+        fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
+        fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
+        fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
+
+        fheroes2::drawMainMenuScreen();
+
+        Settings & conf = Settings::Get();
+        bool resetStartingSettings = conf.MapsFile().empty();
+        Players & players = conf.GetPlayers();
+        Interface::PlayersInfo playersInfo( true, true, true );
+
+        const int humanPlayerCount = Settings::Get().PreferablyCountPlayers();
+
+        if ( !resetStartingSettings ) { // verify that current map really exists in map's list
+            resetStartingSettings = true;
+            const std::string & mapName = conf.CurrentFileInfo().name;
+            const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+            for ( const Maps::FileInfo & mapInfo : lists ) {
+                if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.file ) == mapFileName ) ) {
+                    if ( mapInfo.file == conf.CurrentFileInfo().file ) {
+                        conf.SetCurrentFileInfo( mapInfo );
+                        updatePlayers( players, humanPlayerCount );
+                        Game::LoadPlayers( mapInfo.file, players );
+                        resetStartingSettings = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // set first map's settings
+        if ( resetStartingSettings ) {
+            conf.SetCurrentFileInfo( lists.front() );
+            updatePlayers( players, humanPlayerCount );
+            Game::LoadPlayers( lists.front().file, players );
+        }
+
+        playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
+
+        RedrawScenarioStaticInfo( rectPanel, true );
+        RedrawDifficultyInfo( pointDifficultyInfo );
+
+        playersInfo.RedrawInfo();
+
+        TextSprite rating;
+        rating.SetFont( Font::BIG );
+        rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
+        RedrawRatingInfo( rating );
+
+        fheroes2::MovableSprite levelCursor( ngextra );
+
+        switch ( Game::getDifficulty() ) {
+        case Difficulty::EASY:
+            levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
+            break;
+        case Difficulty::NORMAL:
+            levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
+            break;
+        case Difficulty::HARD:
+            levelCursor.setPosition( coordDifficulty[2].x, coordDifficulty[2].y );
+            break;
+        case Difficulty::EXPERT:
+            levelCursor.setPosition( coordDifficulty[3].x, coordDifficulty[3].y );
+            break;
+        case Difficulty::IMPOSSIBLE:
+            levelCursor.setPosition( coordDifficulty[4].x, coordDifficulty[4].y );
+            break;
+        default:
+            // Did you add a new difficulty mode? Add the corresponding case above!
+            assert( 0 );
+            break;
+        }
+        levelCursor.redraw();
+
+        buttonSelectMaps.draw();
+        buttonOk.draw();
+        buttonCancel.draw();
+
+        display.render();
+
+        fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
+        LocalEvent & le = LocalEvent::Get();
+        while ( true ) {
+            if ( !le.HandleEvents( true, true ) ) {
+                if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                    if ( conf.ExtGameUseFade() ) {
+                        fheroes2::FadeDisplay();
+                    }
+                    return fheroes2::GameMode::QUIT_GAME;
+                }
+
+                continue;
+            }
+
+            // press button
+            le.MousePressLeft( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
+            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+
+            // click select
+            if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
+                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+
+                if ( fi ) {
+                    Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
+                    conf.SetCurrentFileInfo( *fi );
+                    Game::LoadPlayers( fi->file, players );
+
+                    updatePlayers( players, humanPlayerCount );
+                    playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
+
+                    RedrawScenarioStaticInfo( rectPanel );
+                    RedrawDifficultyInfo( pointDifficultyInfo );
+                    playersInfo.resetSelection();
+                    playersInfo.RedrawInfo();
+                    RedrawRatingInfo( rating );
+                    levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
+                    buttonOk.draw();
+                    buttonCancel.draw();
+                }
+
+                display.render();
+            }
+            else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+                result = fheroes2::GameMode::MAIN_MENU;
+                break;
+            }
+            else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) );
+                result = fheroes2::GameMode::START_GAME;
+                break;
+            }
+            else if ( le.MouseClickLeft( rectPanel ) ) {
+                const int32_t index = GetRectIndex( coordDifficulty, le.GetMouseCursor() );
+
+                // select difficulty
+                if ( 0 <= index ) {
+                    levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
+                    levelCursor.redraw();
+                    Game::saveDifficulty( index );
+                    RedrawRatingInfo( rating );
+                    display.render();
+                }
+                // playersInfo
+                else if ( playersInfo.QueueEventProcessing() ) {
+                    RedrawScenarioStaticInfo( rectPanel );
+                    levelCursor.redraw();
+                    RedrawDifficultyInfo( pointDifficultyInfo );
+
+                    playersInfo.RedrawInfo();
+                    RedrawRatingInfo( rating );
+                    buttonOk.draw();
+                    buttonCancel.draw();
+                    display.render();
+                }
+            }
+
+            if ( le.MousePressRight( rectPanel ) ) {
+                if ( le.MousePressRight( buttonSelectMaps.area() ) )
+                    Dialog::Message( _( "Scenario" ), _( "Click here to select which scenario to play." ), Font::BIG );
+                else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) )
+                    Dialog::Message(
+                        _( "Game Difficulty" ),
+                        _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
+                        Font::BIG );
+                else if ( le.MousePressRight( rating.GetRect() ) )
+                    Dialog::
+                        Message( _( "Difficulty Rating" ),
+                                 _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
+                                 Font::BIG );
+                else if ( le.MousePressRight( buttonOk.area() ) )
+                    Dialog::Message( _( "OK" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
+                else if ( le.MousePressRight( buttonCancel.area() ) )
+                    Dialog::Message( _( "Cancel" ), _( "Click to return to the main menu." ), Font::BIG );
+                else
+                    playersInfo.QueueEventProcessing();
+            }
+        }
+
+        Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
+
+        return result;
+    }
+
+    fheroes2::GameMode LoadNewMap()
+    {
+        Settings & conf = Settings::Get();
+
+        conf.GetPlayers().SetStartGame();
+        if ( conf.ExtGameUseFade() ) {
+            fheroes2::FadeDisplay();
+        }
+
+        Game::ShowMapLoadingText();
+        // Load maps
+        std::string lower = StringLower( conf.MapsFile() );
+
+        if ( lower.size() > 3 ) {
+            std::string ext = lower.substr( lower.size() - 3 );
+
+            if ( ext == "mp2" || ext == "mx2" ) {
+                return world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
+            }
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       conf.MapsFile() << ", "
+                                       << "unknown map format" );
+            return fheroes2::GameMode::MAIN_MENU;
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   conf.MapsFile() << ", "
+                                   << "unknown map format" );
+        return fheroes2::GameMode::MAIN_MENU;
+    }
 }
 
 fheroes2::GameMode Game::SelectScenario()
@@ -151,254 +395,21 @@ fheroes2::GameMode Game::SelectScenario()
 
 fheroes2::GameMode Game::ScenarioInfo()
 {
-    Settings & conf = Settings::Get();
-
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( conf.IsGameType( Game::TYPE_MULTI ) );
+    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( lists.empty() ) {
         Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 
-    fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    fheroes2::Point pointDifficultyInfo, pointOpponentInfo, pointClassInfo;
-    fheroes2::Rect rectPanel;
-
-    // vector coord difficulty
-    std::vector<fheroes2::Rect> coordDifficulty;
-    coordDifficulty.reserve( 5 );
-
-    const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-
-    rectPanel = fheroes2::Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
-    pointDifficultyInfo = fheroes2::Point( rectPanel.x + 24, rectPanel.y + 93 );
-    pointOpponentInfo = fheroes2::Point( rectPanel.x + 24, rectPanel.y + 202 );
-    pointClassInfo = fheroes2::Point( rectPanel.x + 24, rectPanel.y + 282 );
-
-    const uint32_t ngextraWidth = ngextra.width();
-    const uint32_t ngextraHeight = ngextra.height();
-    coordDifficulty.emplace_back( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-    coordDifficulty.emplace_back( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-    coordDifficulty.emplace_back( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-    coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-    coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-
-    fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
-    fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
-    fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
-
-    fheroes2::drawMainMenuScreen();
-
-    bool resetStartingSettings = conf.MapsFile().empty();
-    Players & players = conf.GetPlayers();
-    Interface::PlayersInfo playersInfo( true, true, true );
-
-    const int humanPlayerCount = Settings::Get().PreferablyCountPlayers();
-
-    if ( !resetStartingSettings ) { // verify that current map really exists in map's list
-        resetStartingSettings = true;
-        const std::string & mapName = conf.CurrentFileInfo().name;
-        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
-            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                if ( mapIter->file == conf.CurrentFileInfo().file ) {
-                    conf.SetCurrentFileInfo( *mapIter );
-                    updatePlayers( players, humanPlayerCount );
-                    LoadPlayers( mapIter->file, players );
-                    resetStartingSettings = false;
-                    break;
-                }
-            }
-        }
+    // We must release UI resources for this window before loading a new map. That's why all UI logic is in a separate function.
+    const fheroes2::GameMode result = ChooseNewMap( lists );
+    if ( result != fheroes2::GameMode::START_GAME ) {
+        return result;
     }
 
-    // set first map's settings
-    if ( resetStartingSettings ) {
-        conf.SetCurrentFileInfo( lists.front() );
-        updatePlayers( players, humanPlayerCount );
-        LoadPlayers( lists.front().file, players );
-    }
-
-    playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
-
-    RedrawScenarioStaticInfo( rectPanel, true );
-    RedrawDifficultyInfo( pointDifficultyInfo );
-
-    playersInfo.RedrawInfo();
-
-    TextSprite rating;
-    rating.SetFont( Font::BIG );
-    rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
-    RedrawRatingInfo( rating );
-
-    fheroes2::MovableSprite levelCursor( ngextra );
-
-    switch ( Game::getDifficulty() ) {
-    case Difficulty::EASY:
-        levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
-        break;
-    case Difficulty::NORMAL:
-        levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
-        break;
-    case Difficulty::HARD:
-        levelCursor.setPosition( coordDifficulty[2].x, coordDifficulty[2].y );
-        break;
-    case Difficulty::EXPERT:
-        levelCursor.setPosition( coordDifficulty[3].x, coordDifficulty[3].y );
-        break;
-    case Difficulty::IMPOSSIBLE:
-        levelCursor.setPosition( coordDifficulty[4].x, coordDifficulty[4].y );
-        break;
-    }
-    levelCursor.redraw();
-
-    buttonSelectMaps.draw();
-    buttonOk.draw();
-    buttonCancel.draw();
-
-    display.render();
-
-    while ( 1 ) {
-        if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                if ( conf.ExtGameUseFade() )
-                    fheroes2::FadeDisplay();
-                return fheroes2::GameMode::QUIT_GAME;
-            }
-            else {
-                continue;
-            }
-        }
-
-        // press button
-        le.MousePressLeft( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-
-        // click select
-        if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-            const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
-
-            if ( fi ) {
-                SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
-                conf.SetCurrentFileInfo( *fi );
-                LoadPlayers( fi->file, players );
-
-                updatePlayers( players, humanPlayerCount );
-                playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
-
-                RedrawScenarioStaticInfo( rectPanel );
-                RedrawDifficultyInfo( pointDifficultyInfo );
-                playersInfo.resetSelection();
-                playersInfo.RedrawInfo();
-                RedrawRatingInfo( rating );
-                levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
-                buttonOk.draw();
-                buttonCancel.draw();
-            }
-
-            display.render();
-        }
-        else
-            // click cancel
-            if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            result = fheroes2::GameMode::MAIN_MENU;
-            break;
-        }
-        else
-            // click ok
-            if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) );
-            result = fheroes2::GameMode::START_GAME;
-            break;
-        }
-        else if ( le.MouseClickLeft( rectPanel ) ) {
-            const s32 index = GetRectIndex( coordDifficulty, le.GetMouseCursor() );
-
-            // select difficulty
-            if ( 0 <= index ) {
-                levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
-                levelCursor.redraw();
-                Game::saveDifficulty( index );
-                RedrawRatingInfo( rating );
-                display.render();
-            }
-            // playersInfo
-            else if ( playersInfo.QueueEventProcessing() ) {
-                RedrawScenarioStaticInfo( rectPanel );
-                levelCursor.redraw();
-                RedrawDifficultyInfo( pointDifficultyInfo );
-
-                playersInfo.RedrawInfo();
-                RedrawRatingInfo( rating );
-                buttonOk.draw();
-                buttonCancel.draw();
-                display.render();
-            }
-        }
-
-        if ( le.MousePressRight( rectPanel ) ) {
-            if ( le.MousePressRight( buttonSelectMaps.area() ) )
-                Dialog::Message( _( "Scenario" ), _( "Click here to select which scenario to play." ), Font::BIG );
-            else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) )
-                Dialog::Message(
-                    _( "Game Difficulty" ),
-                    _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
-                    Font::BIG );
-            else if ( le.MousePressRight( rating.GetRect() ) )
-                Dialog::Message( _( "Difficulty Rating" ),
-                                 _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
-                                 Font::BIG );
-            else if ( le.MousePressRight( buttonOk.area() ) )
-                Dialog::Message( _( "OK" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
-            else if ( le.MousePressRight( buttonCancel.area() ) )
-                Dialog::Message( _( "Cancel" ), _( "Click to return to the main menu." ), Font::BIG );
-            else
-                playersInfo.QueueEventProcessing();
-        }
-    }
-
-    SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
-
-    if ( result == fheroes2::GameMode::START_GAME ) {
-        players.SetStartGame();
-        if ( conf.ExtGameUseFade() )
-            fheroes2::FadeDisplay();
-        Game::ShowMapLoadingText();
-        // Load maps
-        std::string lower = StringLower( conf.MapsFile() );
-
-        if ( lower.size() > 3 ) {
-            std::string ext = lower.substr( lower.size() - 3 );
-
-            if ( ext == "mp2" || ext == "mx2" ) {
-                result = world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
-            }
-            else {
-                result = fheroes2::GameMode::MAIN_MENU;
-                DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           conf.MapsFile() << ", "
-                                           << "unknown map format" );
-            }
-        }
-        else {
-            result = fheroes2::GameMode::MAIN_MENU;
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       conf.MapsFile() << ", "
-                                       << "unknown map format" );
-        }
-    }
-
-    return result;
+    return LoadNewMap();
 }
 
 int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )

@@ -315,6 +315,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( small );
                 currentPressedButton = &buttonSelectSmall;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -327,6 +328,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( medium );
                 currentPressedButton = &buttonSelectMedium;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -339,6 +341,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( large );
                 currentPressedButton = &buttonSelectLarge;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -351,6 +354,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( xlarge );
                 currentPressedButton = &buttonSelectXLarge;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -358,6 +362,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             currentPressedButton = &buttonSelectAll;
+            currentPressedButton->press();
 
             needRedraw = true;
         }

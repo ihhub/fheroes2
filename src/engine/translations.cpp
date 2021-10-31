@@ -64,7 +64,11 @@ u32 crc32b( const char * msg )
 
 struct mofile
 {
-    u32 count, offset_strings1, offset_strings2, hash_size, hash_offset;
+    uint32_t count;
+    uint32_t offset_strings1;
+    uint32_t offset_strings2;
+    uint32_t hash_size;
+    uint32_t hash_offset;
     StreamBuf buf;
     std::map<u32, chunk> hash_offsets;
     std::string encoding;
@@ -126,7 +130,8 @@ struct mofile
                 return false;
             }
             else {
-                u16 major, minor;
+                uint16_t major;
+                uint16_t minor;
                 sf >> major >> minor;
 
                 if ( 0 != major ) {
@@ -217,6 +222,7 @@ namespace Translation
         LOCALE_LT,
         LOCALE_LV,
         LOCALE_MK,
+        LOCALE_NB,
         LOCALE_NL,
         LOCALE_PL,
         LOCALE_PT,
@@ -300,6 +306,8 @@ namespace Translation
             locale = LOCALE_LV;
         else if ( str == "mk" || str == "macedonia" )
             locale = LOCALE_MK;
+        else if ( str == "nb" || str == "norwegian" )
+            locale = LOCALE_NB;
         else if ( str == "nl" || str == "dutch" )
             locale = LOCALE_NL;
         else if ( str == "pl" || str == "polish" )
@@ -394,6 +402,8 @@ namespace Translation
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LOCALE_MK:
                 return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
+            case LOCALE_NB:
+                return current->ngettext( str, ( n != 1 ) );
             case LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             default:

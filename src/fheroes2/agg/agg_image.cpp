@@ -92,6 +92,14 @@ namespace
             output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
         }
     }
+
+    void replaceTranformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
+    {
+        if ( image.transform()[position] != 0 ) {
+            image.transform()[position] = 0;
+            image.image()[position] = value;
+        }
+    }
 }
 
 namespace fheroes2
@@ -174,11 +182,11 @@ namespace fheroes2
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
-                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
-                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
-                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
+                    imageArray.insert( imageArray.begin() + 96, 64, imageArray[0] );
+                    std::swap( imageArray[136], imageArray[192] ); // Move sprites for chars 0xA8
+                    std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
-                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
+                    imageArray.erase( imageArray.begin() + 192 );
                 }
                 return true;
             }
@@ -625,6 +633,14 @@ namespace fheroes2
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 7 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
                 return true;
+            case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 2 ), 6, 0, 108, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 3 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
             case ICN::NON_UNIFORM_EVIL_OKAY_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 4 ), 4, 0, 96, 25 );
@@ -639,6 +655,14 @@ namespace fheroes2
                 _icnVsSprite[id][0].setPosition( 0, 0 );
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 7 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::NON_UNIFORM_EVIL_RESTART_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 2 ), 4, 0, 108, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 3 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
                 return true;
             case ICN::UNIFORM_GOOD_MAX_BUTTON: {
@@ -868,6 +892,126 @@ namespace fheroes2
                     _icnVsSprite[id][0]._disableTransformLayer();
                 }
                 return true;
+            case ICN::TOWNBKG3:
+                // Warlock town background image contains 'empty' pixels leading to appear them as black.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 640 && original.height() == 256 ) {
+                        replaceTranformPixel( original, 51945, 17 );
+                        replaceTranformPixel( original, 61828, 25 );
+                        replaceTranformPixel( original, 64918, 164 );
+                        replaceTranformPixel( original, 77685, 18 );
+                        replaceTranformPixel( original, 84618, 19 );
+                    }
+                }
+                return true;
+            case ICN::PORT0091:
+                // Barbarian captain has one bad pixel.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        replaceTranformPixel( original, 9084, 77 );
+                    }
+                }
+                return true;
+            case ICN::PORT0090:
+                // Knight captain has multiple bad pixels.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        replaceTranformPixel( original, 2314, 70 );
+                        replaceTranformPixel( original, 5160, 71 );
+                        replaceTranformPixel( original, 5827, 18 );
+                        replaceTranformPixel( original, 7474, 167 );
+                    }
+                }
+                return true;
+            case ICN::CSTLWZRD:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 8 ) {
+                    // Statue image has bad pixels.
+                    Sprite & original = _icnVsSprite[id][7];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 3687, 50 );
+                        replaceTranformPixel( original, 5159, 108 );
+                        replaceTranformPixel( original, 5294, 108 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() >= 24 ) {
+                    // Mage tower image has a bad pixel.
+                    Sprite & original = _icnVsSprite[id][23];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 4333, 23 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() >= 29 ) {
+                    // Mage tower image has a bad pixel.
+                    Sprite & original = _icnVsSprite[id][28];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 4333, 23 );
+                    }
+                }
+                return true;
+            case ICN::CSTLCAPK:
+                // Knight captain has a bad pixel.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 2 ) {
+                    Sprite & original = _icnVsSprite[id][1];
+                    if ( original.width() == 84 && original.height() == 81 ) {
+                        replaceTranformPixel( original, 4934, 18 );
+                    }
+                }
+                return true;
+            case ICN::CSTLCAPW:
+                // Warlock captain quarters have bad pixels.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 84 && original.height() == 81 ) {
+                        replaceTranformPixel( original, 1692, 26 );
+                        replaceTranformPixel( original, 2363, 32 );
+                        replaceTranformPixel( original, 2606, 21 );
+                        replaceTranformPixel( original, 2608, 21 );
+                    }
+                }
+                return true;
+            case ICN::CSTLSORC:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 14 ) {
+                    // Rainbow has bad pixels.
+                    Sprite & original = _icnVsSprite[id][13];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 2047, 160 );
+                        replaceTranformPixel( original, 2052, 159 );
+                        replaceTranformPixel( original, 2055, 160 );
+                        replaceTranformPixel( original, 2060, 67 );
+                        replaceTranformPixel( original, 2063, 159 );
+                        replaceTranformPixel( original, 2067, 67 );
+                        replaceTranformPixel( original, 2184, 67 );
+                        replaceTranformPixel( original, 2192, 158 );
+                        replaceTranformPixel( original, 3508, 67 );
+                        replaceTranformPixel( original, 3641, 67 );
+                        replaceTranformPixel( original, 3773, 69 );
+                        replaceTranformPixel( original, 3910, 67 );
+                        replaceTranformPixel( original, 4039, 69 );
+                        replaceTranformPixel( original, 4041, 67 );
+                        replaceTranformPixel( original, 4172, 67 );
+                        replaceTranformPixel( original, 4578, 69 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() >= 25 ) {
+                    // Red tower has bad pixels.
+                    Sprite & original = _icnVsSprite[id][24];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 2830, 165 );
+                        replaceTranformPixel( original, 3101, 165 );
+                        replaceTranformPixel( original, 3221, 69 );
+                    }
+                }
+                return true;
             case ICN::CURSOR_ADVENTURE_MAP: {
                 // Create needed numbers
                 const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
@@ -958,6 +1102,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 1 );
                 h2d::readImage( "knight_castle_left_farm.image", _icnVsSprite[id][0] );
                 return true;
+            case ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+                return true;
             case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
                 _icnVsSprite[id].resize( 1 );
                 Sprite & output = _icnVsSprite[id][0];
@@ -1030,7 +1178,22 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::TWNWWEL2: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    if ( _icnVsSprite[id][0].width() == 122 && _icnVsSprite[id][0].height() == 226 ) {
+                        FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
+                    }
 
+                    for ( size_t i = 1; i < 7; i++ ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( original.width() == 121 && original.height() == 151 ) {
+                            FillTransform( original, 0, 0, 64, 39, 1 );
+                        }
+                    }
+                }
+                return true;
+            }
             default:
                 break;
             }
