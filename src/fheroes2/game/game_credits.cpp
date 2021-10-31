@@ -538,7 +538,7 @@ namespace
 
         name.set( _( "Bryan Farina\n"
                      "Rozita Tolouey\n"
-                     "Bruce Schlickbernd"),
+                     "Bruce Schlickbernd" ),
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -561,7 +561,7 @@ namespace
                      "Mark Palczynski\n"
                      "Walt Hochbrueckner\n"
                      "Bruce Schlickbernd\n"
-                     "Craig Konas"),
+                     "Craig Konas" ),
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -573,7 +573,7 @@ namespace
         name.set( _( "Scott McDaniel\n"
                      "Dean Rettig\n"
                      "Ted Chapman\n"
-                     "Dean Frost"),
+                     "Dean Frost" ),
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
