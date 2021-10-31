@@ -56,13 +56,13 @@ void Battle::ControlInfo::Redraw( void ) const
     if ( result & CONTROL_HUMAN )
         fheroes2::Blit( mark, display, rtLocal.x + 3, rtLocal.y + 2 );
     fheroes2::Text text( _( "Human" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-    text.draw( rtLocal.x + cell.width() + 5, rtLocal.y + 5 , display );
+    text.draw( rtLocal.x + cell.width() + 5, rtLocal.y + 5, display );
 
     fheroes2::Blit( cell, display, rtAI.x, rtAI.y );
     if ( result & CONTROL_AI )
         fheroes2::Blit( mark, display, rtAI.x + 3, rtAI.y + 2 );
     text.set( _( "AI" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-    text.draw( rtAI.x + cell.width() + 5, rtAI.y + 5 , display );
+    text.draw( rtAI.x + cell.width() + 5, rtAI.y + 5, display );
 }
 
 Battle::Only::Only()
@@ -533,7 +533,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
         StringReplace( message, "%{race1}", std::string( Race::String( hero1->GetRace() ) ) );
     }
     else {
-        StringReplace( message, _( "%{race1} %{name1}" ), _( "Monsters" ) ) ;
+        StringReplace( message, _( "%{race1} %{name1}" ), _( "Monsters" ) );
     }
     if ( hero2 ) { 
         StringReplace( message, "%{name2}", hero2->GetName() );
