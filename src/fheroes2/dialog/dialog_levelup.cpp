@@ -82,7 +82,9 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     StringReplace( header, "%{skill}", primary );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int system = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -156,30 +158,14 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     // hero button
     pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
     pt.y = box.GetArea().y + box.GetArea().height - 36;
-
-    const Settings & conf = Settings::Get();
-    const bool isEvilInterface = conf.ExtGameEvilInterface();
-
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
-    fheroes2::AddTransparency( armyButtonReleased, 36 );
-    fheroes2::AddTransparency( armyButtonPressed, 36 );
-
-    fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
-    fheroes2::Copy( display, pt.x, pt.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
-    fheroes2::Blit( armyButtonReleased, armyButtonReleasedBack );
-
-    fheroes2::Sprite armyButtonPressedBack( armyButtonPressed.width(), armyButtonPressed.height(), armyButtonPressed.x(), armyButtonPressed.y() );
-    fheroes2::Copy( display, pt.x, pt.y, armyButtonPressedBack, 0, 0, armyButtonPressedBack.width(), armyButtonPressedBack.height() );
-    fheroes2::Blit( armyButtonPressed, armyButtonPressedBack );
-
-    fheroes2::ButtonSprite button_hero( pt.x, pt.y, armyButtonReleasedBack, armyButtonPressedBack );
+    fheroes2::Button button_hero( pt.x, pt.y, isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON, 0, 1 );
 
     text.Set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), Font::BIG );
     text.Blit( box.GetArea().x + ( box.GetArea().width - text.w() ) / 2, pt.y - 15 );
 
     button_learn1.draw();
     button_learn2.draw();
+    button_hero.captureBackground( display );
     button_hero.draw();
 
     display.render();

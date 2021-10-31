@@ -866,20 +866,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     fheroes2::Button btnAccept( pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
     fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
-
-    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
-    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
-    fheroes2::AddTransparency( marketButtonReleased, 36 );
-    fheroes2::AddTransparency( marketButtonPressed, 36 );
-
-    const fheroes2::Point buttonMarketPos( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145 );
-
-    fheroes2::Sprite marketButtonPressedBack( marketButtonPressed.width(), marketButtonPressed.height(), marketButtonPressed.x(), marketButtonPressed.y() );
-    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonPressedBack, 0, 0, marketButtonPressedBack.width(), marketButtonPressedBack.height() );
-    fheroes2::Fill( marketButtonPressedBack, 1, 4, 31, 31, 36 ); // the black pixels of the castle on the pressed image need not be transparent
-    fheroes2::Blit( marketButtonPressed, marketButtonPressedBack );
-
-    fheroes2::ButtonSprite btnMarket( buttonMarketPos.x, buttonMarketPos.y, marketButtonReleased, marketButtonPressedBack );
+    fheroes2::Button btnMarket( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();
@@ -891,6 +878,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         }
         else {
             btnMarket.drawShadow();
+            btnMarket.captureBackground( display );
             btnMarket.draw();
         }
     }

@@ -58,6 +58,7 @@ namespace fheroes2
         bool drawOnRelease( Image & output = Display::instance() );
 
         void drawShadow( Image & output = Display::instance() ) const;
+        void captureBackground( const Image & input = Display::instance() ) const;
 
         Rect area() const;
 
@@ -66,6 +67,7 @@ namespace fheroes2
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
         virtual const Sprite & _getShadow() const;
+        void _restoreBackground( Image & output ) const;
 
     private:
         int32_t _offsetX;
@@ -78,6 +80,7 @@ namespace fheroes2
         mutable const Sprite * _releasedSprite;
         mutable std::unique_ptr<Sprite> _disabledSprite;
         mutable std::unique_ptr<Sprite> _shadowSprite;
+        mutable std::unique_ptr<Sprite> _backgroundSprite;
     };
 
     class Button : public ButtonBase

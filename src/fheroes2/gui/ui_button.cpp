@@ -122,6 +122,9 @@ namespace fheroes2
         if ( !isVisible() )
             return;
 
+        // restore background first if it was captured
+        _restoreBackground( output );
+
         if ( isPressed() ) {
             // button can't be disabled and pressed
             const Sprite & sprite = _getPressed();
@@ -164,6 +167,13 @@ namespace fheroes2
         fheroes2::Blit( shadow, output, _offsetX + shadow.x(), _offsetY + shadow.y() );
     }
 
+    void ButtonBase::captureBackground( const Image & input ) const
+    {
+        const Rect rect = area();
+        const Sprite & bkg = Crop( input, rect.x, rect.y, rect.width, rect.height );
+        _backgroundSprite.reset( new Sprite( bkg ) );
+    }
+
     Rect ButtonBase::area() const
     {
         const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
@@ -190,6 +200,14 @@ namespace fheroes2
             _shadowSprite.reset( new Sprite( shadow ) );
         }
         return *_shadowSprite.get();
+    }
+
+    void ButtonBase::_restoreBackground( Image & out ) const
+    {
+        const Sprite * bkg = _backgroundSprite.get();
+        if ( bkg != nullptr ) {
+            Blit( *bkg, out, bkg->x(), bkg->y() );
+        }
     }
 
     Button::Button( int32_t offsetX, int32_t offsetY )

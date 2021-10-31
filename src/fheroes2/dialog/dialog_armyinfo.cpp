@@ -635,28 +635,18 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
 
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
-    fheroes2::AddTransparency( armyButtonReleased, 36 );
-    fheroes2::AddTransparency( armyButtonPressed, 36 );
+    const int armyButtonIcn = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
+    const fheroes2::Sprite & armyButtonReleased = fheroes2::AGG::GetICN( armyButtonIcn, 0 );
+    const fheroes2::Sprite & armyButtonPressed = fheroes2::AGG::GetICN( armyButtonIcn, 1 );
 
-    const fheroes2::Point buttonHeroPos( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35 );
-
-    fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
-    fheroes2::Copy( display, buttonHeroPos.x, buttonHeroPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
-    fheroes2::Blit( armyButtonReleased, armyButtonReleasedBack );
-
-    fheroes2::Sprite armyButtonPressedBack( armyButtonPressed.width(), armyButtonPressed.height(), armyButtonPressed.x(), armyButtonPressed.y() );
-    fheroes2::Copy( display, buttonHeroPos.x, buttonHeroPos.y, armyButtonPressedBack, 0, 0, armyButtonPressedBack.width(), armyButtonPressedBack.height() );
-    fheroes2::Blit( armyButtonPressed, armyButtonPressedBack );
-
-    fheroes2::ButtonSprite btnHeroes( buttonHeroPos.x, buttonHeroPos.y, armyButtonReleasedBack, armyButtonPressedBack );
+    fheroes2::ButtonSprite btnHeroes( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35, armyButtonReleased, armyButtonPressed );
 
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
     else {
         // TextBox textbox2(_("Not room in\nthe garrison"), Font::SMALL, 100);
         // textbox2.Blit(btnHeroes.x - 35, btnHeroes.y - 30);
+        btnHeroes.captureBackground( display );
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }
@@ -752,38 +742,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-
-    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
-    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
-    fheroes2::AddTransparency( marketButtonReleased, 36 );
-    fheroes2::AddTransparency( marketButtonPressed, 36 );
-
-    const fheroes2::Point buttonMarketPos( pos.x + pos.width / 2 - 60 - 36, posy );
-    fheroes2::Sprite marketButtonReleasedBack( marketButtonReleased.width(), marketButtonReleased.height(), marketButtonReleased.x(), marketButtonReleased.y() );
-    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, 0, 0, marketButtonReleasedBack.width(), marketButtonReleasedBack.height() );
-    fheroes2::Blit( marketButtonReleased, marketButtonReleasedBack );
-
-    fheroes2::Sprite marketButtonPressedBack( marketButtonPressed.width(), marketButtonPressed.height(), marketButtonPressed.x(), marketButtonPressed.y() );
-    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonPressedBack, 0, 0, marketButtonPressedBack.width(), marketButtonPressedBack.height() );
-    fheroes2::Blit( marketButtonPressed, marketButtonPressedBack );
-
-    fheroes2::ButtonSprite btnMarket( buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, marketButtonPressedBack );
-
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
-    fheroes2::AddTransparency( armyButtonReleased, 36 );
-    fheroes2::AddTransparency( armyButtonPressed, 36 );
-
-    const fheroes2::Point buttonArmyPos( pos.x + pos.width / 2 + 60, posy );
-    fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
-    fheroes2::Copy( display, buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
-    fheroes2::Blit( armyButtonReleased, armyButtonReleasedBack );
-
-    fheroes2::Sprite armyButtonPressedBack( armyButtonPressed.width(), armyButtonPressed.height(), armyButtonPressed.x(), armyButtonPressed.y() );
-    fheroes2::Copy( display, buttonArmyPos.x, buttonArmyPos.y, armyButtonPressedBack, 0, 0, armyButtonPressedBack.width(), armyButtonPressedBack.height() );
-    fheroes2::Blit( armyButtonPressed, armyButtonPressedBack );
-
-    fheroes2::ButtonSprite btnHeroes( buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, armyButtonPressedBack );
+    fheroes2::Button btnMarket( pos.x + pos.width / 2 - 60 - 36, posy, isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
+    fheroes2::Button btnHeroes( pos.x + pos.width / 2 + 60, posy, isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON, 0, 1 );
 
     Kingdom & kingdom = hero.GetKingdom();
 
@@ -809,6 +769,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         tsNotEnoughGold.SetText( msg, Font::SMALL );
         tsNotEnoughGold.Show();
         btnMarket.enable();
+        btnMarket.captureBackground( display );
         btnMarket.draw();
     }
 
@@ -824,6 +785,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     else {
         noRoom1.Show();
         noRoom2.Show();
+        btnHeroes.captureBackground( display );
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }
