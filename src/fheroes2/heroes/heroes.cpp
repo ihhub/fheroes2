@@ -1844,7 +1844,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = world.GetMapSeed();
-    fheroes2::hashCombine( hash, id );
+    fheroes2::hashCombine( hash, static_cast<int>( id ) );
     fheroes2::hashCombine( hash, _race );
     fheroes2::hashCombine( hash, attack );
     fheroes2::hashCombine( hash, defense );
