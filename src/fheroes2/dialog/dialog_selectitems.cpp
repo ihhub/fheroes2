@@ -42,12 +42,12 @@ public:
         , ok( false )
     {
         RedrawBackground( rt.getPosition() );
-        ListBox<Item>::SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.width - 25, rt.y + 25 ) );
-        ListBox<Item>::SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.width - 25, rt.y + rt.height - 55 ) );
+        Interface::ListBox<Item>::SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.width - 25, rt.y + 25 ) );
+        Interface::ListBox<Item>::SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.width - 25, rt.y + rt.height - 55 ) );
 
-        ListBox<Item>::SetScrollBar( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( rt.x + rt.width - 21, rt.y + 48, 14, rt.height - 107 ) );
-        ListBox<Item>::SetAreaMaxItems( 5 );
-        ListBox<Item>::SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 ) );
+        Interface::ListBox<Item>::SetScrollBar( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( rt.x + rt.width - 21, rt.y + 48, 14, rt.height - 107 ) );
+        Interface::ListBox<Item>::SetAreaMaxItems( 5 );
+        Interface::ListBox<Item>::SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 ) );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -435,10 +435,10 @@ HeroInfo::Id Dialog::SelectHeroes( const HeroInfo::Id & cur )
     std::vector<HeroInfo::Id> heroes;
 
     if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
-        std::copy( std::cbegin( HeroInfo::priceOfLoyalty ), std::cend( HeroInfo::priceOfLoyalty ), std::back_inserter( heroes ) );
+        std::copy( std::begin( HeroInfo::priceOfLoyalty ), std::end( HeroInfo::priceOfLoyalty ), std::back_inserter( heroes ) );
     }
     else {
-        std::copy( std::cbegin( HeroInfo::successionWars ), std::cend( HeroInfo::successionWars ), std::back_inserter( heroes ) );
+        std::copy( std::begin( HeroInfo::successionWars ), std::end( HeroInfo::successionWars ), std::back_inserter( heroes ) );
     }
 
     listbox.SetListContent( heroes );

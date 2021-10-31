@@ -40,8 +40,8 @@ public:
     HeroInfo::Id GetID1() const;
     HeroInfo::Id GetID2() const;
 
-    Heroes * GetHero1();
-    Heroes * GetHero2();
+    Heroes * GetHero1() const;
+    Heroes * GetHero2() const;
 
     void SetHero1( const Heroes * hero );
     void SetHero2( const Heroes * hero );

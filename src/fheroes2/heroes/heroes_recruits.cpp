@@ -46,12 +46,12 @@ HeroInfo::Id Recruits::GetID2() const
     return heroId2;
 }
 
-Heroes * Recruits::GetHero1()
+Heroes * Recruits::GetHero1() const
 {
     return world.GetHeroes( heroId1 );
 }
 
-Heroes * Recruits::GetHero2()
+Heroes * Recruits::GetHero2() const
 {
     return world.GetHeroes( heroId2 );
 }
