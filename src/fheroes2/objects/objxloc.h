@@ -39,6 +39,9 @@ namespace ObjXlc2
     bool isAction( u32 index );
     bool isShadow( const uint8_t index );
     int GetActionObject( u32 index );
+
+    // Returns true if the index belongs to Reefs type of the object.
+    bool isReefs( const uint8_t index );
 }
 
 namespace ObjXlc3

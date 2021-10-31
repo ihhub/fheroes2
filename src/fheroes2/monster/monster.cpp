@@ -354,6 +354,8 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
             factor = 190;
             break;
         default:
+            // Did you add a new difficulty mode? Add the corresponding case above!
+            assert( 0 );
             break;
         }
 

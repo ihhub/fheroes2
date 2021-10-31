@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,25 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#ifndef H2ZLIB_H
-#define H2ZLIB_H
+class StreamBase;
 
-#include <vector>
-
-#include "image.h"
-#include "serialize.h"
-#include "types.h"
-
-class ZStreamFile : public StreamBuf
+namespace MP2
 {
-public:
-    ZStreamFile() = default;
+    struct mp2tile_t;
+    struct mp2addon_t;
 
-    bool read( const std::string &, size_t offset = 0 );
-    bool write( const std::string &, bool append = false ) const;
-};
+    void loadTile( StreamBase & stream, mp2tile_t & tile );
 
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
-
-#endif
+    void loadAddon( StreamBase & stream, mp2addon_t & addon );
+}
