@@ -1163,49 +1163,37 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::GOOD_ARMY_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-
-                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, 0 );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, 1 );
-                AddTransparency( _icnVsSprite[id][0], 36 );
-                AddTransparency( _icnVsSprite[id][1], 36 );
-
-                return true;
-            }
+            case ICN::GOOD_ARMY_BUTTON:
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, 4 );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, 5 );
+                const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
+                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
+                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
                 AddTransparency( _icnVsSprite[id][0], 36 );
                 AddTransparency( _icnVsSprite[id][1], 36 );
 
                 return true;
             }
-            case ICN::EVIL_ARMY_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-
-                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, 0 );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVEBTNS, 1 );
-                AddTransparency( _icnVsSprite[id][0], 36 );
-                AddTransparency( _icnVsSprite[id][1], 36 );
-
-                return true;
-            }
+            case ICN::EVIL_ARMY_BUTTON:
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, 4 );
+                const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
+                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
                 AddTransparency( _icnVsSprite[id][0], 36 );
 
-                Sprite pressed = GetICN( ICN::ADVEBTNS, 5 );
+                Sprite pressed = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
                 AddTransparency( pressed, 36 );
 
                 Sprite fixed( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
                 fixed.reset();
-                Fill( fixed, 1, 4, 31, 31, 36 ); // the black pixels of the castle on the pressed image need not be transparent
+                // put back pixels that actually should be black
+                Fill( fixed, 1, 4, 31, 31, 36 );
                 Blit( pressed, fixed );
+                // and fix the brown border, while at it
+                DrawLine( fixed, Point( 0, 5 ), Point( 0, 35 ), 36 );
+                DrawLine( fixed, Point( 1, 35 ), Point( 30, 35 ), 36 );
                 _icnVsSprite[id][1] = fixed;
 
                 return true;
