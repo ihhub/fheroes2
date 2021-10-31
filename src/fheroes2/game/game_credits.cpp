@@ -429,7 +429,6 @@ namespace
                      "Paul Romero" ),
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
@@ -541,7 +540,6 @@ namespace
                      "Bruce Schlickbernd" ),
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
