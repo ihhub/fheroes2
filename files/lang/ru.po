@@ -196,17 +196,38 @@ msgstr "Скорость"
 msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
+
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
+msgstr ""
 
 msgid "Grid"
 msgstr "Сетка"
 
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
 msgid "Shadow Movement"
 msgstr "Тень при движении"
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
 msgstr "Тень-курсор"
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
+msgstr ""
 
 msgid "Off"
 msgstr "Выкл."
@@ -293,7 +314,8 @@ msgstr "Удача"
 msgid "Spell Points"
 msgstr "Очки магии"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Опции героя"
 
 msgid "Cast Spell"
@@ -353,8 +375,8 @@ msgstr ""
 "\"Я приму вашу капитуляцию и предоставлю безопасный проход вам и вашим "
 "войскам за %{price} золотом.\""
 
-msgid "View %{monster} info."
-msgstr "Показать информацию для %{monster}."
+msgid "View %{monster} info"
+msgstr "Показать информацию для %{monster}"
 
 msgid "Shoot %{monster}"
 msgstr ""
@@ -370,19 +392,20 @@ msgstr[2] "(осталось %{count} выстрелов)"
 msgid "Attack %{monster}"
 msgstr "Атаковать %{monster}"
 
-msgid "Fly %{monster} here."
-msgstr "Лететь сюда."
+msgid "Fly %{monster} here"
+msgstr "Лететь сюда"
 
-msgid "Move %{monster} here."
-msgstr "Идти сюда."
+msgid "Move %{monster} here"
+msgstr "Идти сюда"
 
 msgid "Turn %{turn}"
 msgstr "Turn %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Телепортироваться сюда"
 
-msgid "Invalid Teleport Destination"
+#, fuzzy
+msgid "Invalid teleport destination"
 msgstr "Неверная цель телепорта"
 
 msgid "Cast %{spell} on %{monster}"
@@ -391,28 +414,50 @@ msgstr "Применить \"%{spell}\" (цель: %{monster})"
 msgid "Cast %{spell}"
 msgstr "Произнести \"%{spell}\""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Выберите цель заклинания"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Информация о баллисте"
 
 msgid "Ballista"
 msgstr "Баллиста"
 
-msgid "Auto combat"
+msgid "Auto Combat"
 msgstr "Автобитва"
 
-msgid "Customize system options."
-msgstr "Изменить настройки системы."
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+#, fuzzy
+msgid "Enable auto combat"
+msgstr "Автобитва"
+
+msgid "Customize system options"
+msgstr "Изменить настройки системы"
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "Wait"
+msgstr ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgstr ""
 
 msgid "Wait this unit"
 msgstr "Подождать"
 
+msgid "Skip"
+msgstr ""
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgstr ""
+
 msgid "Skip this unit"
 msgstr "Пропустить ход"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Просмотреть вражеского героя"
 
 msgid "Hide logs"
@@ -424,11 +469,11 @@ msgstr "Показать журнал"
 msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} использует магию: %{spell}"
 
-msgid "%{name} skip the turn"
-msgstr "%{name} пропускает ход"
+msgid "%{name} skip their turn."
+msgstr "%{name} пропускает ход."
 
-msgid "%{name} wait their turn"
-msgstr "%{name} ждет хода"
+msgid "%{name} wait their turn."
+msgstr "%{name} ждет хода."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} наносит %{damage} урона."
@@ -495,11 +540,11 @@ msgstr "%{name} парализованы Циклопами!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "Архимаги рассеяли хорошую магию с отряда %{name}!"
 
-msgid "Bad luck descends on the %{attacker}"
-msgstr "Удача отвернулась от %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
+msgstr "Удача отвернулась от %{attacker}."
 
-msgid "Good luck shines on the %{attacker}"
-msgstr "Удача улыбнулась %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "Удача улыбнулась %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "Благодаря высокой морали %{monster} атакуют ещё раз."
@@ -510,7 +555,7 @@ msgstr "Из-за низкой морали %{monster} застыли в пан�
 msgid "%{tower} does %{damage} damage."
 msgstr "Башня \"%{tower}\" наносит %{damage} урона."
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr "Фантомный отряд создан!"
 
 msgid "The mirror image is destroyed!"

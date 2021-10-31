@@ -196,18 +196,39 @@ msgstr "Hastighet"
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Besvärjelsekastning"
 
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
+msgstr ""
+
 msgid "Grid"
+msgstr ""
+
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
 msgstr ""
 
 #, fuzzy
 msgid "Shadow Movement"
 msgstr "Fortsätt förflyttning"
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
+msgstr ""
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 #, fuzzy
@@ -298,7 +319,8 @@ msgstr "Tur"
 msgid "Spell Points"
 msgstr "Besvärjelsepoäng"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Hjältealternativ"
 
 msgid "Cast Spell"
@@ -361,8 +383,8 @@ msgstr ""
 "Jag kommer att acceptera din kapitulation och bevilja dig och dina trupper "
 "en säker passage för ett pris på %{price} guld."
 
-msgid "View %{monster} info."
-msgstr "Visa information om %{monster}."
+msgid "View %{monster} info"
+msgstr "Visa information om %{monster}"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -378,19 +400,19 @@ msgstr[1] ""
 msgid "Attack %{monster}"
 msgstr "Attackera %{monster}"
 
-msgid "Fly %{monster} here."
-msgstr "Flyg %{monster} hit."
+msgid "Fly %{monster} here"
+msgstr "Flyg %{monster} hit"
 
-msgid "Move %{monster} here."
-msgstr "Flytta %{monster} hit."
+msgid "Move %{monster} here"
+msgstr "Flytta %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Sväng %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleportera hit"
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr "Ogiltig teleporteringsdestination"
 
 msgid "Cast %{spell} on %{monster}"
@@ -399,28 +421,50 @@ msgstr "Kasta %{spell} på %{monster}"
 msgid "Cast %{spell}"
 msgstr "Kasta %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Välj besvärjelsemåltavla"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr ""
 
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Auto Combat"
+msgstr "Autom. Strid"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Autom. strid"
 
-msgid "Customize system options."
-msgstr "Skräddarsy systeminställningarna."
+msgid "Customize system options"
+msgstr "Skräddarsy systeminställningarna"
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "Wait"
+msgstr ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgstr ""
 
 msgid "Wait this unit"
 msgstr "Vänta denna enhet"
 
+msgid "Skip"
+msgstr ""
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgstr ""
+
 msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Visa motstående hjälte"
 
 msgid "Hide logs"
@@ -434,12 +478,12 @@ msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} Kastar besvärjelse: %{spell}"
 
 #, fuzzy
-msgid "%{name} skip the turn"
-msgstr "%{name} hoppar över rundan"
+msgid "%{name} skip their turn."
+msgstr "%{name} hoppar över rundan."
 
 #, fuzzy
-msgid "%{name} wait their turn"
-msgstr "%{name} inväntar runda"
+msgid "%{name} wait their turn."
+msgstr "%{name} inväntar runda."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} tar %{damage} skada."
@@ -510,12 +554,12 @@ msgstr "%{name} blev paralyserad av Cykloperna!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
-msgstr "Dålig lycka stiger ned på %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
+msgstr "Dålig lycka stiger ned på %{attacker}."
 
 #, fuzzy
-msgid "Good luck shines on the %{attacker}"
-msgstr "God lycka skiner på %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "God lycka skiner på %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "Hög moral låter %{monster} attackera igen."
@@ -528,8 +572,8 @@ msgid "%{tower} does %{damage} damage."
 msgstr "Torn tar %{damage} skada."
 
 #, fuzzy
-msgid "The mirror image is created"
-msgstr "Spegelbild skapad"
+msgid "The mirror image is created."
+msgstr "Spegelbild skapad."
 
 msgid "The mirror image is destroyed!"
 msgstr ""
