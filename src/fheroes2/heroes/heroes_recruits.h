@@ -32,6 +32,12 @@ class StreamBase;
 
 class Recruits
 {
+    HeroInfo::Id heroId1;
+    HeroInfo::Id heroId2;
+
+    friend StreamBase & operator>>( StreamBase & sb, Recruits & rt );
+    friend StreamBase & operator<<( StreamBase & sb, const Recruits & rt );
+
 public:
     Recruits();
 
@@ -45,9 +51,6 @@ public:
 
     void SetHero1( const Heroes * hero );
     void SetHero2( const Heroes * hero );
-
-    HeroInfo::Id heroId1;
-    HeroInfo::Id heroId2;
 };
 
 StreamBase & operator>>( StreamBase & sb, Recruits & rt );
