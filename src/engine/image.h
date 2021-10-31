@@ -250,6 +250,9 @@ namespace fheroes2
     // Use this function only when you need to convert pixel value into transform layer
     void ReplaceColorIdByTransformId( Image & image, uint8_t colorId, uint8_t transformId );
 
+    // Replace transform layer of the output image with the values found in the input image. Both images must be of the same size.
+    void ReplaceTransform( const Image & in, Image & out );
+
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );
 
