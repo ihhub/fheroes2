@@ -29,6 +29,8 @@
 #include "interface_list.h"
 #include "settings.h"
 #include "text.h"
+#include "translations.h"
+#include "ui_text.h"
 
 class SelectEnum : public Interface::ListBox<int>
 {
@@ -113,8 +115,8 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Monster:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Monster:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -148,8 +150,8 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Hero:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Hero:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -173,8 +175,8 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Artifact:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Artifact:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -200,8 +202,8 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Spell:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Spell:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -227,8 +229,8 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Skill:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Skill:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
