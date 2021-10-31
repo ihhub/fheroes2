@@ -916,8 +916,6 @@ int Maps::Tiles::getOriginalPassability() const
     }
 
     if ( isValidReefsSprite( MP2::GetICNObject( objectTileset ), objectIndex ) ) {
-        // If this assertion blows up we miss somewhere the conversion from Stones type to Reefs.
-        assert( objectType == MP2::OBJ_REEFS );
         return 0;
     }
 
