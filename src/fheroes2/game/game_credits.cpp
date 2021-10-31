@@ -350,7 +350,7 @@ namespace
         const fheroes2::FontType nameFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
 
         fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
-        title.draw( ( output.width() -  title.width() ) / 2, 10, output );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
         const int32_t textWidth = 320;
@@ -396,7 +396,8 @@ namespace
         offsetY += title.height( textWidth );
 
         name.set( _( "Paul Rattner\n"
-                     "Debbie Van Caneghem" ), nameFontType );
+                     "Debbie Van Caneghem" ),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -406,7 +407,8 @@ namespace
 
         name.set( _( "George Ruof\n"
                      "Todd Hendrix\n"
-                     "Mark Caldwell" ), nameFontType );
+                     "Mark Caldwell" ),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -424,7 +426,8 @@ namespace
 
         name.set( _( "Rob King\n"
                      "Steve Baca\n"
-                     "Paul Romero" ), nameFontType );
+                     "Paul Romero" ),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -436,7 +439,8 @@ namespace
         offsetY += title.height( textWidth );
 
         name.set( _( "Grant Youngblood\n"
-                     "Kareen Meshagan" ), nameFontType );
+                     "Kareen Meshagan" ),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -471,7 +475,8 @@ namespace
                      "Lieu Pham\n"
                      "Phelan Sykes\n"
                      "Steve Wasaff\n"
-                     "Scott White" ), nameFontType );
+                     "Scott White" ),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
         return output;
@@ -487,7 +492,7 @@ namespace
         const fheroes2::FontType nameFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
 
         fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
-        title.draw( ( output.width() -  title.width() ) / 2, 10, output );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
         const int32_t textWidth = 320;
@@ -514,7 +519,8 @@ namespace
                      "Walter Johnson\n"
                      "Kate McClelland\n"
                      "Timothy Lang\n"
-                     "Bryan Farina" ), nameFontType );
+                     "Bryan Farina" ),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -532,7 +538,8 @@ namespace
 
         name.set( _( "Bryan Farina\n"
                      "Rozita Tolouey\n"
-                     "Bruce Schlickbernd"), nameFontType );
+                     "Bruce Schlickbernd"),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -554,7 +561,8 @@ namespace
                      "Mark Palczynski\n"
                      "Walt Hochbrueckner\n"
                      "Bruce Schlickbernd\n"
-                     "Craig Konas"), nameFontType );
+                     "Craig Konas"),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -565,7 +573,8 @@ namespace
         name.set( _( "Scott McDaniel\n"
                      "Dean Rettig\n"
                      "Ted Chapman\n"
-                     "Dean Frost"), nameFontType );
+                     "Dean Frost"),
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
         return output;
