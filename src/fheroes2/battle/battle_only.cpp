@@ -535,7 +535,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     else {
         StringReplace( message, _( "%{race1} %{name1}" ), _( "Monsters" ) );
     }
-    if ( hero2 ) { 
+    if ( hero2 ) {
         StringReplace( message, "%{name2}", hero2->GetName() );
         StringReplace( message, "%{race2}", std::string( Race::String( hero2->GetRace() ) ) );
     }
