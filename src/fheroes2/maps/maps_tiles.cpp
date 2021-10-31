@@ -138,11 +138,13 @@ namespace
             return true;
         case ICN::STREAM:
         case ICN::OBJNTWBA:
+        case ICN::OBJNXTRA:
         case ICN::ROAD:
         case ICN::EXTRAOVR:
         case ICN::MONS32:
         case ICN::BOAT32:
         case ICN::FLAG32:
+        case ICN::MINIHERO:
             return false;
         default:
             break;
@@ -151,6 +153,11 @@ namespace
         // Did you add a new type of objects into the game?
         assert( 0 );
         return false;
+    }
+
+    bool isValidReefsSprite( const int icn, const uint8_t icnIndex )
+    {
+        return icn == ICN::X_LOC2 && ObjXlc2::isReefs( icnIndex );
     }
 
 #if defined( VERIFY_SHADOW_SPRITES )
@@ -503,7 +510,7 @@ MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const u
             return MP2::OBJ_SIRENS;
         else if ( 46 < icnIndex && icnIndex < 111 )
             return MP2::OBJN_SIRENS;
-        else if ( 110 < icnIndex && icnIndex < 136 )
+        else if ( ObjXlc2::isReefs( icnIndex ) )
             return MP2::OBJ_REEFS;
         break;
 
@@ -728,9 +735,9 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     quantity3 = 0;
     fog_colors = Color::ALL;
 
-    SetTile( mp2.tileIndex, mp2.flags );
+    SetTile( mp2.surfaceType, mp2.flags );
     SetIndex( index );
-    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObject ) );
+    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
     addons_level1.clear();
     addons_level2.clear();
@@ -739,12 +746,12 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     tileIsRoad = ( mp2.objectName1 >> 1 ) & 1;
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
-    if ( mp2.mapObject == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
+    if ( mp2.mapObjectType == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
         objectTileset = mp2.objectName1;
-        objectIndex = mp2.indexName1;
+        objectIndex = mp2.level1IcnImageIndex;
         uniq = mp2.level1ObjectUID;
     }
     AddonsPushLevel2( mp2 );
@@ -906,6 +913,10 @@ int Maps::Tiles::getOriginalPassability() const
     if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
+    }
+
+    if ( isValidReefsSprite( MP2::GetICNObject( objectTileset ), objectIndex ) ) {
+        return 0;
     }
 
     // Objects have fixed passability.
@@ -1084,8 +1095,8 @@ bool Maps::Tiles::isClearGround() const
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName1 && mt.indexName1 < 0xFF ) {
-        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.indexName1 );
+    if ( mt.objectName1 != 0 && mt.level1IcnImageIndex != 0xFF ) {
+        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.level1IcnImageIndex );
     }
 
     // MP2 "objectName" is a bitfield
@@ -1108,8 +1119,8 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName2 && mt.indexName2 < 0xFF ) {
-        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.indexName2 );
+    if ( mt.objectName2 && mt.level2IcnImageIndex != 0xFF ) {
+        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.level2IcnImageIndex );
     }
 }
 
@@ -1817,41 +1828,72 @@ void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up 
         addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
 }
 
-void Maps::Tiles::FixedPreload( Tiles & tile )
+void Maps::Tiles::fixTileObjectType( Tiles & tile )
 {
-    // fix skeleton: left position
-    if ( MP2::GetICNObject( tile.objectTileset ) == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
+    const MP2::MapObjectType originalObjectType = tile.GetObject( false );
+    const int originalICN = MP2::GetICNObject( tile.objectTileset );
+
+    // Left tile of a skeleton on Desert should be mark as non-action tile.
+    if ( originalObjectType == MP2::OBJ_SKELETON && originalICN == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
         tile.SetObject( MP2::OBJN_SKELETON );
+
+        // There is no need to check the rest of things as we fixed this object.
+        return;
     }
 
-    // fix price loyalty objects.
-    if ( Settings::Get().isPriceOfLoyaltySupported() )
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_UNKNW_79:
-        case MP2::OBJ_UNKNW_7A:
-        case MP2::OBJ_UNKNW_F9:
-        case MP2::OBJ_UNKNW_FA: {
-            MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
-            if ( objectType == MP2::OBJ_ZERO ) {
-                // if nothing was found it means there's overlay tile on top of the object; search for it
-                for ( auto it = tile.addons_level2.begin(); it != tile.addons_level2.end(); ++it ) {
-                    objectType = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
-                    if ( objectType != MP2::OBJ_ZERO )
-                        break;
-                }
-            }
+    // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
+    // This is also required in order to properly calculate Reefs' passbility.
+    if ( originalObjectType == MP2::OBJ_STONES && isValidReefsSprite( originalICN, tile.objectIndex ) ) {
+        tile.SetObject( MP2::OBJ_REEFS );
 
-            if ( MP2::OBJ_ZERO != objectType )
-                tile.SetObject( objectType );
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile._index );
-            }
+        // There is no need to check the rest of things as we fixed this object.
+        return;
+    }
+
+    // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
+    switch ( originalObjectType ) {
+    case MP2::OBJ_UNKNW_79:
+    case MP2::OBJ_UNKNW_7A:
+    case MP2::OBJ_UNKNW_F9:
+    case MP2::OBJ_UNKNW_FA: {
+        MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
             break;
         }
 
-        default:
+        // Add-ons of level 1 shouldn't even exist if no top object. However, let's play safe and verify it as well.
+        for ( const TilesAddon & addon : tile.addons_level1 ) {
+            objectType = Maps::Tiles::GetLoyaltyObject( addon.object, addon.index );
+            if ( objectType != MP2::OBJ_ZERO )
+                break;
+        }
+
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
             break;
         }
+
+        for ( const TilesAddon & addon : tile.addons_level2 ) {
+            objectType = Maps::Tiles::GetLoyaltyObject( addon.object, addon.index );
+            if ( objectType != MP2::OBJ_ZERO )
+                break;
+        }
+
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
+            break;
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
+                                                << static_cast<int>( tile.objectIndex ) );
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 /* true: if protection or has guardians */

@@ -28,13 +28,13 @@ payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
 {
     switch ( building ) {
     case BUILD_CASTLE:
-        return { 1000, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case BUILD_TENT:
     case BUILD_STATUE:
-        return { 250, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
     case BUILD_SPEC:
         if ( race == Race::WRLK )
-            return { 500, 0, 0, 0, 0, 0, 0 };
+            return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
         break;
     default:
         break;
@@ -47,27 +47,27 @@ payment_t ProfitConditions::FromArtifact( int artifact )
 {
     switch ( artifact ) {
     case Artifact::TAX_LIEN:
-        return { 250, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
     case Artifact::GOLDEN_GOOSE:
-        return { 10000, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 10000, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_SACK_GOLD:
-        return { 1000, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_BAG_GOLD:
-        return { 750, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_PURSE_GOLD:
-        return { 500, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_POUCH_SULFUR:
-        return { 0, 0, 0, 0, 1, 0, 0 };
+        return payment_t( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
     case Artifact::ENDLESS_VIAL_MERCURY:
-        return { 0, 0, 1, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_POUCH_GEMS:
-        return { 0, 0, 0, 0, 0, 0, 1 };
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
     case Artifact::ENDLESS_CORD_WOOD:
-        return { 0, 1, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 0, 1, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_CART_ORE:
-        return { 0, 0, 0, 1, 0, 0, 0 };
+        return payment_t( cost_t{ 0, 0, 0, 1, 0, 0, 0 } );
     case Artifact::ENDLESS_POUCH_CRYSTAL:
-        return { 0, 0, 0, 0, 0, 1, 0 };
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
     default:
         break;
     }
@@ -79,19 +79,19 @@ payment_t ProfitConditions::FromMine( int type )
 {
     switch ( type ) {
     case Resource::ORE:
-        return { 0, 0, 0, 2, 0, 0, 0 };
+        return payment_t( cost_t{ 0, 0, 0, 2, 0, 0, 0 } );
     case Resource::WOOD:
-        return { 0, 2, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 0, 2, 0, 0, 0, 0, 0 } );
     case Resource::MERCURY:
-        return { 0, 0, 1, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
     case Resource::SULFUR:
-        return { 0, 0, 0, 0, 1, 0, 0 };
+        return payment_t( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
     case Resource::CRYSTAL:
-        return { 0, 0, 0, 0, 0, 1, 0 };
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
     case Resource::GEMS:
-        return { 0, 0, 0, 0, 0, 0, 1 };
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
     case Resource::GOLD:
-        return { 1000, 0, 0, 0, 0, 0, 0 };
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     default:
         break;
     }

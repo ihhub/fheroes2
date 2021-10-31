@@ -101,7 +101,7 @@ namespace Campaign
         return _finishedMaps.back();
     }
 
-    const std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
+    std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
     {
         std::vector<Campaign::CampaignAwardData> obtainedAwards;
 

@@ -1811,7 +1811,9 @@ msgid "Rating"
 msgstr "Hodnocení"
 
 msgid "Map Size"
-msgstr "Velikost mapy"
+msgstr ""
+"Velikost\n"
+"mapy"
 
 msgid "Opponents"
 msgstr "Protivníci"
@@ -3480,7 +3482,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Zombies you spend several hours searching the graves and "
+"You spend several hours searching the graves and "
 "find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
@@ -3493,7 +3495,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Ghosts you spend several hours sifting through the debris "
+"You spend several hours sifting through the debris "
 "and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
@@ -3504,11 +3506,6 @@ msgstr ""
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the ship?"
-msgstr ""
-
-msgid ""
-"Upon defeating the Skeletons you spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""

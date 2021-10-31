@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,24 +18,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ZLIB_H
-#define H2ZLIB_H
-
-#include <vector>
-
-#include "image.h"
+#include "mp2_helper.h"
+#include "mp2.h"
 #include "serialize.h"
-#include "types.h"
 
-class ZStreamFile : public StreamBuf
+namespace MP2
 {
-public:
-    ZStreamFile() = default;
+    void loadTile( StreamBase & stream, mp2tile_t & tile )
+    {
+        tile.surfaceType = stream.getLE16();
+        tile.objectName1 = stream.get();
+        tile.level1IcnImageIndex = stream.get();
+        tile.quantity1 = stream.get();
+        tile.quantity2 = stream.get();
+        tile.objectName2 = stream.get();
+        tile.level2IcnImageIndex = stream.get();
+        tile.flags = stream.get();
+        tile.mapObjectType = stream.get();
+        tile.nextAddonIndex = stream.getLE16();
+        tile.level1ObjectUID = stream.getLE32();
+        tile.level2ObjectUID = stream.getLE32();
+    }
 
-    bool read( const std::string &, size_t offset = 0 );
-    bool write( const std::string &, bool append = false ) const;
-};
-
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
-
-#endif
+    void loadAddon( StreamBase & stream, mp2addon_t & addon )
+    {
+        addon.nextAddonIndex = stream.getLE16();
+        addon.objectNameN1 = stream.get() * 2;
+        addon.indexNameN1 = stream.get();
+        addon.quantityN = stream.get();
+        addon.objectNameN2 = stream.get();
+        addon.indexNameN2 = stream.get();
+        addon.level1ObjectUID = stream.getLE32();
+        addon.level2ObjectUID = stream.getLE32();
+    }
+}
