@@ -1171,7 +1171,6 @@ msgstr "Драконий Меч"
 msgid "Breastplate"
 msgstr "Божественный Доспех"
 
-#, fuzzy (18 char max)
 msgid "Fizbin Medal"
 msgstr "Символ Неудачи"
 
@@ -6657,7 +6656,6 @@ msgstr "Божественный Доспех"
 msgid "Minor Scroll of Knowledge"
 msgstr "Малый Свиток Знания"
 
-#, fuzzy (18 char max)
 msgid "Major Scroll"
 msgstr "Большой Свиток"
 
@@ -6667,7 +6665,6 @@ msgstr "Большой Свиток Знания"
 msgid "Superior Scroll of Knowledge"
 msgstr "Могущественный Свиток Знания"
 
-#, fuzzy (18 char max)
 msgid "Foremost Scroll"
 msgstr "Высший Свиток"
 
