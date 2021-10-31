@@ -1163,6 +1163,22 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::TWNWWEL2: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    if ( _icnVsSprite[id][0].width() == 122 && _icnVsSprite[id][0].height() == 226 ) {
+                        FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
+                    }
+
+                    for ( size_t i = 1; i < 7; i++ ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( original.width() == 121 && original.height() == 151 ) {
+                            FillTransform( original, 0, 0, 64, 39, 1 );
+                        }
+                    }
+                }
+                return true;
+            }
             case ICN::GOOD_ARMY_BUTTON:
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
@@ -1198,7 +1214,6 @@ namespace fheroes2
 
                 return true;
             }
-
             default:
                 break;
             }
