@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "army.h"
+#include "hero_info.h"
 #include "heroes_base.h"
 #include "pairs.h"
 #include "route.h"
@@ -56,94 +57,7 @@ struct HeroSeedsForLevelUp
 class Heroes : public HeroBase, public ColorBase
 {
 public:
-    enum
-    {
-        // knight
-        LORDKILBURN,
-        SIRGALLANTH,
-        ECTOR,
-        GVENNETH,
-        TYRO,
-        AMBROSE,
-        RUBY,
-        MAXIMUS,
-        DIMITRY,
-        // barbarian
-        THUNDAX,
-        FINEOUS,
-        JOJOSH,
-        CRAGHACK,
-        JEZEBEL,
-        JACLYN,
-        ERGON,
-        TSABU,
-        ATLAS,
-        // sorceress
-        ASTRA,
-        NATASHA,
-        TROYAN,
-        VATAWNA,
-        REBECCA,
-        GEM,
-        ARIEL,
-        CARLAWN,
-        LUNA,
-        // warlock
-        ARIE,
-        ALAMAR,
-        VESPER,
-        CRODO,
-        BAROK,
-        KASTORE,
-        AGAR,
-        FALAGAR,
-        WRATHMONT,
-        // wizard
-        MYRA,
-        FLINT,
-        DAWN,
-        HALON,
-        MYRINI,
-        WILFREY,
-        SARAKIN,
-        KALINDRA,
-        MANDIGAL,
-        // necromancer
-        ZOM,
-        DARLANA,
-        ZAM,
-        RANLOO,
-        CHARITY,
-        RIALDO,
-        ROXANA,
-        SANDRO,
-        CELIA,
-        // From The Succession Wars campaign.
-        ROLAND,
-        CORLAGON,
-        ELIZA,
-        ARCHIBALD,
-        HALTON,
-        BAX,
-        // From The Price of Loyalty expansion.
-        SOLMYR,
-        DAINWIN,
-        MOG,
-        UNCLEIVAN,
-        JOSEPH,
-        GALLAVANT,
-        ELDERIAN,
-        CEALLACH,
-        DRAKONIA,
-        MARTINE,
-        JARKONAS,
-        // debugger
-        DEBUG_HERO,
-        UNKNOWN
-    };
-
-    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
-    static const char * GetName( int heroid );
+    static const fheroes2::Sprite & GetPortrait( const HeroInfo::Id & heroId, int type );
 
     enum flags_t
     {
@@ -204,8 +118,8 @@ public:
     };
 
     Heroes();
-    Heroes( int heroid, int rc );
-    Heroes( int heroID, int race, int initialLevel );
+    Heroes( const HeroInfo::Id & heroId, int rc );
+    Heroes( const HeroInfo::Id & heroId, int race, int initialLevel );
 
     bool isValid() const override;
     bool isFreeman( void ) const;
@@ -229,7 +143,7 @@ public:
     const Army & GetArmy() const override;
     Army & GetArmy() override;
 
-    int GetID( void ) const;
+    HeroInfo::Id GetID() const;
 
     double getMeetingValue( const Heroes & otherHero ) const;
     double getRecruitValue() const;
@@ -324,8 +238,8 @@ public:
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     // These methods are used only for AI.
-    bool hasMetWithHero( int heroID ) const;
-    void markHeroMeeting( int heroID );
+    bool hasMetWithHero( const HeroInfo::Id & heroId ) const;
+    void markHeroMeeting( const HeroInfo::Id & heroId );
     void unmarkHeroMeeting();
 
     bool Move( bool fast = false );
@@ -434,8 +348,8 @@ private:
 
     Army army;
 
-    int hid; /* hero id */
-    int portrait; /* hero id */
+    HeroInfo::Id id; /* hero id */
+    HeroInfo::Id portrait; /* hero id */
     int _race;
     int save_maps_object;
 
@@ -468,7 +382,7 @@ private:
 
 struct VecHeroes : public std::vector<Heroes *>
 {
-    Heroes * Get( int /* hero id */ ) const;
+    Heroes * Get( const HeroInfo::Id & heroId ) const;
     Heroes * Get( const fheroes2::Point & ) const;
 };
 

@@ -490,8 +490,8 @@ bool World::LoadMapMP2( const std::string & filename )
                     if ( kingdom.AllowRecruitHero( false, 0 ) ) {
                         Heroes * hero = nullptr;
 
-                        if ( pblock[17] && pblock[18] < Heroes::BAX )
-                            hero = vec_heroes.Get( pblock[18] );
+                        if ( pblock[17] && pblock[18] < static_cast<int>( HeroInfo::Id::BAX ) )
+                            hero = vec_heroes.Get( static_cast<HeroInfo::Id>( pblock[18] ) );
 
                         if ( !hero || !hero->isFreeman() )
                             hero = vec_heroes.GetFreeman( colorRace.second );
@@ -679,7 +679,7 @@ void World::ProcessNewMap()
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
         const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
-        heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
+        heroes_cond_wins = hero ? hero->GetID() : HeroInfo::Id::UNKNOWN;
     }
     if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
         Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
@@ -738,7 +738,7 @@ void World::ProcessNewMap()
         if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
             const fheroes2::Point & cp = castle->GetCenter();
-            Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
+            Heroes * hero = vec_heroes.Get( HeroInfo::Id::DEBUG_HERO );
 
             if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
                 hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );

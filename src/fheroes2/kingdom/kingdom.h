@@ -33,11 +33,11 @@ struct CapturedObjects;
 struct LastLoseHero
 {
     LastLoseHero()
-        : id( Heroes::UNKNOWN )
+        : heroId( HeroInfo::Id::UNKNOWN )
         , date( 0 )
     {}
-    int id;
-    u32 date;
+    HeroInfo::Id heroId;
+    uint32_t date;
 };
 
 struct KingdomCastles : public VecCastles
@@ -71,7 +71,7 @@ public:
     bool AllowRecruitHero( bool check_payment, int level ) const;
 
     void SetLastLostHero( const Heroes & );
-    void ResetLastLostHero( void );
+    void ResetLastLostHero();
 
     void SetLastBattleWinHero( const Heroes & hero );
 
@@ -168,7 +168,7 @@ private:
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
     int color;
-    int _lastBattleWinHeroID;
+    HeroInfo::Id _lastBattleWinHeroID;
     Funds resource;
 
     u32 lost_town_days;

@@ -197,8 +197,8 @@ public:
     const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
     Castle * getCastleEntrance( const fheroes2::Point & tilePosition );
 
-    const Heroes * GetHeroes( int id ) const;
-    Heroes * GetHeroes( int id );
+    const Heroes * GetHeroes( const HeroInfo::Id & heroId ) const;
+    Heroes * GetHeroes( const HeroInfo::Id & heroId );
 
     const Heroes * GetHeroes( const fheroes2::Point & ) const;
     Heroes * GetHeroes( const fheroes2::Point & );
@@ -207,8 +207,8 @@ public:
     Heroes * GetFreemanHeroes( int race = 0 ) const;
     Heroes * GetFreemanHeroesSpecial( int heroID ) const;
 
-    const Heroes * GetHeroesCondWins( void ) const;
-    const Heroes * GetHeroesCondLoss( void ) const;
+    const Heroes * GetHeroesCondWins() const;
+    const Heroes * GetHeroesCondLoss() const;
 
     CastleHeroes GetHeroes( const Castle & ) const;
 
@@ -323,8 +323,8 @@ private:
     Week week_current;
     Week week_next;
 
-    int heroes_cond_wins = Heroes::UNKNOWN;
-    int heroes_cond_loss = Heroes::UNKNOWN;
+    HeroInfo::Id heroes_cond_wins = HeroInfo::Id::UNKNOWN;
+    HeroInfo::Id heroes_cond_loss = HeroInfo::Id::UNKNOWN;
 
     MapActions map_actions;
     MapObjects map_objects;

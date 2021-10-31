@@ -26,46 +26,59 @@
 #include "world.h"
 
 Recruits::Recruits()
-    : std::pair<int, int>( Heroes::UNKNOWN, Heroes::UNKNOWN )
+    : heroId1( HeroInfo::Id::UNKNOWN )
+    , heroId2( HeroInfo::Id::UNKNOWN )
 {}
 
-void Recruits::Reset( void )
+void Recruits::Reset()
 {
-    first = Heroes::UNKNOWN;
-    second = Heroes::UNKNOWN;
+    heroId1 = HeroInfo::Id::UNKNOWN;
+    heroId2 = HeroInfo::Id::UNKNOWN;
 }
 
-int Recruits::GetID1( void ) const
+HeroInfo::Id Recruits::GetID1() const
 {
-    return first;
+    return heroId1;
 }
 
-int Recruits::GetID2( void ) const
+HeroInfo::Id Recruits::GetID2() const
 {
-    return second;
+    return heroId2;
 }
 
-Heroes * Recruits::GetHero1( void )
+Heroes * Recruits::GetHero1()
 {
-    return world.GetHeroes( first );
+    return world.GetHeroes( heroId1 );
 }
 
-Heroes * Recruits::GetHero2( void )
+Heroes * Recruits::GetHero2()
 {
-    return world.GetHeroes( second );
+    return world.GetHeroes( heroId2 );
 }
 
 void Recruits::SetHero1( const Heroes * hero )
 {
-    first = hero ? hero->hid : Heroes::UNKNOWN;
+    heroId1 = hero ? hero->id : HeroInfo::Id::UNKNOWN;
 }
 
 void Recruits::SetHero2( const Heroes * hero )
 {
-    second = hero ? hero->hid : Heroes::UNKNOWN;
+    heroId2 = hero ? hero->id : HeroInfo::Id::UNKNOWN;
 }
 
 StreamBase & operator>>( StreamBase & sb, Recruits & rt )
 {
-    return sb >> rt.first >> rt.second;
+    int heroId1;
+    int heroId2;
+    sb >> heroId1 >> heroId2;
+    rt.heroId1 = static_cast<HeroInfo::Id>( heroId1 );
+    rt.heroId2 = static_cast<HeroInfo::Id>( heroId2 );
+    return sb;
+}
+
+StreamBase & operator<<( StreamBase & sb, const Recruits & rt )
+{
+    const int heroId1 = static_cast<int>( rt.heroId1 );
+    const int heroId2 = static_cast<int>( rt.heroId2 );
+    return sb << heroId1 << heroId2;
 }

@@ -22,7 +22,6 @@
 
 #include <cassert>
 
-#include "heroes.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
@@ -794,156 +793,156 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     return 0;
 }
 
-int ICN::PORTxxxx( int heroId )
+int ICN::PORTxxxx( const HeroInfo::Id heroId )
 {
     switch ( heroId ) {
-    case Heroes::LORDKILBURN:
+    case HeroInfo::Id::LORDKILBURN:
         return ICN::PORT0000;
-    case Heroes::SIRGALLANTH:
+    case HeroInfo::Id::SIRGALLANTH:
         return ICN::PORT0001;
-    case Heroes::ECTOR:
+    case HeroInfo::Id::ECTOR:
         return ICN::PORT0002;
-    case Heroes::GVENNETH:
+    case HeroInfo::Id::GVENNETH:
         return ICN::PORT0003;
-    case Heroes::TYRO:
+    case HeroInfo::Id::TYRO:
         return ICN::PORT0004;
-    case Heroes::AMBROSE:
+    case HeroInfo::Id::AMBROSE:
         return ICN::PORT0005;
-    case Heroes::RUBY:
+    case HeroInfo::Id::RUBY:
         return ICN::PORT0006;
-    case Heroes::MAXIMUS:
+    case HeroInfo::Id::MAXIMUS:
         return ICN::PORT0007;
-    case Heroes::DIMITRY:
+    case HeroInfo::Id::DIMITRY:
         return ICN::PORT0008;
-    case Heroes::THUNDAX:
+    case HeroInfo::Id::THUNDAX:
         return ICN::PORT0009;
-    case Heroes::FINEOUS:
+    case HeroInfo::Id::FINEOUS:
         return ICN::PORT0010;
-    case Heroes::JOJOSH:
+    case HeroInfo::Id::JOJOSH:
         return ICN::PORT0011;
-    case Heroes::CRAGHACK:
+    case HeroInfo::Id::CRAGHACK:
         return ICN::PORT0012;
-    case Heroes::JEZEBEL:
+    case HeroInfo::Id::JEZEBEL:
         return ICN::PORT0013;
-    case Heroes::JACLYN:
+    case HeroInfo::Id::JACLYN:
         return ICN::PORT0014;
-    case Heroes::ERGON:
+    case HeroInfo::Id::ERGON:
         return ICN::PORT0015;
-    case Heroes::TSABU:
+    case HeroInfo::Id::TSABU:
         return ICN::PORT0016;
-    case Heroes::ATLAS:
+    case HeroInfo::Id::ATLAS:
         return ICN::PORT0017;
-    case Heroes::ASTRA:
+    case HeroInfo::Id::ASTRA:
         return ICN::PORT0018;
-    case Heroes::NATASHA:
+    case HeroInfo::Id::NATASHA:
         return ICN::PORT0019;
-    case Heroes::TROYAN:
+    case HeroInfo::Id::TROYAN:
         return ICN::PORT0020;
-    case Heroes::VATAWNA:
+    case HeroInfo::Id::VATAWNA:
         return ICN::PORT0021;
-    case Heroes::REBECCA:
+    case HeroInfo::Id::REBECCA:
         return ICN::PORT0022;
-    case Heroes::GEM:
+    case HeroInfo::Id::GEM:
         return ICN::PORT0023;
-    case Heroes::ARIEL:
+    case HeroInfo::Id::ARIEL:
         return ICN::PORT0024;
-    case Heroes::CARLAWN:
+    case HeroInfo::Id::CARLAWN:
         return ICN::PORT0025;
-    case Heroes::LUNA:
+    case HeroInfo::Id::LUNA:
         return ICN::PORT0026;
-    case Heroes::ARIE:
+    case HeroInfo::Id::ARIE:
         return ICN::PORT0027;
-    case Heroes::ALAMAR:
+    case HeroInfo::Id::ALAMAR:
         return ICN::PORT0028;
-    case Heroes::VESPER:
+    case HeroInfo::Id::VESPER:
         return ICN::PORT0029;
-    case Heroes::CRODO:
+    case HeroInfo::Id::CRODO:
         return ICN::PORT0030;
-    case Heroes::BAROK:
+    case HeroInfo::Id::BAROK:
         return ICN::PORT0031;
-    case Heroes::KASTORE:
+    case HeroInfo::Id::KASTORE:
         return ICN::PORT0032;
-    case Heroes::AGAR:
+    case HeroInfo::Id::AGAR:
         return ICN::PORT0033;
-    case Heroes::FALAGAR:
+    case HeroInfo::Id::FALAGAR:
         return ICN::PORT0034;
-    case Heroes::WRATHMONT:
+    case HeroInfo::Id::WRATHMONT:
         return ICN::PORT0035;
-    case Heroes::MYRA:
+    case HeroInfo::Id::MYRA:
         return ICN::PORT0036;
-    case Heroes::FLINT:
+    case HeroInfo::Id::FLINT:
         return ICN::PORT0037;
-    case Heroes::DAWN:
+    case HeroInfo::Id::DAWN:
         return ICN::PORT0038;
-    case Heroes::HALON:
+    case HeroInfo::Id::HALON:
         return ICN::PORT0039;
-    case Heroes::MYRINI:
+    case HeroInfo::Id::MYRINI:
         return ICN::PORT0040;
-    case Heroes::WILFREY:
+    case HeroInfo::Id::WILFREY:
         return ICN::PORT0041;
-    case Heroes::SARAKIN:
+    case HeroInfo::Id::SARAKIN:
         return ICN::PORT0042;
-    case Heroes::KALINDRA:
+    case HeroInfo::Id::KALINDRA:
         return ICN::PORT0043;
-    case Heroes::MANDIGAL:
+    case HeroInfo::Id::MANDIGAL:
         return ICN::PORT0044;
-    case Heroes::ZOM:
+    case HeroInfo::Id::ZOM:
         return ICN::PORT0045;
-    case Heroes::DARLANA:
+    case HeroInfo::Id::DARLANA:
         return ICN::PORT0046;
-    case Heroes::ZAM:
+    case HeroInfo::Id::ZAM:
         return ICN::PORT0047;
-    case Heroes::RANLOO:
+    case HeroInfo::Id::RANLOO:
         return ICN::PORT0048;
-    case Heroes::CHARITY:
+    case HeroInfo::Id::CHARITY:
         return ICN::PORT0049;
-    case Heroes::RIALDO:
+    case HeroInfo::Id::RIALDO:
         return ICN::PORT0050;
-    case Heroes::ROXANA:
+    case HeroInfo::Id::ROXANA:
         return ICN::PORT0051;
-    case Heroes::SANDRO:
+    case HeroInfo::Id::SANDRO:
         return ICN::PORT0052;
-    case Heroes::CELIA:
+    case HeroInfo::Id::CELIA:
         return ICN::PORT0053;
-    case Heroes::ROLAND:
+    case HeroInfo::Id::ROLAND:
         return ICN::PORT0054;
-    case Heroes::CORLAGON:
+    case HeroInfo::Id::CORLAGON:
         return ICN::PORT0055;
-    case Heroes::ELIZA:
+    case HeroInfo::Id::ELIZA:
         return ICN::PORT0056;
-    case Heroes::ARCHIBALD:
+    case HeroInfo::Id::ARCHIBALD:
         return ICN::PORT0057;
-    case Heroes::HALTON:
+    case HeroInfo::Id::HALTON:
         return ICN::PORT0058;
-    case Heroes::BAX:
+    case HeroInfo::Id::BAX:
         return ICN::PORT0059;
 
-    case Heroes::SOLMYR:
+    case HeroInfo::Id::SOLMYR:
         return ICN::PORT0060;
-    case Heroes::DAINWIN:
+    case HeroInfo::Id::DAINWIN:
         return ICN::PORT0061;
-    case Heroes::MOG:
+    case HeroInfo::Id::MOG:
         return ICN::PORT0062;
-    case Heroes::UNCLEIVAN:
+    case HeroInfo::Id::UNCLEIVAN:
         return ICN::PORT0063;
-    case Heroes::JOSEPH:
+    case HeroInfo::Id::JOSEPH:
         return ICN::PORT0064;
-    case Heroes::GALLAVANT:
+    case HeroInfo::Id::GALLAVANT:
         return ICN::PORT0065;
-    case Heroes::ELDERIAN:
+    case HeroInfo::Id::ELDERIAN:
         return ICN::PORT0066;
-    case Heroes::CEALLACH:
+    case HeroInfo::Id::CEALLACH:
         return ICN::PORT0067;
-    case Heroes::DRAKONIA:
+    case HeroInfo::Id::DRAKONIA:
         return ICN::PORT0068;
-    case Heroes::MARTINE:
+    case HeroInfo::Id::MARTINE:
         return ICN::PORT0069;
-    case Heroes::JARKONAS:
+    case HeroInfo::Id::JARKONAS:
         return ICN::PORT0070;
 
-    case Heroes::DEBUG_HERO:
+    case HeroInfo::Id::DEBUG_HERO:
         return ICN::PORT0059;
-    case Heroes::UNKNOWN:
+    case HeroInfo::Id::UNKNOWN:
         return ICN::UNKNOWN;
 
     default:

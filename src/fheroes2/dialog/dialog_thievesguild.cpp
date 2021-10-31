@@ -185,13 +185,11 @@ void GetIncomesInfo( std::vector<ValueColors> & v, const Colors & colors )
     std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
 }
 
-void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
+void GetBestHeroArmyInfo( std::vector<HeroInfo::Id> & bestHeroes, const Colors & colors )
 {
-    v.clear();
-
-    for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        const Heroes * hero = world.GetKingdom( *color ).GetBestHero();
-        v.emplace_back( ( hero ? hero->GetID() : Heroes::UNKNOWN ), *color );
+    for ( const auto & color : colors ) {
+        const Heroes * hero = world.GetKingdom( color ).GetBestHero();
+        bestHeroes.emplace_back( ( hero ? hero->GetID() : HeroInfo::Id::UNKNOWN ) );
     }
 }
 
@@ -212,15 +210,15 @@ void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos,
     }
 }
 
-void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
+void DrawHeroIcons( std::vector<HeroInfo::Id> & bestHeroes, const fheroes2::Point & pos, const int step )
 {
-    if ( !v.empty() ) {
+    if ( !bestHeroes.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        for ( u32 ii = 0; ii < v.size(); ++ii ) {
-            const Heroes * hero = world.GetHeroes( v[ii].first );
+        int i = 0;
+        for ( const auto & bestHero : bestHeroes ) {
+            const Heroes * hero = world.GetHeroes( bestHero );
             if ( hero ) {
-                int32_t px = pos.x + ii * step;
+                int32_t px = pos.x + i * step;
                 const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
                 fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
 
@@ -228,35 +226,37 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
                 if ( !icon.empty() )
                     fheroes2::Blit( icon, display, px - icon.width() / 2, pos.y );
             }
+            ++i;
         }
     }
 }
 
-void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
+void DrawHeroStats( const std::vector<HeroInfo::Id> & bestHeroes, const fheroes2::Point & pos, const int step )
 {
-    for ( size_t i = 0; i < v.size(); ++i ) {
-        const Heroes * hero = world.GetHeroes( v[i].first );
-        if ( hero == nullptr ) {
-            continue;
-        }
-        const int32_t px = pos.x - 25 + static_cast<int32_t>( i ) * step;
+    int i = 0;
+    for ( const auto & bestHero : bestHeroes ) {
+        const Heroes * hero = world.GetHeroes( bestHero );
+        if ( hero != nullptr ) {
+            const int32_t px = pos.x - 25 + i * step;
 
-        Text text( _( "Att." ), Font::SMALL );
-        text.Blit( px, pos.y );
-        text.Set( std::to_string( hero->GetAttack() ) );
-        text.Blit( px + 50 - text.w(), pos.y );
-        text.Set( _( "Def." ) );
-        text.Blit( px, pos.y + 11 );
-        text.Set( std::to_string( hero->GetDefense() ) );
-        text.Blit( px + 50 - text.w(), pos.y + 11 );
-        text.Set( _( "Power" ), Font::SMALL );
-        text.Blit( px, pos.y + 22 );
-        text.Set( std::to_string( hero->GetPower() ) );
-        text.Blit( px + 50 - text.w(), pos.y + 22 );
-        text.Set( _( "Knowl" ), Font::SMALL );
-        text.Blit( px, pos.y + 33 );
-        text.Set( std::to_string( hero->GetKnowledge() ) );
-        text.Blit( px + 50 - text.w(), pos.y + 33 );
+            Text text( _( "Att." ), Font::SMALL );
+            text.Blit( px, pos.y );
+            text.Set( std::to_string( hero->GetAttack() ) );
+            text.Blit( px + 50 - text.w(), pos.y );
+            text.Set( _( "Def." ) );
+            text.Blit( px, pos.y + 11 );
+            text.Set( std::to_string( hero->GetDefense() ) );
+            text.Blit( px + 50 - text.w(), pos.y + 11 );
+            text.Set( _( "Power" ), Font::SMALL );
+            text.Blit( px, pos.y + 22 );
+            text.Set( std::to_string( hero->GetPower() ) );
+            text.Blit( px + 50 - text.w(), pos.y + 22 );
+            text.Set( _( "Knowl" ), Font::SMALL );
+            text.Blit( px, pos.y + 33 );
+            text.Set( std::to_string( hero->GetKnowledge() ) );
+            text.Blit( px + 50 - text.w(), pos.y + 33 );
+        }
+        ++i;
     }
 }
 
@@ -467,8 +467,10 @@ void Dialog::ThievesGuild( bool oracle )
 
     dst_pt.x = cur_pt.x + startx + 1;
     dst_pt.y -= 2;
-    GetBestHeroArmyInfo( v, colors );
-    DrawHeroIcons( v, dst_pt, stepx );
+
+    std::vector<HeroInfo::Id> bestHeroes;
+    GetBestHeroArmyInfo( bestHeroes, colors );
+    DrawHeroIcons( bestHeroes, dst_pt, stepx );
 
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
@@ -478,7 +480,7 @@ void Dialog::ThievesGuild( bool oracle )
     dst_pt.x = cur_pt.x + startx;
     dst_pt.y -= 13;
     if ( 1 < count )
-        DrawHeroStats( v, dst_pt, stepx );
+        DrawHeroStats( bestHeroes, dst_pt, stepx );
 
     text.Set( _( "Personality:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();

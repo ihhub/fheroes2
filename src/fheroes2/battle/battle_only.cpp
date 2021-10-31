@@ -28,7 +28,8 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
-#include "heroes.h"
+//#include "heroes.h"
+#include "hero_info.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "race.h"
@@ -116,7 +117,7 @@ bool Battle::Only::ChangeSettings( void )
     const fheroes2::Rect rtKnowledge1( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
     const fheroes2::Rect rtKnowledge2( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
 
-    hero1 = world.GetHeroes( Heroes::LORDKILBURN );
+    hero1 = world.GetHeroes( HeroInfo::Id::LORDKILBURN );
     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
     army1 = &hero1->GetArmy();
 
@@ -179,11 +180,11 @@ bool Battle::Only::ChangeSettings( void )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
+            const HeroInfo::Id hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : HeroInfo::Id::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
                 Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
             }
-            else if ( Heroes::UNKNOWN != hid ) {
+            else if ( HeroInfo::Id::UNKNOWN != hid ) {
                 hero1 = world.GetHeroes( hid );
                 if ( hero1 )
                     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
@@ -192,11 +193,11 @@ bool Battle::Only::ChangeSettings( void )
             }
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
-            int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
+            const HeroInfo::Id hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : HeroInfo::Id::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
                 Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
             }
-            else if ( Heroes::UNKNOWN != hid ) {
+            else if ( HeroInfo::Id::UNKNOWN != hid ) {
                 hero2 = world.GetHeroes( hid );
                 if ( hero2 )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );

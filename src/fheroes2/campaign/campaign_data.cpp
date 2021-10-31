@@ -21,6 +21,7 @@
 #include "campaign_data.h"
 #include "artifact.h"
 #include "heroes.h"
+#include "hero_info.h"
 #include "monster.h"
 #include "resource.h"
 #include "spell.h"
@@ -40,7 +41,7 @@ namespace
             obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven Alliance" ) );
             break;
         case 5:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, static_cast<uint32_t>(HeroInfo::Id::ELIZA), 0, 0, _( "Sorceress Guild" ) );
             break;
         case 6:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 );
@@ -49,7 +50,7 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 );
             break;
         case 8:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, static_cast<uint32_t>(HeroInfo::Id::CORLAGON), 0, 9 );
             break;
         }
 
@@ -62,7 +63,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, _( "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, static_cast<uint32_t>(HeroInfo::Id::BAX), 0, 0, _( "Necromancer Guild" ) );
             break;
         case 3:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE );
@@ -103,7 +104,7 @@ namespace
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
 
             // seems that Kraeger is a custom name for Dainwin in this case
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, static_cast<uint32_t>(HeroInfo::Id::DAINWIN), _( "Kraeger defeated" ) );
             break;
         }
 
@@ -132,10 +133,10 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::JOSEPH, 0, 0, _( "Wayward Son" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, static_cast<uint32_t>(HeroInfo::Id::JOSEPH), 0, 0, _( "Wayward Son" ) );
             break;
         case 3:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::UNCLEIVAN, 0, 0, _( "Uncle Ivan" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, static_cast<uint32_t>(HeroInfo::Id::UNCLEIVAN), 0, 0, _( "Uncle Ivan" ) );
             break;
         case 5:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::LEGENDARY_SCEPTER );
@@ -662,9 +663,9 @@ namespace Campaign
         case CampaignAwardData::TYPE_GET_SPELL:
             return Spell( _subType ).GetName();
         case CampaignAwardData::TYPE_HIREABLE_HERO:
-            return Heroes( _subType, 0 ).GetName();
+            return Heroes( static_cast<HeroInfo::Id>( _subType ), 0 ).GetName();
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
-            return Heroes( _subType, 0 ).GetName() + std::string( _( " defeated" ) );
+            return Heroes( static_cast<HeroInfo::Id>( _subType ), 0 ).GetName() + std::string( _( " defeated" ) );
         default:
             assert( 0 ); // some new/unhandled award
             return "";

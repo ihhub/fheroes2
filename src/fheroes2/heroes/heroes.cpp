@@ -56,32 +56,6 @@
 #include "translations.h"
 #include "world.h"
 
-const char * Heroes::GetName( int id )
-{
-    const char * names[]
-        = { // knight
-            _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
-            // barbarian
-            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
-            // sorceress
-            _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
-            // warlock
-            _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
-            // wizard
-            _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
-            // necromant
-            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
-            // campains
-            _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
-            // loyalty version
-            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
-            _( "Martine" ), _( "Jarkonas" ),
-            // debug
-            "Debug Hero", "Unknown" };
-
-    return names[id];
-}
-
 template <std::size_t size>
 int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &objectTypes )[size], const Heroes & hero, std::string * strs )
 {
@@ -129,9 +103,9 @@ Heroes::Heroes()
     : experience( 0 )
     , move_point_scale( -1 )
     , army( this )
-    , hid( UNKNOWN )
-    , portrait( UNKNOWN )
-    , _race( UNKNOWN )
+    , id( HeroInfo::Id::UNKNOWN )
+    , portrait( HeroInfo::Id::UNKNOWN )
+    , _race( Race::NONE )
     , save_maps_object( 0 )
     , path( *this )
     , direction( Direction::RIGHT )
@@ -142,8 +116,8 @@ Heroes::Heroes()
     , _aiRole( Role::HUNTER )
 {}
 
-Heroes::Heroes( int heroID, int race, int initialLevel )
-    : Heroes( heroID, race )
+Heroes::Heroes( const HeroInfo::Id & heroId, int race, int initialLevel )
+    : Heroes( heroId, race )
 {
     // level 1 is technically regarded as 0, so reduce the initial level by 1
     experience = GetExperienceFromLevel( initialLevel - 1 );
@@ -153,15 +127,15 @@ Heroes::Heroes( int heroID, int race, int initialLevel )
     }
 }
 
-Heroes::Heroes( int heroid, int rc )
+Heroes::Heroes( const HeroInfo::Id & heroId, int rc )
     : HeroBase( HeroBase::HEROES, rc )
     , ColorBase( Color::NONE )
     , experience( GetStartingXp() )
     , move_point_scale( -1 )
     , secondary_skills( rc )
     , army( this )
-    , hid( heroid )
-    , portrait( heroid )
+    , id( heroId )
+    , portrait( heroId )
     , _race( rc )
     , save_maps_object( MP2::OBJ_ZERO )
     , path( *this )
@@ -172,14 +146,14 @@ Heroes::Heroes( int heroid, int rc )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
 {
-    name = _( Heroes::GetName( heroid ) );
+    name = HeroInfo::getHeroName( heroId );
 
     // set default army
     army.Reset( true );
 
     // extra hero
-    switch ( hid ) {
-    case DEBUG_HERO:
+    switch ( heroId ) {
+    case HeroInfo::Id::DEBUG_HERO:
         army.Clean();
         army.JoinTroop( Monster::BLACK_DRAGON, 2 );
         army.JoinTroop( Monster::RED_DRAGON, 3 );
@@ -248,11 +222,13 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         SetModes( NOTDEFAULTS );
 
         // index sprite portrait
-        portrait = st.get();
-
-        if ( UNKNOWN <= portrait ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portrait );
-            portrait = hid;
+        const uint8_t portraitId = st.get();
+        if ( HeroInfo::lastId <= portraitId ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portraitId );
+            portrait = id;        
+        }
+        else {
+            portrait = static_cast<HeroInfo::Id>( portraitId );
         }
 
         // fixed race for custom portrait (after level up)
@@ -363,9 +339,9 @@ void Heroes::PostLoad( void )
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) );
 }
 
-int Heroes::GetID( void ) const
+HeroInfo::Id Heroes::GetID() const
 {
-    return hid;
+    return id;
 }
 
 int Heroes::GetRace( void ) const
@@ -875,10 +851,10 @@ void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType objectType,
     }
 }
 
-void Heroes::markHeroMeeting( int heroID )
+void Heroes::markHeroMeeting( const HeroInfo::Id & heroId )
 {
-    if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
-        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+    if ( !hasMetWithHero( heroId ) )
+        visit_object.push_front( IndexObject( static_cast<int32_t>( heroId ), MP2::OBJ_HEROES ) );
 }
 
 void Heroes::unmarkHeroMeeting()
@@ -889,14 +865,14 @@ void Heroes::unmarkHeroMeeting()
             continue;
         }
 
-        hero->visit_object.remove( IndexObject( hid, MP2::OBJ_HEROES ) );
-        visit_object.remove( IndexObject( hero->hid, MP2::OBJ_HEROES ) );
+        hero->visit_object.remove( IndexObject( static_cast<int32_t>( id ), MP2::OBJ_HEROES ) );
+        visit_object.remove( IndexObject( static_cast<int32_t>( hero->id ), MP2::OBJ_HEROES ) );
     }
 }
 
-bool Heroes::hasMetWithHero( int heroID ) const
+bool Heroes::hasMetWithHero( const HeroInfo::Id & heroId ) const
 {
-    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( static_cast<int32_t>( heroId ), MP2::OBJ_HEROES ) );
 }
 
 int Heroes::GetSpriteIndex( void ) const
@@ -1422,9 +1398,9 @@ bool Heroes::MayCastAdventureSpells() const
     return !Modes( GUARDIAN ) && !isFreeman();
 }
 
-bool Heroes::isValid( void ) const
+bool Heroes::isValid() const
 {
-    return hid != UNKNOWN;
+    return id != HeroInfo::Id::UNKNOWN;
 }
 
 bool Heroes::isFreeman( void ) const
@@ -1568,19 +1544,18 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     }
 }
 
-const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
+const fheroes2::Sprite & Heroes::GetPortrait( const HeroInfo::Id & heroId, int type )
 {
-    if ( Heroes::UNKNOWN != id )
-        switch ( type ) {
-        case PORT_BIG:
-            return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
-        case PORT_MEDIUM:
-            return fheroes2::AGG::GetICN( ICN::PORTMEDI, id );
-        case PORT_SMALL:
-            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
-        default:
-            break;
-        }
+    switch ( type ) {
+    case PORT_BIG:
+        return fheroes2::AGG::GetICN( ICN::PORTxxxx( heroId ), 0 );
+    case PORT_MEDIUM:
+        return fheroes2::AGG::GetICN( ICN::PORTMEDI, static_cast<uint32_t>(heroId) );
+    case PORT_SMALL:
+        return fheroes2::AGG::GetICN( ICN::MINIPORT, static_cast<uint32_t>( heroId ) );
+    default:
+        break;
+    }
 
     return fheroes2::AGG::GetICN( -1, 0 );
 }
@@ -1721,67 +1696,8 @@ void AllHeroes::Init( void )
     if ( !empty() )
         AllHeroes::clear();
 
-    // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY
-    for ( u32 hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
-        push_back( new Heroes( hid, Race::KNGT ) );
-
-    // barbarian: THUNDAX, FINEOUS, JOJOSH, CRAGHACK, JEZEBEL, JACLYN, ERGON, TSABU, ATLAS
-    for ( u32 hid = Heroes::THUNDAX; hid <= Heroes::ATLAS; ++hid )
-        push_back( new Heroes( hid, Race::BARB ) );
-
-    // sorceress: ASTRA, NATASHA, TROYAN, VATAWNA, REBECCA, GEM, ARIEL, CARLAWN, LUNA
-    for ( u32 hid = Heroes::ASTRA; hid <= Heroes::LUNA; ++hid )
-        push_back( new Heroes( hid, Race::SORC ) );
-
-    // warlock: ARIE, ALAMAR, VESPER, CRODO, BAROK, KASTORE, AGAR, FALAGAR, WRATHMONT
-    for ( u32 hid = Heroes::ARIE; hid <= Heroes::WRATHMONT; ++hid )
-        push_back( new Heroes( hid, Race::WRLK ) );
-
-    // wizard: MYRA, FLINT, DAWN, HALON, MYRINI, WILFREY, SARAKIN, KALINDRA, MANDIGAL
-    for ( u32 hid = Heroes::MYRA; hid <= Heroes::MANDIGAL; ++hid )
-        push_back( new Heroes( hid, Race::WZRD ) );
-
-    // necromancer: ZOM, DARLANA, ZAM, RANLOO, CHARITY, RIALDO, ROXANA, SANDRO, CELIA
-    for ( u32 hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
-        push_back( new Heroes( hid, Race::NECR ) );
-
-    // from campain
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5 ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5 ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5 ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
-
-    // loyalty version
-    if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
-        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
-        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
-        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
-    }
-    else {
-        // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
-        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i )
-            push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
-    }
-
-    // devel
-    if ( IS_DEVEL() ) {
-        push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
-    }
-    else {
-        push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
-    }
-
-    push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+    for ( const auto & heroId : HeroInfo::all )
+        push_back( new Heroes( heroId, HeroInfo::getHeroRace( heroId ) ) );
 }
 
 void AllHeroes::clear( void )
@@ -1791,10 +1707,9 @@ void AllHeroes::clear( void )
     std::vector<Heroes *>::clear();
 }
 
-Heroes * VecHeroes::Get( int hid ) const
+Heroes * VecHeroes::Get( const HeroInfo::Id & heroId ) const
 {
-    const std::vector<Heroes *> & vec = *this;
-    return 0 <= hid && hid < Heroes::UNKNOWN ? vec[hid] : nullptr;
+    return at( static_cast<std::size_t>( heroId ) );
 }
 
 Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
@@ -1827,71 +1742,69 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 
 Heroes * AllHeroes::GetFreeman( int race ) const
 {
-    int min = Heroes::UNKNOWN;
-    int max = Heroes::UNKNOWN;
+    std::vector<HeroInfo::Id> freeHeroes;
+    freeHeroes.reserve( HEROESMAXCOUNT );
+
+    const auto fillFreeHeroes = [&]( const std::array<HeroInfo::Id, 9> & heroes, const bool noDefaults ) {
+        for ( const auto & heroId : heroes ) {
+            const int id = static_cast<int>( heroId );
+            if ( at( id )->isFreeman() && ( !noDefaults || !at( id )->Modes( Heroes::NOTDEFAULTS ) ) )
+                freeHeroes.push_back( heroId );
+        }
+    };
 
     switch ( race ) {
     case Race::KNGT:
-        min = Heroes::LORDKILBURN;
-        max = Heroes::DIMITRY;
+        fillFreeHeroes( HeroInfo::knight, true );
         break;
 
     case Race::BARB:
-        min = Heroes::THUNDAX;
-        max = Heroes::ATLAS;
+        fillFreeHeroes( HeroInfo::barbarian, true );
         break;
 
     case Race::SORC:
-        min = Heroes::ASTRA;
-        max = Heroes::LUNA;
+        fillFreeHeroes( HeroInfo::sorceress, true );
         break;
 
     case Race::WRLK:
-        min = Heroes::ARIE;
-        max = Heroes::WRATHMONT;
+        fillFreeHeroes( HeroInfo::warlock, true );
         break;
 
     case Race::WZRD:
-        min = Heroes::MYRA;
-        max = Heroes::MANDIGAL;
+        fillFreeHeroes( HeroInfo::wizard, true );
         break;
 
     case Race::NECR:
-        min = Heroes::ZOM;
-        max = Heroes::CELIA;
+        fillFreeHeroes( HeroInfo::necromancer, true );
         break;
 
     default:
-        min = Heroes::LORDKILBURN;
-        max = Heroes::CELIA;
+        fillFreeHeroes( HeroInfo::knight, true );
+        fillFreeHeroes( HeroInfo::barbarian, true );
+        fillFreeHeroes( HeroInfo::sorceress, true );
+        fillFreeHeroes( HeroInfo::warlock, true );
+        fillFreeHeroes( HeroInfo::wizard, true );
+        fillFreeHeroes( HeroInfo::necromancer, true );
         break;
     }
 
-    std::vector<int> freeman_heroes;
-    freeman_heroes.reserve( HEROESMAXCOUNT );
-
-    // find freeman in race (skip: manual changes)
-    for ( int ii = min; ii <= max; ++ii )
-        if ( at( ii )->isFreeman() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
-            freeman_heroes.push_back( ii );
-
     // not found, find any race
-    if ( Race::NONE != race && freeman_heroes.empty() ) {
-        min = Heroes::LORDKILBURN;
-        max = Heroes::CELIA;
-
-        for ( int ii = min; ii <= max; ++ii )
-            if ( at( ii )->isFreeman() )
-                freeman_heroes.push_back( ii );
+    if ( Race::NONE != race && freeHeroes.empty() ) {
+        fillFreeHeroes( HeroInfo::knight, false );
+        fillFreeHeroes( HeroInfo::barbarian, false );
+        fillFreeHeroes( HeroInfo::sorceress, false );
+        fillFreeHeroes( HeroInfo::warlock, false );
+        fillFreeHeroes( HeroInfo::wizard, false );
+        fillFreeHeroes( HeroInfo::necromancer, false );
     }
 
     // not found, all heroes busy
-    if ( freeman_heroes.empty() ) {
+    if ( freeHeroes.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
         return nullptr;
     }
 
-    return at( Rand::Get( freeman_heroes ) );
+    return at( static_cast<std::size_t>( Rand::Get( freeHeroes ) ) );
 }
 
 Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const
@@ -1933,7 +1846,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = world.GetMapSeed();
-    fheroes2::hashCombine( hash, hid );
+    fheroes2::hashCombine( hash, id );
     fheroes2::hashCombine( hash, _race );
     fheroes2::hashCombine( hash, attack );
     fheroes2::hashCombine( hash, defense );
@@ -1953,25 +1866,29 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
 {
-    msg << static_cast<u32>( heroes.size() );
+    const uint32_t size = static_cast<uint32_t>( heroes.size() );
+    msg << size;
 
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        msg << ( *it ? ( *it )->GetID() : Heroes::UNKNOWN );
+    for ( const auto & hero : heroes ) {
+        const uint32_t id = static_cast<uint32_t>( hero ? hero->GetID() : HeroInfo::Id::UNKNOWN );
+        msg << id;
+    }
 
     return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
 {
-    u32 size;
+    uint32_t size;
     msg >> size;
 
     heroes.resize( size, nullptr );
 
-    for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-        u32 hid;
-        msg >> hid;
-        *it = ( hid != Heroes::UNKNOWN ? world.GetHeroes( hid ) : nullptr );
+    for ( auto & hero : heroes ) {
+        uint32_t id;
+        msg >> id;
+        const HeroInfo::Id heroId = static_cast<HeroInfo::Id>( id );
+        hero = ( heroId != HeroInfo::Id::UNKNOWN ? world.GetHeroes( heroId ) : nullptr );
     }
 
     return msg;
@@ -1984,8 +1901,11 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
 
     msg << base;
 
+    const int heroId = static_cast<int>( hero.id );
+    const int portraitId = static_cast<int>( hero.portrait );
+
     // heroes
-    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
+    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << heroId << portraitId
         << hero._race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
@@ -2002,8 +1922,14 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     HeroBase & base = hero;
     ColorBase & col = hero;
 
-    msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait
+    int heroId;
+    int portraitId;
+
+    msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> heroId >> portraitId
         >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
+
+    hero.id = static_cast<HeroInfo::Id>( heroId );
+    hero.portrait = static_cast<HeroInfo::Id>( portraitId );
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

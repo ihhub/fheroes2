@@ -633,14 +633,14 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
 Heroes * Maps::Tiles::GetHeroes( void ) const
 {
-    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
+    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( static_cast<HeroInfo::Id>( heroID - 1 ) ) : nullptr;
 }
 
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
     if ( hero ) {
         hero->SetMapsObject( static_cast<MP2::MapObjectType>( mp2_object ) );
-        heroID = hero->GetID() + 1;
+        heroID = static_cast<int>( hero->GetID() ) + 1;
         SetObject( MP2::OBJ_HEROES );
     }
     else {

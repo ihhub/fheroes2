@@ -1018,13 +1018,15 @@ namespace fheroes2
             }
             case ICN::PORTMEDI: {
                 // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
-                _icnVsSprite[id].resize( HeroInfo::Id::UNKNOWN + 1 );
-                for ( int heroId = 0; heroId < HeroInfo::Id::UNKNOWN + 1; ++heroId ) {
+                const int size = HeroInfo::lastId + 1;
+                _icnVsSprite[id].resize( size );
+                for ( const auto & heroId : HeroInfo::all ) {
                     const int heroIcnId = ICN::PORTxxxx( heroId );
                     const fheroes2::Sprite & original = fheroes2::AGG::GetICN( heroIcnId, 0 );
-                    Sprite out = _icnVsSprite[id][heroId];
+                    std::size_t i = static_cast<std::size_t>( heroId );
+                    Sprite out = _icnVsSprite[id][i];
                     out.resize( 50, 47 );
-                    fheroes2::Resize( original, out, false );
+                    fheroes2::Resize( original, out, false );                
                 }
                 return true;
             }

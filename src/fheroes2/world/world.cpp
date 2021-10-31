@@ -382,8 +382,8 @@ void World::Reset( void )
     week_current = Week( WeekName::TORTOISE );
     week_next = Week::RandomWeek( *this, false, _weekSeed );
 
-    heroes_cond_wins = Heroes::UNKNOWN;
-    heroes_cond_loss = Heroes::UNKNOWN;
+    heroes_cond_wins = HeroInfo::Id::UNKNOWN;
+    heroes_cond_loss = HeroInfo::Id::UNKNOWN;
 
     _seed = 0;
 }
@@ -524,14 +524,14 @@ bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
-Heroes * World::GetHeroes( int id )
+Heroes * World::GetHeroes( const HeroInfo::Id & heroId )
 {
-    return vec_heroes.Get( id );
+    return vec_heroes.Get( heroId );
 }
 
-const Heroes * World::GetHeroes( int id ) const
+const Heroes * World::GetHeroes( const HeroInfo::Id & heroId ) const
 {
-    return vec_heroes.Get( id );
+    return vec_heroes.Get( heroId );
 }
 
 /* get heroes from index maps */
@@ -1118,12 +1118,12 @@ void World::UpdateRecruits( Recruits & recruits ) const
         recruits.SetHero2( nullptr );
 }
 
-const Heroes * World::GetHeroesCondWins( void ) const
+const Heroes * World::GetHeroesCondWins() const
 {
     return GetHeroes( heroes_cond_wins );
 }
 
-const Heroes * World::GetHeroesCondLoss( void ) const
+const Heroes * World::GetHeroesCondLoss() const
 {
     return GetHeroes( heroes_cond_loss );
 }
@@ -1144,7 +1144,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
 
     case GameOver::WINS_HERO: {
         const Heroes * hero = GetHeroesCondWins();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_wins && hero->isFreeman() && hero->GetKillerColor() == kingdom.GetColor() );
+        return ( hero && HeroInfo::Id::UNKNOWN != heroes_cond_wins && hero->isFreeman() && hero->GetKillerColor() == kingdom.GetColor() );
     }
 
     case GameOver::WINS_ARTIFACT: {
@@ -1201,7 +1201,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 
     case GameOver::LOSS_HERO: {
         const Heroes * hero = GetHeroesCondLoss();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
+        return ( hero && HeroInfo::Id::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
     }
 
     case GameOver::LOSS_TIME:
@@ -1452,8 +1452,11 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t width = static_cast<uint16_t>( w.width );
     const uint16_t height = static_cast<uint16_t>( w.height );
 
+    const int heroes_cond_wins = static_cast<int>( w.heroes_cond_wins );
+    const int heroes_cond_loss = static_cast<int>( w.heroes_cond_loss );
+
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
+               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << heroes_cond_wins << heroes_cond_loss << w.map_actions
                << w.map_objects << w._seed;
 }
 
@@ -1467,8 +1470,14 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
+    int heroes_cond_wins;
+    int heroes_cond_loss;
+
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.week_current >> w.week_next >> heroes_cond_wins >> heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+
+    w.heroes_cond_wins = static_cast<HeroInfo::Id>( heroes_cond_wins );
+    w.heroes_cond_loss = static_cast<HeroInfo::Id>( heroes_cond_loss );
 
     w.PostLoad( false );
 

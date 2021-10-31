@@ -54,7 +54,7 @@ bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 
 Kingdom::Kingdom()
     : color( Color::NONE )
-    , _lastBattleWinHeroID( 0 )
+    , _lastBattleWinHeroID( HeroInfo::Id::UNKNOWN )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
     , _topItemInKingdomView( -1 )
@@ -452,14 +452,14 @@ u32 Kingdom::GetLostTownDays( void ) const
 Recruits & Kingdom::GetRecruits( void )
 {
     // update hero1
-    if ( Heroes::UNKNOWN == recruits.GetID1() || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
-        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    if ( HeroInfo::Id::UNKNOWN == recruits.GetID1() || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
+        const bool preferNative = recruits.GetID1() == HeroInfo::Id::UNKNOWN && recruits.GetID2() == HeroInfo::Id::UNKNOWN;
 
         recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
     }
 
     // update hero2
-    if ( Heroes::UNKNOWN == recruits.GetID2() || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) )
+    if ( HeroInfo::Id::UNKNOWN == recruits.GetID2() || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) )
         recruits.SetHero2( world.GetFreemanHeroes() );
 
     if ( recruits.GetID1() == recruits.GetID2() )
@@ -479,7 +479,7 @@ void Kingdom::UpdateRecruits( void )
                 continue;
 
             // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
-            const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+            const Heroes * hero = world.GetHeroes( static_cast<HeroInfo::Id>(obtainedAwards[i]._subType) );
 
             if ( hero && hero->isFreeman() ) {
                 recruits.SetHero1( hero );
@@ -490,7 +490,7 @@ void Kingdom::UpdateRecruits( void )
     }
 
     if ( !hasSpecialHireableHero ) {
-        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+        const bool preferNative = recruits.GetID1() == HeroInfo::Id::UNKNOWN && recruits.GetID2() == HeroInfo::Id::UNKNOWN;
         recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
     }
 
@@ -738,7 +738,7 @@ Kingdom & Kingdoms::GetKingdom( int color )
 
 void Kingdom::SetLastLostHero( const Heroes & hero )
 {
-    lost_hero.id = hero.GetID();
+    lost_hero.heroId = hero.GetID();
     lost_hero.date = world.CountDay();
 }
 
@@ -747,20 +747,20 @@ void Kingdom::SetLastBattleWinHero( const Heroes & hero )
     _lastBattleWinHeroID = hero.GetID();
 }
 
-void Kingdom::ResetLastLostHero( void )
+void Kingdom::ResetLastLostHero()
 {
-    lost_hero.id = Heroes::UNKNOWN;
+    lost_hero.heroId = HeroInfo::Id::UNKNOWN;
     lost_hero.date = 0;
 }
 
 Heroes * Kingdom::GetLastLostHero( void ) const
 {
-    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : nullptr;
+    return HeroInfo::Id::UNKNOWN != lost_hero.heroId && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.heroId ) : nullptr;
 }
 
 Heroes * Kingdom::GetLastBattleWinHero() const
 {
-    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
+    return HeroInfo::Id::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
 void Kingdoms::NewDay( void )
@@ -904,15 +904,20 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
+    const int _lastBattleWinHeroID = static_cast<int>( kingdom._lastBattleWinHeroID );
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss
-               << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
+               << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss << _lastBattleWinHeroID
+               << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
+    int _lastBattleWinHeroID;
+
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
-        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> _lastBattleWinHeroID;
+
+    kingdom._lastBattleWinHeroID = static_cast<HeroInfo::Id>( _lastBattleWinHeroID );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
@@ -947,12 +952,19 @@ StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & sb, LastLoseHero & st )
+StreamBase & operator>>( StreamBase & sb, LastLoseHero & hero )
 {
-    return sb >> st.id >> st.date;
+    int id;
+    uint32_t date;
+    sb >> id >> date;
+    hero.heroId = static_cast<HeroInfo::Id>( id );
+    hero.date = date;
+    return sb;
 }
 
 StreamBase & operator<<( StreamBase & sb, const LastLoseHero & hero )
 {
-    return sb << hero.id << hero.date;
+    const int id = static_cast<int>( hero.heroId );
+    const uint32_t date = hero.date;
+    return sb << id << date;
 }

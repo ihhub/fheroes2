@@ -23,6 +23,7 @@
 #ifndef H2ICN_H
 #define H2ICN_H
 
+#include "hero_info.h"
 #include "types.h"
 
 namespace ICN
@@ -961,7 +962,7 @@ namespace ICN
     const char * GetString( int );
     u32 AnimationFrame( int icn, u32, u32, bool = false );
     bool HighlyObjectSprite( int icn, u32 );
-    int PORTxxxx( int heroId );
+    int PORTxxxx( const HeroInfo::Id );
 
     int Get4Captain( int race );
     int Get4Building( int race );

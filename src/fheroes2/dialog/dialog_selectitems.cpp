@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <iterator>
+
 #include "dialog_selectitems.h"
 #include "agg_image.h"
 #include "army_troop.h"
@@ -30,11 +32,12 @@
 #include "settings.h"
 #include "text.h"
 
-class SelectEnum : public Interface::ListBox<int>
+template <class Item>
+class SelectEnum : public Interface::ListBox<Item>
 {
 public:
     explicit SelectEnum( const fheroes2::Rect & rt )
-        : Interface::ListBox<int>( rt.getPosition() )
+        : Interface::ListBox<Item>( rt.getPosition() )
         , area( rt )
         , ok( false )
     {
@@ -61,12 +64,12 @@ public:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + area.width - 25, dst.y + area.height - 74 );
     }
 
-    void ActionListDoubleClick( int & /*index*/ ) override
+    void ActionListDoubleClick( Item & /*index*/ ) override
     {
         ok = true;
     }
 
-    void RedrawItem( const int &, s32, s32, bool ) override
+    void RedrawItem( const Item &, s32, s32, bool ) override
     {
         // Do nothing.
     }
@@ -81,12 +84,12 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( int & ) override
+    void ActionListSingleClick( Item & ) override
     {
         // Do nothing.
     }
 
-    void ActionListPressRight( int & ) override
+    void ActionListPressRight( Item & ) override
     {
         // Do nothing.
     }
@@ -95,7 +98,7 @@ public:
     bool ok;
 };
 
-class SelectEnumMonster : public SelectEnum
+class SelectEnumMonster : public SelectEnum<int>
 {
 public:
     explicit SelectEnumMonster( const fheroes2::Rect & rt )
@@ -126,7 +129,7 @@ public:
     }
 };
 
-class SelectEnumHeroes : public SelectEnum
+class SelectEnumHeroes : public SelectEnum<HeroInfo::Id>
 {
 public:
     explicit SelectEnumHeroes( const fheroes2::Rect & rt )
@@ -135,14 +138,14 @@ public:
         SetAreaMaxItems( 6 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const HeroInfo::Id & index, s32 dstx, s32 dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
         if ( !port.empty() )
             fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( Heroes::GetName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        Text text( HeroInfo::getHeroName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 5 );
     }
 
@@ -155,7 +158,7 @@ public:
     }
 };
 
-class SelectEnumArtifact : public SelectEnum
+class SelectEnumArtifact : public SelectEnum<int>
 {
 public:
     explicit SelectEnumArtifact( const fheroes2::Rect & rt )
@@ -180,7 +183,7 @@ public:
     }
 };
 
-class SelectEnumSpell : public SelectEnum
+class SelectEnumSpell : public SelectEnum<int>
 {
 public:
     explicit SelectEnumSpell( const fheroes2::Rect & rt )
@@ -207,7 +210,7 @@ public:
     }
 };
 
-class SelectEnumSecSkill : public SelectEnum
+class SelectEnumSecSkill : public SelectEnum<int>
 {
 public:
     explicit SelectEnumSecSkill( const fheroes2::Rect & rt )
@@ -416,7 +419,7 @@ Monster Dialog::SelectMonster( int id )
     return result == Dialog::OK || listbox.ok ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
 }
 
-int Dialog::SelectHeroes( int cur )
+HeroInfo::Id Dialog::SelectHeroes( const HeroInfo::Id & cur )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -424,18 +427,22 @@ int Dialog::SelectHeroes( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::DEBUG_HERO : Heroes::SOLMYR ), Heroes::UNKNOWN );
-
-    for ( size_t i = 0; i < heroes.size(); ++i )
-        heroes[i] = static_cast<int>( i ); // safe to do this as the heroes of spells can't be more than 2 billion
-
     Dialog::FrameBorder frameborder( fheroes2::Size( 240, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
 
     SelectEnumHeroes listbox( area );
 
+    std::vector<HeroInfo::Id> heroes;
+
+    if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
+        std::copy( std::cbegin( HeroInfo::priceOfLoyalty ), std::cend( HeroInfo::priceOfLoyalty ), std::back_inserter( heroes ) );
+    }
+    else {
+        std::copy( std::cbegin( HeroInfo::successionWars ), std::cend( HeroInfo::successionWars ), std::back_inserter( heroes ) );
+    }
+
     listbox.SetListContent( heroes );
-    if ( cur != Heroes::UNKNOWN )
+    if ( cur != HeroInfo::Id::UNKNOWN )
         listbox.SetCurrent( cur );
     listbox.Redraw();
 
@@ -457,5 +464,5 @@ int Dialog::SelectHeroes( int cur )
         display.render();
     }
 
-    return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : Heroes::UNKNOWN;
+    return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : HeroInfo::Id::UNKNOWN;
 }

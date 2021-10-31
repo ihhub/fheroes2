@@ -21,12 +21,11 @@
 #ifndef HERO_INFO_H
 #define HERO_INFO_H
 
+#include <array>
+
 namespace HeroInfo
 {
-    const char * getHeroName( const int heroId );
-    int getHeroRace( const int heroId );
-
-    enum Id : int
+    enum class Id : int
     {
         // knight
         LORDKILBURN,
@@ -112,6 +111,49 @@ namespace HeroInfo
         UNKNOWN
     };
 
+    constexpr std::array<Id, 9> knight = { Id::LORDKILBURN, Id::SIRGALLANTH, Id::ECTOR, Id::GVENNETH, Id::TYRO, Id::AMBROSE, Id::RUBY, Id::MAXIMUS, Id::DIMITRY };
+
+    constexpr std::array<Id, 9> barbarian = { Id::THUNDAX, Id::FINEOUS, Id::JOJOSH, Id::CRAGHACK, Id::JEZEBEL, Id::JACLYN, Id::ERGON, Id::TSABU, Id::ATLAS };
+
+    constexpr std::array<Id, 9> sorceress = { Id::ASTRA, Id::NATASHA, Id::TROYAN, Id::VATAWNA, Id::REBECCA, Id::GEM, Id::ARIEL, Id::CARLAWN, Id::LUNA };
+
+    constexpr std::array<Id, 9> warlock = { Id::ARIE, Id::ALAMAR, Id::VESPER, Id::CRODO, Id::BAROK, Id::KASTORE, Id::AGAR, Id::FALAGAR, Id::WRATHMONT };
+
+    constexpr std::array<Id, 9> wizard = { Id::MYRA, Id::FLINT, Id::DAWN, Id::HALON, Id::MYRINI, Id::WILFREY, Id::SARAKIN, Id::KALINDRA, Id::MANDIGAL };
+
+    constexpr std::array<Id, 9> necromancer = { Id::ZOM, Id::DARLANA, Id::ZAM, Id::RANLOO, Id::CHARITY, Id::RIALDO, Id::ROXANA, Id::SANDRO };
+
+    constexpr std::array<Id, 60> successionWars
+        = { Id::LORDKILBURN, Id::SIRGALLANTH, Id::ECTOR,    Id::GVENNETH, Id::TYRO,     Id::AMBROSE,   Id::RUBY,    Id::MAXIMUS,   Id::DIMITRY, Id::THUNDAX,
+            Id::FINEOUS,     Id::JOJOSH,      Id::CRAGHACK, Id::JEZEBEL,  Id::JACLYN,   Id::ERGON,     Id::TSABU,   Id::ATLAS,     Id::ASTRA,   Id::NATASHA,
+            Id::TROYAN,      Id::VATAWNA,     Id::REBECCA,  Id::GEM,      Id::ARIEL,    Id::CARLAWN,   Id::LUNA,    Id::ARIE,      Id::ALAMAR,  Id::VESPER,
+            Id::CRODO,       Id::BAROK,       Id::KASTORE,  Id::AGAR,     Id::FALAGAR,  Id::WRATHMONT, Id::MYRA,    Id::FLINT,     Id::DAWN,    Id::HALON,
+            Id::MYRINI,      Id::WILFREY,     Id::SARAKIN,  Id::KALINDRA, Id::MANDIGAL, Id::ZOM,       Id::DARLANA, Id::ZAM,       Id::RANLOO,  Id::CHARITY,
+            Id::RIALDO,      Id::ROXANA,      Id::SANDRO,   Id::CELIA,    Id::ROLAND,   Id::CORLAGON,  Id::ELIZA,   Id::ARCHIBALD, Id::HALTON,  Id::BAX };
+
+    constexpr std::array<Id, 71> priceOfLoyalty
+        = { Id::LORDKILBURN, Id::SIRGALLANTH, Id::ECTOR,     Id::GVENNETH, Id::TYRO,    Id::AMBROSE, Id::RUBY,    Id::MAXIMUS, Id::DIMITRY,   Id::THUNDAX, Id::FINEOUS,
+            Id::JOJOSH,      Id::CRAGHACK,    Id::JEZEBEL,   Id::JACLYN,   Id::ERGON,   Id::TSABU,   Id::ATLAS,   Id::ASTRA,   Id::NATASHA,   Id::TROYAN,  Id::VATAWNA,
+            Id::REBECCA,     Id::GEM,         Id::ARIEL,     Id::CARLAWN,  Id::LUNA,    Id::ARIE,    Id::ALAMAR,  Id::VESPER,  Id::CRODO,     Id::BAROK,   Id::KASTORE,
+            Id::AGAR,        Id::FALAGAR,     Id::WRATHMONT, Id::MYRA,     Id::FLINT,   Id::DAWN,    Id::HALON,   Id::MYRINI,  Id::WILFREY,   Id::SARAKIN, Id::KALINDRA,
+            Id::MANDIGAL,    Id::ZOM,         Id::DARLANA,   Id::ZAM,      Id::RANLOO,  Id::CHARITY, Id::RIALDO,  Id::ROXANA,  Id::SANDRO,    Id::CELIA,   Id::ROLAND,
+            Id::CORLAGON,    Id::ELIZA,       Id::ARCHIBALD, Id::HALTON,   Id::BAX,     Id::SOLMYR,  Id::DAINWIN, Id::MOG,     Id::UNCLEIVAN, Id::JOSEPH,  Id::GALLAVANT,
+            Id::ELDERIAN,    Id::CEALLACH,    Id::DRAKONIA,  Id::MARTINE,  Id::JARKONAS };
+
+    constexpr std::array<Id, 73> all
+        = { Id::LORDKILBURN, Id::SIRGALLANTH, Id::ECTOR,    Id::GVENNETH,  Id::TYRO,     Id::AMBROSE,   Id::RUBY,     Id::MAXIMUS,   Id::DIMITRY,  Id::THUNDAX,
+            Id::FINEOUS,     Id::JOJOSH,      Id::CRAGHACK, Id::JEZEBEL,   Id::JACLYN,   Id::ERGON,     Id::TSABU,    Id::ATLAS,     Id::ASTRA,    Id::NATASHA,
+            Id::TROYAN,      Id::VATAWNA,     Id::REBECCA,  Id::GEM,       Id::ARIEL,    Id::CARLAWN,   Id::LUNA,     Id::ARIE,      Id::ALAMAR,   Id::VESPER,
+            Id::CRODO,       Id::BAROK,       Id::KASTORE,  Id::AGAR,      Id::FALAGAR,  Id::WRATHMONT, Id::MYRA,     Id::FLINT,     Id::DAWN,     Id::HALON,
+            Id::MYRINI,      Id::WILFREY,     Id::SARAKIN,  Id::KALINDRA,  Id::MANDIGAL, Id::ZOM,       Id::DARLANA,  Id::ZAM,       Id::RANLOO,   Id::CHARITY,
+            Id::RIALDO,      Id::ROXANA,      Id::SANDRO,   Id::CELIA,     Id::ROLAND,   Id::CORLAGON,  Id::ELIZA,    Id::ARCHIBALD, Id::HALTON,   Id::BAX,
+            Id::SOLMYR,      Id::DAINWIN,     Id::MOG,      Id::UNCLEIVAN, Id::JOSEPH,   Id::GALLAVANT, Id::ELDERIAN, Id::CEALLACH,  Id::DRAKONIA, Id::MARTINE,
+            Id::JARKONAS,    Id::DEBUG_HERO,  Id::UNKNOWN };
+
+    constexpr int lastId = static_cast<int>( Id::UNKNOWN );
+
+    const char * getHeroName( const HeroInfo::Id & heroId );
+    int getHeroRace( const HeroInfo::Id & heroId );
 }
 
 #endif

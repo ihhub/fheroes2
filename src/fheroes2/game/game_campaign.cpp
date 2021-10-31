@@ -307,13 +307,12 @@ namespace
                 for ( const Player * player : sortedPlayers ) {
                     Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                     const KingdomHeroes & heroes = kingdom.GetHeroes();
-
-                    for ( size_t j = 0; j < heroes.size(); ++j ) {
-                        if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
-                            heroes[j]->SetKillerColor( humanKingdom.GetColor() );
-                            heroes[j]->SetFreeman( Battle::RESULT_LOSS );
+                    for ( const auto & hero : heroes ) {
+                        if ( hero->GetID() == static_cast<HeroInfo::Id>( awards[i]._subType ) ) {
+                            hero->SetKillerColor( humanKingdom.GetColor() );
+                            hero->SetFreeman( Battle::RESULT_LOSS );
                             break;
-                        }
+                        }                    
                     }
                 }
                 break;

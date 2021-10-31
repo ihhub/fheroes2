@@ -23,28 +23,34 @@
 #ifndef H2RECRUITS_H
 #define H2RECRUITS_H
 
+#include "hero_info.h"
+
 #include <utility>
 
 class Heroes;
 class StreamBase;
 
-class Recruits : public std::pair<int, int>
+class Recruits
 {
 public:
     Recruits();
 
-    void Reset( void );
+    void Reset();
 
-    int GetID1( void ) const;
-    int GetID2( void ) const;
+    HeroInfo::Id GetID1() const;
+    HeroInfo::Id GetID2() const;
 
-    Heroes * GetHero1( void );
-    Heroes * GetHero2( void );
+    Heroes * GetHero1();
+    Heroes * GetHero2();
 
-    void SetHero1( const Heroes * );
-    void SetHero2( const Heroes * );
+    void SetHero1( const Heroes * hero );
+    void SetHero2( const Heroes * hero );
+
+    HeroInfo::Id heroId1;
+    HeroInfo::Id heroId2;
 };
 
-StreamBase & operator>>( StreamBase &, Recruits & );
+StreamBase & operator>>( StreamBase & sb, Recruits & rt );
+StreamBase & operator<<( StreamBase & sb, const Recruits & rt );
 
 #endif

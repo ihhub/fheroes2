@@ -19,132 +19,57 @@
  ***************************************************************************/
 
 #include <array>
+#include <cassert>
 #include <string>
 
 #include "hero_info.h"
 #include "race.h"
 #include "translations.h"
 
-const char * HeroInfo::getHeroName( const int heroId )
+namespace HeroInfo
 {
-    const std::array<const char *, 73> names
-        = { // knight
-            _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
-            // barbarian
-            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
-            // sorceress
-            _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
-            // warlock
-            _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
-            // wizard
-            _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
-            // necromant
-            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
-            // campains
-            _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
-            // loyalty version
-            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
-            _( "Martine" ), _( "Jarkonas" ),
-            // debug
-            "Debug Hero", "Unknown" };
-
-    return names[heroId];
-}
-
-int HeroInfo::getHeroRace( const int heroId )
-{
-    constexpr std::array<int, 73> races = {
-        // knight
-        Race::KNGT, // LORDKILBURN
-        Race::KNGT, // SIRGALLANTH
-        Race::KNGT, // ECTOR
-        Race::KNGT, // GVENNETH
-        Race::KNGT, // TYRO
-        Race::KNGT, // AMBROSE
-        Race::KNGT, // RUBY
-        Race::KNGT, // MAXIMUS
-        Race::KNGT, // DIMITRY
-
-        // barbarian
-        Race::BARB, // THUNDAX
-        Race::BARB, // FINEOUS
-        Race::BARB, // JOJOSH
-        Race::BARB, // CRAGHACK
-        Race::BARB, // JEZEBEL
-        Race::BARB, // JACLYN
-        Race::BARB, // ERGON
-        Race::BARB, // TSABU
-        Race::BARB, // ATLAS
-
-        // sorceress
-        Race::SORC, // ASTRA
-        Race::SORC, // NATASHA
-        Race::SORC, // TROYAN
-        Race::SORC, // VATAWNA
-        Race::SORC, // REBECCA
-        Race::SORC, // GEM
-        Race::SORC, // ARIEL
-        Race::SORC, // CARLAWN
-        Race::SORC, // LUNA
-
-        // warlock
-        Race::WRLK, // ARIE
-        Race::WRLK, // ALAMAR
-        Race::WRLK, // VESPER
-        Race::WRLK, // CRODO
-        Race::WRLK, // BAROK
-        Race::WRLK, // KASTORE
-        Race::WRLK, // AGAR
-        Race::WRLK, // FALAGAR
-        Race::WRLK, // WRATHMONT
-
-        // wizard
-        Race::WZRD, // MYRA
-        Race::WZRD, // FLINT
-        Race::WZRD, // DAWN
-        Race::WZRD, // HALON
-        Race::WZRD, // MYRINI
-        Race::WZRD, // WILFREY
-        Race::WZRD, // SARAKIN
-        Race::WZRD, // KALINDRA
-        Race::WZRD, // MANDIGAL
-
-        // necromancer
-        Race::NECR, // ZOM
-        Race::NECR, // DARLANA
-        Race::NECR, // ZAM
-        Race::NECR, // RANLOO
-        Race::NECR, // CHARITY
-        Race::NECR, // RIALDO
-        Race::NECR, // ROXANA
-        Race::NECR, // SANDRO
-        Race::NECR, // CELIA
-
-        // from campain
-        Race::WZRD, // ROLAND
-        Race::KNGT, // CORLAGON
-        Race::SORC, // ELIZA
-        Race::WRLK, // ARCHIBALD
-        Race::KNGT, // HALTON
-        Race::NECR, // BAX
-
-        // loyalty version
-        Race::WZRD, // SOLMYR
-        Race::WRLK, // DAINWIN
-        Race::NECR, // MOG
-        Race::BARB, // UNCLEIVAN
-        Race::KNGT, // JOSEPH
-        Race::KNGT, // GALLAVANT
-        Race::WRLK, // ELDERIAN
-        Race::KNGT, // CEALLACH
-        Race::WZRD, // DRAKONIA
-        Race::SORC, // MARTINE
-        Race::BARB, // JARKONAS
-
-        // devel
-        Race::WRLK, // DEBUG_HERO
-        Race::KNGT // UNKNOWN
+    struct HeroType
+    {
+        const char * name;
+        int race;
     };
 
-    return races[heroId];
+    constexpr std::array<HeroType, 73> heroTypes = {
+        { { "Lord Kilburn", Race::KNGT }, { "Sir Gallant", Race::KNGT },   { "Ector", Race::KNGT },        { "Gwenneth", Race::KNGT },   { "Tyro", Race::KNGT },
+          { "Ambrose", Race::KNGT },      { "Ruby", Race::KNGT },          { "Maximus", Race::KNGT },      { "Dimitry", Race::KNGT },
+
+          { "Thundax", Race::BARB },      { "Fineous", Race::BARB },       { "Jojosh", Race::BARB },       { "Crag Hack", Race::BARB },  { "Jezebel", Race::BARB },
+          { "Jaclyn", Race::BARB },       { "Ergon", Race::BARB },         { "Tsabu", Race::BARB },        { "Atlas", Race::BARB },
+
+          { "Astra", Race::SORC },        { "Natasha", Race::SORC },       { "Troyan", Race::SORC },       { "Vatawna", Race::SORC },    { "Rebecca", Race::SORC },
+          { "Gem", Race::SORC },          { "Ariel", Race::SORC },         { "Carlawn", Race::SORC },      { "Luna", Race::SORC },
+
+          { "Arie", Race::WRLK },         { "Alamar", Race::WRLK },        { "Vesper", Race::WRLK },       { "Crodo", Race::WRLK },      { "Barok", Race::WRLK },
+          { "Kastore", Race::WRLK },      { "Agar", Race::WRLK },          { "Falagar", Race::WRLK },      { "Wrathmont", Race::WRLK },
+
+          { "Myra", Race::WZRD },         { "Flint", Race::WZRD },         { "Dawn", Race::WZRD },         { "Halon", Race::WZRD },      { "Myrini", Race::WZRD },
+          { "Wilfrey", Race::WZRD },      { "Sarakin", Race::WZRD },       { "Kalindra", Race::WZRD },     { "Mandigal", Race::WZRD },
+
+          { "Zom", Race::NECR },          { "Darlana", Race::NECR },       { "Zam", Race::NECR },          { "Ranloo", Race::NECR },     { "Charity", Race::NECR },
+          { "Rialdo", Race::NECR },       { "Roxana", Race::NECR },        { "Sandro", Race::NECR },       { "Celia", Race::NECR },
+
+          { "Roland", Race::WZRD },       { "Lord Corlagon", Race::KNGT }, { "Sister Eliza", Race::SORC }, { "Archibald", Race::WRLK },  { "Lord Halton", Race::KNGT },
+          { "Brother Brax", Race::NECR },
+
+          { "Solmyr", Race::WZRD },       { "Dainwin", Race::WRLK },       { "Mog", Race::NECR },          { "Uncle Ivan", Race::BARB }, { "Joseph", Race::KNGT },
+          { "Gallavant", Race::KNGT },    { "Elderian", Race::WRLK },      { "Ceallach", Race::KNGT },     { "Drakonia", Race::WZRD },   { "Martine", Race::SORC },
+          { "Jarkonas", Race::BARB },     { "Debug Hero", Race::WRLK },    { "Unknown", Race::KNGT }
+
+        } };
+
+}
+
+const char * HeroInfo::getHeroName( const HeroInfo::Id & heroId )
+{
+    return _( heroTypes[static_cast<int>( heroId )].name );
+}
+
+int HeroInfo::getHeroRace( const HeroInfo::Id & heroId )
+{
+    return heroTypes[static_cast<int>( heroId )].race;
 }
