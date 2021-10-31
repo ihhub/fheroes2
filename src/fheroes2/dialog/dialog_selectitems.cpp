@@ -52,7 +52,8 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 11 ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( dst.x, dst.y + 25, Interface::ListBox<Item>::rtAreaItems.width + 5,
+                                                                                                    Interface::ListBox<Item>::rtAreaItems.height + 11 ) );
 
         // scroll
         fheroes2::Display & display = fheroes2::Display::instance();
