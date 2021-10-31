@@ -312,7 +312,7 @@ namespace
                             hero->SetKillerColor( humanKingdom.GetColor() );
                             hero->SetFreeman( Battle::RESULT_LOSS );
                             break;
-                        }                    
+                        }
                     }
                 }
                 break;

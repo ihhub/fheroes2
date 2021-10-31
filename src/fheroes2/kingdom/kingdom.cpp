@@ -479,7 +479,7 @@ void Kingdom::UpdateRecruits( void )
                 continue;
 
             // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
-            const Heroes * hero = world.GetHeroes( static_cast<HeroInfo::Id>(obtainedAwards[i]._subType) );
+            const Heroes * hero = world.GetHeroes( static_cast<HeroInfo::Id>( obtainedAwards[i]._subType ) );
 
             if ( hero && hero->isFreeman() ) {
                 recruits.SetHero1( hero );

@@ -225,7 +225,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         const uint8_t portraitId = st.get();
         if ( HeroInfo::lastId <= portraitId ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portraitId );
-            portrait = id;        
+            portrait = id;
         }
         else {
             portrait = static_cast<HeroInfo::Id>( portraitId );
@@ -1548,7 +1548,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( const HeroInfo::Id & heroId, int t
     case PORT_BIG:
         return fheroes2::AGG::GetICN( ICN::PORTxxxx( heroId ), 0 );
     case PORT_MEDIUM:
-        return fheroes2::AGG::GetICN( ICN::PORTMEDI, static_cast<uint32_t>(heroId) );
+        return fheroes2::AGG::GetICN( ICN::PORTMEDI, static_cast<uint32_t>( heroId ) );
     case PORT_SMALL:
         return fheroes2::AGG::GetICN( ICN::MINIPORT, static_cast<uint32_t>( heroId ) );
     default:
@@ -1903,8 +1903,8 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     const int portraitId = static_cast<int>( hero.portrait );
 
     // heroes
-    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << heroId << portraitId
-        << hero._race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << heroId << portraitId << hero._race
+        << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );

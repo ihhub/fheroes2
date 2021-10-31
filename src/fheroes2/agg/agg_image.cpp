@@ -28,7 +28,6 @@
 #include "agg_file.h"
 #include "agg_image.h"
 #include "h2d.h"
-#include "hero_info.h"
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
@@ -1174,7 +1173,7 @@ namespace fheroes2
                     std::size_t i = static_cast<std::size_t>( heroId );
                     Sprite out = _icnVsSprite[id][i];
                     out.resize( 50, 47 );
-                    fheroes2::Resize( original, out, false );                
+                    fheroes2::Resize( original, out, false );
                 }
                 return true;
             }

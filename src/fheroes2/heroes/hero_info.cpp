@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,14 +62,13 @@ namespace HeroInfo
 
         } };
 
-}
+    const char * getHeroName( const HeroInfo::Id & heroId )
+    {
+        return _( heroTypes[static_cast<int>( heroId )].name );
+    }
 
-const char * HeroInfo::getHeroName( const HeroInfo::Id & heroId )
-{
-    return _( heroTypes[static_cast<int>( heroId )].name );
-}
-
-int HeroInfo::getHeroRace( const HeroInfo::Id & heroId )
-{
-    return heroTypes[static_cast<int>( heroId )].race;
+    int getHeroRace( const HeroInfo::Id & heroId )
+    {
+        return heroTypes[static_cast<int>( heroId )].race;
+    }
 }

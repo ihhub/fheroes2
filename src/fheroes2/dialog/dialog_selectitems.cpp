@@ -22,11 +22,11 @@
 
 #include <iterator>
 
-#include "dialog_selectitems.h"
 #include "agg_image.h"
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "settings.h"
@@ -42,12 +42,12 @@ public:
         , ok( false )
     {
         RedrawBackground( rt.getPosition() );
-        SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.width - 25, rt.y + 25 ) );
-        SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.width - 25, rt.y + rt.height - 55 ) );
+        ListBox<Item>::SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.width - 25, rt.y + 25 ) );
+        ListBox<Item>::SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.width - 25, rt.y + rt.height - 55 ) );
 
-        SetScrollBar( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( rt.x + rt.width - 21, rt.y + 48, 14, rt.height - 107 ) );
-        SetAreaMaxItems( 5 );
-        SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 ) );
+        ListBox<Item>::SetScrollBar( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( rt.x + rt.width - 21, rt.y + 48, 14, rt.height - 107 ) );
+        ListBox<Item>::SetAreaMaxItems( 5 );
+        ListBox<Item>::SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 ) );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -69,7 +69,7 @@ public:
         ok = true;
     }
 
-    void RedrawItem( const Item &, s32, s32, bool ) override
+    void RedrawItem( const Item & /*unused*/, int32_t /*unused*/, int32_t /*unused*/, bool /*unused*/ ) override
     {
         // Do nothing.
     }
@@ -84,12 +84,12 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( Item & ) override
+    void ActionListSingleClick( Item & /*unused*/ ) override
     {
         // Do nothing.
     }
 
-    void ActionListPressRight( Item & ) override
+    void ActionListPressRight( Item & /*unused*/ ) override
     {
         // Do nothing.
     }

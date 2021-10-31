@@ -28,7 +28,6 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
-//#include "heroes.h"
 #include "hero_info.h"
 #include "heroes_indicator.h"
 #include "icn.h"

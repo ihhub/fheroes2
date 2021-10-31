@@ -327,6 +327,7 @@
     <ClCompile Include="src\fheroes2\heroes\heroes_move.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_recruits.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_spell.cpp" />
+    <ClCompile Include="src\fheroes2\heroes\hero_info.cpp" />
     <ClCompile Include="src\fheroes2\heroes\route.cpp" />
     <ClCompile Include="src\fheroes2\heroes\skill.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\color.cpp" />
@@ -496,6 +497,7 @@
     <ClInclude Include="src\fheroes2\heroes\heroes_base.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_indicator.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_recruits.h" />
+    <ClInclude Include="src\fheroes2\heroes\hero_info.h" />
     <ClInclude Include="src\fheroes2\heroes\route.h" />
     <ClInclude Include="src\fheroes2\heroes\skill.h" />
     <ClInclude Include="src\fheroes2\heroes\skill_static.h" />
