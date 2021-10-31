@@ -37,7 +37,6 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 

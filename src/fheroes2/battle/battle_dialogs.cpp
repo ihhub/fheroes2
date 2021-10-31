@@ -43,7 +43,6 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_tool.h"
 
 namespace
 {

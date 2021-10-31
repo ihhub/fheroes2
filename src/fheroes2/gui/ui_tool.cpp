@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "ui_tool.h"
-#include "image_tool.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
