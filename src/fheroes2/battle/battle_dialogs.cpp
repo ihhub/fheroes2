@@ -284,7 +284,7 @@ void Battle::DialogBattleSettings( void )
         else if ( le.MousePressRight( optionAreas[3] ) ) {
             Dialog::Message(
                 _( "Grid" ),
-                _( "Toggle the hex grid on or off.  The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible." ),
+                _( "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible." ),
                 Font::BIG );
         }
         else if ( le.MouseClickLeft( optionAreas[4] ) ) {

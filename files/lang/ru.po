@@ -214,7 +214,7 @@ msgstr ""
 msgid "Grid"
 msgstr "Сетка"
 
-msgid "Toggle the hex grid on or off.  The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
 msgstr ""
 
 msgid "Shadow Movement"
