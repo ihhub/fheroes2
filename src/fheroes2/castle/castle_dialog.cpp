@@ -463,7 +463,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readonly )
             }
 
             // Get pressed hotkey.
-            const building_t hotKeyBuilding =  getPressedBuildingHotkey();
+            const building_t hotKeyBuilding = getPressedBuildingHotkey();
 
             // Interaction with buildings.
             // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
