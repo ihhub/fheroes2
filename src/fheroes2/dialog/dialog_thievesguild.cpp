@@ -210,7 +210,7 @@ void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos,
     }
 }
 
-void DrawHeroIcons( std::vector<HeroInfo::Id> & bestHeroes, const fheroes2::Point & pos, const int step )
+void DrawHeroIcons( const std::vector<HeroInfo::Id> & bestHeroes, const fheroes2::Point & pos, const int step )
 {
     if ( !bestHeroes.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
