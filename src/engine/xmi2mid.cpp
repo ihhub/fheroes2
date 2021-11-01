@@ -408,7 +408,7 @@ struct MidiEvents : std::vector<MidiChunk>
             }
         }
 
-        std::sort( this->begin(), this->end() );
+        std::stable_sort( this->begin(), this->end() );
 
         // update duration
         delta = 0;
