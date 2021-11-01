@@ -211,8 +211,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "expansion" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
-            if ( isPriceOfLoyaltySupported() )
-                _musicType = MUSIC_MIDI_EXPANSION;
+            _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
