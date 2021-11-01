@@ -225,8 +225,11 @@ namespace
     }
 }
 
-int Castle::OpenDialog( bool readonly )
+Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readonly )
 {
+    int alphaHero = 255;
+    CastleDialog::FadeBuilding fadeBuilding;
+
     // Fade screen.
     Settings & conf = Settings::Get();
     if ( conf.ExtGameUseFade() )
@@ -310,8 +313,6 @@ int Castle::OpenDialog( bool readonly )
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
 
-    CastleDialog::FadeBuilding fadeBuilding;
-
     // draw building
     CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding, castleAnimationIndex );
 
@@ -326,10 +327,9 @@ int Castle::OpenDialog( bool readonly )
 
     AGG::PlayMusic( MUS::FromRace( race ), true, true );
 
-    int result = Dialog::CANCEL;
+    CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
 
-    int alphaHero = 255;
     fheroes2::Image surfaceHero( 552, 105 );
 
     // dialog menu loop
@@ -339,7 +339,7 @@ int Castle::OpenDialog( bool readonly )
     std::string statusMessage;
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
         // During hero purchase or building construction disable any interaction
         if ( alphaHero >= 255 && fadeBuilding.IsFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
@@ -353,17 +353,17 @@ int Castle::OpenDialog( bool readonly )
 
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
-                result = Dialog::CANCEL;
+                result = CastleDialogReturnValue::Close;
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
                  && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
-                result = Dialog::PREV;
+                result = CastleDialogReturnValue::PreviousCastle;
                 break;
             }
             if ( buttonNextCastle.isEnabled()
                  && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
-                result = Dialog::NEXT;
+                result = CastleDialogReturnValue::NextCastle;
                 break;
             }
 
@@ -463,7 +463,7 @@ int Castle::OpenDialog( bool readonly )
             }
 
             // Get pressed hotkey.
-            const building_t hotKeyBuilding = getPressedBuildingHotkey();
+            const building_t hotKeyBuilding =  getPressedBuildingHotkey();
 
             // Interaction with buildings.
             // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
@@ -574,24 +574,30 @@ int Castle::OpenDialog( bool readonly )
                         }
 
                         case BUILD_CASTLE: {
-                            uint32_t build = fadeBuilding.GetBuild();
-                            if ( build != BUILD_NOTHING ) {
-                                BuyBuilding( build );
-                                if ( BUILD_CAPTAIN == build ) {
-                                    RedrawIcons( *this, heroes, cur_pt );
-                                    display.render();
-                                }
-                            }
-                            fadeBuilding.StopFadeBuilding();
                             const Heroes * prev = heroes.Guest();
-                            build = OpenTown();
-                            heroes = world.GetHeroes( *this );
-                            const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
 
-                            if ( BUILD_NOTHING != build ) {
+                            uint32_t build = BUILD_NOTHING;
+                            const TownDialogResult townResult = OpenTown( build );
+
+                            // As of now we do not support switching between town windows for few reasons:
+                            // - what to do if the next / previous town doesn't have a built castle?
+                            // - even if we who castle window for a town without built castle do we need to show town window for the next castle with a built dwelling?
+                            if ( townResult == TownDialogResult::NextTown ) {
+                                result = CastleDialogReturnValue::NextCastle;
+                                break;
+                            }
+                            if ( townResult == TownDialogResult::PrevTown ) {
+                                result = CastleDialogReturnValue::PreviousCastle;
+                                break;
+                            }
+
+                            if ( build != BUILD_NOTHING ) {
                                 AGG::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( build );
                             }
+
+                            heroes = world.GetHeroes( *this );
+                            const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
 
                             if ( buyhero ) {
                                 if ( prev ) {
@@ -609,8 +615,9 @@ int Castle::OpenDialog( bool readonly )
                                 // animate fade in for hero army bar
                                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
                                 const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
-                                if ( !port.empty() )
+                                if ( !port.empty() ) {
                                     fheroes2::Blit( port, surfaceHero, 5, 5 );
+                                }
 
                                 const fheroes2::Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
@@ -633,6 +640,10 @@ int Castle::OpenDialog( bool readonly )
                     break;
                 }
             }
+        }
+
+        if ( result != CastleDialogReturnValue::DoNothing ) {
+            break;
         }
 
         if ( alphaHero < 255 ) {

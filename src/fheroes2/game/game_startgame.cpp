@@ -139,21 +139,22 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
     if ( it != myCastles.end() ) {
-        int result = Dialog::ZERO;
-        while ( Dialog::CANCEL != result ) {
+        Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
+
+        while ( result != Castle::CastleDialogReturnValue::Close ) {
+            assert( it != myCastles.end() );
+
             result = ( *it )->OpenDialog( false );
 
-            if ( it != myCastles.end() ) {
-                if ( Dialog::PREV == result ) {
-                    if ( it == myCastles.begin() )
-                        it = myCastles.end();
-                    --it;
-                }
-                else if ( Dialog::NEXT == result ) {
-                    ++it;
-                    if ( it == myCastles.end() )
-                        it = myCastles.begin();
-                }
+            if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousTown ) {
+                if ( it == myCastles.begin() )
+                    it = myCastles.end();
+                --it;
+            }
+            else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextTown ) {
+                ++it;
+                if ( it == myCastles.end() )
+                    it = myCastles.begin();
             }
         }
     }
