@@ -197,37 +197,37 @@ msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Скорость анимации в бою."
 
 msgid "Monster Info"
-msgstr ""
+msgstr "Информация о существе"
 
 msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr ""
+msgstr "Отобразить/скрыть окно информации для активных и указываемых существ."
 
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
 
 msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr ""
+msgstr "Включить/выключить использование заклинаний компьютером в режиме автобитвы. (Эта опция не влияет на использование заклинаний компьютерным игроком и на режим быстрой битвы.)"
 
 msgid "Grid"
 msgstr "Сетка"
 
 msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr ""
+msgstr "Отобразить/скрыть гексагональную сетку. Движения всегда ограничены сеткой. Эта опция влияет лишь на внешний вид поля боя."
 
 msgid "Shadow Movement"
 msgstr "Тень при движении"
 
 msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
+msgstr "Включить/выключить затенение участков поля боя, доступных для перемещения и атаки существом."
 
 msgid "Shadow Cursor"
 msgstr "Тень-курсор"
 
 msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
-msgstr ""
+msgstr "Включить/выключить затенение гекса под курсором мыши."
 
 msgid "Off"
 msgstr "Выкл."
@@ -314,7 +314,6 @@ msgstr "Удача"
 msgid "Spell Points"
 msgstr "Очки магии"
 
-#, fuzzy
 msgid "View Hero's options"
 msgstr "Опции героя"
 
@@ -404,7 +403,6 @@ msgstr "Turn %{turn}"
 msgid "Teleport here"
 msgstr "Телепортироваться сюда"
 
-#, fuzzy
 msgid "Invalid teleport destination"
 msgstr "Неверная цель телепорта"
 
@@ -427,9 +425,8 @@ msgid "Auto Combat"
 msgstr "Автобитва"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Позволяет компьютеру сражаться за вас."
 
-#, fuzzy
 msgid "Enable auto combat"
 msgstr "Автобитва"
 
@@ -437,22 +434,22 @@ msgid "Customize system options"
 msgstr "Изменить настройки системы"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Позволяет вам настраивать отображение боя."
 
 msgid "Wait"
-msgstr ""
+msgstr "Ожидание"
 
 msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr ""
+msgstr "Ожидание для текущего существа. Существо ждёт пропускает свой ход в ожидание пока походят другие существа."
 
 msgid "Wait this unit"
 msgstr "Подождать"
 
 msgid "Skip"
-msgstr ""
+msgstr "Пропустить"
 
 msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
-msgstr ""
+msgstr "Пропустить ход для текущего существа. Существо пропускает ход до начала следующего раунда."
 
 msgid "Skip this unit"
 msgstr "Пропустить ход"
