@@ -198,37 +198,37 @@ msgid "Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
 msgid "Monster Info"
-msgstr ""
+msgstr "Jednostka"
 
 msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr ""
+msgstr "Włącza okno informacyjne, gdzie pokazane są dane aktywnej lub wskazywanej jednostki."
 
 msgid "Auto Spell Casting"
-msgstr "Automatyczne rzucanie zaklęć"
+msgstr "Auto. czary"
 
 msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr ""
+msgstr "Włączenie tej opcji sprawi, że komputer będzie rzucał zaklęcia w trybie walki automatycznej. (Uwaga: nie ma to wpływu na rzucanie zaklęć przez graczy komputerowych oraz na szybką walkę.)"
 
 msgid "Grid"
 msgstr "Siatka"
 
 msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr ""
+msgstr "Włączenie/wyłączenie siatki pól. Na siatce zawsze widoczna jest trasa ruchu jednostki."
 
 msgid "Shadow Movement"
 msgstr "Cieniowanie pola"
 
 msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
+msgstr "Włączenie/wyłączenie cieniowania pól, na które może się ruszyć twoja jednostka."
 
 msgid "Shadow Cursor"
 msgstr "Cieniowanie kursora"
 
 msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
-msgstr ""
+msgstr "Włączenie/wyłączenie systemu cieniowania zaznaczającego pola, nad którymi znajduje się kursor."
 
 msgid "Off"
 msgstr "Wyłączone"
@@ -315,7 +315,6 @@ msgstr "Szczęście"
 msgid "Spell Points"
 msgstr "Ptk. magii"
 
-#, fuzzy
 msgid "View Hero's options"
 msgstr "Opcje bohatera"
 
@@ -424,9 +423,8 @@ msgid "Auto Combat"
 msgstr "Automatyczna Walka"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Pozwala komputerowi rozegrać walkę za ciebie."
 
-#, fuzzy
 msgid "Enable auto combat"
 msgstr "Automatyczna walka"
 
@@ -434,22 +432,22 @@ msgid "Customize system options"
 msgstr "Dostosuj ustawienia systemowe"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Pozwala na zmianę wyglądu ekranu walki."
 
 msgid "Wait"
-msgstr ""
+msgstr "Czekaj"
 
 msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr ""
+msgstr "Aktualna jednostka czeka. Aktualna jednostka wstrzymuje się dopóki wszystkie inne jednostki nie ruszą się."
 
 msgid "Wait this unit"
-msgstr "Zatrzymaj tą jednostkę"
+msgstr "Zatrzymaj tę jednostkę"
 
 msgid "Skip"
-msgstr ""
+msgstr "Powoduje pominięcie aktualnej jednostki. Traci ona swoją turę i może ruszyć się ponownie dopiero w następnej rundzie."
 
 msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
-msgstr ""
+msgstr "Powoduje pominięcie aktualnej jednostki. Traci ona swoją turę i może ruszyć się ponownie dopiero w następnej rundzie."
 
 msgid "Skip this unit"
 msgstr "Pomiń tę jednostkę"
