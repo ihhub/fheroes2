@@ -646,7 +646,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     else {
         // TextBox textbox2(_("Not room in\nthe garrison"), Font::SMALL, 100);
         // textbox2.Blit(btnHeroes.x - 35, btnHeroes.y - 30);
-        btnHeroes.captureBackground( display );
+        btnHeroes.captureBackground();
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }
@@ -769,7 +769,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         tsNotEnoughGold.SetText( msg, Font::SMALL );
         tsNotEnoughGold.Show();
         btnMarket.enable();
-        btnMarket.captureBackground( display );
+        btnMarket.captureBackground();
         btnMarket.draw();
     }
 
@@ -785,7 +785,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     else {
         noRoom1.Show();
         noRoom2.Show();
-        btnHeroes.captureBackground( display );
+        btnHeroes.captureBackground();
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }

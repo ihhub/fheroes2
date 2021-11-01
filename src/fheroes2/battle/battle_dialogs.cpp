@@ -877,7 +877,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         }
         else {
             btnMarket.drawShadow();
-            btnMarket.captureBackground( display );
+            btnMarket.captureBackground();
             btnMarket.draw();
         }
     }
