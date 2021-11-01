@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <string>
 
 #include "agg_image.h"
@@ -146,6 +147,12 @@ int Castle::DialogBuyCastle( bool buttons ) const
 
 Castle::TownDialogResult Castle::OpenTown( uint32_t & dwellingTobuild )
 {
+    if ( !isBuild( BUILD_CASTLE ) ) {
+        // It is not possible to open this dialog without a built castle!
+        assert( 0 );
+        return TownDialogResult::DoNothing;
+    }
+
     dwellingTobuild = BUILD_NOTHING;
 
     // setup cursor
@@ -477,31 +484,31 @@ Castle::TownDialogResult Castle::OpenTown( uint32_t & dwellingTobuild )
             dwellingTobuild = dwelling1.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( dwelling2.GetArea() ) && dwelling2.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( dwelling2.GetArea() ) && dwelling2.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = dwelling2.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( dwelling3.GetArea() ) && dwelling3.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( dwelling3.GetArea() ) && dwelling3.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = dwelling3.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( dwelling4.GetArea() ) && dwelling4.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( dwelling4.GetArea() ) && dwelling4.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = dwelling4.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( dwelling5.GetArea() ) && dwelling5.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( dwelling5.GetArea() ) && dwelling5.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = dwelling5.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( dwelling6.GetArea() ) && dwelling6.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( dwelling6.GetArea() ) && dwelling6.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = dwelling6.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingMageGuild.GetArea() ) && buildingMageGuild.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingMageGuild.GetArea() ) && buildingMageGuild.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = buildingMageGuild.getBuilding();
             return TownDialogResult::Build;
         }
-        else if ( !isSkipTavernInteraction && le.MouseCursor( buildingTavern.GetArea() ) && buildingTavern.QueueEventProcessing( buttonExit ) ) {
+        if ( !isSkipTavernInteraction && le.MouseCursor( buildingTavern.GetArea() ) && buildingTavern.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = ( Race::NECR == race ? BUILD_SHRINE : BUILD_TAVERN );
             return TownDialogResult::Build;
         }
@@ -509,43 +516,43 @@ Castle::TownDialogResult Castle::OpenTown( uint32_t & dwellingTobuild )
             dwellingTobuild = BUILD_THIEVESGUILD;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingShipyard.GetArea() ) && buildingShipyard.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingShipyard.GetArea() ) && buildingShipyard.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_SHIPYARD;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingStatue.GetArea() ) && buildingStatue.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingStatue.GetArea() ) && buildingStatue.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_STATUE;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingMarketplace.GetArea() ) && buildingMarketplace.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingMarketplace.GetArea() ) && buildingMarketplace.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_MARKETPLACE;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingWell.GetArea() ) && buildingWell.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingWell.GetArea() ) && buildingWell.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_WELL;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingWel2.GetArea() ) && buildingWel2.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingWel2.GetArea() ) && buildingWel2.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_WEL2;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingSpec.GetArea() ) && buildingSpec.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingSpec.GetArea() ) && buildingSpec.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_SPEC;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingLTurret.GetArea() ) && buildingLTurret.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingLTurret.GetArea() ) && buildingLTurret.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_LEFTTURRET;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingRTurret.GetArea() ) && buildingRTurret.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingRTurret.GetArea() ) && buildingRTurret.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_RIGHTTURRET;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingMoat.GetArea() ) && buildingMoat.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingMoat.GetArea() ) && buildingMoat.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_MOAT;
             return TownDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingCaptain.GetArea() ) && buildingCaptain.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingCaptain.GetArea() ) && buildingCaptain.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_CAPTAIN;
             return TownDialogResult::Build;
         }
