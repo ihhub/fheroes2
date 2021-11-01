@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <iomanip>
 #include <list>
@@ -498,6 +499,9 @@ struct MidData
         , ppqn( 60 )
         , tracks( t )
     {
+        // MIDI format 0 can contain only one track
+        assert( tracks.count() == 1 );
+
         // XMI files play MIDI at a fixed clock rate of 120 Hz
         if ( !tracks.empty() && tracks.front().events.trackTempo > 0 ) {
             ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
