@@ -206,7 +206,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
         const std::string message = firstExchange && ( resourceFrom == resourceTo )
                                         ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
-                                        : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" )
+                                        : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
 
         const TextBox displayMesssage( message, Font::BIG, dst_rt );
 
