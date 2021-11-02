@@ -217,7 +217,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             // upgrade
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
-                    const std::string msg( "You can't afford to upgrade your troops!" );
+                    const std::string msg( _( "You can't afford to upgrade your troops!" ) );
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
                         result = Dialog::UPGRADE;
                         break;
