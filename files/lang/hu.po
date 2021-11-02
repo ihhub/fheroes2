@@ -1096,11 +1096,15 @@ msgstr "Sárkánykard"
 msgid "Breastplate"
 msgstr "Anduran Mellvértje"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr ""
 
 #, fuzzy
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr "Varázsgyűrű"
 
 #, fuzzy
@@ -6539,6 +6543,10 @@ msgstr ""
 msgid "Arcane Necklace of Magic"
 msgstr "Misztikus Varázslás Nyaklánca"
 
+#, fuzzy (18 char max)
+msgid "Caster's Bracelet"
+msgstr "Idéző Varázslat Karkötője"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Idéző Varázslat Karkötője"
 
@@ -6602,10 +6610,16 @@ msgstr ""
 msgid "Minor Scroll of Knowledge"
 msgstr ""
 
+msgid "Major Scroll"
+msgstr ""
+
 msgid "Major Scroll of Knowledge"
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
+msgstr ""
+
+msgid "Foremost Scroll"
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
@@ -6628,6 +6642,9 @@ msgstr "Nomádcsizma"
 
 msgid "The %{name} increase your movement on land."
 msgstr ""
+
+msgid "Traveler's Boots"
+msgstr "Utazócsizma"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Utazócsizma"

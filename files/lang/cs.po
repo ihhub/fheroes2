@@ -1031,10 +1031,14 @@ msgstr ""
 msgid "Breastplate"
 msgstr "Tržiště"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr ""
 
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr ""
 
 #, fuzzy
@@ -5945,6 +5949,9 @@ msgstr ""
 msgid "Arcane Necklace of Magic"
 msgstr ""
 
+msgid "Caster's Bracelet"
+msgstr ""
+
 msgid "Caster's Bracelet of Magic"
 msgstr ""
 
@@ -6008,10 +6015,16 @@ msgstr ""
 msgid "Minor Scroll of Knowledge"
 msgstr ""
 
+msgid "Major Scroll"
+msgstr ""
+
 msgid "Major Scroll of Knowledge"
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
+msgstr ""
+
+msgid "Foremost Scroll"
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
@@ -6033,6 +6046,9 @@ msgid "Nomad Boots of Mobility"
 msgstr ""
 
 msgid "The %{name} increase your movement on land."
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Traveler's Boots of Mobility"

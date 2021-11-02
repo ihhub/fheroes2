@@ -1140,11 +1140,15 @@ msgstr "Matadragones"
 msgid "Breastplate"
 msgstr "Peto de Anduran"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr "El Fizbin de la Mala Suerte"
 
-#, fuzzy
-msgid "Mage's ring"
+#, fuzzy (18 char max)
+msgid "Mage's Ring"
 msgstr "Anillo del Mago del Poder"
 
 #, fuzzy
@@ -6787,6 +6791,10 @@ msgstr ""
 msgid "Arcane Necklace of Magic"
 msgstr "Collar Arcano de la Magia"
 
+#, fuzzy (18 char max)
+msgid "Caster's Bracelet"
+msgstr "Brazalete del Lanzador de la Magia"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Brazalete del Lanzador de la Magia"
 
@@ -6850,11 +6858,19 @@ msgstr "Coraza  Divina de Protección"
 msgid "Minor Scroll of Knowledge"
 msgstr "Pergamino Menor de Conocimiento"
 
+#, fuzzy (18 char max)
+msgid "Major Scroll"
+msgstr "Rollo Mayor del Conocimiento"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Rollo Mayor del Conocimiento"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Rollo Superior del Conocimiento"
+
+#, fuzzy (18 char max)
+msgid "Foremost Scroll"
+msgstr "Principal Pergamino de Conocimiento"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Principal Pergamino de Conocimiento"
@@ -6876,6 +6892,10 @@ msgstr "Las Botas Nómadas de la Movilidad"
 
 msgid "The %{name} increase your movement on land."
 msgstr ""
+
+#, fuzzy (18 char max)
+msgid "Traveler's Boots"
+msgstr "Botas de Viajero de la Movilidad"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Botas de Viajero de la Movilidad"

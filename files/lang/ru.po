@@ -1171,10 +1171,13 @@ msgstr "Драконий Меч"
 msgid "Breastplate"
 msgstr "Божественный Доспех"
 
+msgid "Fizbin Medal"
+msgstr "Символ Неудачи"
+
 msgid "Fizbin of Misfortune"
 msgstr "Символ Неудачи"
 
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr "Кольцо Мага"
 
 msgid "Defender Helm"
@@ -6582,6 +6585,9 @@ msgstr "%{name} приносит каждый день по %{count} золот�
 msgid "Arcane Necklace of Magic"
 msgstr "Ожерелье Тайной Магии"
 
+msgid "Caster's Bracelet"
+msgstr "Магический Браслет"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Магический Браслет"
 
@@ -6645,11 +6651,17 @@ msgstr "Божественный Доспех"
 msgid "Minor Scroll of Knowledge"
 msgstr "Малый Свиток Знания"
 
+msgid "Major Scroll"
+msgstr "Большой Свиток"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Большой Свиток Знания"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Могущественный Свиток Знания"
+
+msgid "Foremost Scroll"
+msgstr "Высший Свиток"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Свиток Высшего Знания"
@@ -6671,6 +6683,9 @@ msgstr "Башмаки Кочевника"
 
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} увеличивают ваше передвижение по земле."
+
+msgid "Traveler's Boots"
+msgstr "Башмаки Путника"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Башмаки Путника"
