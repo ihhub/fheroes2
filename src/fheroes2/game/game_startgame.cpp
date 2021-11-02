@@ -144,8 +144,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
         while ( result != Castle::CastleDialogReturnValue::Close ) {
             assert( it != myCastles.end() );
 
-            const bool openConstructionWindow = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) ||
-                                                ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+            const bool openConstructionWindow =
+                ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
             result = ( *it )->OpenDialog( false, openConstructionWindow );
 

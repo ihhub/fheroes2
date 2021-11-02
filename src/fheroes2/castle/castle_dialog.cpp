@@ -318,7 +318,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
     const fheroes2::Rect rectSign1( cur_pt.x + 5, cur_pt.y + 262, crest.width(), crest.height() );
 
-    
     RedrawIcons( *this, heroes, cur_pt );
 
     // castle troops selector
@@ -462,8 +461,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     // Move hero to top army.
                     if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
                         Dialog::Message( _( "Army joining" ),
-                                         _( "Unable to merge two armies together. Rearrange monsters manually before moving the hero to the garrison." ),
-                                         Font::BIG, Dialog::OK );
+                                         _( "Unable to merge two armies together. Rearrange monsters manually before moving the hero to the garrison." ), Font::BIG,
+                                         Dialog::OK );
                     }
                     else {
                         SwapCastleHeroes( heroes );
