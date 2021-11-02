@@ -123,7 +123,7 @@ namespace
         const fheroes2::Rect windowRoi = window.activeArea();
 
         const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-        const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
+        const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
         const fheroes2::Sprite & buttonOkayImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
         fheroes2::Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 6 - buttonOkayImage.height(),
