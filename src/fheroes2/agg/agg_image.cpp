@@ -1223,6 +1223,7 @@ namespace fheroes2
                 _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
                 AddTransparency( _icnVsSprite[id][0], 36 );
                 AddTransparency( _icnVsSprite[id][1], 36 );
+                AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
 
                 return true;
             }
@@ -1236,16 +1237,15 @@ namespace fheroes2
 
                 Sprite pressed = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
                 AddTransparency( pressed, 36 );
+                AddTransparency( pressed, 61 ); // remove the extra brown border
 
                 Sprite fixed( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
                 fixed.reset();
                 // put back pixels that actually should be black
                 Fill( fixed, 1, 4, 31, 31, 36 );
                 Blit( pressed, fixed );
-                // and fix the brown border, while at it
-                DrawLine( fixed, Point( 0, 5 ), Point( 0, 35 ), 36 );
-                DrawLine( fixed, Point( 1, 35 ), Point( 30, 35 ), 36 );
                 _icnVsSprite[id][1] = fixed;
+
                 return true;
             }
             default:
