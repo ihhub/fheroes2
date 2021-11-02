@@ -1197,6 +1197,23 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::TWNWCAPT: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 118 && original.height() ) {
+                        // Remove shadow from left side.
+                        FillTransform( original, 85, 84, 33, 26, 1 );
+
+                        // Remove extra terrain at the bottom.
+                        FillTransform( original, 0, 114, 40, 4, 1 );
+                        FillTransform( original, 9, 112, 51, 2, 1 );
+                        FillTransform( original, 35, 110, 47, 2, 1 );
+                        FillTransform( original, 57, 108, 51, 2, 1 );
+                    }
+                }
+                return true;
+            }
             case ICN::GOOD_ARMY_BUTTON:
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
@@ -1229,7 +1246,6 @@ namespace fheroes2
                 DrawLine( fixed, Point( 0, 5 ), Point( 0, 35 ), 36 );
                 DrawLine( fixed, Point( 1, 35 ), Point( 30, 35 ), 36 );
                 _icnVsSprite[id][1] = fixed;
-
                 return true;
             }
             default:
