@@ -218,19 +218,19 @@ msgid "Toggle the hex grid on or off. The hex grid always underlies movement, ev
 msgstr "Activer ou désactiver l'affichage de la grille d'hexagones. Même désactivée, le jeu utilise cette grille pour les déplacements et certains sortilèges."
 
 msgid "Shadow Movement"
-msgstr "Ombre de mouvement"
+msgstr "Ombre du déplacement"
 
 msgid "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr "Activer ou désactiver la zone ombragée indiquant où vos créatures peuvent se déplacer et attaquer."
 
 msgid "Shadow Cursor"
-msgstr "Curseur d'ombre"
+msgstr "Ombre du curseur"
 
 msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr "Activer ou désactiver l'ombre montrant l'hexagone où est situé le curseur de la souris."
 
 msgid "Off"
-msgstr "Eteint"
+msgstr "Désactivé"
 
 msgid "On"
 msgstr "Activé"
@@ -272,13 +272,13 @@ msgid "Defender"
 msgstr "Défenseur"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Alors que vous vous approchez %{name}, il disparait mystérieusement."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Tandis que votre ennemi atteint %{name}, il disparait mystérieusement."
 
 msgid "You have captured an enemy artifact!"
-msgstr "Vous avez capturé un artéfact ennemi !"
+msgstr "Vous avez capturé un artéfact de l'ennemi !"
 
 msgid "Necromancy!"
 msgstr "Nécromancie !"
@@ -424,7 +424,7 @@ msgid "Auto Combat"
 msgstr "Combat Auto"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "L'ordinateur joue le combat à votre place."
 
 #, fuzzy
 msgid "Enable auto combat"
@@ -434,19 +434,19 @@ msgid "Customize system options"
 msgstr "Modifier les options système"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Modifier les options de l'écran de combat."
 
 msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr ""
+msgstr "Le peloton actif reporte son tour jusqu'à ce que tous les autres pelotons aient joué leur tour."
 
 msgid "Wait this unit"
 msgstr "Ce peloton attend"
 
 msgid "Skip"
-msgstr ""
+msgstr "Passer"
 
 msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
-msgstr ""
+msgstr "Le peloton actif passe son tour et ne peut pas jouer avant le prochain tour."
 
 msgid "Skip this unit"
 msgstr "Passer ce peloton"
