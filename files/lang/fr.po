@@ -314,9 +314,8 @@ msgstr "Chance"
 msgid "Spell Points"
 msgstr "Pt de magie"
 
-#, fuzzy
 msgid "View Hero's options"
-msgstr "Options du héros"
+msgstr "Voir les options du héros"
 
 msgid "Cast Spell"
 msgstr "Lancer un sort"
@@ -426,9 +425,8 @@ msgstr "Combat Auto"
 msgid "Allows the computer to fight out the battle for you."
 msgstr "L'ordinateur joue le combat à votre place."
 
-#, fuzzy
 msgid "Enable auto combat"
-msgstr "Combat auto"
+msgstr "Activer le combat automatique"
 
 msgid "Customize system options"
 msgstr "Modifier les options système"
