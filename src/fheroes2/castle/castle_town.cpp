@@ -512,7 +512,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             dwellingTobuild = ( Race::NECR == race ? BUILD_SHRINE : BUILD_TAVERN );
             return ConstructionDialogResult::Build;
         }
-        else if ( le.MouseCursor( buildingThievesGuild.GetArea() ) && buildingThievesGuild.QueueEventProcessing( buttonExit ) ) {
+        if ( le.MouseCursor( buildingThievesGuild.GetArea() ) && buildingThievesGuild.QueueEventProcessing( buttonExit ) ) {
             dwellingTobuild = BUILD_THIEVESGUILD;
             return ConstructionDialogResult::Build;
         }
