@@ -112,8 +112,8 @@ public:
         Close, // Close the dialog.
         NextCastle, // Open main dialog of the next castle.
         PreviousCastle, // Open main dialog of the previous castle.
-        NextTown, // Open building purchase dialog of the next castle.
-        PreviousTown // Open building purchase dialog of the previous castle.
+        NextCostructionWindow, // Open construction dialog of the next castle.
+        PreviousCostructionWindow // Open construction dialog of the previous castle.
     };
 
     Castle();
@@ -178,7 +178,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    CastleDialogReturnValue OpenDialog( const bool readonly );
+    CastleDialogReturnValue OpenDialog( const bool readOnly, const bool openConstructionWindow );
 
     int GetAttackModificator( const std::string * ) const;
     int GetDefenseModificator( const std::string * ) const;
@@ -226,17 +226,20 @@ public:
     void SwapCastleHeroes( CastleHeroes & );
 
 private:
-    enum class TownDialogResult : int
+    enum class ConstructionDialogResult : int
     {
         DoNothing,
-        NextTown, // Open next Town dialog.
-        PrevTown, // Open previous Town dialog.
-        Build // Build something.
+        NextConstructionWindow, // Open construction dialog for the next castle.
+        PrevConstructionWindow, // Open construction dialog for the previous castle.
+        Build, // Build something.
+        RecruitHero // Recruit a hero.
     };
 
     u32 * GetDwelling( u32 dw );
     void EducateHeroes( void );
-    TownDialogResult OpenTown( uint32_t & dwellingTobuild );
+
+    ConstructionDialogResult openConstructionDialog( uint32_t & dwellingTobuild );
+
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
