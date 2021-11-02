@@ -602,6 +602,12 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             hero2->OpenDialog( true );
             display.render();
         }
+        else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
+            Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
+            Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
+        }
 
         // status info
         if ( le.MouseCursor( dwelling1.GetArea() ) )
