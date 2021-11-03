@@ -1198,9 +1198,8 @@ msgstr "Dragesverdet"
 msgid "Breastplate"
 msgstr "Brystplate"
 
-#, fuzzy (18 char max)
 msgid "Fizbin Medal"
-msgstr ""
+msgstr "Fizbin-medaljen"
 
 msgid "Fizbin of Misfortune"
 msgstr "Fizbinen av uflaks"
@@ -1215,7 +1214,7 @@ msgid "Power Axe"
 msgstr "Styrkeøks"
 
 msgid "Stealth Shield"
-msgstr "Luskeskjold"
+msgstr "Snikeskjoldet"
 
 msgid "Nomad Boots"
 msgstr "Nomadens sko"
@@ -6681,9 +6680,8 @@ msgstr "%{name} håver inn en inntekt på %{count} gull hver runde."
 msgid "Arcane Necklace of Magic"
 msgstr "Det mørke magihalskjedet"
 
-#, fuzzy (18 char max)
 msgid "Caster's Bracelet"
-msgstr "Fortryllerens magiarmbånd"
+msgstr "Fortryller-armbånd"
 
 msgid "Caster's Bracelet of Magic"
 msgstr "Fortryllerens magiarmbånd"
@@ -6734,7 +6732,7 @@ msgid "The %{name} lets your catapult fire twice per combat round."
 msgstr "%{name} lar katapulten din avfyre to gangen per kamprunde."
 
 msgid "Stealth Shield of Protection"
-msgstr "Luskeskjoldet av beskyttelse"
+msgstr "Snikeskjoldet av beskyttelse"
 
 msgid "Dragon Sword of Dominion"
 msgstr "Dragesverdet av Herreveldet"
@@ -6748,9 +6746,8 @@ msgstr "Den gudommelige brystplata av beskyttelse"
 msgid "Minor Scroll of Knowledge"
 msgstr "Den mindre kunnskapsrullen"
 
-#, fuzzy (18 char max)
 msgid "Major Scroll"
-msgstr "Den større kunnskapsrullen"
+msgstr "Str. kunskpsrull"
 
 msgid "Major Scroll of Knowledge"
 msgstr "Den større kunnskapsrullen"
@@ -6758,9 +6755,8 @@ msgstr "Den større kunnskapsrullen"
 msgid "Superior Scroll of Knowledge"
 msgstr "Den overlegne kunnskapsrullen"
 
-#, fuzzy (18 char max)
 msgid "Foremost Scroll"
-msgstr "Den ypperste kunnskapsrullen"
+msgstr "Yprst. kunskpsrull"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Den ypperste kunnskapsrullen"
@@ -6783,12 +6779,11 @@ msgstr "Nomadens sko av bevegelighet"
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} øker flyttepoengene dine på land."
 
-#, fuzzy (18 char max)
 msgid "Traveler's Boots"
-msgstr "Den reisendes sko av bevegelighet"
+msgstr "Vandrerens sko"
 
 msgid "Traveler's Boots of Mobility"
-msgstr "Den reisendes sko av bevegelighet"
+msgstr "Vandrerens bevegelighetssko"
 
 msgid "Lucky Rabbit's Foot"
 msgstr "Lykkeharens pote"
