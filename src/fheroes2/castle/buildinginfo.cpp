@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
@@ -56,6 +58,8 @@ namespace
         case Race::NECR:
             return fheroes2::Point( 35, 10 );
         default:
+            // Did you add a new race?
+            assert( 0 );
             return fheroes2::Point();
         }
     }
@@ -258,7 +262,7 @@ int GetIndexBuildingSprite( u32 build )
     return 0;
 }
 
-BuildingInfo::BuildingInfo( const Castle & c, building_t b )
+BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     : castle( c )
     , building( b )
     , area( 0, 0, 135, 70 )
