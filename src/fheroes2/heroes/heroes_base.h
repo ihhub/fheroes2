@@ -95,7 +95,7 @@ public:
     int GetKnowledgeModificator( std::string * = nullptr ) const;
     int GetMoraleModificator( std::string * = nullptr ) const;
     int GetLuckModificator( std::string * = nullptr ) const;
-    double GetSpellcastStrength( const double armyLimit ) const;
+    double GetMagicStrategicValue( const double armyStrength ) const;
 
     u32 GetSpellPoints( void ) const;
     bool HaveSpellPoints( const Spell & ) const;

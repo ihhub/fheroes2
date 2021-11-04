@@ -370,7 +370,7 @@ namespace AI
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->hasArtifact( Artifact::GOLDEN_BOW );
 
-            auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
+            auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetMonsterStrength() : 0; };
 
             double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
@@ -391,15 +391,14 @@ namespace AI
             }
         }
 
-        // TODO: replace this hacky code for archers
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
         if ( _commander && _myShooterStr > 1 ) {
-            _myShooterStr += _commander->GetSpellcastStrength( _myArmyStrength );
+            _myShooterStr += commanderDamageValue( *_commander );
         }
         const HeroBase * enemyCommander = arena.getEnemyCommander( _myColor );
         if ( enemyCommander ) {
-            _enemySpellStrength = enemyCommander->GetSpellcastStrength( _enemyArmyStrength );
-            _enemyShooterStr += _enemySpellStrength;
+            _enemySpellStrength = enemyCommander->GetMagicStrategicValue( _myArmyStrength );
+            _enemyShooterStr += commanderDamageValue( *enemyCommander );
         }
 
         // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
