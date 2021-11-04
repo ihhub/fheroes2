@@ -1116,9 +1116,6 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
     case DWELLING_UPGRADE5:
         switch ( race ) {
         case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
             requirement |= DWELLING_MONSTER5;
             break;
 
@@ -1144,9 +1141,6 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
     case DWELLING_UPGRADE6:
         switch ( race ) {
         case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
             requirement |= DWELLING_MONSTER6;
             break;
 
