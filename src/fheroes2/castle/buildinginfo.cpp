@@ -134,7 +134,7 @@ buildstats_t _builds[] = {
     {DWELLING_UPGRADE2, Race::SORC, {1500, 5, 0, 0, 0, 0, 0}},
     {DWELLING_MONSTER3, Race::SORC, {1500, 0, 0, 0, 0, 0, 0}},
     {DWELLING_UPGRADE3, Race::SORC, {1500, 5, 0, 0, 0, 0, 0}},
-    {DWELLING_MONSTER4, Race::SORC, {1500, 0, 0, 10, 0, 0, 0}},
+    {DWELLING_MONSTER4, Race::SORC, {2500, 0, 0, 10, 0, 0, 0}},
     {DWELLING_UPGRADE4, Race::SORC, {1500, 0, 5, 0, 0, 0, 0}},
     {DWELLING_MONSTER5, Race::SORC, {3000, 10, 0, 0, 0, 0, 10}},
     {DWELLING_MONSTER6, Race::SORC, {10000, 0, 20, 30, 0, 0, 0}},
