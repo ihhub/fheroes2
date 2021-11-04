@@ -390,10 +390,12 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
         const Castle * castle = world.getCastleEntrance( next.GetCenter() );
         return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
-    else
-        // to coast action
-        if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST )
+    else if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
         return true;
+    }
+    else if ( !hero.isShipMaster() && next.GetObject() == MP2::OBJ_SHIPWRECK ) {
+        return true;
+    }
 
     return MP2::isNeedStayFront( next.GetObject() );
 }

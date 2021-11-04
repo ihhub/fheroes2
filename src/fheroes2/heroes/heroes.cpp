@@ -56,6 +56,51 @@
 #include "translations.h"
 #include "world.h"
 
+namespace
+{
+    int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
+    {
+        int result = 0;
+
+        for ( const MP2::MapObjectType objectType : objectTypes ) {
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                result += GameStatic::ObjectVisitedModifiers( objectType );
+
+                if ( strs ) {
+                    switch ( objectType ) {
+                    case MP2::OBJ_GRAVEYARD:
+                    case MP2::OBJN_GRAVEYARD:
+                    case MP2::OBJ_SHIPWRECK:
+                    case MP2::OBJN_SHIPWRECK:
+                    case MP2::OBJ_DERELICTSHIP:
+                    case MP2::OBJN_DERELICTSHIP: {
+                        std::string modRobber = _( "%{object} robber" );
+                        StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        strs->append( modRobber );
+                        break;
+                    }
+                    case MP2::OBJ_PYRAMID:
+                    case MP2::OBJN_PYRAMID: {
+                        std::string modRaided = _( "%{object} raided" );
+                        StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        strs->append( modRaided );
+                        break;
+                    }
+                    default:
+                        strs->append( _( MP2::StringObject( objectType ) ) );
+                        break;
+                    }
+
+                    StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
+                    strs->append( "\n" );
+                }
+            }
+        }
+
+        return result;
+    }
+}
+
 const char * Heroes::GetName( int id )
 {
     const char * names[]
@@ -80,49 +125,6 @@ const char * Heroes::GetName( int id )
             "Debug Hero", "Unknown" };
 
     return names[id];
-}
-
-template <std::size_t size>
-int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &objectTypes )[size], const Heroes & hero, std::string * strs )
-{
-    int result = 0;
-
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isObjectTypeVisited( objectTypes[ii] ) ) {
-            result += GameStatic::ObjectVisitedModifiers( objectTypes[ii] );
-
-            if ( strs ) {
-                switch ( objectTypes[ii] ) {
-                case MP2::OBJ_GRAVEYARD:
-                case MP2::OBJN_GRAVEYARD:
-                case MP2::OBJ_SHIPWRECK:
-                case MP2::OBJN_SHIPWRECK:
-                case MP2::OBJ_DERELICTSHIP:
-                case MP2::OBJN_DERELICTSHIP: {
-                    std::string modRobber = _( "%{object} robber" );
-                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
-                    strs->append( modRobber );
-                    break;
-                }
-                case MP2::OBJ_PYRAMID:
-                case MP2::OBJN_PYRAMID: {
-                    std::string modRaided = _( "%{object} raided" );
-                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
-                    strs->append( modRaided );
-                    break;
-                }
-                default:
-                    strs->append( _( MP2::StringObject( objectTypes[ii] ) ) );
-                    break;
-                }
-
-                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectTypes[ii] ) );
-                strs->append( "\n" );
-            }
-        }
-    }
-
-    return result;
 }
 
 Heroes::Heroes()
@@ -605,9 +607,9 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const MP2::MapObjectType objectTypes[]
-        = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objectTypes, *this, strs );
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP,
+                                                       MP2::OBJ_SHIPWRECK };
+    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // result
     return Morale::Normalize( result );
@@ -629,8 +631,8 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const MP2::MapObjectType objectTypes[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objectTypes, *this, strs );
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     return Luck::Normalize( result );
 }
@@ -763,7 +765,7 @@ void Heroes::RescanPath( void )
     if ( path.isValid() ) {
         const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
 
-        if ( !isShipMaster() && tile.isWater() && !MP2::isNeedStayFront( tile.GetObject() ) )
+        if ( !isShipMaster() && tile.isWater() && !MP2::isAccessibleFromBeach( tile.GetObject() ) )
             path.PopBack();
     }
 
