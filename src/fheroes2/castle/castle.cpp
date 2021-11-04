@@ -967,7 +967,7 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
             break;
 
         case Race::SORC:
-            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
             requirement |= BUILD_MAGEGUILD1;
             break;
 
