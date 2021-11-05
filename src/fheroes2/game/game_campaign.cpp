@@ -290,7 +290,7 @@ namespace
     void applyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        Kingdom & humanKingdom = world.GetKingdom( sortedPlayers.HumanColors() );
+        Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioID < awards[i]._startScenarioID )
@@ -463,7 +463,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         const uint32_t awardType = obtainableAwards[i]._type;
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
+            Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
             const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
 

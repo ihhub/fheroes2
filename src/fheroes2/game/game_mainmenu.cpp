@@ -237,7 +237,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::ApplyPalette( highlightDoor, 8 );
 
     // mainmenu loop
-    while ( 1 ) {
+    while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )

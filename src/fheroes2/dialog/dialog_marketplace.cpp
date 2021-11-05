@@ -173,7 +173,8 @@ public:
     }
 
     void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
-    void ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, bool fromTradingPost );
+    void ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, const bool fromTradingPost,
+                        const bool firstExchange );
 
     fheroes2::Rect buttonMax;
     fheroes2::Rect buttonMin;
@@ -194,7 +195,7 @@ private:
 };
 
 void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell,
-                                    bool fromTradingPost )
+                                    const bool fromTradingPost, const bool firstExchange )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     bool disable = kingdom.GetFunds().Get( resourceFrom ) <= 0;
@@ -203,8 +204,11 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         _scrollbar.hide();
         back.restore();
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
-        const TextBox displayMesssage( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ),
-                                       Font::BIG, dst_rt );
+        const std::string message = firstExchange && ( resourceFrom == resourceTo )
+                                        ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
+                                        : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
+
+        const TextBox displayMesssage( message, Font::BIG, dst_rt );
 
         if ( !_singlePlayer ) {
             buttonGift.enable();
@@ -403,6 +407,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     LocalEvent & le = LocalEvent::Get();
 
+    bool firstExchange = true;
+
     // message loop
     while ( le.HandleEvents() ) {
         if ( buttonGift.isEnabled() )
@@ -450,7 +456,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 RedrawToResource( pt2, true, kingdom, fromTradingPost, resourceFrom );
                 if ( resourceTo ) {
                     cursorTo.show();
-                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost );
+                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost, firstExchange );
                 }
 
                 display.render();
@@ -480,7 +486,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                     cursorTo.hide();
                     RedrawToResource( pt2, true, kingdom, fromTradingPost, resourceFrom );
                     cursorTo.show();
-                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost );
+                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost, firstExchange );
                 }
                 display.render();
             }
@@ -531,8 +537,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             kingdom.OddFundsResource( Funds( resourceFrom, count_sell ) );
             kingdom.AddFundsResource( Funds( resourceTo, count_buy ) );
 
+            firstExchange = false;
+
             resourceTo = resourceFrom = Resource::UNKNOWN;
-            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost );
+            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
             fundsFrom = kingdom.GetFunds();
             cursorTo.hide();

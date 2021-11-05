@@ -1349,7 +1349,8 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Spell & spell = tile.QuantitySpell();
-    std::string ask, msg;
+    std::string ask;
+    std::string msg;
 
     switch ( objectType ) {
     case MP2::OBJ_PYRAMID:
@@ -1511,22 +1512,24 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     u32 gold = tile.QuantityGold();
-    std::string ask, msg, win;
+    std::string ask;
+    std::string msg;
+    std::string win;
 
     switch ( objectType ) {
     case MP2::OBJ_GRAVEYARD:
         ask = _( "You tentatively approach the burial ground of ancient warriors. Do you want to search the graves?" );
-        msg = _( "Upon defeating the Zombies you spend several hours searching the graves and find nothing. Such a despicable act reduces your army's morale." );
+        msg = _( "You spend several hours searching the graves and find nothing. Such a despicable act reduces your army's morale." );
         win = _( "Upon defeating the Zombies you search the graves and find something!" );
         break;
     case MP2::OBJ_SHIPWRECK:
         ask = _( "The rotting hulk of a great pirate ship creaks eerily as it is pushed against the rocks. Do you wish to search the shipwreck?" );
-        msg = _( "Upon defeating the Ghosts you spend several hours sifting through the debris and find nothing. Such a despicable act reduces your army's morale." );
+        msg = _( "You spend several hours sifting through the debris and find nothing. Such a despicable act reduces your army's morale." );
         win = _( "Upon defeating the Ghosts you sift through the debris and find something!" );
         break;
     case MP2::OBJ_DERELICTSHIP:
         ask = _( "The rotting hulk of a great pirate ship creaks eerily as it is pushed against the rocks. Do you wish to search the ship?" );
-        msg = _( "Upon defeating the Skeletons you spend several hours sifting through the debris and find nothing. Such a despicable act reduces your army's morale." );
+        msg = _( "You spend several hours sifting through the debris and find nothing. Such a despicable act reduces your army's morale." );
         win = _( "Upon defeating the Skeletons you sift through the debris and find something!" );
         break;
     default:
@@ -1768,14 +1771,20 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 result = true;
             }
             else {
-                if ( skill.Skill() == Skill::Secondary::WISDOM )
+                if ( skill.Skill() == Skill::Secondary::WISDOM ) {
                     msg = _(
                         "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
-                else if ( skill.Skill() == Skill::Secondary::LEADERSHIP )
+                }
+                else if ( skill.Skill() == Skill::Secondary::LEADERSHIP ) {
                     msg = _(
                         "You've come across the spartan quarters of a retired soldier. The soldier tells you that he is willing to pass on the %{art} to the first true leader he meets." );
-                else
-                    msg = "FIXME: (unknown condition): %{art}";
+                }
+                else {
+                    // Did you add a new condition? If yes add a proper if-else branch.
+                    assert( 0 );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
+                    StringReplace( msg, "%{skill}", skill.GetName() );
+                }
 
                 StringReplace( msg, "%{art}", art.GetName() );
                 Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::OK );
@@ -2197,7 +2206,8 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
-    std::string msg_full, msg_void;
+    std::string msg_full;
+    std::string msg_void;
 
     switch ( objectType ) {
     case MP2::OBJ_RUINS:
@@ -3090,6 +3100,9 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
 
 void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
+    // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
+    assert( hero.GetIndex() != dst_index );
+
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Kingdom & kingdom = hero.GetKingdom();
 
@@ -3101,20 +3114,11 @@ void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 
         Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
-        tile.SetObject( hero.GetMapsObject() );
-        hero.SetMapsObject( MP2::OBJ_ZERO );
         tile.RemoveObjectSprite();
+        tile.setAsEmpty();
 
+        AGG::PlaySound( M82::KILLFADE );
         Game::ObjectFadeAnimation::PerformFadeTask();
-
-        // TODO: fix pathfinding
-        if ( tile.GetIndex() == hero.GetIndex() ) {
-            tile.SetObject( MP2::OBJ_HEROES );
-        }
-        else {
-            tile.setAsEmpty();
-            hero.SetMapsObject( MP2::OBJ_HEROES );
-        }
     }
     else {
         Dialog::Message(

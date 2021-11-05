@@ -1163,7 +1163,39 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::TWNWWEL2: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    if ( _icnVsSprite[id][0].width() == 122 && _icnVsSprite[id][0].height() == 226 ) {
+                        FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
+                    }
 
+                    for ( size_t i = 1; i < 7; i++ ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( original.width() == 121 && original.height() == 151 ) {
+                            FillTransform( original, 0, 0, 64, 39, 1 );
+                        }
+                    }
+                }
+                return true;
+            }
+            case ICN::TWNWCAPT: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 118 && original.height() ) {
+                        // Remove shadow from left side.
+                        FillTransform( original, 85, 84, 33, 26, 1 );
+
+                        // Remove extra terrain at the bottom.
+                        FillTransform( original, 0, 114, 40, 4, 1 );
+                        FillTransform( original, 9, 112, 51, 2, 1 );
+                        FillTransform( original, 35, 110, 47, 2, 1 );
+                        FillTransform( original, 57, 108, 51, 2, 1 );
+                    }
+                }
+                return true;
+            }
             default:
                 break;
             }

@@ -68,7 +68,7 @@ namespace Campaign
             return _carryOverTroops;
         }
 
-        const std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
+        std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
 
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );

@@ -26,10 +26,12 @@
 #include "icn.h"
 #include "localevent.h"
 #include "mus.h"
+#include "pal.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_text.h"
 
 #include <cassert>
 
@@ -221,15 +223,15 @@ namespace
 
         const std::string contributors( "LeHerosInconnu\n"
                                         "undef21\n"
-                                        "shprotru\n"
                                         "Arkadiy Illarionov\n"
+                                        "shprotru\n"
                                         "eos428\n"
                                         "vincent-grosbois\n"
                                         "Vasilenko Alexey\n"
+                                        "a1exsh\n"
                                         "Andrii Kurdiumov\n"
-                                        "Andrey Starodubtsev\n"
-                                        "dimag0g\n"
                                         "felix642\n"
+                                        "dimag0g\n"
                                         "and many other contributors!" );
 
         name.Set( contributors, Font::BIG, textWidth );
@@ -294,16 +296,17 @@ namespace
         fheroes2::ApplyPalette( labyrinth, 2 );
         fheroes2::Blit( labyrinth, output, ( columnStep - labyrinth.width() ) / 2, offsetY );
 
-        offsetY = textInitialOffsetY + 65;
+        offsetY = textInitialOffsetY + 55;
 
         title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, output.width() - columnStep );
         title.Blit( columnStep + ( output.width() - columnStep - title.w() ) / 2, offsetY, output );
         offsetY += title.h();
 
-        const std::string contributors( "Matt Taylor\n"
-                                        "Lipatov Kiril\n"
+        const std::string contributors( "William Hoskinson\n"
+                                        "Kiril Lipatov\n"
                                         "Aleksei Mazur\n"
-                                        "William Hoskinson\n"
+                                        "Matt Taylor\n"
+                                        "Connor Townsend\n"
                                         "Brandon Wright\n"
                                         "and many-many other supporters!" );
 
@@ -336,6 +339,244 @@ namespace
 
         return output;
     }
+
+    fheroes2::Sprite generateOriginalCreditsFirstPage()
+    {
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
+        fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        output._disableTransformLayer();
+
+        const fheroes2::FontType titleFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW };
+        const fheroes2::FontType nameFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+
+        fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
+
+        const int32_t textInitialOffsetY = 35;
+        const int32_t textWidth = 320;
+        const int32_t titleOffsetY = 7;
+
+        int32_t offsetY = textInitialOffsetY;
+        int32_t offsetX = 0;
+
+        title.set( _( "Designed and Directed" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        fheroes2::Text name( _( "Jon Van Caneghem" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Programming and Design" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Phil Steinmeyer" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Executive Producer" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Mark Caldwell" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Producer" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Walt Hochbrueckner" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Additional Design" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Paul Rattner\n"
+                     "Debbie Van Caneghem" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Additional Programming" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "George Ruof\n"
+                     "Todd Hendrix\n"
+                     "Mark Caldwell" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Musical Production" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Rob King" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Music and Sound Design" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Rob King\n"
+                     "Steve Baca\n"
+                     "Paul Romero" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        offsetY = textInitialOffsetY;
+        offsetX += textWidth;
+
+        title.set( _( "Vocalists" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Grant Youngblood\n"
+                     "Kareen Meshagan" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Art Director" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Julia Ulano" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Assistant Art Director" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Bonita Long-Hemsath" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Artists" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Julie Bateman\n"
+                     "Rebecca Christel\n"
+                     "Shelly Garcia\n"
+                     "Sam Hasson\n"
+                     "Louis Henderson\n"
+                     "Tracy Iwata\n"
+                     "Steve Jasper\n"
+                     "April Lee\n"
+                     "Lieu Pham\n"
+                     "Phelan Sykes\n"
+                     "Steve Wasaff\n"
+                     "Scott White" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        return output;
+    }
+
+    fheroes2::Sprite generateOriginalCreditsSecondPage()
+    {
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
+        fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        output._disableTransformLayer();
+
+        const fheroes2::FontType titleFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW };
+        const fheroes2::FontType nameFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+
+        fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
+
+        const int32_t textInitialOffsetY = 35;
+        const int32_t textWidth = 320;
+        const int32_t titleOffsetY = 7;
+
+        int32_t offsetY = textInitialOffsetY;
+        int32_t offsetX = 0;
+
+        title.set( _( "QA Manager" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        fheroes2::Text name( _( "Peter Ryu" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "QA" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "David Botan\n"
+                     "David Fernandez\n"
+                     "Bill Nesemeier\n"
+                     "Walter Johnson\n"
+                     "Kate McClelland\n"
+                     "Timothy Lang\n"
+                     "Bryan Farina" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Writing" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Paul Rattner" ), nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Manual and Helpfile" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Bryan Farina\n"
+                     "Rozita Tolouey\n"
+                     "Bruce Schlickbernd" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        offsetY = textInitialOffsetY;
+        offsetX += textWidth;
+
+        title.set( _( "Scenarios" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Jon Van Caneghem\n"
+                     "Debbie Van Caneghem\n"
+                     "Clayton Retzer\n"
+                     "Christian Vanover\n"
+                     "Paul Rattner\n"
+                     "Benjamin Bent\n"
+                     "Bryan Farina\n"
+                     "Eric Heffron\n"
+                     "Mark Palczynski\n"
+                     "Walt Hochbrueckner\n"
+                     "Bruce Schlickbernd\n"
+                     "Craig Konas" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Special Thanks to" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( _( "Scott McDaniel\n"
+                     "Dean Rettig\n"
+                     "Ted Chapman\n"
+                     "Dean Frost" ),
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        return output;
+    }
 }
 
 void Game::ShowCredits()
@@ -362,6 +603,8 @@ void Game::ShowCredits()
     std::vector<fheroes2::Sprite> pages;
     pages.emplace_back( generateFirstPage() );
     pages.emplace_back( generateSecondPage() );
+    pages.emplace_back( generateOriginalCreditsFirstPage() );
+    pages.emplace_back( generateOriginalCreditsSecondPage() );
 
     const fheroes2::Sprite header = generateHeader();
 

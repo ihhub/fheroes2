@@ -319,26 +319,36 @@ namespace
     const char * getArtifactCampaignName( const int32_t artifactId )
     {
         switch ( artifactId ) {
-        case Artifact::THUNDER_MACE:
-            return _( "Thunder Mace" );
-        case Artifact::MINOR_SCROLL:
-            return _( "Minor Scroll" );
-        case Artifact::DRAGON_SWORD:
-            return _( "Dragon Sword" );
-        case Artifact::DIVINE_BREASTPLATE:
-            return _( "Breastplate" );
-        case Artifact::FIZBIN_MISFORTUNE:
-            return _( "Fizbin of Misfortune" );
-        case Artifact::MAGE_RING:
-            return _( "Mage's ring" );
+        case Artifact::BALLISTA:
+            return _( "Ballista" );
+        case Artifact::CASTER_BRACELET:
+            return _( "Caster's Bracelet" );
         case Artifact::DEFENDER_HELM:
             return _( "Defender Helm" );
+        case Artifact::DIVINE_BREASTPLATE:
+            return _( "Breastplate" );
+        case Artifact::DRAGON_SWORD:
+            return _( "Dragon Sword" );
+        case Artifact::FIZBIN_MISFORTUNE:
+            return _( "Fizbin Medal" );
+        case Artifact::FOREMOST_SCROLL:
+            return _( "Foremost Scroll" );
+        case Artifact::MAGE_RING:
+            return _( "Mage's Ring" );
+        case Artifact::MAJOR_SCROLL:
+            return _( "Major Scroll" );
+        case Artifact::MINOR_SCROLL:
+            return _( "Minor Scroll" );
+        case Artifact::NOMAD_BOOTS_MOBILITY:
+            return _( "Nomad Boots" );
         case Artifact::POWER_AXE:
             return _( "Power Axe" );
         case Artifact::STEALTH_SHIELD:
             return _( "Stealth Shield" );
-        case Artifact::NOMAD_BOOTS_MOBILITY:
-            return _( "Nomad Boots" );
+        case Artifact::THUNDER_MACE:
+            return _( "Thunder Mace" );
+        case Artifact::TRAVELER_BOOTS_MOBILITY:
+            return _( "Traveler's Boots" );
         default:
             return Artifact( artifactId ).GetName();
         }
@@ -447,6 +457,10 @@ namespace Campaign
             return getWizardsIsleCampaignBonusData( scenarioID );
         case Campaign::DESCENDANTS_CAMPAIGN:
             return getDescendantsCampaignBonusData( scenarioID );
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
+            break;
         }
 
         // shouldn't be here unless we get an unsupported campaign

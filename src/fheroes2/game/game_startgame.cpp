@@ -139,26 +139,30 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
     if ( it != myCastles.end() ) {
-        int result = Dialog::ZERO;
-        while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false );
+        Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
 
-            if ( it != myCastles.end() ) {
-                if ( Dialog::PREV == result ) {
-                    if ( it == myCastles.begin() )
-                        it = myCastles.end();
-                    --it;
-                }
-                else if ( Dialog::NEXT == result ) {
-                    ++it;
-                    if ( it == myCastles.end() )
-                        it = myCastles.begin();
-                }
+        while ( result != Castle::CastleDialogReturnValue::Close ) {
+            assert( it != myCastles.end() );
+
+            const bool openConstructionWindow
+                = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+
+            result = ( *it )->OpenDialog( false, openConstructionWindow );
+
+            if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+                if ( it == myCastles.begin() )
+                    it = myCastles.end();
+                --it;
+            }
+            else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+                ++it;
+                if ( it == myCastles.end() )
+                    it = myCastles.begin();
             }
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true );
+        castle.OpenDialog( true, false );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();

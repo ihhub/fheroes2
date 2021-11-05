@@ -64,7 +64,11 @@ u32 crc32b( const char * msg )
 
 struct mofile
 {
-    u32 count, offset_strings1, offset_strings2, hash_size, hash_offset;
+    uint32_t count;
+    uint32_t offset_strings1;
+    uint32_t offset_strings2;
+    uint32_t hash_size;
+    uint32_t hash_offset;
     StreamBuf buf;
     std::map<u32, chunk> hash_offsets;
     std::string encoding;
@@ -126,7 +130,8 @@ struct mofile
                 return false;
             }
             else {
-                u16 major, minor;
+                uint16_t major;
+                uint16_t minor;
                 sf >> major >> minor;
 
                 if ( 0 != major ) {

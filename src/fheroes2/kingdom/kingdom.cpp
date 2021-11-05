@@ -258,7 +258,7 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
             }
         }
 
-        Player * player = Settings::Get().GetPlayers().Get( GetColor() );
+        Player * player = Players::Get( GetColor() );
 
         if ( player && player->GetFocus().GetHeroes() == hero ) {
             player->GetFocus().Reset();
@@ -300,7 +300,7 @@ void Kingdom::RemoveCastle( const Castle * castle )
             }
         }
 
-        Player * player = Settings::Get().GetPlayers().Get( GetColor() );
+        Player * player = Players::Get( GetColor() );
 
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();
@@ -873,33 +873,27 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 
 cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
 {
-    static cost_t startingResourcesSet[] = {{10000, 30, 10, 30, 10, 10, 10},
-                                            {7500, 20, 5, 20, 5, 5, 5},
-                                            {5000, 10, 2, 10, 2, 2, 2},
-                                            {2500, 5, 0, 5, 0, 0, 0},
-                                            {0, 0, 0, 0, 0, 0, 0},
-                                            // ai resource
-                                            {10000, 30, 10, 30, 10, 10, 10}};
-
     if ( isControlAI() )
-        return startingResourcesSet[5];
+        return { 10000, 30, 10, 30, 10, 10, 10 };
 
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return startingResourcesSet[0];
+        return { 10000, 30, 10, 30, 10, 10, 10 };
     case Difficulty::NORMAL:
-        return startingResourcesSet[1];
+        return { 7500, 20, 5, 20, 5, 5, 5 };
     case Difficulty::HARD:
-        return startingResourcesSet[2];
+        return { 5000, 10, 2, 10, 2, 2, 2 };
     case Difficulty::EXPERT:
-        return startingResourcesSet[3];
+        return { 2500, 5, 0, 5, 0, 0, 0 };
     case Difficulty::IMPOSSIBLE:
-        return startingResourcesSet[4];
+        return { 0, 0, 0, 0, 0, 0, 0 };
     default:
+        // Did you add a new difficulty level?
+        assert( 0 );
         break;
     }
 
-    return startingResourcesSet[1];
+    return { 7500, 20, 5, 20, 5, 5, 5 };
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )

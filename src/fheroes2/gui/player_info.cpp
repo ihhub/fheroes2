@@ -278,7 +278,7 @@ void Interface::PlayersInfo::resetSelection()
 bool Interface::PlayersInfo::QueueEventProcessing( void )
 {
     Settings & conf = Settings::Get();
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     Player * player = nullptr;
 
     if ( le.MousePressRight() ) {

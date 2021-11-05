@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <string>
 #include <vector>
 
@@ -236,6 +237,10 @@ namespace
             break;
         case Difficulty::IMPOSSIBLE:
             levelCursor.setPosition( coordDifficulty[4].x, coordDifficulty[4].y );
+            break;
+        default:
+            // Did you add a new difficulty mode? Add the corresponding case above!
+            assert( 0 );
             break;
         }
         levelCursor.redraw();

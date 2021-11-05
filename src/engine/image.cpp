@@ -1537,6 +1537,23 @@ namespace fheroes2
         }
     }
 
+    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t tranformId )
+    {
+        if ( !Verify( image, x, y, width, height ) )
+            return;
+
+        const int32_t imageWidth = image.width();
+
+        uint8_t * imageY = image.image() + y * imageWidth + x;
+        uint8_t * transformY = image.transform() + y * imageWidth + x;
+        const uint8_t * imageYEnd = imageY + height * imageWidth;
+
+        for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
+            std::fill( imageY, imageY + width, 0 );
+            std::fill( transformY, transformY + width, tranformId );
+        }
+    }
+
     Image FilterOnePixelNoise( const Image & input )
     {
         if ( input.width() < 3 || input.height() < 3 ) {
@@ -1877,8 +1894,7 @@ namespace fheroes2
                         const uint8_t * transformInX = transformInY + offsetIn;
 
                         if ( posX < widthIn - 1 && posY < heightRoiIn - 1 ) {
-                            if ( *( transformInX ) == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0
-                                 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
+                            if ( *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
                                 const double coeffX = posX - startX;
                                 const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
                                 const double coeff2 = coeffX * ( 1 - coeffY );

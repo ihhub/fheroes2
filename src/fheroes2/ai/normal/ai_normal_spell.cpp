@@ -427,7 +427,7 @@ namespace AI
                 continue;
 
             // For dead units: skip if there's another unit standing on top
-            if ( !unit->isValid() && arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
+            if ( !unit->isValid() && Board::GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
             uint32_t missingHP = unit->GetMissingHitPoints();

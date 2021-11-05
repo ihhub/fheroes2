@@ -1,7 +1,7 @@
 # For descent FetchContent()
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.8 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.9 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12")
@@ -76,7 +76,7 @@ if(WIN32)
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
 		)
 	install(
-		FILES script/homm2/extract_homm2_dos_anim.bat script/homm2/extract_homm2_dos_anim.ps1 script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
+		FILES script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 else(WIN32)

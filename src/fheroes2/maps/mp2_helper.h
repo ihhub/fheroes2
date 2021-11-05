@@ -17,13 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #pragma once
 
-#define MAJOR_VERSION 0
-#define MINOR_VERSION 9
-#define INTERMEDIATE_VERSION 9
+class StreamBase;
 
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+namespace MP2
+{
+    struct mp2tile_t;
+    struct mp2addon_t;
+
+    void loadTile( StreamBase & stream, mp2tile_t & tile );
+
+    void loadAddon( StreamBase & stream, mp2addon_t & addon );
+}
