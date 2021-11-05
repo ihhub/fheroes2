@@ -1,7 +1,7 @@
 version 0.9.9 (05 November 2021)
 - do not leak the hotkey state from the experimental settings dialog to the scenario info dialog
 - fix Stonehenge gold cost
-- fix stonehenge building requirements
+- fix Stonehenge building requirements
 - add buttons in castle construction window
 - fix rendering of Captain's Quarters in Warlock castle
 - fix Marketplace messaging
@@ -40,8 +40,8 @@ version 0.9.9 (05 November 2021)
 - fix AI lust for Magellan Maps object
 - hide the OKAY button in campaign info window
 - handle default exit hotkey in Campaign scenario select / info
-- add Sphnix handling by AI
-- remove incorrect status message for hero portait in hero screen
+- add Sphinx handling by AI
+- remove incorrect status message for hero portrait in hero screen
 - fix map size button states on hotkey press
 - restore environment music & ambient sounds after exiting from the campaign info screen to the adventure map
 - do not allow to use lower than original resolutions
@@ -53,7 +53,7 @@ version 0.9.9 (05 November 2021)
 - fix losing hero artifacts upon flee or surrender
 - enable a pressed state for View Intro button post-launch in Campaign screen
 - fix bonus artifact names in campaign screen
-- return to the Main Menu after canceling campaign scenarion
+- return to the Main Menu after cancelling campaign scenario
 - fix AI heroes being stuck on teleports
 - fix button rendering in Restart battle dialog
 - update Portuguese translation
