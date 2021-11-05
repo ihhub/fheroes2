@@ -23,7 +23,7 @@ MAKE	:= make
 
 PROJECT_TITLE := fheroes2
 PROJECT_AUTHOR := fheroes2 resurrection team
-PROJECT_VERSION := 0.9.8
+PROJECT_VERSION := 0.9.9
 
 PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
 

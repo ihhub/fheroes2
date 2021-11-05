@@ -1,3 +1,77 @@
+version 0.9.9 (05 November 2021)
+- do not leak the hotkey state from the experimental settings dialog to the scenario info dialog
+- fix Stonehenge gold cost
+- fix stonehenge building requirements
+- add buttons in castle construction window
+- fix rendering of Captain's Quarters in Warlock castle
+- fix Marketplace messaging
+- fix MIDI Expansion music option being always reset upon restarting the game
+- fix incorrect sounds while playing MIDI music in certain platforms
+- add credits to the original HoMM2 team
+- correct original Waterfall images to remove Cave
+- use original alignment for Rating, Map Size in gameinfo window
+- fix interaction passability with water objects
+- change Shipwreck, Graveyard and Derelict Ship messages
+- add the Resources Settings page to the Windows installer
+- fix passability for Reefs
+- fix invalid Stonelithts after Barrier removal
+- fix passabilities for diagonal moves
+- clear fog for allies upon visiting Magellan's maps
+- fix Archibald scenario 7 description
+- fix bad pixels on multiple images
+- verify Victory/Loss conditions after a static hero action
+- modify Magellan's maps logic and UI
+- fix monster count in Dragon City for Archibald scenario 7
+- update Victory message for Archibald scenario 7
+- fix possible crash for Russian version of the game
+- fix incorrect map description length
+- fix spell points in Battle Only mode
+- apply Bane and Alliance condition only for Human heroes
+- add extra empty line in New Month window
+- disable bonus choice for campaign scenario info window during scenario play
+- add Norwegian Translation
+- fix the position of campaign days spent text
+- close certain dialogs containing only one Exit button with Enter key
+- add Barbarian Captain Quarter's missing part
+- add hotkeys for selection of SW/PoL campaign
+- generate the default High Score values
+- fix "show damage" feature for blessed/cursed troops
+- fix high scores word
+- fix AI lust for Magellan Maps object
+- hide the OKAY button in campaign info window
+- handle default exit hotkey in Campaign scenario select / info
+- add Sphnix handling by AI
+- remove incorrect status message for hero portait in hero screen
+- fix map size button states on hotkey press
+- restore environment music & ambient sounds after exiting from the campaign info screen to the adventure map
+- do not allow to use lower than original resolutions
+- freed from Jail AI hero starts movement at the same turn
+- add AI interaction with Alchemist Tower
+- fix incorrect visiting status of Magic Well, Stables, Artesian Spring and Bad Luck objects for AI
+- fix invalid assessment of Monster upgrade objects for AI
+- fix cases when AI hero ignores some objects while defeating an army just on the way to them
+- fix losing hero artifacts upon flee or surrender
+- enable a pressed state for View Intro button post-launch in Campaign screen
+- fix bonus artifact names in campaign screen
+- return to the Main Menu after canceling campaign scenarion
+- fix AI heroes being stuck on teleports
+- fix button rendering in Restart battle dialog
+- update Portuguese translation
+- fix inability to dig on a tile where monster was located
+- fix inability to apply Hypnotize spell on Dwarves
+- fix shooting penalty detection
+- add extra popup windows for UI elements in castle dialog
+- fix passability with shadow sprites
+- AI to use Hydra ability in battle
+- reinforce a AI hero standing in a castle at the start of turn
+- update status bar in castle screen dialog even during construction animation
+- fix incorrect active area of certain buildings in castle screen dialog due to invalid Z levels
+- hide cursor while opening a dwelling info in castle screen dialog by right mouse click
+- add Italian language support
+- update Polish translation
+- properly show the attack cursor when the attack square is located at the top of the castle sprite
+- fix infinite loop for AI trying to use Stoneliths
+
 version 0.9.8 (05 October 2021)
 - fix a case when a hero loses his artifacts after retreat in multiplayer mode
 - fix monster position on World Map

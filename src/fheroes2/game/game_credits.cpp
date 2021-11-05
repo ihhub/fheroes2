@@ -223,15 +223,15 @@ namespace
 
         const std::string contributors( "LeHerosInconnu\n"
                                         "undef21\n"
-                                        "shprotru\n"
                                         "Arkadiy Illarionov\n"
+                                        "shprotru\n"
                                         "eos428\n"
                                         "vincent-grosbois\n"
                                         "Vasilenko Alexey\n"
+                                        "a1exsh\n"
                                         "Andrii Kurdiumov\n"
-                                        "Andrey Starodubtsev\n"
-                                        "dimag0g\n"
                                         "felix642\n"
+                                        "dimag0g\n"
                                         "and many other contributors!" );
 
         name.Set( contributors, Font::BIG, textWidth );
