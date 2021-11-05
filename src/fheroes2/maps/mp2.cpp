@@ -1166,15 +1166,30 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     case OBJ_JAIL:
     case OBJ_BUOY:
     case OBJ_SKELETON:
-    case OBJ_DERELICTSHIP:
     case OBJ_MERMAID:
     case OBJ_SIRENS:
+    case OBJ_SHIPWRECK:
         return true;
     default:
         break;
     }
 
     return isPickupObject( objectType );
+}
+
+bool MP2::isAccessibleFromBeach( const MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case OBJ_MONSTER:
+    case OBJ_HEROES:
+    case OBJ_BOAT:
+    case OBJ_SHIPWRECK:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
 }
 
 int MP2::getActionObjectDirection( const MapObjectType objectType )
@@ -1198,9 +1213,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_BOAT:
     case OBJ_HEROES:
         return DIRECTION_ALL;
-    case OBJ_SHIPWRECK:
-        // Logically right tile from Shipwreck is ocean so it could be safe to allow it.
-        return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;
     case OBJ_DERELICTSHIP:
     case OBJ_TROLLBRIDGE:
     case OBJ_ARCHERHOUSE:
@@ -1275,6 +1287,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_MERMAID:
     case OBJ_WATERWHEEL:
     case OBJ_MAGELLANMAPS:
+    case OBJ_SHIPWRECK:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
     case OBJ_CASTLE:
         return Direction::CENTER | Direction::BOTTOM;
