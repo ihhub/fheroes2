@@ -1193,10 +1193,13 @@ msgstr "L'épée du Dragon"
 msgid "Breastplate"
 msgstr "Plastron Divin"
 
+msgid "Fizbin Medal"
+msgstr "Fizbin"
+
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin de l'infortune"
 
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr "Anneau de Magicien"
 
 msgid "Defender Helm"
@@ -6766,6 +6769,9 @@ msgstr "La %{name} apporte un revenu de %{count} pièces d'or par tour."
 msgid "Arcane Necklace of Magic"
 msgstr "Obscur collier magique"
 
+msgid "Caster's Bracelet"
+msgstr "Bracelet magique"
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Bracelet magique du jeteur de sorts"
 
@@ -6830,11 +6836,17 @@ msgstr "Plastron divin de protection"
 msgid "Minor Scroll of Knowledge"
 msgstr "Parchemin mineur"
 
+msgid "Major Scroll"
+msgstr "Parchemin majeur"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Parchemin majeur"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Parchemin supérieur"
+
+msgid "Foremost Scroll"
+msgstr "Parchemin ultime"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Parchemin ultime"
@@ -6857,6 +6869,9 @@ msgstr "Brodequins de nomade"
 msgid "The %{name} increase your movement on land."
 msgstr ""
 "Les %{name} augmentent le potentiel de déplacement d'un héros sur terre."
+
+msgid "Traveler's Boots"
+msgstr "Bottes magiques"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Bottes de sept lieues"

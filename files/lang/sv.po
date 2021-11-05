@@ -1108,10 +1108,14 @@ msgstr "Drakdräpare"
 msgid "Breastplate"
 msgstr "Andurans bröstharnesk"
 
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
 msgid "Fizbin of Misfortune"
 msgstr "Olycksfizbin"
 
-msgid "Mage's ring"
+msgid "Mage's Ring"
 msgstr ""
 
 #, fuzzy
@@ -6561,6 +6565,9 @@ msgstr "%{name} medför en inkomst på %{count} guld per runda."
 msgid "Arcane Necklace of Magic"
 msgstr ""
 
+msgid "Caster's Bracelet"
+msgstr ""
+
 msgid "Caster's Bracelet of Magic"
 msgstr ""
 
@@ -6624,11 +6631,19 @@ msgstr ""
 msgid "Minor Scroll of Knowledge"
 msgstr "Mindre Kunskapsrulle"
 
+#, fuzzy (18 char max)
+msgid "Major Scroll"
+msgstr "Större Kunskapsrulle"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Större Kunskapsrulle"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Överordnad Kunskapsrulle"
+
+#, fuzzy (18 char max)
+msgid "Foremost Scroll"
+msgstr "Särskild Kunskapsrulle"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Särskild Kunskapsrulle"
@@ -6649,6 +6664,9 @@ msgid "Nomad Boots of Mobility"
 msgstr ""
 
 msgid "The %{name} increase your movement on land."
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Traveler's Boots of Mobility"
