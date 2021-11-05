@@ -44,7 +44,7 @@ namespace AGG
     void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
-    void ResetMixer();
+    void ResetMixer( bool asyncronizedCall = true );
 
     std::vector<uint8_t> ReadChunk( const std::string & key, bool ignoreExpansion = false );
 }
