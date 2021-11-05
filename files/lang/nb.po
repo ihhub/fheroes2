@@ -153,10 +153,10 @@ msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverer fiendestyrken!"
 
 msgid "Set auto battle off"
-msgstr "Skru autostrid av"
+msgstr "Skru autokamp av"
 
 msgid "Set auto battle on"
-msgstr "Skru autostrid på"
+msgstr "Skru autokamp på"
 
 msgid "spell failed!"
 msgstr "trolldom mislykket!"
@@ -193,23 +193,44 @@ msgstr "Hurtighet"
 msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
+msgid "Set the speed of combat actions and animations."
+msgstr "Juster hastigheten til handlinger og animasjoner i kamp."
+
+msgid "Monster Info"
+msgstr "Monsterinfo"
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr "Slå på/av vinduet med monsterinfo. Vinduet viser detaljer om de nåværende og utvalgte monstrene."
+
 msgid "Auto Spell Casting"
 msgstr ""
 "Auto-\n"
 "trylling"
 
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
+msgstr "Velg om datamaskinen skal bruke trolldommer når autokamp er skrudd på. (Merk: Dette påvirker ikke magibruken til datamaskinspillere på noen som helst måte, og det påvirker heller ikke hurtigkamp.)"
+
 msgid "Grid"
 msgstr "Rutenett"
+
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
+msgstr "Skru rutenettet på eller av. Rutenettet bestemmer alltid hvor man kan flytte seg, selv om det er slått av. Denne innstillingen avgjør bare om den er synlig."
 
 msgid "Shadow Movement"
 msgstr ""
 "Flytte-\n"
 "skygge"
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr "Skru skyggene som viser hvor skapningene dine kan flytte seg eller angripe enten av eller på."
+
 msgid "Shadow Cursor"
 msgstr ""
 "Skygge-\n"
 "markør"
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
+msgstr "Skru av eller på en skygge som viser den nåværende plasseringen på rutenettet til pekeren."
 
 msgid "Off"
 msgstr "Av"
@@ -298,7 +319,8 @@ msgstr "Flaks"
 msgid "Spell Points"
 msgstr "Mana"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Helteinnstillinger"
 
 msgid "Cast Spell"
@@ -357,8 +379,8 @@ msgstr ""
 "\"Jeg aksepterer din overgivelse, og jeg gir deg og dine styrker fritt leide "
 "mot en pris på %{price} gull.\""
 
-msgid "View %{monster} info."
-msgstr "Vis info om %{monster}."
+msgid "View %{monster} info"
+msgstr "Vis info om %{monster}"
 
 # Bare skyt?
 msgid "Shoot %{monster}"
@@ -372,19 +394,19 @@ msgstr[1] "(%{count} skudd igjen)"
 msgid "Attack %{monster}"
 msgstr "Angrip %{monster}"
 
-msgid "Fly %{monster} here."
-msgstr "Fly %{monster} hit."
+msgid "Fly %{monster} here"
+msgstr "Fly %{monster} hit"
 
-msgid "Move %{monster} here."
-msgstr "Flytt %{monster} hit."
+msgid "Move %{monster} here"
+msgstr "Flytt %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleporter hit"
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr "Ugyldig teleporteringsmål"
 
 msgid "Cast %{spell} on %{monster}"
@@ -393,28 +415,49 @@ msgstr "Kast %{spell} på %{monster}"
 msgid "Cast %{spell}"
 msgstr "Kast %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Velg trolldomsmål"
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Vis info om ballist"
 
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Auto combat"
-msgstr "Autostrid"
+msgid "Auto Combat"
+msgstr "Autokamp"
 
-msgid "Customize system options."
-msgstr "Skreddersy systeminnstillinger."
+msgid "Allows the computer to fight out the battle for you."
+msgstr "Lar datamaskinen kjempe for deg."
+
+msgid "Enable auto combat"
+msgstr "Skru på autokamp"
+
+msgid "Customize system options"
+msgstr "Skreddersy systeminnstillinger"
+
+msgid "Allows you to customize the combat screen."
+msgstr "Lar deg skreddersy kampskjermen."
+
+msgid "Wait"
+msgstr "Avvent"
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgstr "Lar den nåværende skapningen vente. Den nåværende skapningen utsetter turen sin til etter alle andre skapninger har gjort turen sin."
 
 msgid "Wait this unit"
 msgstr "Avvent denne stryken"
 
+msgid "Skip"
+msgstr "Hopp over"
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgstr "Hopper over den nåværende skapningen. Den nåværende skapningen avslutter turen sin og får ikke en ny tur før neste runde."
+
 msgid "Skip this unit"
 msgstr "Hopp over denne styrken"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Vis motstanderhelt"
 
 msgid "Hide logs"
@@ -426,12 +469,12 @@ msgstr "Vis logg"
 msgid "%{color} casts a spell: %{spell}"
 msgstr "%{color} kaster en trolldom: %{spell}"
 
-msgid "%{name} skip the turn"
-msgstr "%{name} hopper over turen"
+msgid "%{name} skip their turn."
+msgstr "%{name} hopper over turen."
 
 # if only 1 monster: "... passe ..."
-msgid "%{name} wait their turn"
-msgstr "%{name} avventer"
+msgid "%{name} wait their turn."
+msgstr "%{name} avventer."
 
 # if only 1 monster: "... attend"
 msgid "%{attacker} do %{damage} damage."
@@ -500,11 +543,11 @@ msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "Erkemagikerne opphever alle gode trolldommer på dine %{name}!"
 
 # Bestemtform flertall feks. Dvergene får uflaks i stedet for "dverger får uflaks"
-msgid "Bad luck descends on the %{attacker}"
-msgstr "Troppen med %{attacker} får uflaks"
+msgid "Bad luck descends on the %{attacker}."
+msgstr "Troppen med %{attacker} får uflaks."
 
-msgid "Good luck shines on the %{attacker}"
-msgstr "Troppen med %{attacker} får flaks"
+msgid "Good luck shines on the %{attacker}."
+msgstr "Troppen med %{attacker} får flaks."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "God kampånd gjør at troppen med %{monster} får en ny tur."
@@ -516,8 +559,8 @@ msgstr "Dårlig kampånd gjør at troppen med %{monster} går i panikk."
 msgid "%{tower} does %{damage} damage."
 msgstr "Slottets %{tower} gjør %{damage} skadepoeng."
 
-msgid "The mirror image is created"
-msgstr "Speilbildet ble skapt"
+msgid "The mirror image is created."
+msgstr "Speilbildet ble skapt."
 
 msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"

@@ -828,7 +828,7 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         if ( ( *it ).first ) {
             const fheroes2::Rect unitRoi = ( *it ).second + offset;
             if ( le.MouseCursor( unitRoi ) ) {
-                msg = _( "View %{monster} info." );
+                msg = _( "View %{monster} info" );
                 StringReplace( msg, "%{monster}", ( *it ).first->GetName() );
             }
 
@@ -2073,7 +2073,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
         if ( b_enemy ) {
             if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
-                statusMsg = _( "View %{monster} info." );
+                statusMsg = _( "View %{monster} info" );
                 StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                 return Cursor::WAR_INFO;
             }
@@ -2105,7 +2105,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
         }
         else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
-            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
+            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
             StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
             return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
         }
@@ -2145,11 +2145,11 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             assert( unitToTeleport != nullptr );
 
             if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
-                statusMsg = _( "Teleport Here" );
+                statusMsg = _( "Teleport here" );
                 return Cursor::SP_TELEPORT;
             }
 
-            statusMsg = _( "Invalid Teleport Destination" );
+            statusMsg = _( "Invalid teleport destination" );
             return Cursor::WAR_NONE;
         }
         else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
@@ -2165,7 +2165,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         }
     }
 
-    statusMsg = _( "Select Spell Target" );
+    statusMsg = _( "Select spell target" );
 
     return Cursor::WAR_NONE;
 }
@@ -2310,7 +2310,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     const fheroes2::Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
     if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
-        msg = _( "View Ballista Info" );
+        msg = _( "View Ballista info" );
 
         if ( le.MouseClickLeft( mainTowerRect ) || le.MousePressRight( mainTowerRect ) ) {
             const Castle * cstl = Arena::GetCastle();
@@ -2330,28 +2330,46 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( le.MouseCursor( btn_auto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Auto combat" );
+        msg = _( "Enable auto combat" );
         ButtonAutoAction( b, a );
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Font::BIG );
+        }
     }
     else if ( le.MouseCursor( btn_settings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Customize system options." );
+        msg = _( "Customize system options" );
         ButtonSettingsAction();
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "System Options" ), _( "Allows you to customize the combat screen." ), Font::BIG );
+        }
     }
     else if ( conf.ExtBattleSoftWait() && le.MouseCursor( btn_wait.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Wait this unit" );
         ButtonWaitAction( a );
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ),
+                             Font::BIG );
+        }
     }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Skip this unit" );
         ButtonSkipAction( a );
+
+        if ( le.MousePressRight() ) {
+            Dialog::Message( _( "Skip" ), _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
+                             Font::BIG );
+        }
     }
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
-            msg = _( "Hero's Options" );
+            msg = _( "View Hero's options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2360,7 +2378,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View Opposing Hero" );
+            msg = _( "View opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2377,7 +2395,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( opponent2 && le.MouseCursor( opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent2Area = opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
-            msg = _( "Hero's Options" );
+            msg = _( "View Hero's options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -2386,7 +2404,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View Opposing Hero" );
+            msg = _( "View opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -2741,10 +2759,10 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
     std::string msg;
     if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skip the turn" );
+        msg = _( "%{name} skip their turn." );
     }
     else {
-        msg = _( "%{name} wait their turn" );
+        msg = _( "%{name} wait their turn." );
     }
 
     StringReplace( msg, "%{name}", attacker.GetName() );
@@ -3608,7 +3626,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
     const fheroes2::Rect & pos = unit.GetRectPosition();
 
-    std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
+    std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}." ) : _( "Bad luck descends on the %{attacker}." );
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
@@ -3921,7 +3939,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         }
     }
 
-    status.SetMessage( _( "The mirror image is created" ), true );
+    status.SetMessage( _( "The mirror image is created." ), true );
 }
 
 void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )

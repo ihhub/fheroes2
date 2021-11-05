@@ -192,18 +192,39 @@ msgstr "Veloc."
 msgid "Speed: %{speed}"
 msgstr "Rapidez: %{speed}"
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr ""
 
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
+msgstr ""
+
 msgid "Grid"
+msgstr ""
+
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
 msgstr ""
 
 #, fuzzy
 msgid "Shadow Movement"
 msgstr "Continuar a Andar"
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
 msgstr "Sombra do cursor"
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
+msgstr ""
 
 #, fuzzy
 msgid "Off"
@@ -290,7 +311,8 @@ msgstr "Sorte"
 msgid "Spell Points"
 msgstr "Mana"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Opções do Herói"
 
 msgid "Cast Spell"
@@ -349,8 +371,8 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
-msgstr "Ver informação de %{monster} "
+msgid "View %{monster} info"
+msgstr "Ver informação de %{monster}"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -366,20 +388,20 @@ msgstr[1] "(Restam %{count} tiros"
 msgid "Attack %{monster}"
 msgstr "Atacar %{monster}"
 
-msgid "Fly %{monster} here."
+msgid "Fly %{monster} here"
 msgstr ""
 
-msgid "Move %{monster} here."
-msgstr "Mover %{monster} daqui."
+msgid "Move %{monster} here"
+msgstr "Mover %{monster} daqui"
 
 msgid "Turn %{turn}"
 msgstr "Turno %{turn}"
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Se teleportar pra cá"
 
-msgid "Invalid Teleport Destination"
-msgstr "Destino de Teleporte Inválido"
+msgid "Invalid teleport destination"
+msgstr "Destino de teleporte inválido"
 
 msgid "Cast %{spell} on %{monster}"
 msgstr ""
@@ -387,29 +409,52 @@ msgstr ""
 msgid "Cast %{spell}"
 msgstr ""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr ""
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr ""
 
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Auto Combat"
+msgstr "Combate Automático"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Combate automático"
 
-msgid "Customize system options."
-msgstr "Customizar opções do sistema."
+msgid "Customize system options"
+msgstr "Customizar opções do sistema"
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "Wait"
+msgstr ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgstr ""
 
 #, fuzzy
 msgid "Wait this unit"
 msgstr "Passar a vez desta criatura"
 
+msgid "Skip"
+msgstr ""
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgstr ""
+
+#, fuzzy
 msgid "Skip this unit"
 msgstr "Passar a vez desta criatura"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Ver Heróis oponentes"
 
 msgid "Hide logs"
@@ -422,12 +467,12 @@ msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
 #, fuzzy
-msgid "%{name} skip the turn"
-msgstr "%{name} a %{race}"
+msgid "%{name} skip their turn."
+msgstr "%{name} a %{race}."
 
 #, fuzzy
-msgid "%{name} wait their turn"
-msgstr "%{name} a %{race}"
+msgid "%{name} wait their turn."
+msgstr "%{name} a %{race}."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr ""
@@ -493,10 +538,10 @@ msgstr "%{name} está paralisado pelos Ciclopes!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr ""
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Good luck shines on the %{attacker}."
 msgstr ""
 
 msgid "High morale enables the %{monster} to attack again."
@@ -508,8 +553,8 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} causou %{damage} damage."
 
-msgid "The mirror image is created"
-msgstr "A imagem no espelho está criada"
+msgid "The mirror image is created."
+msgstr "A imagem no espelho está criada."
 
 msgid "The mirror image is destroyed!"
 msgstr "A imagem no espelho está destruída!"

@@ -177,16 +177,37 @@ msgstr "Greitis"
 msgid "Speed: %{speed}"
 msgstr ""
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 msgid "Auto Spell Casting"
+msgstr ""
+
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
 msgstr ""
 
 msgid "Grid"
 msgstr ""
 
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
 msgid "Shadow Movement"
 msgstr ""
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
+msgstr ""
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 msgid "Off"
@@ -272,7 +293,7 @@ msgstr ""
 msgid "Spell Points"
 msgstr ""
 
-msgid "Hero's Options"
+msgid "View Hero's options"
 msgstr ""
 
 msgid "Cast Spell"
@@ -323,8 +344,8 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
-msgstr "Žiūrėti %{monster} informaciją."
+msgid "View %{monster} info"
+msgstr "Žiūrėti %{monster} informaciją"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -339,19 +360,19 @@ msgstr[2] ""
 msgid "Attack %{monster}"
 msgstr "Pulti %{monster}"
 
-msgid "Fly %{monster} here."
+msgid "Fly %{monster} here"
 msgstr ""
 
-msgid "Move %{monster} here."
+msgid "Move %{monster} here"
 msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr ""
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr ""
 
 msgid "Cast %{spell} on %{monster}"
@@ -360,28 +381,49 @@ msgstr ""
 msgid "Cast %{spell}"
 msgstr ""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr ""
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr ""
 
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Auto Combat"
 msgstr ""
 
-msgid "Customize system options."
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+msgid "Enable auto combat"
+msgstr ""
+
+msgid "Customize system options"
+msgstr ""
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "Wait"
+msgstr ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
 msgstr ""
 
 msgid "Wait this unit"
 msgstr "Šis karys palauks"
 
+msgid "Skip"
+msgstr ""
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgstr ""
+
 msgid "Skip this unit"
 msgstr "Šis karys praleis ėjimą"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"
@@ -393,10 +435,10 @@ msgstr ""
 msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
-msgid "%{name} skip the turn"
+msgid "%{name} skip their turn."
 msgstr ""
 
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr ""
 
 msgid "%{attacker} do %{damage} damage."
@@ -465,10 +507,10 @@ msgstr ""
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr ""
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Good luck shines on the %{attacker}."
 msgstr ""
 
 msgid "High morale enables the %{monster} to attack again."
@@ -480,7 +522,7 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr ""
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr ""
 
 msgid "The mirror image is destroyed!"

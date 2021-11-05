@@ -193,18 +193,39 @@ msgstr "Sebesség"
 msgid "Speed: %{speed}"
 msgstr ""
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Varázslás"
 
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
+msgstr ""
+
 msgid "Grid"
+msgstr ""
+
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
 msgstr ""
 
 #, fuzzy
 msgid "Shadow Movement"
 msgstr "Mozgás folytatása"
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
+msgstr ""
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 #, fuzzy
@@ -295,7 +316,8 @@ msgstr "Szerencse"
 msgid "Spell Points"
 msgstr "Varázspontok"
 
-msgid "Hero's Options"
+#, fuzzy
+msgid "View Hero's options"
 msgstr "Hős opciói"
 
 msgid "Cast Spell"
@@ -357,8 +379,8 @@ msgstr ""
 "Efogadom a megadásodat és gatantálom, hogy %{price} aranyért cserébe a "
 "csapatod szabadon távozhat."
 
-msgid "View %{monster} info."
-msgstr "Megmutatja %{monster} információját."
+msgid "View %{monster} info"
+msgstr "Megmutatja %{monster} információját"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -372,20 +394,20 @@ msgstr[1] ""
 msgid "Attack %{monster}"
 msgstr "%{monster} támad"
 
-msgid "Fly %{monster} here."
-msgstr "A %{monster} ide repül."
+msgid "Fly %{monster} here"
+msgstr "A %{monster} ide repül"
 
-msgid "Move %{monster} here."
-msgstr "A %{monster} ide menjen."
+msgid "Move %{monster} here"
+msgstr "A %{monster} ide menjen"
 
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr "Teleportálás Ide"
 
-msgid "Invalid Teleport Destination"
-msgstr "Helytelen Teleport Cél"
+msgid "Invalid teleport destination"
+msgstr "Helytelen teleport cél"
 
 msgid "Cast %{spell} on %{monster}"
 msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
@@ -393,29 +415,51 @@ msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
 msgid "Cast %{spell}"
 msgstr "Varázsolj %{spell}"
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr "Varázslat célpontjának választása."
 
 #, fuzzy
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Morál információ"
 
 msgid "Ballista"
 msgstr "Dobógép"
 
-msgid "Auto combat"
+msgid "Auto Combat"
+msgstr "Automatikus Harc"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+#, fuzzy
+msgid "Enable auto combat"
 msgstr "Automatikus harc"
 
-msgid "Customize system options."
+msgid "Customize system options"
 msgstr "Rendszerbeállítások testreszabása"
 
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "Wait"
+msgstr ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgstr ""
+
 msgid "Wait this unit"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
 msgstr ""
 
 msgid "Skip this unit"
 msgstr "Egység kihagyása"
 
-msgid "View Opposing Hero"
+msgid "View opposing Hero"
 msgstr "Ellenséges hős megmutatása"
 
 msgid "Hide logs"
@@ -429,11 +473,11 @@ msgid "%{color} casts a spell: %{spell}"
 msgstr "%{name} %{spell} -t  varázsol."
 
 #, fuzzy
-msgid "%{name} skip the turn"
-msgstr "%{name} kör kihagyása"
+msgid "%{name} skip their turn."
+msgstr "%{name} kör kihagyása."
 
 #, fuzzy
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr "%{name} várakozik."
 
 msgid "%{attacker} do %{damage} damage."
@@ -509,12 +553,12 @@ msgstr "A Küklopsz lebénítja a(z) %{name} lényt!"
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr "A főmágus eloszlatja az összes pozitív varázslatot a %{name} lényről!"
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr "A %{attacker} lénynek balszerencséje van."
 
 #, fuzzy
-msgid "Good luck shines on the %{attacker}"
-msgstr "A Jó szerencse regyog a  %{attacker}"
+msgid "Good luck shines on the %{attacker}."
+msgstr "A Jó szerencse regyog a  %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr "A jó morál következtében a(z) %{monster} újra támadhat."
@@ -527,8 +571,8 @@ msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} sebzése %{dmg}"
 
 #, fuzzy
-msgid "The mirror image is created"
-msgstr "A Tükörkép varázslat nem sikerült!"
+msgid "The mirror image is created."
+msgstr "A Tükörkép varázslat nem sikerült."
 
 msgid "The mirror image is destroyed!"
 msgstr ""
