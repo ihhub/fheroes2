@@ -1566,7 +1566,7 @@ void Battle::Interface::RedrawCover()
     const Cell * cell = Board::GetCell( index_pos );
     const int cursorType = Cursor::Get().Themes();
 
-    if ( cell && _currentUnit && conf.BattleShowMouseShadow() && cursorType != Cursor::WAR_NONE ) {
+    if ( cell && _currentUnit && conf.BattleShowMouseShadow() ) {
         std::set<const Cell *> highlightCells;
 
         if ( humanturn_spell.isValid() ) {
