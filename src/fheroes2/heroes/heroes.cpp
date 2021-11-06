@@ -989,15 +989,15 @@ void Heroes::ShowPath( bool f )
     f ? path.Show() : path.Hide();
 }
 
-void Heroes::IncreaseExperience( u32 exp )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
 {
-    int level_old = GetLevelFromExperience( experience );
-    int level_new = GetLevelFromExperience( experience + exp );
+    int oldLevel = GetLevelFromExperience( experience );
+    int newLevel = GetLevelFromExperience( experience + amount );
 
-    for ( int ii = 0; ii < level_new - level_old; ++ii )
-        LevelUp( false );
+    for ( int level = oldLevel; level < newLevel; ++level )
+        LevelUp( false, autoselect );
 
-    experience += exp;
+    experience += amount;
 }
 
 /* calc level from exp */

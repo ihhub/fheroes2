@@ -226,66 +226,6 @@ namespace
         }
     }
 
-    void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
-    {
-        const Players & sortedPlayers = Settings::Get().GetPlayers();
-        for ( const Player * player : sortedPlayers ) {
-            if ( player == nullptr ) {
-                continue;
-            }
-
-            if ( !player->isControlHuman() )
-                continue;
-
-            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-            Heroes * bestHero = kingdom.GetBestHero();
-
-            switch ( scenarioBonus._type ) {
-            case Campaign::ScenarioBonusData::RESOURCES:
-                kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
-                break;
-            case Campaign::ScenarioBonusData::ARTIFACT: {
-                Heroes * hero = kingdom.GetBestHero();
-                assert( hero != nullptr );
-                if ( hero != nullptr ) {
-                    hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
-                }
-                break;
-            }
-            case Campaign::ScenarioBonusData::TROOP:
-                kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
-                break;
-            case Campaign::ScenarioBonusData::SPELL: {
-                KingdomHeroes & heroes = kingdom.GetHeroes();
-                assert( !heroes.empty() );
-                if ( !heroes.empty() ) {
-                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
-                }
-                break;
-            }
-            case Campaign::ScenarioBonusData::STARTING_RACE:
-                Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
-                break;
-            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
-                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
-                }
-                break;
-            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
-                }
-                break;
-            default:
-                assert( 0 );
-            }
-        }
-    }
-
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
     {
         army.Clean();
@@ -293,16 +233,14 @@ namespace
             army.GetTroop( i )->Set( troops[i] );
     }
 
-    void applySpecailCampaignBonuses( const int campaignID, const uint32_t currentScenarioID )
+    void setHeroAndArmyBonus( Heroes * hero, const int campaignID, const uint32_t currentScenarioID )
     {
         switch ( campaignID ) {
         case Campaign::ARCHIBALD_CAMPAIGN:
             switch ( currentScenarioID ) {
             case 6:
-                Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
-                Heroes * bestHero = humanKingdom.GetBestHero();
                 std::vector<Troop> startingTroops;
-                switch ( bestHero->GetRace() ) {
+                switch ( hero->GetRace() ) {
                 case Race::NECR:
                     startingTroops.emplace_back( Monster::SKELETON, 50 );
                     startingTroops.emplace_back( Monster::ROYAL_MUMMY, 18 );
@@ -321,10 +259,81 @@ namespace
                 default:
                     assert( 0 ); // bonus changed?
                 }
-                replaceArmy( bestHero->GetArmy(), startingTroops );
+                replaceArmy( hero->GetArmy(), startingTroops );
+                uint32_t exp = hero->GetExperience();
+                if ( exp < 5000 ) {
+                    hero->IncreaseExperience( 5000 - exp, true );
+                }
                 break;
             }
             break;
+        }
+    }
+
+    void SetScenarioBonus( const int campaignID, const uint32_t currentScenarioID, const Campaign::ScenarioBonusData & scenarioBonus )
+    {
+        const Players & sortedPlayers = Settings::Get().GetPlayers();
+        for ( const Player * player : sortedPlayers ) {
+            if ( player == nullptr ) {
+                continue;
+            }
+
+            if ( !player->isControlHuman() )
+                continue;
+
+            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+            Heroes * bestHero = kingdom.GetBestHero();
+
+            switch ( scenarioBonus._type ) {
+            case Campaign::ScenarioBonusData::RESOURCES:
+                kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+                break;
+            case Campaign::ScenarioBonusData::ARTIFACT: {
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    bestHero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                }
+                break;
+            }
+            case Campaign::ScenarioBonusData::TROOP:
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    bestHero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+                }
+                break;
+            case Campaign::ScenarioBonusData::SPELL: {
+                // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    bestHero->AppendSpellToBook( scenarioBonus._subType, true );
+                }
+                break;
+            }
+            case Campaign::ScenarioBonusData::STARTING_RACE:
+                Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
+                break;
+            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY:
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    setHeroAndArmyBonus( bestHero, campaignID, currentScenarioID );
+                }
+                break;
+            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
+                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+                }
+                break;
+            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                }
+                break;
+            default:
+                assert( 0 );
+            }
         }
     }
 
@@ -733,8 +742,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             conf.SetCurrentFileInfo( mapInfo );
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
-            if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE )
-                SetScenarioBonus( scenarioBonus );
+            if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
+                // but the army has to be set after starting the game, so first only set the race
+                Campaign::ScenarioBonusData temp( Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount );
+                SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID, temp );
+            }
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
@@ -754,10 +766,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             restorer.reset();
 
             // meanwhile, the others should be called after players.SetStartGame()
-            if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
-                SetScenarioBonus( scenarioBonus );
+            if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
+                SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID, scenarioBonus );
+            }
 
-            applySpecailCampaignBonuses( campaignSaveData.getCampaignID(), chosenScenarioID );
             applyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
