@@ -434,7 +434,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             }
 
         if ( redraw_count ) {
-            SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, min );
+            SwitchMaxMinButtons( buttonMin, buttonMax, sel.getCur(), min );
             if ( !ssp.empty() )
                 ssp.hide();
             sel.Redraw();

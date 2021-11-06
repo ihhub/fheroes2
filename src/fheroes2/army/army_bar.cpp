@@ -69,22 +69,9 @@ namespace
                 ++freeSlots;
 
             const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
-            uint32_t redistributeCount = troopFrom.GetCount() / 2;
-            const uint32_t halfOverallCount = overallCount / 2;
+            uint32_t redistributeCount = isSameTroopType ? 1 : troopFrom.GetCount() / 2;
 
-            if ( isSameTroopType ) {
-                // if the same type, then display how many troops should be moved from one slot to another (if redistributeCount > 1 then the Min button is displayed by
-                // default)
-                redistributeCount = halfOverallCount > troopTarget.GetCount() ? halfOverallCount - troopTarget.GetCount() : troopTarget.GetCount() - halfOverallCount;
-
-                // possible when merging two slots of the same unit and there is a count difference, ie. 2 troops + 14 troops
-                if ( redistributeCount > maxCount )
-                    redistributeCount = maxCount;
-            }
-
-            // if splitting to the same troop type, use this bool to turn on fast split option at the beginning of the dialog
-            bool useFastSplit = true;
-
+            bool useFastSplit = !isSameTroopType;
             const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 
             if ( slots < 2 || slots > 6 )
