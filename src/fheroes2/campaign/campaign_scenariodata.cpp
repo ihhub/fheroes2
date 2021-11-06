@@ -425,8 +425,6 @@ namespace Campaign
             objectName = getSpellCampaignName( _subType );
             break;
         case ScenarioBonusData::STARTING_RACE:
-            objectName = Race::String( _subType );
-            break;
         case ScenarioBonusData::STARTING_RACE_AND_ARMY:
             objectName = Race::String( _subType );
             break;
