@@ -1184,12 +1184,16 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
+        if ( !CanAttackUnitFromCell( currentUnit, cell->GetIndex() ) ) {
+            continue;
+        }
+
         for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
             const Cell * aroundCell = GetCell( aroundIdx );
             assert( aroundCell != nullptr );
 
             if ( aroundCell->GetUnit() == &target ) {
-                return CanAttackUnitFromCell( currentUnit, cell->GetIndex() );
+                return true;
             }
         }
     }
