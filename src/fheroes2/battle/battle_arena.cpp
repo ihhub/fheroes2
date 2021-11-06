@@ -672,6 +672,37 @@ Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
     return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
+int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
+{
+    const Position dstPos = Position::GetReachable( currentUnit, dst );
+
+    if ( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) ) {
+        // Destination cell is already reachable
+        return dstPos.GetHead()->GetIndex();
+    }
+
+    const Indexes path = _pathfinder.buildPath( dst );
+
+    // Destination cell is unreachable in principle according to the ArenaPathfinder
+    if ( path.empty() ) {
+        return -1;
+    }
+
+    // Search for the reachable cell nearest to the end of the path
+    const Cell * nearestCell = nullptr;
+
+    for ( auto it = path.crbegin(); it != path.crend(); ++it ) {
+        const Position pos = Position::GetReachable( currentUnit, *it );
+
+        if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
+            nearestCell = pos.GetHead();
+            break;
+        }
+    }
+
+    return nearestCell ? nearestCell->GetIndex() : -1;
+}
+
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;

@@ -1248,35 +1248,6 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     return result;
 }
 
-int32_t Battle::Board::FindNearestReachableCell( const Unit & currentUnit, const int32_t dst )
-{
-    const Position dstPos = Position::GetReachable( currentUnit, dst );
-
-    if ( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) ) {
-        // Destination cell is already reachable
-        return dstPos.GetHead()->GetIndex();
-    }
-
-    const Cell * nearestCell = nullptr;
-    uint32_t nearestDistance = UINT32_MAX;
-
-    // Search for the nearest reachable cell
-    for ( const Cell & cell : *Arena::GetBoard() ) {
-        const Position pos = Position::GetReachable( currentUnit, cell.GetIndex() );
-
-        if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
-            const uint32_t distance = GetDistance( dst, cell.GetIndex() );
-
-            if ( distance < nearestDistance ) {
-                nearestCell = pos.GetHead();
-                nearestDistance = distance;
-            }
-        }
-    }
-
-    return nearestCell ? nearestCell->GetIndex() : -1;
-}
-
 int32_t Battle::Board::FixupDestinationCell( const Unit & currentUnit, const int32_t dst )
 {
     // Only wide units may need this fixup
