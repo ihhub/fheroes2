@@ -32,6 +32,7 @@
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
+#include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
@@ -285,6 +286,48 @@ namespace
         }
     }
 
+    void replaceArmy( Army & army, const std::vector<Troop> & troops )
+    {
+        army.Clean();
+        for ( uint32_t i = 0; i < troops.size(); ++i )
+            army.GetTroop( i )->Set( troops[i] );
+    }
+
+    void applySpecailCampaignBonuses( const int campaignID, const uint32_t currentScenarioID )
+    {
+        switch ( campaignID ) {
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            switch ( currentScenarioID ) {
+            case 6:
+                Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+                Heroes * bestHero = humanKingdom.GetBestHero();
+                std::vector<Troop> startingTroops;
+                switch ( bestHero->GetRace() ) {
+                case Race::NECR:
+                    startingTroops.emplace_back( Monster::SKELETON, 50 );
+                    startingTroops.emplace_back( Monster::ROYAL_MUMMY, 18 );
+                    startingTroops.emplace_back( Monster::VAMPIRE_LORD, 8 );
+                    break;
+                case Race::WRLK:
+                    startingTroops.emplace_back( Monster::CENTAUR, 40 );
+                    startingTroops.emplace_back( Monster::GARGOYLE, 24 );
+                    startingTroops.emplace_back( Monster::GRIFFIN, 18 );
+                    break;
+                case Race::BARB:
+                    startingTroops.emplace_back( Monster::ORC_CHIEF, 12 );
+                    startingTroops.emplace_back( Monster::OGRE, 18 );
+                    startingTroops.emplace_back( Monster::GOBLIN, 40 );
+                    break;
+                default:
+                    assert( 0 ); // bonus changed?
+                }
+                replaceArmy( bestHero->GetArmy(), startingTroops );
+                break;
+            }
+            break;
+        }
+    }
+
     // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
@@ -318,13 +361,7 @@ namespace
                 }
                 break;
             case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-                const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
-                Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
-                bestHeroArmy.Clean();
-
-                for ( uint32_t troopID = 0; troopID < carryOverTroops.size(); ++troopID )
-                    bestHeroArmy.GetTroop( troopID )->Set( carryOverTroops[troopID] );
-
+                replaceArmy( humanKingdom.GetBestHero()->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
                 break;
             }
         }
@@ -720,6 +757,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
 
+            applySpecailCampaignBonuses( campaignSaveData.getCampaignID(), chosenScenarioID );
             applyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
