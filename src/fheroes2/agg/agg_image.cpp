@@ -118,7 +118,7 @@ namespace
             _smallFont = _icnVsSprite[ICN::SMALFONT];
         }
 
-        void restore()
+        void restore() const
         {
             if ( !_isPreserved ) {
                 return;
