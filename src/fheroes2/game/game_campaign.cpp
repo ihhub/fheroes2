@@ -691,8 +691,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
             return prevMode;
         }
-        else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) )
-                  || ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) ) ) {
+        if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) )
+             || ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
 
