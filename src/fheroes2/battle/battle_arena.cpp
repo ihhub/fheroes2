@@ -689,18 +689,15 @@ int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const 
     }
 
     // Search for the reachable cell nearest to the end of the path
-    const Cell * nearestCell = nullptr;
-
     for ( auto it = path.crbegin(); it != path.crend(); ++it ) {
         const Position pos = Position::GetReachable( currentUnit, *it );
 
         if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
-            nearestCell = pos.GetHead();
-            break;
+            return pos.GetHead()->GetIndex();
         }
     }
 
-    return nearestCell ? nearestCell->GetIndex() : -1;
+    return -1;
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
