@@ -29,6 +29,7 @@
 #include "ui_text.h"
 #include "ui_window.h"
 
+#include <algorithm>
 #include <cassert>
 
 namespace fheroes2
