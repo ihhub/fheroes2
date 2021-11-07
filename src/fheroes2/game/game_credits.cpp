@@ -438,7 +438,7 @@ namespace
         offsetY += title.height( textWidth );
 
         name.set( "Grant Youngblood\n"
-                  "Kareen Meshagan" ,
+                  "Kareen Meshagan",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -447,15 +447,15 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( "Julia Ulano" , nameFontType );
+        name.set( "Julia Ulano", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
-        title.set(  _( "Assistant Art Director" ), titleFontType );
+        title.set( _( "Assistant Art Director" ), titleFontType );
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( "Bonita Long-Hemsath" , nameFontType );
+        name.set( "Bonita Long-Hemsath", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
