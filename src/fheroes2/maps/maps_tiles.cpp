@@ -919,6 +919,12 @@ int Maps::Tiles::getOriginalPassability() const
         return 0;
     }
 
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( isValidReefsSprite( MP2::GetICNObject( addon.object ), addon.index ) ) {
+            return 0;
+        }
+    }
+
     // Objects have fixed passability.
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
