@@ -20,6 +20,7 @@
 
 #include "ui_language.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "icn.h"
 #include "settings.h"
 #include "tools.h"
@@ -27,6 +28,7 @@
 
 #include <cassert>
 #include <map>
+#include <set>
 
 namespace
 {
@@ -68,24 +70,63 @@ namespace
     private:
         const std::string _currentLanguage;
     };
+
+    fheroes2::SupportedLanguage getResourceLanguage()
+    {
+        const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
+        if ( data.empty() ) {
+            // How is it possible to run the game without a font?
+            assert( 0 );
+            return fheroes2::SupportedLanguage::English;
+        }
+
+        const uint32_t crc32 = fheroes2::calculateCRC32( data.data(), data.size() );
+        auto iter = languageCRC32.find( crc32 );
+        if ( iter == languageCRC32.end() ) {
+            return fheroes2::SupportedLanguage::English;
+        }
+
+        return iter->second;
+    }
 }
 
 namespace fheroes2
 {
-    SupportedLanguage getSupportedLanguage()
+    std::vector<SupportedLanguage> getSupportedLanguages()
     {
-        const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
-        if ( data.empty() ) {
-            return SupportedLanguage::English;
+        std::vector<SupportedLanguage> languages;
+
+        const SupportedLanguage resourceLanguage = getResourceLanguage();
+        if ( resourceLanguage != SupportedLanguage::English ) {
+            languages.emplace_back( resourceLanguage );
         }
 
-        const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
-        auto iter = languageCRC32.find( crc32 );
-        if ( iter == languageCRC32.end() ) {
-            return SupportedLanguage::English;
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French, SupportedLanguage::Polish, SupportedLanguage::German, SupportedLanguage::Russian,
+                                                             SupportedLanguage::Italian };
+
+        for ( const SupportedLanguage language : possibleLanguages ) {
+            if ( language != resourceLanguage && AGG::isAlphabetSupported( language ) ) {
+                languages.emplace_back( language );
+            }
         }
 
-        return iter->second;
+        Settings & conf = Settings::Get();
+
+        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+
+        std::vector<fheroes2::SupportedLanguage> validSupportedLanguages{ fheroes2::SupportedLanguage::English };
+
+        for ( fheroes2::SupportedLanguage language : languages ) {
+            if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
+                validSupportedLanguages.emplace_back( language );
+            }
+        }
+
+        conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
+
+        assert( !validSupportedLanguages.empty() );
+
+        return validSupportedLanguages;
     }
 
     const char * getLanguageName( const SupportedLanguage language )
@@ -149,5 +190,13 @@ namespace fheroes2
         }
 
         return iter->second;
+    }
+
+    void updateAlphabet( const std::string & abbreviation )
+    {
+        const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
+        const bool isOriginalResourceLanguage = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() );
+
+        AGG::updateAlphabet( language, isOriginalResourceLanguage );
     }
 }

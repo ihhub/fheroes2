@@ -36,6 +36,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "version.h"
+#include "ui_language.h""
 
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
@@ -473,6 +474,8 @@ const std::string & Settings::getGameLanguage() const
 
 bool Settings::setGameLanguage( const std::string & language )
 {
+    fheroes2::updateAlphabet( language );
+
     Translation::setStripContext( '|' );
 
     _gameLanguage = language;

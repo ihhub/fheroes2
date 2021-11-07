@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace fheroes2
 {
@@ -34,9 +35,8 @@ namespace fheroes2
         Italian // Rare version?
     };
 
-    // Game resources can support up to 2 languages. One of them is always English.
-    // This function returns supported from resources language except English, otherwise English language will be returned.
-    SupportedLanguage getSupportedLanguage();
+    // This function returns an array of supported languages. If the array contains only one language it must be English.
+    std::vector<SupportedLanguage> getSupportedLanguages();
 
     // Return name of the language.
     const char * getLanguageName( const SupportedLanguage language );
@@ -44,4 +44,6 @@ namespace fheroes2
     const char * getLanguageAbbreviation( const SupportedLanguage language );
 
     SupportedLanguage getLanguageFromAbbreviation( const std::string & abbreviation );
+
+    void updateAlphabet( const std::string & abbreviation );
 }
