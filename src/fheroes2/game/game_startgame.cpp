@@ -81,7 +81,7 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    AGG::ResetMixer();
+    AGG::ResetMixer( true );
 
     Interface::Basic::Get().Reset();
 
