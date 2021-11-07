@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 05:21+0100\n"
+"POT-Creation-Date: 2021-10-20 22:34+0800\n"
 "PO-Revision-Date: 2013-04-25 12:49+0000\n"
 "Last-Translator: Phoenix <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -152,9 +152,6 @@ msgstr "Välj %{name}"
 msgid "Cannot move last troop"
 msgstr ""
 
-msgid "Set Count"
-msgstr ""
-
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverar fiendetrupperna!"
 
@@ -199,18 +196,39 @@ msgstr "Hastighet"
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Monster Info"
+msgstr ""
+
+msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
+msgstr ""
+
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Besvärjelsekastning"
 
+msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
+msgstr ""
+
 msgid "Grid"
+msgstr ""
+
+msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
 msgstr ""
 
 #, fuzzy
 msgid "Shadow Movement"
 msgstr "Fortsätt förflyttning"
 
+msgid "Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
 msgid "Shadow Cursor"
+msgstr ""
+
+msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 #, fuzzy
@@ -218,29 +236,6 @@ msgid "Off"
 msgstr "av"
 
 msgid "On"
-msgstr ""
-
-msgid "Set the speed of combat actions and animations."
-msgstr ""
-
-msgid ""
-"Toggle whether or not the computer will cast spells for you when auto combat "
-"is on. (Note: This does not affect spell casting for computer players in any "
-"way, nor does it affect quick combat.)"
-msgstr ""
-
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
 msgstr ""
 
 msgid "The enemy has surrendered!"
@@ -325,7 +320,7 @@ msgid "Spell Points"
 msgstr "Besvärjelsepoäng"
 
 #, fuzzy
-msgid "Hero's Options"
+msgid "View Hero's options"
 msgstr "Hjältealternativ"
 
 msgid "Cast Spell"
@@ -435,15 +430,15 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-#, fuzzy
-msgid "Enable auto combat"
-msgstr "Autom. strid"
+msgid "Auto Combat"
+msgstr "Autom. Strid"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
-msgid "Auto Combat"
-msgstr "Autom. Strid"
+#, fuzzy
+msgid "Enable auto combat"
+msgstr "Autom. strid"
 
 msgid "Customize system options"
 msgstr "Skräddarsy systeminställningarna"
@@ -451,34 +446,23 @@ msgstr "Skräddarsy systeminställningarna"
 msgid "Allows you to customize the combat screen."
 msgstr ""
 
-msgid "System Options"
-msgstr "Systemalternativ"
+msgid "Wait"
+msgstr ""
+
+msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgstr ""
 
 msgid "Wait this unit"
 msgstr "Vänta denna enhet"
 
-msgid "Wait"
+msgid "Skip"
 msgstr ""
 
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
+msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
 msgstr ""
 
 msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
-
-msgid "Skip"
-msgstr ""
-
-msgid ""
-"Skips the current creature. The current creature ends its turn and does not "
-"get to go again until the next round."
-msgstr ""
-
-#, fuzzy
-msgid "View Hero's options"
-msgstr "Hjältealternativ"
 
 msgid "View opposing Hero"
 msgstr "Visa motstående hjälte"
@@ -632,42 +616,6 @@ msgid ""
 "%{spell}."
 msgstr ""
 "Genom en falkblicksobservation, %{name} kan lära sig besvärjelsen %{spell}."
-
-msgid "Human"
-msgstr ""
-
-msgid "AI"
-msgstr ""
-
-msgid "Please select another hero."
-msgstr ""
-
-#, fuzzy
-msgid "Set Attack Skill"
-msgstr "Attackfärdighet"
-
-#, fuzzy
-msgid "Set Defense Skill"
-msgstr "Försvarsfärdighet"
-
-#, fuzzy
-msgid "Set Power Skill"
-msgstr "Besvärjelsestyrka"
-
-#, fuzzy
-msgid "Set Knowledge Skill"
-msgstr "Kunskap"
-
-#, fuzzy
-msgid "%{race1} %{name1}"
-msgstr "%{name1} möter %{name2}"
-
-msgid "vs"
-msgstr ""
-
-#, fuzzy
-msgid "%{race2} %{name2}"
-msgstr "%{name1} möter %{name2}"
 
 #, fuzzy
 msgid "Monsters"
@@ -1188,42 +1136,35 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Caster's Bracelet"
-msgstr ""
-
 #, fuzzy
-msgid "Defender Helm"
-msgstr "Försvarare"
-
-#, fuzzy
-msgid "Breastplate"
-msgstr "Andurans bröstharnesk"
-
-#, fuzzy
-msgid "Dragon Sword"
-msgstr "Drakdräpare"
-
-msgid "Fizbin Medal"
-msgstr ""
-
-#, fuzzy
-msgid "Foremost Scroll"
-msgstr "Särskild Kunskapsrulle"
-
-msgid "Mage's Ring"
-msgstr ""
-
-#, fuzzy
-msgid "Major Scroll"
-msgstr "Större Kunskapsrulle"
+msgid "Thunder Mace"
+msgstr "Thundax"
 
 #, fuzzy
 msgid "Minor Scroll"
 msgstr "Mindre Kunskapsrulle"
 
 #, fuzzy
-msgid "Nomad Boots"
-msgstr "Nomader"
+msgid "Dragon Sword"
+msgstr "Drakdräpare"
+
+#, fuzzy
+msgid "Breastplate"
+msgstr "Andurans bröstharnesk"
+
+#, fuzzy (18 char max)
+msgid "Fizbin Medal"
+msgstr ""
+
+msgid "Fizbin of Misfortune"
+msgstr "Olycksfizbin"
+
+msgid "Mage's Ring"
+msgstr ""
+
+#, fuzzy
+msgid "Defender Helm"
+msgstr "Försvarare"
 
 #, fuzzy
 msgid "Power Axe"
@@ -1234,11 +1175,8 @@ msgid "Stealth Shield"
 msgstr "Ultimata skölden"
 
 #, fuzzy
-msgid "Thunder Mace"
-msgstr "Thundax"
-
-msgid "Traveler's Boots"
-msgstr ""
+msgid "Nomad Boots"
+msgstr "Nomader"
 
 #, fuzzy
 msgid "Summon Earth"
@@ -1693,13 +1631,12 @@ msgstr "Visa föregående stad"
 msgid "Show previous town"
 msgstr "Visa föregående stad"
 
-msgid "Army joining"
+msgid "Army is full"
 msgstr ""
 
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
+#, fuzzy
+msgid "Join Error"
+msgstr "Fel"
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Denna stad kan inte uppgraderas till ett slott."
@@ -1868,9 +1805,6 @@ msgstr ""
 "ansträngning och publiken hurrar. Den åldrade gladiatortränaren går med på "
 "att träna dig i en valfri färdighet."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1942,9 +1876,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
-msgstr ""
-
 msgid "No room in"
 msgstr ""
 
@@ -1957,9 +1888,6 @@ msgstr "Bygg ett nytt skepp:"
 
 msgid "Resource cost:"
 msgstr "Resurskostnad:"
-
-msgid "Need: "
-msgstr ""
 
 msgid "Load Game"
 msgstr "Ladda spel"
@@ -2142,13 +2070,11 @@ msgstr "Jag kan erbjuda dig %{count} för 1 enhet %{resfrom}."
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Jag kan erbjuda dig 1 enhet %{resto} för %{count} %{resfrom}."
 
-#, fuzzy
-msgid "Max"
-msgstr "Maximus"
+msgid "max"
+msgstr ""
 
-#, fuzzy
-msgid "Min"
-msgstr "Gruva"
+msgid "min"
+msgstr ""
 
 msgid "Qty to trade"
 msgstr "Köp antal:"
@@ -2229,12 +2155,6 @@ msgstr "Tillgängligt: %{count}"
 msgid "Number to buy:"
 msgstr "Antal att köpa:"
 
-msgid "max"
-msgstr ""
-
-msgid "min"
-msgstr ""
-
 msgid "MAX"
 msgstr ""
 
@@ -2275,26 +2195,6 @@ msgstr "Är du säker på att du vill radera filen:"
 
 msgid "Warning!"
 msgstr "Varning!"
-
-#, fuzzy
-msgid "Select Monster:"
-msgstr "Bästa monster:"
-
-#, fuzzy
-msgid "Select Hero:"
-msgstr "Bästa hjälte:"
-
-#, fuzzy
-msgid "Select Artifact:"
-msgstr "Artifakter"
-
-#, fuzzy
-msgid "Select Spell:"
-msgstr "Välj besvärjelsemåltavla"
-
-#, fuzzy
-msgid "Select Skill:"
-msgstr "Försvarsfärdighet"
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -2556,6 +2456,9 @@ msgstr "Effekt"
 msgid "Knowl"
 msgstr "Kunskap"
 
+msgid "Human"
+msgstr ""
+
 msgid "1st"
 msgstr "1:a"
 
@@ -2677,167 +2580,6 @@ msgid "Connect with us at"
 msgstr ""
 
 msgid "Need help with the game?"
-msgstr ""
-
-#, fuzzy
-msgid "Original Heroes of Might and Magic II team"
-msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
-
-msgid "Designed and Directed"
-msgstr ""
-
-msgid "Jon Van Caneghem"
-msgstr ""
-
-msgid "Programming and Design"
-msgstr ""
-
-msgid "Phil Steinmeyer"
-msgstr ""
-
-msgid "Executive Producer"
-msgstr ""
-
-msgid "Mark Caldwell"
-msgstr ""
-
-msgid "Producer"
-msgstr ""
-
-msgid "Walt Hochbrueckner"
-msgstr ""
-
-msgid "Additional Design"
-msgstr ""
-
-msgid ""
-"Paul Rattner\n"
-"Debbie Van Caneghem"
-msgstr ""
-
-msgid "Additional Programming"
-msgstr ""
-
-msgid ""
-"George Ruof\n"
-"Todd Hendrix\n"
-"Mark Caldwell"
-msgstr ""
-
-msgid "Musical Production"
-msgstr ""
-
-msgid "Rob King"
-msgstr ""
-
-msgid "Music and Sound Design"
-msgstr ""
-
-msgid ""
-"Rob King\n"
-"Steve Baca\n"
-"Paul Romero"
-msgstr ""
-
-#, fuzzy
-msgid "Vocalists"
-msgstr "Ballistik"
-
-msgid ""
-"Grant Youngblood\n"
-"Kareen Meshagan"
-msgstr ""
-
-msgid "Art Director"
-msgstr ""
-
-msgid "Julia Ulano"
-msgstr ""
-
-msgid "Assistant Art Director"
-msgstr ""
-
-msgid "Bonita Long-Hemsath"
-msgstr ""
-
-#, fuzzy
-msgid "Artists"
-msgstr "Artifakter"
-
-msgid ""
-"Julie Bateman\n"
-"Rebecca Christel\n"
-"Shelly Garcia\n"
-"Sam Hasson\n"
-"Louis Henderson\n"
-"Tracy Iwata\n"
-"Steve Jasper\n"
-"April Lee\n"
-"Lieu Pham\n"
-"Phelan Sykes\n"
-"Steve Wasaff\n"
-"Scott White"
-msgstr ""
-
-msgid "QA Manager"
-msgstr ""
-
-msgid "Peter Ryu"
-msgstr ""
-
-msgid "QA"
-msgstr ""
-
-msgid ""
-"David Botan\n"
-"David Fernandez\n"
-"Bill Nesemeier\n"
-"Walter Johnson\n"
-"Kate McClelland\n"
-"Timothy Lang\n"
-"Bryan Farina"
-msgstr ""
-
-#, fuzzy
-msgid "Writing"
-msgstr "Betyg"
-
-msgid "Paul Rattner"
-msgstr ""
-
-msgid "Manual and Helpfile"
-msgstr ""
-
-msgid ""
-"Bryan Farina\n"
-"Rozita Tolouey\n"
-"Bruce Schlickbernd"
-msgstr ""
-
-#, fuzzy
-msgid "Scenarios"
-msgstr "Scenario"
-
-msgid ""
-"Jon Van Caneghem\n"
-"Debbie Van Caneghem\n"
-"Clayton Retzer\n"
-"Christian Vanover\n"
-"Paul Rattner\n"
-"Benjamin Bent\n"
-"Bryan Farina\n"
-"Eric Heffron\n"
-"Mark Palczynski\n"
-"Walt Hochbrueckner\n"
-"Bruce Schlickbernd\n"
-"Craig Konas"
-msgstr ""
-
-msgid ""
-"Scott McDaniel\n"
-"Dean Rettig\n"
-"Ted Chapman\n"
-"Dean Frost"
 msgstr ""
 
 msgid "Unknown Hero"
@@ -3064,9 +2806,6 @@ msgstr "6  Spelare"
 msgid "Play with 6 human players."
 msgstr "Spela med 6 mänskliga spelare."
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
-msgstr ""
-
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -3087,10 +2826,6 @@ msgid ""
 msgstr ""
 "Du har hittat %{name}.\n"
 "Ditt uppdrag är slufört."
-
-#, fuzzy
-msgid "Ultimate Artifact"
-msgstr "Hitta den Ultimata artefakten"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -3369,6 +3104,9 @@ msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy ditt spelande."
 
+msgid "System Options"
+msgstr "Systemalternativ"
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -3506,12 +3244,6 @@ msgid "Italian"
 msgstr "Ohelig allians"
 
 msgid ", FPS: "
-msgstr ""
-
-msgid "%{object} robber"
-msgstr ""
-
-msgid "%{object} raided"
 msgstr ""
 
 msgid "Ambrose"
@@ -3725,6 +3457,12 @@ msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
+msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -4106,8 +3844,8 @@ msgstr ""
 "du söka igenom gravarna?"
 
 msgid ""
-"You spend several hours searching the graves and find nothing. Such a "
-"despicable act reduces your army's morale."
+"You spend several hours searching the graves and "
+"find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 "Medan du besegrar Zombierna spenderar du några timmar på att söka igenom "
 "gravarna och hittar ingenting! En sådan föraktlig handling reducerar din "
@@ -4124,8 +3862,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You spend several hours sifting through the debris and find nothing. Such a "
-"despicable act reduces your army's morale."
+"You spend several hours sifting through the debris "
+"and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 "Medan du besegrar Spökena spenderar du några timmar på att söka igenom "
 "ruinerna och hittar ingenting! En sådan föraktlig handling reducerar din "
@@ -4266,11 +4004,6 @@ msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
-msgstr ""
-
-msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
-"you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
 msgid ""
@@ -4672,11 +4405,6 @@ msgstr ""
 "Svärdsmännens alla vapen från järn till stål. Han säger även att han vet en "
 "process som konverterar Järngolems till Stålgolems. Olyckligtvis har du inte "
 "någon av dessa i dina arméer, så han kan inte hjälpa dig."
-
-msgid ""
-"The captain looks at you with surprise and says:\n"
-"\"You already have all the maps I know about. Let me fish in peace now.\""
-msgstr ""
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -6881,6 +6609,9 @@ msgstr "%{name} medför en inkomst på %{count} guld per runda."
 msgid "Arcane Necklace of Magic"
 msgstr ""
 
+msgid "Caster's Bracelet"
+msgstr ""
+
 msgid "Caster's Bracelet of Magic"
 msgstr ""
 
@@ -6904,9 +6635,6 @@ msgstr "Hedersmedalj"
 
 msgid "Medal of Distinction"
 msgstr "Utmärkelsens medalj"
-
-msgid "Fizbin of Misfortune"
-msgstr "Olycksfizbin"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} minskar kraftigt din moral med %{count}."
@@ -6947,11 +6675,19 @@ msgstr ""
 msgid "Minor Scroll of Knowledge"
 msgstr "Mindre Kunskapsrulle"
 
+#, fuzzy (18 char max)
+msgid "Major Scroll"
+msgstr "Större Kunskapsrulle"
+
 msgid "Major Scroll of Knowledge"
 msgstr "Större Kunskapsrulle"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Överordnad Kunskapsrulle"
+
+#, fuzzy (18 char max)
+msgid "Foremost Scroll"
+msgstr "Särskild Kunskapsrulle"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Särskild Kunskapsrulle"
@@ -6972,6 +6708,9 @@ msgid "Nomad Boots of Mobility"
 msgstr ""
 
 msgid "The %{name} increase your movement on land."
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Traveler's Boots of Mobility"
@@ -8247,10 +7986,6 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Join Error"
-#~ msgstr "Fel"
 
 #, fuzzy
 #~ msgid "View Stats"
