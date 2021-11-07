@@ -4812,9 +4812,6 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     }
 
     if ( animation != NONE ) {
-        if ( animation == RESURRECT ) {
-            b.SetPosition( b.GetPosition() );
-        }
         b.SwitchAnimation( Monster_Info::STATIC );
         _currentUnit = nullptr;
     }
