@@ -969,8 +969,9 @@ void Maps::Tiles::updatePassability()
                 }
             }
 
-            if ( isWater() != bottomTile.isWater() ) {
-                // If object is bordering water then it must be marked as not passable.
+            // If an object locates on land and the bottom tile is water mark the current tile as impassible. It's done for cases that a hero won't be able to
+            // disembark on the tile.
+            if ( !isWater() && bottomTile.isWater() ) {
                 tilePassable = 0;
                 return;
             }
