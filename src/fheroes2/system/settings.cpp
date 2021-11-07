@@ -35,8 +35,8 @@
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_language.h"
 #include "version.h"
-#include "ui_language.h""
 
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
