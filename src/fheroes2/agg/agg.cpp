@@ -627,7 +627,7 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
-void AGG::ResetMixer( bool asyncronizedCall /* = true */ )
+void AGG::ResetMixer( bool asyncronizedCall /* = false */ )
 {
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushStopMusic();

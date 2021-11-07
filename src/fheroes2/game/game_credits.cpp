@@ -361,7 +361,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        fheroes2::Text name( _( "Jon Van Caneghem" ), nameFontType );
+        fheroes2::Text name( "Jon Van Caneghem", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -369,7 +369,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Phil Steinmeyer" ), nameFontType );
+        name.set( "Phil Steinmeyer", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -377,7 +377,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Mark Caldwell" ), nameFontType );
+        name.set( "Mark Caldwell", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -385,7 +385,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Walt Hochbrueckner" ), nameFontType );
+        name.set( "Walt Hochbrueckner", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -393,8 +393,8 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Paul Rattner\n"
-                     "Debbie Van Caneghem" ),
+        name.set( "Paul Rattner\n"
+                  "Debbie Van Caneghem",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -403,9 +403,9 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "George Ruof\n"
-                     "Todd Hendrix\n"
-                     "Mark Caldwell" ),
+        name.set( "George Ruof\n"
+                  "Todd Hendrix\n"
+                  "Mark Caldwell",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -414,7 +414,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Rob King" ), nameFontType );
+        name.set( "Rob King", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -422,9 +422,9 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Rob King\n"
-                     "Steve Baca\n"
-                     "Paul Romero" ),
+        name.set( "Rob King\n"
+                  "Steve Baca\n"
+                  "Paul Romero",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
@@ -435,8 +435,8 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Grant Youngblood\n"
-                     "Kareen Meshagan" ),
+        name.set( "Grant Youngblood\n"
+                  "Kareen Meshagan",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -445,7 +445,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Julia Ulano" ), nameFontType );
+        name.set( "Julia Ulano", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -453,7 +453,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Bonita Long-Hemsath" ), nameFontType );
+        name.set( "Bonita Long-Hemsath", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -461,18 +461,18 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Julie Bateman\n"
-                     "Rebecca Christel\n"
-                     "Shelly Garcia\n"
-                     "Sam Hasson\n"
-                     "Louis Henderson\n"
-                     "Tracy Iwata\n"
-                     "Steve Jasper\n"
-                     "April Lee\n"
-                     "Lieu Pham\n"
-                     "Phelan Sykes\n"
-                     "Steve Wasaff\n"
-                     "Scott White" ),
+        name.set( "Julie Bateman\n"
+                  "Rebecca Christel\n"
+                  "Shelly Garcia\n"
+                  "Sam Hasson\n"
+                  "Louis Henderson\n"
+                  "Tracy Iwata\n"
+                  "Steve Jasper\n"
+                  "April Lee\n"
+                  "Lieu Pham\n"
+                  "Phelan Sykes\n"
+                  "Steve Wasaff\n"
+                  "Scott White",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
@@ -502,7 +502,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        fheroes2::Text name( _( "Peter Ryu" ), nameFontType );
+        fheroes2::Text name( "Peter Ryu", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -510,13 +510,13 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "David Botan\n"
-                     "David Fernandez\n"
-                     "Bill Nesemeier\n"
-                     "Walter Johnson\n"
-                     "Kate McClelland\n"
-                     "Timothy Lang\n"
-                     "Bryan Farina" ),
+        name.set( "David Botan\n"
+                  "David Fernandez\n"
+                  "Bill Nesemeier\n"
+                  "Walter Johnson\n"
+                  "Kate McClelland\n"
+                  "Timothy Lang\n"
+                  "Bryan Farina",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -525,7 +525,7 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Paul Rattner" ), nameFontType );
+        name.set( "Paul Rattner", nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -533,9 +533,9 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Bryan Farina\n"
-                     "Rozita Tolouey\n"
-                     "Bruce Schlickbernd" ),
+        name.set( "Bryan Farina\n"
+                  "Rozita Tolouey\n"
+                  "Bruce Schlickbernd",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
@@ -546,18 +546,18 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Jon Van Caneghem\n"
-                     "Debbie Van Caneghem\n"
-                     "Clayton Retzer\n"
-                     "Christian Vanover\n"
-                     "Paul Rattner\n"
-                     "Benjamin Bent\n"
-                     "Bryan Farina\n"
-                     "Eric Heffron\n"
-                     "Mark Palczynski\n"
-                     "Walt Hochbrueckner\n"
-                     "Bruce Schlickbernd\n"
-                     "Craig Konas" ),
+        name.set( "Jon Van Caneghem\n"
+                  "Debbie Van Caneghem\n"
+                  "Clayton Retzer\n"
+                  "Christian Vanover\n"
+                  "Paul Rattner\n"
+                  "Benjamin Bent\n"
+                  "Bryan Farina\n"
+                  "Eric Heffron\n"
+                  "Mark Palczynski\n"
+                  "Walt Hochbrueckner\n"
+                  "Bruce Schlickbernd\n"
+                  "Craig Konas",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
@@ -566,10 +566,10 @@ namespace
         title.draw( offsetX, offsetY, textWidth, output );
         offsetY += title.height( textWidth );
 
-        name.set( _( "Scott McDaniel\n"
-                     "Dean Rettig\n"
-                     "Ted Chapman\n"
-                     "Dean Frost" ),
+        name.set( "Scott McDaniel\n"
+                  "Dean Rettig\n"
+                  "Ted Chapman\n"
+                  "Dean Frost",
                   nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
