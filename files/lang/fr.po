@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 22:34+0800\n"
+"POT-Creation-Date: 2021-11-07 05:21+0100\n"
 "PO-Revision-Date: 2021-08-02 10:23+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -150,6 +150,9 @@ msgstr "Sélectionner %{name}"
 msgid "Cannot move last troop"
 msgstr "Impossible de déplacer la dernière armée dans la garnison"
 
+msgid "Set Count"
+msgstr ""
+
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} décime la troupe ennemie !"
 
@@ -196,44 +199,55 @@ msgstr "Vitesse"
 msgid "Speed: %{speed}"
 msgstr "Vitesse : %{speed}"
 
-msgid "Set the speed of combat actions and animations."
-msgstr "Définir la vitesse des actions et animations de combat."
-
-msgid "Monster Info"
-msgstr "Informations sur la créature"
-
-msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr "Afficher les fenêtres d'information concernant les créatures actives et les créatures choisies."
-
 msgid "Auto Spell Casting"
 msgstr "Sorts auto"
-
-msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr "Activer ou désactiver le lancement de sorts pendant le combat automatique. (Remarque: cela n'affecte en aucun cas le lancement de sorts pour les héros de l'ordinateur, ni le combat rapide.)"
 
 msgid "Grid"
 msgstr "Grille"
 
-msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr "Activer ou désactiver l'affichage de la grille d'hexagones. Même désactivée, le jeu utilise cette grille pour les déplacements et certains sortilèges."
-
 msgid "Shadow Movement"
 msgstr "Ombre du déplacement"
 
-msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr "Activer ou désactiver la zone ombragée indiquant où vos créatures peuvent se déplacer et attaquer."
-
 msgid "Shadow Cursor"
 msgstr "Ombre du curseur"
-
-msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
-msgstr "Activer ou désactiver l'ombre montrant l'hexagone où est situé le curseur de la souris."
 
 msgid "Off"
 msgstr "Désactivé"
 
 msgid "On"
 msgstr "Activé"
+
+msgid "Set the speed of combat actions and animations."
+msgstr "Définir la vitesse des actions et animations de combat."
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+"Activer ou désactiver le lancement de sorts pendant le combat automatique. "
+"(Remarque: cela n'affecte en aucun cas le lancement de sorts pour les héros "
+"de l'ordinateur, ni le combat rapide.)"
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Activer ou désactiver l'affichage de la grille d'hexagones. Même désactivée, "
+"le jeu utilise cette grille pour les déplacements et certains sortilèges."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Activer ou désactiver la zone ombragée indiquant où vos créatures peuvent se "
+"déplacer et attaquer."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Activer ou désactiver l'ombre montrant l'hexagone où est situé le curseur de "
+"la souris."
 
 msgid "The enemy has surrendered!"
 msgstr "L'ennemi s'est rendu !"
@@ -314,7 +328,8 @@ msgstr "Chance"
 msgid "Spell Points"
 msgstr "Pt de magie"
 
-msgid "View Hero's options"
+#, fuzzy
+msgid "Hero's Options"
 msgstr "Voir les options du héros"
 
 msgid "Cast Spell"
@@ -419,14 +434,14 @@ msgstr "Voir les infos de la baliste"
 msgid "Ballista"
 msgstr "Baliste"
 
-msgid "Auto Combat"
-msgstr "Combat Auto"
+msgid "Enable auto combat"
+msgstr "Activer le combat automatique"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr "L'ordinateur joue le combat à votre place."
 
-msgid "Enable auto combat"
-msgstr "Activer le combat automatique"
+msgid "Auto Combat"
+msgstr "Combat Auto"
 
 msgid "Customize system options"
 msgstr "Modifier les options système"
@@ -434,20 +449,36 @@ msgstr "Modifier les options système"
 msgid "Allows you to customize the combat screen."
 msgstr "Modifier les options de l'écran de combat."
 
-msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr "Le peloton actif reporte son tour jusqu'à ce que tous les autres pelotons aient joué leur tour."
+msgid "System Options"
+msgstr "Options du système"
 
 msgid "Wait this unit"
 msgstr "Ce peloton attend"
 
-msgid "Skip"
-msgstr "Passer"
+msgid "Wait"
+msgstr ""
 
-msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
-msgstr "Le peloton actif passe son tour et ne peut pas jouer avant le prochain tour."
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
+msgstr ""
+"Le peloton actif reporte son tour jusqu'à ce que tous les autres pelotons "
+"aient joué leur tour."
 
 msgid "Skip this unit"
 msgstr "Passer ce peloton"
+
+msgid "Skip"
+msgstr "Passer"
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+"Le peloton actif passe son tour et ne peut pas jouer avant le prochain tour."
+
+msgid "View Hero's options"
+msgstr "Voir les options du héros"
 
 msgid "View opposing Hero"
 msgstr "Voir le héros adverse"
@@ -589,6 +620,42 @@ msgid ""
 msgstr ""
 "Grâce à l'observation avec ses yeux d'aigle, %{name} est capable d'apprendre "
 "le sortilège %{spell}."
+
+msgid "Human"
+msgstr "Humain"
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+#, fuzzy
+msgid "Set Attack Skill"
+msgstr "Attaque"
+
+#, fuzzy
+msgid "Set Defense Skill"
+msgstr "Défense"
+
+#, fuzzy
+msgid "Set Power Skill"
+msgstr "Puissance"
+
+#, fuzzy
+msgid "Set Knowledge Skill"
+msgstr "Connaissance"
+
+#, fuzzy
+msgid "%{race1} %{name1}"
+msgstr "Échanger %{name1} avec %{name2}"
+
+msgid "vs"
+msgstr ""
+
+#, fuzzy
+msgid "%{race2} %{name2}"
+msgstr "Échanger %{name1} avec %{name2}"
 
 msgid "Monsters"
 msgstr "Monstres"
@@ -1220,29 +1287,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Le Dwarfbane!!!!, sauve qui peut.\""
 
-msgid "Thunder Mace"
-msgstr "Massue"
+msgid "Caster's Bracelet"
+msgstr "Bracelet magique"
 
-msgid "Minor Scroll"
-msgstr "Parchemin Mineur"
-
-msgid "Dragon Sword"
-msgstr "L'épée du Dragon"
+msgid "Defender Helm"
+msgstr "Casque de Protection"
 
 msgid "Breastplate"
 msgstr "Plastron Divin"
 
+msgid "Dragon Sword"
+msgstr "L'épée du Dragon"
+
 msgid "Fizbin Medal"
 msgstr "Fizbin"
 
-msgid "Fizbin of Misfortune"
-msgstr "Fizbin de l'infortune"
+msgid "Foremost Scroll"
+msgstr "Parchemin ultime"
 
 msgid "Mage's Ring"
 msgstr "Anneau de Magicien"
 
-msgid "Defender Helm"
-msgstr "Casque de Protection"
+msgid "Major Scroll"
+msgstr "Parchemin majeur"
+
+msgid "Minor Scroll"
+msgstr "Parchemin Mineur"
+
+#, fuzzy
+msgid "Nomad Boots"
+msgstr "Nomades"
 
 msgid "Power Axe"
 msgstr "Puissante Hache"
@@ -1251,9 +1325,11 @@ msgstr "Puissante Hache"
 msgid "Stealth Shield"
 msgstr "Ultime Bouclier"
 
-#, fuzzy
-msgid "Nomad Boots"
-msgstr "Nomades"
+msgid "Thunder Mace"
+msgstr "Massue"
+
+msgid "Traveler's Boots"
+msgstr "Bottes magiques"
 
 msgid "Summon Earth"
 msgstr "Invoquer Terre"
@@ -1728,11 +1804,13 @@ msgstr "Montrer le village précédent"
 msgid "Show previous town"
 msgstr "Montrer le village précédent"
 
-msgid "Army is full"
-msgstr "Le peloton a atteint sa taille maximale"
+msgid "Army joining"
+msgstr ""
 
-msgid "Join Error"
-msgstr "Erreur pour rejoindre"
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
+msgstr ""
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Ce village ne peut pas être amélioré en château."
@@ -1893,6 +1971,9 @@ msgstr ""
 "la foule. Impressionné par votre talent, l’entraîneur des gladiateurs vous "
 "propose d’entraîner le talent de votre choix."
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1965,6 +2046,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Taux: %{percent})"
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr "Pas de place dans"
 
@@ -1976,6 +2060,9 @@ msgstr "Construire un nouveau navire :"
 
 msgid "Resource cost:"
 msgstr "Coût en ressources :"
+
+msgid "Need: "
+msgstr ""
 
 msgid "Load Game"
 msgstr "Charger une partie"
@@ -2157,11 +2244,13 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Je peux vous offrir 1 unité de %{resto} pour %{count} unités de %{resfrom}."
 
-msgid "max"
-msgstr ""
+#, fuzzy
+msgid "Max"
+msgstr "Maximus"
 
-msgid "min"
-msgstr ""
+#, fuzzy
+msgid "Min"
+msgstr "Mine"
 
 msgid "Qty to trade"
 msgstr "Qté à échanger"
@@ -2241,6 +2330,12 @@ msgstr "Disponible : %{count}"
 msgid "Number to buy:"
 msgstr "Recruter :"
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "MAX"
 msgstr ""
 
@@ -2281,6 +2376,26 @@ msgstr "Êtes vous sûr de vouloir effacer le fichier :"
 
 msgid "Warning!"
 msgstr "Attention !"
+
+#, fuzzy
+msgid "Select Monster:"
+msgstr "Meilleure créature :"
+
+#, fuzzy
+msgid "Select Hero:"
+msgstr "Meilleur Héros :"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Artéfacts :"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Sélectionner la cible du sort"
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Défense"
 
 msgid "Map difficulty:"
 msgstr "Difficulté de la carte :"
@@ -2540,9 +2655,6 @@ msgstr "Puiss."
 msgid "Knowl"
 msgstr "Conn."
 
-msgid "Human"
-msgstr "Humain"
-
 msgid "1st"
 msgstr "1er"
 
@@ -2661,6 +2773,167 @@ msgid "Connect with us at"
 msgstr ""
 
 msgid "Need help with the game?"
+msgstr ""
+
+#, fuzzy
+msgid "Original Heroes of Might and Magic II team"
+msgstr "Quittez le jeu Free Heroes of Might and Magic II."
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Jon Van Caneghem"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Phil Steinmeyer"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Mark Caldwell"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Walt Hochbrueckner"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid ""
+"Paul Rattner\n"
+"Debbie Van Caneghem"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid ""
+"George Ruof\n"
+"Todd Hendrix\n"
+"Mark Caldwell"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Rob King"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid ""
+"Rob King\n"
+"Steve Baca\n"
+"Paul Romero"
+msgstr ""
+
+#, fuzzy
+msgid "Vocalists"
+msgstr "Balistique"
+
+msgid ""
+"Grant Youngblood\n"
+"Kareen Meshagan"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Julia Ulano"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+msgid "Bonita Long-Hemsath"
+msgstr ""
+
+#, fuzzy
+msgid "Artists"
+msgstr "Artéfacts"
+
+msgid ""
+"Julie Bateman\n"
+"Rebecca Christel\n"
+"Shelly Garcia\n"
+"Sam Hasson\n"
+"Louis Henderson\n"
+"Tracy Iwata\n"
+"Steve Jasper\n"
+"April Lee\n"
+"Lieu Pham\n"
+"Phelan Sykes\n"
+"Steve Wasaff\n"
+"Scott White"
+msgstr ""
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "Peter Ryu"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+msgid ""
+"David Botan\n"
+"David Fernandez\n"
+"Bill Nesemeier\n"
+"Walter Johnson\n"
+"Kate McClelland\n"
+"Timothy Lang\n"
+"Bryan Farina"
+msgstr ""
+
+#, fuzzy
+msgid "Writing"
+msgstr "Taux"
+
+msgid "Paul Rattner"
+msgstr ""
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+msgid ""
+"Bryan Farina\n"
+"Rozita Tolouey\n"
+"Bruce Schlickbernd"
+msgstr ""
+
+#, fuzzy
+msgid "Scenarios"
+msgstr "Scénario"
+
+msgid ""
+"Jon Van Caneghem\n"
+"Debbie Van Caneghem\n"
+"Clayton Retzer\n"
+"Christian Vanover\n"
+"Paul Rattner\n"
+"Benjamin Bent\n"
+"Bryan Farina\n"
+"Eric Heffron\n"
+"Mark Palczynski\n"
+"Walt Hochbrueckner\n"
+"Bruce Schlickbernd\n"
+"Craig Konas"
+msgstr ""
+
+msgid ""
+"Scott McDaniel\n"
+"Dean Rettig\n"
+"Ted Chapman\n"
+"Dean Frost"
 msgstr ""
 
 msgid "Unknown Hero"
@@ -2901,6 +3174,9 @@ msgstr "6 Joueurs"
 msgid "Play with 6 human players."
 msgstr "Jouer avec 6 joueurs humains."
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2921,6 +3197,10 @@ msgid ""
 msgstr ""
 "Vous avez trouvé le %{name}.\n"
 "Votre quête est terminée."
+
+#, fuzzy
+msgid "Ultimate Artifact"
+msgstr "Trouver l'ultime artéfact."
 
 msgid ""
 "The enemy is beaten.\n"
@@ -3194,9 +3474,6 @@ msgstr ""
 "Affiche le menu des options du système, qui vous permet de personnaliser "
 "votre jeu."
 
-msgid "System Options"
-msgstr "Options du système"
-
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -3337,6 +3614,13 @@ msgstr " alliance"
 
 msgid ", FPS: "
 msgstr ""
+
+#, fuzzy
+msgid "%{object} robber"
+msgstr "%{object} cambriolé"
+
+msgid "%{object} raided"
+msgstr "%{object} pillé"
 
 msgid "Ambrose"
 msgstr "Ambrose"
@@ -3547,13 +3831,6 @@ msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
-
-#, fuzzy
-msgid "%{object} robber"
-msgstr "%{object} cambriolé"
-
-msgid "%{object} raided"
-msgstr "%{object} pillé"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Vous ne pouvez pas ramasser cet artéfact, vous êtes déjà surchargé !"
@@ -3974,8 +4251,8 @@ msgstr ""
 "vous fouiller les tombes ?"
 
 msgid ""
-"You spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 "Après avoir vaincu les zombies, vous passez plusieurs heures à fouiller les "
 "tombes sans rien trouver. Un tel acte méprisable réduit le moral de votre "
@@ -3994,12 +4271,11 @@ msgstr ""
 "lorsqu'elle est poussée contre les rochers. Voulez-vous fouiller l'épave ?"
 
 msgid ""
-"You spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
-"Vous passez plusieurs heures à fouiller les "
-"débris et ne trouvez rien. Un tel acte méprisable réduit le moral de votre "
-"armée."
+"Vous passez plusieurs heures à fouiller les débris et ne trouvez rien. Un "
+"tel acte méprisable réduit le moral de votre armée."
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
@@ -4152,6 +4428,11 @@ msgstr ""
 "Vous avez rencontré les quartiers spartiates d'un soldat à la retraite. Le "
 "soldat vous dit qu'il est prêt à transmettre l'artéfact '%{art}' au premier "
 "vrai chef qu'il rencontre."
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
+msgstr ""
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -4607,6 +4888,11 @@ msgstr ""
 "qu'il connaît un procédé permettant de convertir les Golems de fer en Golems "
 "d'acier. Malheureusement, vous n'avez aucune de ces troupes dans votre "
 "armée, il ne peut donc pas vous aider."
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -6808,9 +7094,6 @@ msgstr "La %{name} apporte un revenu de %{count} pièces d'or par tour."
 msgid "Arcane Necklace of Magic"
 msgstr "Obscur collier magique"
 
-msgid "Caster's Bracelet"
-msgstr "Bracelet magique"
-
 msgid "Caster's Bracelet of Magic"
 msgstr "Bracelet magique du jeteur de sorts"
 
@@ -6834,6 +7117,9 @@ msgstr "Médaille d'honneur"
 
 msgid "Medal of Distinction"
 msgstr "Médaille de distinction"
+
+msgid "Fizbin of Misfortune"
+msgstr "Fizbin de l'infortune"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "Le %{name} diminue fortement votre moral de %{count}."
@@ -6875,17 +7161,11 @@ msgstr "Plastron divin de protection"
 msgid "Minor Scroll of Knowledge"
 msgstr "Parchemin mineur"
 
-msgid "Major Scroll"
-msgstr "Parchemin majeur"
-
 msgid "Major Scroll of Knowledge"
 msgstr "Parchemin majeur"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Parchemin supérieur"
-
-msgid "Foremost Scroll"
-msgstr "Parchemin ultime"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Parchemin ultime"
@@ -6908,9 +7188,6 @@ msgstr "Brodequins de nomade"
 msgid "The %{name} increase your movement on land."
 msgstr ""
 "Les %{name} augmentent le potentiel de déplacement d'un héros sur terre."
-
-msgid "Traveler's Boots"
-msgstr "Bottes magiques"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Bottes de sept lieues"
@@ -8305,6 +8582,22 @@ msgstr ""
 "Cherchez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monster Info"
+#~ msgstr "Informations sur la créature"
+
+#~ msgid ""
+#~ "Toggle the monster info window, which shows information on the active and "
+#~ "targeted monsters."
+#~ msgstr ""
+#~ "Afficher les fenêtres d'information concernant les créatures actives et "
+#~ "les créatures choisies."
+
+#~ msgid "Army is full"
+#~ msgstr "Le peloton a atteint sa taille maximale"
+
+#~ msgid "Join Error"
+#~ msgstr "Erreur pour rejoindre"
 
 #~ msgid "View Stats"
 #~ msgstr "Voir Stats"

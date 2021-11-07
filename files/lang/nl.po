@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 22:34+0800\n"
+"POT-Creation-Date: 2021-11-07 05:21+0100\n"
 "PO-Revision-Date: 2009-08-10 12:30+0000\n"
 "Last-Translator: Yentl <y.v.t@scarlet.be>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -131,6 +131,9 @@ msgstr ""
 msgid "Cannot move last troop"
 msgstr ""
 
+msgid "Set Count"
+msgstr ""
+
 msgid "%{name} half the enemy troops!"
 msgstr ""
 
@@ -171,43 +174,45 @@ msgstr ""
 msgid "Speed: %{speed}"
 msgstr ""
 
-msgid "Set the speed of combat actions and animations."
-msgstr ""
-
-msgid "Monster Info"
-msgstr ""
-
-msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr ""
-
 msgid "Auto Spell Casting"
-msgstr ""
-
-msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
 msgstr ""
 
 msgid "Grid"
 msgstr ""
 
-msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr ""
-
 msgid "Shadow Movement"
 msgstr ""
 
-msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-
 msgid "Shadow Cursor"
-msgstr ""
-
-msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 msgid "Off"
 msgstr ""
 
 msgid "On"
+msgstr ""
+
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
 msgstr ""
 
 msgid "The enemy has surrendered!"
@@ -287,7 +292,7 @@ msgstr ""
 msgid "Spell Points"
 msgstr ""
 
-msgid "View Hero's options"
+msgid "Hero's Options"
 msgstr ""
 
 msgid "Cast Spell"
@@ -382,13 +387,13 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto Combat"
+msgid "Enable auto combat"
 msgstr ""
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
-msgid "Enable auto combat"
+msgid "Auto Combat"
 msgstr ""
 
 msgid "Customize system options"
@@ -397,22 +402,32 @@ msgstr ""
 msgid "Allows you to customize the combat screen."
 msgstr ""
 
-msgid "Wait"
-msgstr ""
-
-msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
+msgid "System Options"
 msgstr ""
 
 msgid "Wait this unit"
 msgstr ""
 
-msgid "Skip"
+msgid "Wait"
 msgstr ""
 
-msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
 msgstr ""
 
 msgid "Skip this unit"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+
+msgid "View Hero's options"
 msgstr ""
 
 msgid "View opposing Hero"
@@ -548,6 +563,36 @@ msgstr ""
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
+msgstr ""
+
+msgid "Human"
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+msgid "Set Attack Skill"
+msgstr ""
+
+msgid "Set Defense Skill"
+msgstr ""
+
+msgid "Set Power Skill"
+msgstr ""
+
+msgid "Set Knowledge Skill"
+msgstr ""
+
+msgid "%{race1} %{name1}"
+msgstr ""
+
+msgid "vs"
+msgstr ""
+
+msgid "%{race2} %{name2}"
 msgstr ""
 
 msgid "Monsters"
@@ -1029,29 +1074,34 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Thunder Mace"
+msgid "Caster's Bracelet"
 msgstr ""
 
-msgid "Minor Scroll"
-msgstr ""
-
-msgid "Dragon Sword"
+msgid "Defender Helm"
 msgstr ""
 
 msgid "Breastplate"
 msgstr ""
 
-#, fuzzy (18 char max)
+msgid "Dragon Sword"
+msgstr ""
+
 msgid "Fizbin Medal"
 msgstr ""
 
-msgid "Fizbin of Misfortune"
+msgid "Foremost Scroll"
 msgstr ""
 
 msgid "Mage's Ring"
 msgstr ""
 
-msgid "Defender Helm"
+msgid "Major Scroll"
+msgstr ""
+
+msgid "Minor Scroll"
+msgstr ""
+
+msgid "Nomad Boots"
 msgstr ""
 
 msgid "Power Axe"
@@ -1060,7 +1110,10 @@ msgstr ""
 msgid "Stealth Shield"
 msgstr ""
 
-msgid "Nomad Boots"
+msgid "Thunder Mace"
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Summon Earth"
@@ -1490,10 +1543,12 @@ msgstr ""
 msgid "Show previous town"
 msgstr ""
 
-msgid "Army is full"
+msgid "Army joining"
 msgstr ""
 
-msgid "Join Error"
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
@@ -1644,6 +1699,9 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1699,6 +1757,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr ""
 
@@ -1709,6 +1770,9 @@ msgid "Build a new ship:"
 msgstr ""
 
 msgid "Resource cost:"
+msgstr ""
+
+msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
@@ -1869,10 +1933,10 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
-msgid "max"
+msgid "Max"
 msgstr ""
 
-msgid "min"
+msgid "Min"
 msgstr ""
 
 msgid "Qty to trade"
@@ -1950,6 +2014,12 @@ msgstr ""
 msgid "Number to buy:"
 msgstr ""
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "MAX"
 msgstr ""
 
@@ -1987,6 +2057,21 @@ msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "Select Monster:"
+msgstr ""
+
+msgid "Select Hero:"
+msgstr ""
+
+msgid "Select Artifact:"
+msgstr ""
+
+msgid "Select Spell:"
+msgstr ""
+
+msgid "Select Skill:"
 msgstr ""
 
 msgid "Map difficulty:"
@@ -2232,9 +2317,6 @@ msgstr ""
 msgid "Knowl"
 msgstr ""
 
-msgid "Human"
-msgstr ""
-
 msgid "1st"
 msgstr ""
 
@@ -2353,6 +2435,162 @@ msgid "Connect with us at"
 msgstr ""
 
 msgid "Need help with the game?"
+msgstr ""
+
+msgid "Original Heroes of Might and Magic II team"
+msgstr ""
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Jon Van Caneghem"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Phil Steinmeyer"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Mark Caldwell"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Walt Hochbrueckner"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid ""
+"Paul Rattner\n"
+"Debbie Van Caneghem"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid ""
+"George Ruof\n"
+"Todd Hendrix\n"
+"Mark Caldwell"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Rob King"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid ""
+"Rob King\n"
+"Steve Baca\n"
+"Paul Romero"
+msgstr ""
+
+msgid "Vocalists"
+msgstr ""
+
+msgid ""
+"Grant Youngblood\n"
+"Kareen Meshagan"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Julia Ulano"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+msgid "Bonita Long-Hemsath"
+msgstr ""
+
+msgid "Artists"
+msgstr ""
+
+msgid ""
+"Julie Bateman\n"
+"Rebecca Christel\n"
+"Shelly Garcia\n"
+"Sam Hasson\n"
+"Louis Henderson\n"
+"Tracy Iwata\n"
+"Steve Jasper\n"
+"April Lee\n"
+"Lieu Pham\n"
+"Phelan Sykes\n"
+"Steve Wasaff\n"
+"Scott White"
+msgstr ""
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "Peter Ryu"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+msgid ""
+"David Botan\n"
+"David Fernandez\n"
+"Bill Nesemeier\n"
+"Walter Johnson\n"
+"Kate McClelland\n"
+"Timothy Lang\n"
+"Bryan Farina"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Paul Rattner"
+msgstr ""
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+msgid ""
+"Bryan Farina\n"
+"Rozita Tolouey\n"
+"Bruce Schlickbernd"
+msgstr ""
+
+msgid "Scenarios"
+msgstr ""
+
+msgid ""
+"Jon Van Caneghem\n"
+"Debbie Van Caneghem\n"
+"Clayton Retzer\n"
+"Christian Vanover\n"
+"Paul Rattner\n"
+"Benjamin Bent\n"
+"Bryan Farina\n"
+"Eric Heffron\n"
+"Mark Palczynski\n"
+"Walt Hochbrueckner\n"
+"Bruce Schlickbernd\n"
+"Craig Konas"
+msgstr ""
+
+msgid ""
+"Scott McDaniel\n"
+"Dean Rettig\n"
+"Ted Chapman\n"
+"Dean Frost"
 msgstr ""
 
 msgid "Unknown Hero"
@@ -2554,6 +2792,9 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2567,6 +2808,9 @@ msgstr ""
 msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
+msgstr ""
+
+msgid "Ultimate Artifact"
 msgstr ""
 
 msgid ""
@@ -2798,9 +3042,6 @@ msgstr ""
 msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr ""
 
-msgid "System Options"
-msgstr ""
-
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -2913,6 +3154,12 @@ msgid "Italian"
 msgstr ""
 
 msgid ", FPS: "
+msgstr ""
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
 msgstr ""
 
 msgid "Ambrose"
@@ -3123,12 +3370,6 @@ msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
-msgstr ""
-
-msgid "%{object} robber"
-msgstr ""
-
-msgid "%{object} raided"
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
@@ -3431,8 +3672,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
@@ -3444,8 +3685,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3554,6 +3795,11 @@ msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
+msgstr ""
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
 msgid ""
@@ -3871,6 +4117,11 @@ msgid ""
 "knows a process that will convert Iron Golems into Steel Golems. "
 "Unfortunately, you have none of these troops in your army, so he can't help "
 "you."
+msgstr ""
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
 msgstr ""
 
 msgid ""
@@ -5862,9 +6113,6 @@ msgstr ""
 msgid "Arcane Necklace of Magic"
 msgstr ""
 
-msgid "Caster's Bracelet"
-msgstr ""
-
 msgid "Caster's Bracelet of Magic"
 msgstr ""
 
@@ -5887,6 +6135,9 @@ msgid "Medal of Honor"
 msgstr ""
 
 msgid "Medal of Distinction"
+msgstr ""
+
+msgid "Fizbin of Misfortune"
 msgstr ""
 
 msgid "The %{name} greatly decreases your morale by %{count}."
@@ -5928,16 +6179,10 @@ msgstr ""
 msgid "Minor Scroll of Knowledge"
 msgstr ""
 
-msgid "Major Scroll"
-msgstr ""
-
 msgid "Major Scroll of Knowledge"
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
-
-msgid "Foremost Scroll"
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
@@ -5959,9 +6204,6 @@ msgid "Nomad Boots of Mobility"
 msgstr ""
 
 msgid "The %{name} increase your movement on land."
-msgstr ""
-
-msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Traveler's Boots of Mobility"

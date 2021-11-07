@@ -4,12 +4,12 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@gmail.com>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 22:34+0800\n"
+"POT-Creation-Date: 2021-11-07 05:21+0100\n"
 "PO-Revision-Date: 2021-08-02 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -153,6 +153,9 @@ msgstr "Выбрать %{name}"
 msgid "Cannot move last troop"
 msgstr "Невозможно переместить последний отряд"
 
+msgid "Set Count"
+msgstr ""
+
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} убивает половину вражеского отряда!"
 
@@ -196,44 +199,53 @@ msgstr "Скорость"
 msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
-msgid "Set the speed of combat actions and animations."
-msgstr "Скорость анимации в бою."
-
-msgid "Monster Info"
-msgstr "Информация о существе"
-
-msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr "Отобразить/скрыть окно информации для активных и указываемых существ."
-
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
-
-msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr "Включить/выключить использование заклинаний компьютером в режиме автобитвы. (Эта опция не влияет на использование заклинаний компьютерным игроком и на режим быстрой битвы.)"
 
 msgid "Grid"
 msgstr "Сетка"
 
-msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr "Отобразить/скрыть гексагональную сетку. Движения всегда ограничены сеткой. Эта опция влияет лишь на внешний вид поля боя."
-
 msgid "Shadow Movement"
 msgstr "Тень при движении"
 
-msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr "Включить/выключить затенение участков поля боя, доступных для перемещения и атаки существом."
-
 msgid "Shadow Cursor"
 msgstr "Тень-курсор"
-
-msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
-msgstr "Включить/выключить затенение гекса под курсором мыши."
 
 msgid "Off"
 msgstr "Выкл."
 
 msgid "On"
 msgstr "Вкл."
+
+msgid "Set the speed of combat actions and animations."
+msgstr "Скорость анимации в бою."
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+"Включить/выключить использование заклинаний компьютером в режиме автобитвы. "
+"(Эта опция не влияет на использование заклинаний компьютерным игроком и на "
+"режим быстрой битвы.)"
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Отобразить/скрыть гексагональную сетку. Движения всегда ограничены сеткой. "
+"Эта опция влияет лишь на внешний вид поля боя."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Включить/выключить затенение участков поля боя, доступных для перемещения и "
+"атаки существом."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr "Включить/выключить затенение гекса под курсором мыши."
 
 msgid "The enemy has surrendered!"
 msgstr "Враг капитулировал!"
@@ -314,7 +326,8 @@ msgstr "Удача"
 msgid "Spell Points"
 msgstr "Очки магии"
 
-msgid "View Hero's options"
+#, fuzzy
+msgid "Hero's Options"
 msgstr "Опции героя"
 
 msgid "Cast Spell"
@@ -421,13 +434,13 @@ msgstr "Информация о баллисте"
 msgid "Ballista"
 msgstr "Баллиста"
 
-msgid "Auto Combat"
+msgid "Enable auto combat"
 msgstr "Автобитва"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr "Позволяет компьютеру сражаться за вас."
 
-msgid "Enable auto combat"
+msgid "Auto Combat"
 msgstr "Автобитва"
 
 msgid "Customize system options"
@@ -436,23 +449,37 @@ msgstr "Изменить настройки системы"
 msgid "Allows you to customize the combat screen."
 msgstr "Позволяет вам настраивать отображение боя."
 
-msgid "Wait"
-msgstr "Ожидание"
-
-msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr "Ожидание для текущего существа. Существо ждёт пропускает свой ход в ожидание пока походят другие существа."
+msgid "System Options"
+msgstr "Параметры системы"
 
 msgid "Wait this unit"
 msgstr "Подождать"
 
-msgid "Skip"
-msgstr "Пропустить"
+msgid "Wait"
+msgstr "Ожидание"
 
-msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
-msgstr "Пропустить ход для текущего существа. Существо пропускает ход до начала следующего раунда."
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
+msgstr ""
+"Ожидание для текущего существа. Существо ждёт пропускает свой ход в ожидание "
+"пока походят другие существа."
 
 msgid "Skip this unit"
 msgstr "Пропустить ход"
+
+msgid "Skip"
+msgstr "Пропустить"
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+"Пропустить ход для текущего существа. Существо пропускает ход до начала "
+"следующего раунда."
+
+msgid "View Hero's options"
+msgstr "Опции героя"
 
 msgid "View opposing Hero"
 msgstr "Просмотреть вражеского героя"
@@ -593,6 +620,42 @@ msgid ""
 "%{spell}."
 msgstr ""
 "Благодаря орлиному взору, %{name} смог выучить заклинание \"%{spell}\"."
+
+msgid "Human"
+msgstr "Человек"
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+#, fuzzy
+msgid "Set Attack Skill"
+msgstr "Атака"
+
+#, fuzzy
+msgid "Set Defense Skill"
+msgstr "Защита"
+
+#, fuzzy
+msgid "Set Power Skill"
+msgstr "Сила магии"
+
+#, fuzzy
+msgid "Set Knowledge Skill"
+msgstr "Знания"
+
+#, fuzzy
+msgid "%{race1} %{name1}"
+msgstr "%{name1} встретил %{name2}"
+
+msgid "vs"
+msgstr ""
+
+#, fuzzy
+msgid "%{race2} %{name2}"
+msgstr "%{name1} встретил %{name2}"
 
 msgid "Monsters"
 msgstr "Монстры"
@@ -1201,29 +1264,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Убийца гномов!!!!, спасайтесь кто может!\""
 
-msgid "Thunder Mace"
-msgstr "Громовая Палица"
+msgid "Caster's Bracelet"
+msgstr "Магический Браслет"
 
-msgid "Minor Scroll"
-msgstr "Малый Свиток Знания"
-
-msgid "Dragon Sword"
-msgstr "Драконий Меч"
+msgid "Defender Helm"
+msgstr "Шлем Защитника"
 
 msgid "Breastplate"
 msgstr "Божественный Доспех"
 
+msgid "Dragon Sword"
+msgstr "Драконий Меч"
+
 msgid "Fizbin Medal"
 msgstr "Символ Неудачи"
 
-msgid "Fizbin of Misfortune"
-msgstr "Символ Неудачи"
+msgid "Foremost Scroll"
+msgstr "Высший Свиток"
 
 msgid "Mage's Ring"
 msgstr "Кольцо Мага"
 
-msgid "Defender Helm"
-msgstr "Шлем Защитника"
+msgid "Major Scroll"
+msgstr "Большой Свиток"
+
+msgid "Minor Scroll"
+msgstr "Малый Свиток Знания"
+
+#, fuzzy
+msgid "Nomad Boots"
+msgstr "Кочевников"
 
 msgid "Power Axe"
 msgstr "Топор Власти"
@@ -1232,9 +1302,11 @@ msgstr "Топор Власти"
 msgid "Stealth Shield"
 msgstr "Всемогущий Щит"
 
-#, fuzzy
-msgid "Nomad Boots"
-msgstr "Кочевников"
+msgid "Thunder Mace"
+msgstr "Громовая Палица"
+
+msgid "Traveler's Boots"
+msgstr "Башмаки Путника"
 
 msgid "Summon Earth"
 msgstr "Земной элементал"
@@ -1685,11 +1757,13 @@ msgstr "Предыдущий город"
 msgid "Show previous town"
 msgstr "Предыдущий город"
 
-msgid "Army is full"
-msgstr "Нет места"
+msgid "Army joining"
+msgstr ""
 
-msgid "Join Error"
-msgstr "Ошибка подключения"
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
+msgstr ""
 
 msgid "This town may not be upgraded to a castle."
 msgstr "В этом городе нельзя построить замок."
@@ -1848,6 +1922,9 @@ msgstr ""
 "побеждаете их под диким вопль толпы. Тренер гладиаторов, впечатленный Вашим "
 "умением, соглашается обучить Вас выбранному навыку."
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1917,6 +1994,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Рейтинг: %{percent})"
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr "Нет места в"
 
@@ -1928,6 +2008,9 @@ msgstr "Построить новый корабль:"
 
 msgid "Resource cost:"
 msgstr "Стоимость:"
+
+msgid "Need: "
+msgstr ""
 
 msgid "Load Game"
 msgstr "Загрузка игры"
@@ -2109,11 +2192,13 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Я могу дать вам за одну единицу %{resto} %{count} единиц(у) %{resfrom}."
 
-msgid "max"
-msgstr ""
+#, fuzzy
+msgid "Max"
+msgstr "Максимус"
 
-msgid "min"
-msgstr ""
+#, fuzzy
+msgid "Min"
+msgstr "Шахта"
 
 msgid "Qty to trade"
 msgstr "Перейти к торговле"
@@ -2190,6 +2275,12 @@ msgstr "Доступно: %{count}"
 msgid "Number to buy:"
 msgstr "Купить:"
 
+msgid "max"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
 msgid "MAX"
 msgstr ""
 
@@ -2230,6 +2321,26 @@ msgstr "Вы действительно хотите удалить файл:"
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+#, fuzzy
+msgid "Select Monster:"
+msgstr "Лучший отряд:"
+
+#, fuzzy
+msgid "Select Hero:"
+msgstr "Лучший герой:"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Артефакты:"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Выберите цель заклинания"
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Защита"
 
 msgid "Map difficulty:"
 msgstr "Сложность карты:"
@@ -2487,9 +2598,6 @@ msgstr "Сила магии"
 msgid "Knowl"
 msgstr "Знания"
 
-msgid "Human"
-msgstr "Человек"
-
 msgid "1st"
 msgstr "1-ый"
 
@@ -2608,6 +2716,167 @@ msgid "Connect with us at"
 msgstr ""
 
 msgid "Need help with the game?"
+msgstr ""
+
+#, fuzzy
+msgid "Original Heroes of Might and Magic II team"
+msgstr "Выйдите из Free Heroes of Might and Magic II."
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Jon Van Caneghem"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Phil Steinmeyer"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Mark Caldwell"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Walt Hochbrueckner"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid ""
+"Paul Rattner\n"
+"Debbie Van Caneghem"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid ""
+"George Ruof\n"
+"Todd Hendrix\n"
+"Mark Caldwell"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Rob King"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid ""
+"Rob King\n"
+"Steve Baca\n"
+"Paul Romero"
+msgstr ""
+
+#, fuzzy
+msgid "Vocalists"
+msgstr "Баллистика"
+
+msgid ""
+"Grant Youngblood\n"
+"Kareen Meshagan"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Julia Ulano"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+msgid "Bonita Long-Hemsath"
+msgstr ""
+
+#, fuzzy
+msgid "Artists"
+msgstr "Артифакты"
+
+msgid ""
+"Julie Bateman\n"
+"Rebecca Christel\n"
+"Shelly Garcia\n"
+"Sam Hasson\n"
+"Louis Henderson\n"
+"Tracy Iwata\n"
+"Steve Jasper\n"
+"April Lee\n"
+"Lieu Pham\n"
+"Phelan Sykes\n"
+"Steve Wasaff\n"
+"Scott White"
+msgstr ""
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "Peter Ryu"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+msgid ""
+"David Botan\n"
+"David Fernandez\n"
+"Bill Nesemeier\n"
+"Walter Johnson\n"
+"Kate McClelland\n"
+"Timothy Lang\n"
+"Bryan Farina"
+msgstr ""
+
+#, fuzzy
+msgid "Writing"
+msgstr "Рейтинг"
+
+msgid "Paul Rattner"
+msgstr ""
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+msgid ""
+"Bryan Farina\n"
+"Rozita Tolouey\n"
+"Bruce Schlickbernd"
+msgstr ""
+
+#, fuzzy
+msgid "Scenarios"
+msgstr "Сценарий"
+
+msgid ""
+"Jon Van Caneghem\n"
+"Debbie Van Caneghem\n"
+"Clayton Retzer\n"
+"Christian Vanover\n"
+"Paul Rattner\n"
+"Benjamin Bent\n"
+"Bryan Farina\n"
+"Eric Heffron\n"
+"Mark Palczynski\n"
+"Walt Hochbrueckner\n"
+"Bruce Schlickbernd\n"
+"Craig Konas"
+msgstr ""
+
+msgid ""
+"Scott McDaniel\n"
+"Dean Rettig\n"
+"Ted Chapman\n"
+"Dean Frost"
 msgstr ""
 
 msgid "Unknown Hero"
@@ -2832,6 +3101,9 @@ msgstr "6 игроков"
 msgid "Play with 6 human players."
 msgstr "Все игроки - люди."
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2852,6 +3124,10 @@ msgid ""
 msgstr ""
 "Вы нашли %{name}.\n"
 "Ваше задание выполнено."
+
+#, fuzzy
+msgid "Ultimate Artifact"
+msgstr "Найти уникальный артефакт."
 
 msgid ""
 "The enemy is beaten.\n"
@@ -3122,9 +3398,6 @@ msgstr "Настройки файла карты"
 msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr "Открывает окно системных настроек, позволяющих настроить игру."
 
-msgid "System Options"
-msgstr "Параметры системы"
-
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -3258,6 +3531,12 @@ msgstr " союз"
 
 msgid ", FPS: "
 msgstr ""
+
+msgid "%{object} robber"
+msgstr "%{object} грабителя"
+
+msgid "%{object} raided"
+msgstr "%{object} рейд"
 
 msgid "Ambrose"
 msgstr "Амброс"
@@ -3468,12 +3747,6 @@ msgstr "Ярконас"
 
 msgid "Martine"
 msgstr "Мартин"
-
-msgid "%{object} robber"
-msgstr "%{object} грабителя"
-
-msgid "%{object} raided"
-msgstr "%{object} рейд"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у вас нет свободного места!"
@@ -3870,11 +4143,11 @@ msgstr ""
 "могилы?"
 
 msgid ""
-"You spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
-"Вы тратите несколько часов, обыскивая могилы, но "
-"ничего не находите. Сей презренный акт снижает мораль вашей армии."
+"Вы тратите несколько часов, обыскивая могилы, но ничего не находите. Сей "
+"презренный акт снижает мораль вашей армии."
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
 msgstr "После победы над зомби, вы обыскиваете могилы и удаляетесь с находкой!"
@@ -3887,11 +4160,11 @@ msgstr ""
 "покачиваемый прибоем на скалах. Желаете обыскать обломки?"
 
 msgid ""
-"You spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
-"Вы тратите несколько часов, обыскивая останки, но ничего "
-"не находите. Сей презренный акт снижает мораль вашей армии."
+"Вы тратите несколько часов, обыскивая останки, но ничего не находите. Сей "
+"презренный акт снижает мораль вашей армии."
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
@@ -4031,6 +4304,11 @@ msgid ""
 msgstr ""
 "Вы посетили в квартиру отставного ветерана. Солдат говорит вам, что он готов "
 "отдать %{art} первому Лидеру, которого он встретит."
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
+msgstr ""
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -4468,6 +4746,11 @@ msgstr ""
 "железного на стальное. Он так же сказал, что владеет технологией переплавки "
 "железных големов в стальные. К сожалению, никого из них нет в вашей армии, и "
 "он не может вам ничем помочь."
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -6627,9 +6910,6 @@ msgstr "%{name} приносит каждый день по %{count} золот�
 msgid "Arcane Necklace of Magic"
 msgstr "Ожерелье Тайной Магии"
 
-msgid "Caster's Bracelet"
-msgstr "Магический Браслет"
-
 msgid "Caster's Bracelet of Magic"
 msgstr "Магический Браслет"
 
@@ -6653,6 +6933,9 @@ msgstr "Медаль Доблести"
 
 msgid "Medal of Distinction"
 msgstr "Медаль Почета"
+
+msgid "Fizbin of Misfortune"
+msgstr "Символ Неудачи"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} снижает вашу мораль на %{count}."
@@ -6693,17 +6976,11 @@ msgstr "Божественный Доспех"
 msgid "Minor Scroll of Knowledge"
 msgstr "Малый Свиток Знания"
 
-msgid "Major Scroll"
-msgstr "Большой Свиток"
-
 msgid "Major Scroll of Knowledge"
 msgstr "Большой Свиток Знания"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Могущественный Свиток Знания"
-
-msgid "Foremost Scroll"
-msgstr "Высший Свиток"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Свиток Высшего Знания"
@@ -6725,9 +7002,6 @@ msgstr "Башмаки Кочевника"
 
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} увеличивают ваше передвижение по земле."
-
-msgid "Traveler's Boots"
-msgstr "Башмаки Путника"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Башмаки Путника"
@@ -8138,6 +8412,21 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monster Info"
+#~ msgstr "Информация о существе"
+
+#~ msgid ""
+#~ "Toggle the monster info window, which shows information on the active and "
+#~ "targeted monsters."
+#~ msgstr ""
+#~ "Отобразить/скрыть окно информации для активных и указываемых существ."
+
+#~ msgid "Army is full"
+#~ msgstr "Нет места"
+
+#~ msgid "Join Error"
+#~ msgstr "Ошибка подключения"
 
 #~ msgid "View Stats"
 #~ msgstr "Герой/Характеристика"
