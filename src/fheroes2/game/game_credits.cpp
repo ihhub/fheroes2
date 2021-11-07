@@ -231,10 +231,9 @@ namespace
                                         "a1exsh\n"
                                         "Andrii Kurdiumov\n"
                                         "felix642\n"
-                                        "dimag0g\n"
-                                        "and many other contributors!" );
+                                        "dimag0g\n" );
 
-        name.Set( contributors, Font::BIG, textWidth );
+        name.Set( contributors + _( "and many other contributors!" ), Font::BIG, textWidth );
         name.Blit( 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
         offsetY += name.h() + 10;
 
@@ -307,10 +306,9 @@ namespace
                                         "Aleksei Mazur\n"
                                         "Matt Taylor\n"
                                         "Connor Townsend\n"
-                                        "Brandon Wright\n"
-                                        "and many-many other supporters!" );
+                                        "Brandon Wright\n" );
 
-        name.Set( contributors, Font::BIG, output.width() - columnStep );
+        name.Set( contributors + _("and many-many other supporters!" ), Font::BIG, output.width() - columnStep );
         name.Blit( columnStep + ( output.width() - columnStep - title.w() ) / 2, offsetY, output );
         offsetY += name.h() + 10;
 
