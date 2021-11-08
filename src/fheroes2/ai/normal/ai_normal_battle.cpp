@@ -256,7 +256,7 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
             if ( target.cell != -1 ) {
-                const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+                const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
@@ -453,7 +453,7 @@ namespace AI
                 if ( target.cell != -1 ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
 
-                    const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+                    const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
@@ -700,7 +700,7 @@ namespace AI
                     if ( targetCell != -1 ) {
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
 
-                        const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, targetCell );
+                        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
