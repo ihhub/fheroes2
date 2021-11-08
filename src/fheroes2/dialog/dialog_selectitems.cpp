@@ -116,7 +116,6 @@ public:
             fheroes2::Text text( mons.GetName(), fheroes2::FontType() );
             text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
         }
-        
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -152,13 +151,12 @@ public:
 
         if ( current ) {
             fheroes2::Text text( Heroes::GetName( index ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() ); 
+            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
         }
         else {
             fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType() );
             text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
         }
-        
     }
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
