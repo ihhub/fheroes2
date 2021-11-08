@@ -238,6 +238,7 @@ namespace
         switch ( campaignID ) {
         case Campaign::ARCHIBALD_CAMPAIGN: {
             if ( currentScenarioID != 6 ) {
+                assert( 0 ); // no other scenario has this bonus
                 return;
             }
             switch ( hero->GetRace() ) {
