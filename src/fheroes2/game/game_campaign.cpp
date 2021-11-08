@@ -740,8 +740,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
                 // but the army has to be set after starting the game, so first only set the race
-                const Campaign::ScenarioBonusData temp( Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount );
-                SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID, temp );
+                SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID,
+                                  { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
 
             Players & players = conf.GetPlayers();
