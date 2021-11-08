@@ -35,6 +35,7 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -98,6 +99,99 @@ namespace
             image.transform()[position] = 0;
             image.image()[position] = value;
         }
+    }
+
+    // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
+    class OriginalAlphabetPreserver
+    {
+    public:
+        void preserve()
+        {
+            if ( _isPreserved ) {
+                return;
+            }
+
+            fheroes2::AGG::GetICN( ICN::FONT, 0 );
+            fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
+
+            _normalFont = _icnVsSprite[ICN::FONT];
+            _smallFont = _icnVsSprite[ICN::SMALFONT];
+        }
+
+        void restore() const
+        {
+            if ( !_isPreserved ) {
+                return;
+            }
+
+            // Restore the original font.
+            _icnVsSprite[ICN::FONT] = _normalFont;
+            _icnVsSprite[ICN::SMALFONT] = _smallFont;
+
+            // Clear modified fonts.
+            _icnVsSprite[ICN::YELLOW_FONT].clear();
+            _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+            _icnVsSprite[ICN::GRAY_FONT].clear();
+            _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+            _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+        }
+
+    private:
+        bool _isPreserved = false;
+
+        std::vector<fheroes2::Sprite> _normalFont;
+        std::vector<fheroes2::Sprite> _smallFont;
+    };
+
+    OriginalAlphabetPreserver alphabetPreserver;
+
+    void generatePolishAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original.insert( original.end(), 128, original[95] );
+            original[108] = original[51];
+            original[111] = original[58];
+            original[124] = original[83];
+            original[127] = original[90];
+            original[131] = original[44];
+            original[133] = original[33];
+            original[143] = original[58];
+            original[147] = original[76];
+            original[153] = original[65];
+            original[159] = original[90];
+            original[166] = original[35];
+            original[170] = original[37];
+            original[177] = original[46];
+            original[179] = original[47];
+            original[198] = original[67];
+            original[202] = original[69];
+            original[209] = original[78];
+            original[211] = original[79];
+        }
+
+        // TODO: add missing pixels to newly copied characters.
+    }
+
+    void generateAlphabet( const fheroes2::SupportedLanguage language )
+    {
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::Polish:
+            generatePolishAlphabet();
+            break;
+        default:
+            // Add new language generation code!
+            assert( 0 );
+            break;
+        }
+
+        _icnVsSprite[ICN::YELLOW_FONT].clear();
+        _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+        _icnVsSprite[ICN::GRAY_FONT].clear();
+        _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+        _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
     }
 }
 
@@ -781,7 +875,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::WHITE_LARGE_FONT: {
-                LoadModifiedICN( ICN::FONT );
+                GetICN( ICN::FONT, 0 );
                 const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
                 _icnVsSprite[id].resize( original.size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -1462,6 +1556,29 @@ namespace fheroes2
             assert( 0 ); // Did you add a new font size? Please add implementation.
 
             return errorImage;
+        }
+
+        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet )
+        {
+            if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
+                alphabetPreserver.restore();
+            }
+            else {
+                alphabetPreserver.preserve();
+                generateAlphabet( language );
+            }
+        }
+
+        bool isAlphabetSupported( const SupportedLanguage language )
+        {
+            switch ( language ) {
+            case SupportedLanguage::Polish:
+                return true;
+            default:
+                break;
+            }
+
+            return false;
         }
     }
 }

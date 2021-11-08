@@ -35,6 +35,7 @@
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_language.h"
 #include "version.h"
 
 #define STRINGIFY( DEF ) #DEF
@@ -473,6 +474,8 @@ const std::string & Settings::getGameLanguage() const
 
 bool Settings::setGameLanguage( const std::string & language )
 {
+    fheroes2::updateAlphabet( language );
+
     Translation::setStripContext( '|' );
 
     _gameLanguage = language;
