@@ -1722,8 +1722,8 @@ namespace fheroes2
             case SupportedLanguage::Polish:
             case SupportedLanguage::German:
             case SupportedLanguage::French:
-            // TODO: uncomment the line below once Russian alphabet is good enough
-            // case SupportedLanguage::Russian:
+                // TODO: uncomment the line below once Russian alphabet is good enough
+                // case SupportedLanguage::Russian:
                 return true;
             default:
                 break;
