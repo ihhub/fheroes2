@@ -21,7 +21,7 @@
 #include <string>
 
 #include "image_tool.h"
-#include "palette_h2.h"
+#include "image_palette.h"
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -39,11 +39,13 @@
 
 namespace
 {
-    std::vector<uint8_t> PALPAlette()
+    std::vector<uint8_t> PALPalette()
     {
+        const uint8_t * gamePalette = fheroes2::getGamePalette();
+
         std::vector<uint8_t> palette( 256 * 3 );
         for ( size_t i = 0; i < palette.size(); ++i ) {
-            palette[i] = kb_pal[i] << 2;
+            palette[i] = gamePalette[i] << 2;
         }
 
         return palette;
@@ -51,7 +53,7 @@ namespace
 
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
     {
-        const std::vector<uint8_t> & palette = PALPAlette();
+        const std::vector<uint8_t> & palette = PALPalette();
         const uint8_t * currentPalette = palette.data();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

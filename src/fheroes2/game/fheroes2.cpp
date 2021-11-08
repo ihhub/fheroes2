@@ -33,6 +33,7 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -205,6 +206,9 @@ int main( int argc, char ** argv )
         const DisplayInitializer displayInitializer;
 
         const AGG::AGGInitializer aggInitializer;
+
+        // Load palette.
+        fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
 
         // load BIN data
         Bin_Info::InitBinInfo();
