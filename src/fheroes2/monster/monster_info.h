@@ -21,7 +21,7 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
-#include "resource.h"
+#include "payment.h"
 
 #include <string>
 #include <vector>
@@ -147,7 +147,7 @@ namespace fheroes2
         uint32_t race;
         uint32_t level;
 
-        cost_t cost;
+        payment_t cost;
     };
 
     struct MonsterSound

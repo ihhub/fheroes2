@@ -28,23 +28,6 @@
 #include "types.h"
 
 class StreamBase;
-
-struct cost_t
-{
-    u16 gold;
-    u8 wood;
-    u8 mercury;
-    u8 ore;
-    u8 sulfur;
-    u8 crystal;
-    u8 gems;
-};
-
-#define COST_NONE                                                                                                                                                        \
-    {                                                                                                                                                                    \
-        0, 0, 0, 0, 0, 0, 0                                                                                                                                              \
-    }
-
 class ResourceCount;
 
 namespace Resource
@@ -67,68 +50,64 @@ class Funds
 {
 public:
     Funds();
-    Funds( s32 _ore, s32 _wood, s32 _mercury, s32 _sulfur, s32 _crystal, s32 _gems, s32 _gold );
-    Funds( int rs, u32 count );
-    explicit Funds( const cost_t & );
-    explicit Funds( const ResourceCount & );
+    Funds( const int32_t _ore, const int32_t _wood, const int32_t _mercury, const int32_t _sulfur, const int32_t _crystal, const int32_t _gems, const int32_t _gold );
+    Funds( const int rs, const uint32_t count );
+    explicit Funds( const ResourceCount & rs );
 
-    Funds operator+( const Funds & ) const;
-    Funds operator*( u32 mul ) const;
-    Funds operator-( const Funds & ) const;
-    Funds & operator+=( const Funds & );
-    Funds & operator*=( u32 mul );
-    Funds & operator-=( const Funds & );
-    Funds & operator=( const cost_t & );
+    Funds operator+( const Funds & pm ) const;
+    Funds operator*( uint32_t mul ) const;
+    Funds operator-( const Funds & pm ) const;
+    Funds & operator+=( const Funds & pm );
+    Funds & operator*=( uint32_t mul );
+    Funds & operator-=( const Funds & pm );
 
-    s32 Get( int rs ) const;
-    s32 * GetPtr( int rs );
+    int32_t Get( const int rs ) const;
+    int32_t * GetPtr( const int rs );
 
-    bool operator>=( const Funds & ) const;
+    bool operator>=( const Funds & pm ) const;
 
-    int getLowestQuotient( const Funds & ) const;
-    int GetValidItems( void ) const;
-    u32 GetValidItemsCount( void ) const;
+    int getLowestQuotient( const Funds & divisor ) const;
+    int GetValidItems() const;
+    u32 GetValidItemsCount() const;
 
-    void Trim( void ); // set all values to be >= 0
+    void Trim(); // set all values to be >= 0
 
-    void Reset( void );
-    std::string String( void ) const;
+    void Reset();
+    std::string String() const;
 
-    s32 wood;
-    s32 mercury;
-    s32 ore;
-    s32 sulfur;
-    s32 crystal;
-    s32 gems;
-    s32 gold;
+    int32_t wood;
+    int32_t mercury;
+    int32_t ore;
+    int32_t sulfur;
+    int32_t crystal;
+    int32_t gems;
+    int32_t gold;
 };
 
-StreamBase & operator<<( StreamBase &, const cost_t & );
-StreamBase & operator>>( StreamBase &, cost_t & );
 StreamBase & operator<<( StreamBase &, const Funds & );
 StreamBase & operator>>( StreamBase &, Funds & );
 
 namespace Resource
 {
-    const char * String( int resource );
+    const char * String( const int resource );
     int Rand( const bool includeGold );
 
     /* return index sprite objnrsrc.icn */
-    u32 GetIndexSprite( int resource );
-    int FromIndexSprite( u32 index );
+    uint32_t GetIndexSprite( const int resource );
+    int FromIndexSprite( const uint32_t index );
 
     /* return index sprite resource.icn */
-    u32 GetIndexSprite2( int resource );
-    int FromIndexSprite2( u32 index );
+    uint32_t GetIndexSprite2( const int resource );
+    int FromIndexSprite2( const uint32_t index );
 
     class BoxSprite : protected fheroes2::Rect
     {
     public:
-        BoxSprite( const Funds &, int32_t );
+        BoxSprite( const Funds &, const int32_t width_ );
 
         const fheroes2::Rect & GetArea( void ) const;
-        void SetPos( s32, s32 );
-        void Redraw( void ) const;
+        void SetPos( const int32_t px, const int32_t py );
+        void Redraw() const;
 
         const Funds rs;
     };

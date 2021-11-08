@@ -38,10 +38,10 @@ enum
 
 namespace PaymentConditions
 {
-    payment_t BuyBuilding( int race, u32 build );
-    payment_t BuyBoat( void );
-    payment_t BuySpellBook( int shrine = 0 );
-    payment_t RecruitHero( int level );
+    payment_t BuyBuilding( const int race, const uint32_t build );
+    payment_t BuyBoat();
+    payment_t BuySpellBook( const int shrine = 0 );
+    payment_t RecruitHero( const int level );
     payment_t ForAlchemist();
 }
 

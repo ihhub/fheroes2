@@ -871,29 +871,29 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
+payment_t Kingdom::_getKingdomStartingResources( const int difficulty )
 {
     if ( isControlAI() )
-        return { 10000, 30, 10, 30, 10, 10, 10 };
+        return { 30, 30, 10, 10, 10, 10, 10000 };
 
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return { 10000, 30, 10, 30, 10, 10, 10 };
+        return { 30, 30, 10, 10, 10, 10, 10000 };
     case Difficulty::NORMAL:
-        return { 7500, 20, 5, 20, 5, 5, 5 };
+        return { 20, 20, 5, 5, 5, 5, 7500 };
     case Difficulty::HARD:
-        return { 5000, 10, 2, 10, 2, 2, 2 };
+        return { 10, 10, 2, 2, 2, 2, 5000 };
     case Difficulty::EXPERT:
-        return { 2500, 5, 0, 5, 0, 0, 0 };
+        return { 5, 5, 0, 0, 0, 0, 2500 };
     case Difficulty::IMPOSSIBLE:
-        return { 0, 0, 0, 0, 0, 0, 0 };
+        return {};
     default:
         // Did you add a new difficulty level?
         assert( 0 );
         break;
     }
 
-    return { 7500, 20, 5, 20, 5, 5, 5 };
+    return payment_t( 20, 20, 5, 5, 5, 5, 7500 );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )

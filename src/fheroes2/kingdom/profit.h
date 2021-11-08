@@ -27,9 +27,9 @@
 
 namespace ProfitConditions
 {
-    payment_t FromBuilding( uint32_t building, int race );
-    payment_t FromArtifact( int );
-    payment_t FromMine( int );
+    payment_t FromBuilding( const uint32_t building, const int race );
+    payment_t FromArtifact( const int artifact );
+    payment_t FromMine( const int type );
 }
 
 #endif
