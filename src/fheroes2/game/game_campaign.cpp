@@ -229,44 +229,38 @@ namespace
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
     {
         army.Clean();
-        for ( uint32_t i = 0; i < troops.size(); ++i )
+        for ( size_t i = 0; i < troops.size(); ++i )
             army.GetTroop( i )->Set( troops[i] );
     }
 
     void setHeroAndArmyBonus( Heroes * hero, const int campaignID, const uint32_t currentScenarioID )
     {
         switch ( campaignID ) {
-        case Campaign::ARCHIBALD_CAMPAIGN:
-            switch ( currentScenarioID ) {
-            case 6:
-                std::vector<Troop> startingTroops;
-                switch ( hero->GetRace() ) {
-                case Race::NECR:
-                    startingTroops.emplace_back( Monster::SKELETON, 50 );
-                    startingTroops.emplace_back( Monster::ROYAL_MUMMY, 18 );
-                    startingTroops.emplace_back( Monster::VAMPIRE_LORD, 8 );
-                    break;
-                case Race::WRLK:
-                    startingTroops.emplace_back( Monster::CENTAUR, 40 );
-                    startingTroops.emplace_back( Monster::GARGOYLE, 24 );
-                    startingTroops.emplace_back( Monster::GRIFFIN, 18 );
-                    break;
-                case Race::BARB:
-                    startingTroops.emplace_back( Monster::ORC_CHIEF, 12 );
-                    startingTroops.emplace_back( Monster::OGRE, 18 );
-                    startingTroops.emplace_back( Monster::GOBLIN, 40 );
-                    break;
-                default:
-                    assert( 0 ); // bonus changed?
-                }
-                replaceArmy( hero->GetArmy(), startingTroops );
-                uint32_t exp = hero->GetExperience();
-                if ( exp < 5000 ) {
-                    hero->IncreaseExperience( 5000 - exp, true );
-                }
+        case Campaign::ARCHIBALD_CAMPAIGN: {
+            if ( currentScenarioID != 6 ) {
+                return;
+            }
+            switch ( hero->GetRace() ) {
+            case Race::NECR:
+                replaceArmy( hero->GetArmy(), { { Monster::SKELETON, 50 }, { Monster::ROYAL_MUMMY, 18 }, { Monster::VAMPIRE_LORD, 8 } } );
                 break;
+            case Race::WRLK:
+                replaceArmy( hero->GetArmy(), { { Monster::CENTAUR, 40 }, { Monster::GARGOYLE, 24 }, { Monster::GRIFFIN, 18 } } );
+                break;
+            case Race::BARB:
+                replaceArmy( hero->GetArmy(), { { Monster::ORC_CHIEF, 12 }, { Monster::OGRE, 18 }, { Monster::GOBLIN, 40 } } );
+                break;
+            default:
+                assert( 0 ); // bonus changed?
+            }
+            const uint32_t exp = hero->GetExperience();
+            if ( exp < 5000 ) {
+                hero->IncreaseExperience( 5000 - exp, true );
             }
             break;
+        }
+        default:
+            assert( 0 ); // some new campaign that uses this bonus?
         }
     }
 
@@ -302,10 +296,11 @@ namespace
                 }
                 break;
             case Campaign::ScenarioBonusData::SPELL: {
-                // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->AppendSpellToBook( scenarioBonus._subType, true );
+                KingdomHeroes & heroes = kingdom.GetHeroes();
+                assert( !heroes.empty() );
+                if ( !heroes.empty() ) {
+                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
+                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
                 }
                 break;
             }
@@ -744,7 +739,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
                 // but the army has to be set after starting the game, so first only set the race
-                Campaign::ScenarioBonusData temp( Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount );
+                const Campaign::ScenarioBonusData temp( Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount );
                 SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID, temp );
             }
 
