@@ -192,8 +192,6 @@ int main( int argc, char ** argv )
 
         const fheroes2::CoreInitializer coreInitializer( coreComponents );
 
-        conf.setGameLanguage( conf.getGameLanguage() );
-
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 16 );
             Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
@@ -213,6 +211,8 @@ int main( int argc, char ** argv )
 
         // init game data
         Game::Init();
+
+        conf.setGameLanguage( conf.getGameLanguage() );
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();

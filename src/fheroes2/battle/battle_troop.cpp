@@ -1499,6 +1499,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
 
         const u32 resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
+        // Puts back the unit in the board
+        SetPosition( GetPosition() );
+
         if ( Arena::GetInterface() ) {
             std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );
             StringReplace( str, "%{count}", resurrect );
