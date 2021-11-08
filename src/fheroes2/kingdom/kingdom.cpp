@@ -127,14 +127,20 @@ void Kingdom::LossPostActions( void )
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
 
-        if ( !heroes.empty() ) {
-            std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) ); } );
-            heroes.clear();
+        // Heroes::SetFreeman() calls Kingdom::RemoveHeroes(), which eventually calls heroes.erase()
+        while ( !heroes.empty() ) {
+            Heroes * hero = heroes.back();
+
+            assert( hero->GetColor() == GetColor() );
+
+            hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) );
         }
+
         if ( !castles.empty() ) {
             castles.ChangeColors( GetColor(), Color::NONE );
             castles.clear();
         }
+
         world.ResetCapturedObjects( GetColor() );
     }
 }
