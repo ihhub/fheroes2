@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 21:44+0800\n"
-"PO-Revision-Date: 2021-10-26 23:28+0200\n"
+"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"PO-Revision-Date: 2021-11-07 17:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -149,6 +149,9 @@ msgstr "Velg %{name}"
 msgid "Cannot move last troop"
 msgstr "Kan ikke flytte siste styrke i garnisonen"
 
+msgid "Set Count"
+msgstr "Velg antall"
+
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverer fiendestyrken!"
 
@@ -193,50 +196,62 @@ msgstr "Hurtighet"
 msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
-msgid "Set the speed of combat actions and animations."
-msgstr "Juster hastigheten til handlinger og animasjoner i kamp."
-
-msgid "Monster Info"
-msgstr "Monsterinfo"
-
-msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr "Slå på/av vinduet med monsterinfo. Vinduet viser detaljer om de nåværende og utvalgte monstrene."
-
 msgid "Auto Spell Casting"
 msgstr ""
 "Auto-\n"
 "trylling"
 
-msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr "Velg om datamaskinen skal bruke trolldommer når autokamp er skrudd på. (Merk: Dette påvirker ikke magibruken til datamaskinspillere på noen som helst måte, og det påvirker heller ikke hurtigkamp.)"
-
 msgid "Grid"
 msgstr "Rutenett"
-
-msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
-msgstr "Skru rutenettet på eller av. Rutenettet bestemmer alltid hvor man kan flytte seg, selv om det er slått av. Denne innstillingen avgjør bare om den er synlig."
 
 msgid "Shadow Movement"
 msgstr ""
 "Flytte-\n"
 "skygge"
 
-msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr "Skru skyggene som viser hvor skapningene dine kan flytte seg eller angripe enten av eller på."
-
 msgid "Shadow Cursor"
 msgstr ""
 "Skygge-\n"
 "markør"
-
-msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
-msgstr "Skru av eller på en skygge som viser den nåværende plasseringen på rutenettet til pekeren."
 
 msgid "Off"
 msgstr "Av"
 
 msgid "On"
 msgstr "På"
+
+msgid "Set the speed of combat actions and animations."
+msgstr "Juster hastigheten til handlinger og animasjoner i kamp."
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+"Velg om datamaskinen skal bruke trolldommer når autokamp er skrudd på. "
+"(Merk: Dette påvirker ikke magibruken til datamaskinspillere på noen som "
+"helst måte, og det påvirker heller ikke hurtigkamp.)"
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Skru rutenettet på eller av. Rutenettet bestemmer alltid hvor man kan flytte "
+"seg, selv om det er slått av. Denne innstillingen avgjør bare om den er "
+"synlig."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Skru skyggene som viser hvor skapningene dine kan flytte seg eller angripe "
+"enten av eller på."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Skru av eller på en skygge som viser den nåværende plasseringen på "
+"rutenettet til pekeren."
 
 msgid "The enemy has surrendered!"
 msgstr "Fienden overga seg!"
@@ -319,8 +334,7 @@ msgstr "Flaks"
 msgid "Spell Points"
 msgstr "Mana"
 
-#, fuzzy
-msgid "View Hero's options"
+msgid "Hero's Options"
 msgstr "Helteinnstillinger"
 
 msgid "Cast Spell"
@@ -424,14 +438,14 @@ msgstr "Vis info om ballist"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Auto Combat"
-msgstr "Autokamp"
+msgid "Enable auto combat"
+msgstr "Skru på autokamp"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr "Lar datamaskinen kjempe for deg."
 
-msgid "Enable auto combat"
-msgstr "Skru på autokamp"
+msgid "Auto Combat"
+msgstr "Autokamp"
 
 msgid "Customize system options"
 msgstr "Skreddersy systeminnstillinger"
@@ -439,23 +453,37 @@ msgstr "Skreddersy systeminnstillinger"
 msgid "Allows you to customize the combat screen."
 msgstr "Lar deg skreddersy kampskjermen."
 
-msgid "Wait"
-msgstr "Avvent"
-
-msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr "Lar den nåværende skapningen vente. Den nåværende skapningen utsetter turen sin til etter alle andre skapninger har gjort turen sin."
+msgid "System Options"
+msgstr "Systeminnstillinger"
 
 msgid "Wait this unit"
 msgstr "Avvent denne stryken"
 
-msgid "Skip"
-msgstr "Hopp over"
+msgid "Wait"
+msgstr "Avvent"
 
-msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
-msgstr "Hopper over den nåværende skapningen. Den nåværende skapningen avslutter turen sin og får ikke en ny tur før neste runde."
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
+msgstr ""
+"Lar den nåværende skapningen vente. Den nåværende skapningen utsetter turen "
+"sin til etter alle andre skapninger har gjort turen sin."
 
 msgid "Skip this unit"
 msgstr "Hopp over denne styrken"
+
+msgid "Skip"
+msgstr "Hopp over"
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+"Hopper over den nåværende skapningen. Den nåværende skapningen avslutter "
+"turen sin og får ikke en ny tur før neste runde."
+
+msgid "View Hero's options"
+msgstr "Vis helteinnstillinger"
 
 msgid "View opposing Hero"
 msgstr "Vis motstanderhelt"
@@ -601,6 +629,36 @@ msgid ""
 msgstr ""
 "Ved bruk av sitt ørneblikk er %{name} i stand til å lære trolldommen:\n"
 " %{spell}."
+
+msgid "Human"
+msgstr "Menneske"
+
+msgid "AI"
+msgstr "Datamaskin"
+
+msgid "Please select another hero."
+msgstr "Vennligst velg en annen helt."
+
+msgid "Set Attack Skill"
+msgstr "Velg angrepsevne"
+
+msgid "Set Defense Skill"
+msgstr "Velg forsvarsevne"
+
+msgid "Set Power Skill"
+msgstr "Velg tryllekraft"
+
+msgid "Set Knowledge Skill"
+msgstr "Velg kunnskap"
+
+msgid "%{race1} %{name1}"
+msgstr "%{race1}en %{name1}"
+
+msgid "vs"
+msgstr "mot"
+
+msgid "%{race2} %{name2}"
+msgstr "%{race2}en %{name2}"
 
 msgid "Monsters"
 msgstr "Monstre"
@@ -1229,29 +1287,35 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Dvergemorderen!!!! Flykt for livene deres!\""
 
-msgid "Thunder Mace"
-msgstr "Tordenklubben"
+msgid "Caster's Bracelet"
+msgstr "Fortryller-armbånd"
 
-msgid "Minor Scroll"
-msgstr "Mindre skriftrull"
-
-msgid "Dragon Sword"
-msgstr "Dragesverdet"
+msgid "Defender Helm"
+msgstr "Forsvarerhjelm"
 
 msgid "Breastplate"
 msgstr "Brystplate"
 
+msgid "Dragon Sword"
+msgstr "Dragesverdet"
+
 msgid "Fizbin Medal"
 msgstr "Fizbin-medaljen"
 
-msgid "Fizbin of Misfortune"
-msgstr "Fizbinen av uflaks"
+msgid "Foremost Scroll"
+msgstr "Yprst. kunskpsrull"
 
 msgid "Mage's Ring"
 msgstr "Magikerens ring"
 
-msgid "Defender Helm"
-msgstr "Forsvarerhjelm"
+msgid "Major Scroll"
+msgstr "Str. kunskpsrull"
+
+msgid "Minor Scroll"
+msgstr "Mindre skriftrull"
+
+msgid "Nomad Boots"
+msgstr "Nomadens sko"
 
 msgid "Power Axe"
 msgstr "Styrkeøks"
@@ -1259,8 +1323,11 @@ msgstr "Styrkeøks"
 msgid "Stealth Shield"
 msgstr "Snikeskjoldet"
 
-msgid "Nomad Boots"
-msgstr "Nomadens sko"
+msgid "Thunder Mace"
+msgstr "Tordenklubben"
+
+msgid "Traveler's Boots"
+msgstr "Vandrerens sko"
 
 msgid "Summon Earth"
 msgstr "Tilkall jord"
@@ -1721,12 +1788,15 @@ msgstr "Klikk for å vise forrige by."
 msgid "Show previous town"
 msgstr "Vis forrige by"
 
-msgid "Army is full"
-msgstr "Hæren er full"
+msgid "Army joining"
+msgstr "Sammenslåing av hærer"
 
-# Hvilken funksjon?
-msgid "Join Error"
-msgstr "Tilkoblingsfeil"
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
+msgstr ""
+"Ikke mulig å slå sammen to hærer. Rokker om på monstrene manuelt før du "
+"flytter helten inn til garnisonen."
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Denne byen kan ikke oppgraderes til slott."
@@ -1887,6 +1957,9 @@ msgstr ""
 "publikum. Imponert over dine ferdigheter blir den aldrende gladiatormesteren "
 "med på å trene deg opp i en ferdighet etter ditt ønske."
 
+msgid "You can't afford to upgrade your troops!"
+msgstr "Du har ikke råd til å oppgradere troppene dine!"
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1960,6 +2033,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grad: %{percent})"
 
+msgid "Total: "
+msgstr "Totalt: "
+
 msgid "No room in"
 msgstr "Ingen plass i"
 
@@ -1971,6 +2047,9 @@ msgstr "Bygg et nytt skip:"
 
 msgid "Resource cost:"
 msgstr "Pris i råvarer:"
+
+msgid "Need: "
+msgstr "Trenger: "
 
 msgid "Load Game"
 msgstr "Last inn et spill"
@@ -2081,8 +2160,8 @@ msgstr ""
 "Taps-\n"
 "vilkår"
 
-msgid "score: "
-msgstr "poengsum: "
+msgid "Score: "
+msgstr "Poengsum: "
 
 msgid "First select recipients!"
 msgstr "Velg først mottakere!"
@@ -2150,11 +2229,11 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Jeg kan tilby deg 1 enhet av %{resto} mot %{count} enhet av %{resfrom}."
 
-msgid "max"
-msgstr "maks"
+msgid "Max"
+msgstr "Maks"
 
-msgid "min"
-msgstr "min"
+msgid "Min"
+msgstr "Min"
 
 msgid "Qty to trade"
 msgstr "Ant. å bytte"
@@ -2273,6 +2352,21 @@ msgstr "Er du sikker på at du vil slette filen:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "Select Monster:"
+msgstr "Velg monster:"
+
+msgid "Select Hero:"
+msgstr "Velg helt:"
+
+msgid "Select Artifact:"
+msgstr "Velg gjenstand:"
+
+msgid "Select Spell:"
+msgstr "Velg trolldom:"
+
+msgid "Select Skill:"
+msgstr "Velg ferdighet:"
 
 msgid "Map difficulty:"
 msgstr "Brettets utfordring:"
@@ -2531,9 +2625,6 @@ msgstr "Kraft"
 msgid "Knowl"
 msgstr "Kunns"
 
-msgid "Human"
-msgstr "Menneske"
-
 msgid "1st"
 msgstr "1."
 
@@ -2645,6 +2736,9 @@ msgstr "Treff oss på "
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
 
+msgid "and many other contributors!"
+msgstr "og mange andre bidragsytere!"
+
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
 
@@ -2656,6 +2750,63 @@ msgstr "Kontakt oss på"
 
 msgid "Need help with the game?"
 msgstr "Behov for hjelp med spillet?"
+
+msgid "and many-many other supporters!"
+msgstr "og mange flere støttespillere!"
+
+msgid "Original Heroes of Might and Magic II team"
+msgstr "Det opprinnelige Heroes of Might and Magic II teamet"
+
+msgid "Designed and Directed"
+msgstr "Utforming og ledelse"
+
+msgid "Programming and Design"
+msgstr "Programmering og utforming"
+
+msgid "Executive Producer"
+msgstr "Sjefsprodusent"
+
+msgid "Producer"
+msgstr "Produsent"
+
+msgid "Additional Design"
+msgstr "Øvrig utforming"
+
+msgid "Additional Programming"
+msgstr "Øvrig programmering"
+
+msgid "Musical Production"
+msgstr "Musikkproduksjon"
+
+msgid "Music and Sound Design"
+msgstr "Musikk- og lyddesign"
+
+msgid "Vocalists"
+msgstr "Vokalister"
+
+msgid "Art Director"
+msgstr "Kunstnerisk leder"
+
+msgid "Assistant Art Director"
+msgstr "Kunstnerisk leder-assistent"
+
+msgid "Artists"
+msgstr "Artister"
+
+msgid "QA Manager"
+msgstr "Koordinator for kvalitetssikring"
+
+msgid "QA"
+msgstr "Kvalitetssikring"
+
+msgid "Writing"
+msgstr "Skribent"
+
+msgid "Manual and Helpfile"
+msgstr "Håndbok og hjelpetekst"
+
+msgid "Scenarios"
+msgstr "Scenarioer"
 
 msgid "Unknown Hero"
 msgstr "Ukjent helt"
@@ -2887,6 +3038,9 @@ msgstr "6 Spillere"
 msgid "Play with 6 human players."
 msgstr "Spill med 6 menneskelige spillere."
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr "Dragebyen har falt! Du har nå blitt mesteren av dragene."
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2907,6 +3061,9 @@ msgid ""
 msgstr ""
 "Du har funnet %{name}.\n"
 "Oppdraget ditt er fullført."
+
+msgid "Ultimate Artifact"
+msgstr "Ultimat gjenstand"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -3177,9 +3334,6 @@ msgstr ""
 "Hent fram menyen for systeminnstillinger, som lar deg skreddersy spillet "
 "ditt."
 
-msgid "System Options"
-msgstr "Systeminnstillinger"
-
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -3313,6 +3467,12 @@ msgstr "Italiensk"
 
 msgid ", FPS: "
 msgstr ""
+
+msgid "%{object} robber"
+msgstr "%{object} ranet"
+
+msgid "%{object} raided"
+msgstr "%{object} plyndret"
 
 msgid "Ambrose"
 msgstr "Ambrose"
@@ -3523,12 +3683,6 @@ msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
-
-msgid "%{object} robber"
-msgstr "%{object} ranet"
-
-msgid "%{object} raided"
-msgstr "%{object} plyndret"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke plukke opp denne gjenstanden. Du er allerede fullastet!"
@@ -3933,12 +4087,11 @@ msgstr ""
 "gjennom gravene deres?"
 
 msgid ""
-"Upon defeating the Zombies you spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
-"Etter å ha beseiret zombiene tilbringer du flere timer på å lete gjennom "
-"gravene, men finner ingenting. En slik fordømmelig handling minsker "
-"kampånden til hæren din."
+"Du tilbringer flere timer på å lete gjennom gravene, men finner ingenting. "
+"En slik fordømmelig handling minsker kampånden til hæren din."
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
 msgstr ""
@@ -3953,12 +4106,11 @@ msgstr ""
 "mot steinene. Vil du lete gjennom skipbruddet?"
 
 msgid ""
-"Upon defeating the Ghosts you spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
-"Etter å ha beseiret gjenferdene tilbringer du flere timer på å gå gjennom "
-"restene men finner ingenting. En slik fordømmelig handling minsker kampånden "
-"til hæren din."
+"Du tilbringer flere timer på å gå gjennom restene, men finner ingenting. En "
+"slik fordømmelig handling minsker kampånden til hæren din."
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
@@ -3972,14 +4124,6 @@ msgid ""
 msgstr ""
 "Det råtne skroget til et mektig sjørøverskip knaker nifst mens det dyttes "
 "mot steinene. Vil du lete gjennom skipet?"
-
-msgid ""
-"Upon defeating the Skeletons you spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
-msgstr ""
-"Etter å ha beseiret skjelettene tilbringer du flere timer på å gå gjennom "
-"restene, men finner ingenting. En slik fordømmelig handling minsker "
-"kampånden til hæren din."
 
 msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
@@ -4116,6 +4260,14 @@ msgstr ""
 "Du kommer over det nøysomme kvarteret til en avgått soldat. Soldaten "
 "forteller deg at han er villig til å gi gjenstanden %{art} videre til den "
 "første sanne lederen han møter."
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
+msgstr ""
+"Du har møtt på en merkelig person med en hatt med en ugle på seg. Han "
+"forteller deg at han er villig til å gi deg gjenstanden %{art} hvis du har "
+"%{skill}"
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -4554,6 +4706,13 @@ msgstr ""
 "våpen som blir gitt til ham om fra jern til stål. Han sier også at han "
 "kjenner til en måte å få gjort jerngolemer til stålgolemer. Dessverre har du "
 "ingen av disse styrkene i hæren din så han kan ikke hjelpe deg."
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
+"Kapteinen ser på deg overrasket og sier:\n"
+"\"Du har allerede alle kartene jeg kjenner til. La meg få fiske i fred nå.\""
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -6723,9 +6882,6 @@ msgstr "%{name} håver inn en inntekt på %{count} gull hver runde."
 msgid "Arcane Necklace of Magic"
 msgstr "Det mørke magihalskjedet"
 
-msgid "Caster's Bracelet"
-msgstr "Fortryller-armbånd"
-
 msgid "Caster's Bracelet of Magic"
 msgstr "Fortryllerens magiarmbånd"
 
@@ -6749,6 +6905,9 @@ msgstr "Æresmedaljen"
 
 msgid "Medal of Distinction"
 msgstr "Utmerkelsesmedaljen"
+
+msgid "Fizbin of Misfortune"
+msgstr "Fizbinen av uflaks"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name}en svekker kampånden din skikkelig med %{count}."
@@ -6789,17 +6948,11 @@ msgstr "Den gudommelige brystplata av beskyttelse"
 msgid "Minor Scroll of Knowledge"
 msgstr "Den mindre kunnskapsrullen"
 
-msgid "Major Scroll"
-msgstr "Str. kunskpsrull"
-
 msgid "Major Scroll of Knowledge"
 msgstr "Den større kunnskapsrullen"
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Den overlegne kunnskapsrullen"
-
-msgid "Foremost Scroll"
-msgstr "Yprst. kunskpsrull"
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Den ypperste kunnskapsrullen"
@@ -6821,9 +6974,6 @@ msgstr "Nomadens sko av bevegelighet"
 
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} øker flyttepoengene dine på land."
-
-msgid "Traveler's Boots"
-msgstr "Vandrerens sko"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Vandrerens bevegelighetssko"
@@ -8213,5 +8363,12 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "View Stats"
-#~ msgstr "Vis egenskaper"
+#~ msgid "Monster Info"
+#~ msgstr "Monsterinfo"
+
+#~ msgid ""
+#~ "Toggle the monster info window, which shows information on the active and "
+#~ "targeted monsters."
+#~ msgstr ""
+#~ "Slå på/av vinduet med monsterinfo. Vinduet viser detaljer om de nåværende "
+#~ "og utvalgte monstrene."

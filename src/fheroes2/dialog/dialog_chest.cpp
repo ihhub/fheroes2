@@ -45,7 +45,7 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
 
     Text text;
-    text.Set( std::to_string( gold ) + " " + "(" + ( "Total: " ) + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
+    text.Set( std::to_string( gold ) + " " + "(" + _( "Total: " ) + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
               Font::SMALL );
 
     const int spacer = 10;
