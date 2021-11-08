@@ -20,8 +20,8 @@
 
 #include <string>
 
-#include "image_tool.h"
 #include "image_palette.h"
+#include "image_tool.h"
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
