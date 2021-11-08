@@ -893,7 +893,7 @@ payment_t Kingdom::_getKingdomStartingResources( const int difficulty )
         break;
     }
 
-    return payment_t( 20, 20, 5, 5, 5, 5, 7500 );
+    return { 20, 20, 5, 5, 5, 5, 7500 };
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
