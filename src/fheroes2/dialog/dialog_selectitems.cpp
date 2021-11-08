@@ -28,7 +28,6 @@
 #include "icn.h"
 #include "interface_list.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_text.h"
 
@@ -109,8 +108,15 @@ public:
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( mons.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 10 );
+        if ( current ) {
+            fheroes2::Text text( mons.GetName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( mons.GetName(), fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -144,10 +150,16 @@ public:
         if ( !port.empty() )
             fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( Heroes::GetName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 5 );
+        if ( current ) {
+            fheroes2::Text text( Heroes::GetName( index ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() ); 
+        }
+        else {
+            fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
+        }
+        
     }
-
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
         fheroes2::Text text( _( "Select Hero:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
@@ -169,8 +181,14 @@ public:
         Artifact art( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( art.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 10 );
+        if ( current ) {
+            fheroes2::Text text( art.GetName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( art.GetName(), fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -196,8 +214,14 @@ public:
         Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( spell.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 80, dsty + 10 );
+        if ( current ) {
+            fheroes2::Text text( spell.GetName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 80, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( spell.GetName(), fheroes2::FontType() );
+            text.draw( dstx + 80, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -223,8 +247,15 @@ public:
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
         std::string str = skill.GetName();
-        Text text( str, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 10 );
+
+        if ( current ) {
+            fheroes2::Text text( str, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( str, fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
