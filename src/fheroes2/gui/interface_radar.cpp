@@ -205,7 +205,7 @@ void Interface::Radar::Generate( void )
 
         fheroes2::Image resized( new_sz.width, new_sz.height );
         fheroes2::Resize( spriteArea, resized );
-        spriteArea = resized;
+        std::swap( spriteArea, resized );
     }
 }
 

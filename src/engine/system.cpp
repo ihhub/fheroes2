@@ -98,7 +98,15 @@ int System::MakeDirectory( const std::string & path )
 
 std::string System::ConcatePath( const std::string & str1, const std::string & str2 )
 {
-    return std::string( str1 + SEPARATOR + str2 );
+    // Avoid memory allocation while concatenating string. Allocate needed size at once.
+    std::string temp;
+    temp.reserve( str1.size() + 1 + str2.size() );
+
+    temp += str1;
+    temp += SEPARATOR;
+    temp += str2;
+
+    return temp;
 }
 
 ListDirs System::GetOSSpecificDirectories()

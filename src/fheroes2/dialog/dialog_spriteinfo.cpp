@@ -37,9 +37,9 @@ int Dialog::ArtifactInfo( const std::string & hdr, const std::string & msg, cons
     fheroes2::Blit( artifact, image, 5, 5 );
 
     std::string ext = msg;
-    ext.append( "\n" );
-    ext.append( " " );
-    ext.append( "\n" );
+    ext += '\n';
+    ext += ' ';
+    ext += '\n';
     ext.append( art.GetDescription() );
 
     return Dialog::SpriteInfo( hdr, ext, image, buttons );
@@ -47,8 +47,6 @@ int Dialog::ArtifactInfo( const std::string & hdr, const std::string & msg, cons
 
 int Dialog::SpriteInfo( const std::string & header, const std::string & message, const fheroes2::Image & sprite, int buttons )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // setup cursor
     const CursorRestorer cursorRestorer( buttons != 0, Cursor::POINTER );
 
@@ -69,6 +67,8 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
 
     // blit sprite
     pos.x = box.GetArea().x + ( pos.width - sprite.width() ) / 2;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( sprite, display, pos.x, pos.y );
 
     LocalEvent & le = LocalEvent::Get();
