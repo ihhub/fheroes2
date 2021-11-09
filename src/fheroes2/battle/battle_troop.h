@@ -132,7 +132,7 @@ namespace Battle
         int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
-        u32 GetSpeed( bool skip_standing_check ) const;
+        u32 GetSpeed( bool skip_standing_check, bool skip_moved_check ) const;
         int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
