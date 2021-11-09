@@ -197,7 +197,7 @@ const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::Butto
             btnMax.enable();
         }
 
-        return max ? "max" : "min";
+        return max ? _( "Max" ) : _( "Min" );
     }
 
     return "";

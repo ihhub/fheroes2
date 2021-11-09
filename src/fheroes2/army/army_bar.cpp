@@ -441,7 +441,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             if ( mons.isValid() ) {
                 u32 count = 1;
 
-                if ( Dialog::SelectCount( "Set Count", 1, 500000, count ) )
+                if ( Dialog::SelectCount( _( "Set Count" ), 1, 500000, count ) )
                     troop.Set( mons, count );
             }
         }

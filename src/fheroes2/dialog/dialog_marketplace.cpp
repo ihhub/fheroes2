@@ -254,12 +254,12 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
-        Text text( _( "max" ), Font::YELLOW_SMALL );
+        Text text( _( "Max" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
         buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
         text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( _( "min" ), Font::YELLOW_SMALL );
+        text.Set( _( "Min" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
         buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 22:34+0800\n"
-"PO-Revision-Date: 2010-05-25 19:30+0000\n"
+"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"PO-Revision-Date: 2021-11-07 17:16+0100\n"
 "Last-Translator: Lévai Tamás <leai@t-online.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Launchpad (build 13144)\n"
+"X-Generator: Poedit 3.0\n"
 
 #, fuzzy
 msgid "Warrior"
@@ -153,6 +153,9 @@ msgstr "%{name} kiválasztása"
 msgid "Cannot move last troop"
 msgstr "A sereg utolsó egységét nem lehet áthelyezni."
 
+msgid "Set Count"
+msgstr ""
+
 msgid "%{name} half the enemy troops!"
 msgstr ""
 
@@ -193,39 +196,18 @@ msgstr "Sebesség"
 msgid "Speed: %{speed}"
 msgstr ""
 
-msgid "Set the speed of combat actions and animations."
-msgstr ""
-
-msgid "Monster Info"
-msgstr ""
-
-msgid "Toggle the monster info window, which shows information on the active and targeted monsters."
-msgstr ""
-
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Varázslás"
 
-msgid "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)"
-msgstr ""
-
 msgid "Grid"
-msgstr ""
-
-msgid "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible."
 msgstr ""
 
 #, fuzzy
 msgid "Shadow Movement"
 msgstr "Mozgás folytatása"
 
-msgid "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-
 msgid "Shadow Cursor"
-msgstr ""
-
-msgid "Toggle on or off a shadow showing the current hex location of the mouse cursor."
 msgstr ""
 
 #, fuzzy
@@ -233,6 +215,29 @@ msgid "Off"
 msgstr "ki"
 
 msgid "On"
+msgstr ""
+
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
 msgstr ""
 
 msgid "The enemy has surrendered!"
@@ -317,7 +322,7 @@ msgid "Spell Points"
 msgstr "Varázspontok"
 
 #, fuzzy
-msgid "View Hero's options"
+msgid "Hero's Options"
 msgstr "Hős opciói"
 
 msgid "Cast Spell"
@@ -425,15 +430,15 @@ msgstr "Morál információ"
 msgid "Ballista"
 msgstr "Dobógép"
 
-msgid "Auto Combat"
-msgstr "Automatikus Harc"
+#, fuzzy
+msgid "Enable auto combat"
+msgstr "Automatikus harc"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
-#, fuzzy
-msgid "Enable auto combat"
-msgstr "Automatikus harc"
+msgid "Auto Combat"
+msgstr "Automatikus Harc"
 
 msgid "Customize system options"
 msgstr "Rendszerbeállítások testreszabása"
@@ -441,23 +446,34 @@ msgstr "Rendszerbeállítások testreszabása"
 msgid "Allows you to customize the combat screen."
 msgstr ""
 
-msgid "Wait"
-msgstr ""
-
-msgid "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn."
-msgstr ""
+msgid "System Options"
+msgstr "Rendszerbeállítások"
 
 msgid "Wait this unit"
 msgstr ""
 
-msgid "Skip"
+msgid "Wait"
 msgstr ""
 
-msgid "Skips the current creature. The current creature ends its turn and does not get to go again until the next round."
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
 msgstr ""
 
 msgid "Skip this unit"
 msgstr "Egység kihagyása"
+
+msgid "Skip"
+msgstr ""
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+
+#, fuzzy
+msgid "View Hero's options"
+msgstr "Hős opciói"
 
 msgid "View opposing Hero"
 msgstr "Ellenséges hős megmutatása"
@@ -616,6 +632,42 @@ msgid ""
 msgstr ""
 "A sasszemű megfigyelés következtében %{name} az alábbi varázslatot tanulja "
 "meg: %{spell}."
+
+msgid "Human"
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+#, fuzzy
+msgid "Set Attack Skill"
+msgstr "Támadóerő"
+
+#, fuzzy
+msgid "Set Defense Skill"
+msgstr "Védőerő"
+
+#, fuzzy
+msgid "Set Power Skill"
+msgstr "Varázserő"
+
+#, fuzzy
+msgid "Set Knowledge Skill"
+msgstr "Tudás"
+
+#, fuzzy
+msgid "%{race1} %{name1}"
+msgstr "%{name1} és %{name2} találkozik"
+
+msgid "vs"
+msgstr ""
+
+#, fuzzy
+msgid "%{race2} %{name2}"
+msgstr "%{name1} és %{name2} találkozik"
 
 #, fuzzy
 msgid "Monsters"
@@ -1127,33 +1179,39 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
 #, fuzzy
-msgid "Thunder Mace"
-msgstr "Hatalom Mennydörgő Buzogánya"
+msgid "Caster's Bracelet"
+msgstr "Idéző Varázslat Karkötője"
 
-msgid "Minor Scroll"
-msgstr "Kis Pergamentekercs"
-
-msgid "Dragon Sword"
-msgstr "Sárkánykard"
+#, fuzzy
+msgid "Defender Helm"
+msgstr "Védekező"
 
 #, fuzzy
 msgid "Breastplate"
 msgstr "Anduran Mellvértje"
 
-#, fuzzy (18 char max)
+msgid "Dragon Sword"
+msgstr "Sárkánykard"
+
 msgid "Fizbin Medal"
 msgstr ""
 
-msgid "Fizbin of Misfortune"
+msgid "Foremost Scroll"
 msgstr ""
 
 #, fuzzy
 msgid "Mage's Ring"
 msgstr "Varázsgyűrű"
 
+msgid "Major Scroll"
+msgstr ""
+
+msgid "Minor Scroll"
+msgstr "Kis Pergamentekercs"
+
 #, fuzzy
-msgid "Defender Helm"
-msgstr "Védekező"
+msgid "Nomad Boots"
+msgstr "Nomád"
 
 #, fuzzy
 msgid "Power Axe"
@@ -1164,8 +1222,11 @@ msgid "Stealth Shield"
 msgstr "Szent Pajzs"
 
 #, fuzzy
-msgid "Nomad Boots"
-msgstr "Nomád"
+msgid "Thunder Mace"
+msgstr "Hatalom Mennydörgő Buzogánya"
+
+msgid "Traveler's Boots"
+msgstr "Utazócsizma"
 
 #, fuzzy
 msgid "Summon Earth"
@@ -1628,12 +1689,13 @@ msgstr "Előző város mutatása"
 msgid "Show previous town"
 msgstr "Előző város mutatása"
 
-msgid "Army is full"
+msgid "Army joining"
 msgstr ""
 
-#, fuzzy
-msgid "Join Error"
-msgstr "Hiba"
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
+msgstr ""
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
@@ -1801,6 +1863,9 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1875,6 +1940,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(elérhető: %{count})"
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr ""
 
@@ -1887,6 +1955,9 @@ msgstr "Új hajó építése:"
 
 msgid "Resource cost:"
 msgstr "Fejlesztési költség:"
+
+msgid "Need: "
+msgstr ""
 
 msgid "Load Game"
 msgstr "Játék betöltése"
@@ -2000,7 +2071,7 @@ msgstr ""
 "Vesztési\n"
 "Feltételek"
 
-msgid "score: "
+msgid "Score: "
 msgstr ""
 
 msgid "First select recipients!"
@@ -2070,11 +2141,13 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
-msgid "max"
-msgstr ""
+#, fuzzy
+msgid "Max"
+msgstr "Maximus"
 
-msgid "min"
-msgstr ""
+#, fuzzy
+msgid "Min"
+msgstr "Bányák"
 
 msgid "Qty to trade"
 msgstr ""
@@ -2197,6 +2270,26 @@ msgstr "Biztos benne hogy törli a fájlt:"
 
 msgid "Warning!"
 msgstr "Figyelem!"
+
+#, fuzzy
+msgid "Select Monster:"
+msgstr "Legjobb szörny:"
+
+#, fuzzy
+msgid "Select Hero:"
+msgstr "Legjobb hős:"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Varázstárgy"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Varázslat célpontjának választása."
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Védőerő"
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -2456,9 +2549,6 @@ msgstr "Erő"
 msgid "Knowl"
 msgstr "Tudás"
 
-msgid "Human"
-msgstr ""
-
 msgid "1st"
 msgstr ""
 
@@ -2571,6 +2661,9 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
+msgid "and many other contributors!"
+msgstr ""
+
 msgid "Original project before 0.7"
 msgstr ""
 
@@ -2582,6 +2675,68 @@ msgstr ""
 
 msgid "Need help with the game?"
 msgstr ""
+
+msgid "and many-many other supporters!"
+msgstr ""
+
+#, fuzzy
+msgid "Original Heroes of Might and Magic II team"
+msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+#, fuzzy
+msgid "Vocalists"
+msgstr "Ballisztika"
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+#, fuzzy
+msgid "Artists"
+msgstr "Varázstárgy"
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+#, fuzzy
+msgid "Writing"
+msgstr "Besorolás"
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+#, fuzzy
+msgid "Scenarios"
+msgstr "Küldetés"
 
 #, fuzzy
 msgid "Unknown Hero"
@@ -2793,6 +2948,9 @@ msgstr "6 játékos"
 msgid "Play with 6 human players."
 msgstr "Játsz 6 ember játékossal."
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2813,6 +2971,10 @@ msgid ""
 msgstr ""
 "Megtaláltad a  %{name}-t.\n"
 "Küldetés teljesítve."
+
+#, fuzzy
+msgid "Ultimate Artifact"
+msgstr "A Szent Varázstárgy kiásása."
 
 msgid ""
 "The enemy is beaten.\n"
@@ -3073,9 +3235,6 @@ msgstr "Fájlbeállítások"
 msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr ""
 
-msgid "System Options"
-msgstr "Rendszerbeállítások"
-
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -3202,6 +3361,12 @@ msgid "Italian"
 msgstr ""
 
 msgid ", FPS: "
+msgstr ""
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
 msgstr ""
 
 msgid "Ambrose"
@@ -3415,12 +3580,6 @@ msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
-
-msgid "%{object} robber"
-msgstr ""
-
-msgid "%{object} raided"
-msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -3784,8 +3943,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 "Miután legyőzted a Zombikat órákat töltöttél el a sírok átkutatásával de nem "
 "találtál semmit. Csökkent a csapatod morálja ."
@@ -3800,8 +3959,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3930,6 +4089,11 @@ msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
+msgstr ""
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
 msgid ""
@@ -4325,6 +4489,11 @@ msgstr ""
 "Kardforgatód fegyverét vasból acéllá edzi. Azt mondja, ismeri a Vasgólem - "
 "Acélgólem átalakításának módszerét is. Sajnos, egyik egység sincs a "
 "seregedben, ezért nem tud neked segíteni."
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -6587,10 +6756,6 @@ msgstr ""
 msgid "Arcane Necklace of Magic"
 msgstr "Misztikus Varázslás Nyaklánca"
 
-#, fuzzy (18 char max)
-msgid "Caster's Bracelet"
-msgstr "Idéző Varázslat Karkötője"
-
 msgid "Caster's Bracelet of Magic"
 msgstr "Idéző Varázslat Karkötője"
 
@@ -6614,6 +6779,9 @@ msgstr "Becsület Medál"
 
 msgid "Medal of Distinction"
 msgstr "Kiválóság Medál"
+
+msgid "Fizbin of Misfortune"
+msgstr ""
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr ""
@@ -6654,16 +6822,10 @@ msgstr ""
 msgid "Minor Scroll of Knowledge"
 msgstr ""
 
-msgid "Major Scroll"
-msgstr ""
-
 msgid "Major Scroll of Knowledge"
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
-
-msgid "Foremost Scroll"
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
@@ -6686,9 +6848,6 @@ msgstr "Nomádcsizma"
 
 msgid "The %{name} increase your movement on land."
 msgstr ""
-
-msgid "Traveler's Boots"
-msgstr "Utazócsizma"
 
 msgid "Traveler's Boots of Mobility"
 msgstr "Utazócsizma"
@@ -7930,6 +8089,10 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Join Error"
+#~ msgstr "Hiba"
 
 #, fuzzy
 #~ msgid "View Stats"
