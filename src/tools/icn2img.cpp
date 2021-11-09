@@ -38,7 +38,7 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
-    std::string intpuFileName( argv[1] );
+    std::string inputFileName( argv[1] );
     std::string prefix( argv[2] );
 
     std::string paletteFileName( argv[3] );
@@ -59,16 +59,16 @@ int main( int argc, char ** argv )
 
     StreamFile sf;
 
-    if ( !sf.open( intpuFileName, "rb" ) ) {
-        std::cout << "Cannot open " << intpuFileName << std::endl;
+    if ( !sf.open( inputFileName, "rb" ) ) {
+        std::cout << "Cannot open " << inputFileName << std::endl;
         return EXIT_FAILURE;
     }
 
     int count_sprite = sf.getLE16();
     int total_size = sf.getLE32();
 
-    intpuFileName.replace( intpuFileName.find( ".icn" ), 4, "" );
-    prefix = System::ConcatePath( prefix, intpuFileName );
+    inputFileName.replace( inputFileName.find( ".icn" ), 4, "" );
+    prefix = System::ConcatePath( prefix, inputFileName );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
         std::cout << "error mkdir: " << prefix << std::endl;

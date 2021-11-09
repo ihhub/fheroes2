@@ -36,7 +36,7 @@ namespace
             std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
         }
 
-        std::array<uint8_t, 768> gamePalette;
+        std::array<uint8_t, paletteSize> gamePalette;
     };
 
     PaletteHolder paletteHolder;
