@@ -61,7 +61,8 @@ namespace Campaign
             SPELL,
             STARTING_RACE,
             SKILL_PRIMARY,
-            SKILL_SECONDARY
+            SKILL_SECONDARY,
+            STARTING_RACE_AND_ARMY
         };
 
         uint32_t _type;

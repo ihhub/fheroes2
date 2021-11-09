@@ -112,9 +112,9 @@ namespace
         case 4:
         case 5:
         case 6:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::NECR, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::WRLK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::BARB, 1 );
             break;
         case 7:
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
@@ -425,6 +425,7 @@ namespace Campaign
             objectName = getSpellCampaignName( _subType );
             break;
         case ScenarioBonusData::STARTING_RACE:
+        case ScenarioBonusData::STARTING_RACE_AND_ARMY:
             objectName = Race::String( _subType );
             break;
         case ScenarioBonusData::SKILL_PRIMARY:
