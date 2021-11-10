@@ -62,6 +62,11 @@ namespace
             troopFrom.SetCount( 1 );
             troopTarget.Set( troopFrom.GetMonster(), 1 );
         }
+        else if ( isSameTroopType && troopFrom.isValid() && troopFrom.GetCount() == 1 && troopTarget.isValid() && troopTarget.GetCount() == 1 ) {
+            // a player splits the same troop type and both count one; move a monster from the source slot to the target slot.
+            troopFrom.Reset();
+            troopTarget.SetCount( 2 );
+        }
         else {
             uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
 
