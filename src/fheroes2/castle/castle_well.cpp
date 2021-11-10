@@ -336,13 +336,17 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
         dst_pt.y = pt.y + 34;
         text.Blit( dst_pt.x, dst_pt.y );
         // damage
-        str = std::string( _( "Damg" ) ) + ": ";
+        str = _( "Damg" );
+        str += ": ";
 
-        if ( monster.GetDamageMin() != monster.GetDamageMax() ) {
-            str.append( std::to_string( monster.GetDamageMin() ) + "-" + std::to_string( monster.GetDamageMax() ) );
-        }
-        else {
-            str.append( std::to_string( monster.GetDamageMin() ) );
+        const uint32_t monsterMinDamage = monster.GetDamageMin();
+        const uint32_t monsterMaxDamage = monster.GetDamageMax();
+
+        str += std::to_string( monsterMinDamage );
+
+        if ( monsterMinDamage != monsterMaxDamage ) {
+            str += '-';
+            str += std::to_string( monsterMaxDamage );
         }
 
         text.Set( str );
