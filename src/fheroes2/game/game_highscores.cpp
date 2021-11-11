@@ -270,4 +270,3 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     return fheroes2::GameMode::QUIT_GAME;
 }
-
