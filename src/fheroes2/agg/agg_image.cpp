@@ -760,8 +760,7 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 7 ) {
                     Sprite & out = _icnVsSprite[id][7];
                     if ( out.width() == 34 && out.height() == 19 ) {
-                        Sprite temp;
-                        std::swap( out, temp );
+                        Sprite temp = std::move( out );
 
                         out.resize( out.width() + 1, out.height() );
                         out.reset();
@@ -785,7 +784,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    std::swap( modified, temp );
+                    modified = std::move( temp );
                     Fill( modified, 7, 0, 4, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
@@ -794,7 +793,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    std::swap( modified, temp );
+                    modified = std::move( temp );
                     Fill( modified, 2, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 8 ) { // Champion
@@ -803,7 +802,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    std::swap( modified, temp );
+                    modified = std::move( temp );
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 62 ) {
@@ -821,7 +820,7 @@ namespace fheroes2
                             modified.setPosition( offset.x, offset.y );
                         }
                         else {
-                            std::swap( modified, temp );
+                            modified = std::move( temp );
                         }
                     }
                 }
