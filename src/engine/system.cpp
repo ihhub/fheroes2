@@ -34,8 +34,8 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-#include <windows.h>
 #include <shellapi.h>
+#include <windows.h>
 #else
 #include <dirent.h>
 #endif
@@ -348,7 +348,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     }
 
     const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for (const auto & subPathIter : splittedPath) {
+    for ( const auto & subPathIter : splittedPath ) {
         if ( !d ) {
             return false;
         }
