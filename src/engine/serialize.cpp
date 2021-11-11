@@ -192,8 +192,8 @@ StreamBase & StreamBase::operator<<( const std::string & v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
 
-    for ( std::string::const_iterator it = v.begin(); it != v.end(); ++it )
-        put8( *it );
+    for ( char it : v )
+        put8( it );
 
     return *this;
 }

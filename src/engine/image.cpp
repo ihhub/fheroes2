@@ -461,16 +461,6 @@ namespace fheroes2
         return _data.get();
     }
 
-    uint8_t * Image::transform()
-    {
-        return _data.get() + _width * _height;
-    }
-
-    const uint8_t * Image::transform() const
-    {
-        return _data.get() + _width * _height;
-    }
-
     void Image::clear()
     {
         _data.reset();

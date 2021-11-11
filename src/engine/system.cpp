@@ -201,8 +201,8 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
         // 2: en_us
         // 1: en
         if ( length < 3 ) {
-            std::list<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
-            return list.empty() ? locname : list.front();
+            auto vec = StringSplit( locname, length < 2 ? "_" : "." );
+            return vec.empty() ? locname : vec.front();
         }
     }
 
@@ -348,7 +348,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     }
 
     const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
+    for (const auto & subPathIter : splittedPath) {
         if ( !d ) {
             return false;
         }
@@ -362,7 +362,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
         struct dirent * e = readdir( d );
         while ( e ) {
-            if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
+            if ( strcasecmp( subPathIter.c_str(), e->d_name ) == 0 ) {
                 correctedPath += e->d_name;
 
                 closedir( d );
@@ -375,7 +375,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
         }
 
         if ( !e ) {
-            correctedPath += *subPathIter;
+            correctedPath += subPathIter;
             last = true;
         }
     }

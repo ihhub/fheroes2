@@ -19,6 +19,7 @@
  ***************************************************************************/
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -59,10 +60,17 @@ namespace fheroes2
         virtual uint8_t * image();
         virtual const uint8_t * image() const;
 
-        uint8_t * transform();
-        const uint8_t * transform() const;
+        inline uint8_t * transform()
+        {
+            return _data.get() + static_cast<ptrdiff_t>( _width * _height );
+        }
 
-        bool empty() const
+        inline const uint8_t * transform() const
+        {
+            return _data.get() + static_cast<ptrdiff_t>( _width * _height );
+        }
+
+        inline bool empty() const
         {
             return !_data;
         }

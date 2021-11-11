@@ -305,11 +305,11 @@ static bool operator<( const MidiChunk & left, const MidiChunk & right )
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
 {
-    for ( std::vector<u8>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
-        sb << *it;
+    for ( const uint8_t it : event._binaryTime )
+        sb << it;
     sb << event._type;
-    for ( std::vector<u8>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
-        sb << *it;
+    for ( const uint8_t it : event._data )
+        sb << it;
     return sb;
 }
 
@@ -325,8 +325,8 @@ struct MidiEvents : std::vector<MidiChunk>
     size_t size( void ) const
     {
         size_t res = 0;
-        for ( const_iterator it = begin(); it != end(); ++it )
-            res += ( *it ).size();
+        for ( const auto & it : *this )
+            res += it.size();
         return res;
     }
 
@@ -413,17 +413,17 @@ struct MidiEvents : std::vector<MidiChunk>
 
         // update duration
         delta = 0;
-        for ( iterator it = this->begin(); it != this->end(); ++it ) {
-            it->_binaryTime = packToMIDITime( it->_time - delta );
-            delta = it->_time;
+        for ( auto & it : *this ) {
+            it._binaryTime = packToMIDITime( it._time - delta );
+            delta = it._time;
         }
     }
 };
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
-    for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
-        sb << *it;
+    for ( const auto & it : st ) {
+        sb << it;
     }
     return sb;
 }
@@ -466,23 +466,23 @@ struct MidTracks : std::list<MidTrack>
     size_t size( void ) const
     {
         size_t res = 0;
-        for ( const_iterator it = begin(); it != end(); ++it )
-            res += ( *it ).size();
+        for ( const auto & it : *this )
+            res += it.size();
         return res;
     }
 
     MidTracks() = default;
     explicit MidTracks( const XMITracks & tracks )
     {
-        for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
-            emplace_back( *it );
+        for ( const auto & track : tracks )
+            emplace_back( track );
     }
 };
 
 StreamBuf & operator<<( StreamBuf & sb, const MidTracks & st )
 {
-    for ( std::list<MidTrack>::const_iterator it = st.begin(); it != st.end(); ++it )
-        sb << *it;
+    for ( const auto & it : st )
+        sb << it;
     return sb;
 }
 

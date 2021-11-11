@@ -135,7 +135,7 @@ namespace
 
     const std::vector<CyclingColorSet> & GetCyclingColors()
     {
-        static const std::vector<CyclingColorSet> cycleSet = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}};
+        static const std::vector<CyclingColorSet> cycleSet = { { 0xD6, 4, false }, { 0xDA, 4, false }, { 0xE7, 5, true }, { 0xEE, 4, false } };
         return cycleSet;
     }
 }
@@ -145,11 +145,11 @@ std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
     std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
 
     const std::vector<CyclingColorSet> & set = GetCyclingColors();
-    for ( std::vector<CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
-        for ( int id = 0; id < it->length; ++id ) {
-            const int lastColorID = it->length - 1;
-            const uint8_t newColorID = it->forward ? it->start + ( id + stepId ) % it->length : it->start + lastColorID - ( lastColorID + stepId - id ) % it->length;
-            palette[it->start + id] = newColorID;
+    for ( const auto &it : set ) {
+        for ( int id = 0; id < it.length; ++id ) {
+            const int lastColorID = it.length - 1;
+            const uint8_t newColorID = it.forward ? it.start + ( id + stepId ) % it.length : it.start + lastColorID - ( lastColorID + stepId - id ) % it.length;
+            palette[it.start + id] = newColorID;
         }
     }
 

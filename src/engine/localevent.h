@@ -277,7 +277,7 @@ private:
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    void OnSdl2WindowEvent( const SDL_Event & event );
+    static void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 
