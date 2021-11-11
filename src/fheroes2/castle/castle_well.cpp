@@ -441,7 +441,6 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
             dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
             dst_pt.y = pt.y + statsOffsetY;
             text.draw( dst_pt.x, dst_pt.y, display );
-            statsOffsetY += text.height( text.width() );
 
             str = _( "Available" );
             str += ':';
