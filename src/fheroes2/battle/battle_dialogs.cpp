@@ -248,13 +248,18 @@ void Battle::DialogBattleSettings( void )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
+        bool saveBattleSpeed = false;
         if ( le.MouseClickLeft( optionAreas[0] ) ) {
             conf.SetBattleSpeed( conf.BattleSpeed() % 10 + 1 );
-            Game::UpdateGameSpeed();
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            display.render();
-            saveConfiguration = true;
+            saveBattleSpeed = true;
+        }
+        else if ( le.MouseWheelUp( optionAreas[0] ) ) {
+            conf.SetBattleSpeed( conf.BattleSpeed() + 1 );
+            saveBattleSpeed = true;
+        }
+        else if ( le.MouseWheelDn( optionAreas[0] ) ) {
+            conf.SetBattleSpeed( conf.BattleSpeed() - 1 );
+            saveBattleSpeed = true;
         }
         else if ( le.MousePressRight( optionAreas[0] ) ) {
             Dialog::Message( _( "Speed" ), _( "Set the speed of combat actions and animations." ), Font::BIG );
@@ -307,6 +312,14 @@ void Battle::DialogBattleSettings( void )
         }
         else if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
+        }
+
+        if ( saveBattleSpeed ) {
+            Game::UpdateGameSpeed();
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
+            display.render();
+            saveConfiguration = true;
         }
     }
 
