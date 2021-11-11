@@ -34,8 +34,8 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-#include <shellapi.h>
 #include <windows.h>
+#include <shellapi.h>
 #else
 #include <dirent.h>
 #endif
