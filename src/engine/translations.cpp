@@ -162,7 +162,7 @@ struct mofile
             buf.seek( offset2 );
             auto tags = StringSplit( buf.toString( length2 ), "\n" );
 
-            for ( const auto &it: tags ) {
+            for ( const auto & it : tags ) {
                 if ( encoding.empty() )
                     encoding = get_tag( it, tag1, sep1 );
 
