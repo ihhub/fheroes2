@@ -60,17 +60,17 @@ namespace fheroes2
         virtual uint8_t * image();
         virtual const uint8_t * image() const;
 
-        inline uint8_t * transform()
+        uint8_t * transform()
         {
-            return _data.get() + static_cast<ptrdiff_t>( _width * _height );
+            return _data.get() + static_cast<ptrdiff_t>( width() * height() );
         }
 
-        inline const uint8_t * transform() const
+        const uint8_t * transform() const
         {
-            return _data.get() + static_cast<ptrdiff_t>( _width * _height );
+            return _data.get() + static_cast<ptrdiff_t>( width() * height() );
         }
 
-        inline bool empty() const
+        bool empty() const
         {
             return !_data;
         }
