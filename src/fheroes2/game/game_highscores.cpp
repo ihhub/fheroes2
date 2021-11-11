@@ -149,93 +149,15 @@ namespace
 
 fheroes2::GameMode Game::HighScoresStandard()
 {
-#ifdef WITH_DEBUG
-    if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
-        Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
-        return fheroes2::GameMode::MAIN_MENU;
-    }
-#endif
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
-
-    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
-
-    highScoreDataContainer.load( highScoreDataPath );
-    uint32_t monsterAnimationFrameId = 0;
-
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
-    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
-
-    RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
-
-    fheroes2::Button buttonCampaign( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
-    fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
-
-    buttonCampaign.draw();
-    buttonExit.draw();
-
-    display.render();
-
-    GameOver::Result & gameResult = GameOver::Result::Get();
-
-    if ( gameResult.GetResult() & GameOver::WINS ) {
-        std::string player( _( "Unknown Hero" ) );
-        Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
-        if ( player.empty() )
-            player = _( "Unknown Hero" );
-
-        const uint32_t rating = GetGameOverScores();
-        const uint32_t days = world.CountDay();
-        highScoreDataContainer.registerScoreStandard( player, Settings::Get().CurrentFileInfo().name, days, rating );
-        highScoreDataContainer.save( highScoreDataPath );
-        RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
-        buttonCampaign.draw();
-        buttonExit.draw();
-        display.render();
-        gameResult.ResetResult();
-    }
-
-    LocalEvent & le = LocalEvent::Get();
-
-    // highscores loop
-    while ( le.HandleEvents() ) {
-        // key code info
-        if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
-            Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
-
-        le.MousePressLeft( buttonCampaign.area() ) ? buttonCampaign.drawOnPress() : buttonCampaign.drawOnRelease();
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
-            return fheroes2::GameMode::MAIN_MENU;
-        if ( le.MouseClickLeft( buttonCampaign.area() ) )
-            return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
-
-        if ( le.MousePressRight( buttonExit.area() ) ) {
-            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
-        }
-        else if ( le.MousePressRight( buttonCampaign.area() ) ) {
-            Dialog::Message( _( "Campaign" ), _( "View High Scores for Campaigns." ), Font::BIG );
-        }
-
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
-            display.render();
-        }
-    }
-
-    return fheroes2::GameMode::QUIT_GAME;
+    return DisplayHighScores( false );
 }
 
 fheroes2::GameMode Game::HighScoresCampaign()
+{
+    return DisplayHighScores( true );
+}
+
+fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
@@ -252,7 +174,6 @@ fheroes2::GameMode Game::HighScoresCampaign()
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
-    uint32_t monsterAnimationFrameId = 0;
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
@@ -266,12 +187,18 @@ fheroes2::GameMode Game::HighScoresCampaign()
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
-    RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
+    uint32_t monsterAnimationFrameId = 0;
+    if ( isCampaign )
+        RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
+    else
+        RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
 
-    fheroes2::Button buttonStandard( top.x + 8, top.y + 315, ICN::HISCORE, 2, 3 );
+    // button that goes to standard: releasedIndex == 2, pressedIndex == 3
+    // button that goes to campaign: releasedIndex == 0, pressedIndex == 1
+    fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, ICN::HISCORE, isCampaign ? 2 : 0, isCampaign ? 3 : 1 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
 
-    buttonStandard.draw();
+    buttonOtherHighScore.draw();
     buttonExit.draw();
 
     display.render();
@@ -284,14 +211,26 @@ fheroes2::GameMode Game::HighScoresCampaign()
         if ( player.empty() )
             player = _( "Unknown Hero" );
 
-        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( campaignSaveData.getCampaignID() );
+        if ( isCampaign ) {
+            const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+            const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( campaignSaveData.getCampaignID() );
 
-        highScoreDataContainer.registerScoreCampaign( player, campaignData.getCampaignName(), campaignSaveData.getDaysPassed() );
+            highScoreDataContainer.registerScoreCampaign( player, campaignData.getCampaignName(), campaignSaveData.getDaysPassed() );
+        }
+        else {
+            const uint32_t rating = GetGameOverScores();
+            const uint32_t days = world.CountDay();
+            highScoreDataContainer.registerScoreStandard( player, Settings::Get().CurrentFileInfo().name, days, rating );
+        }
+
         highScoreDataContainer.save( highScoreDataPath );
 
-        RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
-        buttonStandard.draw();
+        if ( isCampaign )
+            RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
+        else
+            RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
+
+        buttonOtherHighScore.draw();
         buttonExit.draw();
         display.render();
         gameResult.ResetResult();
@@ -305,26 +244,30 @@ fheroes2::GameMode Game::HighScoresCampaign()
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
             Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
 
-        le.MousePressLeft( buttonStandard.area() ) ? buttonStandard.drawOnPress() : buttonStandard.drawOnRelease();
+        le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return fheroes2::GameMode::MAIN_MENU;
-        if ( le.MouseClickLeft( buttonStandard.area() ) )
-            return fheroes2::GameMode::HIGHSCORES_STANDARD;
+        if ( le.MouseClickLeft( buttonOtherHighScore.area() ) )
+            return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
 
         if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( buttonStandard.area() ) ) {
-            Dialog::Message( _( "Standard" ), _( "View High Scores for Standard Maps." ), Font::BIG );
+        else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
+            Dialog::Message( _( "Standard" ), _( isCampaign ? "View High Scores for Standard Maps." : "View High Scores for Campaigns." ), Font::BIG );
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
+            if ( isCampaign )
+                RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
+            else
+                RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
             display.render();
         }
     }
 
     return fheroes2::GameMode::QUIT_GAME;
 }
+

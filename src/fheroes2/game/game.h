@@ -189,6 +189,7 @@ namespace Game
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
     fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
+    fheroes2::GameMode DisplayHighScores( const bool isCampaign );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
