@@ -313,30 +313,58 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
         dst_pt.x = pt.x + 21;
         dst_pt.y = pt.y + 35;
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( race ), icnindex ), display, dst_pt.x, dst_pt.y );
-        // text
-        text.set( GetStringBuilding( dw_orig, race ), statsFontType );
+       
+        // texts
+        const std::string monsterBuilding = GetStringBuilding( dw_orig, race );
+
+        text.set( monsterBuilding, statsFontType );
         dst_pt.x = pt.x + 86 - text.width() / 2;
         dst_pt.y = pt.y + 104;
         text.draw( dst_pt.x, dst_pt.y, display );
 
         // name
-        text.set( monster.GetMultiName(), statsFontType );
+        const std::string monsterMultiName = monster.GetMultiName();
+
+        text.set( monsterMultiName, statsFontType );
         dst_pt.x = pt.x + 122 - text.width() / 2;
         dst_pt.y = pt.y + 19;
         text.draw( dst_pt.x, dst_pt.y, display );
-        // attack
+
+        // stats declarations
+
         std::string str;
-        str = std::string( _( "Attack" ) ) + ": " + std::to_string( monster.GetAttack() );
+        const int32_t statsOffsetX = 269;
+        const int32_t statsInitialOffsetY = 22;
+        int32_t statsOffsetY = statsInitialOffsetY;
+
+        // attack
+        str = _( "Attack" );
+        str += ": ";
+
+        const uint32_t monsterAttack = monster.GetAttack();
+
+        str += std::to_string( monsterAttack );
+
         text.set( str, statsFontType );
-        dst_pt.x = pt.x + 268 - text.width() / 2;
-        dst_pt.y = pt.y + 22;
+        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+        dst_pt.y = pt.y + statsOffsetY;
         text.draw( dst_pt.x, dst_pt.y, display );
+        statsOffsetY += text.height( text.width() );
+
         // defense
-        str = std::string( _( "Defense" ) ) + ": " + std::to_string( monster.GetDefense() );
+        str = _( "Defense" );
+        str += ": ";
+        
+        const uint32_t monsterDefense = monster.GetDefense();
+
+        str += std::to_string( monsterDefense );
+
         text.set( str, statsFontType );
-        dst_pt.x = pt.x + 268 - text.width() / 2;
-        dst_pt.y = pt.y + 34;
+        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+        dst_pt.y = pt.y + statsOffsetY;
         text.draw( dst_pt.x, dst_pt.y, display );
+        statsOffsetY += text.height( text.width() );
+
         // damage
         str = _( "Damg" );
         str += ": ";
@@ -352,50 +380,82 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
         }
 
         text.set( str, statsFontType );
-        dst_pt.x = pt.x + 268 - text.width() / 2;
-        dst_pt.y = pt.y + 46;
+        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+        dst_pt.y = pt.y + statsOffsetY;
         text.draw( dst_pt.x, dst_pt.y, display );
+        statsOffsetY += text.height( text.width() );
+       
         // hp
-        str = std::string( _( "HP" ) ) + ": " + std::to_string( monster.GetHitPoints() );
-        text.set( str, statsFontType );
-        dst_pt.x = pt.x + 268 - text.width() / 2;
-        dst_pt.y = pt.y + 58;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        // speed
-        str = std::string( _( "Speed" ) ) + ": ";
-        text.set( str, statsFontType );
-        dst_pt.x = pt.x + 268 - text.width() / 2;
-        dst_pt.y = pt.y + 78;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        text.set( Speed::String( monster.GetSpeed() ), statsFontType );
-        dst_pt.x = pt.x + 268 - text.width() / 2;
-        dst_pt.y = pt.y + 90;
-        text.draw( dst_pt.x, dst_pt.y, display );
+        str = _( "HP" );
+        str += ": ";
 
+        const uint32_t monsterHitPoints = monster.GetHitPoints();
+
+        str += std::to_string( monsterHitPoints );
+
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+        dst_pt.y = pt.y + statsOffsetY;
+        text.draw( dst_pt.x, dst_pt.y, display );
+        statsOffsetY += 2 * ( text.height( text.width() ) ); // skip a line
+
+        // speed
+        str = _( "Speed" );
+        str += ':';
+
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+        dst_pt.y = pt.y + statsOffsetY;
+        text.draw( dst_pt.x, dst_pt.y, display );
+        statsOffsetY += text.height( text.width() );
+
+        const std::string monsterSpeed = Speed::String( monster.GetSpeed() );
+
+        text.set( monsterSpeed, statsFontType );
+        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+        dst_pt.y = pt.y + statsOffsetY;
+        text.draw( dst_pt.x, dst_pt.y, display );
+        statsOffsetY += 2 * ( text.height( text.width() ) ); // skip a line
+
+        // weekly growth
         if ( present ) {
-            u32 grown = monster.GetGrown();
-            grown += building & BUILD_WELL ? GetGrownWell() : 0;
-            if ( DWELLING_MONSTER1 & dw )
-                grown += building & BUILD_WEL2 ? GetGrownWel2() : 0;
+
+            uint32_t monsterGrown = monster.GetGrown();
+            monsterGrown += building & BUILD_WELL ? GetGrownWell() : 0;
+
+            if ( DWELLING_MONSTER1 & dw ) {
+                monsterGrown += building & BUILD_WEL2 ? GetGrownWel2() : 0;
+            }
+
 
             text.set( _( "Growth" ), statsFontType );
-            dst_pt.x = pt.x + 268 - text.width() / 2;
-            dst_pt.y = pt.y + 110;
+            dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+            dst_pt.y = pt.y + statsOffsetY;
             text.draw( dst_pt.x, dst_pt.y, display );
-            str = std::string( "+ " ) + std::to_string( grown ) + " / " + _( "week" );
-            text.set( str, statsFontType );
-            dst_pt.x = pt.x + 268 - text.width() / 2;
-            dst_pt.y = pt.y + 122;
-            text.draw( dst_pt.x, dst_pt.y, display );
+            statsOffsetY += text.height( text.width() );
 
-            str = std::string( _( "Available" ) ) + ": ";
+            str = "+ ";
+            str += std::to_string( monsterGrown );
+            str += " / ";
+            str += _( "week" );
+
+            text.set( str, statsFontType );
+            dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
+            dst_pt.y = pt.y + statsOffsetY;
+            text.draw( dst_pt.x, dst_pt.y, display );
+            statsOffsetY += text.height( text.width() );
+
+            str = _( "Available" );
+            str += ':';
+
             text.set( str, statsFontType );
             dst_pt.x = pt.x + 44;
             dst_pt.y = pt.y + 122;
             text.draw( dst_pt.x, dst_pt.y, display );
+
             text.set( std::to_string( available ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
             dst_pt.x = pt.x + 129 - text.width() / 2;
-            dst_pt.y = pt.y + 119;
+            dst_pt.y = pt.y + 120;
             text.draw( dst_pt.x, dst_pt.y, display );
         }
 
