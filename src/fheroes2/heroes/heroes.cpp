@@ -335,7 +335,7 @@ void Heroes::PostLoad( void )
 
     // fix zero army
     if ( !army.isValid() )
-        army.Reset( true );
+        army.Reset( false );
     else
         SetModes( CUSTOMARMY );
 
