@@ -188,7 +188,7 @@ void Castle::OpenWell( void )
                     }
                 }
                 if ( isCreaturePresent ) {
-                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), int (fheroes2::FontSize::LARGE), Dialog::OK );
+                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
                 }
                 else {
                     Dialog::Message( "", _( "No monsters available for purchase." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
@@ -367,7 +367,7 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
         dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 78;
         text.draw( dst_pt.x, dst_pt.y, display );
-        text.set( Speed::String( monster.GetSpeed() ) , statsFontType );
+        text.set( Speed::String( monster.GetSpeed() ), statsFontType );
         dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 90;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -386,7 +386,7 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
             text.set( str, statsFontType );
             dst_pt.x = pt.x + 268 - text.width() / 2;
             dst_pt.y = pt.y + 122;
-            text.draw( dst_pt.x, dst_pt.y, display);
+            text.draw( dst_pt.x, dst_pt.y, display );
 
             str = std::string( _( "Available" ) ) + ": ";
             text.set( str, statsFontType );
