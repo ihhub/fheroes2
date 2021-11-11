@@ -595,7 +595,7 @@ int Settings::ScrollSpeed() const
     return scroll_speed;
 }
 
-/* set ai speed: 1 - 10 */
+/* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
     ai_speed = clamp( speed, 0, 10 );
@@ -646,17 +646,7 @@ void Settings::setFullScreen( const bool enable )
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
-    switch ( speed ) {
-    case SCROLL_SLOW:
-    case SCROLL_NORMAL:
-    case SCROLL_FAST1:
-    case SCROLL_FAST2:
-        scroll_speed = speed;
-        break;
-    default:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    }
+    scroll_speed = clamp( static_cast<int>( speed ), static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
@@ -759,13 +749,13 @@ MusicSource Settings::MusicType() const
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
-    sound_volume = std::min( v, 10 );
+    sound_volume = clamp( v, 0, 10 );
 }
 
 /* music volume: 0 - 10 */
 void Settings::SetMusicVolume( int v )
 {
-    music_volume = std::min( v, 10 );
+    music_volume = clamp( v, 0, 10 );
 }
 
 /* Set music type: check MusicSource enum */
