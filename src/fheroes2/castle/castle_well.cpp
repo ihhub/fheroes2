@@ -35,8 +35,8 @@
 #include "monster_anim.h"
 #include "resource.h"
 #include "speed.h"
-#include "text.h"
 #include "translations.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -188,10 +188,10 @@ void Castle::OpenWell( void )
                     }
                 }
                 if ( isCreaturePresent ) {
-                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
+                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), int (fheroes2::FontSize::LARGE), Dialog::OK );
                 }
                 else {
-                    Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
+                    Dialog::Message( "", _( "No monsters available for purchase." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
                 }
             }
             else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
@@ -230,19 +230,21 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 
-    Text text;
+    fheroes2::Text text;
     fheroes2::Point dst_pt;
     fheroes2::Point pt;
+
+    const fheroes2::FontType statsFontType{ fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE };
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
     const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width() + 1, cur_pt.y + 461, src_rt.width, src_rt.height );
     fheroes2::Fill( display, cur_pt.x + button.width(), cur_pt.y + 461, 1, src_rt.height, 0 );
 
-    text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
-    dst_pt.x = cur_pt.x + 315 - text.w() / 2;
-    dst_pt.y = cur_pt.y + 462;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.set( _( "Town Population Information and Statistics" ), fheroes2::FontType() );
+    dst_pt.x = cur_pt.x + 315 - text.width() / 2;
+    dst_pt.y = cur_pt.y + 464;
+    text.draw( dst_pt.x, dst_pt.y, display );
 
     u32 dw = DWELLING_MONSTER1;
     size_t monsterId = 0u;
@@ -312,29 +314,29 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
         dst_pt.y = pt.y + 35;
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( race ), icnindex ), display, dst_pt.x, dst_pt.y );
         // text
-        text.Set( GetStringBuilding( dw_orig, race ), Font::SMALL );
-        dst_pt.x = pt.x + 86 - text.w() / 2;
-        dst_pt.y = pt.y + 103;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.set( GetStringBuilding( dw_orig, race ), statsFontType );
+        dst_pt.x = pt.x + 86 - text.width() / 2;
+        dst_pt.y = pt.y + 104;
+        text.draw( dst_pt.x, dst_pt.y, display );
 
         // name
-        text.Set( monster.GetMultiName() );
-        dst_pt.x = pt.x + 122 - text.w() / 2;
-        dst_pt.y = pt.y + 17;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.set( monster.GetMultiName(), statsFontType );
+        dst_pt.x = pt.x + 122 - text.width() / 2;
+        dst_pt.y = pt.y + 19;
+        text.draw( dst_pt.x, dst_pt.y, display );
         // attack
         std::string str;
         str = std::string( _( "Attack" ) ) + ": " + std::to_string( monster.GetAttack() );
-        text.Set( str );
-        dst_pt.x = pt.x + 268 - text.w() / 2;
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 22;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y, display );
         // defense
         str = std::string( _( "Defense" ) ) + ": " + std::to_string( monster.GetDefense() );
-        text.Set( str );
-        dst_pt.x = pt.x + 268 - text.w() / 2;
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 34;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y, display );
         // damage
         str = _( "Damg" );
         str += ": ";
@@ -349,26 +351,26 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
             str += std::to_string( monsterMaxDamage );
         }
 
-        text.Set( str );
-        dst_pt.x = pt.x + 268 - text.w() / 2;
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 46;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y, display );
         // hp
         str = std::string( _( "HP" ) ) + ": " + std::to_string( monster.GetHitPoints() );
-        text.Set( str );
-        dst_pt.x = pt.x + 268 - text.w() / 2;
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 58;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y, display );
         // speed
         str = std::string( _( "Speed" ) ) + ": ";
-        text.Set( str );
-        dst_pt.x = pt.x + 268 - text.w() / 2;
+        text.set( str, statsFontType );
+        dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 78;
-        text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( Speed::String( monster.GetSpeed() ) );
-        dst_pt.x = pt.x + 268 - text.w() / 2;
+        text.draw( dst_pt.x, dst_pt.y, display );
+        text.set( Speed::String( monster.GetSpeed() ) , statsFontType );
+        dst_pt.x = pt.x + 268 - text.width() / 2;
         dst_pt.y = pt.y + 90;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y, display );
 
         if ( present ) {
             u32 grown = monster.GetGrown();
@@ -376,25 +378,25 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
             if ( DWELLING_MONSTER1 & dw )
                 grown += building & BUILD_WEL2 ? GetGrownWel2() : 0;
 
-            text.Set( _( "Growth" ) );
-            dst_pt.x = pt.x + 268 - text.w() / 2;
+            text.set( _( "Growth" ), statsFontType );
+            dst_pt.x = pt.x + 268 - text.width() / 2;
             dst_pt.y = pt.y + 110;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y, display );
             str = std::string( "+ " ) + std::to_string( grown ) + " / " + _( "week" );
-            text.Set( str );
-            dst_pt.x = pt.x + 268 - text.w() / 2;
+            text.set( str, statsFontType );
+            dst_pt.x = pt.x + 268 - text.width() / 2;
             dst_pt.y = pt.y + 122;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y, display);
 
             str = std::string( _( "Available" ) ) + ": ";
-            text.Set( str );
+            text.set( str, statsFontType );
             dst_pt.x = pt.x + 44;
             dst_pt.y = pt.y + 122;
-            text.Blit( dst_pt.x, dst_pt.y );
-            text.Set( std::to_string( available ), Font::YELLOW_BIG );
-            dst_pt.x = pt.x + 129 - text.w() / 2;
+            text.draw( dst_pt.x, dst_pt.y, display );
+            text.set( std::to_string( available ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            dst_pt.x = pt.x + 129 - text.width() / 2;
             dst_pt.y = pt.y + 119;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y, display );
         }
 
         // monster
