@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 21:44+0800\n"
-"PO-Revision-Date: 2014-11-08 12:00+0000\n"
+"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"PO-Revision-Date: 2021-11-07 19:44+0100\n"
 "Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2014-12-05 05:56+0000\n"
-"X-Generator: Launchpad (build 17274)\n"
+"X-Generator: Poedit 3.0\n"
 
 msgid "Warrior"
 msgstr ""
@@ -80,31 +80,31 @@ msgid ""
 "%{monster}"
 msgstr ""
 
-msgid "army|Few"
-msgstr ""
-
-msgid "army|Horde"
-msgstr ""
-
-msgid "army|Lots"
+msgid "army|Several"
 msgstr ""
 
 msgid "army|Pack"
 msgstr ""
 
-msgid "army|Several"
+msgid "army|Lots"
 msgstr ""
 
-msgid "army|Legion"
-msgstr ""
-
-msgid "army|Swarm"
+msgid "army|Horde"
 msgstr ""
 
 msgid "army|Throng"
 msgstr ""
 
+msgid "army|Swarm"
+msgstr ""
+
 msgid "army|Zounds"
+msgstr ""
+
+msgid "army|Legion"
+msgstr ""
+
+msgid "army|Few"
 msgstr ""
 
 msgid "All %{race} troops +1"
@@ -135,6 +135,9 @@ msgid "Select %{name}"
 msgstr "Pasirinkti %{name}"
 
 msgid "Cannot move last troop"
+msgstr ""
+
+msgid "Set Count"
 msgstr ""
 
 msgid "%{name} half the enemy troops!"
@@ -195,6 +198,29 @@ msgstr ""
 msgid "On"
 msgstr ""
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+
 msgid "The enemy has surrendered!"
 msgstr "Priešas pasidavė!"
 
@@ -229,6 +255,12 @@ msgid "None"
 msgstr ""
 
 msgid "Defender"
+msgstr ""
+
+msgid "As you reach for the %{name}, it mysteriously disappears."
+msgstr ""
+
+msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "You have captured an enemy artifact!"
@@ -317,8 +349,8 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
-msgstr "Žiūrėti %{monster} informaciją."
+msgid "View %{monster} info"
+msgstr "Žiūrėti %{monster} informaciją"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -333,19 +365,19 @@ msgstr[2] ""
 msgid "Attack %{monster}"
 msgstr "Pulti %{monster}"
 
-msgid "Fly %{monster} here."
+msgid "Fly %{monster} here"
 msgstr ""
 
-msgid "Move %{monster} here."
+msgid "Move %{monster} here"
 msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr ""
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr ""
 
 msgid "Cast %{spell} on %{monster}"
@@ -354,28 +386,59 @@ msgstr ""
 msgid "Cast %{spell}"
 msgstr ""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr ""
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr ""
 
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Enable auto combat"
 msgstr ""
 
-msgid "Customize system options."
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr ""
+
+msgid "Customize system options"
+msgstr ""
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "System Options"
 msgstr ""
 
 msgid "Wait this unit"
 msgstr "Šis karys palauks"
 
+msgid "Wait"
+msgstr ""
+
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
+msgstr ""
+
 msgid "Skip this unit"
 msgstr "Šis karys praleis ėjimą"
 
-msgid "View Opposing Hero"
+msgid "Skip"
+msgstr ""
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+
+msgid "View Hero's options"
+msgstr ""
+
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"
@@ -387,10 +450,10 @@ msgstr ""
 msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
-msgid "%{name} skip the turn"
+msgid "%{name} skip their turn."
 msgstr ""
 
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr ""
 
 msgid "%{attacker} do %{damage} damage."
@@ -444,10 +507,10 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr ""
 
-msgid "The Unicorns attack blinds the %{name}!"
+msgid "The Unicorns' attack blinds the %{name}!"
 msgstr ""
 
-msgid "The Medusas gaze turns the %{name} to stone!"
+msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr ""
 
 msgid "The Mummies' curse falls upon the %{name}!"
@@ -459,10 +522,10 @@ msgstr ""
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr ""
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Good luck shines on the %{attacker}."
 msgstr ""
 
 msgid "High morale enables the %{monster} to attack again."
@@ -474,7 +537,7 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr ""
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr ""
 
 msgid "The mirror image is destroyed!"
@@ -515,6 +578,42 @@ msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+
+msgid "Human"
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+#, fuzzy
+msgid "Set Attack Skill"
+msgstr "Puolimo įgūdis"
+
+#, fuzzy
+msgid "Set Defense Skill"
+msgstr "Gynybos įgūdis"
+
+#, fuzzy
+msgid "Set Power Skill"
+msgstr "Burtų galia"
+
+#, fuzzy
+msgid "Set Knowledge Skill"
+msgstr "Išmanymas"
+
+#, fuzzy
+msgid "%{race1} %{name1}"
+msgstr "Žiūrėti %{name}"
+
+msgid "vs"
+msgstr ""
+
+#, fuzzy
+msgid "%{race2} %{name2}"
+msgstr "Žiūrėti %{name}"
 
 #, fuzzy
 msgid "Monsters"
@@ -559,6 +658,9 @@ msgid "Dragon Alliance"
 msgstr "Drakonų miestas"
 
 msgid "Elven Alliance"
+msgstr ""
+
+msgid "Kraeger defeated"
 msgstr ""
 
 msgid "Wayward Son"
@@ -721,7 +823,7 @@ msgstr ""
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
-"City to win"
+"City to win."
 msgstr ""
 
 msgid ""
@@ -1000,31 +1102,49 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Thunder Mace"
-msgstr ""
-
-msgid "Minor Scroll"
-msgstr ""
-
-#, fuzzy
-msgid "Dragon Sword"
-msgstr "Drakonų miestas"
-
-#, fuzzy
-msgid "Breastplate"
-msgstr "Turgus"
-
-msgid "Fizbin of Misfortune"
-msgstr ""
-
-msgid "Mage's ring"
+msgid "Caster's Bracelet"
 msgstr ""
 
 #, fuzzy
 msgid "Defender Helm"
 msgstr "Gynybos įgūdis"
 
+#, fuzzy
+msgid "Breastplate"
+msgstr "Turgus"
+
+#, fuzzy
+msgid "Dragon Sword"
+msgstr "Drakonų miestas"
+
+msgid "Fizbin Medal"
+msgstr ""
+
+msgid "Foremost Scroll"
+msgstr ""
+
+msgid "Mage's Ring"
+msgstr ""
+
+msgid "Major Scroll"
+msgstr ""
+
+msgid "Minor Scroll"
+msgstr ""
+
+msgid "Nomad Boots"
+msgstr ""
+
 msgid "Power Axe"
+msgstr ""
+
+msgid "Stealth Shield"
+msgstr ""
+
+msgid "Thunder Mace"
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Summon Earth"
@@ -1060,6 +1180,263 @@ msgstr ""
 #, fuzzy
 msgid "Build %{name}."
 msgstr "Žiūrėti %{name}"
+
+msgid "Cannot recruit - guest to guard automove error."
+msgstr ""
+
+msgid "Cannot recruit - you already have a Hero in this town."
+msgstr ""
+
+msgid "Cannot recruit - you have too many Heroes."
+msgstr ""
+
+msgid "Cannot afford a Hero"
+msgstr ""
+
+msgid "There is no room in the garrison for this army."
+msgstr ""
+
+msgid "Fortifications"
+msgstr "Įtvirtinimai"
+
+msgid "Farm"
+msgstr "Ferma"
+
+msgid "Thatched Hut"
+msgstr ""
+
+msgid "Archery Range"
+msgstr ""
+
+msgid "Upg. Archery Range"
+msgstr ""
+
+msgid "Blacksmith"
+msgstr "Kalvė"
+
+msgid "Upg. Blacksmith"
+msgstr "Geresnė kalvė"
+
+msgid "Armory"
+msgstr ""
+
+msgid "Upg. Armory"
+msgstr ""
+
+msgid "Jousting Arena"
+msgstr "Riterių arena"
+
+msgid "Upg. Jousting Arena"
+msgstr "Geresnė riterių arena"
+
+msgid "Cathedral"
+msgstr "Katedra"
+
+msgid "Upg. Cathedral"
+msgstr "Geresnė katedra"
+
+msgid "Coliseum"
+msgstr "Koliziejus"
+
+msgid "Garbage Heap"
+msgstr ""
+
+msgid "Hut"
+msgstr ""
+
+msgid "Stick Hut"
+msgstr ""
+
+msgid "Upg. Stick Hut"
+msgstr ""
+
+msgid "Den"
+msgstr "Ola"
+
+msgid "Adobe"
+msgstr "Moliniai nameliai"
+
+msgid "Upg. Adobe"
+msgstr ""
+
+msgid "Bridge"
+msgstr "Tiltas"
+
+msgid "Upg. Bridge"
+msgstr "Tobulesnis tiltas"
+
+msgid "Pyramid"
+msgstr "Piramidė"
+
+msgid "Rainbow"
+msgstr "Vaivorykštė"
+
+msgid "Crystal Garden"
+msgstr ""
+
+msgid "Treehouse"
+msgstr "Namelis medyje"
+
+msgid "Cottage"
+msgstr ""
+
+msgid "Upg. Cottage"
+msgstr ""
+
+msgid "Stonehenge"
+msgstr ""
+
+msgid "Upg. Stonehenge"
+msgstr ""
+
+msgid "Fenced Meadow"
+msgstr "Aptverta pieva"
+
+msgid "Red Tower"
+msgstr "Raudonas bokštas"
+
+msgid "Dungeon"
+msgstr "Požemiai"
+
+msgid "Waterfall"
+msgstr "Krioklys"
+
+msgid "Cave"
+msgstr "Urvas"
+
+msgid "Crypt"
+msgstr ""
+
+msgid "Nest"
+msgstr "Lizdas"
+
+msgid "Maze"
+msgstr "Labirintas"
+
+msgid "Upg. Maze"
+msgstr "Tobulesnis labirintas"
+
+msgid "Swamp"
+msgstr "Pelkė"
+
+msgid "Green Tower"
+msgstr "Žalias bokštas"
+
+msgid "Black Tower"
+msgstr "Juodas bokštas"
+
+msgid "Library"
+msgstr "Biblioteka"
+
+msgid "Orchard"
+msgstr "Vaisių sodas"
+
+msgid "Habitat"
+msgstr ""
+
+msgid "Pen"
+msgstr ""
+
+msgid "Foundry"
+msgstr "Liejykla"
+
+msgid "Upg. Foundry"
+msgstr "Geresnė liejykla"
+
+msgid "Cliff Nest"
+msgstr "Lizdas ant uolos"
+
+msgid "Ivory Tower"
+msgstr "Burtininkų bokštas"
+
+msgid "Upg. Ivory Tower"
+msgstr "Tobulesnis burtininkų bokštas"
+
+msgid "Cloud Castle"
+msgstr "Dangaus pilis"
+
+msgid "Upg. Cloud Castle"
+msgstr "Geresnė dangaus pilis"
+
+msgid "Storm"
+msgstr "Audra"
+
+msgid "Skull Pile"
+msgstr ""
+
+msgid "Excavation"
+msgstr ""
+
+msgid "Graveyard"
+msgstr "Kapinės"
+
+msgid "Upg. Graveyard"
+msgstr "Geresnės kapinės"
+
+msgid "Upg. Pyramid"
+msgstr "Didžioji piramidė"
+
+msgid "Mansion"
+msgstr "Apleisti rūmai"
+
+msgid "Upg. Mansion"
+msgstr ""
+
+msgid "Mausoleum"
+msgstr "Mauzoliejus"
+
+msgid "Upg. Mausoleum"
+msgstr ""
+
+msgid "Laboratory"
+msgstr "Laboratorija"
+
+msgid "Shrine"
+msgstr ""
+
+msgid ""
+"The Fortifications increase the toughness of the walls, increasing the "
+"number of turns it takes to knock them down."
+msgstr ""
+
+msgid "The Farm increases production of Peasants by %{count} per week."
+msgstr ""
+
+msgid ""
+"The Coliseum provides inspiring spectacles to defending troops, raising "
+"their morale by two during combat."
+msgstr ""
+
+msgid "The Garbage Heap increases production of Goblins by %{count} per week."
+msgstr ""
+
+msgid "The Rainbow increases the luck of the defending units by two."
+msgstr ""
+
+msgid ""
+"The Crystal Garden increases production of Sprites by %{count} per week."
+msgstr ""
+
+msgid "The Dungeon increases the income of the town by %{count} / day."
+msgstr ""
+"Požeminiai rūsiai padidina jūsų miesto pajamas %{count} auksinių per dieną."
+
+msgid "The Waterfall increases production of Centaurs by %{count} per week."
+msgstr ""
+
+msgid ""
+"The Library increases the number of spells in the Guild by one for each "
+"level of the guild."
+msgstr ""
+
+msgid "The Orchard increases production of Halflings by %{count} per week."
+msgstr ""
+
+msgid "The Storm adds +2 to the power of spells of a defending spell caster."
+msgstr ""
+
+msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
 
 msgid "Thieves' Guild"
 msgstr "Vagių gildija"
@@ -1106,202 +1483,9 @@ msgstr ""
 msgid "Mage Guild, Level 5"
 msgstr ""
 
-msgid "Crystal Garden"
-msgstr ""
-
-msgid "Farm"
-msgstr "Ferma"
-
-msgid "Garbage Heap"
-msgstr ""
-
-msgid "Orchard"
-msgstr "Vaisių sodas"
-
-msgid "Skull Pile"
-msgstr ""
-
-msgid "Waterfall"
-msgstr "Krioklys"
-
-msgid "Coliseum"
-msgstr "Koliziejus"
-
-msgid "Dungeon"
-msgstr "Požemiai"
-
-msgid "Fortifications"
-msgstr "Įtvirtinimai"
-
-msgid "Library"
-msgstr "Biblioteka"
-
-msgid "Rainbow"
-msgstr "Vaivorykštė"
-
-msgid "Storm"
-msgstr "Audra"
-
-msgid "Cave"
-msgstr "Urvas"
-
-msgid "Excavation"
-msgstr ""
-
-msgid "Habitat"
-msgstr ""
-
-msgid "Hut"
-msgstr ""
-
-msgid "Thatched Hut"
-msgstr ""
-
-msgid "Treehouse"
-msgstr "Namelis medyje"
-
-msgid "Archery Range"
-msgstr ""
-
-msgid "Cottage"
-msgstr ""
-
-msgid "Crypt"
-msgstr ""
-
-msgid "Graveyard"
-msgstr "Kapinės"
-
-msgid "Pen"
-msgstr ""
-
-msgid "Stick Hut"
-msgstr ""
-
-msgid "Blacksmith"
-msgstr "Kalvė"
-
-msgid "Den"
-msgstr "Ola"
-
-msgid "Foundry"
-msgstr "Liejykla"
-
-msgid "Nest"
-msgstr "Lizdas"
-
-msgid "Pyramid"
-msgstr "Piramidė"
-
-msgid "Adobe"
-msgstr "Moliniai nameliai"
-
-msgid "Armory"
-msgstr ""
-
-msgid "Cliff Nest"
-msgstr "Lizdas ant uolos"
-
-msgid "Mansion"
-msgstr "Apleisti rūmai"
-
-msgid "Maze"
-msgstr "Labirintas"
-
-msgid "Stonehenge"
-msgstr ""
-
-msgid "Bridge"
-msgstr "Tiltas"
-
-msgid "Fenced Meadow"
-msgstr "Aptverta pieva"
-
-msgid "Ivory Tower"
-msgstr "Burtininkų bokštas"
-
-msgid "Jousting Arena"
-msgstr "Riterių arena"
-
-msgid "Mausoleum"
-msgstr "Mauzoliejus"
-
-msgid "Swamp"
-msgstr "Pelkė"
-
-msgid "Cathedral"
-msgstr "Katedra"
-
-msgid "Cloud Castle"
-msgstr "Dangaus pilis"
-
-msgid "Green Tower"
-msgstr "Žalias bokštas"
-
-msgid "Laboratory"
-msgstr "Laboratorija"
-
-msgid "Red Tower"
-msgstr "Raudonas bokštas"
-
-msgid "Upg. Archery Range"
-msgstr ""
-
-msgid "Upg. Stick Hut"
-msgstr ""
-
-msgid "Upg. Cottage"
-msgstr ""
-
-msgid "Upg. Graveyard"
-msgstr "Geresnės kapinės"
-
-msgid "Upg. Blacksmith"
-msgstr "Geresnė kalvė"
-
-msgid "Upg. Foundry"
-msgstr "Geresnė liejykla"
-
-msgid "Upg. Pyramid"
-msgstr "Didžioji piramidė"
-
-msgid "Upg. Armory"
-msgstr ""
-
-msgid "Upg. Adobe"
-msgstr ""
-
-msgid "Upg. Stonehenge"
-msgstr ""
-
-msgid "Upg. Maze"
-msgstr "Tobulesnis labirintas"
-
-msgid "Upg. Mansion"
-msgstr ""
-
-msgid "Upg. Jousting Arena"
-msgstr "Geresnė riterių arena"
-
-msgid "Upg. Bridge"
-msgstr "Tobulesnis tiltas"
-
-msgid "Upg. Ivory Tower"
-msgstr "Tobulesnis burtininkų bokštas"
-
-msgid "Upg. Mausoleum"
-msgstr ""
-
-msgid "Upg. Cathedral"
-msgstr "Geresnė katedra"
-
-msgid "Upg. Cloud Castle"
-msgstr "Geresnė dangaus pilis"
-
-msgid "Black Tower"
-msgstr "Juodas bokštas"
-
-msgid "Shrine"
+msgid ""
+"The Shrine increases the necromancy skill of all your necromancers by 10 "
+"percent."
 msgstr ""
 
 msgid ""
@@ -1366,88 +1550,48 @@ msgid ""
 "points."
 msgstr ""
 
-msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
-
-msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
-
-msgid ""
-"The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
-
-msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
-
-msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
-
-msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
-
-msgid ""
-"The Fortifications increase the toughness of the walls, increasing the "
-"number of turns it takes to knock them down."
-msgstr ""
-
-msgid ""
-"The Coliseum provides inspiring spectacles to defending troops, raising "
-"their morale by two during combat."
-msgstr ""
-
-msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
-
-msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr ""
-"Požeminiai rūsiai padidina jūsų miesto pajamas %{count} auksinių per dieną."
-
-msgid ""
-"The Library increases the number of spells in the Guild by one for each "
-"level of the guild."
-msgstr ""
-
-msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
-
-msgid ""
-"The Shrine increases the necromancy skill of all your necromancers by 10 "
-"percent."
-msgstr ""
-
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-
-msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
-
-msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
-
-msgid "Cannot afford a Hero"
-msgstr ""
-
-msgid "There is no room in the garrison for this army."
-msgstr ""
-
 msgid "Recruit %{name}"
 msgstr "Pasamdyti %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Mėnuo: %{month}, Savaitė: %{week}, Diena: %{day}"
 
-msgid "Income"
-msgstr ""
-
-msgid "Army is full"
-msgstr ""
-
-msgid "Join Error"
-msgstr ""
-
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+#, fuzzy
+msgid "Exit"
+msgstr "Išeiti iš miesto"
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Šis karys palauks"
+
+#, fuzzy
+msgid "Click to show next town."
+msgstr "Rodyti kitą miestą"
+
+msgid "Show next town"
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to show previous town."
+msgstr "Rodyti ankstesnį miestą"
+
+msgid "Show previous town"
+msgstr "Rodyti ankstesnį miestą"
+
+msgid "Army joining"
+msgstr ""
+
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
@@ -1466,12 +1610,6 @@ msgstr "Išeiti iš miesto"
 
 msgid "Show Income"
 msgstr ""
-
-msgid "Show previous town"
-msgstr "Rodyti ankstesnį miestą"
-
-msgid "Show next town"
-msgstr "Rodyti kitą miestą"
 
 msgid "Swap Heroes"
 msgstr ""
@@ -1612,6 +1750,9 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1668,6 +1809,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr ""
 
@@ -1679,6 +1823,9 @@ msgstr "Statyti naują laivą:"
 
 msgid "Resource cost:"
 msgstr "Išteklio kaina:"
+
+msgid "Need: "
+msgstr ""
 
 msgid "Load Game"
 msgstr "Įkelti žaidimą"
@@ -1761,7 +1908,9 @@ msgid "Rating"
 msgstr ""
 
 msgid "Map Size"
-msgstr "Pasaulio dydis"
+msgstr ""
+"Pasaulio\n"
+"dydis"
 
 msgid "Opponents"
 msgstr ""
@@ -1779,7 +1928,7 @@ msgid ""
 "Conditions"
 msgstr ""
 
-msgid "score: "
+msgid "Score: "
 msgstr ""
 
 msgid "First select recipients!"
@@ -1845,11 +1994,12 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
-msgid "max"
+msgid "Max"
 msgstr ""
 
-msgid "min"
-msgstr ""
+#, fuzzy
+msgid "Min"
+msgstr "Apleisti rūmai"
 
 msgid "Qty to trade"
 msgstr ""
@@ -1935,17 +2085,55 @@ msgstr ""
 msgid "Fast separation into slots:"
 msgstr ""
 
+msgid "Map: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Location: "
+msgstr ""
+
 msgid "File to Save:"
 msgstr "Įrašyti į failą:"
 
 msgid "File to Load:"
 msgstr "Failas įkėlimui:"
 
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "OK"
+msgstr "Gerai"
+
+#, fuzzy
+msgid "Click to load a previously saved game."
+msgstr "Atverti prieš tai įrašytą žaidimą"
+
 msgid "Are you sure you want to delete file:"
 msgstr "Ar jūs tikrai norite ištrinti failą:"
 
 msgid "Warning!"
 msgstr "Įspėjimas!"
+
+#, fuzzy
+msgid "Select Monster:"
+msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Select Hero:"
+msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Magiškas artefaktas"
+
+msgid "Select Spell:"
+msgstr ""
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Gynybos įgūdis"
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -2009,6 +2197,15 @@ msgstr ""
 
 msgid "The name of the currently selected map."
 msgstr ""
+
+msgid ""
+"Indicates whether the map is made for The Succession Wars or The Price of "
+"Loyalty version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Pasaulio dydis"
 
 msgid "Selected Map Difficulty"
 msgstr ""
@@ -2175,13 +2372,6 @@ msgstr ""
 msgid "Toggle instant battle mode."
 msgstr ""
 
-#, fuzzy
-msgid "Exit this menu."
-msgstr "Šis karys palauks"
-
-msgid "OK"
-msgstr "Gerai"
-
 msgid "Att."
 msgstr ""
 
@@ -2194,9 +2384,6 @@ msgstr ""
 #, fuzzy
 msgid "Knowl"
 msgstr "Išmanymas"
-
-msgid "Human"
-msgstr ""
 
 msgid "1st"
 msgstr ""
@@ -2308,6 +2495,9 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
+msgid "and many other contributors!"
+msgstr ""
+
 msgid "Original project before 0.7"
 msgstr ""
 
@@ -2320,10 +2510,74 @@ msgstr ""
 msgid "Need help with the game?"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
+msgid "Original Heroes of Might and Magic II team"
+msgstr ""
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid "Vocalists"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+#, fuzzy
+msgid "Artists"
+msgstr "Magiškas artefaktas"
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+msgid "Scenarios"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
 msgid "Your Name"
+msgstr ""
+
+msgid "Campaign"
+msgstr ""
+
+msgid "View High Scores for Campaigns."
 msgstr ""
 
 msgid ""
@@ -2433,7 +2687,7 @@ msgstr ""
 msgid "High Scores"
 msgstr "Geriausi rezultatai"
 
-msgid "View the high score screen."
+msgid "View the high scores screen."
 msgstr ""
 
 msgid "Game settings."
@@ -2513,6 +2767,9 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2527,6 +2784,10 @@ msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
 msgstr ""
+
+#, fuzzy
+msgid "Ultimate Artifact"
+msgstr "Rasti magišką artefaktą '%{name}'"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -2626,7 +2887,19 @@ msgstr ""
 msgid "Do you wish to continue the game?"
 msgstr "Ar norite nusipirkti vieną?"
 
-msgid "No maps available!"
+msgid "Scenario:"
+msgstr ""
+
+msgid "Game Difficulty:"
+msgstr ""
+
+msgid "Opponents:"
+msgstr ""
+
+msgid "Class:"
+msgstr ""
+
+msgid "Rating %{rating}%"
 msgstr ""
 
 msgid "Click here to select which scenario to play."
@@ -2658,19 +2931,7 @@ msgstr ""
 msgid "Click to return to the main menu."
 msgstr ""
 
-msgid "Scenario:"
-msgstr ""
-
-msgid "Game Difficulty:"
-msgstr ""
-
-msgid "Opponents:"
-msgstr ""
-
-msgid "Class:"
-msgstr ""
-
-msgid "Rating %{rating}%"
+msgid "No maps available!"
 msgstr ""
 
 msgid "Astrologers proclaim Month of the %{name}."
@@ -2768,9 +3029,6 @@ msgid "File Options"
 msgstr ""
 
 msgid "Bring up the system options menu, alloving you to customize your game."
-msgstr ""
-
-msgid "System Options"
 msgstr ""
 
 msgid ""
@@ -2891,7 +3149,16 @@ msgstr ""
 msgid "Russian"
 msgstr ""
 
+msgid "Italian"
+msgstr ""
+
 msgid ", FPS: "
+msgstr ""
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
 msgstr ""
 
 msgid "Ambrose"
@@ -3104,16 +3371,7 @@ msgstr ""
 msgid "Martine"
 msgstr ""
 
-msgid "%{object} robber"
-msgstr ""
-
-msgid "%{object} raided"
-msgstr ""
-
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
-
-msgid "The three Anduran artifacts magically combine into one."
 msgstr ""
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
@@ -3419,8 +3677,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Zombies you spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
@@ -3432,8 +3690,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Ghosts you spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3443,11 +3701,6 @@ msgstr ""
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the ship?"
-msgstr ""
-
-msgid ""
-"Upon defeating the Skeletons you spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3511,6 +3764,9 @@ msgid ""
 "%{art}."
 msgstr ""
 
+msgid "Artifact"
+msgstr "Magiškas artefaktas"
+
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 
@@ -3544,6 +3800,11 @@ msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
+msgstr ""
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
 msgid ""
@@ -3876,6 +4137,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
+
+msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
 "you maps of the sea he made in his younger days for 1,000 gold. Do you wish "
 "to buy the maps?"
@@ -3960,13 +4226,13 @@ msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and find the %{art} in the back of the cave."
+"battle, you slay the monster and receive %{exp} experience points and "
+"%{count} gold."
 msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and receive %{exp} experience points and "
-"%{count} gold."
+"battle, you slay the monster and find the %{art} in the back of the cave."
 msgstr ""
 
 msgid ""
@@ -3996,7 +4262,21 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
-msgstr ""
+msgid_plural ""
+"For %{gold} gold, the alchemist will remove them for you. Do you pay?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"the cursed artifact and throws it into his magical cauldron."
+msgid_plural ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"all cursed artifacts and throws them into his magical cauldron."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid ""
 "You hear a voice from behind the locked door, \"You don't have enough gold "
@@ -4118,9 +4398,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
+msgid "Spell book is not present."
+msgstr ""
+
+msgid "The spell is not found."
+msgstr ""
+
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
+msgstr ""
+
+msgid "Not enough move points."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -4132,9 +4421,6 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
-msgstr ""
-
-msgid "View Stats"
 msgstr ""
 
 msgid "View Experience Info"
@@ -4309,10 +4595,10 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr ""
 
-msgid "skill|Advanced"
+msgid "skill|Basic"
 msgstr ""
 
-msgid "skill|Basic"
+msgid "skill|Advanced"
 msgstr ""
 
 msgid "skill|Expert"
@@ -4645,10 +4931,6 @@ msgstr "Miestelis/Pilis"
 msgid "View Towns and Castles."
 msgstr "Rodyti miestus"
 
-#, fuzzy
-msgid "Exit"
-msgstr "Išeiti iš miesto"
-
 msgid "luck|Cursed"
 msgstr ""
 
@@ -4736,6 +5018,12 @@ msgid "Necromancer"
 msgstr ""
 
 msgid "Multi"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "race|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -4840,22 +5128,7 @@ msgstr ""
 msgid "week|Condor"
 msgstr ""
 
-msgid "Beach"
-msgstr ""
-
 msgid "Desert"
-msgstr ""
-
-msgid "Dirt"
-msgstr ""
-
-msgid "Grass"
-msgstr ""
-
-msgid "Lava"
-msgstr ""
-
-msgid "Ocean"
 msgstr ""
 
 msgid "Snow"
@@ -4864,19 +5137,34 @@ msgstr ""
 msgid "Wasteland"
 msgstr ""
 
-msgid "maps|Custom Size"
+msgid "Beach"
 msgstr ""
 
-msgid "maps|Extra Large"
+msgid "Lava"
 msgstr ""
 
-msgid "maps|Large"
+msgid "Dirt"
+msgstr ""
+
+msgid "Grass"
+msgstr ""
+
+msgid "Ocean"
+msgstr ""
+
+msgid "maps|Small"
 msgstr ""
 
 msgid "maps|Medium"
 msgstr ""
 
-msgid "maps|Small"
+msgid "maps|Large"
+msgstr ""
+
+msgid "maps|Extra Large"
+msgstr ""
+
+msgid "maps|Custom Size"
 msgstr ""
 
 msgid "Ore Mine"
@@ -4895,6 +5183,9 @@ msgid "Gold Mine"
 msgstr "Aukso kasykla"
 
 msgid "Mine"
+msgstr ""
+
+msgid "No object"
 msgstr ""
 
 msgid "Alchemist Lab"
@@ -5002,7 +5293,7 @@ msgstr ""
 msgid "Xanadu"
 msgstr ""
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr ""
 
 msgid "Derelict Ship"
@@ -5125,14 +5416,46 @@ msgstr "Ištekliai"
 msgid "Whirlpool"
 msgstr ""
 
-msgid "Artifact"
-msgstr "Magiškas artefaktas"
-
 msgid "Boat"
 msgstr ""
 
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Ištekliai"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Atsitiktinė pilis"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Atsitiktinė pilis"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Atsitiktinė pilis"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Atsitiktinė pilis"
+
 msgid "Standing Stones"
 msgstr ""
+
+msgid "Event"
+msgstr ""
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Atsitiktinė pilis"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Rasti magišką artefaktą '%{name}'"
 
 msgid "Idol"
 msgstr ""
@@ -5166,6 +5489,15 @@ msgid_plural "Magic Gardens"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgid "Random Artifact - Treasure"
+msgstr ""
+
+msgid "Random Artifact - Minor"
+msgstr ""
+
+msgid "Random Artifact - Major"
+msgstr ""
 
 msgid "Jail"
 msgstr ""
@@ -5617,10 +5949,6 @@ msgid "Water Elementals"
 msgstr ""
 
 #, fuzzy
-msgid "Random Monster"
-msgstr "Atsitiktinė pilis"
-
-#, fuzzy
 msgid "Random Monsters"
 msgstr "Atsitiktinė pilis"
 
@@ -5791,6 +6119,9 @@ msgstr ""
 msgid "% damage from "
 msgstr ""
 
+msgid "The three Anduran artifacts magically combine into one."
+msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -5864,6 +6195,9 @@ msgid "Medal of Honor"
 msgstr ""
 
 msgid "Medal of Distinction"
+msgstr ""
+
+msgid "Fizbin of Misfortune"
 msgstr ""
 
 msgid "The %{name} greatly decreases your morale by %{count}."
@@ -6496,6 +6830,9 @@ msgid ""
 " Cost in spell points: %{sp}"
 msgstr ""
 
+msgid "Move points: %{mp}"
+msgstr ""
+
 msgid "Transcribe Spell Scroll"
 msgstr ""
 
@@ -6515,11 +6852,8 @@ msgstr "Negalima perkelti artefakto"
 msgid "This item can't be traded."
 msgstr ""
 
-msgid "Crystal"
-msgstr "Kristalai"
-
-msgid "Gems"
-msgstr "Brangakmeniai"
+msgid "Wood"
+msgstr "Mediena"
 
 msgid "Mercury"
 msgstr "Gyvsidabris"
@@ -6530,8 +6864,11 @@ msgstr "Rūda"
 msgid "Sulfur"
 msgstr "Siera"
 
-msgid "Wood"
-msgstr "Mediena"
+msgid "Crystal"
+msgstr "Kristalai"
+
+msgid "Gems"
+msgstr "Brangakmeniai"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -6772,12 +7109,12 @@ msgstr ""
 msgid "Death Ripple"
 msgstr ""
 
+msgid "Death Wave"
+msgstr ""
+
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
-msgstr ""
-
-msgid "Death Wave"
 msgstr ""
 
 msgid "Dragon Slayer"
@@ -6956,6 +7293,15 @@ msgstr ""
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
+#, fuzzy
+msgid "Petrification"
+msgstr "Įtvirtinimai"
+
+msgid ""
+"Turns the affected creature into stone.  A petrified creature receives half "
+"damage from a direct attack."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr ""
 
@@ -7046,12 +7392,6 @@ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr ""
 
 msgid "heroes: in Arena can choose any of primary skills"
-msgstr ""
-
-msgid "unions: allow meeting heroes"
-msgstr ""
-
-msgid "unions: allow castle visiting"
 msgstr ""
 
 msgid "battle: show army order"

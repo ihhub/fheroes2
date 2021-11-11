@@ -266,11 +266,6 @@ namespace Interface
         // Move visible area to the position with given element ID being on the top of the list.
         void setTopVisibleItem( const int topId )
         {
-            if ( topId < 0 || static_cast<size_t>( topId ) >= content->size() ) {
-                // Invalid ID.
-                return;
-            }
-
             Verify();
 
             if ( !IsValid() ) {
@@ -278,7 +273,7 @@ namespace Interface
                 return;
             }
 
-            _topId = topId;
+            _topId = std::max( 0, std::min( topId, _size() - maxItems ) );
 
             UpdateScrollbarRange();
             _scrollbar.moveToIndex( _topId );

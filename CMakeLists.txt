@@ -1,8 +1,12 @@
 # For descent FetchContent()
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.7 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.9 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12")
+    cmake_policy(SET CMP0074 NEW)
+endif()
 
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -68,12 +72,16 @@ endif(GET_HOMM2_DEMO)
 
 if(WIN32)
 	install(
-		FILES script/demo/demo_windows.bat script/demo/demo_windows.ps1
+		FILES script/demo/download_demo_version.bat script/demo/download_demo_version.ps1
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+		)
+	install(
+		FILES script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 else(WIN32)
 	install(
-		FILES script/demo/demo_unix.sh
+		FILES script/demo/download_demo_version.sh
 		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
 		)

@@ -29,7 +29,7 @@
 #include <SDL_mixer.h>
 
 #include "audio.h"
-#include "engine.h"
+#include "core.h"
 #include "logging.h"
 
 namespace
@@ -126,7 +126,7 @@ void Audio::Init()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    if ( SDL::SubSystem( SDL_INIT_AUDIO ) ) {
+    if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         Mix_Init( MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD );
 #endif
@@ -150,7 +150,7 @@ void Audio::Init()
         }
     }
     else {
-        ERROR_LOG( "the audio subsystem was not initialized" );
+        ERROR_LOG( "The audio subsystem was not initialized." );
 
         valid = false;
     }
@@ -160,7 +160,7 @@ void Audio::Quit()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    if ( SDL::SubSystem( SDL_INIT_AUDIO ) && valid ) {
+    if ( valid && fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
         Music::Reset();
         Mixer::Reset();
 

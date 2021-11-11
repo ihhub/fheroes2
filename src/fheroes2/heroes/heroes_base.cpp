@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 
 #include "army.h"
 #include "castle.h"
@@ -33,17 +34,15 @@
 #include "world.h"
 
 template <std::size_t size>
-int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const HeroBase & base, std::string * strs )
+int ArtifactsModifiersResult( int type, const std::array<uint8_t, size> & arts, const HeroBase & base, std::string * strs )
 {
     int result = 0;
 
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        const Artifact art( arts[ii] );
-
+    for ( const Artifact art : arts ) {
         if ( art.isValid() ) {
-            uint32_t acount = base.artifactCount( art );
+            const uint32_t acount = base.artifactCount( art );
             if ( acount ) {
-                s32 mod = art.ExtraValue();
+                int32_t mod = art.ExtraValue();
 
                 switch ( art.GetID() ) {
                 case Artifact::SWORD_BREAKER:
@@ -89,56 +88,60 @@ int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const Her
 
 int ArtifactsModifiersAttack( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[] = {Artifact::SPIKED_HELM,   Artifact::THUNDER_MACE,      Artifact::GIANT_FLAIL,     Artifact::SWORD_BREAKER,  Artifact::SPIKED_SHIELD,
-                       Artifact::POWER_AXE,     Artifact::LEGENDARY_SCEPTER, Artifact::DRAGON_SWORD,    Artifact::ULTIMATE_CROWN, Artifact::BATTLE_GARB,
-                       Artifact::SWORD_ANDURAN, Artifact::HOLY_HAMMER,       Artifact::ULTIMATE_SHIELD, Artifact::ULTIMATE_SWORD};
+    const std::array<uint8_t, 14> arts
+        = { Artifact::SPIKED_HELM,   Artifact::THUNDER_MACE,      Artifact::GIANT_FLAIL,     Artifact::SWORD_BREAKER,  Artifact::SPIKED_SHIELD,
+            Artifact::POWER_AXE,     Artifact::LEGENDARY_SCEPTER, Artifact::DRAGON_SWORD,    Artifact::ULTIMATE_CROWN, Artifact::BATTLE_GARB,
+            Artifact::SWORD_ANDURAN, Artifact::HOLY_HAMMER,       Artifact::ULTIMATE_SHIELD, Artifact::ULTIMATE_SWORD };
 
     return ArtifactsModifiersResult( MDF_ATTACK, arts, base, strs );
 }
 
 int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[] = {Artifact::SPIKED_HELM,       Artifact::ARMORED_GAUNTLETS,  Artifact::DEFENDER_HELM,  Artifact::SPIKED_SHIELD, Artifact::STEALTH_SHIELD,
-                       Artifact::LEGENDARY_SCEPTER, Artifact::DIVINE_BREASTPLATE, Artifact::ULTIMATE_CROWN, Artifact::SWORD_BREAKER, Artifact::BREASTPLATE_ANDURAN,
-                       Artifact::BATTLE_GARB,       Artifact::ULTIMATE_SHIELD,    Artifact::ULTIMATE_CLOAK};
+    const std::array<uint8_t, 13> arts
+        = { Artifact::SPIKED_HELM,       Artifact::ARMORED_GAUNTLETS,  Artifact::DEFENDER_HELM,  Artifact::SPIKED_SHIELD, Artifact::STEALTH_SHIELD,
+            Artifact::LEGENDARY_SCEPTER, Artifact::DIVINE_BREASTPLATE, Artifact::ULTIMATE_CROWN, Artifact::SWORD_BREAKER, Artifact::BREASTPLATE_ANDURAN,
+            Artifact::BATTLE_GARB,       Artifact::ULTIMATE_SHIELD,    Artifact::ULTIMATE_CLOAK };
 
     return ArtifactsModifiersResult( MDF_DEFENSE, arts, base, strs );
 }
 
 int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[] = {Artifact::WHITE_PEARL,    Artifact::BLACK_PEARL,    Artifact::CASTER_BRACELET, Artifact::MAGE_RING,       Artifact::LEGENDARY_SCEPTER,
-                       Artifact::WITCHES_BROACH, Artifact::ARM_MARTYR,     Artifact::ULTIMATE_CROWN,  Artifact::ARCANE_NECKLACE, Artifact::BATTLE_GARB,
-                       Artifact::STAFF_WIZARDRY, Artifact::HELMET_ANDURAN, Artifact::ULTIMATE_STAFF,  Artifact::ULTIMATE_WAND,   Artifact::BROACH_SHIELDING};
+    const std::array<uint8_t, 15> arts
+        = { Artifact::WHITE_PEARL,    Artifact::BLACK_PEARL,    Artifact::CASTER_BRACELET, Artifact::MAGE_RING,       Artifact::LEGENDARY_SCEPTER,
+            Artifact::WITCHES_BROACH, Artifact::ARM_MARTYR,     Artifact::ULTIMATE_CROWN,  Artifact::ARCANE_NECKLACE, Artifact::BATTLE_GARB,
+            Artifact::STAFF_WIZARDRY, Artifact::HELMET_ANDURAN, Artifact::ULTIMATE_STAFF,  Artifact::ULTIMATE_WAND,   Artifact::BROACH_SHIELDING };
 
     return ArtifactsModifiersResult( MDF_POWER, arts, base, strs );
 }
 
 int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[] = {Artifact::WHITE_PEARL,     Artifact::BLACK_PEARL,       Artifact::MINOR_SCROLL,   Artifact::MAJOR_SCROLL,   Artifact::SUPERIOR_SCROLL,
-                       Artifact::FOREMOST_SCROLL, Artifact::LEGENDARY_SCEPTER, Artifact::ULTIMATE_CROWN, Artifact::ULTIMATE_STAFF, Artifact::ULTIMATE_BOOK};
+    const std::array<uint8_t, 10> arts
+        = { Artifact::WHITE_PEARL,     Artifact::BLACK_PEARL,       Artifact::MINOR_SCROLL,   Artifact::MAJOR_SCROLL,   Artifact::SUPERIOR_SCROLL,
+            Artifact::FOREMOST_SCROLL, Artifact::LEGENDARY_SCEPTER, Artifact::ULTIMATE_CROWN, Artifact::ULTIMATE_STAFF, Artifact::ULTIMATE_BOOK };
 
     return ArtifactsModifiersResult( MDF_KNOWLEDGE, arts, base, strs );
 }
 
 int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[] = {Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
-                       Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE};
+    const std::array<uint8_t, 7> arts = { Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
+                                          Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE };
 
     return ArtifactsModifiersResult( MDF_MORALE, arts, base, strs );
 }
 
 int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
 {
-    const u8 arts[]
-        = {Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD};
+    const std::array<uint8_t, 6> arts
+        = { Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD };
 
     return ArtifactsModifiersResult( MDF_LUCK, arts, base, strs );
 }
 
-HeroBase::HeroBase( int type, int race )
+HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
     , move_point( 0 )
 {
@@ -146,7 +149,7 @@ HeroBase::HeroBase( int type, int race )
     LoadDefaults( type, race );
 }
 
-void HeroBase::LoadDefaults( int type, int race )
+void HeroBase::LoadDefaults( const int type, const int race )
 {
     if ( Race::ALL & race ) {
         // fixed default primary skills
@@ -158,14 +161,14 @@ void HeroBase::LoadDefaults( int type, int race )
             // force add spell book
             SpellBookActivate();
 
-            Spell spell = Skill::Primary::GetInitialSpell( race );
+            const Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() )
                 spell_book.Append( spell );
             break;
         }
 
         case HeroBase::HEROES: {
-            Spell spell = Skill::Primary::GetInitialSpell( race );
+            const Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() ) {
                 SpellBookActivate();
                 spell_book.Append( spell );
@@ -184,22 +187,22 @@ HeroBase::HeroBase()
     , move_point( 0 )
 {}
 
-bool HeroBase::isCaptain( void ) const
+bool HeroBase::isCaptain() const
 {
     return GetType() == CAPTAIN;
 }
 
-bool HeroBase::isHeroes( void ) const
+bool HeroBase::isHeroes() const
 {
     return GetType() == HEROES;
 }
 
-u32 HeroBase::GetSpellPoints( void ) const
+uint32_t HeroBase::GetSpellPoints() const
 {
     return magic_point;
 }
 
-void HeroBase::SetSpellPoints( u32 points )
+void HeroBase::SetSpellPoints( const uint32_t points )
 {
     magic_point = points;
 }
@@ -209,54 +212,54 @@ bool HeroBase::HaveSpellPoints( const Spell & spell ) const
     return magic_point >= spell.SpellPoint( this );
 }
 
-void HeroBase::EditSpellBook( void )
+void HeroBase::EditSpellBook()
 {
     spell_book.Edit( *this );
 }
 
-Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, bool canCastSpell, std::function<void( const std::string & )> * statusCallback ) const
+Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const std::function<void( const std::string & )> * statusCallback ) const
 {
     return spell_book.Open( *this, filter, canCastSpell, statusCallback );
 }
 
-bool HeroBase::HaveSpellBook( void ) const
+bool HeroBase::HaveSpellBook() const
 {
     return hasArtifact( Artifact::MAGIC_BOOK );
 }
 
-std::vector<Spell> HeroBase::GetSpells( int lvl ) const
+std::vector<Spell> HeroBase::GetSpells( const int lvl ) const
 {
     return spell_book.GetSpells( lvl );
 }
 
-bool HeroBase::HaveSpell( const Spell & spell, bool skip_bag ) const
+bool HeroBase::HaveSpell( const Spell & spell, const bool skip_bag ) const
 {
     return HaveSpellBook() && ( spell_book.isPresentSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );
 }
 
-void HeroBase::AppendSpellToBook( const Spell & spell, bool without_wisdom )
+void HeroBase::AppendSpellToBook( const Spell & spell, const bool without_wisdom )
 {
     if ( without_wisdom || CanLearnSpell( spell ) )
         spell_book.Append( spell );
 }
 
-void HeroBase::AppendSpellsToBook( const SpellStorage & spells, bool without_wisdom )
+void HeroBase::AppendSpellsToBook( const SpellStorage & spells, const bool without_wisdom )
 {
-    for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it )
-        AppendSpellToBook( *it, without_wisdom );
+    for ( const auto & spell : spells )
+        AppendSpellToBook( spell, without_wisdom );
 }
 
-bool HeroBase::SpellBookActivate( void )
+bool HeroBase::SpellBookActivate()
 {
     return !HaveSpellBook() && bag_artifacts.PushArtifact( Artifact::MAGIC_BOOK );
 }
 
-const BagArtifacts & HeroBase::GetBagArtifacts( void ) const
+const BagArtifacts & HeroBase::GetBagArtifacts() const
 {
     return bag_artifacts;
 }
 
-BagArtifacts & HeroBase::GetBagArtifacts( void )
+BagArtifacts & HeroBase::GetBagArtifacts()
 {
     return bag_artifacts;
 }
@@ -412,35 +415,38 @@ double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
 {
-    if ( res ) {
-        res->clear();
-
-        if ( HaveSpellBook() ) {
-            if ( HaveSpell( spell ) ) {
-                if ( HaveSpellPoints( spell ) ) {
-                    if ( spell.MovePoint() <= move_point ) {
-                        return true;
-                    }
-                    else {
-                        *res += _( "Not enough move points." );
-                    }
-                }
-                else {
-                    *res += _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
-                }
-            }
-            else {
-                *res += _( "The spell is not found." );
-            }
+    if ( !HaveSpellBook() ) {
+        if ( res ) {
+            *res = _( "Spell book is not present." );
         }
-        else {
-            *res += _( "Spell book is not present." );
-        }
-
         return false;
     }
 
-    return HaveSpellBook() && HaveSpell( spell ) && HaveSpellPoints( spell );
+    if ( !HaveSpell( spell ) ) {
+        if ( res ) {
+            *res = _( "The spell is not found." );
+        }
+        return false;
+    }
+
+    if ( !HaveSpellPoints( spell ) ) {
+        if ( res ) {
+            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+        }
+        return false;
+    }
+
+    if ( move_point < spell.MovePoint() ) {
+        if ( res ) {
+            *res = _( "Not enough move points." );
+        }
+        return false;
+    }
+
+    if ( res ) {
+        res->clear();
+    }
+    return true;
 }
 
 void HeroBase::SpellCasted( const Spell & spell )
@@ -455,10 +461,10 @@ void HeroBase::SpellCasted( const Spell & spell )
 
 bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
 {
-    Spell spell = art.GetSpell();
+    const Spell spell = art.GetSpell();
 
     if ( spell.isValid() && CanCastSpell( spell ) ) {
-        int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
+        const int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
         return ( ( 3 < spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
                  || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
@@ -469,7 +475,7 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
 
 bool HeroBase::CanTeachSpell( const Spell & spell ) const
 {
-    int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
+    const int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
 
     return ( ( 4 == spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
              || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
@@ -477,7 +483,7 @@ bool HeroBase::CanTeachSpell( const Spell & spell ) const
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
 {
-    int wisdom = GetLevelSkill( Skill::Secondary::WISDOM );
+    const int wisdom = GetLevelSkill( Skill::Secondary::WISDOM );
 
     return ( ( 4 < spell.Level() && Skill::Level::EXPERT == wisdom ) || ( 4 == spell.Level() && Skill::Level::ADVANCED <= wisdom )
              || ( 3 == spell.Level() && Skill::Level::BASIC <= wisdom ) || 3 > spell.Level() );
@@ -485,7 +491,7 @@ bool HeroBase::CanLearnSpell( const Spell & spell ) const
 
 void HeroBase::TranscribeScroll( const Artifact & art )
 {
-    Spell spell = art.GetSpell();
+    const Spell spell = art.GetSpell();
 
     if ( spell.isValid() ) {
         // add spell

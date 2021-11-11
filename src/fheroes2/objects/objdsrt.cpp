@@ -21,12 +21,20 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
 #include "objdsrt.h"
+#include "tools.h"
 
-int ObjDsrt::GetPassable( u32 index )
+namespace
+{
+    const std::bitset<256> objDsrtShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 46, 47, 50, 52, 54, 55, 56, 57, 58, 59, 60, 71, 75, 77, 80, 86, 103, 115, 118 } );
+}
+
+int ObjDsrt::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {61, 89, 90, 91, 92, 93, 125, 126};
     const u8 restricted[] = {3,  6,  9,  12, 14, 15, 17, 18, 20, 21, 22, 24, 26, 28,  30,  31,  32,  34,  36,  39,  40,  42, 45,
@@ -45,10 +53,9 @@ bool ObjDsrt::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjDsrt::isShadow( u32 index )
+bool ObjDsrt::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 46, 47, 50, 52, 54, 71, 75, 77, 80, 86, 103, 115, 118};
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    return objDsrtShadowBitset[index];
 }
 
 int ObjDsrt::GetActionObject( u32 index )

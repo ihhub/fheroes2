@@ -27,9 +27,9 @@
 #include "agg.h"
 #include "audio.h"
 #include "bin_info.h"
+#include "core.h"
 #include "cursor.h"
 #include "embedded_image.h"
-#include "engine.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
@@ -106,65 +106,13 @@ namespace
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
     }
-}
 
-#if defined( _MSC_VER )
-#undef main
-#endif
-
-int main( int argc, char ** argv )
-{
-    InitHardware();
-    Logging::InitLog();
-
-    DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
-
-    Settings & conf = Settings::Get();
-    conf.SetProgramPath( argv[0] );
-
-    InitConfigDir();
-    InitDataDir();
-    ReadConfigs();
-
-    // getopt
+    class DisplayInitializer
     {
-        int opt;
-        while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
-            switch ( opt ) {
-#ifndef BUILD_RELEASE
-            case 'd':
-                conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
-                break;
-#endif
-            case '?':
-            case 'h':
-                return PrintHelp( argv[0] );
-
-            default:
-                break;
-            }
-    }
-
-    u32 subsystem = INIT_VIDEO | INIT_AUDIO;
-
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
-    subsystem |= INIT_GAMECONTROLLER;
-#endif
-
-    if ( SDL::Init( subsystem ) ) {
-        try
+    public:
+        DisplayInitializer()
         {
-            std::atexit( SDL::Quit );
-
-            conf.setGameLanguage( conf.getGameLanguage() );
-
-            if ( Audio::isValid() ) {
-                Mixer::SetChannels( 16 );
-                Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
-
-                Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-                Music::SetFadeIn( 900 );
-            }
+            const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
@@ -185,41 +133,102 @@ int main( int argc, char ** argv )
 
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
-
-            DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
-
-            // read data dir
-            if ( !AGG::Init() ) {
-                fheroes2::Display::instance().release();
-                return EXIT_FAILURE;
-            }
-
-            atexit( &AGG::Quit );
-
-            // load BIN data
-            Bin_Info::InitBinInfo();
-
-            // init game data
-            Game::Init();
-
-            if ( conf.isShowIntro() ) {
-                fheroes2::showTeamInfo();
-
-                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-            }
-
-            // init cursor
-            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-            Game::mainGameLoop( conf.isFirstGameRun() );
         }
-        catch ( const std::exception & ex ) {
-            ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
+
+        DisplayInitializer( const DisplayInitializer & ) = delete;
+        DisplayInitializer & operator=( const DisplayInitializer & ) = delete;
+
+        ~DisplayInitializer()
+        {
+            fheroes2::Display::instance().release();
         }
+    };
+}
+
+#if defined( _MSC_VER )
+#undef main
+#endif
+
+int main( int argc, char ** argv )
+{
+    try {
+        const fheroes2::HardwareInitializer hardwareInitializer;
+        Logging::InitLog();
+
+        DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
+
+        Settings & conf = Settings::Get();
+        conf.SetProgramPath( argv[0] );
+
+        InitConfigDir();
+        InitDataDir();
+        ReadConfigs();
+
+        // getopt
+        {
+            int opt;
+            while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
+                switch ( opt ) {
+#ifndef BUILD_RELEASE
+                case 'd':
+                    conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
+                    break;
+#endif
+                case '?':
+                case 'h':
+                    return PrintHelp( argv[0] );
+
+                default:
+                    break;
+                }
+        }
+
+        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
+                                                                          fheroes2::SystemInitializationComponent::Video };
+
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+        coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
+#endif
+
+        const fheroes2::CoreInitializer coreInitializer( coreComponents );
+
+        if ( Audio::isValid() ) {
+            Mixer::SetChannels( 16 );
+            Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+
+            Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
+            Music::SetFadeIn( 900 );
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+
+        const DisplayInitializer displayInitializer;
+
+        const AGG::AGGInitializer aggInitializer;
+
+        // load BIN data
+        Bin_Info::InitBinInfo();
+
+        // init game data
+        Game::Init();
+
+        conf.setGameLanguage( conf.getGameLanguage() );
+
+        if ( conf.isShowIntro() ) {
+            fheroes2::showTeamInfo();
+
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+        }
+
+        // init cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+        Game::mainGameLoop( conf.isFirstGameRun() );
     }
-
-    fheroes2::Display::instance().release();
-    CloseHardware();
+    catch ( const std::exception & ex ) {
+        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

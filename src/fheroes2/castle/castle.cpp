@@ -28,6 +28,7 @@
 #include "battle_board.h"
 #include "battle_tower.h"
 #include "castle.h"
+#include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
@@ -532,7 +533,7 @@ void Castle::ActionNewWeek( void )
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
-    if ( world.GetWeekType().GetType() != Week::PLAGUE ) {
+    if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
         const u32 dwellings1[] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
         u32 * dw = nullptr;
 
@@ -560,7 +561,7 @@ void Castle::ActionNewWeek( void )
             }
 
         // Week Of
-        if ( world.GetWeekType().GetType() == Week::MONSTERS && !world.BeginMonth() ) {
+        if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
             const u32 dwellings2[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
                                        DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
 
@@ -587,14 +588,13 @@ void Castle::ActionNewWeek( void )
 void Castle::ActionNewMonth( void )
 {
     // population halved
-    if ( world.GetWeekType().GetType() == Week::PLAGUE ) {
+    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
         for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )
-            if ( dwelling[ii] )
-                dwelling[ii] /= 2;
+            dwelling[ii] /= 2;
     }
     else
         // Month Of
-        if ( world.GetWeekType().GetType() == Week::MONSTERS ) {
+        if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
         const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
                                   DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
         u32 * dw = nullptr;
@@ -661,241 +661,12 @@ bool Castle::isFortificationBuild() const
 
 const char * Castle::GetStringBuilding( u32 build, int race )
 {
-    const char * str_wel2[] = { _( "Farm" ), _( "Garbage Heap" ), _( "Crystal Garden" ), _( "Waterfall" ), _( "Orchard" ), _( "Skull Pile" ) };
-
-    const char * str_spec[] = { _( "Fortifications" ), _( "Coliseum" ), _( "Rainbow" ), _( "Dungeon" ), _( "Library" ), _( "Storm" ) };
-
-    const char * str_dwelling[] = { _( "Thatched Hut" ),   _( "Hut" ),       _( "Treehouse" ),     _( "Cave" ),        _( "Habitat" ),      _( "Excavation" ),
-                                    _( "Archery Range" ),  _( "Stick Hut" ), _( "Cottage" ),       _( "Crypt" ),       _( "Pen" ),          _( "Graveyard" ),
-                                    _( "Blacksmith" ),     _( "Den" ),       _( "Archery Range" ), _( "Nest" ),        _( "Foundry" ),      _( "Pyramid" ),
-                                    _( "Armory" ),         _( "Adobe" ),     _( "Stonehenge" ),    _( "Maze" ),        _( "Cliff Nest" ),   _( "Mansion" ),
-                                    _( "Jousting Arena" ), _( "Bridge" ),    _( "Fenced Meadow" ), _( "Swamp" ),       _( "Ivory Tower" ),  _( "Mausoleum" ),
-                                    _( "Cathedral" ),      _( "Pyramid" ),   _( "Red Tower" ),     _( "Green Tower" ), _( "Cloud Castle" ), _( "Laboratory" ) };
-
-    const char * str_upgrade[] = { _( "Upg. Archery Range" ),
-                                   _( "Upg. Stick Hut" ),
-                                   _( "Upg. Cottage" ),
-                                   _( "Crypt" ),
-                                   _( "Pen" ),
-                                   _( "Upg. Graveyard" ),
-                                   _( "Upg. Blacksmith" ),
-                                   _( "Den" ),
-                                   _( "Upg. Archery Range" ),
-                                   _( "Nest" ),
-                                   _( "Upg. Foundry" ),
-                                   _( "Upg. Pyramid" ),
-                                   _( "Upg. Armory" ),
-                                   _( "Upg. Adobe" ),
-                                   _( "Upg. Stonehenge" ),
-                                   _( "Upg. Maze" ),
-                                   _( "Cliff Nest" ),
-                                   _( "Upg. Mansion" ),
-                                   _( "Upg. Jousting Arena" ),
-                                   _( "Upg. Bridge" ),
-                                   _( "Fenced Meadow" ),
-                                   _( "Swamp" ),
-                                   _( "Upg. Ivory Tower" ),
-                                   _( "Upg. Mausoleum" ),
-                                   _( "Upg. Cathedral" ),
-                                   _( "Pyramid" ),
-                                   _( "Red Tower" ),
-                                   _( "Red Tower" ),
-                                   _( "Upg. Cloud Castle" ),
-                                   _( "Laboratory" ),
-                                   "",
-                                   "",
-                                   "",
-                                   _( "Black Tower" ),
-                                   "",
-                                   "" };
-
-    u32 offset = 0;
-
-    switch ( race ) {
-    case Race::KNGT:
-        offset = 0;
-        break;
-    case Race::BARB:
-        offset = 1;
-        break;
-    case Race::SORC:
-        offset = 2;
-        break;
-    case Race::WRLK:
-        offset = 3;
-        break;
-    case Race::WZRD:
-        offset = 4;
-        break;
-    case Race::NECR:
-        offset = 5;
-        break;
-    default:
-        break;
-    }
-
-    switch ( build ) {
-    case BUILD_SHRINE:
-        return _( "Shrine" );
-    case BUILD_THIEVESGUILD:
-        return _( "Thieves' Guild" );
-    case BUILD_TAVERN:
-        return _( "Tavern" );
-    case BUILD_SHIPYARD:
-        return _( "Shipyard" );
-    case BUILD_WELL:
-        return _( "Well" );
-    case BUILD_STATUE:
-        return _( "Statue" );
-    case BUILD_LEFTTURRET:
-        return _( "Left Turret" );
-    case BUILD_RIGHTTURRET:
-        return _( "Right Turret" );
-    case BUILD_MARKETPLACE:
-        return _( "Marketplace" );
-    case BUILD_MOAT:
-        return _( "Moat" );
-    case BUILD_CASTLE:
-        return _( "Castle" );
-    case BUILD_TENT:
-        return _( "Tent" );
-    case BUILD_CAPTAIN:
-        return _( "Captain's Quarters" );
-    case BUILD_MAGEGUILD1:
-        return _( "Mage Guild, Level 1" );
-    case BUILD_MAGEGUILD2:
-        return _( "Mage Guild, Level 2" );
-    case BUILD_MAGEGUILD3:
-        return _( "Mage Guild, Level 3" );
-    case BUILD_MAGEGUILD4:
-        return _( "Mage Guild, Level 4" );
-    case BUILD_MAGEGUILD5:
-        return _( "Mage Guild, Level 5" );
-
-    case BUILD_SPEC:
-        return str_spec[offset];
-    case BUILD_WEL2:
-        return str_wel2[offset];
-
-    case DWELLING_MONSTER1:
-        return str_dwelling[offset];
-    case DWELLING_MONSTER2:
-        return str_dwelling[6 + offset];
-    case DWELLING_MONSTER3:
-        return str_dwelling[12 + offset];
-    case DWELLING_MONSTER4:
-        return str_dwelling[18 + offset];
-    case DWELLING_MONSTER5:
-        return str_dwelling[24 + offset];
-    case DWELLING_MONSTER6:
-        return str_dwelling[30 + offset];
-
-    case DWELLING_UPGRADE2:
-        return str_upgrade[offset];
-    case DWELLING_UPGRADE3:
-        return str_upgrade[6 + offset];
-    case DWELLING_UPGRADE4:
-        return str_upgrade[12 + offset];
-    case DWELLING_UPGRADE5:
-        return str_upgrade[18 + offset];
-    case DWELLING_UPGRADE6:
-        return str_upgrade[24 + offset];
-    case DWELLING_UPGRADE7:
-        return str_upgrade[30 + offset];
-
-    default:
-        break;
-    }
-
-    return "Unknown";
+    return fheroes2::getBuildingName( race, static_cast<building_t>( build ) );
 }
 
 const char * Castle::GetDescriptionBuilding( u32 build, int race )
 {
-    const char * desc_wel2[] = { _( "The Farm increases production of Peasants by %{count} per week." ),
-                                 _( "The Garbage Heap increases production of Goblins by %{count} per week." ),
-                                 _( "The Crystal Garden increases production of Sprites by %{count} per week." ),
-                                 _( "The Waterfall increases production of Centaurs by %{count} per week." ),
-                                 _( "The Orchard increases production of Halflings by %{count} per week." ),
-                                 _( "The Skull Pile increases production of Skeletons by %{count} per week." ) };
-
-    const char * desc_spec[] = { _( "The Fortifications increase the toughness of the walls, increasing the number of turns it takes to knock them down." ),
-                                 _( "The Coliseum provides inspiring spectacles to defending troops, raising their morale by two during combat." ),
-                                 _( "The Rainbow increases the luck of the defending units by two." ),
-                                 _( "The Dungeon increases the income of the town by %{count} / day." ),
-                                 _( "The Library increases the number of spells in the Guild by one for each level of the guild." ),
-                                 _( "The Storm adds +2 to the power of spells of a defending spell caster." ) };
-
-    u32 offset = 0;
-
-    switch ( race ) {
-    case Race::KNGT:
-        offset = 0;
-        break;
-    case Race::BARB:
-        offset = 1;
-        break;
-    case Race::SORC:
-        offset = 2;
-        break;
-    case Race::WRLK:
-        offset = 3;
-        break;
-    case Race::WZRD:
-        offset = 4;
-        break;
-    case Race::NECR:
-        offset = 5;
-        break;
-    default:
-        break;
-    }
-
-    switch ( build ) {
-    case BUILD_SHRINE:
-        return _( "The Shrine increases the necromancy skill of all your necromancers by 10 percent." );
-    case BUILD_THIEVESGUILD:
-        return _(
-            "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information." );
-    case BUILD_TAVERN:
-        return _( "The Tavern increases morale for troops defending the castle." );
-    case BUILD_SHIPYARD:
-        return _( "The Shipyard allows ships to be built." );
-    case BUILD_WELL:
-        return _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." );
-    case BUILD_STATUE:
-        return _( "The Statue increases your town's income by %{count} per day." );
-    case BUILD_LEFTTURRET:
-        return _( "The Left Turret provides extra firepower during castle combat." );
-    case BUILD_RIGHTTURRET:
-        return _( "The Right Turret provides extra firepower during castle combat." );
-    case BUILD_MARKETPLACE:
-        return _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." );
-    case BUILD_MOAT:
-        return _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." );
-    case BUILD_CASTLE:
-        return _( "The Castle improves town defense and increases income to %{count} gold per day." );
-    case BUILD_TENT:
-        return _( "The Tent provides workers to build a castle, provided the materials and the gold are available." );
-    case BUILD_CAPTAIN:
-        return _( "The Captain's Quarters provides a captain to assist in the castle's defense when no hero is present." );
-    case BUILD_MAGEGUILD1:
-    case BUILD_MAGEGUILD2:
-    case BUILD_MAGEGUILD3:
-    case BUILD_MAGEGUILD4:
-    case BUILD_MAGEGUILD5:
-        return _( "The Mage Guild allows heroes to learn spells and replenish their spell points." );
-
-    case BUILD_SPEC:
-        return desc_spec[offset];
-    case BUILD_WEL2:
-        return desc_wel2[offset];
-
-    default:
-        break;
-    }
-
-    return "Unknown";
+    return fheroes2::getBuildingDescription( race, static_cast<building_t>( build ) );
 }
 
 bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
@@ -1196,7 +967,7 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
             break;
 
         case Race::SORC:
-            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
             requirement |= BUILD_MAGEGUILD1;
             break;
 
@@ -1345,9 +1116,6 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
     case DWELLING_UPGRADE5:
         switch ( race ) {
         case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
             requirement |= DWELLING_MONSTER5;
             break;
 
@@ -1373,9 +1141,6 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
     case DWELLING_UPGRADE6:
         switch ( race ) {
         case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
             requirement |= DWELLING_MONSTER6;
             break;
 
@@ -2417,7 +2182,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonus if there are any troops defending it
     if ( isCastle() && totalStrength > 1 ) {
-        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ) );
+        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
 
         totalStrength += towerStr;
@@ -2853,17 +2618,4 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
     }
 
     return res;
-}
-
-std::string Castle::buildingStatusMessage( const uint32_t buildingId ) const
-{
-    // Check if building is a monster dwelling or its upgraded version
-    if ( ( buildingId & DWELLING_MONSTERS ) == 0 && ( buildingId & DWELLING_UPGRADES ) == 0 ) {
-        return GetStringBuilding( buildingId );
-    }
-
-    const Monster monster( race, buildingId );
-    std::string msgStatus = _( "Recruit %{name}" );
-    StringReplace( msgStatus, "%{name}", monster.GetMultiName() );
-    return msgStatus;
 }

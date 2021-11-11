@@ -73,17 +73,18 @@ namespace HighScore
             , _highScoresCampaign()
         {}
 
-        bool Load( const std::string & fileName );
-        bool Save( const std::string & fileName ) const;
-        void RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
-        void RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days );
+        bool load( const std::string & fileName );
+        bool save( const std::string & fileName ) const;
+        void registerScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
+        void registerScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days );
+        void populateDefaultHighScoresStandard();
 
-        const std::vector<HighScoreStandardData> & GetHighScoresStandard() const
+        const std::vector<HighScoreStandardData> & getHighScoresStandard() const
         {
             return _highScoresStandard;
         }
 
-        const std::vector<HighScoreCampaignData> & GetHighScoresCampaign() const
+        const std::vector<HighScoreCampaignData> & getHighScoresCampaign() const
         {
             return _highScoresCampaign;
         }

@@ -38,7 +38,15 @@ namespace Rand
     std::mt19937 & CurrentThreadRandomDevice();
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
+
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
+
+    template <typename T, typename std::enable_if<std::is_enum<T>::value>::type * = nullptr>
+    T GetWithSeed( const T from, const T to, const uint32_t seed )
+    {
+        return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );
+    }
+
     uint32_t GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen );
 
     template <typename T>
@@ -108,7 +116,7 @@ namespace Rand
     class DeterministicRandomGenerator
     {
     public:
-        DeterministicRandomGenerator( const size_t initialSeed );
+        explicit DeterministicRandomGenerator( const size_t initialSeed );
 
         // prevent accidental copies
         DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;

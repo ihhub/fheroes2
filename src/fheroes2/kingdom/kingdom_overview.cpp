@@ -677,7 +677,6 @@ void Kingdom::openOverviewDialog()
         buttonCastle.press();
         buttonHeroes.release();
 
-        assert( _topItemInKingdomView >= 0 );
         listCastles.setTopVisibleItem( _topItemInKingdomView );
 
         listStats = &listCastles;
@@ -687,7 +686,6 @@ void Kingdom::openOverviewDialog()
         buttonHeroes.press();
         buttonCastle.release();
 
-        assert( _topItemInKingdomView >= 0 );
         listHeroes.setTopVisibleItem( _topItemInKingdomView );
 
         listStats = &listHeroes;
@@ -723,7 +721,7 @@ void Kingdom::openOverviewDialog()
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
         // switch view: heroes/castle

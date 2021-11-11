@@ -53,13 +53,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
+
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
-        LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Point & mousePos = le.GetMouseCursor();
+        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
         if ( gameArea.GetROI() & mousePos ) {
             const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
             Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
@@ -213,9 +213,13 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
             fheroes2::Display & display = fheroes2::Display::instance();
             fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
+            AGG::ResetMixer();
+
             const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
             if ( returnMode == fheroes2::GameMode::CANCEL ) {
                 saver.restore();
+
+                Game::restoreSoundsForCurrentFocus();
             }
             else {
                 saver.reset();
@@ -387,7 +391,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction() const
+fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode ) const
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -395,12 +399,21 @@ void Interface::Basic::EventDefaultAction() const
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
+
+            // If a hero completed an action we must verify the condition for the scenario.
+            if ( hero->isAction() ) {
+                hero->ResetAction();
+                // check if the game is over after the hero's action
+                return GameOver::Result::Get().LocalCheckGameOver();
+            }
         }
     }
     else if ( GetFocusCastle() ) {
         // 2. town dialog
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
+
+    return gameMode;
 }
 
 void Interface::Basic::EventOpenFocus( void ) const

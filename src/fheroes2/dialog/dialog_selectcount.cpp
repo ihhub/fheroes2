@@ -102,7 +102,7 @@ public:
         return vcur;
     }
 
-    void Redraw( void )
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & sprite_edit = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );

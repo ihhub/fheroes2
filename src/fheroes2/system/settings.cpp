@@ -35,6 +35,7 @@
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_language.h"
 #include "version.h"
 
 #define STRINGIFY( DEF ) #DEF
@@ -211,8 +212,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "expansion" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
-            if ( isPriceOfLoyaltySupported() )
-                _musicType = MUSIC_MIDI_EXPANSION;
+            _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
@@ -474,6 +474,8 @@ const std::string & Settings::getGameLanguage() const
 
 bool Settings::setGameLanguage( const std::string & language )
 {
+    fheroes2::updateAlphabet( language );
+
     Translation::setStripContext( '|' );
 
     _gameLanguage = language;

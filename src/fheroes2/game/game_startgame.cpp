@@ -81,7 +81,7 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    AGG::ResetMixer();
+    AGG::ResetMixer( true );
 
     Interface::Basic::Get().Reset();
 
@@ -139,26 +139,30 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
     if ( it != myCastles.end() ) {
-        int result = Dialog::ZERO;
-        while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false );
+        Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
 
-            if ( it != myCastles.end() ) {
-                if ( Dialog::PREV == result ) {
-                    if ( it == myCastles.begin() )
-                        it = myCastles.end();
-                    --it;
-                }
-                else if ( Dialog::NEXT == result ) {
-                    ++it;
-                    if ( it == myCastles.end() )
-                        it = myCastles.begin();
-                }
+        while ( result != Castle::CastleDialogReturnValue::Close ) {
+            assert( it != myCastles.end() );
+
+            const bool openConstructionWindow
+                = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+
+            result = ( *it )->OpenDialog( false, openConstructionWindow );
+
+            if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+                if ( it == myCastles.begin() )
+                    it = myCastles.end();
+                --it;
+            }
+            else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+                ++it;
+                if ( it == myCastles.end() )
+                    it = myCastles.begin();
             }
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true );
+        castle.OpenDialog( true, false );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -182,33 +186,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     }
     else {
         // If we don't update focus, we still have to restore environment sounds and terrain music theme
-        AGG::ResetMixer();
-
-        switch ( Interface::GetFocusType() ) {
-        case GameFocus::HEROES: {
-            const Heroes * focusedHero = Interface::GetFocusHeroes();
-            assert( focusedHero != nullptr );
-
-            const int heroIndexPos = focusedHero->GetIndex();
-            if ( heroIndexPos >= 0 ) {
-                Game::EnvironmentSoundMixer();
-                AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
-            }
-            break;
-        }
-
-        case GameFocus::CASTLE: {
-            const Castle * focusedCastle = Interface::GetFocusCastle();
-            assert( focusedCastle != nullptr );
-
-            Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
-            break;
-        }
-
-        default:
-            break;
-        }
+        restoreSoundsForCurrentFocus();
     }
 
     basicInterface.RedrawFocus();
@@ -300,7 +278,7 @@ void ShowNewWeekDialog( void )
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
-    if ( week.GetType() == Week::MONSTERS ) {
+    if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
         const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
@@ -313,11 +291,11 @@ void ShowNewWeekDialog( void )
                 message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n";
+            message += "\n \n";
         }
     }
 
-    if ( week.GetType() == Week::PLAGUE )
+    if ( week.GetType() == WeekName::PLAGUE )
         message += _( " All populations are halved." );
     else
         message += _( " All dwellings increase population." );
@@ -460,7 +438,10 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
                 else {
-                    return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MOVE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                    const bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+
+                    return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
+                                                   from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 }
             }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
@@ -902,7 +883,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULTACTION ) )
-                EventDefaultAction();
+                res = EventDefaultAction( res );
             // open focus
             else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
                 EventOpenFocus();

@@ -122,7 +122,7 @@ namespace HighScore
         return _player == other._player && _campaignName == other._campaignName && _days == other._days;
     }
 
-    bool HighScoreDataContainer::Load( const std::string & fileName )
+    bool HighScoreDataContainer::load( const std::string & fileName )
     {
         ZStreamFile hdata;
         if ( !hdata.read( fileName ) )
@@ -145,7 +145,7 @@ namespace HighScore
         return false;
     }
 
-    bool HighScoreDataContainer::Save( const std::string & fileName ) const
+    bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
         ZStreamFile hdata;
         hdata.setbigendian( true );
@@ -154,7 +154,7 @@ namespace HighScore
         return !hdata.fail() && hdata.write( fileName );
     }
 
-    void HighScoreDataContainer::RegisterScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
+    void HighScoreDataContainer::registerScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
     {
         HighScoreStandardData highScore;
 
@@ -167,7 +167,7 @@ namespace HighScore
         TrySaveScore( _highScoresStandard, highScore, RatingSort );
     }
 
-    void HighScoreDataContainer::RegisterScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days )
+    void HighScoreDataContainer::registerScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days )
     {
         HighScoreCampaignData highScore;
 
@@ -282,5 +282,19 @@ namespace HighScore
         }
 
         return Monster( monster );
+    }
+
+    void HighScoreDataContainer::populateDefaultHighScoresStandard()
+    {
+        registerScoreStandard( "Lord Kilburn", "Beltway", 70, 150 );
+        registerScoreStandard( "Tsabu", "Deathgate", 80, 140 );
+        registerScoreStandard( "Sir Galant", "Enroth", 90, 130 );
+        registerScoreStandard( "Thundax", "Lost Continent", 100, 120 );
+        registerScoreStandard( "Lord Haart", "Mountain King", 120, 110 );
+        registerScoreStandard( "Ariel", "Pandemonium", 140, 100 );
+        registerScoreStandard( "Rebecca", "Terra Firma", 160, 90 );
+        registerScoreStandard( "Sandro", "The Clearing", 180, 80 );
+        registerScoreStandard( "Crodo", "Vikings!", 200, 70 );
+        registerScoreStandard( "Barock", "Wastelands", 240, 60 );
     }
 }

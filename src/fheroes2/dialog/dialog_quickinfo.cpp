@@ -345,6 +345,16 @@ namespace
         return str;
     }
 
+    std::string showUniqueObjectVisitInfo( const MP2::MapObjectType objectType, const Kingdom & kingdom )
+    {
+        std::string str = MP2::StringObject( objectType );
+
+        str.append( "\n \n" );
+        str.append( kingdom.isVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+
+        return str;
+    }
+
     std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = BarrierColor::String( tile.QuantityColor() );
@@ -463,47 +473,10 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
 
     if ( objectType != correctedObjectType && MP2::isActionObject( correctedObjectType ) && !ignoreHeroOnTile ) {
-        // This is non-main tile of an action object. We have to find the main tile.
-        // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
-        const int32_t radiusOfSearch = 3;
-
-        // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
-        std::vector<uint32_t> uids;
-        const Maps::Addons & level2Addons = tile.getLevel2Addons();
-        const Maps::Addons & level1Addons = tile.getLevel1Addons();
-
-        for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
-            if ( iter->uniq != 0 ) {
-                uids.emplace_back( iter->uniq );
-            }
-        }
-
-        if ( tile.GetObjectUID() != 0 ) {
-            uids.emplace_back( tile.GetObjectUID() );
-        }
-
-        for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
-            if ( iter->uniq != 0 ) {
-                uids.emplace_back( iter->uniq );
-            }
-        }
-
-        const int32_t tileIndex = tile.GetIndex();
-        const int32_t mapWidth = world.w();
-
-        assert( correctedObjectType > objectType );
-
-        for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
-            for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
-                const int32_t index = tileIndex + y * mapWidth + x;
-                if ( Maps::isValidAbsIndex( index ) ) {
-                    const Maps::Tiles & foundTile = world.GetTiles( index );
-                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
-                        QuickInfo( foundTile, true );
-                        return;
-                    }
-                }
-            }
+        const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+        if ( mainTileIndex != -1 ) {
+            QuickInfo( world.GetTiles( mainTileIndex ), true );
+            return;
         }
     }
 
@@ -566,7 +539,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_LEANTO:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
-
+        case MP2::OBJ_MAGELLANMAPS:
+            name_object = showUniqueObjectVisitInfo( objectType, kingdom );
+            break;
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:

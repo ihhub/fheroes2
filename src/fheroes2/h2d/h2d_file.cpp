@@ -21,6 +21,7 @@
 #include "h2d_file.h"
 #include "image.h"
 
+#include <cassert>
 #include <cstring>
 
 namespace
@@ -93,6 +94,17 @@ namespace fheroes2
         return _fileStream.getRaw( it->second.second );
     }
 
+    std::set<std::string> H2RReader::getAllFileNames() const
+    {
+        std::set<std::string> names;
+
+        for ( const auto & value : _fileNameAndOffset ) {
+            names.insert( value.first );
+        }
+
+        return names;
+    }
+
     bool H2Writer::write( const std::string & path ) const
     {
         if ( _fileData.empty() ) {
@@ -144,6 +156,19 @@ namespace fheroes2
         return result.second;
     }
 
+    bool H2Writer::add( H2RReader & reader )
+    {
+        const std::set<std::string> names = reader.getAllFileNames();
+
+        for ( const std::string & name : names ) {
+            if ( !add( name, reader.getFile( name ) ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image )
     {
         const std::vector<uint8_t> & data = reader.getFile( name );
@@ -169,5 +194,22 @@ namespace fheroes2
         image.setPosition( x, y );
 
         return true;
+    }
+
+    bool writeImageToH2D( H2Writer & writer, const std::string & name, const Sprite & image )
+    {
+        assert( !image.empty() );
+
+        StreamBuf stream;
+        stream.putLE32( static_cast<uint32_t>( image.width() ) );
+        stream.putLE32( static_cast<uint32_t>( image.height() ) );
+        stream.putLE32( static_cast<uint32_t>( image.x() ) );
+        stream.putLE32( static_cast<uint32_t>( image.y() ) );
+
+        const size_t imageSize = static_cast<size_t>( image.width() ) * static_cast<size_t>( image.height() );
+        stream.putRaw( reinterpret_cast<const char *>( image.image() ), imageSize );
+        stream.putRaw( reinterpret_cast<const char *>( image.transform() ), imageSize );
+
+        return writer.add( name, stream.getRaw() );
     }
 }

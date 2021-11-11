@@ -26,6 +26,7 @@
 #include "agg_image.h"
 #include "castle.h"
 #include "castle_building_info.h"
+#include "castle_ui.h"
 #include "game.h"
 #include "game_delays.h"
 #include "icn.h"
@@ -34,11 +35,8 @@
 #include "text.h"
 #include "tools.h"
 
-void CastleRedrawTownName( const Castle &, const fheroes2::Point & );
 void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
-                                  const CastleDialog::FadeBuilding & alphaBuilding );
-fheroes2::Rect CastleGetCoordBuilding( int, building_t, const fheroes2::Point & );
-void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
+                                  const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex );
 fheroes2::Rect CastleGetMaxArea( const Castle &, const fheroes2::Point & );
 
 namespace
@@ -130,14 +128,10 @@ void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, 
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
 {
-    std::vector<building_t> ordersBuildings;
+    const std::vector<building_t> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castle.GetRace(), Settings::Get().CurrentFileInfo()._version );
 
-    ordersBuildings.reserve( 25 );
-
-    CastlePackOrdersBuildings( castle, ordersBuildings );
-
-    for ( auto it = ordersBuildings.cbegin(); it != ordersBuildings.cend(); ++it ) {
-        push_back( builds_t( *it, CastleGetCoordBuilding( castle.GetRace(), *it, top ) ) );
+    for ( const building_t buildingId : ordersBuildings ) {
+        emplace_back( buildingId, fheroes2::getCastleBuildingArea( castle.GetRace(), buildingId ) + top );
     }
 }
 
@@ -170,29 +164,15 @@ void CastleDialog::FadeBuilding::StopFadeBuilding()
 }
 
 void CastleDialog::RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders,
-                                      const CastleDialog::FadeBuilding & alphaBuilding )
+                                      const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex )
 {
-    CastleRedrawCurrentBuilding( castle, dst_pt, orders, alphaBuilding );
-    CastleRedrawTownName( castle, dst_pt );
-}
-
-void CastleRedrawTownName( const Castle & castle, const fheroes2::Point & dst )
-{
-    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    fheroes2::Point dst_pt( dst.x + 320 - background.width() / 2, dst.y + 248 );
-    fheroes2::Blit( background, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
-
-    Text text( castle.GetName(), Font::SMALL );
-    dst_pt.x = dst.x + 320 - text.w() / 2;
-    dst_pt.y = dst.y + 248;
-    text.Blit( dst_pt );
+    CastleRedrawCurrentBuilding( castle, dst_pt, orders, alphaBuilding, animationIndex );
+    fheroes2::drawCastleName( castle, fheroes2::Display::instance(), dst_pt );
 }
 
 void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
-                                  const CastleDialog::FadeBuilding & fadeBuilding )
+                                  const CastleDialog::FadeBuilding & fadeBuilding, const uint32_t animationIndex )
 {
-    const uint32_t frame = Game::CastleAnimationFrame();
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     int townIcnId = -1;
@@ -223,12 +203,13 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
 
     if ( townIcnId != -1 ) {
+        // We shouldn't Blit this image. This is a background image so a normal Copy is enough.
         const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
         fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
     }
 
     if ( Race::BARB == castle.GetRace() ) {
-        const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + frame % 5 );
+        const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + animationIndex % 5 );
         fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
     }
 
@@ -240,27 +221,27 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
         switch ( castle.GetRace() ) {
         case Race::KNGT:
             sprite50 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 1 + frame % 5 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 1 + animationIndex % 5 );
             break;
         case Race::BARB:
             sprite50 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 1 + frame % 5 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 1 + animationIndex % 5 );
             break;
         case Race::SORC:
             sprite50 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 1 + frame % 5 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 1 + animationIndex % 5 );
             break;
         case Race::NECR:
             sprite50 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 1 + frame % 5 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 1 + animationIndex % 5 );
             break;
         case Race::WRLK:
             sprite50 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 1 + frame % 5 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 1 + animationIndex % 5 );
             break;
         case Race::WZRD:
             sprite50 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 1 + frame % 5 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 1 + animationIndex % 5 );
             break;
         default:
             break;
@@ -278,8 +259,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
         for ( auto it = orders.cbegin(); it != orders.cend(); ++it ) {
             const uint32_t currentBuildId = it->id;
             if ( castle.isBuild( currentBuildId ) ) {
-                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
-                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, animationIndex );
+                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, animationIndex );
                 if ( isBuildingConnectionNeeded( castle, currentBuildId, false ) ) {
                     redrawBuildingConnection( castle, dst_pt, currentBuildId );
                 }
@@ -292,12 +273,12 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
             const uint32_t currentBuildId = it->id;
 
             if ( castle.isBuild( currentBuildId ) ) {
-                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, animationIndex );
                 if ( currentBuildId == BUILD_SHIPYARD && fadeBuilding.GetBuild() == BUILD_SHIPYARD ) {
-                    CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
+                    CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, animationIndex, fadeBuilding.GetAlpha() );
                 }
                 else {
-                    CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                    CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, animationIndex );
                 }
                 if ( isBuildingConnectionNeeded( castle, currentBuildId, false ) ) {
                     redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuild(), fadeBuilding.GetAlpha() );
@@ -305,8 +286,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
                 }
             }
             else if ( currentBuildId == fadeBuilding.GetBuild() ) {
-                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
-                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, animationIndex, fadeBuilding.GetAlpha() );
+                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, animationIndex, fadeBuilding.GetAlpha() );
                 if ( isBuildingConnectionNeeded( castle, currentBuildId, true ) ) {
                     redrawBuildingConnection( castle, dst_pt, currentBuildId, fadeBuilding.GetAlpha() );
                 }
@@ -447,207 +428,12 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
         CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
     }
-}
-
-fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const fheroes2::Point & pt )
-{
-    return fheroes2::getCastleBuildingArea( race, building ) + pt;
-}
-
-void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> & ordersBuildings )
-{
-    ordersBuildings.reserve( 30 );
-
-    switch ( castle.GetRace() ) {
-    case Race::KNGT:
-        ordersBuildings.push_back( BUILD_TENT );
-        ordersBuildings.push_back( BUILD_WEL2 );
-        ordersBuildings.push_back( BUILD_CASTLE );
-        ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( BUILD_CAPTAIN );
-        ordersBuildings.push_back( BUILD_LEFTTURRET );
-        ordersBuildings.push_back( BUILD_RIGHTTURRET );
-        ordersBuildings.push_back( BUILD_MOAT );
-        ordersBuildings.push_back( BUILD_MARKETPLACE );
-        ordersBuildings.push_back( DWELLING_MONSTER2 );
-        ordersBuildings.push_back( DWELLING_UPGRADE2 );
-        ordersBuildings.push_back( BUILD_THIEVESGUILD );
-        ordersBuildings.push_back( BUILD_TAVERN );
-        ordersBuildings.push_back( BUILD_MAGEGUILD1 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD2 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD3 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD5 );
-        ordersBuildings.push_back( DWELLING_MONSTER5 );
-        ordersBuildings.push_back( DWELLING_UPGRADE5 );
-        ordersBuildings.push_back( DWELLING_MONSTER6 );
-        ordersBuildings.push_back( DWELLING_UPGRADE6 );
-        ordersBuildings.push_back( DWELLING_MONSTER1 );
-        ordersBuildings.push_back( DWELLING_MONSTER3 );
-        ordersBuildings.push_back( DWELLING_UPGRADE3 );
-        ordersBuildings.push_back( DWELLING_MONSTER4 );
-        ordersBuildings.push_back( DWELLING_UPGRADE4 );
-        ordersBuildings.push_back( BUILD_WELL );
-        ordersBuildings.push_back( BUILD_SHIPYARD );
-        ordersBuildings.push_back( BUILD_STATUE );
-        break;
-    case Race::BARB:
-        ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( BUILD_WEL2 );
-        ordersBuildings.push_back( DWELLING_MONSTER6 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD1 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD2 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD3 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD5 );
-        ordersBuildings.push_back( BUILD_CAPTAIN );
-        ordersBuildings.push_back( BUILD_TENT );
-        ordersBuildings.push_back( BUILD_CASTLE );
-        ordersBuildings.push_back( BUILD_LEFTTURRET );
-        ordersBuildings.push_back( BUILD_RIGHTTURRET );
-        ordersBuildings.push_back( BUILD_MOAT );
-        ordersBuildings.push_back( DWELLING_MONSTER3 );
-        ordersBuildings.push_back( BUILD_THIEVESGUILD );
-        ordersBuildings.push_back( DWELLING_MONSTER1 );
-        ordersBuildings.push_back( BUILD_MARKETPLACE );
-        ordersBuildings.push_back( DWELLING_MONSTER2 );
-        ordersBuildings.push_back( DWELLING_UPGRADE2 );
-        ordersBuildings.push_back( BUILD_TAVERN );
-        ordersBuildings.push_back( DWELLING_MONSTER4 );
-        ordersBuildings.push_back( DWELLING_UPGRADE4 );
-        ordersBuildings.push_back( DWELLING_MONSTER5 );
-        ordersBuildings.push_back( DWELLING_UPGRADE5 );
-        ordersBuildings.push_back( BUILD_WELL );
-        ordersBuildings.push_back( BUILD_STATUE );
-        ordersBuildings.push_back( BUILD_SHIPYARD );
-        break;
-    case Race::SORC:
-        ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( DWELLING_MONSTER6 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD1 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD2 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD3 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD5 );
-        ordersBuildings.push_back( BUILD_CAPTAIN );
-        ordersBuildings.push_back( BUILD_TENT );
-        ordersBuildings.push_back( BUILD_CASTLE );
-        ordersBuildings.push_back( BUILD_LEFTTURRET );
-        ordersBuildings.push_back( BUILD_RIGHTTURRET );
-        ordersBuildings.push_back( BUILD_MOAT );
-        ordersBuildings.push_back( DWELLING_MONSTER3 );
-        ordersBuildings.push_back( DWELLING_UPGRADE3 );
-        ordersBuildings.push_back( BUILD_SHIPYARD );
-        ordersBuildings.push_back( BUILD_MARKETPLACE );
-        ordersBuildings.push_back( DWELLING_MONSTER2 );
-        ordersBuildings.push_back( DWELLING_UPGRADE2 );
-        ordersBuildings.push_back( BUILD_THIEVESGUILD );
-        ordersBuildings.push_back( DWELLING_MONSTER1 );
-        ordersBuildings.push_back( BUILD_TAVERN );
-        ordersBuildings.push_back( BUILD_STATUE );
-        ordersBuildings.push_back( BUILD_WEL2 );
-        ordersBuildings.push_back( DWELLING_MONSTER4 );
-        ordersBuildings.push_back( DWELLING_UPGRADE4 );
-        ordersBuildings.push_back( BUILD_WELL );
-        ordersBuildings.push_back( DWELLING_MONSTER5 );
-        break;
-    case Race::WRLK:
-        ordersBuildings.push_back( DWELLING_MONSTER5 );
-        ordersBuildings.push_back( DWELLING_MONSTER3 );
-        ordersBuildings.push_back( BUILD_TENT );
-        ordersBuildings.push_back( BUILD_CASTLE );
-        ordersBuildings.push_back( BUILD_LEFTTURRET );
-        ordersBuildings.push_back( BUILD_RIGHTTURRET );
-        ordersBuildings.push_back( BUILD_CAPTAIN );
-        ordersBuildings.push_back( BUILD_MOAT );
-        ordersBuildings.push_back( BUILD_SHIPYARD );
-        ordersBuildings.push_back( BUILD_MAGEGUILD1 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD2 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD3 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD5 );
-        ordersBuildings.push_back( BUILD_TAVERN );
-        ordersBuildings.push_back( BUILD_THIEVESGUILD );
-        ordersBuildings.push_back( BUILD_MARKETPLACE );
-        ordersBuildings.push_back( BUILD_STATUE );
-        ordersBuildings.push_back( DWELLING_MONSTER1 );
-        ordersBuildings.push_back( BUILD_WEL2 );
-        ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( DWELLING_MONSTER4 );
-        ordersBuildings.push_back( DWELLING_UPGRADE4 );
-        ordersBuildings.push_back( DWELLING_MONSTER2 );
-        ordersBuildings.push_back( DWELLING_MONSTER6 );
-        ordersBuildings.push_back( DWELLING_UPGRADE6 );
-        ordersBuildings.push_back( DWELLING_UPGRADE7 );
-        ordersBuildings.push_back( BUILD_WELL );
-        break;
-    case Race::WZRD:
-        ordersBuildings.push_back( DWELLING_MONSTER6 );
-        ordersBuildings.push_back( DWELLING_UPGRADE6 );
-        ordersBuildings.push_back( BUILD_TENT );
-        ordersBuildings.push_back( BUILD_CASTLE );
-        ordersBuildings.push_back( BUILD_LEFTTURRET );
-        ordersBuildings.push_back( BUILD_RIGHTTURRET );
-        ordersBuildings.push_back( BUILD_MOAT );
-        ordersBuildings.push_back( BUILD_CAPTAIN );
-        ordersBuildings.push_back( DWELLING_MONSTER2 );
-        ordersBuildings.push_back( BUILD_THIEVESGUILD );
-        ordersBuildings.push_back( BUILD_TAVERN );
-        ordersBuildings.push_back( BUILD_SHIPYARD );
-        ordersBuildings.push_back( BUILD_WELL );
-        ordersBuildings.push_back( DWELLING_MONSTER3 );
-        ordersBuildings.push_back( DWELLING_UPGRADE3 );
-        ordersBuildings.push_back( DWELLING_MONSTER5 );
-        ordersBuildings.push_back( DWELLING_UPGRADE5 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD1 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD2 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD3 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD5 );
-        ordersBuildings.push_back( BUILD_SPEC );
-        ordersBuildings.push_back( BUILD_STATUE );
-        ordersBuildings.push_back( DWELLING_MONSTER1 );
-        ordersBuildings.push_back( DWELLING_MONSTER4 );
-        ordersBuildings.push_back( BUILD_MARKETPLACE );
-        ordersBuildings.push_back( BUILD_WEL2 );
-        break;
-    case Race::NECR:
-        ordersBuildings.push_back( BUILD_SPEC );
-        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
-            ordersBuildings.push_back( BUILD_SHRINE );
-        ordersBuildings.push_back( BUILD_TENT );
-        ordersBuildings.push_back( BUILD_CASTLE );
-        ordersBuildings.push_back( BUILD_LEFTTURRET );
-        ordersBuildings.push_back( BUILD_RIGHTTURRET );
-        ordersBuildings.push_back( BUILD_MOAT );
-        ordersBuildings.push_back( BUILD_CAPTAIN );
-        ordersBuildings.push_back( DWELLING_MONSTER6 );
-        ordersBuildings.push_back( DWELLING_MONSTER1 );
-        ordersBuildings.push_back( BUILD_THIEVESGUILD );
-        ordersBuildings.push_back( DWELLING_MONSTER3 );
-        ordersBuildings.push_back( DWELLING_UPGRADE3 );
-        ordersBuildings.push_back( DWELLING_MONSTER5 );
-        ordersBuildings.push_back( DWELLING_UPGRADE5 );
-        ordersBuildings.push_back( DWELLING_MONSTER2 );
-        ordersBuildings.push_back( DWELLING_UPGRADE2 );
-        ordersBuildings.push_back( DWELLING_MONSTER4 );
-        ordersBuildings.push_back( DWELLING_UPGRADE4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD1 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD2 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD3 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD4 );
-        ordersBuildings.push_back( BUILD_MAGEGUILD5 );
-        ordersBuildings.push_back( BUILD_SHIPYARD );
-        ordersBuildings.push_back( BUILD_WEL2 );
-        ordersBuildings.push_back( BUILD_MARKETPLACE );
-        ordersBuildings.push_back( BUILD_STATUE );
-        ordersBuildings.push_back( BUILD_WELL );
-        break;
-    default:
-        break;
+    else if ( castle.GetRace() == Race::BARB && BUILD_CAPTAIN == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
+        const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
+        CastleDialog::RedrawBuildingSpriteToArea( leftCaptainQuarters, dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width() + leftCaptainQuarters.x(),
+                                                  dst_pt.y + rightCaptainQuarters.y() + leftCaptainQuarters.y(), max, alpha );
     }
-
-    ordersBuildings.push_back( BUILD_NOTHING );
 }
 
 fheroes2::Rect CastleGetMaxArea( const Castle & castle, const fheroes2::Point & top )

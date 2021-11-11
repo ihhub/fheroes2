@@ -137,7 +137,7 @@ namespace GameStatic
     u8 castle_grown_week_of = 5;
     u8 castle_grown_month_of = 100;
 
-    u8 mageguild_restore_spell_points_day[] = {20, 40, 60, 80, 100};
+    const uint32_t mageguild_restore_spell_points_day[5] = { 20, 40, 60, 80, 100 };
 
     // heroes
     u8 heroes_spell_points_day = 1;

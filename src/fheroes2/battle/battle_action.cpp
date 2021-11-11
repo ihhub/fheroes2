@@ -298,9 +298,9 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
-        Position pos1, pos2;
+        Position pos2;
         const s32 head = b->GetHeadIndex();
-        pos1 = Position::GetCorrect( *b, dst );
+        Position pos1 = Position::GetPositionWhenMoved( *b, dst );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 )
@@ -818,7 +818,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         for ( auto & tgt : targets ) {
             const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
-            if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
+            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
                 tgt.resist = true;
             }
         }
@@ -960,7 +960,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     const Spell spell( Spell::TELEPORT );
 
     if ( b ) {
-        Position pos = Position::GetCorrect( *b, dst );
+        Position pos = Position::GetPositionWhenMoved( *b, dst );
         if ( b->isReflect() != pos.isReflect() )
             pos.Swap();
 
@@ -1017,7 +1017,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         Indexes::const_iterator it
             = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
         if ( it != distances.end() ) {
-            const Position pos = Position::GetCorrect( *troop, *it );
+            const Position pos = Position::GetPositionWhenMoved( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
             if ( interface )

@@ -33,6 +33,7 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 void LossConditionInfo( const Maps::FileInfo & );
 void VictoryConditionInfo( const Maps::FileInfo & );
@@ -51,17 +52,23 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Text text;
     int index = 19 + Color::Count( info.kingdom_colors );
 
     dstx = dstx - 10;
     dsty = dsty + 2;
 
+    int32_t offsetX = 0;
+
     const fheroes2::Sprite & spriteCount = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
     fheroes2::Blit( spriteCount, display, dstx, dsty );
 
+    offsetX += spriteCount.width() + 2;
+
     if ( info.size_w != info.size_h || info.size_w < Maps::SMALL || info.size_w > Maps::XLARGE ) {
-        fheroes2::Blit( GetNonStandardSizeIcon(), display, dstx + spriteCount.width() + 2, dsty );
+        const fheroes2::Image & nonStandardIcon = GetNonStandardSizeIcon();
+
+        fheroes2::Blit( nonStandardIcon, display, dstx + offsetX, dsty );
+        offsetX += nonStandardIcon.width() + 2;
     }
     else {
         switch ( info.size_w ) {
@@ -82,11 +89,15 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
         }
 
         const fheroes2::Sprite & spriteSize = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteSize, display, dstx + spriteCount.width() + 2, dsty );
+        fheroes2::Blit( spriteSize, display, dstx + offsetX, dsty );
+        offsetX += spriteSize.width() + 2;
     }
 
-    text.Set( info.name, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-    text.Blit( dstx + 54, dsty + 2 );
+    const fheroes2::Sprite & mapType = fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, info._version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
+    fheroes2::Blit( mapType, display, dstx + offsetX, dsty );
+
+    fheroes2::Text mapName( info.name, { fheroes2::FontSize::NORMAL, ( current ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
+    mapName.draw( dstx + 58, dsty + ( mapType.height() - mapName.height() ) / 2 + 2, display );
 
     index = 30 + info.conditions_wins;
     const fheroes2::Sprite & spriteWins = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
@@ -113,7 +124,7 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
         int index = 19 + Color::Count( info.kingdom_colors );
 
         const fheroes2::Sprite & spriteCount = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteCount, display, dst.x + 65, dst.y + 265 );
+        fheroes2::Blit( spriteCount, display, dst.x + 46, dst.y + 265 );
 
         switch ( info.size_w ) {
         case Maps::SMALL:
@@ -134,7 +145,10 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
         }
 
         const fheroes2::Sprite & spriteSize = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteSize, display, dst.x + 65 + spriteCount.width() + 2, dst.y + 265 );
+        fheroes2::Blit( spriteSize, display, dst.x + 46 + spriteCount.width() + 2, dst.y + 265 );
+
+        const fheroes2::Sprite & mapType = fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, info._version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
+        fheroes2::Blit( mapType, display, dst.x + 46 + spriteCount.width() + 2 * 2 + spriteSize.width(), dst.y + 265 );
 
         text.Set( info.name, Font::BIG );
         text.Blit( dst.x + 190 - text.w() / 2, dst.y + 265 );
@@ -210,16 +224,18 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
     fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
 
-    const fheroes2::Rect countPlayers( rt.x + 45, rt.y + 55, 20, 175 );
-    const fheroes2::Rect sizeMaps( rt.x + 62, rt.y + 55, 20, 175 );
-    const fheroes2::Rect victoryConds( rt.x + 267, rt.y + 55, 20, 175 );
-    const fheroes2::Rect lossConds( rt.x + 287, rt.y + 55, 20, 175 );
+    const fheroes2::Rect countPlayers( rt.x + 45, rt.y + 55, 19, 175 );
+    const fheroes2::Rect sizeMaps( rt.x + 64, rt.y + 55, 19, 175 );
+    const fheroes2::Rect mapType( rt.x + 83, rt.y + 55, 19, 175 );
+    const fheroes2::Rect victoryConds( rt.x + 268, rt.y + 55, 19, 175 );
+    const fheroes2::Rect lossConds( rt.x + 287, rt.y + 55, 19, 175 );
 
-    const fheroes2::Rect curCountPlayer( rt.x + 66, rt.y + 264, 18, 18 );
-    const fheroes2::Rect curMapSize( rt.x + 85, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curCountPlayer( rt.x + 46, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curMapSize( rt.x + 65, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curMapType( rt.x + 84, rt.y + 264, 19, 18 );
     const fheroes2::Rect curMapName( rt.x + 107, rt.y + 264, 166, 18 );
-    const fheroes2::Rect curVictoryCond( rt.x + 277, rt.y + 264, 18, 18 );
-    const fheroes2::Rect curLossCond( rt.x + 295, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curVictoryCond( rt.x + 274, rt.y + 264, 19, 18 );
+    const fheroes2::Rect curLossCond( rt.x + 293, rt.y + 264, 19, 18 );
     const fheroes2::Rect curDifficulty( rt.x + 220, rt.y + 292, 114, 20 );
     const fheroes2::Rect curDescription( rt.x + 42, rt.y + 316, 292, 90 );
 
@@ -299,6 +315,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( small );
                 currentPressedButton = &buttonSelectSmall;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -311,6 +328,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( medium );
                 currentPressedButton = &buttonSelectMedium;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -323,6 +341,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( large );
                 currentPressedButton = &buttonSelectLarge;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -335,6 +354,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             else {
                 listbox.SetListContent( xlarge );
                 currentPressedButton = &buttonSelectXLarge;
+                currentPressedButton->press();
             }
 
             needRedraw = true;
@@ -342,6 +362,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             currentPressedButton = &buttonSelectAll;
+            currentPressedButton->press();
 
             needRedraw = true;
         }
@@ -366,6 +387,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                              Font::BIG );
         else if ( le.MousePressRight( curMapName ) )
             Dialog::Message( _( "Selected Name" ), _( "The name of the currently selected map." ), Font::BIG );
+        else if ( le.MousePressRight( mapType ) || le.MousePressRight( curMapType ) )
+            Dialog::Message( _( "Map Type" ), _( "Indicates whether the map is made for The Succession Wars or The Price of Loyalty version of the game." ), Font::BIG );
         else if ( le.MousePressRight( victoryConds ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )

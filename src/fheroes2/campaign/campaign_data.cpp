@@ -233,7 +233,7 @@ namespace
             _( "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
             _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
             _( "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
-            _( "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win" ),
+            _( "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win." ),
             _( "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
             _( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
             _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
@@ -619,6 +619,8 @@ namespace Campaign
             return campaign;
         }
         default: {
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
             static const Campaign::CampaignData noCampaign;
             return noCampaign;
         }
@@ -690,12 +692,16 @@ namespace Campaign
             return getDescendantsCampaignAwardData( scenarioID );
         case WIZARDS_ISLE_CAMPAIGN:
             return getWizardsIsleCampaignAwardData( scenarioID );
-            // no campaign award for voyage home!
         case VOYAGE_HOME_CAMPAIGN:
+            // No campaign award for voyage home!
+            return {};
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
             break;
         }
 
-        return std::vector<Campaign::CampaignAwardData>();
+        return {};
     }
 
     const char * CampaignAwardData::getAllianceJoiningMessage( const int monsterId )

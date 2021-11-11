@@ -55,7 +55,7 @@ namespace Battle
     void DialogBattleSettings( void );
     bool DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom );
 
-    enum HeroAnimation
+    enum HeroAnimation : uint32_t
     {
         OP_JOY,
         OP_CAST_MASS,
@@ -111,7 +111,7 @@ namespace Battle
         int _animationType;
         RandomizedDelay _idleTimer;
 
-        int icn;
+        int _heroIcnId;
         bool reflect;
         fheroes2::Rect pos;
         fheroes2::Point _offset;
@@ -220,7 +220,7 @@ namespace Battle
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
         void RedrawActionSkipStatus( const Unit & );
         void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
-        void RedrawBridgeAnimation( bool down );
+        void RedrawBridgeAnimation( const bool bridgeDownAnimation );
         void RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, double angle, uint32_t monsterID );
 
     private:
@@ -343,6 +343,22 @@ namespace Battle
 
         CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
+
+        struct BridgeMovementAnimation
+        {
+            enum AnimationStatusId : uint32_t
+            {
+                DOWN_POSITION = 21,
+                UP_POSITION = 23,
+                DESTROYED = 24
+            };
+
+            bool animationIsRequired;
+
+            uint32_t currentFrameId;
+        };
+
+        BridgeMovementAnimation _bridgeAnimation;
     };
 }
 

@@ -351,7 +351,7 @@ public:
     void Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
     void RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
-    void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
@@ -370,7 +370,7 @@ public:
     void setLastGroundRegion( uint32_t regionID );
 
     u32 GetExperience( void ) const;
-    void IncreaseExperience( u32 );
+    void IncreaseExperience( const uint32_t amount, const bool autoselect = false );
 
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;

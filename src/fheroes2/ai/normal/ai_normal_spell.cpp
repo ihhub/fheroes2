@@ -204,6 +204,31 @@ namespace AI
         return 1;
     }
 
+    // Compute a heuristic for Disrupting Ray usage by AI
+    double BattlePlanner::getDisruptingRayRatio( const Battle::Unit & target ) const
+    {
+        const double targetDefense = target.GetDefense();
+
+        if ( targetDefense <= 1 ) { // target is already at minimum defense: not useful to cast Disrupting Ray
+            return 0.0;
+        }
+
+        double ratio = 0.2;
+        if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) { // disrupting ray can't have full effect
+            const double actualDefenseChange = targetDefense - 1.0;
+            ratio *= actualDefenseChange / Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        }
+
+        const double targetStrength = target.GetStrength();
+
+        // if current army has much lower strength than target unit, we reduce the ratio to prioritize direct damage spells
+        if ( _myArmyStrength < targetStrength ) {
+            ratio *= _myArmyStrength / targetStrength;
+        }
+
+        return ratio;
+    }
+
     double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
     {
         const int spellID = spell.GetID();
@@ -250,7 +275,7 @@ namespace AI
             break;
         }
         case Spell::DISRUPTINGRAY:
-            ratio = 0.2;
+            ratio = getDisruptingRayRatio( target );
             break;
         case Spell::HASTE:
         case Spell::MASSHASTE:
@@ -427,7 +452,7 @@ namespace AI
                 continue;
 
             // For dead units: skip if there's another unit standing on top
-            if ( !unit->isValid() && arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
+            if ( !unit->isValid() && Board::GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
             uint32_t missingHP = unit->GetMissingHitPoints();

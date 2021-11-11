@@ -256,11 +256,24 @@ void Battle::DialogBattleSettings( void )
             display.render();
             saveConfiguration = true;
         }
+        else if ( le.MousePressRight( optionAreas[0] ) ) {
+            Dialog::Message( _( "Speed" ), _( "Set the speed of combat actions and animations." ), Font::BIG );
+        }
+        // For future use
+        // else if ( le.MousePressRight( optionAreas[1] ) ) {
+        //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
+        // }
         else if ( le.MouseClickLeft( optionAreas[2] ) ) {
             conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
             saveConfiguration = true;
+        }
+        else if ( le.MousePressRight( optionAreas[2] ) ) {
+            Dialog::Message(
+                _( "Auto Spell Casting" ),
+                _( "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)" ),
+                Font::BIG );
         }
         else if ( le.MouseClickLeft( optionAreas[3] ) ) {
             conf.SetBattleGrid( !conf.BattleShowGrid() );
@@ -268,11 +281,20 @@ void Battle::DialogBattleSettings( void )
             RedrawBattleSettings( optionAreas );
             saveConfiguration = true;
         }
+        else if ( le.MousePressRight( optionAreas[3] ) ) {
+            Dialog::Message(
+                _( "Grid" ),
+                _( "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible." ),
+                Font::BIG );
+        }
         else if ( le.MouseClickLeft( optionAreas[4] ) ) {
             conf.SetBattleMovementShaded( !conf.BattleShowMoveShadow() );
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
             saveConfiguration = true;
+        }
+        else if ( le.MousePressRight( optionAreas[4] ) ) {
+            Dialog::Message( _( "Shadow Movement" ), _( "Toggle on or off shadows showing where your creatures can move and attack." ), Font::BIG );
         }
         else if ( le.MouseClickLeft( optionAreas[5] ) ) {
             conf.SetBattleMouseShaded( !conf.BattleShowMouseShadow() );
@@ -280,7 +302,10 @@ void Battle::DialogBattleSettings( void )
             RedrawBattleSettings( optionAreas );
             saveConfiguration = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok.area() ) ) {
+        else if ( le.MousePressRight( optionAreas[5] ) ) {
+            Dialog::Message( _( "Shadow Cursor" ), _( "Toggle on or off a shadow showing the current hex location of the mouse cursor." ), Font::BIG );
+        }
+        else if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
         }
     }
@@ -405,10 +430,12 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
     const int buttonOffset = allowToCancel ? 39 : 121;
-    const int buttonICN
+    const int buttonOkICN
         = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
-    fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonICN, 0, 1 );
-    fheroes2::Button btnCancel( pos_rt.x + buttonOffset + 125, pos_rt.y + 410, ( isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG ), 2, 3 );
+    const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
+
+    fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 );
+    fheroes2::Button btnCancel( pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
@@ -449,8 +476,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     if ( allowToCancel ) {
-        fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 65, 170, 100, 25 );
-        fheroes2::Blit( buttonOverride, display, pos_rt.x + 91, pos_rt.y + 410 );
+        fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
+        fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
         btnCancel.draw();
     }
     btn_ok.draw();

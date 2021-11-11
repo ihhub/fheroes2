@@ -55,6 +55,10 @@ namespace
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
+        if ( !MP2::isActionObject( objectType ) ) {
+            return false;
+        }
+
         switch ( objectType ) {
         case MP2::OBJ_SHIPWRECKSURVIROR:
         case MP2::OBJ_WATERCHEST:
@@ -72,9 +76,9 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
+            return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
         case MP2::OBJ_WHIRLPOOL:
             return hero.isShipMaster() && !hero.isVisited( tile );
-
         case MP2::OBJ_COAST:
             return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
 
@@ -240,10 +244,10 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
 
         case MP2::OBJ_MAGICWELL:
-            return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
 
         case MP2::OBJ_ARTESIANSPRING:
-            return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
+            return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
 
         case MP2::OBJ_XANADU: {
             const uint32_t level1 = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
@@ -332,7 +336,7 @@ namespace
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
             const double movementBonus = daysActive * 400.0 - 2.0 * pathfinder.getDistance( index );
 
-            return !hero.isVisited( tile ) && movementBonus > 0;
+            return !hero.isObjectTypeVisited( MP2::OBJ_STABLES ) && movementBonus > 0;
         }
 
         case MP2::OBJ_ARENA:
@@ -348,7 +352,13 @@ namespace
             }
             break;
 
-            // TODO: add evaluation for MP2::OBJ_PYRAMID.
+        case MP2::OBJ_PYRAMID:
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
+                Army enemy( tile );
+                return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
+                       && army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+            }
+            break;
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
@@ -391,8 +401,25 @@ namespace
             return hero.GetKingdom().GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUTMAGI:
             return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
+        case MP2::OBJ_TRADINGPOST:
+        case MP2::OBJ_SPHINX:
+            // TODO: AI doesn't know how it use it properly.
+            return false;
+        case MP2::OBJ_ORACLE:
+        case MP2::OBJ_EYEMAGI:
+            // No use of this object for AI.
+            return false;
+        case MP2::OBJ_ALCHEMYTOWER: {
+            const BagArtifacts & bag = hero.GetBagArtifacts();
+            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
 
+            const payment_t payment = PaymentConditions::ForAlchemist();
+
+            return cursed > 0 && hero.GetKingdom().AllowPayment( payment );
+        }
         default:
+            // Did you add a new action object but forget to add AI interaction for it?
+            assert( 0 );
             break;
         }
 
@@ -405,6 +432,32 @@ namespace
         int patrolCenter = -1;
         uint32_t patrolDistance = 0;
     };
+
+    void addHeroToMove( Heroes * hero, std::vector<HeroToMove> & availableHeroes )
+    {
+        if ( hero->Modes( Heroes::PATROL ) ) {
+            if ( hero->GetSquarePatrol() == 0 ) {
+                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
+                hero->SetModes( Heroes::MOVED );
+                return;
+            }
+        }
+
+        hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
+        if ( !hero->MayStillMove( false ) ) {
+            hero->SetModes( Heroes::MOVED );
+        }
+        else {
+            availableHeroes.emplace_back();
+            HeroToMove & heroInfo = availableHeroes.back();
+            heroInfo.hero = hero;
+
+            if ( hero->Modes( Heroes::PATROL ) ) {
+                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetCenterPatrol() );
+                heroInfo.patrolDistance = hero->GetSquarePatrol();
+            }
+        }
+    }
 
     // Used for caching object validations per hero.
     class ObjectValidator
@@ -736,6 +789,9 @@ namespace AI
             }
             return 500;
         }
+        else if ( objectType == MP2::OBJ_PYRAMID ) {
+            return 1500;
+        }
 
         // TODO: add support for all possible objects.
 
@@ -975,6 +1031,9 @@ namespace AI
             }
             return 250;
         }
+        else if ( objectType == MP2::OBJ_PYRAMID ) {
+            return 10000;
+        }
 
         // TODO: add support for all possible objects.
 
@@ -1095,30 +1154,15 @@ namespace AI
 
     bool Normal::HeroesTurn( VecHeroes & heroes )
     {
+        if ( heroes.empty() ) {
+            // No heroes so we idicate that all heroes moved.
+            return true;
+        }
+
         std::vector<HeroToMove> availableHeroes;
 
         for ( Heroes * hero : heroes ) {
-            if ( hero->Modes( Heroes::PATROL ) ) {
-                if ( hero->GetSquarePatrol() == 0 ) {
-                    DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
-                    hero->SetModes( Heroes::MOVED );
-                    continue;
-                }
-            }
-            hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
-            if ( !hero->MayStillMove( false ) ) {
-                hero->SetModes( Heroes::MOVED );
-            }
-            else {
-                availableHeroes.emplace_back();
-                HeroToMove & heroInfo = availableHeroes.back();
-                heroInfo.hero = hero;
-
-                if ( hero->Modes( Heroes::PATROL ) ) {
-                    heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetCenterPatrol() );
-                    heroInfo.patrolDistance = hero->GetSquarePatrol();
-                }
-            }
+            addHeroToMove( hero, availableHeroes );
         }
 
         const double originalMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
@@ -1193,16 +1237,13 @@ namespace AI
 
             _pathfinder.reEvaluateIfNeeded( *bestHero );
             bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
-            const int32_t idxToErase = bestHero->GetPath().GetDestinationIndex();
+
+            const size_t heroesBefore = heroes.size();
 
             HeroesMove( *bestHero );
 
-            auto it = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&idxToErase]( const IndexObject & o ) { return o.first == idxToErase; } );
-            // Actually remove if this object single use only
-            if ( it != _mapObjects.end() && !MP2::isCaptureObject( static_cast<MP2::MapObjectType>( it->second ) )
-                 && !MP2::isRemoveObject( static_cast<MP2::MapObjectType>( it->second ) ) ) {
-                // retains the vector order for binary search
-                _mapObjects.erase( it );
+            if ( heroes.size() > heroesBefore ) {
+                addHeroToMove( heroes.back(), availableHeroes );
             }
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {

@@ -35,6 +35,7 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -90,6 +91,254 @@ namespace
             output.emplace_back( addDigit( origin, digits[i], offset ) );
             output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
         }
+    }
+
+    void replaceTranformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
+    {
+        if ( image.transform()[position] != 0 ) {
+            image.transform()[position] = 0;
+            image.image()[position] = value;
+        }
+    }
+
+    // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
+    class OriginalAlphabetPreserver
+    {
+    public:
+        void preserve()
+        {
+            if ( _isPreserved ) {
+                return;
+            }
+
+            fheroes2::AGG::GetICN( ICN::FONT, 0 );
+            fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
+
+            _normalFont = _icnVsSprite[ICN::FONT];
+            _smallFont = _icnVsSprite[ICN::SMALFONT];
+        }
+
+        void restore() const
+        {
+            if ( !_isPreserved ) {
+                return;
+            }
+
+            // Restore the original font.
+            _icnVsSprite[ICN::FONT] = _normalFont;
+            _icnVsSprite[ICN::SMALFONT] = _smallFont;
+
+            // Clear modified fonts.
+            _icnVsSprite[ICN::YELLOW_FONT].clear();
+            _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+            _icnVsSprite[ICN::GRAY_FONT].clear();
+            _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+            _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+        }
+
+    private:
+        bool _isPreserved = false;
+
+        std::vector<fheroes2::Sprite> _normalFont;
+        std::vector<fheroes2::Sprite> _smallFont;
+    };
+
+    OriginalAlphabetPreserver alphabetPreserver;
+
+    void generatePolishAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original.insert( original.end(), 128, original[0] );
+            original[108] = original[51];
+            original[111] = original[58];
+            original[124] = original[83];
+            original[127] = original[90];
+            original[131] = original[44];
+            original[133] = original[33];
+            original[143] = original[58];
+            original[147] = original[76];
+            original[153] = original[65];
+            original[159] = original[90];
+            original[166] = original[35];
+            original[170] = original[37];
+            original[177] = original[46];
+            original[179] = original[47];
+            original[198] = original[67];
+            original[202] = original[69];
+            original[209] = original[78];
+            original[211] = original[79];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateGermanAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 103 );
+            original[96] = original[65];
+            original[97] = original[79];
+            original[98] = original[85];
+            original[99] = original[34];
+            original[100] = original[33];
+            original[101] = original[47];
+            original[102] = original[53];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateFrenchAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original[3] = original[79];
+            original[4] = original[85];
+            original[6] = original[85];
+            original[10] = original[65];
+            original[28] = original[73];
+            original[30] = original[73];
+            original[32] = original[65];
+            original[62] = original[67];
+            original[64] = original[69];
+            original[91] = original[73];
+            original[92] = original[69];
+            original[93] = original[73];
+            original[94] = original[69];
+            original[95] = original[73];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateRussianAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original.insert( original.end(), 128, original[0] );
+
+            size_t offset = 0;
+
+            original[168 - 32] = original[37 + offset];
+
+            original[192 - 32] = original[33 + offset];
+            original[193 - 32] = original[34 + offset];
+            original[194 - 32] = original[34 + offset];
+            original[195 - 32] = original[52 + offset];
+            original[196 - 32] = original[36 + offset];
+            original[197 - 32] = original[37 + offset];
+            original[198 - 32] = original[56 + offset];
+            original[199 - 32] = original[19];
+
+            original[200 - 32] = fheroes2::Flip( original[46 + offset], true, false );
+            original[200 - 32].setPosition( original[46 + offset].x(), original[46 + offset].y() );
+
+            original[201 - 32] = original[200 - 32];
+
+            original[202 - 32] = original[43 + offset];
+            original[203 - 32] = original[44 + offset];
+            original[204 - 32] = original[45 + offset];
+            original[205 - 32] = original[40 + offset];
+            original[206 - 32] = original[47 + offset];
+            original[207 - 32] = original[52 + offset];
+            original[208 - 32] = original[48 + offset];
+            original[209 - 32] = original[35 + offset];
+            original[210 - 32] = original[52 + offset];
+            original[211 - 32] = original[57 + offset];
+            original[212 - 32] = original[49 + offset];
+            original[213 - 32] = original[56 + offset];
+            original[214 - 32] = original[53 + offset];
+            original[215 - 32] = original[20];
+            original[216 - 32] = original[55 + offset];
+            original[217 - 32] = original[55 + offset];
+            original[218 - 32] = original[48 + offset];
+            original[219 - 32] = original[48 + offset];
+            original[220 - 32] = original[48 + offset];
+
+            original[221 - 32] = fheroes2::Flip( original[39 + offset], true, false );
+            original[221 - 32].setPosition( original[39 + offset].x(), original[39 + offset].y() );
+
+            original[222 - 32] = original[47 + offset];
+
+            original[223 - 32] = fheroes2::Flip( original[50 + offset], true, false );
+            original[223 - 32].setPosition( original[50 + offset].x(), original[50 + offset].y() );
+
+            offset = 32;
+
+            original[184 - 32] = original[37 + offset];
+
+            original[224 - 32] = original[33 + offset];
+            original[225 - 32] = original[34 + offset];
+            original[226 - 32] = original[34 + offset];
+            original[227 - 32] = original[82];
+            original[228 - 32] = original[36 + offset];
+            original[229 - 32] = original[37 + offset];
+            original[230 - 32] = original[56 + offset];
+            original[231 - 32] = original[19];
+            original[232 - 32] = original[46 + offset];
+            original[233 - 32] = original[46 + offset];
+            original[234 - 32] = original[43 + offset];
+            original[235 - 32] = original[44 + offset];
+            original[236 - 32] = original[45 + offset];
+            original[237 - 32] = original[40 + offset];
+            original[238 - 32] = original[47 + offset];
+            original[239 - 32] = original[52 + offset];
+            original[240 - 32] = original[48 + offset];
+            original[241 - 32] = original[35 + offset];
+            original[242 - 32] = original[77];
+            original[243 - 32] = original[57 + offset];
+            original[244 - 32] = original[49 + offset];
+            original[245 - 32] = original[56 + offset];
+            original[246 - 32] = original[53 + offset];
+            original[247 - 32] = original[20];
+            original[248 - 32] = original[55 + offset];
+            original[249 - 32] = original[55 + offset];
+            original[250 - 32] = original[48 + offset];
+            original[251 - 32] = original[48 + offset];
+            original[252 - 32] = original[48 + offset];
+            original[253 - 32] = original[35 + offset];
+            original[254 - 32] = original[47 + offset];
+            original[255 - 32] = original[81];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateAlphabet( const fheroes2::SupportedLanguage language )
+    {
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::Polish:
+            generatePolishAlphabet();
+            break;
+        case fheroes2::SupportedLanguage::German:
+            generateGermanAlphabet();
+            break;
+        case fheroes2::SupportedLanguage::French:
+            generateFrenchAlphabet();
+            break;
+        case fheroes2::SupportedLanguage::Russian:
+            generateRussianAlphabet();
+            break;
+        default:
+            // Add new language generation code!
+            assert( 0 );
+            break;
+        }
+
+        _icnVsSprite[ICN::YELLOW_FONT].clear();
+        _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+        _icnVsSprite[ICN::GRAY_FONT].clear();
+        _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+        _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
     }
 }
 
@@ -173,11 +422,11 @@ namespace fheroes2
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
-                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
-                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
-                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
+                    imageArray.insert( imageArray.begin() + 96, 64, imageArray[0] );
+                    std::swap( imageArray[136], imageArray[192] ); // Move sprites for chars 0xA8
+                    std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
-                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
+                    imageArray.erase( imageArray.begin() + 192 );
                 }
                 return true;
             }
@@ -624,6 +873,14 @@ namespace fheroes2
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 7 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
                 return true;
+            case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 2 ), 6, 0, 108, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 3 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
             case ICN::NON_UNIFORM_EVIL_OKAY_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 4 ), 4, 0, 96, 25 );
@@ -638,6 +895,14 @@ namespace fheroes2
                 _icnVsSprite[id][0].setPosition( 0, 0 );
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 7 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::NON_UNIFORM_EVIL_RESTART_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 2 ), 4, 0, 108, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 3 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
                 return true;
             case ICN::UNIFORM_GOOD_MAX_BUTTON: {
@@ -757,7 +1022,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::WHITE_LARGE_FONT: {
-                LoadModifiedICN( ICN::FONT );
+                GetICN( ICN::FONT, 0 );
                 const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
                 _icnVsSprite[id].resize( original.size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -867,6 +1132,126 @@ namespace fheroes2
                     _icnVsSprite[id][0]._disableTransformLayer();
                 }
                 return true;
+            case ICN::TOWNBKG3:
+                // Warlock town background image contains 'empty' pixels leading to appear them as black.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 640 && original.height() == 256 ) {
+                        replaceTranformPixel( original, 51945, 17 );
+                        replaceTranformPixel( original, 61828, 25 );
+                        replaceTranformPixel( original, 64918, 164 );
+                        replaceTranformPixel( original, 77685, 18 );
+                        replaceTranformPixel( original, 84618, 19 );
+                    }
+                }
+                return true;
+            case ICN::PORT0091:
+                // Barbarian captain has one bad pixel.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        replaceTranformPixel( original, 9084, 77 );
+                    }
+                }
+                return true;
+            case ICN::PORT0090:
+                // Knight captain has multiple bad pixels.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        replaceTranformPixel( original, 2314, 70 );
+                        replaceTranformPixel( original, 5160, 71 );
+                        replaceTranformPixel( original, 5827, 18 );
+                        replaceTranformPixel( original, 7474, 167 );
+                    }
+                }
+                return true;
+            case ICN::CSTLWZRD:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 8 ) {
+                    // Statue image has bad pixels.
+                    Sprite & original = _icnVsSprite[id][7];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 3687, 50 );
+                        replaceTranformPixel( original, 5159, 108 );
+                        replaceTranformPixel( original, 5294, 108 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() >= 24 ) {
+                    // Mage tower image has a bad pixel.
+                    Sprite & original = _icnVsSprite[id][23];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 4333, 23 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() >= 29 ) {
+                    // Mage tower image has a bad pixel.
+                    Sprite & original = _icnVsSprite[id][28];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 4333, 23 );
+                    }
+                }
+                return true;
+            case ICN::CSTLCAPK:
+                // Knight captain has a bad pixel.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 2 ) {
+                    Sprite & original = _icnVsSprite[id][1];
+                    if ( original.width() == 84 && original.height() == 81 ) {
+                        replaceTranformPixel( original, 4934, 18 );
+                    }
+                }
+                return true;
+            case ICN::CSTLCAPW:
+                // Warlock captain quarters have bad pixels.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 84 && original.height() == 81 ) {
+                        replaceTranformPixel( original, 1692, 26 );
+                        replaceTranformPixel( original, 2363, 32 );
+                        replaceTranformPixel( original, 2606, 21 );
+                        replaceTranformPixel( original, 2608, 21 );
+                    }
+                }
+                return true;
+            case ICN::CSTLSORC:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 14 ) {
+                    // Rainbow has bad pixels.
+                    Sprite & original = _icnVsSprite[id][13];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 2047, 160 );
+                        replaceTranformPixel( original, 2052, 159 );
+                        replaceTranformPixel( original, 2055, 160 );
+                        replaceTranformPixel( original, 2060, 67 );
+                        replaceTranformPixel( original, 2063, 159 );
+                        replaceTranformPixel( original, 2067, 67 );
+                        replaceTranformPixel( original, 2184, 67 );
+                        replaceTranformPixel( original, 2192, 158 );
+                        replaceTranformPixel( original, 3508, 67 );
+                        replaceTranformPixel( original, 3641, 67 );
+                        replaceTranformPixel( original, 3773, 69 );
+                        replaceTranformPixel( original, 3910, 67 );
+                        replaceTranformPixel( original, 4039, 69 );
+                        replaceTranformPixel( original, 4041, 67 );
+                        replaceTranformPixel( original, 4172, 67 );
+                        replaceTranformPixel( original, 4578, 69 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() >= 25 ) {
+                    // Red tower has bad pixels.
+                    Sprite & original = _icnVsSprite[id][24];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        replaceTranformPixel( original, 2830, 165 );
+                        replaceTranformPixel( original, 3101, 165 );
+                        replaceTranformPixel( original, 3221, 69 );
+                    }
+                }
+                return true;
             case ICN::CURSOR_ADVENTURE_MAP: {
                 // Create needed numbers
                 const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
@@ -957,6 +1342,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 1 );
                 h2d::readImage( "knight_castle_left_farm.image", _icnVsSprite[id][0] );
                 return true;
+            case ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+                return true;
             case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
                 _icnVsSprite[id].resize( 1 );
                 Sprite & output = _icnVsSprite[id][0];
@@ -982,6 +1371,70 @@ namespace fheroes2
                 output = Crop( original, 0, 0, 23, original.height() );
                 output.setPosition( original.x(), original.y() );
 
+                return true;
+            }
+            case ICN::ESCROLL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 4 ) {
+                    // fix missing black border on the right side of the "up" button
+                    Sprite & out = _icnVsSprite[id][4];
+                    if ( out.width() == 16 && out.height() == 16 ) {
+                        Copy( out, 0, 0, out, 15, 0, 1, 16 );
+                    }
+                }
+                return true;
+            case ICN::MAP_TYPE_ICON: {
+                // TODO: add a new icon for the Resurrection add-on map type.
+                _icnVsSprite[id].resize( 2 );
+                for ( Sprite & icon : _icnVsSprite[id] ) {
+                    icon.resize( 17, 17 );
+                    icon.fill( 0 );
+                }
+
+                const Sprite & successionWarsIcon = GetICN( ICN::ARTFX, 6 );
+                const Sprite & priceOfLoyaltyIcon = GetICN( ICN::ARTFX, 90 );
+
+                if ( !successionWarsIcon.empty() ) {
+                    Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
+                }
+
+                if ( !priceOfLoyaltyIcon.empty() ) {
+                    Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
+                }
+
+                return true;
+            }
+            case ICN::TWNWWEL2: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    if ( _icnVsSprite[id][0].width() == 122 && _icnVsSprite[id][0].height() == 226 ) {
+                        FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
+                    }
+
+                    for ( size_t i = 1; i < 7; i++ ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( original.width() == 121 && original.height() == 151 ) {
+                            FillTransform( original, 0, 0, 64, 39, 1 );
+                        }
+                    }
+                }
+                return true;
+            }
+            case ICN::TWNWCAPT: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 118 && original.height() ) {
+                        // Remove shadow from left side.
+                        FillTransform( original, 85, 84, 33, 26, 1 );
+
+                        // Remove extra terrain at the bottom.
+                        FillTransform( original, 0, 114, 40, 4, 1 );
+                        FillTransform( original, 9, 112, 51, 2, 1 );
+                        FillTransform( original, 35, 110, 47, 2, 1 );
+                        FillTransform( original, 57, 108, 51, 2, 1 );
+                    }
+                }
                 return true;
             }
             default:
@@ -1250,6 +1703,33 @@ namespace fheroes2
             assert( 0 ); // Did you add a new font size? Please add implementation.
 
             return errorImage;
+        }
+
+        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet )
+        {
+            if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
+                alphabetPreserver.restore();
+            }
+            else {
+                alphabetPreserver.preserve();
+                generateAlphabet( language );
+            }
+        }
+
+        bool isAlphabetSupported( const SupportedLanguage language )
+        {
+            switch ( language ) {
+            case SupportedLanguage::Polish:
+            case SupportedLanguage::German:
+            case SupportedLanguage::French:
+                // TODO: uncomment the line below once Russian alphabet is good enough
+                // case SupportedLanguage::Russian:
+                return true;
+            default:
+                break;
+            }
+
+            return false;
         }
     }
 }

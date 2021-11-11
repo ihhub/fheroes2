@@ -101,7 +101,7 @@ namespace Campaign
         return _finishedMaps.back();
     }
 
-    const std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
+    std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
     {
         std::vector<Campaign::CampaignAwardData> obtainedAwards;
 
@@ -123,15 +123,45 @@ namespace Campaign
         return obtainedAwards;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
+    StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
     {
         return msg << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed << data._obtainedCampaignAwards
                    << data._carryOverTroops;
     }
 
-    StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
+    StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
         return msg >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps >> data._campaignID >> data._daysPassed >> data._obtainedCampaignAwards
                >> data._carryOverTroops;
+    }
+
+    ScenarioVictoryCondition getCurrentScenarioVictoryCondition()
+    {
+        const CampaignSaveData & campaignData = CampaignSaveData::Get();
+
+        const std::vector<ScenarioData> & scenarios = CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            return scenarios[scenarioId].getVictoryCondition();
+        }
+
+        return ScenarioVictoryCondition::STANDARD;
+    }
+
+    ScenarioLossCondition getCurrentScenarioLossCondition()
+    {
+        const CampaignSaveData & campaignData = CampaignSaveData::Get();
+
+        const std::vector<ScenarioData> & scenarios = CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            return scenarios[scenarioId].getLossCondition();
+        }
+
+        return ScenarioLossCondition::STANDARD;
     }
 }

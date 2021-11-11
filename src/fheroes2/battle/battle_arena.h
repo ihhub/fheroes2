@@ -51,6 +51,22 @@ namespace Battle
     {
     };
 
+    class TroopsUidGenerator
+    {
+    public:
+        TroopsUidGenerator() = default;
+        TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+        TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
+
+        uint32_t GetUnique()
+        {
+            return _id++;
+        }
+
+    private:
+        uint32_t _id{ 1 };
+    };
+
     class Arena
     {
     public:
@@ -107,6 +123,11 @@ namespace Battle
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & ) const;
+
+        // Returns the cell nearest to the end of the path to the cell with the given index (according to the ArenaPathfinder)
+        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
+        // with the given index is unreachable in principle
+        int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
 
         void ApplyAction( Command & );
 
@@ -229,6 +250,8 @@ namespace Battle
         bool end_turn;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
+
+        TroopsUidGenerator _uidGenerator;
 
         enum
         {

@@ -1452,15 +1452,10 @@ namespace fheroes2
         if ( image.empty() || roi.width < 1 || roi.height < 1 )
             return;
 
-        const Point point1( roi.x, roi.y );
-        const Point point2( roi.x + roi.width, roi.y );
-        const Point point3( roi.x + roi.width, roi.y + roi.height );
-        const Point point4( roi.x, roi.y + roi.height );
-
-        DrawLine( image, point1, point2, value );
-        DrawLine( image, point2, point3, value );
-        DrawLine( image, point3, point4, value );
-        DrawLine( image, point4, point1, value );
+        DrawLine( image, { roi.x, roi.y }, { roi.x + roi.width, roi.y }, value, roi );
+        DrawLine( image, { roi.x, roi.y }, { roi.x, roi.y + roi.height }, value, roi );
+        DrawLine( image, { roi.x + roi.width - 1, roi.y }, { roi.x + roi.width - 1, roi.y + roi.height }, value, roi );
+        DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
     Image ExtractCommonPattern( const std::vector<Image> & input )
@@ -1539,6 +1534,23 @@ namespace fheroes2
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
             std::fill( imageY, imageY + width, colorId );
             std::fill( transformY, transformY + width, 0 );
+        }
+    }
+
+    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t tranformId )
+    {
+        if ( !Verify( image, x, y, width, height ) )
+            return;
+
+        const int32_t imageWidth = image.width();
+
+        uint8_t * imageY = image.image() + y * imageWidth + x;
+        uint8_t * transformY = image.transform() + y * imageWidth + x;
+        const uint8_t * imageYEnd = imageY + height * imageWidth;
+
+        for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
+            std::fill( imageY, imageY + width, 0 );
+            std::fill( transformY, transformY + width, tranformId );
         }
     }
 
@@ -1882,8 +1894,7 @@ namespace fheroes2
                         const uint8_t * transformInX = transformInY + offsetIn;
 
                         if ( posX < widthIn - 1 && posY < heightRoiIn - 1 ) {
-                            if ( *( transformInX ) == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0
-                                 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
+                            if ( *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
                                 const double coeffX = posX - startX;
                                 const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
                                 const double coeff2 = coeffX * ( 1 - coeffY );

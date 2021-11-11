@@ -303,7 +303,11 @@ namespace Maps
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
         static void UpdateAbandoneMineSprite( Tiles & tile );
-        static void FixedPreload( Tiles & tile );
+
+        // Some tiles have incorrect object type. This is due to original Editor issues.
+        static void fixTileObjectType( Tiles & tile );
+
+        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
     private:
         TilesAddon * FindFlags( void );
@@ -318,6 +322,10 @@ namespace Maps
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
+
+        bool isTallObject() const;
+
+        bool isDetachedObject() const;
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );

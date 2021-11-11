@@ -22,6 +22,7 @@
 
 #include "game_over.h"
 #include "agg.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
@@ -43,52 +44,55 @@ namespace
 {
     void DialogWins( uint32_t cond )
     {
-        const Settings & conf = Settings::Get();
         std::string body;
 
-        switch ( cond ) {
-        case GameOver::WINS_ALL:
-            break;
-
-        case GameOver::WINS_TOWN: {
-            body = _( "You captured %{name}!\nYou are victorious." );
-            const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
-            if ( town )
-                StringReplace( body, "%{name}", town->GetName() );
-            break;
-        }
-
-        case GameOver::WINS_HERO: {
-            body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
-            const Heroes * hero = world.GetHeroesCondWins();
-            if ( hero )
-                StringReplace( body, "%{name}", hero->GetName() );
-            break;
-        }
-
-        case GameOver::WINS_ARTIFACT: {
-            body = _( "You have found the %{name}.\nYour quest is complete." );
-            if ( conf.WinsFindUltimateArtifact() )
-                StringReplace( body, "%{name}", "Ultimate Artifact" );
-            else {
-                const Artifact art = conf.WinsFindArtifactID();
-                StringReplace( body, "%{name}", art.GetName() );
+        const Settings & conf = Settings::Get();
+        if ( conf.isCampaignGameType() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                body = _( "Dragon city has fallen!  You are now the Master of the Dragons." );
             }
-            break;
         }
 
-        case GameOver::WINS_SIDE:
-            body = _( "The enemy is beaten.\nYour side has triumphed!" );
-            break;
-
-        case GameOver::WINS_GOLD: {
-            body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-            StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
-            break;
-        }
-
-        default:
-            break;
+        if ( body.empty() ) {
+            switch ( cond ) {
+            case GameOver::WINS_ALL:
+                break;
+            case GameOver::WINS_TOWN: {
+                body = _( "You captured %{name}!\nYou are victorious." );
+                const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
+                if ( town )
+                    StringReplace( body, "%{name}", town->GetName() );
+                break;
+            }
+            case GameOver::WINS_HERO: {
+                body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
+                const Heroes * hero = world.GetHeroesCondWins();
+                if ( hero )
+                    StringReplace( body, "%{name}", hero->GetName() );
+                break;
+            }
+            case GameOver::WINS_ARTIFACT: {
+                body = _( "You have found the %{name}.\nYour quest is complete." );
+                if ( conf.WinsFindUltimateArtifact() )
+                    StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+                else {
+                    const Artifact art = conf.WinsFindArtifactID();
+                    StringReplace( body, "%{name}", art.GetName() );
+                }
+                break;
+            }
+            case GameOver::WINS_SIDE:
+                body = _( "The enemy is beaten.\nYour side has triumphed!" );
+                break;
+            case GameOver::WINS_GOLD: {
+                body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
+                StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+                break;
+            }
+            default:
+                break;
+            }
         }
 
         AGG::PlayMusic( MUS::VICTORY, false );
@@ -171,46 +175,32 @@ namespace
 
 const char * GameOver::GetString( uint32_t cond )
 {
-    const char * cond_str[] = {"None",
-                               _( "Defeat all enemy heroes and capture all enemy towns and castles." ),
-                               _( "Capture a specific town." ),
-                               _( "Defeat a specific hero." ),
-                               _( "Find a specific artifact." ),
-                               _( "Your side defeats the opposing side." ),
-                               _( "Accumulate a large amount of gold." ),
-                               _( "Lose all your heroes and towns." ),
-                               _( "Lose a specific town." ),
-                               _( "Lose a specific hero." ),
-                               _( "Run out of time. (Fail to win by a certain point.)" )};
-
     switch ( cond ) {
     case WINS_ALL:
-        return cond_str[1];
+        return _( "Defeat all enemy heroes and capture all enemy towns and castles." );
     case WINS_TOWN:
-        return cond_str[2];
+        return _( "Capture a specific town." );
     case WINS_HERO:
-        return cond_str[3];
+        return _( "Defeat a specific hero." );
     case WINS_ARTIFACT:
-        return cond_str[4];
+        return _( "Find a specific artifact." );
     case WINS_SIDE:
-        return cond_str[5];
+        return _( "Your side defeats the opposing side." );
     case WINS_GOLD:
-        return cond_str[6];
-
+        return _( "Accumulate a large amount of gold." );
     case LOSS_ALL:
-        return cond_str[7];
+        return _( "Lose all your heroes and towns." );
     case LOSS_TOWN:
-        return cond_str[8];
+        return _( "Lose a specific town." );
     case LOSS_HERO:
-        return cond_str[9];
+        return _( "Lose a specific hero." );
     case LOSS_TIME:
-        return cond_str[10];
-
+        return _( "Run out of time. (Fail to win by a certain point.)" );
     default:
         break;
     }
 
-    return cond_str[0];
+    return "None";
 }
 
 std::string GameOver::GetActualDescription( uint32_t cond )

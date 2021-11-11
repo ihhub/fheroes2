@@ -399,6 +399,31 @@ namespace
             return evil ? ICN::EVIWWRLD : ICN::VIEWWRLD;
         }
     }
+
+    void drawViewWorldSprite( const fheroes2::Sprite & viewWorldSprite, fheroes2::Display & display, const bool isEvilInterface )
+    {
+        const int32_t dstX = display.width() - viewWorldSprite.width() - BORDERWIDTH;
+        int32_t dstY = 2 * BORDERWIDTH + RADARWIDTH;
+        const int32_t cutHeight = 275;
+        fheroes2::Blit( viewWorldSprite, 0, 0, display, dstX, dstY, viewWorldSprite.width(), cutHeight );
+        dstY += cutHeight;
+
+        if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
+            const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
+            const int32_t startY = 11;
+            const int32_t copyHeight = 46;
+            const int32_t repeatHeight = display.height() - BORDERWIDTH - dstY - ( viewWorldSprite.height() - cutHeight );
+            const int32_t repeatCount = repeatHeight / copyHeight;
+            for ( int32_t i = 0; i < repeatCount; ++i ) {
+                fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), copyHeight );
+                dstY += copyHeight;
+            }
+            fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), repeatHeight % copyHeight );
+            dstY += repeatHeight % copyHeight;
+        }
+
+        fheroes2::Blit( viewWorldSprite, 0, cutHeight, display, dstX, dstY, viewWorldSprite.width(), viewWorldSprite.height() - cutHeight );
+    }
 }
 
 ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels )
@@ -526,7 +551,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     // "View world" sprite
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
-    fheroes2::Blit( viewWorldSprite, display, display.width() - viewWorldSprite.width() - BORDERWIDTH, 2 * BORDERWIDTH + RADARWIDTH );
+    drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
 
     // Zoom button
     const fheroes2::Point buttonZoomPosition( display.width() - RADARWIDTH + 16, 2 * BORDERWIDTH + RADARWIDTH + 128 );
@@ -552,7 +577,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {
@@ -591,7 +616,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             DrawObjectsIcons( color, mode, currentROI );
             Interface::GameBorderRedraw( true );
             radar.RedrawForViewWorld( currentROI, mode );
-            fheroes2::Blit( viewWorldSprite, display, display.width() - viewWorldSprite.width() - BORDERWIDTH, 2 * BORDERWIDTH + RADARWIDTH );
+            drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
         }
     }

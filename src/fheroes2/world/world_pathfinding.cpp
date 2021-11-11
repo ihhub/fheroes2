@@ -472,7 +472,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
-    const int start = hero.GetIndex();
+    const int32_t start = hero.GetIndex();
 
     const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
     const bool rightSideUnreachable = !Maps::isValidDirection( start, Direction::RIGHT ) || _cache[start + 1]._cost == 0;
@@ -482,7 +482,12 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 
     const bool topSideUnreachable = !Maps::isValidDirection( start, Direction::TOP ) || _cache[start - world.w()]._cost == 0;
     const bool bottomSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM ) || _cache[start + world.w()]._cost == 0;
-    return topSideUnreachable && bottomSideUnreachable;
+    if ( topSideUnreachable && bottomSideUnreachable ) {
+        return true;
+    }
+
+    // Is the hero standing on Stoneliths?
+    return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )

@@ -71,7 +71,7 @@ namespace Battle
 
         static std::string GetMoatInfo( void );
 
-        static Cell * GetCell( s32, int = CENTER );
+        static Cell * GetCell( s32 position, int dir = CENTER );
         static bool isNearIndexes( s32, s32 );
         static bool isValidIndex( s32 );
         static bool isCastleIndex( s32 );
@@ -92,7 +92,8 @@ namespace Battle
         static s32 GetIndexDirection( s32, int );
         static Indexes GetDistanceIndexes( s32, u32 );
         static Indexes GetAroundIndexes( s32 center, s32 ignore = -1 );
-        static Indexes GetAroundIndexes( const Unit & );
+        static Indexes GetAroundIndexes( const Unit & unit );
+        static Indexes GetAroundIndexes( const Position & position );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
 
@@ -104,10 +105,6 @@ namespace Battle
         static bool CanAttackUnitFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
-
-        // Finds the cell nearest to the cell with the given index and reachable for the current unit (to which the
-        // current passability information relates)
-        static int32_t FindNearestReachableCell( const Unit & currentUnit, const int32_t dst );
 
         // Handles the situation when the cell with the given index is specified as the target cell for the movement of
         // the current unit (to which the current passability information relates), this cell is located on the border

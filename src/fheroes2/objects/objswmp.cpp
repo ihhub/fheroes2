@@ -21,12 +21,21 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <set>
 
 #include "direction.h"
 #include "mp2.h"
 #include "objswmp.h"
+#include "tools.h"
 
-int ObjSwmp::GetPassable( u32 index )
+namespace
+{
+    const std::bitset<256> objSwmpShadowBitset
+        = fheroes2::makeBitsetFromVector<256>( { 2,  3,   14,  15,  16,  17,  18,  19,  20,  21,  31,  43,  44,  45,  46,  47,  48,  49, 66,
+                                                 83, 125, 127, 130, 132, 136, 141, 163, 170, 175, 178, 195, 197, 202, 204, 207, 211, 215 } );
+}
+
+int ObjSwmp::GetPassable( const uint8_t index )
 {
     const u8 disabled[] = {88, 89, 90, 91, 94, 95, 96, 97, 98, 108, 109, 110, 112, 113, 115, 116, 118, 119, 122, 123, 143, 144};
     const u8 restricted[] = {32,  33,  67,  74,  82,  85,  100, 101, 102, 103, 104, 105, 126, 128, 129, 131, 133, 134, 135, 137, 138, 139, 145, 146,
@@ -46,11 +55,9 @@ bool ObjSwmp::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjSwmp::isShadow( u32 index )
+bool ObjSwmp::isShadow( const uint8_t index )
 {
-    const u8 shadows[] = {14, 21, 31, 43, 66, 83, 125, 127, 130, 132, 136, 141, 163, 170, 175, 178, 195, 197, 202, 204, 207, 211, 215};
-
-    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
+    return objSwmpShadowBitset[index];
 }
 
 int ObjSwmp::GetActionObject( u32 index )

@@ -131,7 +131,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::MAIN_MENU, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario( false );
@@ -166,10 +166,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
-        fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
-        if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
-            supportedLanguage = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage }, 0 );
-            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
+        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+        const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+
+        if ( supportedLanguages.size() > 1 ) {
+            currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
+            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
         }
 
         Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
@@ -240,7 +242,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::ApplyPalette( highlightDoor, 8 );
 
     // mainmenu loop
-    while ( 1 ) {
+    while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )
@@ -315,7 +317,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( buttonCredits.area() ) )
             Dialog::Message( _( "Credits" ), _( "View the credits screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonHighScores.area() ) )
-            Dialog::Message( _( "High Scores" ), _( "View the high score screen." ), Font::BIG );
+            Dialog::Message( _( "High Scores" ), _( "View the high scores screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         else if ( le.MousePressRight( resolutionArea ) )

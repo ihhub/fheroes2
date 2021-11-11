@@ -68,7 +68,7 @@ namespace Campaign
             return _carryOverTroops;
         }
 
-        const std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
+        std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
 
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
@@ -94,6 +94,12 @@ namespace Campaign
         uint32_t _daysPassed;
         ScenarioBonusData _currentScenarioBonus;
     };
+
+    // Call this function only when playing campaign scenario.
+    ScenarioVictoryCondition getCurrentScenarioVictoryCondition();
+
+    // Call this function only when playing campaign scenario.
+    ScenarioLossCondition getCurrentScenarioLossCondition();
 }
 
 #endif

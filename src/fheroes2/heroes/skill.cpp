@@ -163,7 +163,8 @@ const char * Skill::Primary::String( int skill )
 
 std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
 {
-    std::string res, ext;
+    std::string res;
+    std::string ext;
 
     switch ( skill ) {
     case ATTACK:

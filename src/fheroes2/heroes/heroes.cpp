@@ -56,6 +56,51 @@
 #include "translations.h"
 #include "world.h"
 
+namespace
+{
+    int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
+    {
+        int result = 0;
+
+        for ( const MP2::MapObjectType objectType : objectTypes ) {
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                result += GameStatic::ObjectVisitedModifiers( objectType );
+
+                if ( strs ) {
+                    switch ( objectType ) {
+                    case MP2::OBJ_GRAVEYARD:
+                    case MP2::OBJN_GRAVEYARD:
+                    case MP2::OBJ_SHIPWRECK:
+                    case MP2::OBJN_SHIPWRECK:
+                    case MP2::OBJ_DERELICTSHIP:
+                    case MP2::OBJN_DERELICTSHIP: {
+                        std::string modRobber = _( "%{object} robber" );
+                        StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        strs->append( modRobber );
+                        break;
+                    }
+                    case MP2::OBJ_PYRAMID:
+                    case MP2::OBJN_PYRAMID: {
+                        std::string modRaided = _( "%{object} raided" );
+                        StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        strs->append( modRaided );
+                        break;
+                    }
+                    default:
+                        strs->append( _( MP2::StringObject( objectType ) ) );
+                        break;
+                    }
+
+                    StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
+                    strs->append( "\n" );
+                }
+            }
+        }
+
+        return result;
+    }
+}
+
 const char * Heroes::GetName( int id )
 {
     const char * names[]
@@ -80,49 +125,6 @@ const char * Heroes::GetName( int id )
             "Debug Hero", "Unknown" };
 
     return names[id];
-}
-
-template <std::size_t size>
-int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &objectTypes )[size], const Heroes & hero, std::string * strs )
-{
-    int result = 0;
-
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isObjectTypeVisited( objectTypes[ii] ) ) {
-            result += GameStatic::ObjectVisitedModifiers( objectTypes[ii] );
-
-            if ( strs ) {
-                switch ( objectTypes[ii] ) {
-                case MP2::OBJ_GRAVEYARD:
-                case MP2::OBJN_GRAVEYARD:
-                case MP2::OBJ_SHIPWRECK:
-                case MP2::OBJN_SHIPWRECK:
-                case MP2::OBJ_DERELICTSHIP:
-                case MP2::OBJN_DERELICTSHIP: {
-                    std::string modRobber = _( "%{object} robber" );
-                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
-                    strs->append( modRobber );
-                    break;
-                }
-                case MP2::OBJ_PYRAMID:
-                case MP2::OBJN_PYRAMID: {
-                    std::string modRaided = _( "%{object} raided" );
-                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
-                    strs->append( modRaided );
-                    break;
-                }
-                default:
-                    strs->append( _( MP2::StringObject( objectTypes[ii] ) ) );
-                    break;
-                }
-
-                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectTypes[ii] ) );
-                strs->append( "\n" );
-            }
-        }
-    }
-
-    return result;
 }
 
 Heroes::Heroes()
@@ -420,15 +422,16 @@ int Heroes::getStatsValue() const
 
 double Heroes::getRecruitValue() const
 {
-    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 2.0 + getStatsValue() ) * SKILL_VALUE );
+    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 10.0 + getStatsValue() ) * SKILL_VALUE );
 }
 
 double Heroes::getMeetingValue( const Heroes & recievingHero ) const
 {
-    const uint32_t artCount = bag_artifacts.CountArtifacts();
+    // Magic Book is not transferable.
+    const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
     const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
 
-    double artifactValue = bag_artifacts.getArtifactValue() * 2.0;
+    double artifactValue = bag_artifacts.getArtifactValue() * 5.0;
     if ( artCount > canFit ) {
         artifactValue = canFit * ( artifactValue / artCount );
     }
@@ -604,9 +607,9 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const MP2::MapObjectType objectTypes[]
-        = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objectTypes, *this, strs );
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,        MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE,
+                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // result
     return Morale::Normalize( result );
@@ -628,8 +631,8 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const MP2::MapObjectType objectTypes[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objectTypes, *this, strs );
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     return Luck::Normalize( result );
 }
@@ -709,7 +712,7 @@ void Heroes::ActionAfterBattle( void )
 {
     // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
-    //
+
     SetModes( ACTION );
 }
 
@@ -762,7 +765,7 @@ void Heroes::RescanPath( void )
     if ( path.isValid() ) {
         const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
 
-        if ( !isShipMaster() && tile.isWater() && !MP2::isNeedStayFront( tile.GetObject() ) )
+        if ( !isShipMaster() && tile.isWater() && !MP2::isAccessibleFromBeach( tile.GetObject() ) )
             path.PopBack();
     }
 
@@ -986,15 +989,15 @@ void Heroes::ShowPath( bool f )
     f ? path.Show() : path.Hide();
 }
 
-void Heroes::IncreaseExperience( u32 exp )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
 {
-    int level_old = GetLevelFromExperience( experience );
-    int level_new = GetLevelFromExperience( experience + exp );
+    int oldLevel = GetLevelFromExperience( experience );
+    int newLevel = GetLevelFromExperience( experience + amount );
 
-    for ( int ii = 0; ii < level_new - level_old; ++ii )
-        LevelUp( false );
+    for ( int level = oldLevel; level < newLevel; ++level )
+        LevelUp( false, autoselect );
 
-    experience += exp;
+    experience += amount;
 }
 
 /* calc level from exp */
@@ -1325,10 +1328,8 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
 
         return 8;
     }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
-    }
 
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
     return 0;
 }
 
@@ -1602,7 +1603,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int type ) const
     return Heroes::GetPortrait( portrait, type );
 }
 
-void Heroes::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const
+void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
 {
     const fheroes2::Sprite & port = GetPortrait( portrait, type );
     fheroes2::Point mp;
