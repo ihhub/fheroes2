@@ -253,22 +253,22 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         bool redrawScreen = false;
 
-        for ( size_t i = 0; i < buttons.size(); ++i ) {
-            buttons[i].wasOver = buttons[i].isOver;
+        for ( ButtonInfo & button : buttons ) {
+            button.wasOver = button.isOver;
 
-            if ( le.MousePressLeft( buttons[i].button.area() ) ) {
-                buttons[i].button.drawOnPress();
+            if ( le.MousePressLeft( button.button.area() ) ) {
+                button.button.drawOnPress();
             }
             else {
-                buttons[i].button.drawOnRelease();
+                button.button.drawOnRelease();
             }
 
-            buttons[i].isOver = le.MouseCursor( buttons[i].button.area() );
+            button.isOver = le.MouseCursor( button.button.area() );
 
-            if ( buttons[i].isOver != buttons[i].wasOver ) {
-                u32 frame = buttons[i].frame;
+            if ( button.isOver != button.wasOver ) {
+                u32 frame = button.frame;
 
-                if ( buttons[i].isOver && !buttons[i].wasOver )
+                if ( button.isOver && !button.wasOver )
                     ++frame;
 
                 if ( !redrawScreen ) {

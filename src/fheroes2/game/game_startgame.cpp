@@ -778,9 +778,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 res = fheroes2::GameMode::QUIT_GAME;
                 break;
             }
-            else {
-                continue;
-            }
+            continue;
         }
 
         // hot keys

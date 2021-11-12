@@ -1775,11 +1775,6 @@ KeySym LocalEvent::KeyValue( void ) const
     return key_value;
 }
 
-bool LocalEvent::KeyPress( void ) const
-{
-    return modes & KEY_PRESSED;
-}
-
 bool LocalEvent::KeyPress( KeySym key ) const
 {
     return key == key_value && ( modes & KEY_PRESSED );

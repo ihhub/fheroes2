@@ -75,26 +75,80 @@ namespace Interface
     class Basic
     {
     public:
-        static Basic & Get( void );
+        static Basic & Get( void )
+        {
+            static Basic basic;
+            return basic;
+        }
 
-        bool NeedRedraw( void ) const;
-        void SetRedraw( int );
-        int GetRedrawMask() const;
+        bool NeedRedraw( void ) const
+        {
+            return redraw != 0;
+        }
+
+        void SetRedraw( int f )
+        {
+            redraw |= f;
+        }
+
+        int GetRedrawMask() const
+        {
+            return redraw;
+        }
+
+        const fheroes2::Rect & GetScrollLeft( void ) const
+        {
+            return scrollLeft;
+        }
+
+        const fheroes2::Rect & GetScrollRight( void ) const
+        {
+            return scrollRight;
+        }
+
+        const fheroes2::Rect & GetScrollTop( void ) const
+        {
+            return scrollTop;
+        }
+
+        const fheroes2::Rect & GetScrollBottom( void ) const
+        {
+            return scrollBottom;
+        }
+
         void Redraw( int f = 0 );
-
-        const fheroes2::Rect & GetScrollLeft( void ) const;
-        const fheroes2::Rect & GetScrollRight( void ) const;
-        const fheroes2::Rect & GetScrollTop( void ) const;
-        const fheroes2::Rect & GetScrollBottom( void ) const;
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
-        GameArea & GetGameArea( void );
-        Radar & GetRadar( void );
-        IconsPanel & GetIconsPanel( void );
-        ButtonsArea & GetButtonsArea( void );
-        StatusWindow & GetStatusWindow( void );
-        ControlPanel & GetControlPanel( void );
+        GameArea & GetGameArea( void )
+        {
+            return gameArea;
+        }
+
+        Radar & GetRadar( void )
+        {
+            return radar;
+        }
+
+        IconsPanel & GetIconsPanel( void )
+        {
+            return iconsPanel;
+        }
+
+        ButtonsArea & GetButtonsArea( void )
+        {
+            return buttonsArea;
+        }
+
+        StatusWindow & GetStatusWindow( void )
+        {
+            return statusWindow;
+        }
+
+        ControlPanel & GetControlPanel( void )
+        {
+            return controlPanel;
+        }
 
         void SetFocus( Heroes * );
         void SetFocus( Castle * );

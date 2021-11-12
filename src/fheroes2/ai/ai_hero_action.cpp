@@ -85,10 +85,7 @@ namespace
             return true;
 
         const Route::Path & path = hero.GetPath();
-        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).GetFogDirections( colors ) != DIRECTION_ALL )
-            return true;
-
-        return false;
+        return path.isValid() && world.GetTiles( path.front().GetIndex() ).GetFogDirections( colors ) != DIRECTION_ALL;
     }
 }
 
@@ -541,8 +538,8 @@ namespace AI
             else
                 // wins defender
                 if ( res.DefenderWins() ) {
-                other_hero->IncreaseExperience( res.GetExperienceDefender() );
-            }
+                    other_hero->IncreaseExperience( res.GetExperienceDefender() );
+                }
         }
     }
 
@@ -609,8 +606,8 @@ namespace AI
                 else
                     // wins defender
                     if ( res.DefenderWins() && defender ) {
-                    defender->IncreaseExperience( res.GetExperienceDefender() );
-                }
+                        defender->IncreaseExperience( res.GetExperienceDefender() );
+                    }
             }
             else {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() );
@@ -1506,21 +1503,21 @@ namespace AI
             else
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < cond && cond < 14 ) {
-                Army army( tile );
+                    Army army( tile );
 
-                // new battle
-                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    result = true;
+                    // new battle
+                    Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+                    if ( res.AttackerWins() ) {
+                        hero.IncreaseExperience( res.GetExperienceAttacker() );
+                        result = true;
+                    }
+                    else {
+                        AIBattleLose( hero, res, true, Color::NONE );
+                    }
                 }
                 else {
-                    AIBattleLose( hero, res, true, Color::NONE );
+                    result = true;
                 }
-            }
-            else {
-                result = true;
-            }
 
             if ( result && hero.PickupArtifact( art ) ) {
                 tile.RemoveObjectSprite();
@@ -1542,8 +1539,8 @@ namespace AI
         MapsIndexes coasts = Maps::ScanAroundObjectWithDistance( from_index, 4, MP2::OBJ_COAST );
         coasts.push_back( from_index );
 
-        for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
-            hero.SetVisited( *it );
+        for ( int coast : coasts )
+            hero.SetVisited( coast );
 
         hero.setLastGroundRegion( world.GetTiles( from_index ).GetRegion() );
 

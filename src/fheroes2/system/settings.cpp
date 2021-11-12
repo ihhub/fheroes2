@@ -124,13 +124,6 @@ Settings::~Settings()
         BinarySave();
 }
 
-Settings & Settings::Get()
-{
-    static Settings conf;
-
-    return conf;
-}
-
 bool Settings::Read( const std::string & filename )
 {
     TinyConfig config( '=', '#' );
@@ -462,11 +455,6 @@ int Settings::GameDifficulty() const
     return game_difficulty;
 }
 
-int Settings::CurrentColor() const
-{
-    return players.current_color;
-}
-
 const std::string & Settings::getGameLanguage() const
 {
     return _gameLanguage;
@@ -738,24 +726,6 @@ void Settings::SetGameDifficulty( int d )
     game_difficulty = d;
 }
 
-void Settings::SetCurrentColor( int color )
-{
-    players.current_color = color;
-}
-
-int Settings::SoundVolume() const
-{
-    return sound_volume;
-}
-int Settings::MusicVolume() const
-{
-    return music_volume;
-}
-MusicSource Settings::MusicType() const
-{
-    return _musicType;
-}
-
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
@@ -774,36 +744,9 @@ void Settings::SetMusicType( int v )
     _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
 }
 
-/* check game type */
-bool Settings::IsGameType( int f ) const
-{
-    return ( game_type & f ) != 0;
-}
-
-int Settings::GameType() const
-{
-    return game_type;
-}
-
-/* set game type */
-void Settings::SetGameType( int type )
-{
-    game_type = type;
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
-}
-
-const Players & Settings::GetPlayers() const
-{
-    return players;
-}
-
-Players & Settings::GetPlayers()
-{
-    return players;
 }
 
 void Settings::SetPreferablyCountPlayers( int c )

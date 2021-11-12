@@ -107,8 +107,12 @@ public:
     explicit Player( int col = Color::NONE );
     ~Player() override = default;
 
-    bool isColor( int ) const;
     bool isPlay( void ) const;
+
+    bool isColor( int col ) const
+    {
+        return col == color;
+    }
 
     void SetColor( int );
     void SetRace( int );
@@ -118,9 +122,21 @@ public:
     void SetName( const std::string & );
 
     int GetControl( void ) const override;
-    int GetColor( void ) const;
-    int GetRace( void ) const;
-    int GetFriends( void ) const;
+
+    int GetColor( void ) const
+    {
+        return color;
+    }
+
+    int GetRace( void ) const
+    {
+        return race;
+    }
+
+    int GetFriends( void ) const
+    {
+        return friends;
+    }
 
     std::string GetDefaultName() const;
     const std::string & GetName( void ) const;
