@@ -760,7 +760,8 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 7 ) {
                     Sprite & out = _icnVsSprite[id][7];
                     if ( out.width() == 34 && out.height() == 19 ) {
-                        Sprite temp = std::move( out );
+                        Sprite temp;
+                        std::swap( temp, out );
 
                         out.resize( out.width() + 1, out.height() );
                         out.reset();
