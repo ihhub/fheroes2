@@ -144,8 +144,11 @@ public:
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );
 
-        buttonGift.setPosition( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 120 );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 150 );
+        const fheroes2::Sprite & sprite_exit = fheroes2::AGG::GetICN( tradpost, 17 );
+
+        buttonGift.setPosition( pos_rt.x - 70 + ( pos_rt.width - sprite_exit.width() ) / 2,
+                                pos_rt.y + pos_rt.height - sprite_exit.height() );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - sprite_exit.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
 
@@ -204,7 +207,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         _scrollbar.hide();
         back.restore();
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
-        const std::string message = firstExchange && ( resourceFrom == resourceTo )
+        const std::string message = firstExchange && ( resourceFrom == resourceTo || 0 == max_buy )
                                         ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
                                         : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
 
@@ -269,7 +272,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.y = pos_rt.y + 115;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        buttonGift.disable();
+        buttonGift.enable();
         buttonTrade.enable();
         buttonLeft.enable();
         buttonRight.enable();
@@ -397,7 +400,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     // button exit
     const fheroes2::Sprite & sprite_exit = fheroes2::AGG::GetICN( tradpost, 17 );
-    dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_exit.width() ) / 2;
+    dst_pt.x = pos_rt.x + 70 + ( pos_rt.width - sprite_exit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.height - sprite_exit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
 
@@ -429,6 +432,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             Dialog::MakeGiftResource( kingdom );
             fundsFrom = kingdom.GetFunds();
             RedrawFromResource( pt1, fundsFrom );
+            resourceTo = resourceFrom = Resource::UNKNOWN;
+            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
+            cursorTo.hide();
+            cursorFrom.hide();
             display.render();
         }
 
