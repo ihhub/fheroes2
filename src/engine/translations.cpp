@@ -160,14 +160,14 @@ struct mofile
             const std::string sep2( ": " );
 
             buf.seek( offset2 );
-            auto tags = StringSplit( buf.toString( length2 ), "\n" );
+            std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
 
-            for ( const auto & it : tags ) {
+            for ( const std::string & tag : tags ) {
                 if ( encoding.empty() )
-                    encoding = get_tag( it, tag1, sep1 );
+                    encoding = get_tag( tag, tag1, sep1 );
 
                 if ( plural_forms.empty() )
-                    plural_forms = get_tag( it, tag2, sep2 );
+                    plural_forms = get_tag( tag, tag2, sep2 );
             }
         }
 

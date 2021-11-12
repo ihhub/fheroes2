@@ -19,7 +19,6 @@
  ***************************************************************************/
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -62,12 +61,12 @@ namespace fheroes2
 
         uint8_t * transform()
         {
-            return _data.get() + static_cast<ptrdiff_t>( width() * height() );
+            return _data.get() + width() * height();
         }
 
         const uint8_t * transform() const
         {
-            return _data.get() + static_cast<ptrdiff_t>( width() * height() );
+            return _data.get() + width() * height();
         }
 
         bool empty() const

@@ -201,7 +201,7 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
         // 2: en_us
         // 1: en
         if ( length < 3 ) {
-            auto vec = StringSplit( locname, length < 2 ? "_" : "." );
+            std::vector<std::string> vec = StringSplit( locname, length < 2 ? "_" : "." );
             return vec.empty() ? locname : vec.front();
         }
     }
@@ -348,7 +348,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     }
 
     const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for ( const auto & subPathIter : splittedPath ) {
+    for ( const std::string & subPathIter : splittedPath ) {
         if ( !d ) {
             return false;
         }

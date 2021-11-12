@@ -113,7 +113,7 @@ public:
     {
         const u32 size = get32();
         v.resize( size );
-        for ( auto & it : v )
+        for ( Type & it : v )
             *this >> it;
         return *this;
     }
@@ -123,7 +123,7 @@ public:
     {
         const u32 size = get32();
         v.resize( size );
-        for ( auto & it : v )
+        for ( Type & it : v )
             *this >> it;
         return *this;
     }
@@ -151,8 +151,8 @@ public:
     StreamBase & operator<<( const std::vector<Type> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const auto & it : v )
-            *this << it;
+        for ( const Type & elem : v )
+            *this << elem;
         return *this;
     }
 
@@ -160,8 +160,8 @@ public:
     StreamBase & operator<<( const std::list<Type> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const auto & it : v )
-            *this << it;
+        for ( const Type & elem : v )
+            *this << elem;
         return *this;
     }
 
@@ -169,8 +169,8 @@ public:
     StreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const auto & it : v )
-            *this << it;
+        for ( const std::pair<Type1, Type2> & elem : v )
+            *this << elem;
         return *this;
     }
 

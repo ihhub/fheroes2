@@ -325,8 +325,8 @@ struct MidiEvents : std::vector<MidiChunk>
     size_t size( void ) const
     {
         size_t res = 0;
-        for ( const auto & it : *this )
-            res += it.size();
+        for ( const MidiChunk & chunk : *this )
+            res += chunk.size();
         return res;
     }
 
@@ -413,17 +413,17 @@ struct MidiEvents : std::vector<MidiChunk>
 
         // update duration
         delta = 0;
-        for ( auto & it : *this ) {
-            it._binaryTime = packToMIDITime( it._time - delta );
-            delta = it._time;
+        for ( MidiChunk & chunk : *this ) {
+            chunk._binaryTime = packToMIDITime( chunk._time - delta );
+            delta = chunk._time;
         }
     }
 };
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
-    for ( const auto & it : st ) {
-        sb << it;
+    for ( const MidiChunk & event : st ) {
+        sb << event;
     }
     return sb;
 }
@@ -466,23 +466,23 @@ struct MidTracks : std::list<MidTrack>
     size_t size( void ) const
     {
         size_t res = 0;
-        for ( const auto & it : *this )
-            res += it.size();
+        for ( const MidTrack & track : *this )
+            res += track.size();
         return res;
     }
 
     MidTracks() = default;
     explicit MidTracks( const XMITracks & tracks )
     {
-        for ( const auto & track : tracks )
+        for ( const XMITrack & track : tracks )
             emplace_back( track );
     }
 };
 
 StreamBuf & operator<<( StreamBuf & sb, const MidTracks & st )
 {
-    for ( const auto & it : st )
-        sb << it;
+    for ( const MidTrack & track : st )
+        sb << track;
     return sb;
 }
 

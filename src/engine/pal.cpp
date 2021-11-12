@@ -145,11 +145,12 @@ std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
     std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
 
     const std::vector<CyclingColorSet> & set = GetCyclingColors();
-    for ( const auto & it : set ) {
-        for ( int id = 0; id < it.length; ++id ) {
-            const int lastColorID = it.length - 1;
-            const uint8_t newColorID = it.forward ? it.start + ( id + stepId ) % it.length : it.start + lastColorID - ( lastColorID + stepId - id ) % it.length;
-            palette[it.start + id] = newColorID;
+    for ( const CyclingColorSet & colorSet : set ) {
+        for ( int id = 0; id < colorSet.length; ++id ) {
+            const int lastColorID = colorSet.length - 1;
+            const uint8_t newColorID
+                = colorSet.forward ? colorSet.start + ( id + stepId ) % colorSet.length : colorSet.start + lastColorID - ( lastColorID + stepId - id ) % colorSet.length;
+            palette[colorSet.start + id] = newColorID;
         }
     }
 
