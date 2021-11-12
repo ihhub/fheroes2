@@ -646,7 +646,7 @@ void Settings::setFullScreen( const bool enable )
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
-    scroll_speed = clamp( static_cast<int>( speed ), static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
+    scroll_speed = clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
