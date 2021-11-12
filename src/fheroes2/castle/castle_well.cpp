@@ -35,6 +35,7 @@
 #include "monster_anim.h"
 #include "resource.h"
 #include "speed.h"
+#include "text.h"
 #include "translations.h"
 #include "ui_text.h"
 
@@ -188,10 +189,10 @@ void Castle::OpenWell( void )
                     }
                 }
                 if ( isCreaturePresent ) {
-                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
+                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
                 }
                 else {
-                    Dialog::Message( "", _( "No monsters available for purchase." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
+                    Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
             else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
