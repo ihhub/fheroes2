@@ -150,16 +150,40 @@ void WorldPathfinder::checkWorldSize()
     }
 }
 
-uint32_t WorldPathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
+uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction, uint32_t consumedMovePoints ) const
 {
-    const Maps::Tiles & tileTo = world.GetTiles( target );
-    uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, skill );
+    const Maps::Tiles & srcTile = world.GetTiles( src );
+    const Maps::Tiles & dstTile = world.GetTiles( dst );
+
+    const uint32_t srcTilePenalty = srcTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
+
+    uint32_t dstTilePenalty = ( srcTile.isRoad() && dstTile.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( dstTile, _pathfindingSkill );
 
     // diagonal move costs 50% extra
-    if ( Direction::isDiagonal( direction ) )
-        penalty = penalty * 3 / 2;
+    if ( Direction::isDiagonal( direction ) ) {
+        dstTilePenalty = dstTilePenalty * 3 / 2;
+    }
 
-    return penalty;
+    bool lastMove = false;
+
+    if ( _maxMovePoints > 0 ) {
+        uint32_t movePointsLeft;
+
+        if ( consumedMovePoints < _remainingMovePoints ) {
+            movePointsLeft = _remainingMovePoints - consumedMovePoints;
+        }
+        else {
+            movePointsLeft = _maxMovePoints - ( consumedMovePoints - _remainingMovePoints ) % _maxMovePoints;
+        }
+
+        lastMove = movePointsLeft >= srcTilePenalty && movePointsLeft <= dstTilePenalty;
+    }
+
+    if ( lastMove ) {
+        return srcTilePenalty;
+    }
+
+    return dstTilePenalty;
 }
 
 void WorldPathfinder::processWorldMap( int pathStart )
@@ -191,7 +215,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
             if ( newIndex == pathStart )
                 continue;
 
-            const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], _pathfindingSkill );
+            const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], currentNode._cost );
             PathfindingNode<MP2::MapObjectType> & newNode = _cache[newIndex];
             if ( world.isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
                 const Maps::Tiles & tile = world.GetTiles( newIndex );
@@ -216,18 +240,26 @@ void PlayerWorldPathfinder::reset()
         _pathStart = -1;
         _currentColor = Color::NONE;
         _pathfindingSkill = Skill::Level::EXPERT;
+        _remainingMovePoints = 0;
+        _maxMovePoints = 0;
     }
 }
 
 void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
     const int startIndex = hero.GetIndex();
+    const int color = hero.GetColor();
     const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+    const uint32_t remainingMovePoints = hero.GetMovePoints();
+    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
 
-    if ( _pathStart != startIndex || _pathfindingSkill != skill ) {
+    if ( _pathStart != startIndex || _currentColor != color || _pathfindingSkill != skill || _remainingMovePoints != remainingMovePoints
+         || _maxMovePoints != maxMovePoints ) {
         _pathStart = startIndex;
-        _currentColor = hero.GetColor();
+        _currentColor = color;
         _pathfindingSkill = skill;
+        _remainingMovePoints = remainingMovePoints;
+        _maxMovePoints = maxMovePoints;
 
         processWorldMap( startIndex );
     }
@@ -280,7 +312,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
 
             if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction, _currentColor ) ) {
                 // add straight to cache, can't move further from the monster
-                const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, _pathfindingSkill );
+                const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, _cache[currentNodeIdx]._cost );
                 PathfindingNode<MP2::MapObjectType> & monsterNode = _cache[monsterIndex];
                 if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
                     monsterNode._from = currentNodeIdx;
@@ -303,12 +335,31 @@ void AIWorldPathfinder::reset()
         _currentColor = Color::NONE;
         _armyStrength = -1;
         _pathfindingSkill = Skill::Level::EXPERT;
+        _remainingMovePoints = 0;
+        _maxMovePoints = 0;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    reEvaluateIfNeeded( hero.GetIndex(), hero.GetColor(), hero.GetArmy().GetStrength(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    const int startIndex = hero.GetIndex();
+    const int color = hero.GetColor();
+    const double armyStrength = hero.GetArmy().GetStrength();
+    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+    const uint32_t remainingMovePoints = hero.GetMovePoints();
+    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
+
+    if ( _pathStart != startIndex || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill
+         || _remainingMovePoints != remainingMovePoints || _maxMovePoints != maxMovePoints ) {
+        _pathStart = startIndex;
+        _currentColor = color;
+        _armyStrength = armyStrength;
+        _pathfindingSkill = skill;
+        _remainingMovePoints = remainingMovePoints;
+        _maxMovePoints = maxMovePoints;
+
+        processWorldMap( startIndex );
+    }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
@@ -318,6 +369,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
         _currentColor = color;
         _armyStrength = armyStrength;
         _pathfindingSkill = skill;
+        _remainingMovePoints = 0;
+        _maxMovePoints = 0;
 
         processWorldMap( start );
     }

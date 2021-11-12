@@ -37,9 +37,6 @@ public:
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
 
-    // Shared helper methods
-    uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::EXPERT ) const;
-
 protected:
     void processWorldMap( int pathStart );
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
@@ -47,8 +44,13 @@ protected:
     // This method defines pathfinding rules. This has to be implemented by the derived class.
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
+    // Calculates the movement penalty when moving from src tile to adjacent dst tile in the specified direction.
+    uint32_t getMovementPenalty( int src, int dst, int direction, uint32_t consumedMovePoints ) const;
+
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
     int _currentColor = Color::NONE;
+    uint32_t _remainingMovePoints = 0;
+    uint32_t _maxMovePoints = 0;
     std::vector<int> _mapOffset;
 };
 
