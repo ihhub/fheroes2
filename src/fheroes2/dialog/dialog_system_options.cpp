@@ -351,7 +351,7 @@ namespace
             // set scroll speed
             bool saveScrollSpeed = false;
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( conf.ScrollSpeed() % 4 + 1 );
+                conf.SetScrollSpeed( conf.ScrollSpeed() % SCROLL_FAST2 + 1 );
                 saveScrollSpeed = true;
             }
             else if ( le.MouseWheelUp( scrollSpeedRoi ) ) {
