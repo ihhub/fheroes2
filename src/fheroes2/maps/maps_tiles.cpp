@@ -1673,9 +1673,9 @@ bool Maps::Tiles::isRoad() const
 
 bool Maps::Tiles::isStream( void ) const
 {
-    for ( auto it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-        const int icn = MP2::GetICNObject( it->object );
-        if ( icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && it->index < 14 ) )
+    for ( const TilesAddon & addon : addons_level1 ) {
+        const int icn = MP2::GetICNObject( addon.object );
+        if ( icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && addon.index < 14 ) )
             return true;
     }
     const int tileICN = MP2::GetICNObject( objectTileset );

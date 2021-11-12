@@ -92,7 +92,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
-        std::vector<std::pair<int, const Army *> > enemyArmies;
+        std::vector<std::pair<int, const Army *>> enemyArmies;
 
         const int mapSize = world.w() * world.h();
         _mapObjects.clear();
@@ -169,34 +169,34 @@ namespace AI
         // Step 2. Update AI variables and recalculate resource budget
         const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
 
-        for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
-            if ( *it ) {
-                _combinedHeroStrength += ( *it )->GetArmy().GetStrength();
+        for ( const Heroes * hero : heroes ) {
+            if ( hero ) {
+                _combinedHeroStrength += hero->GetArmy().GetStrength();
             }
         }
 
         const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
         std::set<int> castlesInDanger;
 
-        for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
-            if ( enemy->second == nullptr )
+        for ( const std::pair<int, const Army *> & enemy : enemyArmies ) {
+            if ( enemy.second == nullptr )
                 continue;
 
-            const double attackerStrength = enemy->second->GetStrength();
+            const double attackerStrength = enemy.second->GetStrength();
 
             for ( size_t idx = 0; idx < castles.size(); ++idx ) {
                 const Castle * castle = castles[idx];
                 if ( castle ) {
                     const int castleIndex = castle->GetIndex();
                     // skip precise distance check if army is too far away to be a threat
-                    if ( Maps::GetApproximateDistance( enemy->first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
+                    if ( Maps::GetApproximateDistance( enemy.first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
                         continue;
 
                     const double defenders = castle->GetArmy().GetStrength();
 
                     const double attackerThreat = attackerStrength - defenders;
                     if ( attackerThreat > 0 ) {
-                        const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
+                        const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, color, attackerStrength );
                         if ( dist && dist < threatDistanceLimit ) {
                             // castle is under threat
                             castlesInDanger.insert( castleIndex );

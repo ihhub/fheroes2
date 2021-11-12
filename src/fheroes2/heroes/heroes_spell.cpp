@@ -394,11 +394,11 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     }
 
     const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-    for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
-        if ( Maps::isValidAbsIndex( *it ) ) {
-            const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
+    for ( int boat : boats ) {
+        if ( Maps::isValidAbsIndex( boat ) ) {
+            const uint32_t distance = Maps::GetApproximateDistance( boat, hero.GetIndex() );
             if ( distance > 1 ) {
-                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, boat, dst_water, true, true );
                 Game::ObjectFadeAnimation::PerformFadeTask();
 
                 return true;

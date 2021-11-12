@@ -125,8 +125,8 @@ StreamBase & StreamBase::operator>>( std::string & v )
     u32 size = get32();
     v.resize( size );
 
-    for ( std::string::iterator it = v.begin(); it != v.end(); ++it )
-        *it = get8();
+    for ( char & chr : v )
+        chr = get8();
 
     return *this;
 }

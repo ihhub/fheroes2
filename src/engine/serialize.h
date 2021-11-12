@@ -169,7 +169,7 @@ public:
     StreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const std::pair<Type1, Type2> & elem : v )
+        for ( const auto & elem : v )
             *this << elem;
         return *this;
     }

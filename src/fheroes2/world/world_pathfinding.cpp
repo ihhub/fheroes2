@@ -342,8 +342,8 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     bool isProtected = protectionCheck( currentNodeIdx );
     if ( !isProtected ) {
         const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
-        for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-            if ( protectionCheck( *it ) ) {
+        for (int monster : monsters) {
+            if ( protectionCheck( monster ) ) {
                 isProtected = true;
                 break;
             }

@@ -480,12 +480,12 @@ void Kingdom::UpdateRecruits( void )
     if ( isControlHuman() && ( Settings::Get().isCampaignGameType() ) && world.CountWeek() < 2 ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
-        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
-            if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
+        for ( const Campaign::CampaignAwardData & obtainedAward : obtainedAwards ) {
+            if ( obtainedAward._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
                 continue;
 
             // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
-            const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+            const Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
             if ( hero && hero->isFreeman() ) {
                 recruits.SetHero1( hero );
@@ -535,8 +535,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
 
     bool foundHeroes = false;
 
-    for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
-        const Castle * castle = *it;
+    for ( const Castle * castle : castles ) {
         if ( castle == nullptr )
             continue;
 
@@ -586,8 +585,8 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CAPTURED & type ) {
         // captured object
-        const int resources[]
-            = {Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN};
+        const static int resources[]
+            = { Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN };
 
         for ( u32 index = 0; resources[index] != Resource::UNKNOWN; ++index )
             totalIncome += ProfitConditions::FromMine( resources[index] ) * world.CountCapturedMines( resources[index], GetColor() );
@@ -595,18 +594,16 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CASTLES & type ) {
         // castles
-        for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
-            const Castle & castle = **it;
-
+        for ( const Castle * castle : castles ) {
             // castle or town profit
-            totalIncome += ProfitConditions::FromBuilding( ( castle.isCastle() ? BUILD_CASTLE : BUILD_TENT ), 0 );
+            totalIncome += ProfitConditions::FromBuilding( ( ( *castle ).isCastle() ? BUILD_CASTLE : BUILD_TENT ), 0 );
 
             // statue
-            if ( castle.isBuild( BUILD_STATUE ) )
+            if ( ( *castle ).isBuild( BUILD_STATUE ) )
                 totalIncome += ProfitConditions::FromBuilding( BUILD_STATUE, 0 );
 
             // dungeon for warlock
-            if ( castle.isBuild( BUILD_SPEC ) && Race::WRLK == castle.GetRace() )
+            if ( ( *castle ).isBuild( BUILD_SPEC ) && Race::WRLK == ( *castle ).GetRace() )
                 totalIncome += ProfitConditions::FromBuilding( BUILD_SPEC, Race::WRLK );
         }
     }
@@ -628,8 +625,8 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_HEROSKILLS & type ) {
         // estates skill bonus
-        for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+        for ( const Heroes * hero : heroes )
+            totalIncome.gold += ( *hero ).GetSecondaryValues( Skill::Secondary::ESTATES );
     }
 
     if ( isControlAI() ) {
@@ -666,11 +663,11 @@ double Kingdom::GetArmiesStrength( void ) const
 {
     double res = 0;
 
-    for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-        res += ( **ith ).GetArmy().GetStrength();
+    for ( const Heroes * hero : heroes )
+        res += ( *hero ).GetArmy().GetStrength();
 
-    for ( KingdomCastles::const_iterator itc = castles.begin(); itc != castles.end(); ++itc )
-        res += ( **itc ).GetArmy().GetStrength();
+    for ( const Castle * castle : castles )
+        res += ( *castle ).GetArmy().GetStrength();
 
     return res;
 }
@@ -681,8 +678,8 @@ void Kingdoms::Init( void )
 
     clear();
 
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it )
-        GetKingdom( *it ).Init( *it );
+    for ( int color : colors )
+        GetKingdom( color ).Init( color );
 }
 
 void Kingdoms::clear( void )
@@ -809,10 +806,10 @@ int Kingdoms::FindWins( int cond ) const
 
 void Kingdoms::AddHeroes( const AllHeroes & heroes )
 {
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
+    for ( Heroes * hero : heroes )
         // skip gray color
-        if ( ( *it )->GetColor() )
-            GetKingdom( ( *it )->GetColor() ).AddHeroes( *it );
+        if ( hero->GetColor() )
+            GetKingdom( hero->GetColor() ).AddHeroes( hero );
 }
 
 void Kingdoms::AddCastles( const AllCastles & castles )
