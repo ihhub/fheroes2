@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
-"PO-Revision-Date: 2021-11-13 15:09+0100\n"
+"PO-Revision-Date: 2021-11-13 19:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -1338,6 +1338,7 @@ msgstr "%{building} lager %{monster}."
 msgid "Requires:"
 msgstr "Krever:"
 
+# Ikke mulig å bygge.
 msgid "Cannot build. Already built here this turn."
 msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne turen."
 
@@ -1345,7 +1346,7 @@ msgid "For this action it is necessary first to build a castle."
 msgstr "For å utføre denne handlingen må man bygge slott først."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr "Ikke mulig å bygge %{name} fordi slottet er for langt unna vann."
+msgstr "Kan ikke bygge skipsverft fordi slottet er for langt unna vann."
 
 # bygning? usikker funksjon
 msgid "disable build."
@@ -1363,20 +1364,22 @@ msgstr "Ikke mulig å bygge %{name}."
 msgid "Build %{name}."
 msgstr "Bygg %{name}."
 
+# Ikke mulig å verve?
 msgid "Cannot recruit - guest to guard automove error."
-msgstr "Kan ikke verve - gjest til vokter autoflyttefeil."
+msgstr ""
+"Kan ikke verves - feil ved automatisk flytting fra besøkende til vokter."
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr "Umulig å verve - du har allerede en helt i denne byen."
+msgstr "Kan ikke verves - du har allerede en helt i denne byen."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr "Umulig å verve - du har for mange helter."
+msgstr "Kan ikke verves - du har for mange helter."
 
 msgid "Cannot afford a Hero"
-msgstr "Ikke råd til en helt"
+msgstr "Ikke råd til helt"
 
 msgid "There is no room in the garrison for this army."
-msgstr "Det er ikke plass i garnisonen for denne hæren."
+msgstr "Det er ikke plass i garnisonen for denne styrken."
 
 # Forskansing eller festningsanlegg
 msgid "Fortifications"
@@ -1393,31 +1396,31 @@ msgstr "Skytebane"
 
 # Liten eller stor bokstav på bygningnavn?
 msgid "Upg. Archery Range"
-msgstr "Oppg. Skytebane"
+msgstr "Oppg. skytebane"
 
 msgid "Blacksmith"
 msgstr "Smed"
 
 msgid "Upg. Blacksmith"
-msgstr "Oppg. Smed"
+msgstr "Oppg. smed"
 
 msgid "Armory"
 msgstr "Rustkammer"
 
 msgid "Upg. Armory"
-msgstr "Oppg. Rustkammer"
+msgstr "Oppg. rustkammer"
 
 msgid "Jousting Arena"
 msgstr "Dystearena"
 
 msgid "Upg. Jousting Arena"
-msgstr "Oppg. Dystearena"
+msgstr "Oppg. dystearena"
 
 msgid "Cathedral"
 msgstr "Domkirke"
 
 msgid "Upg. Cathedral"
-msgstr "Oppg. Domkirke"
+msgstr "Oppg. domkirke"
 
 msgid "Coliseum"
 msgstr "Amfiteater"
@@ -1432,7 +1435,7 @@ msgid "Stick Hut"
 msgstr "Kvisthytte"
 
 msgid "Upg. Stick Hut"
-msgstr "Oppg. Kvisthytte"
+msgstr "Oppg. kvisthytte"
 
 msgid "Den"
 msgstr "Hi"
@@ -1441,13 +1444,13 @@ msgid "Adobe"
 msgstr "Leirhus"
 
 msgid "Upg. Adobe"
-msgstr "Oppg. Leirhus"
+msgstr "Oppg. leirhus"
 
 msgid "Bridge"
 msgstr "Bru"
 
 msgid "Upg. Bridge"
-msgstr "Oppg. Bru"
+msgstr "Oppg. bru"
 
 msgid "Pyramid"
 msgstr "Pyramide"
@@ -1465,15 +1468,15 @@ msgid "Cottage"
 msgstr "Stue"
 
 msgid "Upg. Cottage"
-msgstr "Oppg. Stue"
+msgstr "Oppg. stue"
 
 msgid "Stonehenge"
 msgstr "Steinring"
 
 msgid "Upg. Stonehenge"
-msgstr "Oppg. Steinring"
+msgstr "Oppg. steinring"
 
-# hesteslette heller enn eng.
+# hesteslette heller enn hesteeng.
 msgid "Fenced Meadow"
 msgstr "Inngjerdet slette"
 
@@ -1499,7 +1502,7 @@ msgid "Maze"
 msgstr "Labyrint"
 
 msgid "Upg. Maze"
-msgstr "Oppg. Labyrint"
+msgstr "Oppg. labyrint"
 
 msgid "Swamp"
 msgstr "Myr"
@@ -1526,7 +1529,7 @@ msgid "Foundry"
 msgstr "Støperi"
 
 msgid "Upg. Foundry"
-msgstr "Oppg. Støperi"
+msgstr "Oppg. støperi"
 
 msgid "Cliff Nest"
 msgstr "Klipperede"
@@ -1535,13 +1538,13 @@ msgid "Ivory Tower"
 msgstr "Elfenbenstårn"
 
 msgid "Upg. Ivory Tower"
-msgstr "Oppg. Elfenbenstårn"
+msgstr "Oppg. elfenbenstårn"
 
 msgid "Cloud Castle"
 msgstr "Himmelslott"
 
 msgid "Upg. Cloud Castle"
-msgstr "Oppg. Himmelslott"
+msgstr "Oppg. himmelslott"
 
 msgid "Storm"
 msgstr "Storm"
@@ -1556,30 +1559,30 @@ msgid "Graveyard"
 msgstr "Gravplass"
 
 msgid "Upg. Graveyard"
-msgstr "Oppg. Gravplass"
+msgstr "Oppg. gravplass"
 
 msgid "Upg. Pyramid"
-msgstr "Oppg. Pyramide"
+msgstr "Oppg. pyramide"
 
 # Evt herskapshus
 msgid "Mansion"
 msgstr "Herregård"
 
 msgid "Upg. Mansion"
-msgstr "Oppg. Herregård"
+msgstr "Oppg. herregård"
 
 msgid "Mausoleum"
-msgstr "Kongelig gravplass"
+msgstr "Kongegrav"
 
 msgid "Upg. Mausoleum"
-msgstr "Oppg. kongelig gravplass"
+msgstr "Oppg. kongegrav"
 
 msgid "Laboratory"
 msgstr "Laboratorium"
 
 # Offerplass? Offeralter? Tempel? Helligdom? Nekromantiker by?
 msgid "Shrine"
-msgstr "Svart alter"
+msgstr "Mørkets alter"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -1662,10 +1665,11 @@ msgstr "Telt"
 msgid "Captain's Quarters"
 msgstr "Kapteinens kvarter"
 
-# Magitårn, magikerlag, magikertårn, magikerlaug
+# Magikerforbund uten level, som offisiell fransk oversettelse. Første nivå uten forkortelse ser bedre ut.
 msgid "Mage Guild, Level 1"
-msgstr "Magikerforb., level 1"
+msgstr "Magikerforbund"
 
+# nivå eller level?
 msgid "Mage Guild, Level 2"
 msgstr "Magikerforb., level 2"
 
@@ -1682,7 +1686,7 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Det svarte alteret forbedrer sortekunstevnen til heltene dine med 10 prosent."
+"Mørkets alter forbedrer sortekunstevnen til heltene dine med 10 prosent."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -1752,7 +1756,7 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Hos Magikerforbundet kan helten din lære seg trolldommer og få fylt opp "
+"Hos magikerforbundet kan helten din lære seg trolldommer og få fylt opp "
 "manaen sin."
 
 msgid "Recruit %{name}"
@@ -4998,12 +5002,14 @@ msgstr ""
 "fengselet for å tæres av smertende lengsel i utallige dager."
 
 # fjernt og nært?
+# magician ? Betyr ofte tryllekunstner på engelsk.
 msgid ""
 "You enter a rickety hut and talk to the magician who lives there. He tells "
 "you of places near and far which may aid you in your journeys."
 msgstr ""
-"Du går inn i en skrøpelig hytte og snakker med magikeren som bor der. Han "
-"forteller deg om steder fjern og nær som kan hjelpe deg i ferdene dine."
+"Du går inn i en skrøpelig hytte og snakker med tryllemesteren som bor der. "
+"Han forteller deg om steder fjern og nær, noe som kan hjelpe deg på reisene "
+"dine."
 
 msgid "This eye seems to be intently studying its surroundings."
 msgstr "Dette øyet ser ut til å følge oppmerksomt med på omgivelsene sine."
@@ -5747,9 +5753,11 @@ msgstr "Trollkjerring"
 msgid "Warlock"
 msgstr "Trollmann"
 
-# Tryllekunstner? Magiker blir allerede brukt om mage.
+# Magiker blir allerede brukt om mage:
+# Vismann og Viskvinne når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
+# Wizard kommer av wise. Vismann (hva med kvinner?Visdame), fortyller, mystiker, vismenneske, visfolk, klokfolk, filosof, tryllemester,  Trolldomslærd. Tryllelærd
 msgid "Wizard"
-msgstr "Magiker"
+msgstr "Vismann"
 
 msgid "Necromancer"
 msgstr "Sortekunstner"
@@ -6477,7 +6485,7 @@ msgstr "Kentaur"
 msgid "Centaurs"
 msgstr "Kentaurer"
 
-# Gargulje, gargolje, gurgolje. Kommer av å gurgle vann: vannspyere på gotiske bygg.
+# Gargulje, gargolje, gurgolje. Gargle på fransk, engelsk: kommer av å gurgle vann: vannspyere på gotiske bygg.
 msgid "Gargoyle"
 msgstr "Gurgoyle"
 
@@ -6591,10 +6599,10 @@ msgid "Zombies"
 msgstr "Zombier"
 
 msgid "Mutant Zombie"
-msgstr "Mutant zombie"
+msgstr "Mutert zombie"
 
 msgid "Mutant Zombies"
-msgstr "Mutante zombier"
+msgstr "Muterte zombier"
 
 msgid "Mummies"
 msgstr "Mumier"
@@ -7216,7 +7224,7 @@ msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr "%{name} øker varigheten til trolldommene dine med %{count} runder."
 
 msgid "Wizard's Hat"
-msgstr "Trollmannens hatt"
+msgstr "Vismannens hatt"
 
 msgid "Power Ring"
 msgstr "Tryllekraftsring"
@@ -8273,10 +8281,10 @@ msgid "world: use unique artifacts for secondary skills"
 msgstr ""
 
 msgid "world: Wind/Water Mills and Magic Garden can be captured"
-msgstr ""
+msgstr "Verden: Vind- og vannmøller og magisk hage kan bli overtatt."
 
 msgid "world: disable Barrow Mounds"
-msgstr ""
+msgstr "Verden: skru av gravhaug"
 
 msgid "castle: allow guardians"
 msgstr ""
