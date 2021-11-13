@@ -1436,83 +1436,95 @@ fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Spr
     return fheroes2::Point( offsetX, offsetY );
 }
 
-void Battle::Interface::RedrawTroopSprite( const Unit & b )
+void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 {
-    const int monsterIcnId = b.GetMonsterSprite();
-    fheroes2::Sprite spmon1;
-    fheroes2::Sprite spmon2;
-
-    PAL::PaletteType applyPalette = PAL::PaletteType::STANDARD;
-
-    if ( b_current_sprite && _currentUnit == &b ) {
-        spmon1 = *b_current_sprite;
+    if ( b_current_sprite && _currentUnit == &unit ) {
+        drawTroopSprite( unit, *b_current_sprite );
     }
-    else if ( b.Modes( SP_STONE ) ) { // under medusa's stunning effect
-        spmon1 = fheroes2::AGG::GetICN( monsterIcnId, b.GetFrame() );
-        applyPalette = PAL::PaletteType::GRAY;
+    else if ( unit.Modes( SP_STONE ) ) {
+        // Current monster can't be active if it's under Stunning effect.
+        const int monsterIcnId = unit.GetMonsterSprite();
+        fheroes2::Sprite monsterSprite = fheroes2::AGG::GetICN( monsterIcnId, unit.GetFrame() );
+        fheroes2::ApplyPalette( monsterSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        drawTroopSprite( unit, monsterSprite );
+    }
+    else if ( unit.Modes( CAP_MIRRORIMAGE ) ) {
+        fheroes2::Sprite monsterSprite;
+
+        if ( _currentUnit == &unit && b_current_sprite != nullptr ) {
+            monsterSprite = *b_current_sprite;
+        }
+        else {
+            const int monsterIcnId = unit.GetMonsterSprite();
+            monsterSprite = fheroes2::AGG::GetICN( monsterIcnId, unit.GetFrame() );
+        }
+
+        fheroes2::ApplyPalette( monsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+
+        const fheroes2::Point drawnPosition = drawTroopSprite( unit, monsterSprite );
+
+        if ( _currentUnit == &unit && b_current_sprite == nullptr ) {
+            // Current unit's turn which is idling.
+            const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
+            fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
+        }
     }
     else {
-        // regular
-        spmon1 = fheroes2::AGG::GetICN( monsterIcnId, b.GetFrame() );
+        const int monsterIcnId = unit.GetMonsterSprite();
+        const bool isCurrentMonsterAction = ( _currentUnit == &unit && b_current_sprite != nullptr );
 
-        // this unit's turn, must be covered with contour
-        if ( _currentUnit == &b ) {
-            if ( b_current_sprite ) {
-                spmon1 = *b_current_sprite;
-            }
-            else {
-                spmon2 = fheroes2::CreateContour( spmon1, _contourColor );
-            }
-        }
+        const fheroes2::Sprite & monsterSprite = isCurrentMonsterAction ? *b_current_sprite : fheroes2::AGG::GetICN( monsterIcnId, unit.GetFrame() );
 
-        if ( b.Modes( CAP_MIRRORIMAGE ) ) {
-            applyPalette = PAL::PaletteType::MIRROR_IMAGE;
+        const fheroes2::Point drawnPosition = drawTroopSprite( unit, monsterSprite );
+
+        if ( _currentUnit == &unit && b_current_sprite == nullptr ) {
+            // Current unit's turn which is idling.
+            const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
+            fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
         }
     }
+}
 
-    if ( !spmon1.empty() ) {
-        const fheroes2::Rect & rt = b.GetRectPosition();
-        fheroes2::Point sp = GetTroopPosition( b, spmon1 );
+fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite )
+{
+    const fheroes2::Rect & rt = unit.GetRectPosition();
+    fheroes2::Point sp = GetTroopPosition( unit, troopSprite );
 
-        // move offset
-        if ( _movingUnit == &b ) {
-            const fheroes2::Sprite & spmon0 = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
-            const s32 ox = spmon1.x() - spmon0.x();
+    if ( _movingUnit == &unit ) {
+        // Monster is moving.
+        // Here we're getting the first frame and then based on the offset from the first frame we calculate the position of the current frame.
+        // TODO: verify if it's the correct way as we have issues for monster movement animation.
+        const int monsterIcnId = unit.GetMonsterSprite();
+        const fheroes2::Sprite & firstMonsterFrame = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
+        const s32 ox = troopSprite.x() - firstMonsterFrame.x();
 
-            if ( _movingUnit->animation.animationLength() ) {
-                const int32_t cx = _movingPos.x - rt.x;
-                const int32_t cy = _movingPos.y - rt.y;
+        if ( _movingUnit->animation.animationLength() ) {
+            const int32_t cx = _movingPos.x - rt.x;
+            const int32_t cy = _movingPos.y - rt.y;
 
-                // TODO: use offset X from bin file for ground movement
-                // cx/cy is sprite size
-                // Frame count: one tile of movement goes through all stages of animation
-                // sp is sprite drawing offset
-                sp.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * cy );
-                if ( 0 != Sign( cy ) )
-                    sp.x -= Sign( cx ) * ox / 2;
-            }
+            // TODO: use offset X from bin file for ground movement
+            // cx/cy is sprite size
+            // Frame count: one tile of movement goes through all stages of animation
+            // sp is sprite drawing offset
+            sp.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * cy );
+            if ( 0 != Sign( cy ) )
+                sp.x -= Sign( cx ) * ox / 2;
         }
-        // fly offset
-        else if ( _flyingUnit == &b ) {
-            const int32_t cx = _flyingPos.x - rt.x;
-            const int32_t cy = _flyingPos.y - rt.y;
-
-            const double movementProgress = _flyingUnit->animation.movementProgress();
-
-            sp.x += cx + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
-            sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
-        }
-
-        if ( applyPalette != PAL::PaletteType::STANDARD ) {
-            fheroes2::ApplyPalette( spmon1, PAL::GetPalette( applyPalette ) );
-        }
-
-        fheroes2::AlphaBlit( spmon1, _mainSurface, sp.x, sp.y, b.GetCustomAlpha(), b.isReflect() );
-
-        // contour
-        if ( !spmon2.empty() )
-            fheroes2::Blit( spmon2, _mainSurface, sp.x, sp.y, b.isReflect() );
     }
+    else if ( _flyingUnit == &unit ) {
+        // Monster is flying.
+        const int32_t cx = _flyingPos.x - rt.x;
+        const int32_t cy = _flyingPos.y - rt.y;
+
+        const double movementProgress = _flyingUnit->animation.movementProgress();
+
+        sp.x += cx + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
+        sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
+    }
+
+    fheroes2::AlphaBlit( troopSprite, _mainSurface, sp.x, sp.y, unit.GetCustomAlpha(), unit.isReflect() );
+
+    return sp;
 }
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
@@ -1918,32 +1930,37 @@ void Battle::Interface::RedrawLowObjects( s32 cell_index )
     if ( cell == nullptr )
         return;
 
-    fheroes2::Sprite sprite;
+    const int cellObjectId = cell->GetObject();
+    if ( cellObjectId == 0 ) {
+        // No object exists.
+        return;
+    }
 
-    switch ( cell->GetObject() ) {
+    int objectIcnId = 0;
+
+    switch ( cellObjectId ) {
     case 0x84:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0004, 0 );
+        objectIcnId = ICN::COBJ0004;
         break;
     case 0x87:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0007, 0 );
+        objectIcnId = ICN::COBJ0007;
         break;
     case 0x90:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0016, 0 );
+        objectIcnId = ICN::COBJ0016;
         break;
     case 0x9E:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0030, 0 );
+        objectIcnId = ICN::COBJ0030;
         break;
     case 0x9F:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0031, 0 );
+        objectIcnId = ICN::COBJ0031;
         break;
     default:
-        break;
+        return;
     }
 
-    if ( !sprite.empty() ) {
-        const fheroes2::Rect & pt = cell->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, pt.x + pt.width / 2 + sprite.x(), pt.y + pt.height + sprite.y() + cellYOffset );
-    }
+    const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
+    const fheroes2::Rect & pt = cell->GetPos();
+    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
 void Battle::Interface::RedrawHighObjects( s32 cell_index )
@@ -1952,99 +1969,103 @@ void Battle::Interface::RedrawHighObjects( s32 cell_index )
     if ( cell == nullptr )
         return;
 
-    fheroes2::Sprite sprite;
+    const int cellObjectId = cell->GetObject();
+    if ( cellObjectId == 0 ) {
+        // No object exists.
+        return;
+    }
 
-    switch ( cell->GetObject() ) {
+    int objectIcnId = 0;
+
+    switch ( cellObjectId ) {
     case 0x80:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0000, 0 );
+        objectIcnId = ICN::COBJ0000;
         break;
     case 0x81:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0001, 0 );
+        objectIcnId = ICN::COBJ0001;
         break;
     case 0x82:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0002, 0 );
+        objectIcnId = ICN::COBJ0002;
         break;
     case 0x83:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0003, 0 );
+        objectIcnId = ICN::COBJ0003;
         break;
     case 0x85:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0005, 0 );
+        objectIcnId = ICN::COBJ0005;
         break;
     case 0x86:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0006, 0 );
+        objectIcnId = ICN::COBJ0006;
         break;
     case 0x88:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0008, 0 );
+        objectIcnId = ICN::COBJ0008;
         break;
     case 0x89:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0009, 0 );
+        objectIcnId = ICN::COBJ0009;
         break;
     case 0x8A:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0010, 0 );
+        objectIcnId = ICN::COBJ0010;
         break;
     case 0x8B:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0011, 0 );
+        objectIcnId = ICN::COBJ0011;
         break;
     case 0x8C:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0012, 0 );
+        objectIcnId = ICN::COBJ0012;
         break;
     case 0x8D:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0013, 0 );
+        objectIcnId = ICN::COBJ0013;
         break;
     case 0x8E:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0014, 0 );
+        objectIcnId = ICN::COBJ0014;
         break;
     case 0x8F:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0015, 0 );
+        objectIcnId = ICN::COBJ0015;
         break;
     case 0x91:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0017, 0 );
+        objectIcnId = ICN::COBJ0017;
         break;
     case 0x92:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0018, 0 );
+        objectIcnId = ICN::COBJ0018;
         break;
     case 0x93:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0019, 0 );
+        objectIcnId = ICN::COBJ0019;
         break;
     case 0x94:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0020, 0 );
+        objectIcnId = ICN::COBJ0020;
         break;
     case 0x95:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0021, 0 );
+        objectIcnId = ICN::COBJ0021;
         break;
     case 0x96:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0022, 0 );
+        objectIcnId = ICN::COBJ0022;
         break;
     case 0x97:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0023, 0 );
+        objectIcnId = ICN::COBJ0023;
         break;
     case 0x98:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0024, 0 );
+        objectIcnId = ICN::COBJ0024;
         break;
     case 0x99:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0025, 0 );
+        objectIcnId = ICN::COBJ0025;
         break;
     case 0x9A:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0026, 0 );
+        objectIcnId = ICN::COBJ0026;
         break;
     case 0x9B:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0027, 0 );
+        objectIcnId = ICN::COBJ0027;
         break;
     case 0x9C:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0028, 0 );
+        objectIcnId = ICN::COBJ0028;
         break;
     case 0x9D:
-        sprite = fheroes2::AGG::GetICN( ICN::COBJ0029, 0 );
+        objectIcnId = ICN::COBJ0029;
         break;
     default:
-        break;
+        return;
     }
 
-    if ( !sprite.empty() ) {
-        // const fheroes2::Point & topleft = border.GetArea();
-        const fheroes2::Rect & pt = cell->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, pt.x + pt.width / 2 + sprite.x(), pt.y + pt.height + sprite.y() + cellYOffset );
-    }
+    const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
+    const fheroes2::Rect & pt = cell->GetPos();
+    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
 void Battle::Interface::RedrawKilled()
@@ -2781,7 +2802,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     if ( isMage )
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
     else
-        missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<int32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+        missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
 
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
