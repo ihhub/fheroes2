@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
-"PO-Revision-Date: 2021-11-13 19:43+0100\n"
+"PO-Revision-Date: 2021-11-13 21:53+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -664,7 +664,7 @@ msgid "Monsters"
 msgstr "Monstre"
 
 msgid "N/A"
-msgstr ""
+msgstr "Ingen"
 
 # Det venstre tårnet eller Ballisten.
 msgid "Left Turret"
@@ -675,7 +675,7 @@ msgstr "Høyre tårn"
 
 # Samme som over. Det venstre tårnet eller Ballisten.
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr "Slottets %{name} skyter med styrken til %{count} skyttere"
+msgstr "Slottets %{name} skyter med styrken til %{count} bueskyttere"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "hver med en økning på +%{attack} i deres angrepsevner."
@@ -709,7 +709,7 @@ msgid "Kraeger defeated"
 msgstr "Kraeger slått ut"
 
 msgid "Wayward Son"
-msgstr "Den villfarne sønn"
+msgstr "Den villfarne sønnen"
 
 msgid "Uncle Ivan"
 msgstr "Onkel Ivan"
@@ -861,7 +861,7 @@ msgstr "Dragemesteren"
 
 # Større ære gir ikke samme meningen.
 msgid "Greater Glory"
-msgstr "For større ære"
+msgstr "Heder og ære"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -891,7 +891,7 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
-"Godfjottete trollmenn har tatt over Sortekunstnerenes Slott. Du må "
+"Godfjottete magimestere har tatt over Sortekunstnerenes Slott. Du må "
 "gjenerobre det for å oppnå seier. Husk at selv om du starter med en sterk "
 "hær så har du ikke et slott og du må overta ett innen 7 dager, eller tape "
 "denne striden. (Hint: Det nærmeste slottet ligger i sørøst.)"
@@ -968,10 +968,10 @@ msgid "Aurora Borealis"
 msgstr "Nordlys"
 
 msgid "Betrayal's End"
-msgstr "Forræderiets slutt"
+msgstr "Slutten på forræderiet"
 
 msgid "Corruption's Heart"
-msgstr "Fordervelsens hjerte"
+msgstr "Hjertet til fordervelsen"
 
 msgid "The Giant's Pass"
 msgstr "Kjempens fjellovergang"
@@ -1049,7 +1049,7 @@ msgid "Crazy Uncle Ivan"
 msgstr "Den gale onkel Ivan"
 
 msgid "The Wayward Son"
-msgstr "Den villfarne sønn"
+msgstr "Den villfarne sønnen"
 
 msgid "Ivory Gates"
 msgstr "Elfenbensportene"
@@ -1058,7 +1058,7 @@ msgid "The Elven Lands"
 msgstr "Alvelandene"
 
 msgid "The Epic Battle"
-msgstr "Det sagnomsuste slaget"
+msgstr "Den storslagne kampen"
 
 msgid "The Southern War"
 msgstr "Krigen i sør"
@@ -1350,7 +1350,7 @@ msgstr "Kan ikke bygge skipsverft fordi slottet er for langt unna vann."
 
 # bygning? usikker funksjon
 msgid "disable build."
-msgstr "skru av bygging."
+msgstr "Bygning fjernet."
 
 msgid "Cannot afford %{name}."
 msgstr "Ikke råd til %{name}."
@@ -1602,7 +1602,7 @@ msgstr ""
 "at kampånden deres stiger med to."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr "Skrothaugen øker veksten av småvetter med %{count} i uka."
+msgstr "Skrothaugen øker veksten av stridsvetter med %{count} i uka."
 
 msgid "The Rainbow increases the luck of the defending units by two."
 msgstr "Regnbuen øker flaksen til de forsvarende styrkene med to."
@@ -2516,7 +2516,7 @@ msgid "Victory Condition"
 msgstr "Seiersvilkår"
 
 msgid "Experimental Game Settings"
-msgstr "Forsøksinnstillinger"
+msgstr "Utprøvningsinnstillinger"
 
 msgid "one"
 msgstr "1"
@@ -4570,8 +4570,8 @@ msgid ""
 "Some Liches living here are willing to join your army for a price. Do you "
 "want to recruit Liches?"
 msgstr ""
-"Noen hekselik som holder til her er villige til å bli med i hæren din for en "
-"sum penger. Ønsker du å verve hekselik?"
+"Noen heksekonger som holder til her er villige til å bli med i hæren din "
+"imot en pris. Ønsker du å verve heksekonger?"
 
 msgid ""
 "You've found the ruins of an ancient city, now inhabited solely by the "
@@ -4584,8 +4584,9 @@ msgid ""
 "Some of the surviving Liches are impressed by your victory over their "
 "fellows, and offer to join you for a price. Do you want to recruit Liches?"
 msgstr ""
-"Noen av de overlevende hekselikene bli imponert av seieren din mot sine "
-"feller, og de tilbyr å bli med deg mot et beløp. Ønsker du å verve hekselik?"
+"Noen av de overlevende heksekongene bli imponert av seieren din mot sine "
+"feller, og de tilbyr å bli med deg mot et beløp. Ønsker du å verve "
+"heksekonger?"
 
 msgid ""
 "You've found one of those bridges that Trolls are so fond of living under, "
@@ -5754,10 +5755,11 @@ msgid "Warlock"
 msgstr "Trollmann"
 
 # Magiker blir allerede brukt om mage:
-# Vismann og Viskvinne når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
-# Wizard kommer av wise. Vismann (hva med kvinner?Visdame), fortyller, mystiker, vismenneske, visfolk, klokfolk, filosof, tryllemester,  Trolldomslærd. Tryllelærd
+# Wizard kommer av wise og betegner en som har studert mye for å bli flink. 
+# Vismann og visdame når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
+# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd, alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.) Merk: Tryllekunstner er profesjonen som gjør synsbedrageri osv. 
 msgid "Wizard"
-msgstr "Vismann"
+msgstr "Magimester"
 
 msgid "Necromancer"
 msgstr "Sortekunstner"
@@ -6079,7 +6081,7 @@ msgid "Gazebo"
 msgstr "Lysthus"
 
 msgid "Archer's House"
-msgstr "Skytternes hus"
+msgstr "Bueskytternes hus"
 
 msgid "Peasant Hut"
 msgstr "Bondehytte"
@@ -6166,7 +6168,7 @@ msgid "Genie Lamp"
 msgstr "Magisk lampe"
 
 msgid "Goblin Hut"
-msgstr "Småvettehytte"
+msgstr "Vettehytte"
 
 msgid "Monster"
 msgstr "Monster"
@@ -6311,16 +6313,17 @@ msgid "Peasants"
 msgstr "Bønder"
 
 msgid "Archer"
-msgstr "Skytter"
+msgstr "Bueskytter"
 
 msgid "Archers"
-msgstr "Skyttere"
+msgstr "Bueskyttere"
 
+# Denne oversettelsen brukes i D&D
 msgid "Ranger"
-msgstr "Skogvokter"
+msgstr "Jeger"
 
 msgid "Rangers"
-msgstr "Skogvoktere"
+msgstr "Jegere"
 
 msgid "Pikeman"
 msgstr "Pikenér"
@@ -7224,7 +7227,7 @@ msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr "%{name} øker varigheten til trolldommene dine med %{count} runder."
 
 msgid "Wizard's Hat"
-msgstr "Vismannens hatt"
+msgstr "Magimesterens hatt"
 
 msgid "Power Ring"
 msgstr "Tryllekraftsring"
@@ -8245,102 +8248,104 @@ msgid "View %{spell}"
 msgstr "Vis %{spell}"
 
 msgid "game: always confirm for rewrite savefile"
-msgstr ""
+msgstr "Parti: Be alltid om bekreftelse ved overskrivning av lagringsfil"
 
 msgid "game: remember last focus"
-msgstr ""
+msgstr "Parti: Husk hva man holdt på med sist"
 
 msgid "battle: show damage info"
-msgstr ""
+msgstr "Kamp: Vis skadeinfo"
 
 msgid "world: show terrain penalty"
-msgstr ""
+msgstr "Verden: Vis flyttepoengstap for terreng"
 
 msgid "world: scouting skill show extended content info"
-msgstr ""
+msgstr "Verden: Speiding gir deg utvidet info"
 
 msgid "world: allow set guardian to objects"
-msgstr ""
+msgstr "Verden: Tillat å plassere voktere på objekter"
 
 msgid "world: Eagle Eye also works like Scholar in H3."
-msgstr ""
+msgstr "Verden: Ørneblikk virker som \"Scholar\" i Heroes 3."
 
 msgid "world: Crystal Ball also added Identify Hero and Visions spells"
 msgstr ""
+"Verden: Krystallkula gir også \"undersøk helt\" og \"syner\" trolldommene."
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
+msgstr "Verden: Nøytrale hærer øker med spillets vanskelighetsgrad"
 
 msgid "world: use unique artifacts for resource affecting"
-msgstr ""
+msgstr "Verden: Bruk spesielle gjenstander for å påvirke råvarer"
 
 msgid "world: use unique artifacts for primary skills"
-msgstr ""
+msgstr "Verden: Bruke spesielle gjenstander for grunnferdigheter"
 
 msgid "world: use unique artifacts for secondary skills"
-msgstr ""
+msgstr "Verden: Bruk spesielle gjenstander for sideferdigheter"
 
 msgid "world: Wind/Water Mills and Magic Garden can be captured"
-msgstr "Verden: Vind- og vannmøller og magisk hage kan bli overtatt."
+msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget."
 
 msgid "world: disable Barrow Mounds"
-msgstr "Verden: skru av gravhaug"
+msgstr "Verden: Skru av gravhaug"
 
 msgid "castle: allow guardians"
-msgstr ""
+msgstr "Slott: Tillat vokterhelter"
 
 msgid ""
 "castle: higher mage guilds regenerate more spell points/turn "
 "(20/40/60/80/100%)"
 msgstr ""
+"Slott: Høyere magiforbund fyller opp mer mana hver tur (20/40/60/80/100%)"
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
+msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
 msgid "heroes: recruit cost to be dependent on hero level"
-msgstr ""
+msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten."
 
 msgid "heroes: remember move points for retreat/surrender result"
-msgstr ""
+msgstr "Helter: Husk flyttepoengene for tilbaketrekks-/overgivelsesresultatet"
 
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr ""
+msgstr "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)"
 
 msgid "heroes: in Arena can choose any of primary skills"
-msgstr ""
+msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene."
 
 msgid "battle: show army order"
-msgstr ""
+msgstr "Kamp: Vis rekkefølgen av styrkenes tur."
 
 msgid "battle: soft wait troop"
-msgstr ""
+msgstr "Kamp: Avvent styrke til rundens slutt."
 
 msgid "battle: reverse wait order (fast, average, slow)"
-msgstr ""
+msgstr "Kamp: Snu opp-ned på rekkefølgen (rask, middels, sein)"
 
 msgid "battle: deterministic events"
-msgstr ""
+msgstr "Kamp: Forutbestemte turer"
 
 msgid "game: show system info"
-msgstr ""
+msgstr "Parti: Vis systeminfo"
 
 msgid "game: autosave on"
-msgstr ""
+msgstr "Parti: Autolagring på"
 
 msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
+msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
 
 msgid "game: use fade"
-msgstr ""
+msgstr "Parti: Ton ut bildet"
 
 msgid "game: use evil interface"
-msgstr ""
+msgstr "Parti: Bruk ondt grensesnitt"
 
 msgid "game: hide interface"
-msgstr ""
+msgstr "Parti: Skjul grensesnitt"
 
 msgid "game: offer to continue the game afer victory condition"
-msgstr ""
+msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Den ultimate gjenstanden er faktisk %{name}."
