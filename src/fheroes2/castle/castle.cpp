@@ -2490,7 +2490,7 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
     castles.resize( size, nullptr );
 
-    for ( Castle * castle : castles ) {
+    for ( Castle *& castle : castles ) {
         msg >> index;
         castle = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
         assert( castle != nullptr );
