@@ -466,14 +466,14 @@ void Battle::Unit::NewTurn( void )
     }
 }
 
-u32 Battle::Unit::GetSpeed( bool skip_standing_check, bool skip_moved_check ) const
+u32 Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
 {
     uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
-    if ( !skip_moved_check ) {
+    if ( !skipMovedCheck ) {
         modesToCheck |= TR_MOVED;
     }
 
-    if ( !skip_standing_check && ( !GetCount() || Modes( modesToCheck ) ) )
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
         return Speed::STANDING;
 
     uint32_t speed = Monster::GetSpeed();
