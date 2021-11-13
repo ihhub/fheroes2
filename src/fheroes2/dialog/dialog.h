@@ -104,7 +104,7 @@ namespace Dialog
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
-    Troop RecruitMonster( const Monster &, u32 available, bool );
+    Troop RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, u32 available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
