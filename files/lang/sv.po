@@ -3927,10 +3927,10 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Medan du besegrar monstren, dechiffrerar du en uråldrig hieroglyf på väggen "
-"som berättar hemligheten om besvärjelsen."
+"som berättar hemligheten om besvärjelsen - '"
 
 msgid "Sign"
 msgstr "Skylt"

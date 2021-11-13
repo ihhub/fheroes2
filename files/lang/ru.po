@@ -3958,10 +3958,10 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Одолев чудовищ, вы расшифровали иероглифы на стене, содержащие секрет "
-"заклинания."
+"заклинания - '"
 
 msgid "Sign"
 msgstr "Указатель"

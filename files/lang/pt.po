@@ -3878,10 +3878,10 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Após derrotar as criaturas, você decifrar um hieróglifo antigo na parede, "
-"contando o segredo da magia."
+"contando o segredo da magia - '"
 
 msgid "Sign"
 msgstr ""
