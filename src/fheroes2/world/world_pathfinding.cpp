@@ -174,6 +174,8 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction, u
             movePointsLeft = _maxMovePoints - ( ( consumedMovePoints - _remainingMovePoints ) % _maxMovePoints );
         }
 
+        // If this move is the last one on the current turn, we can move to any adjacent cell (both in straight and diagonal direction)
+        // as long as we have enough move points to move over our current cell in straight direction
         if ( movePointsLeft >= srcTilePenalty && movePointsLeft <= dstTilePenalty ) {
             return movePointsLeft;
         }
