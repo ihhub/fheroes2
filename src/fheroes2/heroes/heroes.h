@@ -370,7 +370,7 @@ public:
     void setLastGroundRegion( uint32_t regionID );
 
     u32 GetExperience( void ) const;
-    void IncreaseExperience( u32 );
+    void IncreaseExperience( const uint32_t amount, const bool autoselect = false );
 
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;

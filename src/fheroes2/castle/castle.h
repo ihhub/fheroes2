@@ -106,6 +106,16 @@ public:
         CAPITAL = 0x0020
     };
 
+    enum class CastleDialogReturnValue : int
+    {
+        DoNothing,
+        Close, // Close the dialog.
+        NextCastle, // Open main dialog of the next castle.
+        PreviousCastle, // Open main dialog of the previous castle.
+        NextCostructionWindow, // Open construction dialog of the next castle.
+        PreviousCostructionWindow // Open construction dialog of the previous castle.
+    };
+
     Castle();
     Castle( s32, s32, int rs );
     ~Castle() override = default;
@@ -168,7 +178,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    int OpenDialog( bool readonly = false );
+    CastleDialogReturnValue OpenDialog( const bool readOnly, const bool openConstructionWindow );
 
     int GetAttackModificator( const std::string * ) const;
     int GetDefenseModificator( const std::string * ) const;
@@ -216,9 +226,20 @@ public:
     void SwapCastleHeroes( CastleHeroes & );
 
 private:
+    enum class ConstructionDialogResult : int
+    {
+        DoNothing,
+        NextConstructionWindow, // Open construction dialog for the next castle.
+        PrevConstructionWindow, // Open construction dialog for the previous castle.
+        Build, // Build something.
+        RecruitHero // Recruit a hero.
+    };
+
     u32 * GetDwelling( u32 dw );
     void EducateHeroes( void );
-    u32 OpenTown( void );
+
+    ConstructionDialogResult openConstructionDialog( uint32_t & dwellingTobuild );
+
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
@@ -226,7 +247,6 @@ private:
     void JoinRNDArmy( void );
     void PostLoad( void );
 
-private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
 

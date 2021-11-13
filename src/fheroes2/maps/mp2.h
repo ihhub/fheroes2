@@ -596,6 +596,8 @@ namespace MP2
 
     bool isNeedStayFront( const MapObjectType objectType );
 
+    bool isAccessibleFromBeach( const MapObjectType objectType );
+
     bool isDayLife( const MapObjectType objectType );
     bool isWeekLife( const MapObjectType objectType );
     bool isMonthLife( const MapObjectType objectType );

@@ -221,7 +221,7 @@ std::string Battle::Unit::GetShotString( void ) const
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    const uint32_t speedValue = GetSpeed( true );
+    const uint32_t speedValue = GetSpeed( true, false );
 
     std::string output( Speed::String( speedValue ) );
     output += " (";
@@ -260,7 +260,7 @@ u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 
 u32 Battle::Unit::GetSpeed( void ) const
 {
-    return GetSpeed( false );
+    return GetSpeed( false, false );
 }
 
 int Battle::Unit::GetMorale() const
@@ -377,7 +377,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return Board::GetDistance( from, index ) <= GetSpeed( true );
+    return Board::GetDistance( from, index ) <= GetSpeed( true, false );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const
@@ -466,21 +466,24 @@ void Battle::Unit::NewTurn( void )
     }
 }
 
-u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
+u32 Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
 {
-    if ( !skip_standing_check && ( !GetCount() || Modes( TR_MOVED | SP_BLIND | IS_PARALYZE_MAGIC ) ) )
+    uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
+    if ( !skipMovedCheck ) {
+        modesToCheck |= TR_MOVED;
+    }
+
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
         return Speed::STANDING;
 
     uint32_t speed = Monster::GetSpeed();
     Spell spell;
 
     if ( Modes( SP_HASTE ) ) {
-        spell = Spell::HASTE;
-        return spell.ExtraValue() ? speed + spell.ExtraValue() : Speed::GetOriginalFast( speed );
+        return Speed::GetHasteSpeedFromSpell( speed );
     }
     else if ( Modes( SP_SLOW ) ) {
-        spell = Spell::SLOW;
-        return spell.ExtraValue() ? speed - spell.ExtraValue() : Speed::GetOriginalSlow( speed );
+        return Speed::GetSlowSpeedFromSpell( speed );
     }
 
     return speed;
@@ -488,7 +491,7 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
 
 uint32_t Battle::Unit::GetMoveRange() const
 {
-    return isFlying() ? ARENASIZE : GetSpeed( false );
+    return isFlying() ? ARENASIZE : GetSpeed( false, false );
 }
 
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
@@ -1498,6 +1501,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
             restore *= acount * 2;
 
         const u32 resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
+
+        // Puts back the unit in the board
+        SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
             std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );

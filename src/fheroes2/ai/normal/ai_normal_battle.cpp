@@ -256,7 +256,7 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
             if ( target.cell != -1 ) {
-                const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+                const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
@@ -308,7 +308,7 @@ namespace AI
         if ( enemyForce.empty() )
             return;
 
-        uint32_t slowestUnitSpeed = Speed::INSTANT;
+        double sumEnemyStr = 0.0;
         for ( const Unit * unitPtr : enemyForce ) {
             if ( !unitPtr || !unitPtr->isValid() )
                 continue;
@@ -325,17 +325,18 @@ namespace AI
             if ( dmg > _highestDamageExpected )
                 _highestDamageExpected = dmg;
 
-            const uint32_t speed = unit.GetSpeed();
-            _enemyAverageSpeed += speed;
-            if ( speed < slowestUnitSpeed )
-                slowestUnitSpeed = speed;
+            // average speed is weighted by troop strength
+            const uint32_t speed = unit.GetSpeed( false, true );
+            _enemyAverageSpeed += speed * unitStr;
+            sumEnemyStr += unitStr;
         }
-        if ( enemyForce.size() > 2 ) {
-            _enemyAverageSpeed -= slowestUnitSpeed;
+
+        if ( sumEnemyStr > 0.0 ) {
+            _enemyAverageSpeed /= sumEnemyStr;
         }
-        _enemyAverageSpeed /= enemyForce.size();
 
         uint32_t initialUnitCount = 0;
+        double sumArmyStr = 0.0;
         for ( const Unit * unitPtr : friendlyForce ) {
             // Do not check isValid() here to handle dead troops
             if ( !unitPtr )
@@ -349,17 +350,26 @@ namespace AI
             if ( count > 0 || dead > 0 ) {
                 ++initialUnitCount;
             }
+
+            const double unitStr = unit.GetStrength();
+
+            // average speed is weighted by troop strength
+            const uint32_t speed = unit.GetSpeed( false, true );
+            _myArmyAverageSpeed += speed * unitStr;
+            sumArmyStr += unitStr;
+
             // Dead unit: trigger retreat condition and skip strength calculation
             if ( count == 0 && dead > 0 ) {
                 _considerRetreat = true;
                 continue;
             }
-
-            const double unitStr = unit.GetStrength();
             _myArmyStrength += unitStr;
             if ( unit.isArchers() ) {
                 _myShooterStr += unitStr;
             }
+        }
+        if ( sumArmyStr > 0.0 ) {
+            _myArmyAverageSpeed /= sumArmyStr;
         }
         _considerRetreat = _considerRetreat || initialUnitCount < 4;
 
@@ -453,7 +463,7 @@ namespace AI
                 if ( target.cell != -1 ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
 
-                    const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+                    const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
@@ -700,7 +710,7 @@ namespace AI
                     if ( targetCell != -1 ) {
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
 
-                        const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, targetCell );
+                        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 

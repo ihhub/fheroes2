@@ -107,7 +107,7 @@ void Dialog::GameInfo( void )
     text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
     text.draw( pt.x + 130, pt.y + 398, 272, display );
 
-    text.set( _( "score: " ) + std::to_string( Game::GetGameOverScores() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::YELLOW } );
+    text.set( _( "Score: " ) + std::to_string( Game::GetGameOverScores() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::YELLOW } );
     text.draw( pt.x + 385 - text.width(), pt.y + 436, 80, display );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
@@ -129,12 +129,12 @@ void Dialog::GameInfo( void )
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCfg.area() ) ? buttonCfg.drawOnPress() : buttonCfg.drawOnRelease();
 
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
+            break;
+
         if ( le.MouseClickLeft( buttonCfg.area() ) ) {
             Dialog::ExtSettings( true );
             display.render();
         }
-
-        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
-            break;
     }
 }

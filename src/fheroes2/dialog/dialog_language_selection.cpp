@@ -29,11 +29,12 @@
 #include "ui_text.h"
 #include "ui_window.h"
 
+#include <algorithm>
 #include <cassert>
 
 namespace fheroes2
 {
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, size_t selectionId )
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
     {
         if ( languages.empty() ) {
             // Why do you even call this function having 0 languages?
@@ -45,8 +46,10 @@ namespace fheroes2
             return languages.front();
         }
 
-        if ( selectionId >= languages.size() ) {
-            selectionId = 0;
+        size_t selectionId = 0;
+        auto currentLanguageIt = std::find( languages.begin(), languages.end(), currentLanguage );
+        if ( currentLanguageIt != languages.end() ) {
+            selectionId = static_cast<size_t>( currentLanguageIt - languages.begin() );
         }
 
         const int32_t languageAreaWidth = 100;

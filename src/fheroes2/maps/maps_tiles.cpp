@@ -919,6 +919,12 @@ int Maps::Tiles::getOriginalPassability() const
         return 0;
     }
 
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( isValidReefsSprite( MP2::GetICNObject( addon.object ), addon.index ) ) {
+            return 0;
+        }
+    }
+
     // Objects have fixed passability.
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
@@ -969,8 +975,9 @@ void Maps::Tiles::updatePassability()
                 }
             }
 
-            if ( isWater() != bottomTile.isWater() ) {
-                // If object is bordering water then it must be marked as not passable.
+            // If an object locates on land and the bottom tile is water mark the current tile as impassible. It's done for cases that a hero won't be able to
+            // disembark on the tile.
+            if ( !isWater() && bottomTile.isWater() ) {
                 tilePassable = 0;
                 return;
             }

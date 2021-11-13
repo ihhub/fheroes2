@@ -307,7 +307,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     if ( !hero.GetArmy().CanJoinTroop( troop ) )
         Dialog::Message( msg, _( "You are unable to recruit at this time, your ranks are full." ), Font::BIG, Dialog::OK );
     else {
-        const u32 recruit = Dialog::RecruitMonster( troop.GetMonster(), troop.GetCount(), false ).GetCount();
+        const u32 recruit = Dialog::RecruitMonster( troop.GetMonster(), troop.GetCount(), false, 0 ).GetCount();
 
         if ( recruit ) {
             if ( remove && recruit == troop.GetCount() ) {
@@ -1112,6 +1112,7 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
             message += '\n';
             message.append( _( "Searching through the tattered clothing, you find %{artifact}." ) );
             StringReplace( message, "%{artifact}", art.GetName() );
+            AGG::PlaySound( M82::TREASURE );
             Dialog::ArtifactInfo( "", message, art );
             hero.PickupArtifact( art );
         }
@@ -1144,10 +1145,10 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
                 Dialog::Message( "", message, Font::BIG, Dialog::OK );
             }
             else {
-                AGG::PlaySound( M82::EXPERNCE );
                 message += '\n';
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
+                AGG::PlaySound( M82::TREASURE );
                 Dialog::ArtifactInfo( "", message, art );
                 hero.PickupArtifact( art );
             }
@@ -1694,6 +1695,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
         std::string str = _(
             "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he rewards you for your act of kindness by giving you the %{art}." );
         StringReplace( str, "%{art}", art.GetName() );
+        AGG::PlaySound( M82::TREASURE );
         Dialog::ArtifactInfo( "", str, art );
         hero.PickupArtifact( art );
     }
@@ -1767,6 +1769,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             if ( hero.HasSecondarySkill( skill.Skill() ) ) {
                 msg = _( "You've found the artifact: " );
                 msg.append( art.GetName() );
+                AGG::PlaySound( M82::TREASURE );
                 Dialog::ArtifactInfo( "", msg, art, Dialog::OK );
                 result = true;
             }
@@ -1814,11 +1817,11 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 // new battle
                 Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                 if ( res.AttackerWins() ) {
-                    AGG::PlaySound( M82::EXPERNCE );
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
+                    AGG::PlaySound( M82::TREASURE );
                     Dialog::ArtifactInfo( "", msg, art.GetID() );
                 }
                 else {
@@ -1837,7 +1840,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 msg += '\n';
                 msg.append( art.GetName() );
             }
-
+            AGG::PlaySound( M82::TREASURE );
             Dialog::ArtifactInfo( _( "Artifact" ), msg, art );
             result = true;
         }
@@ -1918,6 +1921,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
             else {
                 msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
                 StringReplace( msg, "%{art}", art.GetName() );
+                AGG::PlaySound( M82::TREASURE );
                 Dialog::ArtifactInfo( "", msg, art );
                 hero.PickupArtifact( art );
             }
@@ -2628,10 +2632,11 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
         const Artifact & art = event_maps->artifact;
         if ( art.isValid() ) {
             if ( hero.PickupArtifact( art ) ) {
-                Game::PlayPickupSound();
                 std::string message( _( "You find %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
+                AGG::PlaySound( M82::TREASURE );
                 Dialog::ArtifactInfo( "", message, art );
+                Game::PlayPickupSound();
             }
         }
 
@@ -3064,12 +3069,16 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
                         DialogWithArtifactAndGold( title, say, art, res.gold );
                     else {
                         Dialog::ResourceInfo( title, say, res );
-                        if ( art.isValid() )
+                        if ( art.isValid() ) {
+                            AGG::PlaySound( M82::TREASURE );
                             Dialog::ArtifactInfo( title, say, art );
+                        }
                     }
                 }
-                else if ( art.isValid() )
+                else if ( art.isValid() ) {
+                    AGG::PlaySound( M82::TREASURE );
                     Dialog::ArtifactInfo( title, say, art );
+                }
 
                 if ( art.isValid() )
                     hero.PickupArtifact( art );

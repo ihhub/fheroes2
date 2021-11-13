@@ -18,12 +18,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "image_palette.h"
+#include "palette_h2.h"
 
-#define MAJOR_VERSION 0
-#define MINOR_VERSION 9
-#define INTERMEDIATE_VERSION 9
+#include <algorithm>
+#include <array>
+#include <cassert>
 
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+namespace
+{
+    const size_t paletteSize = 768;
+
+    struct PaletteHolder
+    {
+        PaletteHolder()
+        {
+            std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
+        }
+
+        std::array<uint8_t, paletteSize> gamePalette;
+    };
+
+    PaletteHolder paletteHolder;
+}
+
+namespace fheroes2
+{
+    const uint8_t * getGamePalette()
+    {
+        return paletteHolder.gamePalette.data();
+    }
+
+    void setGamePalette( const std::vector<uint8_t> & palette )
+    {
+        assert( palette.size() == paletteSize );
+        if ( palette.size() != paletteSize ) {
+            return;
+        }
+
+        std::copy_n( palette.begin(), paletteSize, paletteHolder.gamePalette.begin() );
+    }
+}

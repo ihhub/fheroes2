@@ -20,10 +20,13 @@
 
 #pragma once
 
-#define MAJOR_VERSION 0
-#define MINOR_VERSION 9
-#define INTERMEDIATE_VERSION 9
+#include <cstdint>
+#include <vector>
 
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+namespace fheroes2
+{
+    const uint8_t * getGamePalette();
+
+    // This function must be called only at the start of the application after loading AGG file content.
+    void setGamePalette( const std::vector<uint8_t> & palette );
+}

@@ -17,9 +17,11 @@ Precompiled binaries of the release version are currently available for the foll
   * [**Windows ZIP archive**](#windows-zip-archive)
 * [**macOS**](#macos)
   * [**MacPorts**](#macports)
+  * [**Homebrew**](#homebrew-mac)
   * [**macOS ZIP archive**](#macos-zip-archive)
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
+  * [**Homebrew**](#homebrew-linux)
   * [**Linux ZIP archive**](#linux-zip-archive)
 * [**PlayStation Vita**](#playstation-vita)
 * [**Nintendo Switch**](#nintendo-switch)
@@ -96,6 +98,15 @@ port install fheroes2
 
 Then follow the instructions on the screen.
 
+<a name="homebrew-mac"></a>
+### Homebrew
+
+If you are using [**Homebrew**](https://brew.sh/), you can install the game by running the following command:
+
+```sh
+brew install fheroes2
+```
+
 <a name="macos-zip-archive"></a>
 ### macOS ZIP archive
 
@@ -136,6 +147,15 @@ One of possible command sets:
 git clone https://aur.archlinux.org/fheroes2.git
 cd fheroes2
 makepkg -si
+```
+
+<a name="homebrew-linux"></a>
+### Homebrew
+
+If you are using [**Homebrew**](https://brew.sh/), you can install the game by running the following command:
+
+```sh
+brew install fheroes2
 ```
 
 If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may

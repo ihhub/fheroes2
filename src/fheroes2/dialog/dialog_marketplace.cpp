@@ -204,7 +204,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         _scrollbar.hide();
         back.restore();
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
-        const std::string message = firstExchange && ( resourceFrom == resourceTo )
+        const std::string message = firstExchange && ( resourceFrom == resourceTo || 0 == max_buy )
                                         ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
                                         : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
 
@@ -254,12 +254,12 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
-        Text text( _( "max" ), Font::YELLOW_SMALL );
+        Text text( _( "Max" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
         buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
         text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( _( "min" ), Font::YELLOW_SMALL );
+        text.Set( _( "Min" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
         buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );

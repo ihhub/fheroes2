@@ -113,8 +113,24 @@ namespace AGG
             }
         }
 
+        void pushStopMusic()
+        {
+            _createThreadIfNeeded();
+
+            std::lock_guard<std::mutex> mutexLock( _mutex );
+
+            while ( !_musicTasks.empty() ) {
+                _musicTasks.pop();
+            }
+
+            _musicTasks.emplace( -1, MUSIC_MIDI_ORIGINAL, true );
+            _runFlag = 1;
+            _workerNotification.notify_all();
+        }
+
         void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
         {
+            assert( musicId >= 0 );
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
@@ -279,8 +295,12 @@ namespace AGG
                     }
 
                     manager->_mutex.unlock();
-
-                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
+                    if ( musicTask.musicId >= 0 ) {
+                        PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
+                    }
+                    else {
+                        Music::Reset();
+                    }
                 }
                 else {
                     manager->_runFlag = 0;
@@ -323,10 +343,10 @@ bool AGG::ReadDataDir( void )
     return heroes2_agg.isGood();
 }
 
-std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
+std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 {
-    if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
-        const std::vector<u8> & buf = heroes2x_agg.read( key );
+    if ( heroes2x_agg.isGood() ) {
+        const std::vector<uint8_t> & buf = heroes2x_agg.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -607,13 +627,19 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
-void AGG::ResetMixer()
+void AGG::ResetMixer( bool asyncronizedCall /* = false */ )
 {
-    g_asyncSoundManager.sync();
+    if ( asyncronizedCall ) {
+        g_asyncSoundManager.pushStopMusic();
+        Mixer::Stop();
+    }
+    else {
+        g_asyncSoundManager.sync();
 
-    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    Mixer::Reset();
+        Mixer::Reset();
+    }
     loop_sounds.clear();
     loop_sounds.reserve( 7 );
 }

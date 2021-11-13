@@ -33,6 +33,7 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -46,8 +47,6 @@
 
 namespace
 {
-    const char * configurationFileName = "fheroes2.cfg";
-
     std::string GetCaption()
     {
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
@@ -66,10 +65,10 @@ namespace
 
     void ReadConfigs()
     {
-        Settings & conf = Settings::Get();
-
+        const std::string configurationFileName( "fheroes2.cfg" );
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
+        Settings & conf = Settings::Get();
         if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
             LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
@@ -192,8 +191,6 @@ int main( int argc, char ** argv )
 
         const fheroes2::CoreInitializer coreInitializer( coreComponents );
 
-        conf.setGameLanguage( conf.getGameLanguage() );
-
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 16 );
             Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
@@ -208,11 +205,16 @@ int main( int argc, char ** argv )
 
         const AGG::AGGInitializer aggInitializer;
 
+        // Load palette.
+        fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
+
         // load BIN data
         Bin_Info::InitBinInfo();
 
         // init game data
         Game::Init();
+
+        conf.setGameLanguage( conf.getGameLanguage() );
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();

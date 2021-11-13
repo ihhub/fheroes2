@@ -37,6 +37,8 @@
 #include "ui_text.h"
 #include "ui_window.h"
 
+#include <cassert>
+
 namespace
 {
     const int32_t offsetBetweenOptions = 92;
@@ -212,14 +214,15 @@ namespace fheroes2
             case SelectedWindow::Language: {
                 Settings & conf = Settings::Get();
 
-                const fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
                 fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
-                if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
-                    currentLanguage
-                        = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage }, currentLanguage == supportedLanguage ? 1 : 0 );
+                if ( supportedLanguages.size() > 1 ) {
+                    currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
                 }
                 else {
+                    assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );
+
                     currentLanguage = fheroes2::SupportedLanguage::English;
 
                     fheroes2::Text header( _( "Attention" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );

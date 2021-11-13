@@ -35,6 +35,7 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -99,6 +100,246 @@ namespace
             image.image()[position] = value;
         }
     }
+
+    // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
+    class OriginalAlphabetPreserver
+    {
+    public:
+        void preserve()
+        {
+            if ( _isPreserved ) {
+                return;
+            }
+
+            fheroes2::AGG::GetICN( ICN::FONT, 0 );
+            fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
+
+            _normalFont = _icnVsSprite[ICN::FONT];
+            _smallFont = _icnVsSprite[ICN::SMALFONT];
+        }
+
+        void restore() const
+        {
+            if ( !_isPreserved ) {
+                return;
+            }
+
+            // Restore the original font.
+            _icnVsSprite[ICN::FONT] = _normalFont;
+            _icnVsSprite[ICN::SMALFONT] = _smallFont;
+
+            // Clear modified fonts.
+            _icnVsSprite[ICN::YELLOW_FONT].clear();
+            _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+            _icnVsSprite[ICN::GRAY_FONT].clear();
+            _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+            _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+        }
+
+    private:
+        bool _isPreserved = false;
+
+        std::vector<fheroes2::Sprite> _normalFont;
+        std::vector<fheroes2::Sprite> _smallFont;
+    };
+
+    OriginalAlphabetPreserver alphabetPreserver;
+
+    void generatePolishAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original.insert( original.end(), 128, original[0] );
+            original[108] = original[51];
+            original[111] = original[58];
+            original[124] = original[83];
+            original[127] = original[90];
+            original[131] = original[44];
+            original[133] = original[33];
+            original[143] = original[58];
+            original[147] = original[76];
+            original[153] = original[65];
+            original[159] = original[90];
+            original[166] = original[35];
+            original[170] = original[37];
+            original[177] = original[46];
+            original[179] = original[47];
+            original[198] = original[67];
+            original[202] = original[69];
+            original[209] = original[78];
+            original[211] = original[79];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateGermanAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 103 );
+            original[96] = original[65];
+            original[97] = original[79];
+            original[98] = original[85];
+            original[99] = original[34];
+            original[100] = original[33];
+            original[101] = original[47];
+            original[102] = original[53];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateFrenchAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original[3] = original[79];
+            original[4] = original[85];
+            original[6] = original[85];
+            original[10] = original[65];
+            original[28] = original[73];
+            original[30] = original[73];
+            original[32] = original[65];
+            original[62] = original[67];
+            original[64] = original[69];
+            original[91] = original[73];
+            original[92] = original[69];
+            original[93] = original[73];
+            original[94] = original[69];
+            original[95] = original[73];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateRussianAlphabet()
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original.insert( original.end(), 128, original[0] );
+
+            size_t offset = 0;
+
+            original[168 - 32] = original[37 + offset];
+
+            original[192 - 32] = original[33 + offset];
+            original[193 - 32] = original[34 + offset];
+            original[194 - 32] = original[34 + offset];
+            original[195 - 32] = original[52 + offset];
+            original[196 - 32] = original[36 + offset];
+            original[197 - 32] = original[37 + offset];
+            original[198 - 32] = original[56 + offset];
+            original[199 - 32] = original[19];
+
+            original[200 - 32] = fheroes2::Flip( original[46 + offset], true, false );
+            original[200 - 32].setPosition( original[46 + offset].x(), original[46 + offset].y() );
+
+            original[201 - 32] = original[200 - 32];
+
+            original[202 - 32] = original[43 + offset];
+            original[203 - 32] = original[44 + offset];
+            original[204 - 32] = original[45 + offset];
+            original[205 - 32] = original[40 + offset];
+            original[206 - 32] = original[47 + offset];
+            original[207 - 32] = original[52 + offset];
+            original[208 - 32] = original[48 + offset];
+            original[209 - 32] = original[35 + offset];
+            original[210 - 32] = original[52 + offset];
+            original[211 - 32] = original[57 + offset];
+            original[212 - 32] = original[49 + offset];
+            original[213 - 32] = original[56 + offset];
+            original[214 - 32] = original[53 + offset];
+            original[215 - 32] = original[20];
+            original[216 - 32] = original[55 + offset];
+            original[217 - 32] = original[55 + offset];
+            original[218 - 32] = original[48 + offset];
+            original[219 - 32] = original[48 + offset];
+            original[220 - 32] = original[48 + offset];
+
+            original[221 - 32] = fheroes2::Flip( original[39 + offset], true, false );
+            original[221 - 32].setPosition( original[39 + offset].x(), original[39 + offset].y() );
+
+            original[222 - 32] = original[47 + offset];
+
+            original[223 - 32] = fheroes2::Flip( original[50 + offset], true, false );
+            original[223 - 32].setPosition( original[50 + offset].x(), original[50 + offset].y() );
+
+            offset = 32;
+
+            original[184 - 32] = original[37 + offset];
+
+            original[224 - 32] = original[33 + offset];
+            original[225 - 32] = original[34 + offset];
+            original[226 - 32] = original[34 + offset];
+            original[227 - 32] = original[82];
+            original[228 - 32] = original[36 + offset];
+            original[229 - 32] = original[37 + offset];
+            original[230 - 32] = original[56 + offset];
+            original[231 - 32] = original[19];
+            original[232 - 32] = original[46 + offset];
+            original[233 - 32] = original[46 + offset];
+            original[234 - 32] = original[43 + offset];
+            original[235 - 32] = original[44 + offset];
+            original[236 - 32] = original[45 + offset];
+            original[237 - 32] = original[40 + offset];
+            original[238 - 32] = original[47 + offset];
+            original[239 - 32] = original[52 + offset];
+            original[240 - 32] = original[48 + offset];
+            original[241 - 32] = original[35 + offset];
+            original[242 - 32] = original[77];
+            original[243 - 32] = original[57 + offset];
+            original[244 - 32] = original[49 + offset];
+            original[245 - 32] = original[56 + offset];
+            original[246 - 32] = original[53 + offset];
+            original[247 - 32] = original[20];
+            original[248 - 32] = original[55 + offset];
+            original[249 - 32] = original[55 + offset];
+            original[250 - 32] = original[48 + offset];
+            original[251 - 32] = original[48 + offset];
+            original[252 - 32] = original[48 + offset];
+            original[253 - 32] = original[35 + offset];
+            original[254 - 32] = original[47 + offset];
+            original[255 - 32] = original[81];
+        }
+
+        // TODO: modify newly added characters accordingly.
+    }
+
+    void generateAlphabet( const fheroes2::SupportedLanguage language )
+    {
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::Polish:
+            generatePolishAlphabet();
+            break;
+        case fheroes2::SupportedLanguage::German:
+            generateGermanAlphabet();
+            break;
+        case fheroes2::SupportedLanguage::French:
+            generateFrenchAlphabet();
+            break;
+        case fheroes2::SupportedLanguage::Russian:
+            generateRussianAlphabet();
+            break;
+        default:
+            // Add new language generation code!
+            assert( 0 );
+            break;
+        }
+
+        _icnVsSprite[ICN::YELLOW_FONT].clear();
+        _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+        _icnVsSprite[ICN::GRAY_FONT].clear();
+        _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+        _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+    }
 }
 
 namespace fheroes2
@@ -149,6 +390,8 @@ namespace fheroes2
         // Helper function for LoadModifiedICN
         void CopyICNWithPalette( int icnId, int originalIcnId, const PAL::PaletteType paletteType )
         {
+            assert( icnId != originalIcnId );
+
             GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
 
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
@@ -281,7 +524,7 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::BATTLESKIP: // a button
+            case ICN::BATTLESKIP:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -294,7 +537,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
                 }
                 return true;
-            case ICN::BATTLEWAIT: // a button
+            case ICN::BATTLEWAIT:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -311,7 +554,7 @@ namespace fheroes2
                     Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
                 }
                 return true;
-            case ICN::BUYMAX: // a button
+            case ICN::BUYMAX:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -324,7 +567,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
-            case ICN::BTNGIFT_GOOD: // a button
+            case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -346,7 +589,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
-            case ICN::BTNGIFT_EVIL: // a button
+            case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -368,7 +611,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
-            case ICN::BTNCONFIG: // a button
+            case ICN::BTNCONFIG:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -517,7 +760,9 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 7 ) {
                     Sprite & out = _icnVsSprite[id][7];
                     if ( out.width() == 34 && out.height() == 19 ) {
-                        Sprite temp = out;
+                        Sprite temp;
+                        std::swap( temp, out );
+
                         out.resize( out.width() + 1, out.height() );
                         out.reset();
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
@@ -540,7 +785,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    modified = temp;
+                    modified = std::move( temp );
                     Fill( modified, 7, 0, 4, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
@@ -549,7 +794,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    modified = temp;
+                    modified = std::move( temp );
                     Fill( modified, 2, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 8 ) { // Champion
@@ -558,7 +803,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    modified = temp;
+                    modified = std::move( temp );
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 62 ) {
@@ -576,7 +821,7 @@ namespace fheroes2
                             modified.setPosition( offset.x, offset.y );
                         }
                         else {
-                            std::swap( modified, temp );
+                            modified = std::move( temp );
                         }
                     }
                 }
@@ -799,7 +1044,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::WHITE_LARGE_FONT: {
-                LoadModifiedICN( ICN::FONT );
+                GetICN( ICN::FONT, 0 );
                 const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
                 _icnVsSprite[id].resize( original.size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -1514,6 +1759,33 @@ namespace fheroes2
             assert( 0 ); // Did you add a new font size? Please add implementation.
 
             return errorImage;
+        }
+
+        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet )
+        {
+            if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
+                alphabetPreserver.restore();
+            }
+            else {
+                alphabetPreserver.preserve();
+                generateAlphabet( language );
+            }
+        }
+
+        bool isAlphabetSupported( const SupportedLanguage language )
+        {
+            switch ( language ) {
+            case SupportedLanguage::Polish:
+            case SupportedLanguage::German:
+            case SupportedLanguage::French:
+                // TODO: uncomment the line below once Russian alphabet is good enough
+                // case SupportedLanguage::Russian:
+                return true;
+            default:
+                break;
+            }
+
+            return false;
         }
     }
 }
