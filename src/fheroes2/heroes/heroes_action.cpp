@@ -1773,8 +1773,8 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     hero.GetKingdom().OddFundsResource( payment );
                 }
                 else {
-                     Dialog::Message( title, _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
-                                      Font::BIG, Dialog::OK );
+                    Dialog::Message( title, _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
+                                     Font::BIG, Dialog::OK );
                 }
             }
             else {
@@ -2621,8 +2621,8 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
 
     if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
         Dialog::Message( title,
-                         _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ), Font::BIG,
-                         Dialog::OK );
+                         _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ),
+                         Font::BIG, Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
         if (
