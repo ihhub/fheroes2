@@ -1773,14 +1773,13 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     hero.GetKingdom().OddFundsResource( payment );
                 }
                 else {
-                    Dialog::Message( title,
-                                     _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
-                                     Font::BIG, Dialog::OK );
+                     Dialog::Message( title, _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
+                                      Font::BIG, Dialog::OK );
                 }
             }
-            else
-                Dialog::Message( title,
-                                 _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ), Font::BIG, Dialog::OK );
+            else {
+                Dialog::Message( title, _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ), Font::BIG, Dialog::OK );
+            }
         }
         else
             // 4,5 - need have skill wisard or leadership,
@@ -1973,8 +1972,9 @@ void ActionToAncientLamp( Heroes & hero, const MP2::MapObjectType objectType, s3
     }
 
     const std::string title( MP2::StringObject( objectType ) );
-    if ( Dialog::YES == Dialog::Message( title,
-            _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+    if ( Dialog::YES
+         == Dialog::Message( title, _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ), Font::BIG,
+                             Dialog::YES | Dialog::NO ) ) {
         RecruitMonsterFromTile( hero, tile, title, troop, true );
     }
 
@@ -2065,8 +2065,7 @@ void ActionToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s
 {
     if ( Dialog::YES
          == Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONEDMINE ),
-                             _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
-                             Dialog::YES | Dialog::NO ) ) {
+                             _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
         ActionToCaptureObject( hero, objectType, dst_index );
     }
 }
@@ -2426,8 +2425,7 @@ void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( hero.isVisited( tile ) ) {
-        Dialog::Message( title,
-                         _( "Recognizing you, the butler refuses to admit you. \"The master,\" he says, \"will not see the same student twice.\"" ), Font::BIG,
+        Dialog::Message( title, _( "Recognizing you, the butler refuses to admit you. \"The master,\" he says, \"will not see the same student twice.\"" ), Font::BIG,
                          Dialog::OK );
     }
     else {
@@ -2452,8 +2450,8 @@ void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
         }
 
         if ( access ) {
-            Dialog::Message( title,
-                             _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG, Dialog::OK );
+            Dialog::Message( title, _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG,
+                             Dialog::OK );
             hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
             hero.IncreasePrimarySkill( Skill::Primary::DEFENSE );
             hero.IncreasePrimarySkill( Skill::Primary::KNOWLEDGE );
@@ -2643,8 +2641,8 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
         I.RedrawFocus();
     }
     else {
-        Dialog::Message( title,
-                         _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG, Dialog::OK );
+        Dialog::Message( title, _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG,
+                         Dialog::OK );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2989,9 +2987,8 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( hero.isObjectTypeVisited( objectType ) ) {
-        Dialog::Message( title,
-                         _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ), Font::BIG,
-                         Dialog::OK );
+        Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
+                         Font::BIG, Dialog::OK );
     }
     else {
         u32 exp = hero.GetArmy().ActionToSirens();
