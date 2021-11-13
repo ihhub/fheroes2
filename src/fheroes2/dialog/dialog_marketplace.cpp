@@ -400,6 +400,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     // button exit
     const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
+
     dst_pt.x = pos_rt.x + 70 + ( pos_rt.width - spriteExit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
@@ -428,14 +429,19 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
+        // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
             Dialog::MakeGiftResource( kingdom );
+
             resourceTo = resourceFrom = Resource::UNKNOWN;
             gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
+
             cursorTo.hide();
             cursorFrom.hide();
+
             fundsFrom = kingdom.GetFunds();
             RedrawFromResource( pt1, fundsFrom );
+
             display.render();
         }
 
