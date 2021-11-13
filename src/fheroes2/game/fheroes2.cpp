@@ -46,8 +46,6 @@
 
 namespace
 {
-    const char * configurationFileName = "fheroes2.cfg";
-
     std::string GetCaption()
     {
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
@@ -66,10 +64,10 @@ namespace
 
     void ReadConfigs()
     {
-        Settings & conf = Settings::Get();
-
+        const std::string configurationFileName( "fheroes2.cfg" );
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
+        Settings & conf = Settings::Get();
         if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
             LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
