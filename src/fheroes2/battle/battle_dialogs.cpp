@@ -454,7 +454,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
 
     fheroes2::Button btnOk( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 );
-    fheroes2::Button btnCancel( pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
+    fheroes2::AutoShadowButton btnCancel( display, pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
@@ -907,9 +907,10 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
 
-    fheroes2::Button btnAccept( pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
-    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
-    fheroes2::Button btnMarket( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
+    fheroes2::AutoShadowButton btnAccept( display, pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
+    fheroes2::AutoShadowButton btnDecline( display, pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
+    fheroes2::AutoShadowButton btnMarket( display, pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145,
+                                          isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();
@@ -920,8 +921,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
             btnMarket.disable();
         }
         else {
-            btnMarket.drawShadow();
-            btnMarket.captureBackground();
             btnMarket.draw();
         }
     }
@@ -929,8 +928,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         btnMarket.disable();
     }
 
-    btnAccept.drawShadow();
-    btnDecline.drawShadow();
     btnAccept.draw();
     btnDecline.draw();
 

@@ -168,9 +168,8 @@ bool Battle::Only::ChangeSettings( void )
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( ICN::SYSTEM, 1 );
-    fheroes2::Button buttonStart( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
+    fheroes2::AutoShadowButton buttonStart( display, cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
 
-    buttonStart.drawShadow();
     buttonStart.draw();
 
     display.render();

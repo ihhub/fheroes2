@@ -209,10 +209,8 @@ void Dialog::ExtSettings( bool readonly )
     const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
     const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
-    fheroes2::Button buttonOk( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(), buttonIcnId,
-                               0, 1 );
-
-    buttonOk.drawShadow();
+    fheroes2::AutoShadowButton buttonOk( display, buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2,
+                                         buttonsArea.y + buttonsArea.height - buttonSprite.height(), buttonIcnId, 0, 1 );
     buttonOk.draw();
 
     display.render();

@@ -37,7 +37,6 @@ namespace fheroes2
         , _isVisible( true )
         , _releasedSprite( nullptr )
         , _disabledSprite()
-        , _shadowSprite()
     {}
 
     bool ButtonBase::isEnabled() const
@@ -122,9 +121,6 @@ namespace fheroes2
         if ( !isVisible() )
             return;
 
-        // restore background first if it was captured
-        _restoreBackground( output );
-
         if ( isPressed() ) {
             // button can't be disabled and pressed
             const Sprite & sprite = _getPressed();
@@ -158,22 +154,6 @@ namespace fheroes2
         return false;
     }
 
-    void ButtonBase::drawShadow( Image & output ) const
-    {
-        if ( !isVisible() )
-            return;
-
-        const Sprite & shadow = _getShadow();
-        fheroes2::Blit( shadow, output, _offsetX + shadow.x(), _offsetY + shadow.y() );
-    }
-
-    void ButtonBase::captureBackground( const Image & input ) const
-    {
-        const Rect rect = area();
-        const Sprite & bkg = Crop( input, rect.x, rect.y, rect.width, rect.height );
-        _backgroundSprite.reset( new Sprite( bkg ) );
-    }
-
     Rect ButtonBase::area() const
     {
         const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
@@ -190,24 +170,6 @@ namespace fheroes2
         }
 
         return *_disabledSprite.get();
-    }
-
-    const Sprite & ButtonBase::_getShadow() const
-    {
-        if ( !_shadowSprite ) {
-            // TODO: button corners have to be cleaned up for the perfect shadow
-            const Sprite & shadow = fheroes2::makeShadow( _getReleased(), fheroes2::Point( -4, 6 ), 3 );
-            _shadowSprite.reset( new Sprite( shadow ) );
-        }
-        return *_shadowSprite.get();
-    }
-
-    void ButtonBase::_restoreBackground( Image & out ) const
-    {
-        const Sprite * bkg = _backgroundSprite.get();
-        if ( bkg != nullptr ) {
-            Blit( *bkg, out, bkg->x(), bkg->y() );
-        }
     }
 
     Button::Button( int32_t offsetX, int32_t offsetY )
@@ -276,6 +238,41 @@ namespace fheroes2
         }
 
         return _disabled;
+    }
+
+    AutoShadowButton::AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
+        : ButtonSprite( offsetX, offsetY, fheroes2::AGG::GetICN( icnId, releasedIndex ), fheroes2::AGG::GetICN( icnId, pressedIndex ) )
+    {
+        _captureBackground( in );
+    }
+
+    AutoShadowButton::AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled )
+        : ButtonSprite( offsetX, offsetY, released, pressed, disabled )
+    {
+        _captureBackground( in );
+    }
+
+    void AutoShadowButton::_captureBackground( const Image & in )
+    {
+        const Sprite & oldReleased = _getReleased();
+        const Sprite & oldPressed = _getPressed();
+        const Sprite & oldDisabled = _getDisabled();
+        const Sprite & shadow = fheroes2::makeShadow( oldReleased, fheroes2::Point( -4, 6 ), 3 );
+
+        const Rect rect = area();
+        Image background = Crop( in, rect.x + shadow.x(), rect.y + shadow.y(), shadow.width(), shadow.height() );
+        Blit( shadow, background );
+
+        Sprite newReleased( background, shadow.x(), shadow.y() );
+        Blit( oldReleased, newReleased, oldReleased.x() - shadow.x(), oldReleased.y() - shadow.y() );
+
+        Sprite newPressed( background, shadow.x(), shadow.y() );
+        Blit( oldPressed, newPressed, oldPressed.x() - shadow.x(), oldPressed.y() - shadow.y() );
+
+        Sprite newDisabled( background, shadow.x(), shadow.y() );
+        Blit( oldDisabled, newDisabled, oldDisabled.x() - shadow.x(), oldDisabled.y() - shadow.y() );
+
+        setSprite( newReleased, newPressed, newDisabled );
     }
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
@@ -348,13 +345,6 @@ namespace fheroes2
     {
         for ( size_t i = 0; i < _button.size(); ++i ) {
             _button[i]->draw( area );
-        }
-    }
-
-    void ButtonGroup::drawShadows( Image & area ) const
-    {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i]->drawShadow( area );
         }
     }
 
