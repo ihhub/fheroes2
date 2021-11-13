@@ -2620,8 +2620,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
-        Dialog::Message( title,
-                         _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ),
+        Dialog::Message( title, _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ),
                          Font::BIG, Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
