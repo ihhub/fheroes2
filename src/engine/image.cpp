@@ -1805,18 +1805,11 @@ namespace fheroes2
 
     void ReplaceTransform( const Image & in, Image & out )
     {
-        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() )
+        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
+            assert( 0 );
             return;
-
-        const int32_t width = in.width();
-        const int32_t height = in.height();
-
-        const uint8_t * transformIn = in.transform();
-        const uint8_t * transformInEnd = transformIn + height * width;
-        uint8_t * transformOut = out.transform();
-        for ( ; transformIn != transformInEnd; ++transformIn, ++transformOut ) {
-            *transformOut = *transformIn;
         }
+        memcpy( out.transform(), in.transform(), in.width() * in.height() );
     }
 
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy )
