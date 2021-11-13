@@ -560,8 +560,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
                             const int32_t recruitMonsterWindowOffsetY = -65;
-                            const Troop monsterToRecruit = Dialog::RecruitMonster( Monster( race, monsterDwelling ), getMonstersInDwelling( it->id ), true,
-                                                                                   recruitMonsterWindowOffsetY);
+                            const Troop monsterToRecruit
+                                = Dialog::RecruitMonster( Monster( race, monsterDwelling ), getMonstersInDwelling( it->id ), true, recruitMonsterWindowOffsetY );
                             if ( Castle::RecruitMonster( monsterToRecruit ) ) {
                                 need_redraw = true;
                             }
