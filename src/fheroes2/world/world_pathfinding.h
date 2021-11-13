@@ -44,8 +44,10 @@ protected:
     // This method defines pathfinding rules. This has to be implemented by the derived class.
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
-    // Calculates the movement penalty when moving from src tile to adjacent dst tile in the specified direction.
-    uint32_t getMovementPenalty( int src, int dst, int direction, uint32_t consumedMovePoints ) const;
+    // Calculates the movement penalty when moving from src tile to adjacent dst tile in the specified direction. If "last move"
+    // logic should be taken into account (when performing a pathfinding for a real hero on the map), src tile should be already
+    // accessible for this hero (path from the starting tile to src tile should be already in cache).
+    uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
     int _currentColor = Color::NONE;
