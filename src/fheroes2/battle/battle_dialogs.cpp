@@ -448,14 +448,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     fheroes2::Blit( sequenceBase, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
-    const int buttonOffset = allowToCancel ? 39 : 121;
-    const int buttonOkICN
-        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
-    const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
-
-    fheroes2::Button btnOk( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 );
-    fheroes2::AutoShadowButton btnCancel( display, pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
-
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
         TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
@@ -494,15 +486,18 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
     }
 
+    fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
+    fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
+
+    const int buttonOffset = allowToCancel ? 39 : 112;
+    const int buttonOkICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
+
+    fheroes2::AutoShadowButton btnOk( display, pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 );
+    fheroes2::AutoShadowButton btnCancel( display, pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
+
     if ( allowToCancel ) {
-        fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
-        fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
-
-        btnCancel.drawShadow();
         btnCancel.draw();
-
-        // we only need to add shadow for OK button if we have two buttons in this dialog
-        btnOk.drawShadow();
     }
     btnOk.draw();
 
@@ -544,16 +539,16 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         const bool isWinnerHuman = winner && winner->isControlHuman();
 
-        btnOk.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
-        btnOk.setPosition( pos_rt.x + 120, pos_rt.y + 410 );
-
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
                 back.restore();
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-                btnOk.draw();
+
+                // TODO: well...
+                fheroes2::AutoShadowButton btnOkArtifact( display, pos_rt.x + 112, pos_rt.y + 410, buttonOkICN, 0, 1 );
+                btnOkArtifact.draw();
 
                 std::string artMsg;
                 if ( art.isUltimate() ) {
@@ -586,14 +581,14 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
 
                 while ( le.HandleEvents() ) {
-                    le.MousePressLeft( btnOk.area() ) ? btnOk.drawOnPress() : btnOk.drawOnRelease();
+                    le.MousePressLeft( btnOkArtifact.area() ) ? btnOkArtifact.drawOnPress() : btnOkArtifact.drawOnRelease();
 
                     // display captured artifact info on right click
                     if ( le.MousePressRight( artifactArea ) )
                         Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
-                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk.area() ) )
+                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOkArtifact.area() ) )
                         break;
 
                     // animation
