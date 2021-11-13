@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "image_palette.h"
 #include "image_tool.h"
+#include "image_palette.h"
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -78,9 +78,6 @@ namespace
                 }
                 else if ( *transform == 2 ) {
                     *out = SDL_MapRGBA( surface->format, 0, 0, 0, 64 );
-                }
-                else if ( *transform == 3 ) {
-                    *out = SDL_MapRGBA( surface->format, 0, 0, 0, 128 );
                 }
                 else {
                     const uint8_t * value = currentPalette + *in * 3;
