@@ -164,8 +164,6 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction, u
         dstTilePenalty = dstTilePenalty * 3 / 2;
     }
 
-    bool lastMove = false;
-
     if ( _maxMovePoints > 0 ) {
         uint32_t movePointsLeft;
 
@@ -176,11 +174,9 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction, u
             movePointsLeft = _maxMovePoints - ( ( consumedMovePoints - _remainingMovePoints ) % _maxMovePoints );
         }
 
-        lastMove = movePointsLeft >= srcTilePenalty && movePointsLeft <= dstTilePenalty;
-    }
-
-    if ( lastMove ) {
-        return srcTilePenalty;
+        if ( movePointsLeft >= srcTilePenalty && movePointsLeft <= dstTilePenalty ) {
+            return movePointsLeft;
+        }
     }
 
     return dstTilePenalty;
