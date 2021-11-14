@@ -260,7 +260,7 @@ namespace fheroes2
         const Sprite & shadow = fheroes2::makeShadow( oldReleased, fheroes2::Point( -4, 6 ), 3 );
 
         const Rect rect = area();
-        Image background = Crop( in, rect.x + shadow.x(), rect.y + shadow.y(), shadow.width(), shadow.height() );
+        Sprite background = Crop( in, rect.x + shadow.x(), rect.y + shadow.y(), shadow.width(), shadow.height() );
         Blit( shadow, background );
 
         Sprite newReleased( background, shadow.x(), shadow.y() );
