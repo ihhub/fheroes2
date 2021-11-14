@@ -111,11 +111,7 @@ void Dialog::GameInfo( void )
     text.draw( pt.x + 385 - text.width(), pt.y + 436, 80, display );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
-    fheroes2::Button buttonCfg( pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
-
-    // copy OKAY button together with its shadow to the place where we put our CONFIG button:
-    const fheroes2::Rect & cfgArea = buttonCfg.area();
-    fheroes2::Blit( box, 178 - 4, 426, display, cfgArea.x - 4, cfgArea.y, cfgArea.width + 4, cfgArea.height + 6 );
+    fheroes2::AutoShadowButton buttonCfg( display, pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
 
     buttonOk.draw();
     buttonCfg.draw();
