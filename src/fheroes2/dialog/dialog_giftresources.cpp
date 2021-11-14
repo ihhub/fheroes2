@@ -231,10 +231,10 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     info2.Redraw();
 
     const int32_t border = 10;
-    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( box.x + border, box.y + border, box.width - 2 * border, box.height - 2 * border ), Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( box.x + border, box.y + border, box.width - 2 * border, box.height - 2 * border ), Dialog::OK | Dialog::CANCEL, true,
+                                    display );
     btnGroup.button( 0 ).disable();
 
-    btnGroup.drawShadows();
     btnGroup.draw();
 
     display.render();

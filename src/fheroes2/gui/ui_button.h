@@ -131,7 +131,7 @@ namespace fheroes2
     {
     public:
         // Please refer to dialog.h enumeration for states
-        ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0 );
+        ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0, bool shadows = false, const Image & in = Display::instance() );
         ButtonGroup( const ButtonGroup & ) = delete;
 
         ~ButtonGroup();
@@ -140,6 +140,10 @@ namespace fheroes2
 
         void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
+
+        void createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
+        void createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
+
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
 
         // Make sure that id is less than size!

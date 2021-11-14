@@ -275,7 +275,7 @@ namespace fheroes2
         setSprite( newReleased, newPressed, newDisabled );
     }
 
-    ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
+    ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes, bool shadows, const Image & in )
     {
         const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
@@ -285,33 +285,63 @@ namespace fheroes2
         case Dialog::YES | Dialog::NO:
             offset.x = area.x;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 5 ).height();
-            createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            if ( shadows ) {
+                createShadowButton( in, offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            }
+            else {
+                createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            }
 
             offset.x = area.x + area.width - AGG::GetICN( icnId, 7 ).width();
             offset.y = area.y + area.height - AGG::GetICN( icnId, 7 ).height();
-            createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            if ( shadows ) {
+                createShadowButton( in, offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            }
+            else {
+                createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            }
             break;
 
         case Dialog::OK | Dialog::CANCEL:
             offset.x = area.x;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            if ( shadows ) {
+                createShadowButton( in, offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            }
+            else {
+                createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            }
 
             offset.x = area.x + area.width - AGG::GetICN( icnId, 3 ).width();
             offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            if ( shadows ) {
+                createShadowButton( in, offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            }
+            else {
+                createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            }
             break;
 
         case Dialog::OK:
             offset.x = area.x + ( area.width - AGG::GetICN( icnId, 1 ).width() ) / 2;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            if ( shadows ) {
+                createShadowButton( in, offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            }
+            else {
+                createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            }
             break;
 
         case Dialog::CANCEL:
             offset.x = area.x + ( area.width - AGG::GetICN( icnId, 3 ).width() ) / 2;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            if ( shadows ) {
+                createShadowButton( in, offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            }
+            else {
+                createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            }
             break;
 
         default:
@@ -338,6 +368,18 @@ namespace fheroes2
     void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue )
     {
         _button.push_back( new ButtonSprite( offsetX, offsetY, released, pressed ) );
+        _value.emplace_back( returnValue );
+    }
+
+    void ButtonGroup::createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue )
+    {
+        _button.push_back( new AutoShadowButton( in, offsetX, offsetY, icnId, releasedIndex, pressedIndex ) );
+        _value.emplace_back( returnValue );
+    }
+
+    void ButtonGroup::createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue )
+    {
+        _button.push_back( new AutoShadowButton( in, offsetX, offsetY, released, pressed ) );
         _value.emplace_back( returnValue );
     }
 
