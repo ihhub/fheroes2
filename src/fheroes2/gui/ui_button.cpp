@@ -293,8 +293,8 @@ namespace fheroes2
         const Sprite & oldDisabled = _getDisabled();
         const Sprite & shadow = fheroes2::makeShadow( oldReleased, fheroes2::Point( -4, 6 ), 3 );
 
-        const Rect rect = area();
-        Sprite background = Crop( in, rect.x + shadow.x(), rect.y + shadow.y(), shadow.width(), shadow.height() );
+        const Rect & rect = area();
+        Sprite background = Crop( in, rect.x - oldReleased.x() + shadow.x(), rect.y - oldReleased.y() + shadow.y(), shadow.width(), shadow.height() );
         Blit( shadow, background );
 
         Sprite newReleased( background, shadow.x(), shadow.y() );
