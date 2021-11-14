@@ -165,7 +165,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 
     button_learn1.draw();
     button_learn2.draw();
-    button_hero.captureBackground();
     button_hero.draw();
 
     display.render();
