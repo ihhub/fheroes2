@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2013-04-25 12:49+0000\n"
-"Last-Translator: Phoenix <Unknown>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Warrior"
-msgstr "Barriär"
+msgstr "Krigare"
 
 msgid "Builder"
 msgstr ""
@@ -1812,8 +1812,8 @@ msgstr "Köp monster:"
 msgid "Town Population Information and Statistics"
 msgstr "Stadsbefolknings- och statistikinfo"
 
-msgid "Damage"
-msgstr "Skada"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "HP"
@@ -1886,6 +1886,9 @@ msgstr "Skott"
 
 msgid "Shots Left"
 msgstr "Skott kvar"
+
+msgid "Damage"
+msgstr "Skada"
 
 msgid "Hit Points"
 msgstr "Hälsopoäng"
@@ -5715,6 +5718,19 @@ msgstr "Guldgruva"
 
 msgid "Mine"
 msgstr "Gruva"
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Trädstad"
+
+msgid "This space for rent."
+msgstr ""
 
 msgid "No object"
 msgstr ""

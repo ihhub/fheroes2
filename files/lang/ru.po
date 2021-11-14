@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-08-02 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1865,8 +1865,8 @@ msgstr "Купить Монстров"
 msgid "Town Population Information and Statistics"
 msgstr "Информация о населении и статистика"
 
-msgid "Damage"
-msgstr "Урон"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "Здоровье"
@@ -1938,6 +1938,9 @@ msgstr "Выстрелов"
 
 msgid "Shots Left"
 msgstr "Осталось выстрелов"
+
+msgid "Damage"
+msgstr "Урон"
 
 msgid "Hit Points"
 msgstr "Здоровье"
@@ -5833,6 +5836,19 @@ msgstr "Золотая Шахта"
 
 msgid "Mine"
 msgstr "Шахта"
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Древо-город"
+
+msgid "This space for rent."
+msgstr ""
 
 msgid "No object"
 msgstr ""

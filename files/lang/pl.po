@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2013-10-04 21:15+0000\n"
-"Last-Translator: Łukasz Cieliński <lukasc@mp.pl>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -1802,8 +1802,8 @@ msgstr "Kup potwory"
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
 
-msgid "Damage"
-msgstr "Obrażenia"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "Punkty życia"
@@ -1874,6 +1874,9 @@ msgstr "Strzały"
 
 msgid "Shots Left"
 msgstr "Pozostałe strzały"
+
+msgid "Damage"
+msgstr "Obrażenia"
 
 msgid "Hit Points"
 msgstr "PŻ"
@@ -5837,6 +5840,19 @@ msgstr "Kopalnia złota"
 
 msgid "Mine"
 msgstr "Kopalnia"
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Nadrzewne miasto"
+
+msgid "This space for rent."
+msgstr ""
 
 msgid "No object"
 msgstr ""
