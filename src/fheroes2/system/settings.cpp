@@ -186,7 +186,7 @@ bool Settings::Read( const std::string & filename )
         break;
     }
 
-#ifdef BUILD_RELEASE
+#ifndef WITH_DEBUG
     // reset devel
     debug &= ~( DBG_DEVEL );
 #endif
