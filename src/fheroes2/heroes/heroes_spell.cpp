@@ -512,14 +512,14 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
+    const fheroes2::StandardWindow frameborder( 290, 252 );
+    const fheroes2::Rect & area = frameborder.activeArea();
 
-    const fheroes2::Rect & area = frameborder->activeArea();
     int result = Dialog::ZERO;
 
     const int townIcnId = isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD;
     const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-    CastleIndexListBox listbox( frameborder->windowArea(), area.getPosition(), result, townIcnId, listIcnId );
+    CastleIndexListBox listbox( area, area.getPosition(), result, townIcnId, listIcnId );
 
     listbox.SetScrollButtonUp( listIcnId, 3, 4, fheroes2::Point( area.x + 262, area.y + 45 ) );
     listbox.SetScrollButtonDn( listIcnId, 5, 6, fheroes2::Point( area.x + 262, area.y + 190 ) );
@@ -531,14 +531,10 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
-    const int okayButtonIcn = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-    const int cancelButtonIcn = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const int32_t border = 10;
+    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( area.x + border, area.y + border, area.width - 2 * border, area.height - 2 * border ), Dialog::OK | Dialog::CANCEL,
+                                    true, display );
 
-    fheroes2::ButtonGroup btnGroup;
-    btnGroup.createButton( area.x + 5, area.y + 222, okayButtonIcn, 0, 1, Dialog::OK );
-    btnGroup.createButton( area.x + 187, area.y + 222, cancelButtonIcn, 0, 1, Dialog::CANCEL );
-
-    btnGroup.drawShadows();
     btnGroup.draw();
 
     display.render();
@@ -554,7 +550,7 @@ bool ActionSpellTownPortal( Heroes & hero )
         listbox.Redraw();
         display.render();
     }
-    frameborder.reset();
+
     // store
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( listbox.GetCurrent() ) ) );
