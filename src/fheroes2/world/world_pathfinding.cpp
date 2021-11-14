@@ -202,6 +202,8 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
             else {
                 // This movement takes place at the beginning of a new day: start with max
                 // movement points, don't carry leftovers from the previous day
+                assert( _maxMovePoints >= cost );
+
                 movePointsLeft = _maxMovePoints - cost;
             }
         }
