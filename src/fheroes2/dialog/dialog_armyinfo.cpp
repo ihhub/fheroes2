@@ -639,7 +639,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const fheroes2::Sprite & armyButtonReleased = fheroes2::AGG::GetICN( armyButtonIcn, 0 );
     const fheroes2::Sprite & armyButtonPressed = fheroes2::AGG::GetICN( armyButtonIcn, 1 );
 
-    fheroes2::ButtonSprite btnHeroes( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35, armyButtonReleased, armyButtonPressed );
+    fheroes2::AutoBackgroundButton btnHeroes( display, pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35, armyButtonReleased,
+                                              armyButtonPressed );
 
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
@@ -741,8 +742,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-    fheroes2::Button btnMarket( pos.x + pos.width / 2 - 60 - 36, posy, isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
-    fheroes2::Button btnHeroes( pos.x + pos.width / 2 + 60, posy, isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON, 0, 1 );
+    fheroes2::AutoBackgroundButton btnMarket( display, pos.x + pos.width / 2 - 60 - 36, posy, isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
+    fheroes2::AutoBackgroundButton btnHeroes( display, pos.x + pos.width / 2 + 60, posy, isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON, 0, 1 );
 
     Kingdom & kingdom = hero.GetKingdom();
 

@@ -116,6 +116,18 @@ namespace fheroes2
         Sprite _disabled;
     };
 
+    // The background is automatically captured by this button: it can be used when original button sprites do not contain pieces of background
+    class AutoBackgroundButton : public ButtonSprite
+    {
+    public:
+        // "in" is the image where the button will be drawn at the specified offset, typically the display
+        AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
+        AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
+
+    private:
+        void _captureBackground( const Image & in );
+    };
+
     // A shadow is automatically added to this button: for that it needs to capture the background from the display at construct time
     class AutoShadowButton : public ButtonSprite
     {

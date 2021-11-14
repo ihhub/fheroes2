@@ -240,6 +240,40 @@ namespace fheroes2
         return _disabled;
     }
 
+    AutoBackgroundButton::AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
+        : ButtonSprite( offsetX, offsetY, fheroes2::AGG::GetICN( icnId, releasedIndex ), fheroes2::AGG::GetICN( icnId, pressedIndex ) )
+    {
+        _captureBackground( in );
+    }
+
+    AutoBackgroundButton::AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed,
+                                                const Sprite & disabled )
+        : ButtonSprite( offsetX, offsetY, released, pressed, disabled )
+    {
+        _captureBackground( in );
+    }
+
+    void AutoBackgroundButton::_captureBackground( const Image & in )
+    {
+        const Sprite & oldReleased = _getReleased();
+        const Sprite & oldPressed = _getPressed();
+        const Sprite & oldDisabled = _getDisabled();
+
+        const Rect & rect = area();
+        Sprite background = Crop( in, rect.x - oldReleased.x(), rect.y - oldReleased.y(), rect.width, rect.height );
+
+        Sprite newReleased( background, 0, 0 );
+        Blit( oldReleased, newReleased, oldReleased.x(), oldReleased.y() );
+
+        Sprite newPressed( background, 0, 0 );
+        Blit( oldPressed, newPressed, oldPressed.x(), oldPressed.y() );
+
+        Sprite newDisabled( background, 0, 0 );
+        Blit( oldDisabled, newDisabled, oldDisabled.x(), oldDisabled.y() );
+
+        setSprite( newReleased, newPressed, newDisabled );
+    }
+
     AutoShadowButton::AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
         : ButtonSprite( offsetX, offsetY, fheroes2::AGG::GetICN( icnId, releasedIndex ), fheroes2::AGG::GetICN( icnId, pressedIndex ) )
     {
