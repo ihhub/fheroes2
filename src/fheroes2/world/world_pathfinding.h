@@ -28,8 +28,27 @@
 
 class IndexObject;
 
+struct WorldNode : public PathfindingNode<MP2::MapObjectType>
+{
+    uint32_t _remainingMovePoints = 0;
+
+    WorldNode() = default;
+
+    WorldNode( const int node, const uint32_t cost, const MP2::MapObjectType object, const uint32_t remainingMovePoints )
+        : PathfindingNode( node, cost, object )
+        , _remainingMovePoints( remainingMovePoints )
+    {}
+
+    void resetNode() override
+    {
+        PathfindingNode::resetNode();
+
+        _remainingMovePoints = 0;
+    }
+};
+
 // Abstract class that provides base functionality to path through World map
-class WorldPathfinder : public Pathfinder<PathfindingNode<MP2::MapObjectType>>
+class WorldPathfinder : public Pathfinder<WorldNode>
 {
 public:
     WorldPathfinder() = default;
@@ -45,9 +64,12 @@ protected:
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
     // Calculates the movement penalty when moving from src tile to adjacent dst tile in the specified direction. If "last move"
-    // logic should be taken into account (when performing a pathfinding for a real hero on the map), src tile should be already
-    // accessible for this hero (path from the starting tile to src tile should be already in cache).
+    // logic should be taken into account (when performing pathfinding for a real hero on the map), then src tile should be
+    // already accessible for this hero and have valid information about the hero's remaining movement points.
     uint32_t getMovementPenalty( int src, int dst, int direction ) const;
+
+    // Substracts movement points taking the transition between turns into account
+    uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
     int _currentColor = Color::NONE;

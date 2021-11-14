@@ -164,60 +164,47 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
         dstTilePenalty = dstTilePenalty * 3 / 2;
     }
 
-    // If we perform a pathfinding for a real hero on the map, we have to work out the "last move"
-    // logic: if this move is the last one on the current turn, we can move to any adjacent tile
-    // (both in straight and diagonal direction) as long as we have enough movement points to move
-    // over our current tile in straight direction
+    // If we perform pathfinding for a real hero on the map, we have to work out the "last move"
+    // logic: if this move is the last one on the current turn, then we can move to any adjacent
+    // tile (both in straight and diagonal direction) as long as we have enough movement points
+    // to move over our current tile in straight direction
     if ( _maxMovePoints > 0 ) {
-        static std::vector<uint32_t> pathNodesCosts;
+        const WorldNode & node = _cache[src];
 
-        pathNodesCosts.clear();
+        // No dead ends allowed
+        assert( src == _pathStart || node._from != -1 );
 
-        // Collect costs of all previous steps to the src tile
-        int currentNode = src;
-
-        while ( currentNode != _pathStart ) {
-            const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
-
-            // No dead ends allowed
-            assert( node._from != -1 );
-
-            pathNodesCosts.push_back( node._cost - _cache[node._from]._cost );
-
-            currentNode = node._from;
-        }
-
-        // Calculate the number of movement points left
-        uint32_t movePointsLeft = _remainingMovePoints;
-
-        while ( !pathNodesCosts.empty() ) {
-            const uint32_t cost = pathNodesCosts.back();
-
-            pathNodesCosts.pop_back();
-
-            if ( movePointsLeft >= cost ) {
-                // This movement takes place on the same day
-                movePointsLeft = movePointsLeft - cost;
-            }
-            else {
-                // This movement takes place at the beginning of a new day: start with max
-                // movement points, don't carry leftovers from the previous day
-                assert( _maxMovePoints >= cost );
-
-                movePointsLeft = _maxMovePoints - cost;
-            }
-        }
+        const uint32_t remainingMovePoints = node._remainingMovePoints;
 
         // If we still have enough movement points to move over src tile in straight direction,
         // but not enough to move to the dst tile (or barely enough to move to the dst tile in
         // straight direction), then it's the last move and we can move to the dst tile in any
         // case at the expense of all the remaining movement points
-        if ( movePointsLeft >= srcTilePenalty && movePointsLeft <= dstTilePenalty ) {
-            return movePointsLeft;
+        if ( remainingMovePoints >= srcTilePenalty && remainingMovePoints <= dstTilePenalty ) {
+            return remainingMovePoints;
         }
     }
 
     return dstTilePenalty;
+}
+
+uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const
+{
+    // We do not perform pathfinding for a real hero on the map, this is no-op
+    if ( _maxMovePoints == 0 ) {
+        return 0;
+    }
+
+    // This movement takes place at the beginning of a new turn: start with max movement points,
+    // don't carry leftovers from the previous turn
+    if ( movePoints < substractedMovePoints ) {
+        assert( _maxMovePoints >= substractedMovePoints );
+
+        return _maxMovePoints - substractedMovePoints;
+    }
+
+    // This movement takes place on the same turn
+    return movePoints - substractedMovePoints;
 }
 
 void WorldPathfinder::processWorldMap( int pathStart )
@@ -228,7 +215,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[pathStart] = PathfindingNode<MP2::MapObjectType>( -1, 0, MP2::MapObjectType::OBJ_ZERO );
+    _cache[pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( pathStart );
@@ -241,7 +228,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
 void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const Directions & directions = Direction::All();
-    const PathfindingNode<MP2::MapObjectType> & currentNode = _cache[currentNodeIdx];
+    const WorldNode & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
@@ -249,14 +236,19 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
             if ( newIndex == pathStart )
                 continue;
 
-            const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
-            PathfindingNode<MP2::MapObjectType> & newNode = _cache[newIndex];
+            const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
+            const uint32_t moveCost = currentNode._cost + movementPenalty;
+            const uint32_t remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+
+            WorldNode & newNode = _cache[newIndex];
+
             if ( world.isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
                 const Maps::Tiles & tile = world.GetTiles( newIndex );
 
                 newNode._from = currentNodeIdx;
                 newNode._cost = moveCost;
                 newNode._objectID = tile.GetObject();
+                newNode._remainingMovePoints = remainingMovePoints;
 
                 // duplicates are allowed if we find a cheaper way there
                 if ( tile.isWater() == fromWater )
@@ -306,7 +298,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
     // trace the path from end point
     int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
+        const WorldNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
@@ -346,11 +338,16 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
 
             if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction, _currentColor ) ) {
                 // add straight to cache, can't move further from the monster
-                const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction );
-                PathfindingNode<MP2::MapObjectType> & monsterNode = _cache[monsterIndex];
+                const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
+                const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
+                const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
+
+                WorldNode & monsterNode = _cache[monsterIndex];
+
                 if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
                     monsterNode._from = currentNodeIdx;
                     monsterNode._cost = moveCost;
+                    monsterNode._remainingMovePoints = remainingMovePoints;
                 }
             }
         }
@@ -414,7 +411,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const bool isFirstNode = currentNodeIdx == pathStart;
-    PathfindingNode<MP2::MapObjectType> & currentNode = _cache[currentNodeIdx];
+    WorldNode & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
     auto protectionCheck = [this]( const int index ) {
@@ -455,13 +452,15 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
             if ( teleportIdx == pathStart )
                 continue;
 
-            PathfindingNode<MP2::MapObjectType> & teleportNode = _cache[teleportIdx];
+            WorldNode & teleportNode = _cache[teleportIdx];
 
             // check if move is actually faster through teleporter
             if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
                 teleportNode._from = currentNodeIdx;
                 teleportNode._cost = currentNode._cost;
                 teleportNode._objectID = MP2::OBJ_STONELITHS;
+                teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
+
                 nodesToExplore.push_back( teleportIdx );
             }
         }
@@ -601,7 +600,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     // trace the path from end point
     int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
+        const WorldNode & node = _cache[currentNode];
 
         validateAndAdd( currentNode, node._objectID );
 
@@ -609,7 +608,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNode, directions[i] ) ) {
                     const int newIndex = currentNode + _mapOffset[i];
-                    const PathfindingNode<MP2::MapObjectType> & adjacent = _cache[newIndex];
+                    const WorldNode & adjacent = _cache[newIndex];
 
                     if ( adjacent._cost == 0 || adjacent._objectID == 0 )
                         continue;
@@ -647,7 +646,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
             lastValidNode = currentNode;
         }
 
-        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
+        const WorldNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
