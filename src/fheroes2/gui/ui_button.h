@@ -116,6 +116,7 @@ namespace fheroes2
         Sprite _disabled;
     };
 
+    // A shadow is automatically added to this button: for that it needs to capture the background from the display at construct time
     class AutoShadowButton : public ButtonSprite
     {
     public:
