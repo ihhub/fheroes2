@@ -128,13 +128,12 @@ namespace
     {
         const uint32_t width = 77;
         const uint32_t height = 70;
-        //std::vector<fheroes2::Rect> coordDifficulty;
 
         for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
             const uint32_t offset = width * current;
 
             fheroes2::Text text( Difficulty::String( current ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-            text.draw( /*coordDifficulty[current].x */dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
+            text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
 
