@@ -155,8 +155,6 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
     const Maps::Tiles & srcTile = world.GetTiles( src );
     const Maps::Tiles & dstTile = world.GetTiles( dst );
 
-    const uint32_t srcTilePenalty = srcTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
-
     uint32_t penalty = srcTile.isRoad() && dstTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
 
     // Diagonal movement costs 50% more
@@ -175,6 +173,7 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
         assert( src == _pathStart || node._from != -1 );
 
         const uint32_t remainingMovePoints = node._remainingMovePoints;
+        const uint32_t srcTilePenalty = srcTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
 
         // If we still have enough movement points to move over src tile in straight direction,
         // but not enough (or barely enough) to move to the dst tile, then it's the last move
