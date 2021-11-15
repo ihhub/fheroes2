@@ -466,7 +466,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator nextStep = currentStep;
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
-            const int32_t from = ( *currentStep ).GetIndex();
+            const int32_t from = currentStep->GetIndex();
             const fheroes2::Point & mp = Maps::GetPoint( from );
 
             ++nextStep;
@@ -475,14 +475,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // is visible
             if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
                 uint32_t index = 0;
+
                 if ( pathEnd != nextStep ) {
+                    const Maps::Tiles & tileFrom = world.GetTiles( currentStep->GetFrom() );
                     const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
-                    uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
 
-                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
-                        cost = Maps::Ground::roadPenalty;
+                    // Movement penalty depends on tileFrom penalty, BUT route arrow length depends on tileTo penalty
+                    const uint32_t cost = tileFrom.isRoad() && tileTo.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, pathfinding );
 
-                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
+                    index = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
                 }
 
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
