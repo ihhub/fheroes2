@@ -486,31 +486,38 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
     }
 
-    fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
-    fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
+    if ( allowToCancel ) {
+        const fheroes2::Sprite & buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
+        fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
+    }
 
-    const int buttonOffset = allowToCancel ? 39 : 112;
-    const int buttonOkICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int buttonOffset = allowToCancel ? 39 : 120;
+    const int buttonOkICN
+        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
     const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
 
-    fheroes2::AutoShadowButton btnOk( display, pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 );
+    std::unique_ptr<fheroes2::ButtonBase> btnOk;
     fheroes2::AutoShadowButton btnCancel( display, pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
 
     if ( allowToCancel ) {
         btnCancel.draw();
+        btnOk.reset( new fheroes2::AutoShadowButton( display, pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 ) );
     }
-    btnOk.draw();
+    else {
+        btnOk.reset( new fheroes2::Button( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 ) );
+    }
+    btnOk->draw();
 
     display.render();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( btnOk.area() ) ? btnOk.drawOnPress() : btnOk.drawOnRelease();
+        le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();
         if ( allowToCancel ) {
             le.MousePressLeft( btnCancel.area() ) ? btnCancel.drawOnPress() : btnCancel.drawOnRelease();
         }
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk.area() ) )
+        if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
             break;
 
         if ( allowToCancel && le.MouseClickLeft( btnCancel.area() ) ) {
@@ -547,8 +554,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
                 // TODO: well...
-                fheroes2::AutoShadowButton btnOkArtifact( display, pos_rt.x + 112, pos_rt.y + 410, buttonOkICN, 0, 1 );
-                btnOkArtifact.draw();
+                btnOk.reset( new fheroes2::Button( pos_rt.x + 120, pos_rt.y + 410, isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 ) );
+                btnOk->draw();
 
                 std::string artMsg;
                 if ( art.isUltimate() ) {
@@ -581,14 +588,14 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
 
                 while ( le.HandleEvents() ) {
-                    le.MousePressLeft( btnOkArtifact.area() ) ? btnOkArtifact.drawOnPress() : btnOkArtifact.drawOnRelease();
+                    le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();
 
                     // display captured artifact info on right click
                     if ( le.MousePressRight( artifactArea ) )
                         Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
-                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOkArtifact.area() ) )
+                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
                         break;
 
                     // animation
