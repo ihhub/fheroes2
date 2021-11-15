@@ -248,26 +248,35 @@ void Battle::DialogBattleSettings( void )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
+        bool saveSpeed = false;
         if ( le.MouseClickLeft( optionAreas[0] ) ) {
             conf.SetBattleSpeed( conf.BattleSpeed() % 10 + 1 );
-            Game::UpdateGameSpeed();
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            display.render();
-            saveConfiguration = true;
+            saveSpeed = true;
+        }
+        else if ( le.MouseWheelUp( optionAreas[0] ) ) {
+            conf.SetBattleSpeed( conf.BattleSpeed() + 1 );
+            saveSpeed = true;
+        }
+        else if ( le.MouseWheelDn( optionAreas[0] ) ) {
+            conf.SetBattleSpeed( conf.BattleSpeed() - 1 );
+            saveSpeed = true;
         }
         else if ( le.MousePressRight( optionAreas[0] ) ) {
             Dialog::Message( _( "Speed" ), _( "Set the speed of combat actions and animations." ), Font::BIG );
         }
+        if ( saveSpeed ) {
+            Game::UpdateGameSpeed();
+        }
+
         // For future use
         // else if ( le.MousePressRight( optionAreas[1] ) ) {
         //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
         // }
-        else if ( le.MouseClickLeft( optionAreas[2] ) ) {
+
+        bool saveAutoSpellCast = false;
+        if ( le.MouseClickLeft( optionAreas[2] ) ) {
             conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
+            saveAutoSpellCast = true;
         }
         else if ( le.MousePressRight( optionAreas[2] ) ) {
             Dialog::Message(
@@ -275,11 +284,11 @@ void Battle::DialogBattleSettings( void )
                 _( "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)" ),
                 Font::BIG );
         }
-        else if ( le.MouseClickLeft( optionAreas[3] ) ) {
+
+        bool saveShowGrid = false;
+        if ( le.MouseClickLeft( optionAreas[3] ) ) {
             conf.SetBattleGrid( !conf.BattleShowGrid() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
+            saveShowGrid = true;
         }
         else if ( le.MousePressRight( optionAreas[3] ) ) {
             Dialog::Message(
@@ -287,26 +296,36 @@ void Battle::DialogBattleSettings( void )
                 _( "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible." ),
                 Font::BIG );
         }
-        else if ( le.MouseClickLeft( optionAreas[4] ) ) {
+
+        bool saveShowMoveShadow = false;
+        if ( le.MouseClickLeft( optionAreas[4] ) ) {
             conf.SetBattleMovementShaded( !conf.BattleShowMoveShadow() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
+            saveShowMoveShadow = true;
         }
         else if ( le.MousePressRight( optionAreas[4] ) ) {
             Dialog::Message( _( "Shadow Movement" ), _( "Toggle on or off shadows showing where your creatures can move and attack." ), Font::BIG );
         }
-        else if ( le.MouseClickLeft( optionAreas[5] ) ) {
+
+        bool saveShowMouseShadow = false;
+        if ( le.MouseClickLeft( optionAreas[5] ) ) {
             conf.SetBattleMouseShaded( !conf.BattleShowMouseShadow() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
+            saveShowMouseShadow = true;
         }
         else if ( le.MousePressRight( optionAreas[5] ) ) {
             Dialog::Message( _( "Shadow Cursor" ), _( "Toggle on or off a shadow showing the current hex location of the mouse cursor." ), Font::BIG );
         }
-        else if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
+
+        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
+        }
+
+        if ( saveSpeed || saveAutoSpellCast || saveShowGrid || saveShowMoveShadow || saveShowMouseShadow ) {
+            // redraw
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
+            display.render();
+
+            saveConfiguration = true;
         }
     }
 

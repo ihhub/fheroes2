@@ -26,8 +26,10 @@
 #include "logging.h"
 #include "maps_objects.h"
 #include "mp2.h"
+#include "rand.h"
 #include "serialize.h"
 #include "tools.h"
+#include "translations.h"
 
 #define SIZEMESSAGE 400
 
@@ -209,6 +211,11 @@ void MapSign::LoadFromMP2( s32 index, StreamBuf st )
 {
     st.skip( 9 );
     message = st.toString();
+
+    if ( message.empty() ) {
+        const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
+        message = Rand::Get( randomMessage );
+    }
 
     SetIndex( index );
     SetUID( index );

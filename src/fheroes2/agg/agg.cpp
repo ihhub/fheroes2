@@ -343,10 +343,10 @@ bool AGG::ReadDataDir( void )
     return heroes2_agg.isGood();
 }
 
-std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
+std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 {
-    if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
-        const std::vector<u8> & buf = heroes2x_agg.read( key );
+    if ( heroes2x_agg.isGood() ) {
+        const std::vector<uint8_t> & buf = heroes2x_agg.read( key );
         if ( !buf.empty() )
             return buf;
     }
