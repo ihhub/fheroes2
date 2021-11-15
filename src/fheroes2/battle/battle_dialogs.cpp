@@ -546,6 +546,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         const bool isWinnerHuman = winner && winner->isControlHuman();
 
+        btnOk.reset( new fheroes2::Button( pos_rt.x + 120, pos_rt.y + 410, isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 ) );
+
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
                 back.restore();
@@ -553,8 +555,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
-                // TODO: well...
-                btnOk.reset( new fheroes2::Button( pos_rt.x + 120, pos_rt.y + 410, isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 ) );
                 btnOk->draw();
 
                 std::string artMsg;
