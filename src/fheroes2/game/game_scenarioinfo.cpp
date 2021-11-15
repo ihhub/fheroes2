@@ -103,25 +103,27 @@ namespace
         // Redraw select button as the original image has a wrong position of it
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
+        fheroes2::FontType normalWhiteFont = { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+
         // text scenario
-        Text text( _( "Scenario:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 23 );
+        fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 25, display );
 
         // maps name
-        text.Set( conf.MapsName() );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 46 );
+        text.set( conf.MapsName(), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 48, display );
 
         // text game difficulty
-        text.Set( _( "Game Difficulty:" ) );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 75 );
+        text.set( _( "Game Difficulty:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 77, display );
 
         // text opponents
-        text.Set( _( "Opponents:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 181 );
+        text.set( _( "Opponents:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 183, display );
 
         // text class
-        text.Set( _( "Class:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 262 );
+        text.set( _( "Class:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 264, display );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
