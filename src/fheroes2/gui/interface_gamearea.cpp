@@ -466,8 +466,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator nextStep = currentStep;
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
-            const int32_t from = currentStep->GetIndex();
-            const fheroes2::Point & mp = Maps::GetPoint( from );
+            const fheroes2::Point & mp = Maps::GetPoint( currentStep->GetIndex() );
 
             ++nextStep;
             --green;
@@ -477,12 +476,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 uint32_t index = 0;
 
                 if ( pathEnd != nextStep ) {
-                    const Maps::Tiles & tileFrom = world.GetTiles( currentStep->GetFrom() );
-                    const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
+                    const Maps::Tiles & tile = world.GetTiles( currentStep->GetIndex() );
 
                     // Make no mistake: the cost of moving to this tile depends on the penalty of the PREVIOUS tile,
                     // BUT the length of the route arrow on this tile depends on the penalty of THIS tile
-                    const uint32_t penalty = tileFrom.isRoad() && tileTo.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, pathfinding );
+                    const uint32_t penalty = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
 
                     index = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), penalty );
                 }
