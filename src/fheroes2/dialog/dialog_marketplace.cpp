@@ -552,7 +552,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
             firstExchange = false;
 
-            resourceTo = resourceFrom = Resource::UNKNOWN;
+            resourceTo = Resource::UNKNOWN;
+            resourceFrom = Resource::UNKNOWN;
             gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
             fundsFrom = kingdom.GetFunds();
