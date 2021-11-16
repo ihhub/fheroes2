@@ -177,6 +177,7 @@
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
+    <ClCompile Include="src\engine\image_palette.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\logging.cpp" />
@@ -391,6 +392,7 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\image.h" />
+    <ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />

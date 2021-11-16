@@ -33,12 +33,13 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#ifndef BUILD_RELEASE
+#ifdef WITH_DEBUG
 #include "tools.h"
 #endif
 #include "ui_tool.h"
@@ -54,7 +55,7 @@ namespace
     int PrintHelp( const char * basename )
     {
         COUT( "Usage: " << basename << " [OPTIONS]" );
-#ifndef BUILD_RELEASE
+#ifdef WITH_DEBUG
         COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
 #endif
         COUT( "  -h\t\tprint this help message and exit" );
@@ -167,7 +168,7 @@ int main( int argc, char ** argv )
             int opt;
             while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
                 switch ( opt ) {
-#ifndef BUILD_RELEASE
+#ifdef WITH_DEBUG
                 case 'd':
                     conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
                     break;
@@ -203,6 +204,9 @@ int main( int argc, char ** argv )
         const DisplayInitializer displayInitializer;
 
         const AGG::AGGInitializer aggInitializer;
+
+        // Load palette.
+        fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
 
         // load BIN data
         Bin_Info::InitBinInfo();
