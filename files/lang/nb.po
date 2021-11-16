@@ -7,13 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< Updated upstream
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
-"PO-Revision-Date: 2021-11-13 21:53+0100\n"
-=======
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
-"PO-Revision-Date: 2021-11-16 01:29+0100\n"
->>>>>>> Stashed changes
+"PO-Revision-Date: 2021-11-16 09:11+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -2642,22 +2637,22 @@ msgid "Knowl"
 msgstr "Kunns"
 
 msgid "1st"
-msgstr "1."
+msgstr "Først"
 
 msgid "2nd"
-msgstr "2."
+msgstr "Andre"
 
 msgid "3rd"
-msgstr "3."
+msgstr "Tredje"
 
 msgid "4th"
-msgstr "4."
+msgstr "Fjerde"
 
 msgid "5th"
-msgstr "5."
+msgstr "Femte"
 
 msgid "6th"
-msgstr "6."
+msgstr "Sjette"
 
 msgid "Oracle: Player Rankings"
 msgstr "Orakel: Spillerrangering"
@@ -2859,16 +2854,16 @@ msgid "Usupported save format: "
 msgstr "Ustøttet lagringsformat: "
 
 msgid "Current game version: "
-msgstr "Gjeldende spillutgave: "
+msgstr "Spillutgave som brukes: "
 
 msgid "Last supported version: "
 msgstr "Sist støttede utgave: "
 
 msgid "This saved game is localized to '"
-msgstr "Dette lagrede spillet er satt opp for '"
+msgstr "Dette lagrede spillet er satt opp for språket '"
 
 msgid "' language, but the current language of the game is '"
-msgstr "' språk, men det gjeldende språket for spillet er '"
+msgstr "', men det gjeldende språket for spillet er '"
 
 msgid "Hot Seat"
 msgstr "Byttespilling"
@@ -5760,9 +5755,9 @@ msgid "Warlock"
 msgstr "Trollmann"
 
 # Magiker blir allerede brukt om mage:
-# Wizard kommer av wise og betegner en som har studert mye for å bli flink. 
+# Wizard kommer av wise og betegner en som har studert mye for å bli flink.
 # Vismann og visdame når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
-# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd, alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.) Merk: Tryllekunstner er profesjonen som gjør synsbedrageri osv. 
+# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd, alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.) Merk: Tryllekunstner er profesjonen som gjør synsbedrageri osv.
 msgid "Wizard"
 msgstr "Magimester"
 
@@ -5796,11 +5791,12 @@ msgstr "Sein"
 msgid "speed|Average"
 msgstr "Middels"
 
+# God? Bra? Brukbar?
 msgid "speed|Fast"
-msgstr "Rask"
+msgstr "Grei"
 
 msgid "speed|Very Fast"
-msgstr "Kvikk"
+msgstr "Rask"
 
 msgid "speed|Ultra Fast"
 msgstr "Superrask"
