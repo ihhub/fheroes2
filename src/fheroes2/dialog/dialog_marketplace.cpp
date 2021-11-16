@@ -432,7 +432,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
             Dialog::MakeGiftResource( kingdom );
 
-            resourceTo = resourceFrom = Resource::UNKNOWN;
+            resourceTo = Resource::UNKNOWN;
+            resourceFrom = Resource::UNKNOWN;
             gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
             cursorTo.hide();
