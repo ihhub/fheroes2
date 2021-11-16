@@ -480,10 +480,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     const Maps::Tiles & tileFrom = world.GetTiles( currentStep->GetFrom() );
                     const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
 
-                    // Make no mistake: movement penalty depends on tileFrom penalty, BUT route arrow length depends on tileTo penalty
-                    const uint32_t cost = tileFrom.isRoad() && tileTo.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, pathfinding );
+                    // Make no mistake: the cost of moving to this tile depends on the penalty of the PREVIOUS tile,
+                    // BUT the length of the route arrow on this tile depends on the penalty of THIS tile
+                    const uint32_t penalty = tileFrom.isRoad() && tileTo.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, pathfinding );
 
-                    index = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
+                    index = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), penalty );
                 }
 
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
