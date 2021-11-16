@@ -18,7 +18,6 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE   "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_TOOLS   "Enable additional tools" OFF)
-option(ENABLE_RELEASE "Release mode (disables debug options)" ON)
 option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
 
 option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
