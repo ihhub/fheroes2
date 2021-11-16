@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "screen.h"
-#include "palette_h2.h"
+#include "image_palette.h"
 #include "tools.h"
 
 #include <SDL_version.h>
@@ -126,13 +126,15 @@ namespace
         return indexes;
     }
 
-    const uint8_t * PALPAlette()
+    const uint8_t * PALPalette()
     {
         static std::vector<uint8_t> palette;
         if ( palette.empty() ) {
+            const uint8_t * gamePalette = fheroes2::getGamePalette();
+
             palette.resize( 256 * 3 );
             for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = kb_pal[i] << 2;
+                palette[i] = gamePalette[i] << 2;
             }
         }
 
@@ -179,7 +181,7 @@ namespace
         return true;
     }
 
-    const uint8_t * currentPalette = PALPAlette();
+    const uint8_t * currentPalette = PALPalette();
 
 // If SDL library is used
 #if !defined( FHEROES2_VITA )
@@ -1389,10 +1391,10 @@ namespace fheroes2
 
     void Display::changePalette( const uint8_t * palette ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPAlette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPAlette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPalette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }
