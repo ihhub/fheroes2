@@ -7,8 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< Updated upstream
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-11-13 21:53+0100\n"
+=======
+"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"PO-Revision-Date: 2021-11-16 01:29+0100\n"
+>>>>>>> Stashed changes
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -2318,7 +2323,7 @@ msgid "Available: %{count}"
 msgstr "Tilgjengelig: %{count}"
 
 msgid "Number to buy:"
-msgstr "Antall å verve:"
+msgstr "Valgt antall:"
 
 msgid "MAX"
 msgstr "MAKS"
