@@ -116,6 +116,8 @@ namespace
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
+
+            _isPreserved = true;
         }
 
         void restore() const
