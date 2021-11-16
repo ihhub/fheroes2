@@ -55,7 +55,9 @@ namespace
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !MP2::isActionObject( objectType ) ) {
+        // AI heroes must not take into account coast tile as an action tile. They should calculate paths through them.
+        // TODO: remove the condition for coast once AI is capable to create a path between land and water.
+        if ( !MP2::isActionObject( objectType ) && objectType != MP2::OBJ_COAST ) {
             return false;
         }
 
