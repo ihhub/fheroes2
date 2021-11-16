@@ -21,7 +21,6 @@
 # Options:
 #
 # DEBUG: build in debug mode
-# RELEASE: build with addons extensions
 #
 # FHEROES2_IMAGE_SUPPORT: build with SDL image support
 # WITH_TOOLS: build tools

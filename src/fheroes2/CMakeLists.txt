@@ -12,7 +12,6 @@ get_filename_component(CONFIGURE_FHEROES2_DATA_ABSOLUTE
 
 add_executable(fheroes2 ${FHEROES2_SOURCES})
 target_compile_definitions(fheroes2 PRIVATE
-	$<$<BOOL:${ENABLE_RELEASE}>:BUILD_RELEASE>
 	CONFIGURE_FHEROES2_DATA=${CONFIGURE_FHEROES2_DATA_ABSOLUTE}
 	)
 target_include_directories(fheroes2 PRIVATE
