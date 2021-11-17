@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-17 14:38+0100\n"
-"PO-Revision-Date: 2021-11-17 14:30+0100\n"
+"PO-Revision-Date: 2021-11-17 17:26+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -37,6 +37,8 @@ msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Alcuni/e\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
@@ -70,19 +72,25 @@ msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Un plotone di\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Un esercito di\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"Una legione di\n"
+"%{monster}"
 
 msgid "army|Several"
-msgstr ""
+msgstr "Alcuni/e"
 
 msgid "army|Pack"
 msgstr "Banda"
@@ -97,13 +105,13 @@ msgid "army|Throng"
 msgstr "Folla"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "Plotone"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "Esercito di"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "Legione"
 
 msgid "army|Few"
 msgstr "Pochi/e"
@@ -560,7 +568,7 @@ msgid "Error"
 msgstr ""
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Nessuna magia da lanciare."
 
 msgid "Are you sure you want to retreat?"
 msgstr ""
@@ -1697,31 +1705,31 @@ msgid "Available"
 msgstr "Disponibile"
 
 msgid "View World"
-msgstr ""
+msgstr "Vedi Mondo"
 
 msgid "View the entire world."
-msgstr ""
+msgstr "Monstra il mondo intero."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Puzzle"
 
 msgid "View the obelisk puzzle."
-msgstr ""
+msgstr "Mostra il Puzzle obelisco."
 
 msgid "Scenario Information"
-msgstr ""
+msgstr "Informazioni Scenario"
 
 msgid "View information on the scenario you are currently playing."
-msgstr ""
+msgstr "Mostra lo scenario sul quale stai giocando."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr ""
+msgstr "Scava l'Estremo Artefatto"
 
 msgid "Digging"
-msgstr ""
+msgstr "Scavo"
 
 msgid "Exit this menu without doing anything."
-msgstr "Lascia questo menù senza far nulla."
+msgstr "Esci dal menù senza far nulla."
 
 msgid "Arena"
 msgstr ""
@@ -1802,10 +1810,10 @@ msgid ""
 msgstr ""
 
 msgid "(Rate: %{percent})"
-msgstr ""
+msgstr "(Grado: %{percent})"
 
 msgid "Total: "
-msgstr ""
+msgstr "Totale: "
 
 msgid "No room in"
 msgstr ""
@@ -1820,125 +1828,137 @@ msgid "Resource cost:"
 msgstr "Costo Risorse:"
 
 msgid "Need: "
-msgstr ""
+msgstr "Servono:"
 
 msgid "Load Game"
-msgstr ""
+msgstr "Carica Partita"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Non esistono punti di salvataggio da caricare."
 
 msgid "New Game"
-msgstr ""
+msgstr "Nuova Partita"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Inizia una partita singola o multigiocatore."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Carica una partita salvata."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Salva Partita"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Salva la partita in corso."
 
 msgid "Quit"
-msgstr ""
+msgstr "Esci"
 
 msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr ""
+msgstr "Esci da Free Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Risoluzione"
 
 msgid "Experimental"
-msgstr ""
+msgstr "Sperimentale"
 
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Scegli lingua del gioco"
 
 msgid "Change language of the game."
-msgstr ""
+msgstr "Cambia la lingua del gioco."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Scegli risoluzione del gioco."
 
 msgid "Change resolution of the game."
-msgstr ""
+msgstr "Cambia la risoluzione del gioco."
 
 msgid "Experimental game settings."
-msgstr ""
+msgstr "Impostazioni sperimentali del gioco."
 
 msgid "Attention"
-msgstr ""
+msgstr "Attenzione"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any languages "
 "except English."
 msgstr ""
+"La tua versione di Heroes of Might and Magic II non supporta altre lingue "
+"che l'inglese."
 
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Difficoltà\n"
+"Mappa"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Difficoltà\n"
+"Gioco"
 
 msgid "Rating"
-msgstr ""
+msgstr "Classifica"
 
 msgid "Map Size"
 msgstr ""
+"Dimensioni\n"
+"Mappa"
 
 msgid "Opponents"
-msgstr ""
+msgstr "Avversari"
 
 msgid "Class"
-msgstr ""
+msgstr "Classe"
 
 msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Condizioni\n"
+"Vittoria"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Condizioni\n"
+"Sconfitta"
 
 msgid "Score: "
-msgstr ""
+msgstr "Punteggio: "
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Prima scegli destinatari!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Non puoi scegliere %{resource}!"
 
 msgid "Select count %{resource}:"
-msgstr ""
+msgstr "Scegli quantità di %{resource}:"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Scegli destinatari"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Le tue risorse"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Dono scelto"
 
 msgid "Gift from %{name}"
-msgstr ""
+msgstr "Dono da %{name}"
 
 msgid "Set Guardian"
 msgstr ""
@@ -1947,13 +1967,13 @@ msgid "Your army too big!"
 msgstr ""
 
 msgid "Choose game language:"
-msgstr ""
+msgstr "Scegli la lingua del gioco:"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} guadagna un livello."
 
 msgid "%{skill} +1"
-msgstr ""
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
 msgstr "Hai appreso %{skill}."
@@ -2006,25 +2026,25 @@ msgid "n/a"
 msgstr "n/d"
 
 msgid "guarded by "
-msgstr ""
+msgstr "tenuta da "
 
 msgid "guarded by %{count} %{monster}"
-msgstr ""
+msgstr "tenuta da %{count} %{monster}"
 
 msgid "(available: %{count})"
-msgstr ""
+msgstr "(disponibiltà: %{count})"
 
 msgid "(empty)"
 msgstr "(vuoto/a)"
 
 msgid "already learned"
-msgstr ""
+msgstr "Già imparato"
 
 msgid "already knows this skill"
-msgstr ""
+msgstr "sa già questa dote"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "è già al massimo di doti"
 
 msgid "(already visited)"
 msgstr "(già visitato/a)"
@@ -2033,19 +2053,19 @@ msgid "(not visited)"
 msgstr "(non visitato/a)"
 
 msgid "Road"
-msgstr ""
+msgstr "Strada"
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(scavo possibile)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(no scavo)"
 
 msgid "penalty: %{cost}"
-msgstr ""
+msgstr "penalità: %{cost}"
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Terra ignota"
 
 msgid "Defenders:"
 msgstr "Difensori:"
@@ -2054,10 +2074,10 @@ msgid "Unknown"
 msgstr "Sconosciuta"
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} (Livello %{level})"
 
 msgid "Move Points"
-msgstr ""
+msgstr "Punti di movimento"
 
 msgid "Available: %{count}"
 msgstr "Disponibile/i: %{count}"
@@ -2093,78 +2113,80 @@ msgid "File to Load:"
 msgstr "File da caricare:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Fai clicc per salvare la partita in corso"
 
 msgid "OK"
-msgstr ""
+msgstr "Okay"
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Fai clic per caricare una partita precedente."
 
 msgid "Are you sure you want to delete file:"
-msgstr ""
+msgstr "Sei sicuro di voler cancellare il file:"
 
 msgid "Warning!"
-msgstr ""
+msgstr "Attenzione!"
 
 msgid "Select Monster:"
-msgstr ""
+msgstr "Scegli mostro:"
 
 msgid "Select Hero:"
-msgstr ""
+msgstr "Scegli eroe:"
 
 msgid "Select Artifact:"
-msgstr ""
+msgstr "Scegli artefatto:"
 
 msgid "Select Spell:"
-msgstr ""
+msgstr "Scegli magia:"
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Scegli dote:"
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Difficoltà della mappa:"
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Non esistono mappe di quella dimensione."
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Mappe piccole"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Mostra solo le mappe piccole (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Mappe medie"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Mostra solo le mappe medie (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Mappe grandi"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Mostra solo le mappe grandi (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Mappe XL"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Mostra solo mappe XL (144 x 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Tutte le mappe"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Mostra tutte le mappe, independente dalla dimensione."
 
 msgid "Players Icon"
-msgstr ""
+msgstr "Icona giocatori"
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by humans will be occupied by computer players."
 msgstr ""
+"Indica quanti giocatori vi sono in totale nello scenario. Ogni posizione non "
+"occupata da umani sarà occupata da giocatori computer."
 
 msgid ""
 "Indicates whether the map\n"
@@ -2172,26 +2194,32 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Indica se la mappa è\n"
+"piccola (36 x 36), media\n"
+"(72 x 72), grande (108 x 108), o\n"
+"XL (114 x 114)."
 
 msgid "Size Icon"
-msgstr ""
+msgstr "Icona dimensione"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Nome della mappa"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Il nome della mappa scelta attualmente"
 
 msgid ""
 "Indicates whether the map is made for The Succession Wars or The Price of "
 "Loyalty version of the game."
 msgstr ""
+"Indica se la mappa è stata creata per la versione del gioco Guerra di "
+"Successione o The Price of Loyalty."
 
 msgid "Map Type"
-msgstr ""
+msgstr "Tipo di mappa"
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Difficoltà della mappa scelta"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -2199,57 +2227,61 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"La difficoltà della mappa scelta attualmente. La difficoltà della mappa è "
+"data dallo scenario. Mappe più difficili includono più nemici (o più forti), "
+"meno risorse oppure altre condizioni speciali che rendono la partita più "
+"dura all'umano."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Descrizione scelta"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "La descrizione della mappa scelta attualmente."
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Accetta la scelta."
 
 msgid "Okay"
-msgstr ""
+msgstr "OK\v"
 
 msgid "Lose all your heroes and towns."
-msgstr ""
+msgstr "Perdi tutti gli eroi e le città"
 
 msgid "Lose a specific town."
-msgstr ""
+msgstr "Perdi una città specifica."
 
 msgid "Lose a specific hero."
-msgstr ""
+msgstr "Perdi un eroe specifico."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
+msgstr "Vai fuori tempo. Non riuscire a vincere entro un dato momento."
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Condizione sconfitta"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr ""
+msgstr "Sconfiggi tutti gli eroi e città nemiche."
 
 msgid "Capture a specific town."
-msgstr ""
+msgstr "Cattura una città specifica."
 
 msgid "Defeat a specific hero."
-msgstr ""
+msgstr "Sconfiggi un eroe specifico."
 
 msgid "Find a specific artifact."
-msgstr ""
+msgstr "Trova un dato artefatto."
 
 msgid "Your side defeats the opposing side."
-msgstr ""
+msgstr "La tua alleanza sconfigge quella avversaria."
 
 msgid "Accumulate a large amount of gold."
-msgstr ""
+msgstr "Accumula una grande quantità d'oro."
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Condizione vittoria"
 
 msgid "Experimental Game Settings"
-msgstr ""
+msgstr "Impostazioni sperimentali"
 
 msgid "one"
 msgstr ""
@@ -2955,46 +2987,46 @@ msgstr ""
 "questa terra."
 
 msgid "Next Hero"
-msgstr ""
+msgstr "Altro Eroe"
 
 msgid "Select the next Hero."
-msgstr ""
+msgstr "Scegli altro Eroe"
 
 msgid "Continue Movement"
-msgstr ""
+msgstr "Continua Movimento"
 
 msgid "Continue the Hero's movement along the current path."
-msgstr ""
+msgstr "Prosegui movimento dell'Eroe sul percorso."
 
 msgid "Kingdom Summary"
-msgstr ""
+msgstr "Sommario Regno"
 
 msgid "View a Summary of your Kingdom."
-msgstr ""
+msgstr "Sommario del tuo regno."
 
 msgid "Cast an adventure spell."
-msgstr ""
+msgstr "Lancia una magia."
 
 msgid "End Turn"
-msgstr ""
+msgstr "Fine Turno"
 
 msgid "End your turn and left the computer take its turn."
-msgstr ""
+msgstr "Finisce il tuo turno e passa al computer."
 
 msgid "Adventure Options"
-msgstr ""
+msgstr "Opzioni Avventura"
 
 msgid "Bring up the adventure options menu."
-msgstr ""
+msgstr "Apri il menù opzioni avventura."
 
 msgid "Bring up the file options menu, alloving you to load menu, save etc."
-msgstr ""
+msgstr "April il menù file per caricare, salvare ecc.."
 
 msgid "File Options"
-msgstr ""
+msgstr "Opzioni File"
 
 msgid "Bring up the system options menu, alloving you to customize your game."
-msgstr ""
+msgstr "Apri il menù opzioni sistema per personalizzare il gioco."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -3044,9 +3076,11 @@ msgstr "Lo scavo per gli artefatti richiede un giorno intero, riprova domani."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
+"Vista in miniatura del mondo conosciuto. Fai clic a sinistra per cambiare "
+"visuale."
 
 msgid "World Map"
-msgstr ""
+msgstr "Mappa mondiale"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mese: %{month} Week: %{week}"
@@ -3062,12 +3096,15 @@ msgstr ""
 "quantità di %{resource}."
 
 msgid "Status Window"
-msgstr ""
+msgstr "Finestra di Stato"
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date."
 msgstr ""
+"Questa finestra fornisce informazioni sulla situazione del tuo eroe o del "
+"tuo regno, inclusa la data. Fai clic a sinistra qui per scorrere questa "
+"finestra."
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
@@ -3979,6 +4016,8 @@ msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
 "you accept?"
 msgstr ""
+"Un gruppo di %{monster} desideroso di gloria desidera unirsi a te.\n"
+"Acetti?"
 
 msgid "As you approach the dwelling, you notice that there is no one here."
 msgstr "Avvicinandoti alla dimora ti accorgi che non c'è nessuno."
@@ -7469,31 +7508,31 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr ""
+msgstr "nord-ovest"
 
 msgid "north"
-msgstr ""
+msgstr "nord"
 
 msgid "north-east"
-msgstr ""
+msgstr "nord-est"
 
 msgid "west"
-msgstr ""
+msgstr "ovest"
 
 msgid "center"
-msgstr ""
+msgstr "centro"
 
 msgid "east"
-msgstr ""
+msgstr "est"
 
 msgid "south-west"
-msgstr ""
+msgstr "sud-ovest"
 
 msgid "south"
-msgstr ""
+msgstr "sud"
 
 msgid "south-east"
-msgstr ""
+msgstr "sud-est"
 
 msgid "The truth is out there."
 msgstr ""
