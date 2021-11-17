@@ -1752,6 +1752,9 @@ msgstr "Colpi residui"
 msgid "Damage"
 msgstr "Danni"
 
+msgid "Damage"
+msgstr ""
+
 msgid "Hit Points"
 msgstr "Punti"
 

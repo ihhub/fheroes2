@@ -116,6 +116,8 @@ namespace
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
+
+            _isPreserved = true;
         }
 
         void restore() const
@@ -763,7 +765,7 @@ namespace fheroes2
                         Sprite temp;
                         std::swap( temp, out );
 
-                        out.resize( out.width() + 1, out.height() );
+                        out.resize( temp.width() + 1, temp.height() );
                         out.reset();
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );

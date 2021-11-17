@@ -49,7 +49,7 @@ $(TARGET).velf: $(TARGET).elf
 	vita-elf-create $< $@
 
 $(TARGET).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true
 	@cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:

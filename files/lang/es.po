@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-11-07 17:12+0100\n"
-"Last-Translator: elhoir <jfarroyo82@hotmail.com>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -1875,8 +1875,8 @@ msgstr "Comprar Monstruos:"
 msgid "Town Population Information and Statistics"
 msgstr "Población y estadísticas de la ciudad"
 
-msgid "Damage"
-msgstr "Daño"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "Daño (puntos)"
@@ -1949,6 +1949,9 @@ msgstr "Disparos"
 
 msgid "Shots Left"
 msgstr "Disparos restantes"
+
+msgid "Damage"
+msgstr "Daño"
 
 msgid "Hit Points"
 msgstr "Puntos de daño"
@@ -5943,6 +5946,19 @@ msgstr "MIna de Oro"
 
 msgid "Mine"
 msgstr "Mina"
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Ciudad del Árbol"
+
+msgid "This space for rent."
+msgstr ""
 
 msgid "No object"
 msgstr ""
