@@ -7,8 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< Updated upstream
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-11-17 00:23+0100\n"
+=======
+"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"PO-Revision-Date: 2021-11-17 14:18+0100\n"
+>>>>>>> Stashed changes
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -8394,7 +8399,7 @@ msgid "The end of the world is near."
 msgstr "Verdens ende er nær."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr "Beinene til Myrdeherren er begravd i grunnmuren til arenaen."
+msgstr "Beinrestene til Herr Myrder er begravd i grunnmuren til arenaen."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "En svartdrage klarer å slå ut en titan en hvilken som helst dag i uka."
