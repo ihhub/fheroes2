@@ -48,8 +48,7 @@ echo_stage "[2/3] determining HoMM2 directory"
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
 else
-    echo -n "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): "
-    read -r HOMM2_PATH
+    read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
 fi
 
 if [[ ! -d "$HOMM2_PATH" ]]; then
