@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-17 14:38+0100\n"
-"PO-Revision-Date: 2021-11-17 17:26+0100\n"
+"PO-Revision-Date: 2021-11-17 19:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -117,19 +117,19 @@ msgid "army|Few"
 msgstr "Pochi/e"
 
 msgid "All %{race} troops +1"
-msgstr ""
+msgstr "%{race}: tutte le truppe +1"
 
 msgid "Multiple"
 msgstr "Multipli"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Truppe da 3 fazioni -1"
 
 msgid "Some undead in group -1"
-msgstr ""
+msgstr "Alcuni non-morti in gruppo -1"
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Vedi %{name}"
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Muovi o schiaccia il tasto destro per riposizionare %{name}."
@@ -144,10 +144,10 @@ msgid "Select %{name}"
 msgstr "Scegli %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Non si può spostare l'ultima truppa."
 
 msgid "Set Count"
-msgstr ""
+msgstr "Scegli quantità"
 
 msgid "%{name} half the enemy troops!"
 msgstr ""
@@ -4627,7 +4627,7 @@ msgid "Scholar Ability"
 msgstr ""
 
 msgid "Town Portal"
-msgstr ""
+msgstr "Alla Porta"
 
 msgid "Select town to port to."
 msgstr ""
@@ -6948,20 +6948,24 @@ msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
+"Una gigantesca palla di guoco colpisce l'area prescelta danneggiando tutte "
+"le creature vicine."
 
 msgid "Fireball"
 msgstr "Palla di Fuoco"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Vampata"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
+"Una palla di fuoco maggiorata colpisce due caselle, anziché una, attorno al "
+"punto prescelto."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr ""
+msgstr "Una massa di energia elettrica copisce le creature prescelte."
 
 msgid "Lightning Bolt"
 msgstr "Colpo di Fulmine"
@@ -6975,13 +6979,21 @@ msgid ""
 "creature with half again damage, and so on, until it becomes too weak to be "
 "harmful.  Warning:  This spell can hit your own creatures!"
 msgstr ""
+"Produce un lampo di energia che colpisce la creatura prescelta, quindi la "
+"creatura più vicina causando la metà del danno, quindi la creatura a questa "
+"più vicina causando la metà del danno, e così via finchè diventa troppo "
+"debole per far danni. Attenzione: può colpire le tue creature!"
 
 msgid "Teleport"
 msgstr ""
+"Teletras-\n"
+"porto"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
 msgstr ""
+"Muove le creature prescelte in una qualsiasi posizione aperta sul campo di "
+"battaglia."
 
 msgid "Cure"
 msgstr "Cura"
@@ -6990,41 +7002,48 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Elimina tutte le magie lanciate su una delle tue unità e ripristina fino a 5 "
+"HP per livello di potenza della magia."
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Max Cura"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
+"Elimina tutte le magie lanciate sulle tue unità e ripristina fino a 5 HP per "
+"livello di potenza della magia per creatura."
 
 msgid "Resurrect"
 msgstr "Risorgi"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
+"Fa risorgere creature di un'unità uccisa/danneggiata fino alla fine delle "
+"battaglia."
 
 msgid "Resurrect True"
 msgstr "Risorgi Sempre"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
+"Fa risorgere permanentemente creature di un'unità uccisa o danneggiata."
 
 msgid "Haste"
 msgstr "Furia"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr ""
+msgstr "Aumenta la velocità di qualsiasi creatura di %{count}."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr ""
+msgstr "Aumenta la velocità di tutte le tue creature di %{count}."
 
 msgid "Mass Haste"
 msgstr "Max Furia"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Dimezza la velocità degli obbiettivi."
 
 msgid "spell|Slow"
 msgstr "Adagio"
@@ -7033,28 +7052,28 @@ msgid "Mass Slow"
 msgstr "Pianissimo"
 
 msgid "Slows all enemies to half movement rate."
-msgstr ""
+msgstr "Rallenta della metà il movimento dei nemici."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Oscura la visione delle creature colpite, impedendo loro di muoversi."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Blind"
 
 msgid "Bless"
-msgstr ""
+msgstr "Bless"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Consente alle creature scelte di infliggere il danno massimo."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Fa infliggere il danno massimo da tutte le tue unità."
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Max Bless"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Aumenta la capacità difensiva delle creature prescelte."
 
 msgid "Stoneskin"
 msgstr "Schermo di Pietra"
@@ -7063,31 +7082,34 @@ msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Aumenta la capacità di difesa delle creature attaccate. Versione poteniziata "
+"di Schermo di pietra."
 
 msgid "Steelskin"
 msgstr "Corazza"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr ""
+msgstr "Consente alle creature nemiche scelte di infliggere il minimo danno."
 
 msgid "Curse"
 msgstr "Maledizione"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Permette a tutte le forze nemiche di infliggere il massimo danno."
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Malefizio"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Danneggia nella battaglia tutti i non-morti."
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Sacro Motto"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
+"Danneggia nella battaglia tutti non-morti. Forma potenziata di Sacro Motto."
 
 msgid "Holy Shout"
 msgstr "Sacro Grido"
@@ -7096,7 +7118,7 @@ msgid "Anti-Magic"
 msgstr "Anti-Magia"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Evita alle creature prescelte di subire magie dannose."
 
 msgid "Dispel Magic"
 msgstr ""
@@ -7104,68 +7126,77 @@ msgstr ""
 "magie"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Toglie tutte le magie da un singolo obbiettivo."
 
 msgid "Mass Dispel"
 msgstr ""
-"Max Annulla\n"
+"Max Annulla-\n"
 "magie"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Toglie tutte le magie da tutte le creature."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr ""
+msgstr "Colpisce il bersaglio prescelto."
 
 msgid "Magic Arrow"
 msgstr "Freccia Magica"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Berzerker"
 
 msgid "Causes a creature to attack its nearest neighbor."
-msgstr ""
+msgstr "Fa attaccare da una creatura il vicino più prossimo."
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Armageddon"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
+"Un sacro terrore si diffonde sul campo di battaglia, con gravi danni per "
+"tutte le creature."
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Tempesta di Elementi"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
+"Elementi magici scendono sul campo di battaglia e danneggiano tutte le "
+"creature."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
+"Una piggia di massi colpisce una zona del campo di battaglia danneggiando "
+"tutte le creature."
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Pioggia di Meteore"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Paralizza"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
-msgstr ""
+msgstr "Le creature colpite si paralizzano, incapaci di muoversi o di reagire."
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Ipnotizza"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Porta un'unità nemica sotto il tuo controllo per un turno di combattimento "
+"se i suoi colpi sono minori di 25 volte rispetto al potere magico di chi ha "
+"lanciato la magia."
 
 msgid "Cold Ray"
 msgstr "Raggio Freddo"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Sottrae calore corporeo da un'unità nemica."
 
 msgid "Cold Ring"
 msgstr "Anello Freddo"
@@ -7174,44 +7205,50 @@ msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Sottrae calore corporeo da tutte le unità che circondano il punto centrale, "
+"con l'esclusione di questo."
 
 msgid "Disrupting Ray"
 msgstr "Raggio Dispersore"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr ""
+msgstr "Riduce di tre volte la capacità di difesa di un'unità nemica."
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr ""
+msgstr "Danneggia tutte le unità vitali (non ancora morte) in battaglia."
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Ondina Mortale"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Onda Mortale"
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
+"Danneggia tutte le unità vitali (non ancora morte) in battaglia. È una forma "
+"più potente di ondina mortale."
 
 msgid "Dragon Slayer"
 msgstr "Trucida Drago"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr ""
+msgstr "Aumenta di molto la capacità di attaccare i draghi."
 
 msgid "Blood Lust"
 msgstr "Ferocia"
 
 msgid "Increases a unit's attack skill."
-msgstr ""
+msgstr "Aumenta la forza d'attacco di un'unità."
 
 msgid "Animate Dead"
 msgstr "Anima i Morti"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
+"'Resuscita' definitivamente creature di un gruppo di non-morti danneggiato o "
+"distrutto."
 
 msgid "Mirror Image"
 msgstr "Rispecchia"
@@ -7221,72 +7258,74 @@ msgid ""
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
+"Crea un'unità illusoria che duplica una della tue unità e causa gli stessi "
+"danni di un'unità reale. Svanisce se subisce dei danni."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
+msgstr "Dimezza i danni ricevuti da una singola unità a seguito di un attacco."
 
 msgid "Shield"
 msgstr "Scudo"
 
 msgid "Halves damage received from ranged attacks for all of your units."
-msgstr ""
+msgstr "Dimezza i danni ricevuti da tutte le tue unità."
 
 msgid "Mass Shield"
 msgstr "Max Scudo"
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Richiama Creature di Terra"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr ""
+msgstr "Richiama Creature di Terra a combattere con la tua armata."
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Richiama Creature d'Aria"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr ""
+msgstr "Richiama Creature di Aria a combattere con la tua armata."
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Richiama Creature del Fuoco"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr ""
+msgstr "Richiama Creature del Fuoco a combattere con la tua armata."
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Richiama Creature dell'Acqua"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr ""
+msgstr "Richiama Creature dell'Acqua a combattere con la tua armata."
 
 msgid "Damages castle walls."
-msgstr ""
+msgstr "Danneggia le mura del castello."
 
 msgid "Earthquake"
 msgstr "Terremoto"
 
 msgid "Causes all mines across the land to become visible."
-msgstr ""
+msgstr "Rende visibili tutte le miniere nel territorio."
 
 msgid "View Mines"
-msgstr ""
+msgstr "Vedi Miniere"
 
 msgid "Causes all resources across the land to become visible."
-msgstr ""
+msgstr "Rende visibili tutte le risorse nel territorio."
 
 msgid "View Resources"
-msgstr ""
+msgstr "Vedi Risorse"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Rende visibili titti gli artefatti del territorio."
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Vedi Artefatti"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr ""
+msgstr "Rende visibili tutte le città e i castelli nel territorio."
 
 msgid "View Towns"
-msgstr ""
+msgstr "Vedi Città"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
@@ -7295,81 +7334,91 @@ msgid "View Heroes"
 msgstr ""
 
 msgid "Causes the entire land to become visible."
-msgstr ""
+msgstr "Rende tutto il territorio visibile."
 
 msgid "View All"
-msgstr ""
+msgstr "Vedi Tutto"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
+msgstr "Permette di avere dettagliate informazioni sugli eroi nemici."
 
 msgid "Identify Hero"
-msgstr ""
+msgstr "Riconosci l'Eroe"
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Richiama Barca"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
+"Richiama la barca amica, non occupata, più vicina, ad una riva nei pressi. "
+"Una barca amica è una da te costruita o della quale sei stato l'ultimo "
+"occupante."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
+"Consente a chi la invoca di portarsi magicamente in una località vicina."
 
 msgid "Dimension Door"
 msgstr "Porta Magica"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
+"Fa tornare chi la lancia al castello o alla città attualmente posseduto/a."
 
 msgid "Town Gate"
-msgstr ""
+msgstr "Alle Porte"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
+"Fa tornare l'eroe alla città o castello prescelto, se controllato da te."
 
 msgid "Visions"
-msgstr ""
+msgstr "Visioni"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Le visioni predicono il probabile esito di un incontro con un accampamento "
+"neutrale."
 
 msgid "Haunt"
-msgstr ""
+msgstr "Stregata"
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
+"Strega una miniera che tu controlli con i fantasmi. La miniera cessa "
+"produrre (o mia o di nessuno!)"
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Guardiano di Terra"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Mette una Creatura di Terra a guardia di una miniera."
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Guardiano d'Aria"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Mette una Creatura d'Aria a guardia di una miniera."
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Guardiano di Fuoco"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Mette una Creatura del Fuoco a guardia di una miniera."
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Guardiano d'Acqua"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Mette una Creatura dell'Acqua a guardia di una miniera."
 
 msgid "Petrification"
 msgstr ""
@@ -7380,7 +7429,7 @@ msgid ""
 msgstr ""
 
 msgid "No spell to cast."
-msgstr "Nessun magia disponibile."
+msgstr "Nessuna magia disponibile."
 
 msgid "Your hero has %{point} spell points remaining."
 msgstr "Il tuo Eroe ha %{point} punti magia residui."
@@ -7505,7 +7554,7 @@ msgid "The ultimate artifact is really the %{name}."
 msgstr "L'Estremo Artefatto è in realtà il/la %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "L'Estremo Artefatto può essere trovato in un/a %{name} del mondo."
 
 msgid "north-west"
 msgstr "nord-ovest"
@@ -7535,28 +7584,33 @@ msgid "south-east"
 msgstr "sud-est"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "La verità è là fuori."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Il lato oscuro è più potente."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "La fine del mondo sta arrivando."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr ""
+"Le ossa di Lord Slayer sono state sepolte sotto il fondamento dell'arena."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Un drago nero farà fuori un titano qualsiasi giorno della settimana."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
+"Egli ha detto a lei: Bla bla bla... e poi lei ha detto: Bla, bla, bla..."
 
 msgid "An unknown force is being ressurected..."
-msgstr ""
+msgstr "Una forza sconosciuta sta risorgendo..."
 
 msgid ""
 "Check the newest version of game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+"Scopri l'ultima versione del gioco su\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
