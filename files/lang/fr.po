@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-11-07 17:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1912,8 +1912,8 @@ msgstr "Acheter créatures"
 msgid "Town Population Information and Statistics"
 msgstr "Information et statistiques sur la population du village"
 
-msgid "Damage"
-msgstr "Dégâts"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "PV"
@@ -1988,6 +1988,9 @@ msgstr "Tirs"
 
 msgid "Shots Left"
 msgstr "Tirs restants"
+
+msgid "Damage"
+msgstr "Dégâts"
 
 msgid "Hit Points"
 msgstr "Points de vie"
@@ -6014,6 +6017,19 @@ msgstr "Mine d'Or"
 
 msgid "Mine"
 msgstr "Mine"
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Cité des arbres"
+
+msgid "This space for rent."
+msgstr ""
 
 msgid "No object"
 msgstr ""
