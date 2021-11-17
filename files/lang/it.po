@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
-"PO-Revision-Date: 2021-11-14 20:21+0100\n"
+"PO-Revision-Date: 2021-11-16 01:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -3165,7 +3165,7 @@ msgid "Jaclyn"
 msgstr ""
 
 msgid "Jezebel"
-msgstr ""
+msgstr "Gezebel"
 
 msgid "Jojosh"
 msgstr ""
@@ -3285,7 +3285,7 @@ msgid "Zom"
 msgstr ""
 
 msgid "Archibald"
-msgstr ""
+msgstr "Arcibaldo"
 
 msgid "Brother Brax"
 msgstr ""
@@ -3297,7 +3297,7 @@ msgid "Lord Halton"
 msgstr ""
 
 msgid "Roland"
-msgstr ""
+msgstr "Rolando"
 
 msgid "Sister Eliza"
 msgstr ""
@@ -4567,7 +4567,7 @@ msgid ""
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
-msgstr ""
+msgstr "%{name1} incontra %{name2}"
 
 msgid ""
 "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
@@ -6885,7 +6885,7 @@ msgid "Cannot move artifact"
 msgstr ""
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Questo non si può scambiare."
 
 msgid "Wood"
 msgstr "Legno"
