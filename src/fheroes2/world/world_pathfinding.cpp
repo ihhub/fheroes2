@@ -165,7 +165,7 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
     // If we perform pathfinding for a real hero on the map, we have to work out the "last move"
     // logic: if this move is the last one on the current turn, then we can move to any adjacent
     // tile (both in straight and diagonal direction) as long as we have enough movement points
-    // to move over our current tile in straight direction
+    // to move over our current tile in the straight direction
     if ( _maxMovePoints > 0 ) {
         const WorldNode & node = _cache[src];
 
@@ -175,11 +175,11 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
         const uint32_t remainingMovePoints = node._remainingMovePoints;
         const uint32_t srcTilePenalty = srcTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
 
-        // If we still have enough movement points to move over src tile in straight direction,
-        // but not enough (or barely enough) to move to the dst tile, then it's the last move
-        // and we can move to the dst tile in any case at the expense of all the remaining
+        // If we still have enough movement points to move over the src tile in the straight
+        // direction, but not enough to move to the dst tile, then the "last move" logic is
+        // applied and we can move to the dst tile anyway at the expense of all the remaining
         // movement points
-        if ( remainingMovePoints >= srcTilePenalty && remainingMovePoints <= penalty ) {
+        if ( remainingMovePoints >= srcTilePenalty && remainingMovePoints < penalty ) {
             return remainingMovePoints;
         }
     }
