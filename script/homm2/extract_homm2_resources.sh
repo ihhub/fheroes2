@@ -51,7 +51,7 @@ else
     read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
 fi
 
-if [[ ! -d "$HOMM2_PATH" ]]; then
+if [[ ! -f "$HOMM2_PATH/HEROES2.EXE" || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
     echo_red "Unable to find HoMM2 directory. Installation aborted."
     exit 1
 fi
