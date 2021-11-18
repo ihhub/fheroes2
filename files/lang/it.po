@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-17 14:38+0100\n"
-"PO-Revision-Date: 2021-11-18 04:10+0100\n"
+"PO-Revision-Date: 2021-11-18 17:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -1727,7 +1727,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Mostra lo scenario sul quale stai giocando."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Scava l'Estremo Artefatto"
+msgstr "Scava alla ricerca dell'Estremo Artefatto."
 
 msgid "Digging"
 msgstr "Scavo"
@@ -1883,7 +1883,7 @@ msgid "Change language of the game."
 msgstr "Cambia la lingua del gioco."
 
 msgid "Select Game Resolution"
-msgstr "Scegli risoluzione del gioco."
+msgstr "Scegli risoluzione gioco"
 
 msgid "Change resolution of the game."
 msgstr "Cambia la risoluzione del gioco."
@@ -1986,7 +1986,7 @@ msgid "You have learned %{skill}."
 msgstr "Hai appreso %{skill}."
 
 msgid "You may learn either:"
-msgstr "Puoi apprendere"
+msgstr "Puoi apprendere:"
 
 msgid "or"
 msgstr "oppure"
@@ -2066,7 +2066,7 @@ msgid "(digging ok)"
 msgstr "(scavo possibile)"
 
 msgid "(no digging)"
-msgstr "(no scavo)"
+msgstr "(nessun scavo)"
 
 msgid "penalty: %{cost}"
 msgstr "penalità: %{cost}"
@@ -2090,7 +2090,7 @@ msgid "Available: %{count}"
 msgstr "Disponibile/i: %{count}"
 
 msgid "Number to buy:"
-msgstr "Quantità"
+msgstr "Quantità da comprare:"
 
 msgid "MAX"
 msgstr "MAX"
@@ -2120,7 +2120,7 @@ msgid "File to Load:"
 msgstr "File da caricare:"
 
 msgid "Click to save the current game."
-msgstr "Fai clicc per salvare la partita in corso"
+msgstr "Fai clicc per salvare la partita in corso."
 
 msgid "OK"
 msgstr "Okay"
@@ -2150,7 +2150,7 @@ msgid "Select Skill:"
 msgstr "Scegli dote:"
 
 msgid "Map difficulty:"
-msgstr "Difficoltà della mappa:"
+msgstr "Difficoltà mappa:"
 
 msgid "No maps exist at that size"
 msgstr "Non esistono mappe di quella dimensione."
@@ -2183,7 +2183,7 @@ msgid "All Maps"
 msgstr "Tutte le mappe"
 
 msgid "View all maps, regardless of size."
-msgstr "Mostra tutte le mappe, independente dalla dimensione."
+msgstr "Mostra tutte le mappe, indipendentemente dalla dimensione."
 
 msgid "Players Icon"
 msgstr "Icona giocatori"
@@ -2213,13 +2213,13 @@ msgid "Selected Name"
 msgstr "Nome della mappa"
 
 msgid "The name of the currently selected map."
-msgstr "Il nome della mappa scelta attualmente"
+msgstr "Il nome della mappa scelta attualmente."
 
 msgid ""
 "Indicates whether the map is made for The Succession Wars or The Price of "
 "Loyalty version of the game."
 msgstr ""
-"Indica se la mappa è stata creata per la versione del gioco Guerra di "
+"Indica se la mappa è stata creata per la versione del gioco Guerre di "
 "Successione o The Price of Loyalty."
 
 msgid "Map Type"
@@ -2249,10 +2249,10 @@ msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
 msgid "Okay"
-msgstr "OK\v"
+msgstr "Okay"
 
 msgid "Lose all your heroes and towns."
-msgstr "Perdi tutti gli eroi e le città"
+msgstr "Perdi tutti gli eroi e le città."
 
 msgid "Lose a specific town."
 msgstr "Perdi una città specifica."
@@ -2261,7 +2261,7 @@ msgid "Lose a specific hero."
 msgstr "Perdi un eroe specifico."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr "Vai fuori tempo. Non riuscire a vincere entro un dato momento."
+msgstr "Vai fuori tempo. Non riuscire a vincere entro un certo tempo."
 
 msgid "Loss Condition"
 msgstr "Condizione sconfitta"
@@ -2695,33 +2695,36 @@ msgid "Quit Heroes of Might and Magic and return to the operating system."
 msgstr ""
 
 msgid "Credits"
-msgstr ""
+msgstr "Titoli di coda"
 
 msgid "View the credits screen."
-msgstr ""
+msgstr "Vedi titoli di coda."
 
 msgid "High Scores"
-msgstr ""
+msgstr "Punteggi"
 
 msgid "View the high scores screen."
-msgstr ""
+msgstr "Vedi i migliori punteggi."
 
 msgid "Game settings."
-msgstr ""
+msgstr "Impostazioni del gioco."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
+"O la campagna di Rolando or quella di Arcibaldo dal gioco originale di "
+"Heroes of Might and Magic II."
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Campale Originale"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Campale Espansione"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
+"Una delle quattro nuove campagne dalla espansione 'The Price of Loyalty\"."
 
 msgid "Host"
 msgstr ""
@@ -2849,6 +2852,7 @@ msgstr ""
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
+"Sconfiggi tutti gli eroi nemici e cattura tutte le città e i castelli nemici."
 
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
@@ -3040,7 +3044,7 @@ msgid ""
 msgstr "Uno o più Eroi possono ancora muovere, vuoi davvero chiudere il turno?"
 
 msgid "Are you sure you want to quit?"
-msgstr "Sei sicuor di voler uscire?"
+msgstr "Sei sicuro di voler uscire?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr "Sei sicuro di voler ripartire? (Il gioco in corso sarà perduto)"
@@ -3090,7 +3094,7 @@ msgid "World Map"
 msgstr "Mappa mondiale"
 
 msgid "Month: %{month} Week: %{week}"
-msgstr "Mese: %{month} Week: %{week}"
+msgstr "Mese: %{month} Settimana: %{week}"
 
 msgid "Day: %{day}"
 msgstr "Giorno: %{day}"
@@ -4694,7 +4698,7 @@ msgid "Current Morale Modifiers:"
 msgstr "Attuali varianti del morale:"
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr ""
+msgstr "L'intera unità è non-morta, per cui non si considera il morale."
 
 msgid ""
 "Current experience %{exp1}.\n"
@@ -5314,8 +5318,9 @@ msgstr "Verme"
 msgid "week|Hornet"
 msgstr "Calabrone"
 
+# esiste anche cane
 msgid "week|Beetle"
-msgstr "Cane"
+msgstr "Scarabeo"
 
 msgid "week|Squirrel"
 msgstr "Scoiattolo"
@@ -7025,7 +7030,7 @@ msgid ""
 msgstr ""
 
 msgid "Move points: %{mp}"
-msgstr ""
+msgstr "Punti movim.: %{mp}"
 
 msgid "Transcribe Spell Scroll"
 msgstr ""
@@ -7332,7 +7337,7 @@ msgid "Disrupting Ray"
 msgstr "Raggio Dispersore"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Riduce di tre volte la capacità di difesa di un'unità nemica."
+msgstr "Riduce capacità di difesa di un'unità nemica di tre."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Danneggia tutte le unità vitali (non ancora morte) in battaglia."
@@ -7347,28 +7352,28 @@ msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Danneggia tutte le unità vitali (non ancora morte) in battaglia. È una forma "
-"più potente di ondina mortale."
+"Colpisce tutte le unità viventi (quelle non non-morti) nella battaglia. È la "
+"miglioria più potente di ondina mortale."
 
 msgid "Dragon Slayer"
 msgstr "Trucida Drago"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Aumenta di molto la capacità di attaccare i draghi."
+msgstr "Aumenta i danni contro i draghi di molto."
 
 msgid "Blood Lust"
 msgstr "Ferocia"
 
 msgid "Increases a unit's attack skill."
-msgstr "Aumenta la forza d'attacco di un'unità."
+msgstr "Aumenta la capacità d'attacco di un'unità."
 
 msgid "Animate Dead"
 msgstr "Anima i Morti"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
-"'Resuscita' definitivamente creature di un gruppo di non-morti danneggiato o "
-"distrutto."
+"Fa risorgere permanentamente delle creature dannegiate o distrutte del "
+"gruppo di non-morti prescelto."
 
 msgid "Mirror Image"
 msgstr "Rispecchia"
@@ -7378,17 +7383,18 @@ msgid ""
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
-"Crea un'unità illusoria che duplica una della tue unità e causa gli stessi "
-"danni di un'unità reale. Svanisce se subisce dei danni."
+"Fa comparire un'unità illusionale che copia una dei tuoi già esistenti "
+"unità. Questa illusione è capace di fare gli stessi danni dell'originale, ma "
+"sparisce se subisce qualsiasi tipo di danno."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Dimezza i danni ricevuti da una singola unità a seguito di un attacco."
+msgstr "Riduce a metà i danni subiti da colpi a distanza di un'unica unità."
 
 msgid "Shield"
 msgstr "Scudo"
 
 msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Dimezza i danni ricevuti da tutte le tue unità."
+msgstr "Riduce a metà i danni subiti da colpi a distanza a tutte le tue unità."
 
 msgid "Mass Shield"
 msgstr "Max Scudo"
@@ -7418,51 +7424,50 @@ msgid "Summons Water Elementals to fight for your army."
 msgstr "Richiama Creature dell'Acqua a combattere con la tua armata."
 
 msgid "Damages castle walls."
-msgstr "Danneggia le mura del castello."
+msgstr "Fa danni alle mura del castello."
 
 msgid "Earthquake"
 msgstr "Terremoto"
 
 msgid "Causes all mines across the land to become visible."
-msgstr "Rende visibili tutte le miniere nel territorio."
+msgstr "Diventano visibili tutte le miniere della mappa."
 
 msgid "View Mines"
-msgstr "Vedi Miniere"
+msgstr "Mostra Miniere"
 
 msgid "Causes all resources across the land to become visible."
-msgstr "Rende visibili tutte le risorse nel territorio."
+msgstr "Diventano visibili tutte le risorse della mappa."
 
 msgid "View Resources"
-msgstr "Vedi Risorse"
+msgstr "Mostra Risorse"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr "Rende visibili titti gli artefatti del territorio."
+msgstr "Diventano visibili titti gli artefatti della mappa."
 
 msgid "View Artifacts"
-msgstr "Vedi Artefatti"
+msgstr "Mostra Artefatti"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr "Rende visibili tutte le città e i castelli nel territorio."
+msgstr "Diventano visibili tutte le città e i castelli della mappa."
 
 msgid "View Towns"
-msgstr "Vedi Città"
+msgstr "Mostra Città"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
-"Mostra la posizione ed il colore di tutti gli eroi all'interno della "
-"Schermata mondiale."
+"Diventano visibili la posizione ed il colore di tutti gli eroi nella mappa."
 
 msgid "View Heroes"
-msgstr "Vedi Eroi"
+msgstr "Mostra Eroi"
 
 msgid "Causes the entire land to become visible."
-msgstr "Rende tutto il territorio visibile."
+msgstr "Diventa visibile tutto il territorio della mappa."
 
 msgid "View All"
-msgstr "Vedi Tutto"
+msgstr "Mostra Tutto"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr "Permette di avere dettagliate informazioni sugli eroi nemici."
+msgstr "Permette di ottenere informazioni in detaglio sugli eroi del nemico."
 
 msgid "Identify Hero"
 msgstr "Riconosci l'Eroe"
@@ -7475,21 +7480,24 @@ msgid ""
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
-"Richiama la barca amica, non occupata, più vicina, ad una riva nei pressi. "
-"Una barca amica è una da te costruita o della quale sei stato l'ultimo "
-"occupante."
+"Convoca una barca attualmente libera, amica e più vicina ad una costa "
+"vicina. Una barca amica vuol dire una che hai appena costruita, o una che "
+"sei stato l'ultimo ad usare.\v"
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
-"Consente a chi la invoca di portarsi magicamente in una località vicina."
+"Consente a chi invoca la magia di trasportarsi magicamente ad una parte "
+"della mappa vicina."
 
 msgid "Dimension Door"
 msgstr "Porta Magica"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
-"Fa tornare chi la lancia al castello o alla città attualmente posseduto/a."
+"Trasporta subito chi la lancia a qualsiasi castello o città al momento "
+"posseduto/a."
 
+# Bad translation?
 msgid "Town Gate"
 msgstr "Alle Porte"
 
@@ -7497,7 +7505,8 @@ msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
-"Fa tornare l'eroe alla città o castello prescelto, se controllato da te."
+"Permette all'eroe di scegliere quale castello o città a cui tornare, finché "
+"appartegono all'eroe."
 
 msgid "Visions"
 msgstr "Visioni"
@@ -7505,8 +7514,8 @@ msgstr "Visioni"
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
-"Le visioni predicono il probabile esito di un incontro con un accampamento "
-"neutrale."
+"Mostra all'eroe che la usa un risultato probabile di uno scontro con "
+"un'armata neutrale."
 
 msgid "Haunt"
 msgstr "Stregata"
@@ -7515,32 +7524,32 @@ msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
-"Strega una miniera che tu controlli con i fantasmi. La miniera cessa "
-"produrre (o mia o di nessuno!)"
+"Infesta una miniera vicina all'Eroe con i fantasmi. La miniera smette di "
+"produrre risorse (se non lo posso avere io, nessuno l'avrà!)"
 
 msgid "Set Earth Guardian"
 msgstr "Guardiano di Terra"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr "Mette una Creatura di Terra a guardia di una miniera."
+msgstr "Convoca una Creatura di Terra per proteggere una miniera."
 
 msgid "Set Air Guardian"
 msgstr "Guardiano d'Aria"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr "Mette una Creatura d'Aria a guardia di una miniera."
+msgstr "Convoca una Creatura d'Aria per proteggere una miniera."
 
 msgid "Set Fire Guardian"
 msgstr "Guardiano di Fuoco"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr "Mette una Creatura del Fuoco a guardia di una miniera."
+msgstr "Convoca una Creatura del Fuoco per proteggere una miniera."
 
 msgid "Set Water Guardian"
 msgstr "Guardiano d'Acqua"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr "Mette una Creatura dell'Acqua a guardia di una miniera."
+msgstr "Convoca una Creatura dell'Acqua per proteggere una miniera."
 
 msgid "Petrification"
 msgstr "Pietrificazione"
@@ -7556,25 +7565,25 @@ msgid "No spell to cast."
 msgstr "Nessuna magia disponibile."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr "Il tuo Eroe ha %{point} punti magia residui."
+msgstr "%{point} punti magia residui ha il tuo Eroe."
 
 msgid "View Adventure Spells"
-msgstr "Vedi Magie Avventura"
+msgstr "Mostra Magie d'Avventura"
 
 msgid "View Combat Spells"
-msgstr "Vedi Magie Battaglia"
+msgstr "Mostra Magie di Battaglia"
 
 msgid "View previous page"
-msgstr "Vedi pag. precedente"
+msgstr "Mostra pag. precedente"
 
 msgid "View next page"
-msgstr "Vedi pag. successiva"
+msgstr "Mostra pag. successiva"
 
 msgid "Close Spellbook"
 msgstr "Chiudi Libro Magie"
 
 msgid "View %{spell}"
-msgstr "Vedi %{spell}"
+msgstr "Mostra %{spell}"
 
 msgid "game: always confirm for rewrite savefile"
 msgstr ""
@@ -7675,10 +7684,12 @@ msgid "game: offer to continue the game afer victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr "L'Estremo Artefatto è in realtà il/la %{name}."
+msgstr "Ho sentito che l'Estremo Artefatto è il/la %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr "L'Estremo Artefatto può essere trovato in un/a %{name} del mondo."
+msgstr ""
+"L'Estremo Artefatto può essere trovato in un parte del mondo con il/la "
+"%{name}."
 
 msgid "north-west"
 msgstr "nord-ovest"
@@ -7708,13 +7719,13 @@ msgid "south-east"
 msgstr "sud-est"
 
 msgid "The truth is out there."
-msgstr "La verità è là fuori."
+msgstr "Lì fuori da qualche parte sta la verità."
 
 msgid "The dark side is stronger."
 msgstr "Il lato oscuro è più potente."
 
 msgid "The end of the world is near."
-msgstr "La fine del mondo sta arrivando."
+msgstr "Sta arrivando la fine del mondo."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr ""
