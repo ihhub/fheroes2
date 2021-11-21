@@ -129,7 +129,7 @@ namespace fheroes2
     {
     public:
         // Please refer to dialog.h enumeration for states
-        ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0, bool shadows = false, const Image & in = Display::instance() );
+        ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0 );
         ButtonGroup( const ButtonGroup & ) = delete;
 
         ~ButtonGroup();
@@ -138,9 +138,7 @@ namespace fheroes2
 
         void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
-
-        void createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
-        void createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
+        void createButton( std::unique_ptr<ButtonBase> & button, int returnValue );
 
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
 
@@ -153,6 +151,8 @@ namespace fheroes2
         int processEvents();
 
     private:
+        void createButton( ButtonBase * button, int returnValue );
+
         std::vector<ButtonBase *> _button;
         std::vector<int> _value;
     };
@@ -191,11 +191,9 @@ namespace fheroes2
         void unsubscribeAll();
     };
 
-    // Makes a button with the background (from display): it can be used when original button sprites do not contain pieces of background in the pressed state
-    ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled = Sprite()*/,
-                                           const Image & background = Display::instance() );
+    // Makes a button with the background (usually from display): it can be used when original button sprites do not contain pieces of background in the pressed state
+    ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background );
 
     // Makes a button with the shadow: for that it needs to capture the background from the display at construct time
-    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled = Sprite()*/,
-                                       const Image & background = Display::instance() );
+    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background );
 }

@@ -503,7 +503,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     if ( allowToCancel ) {
         btnCancel.draw();
         btnOk.reset( new fheroes2::ButtonSprite( fheroes2::makeButtonWithShadow( pos_rt.x + buttonOffset, pos_rt.y + 410, fheroes2::AGG::GetICN( buttonOkICN, 0 ),
-                                                                                 fheroes2::AGG::GetICN( buttonOkICN, 1 ) ) ) );
+                                                                                 fheroes2::AGG::GetICN( buttonOkICN, 1 ), display ) ) );
     }
     else {
         btnOk.reset( new fheroes2::Button( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 ) );
