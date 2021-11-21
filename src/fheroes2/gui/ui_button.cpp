@@ -39,23 +39,6 @@ namespace fheroes2
         , _disabledSprite()
     {}
 
-    ButtonBase::ButtonBase( ButtonBase && o ) noexcept
-        : _offsetX( 0 )
-        , _offsetY( 0 )
-        , _isPressed( false )
-        , _isEnabled( true )
-        , _isVisible( true )
-        , _releasedSprite( nullptr )
-        , _disabledSprite( std::move( o._disabledSprite ) )
-    {
-        std::swap( _offsetX, o._offsetX );
-        std::swap( _offsetY, o._offsetY );
-        std::swap( _isPressed, o._isPressed );
-        std::swap( _isEnabled, o._isEnabled );
-        std::swap( _isVisible, o._isVisible );
-        std::swap( _releasedSprite, o._releasedSprite );
-    }
-
     bool ButtonBase::isEnabled() const
     {
         return _isEnabled;

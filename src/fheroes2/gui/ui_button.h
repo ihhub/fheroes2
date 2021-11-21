@@ -31,12 +31,7 @@ namespace fheroes2
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
-        ButtonBase( ButtonBase & ) = delete;
-        ButtonBase( ButtonBase && o ) noexcept;
-
         ~ButtonBase() override = default;
-
-        ButtonBase & operator=( const ButtonBase & ) = delete;
 
         bool isEnabled() const;
         bool isDisabled() const;
