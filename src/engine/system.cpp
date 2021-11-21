@@ -34,8 +34,11 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+// clang-format off
+// shellapi.h must be included after windwos.h
 #include <windows.h>
 #include <shellapi.h>
+// clang-format on
 #else
 #include <dirent.h>
 #endif
@@ -209,8 +212,8 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
         // 2: en_us
         // 1: en
         if ( length < 3 ) {
-            std::vector<std::string> vec = StringSplit( locname, length < 2 ? "_" : "." );
-            return vec.empty() ? locname : vec.front();
+            std::vector<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
+            return list.empty() ? locname : list.front();
         }
     }
 
@@ -356,7 +359,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     }
 
     const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for ( const std::string & subPathIter : splittedPath ) {
+    for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
         if ( !d ) {
             return false;
         }
@@ -370,7 +373,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
         struct dirent * e = readdir( d );
         while ( e ) {
-            if ( strcasecmp( subPathIter.c_str(), e->d_name ) == 0 ) {
+            if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
                 correctedPath += e->d_name;
 
                 closedir( d );
@@ -383,7 +386,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
         }
 
         if ( !e ) {
-            correctedPath += subPathIter;
+            correctedPath += *subPathIter;
             last = true;
         }
     }
