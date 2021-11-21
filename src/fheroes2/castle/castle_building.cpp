@@ -265,8 +265,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     }
     // redraw build with alpha
     else if ( orders.cend() != std::find( orders.cbegin(), orders.cend(), fadeBuilding.GetBuild() ) ) {
-        for ( const CastleDialog::builds_t & order : orders ) {
-            const uint32_t currentBuildId = order.id;
+        for ( auto it = orders.cbegin(); it != orders.cend(); ++it ) {
+            const uint32_t currentBuildId = it->id;
 
             if ( castle.isBuild( currentBuildId ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, animationIndex );
