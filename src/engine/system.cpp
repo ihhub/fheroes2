@@ -34,8 +34,11 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-#include <shellapi.h>
+// clang-format off
+// shellapi.h must be included after windwos.h
 #include <windows.h>
+#include <shellapi.h>
+// clang-format on
 #else
 #include <dirent.h>
 #endif
