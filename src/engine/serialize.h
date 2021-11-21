@@ -113,8 +113,8 @@ public:
     {
         const u32 size = get32();
         v.resize( size );
-        for ( Type & it : v )
-            *this >> it;
+        for ( typename std::vector<Type>::iterator it = v.begin(); it != v.end(); ++it )
+            *this >> *it;
         return *this;
     }
 
@@ -123,8 +123,8 @@ public:
     {
         const u32 size = get32();
         v.resize( size );
-        for ( Type & it : v )
-            *this >> it;
+        for ( typename std::list<Type>::iterator it = v.begin(); it != v.end(); ++it )
+            *this >> *it;
         return *this;
     }
 
@@ -151,8 +151,8 @@ public:
     StreamBase & operator<<( const std::vector<Type> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const Type & elem : v )
-            *this << elem;
+        for ( typename std::vector<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
+            *this << *it;
         return *this;
     }
 
@@ -160,8 +160,8 @@ public:
     StreamBase & operator<<( const std::list<Type> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const Type & elem : v )
-            *this << elem;
+        for ( typename std::list<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
+            *this << *it;
         return *this;
     }
 
@@ -169,8 +169,8 @@ public:
     StreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
         put32( static_cast<u32>( v.size() ) );
-        for ( const auto & elem : v )
-            *this << elem;
+        for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
+            *this << *it;
         return *this;
     }
 

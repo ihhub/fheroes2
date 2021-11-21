@@ -754,17 +754,17 @@ int BagArtifacts::getArtifactValue() const
 void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
 {
     std::vector<Artifact> combined;
-    for ( Artifact & artifact : *this ) {
-        if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
-            combined.push_back( artifact );
-            artifact.Reset();
+    for ( auto it = begin(); it != end(); ++it ) {
+        if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
+            combined.push_back( *it );
+            it->Reset();
         }
     }
 
-    for ( Artifact & artifact : giftBag ) {
-        if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
-            combined.push_back( artifact );
-            artifact.Reset();
+    for ( auto it = giftBag.begin(); it != giftBag.end(); ++it ) {
+        if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
+            combined.push_back( *it );
+            it->Reset();
         }
     }
 
