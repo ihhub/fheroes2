@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
-"PO-Revision-Date: 2021-11-17 00:23+0100\n"
+"PO-Revision-Date: 2021-11-21 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -3479,7 +3479,7 @@ msgid "Italian"
 msgstr "Italiensk"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "%{object} robber"
 msgstr "%{object} ranet"
@@ -3491,211 +3491,211 @@ msgid "Ambrose"
 msgstr "Ambrose"
 
 msgid "Dimitry"
-msgstr "Dimitry"
+msgstr "Dimitri"
 
 msgid "Ector"
-msgstr "Ector"
+msgstr "Ektor"
 
 msgid "Gwenneth"
-msgstr "Gwenneth"
+msgstr ""
 
 msgid "Lord Kilburn"
-msgstr "Lord Kilburn"
+msgstr "Grev Kilburn"
 
 msgid "Maximus"
 msgstr "Maximus"
 
 msgid "Ruby"
-msgstr "Ruby"
+msgstr "Rubin"
 
 msgid "Sir Gallant"
-msgstr "Sir Gallant"
+msgstr "Sir Galant"
 
 msgid "Tyro"
-msgstr "Tyro"
+msgstr "Tyros"
 
 msgid "Atlas"
 msgstr "Atlas"
 
 msgid "Crag Hack"
-msgstr "Crag Hack"
+msgstr "Kragg Haachk"
 
 msgid "Ergon"
-msgstr "Ergon"
+msgstr "Herkon"
 
 msgid "Fineous"
-msgstr "Fineous"
+msgstr "Finehas"
 
 msgid "Jaclyn"
-msgstr "Jaclyn"
+msgstr "Bina"
 
 msgid "Jezebel"
-msgstr "Jezebel"
+msgstr "Isabell"
 
 msgid "Jojosh"
-msgstr "Jojosh"
+msgstr "Jojosva"
 
 msgid "Thundax"
-msgstr "Thundax"
+msgstr "Tordøks"
 
 msgid "Tsabu"
-msgstr "Tsabu"
+msgstr "Sabu"
 
 msgid "Ariel"
 msgstr "Ariel"
 
 msgid "Astra"
-msgstr "Astra"
+msgstr "Astri"
 
 msgid "Carlawn"
-msgstr "Carlawn"
+msgstr "Karlana"
 
 msgid "Gem"
-msgstr "Gem"
+msgstr "Edel"
 
 msgid "Luna"
 msgstr "Luna"
 
 msgid "Natasha"
-msgstr "Natasha"
+msgstr "Natalie"
 
 msgid "Rebecca"
-msgstr "Rebecca"
+msgstr "Rebekka"
 
 msgid "Troyan"
-msgstr "Troyan"
+msgstr "Trojann"
 
 msgid "Vatawna"
-msgstr "Vatawna"
+msgstr "Vatafna"
 
 msgid "Agar"
-msgstr "Agar"
+msgstr "Hagar"
 
 msgid "Alamar"
 msgstr "Alamar"
 
 msgid "Arie"
-msgstr "Arie"
+msgstr "Aris"
 
 msgid "Barok"
-msgstr "Barok"
+msgstr "Bjarg"
 
 msgid "Crodo"
-msgstr "Crodo"
+msgstr "Krod"
 
 msgid "Falagar"
 msgstr "Falagar"
 
 msgid "Kastore"
-msgstr "Kastore"
+msgstr "Kastor"
 
 msgid "Vesper"
-msgstr "Vesper"
+msgstr ""
 
 msgid "Wrathmont"
-msgstr "Wrathmont"
+msgstr ""
 
 msgid "Dawn"
-msgstr "Dawn"
+msgstr ""
 
 msgid "Flint"
-msgstr "Flint"
+msgstr ""
 
 msgid "Halon"
-msgstr "Halon"
+msgstr ""
 
 msgid "Kalindra"
-msgstr "Kalindra"
+msgstr ""
 
 msgid "Mandigal"
-msgstr "Mandigal"
+msgstr ""
 
 msgid "Myra"
-msgstr "Myra"
+msgstr ""
 
 msgid "Myrini"
-msgstr "Myrini"
+msgstr ""
 
 msgid "Sarakin"
-msgstr "Sarakin"
+msgstr ""
 
 msgid "Wilfrey"
-msgstr "Wilfrey"
+msgstr ""
 
 msgid "Celia"
-msgstr "Celia"
+msgstr ""
 
 msgid "Charity"
-msgstr "Charity"
+msgstr ""
 
 msgid "Darlana"
-msgstr "Darlana"
+msgstr ""
 
 msgid "Ranloo"
-msgstr "Ranloo"
+msgstr ""
 
 msgid "Rialdo"
-msgstr "Rialdo"
+msgstr ""
 
 msgid "Roxana"
-msgstr "Roxana"
+msgstr ""
 
 msgid "Sandro"
-msgstr "Sandro"
+msgstr ""
 
 msgid "Zam"
-msgstr "Zam"
+msgstr ""
 
 msgid "Zom"
-msgstr "Zom"
+msgstr ""
 
 msgid "Archibald"
-msgstr "Archibald"
+msgstr ""
 
 msgid "Brother Brax"
 msgstr "Broder Brax"
 
 msgid "Lord Corlagon"
-msgstr "Lord Corlagon"
+msgstr ""
 
 msgid "Lord Halton"
-msgstr "Lord Halton"
+msgstr ""
 
 msgid "Roland"
-msgstr "Roland"
+msgstr ""
 
 msgid "Sister Eliza"
 msgstr "Søster Eliza"
 
 msgid "Ceallach"
-msgstr "Ceallach"
+msgstr ""
 
 msgid "Dainwin"
-msgstr "Dainwin"
+msgstr ""
 
 msgid "Drakonia"
-msgstr "Drakonia"
+msgstr ""
 
 msgid "Elderian"
-msgstr "Elderian"
+msgstr ""
 
 msgid "Gallavant"
-msgstr "Gallavant"
+msgstr ""
 
 msgid "Joseph"
-msgstr "Joseph"
+msgstr ""
 
 msgid "Mog"
-msgstr "Mog"
+msgstr ""
 
 msgid "Solmyr"
-msgstr "Solmyr"
+msgstr ""
 
 msgid "Jarkonas"
-msgstr "Jarkonas"
+msgstr ""
 
 msgid "Martine"
-msgstr "Martine"
+msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke plukke opp denne gjenstanden. Du er allerede fullastet!"
