@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,33 +17,45 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPEED_H
-#define H2SPEED_H
 
-#include <string>
+#include "image_palette.h"
+#include "palette_h2.h"
 
-namespace Speed
+#include <algorithm>
+#include <array>
+#include <cassert>
+
+namespace
 {
-    enum
+    const size_t paletteSize = 768;
+
+    struct PaletteHolder
     {
-        STANDING = 0,
-        CRAWLING = 1,
-        VERYSLOW = 2,
-        SLOW = 3,
-        AVERAGE = 4,
-        FAST = 5,
-        VERYFAST = 6,
-        ULTRAFAST = 7,
-        BLAZING = 8,
-        INSTANT = 9
+        PaletteHolder()
+        {
+            std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
+        }
+
+        std::array<uint8_t, paletteSize> gamePalette;
     };
 
-    std::string String( const int speed );
-    int GetOriginalSlow( const int speed );
-    int GetOriginalFast( const int speed );
-
-    int GetSlowSpeedFromSpell( const int currentSpeed );
-    int GetHasteSpeedFromSpell( const int currentSpeed );
+    PaletteHolder paletteHolder;
 }
 
-#endif
+namespace fheroes2
+{
+    const uint8_t * getGamePalette()
+    {
+        return paletteHolder.gamePalette.data();
+    }
+
+    void setGamePalette( const std::vector<uint8_t> & palette )
+    {
+        assert( palette.size() == paletteSize );
+        if ( palette.size() != paletteSize ) {
+            return;
+        }
+
+        std::copy_n( palette.begin(), paletteSize, paletteHolder.gamePalette.begin() );
+    }
+}

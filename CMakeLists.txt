@@ -18,7 +18,6 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE   "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_TOOLS   "Enable additional tools" OFF)
-option(ENABLE_RELEASE "Release mode (disables debug options)" ON)
 option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
 
 option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
@@ -84,5 +83,10 @@ else(WIN32)
 		FILES script/demo/download_demo_version.sh
 		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+		)
+	install(
+		FILES script/homm2/extract_homm2_resources.sh
+		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 endif(WIN32)

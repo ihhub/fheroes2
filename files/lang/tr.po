@@ -2,14 +2,14 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2009-12-08 00:41+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1644,7 +1644,7 @@ msgstr ""
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damage"
+msgid "Damg"
 msgstr ""
 
 msgid "HP"
@@ -1710,6 +1710,9 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
+msgstr ""
+
+msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -5037,6 +5040,18 @@ msgid "Gold Mine"
 msgstr ""
 
 msgid "Mine"
+msgstr ""
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+msgid "See Rock City."
+msgstr ""
+
+msgid "This space for rent."
 msgstr ""
 
 msgid "No object"

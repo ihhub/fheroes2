@@ -2,14 +2,14 @@
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2010-02-09 01:11+0000\n"
-"Last-Translator: nestorneto <nestor.magalhaes@gmail.com>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -1760,8 +1760,8 @@ msgstr "Melhor Criatura:"
 msgid "Town Population Information and Statistics"
 msgstr "Informações da População da Cidade e Estatísticas"
 
-msgid "Damage"
-msgstr "Dano"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "HP"
@@ -1833,6 +1833,9 @@ msgstr "Tiros"
 
 msgid "Shots Left"
 msgstr "Tiros restantes"
+
+msgid "Damage"
+msgstr "Dano"
 
 msgid "Hit Points"
 msgstr "HP"
@@ -5473,6 +5476,18 @@ msgid "Gold Mine"
 msgstr ""
 
 msgid "Mine"
+msgstr ""
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+msgid "See Rock City."
+msgstr ""
+
+msgid "This space for rent."
 msgstr ""
 
 msgid "No object"

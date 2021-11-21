@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,33 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPEED_H
-#define H2SPEED_H
 
-#include <string>
+#pragma once
 
-namespace Speed
+#include <cstdint>
+#include <vector>
+
+namespace fheroes2
 {
-    enum
-    {
-        STANDING = 0,
-        CRAWLING = 1,
-        VERYSLOW = 2,
-        SLOW = 3,
-        AVERAGE = 4,
-        FAST = 5,
-        VERYFAST = 6,
-        ULTRAFAST = 7,
-        BLAZING = 8,
-        INSTANT = 9
-    };
+    const uint8_t * getGamePalette();
 
-    std::string String( const int speed );
-    int GetOriginalSlow( const int speed );
-    int GetOriginalFast( const int speed );
-
-    int GetSlowSpeedFromSpell( const int currentSpeed );
-    int GetHasteSpeedFromSpell( const int currentSpeed );
+    // This function must be called only at the start of the application after loading AGG file content.
+    void setGamePalette( const std::vector<uint8_t> & palette );
 }
-
-#endif
