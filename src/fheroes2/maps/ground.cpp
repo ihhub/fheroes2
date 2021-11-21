@@ -52,19 +52,20 @@ const char * Maps::Ground::String( int ground )
 
 uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
 {
-    //            none   basc   advd   expr
-    //    Desert  2.00   1.75   1.50   1.00
-    //    Snow    1.75   1.50   1.25   1.00
-    //    Swamp   1.75   1.50   1.25   1.00
-    //    Cracked 1.25   1.00   1.00   1.00
-    //    Beach   1.25   1.00   1.00   1.00
-    //    Lava    1.00   1.00   1.00   1.00
-    //    Dirt    1.00   1.00   1.00   1.00
-    //    Grass   1.00   1.00   1.00   1.00
-    //    Water   1.00   1.00   1.00   1.00
-    //    Road    0.75   0.75   0.75   0.75
+    //              none   basc   advd   expr
+    //    Desert    2.00   1.75   1.50   1.00
+    //    Swamp     1.75   1.50   1.25   1.00
+    //    Snow      1.50   1.25   1.00   1.00
+    //    Wasteland 1.25   1.00   1.00   1.00
+    //    Beach     1.25   1.00   1.00   1.00
+    //    Lava      1.00   1.00   1.00   1.00
+    //    Dirt      1.00   1.00   1.00   1.00
+    //    Grass     1.00   1.00   1.00   1.00
+    //    Water     1.00   1.00   1.00   1.00
+    //    Road      0.75   0.75   0.75   0.75
 
     uint32_t result = defaultGroundPenalty;
+
     switch ( tile.GetGround() ) {
     case DESERT:
         switch ( level ) {
@@ -82,7 +83,6 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
         }
         break;
 
-    case SNOW:
     case SWAMP:
         switch ( level ) {
         case Skill::Level::EXPERT:
@@ -95,6 +95,20 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
             break;
         default:
             result += 75;
+            break;
+        }
+        break;
+
+    case SNOW:
+        switch ( level ) {
+        case Skill::Level::EXPERT:
+        case Skill::Level::ADVANCED:
+            break;
+        case Skill::Level::BASIC:
+            result += 25;
+            break;
+        default:
+            result += 50;
             break;
         }
         break;
