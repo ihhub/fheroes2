@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,33 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AGG_H
-#define H2AGG_H
+#pragma once
 
 #include <cstdint>
-#include <string>
 #include <vector>
 
-namespace AGG
+namespace fheroes2
 {
-    class AGGInitializer
-    {
-    public:
-        AGGInitializer();
-        AGGInitializer( const AGGInitializer & ) = delete;
-        AGGInitializer & operator=( const AGGInitializer & ) = delete;
+    const uint8_t * getGamePalette();
 
-        ~AGGInitializer();
-    };
-
-    std::vector<uint8_t> LoadBINFRM( const char * frm_file );
-
-    void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
-    void PlaySound( int m82, bool asyncronizedCall = false );
-    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
-    void ResetMixer( bool asyncronizedCall = false );
-
-    std::vector<uint8_t> ReadChunk( const std::string & key );
+    // This function must be called only at the start of the application after loading AGG file content.
+    void setGamePalette( const std::vector<uint8_t> & palette );
 }
-
-#endif

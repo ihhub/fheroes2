@@ -116,6 +116,8 @@ namespace
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
+
+            _isPreserved = true;
         }
 
         void restore() const
@@ -390,6 +392,8 @@ namespace fheroes2
         // Helper function for LoadModifiedICN
         void CopyICNWithPalette( int icnId, int originalIcnId, const PAL::PaletteType paletteType )
         {
+            assert( icnId != originalIcnId );
+
             GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
 
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
@@ -522,7 +526,7 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::BATTLESKIP: // a button
+            case ICN::BATTLESKIP:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -535,7 +539,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
                 }
                 return true;
-            case ICN::BATTLEWAIT: // a button
+            case ICN::BATTLEWAIT:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -552,7 +556,7 @@ namespace fheroes2
                     Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
                 }
                 return true;
-            case ICN::BUYMAX: // a button
+            case ICN::BUYMAX:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -565,7 +569,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
-            case ICN::BTNGIFT_GOOD: // a button
+            case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -587,7 +591,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
-            case ICN::BTNGIFT_EVIL: // a button
+            case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -609,7 +613,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
-            case ICN::BTNCONFIG: // a button
+            case ICN::BTNCONFIG:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -758,8 +762,10 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 7 ) {
                     Sprite & out = _icnVsSprite[id][7];
                     if ( out.width() == 34 && out.height() == 19 ) {
-                        Sprite temp = out;
-                        out.resize( out.width() + 1, out.height() );
+                        Sprite temp;
+                        std::swap( temp, out );
+
+                        out.resize( temp.width() + 1, temp.height() );
                         out.reset();
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
@@ -781,7 +787,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    modified = temp;
+                    modified = std::move( temp );
                     Fill( modified, 7, 0, 4, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
@@ -790,7 +796,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    modified = temp;
+                    modified = std::move( temp );
                     Fill( modified, 2, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 8 ) { // Champion
@@ -799,7 +805,7 @@ namespace fheroes2
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
-                    modified = temp;
+                    modified = std::move( temp );
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 62 ) {
@@ -817,7 +823,7 @@ namespace fheroes2
                             modified.setPosition( offset.x, offset.y );
                         }
                         else {
-                            std::swap( modified, temp );
+                            modified = std::move( temp );
                         }
                     }
                 }

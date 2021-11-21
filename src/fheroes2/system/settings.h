@@ -28,7 +28,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-enum
+enum : int
 {
     SCROLL_SLOW = 1,
     SCROLL_NORMAL = 2,

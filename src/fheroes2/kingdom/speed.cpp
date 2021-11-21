@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "speed.h"
+#include "spell.h"
 #include "translations.h"
 
 std::string Speed::String( int speed )
@@ -101,4 +102,16 @@ int Speed::GetOriginalFast( int speed )
     }
 
     return STANDING;
+}
+
+int Speed::GetSlowSpeedFromSpell( const int currentSpeed )
+{
+    Spell spell = Spell::SLOW;
+    return spell.ExtraValue() ? currentSpeed - spell.ExtraValue() : Speed::GetOriginalSlow( currentSpeed );
+}
+
+int Speed::GetHasteSpeedFromSpell( const int currentSpeed )
+{
+    Spell spell = Spell::HASTE;
+    return spell.ExtraValue() ? currentSpeed + spell.ExtraValue() : Speed::GetOriginalFast( currentSpeed );
 }
