@@ -35,10 +35,27 @@ namespace fheroes2
         Italian // Rare version?
     };
 
+    class LanguageSwitcher
+    {
+    public:
+        LanguageSwitcher() = delete;
+
+        LanguageSwitcher( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher( const LanguageSwitcher && ) = delete;
+        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
+
+        explicit LanguageSwitcher( const SupportedLanguage language );
+        ~LanguageSwitcher();
+
+    private:
+        const std::string _currentLanguage;
+    };
+
     // This function returns an array of supported languages. If the array contains only one language it must be English.
     std::vector<SupportedLanguage> getSupportedLanguages();
 
-    // Return name of the language.
+    // Return name of the language. Call this function only within the scope of LanguageSwitcher object.
     const char * getLanguageName( const SupportedLanguage language );
 
     const char * getLanguageAbbreviation( const SupportedLanguage language );
