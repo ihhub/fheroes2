@@ -1369,7 +1369,7 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 
     const std::string title( MP2::StringObject( objectType ) );
 
-    if ( Dialog::YES == Dialog::Message( MP2::StringObject( objectType ), ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+    if ( Dialog::YES == Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
         if ( spell.isValid() ) {
             // battle
             Army army( tile );
@@ -1553,7 +1553,7 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
 
     const std::string title( MP2::StringObject( objectType ) );
 
-    if ( Dialog::YES == Dialog::Message( MP2::StringObject( objectType ), ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+    if ( Dialog::YES == Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
         bool complete = false;
 
         if ( gold ) {
