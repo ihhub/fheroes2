@@ -3825,7 +3825,7 @@ msgstr "Te topas con los restos de un desafortunado aventurero."
 msgid "Treasure"
 msgstr "Tesoro"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Mientras buscabas entre las ropas sucias, encontraste %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."

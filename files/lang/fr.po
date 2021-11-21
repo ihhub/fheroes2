@@ -3847,7 +3847,7 @@ msgstr "Vous tombez sur les restes d'un malheureux aventurier."
 msgid "Treasure"
 msgstr "Trésor"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 "En cherchant dans les vêtements en lambeaux, vous trouvez l'artéfact "
 "'%{artifact}'."

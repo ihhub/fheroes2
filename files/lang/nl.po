@@ -3359,7 +3359,7 @@ msgstr ""
 msgid "Treasure"
 msgstr ""
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find nothing."

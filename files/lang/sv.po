@@ -3660,7 +3660,7 @@ msgstr "Du stöter på kvarlevorna av en olycklig äventyrare."
 msgid "Treasure"
 msgstr "Skatt"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "När du söker igenom de trasiga kläderna hittar du %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."

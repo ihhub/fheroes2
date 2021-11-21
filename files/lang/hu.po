@@ -3685,7 +3685,7 @@ msgstr ""
 msgid "Treasure"
 msgstr "Kincsek"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
 #, fuzzy

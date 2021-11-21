@@ -3758,7 +3758,7 @@ msgstr "Вы обнаружили останки какого-то несчас�
 msgid "Treasure"
 msgstr "Сокровище"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Покопавшись среди лохмотьев, вы нашли %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."

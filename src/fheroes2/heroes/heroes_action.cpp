@@ -1111,7 +1111,7 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
         else {
             const Artifact & art = tile.QuantityArtifact();
             message += '\n';
-            message.append( _( "Searching through the tattered clothing, you find %{artifact}." ) );
+            message.append( _( "Searching through the tattered clothing, you find the %{artifact}." ) );
             StringReplace( message, "%{artifact}", art.GetName() );
             AGG::PlaySound( M82::TREASURE );
             Dialog::ArtifactInfo( title, message, art );

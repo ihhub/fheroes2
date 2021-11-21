@@ -3799,7 +3799,7 @@ msgstr "Du kommer over levningene til en uheldig reisende."
 msgid "Treasure"
 msgstr "Skatt"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Mens du leter gjennom de fillete klærne finner du %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."

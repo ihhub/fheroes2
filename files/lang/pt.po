@@ -3664,7 +3664,7 @@ msgid "Treasure"
 msgstr "Tesouros"
 
 #, fuzzy
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 "Você vai sobre os restos de um aventureiro infeliz.\n"
 "Olhando através da roupa esfarrapada, você encontra um artefato %{artifact}."

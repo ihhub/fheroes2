@@ -3716,7 +3716,7 @@ msgstr "Dotarłeś do szczątek pechowego poszukiwacza"
 msgid "Treasure"
 msgstr "Skarb"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Po przeszukaniu rozdartego ubrania, znajdujesz %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
