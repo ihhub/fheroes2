@@ -135,8 +135,9 @@ namespace
         drawResolution( window );
         drawOptions( window );
 
-        fheroes2::AutoShadowButton okayButton( display, windowRoi.x + ( windowRoi.width - buttonOkayReleased.width() ) / 2,
-                                               windowRoi.y + windowRoi.height - 6 - buttonOkayReleased.height(), buttonOkayReleased, buttonOkayPressed );
+        fheroes2::ButtonSprite okayButton
+            = fheroes2::makeButtonWithShadow( windowRoi.x + ( windowRoi.width - buttonOkayReleased.width() ) / 2,
+                                              windowRoi.y + windowRoi.height - 6 - buttonOkayReleased.height(), buttonOkayReleased, buttonOkayPressed, display );
         okayButton.draw();
 
         display.render();

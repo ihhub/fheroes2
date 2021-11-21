@@ -39,6 +39,23 @@ namespace fheroes2
         , _disabledSprite()
     {}
 
+    ButtonBase::ButtonBase( ButtonBase && o ) noexcept
+        : _offsetX( 0 )
+        , _offsetY( 0 )
+        , _isPressed( false )
+        , _isEnabled( true )
+        , _isVisible( true )
+        , _releasedSprite( nullptr )
+        , _disabledSprite( std::move( o._disabledSprite ) )
+    {
+        std::swap( _offsetX, o._offsetX );
+        std::swap( _offsetY, o._offsetY );
+        std::swap( _isPressed, o._isPressed );
+        std::swap( _isEnabled, o._isEnabled );
+        std::swap( _isVisible, o._isVisible );
+        std::swap( _releasedSprite, o._releasedSprite );
+    }
+
     bool ButtonBase::isEnabled() const
     {
         return _isEnabled;
@@ -214,6 +231,22 @@ namespace fheroes2
         , _disabled( disabled )
     {}
 
+    ButtonSprite::ButtonSprite( ButtonSprite && o ) noexcept
+        : ButtonBase()
+    {
+        std::swap( _offsetX, o._offsetX );
+        std::swap( _offsetY, o._offsetY );
+        std::swap( _isPressed, o._isPressed );
+        std::swap( _isEnabled, o._isEnabled );
+        std::swap( _isVisible, o._isVisible );
+        std::swap( _releasedSprite, o._releasedSprite );
+        std::swap( _disabledSprite, o._disabledSprite );
+
+        std::swap( _released, o._released );
+        std::swap( _pressed, o._pressed );
+        std::swap( _disabled, o._disabled );
+    }
+
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
     {
         _released = released;
@@ -240,75 +273,6 @@ namespace fheroes2
         return _disabled;
     }
 
-    AutoBackgroundButton::AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
-        : ButtonSprite( offsetX, offsetY, fheroes2::AGG::GetICN( icnId, releasedIndex ), fheroes2::AGG::GetICN( icnId, pressedIndex ) )
-    {
-        _captureBackground( in );
-    }
-
-    AutoBackgroundButton::AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed,
-                                                const Sprite & disabled )
-        : ButtonSprite( offsetX, offsetY, released, pressed, disabled )
-    {
-        _captureBackground( in );
-    }
-
-    void AutoBackgroundButton::_captureBackground( const Image & in )
-    {
-        const Sprite & oldReleased = _getReleased();
-        const Sprite & oldPressed = _getPressed();
-        const Sprite & oldDisabled = _getDisabled();
-
-        const Rect & rect = area();
-        Sprite background = Crop( in, rect.x - oldReleased.x(), rect.y - oldReleased.y(), rect.width, rect.height );
-
-        Sprite newReleased( background, 0, 0 );
-        Blit( oldReleased, newReleased, oldReleased.x(), oldReleased.y() );
-
-        Sprite newPressed( background, 0, 0 );
-        Blit( oldPressed, newPressed, oldPressed.x(), oldPressed.y() );
-
-        Sprite newDisabled( background, 0, 0 );
-        Blit( oldDisabled, newDisabled, oldDisabled.x(), oldDisabled.y() );
-
-        setSprite( newReleased, newPressed, newDisabled );
-    }
-
-    AutoShadowButton::AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
-        : ButtonSprite( offsetX, offsetY, fheroes2::AGG::GetICN( icnId, releasedIndex ), fheroes2::AGG::GetICN( icnId, pressedIndex ) )
-    {
-        _captureBackground( in );
-    }
-
-    AutoShadowButton::AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled )
-        : ButtonSprite( offsetX, offsetY, released, pressed, disabled )
-    {
-        _captureBackground( in );
-    }
-
-    void AutoShadowButton::_captureBackground( const Image & in )
-    {
-        const Sprite & oldReleased = _getReleased();
-        const Sprite & oldPressed = _getPressed();
-        const Sprite & oldDisabled = _getDisabled();
-        const Sprite & shadow = fheroes2::makeShadow( oldReleased, fheroes2::Point( -4, 6 ), 3 );
-
-        const Rect & rect = area();
-        Sprite background = Crop( in, rect.x - oldReleased.x() + shadow.x(), rect.y - oldReleased.y() + shadow.y(), shadow.width(), shadow.height() );
-        Blit( shadow, background );
-
-        Sprite newReleased( background, shadow.x(), shadow.y() );
-        Blit( oldReleased, newReleased, oldReleased.x() - shadow.x(), oldReleased.y() - shadow.y() );
-
-        Sprite newPressed( background, shadow.x(), shadow.y() );
-        Blit( oldPressed, newPressed, oldPressed.x() - shadow.x(), oldPressed.y() - shadow.y() );
-
-        Sprite newDisabled( background, shadow.x(), shadow.y() );
-        Blit( oldDisabled, newDisabled, oldDisabled.x() - shadow.x(), oldDisabled.y() - shadow.y() );
-
-        setSprite( newReleased, newPressed, newDisabled );
-    }
-
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes, bool shadows, const Image & in )
     {
         const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
@@ -320,7 +284,7 @@ namespace fheroes2
             offset.x = area.x;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 5 ).height();
             if ( shadows ) {
-                createShadowButton( in, offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+                // createShadowButton( in, offset.x, offset.y, icnId, 5, 6, Dialog::YES );
             }
             else {
                 createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
@@ -329,7 +293,7 @@ namespace fheroes2
             offset.x = area.x + area.width - AGG::GetICN( icnId, 7 ).width();
             offset.y = area.y + area.height - AGG::GetICN( icnId, 7 ).height();
             if ( shadows ) {
-                createShadowButton( in, offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+                // createShadowButton( in, offset.x, offset.y, icnId, 7, 8, Dialog::NO );
             }
             else {
                 createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
@@ -340,7 +304,7 @@ namespace fheroes2
             offset.x = area.x;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
             if ( shadows ) {
-                createShadowButton( in, offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+                // createShadowButton( in, offset.x, offset.y, icnId, 1, 2, Dialog::OK );
             }
             else {
                 createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
@@ -349,7 +313,7 @@ namespace fheroes2
             offset.x = area.x + area.width - AGG::GetICN( icnId, 3 ).width();
             offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
             if ( shadows ) {
-                createShadowButton( in, offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+                // createShadowButton( in, offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
             }
             else {
                 createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
@@ -360,7 +324,7 @@ namespace fheroes2
             offset.x = area.x + ( area.width - AGG::GetICN( icnId, 1 ).width() ) / 2;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
             if ( shadows ) {
-                createShadowButton( in, offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+                // createShadowButton( in, offset.x, offset.y, icnId, 1, 2, Dialog::OK );
             }
             else {
                 createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
@@ -371,7 +335,7 @@ namespace fheroes2
             offset.x = area.x + ( area.width - AGG::GetICN( icnId, 3 ).width() ) / 2;
             offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
             if ( shadows ) {
-                createShadowButton( in, offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+                // createShadowButton( in, offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
             }
             else {
                 createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
@@ -405,6 +369,7 @@ namespace fheroes2
         _value.emplace_back( returnValue );
     }
 
+    /*
     void ButtonGroup::createShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue )
     {
         _button.push_back( new AutoShadowButton( in, offsetX, offsetY, icnId, releasedIndex, pressedIndex ) );
@@ -416,6 +381,7 @@ namespace fheroes2
         _button.push_back( new AutoShadowButton( in, offsetX, offsetY, released, pressed ) );
         _value.emplace_back( returnValue );
     }
+    */
 
     void ButtonGroup::draw( Image & area ) const
     {
@@ -539,5 +505,48 @@ namespace fheroes2
         for ( size_t i = 0; i < _button.size(); ++i ) {
             _button[i]->unsubscribe();
         }
+    }
+
+    ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled*/,
+                                           const Image & background )
+    {
+        Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
+
+        Sprite releasedWithBackground( croppedBackground, 0, 0 );
+        Blit( released, releasedWithBackground, released.x(), released.y() );
+
+        Sprite pressedWithBackground( croppedBackground, 0, 0 );
+        Blit( pressed, pressedWithBackground, pressed.x(), pressed.y() );
+
+        Sprite disabled( released );
+        ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+        Sprite disabledWithBackground( croppedBackground, 0, 0 );
+        Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
+
+        return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };
+    }
+
+    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled*/,
+                                       const Image & background )
+    {
+        const Sprite & shadow = fheroes2::makeShadow( released, fheroes2::Point( -4, 6 ), 3 );
+
+        Sprite croppedBackground = Crop( background, offsetX + shadow.x(), offsetY + shadow.y(), shadow.width(), shadow.height() );
+        Blit( shadow, croppedBackground );
+
+        Sprite releasedWithBackground( croppedBackground, 0, 0 );
+        Blit( released, releasedWithBackground, released.x() - shadow.x(), released.y() - shadow.y() );
+
+        Sprite pressedWithBackground( croppedBackground, 0, 0 );
+        Blit( pressed, pressedWithBackground, pressed.x() - shadow.x(), pressed.y() - shadow.y() );
+
+        Sprite disabled( released );
+        ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+        Sprite disabledWithBackground( croppedBackground, 0, 0 );
+        Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
+
+        return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 }

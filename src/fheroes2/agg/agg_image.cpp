@@ -1484,12 +1484,10 @@ namespace fheroes2
                 AddTransparency( pressed, 36 );
                 AddTransparency( pressed, 61 ); // remove the extra brown border
 
-                Sprite fixed( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
-                fixed.reset();
                 // put back pixels that actually should be black
-                Fill( fixed, 1, 4, 31, 31, 36 );
-                Blit( pressed, fixed );
-                _icnVsSprite[id][1] = fixed;
+                _icnVsSprite[id][1] = Sprite( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
+                Fill( _icnVsSprite[id][1], 1, 4, 31, 31, 36 );
+                Blit( pressed, _icnVsSprite[id][1] );
 
                 return true;
             }

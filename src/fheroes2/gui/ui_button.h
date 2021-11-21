@@ -31,7 +31,12 @@ namespace fheroes2
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
+        ButtonBase( ButtonBase & ) = delete;
+        ButtonBase( ButtonBase && o ) noexcept;
+
         ~ButtonBase() override = default;
+
+        ButtonBase & operator=( const ButtonBase & ) = delete;
 
         bool isEnabled() const;
         bool isDisabled() const;
@@ -64,7 +69,6 @@ namespace fheroes2
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
 
-    private:
         int32_t _offsetX;
         int32_t _offsetY;
 
@@ -101,7 +105,12 @@ namespace fheroes2
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
         ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
+        ButtonSprite( ButtonSprite & ) = delete;
+        ButtonSprite( ButtonSprite && o ) noexcept;
+
         ~ButtonSprite() override = default;
+
+        ButtonSprite & operator=( const ButtonSprite & ) = delete;
 
         void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
 
@@ -114,30 +123,6 @@ namespace fheroes2
         Sprite _released;
         Sprite _pressed;
         Sprite _disabled;
-    };
-
-    // The background is automatically captured by this button: it can be used when original button sprites do not contain pieces of background
-    class AutoBackgroundButton : public ButtonSprite
-    {
-    public:
-        // "in" is the image where the button will be drawn at the specified offset, typically the display
-        AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
-        AutoBackgroundButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
-
-    private:
-        void _captureBackground( const Image & in );
-    };
-
-    // A shadow is automatically added to this button: for that it needs to capture the background from the display at construct time
-    class AutoShadowButton : public ButtonSprite
-    {
-    public:
-        // "in" is the image where the button will be drawn at the specified offset, typically the display
-        AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
-        AutoShadowButton( const Image & in, int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
-
-    private:
-        void _captureBackground( const Image & in );
     };
 
     class ButtonGroup
@@ -205,4 +190,12 @@ namespace fheroes2
         void subscribeAll();
         void unsubscribeAll();
     };
+
+    // Makes a button with the background (from display): it can be used when original button sprites do not contain pieces of background in the pressed state
+    ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled = Sprite()*/,
+                                           const Image & background = Display::instance() );
+
+    // Makes a button with the shadow: for that it needs to capture the background from the display at construct time
+    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled = Sprite()*/,
+                                       const Image & background = Display::instance() );
 }

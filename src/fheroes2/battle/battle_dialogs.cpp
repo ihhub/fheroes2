@@ -497,11 +497,13 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
 
     std::unique_ptr<fheroes2::ButtonBase> btnOk;
-    fheroes2::AutoShadowButton btnCancel( display, pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
+    fheroes2::ButtonSprite btnCancel = fheroes2::makeButtonWithShadow( pos_rt.x + buttonOffset + 129, pos_rt.y + 410, fheroes2::AGG::GetICN( buttonCancelICN, 0 ),
+                                                                       fheroes2::AGG::GetICN( buttonCancelICN, 1 ), display );
 
     if ( allowToCancel ) {
         btnCancel.draw();
-        btnOk.reset( new fheroes2::AutoShadowButton( display, pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 ) );
+        btnOk.reset( new fheroes2::ButtonSprite( fheroes2::makeButtonWithShadow( pos_rt.x + buttonOffset, pos_rt.y + 410, fheroes2::AGG::GetICN( buttonOkICN, 0 ),
+                                                                                 fheroes2::AGG::GetICN( buttonOkICN, 1 ) ) ) );
     }
     else {
         btnOk.reset( new fheroes2::Button( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 ) );
@@ -908,11 +910,16 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
+    const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
 
-    fheroes2::AutoShadowButton btnAccept( display, pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
-    fheroes2::AutoShadowButton btnDecline( display, pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
-    fheroes2::AutoShadowButton btnMarket( display, pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145,
-                                          isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
+    fheroes2::ButtonSprite btnAccept
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 1 ), display );
+
+    fheroes2::ButtonSprite btnDecline
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 2 ), fheroes2::AGG::GetICN( icn, 3 ), display );
+
+    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, fheroes2::AGG::GetICN( icnMarket, 0 ),
+                                                                       fheroes2::AGG::GetICN( icnMarket, 1 ), display );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();

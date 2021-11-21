@@ -158,7 +158,10 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     // hero button
     pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
     pt.y = box.GetArea().y + box.GetArea().height - 36;
-    fheroes2::AutoBackgroundButton button_hero( display, pt.x, pt.y, isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON, 0, 1 );
+
+    const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
+    fheroes2::ButtonSprite button_hero
+        = fheroes2::makeButtonWithBackground( pt.x, pt.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
     text.Set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), Font::BIG );
     text.Blit( box.GetArea().x + ( box.GetArea().width - text.w() ) / 2, pt.y - 15 );

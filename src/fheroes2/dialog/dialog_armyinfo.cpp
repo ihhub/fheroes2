@@ -639,8 +639,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const fheroes2::Sprite & armyButtonReleased = fheroes2::AGG::GetICN( armyButtonIcn, 0 );
     const fheroes2::Sprite & armyButtonPressed = fheroes2::AGG::GetICN( armyButtonIcn, 1 );
 
-    fheroes2::AutoBackgroundButton btnHeroes( display, pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35, armyButtonReleased,
-                                              armyButtonPressed );
+    fheroes2::ButtonSprite btnHeroes = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35,
+                                                                           armyButtonReleased, armyButtonPressed, display );
 
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
@@ -742,8 +742,15 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-    fheroes2::AutoBackgroundButton btnMarket( display, pos.x + pos.width / 2 - 60 - 36, posy, isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON, 0, 1 );
-    fheroes2::AutoBackgroundButton btnHeroes( display, pos.x + pos.width / 2 + 60, posy, isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON, 0, 1 );
+
+    const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
+    const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
+
+    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 - 60 - 36, posy, fheroes2::AGG::GetICN( icnMarket, 0 ),
+                                                                           fheroes2::AGG::GetICN( icnMarket, 1 ), display );
+
+    fheroes2::ButtonSprite btnHeroes
+        = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 + 60, posy, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
     Kingdom & kingdom = hero.GetKingdom();
 
