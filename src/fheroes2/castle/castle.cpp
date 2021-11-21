@@ -595,19 +595,19 @@ void Castle::ActionNewMonth( void )
     else
         // Month Of
         if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
-            const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                      DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
-            u32 * dw = nullptr;
+        const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                  DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+        u32 * dw = nullptr;
 
-            for ( u32 ii = 0; dwellings[ii]; ++ii )
-                if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
-                    const Monster mons( race, dwellings[ii] );
-                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                        *dw += *dw * GetGrownMonthOf() / 100;
-                        break;
-                    }
+        for ( u32 ii = 0; dwellings[ii]; ++ii )
+            if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
+                const Monster mons( race, dwellings[ii] );
+                if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
+                    *dw += *dw * GetGrownMonthOf() / 100;
+                    break;
                 }
-        }
+            }
+    }
 }
 
 // change castle color
@@ -2389,8 +2389,8 @@ void AllCastles::Init( void )
 
 void AllCastles::Clear( void )
 {
-    for ( Castle * castle : *this )
-        delete castle;
+    for ( auto it = begin(); it != end(); ++it )
+        delete *it;
     _castles.clear();
     _castleTiles.clear();
 }
@@ -2435,9 +2435,9 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
 
 void AllCastles::Scoute( int colors ) const
 {
-    for ( const Castle * castle : *this )
-        if ( colors & castle->GetColor() )
-            castle->Scoute();
+    for ( auto it = begin(); it != end(); ++it )
+        if ( colors & ( *it )->GetColor() )
+            ( *it )->Scoute();
 }
 
 /* pack castle */
@@ -2476,8 +2476,8 @@ StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
 {
     msg << static_cast<u32>( castles.size() );
 
-    for ( const Castle * castle : castles )
-        msg << ( castle ? castle->GetIndex() : static_cast<s32>( -1 ) );
+    for ( auto it = castles.begin(); it != castles.end(); ++it )
+        msg << ( *it ? ( *it )->GetIndex() : static_cast<s32>( -1 ) );
 
     return msg;
 }
@@ -2490,10 +2490,10 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
     castles.resize( size, nullptr );
 
-    for ( Castle *& castle : castles ) {
+    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
-        castle = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
-        assert( castle != nullptr );
+        *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
+        assert( *it != nullptr );
     }
 
     return msg;

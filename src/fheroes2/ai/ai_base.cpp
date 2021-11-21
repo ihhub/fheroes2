@@ -208,16 +208,16 @@ namespace AI
         status.RedrawTurnProgress( 1 );
 
         // castles AI turn
-        for ( Castle * castle : castles )
-            if ( castle )
-                CastleTurn( *castle, false );
+        for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
+            if ( *it )
+                CastleTurn( **it, false );
 
         status.RedrawTurnProgress( 3 );
 
         // heroes turns
-        for ( Heroes * hero : heroes )
-            if ( hero )
-                HeroTurn( *hero );
+        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
+            if ( *it )
+                HeroTurn( **it );
 
         status.RedrawTurnProgress( 6 );
         status.RedrawTurnProgress( 7 );
