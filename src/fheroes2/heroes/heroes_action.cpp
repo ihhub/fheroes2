@@ -2371,7 +2371,6 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
     else if ( hero.GetSpellPoints() == max * 2 ) {
         Dialog::Message( name, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Font::BIG,
                          Dialog::OK );
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
     }
     else {
         if ( Settings::Get().MusicMIDI() ) {
@@ -2382,9 +2381,9 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
         }
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
-
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
     }
+
+    hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
