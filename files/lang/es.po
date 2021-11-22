@@ -3825,7 +3825,7 @@ msgstr "Te topas con los restos de un desafortunado aventurero."
 msgid "Treasure"
 msgstr "Tesoro"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Mientras buscabas entre las ropas sucias, encontraste %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -4033,10 +4033,10 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Al derrotar a los monstruos, descrifras un antiguo  jeroglífico de la pared "
-"que explica el secreto del hechizo."
+"que explica el secreto del hechizo - '"
 
 msgid "Sign"
 msgstr "Señal"

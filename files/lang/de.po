@@ -3365,7 +3365,7 @@ msgstr ""
 msgid "Treasure"
 msgstr ""
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -3518,7 +3518,7 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Sign"
