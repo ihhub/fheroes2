@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-11-07 19:44+0100\n"
-"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -1698,7 +1698,7 @@ msgstr ""
 msgid "Town Population Information and Statistics"
 msgstr "Miesto gyventojų informacija bei statistika"
 
-msgid "Damage"
+msgid "Damg"
 msgstr ""
 
 msgid "HP"
@@ -1765,6 +1765,9 @@ msgid "Shots"
 msgstr "Šūviai"
 
 msgid "Shots Left"
+msgstr ""
+
+msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -3458,7 +3461,7 @@ msgstr ""
 msgid "Treasure"
 msgstr ""
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -3616,7 +3619,7 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Sign"
@@ -5183,6 +5186,18 @@ msgid "Gold Mine"
 msgstr "Aukso kasykla"
 
 msgid "Mine"
+msgstr ""
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+msgid "See Rock City."
+msgstr ""
+
+msgid "This space for rent."
 msgstr ""
 
 msgid "No object"

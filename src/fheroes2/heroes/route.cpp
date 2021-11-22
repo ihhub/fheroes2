@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "heroes.h"
 #include "maps.h"
 #include "route.h"
@@ -368,11 +370,16 @@ int Route::Path::GetIndexSprite( int from, int to, int mod )
     return index;
 }
 
-uint32_t Route::Path::getLastMovePenalty() const
+bool Route::Path::hasAllowedSteps() const
 {
-    const Route::Step & firstStep = front();
-    const uint32_t penalty = firstStep.GetPenalty();
-    return Direction::isDiagonal( firstStep.GetDirection() ) ? ( penalty * 2 / 3 ) : penalty;
+    if ( !isValid() ) {
+        return false;
+    }
+
+    assert( hero != nullptr );
+    assert( !empty() );
+
+    return hero->GetMovePoints() >= front().GetPenalty();
 }
 
 int Route::Path::GetAllowedSteps( void ) const
@@ -382,11 +389,6 @@ int Route::Path::GetAllowedSteps( void ) const
 
     for ( const_iterator it = begin(); it != end() && movePoints > 0; ++it ) {
         uint32_t penalty = it->GetPenalty();
-
-        // allow diagonal move at a lower cost if it's a last one
-        if ( movePoints < penalty && Direction::isDiagonal( it->GetDirection() ) ) {
-            penalty = penalty * 2 / 3;
-        }
 
         if ( movePoints >= penalty ) {
             movePoints -= penalty;

@@ -104,7 +104,7 @@ namespace Interface
         void SetHideInterface( bool );
 
         void EventSwitchHeroSleeping( void );
-        fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode ) const;
+        fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
         void EventOpenFocus( void ) const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;

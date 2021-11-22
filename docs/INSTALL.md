@@ -116,10 +116,14 @@ brew install fheroes2
   `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries
   required to run the game.
 
-* If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of
-  them may be missing depending on the version of the original game) from the original game directory to the fheroes2 installation
-  directory. Otherwise, you can download and install the demo version of the original game by running the `download_demo_version.sh`
-  script supplied in the ZIP archive.
+* If you have a legally purchased copy of the original game, run the `extract_homm2_resources.sh` script supplied in the ZIP archive.
+  You will be prompted to enter the location of the original game, and the script will extract all the necessary resource files.
+
+* As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
+  be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
+
+* If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
+  by running the `download_demo_version.sh` script supplied in the ZIP archive.
 
 <a name="linux"></a>
 ## Linux
@@ -185,10 +189,15 @@ be missing depending on the version of the original game) from the original game
 
   * **Gentoo**: run the following command: `emerge --ask media-libs/sdl2-mixer`.
 
-* After all dependencies are installed, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending
-  on the version of the original game) from the original game directory to the fheroes2 installation directory if you have a legally
-  purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the
-  `download_demo_version.sh` script supplied in the ZIP archive.
+* After all dependencies are installed, run the `extract_homm2_resources.sh` script supplied in the ZIP archive if you have a legally purchased
+  copy of the original game. You will be prompted to enter the location of the original game, and the script will extract all the necessary
+  resource files.
+
+* As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
+  be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
+
+* If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
+  by running the `download_demo_version.sh` script supplied in the ZIP archive.
 
 <a name="playstation-vita"></a>
 ## PlayStation Vita

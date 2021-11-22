@@ -94,6 +94,7 @@ namespace fheroes2
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {
+            fheroes2::LanguageSwitcher languageSwitcher( languages[i] );
             const Text languageName( getLanguageName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
             languageName.draw( windowRoi.x + offsetFromBorders + languageAreaWidth * i + languageAreaWidth / 2 - languageName.width() / 2, windowRoi.y + 40, display );
         }

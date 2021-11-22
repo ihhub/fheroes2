@@ -46,31 +46,6 @@ namespace
             { "ru", fheroes2::SupportedLanguage::Russian },     { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
             { "italian", fheroes2::SupportedLanguage::Italian } };
 
-    class LanguageSwitcher
-    {
-    public:
-        LanguageSwitcher() = delete;
-
-        LanguageSwitcher( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher( const LanguageSwitcher && ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
-
-        explicit LanguageSwitcher( const fheroes2::SupportedLanguage language )
-            : _currentLanguage( Settings::Get().getGameLanguage() )
-        {
-            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( language ) );
-        }
-
-        ~LanguageSwitcher()
-        {
-            Settings::Get().setGameLanguage( _currentLanguage );
-        }
-
-    private:
-        const std::string _currentLanguage;
-    };
-
     fheroes2::SupportedLanguage getResourceLanguage()
     {
         const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
@@ -92,6 +67,17 @@ namespace
 
 namespace fheroes2
 {
+    LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
+        : _currentLanguage( Settings::Get().getGameLanguage() )
+    {
+        Settings::Get().setGameLanguage( getLanguageAbbreviation( language ) );
+    }
+
+    LanguageSwitcher::~LanguageSwitcher()
+    {
+        Settings::Get().setGameLanguage( _currentLanguage );
+    }
+
     std::vector<SupportedLanguage> getSupportedLanguages()
     {
         std::vector<SupportedLanguage> languages;
@@ -131,8 +117,6 @@ namespace fheroes2
 
     const char * getLanguageName( const SupportedLanguage language )
     {
-        LanguageSwitcher languageSwitcher( language );
-
         switch ( language ) {
         case SupportedLanguage::English:
             return _( "English" );
