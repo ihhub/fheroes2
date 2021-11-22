@@ -391,7 +391,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode ) const
+fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode )
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -399,6 +399,9 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
+
+            // The action object (e.g. Stables or Well) can alter the status of the hero
+            iconsPanel.RedrawIcons( ICON_HEROES );
 
             // If a hero completed an action we must verify the condition for the scenario.
             if ( hero->isAction() ) {

@@ -86,7 +86,6 @@ namespace Route
         s32 GetDestinedIndex( void ) const;
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
-        uint32_t getLastMovePenalty() const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
         void Show( void )
@@ -109,6 +108,7 @@ namespace Route
             return !hide;
         }
         bool hasObstacle( void ) const;
+        bool hasAllowedSteps() const;
 
         std::string String( void ) const;
 

@@ -3813,7 +3813,7 @@ msgstr "Du kommer over levningene til en uheldig eventyrer."
 msgid "Treasure"
 msgstr "Skatt"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Mens du leter gjennom de fillete klærne finner du %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -4017,10 +4017,10 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Etter å ha utryddet monstrene tyder du et eldgammelt skrifttegn på veggen, "
-"og det røper hemmeligheten til trolldommen."
+"og det røper hemmeligheten til trolldommen - '"
 
 msgid "Sign"
 msgstr "Skilt"
