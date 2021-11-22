@@ -60,6 +60,12 @@ nb.mo: nb.po
 	sed -i -e 's/é/e/g' $<.tmp
 	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
+	
+# Italian
+it.mo: it.po
+	sed -e 'y/àèéìòùÀÈÉÌÒÙ/aeeiouAEEIOU/' $< > $<.tmp
+	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
