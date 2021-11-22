@@ -377,6 +377,7 @@ namespace Translation
             case LOCALE_GL:
             case LOCALE_HE:
             case LOCALE_IT:
+                return current->ngettext( str, 0 );
             case LOCALE_NL:
             case LOCALE_SV:
                 return current->ngettext( str, ( n != 1 ) );
