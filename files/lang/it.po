@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-17 14:38+0100\n"
-"PO-Revision-Date: 2021-11-22 00:00+0100\n"
+"PO-Revision-Date: 2021-11-22 15:20+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -242,7 +242,7 @@ msgid "A glorious victory!"
 msgstr "Una vittoria gloriosa!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "Per valore in combattimento %{name} riceve %{exp} d'esperienza."
+msgstr "Per valore in combattimento %{name} riceve %{exp} punti d'esperienza."
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "Il vigliacco %{name} si scappa dalla battaglia."
@@ -360,6 +360,8 @@ msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Ti permetterò di arrenderti e ti lascierò passare con le tue truppe per "
+"%{price} Oro.\""
 
 msgid "View %{monster} info"
 msgstr "Mostra inf. %{monster}"
@@ -424,7 +426,7 @@ msgid "System Options"
 msgstr "Opzioni Sistema"
 
 msgid "Wait this unit"
-msgstr "Aspettare questa unità"
+msgstr "Aspetta questa unità"
 
 msgid "Wait"
 msgstr "Salta"
@@ -1156,7 +1158,7 @@ msgid "For this action it is necessary first to build a castle."
 msgstr "Per fare questo bisogna prima costruire il castello."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr "Impossibile costruire il %{name}. Acqua sta troppo lontana."
+msgstr "Non si può costruire il %{name}. Troppo lontano dall'acqua."
 
 msgid "disable build."
 msgstr "costruzione disabilitata."
@@ -1347,10 +1349,10 @@ msgid "Upg. Ivory Tower"
 msgstr "Migl. Torre Avorio"
 
 msgid "Cloud Castle"
-msgstr "Castello Nebbioso"
+msgstr "Castello Celeste"
 
 msgid "Upg. Cloud Castle"
-msgstr "Migl. Cast. Nebbia"
+msgstr "Migl. Cast. Cielo"
 
 msgid "Storm"
 msgstr "Tempesta Perpetua"
@@ -1480,7 +1482,7 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"L'Altare Oscuro aumenta la capacità necromantica dei tuoi necromanti di 10 "
+"L'Altare Oscuro aumenta la capacità negromantica dei tuoi negromanti di 10 "
 "percento."
 
 msgid ""
@@ -1560,16 +1562,16 @@ msgid "Exit this menu."
 msgstr "Lascia questo menù."
 
 msgid "Click to show next town."
-msgstr "Fai clic per spostarti alla città succ."
+msgstr "Clicca per andare alla città succ."
 
 msgid "Show next town"
-msgstr "Fai clic per spostarti alla città prec."
+msgstr "Va alla città pross."
 
 msgid "Click to show previous town."
-msgstr ""
+msgstr "Clicca per andare alla città prec."
 
 msgid "Show previous town"
-msgstr "Mostra città precedente"
+msgstr "Vai alla città prec."
 
 msgid "Army joining"
 msgstr ""
@@ -1666,16 +1668,16 @@ msgid "Castle Options"
 msgstr "Opzioni Castello"
 
 msgid "Not enough resources to buy monsters."
-msgstr ""
+msgstr "Mancano risorse per comprare truppe."
 
 msgid "No monsters available for purchase."
-msgstr ""
+msgstr "Niente truppe disponibili da comprare."
 
 msgid "Buy Monsters"
-msgstr "Compra mostri"
+msgstr "Compra Truppe"
 
 msgid "Town Population Information and Statistics"
-msgstr ""
+msgstr "Populazione e Dati della Città"
 
 msgid "Damg"
 msgstr "Danni"
@@ -1728,8 +1730,8 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 "Entri nell'arena e affronti un branco di leoni feroci. Li sconfiggi, senza "
-"sforzo, e il pubblico ti applaude. Colpito dalle tue doti, l'allenatore "
-"attempato di gladiatori acconsente ad allenarti in una dote a scelta tua."
+"sforzo, e il pubblico ti applaude. Colpito dalle tue capacità, un allenatore "
+"di gladiatori attempato acconsente ad allenarti in una dote a scelta tua."
 
 msgid "You can't afford to upgrade your troops!"
 msgstr ""
@@ -1752,7 +1754,7 @@ msgid "Damage"
 msgstr "Danni"
 
 msgid "Hit Points"
-msgstr "PF"
+msgstr "Pt. Ferita"
 
 msgid "Hit Points Left"
 msgstr "PF Rimasti"
@@ -1764,7 +1766,8 @@ msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
-"Un gruppo di %{monster} con un desiderio di gloria vuole unirsi a te.\n"
+"Un gruppo di %{monster} con un desiderio di gloria vuole unirsi alla tua "
+"armata.\n"
 "Acconsenti?"
 
 msgid ""
@@ -1772,17 +1775,17 @@ msgid ""
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
-"Il gruppo di %{monster} è confuso dalla tua parlantina diplomatica ed offre "
-"di unirsi al tuo esercito per %{gold} pezzi d'oro.\n"
-"Accetti?"
+"Il gruppo di %{monster} è persuaso dalle tue abilità diplomatiche ed offre "
+"di aggiungersi al tuo esercito per %{gold} pezzi d'oro.\n"
+"Acconsenti?"
 
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
 " \n"
 msgstr ""
-"Il gruppo di mostri è confuso dalla tua parlantina diplomatica \n"
-"e ti fanno un'offerta:\n"
+"Il gruppo di mostri è persuaso dalla tua capacità diplomatica \n"
+"e ti offrono questo:\n"
 "\n"
 
 msgid ""
@@ -1790,8 +1793,8 @@ msgid ""
 "leave you alone, for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
-"%{offer} dei/delle %{total} %{monster} si uniranno al tuo esercito, e gli "
-"altri ti lasceranno in pace per la somma di %{gold} pezzi d'oro.\n"
+"%{offer} dei/delle %{total} %{monster} si aggiungeranno al tuo esercito, e "
+"gli altri ti lasceranno andare per %{gold} pezzi d'oro.\n"
 "Accetti?"
 
 msgid ""
@@ -1799,6 +1802,9 @@ msgid ""
 "gold.\n"
 "Do you accept?"
 msgstr ""
+"Tutti/e %{offer} %{monster} si aggiungono al tuo esercito per %{gold} pezzi "
+"d'oro.\n"
+"Acconsenti?"
 
 msgid "(Rate: %{percent})"
 msgstr "(Grado: %{percent})"
@@ -2078,7 +2084,7 @@ msgid "MAX"
 msgstr "MAX"
 
 msgid "How many troops to move?"
-msgstr "Sposta quante forze?"
+msgstr "Quante forze spostare?"
 
 msgid "Fast separation into slots:"
 msgstr "Distribuzione rapida ai riquadri liberi:"
@@ -2102,13 +2108,13 @@ msgid "File to Load:"
 msgstr "File da Caricare:"
 
 msgid "Click to save the current game."
-msgstr "Fai clicc per salvare la partita in corso."
+msgstr "Clicca per salvare la partita in corso."
 
 msgid "OK"
 msgstr "Okay"
 
 msgid "Click to load a previously saved game."
-msgstr "Fai clic per caricare una partita precedente."
+msgstr "Clicca per caricare una partita precedente."
 
 msgid "Are you sure you want to delete file:"
 msgstr "Sei sicuro di voler cancellare il file:"
@@ -2425,7 +2431,7 @@ msgid "Wood & Ore:"
 msgstr "Legname e Ferro:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Gem, Cr, Zlf e Mer:"
+msgstr "Gem, Cr, Zlf e Merc.:"
 
 msgid "Obelisks Found:"
 msgstr "Obelischi Trovati:"
@@ -4495,7 +4501,7 @@ msgid ""
 " Next level %{exp2}."
 msgstr ""
 "Esperienza attuale: %{exp1}\n"
-"Livello prossimo %{exp2}"
+"Livello prossimo: %{exp2}"
 
 msgid "Level %{level}"
 msgstr "Livello %{level}"
@@ -4656,7 +4662,7 @@ msgid "Eagle Eye"
 msgstr "Vista"
 
 msgid "Estates"
-msgstr "Immobili"
+msgstr "Investimenti"
 
 msgid "Mysticism"
 msgstr "Misticismo"
@@ -4665,130 +4671,130 @@ msgid "Necromancy"
 msgstr "Negromanzia"
 
 msgid "Advanced Archery"
-msgstr "Tiro con L'arco Avanzato"
+msgstr "Tiro con L'Arco Avanzato"
 
 msgid "Advanced Pathfinding"
-msgstr ""
+msgstr "Orientamento Avanzato"
 
 msgid "Basic Archery"
-msgstr ""
+msgstr "Tiro con l'Arco Normale"
 
 msgid "Basic Pathfinding"
-msgstr ""
+msgstr "Orientamento Normale"
 
 msgid "Expert Pathfinding"
-msgstr ""
+msgstr "Orientamento Esperto"
 
 msgid "Advanced Logistics"
-msgstr ""
+msgstr "Logistica Avanzata"
 
 msgid "Basic Logistics"
-msgstr ""
+msgstr "Logistica Normale"
 
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Esplorazione Normale"
 
 msgid "Expert Archery"
-msgstr ""
+msgstr "Tiro con l'Arco Esperto"
 
 msgid "Expert Logistics"
-msgstr ""
+msgstr "Logistica Esperta"
 
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Diplomazia Avanzata"
 
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Esplorazione Avanzata"
 
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Diplomazia Normale"
 
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Diplomazia Esperta"
 
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Esplorazione Esperta"
 
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Carisma Avanzato"
 
 msgid "Advanced Navigation"
-msgstr ""
+msgstr "Navigazione Avanzata"
 
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Carisma Normale"
 
 msgid "Basic Navigation"
-msgstr ""
+msgstr "Navigazione Normale"
 
 msgid "Expert Navigation"
-msgstr ""
+msgstr "Navigazione Esperta"
 
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Sagezza Avanzata"
 
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Misticismo Normale"
 
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Sagezza Normale"
 
 msgid "Expert Leadership"
-msgstr ""
+msgstr "Carisma Esperto"
 
 msgid "Expert Wisdom"
-msgstr ""
+msgstr "Sagezza Esperta"
 
 msgid "Advanced Luck"
-msgstr ""
+msgstr "Fortuna Avanzata"
 
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Misticismo Avanzato"
 
 msgid "Basic Luck"
-msgstr ""
+msgstr "Fortuna Normale"
 
 msgid "Expert Luck"
-msgstr ""
+msgstr "Fortuna Esperta"
 
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Misticismo Esperto"
 
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Balistica Avanzata"
 
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Vista Avanzata"
 
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Balistica Normale"
 
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Vista Normale"
 
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Balistica Esperta"
 
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Negromanzia Avanzata"
 
 msgid "Basic Estates"
-msgstr "Immobili Normali"
+msgstr "Investimenti Normali"
 
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Negromanzia Normale"
 
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Vista Esperta"
 
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Negromanzia Esperta"
 
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Investimenti Avanzati"
 
 msgid "Expert Estates"
-msgstr ""
+msgstr "Investimenti Esperti"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
@@ -5908,10 +5914,10 @@ msgid "Power Liches"
 msgstr "Salme Potenti"
 
 msgid "Bone Dragon"
-msgstr "Drago d'ossa"
+msgstr "Drago d'Ossa"
 
 msgid "Bone Dragons"
-msgstr "Draghi d'ossa"
+msgstr "Draghi d'Ossa"
 
 msgid "Rogue"
 msgstr "Furfante"
@@ -6083,7 +6089,7 @@ msgid "No enemy retaliation"
 msgstr "Nessun contrattacco nemico"
 
 msgid "HP drain"
-msgstr "Prosciuga PF"
+msgstr "Prosciuga Pt. Ferita"
 
 msgid "Cloud attack"
 msgstr "Attacco di Nuvola"
