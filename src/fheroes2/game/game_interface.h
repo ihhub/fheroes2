@@ -92,6 +92,8 @@ namespace Interface
             return redraw;
         }
 
+        void Redraw( int f = 0 );
+
         const fheroes2::Rect & GetScrollLeft() const
         {
             return scrollLeft;
@@ -111,8 +113,6 @@ namespace Interface
         {
             return scrollBottom;
         }
-
-        void Redraw( int f = 0 );
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
