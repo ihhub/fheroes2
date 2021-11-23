@@ -35,7 +35,7 @@
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
 // clang-format off
-// shellapi.h must be included after windwos.h
+// shellapi.h must be included after windows.h
 #include <windows.h>
 #include <shellapi.h>
 // clang-format on

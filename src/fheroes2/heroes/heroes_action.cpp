@@ -854,8 +854,8 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
         else
             // wins defender
             if ( res.DefenderWins() ) {
-                other_hero->IncreaseExperience( res.GetExperienceDefender() );
-            }
+            other_hero->IncreaseExperience( res.GetExperienceDefender() );
+        }
     }
 }
 
@@ -917,8 +917,8 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             else
                 // wins defender
                 if ( res.DefenderWins() && defender ) {
-                    defender->IncreaseExperience( res.GetExperienceDefender() );
-                }
+                defender->IncreaseExperience( res.GetExperienceDefender() );
+            }
         }
         else {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() );
@@ -1251,14 +1251,14 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
         else
             // already know (skip bag artifacts)
             if ( hero.HaveSpell( spell.GetID(), true ) ) {
-                body += _( "\nUnfortunately, you already have knowledge of this spell, so there is nothing more for them to teach you." );
-                Dialog::Message( head, body, Font::BIG, Dialog::OK );
-            }
-            else {
-                AGG::PlaySound( M82::TREASURE );
-                hero.AppendSpellToBook( spell.GetID() );
-                Dialog::SpellInfo( head, body, spell.GetID() );
-            }
+            body += _( "\nUnfortunately, you already have knowledge of this spell, so there is nothing more for them to teach you." );
+            Dialog::Message( head, body, Font::BIG, Dialog::OK );
+        }
+        else {
+            AGG::PlaySound( M82::TREASURE );
+            hero.AppendSpellToBook( spell.GetID() );
+            Dialog::SpellInfo( head, body, spell.GetID() );
+        }
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1285,16 +1285,16 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
         else
             // check present skill
             if ( hero.HasSecondarySkill( skill.Skill() ) ) {
-                msg.append( _( "As you approach, she turns and speaks.\n\"You already know that which I would teach you. I can help you no further.\"" ) );
-                Dialog::Message( MP2::StringObject( objectType ), msg, Font::BIG, Dialog::OK );
-            }
-            else {
-                hero.LearnSkill( skill );
+            msg.append( _( "As you approach, she turns and speaks.\n\"You already know that which I would teach you. I can help you no further.\"" ) );
+            Dialog::Message( MP2::StringObject( objectType ), msg, Font::BIG, Dialog::OK );
+        }
+        else {
+            hero.LearnSkill( skill );
 
-                msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
-                StringReplace( msg, "%{skill}", skill_name );
-                Dialog::SecondarySkillInfo( MP2::StringObject( objectType ), msg, skill, hero );
-            }
+            msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
+            StringReplace( msg, "%{skill}", skill_name );
+            Dialog::SecondarySkillInfo( MP2::StringObject( objectType ), msg, skill, hero );
+        }
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1380,11 +1380,11 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
                 else
                     // check skill level for wisdom
                     if ( Skill::Level::EXPERT > hero.GetLevelSkill( Skill::Secondary::WISDOM ) )
-                        msg = _( "Unfortunately, you do not have the wisdom to understand the spell, and you are unable to learn it." );
-                    else {
-                        valid = true;
-                        msg = _( "Upon defeating the monsters, you decipher an ancient glyph on the wall, telling the secret of the spell." );
-                    }
+                    msg = _( "Unfortunately, you do not have the wisdom to understand the spell, and you are unable to learn it." );
+                else {
+                    valid = true;
+                    msg = _( "Upon defeating the monsters, you decipher an ancient glyph on the wall, telling the secret of the spell." );
+                }
 
                 if ( valid ) {
                     Dialog::SpellInfo( spell.GetName(), msg, spell, true );
@@ -1433,13 +1433,13 @@ void ActionToMagicWell( Heroes & hero, int32_t dst_index )
     else
         // check already visited
         if ( hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
-            Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
-        }
-        else {
-            hero.SetVisited( dst_index );
-            hero.SetSpellPoints( max );
-            Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A drink from the well has restored your spell points to maximum." ), Font::BIG, Dialog::OK );
-        }
+        Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
+    }
+    else {
+        hero.SetVisited( dst_index );
+        hero.SetSpellPoints( max );
+        Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A drink from the well has restored your spell points to maximum." ), Font::BIG, Dialog::OK );
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -1764,89 +1764,86 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
         else
             // 4,5 - need have skill wisard or leadership,
             if ( 3 < cond && cond < 6 ) {
-                const Skill::Secondary & skill = tile.QuantitySkill();
+            const Skill::Secondary & skill = tile.QuantitySkill();
 
-                if ( hero.HasSecondarySkill( skill.Skill() ) ) {
-                    msg = _( "You've found the artifact: " );
-                    msg.append( art.GetName() );
-                    AGG::PlaySound( M82::TREASURE );
-                    Dialog::ArtifactInfo( "", msg, art, Dialog::OK );
-                    result = true;
+            if ( hero.HasSecondarySkill( skill.Skill() ) ) {
+                msg = _( "You've found the artifact: " );
+                msg.append( art.GetName() );
+                AGG::PlaySound( M82::TREASURE );
+                Dialog::ArtifactInfo( "", msg, art, Dialog::OK );
+                result = true;
+            }
+            else {
+                if ( skill.Skill() == Skill::Secondary::WISDOM ) {
+                    msg = _(
+                        "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
+                }
+                else if ( skill.Skill() == Skill::Secondary::LEADERSHIP ) {
+                    msg = _(
+                        "You've come across the spartan quarters of a retired soldier. The soldier tells you that he is willing to pass on the %{art} to the first true leader he meets." );
                 }
                 else {
-                    if ( skill.Skill() == Skill::Secondary::WISDOM ) {
-                        msg = _(
-                            "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
-                    }
-                    else if ( skill.Skill() == Skill::Secondary::LEADERSHIP ) {
-                        msg = _(
-                            "You've come across the spartan quarters of a retired soldier. The soldier tells you that he is willing to pass on the %{art} to the first true leader he meets." );
-                    }
-                    else {
-                        // Did you add a new condition? If yes add a proper if-else branch.
-                        assert( 0 );
-                        msg = _(
-                            "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
-                        StringReplace( msg, "%{skill}", skill.GetName() );
-                    }
+                    // Did you add a new condition? If yes add a proper if-else branch.
+                    assert( 0 );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
+                    StringReplace( msg, "%{skill}", skill.GetName() );
+                }
 
-                    StringReplace( msg, "%{art}", art.GetName() );
-                    Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::OK );
+                StringReplace( msg, "%{art}", art.GetName() );
+                Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::OK );
+            }
+        }
+        else
+            // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
+            if ( 5 < cond && cond < 14 ) {
+            bool battle = true;
+            Army army( tile );
+            const Troop * troop = army.GetFirstValid();
+
+            if ( troop ) {
+                if ( Monster::ROGUE == troop->GetID() )
+                    Dialog::Message( _( "Artifact" ),
+                                     _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
+                                     Font::BIG, Dialog::OK );
+                else {
+                    msg = _(
+                        "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
+                    StringReplace( msg, "%{monster}", troop->GetName() );
+                    battle = ( Dialog::YES == Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
-            else
-                // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
-                if ( 5 < cond && cond < 14 ) {
-                    bool battle = true;
-                    Army army( tile );
-                    const Troop * troop = army.GetFirstValid();
 
-                    if ( troop ) {
-                        if ( Monster::ROGUE == troop->GetID() )
-                            Dialog::Message(
-                                _( "Artifact" ),
-                                _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
-                                Font::BIG, Dialog::OK );
-                        else {
-                            msg = _(
-                                "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                            StringReplace( msg, "%{monster}", troop->GetName() );
-                            battle = ( Dialog::YES == Dialog::Message( _( "Artifact" ), msg, Font::BIG, Dialog::YES | Dialog::NO ) );
-                        }
-                    }
-
-                    if ( battle ) {
-                        // new battle
-                        Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                        if ( res.AttackerWins() ) {
-                            hero.IncreaseExperience( res.GetExperienceAttacker() );
-                            result = true;
-                            msg = _( "Victorious, you take your prize, the %{art}." );
-                            StringReplace( msg, "%{art}", art.GetName() );
-                            AGG::PlaySound( M82::TREASURE );
-                            Dialog::ArtifactInfo( "", msg, art.GetID() );
-                        }
-                        else {
-                            BattleLose( hero, res, true );
-                        }
-                    }
-                    else {
-                        Dialog::Message( _( "Artifact" ), _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Font::BIG,
-                                         Dialog::OK );
-                    }
+            if ( battle ) {
+                // new battle
+                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+                if ( res.AttackerWins() ) {
+                    hero.IncreaseExperience( res.GetExperienceAttacker() );
+                    result = true;
+                    msg = _( "Victorious, you take your prize, the %{art}." );
+                    StringReplace( msg, "%{art}", art.GetName() );
+                    AGG::PlaySound( M82::TREASURE );
+                    Dialog::ArtifactInfo( "", msg, art.GetID() );
                 }
                 else {
-                    if ( Artifact::GetScenario( art ) )
-                        msg = Artifact::GetScenario( art );
-                    else {
-                        msg = _( "You've found the artifact: " );
-                        msg += '\n';
-                        msg.append( art.GetName() );
-                    }
-                    AGG::PlaySound( M82::TREASURE );
-                    Dialog::ArtifactInfo( _( "Artifact" ), msg, art );
-                    result = true;
+                    BattleLose( hero, res, true );
                 }
+            }
+            else {
+                Dialog::Message( _( "Artifact" ), _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Font::BIG, Dialog::OK );
+            }
+        }
+        else {
+            if ( Artifact::GetScenario( art ) )
+                msg = Artifact::GetScenario( art );
+            else {
+                msg = _( "You've found the artifact: " );
+                msg += '\n';
+                msg.append( art.GetName() );
+            }
+            AGG::PlaySound( M82::TREASURE );
+            Dialog::ArtifactInfo( _( "Artifact" ), msg, art );
+            result = true;
+        }
 
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
@@ -2155,16 +2152,16 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
     else
         // set guardians
         if ( Settings::Get().ExtWorldAllowSetGuardian() ) {
-            CapturedObject & co = world.GetCapturedObject( dst_index );
-            Troop & troop1 = co.GetTroop();
-            Troop troop2 = troop1;
+        CapturedObject & co = world.GetCapturedObject( dst_index );
+        Troop & troop1 = co.GetTroop();
+        Troop troop2 = troop1;
 
-            // check if it is already guarded by a spell
-            const bool readonly = tile.GetQuantity3() != 0;
+        // check if it is already guarded by a spell
+        const bool readonly = tile.GetQuantity3() != 0;
 
-            if ( Dialog::SetGuardian( hero, troop2, co, readonly ) )
-                troop1.Set( troop2.GetMonster(), troop2.GetCount() );
-        }
+        if ( Dialog::SetGuardian( hero, troop2, co, readonly ) )
+            troop1.Set( troop2.GetMonster(), troop2.GetCount() );
+    }
 
     if ( objectType == MP2::OBJ_LIGHTHOUSE )
         world.CaptureObject( dst_index, hero.GetColor() );

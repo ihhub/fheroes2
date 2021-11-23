@@ -40,8 +40,8 @@ namespace Skill
     int SecondaryPriorityFromRace( int, const std::vector<int> &, uint32_t seed );
 
     const int secskills[]
-        = { Secondary::PATHFINDING, Secondary::ARCHERY,   Secondary::LOGISTICS, Secondary::SCOUTING,   Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP,
-            Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES };
+        = {Secondary::PATHFINDING, Secondary::ARCHERY,   Secondary::LOGISTICS, Secondary::SCOUTING,   Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP,
+           Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES};
 }
 
 u32 Skill::Secondary::GetValues( void ) const
@@ -357,8 +357,8 @@ int Skill::Secondary::GetIndexSprite2( void ) const
 const char * Skill::Secondary::String( int skill )
 {
     const char * str_skill[]
-        = { _( "Pathfinding" ), _( "Archery" ), _( "Logistics" ),  _( "Scouting" ),  _( "Diplomacy" ),  _( "Navigation" ), _( "Leadership" ), _( "Wisdom" ),
-            _( "Mysticism" ),   _( "Luck" ),    _( "Ballistics" ), _( "Eagle Eye" ), _( "Necromancy" ), _( "Estates" ),    "Unknown" };
+        = {_( "Pathfinding" ), _( "Archery" ), _( "Logistics" ),  _( "Scouting" ),  _( "Diplomacy" ),  _( "Navigation" ), _( "Leadership" ), _( "Wisdom" ),
+           _( "Mysticism" ),   _( "Luck" ),    _( "Ballistics" ), _( "Eagle Eye" ), _( "Necromancy" ), _( "Estates" ),    "Unknown"};
 
     switch ( skill ) {
     case PATHFINDING:
@@ -400,15 +400,15 @@ const char * Skill::Secondary::String( int skill )
 std::string Skill::Secondary::GetName( void ) const
 {
     const char * name_skill[]
-        = { _( "Basic Pathfinding" ),  _( "Advanced Pathfinding" ), _( "Expert Pathfinding" ),  _( "Basic Archery" ),      _( "Advanced Archery" ),
-            _( "Expert Archery" ),     _( "Basic Logistics" ),      _( "Advanced Logistics" ),  _( "Expert Logistics" ),   _( "Basic Scouting" ),
-            _( "Advanced Scouting" ),  _( "Expert Scouting" ),      _( "Basic Diplomacy" ),     _( "Advanced Diplomacy" ), _( "Expert Diplomacy" ),
-            _( "Basic Navigation" ),   _( "Advanced Navigation" ),  _( "Expert Navigation" ),   _( "Basic Leadership" ),   _( "Advanced Leadership" ),
-            _( "Expert Leadership" ),  _( "Basic Wisdom" ),         _( "Advanced Wisdom" ),     _( "Expert Wisdom" ),      _( "Basic Mysticism" ),
-            _( "Advanced Mysticism" ), _( "Expert Mysticism" ),     _( "Basic Luck" ),          _( "Advanced Luck" ),      _( "Expert Luck" ),
-            _( "Basic Ballistics" ),   _( "Advanced Ballistics" ),  _( "Expert Ballistics" ),   _( "Basic Eagle Eye" ),    _( "Advanced Eagle Eye" ),
-            _( "Expert Eagle Eye" ),   _( "Basic Necromancy" ),     _( "Advanced Necromancy" ), _( "Expert Necromancy" ),  _( "Basic Estates" ),
-            _( "Advanced Estates" ),   _( "Expert Estates" ) };
+        = {_( "Basic Pathfinding" ),  _( "Advanced Pathfinding" ), _( "Expert Pathfinding" ),  _( "Basic Archery" ),      _( "Advanced Archery" ),
+           _( "Expert Archery" ),     _( "Basic Logistics" ),      _( "Advanced Logistics" ),  _( "Expert Logistics" ),   _( "Basic Scouting" ),
+           _( "Advanced Scouting" ),  _( "Expert Scouting" ),      _( "Basic Diplomacy" ),     _( "Advanced Diplomacy" ), _( "Expert Diplomacy" ),
+           _( "Basic Navigation" ),   _( "Advanced Navigation" ),  _( "Expert Navigation" ),   _( "Basic Leadership" ),   _( "Advanced Leadership" ),
+           _( "Expert Leadership" ),  _( "Basic Wisdom" ),         _( "Advanced Wisdom" ),     _( "Expert Wisdom" ),      _( "Basic Mysticism" ),
+           _( "Advanced Mysticism" ), _( "Expert Mysticism" ),     _( "Basic Luck" ),          _( "Advanced Luck" ),      _( "Expert Luck" ),
+           _( "Basic Ballistics" ),   _( "Advanced Ballistics" ),  _( "Expert Ballistics" ),   _( "Basic Eagle Eye" ),    _( "Advanced Eagle Eye" ),
+           _( "Expert Eagle Eye" ),   _( "Basic Necromancy" ),     _( "Advanced Necromancy" ), _( "Expert Necromancy" ),  _( "Basic Estates" ),
+           _( "Advanced Estates" ),   _( "Expert Estates" )};
 
     return isValid() ? name_skill[( Level() - 1 ) + ( Skill() - 1 ) * 3] : "unknown";
 }
