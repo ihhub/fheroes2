@@ -530,6 +530,11 @@ u32 * Castle::GetDwelling( u32 dw )
 
 void Castle::ActionNewWeek( void )
 {
+    // skip the first week
+    if ( world.CountWeek() < 2 ) {
+        return;
+    }
+
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
@@ -587,6 +592,11 @@ void Castle::ActionNewWeek( void )
 
 void Castle::ActionNewMonth( void )
 {
+    // skip the first month
+    if ( world.GetMonth() < 2 ) {
+        return;
+    }
+
     // population halved
     if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
         for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )

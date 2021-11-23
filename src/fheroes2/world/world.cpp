@@ -648,37 +648,41 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+
         pickRumor();
 
-        if ( BeginMonth() )
+        if ( BeginMonth() ) {
             ++month;
+        }
     }
 
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
-        // reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
-        hero->ResetModes( Heroes::SAVE_MP_POINTS );
-        // replenish spell points of all heroes
-        hero->ReplenishSpellPoints();
-    } );
-
-    // action new day
-    vec_kingdoms.NewDay();
-
-    // action new week
-    if ( BeginWeek() ) {
-        NewWeek();
-        vec_kingdoms.NewWeek();
-    }
-
-    // action new month
+    // first the routine of the new month
     if ( BeginMonth() ) {
         NewMonth();
+
         vec_kingdoms.NewMonth();
+        vec_castles.NewMonth();
+        vec_heroes.NewMonth();
     }
 
+    // then the routine of the new week
+    if ( BeginWeek() ) {
+        NewWeek();
+
+        vec_kingdoms.NewWeek();
+        vec_castles.NewWeek();
+        vec_heroes.NewWeek();
+    }
+
+    // and finally the routine of the new day
+    vec_kingdoms.NewDay();
+    vec_castles.NewDay();
+    vec_heroes.NewDay();
+
     // remove deprecated events
-    if ( day )
-        vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+    assert( day > 0 );
+
+    vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
@@ -694,16 +698,13 @@ void World::NewWeek( void )
     week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
     week_current = week_next;
 
-    if ( 1 < week ) {
-        // update week object
-        for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-            if ( MP2::isWeekLife( ( *it ).GetObject( false ) ) || MP2::OBJ_MONSTER == ( *it ).GetObject() )
-                ( *it ).QuantityUpdate( false );
-
-        // update gray towns
-        for ( auto & castle : vec_castles )
-            if ( castle->GetColor() == Color::NONE )
-                castle->ActionNewWeek();
+    // update objects
+    if ( week > 1 ) {
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+                tile.QuantityUpdate( false );
+            }
+        }
     }
 
     // add events
@@ -716,14 +717,9 @@ void World::NewWeek( void )
 
 void World::NewMonth( void )
 {
-    // skip first month
-    if ( 1 < week && week_current.GetType() == WeekName::MONSTERS )
+    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
-
-    // update gray towns
-    for ( auto & castle : vec_castles )
-        if ( castle->GetColor() == Color::NONE )
-            castle->ActionNewMonth();
+    }
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )

@@ -22,6 +22,7 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
@@ -353,6 +354,21 @@ public:
     Castle * Get( const fheroes2::Point & position ) const;
 
     void Scoute( int ) const;
+
+    void NewDay()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+    }
+
+    void NewWeek()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+    }
+
+    void NewMonth()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
+    }
 
     // begin/end methods so we can iterate through the elements
     std::vector<Castle *>::const_iterator begin() const
