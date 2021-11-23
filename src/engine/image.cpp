@@ -1123,6 +1123,15 @@ namespace fheroes2
         }
     }
 
+    void CopyTransformLayer( const Image & in, Image & out )
+    {
+        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
+            assert( 0 );
+            return;
+        }
+        memcpy( out.transform(), in.transform(), in.width() * in.height() );
+    }
+
     Image CreateBlurredImage( const Image & in, int32_t blurRadius )
     {
         if ( in.empty() )
@@ -1845,15 +1854,6 @@ namespace fheroes2
                 *transformIn = transformId;
             }
         }
-    }
-
-    void ReplaceTransform( const Image & in, Image & out )
-    {
-        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
-            assert( 0 );
-            return;
-        }
-        memcpy( out.transform(), in.transform(), in.width() * in.height() );
     }
 
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy )

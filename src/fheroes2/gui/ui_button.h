@@ -31,7 +31,13 @@ namespace fheroes2
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
+        ButtonBase( const ButtonBase & ) = delete;
+        ButtonBase( ButtonBase && button ) noexcept;
+
         ~ButtonBase() override = default;
+
+        ButtonBase & operator=( const ButtonBase & button ) = delete;
+        ButtonBase & operator=( ButtonBase && button ) noexcept;
 
         bool isEnabled() const;
         bool isDisabled() const;
@@ -60,6 +66,8 @@ namespace fheroes2
         Rect area() const;
 
     protected:
+        void _swap( ButtonBase & button );
+
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
@@ -100,12 +108,13 @@ namespace fheroes2
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
         ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
-        ButtonSprite( ButtonSprite & ) = delete;
-        ButtonSprite( ButtonSprite && o ) noexcept;
+        ButtonSprite( const ButtonSprite & ) = delete;
+        ButtonSprite( ButtonSprite && button ) noexcept;
 
         ~ButtonSprite() override = default;
 
         ButtonSprite & operator=( const ButtonSprite & ) = delete;
+        ButtonSprite & operator=( ButtonSprite && button ) noexcept;
 
         void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
 
@@ -133,7 +142,7 @@ namespace fheroes2
 
         void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
-        void createButton( std::unique_ptr<ButtonBase> & button, int returnValue );
+        void addButton( ButtonSprite && button, int returnValue );
 
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
 
@@ -146,8 +155,6 @@ namespace fheroes2
         int processEvents();
 
     private:
-        void createButton( ButtonBase * button, int returnValue );
-
         std::vector<ButtonBase *> _button;
         std::vector<int> _value;
     };

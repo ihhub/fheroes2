@@ -235,16 +235,13 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     const fheroes2::Sprite & buttonOkIcn = fheroes2::AGG::GetICN( icnId, 1 );
     const fheroes2::Sprite & buttonCancelIcn = fheroes2::AGG::GetICN( icnId, 3 );
 
-    std::unique_ptr<fheroes2::ButtonBase> buttonOk( new fheroes2::ButtonSprite(
-        fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkIcn.height(), buttonOkIcn, fheroes2::AGG::GetICN( icnId, 2 ), display ) ) );
-
-    std::unique_ptr<fheroes2::ButtonBase> buttonCancel( new fheroes2::ButtonSprite(
-        fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelIcn.width(), box.y + box.height - border - buttonCancelIcn.height(), buttonCancelIcn,
-                                        fheroes2::AGG::GetICN( icnId, 4 ), display ) ) );
-
     fheroes2::ButtonGroup btnGroup;
-    btnGroup.createButton( buttonOk, Dialog::OK );
-    btnGroup.createButton( buttonCancel, Dialog::CANCEL );
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkIcn.height(), buttonOkIcn,
+                                                        fheroes2::AGG::GetICN( icnId, 2 ), display ),
+                        Dialog::OK );
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelIcn.width(), box.y + box.height - border - buttonCancelIcn.height(),
+                                                        buttonCancelIcn, fheroes2::AGG::GetICN( icnId, 4 ), display ),
+                        Dialog::CANCEL );
     btnGroup.button( 0 ).disable();
 
     btnGroup.draw();

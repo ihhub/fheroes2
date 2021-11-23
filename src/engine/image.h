@@ -213,6 +213,9 @@ namespace fheroes2
     void Copy( const Image & in, Image & out );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
+    // Copies transform the layer from in to out. Both images must be of the same size.
+    void CopyTransformLayer( const Image & in, Image & out );
+
     Image CreateBlurredImage( const Image & in, int32_t blurRadius );
 
     Sprite CreateContour( const Image & image, uint8_t value );
@@ -254,9 +257,6 @@ namespace fheroes2
 
     // Use this function only when you need to convert pixel value into transform layer
     void ReplaceColorIdByTransformId( Image & image, uint8_t colorId, uint8_t transformId );
-
-    // Replace transform layer of the output image with the values found in the input image. Both images must be of the same size.
-    void ReplaceTransform( const Image & in, Image & out );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );

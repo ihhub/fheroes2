@@ -39,6 +39,31 @@ namespace fheroes2
         , _disabledSprite()
     {}
 
+    ButtonBase::ButtonBase( ButtonBase && button ) noexcept
+        : ButtonBase()
+    {
+        _swap( button );
+    }
+
+    ButtonBase & ButtonBase::operator=( ButtonBase && button ) noexcept
+    {
+        if ( this != &button ) {
+            _swap( button );
+        }
+        return *this;
+    }
+
+    void ButtonBase::_swap( ButtonBase & button )
+    {
+        std::swap( _offsetX, button._offsetX );
+        std::swap( _offsetY, button._offsetY );
+        std::swap( _isPressed, button._isPressed );
+        std::swap( _isEnabled, button._isEnabled );
+        std::swap( _isVisible, button._isVisible );
+        std::swap( _releasedSprite, button._releasedSprite );
+        std::swap( _disabledSprite, button._disabledSprite );
+    }
+
     bool ButtonBase::isEnabled() const
     {
         return _isEnabled;
@@ -214,20 +239,23 @@ namespace fheroes2
         , _disabled( disabled )
     {}
 
-    ButtonSprite::ButtonSprite( ButtonSprite && o ) noexcept
-        : ButtonBase()
+    ButtonSprite::ButtonSprite( ButtonSprite && button ) noexcept
+        : ButtonBase( std::move( button ) )
     {
-        std::swap( _offsetX, o._offsetX );
-        std::swap( _offsetY, o._offsetY );
-        std::swap( _isPressed, o._isPressed );
-        std::swap( _isEnabled, o._isEnabled );
-        std::swap( _isVisible, o._isVisible );
-        std::swap( _releasedSprite, o._releasedSprite );
-        std::swap( _disabledSprite, o._disabledSprite );
+        std::swap( _released, button._released );
+        std::swap( _pressed, button._pressed );
+        std::swap( _disabled, button._disabled );
+    }
 
-        std::swap( _released, o._released );
-        std::swap( _pressed, o._pressed );
-        std::swap( _disabled, o._disabled );
+    ButtonSprite & ButtonSprite::operator=( ButtonSprite && button ) noexcept
+    {
+        if ( this != &button ) {
+            ButtonBase::_swap( button );
+            std::swap( _released, button._released );
+            std::swap( _pressed, button._pressed );
+            std::swap( _disabled, button._disabled );
+        }
+        return *this;
     }
 
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
@@ -312,22 +340,19 @@ namespace fheroes2
 
     void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue )
     {
-        createButton( new Button( offsetX, offsetY, icnId, releasedIndex, pressedIndex ), returnValue );
+        _button.push_back( new Button( offsetX, offsetY, icnId, releasedIndex, pressedIndex ) );
+        _value.emplace_back( returnValue );
     }
 
     void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue )
     {
-        createButton( new ButtonSprite( offsetX, offsetY, released, pressed ), returnValue );
+        _button.push_back( new ButtonSprite( offsetX, offsetY, released, pressed ) );
+        _value.emplace_back( returnValue );
     }
 
-    void ButtonGroup::createButton( std::unique_ptr<ButtonBase> & button, int returnValue )
+    void ButtonGroup::addButton( ButtonSprite && button, int returnValue )
     {
-        createButton( button.release(), returnValue );
-    }
-
-    void ButtonGroup::createButton( ButtonBase * button, int returnValue )
-    {
-        _button.push_back( button );
+        _button.push_back( new ButtonSprite( std::move( button ) ) );
         _value.emplace_back( returnValue );
     }
 
@@ -455,8 +480,7 @@ namespace fheroes2
         }
     }
 
-    ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled*/,
-                                           const Image & background )
+    ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background )
     {
         Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
 
@@ -475,8 +499,7 @@ namespace fheroes2
         return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 
-    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed /*, const Sprite & disabled*/,
-                                       const Image & background )
+    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background )
     {
         const Sprite & shadow = fheroes2::makeShadow( released, fheroes2::Point( -4, 6 ), 3 );
 
