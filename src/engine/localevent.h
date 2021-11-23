@@ -225,12 +225,12 @@ public:
 
     bool MouseCursor( const fheroes2::Rect & rt ) const;
 
-    bool KeyPress( KeySym key ) const;
-
     bool KeyPress() const
     {
         return modes & KEY_PRESSED;
     }
+
+    bool KeyPress( KeySym key ) const;
 
     bool KeyHold() const
     {

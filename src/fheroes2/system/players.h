@@ -107,12 +107,12 @@ public:
     explicit Player( int col = Color::NONE );
     ~Player() override = default;
 
-    bool isPlay( void ) const;
-
     bool isColor( int col ) const
     {
         return col == color;
     }
+
+    bool isPlay( void ) const;
 
     void SetColor( int );
     void SetRace( int );
@@ -123,17 +123,17 @@ public:
 
     int GetControl( void ) const override;
 
-    int GetColor( void ) const
+    int GetColor() const
     {
         return color;
     }
 
-    int GetRace( void ) const
+    int GetRace() const
     {
         return race;
     }
 
-    int GetFriends( void ) const
+    int GetFriends() const
     {
         return friends;
     }

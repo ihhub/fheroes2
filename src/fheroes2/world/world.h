@@ -179,6 +179,13 @@ public:
         return height;
     }
 
+    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const;
+    Maps::Tiles & GetTiles( const int32_t x, const int32_t y );
+    const Maps::Tiles & GetTiles( const int32_t tileId ) const;
+    Maps::Tiles & GetTiles( const int32_t tileId );
+
+    void InitKingdoms( void );
+
     Kingdom & GetKingdom( int color )
     {
         return vec_kingdoms.GetKingdom( color );
@@ -188,13 +195,6 @@ public:
     {
         return vec_kingdoms.GetKingdom( color );
     }
-
-    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const;
-    Maps::Tiles & GetTiles( const int32_t x, const int32_t y );
-    const Maps::Tiles & GetTiles( const int32_t tileId ) const;
-    Maps::Tiles & GetTiles( const int32_t tileId );
-
-    void InitKingdoms( void );
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
     const Castle * getCastle( const fheroes2::Point & tilePosition ) const;

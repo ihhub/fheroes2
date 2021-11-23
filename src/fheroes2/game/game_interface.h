@@ -75,13 +75,9 @@ namespace Interface
     class Basic
     {
     public:
-        static Basic & Get( void )
-        {
-            static Basic basic;
-            return basic;
-        }
+        static Basic & Get();
 
-        bool NeedRedraw( void ) const
+        bool NeedRedraw() const
         {
             return redraw != 0;
         }
@@ -96,56 +92,56 @@ namespace Interface
             return redraw;
         }
 
-        const fheroes2::Rect & GetScrollLeft( void ) const
+        void Redraw( int f = 0 );
+
+        const fheroes2::Rect & GetScrollLeft() const
         {
             return scrollLeft;
         }
 
-        const fheroes2::Rect & GetScrollRight( void ) const
+        const fheroes2::Rect & GetScrollRight() const
         {
             return scrollRight;
         }
 
-        const fheroes2::Rect & GetScrollTop( void ) const
+        const fheroes2::Rect & GetScrollTop() const
         {
             return scrollTop;
         }
 
-        const fheroes2::Rect & GetScrollBottom( void ) const
+        const fheroes2::Rect & GetScrollBottom() const
         {
             return scrollBottom;
         }
 
-        void Redraw( int f = 0 );
-
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
-        GameArea & GetGameArea( void )
+        GameArea & GetGameArea()
         {
             return gameArea;
         }
 
-        Radar & GetRadar( void )
+        Radar & GetRadar()
         {
             return radar;
         }
 
-        IconsPanel & GetIconsPanel( void )
+        IconsPanel & GetIconsPanel()
         {
             return iconsPanel;
         }
 
-        ButtonsArea & GetButtonsArea( void )
+        ButtonsArea & GetButtonsArea()
         {
             return buttonsArea;
         }
 
-        StatusWindow & GetStatusWindow( void )
+        StatusWindow & GetStatusWindow()
         {
             return statusWindow;
         }
 
-        ControlPanel & GetControlPanel( void )
+        ControlPanel & GetControlPanel()
         {
             return controlPanel;
         }
