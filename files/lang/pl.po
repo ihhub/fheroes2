@@ -3716,7 +3716,7 @@ msgstr "Dotarłeś do szczątek pechowego poszukiwacza"
 msgid "Treasure"
 msgstr "Skarb"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Po przeszukaniu rozdartego ubrania, znajdujesz %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -3921,7 +3921,7 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Pokonawszy potwory, odczytujesz prastary glif na ścianie, dzięki czemu "
 "poznajesz tajemnice zaklęcia."
