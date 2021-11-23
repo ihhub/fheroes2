@@ -92,7 +92,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
-        std::vector<std::pair<int, const Army *>> enemyArmies;
+        std::vector<std::pair<int, const Army *> > enemyArmies;
 
         const int mapSize = world.w() * world.h();
         _mapObjects.clear();

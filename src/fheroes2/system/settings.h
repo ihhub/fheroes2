@@ -106,12 +106,7 @@ public:
 
     Settings & operator=( const Settings & ) = delete;
 
-    static Settings & Get()
-    {
-        static Settings conf;
-
-        return conf;
-    }
+    static Settings & Get();
 
     bool Read( const std::string & );
     bool Save( const std::string & ) const;
@@ -265,6 +260,8 @@ public:
         game_type = type;
     }
 
+    bool isCampaignGameType() const;
+
     Players & GetPlayers()
     {
         return players;
@@ -285,7 +282,6 @@ public:
         players.current_color = color;
     }
 
-    bool isCampaignGameType() const;
     int PreferablyCountPlayers() const;
     void SetPreferablyCountPlayers( int );
 

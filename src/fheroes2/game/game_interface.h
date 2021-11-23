@@ -75,11 +75,7 @@ namespace Interface
     class Basic
     {
     public:
-        static Basic & Get( void )
-        {
-            static Basic basic;
-            return basic;
-        }
+        static Basic & Get();
 
         bool NeedRedraw() const
         {

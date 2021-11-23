@@ -99,6 +99,12 @@ void Interface::Basic::SetHideInterface( bool f )
     gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
 }
 
+Interface::Basic & Interface::Basic::Get()
+{
+    static Basic basic;
+    return basic;
+}
+
 void Interface::Basic::Redraw( int force )
 {
     const Settings & conf = Settings::Get();

@@ -124,6 +124,13 @@ Settings::~Settings()
         BinarySave();
 }
 
+Settings & Settings::Get()
+{
+    static Settings conf;
+
+    return conf;
+}
+
 bool Settings::Read( const std::string & filename )
 {
     TinyConfig config( '=', '#' );
