@@ -72,6 +72,7 @@ namespace fheroes2
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
 
+    private:
         int32_t _offsetX;
         int32_t _offsetY;
 
