@@ -135,7 +135,7 @@ namespace
 
     const std::vector<CyclingColorSet> & GetCyclingColors()
     {
-        static const std::vector<CyclingColorSet> cycleSet = { { 0xD6, 4, false }, { 0xDA, 4, false }, { 0xE7, 5, true }, { 0xEE, 4, false } };
+        static const std::vector<CyclingColorSet> cycleSet = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}};
         return cycleSet;
     }
 }
