@@ -355,16 +355,22 @@ namespace
         return str;
     }
 
-    std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    std::string ShowBarrierInfo( const Maps::Tiles & tile )
     {
-        std::string str = BarrierColor::String( tile.QuantityColor() );
+        std::string str = _( "%{color} Barrier" );
+        StringReplace( str, "%{color}", BarrierColor::String( tile.QuantityColor() ) );
         str += ' ';
 
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        return str;
+    }
 
-        str.append( MP2::StringObject( objectType ) );
+    std::string ShowTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    {
+        std::string str = _( "%{color} Tent" );
+        StringReplace( str, "%{color}", TentColor::String( tile.QuantityColor() ) );
+        str += ' ';
 
-        if ( MP2::OBJ_TRAVELLERTENT == objectType && kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
+        if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             str.append( "\n \n" );
             str.append( _( "(already visited)" ) );
         }
@@ -637,8 +643,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
             break;
 
         case MP2::OBJ_BARRIER:
+            name_object = ShowBarrierInfo( tile );
+            break;
+
         case MP2::OBJ_TRAVELLERTENT:
-            name_object = ShowBarrierTentInfo( tile, kingdom );
+            name_object = ShowTentInfo( tile, kingdom );
             break;
 
         default:

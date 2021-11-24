@@ -116,21 +116,47 @@ const char * BarrierColor::String( int val )
 {
     switch ( val ) {
     case AQUA:
-        return _( "Aqua" );
+        return _( "barrier|Aqua" );
     case BLUE:
-        return _( "Blue" );
+        return _( "barrier|Blue" );
     case BROWN:
-        return _( "Brown" );
+        return _( "barrier|Brown" );
     case GOLD:
-        return _( "Gold" );
+        return _( "barrier|Gold" );
     case GREEN:
-        return _( "Green" );
+        return _( "barrier|Green" );
     case ORANGE:
-        return _( "Orange" );
+        return _( "barrier|Orange" );
     case PURPLE:
-        return _( "Purple" );
+        return _( "barrier|Purple" );
     case RED:
-        return _( "Red" );
+        return _( "barrier|Red" );
+    default:
+        break;
+    }
+
+    return "None";
+}
+
+const char * TentColor::String( int val )
+{
+    switch ( val ) {
+    case AQUA:
+        return _( "tent|Aqua" );
+    case BLUE:
+        return _( "tent|Blue" );
+    case BROWN:
+        return _( "tent|Brown" );
+    case GOLD:
+        return _( "tent|Gold" );
+    case GREEN:
+        return _( "tent|Green" );
+    case ORANGE:
+        return _( "tent|Orange" );
+    case PURPLE:
+        return _( "tent|Purple" );
+    case RED:
+        return _( "tent|Red" );
     default:
         break;
     }
