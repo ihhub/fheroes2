@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-23 03:43+0100\n"
-"PO-Revision-Date: 2021-11-25 06:43+0100\n"
+"PO-Revision-Date: 2021-11-25 18:33+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -5931,16 +5931,19 @@ msgid "Mine"
 msgstr "Gruve"
 
 msgid "Burma shave."
-msgstr "Barberskum"
+msgstr "Hensatte hester vil kunne ende opp som pålegg."
 
 msgid "Next sign 50 miles."
 msgstr "Neste skilt om 50 mil."
 
 msgid "See Rock City."
-msgstr "Besøk Rocke-byen."
+msgstr ""
+"Gratulerer! \n"
+"Du er besøkende nr. 32167. \n"
+"Ta en tørr kjeks."
 
 msgid "This space for rent."
-msgstr "Til utleie."
+msgstr "Skilt til utleie."
 
 msgid "No object"
 msgstr "Ingen objekt"
@@ -8150,7 +8153,6 @@ msgstr ""
 "Sender helten til en hvilken som helst by eller borg i heltens nåværende "
 "besittelse."
 
-# Bydør?
 msgid "Town Gate"
 msgstr "Byport"
 
@@ -8389,7 +8391,6 @@ msgstr "Beinrestene til Herr Myrder er begravd i grunnmuren til arenaen."
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "En svartdrage klarer å slå ut en titan en hvilken som helst dag i uka."
 
-# Orignal H2-fr: Un Dragon noir peut vaincre un Titan à tout moment.
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Han sa til henne: Bla, bla, bla... og så sa hun: Bla, bla, bla..."
 
