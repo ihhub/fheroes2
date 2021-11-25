@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-23 03:43+0100\n"
-"PO-Revision-Date: 2021-11-25 18:33+0100\n"
+"PO-Revision-Date: 2021-11-25 18:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -5930,12 +5930,14 @@ msgstr "Gullgruve"
 msgid "Mine"
 msgstr "Gruve"
 
+# Hensetting av hester forbudt. Bortsleping skjer på eiers regning.
 msgid "Burma shave."
 msgstr "Hensatte hester vil kunne ende opp som pålegg."
 
 msgid "Next sign 50 miles."
 msgstr "Neste skilt om 50 mil."
 
+# Vennligst les på den andre siden av skiltet.
 msgid "See Rock City."
 msgstr ""
 "Gratulerer! \n"
