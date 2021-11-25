@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-23 03:43+0100\n"
-"PO-Revision-Date: 2021-11-25 05:52+0100\n"
+"PO-Revision-Date: 2021-11-25 06:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -133,7 +133,6 @@ msgstr "Vandøde blant styrkene -1"
 msgid "View %{name}"
 msgstr "Vis %{name}"
 
-# Spre? Omorganisere
 msgid "Move or right click to redistribute %{name}"
 msgstr "Flytt eller høyreklikk for å omfordele %{name}"
 
@@ -396,7 +395,6 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Vis info om %{monster}"
 
-# Bare skyt?
 msgid "Shoot %{monster}"
 msgstr "Skyt på %{monster}"
 
@@ -500,11 +498,9 @@ msgstr "%{color} bruker en trolldom: %{spell}"
 msgid "%{name} skip their turn."
 msgstr "%{name} hopper over turen."
 
-# if only 1 monster: "... passe ..."
 msgid "%{name} wait their turn."
 msgstr "%{name} avventer."
 
-# if only 1 monster: "... attend"
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} gjør %{damage} skadepoeng."
 
@@ -551,19 +547,15 @@ msgstr "%{spell} gjør %{value} skadepoeng på én levende skapning."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} gjør %{value} skadepoeng på alle levende skapninger."
 
-# Umulig å vite kjønn på tropp.
 msgid "The Unicorns' attack blinds the %{name}!"
 msgstr "Enhjørningenes angrep gjør troppen med %{name} blind!"
 
-# se over
 msgid "The Medusas' gaze turns the %{name} to stone!"
 msgstr "Medusaenes blikk forsteiner troppen med %{name}!"
 
-# Se over
 msgid "The Mummies' curse falls upon the %{name}!"
 msgstr "Mumienes forbannelse treffer troppen med %{name}!"
 
-# Se over
 msgid "The %{name} are paralyzed by the Cyclopes!"
 msgstr "Troppen med %{name} blir lamslått av kyklopene!"
 
@@ -583,7 +575,7 @@ msgstr "God kampånd gjør at troppen med %{monster} får en ny tur."
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Dårlig kampånd gjør at troppen med %{monster} går i panikk."
 
-# Kan være det venstre tårnet eller Ballisten... Foreløpig best er Slottets ballist gjør
+# Kan være det venstre tårnet eller Ballisten. Foreløpig best er Borgens ballist gjør...
 msgid "%{tower} does %{damage} damage."
 msgstr "Borgens %{tower} gjør %{damage} skadepoeng."
 
@@ -666,7 +658,7 @@ msgstr "Monstre"
 msgid "N/A"
 msgstr "Ingen"
 
-# Det venstre tårnet eller Ballisten.
+# Brukes til borgbygging også. Det venstre tårnet eller Ballisten.
 msgid "Left Turret"
 msgstr "Venstre tårn"
 
@@ -775,7 +767,7 @@ msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
-"Du vil møte fire allierte fiender i en rett fram kamp om råvarer og skatter. "
+"Du vil møte fire allierte fiender i en ren kamp om råvarer og skatter. "
 "Overta alle fiendtlige borger for å vinne."
 
 msgid ""
@@ -859,7 +851,6 @@ msgstr "Landsherrene"
 msgid "Dragon Master"
 msgstr "Dragemesteren"
 
-# Større ære gir ikke samme meningen.
 msgid "Greater Glory"
 msgstr "Heder og ære"
 
@@ -976,7 +967,6 @@ msgstr "Hjertet til fordervelsen"
 msgid "The Giant's Pass"
 msgstr "Kjempens fjellovergang"
 
-# Lokale herrer? Fasiliteter? Fungere? Underlegg?
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
@@ -1338,7 +1328,6 @@ msgstr "%{building} gir %{monster}."
 msgid "Requires:"
 msgstr "Krever:"
 
-# Ikke mulig å bygge.
 msgid "Cannot build. Already built here this turn."
 msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
 
@@ -1476,7 +1465,7 @@ msgstr "Steinring"
 msgid "Upg. Stonehenge"
 msgstr "Oppg. steinring"
 
-# hesteslette heller enn hesteeng.
+# hesteslette heller enn hesteeng. Enkelte språk bruker plen.
 msgid "Fenced Meadow"
 msgstr "Inngjerdet slette"
 
@@ -1580,7 +1569,7 @@ msgstr "Oppg. kongegrav"
 msgid "Laboratory"
 msgstr "Laboratorium"
 
-# Offerplass? Offeralter? Tempel? Helligdom? Nekromantiker by?
+# Sortekunstnerens by. Offerplass? Offeralter? Tempel? Helligdom?
 msgid "Shrine"
 msgstr "Mørkets alter"
 
@@ -1635,7 +1624,6 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Beinhaugen øker veksten av skjeletter med %{count} i uka."
 
-# Tyvenes forbund, forening
 msgid "Thieves' Guild"
 msgstr "Tyvenes forbund"
 
@@ -1666,11 +1654,11 @@ msgstr "Telt"
 msgid "Captain's Quarters"
 msgstr "Kapteinens kvarter"
 
-# Magikerforbund uten level, som offisiell fransk oversettelse. Første nivå uten forkortelse ser bedre ut.
+# Første nivå uten forkortelse ser både bedre ut og gjør at man vet hva forkortelsen er for senere uten å måtte høyre klikke osv.
 msgid "Mage Guild, Level 1"
 msgstr "Magikerforbund"
 
-# nivå eller level?
+# nivå eller level? etasje?
 msgid "Mage Guild, Level 2"
 msgstr "Magikerforb., level 2"
 
@@ -1824,9 +1812,9 @@ msgstr "Vis inntekt"
 msgid "Swap Heroes"
 msgstr "Bytt helter"
 
-# Hvilken funksjon?
+# Hvilken funksjon? Overskrift for to helter som møtes?
 msgid "Meeting Heroes"
-msgstr "Heltene som møtes"
+msgstr "Møtende helter"
 
 msgid "View Hero"
 msgstr "Vis helt"
@@ -1973,7 +1961,7 @@ msgstr ""
 "Styrkene dine kan oppgraderes, men det vil koste deg dyrt. Ønsker du å "
 "oppgradere dem?"
 
-# Avskjedige. Permittere. Sende bort
+# Avskjedige
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Er du sikker på at du vil bortvise denne troppen?"
 
@@ -2148,11 +2136,11 @@ msgstr ""
 "størrelse"
 
 # Evt Spillere
-# Motspillere og motstandere høres ut som dine egne motspillere og motstandere. Evt Konkurrenter men det høres feil setting ut.
+# Motspillere og motstandere høres ut som dine egne motspillere og motstandere. Evt Konkurrenter men det høres feil setting ut. Motspillere osv passer dårlig når du har lagkamerater blant dem.
 msgid "Opponents"
 msgstr "Deltakere"
 
-# Slag? Type?
+# Slag? Type? Klasse er feil.
 msgid "Class"
 msgstr "Helteslag"
 
@@ -3196,7 +3184,7 @@ msgstr "Scenario:"
 msgid "Game Difficulty:"
 msgstr "Vanskelighetsgrad:"
 
-# Evt spillere
+# Evt spillere. Må funke for både motspillere og lagkamerater.
 msgid "Opponents:"
 msgstr "Deltakere:"
 
@@ -3710,9 +3698,8 @@ msgstr ""
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr "Beklageligvis ser du ut til å ha mangel på penger akkurat nå."
 
-# én?
 msgid "Do you wish to buy one?"
-msgstr "Ønsker du å kjøpe en?"
+msgstr "Ønsker du å kjøpe én?"
 
 msgid "%{count} / day"
 msgstr "%{count} / dag"
@@ -3728,10 +3715,8 @@ msgstr "Noen av styrkene dine har falt om bord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr ""
-"Av fornærmelse over at du kunne avslå tilbudet deres, angriper hærstyrken "
-"deg."
+"Utav fornærmelse over at du avslo tilbudet deres, angriper skapningene deg!"
 
-# overrasket, satt ut av, sjokkert.
 msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
 "Do you wish to pursue and engage them?"
@@ -3740,11 +3725,10 @@ msgstr ""
 "de begynner å stikke av.\n"
 "Ønsker du å følge etter dem og gå til kamp?"
 
-# endevende?
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr ""
 "Etter å ha ransaket den forlatte leirplassen oppdager du et skjult lager med "
-"skatter."
+"verdisaker."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -4076,7 +4060,7 @@ msgid ""
 "of chicken entrails."
 msgstr ""
 "En heksedoktor av en ork bor i hytta, og han beriker kunnskapen din om magi "
-"ved å vise deg hvordan man kaster steiner, tolker jærtegn og leser "
+"ved å vise deg hvordan man kaster steiner, tolker jærtegn og finner "
 "hemmelighetene i kyllinginnvoller."
 
 msgid ""
@@ -4502,7 +4486,6 @@ msgstr ""
 msgid "The pit of mud bubbles for a minute and then lies still."
 msgstr "Pytten bobler litt i et minutt før den stilner til."
 
-# Enstemmig alle samtidig
 msgid ""
 "As you approach the bubbling pit of mud, creatures begin to climb out and "
 "position themselves around it. In unison they say: \"Mother Earth would like "
@@ -4666,13 +4649,12 @@ msgstr ""
 "En slurk fra kilden skal egentlig gi deg dobbelt så mye mana, men du har det "
 "allerede."
 
-# på lager? litt merkelig
 msgid ""
 "A drink from the spring fills your blood with magic! You have twice your "
 "normal spell points in reserve."
 msgstr ""
-"En slurk fra kilden fyller blodet ditt med magi! Du har dobbelt så mye mana "
-"som normalt på lager."
+"En slurk fra kilden får blodet ditt til å strømme av magi! Du har nå dobbelt "
+"så mye mana som du har til vanlig."
 
 msgid ""
 "Recognizing you, the butler refuses to admit you. \"The master,\" he says, "
@@ -5757,7 +5739,7 @@ msgstr "Ridder"
 msgid "Barbarian"
 msgstr "Barbar"
 
-# Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til de andre rasene. Feks. Trollkvinne(en) "navn".
+# Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til de andre rasene. Feks. Trollkvinne(en) "heltenavn".
 msgid "Sorceress"
 msgstr "Trollkjerring"
 
@@ -5766,8 +5748,8 @@ msgstr "Trollmann"
 
 # Magiker blir allerede brukt om mage:
 # Wizard kommer av wise og betegner en som har studert mye for å bli flink.
-# Vismann og visdame når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
-# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd, alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.) Merk: Tryllekunstner er profesjonen som gjør synsbedrageri osv.
+# Vurder vismann og visdame når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
+# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd, alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.) Hvitkunstner siden de er på den gode siden og slags motsetning til sortekunstnerne. Merk: Tryllekunstner er profesjonen som gjør synsbedrageri osv.
 msgid "Wizard"
 msgstr "Magimester"
 
@@ -6037,6 +6019,7 @@ msgid "Tree of Knowledge"
 msgstr "Kunnskapstre"
 
 # Sjaman?
+# Kvinnelig
 msgid "Witch Doctor's Hut"
 msgstr "Heksedoktorens hytte"
 
@@ -6230,7 +6213,7 @@ msgstr "Tilfeldig ultimat gjenstand"
 msgid "Idol"
 msgstr "Gudestatue"
 
-# Helligdom? Sanktuarium? Alter? Tempel?
+# Sirkel? Ring?
 msgid "Shrine of the First Circle"
 msgstr "Tempel av den første sirkelen"
 
@@ -6332,7 +6315,7 @@ msgstr "Bueskytter"
 msgid "Archers"
 msgstr "Bueskyttere"
 
-# Denne oversettelsen brukes i D&D
+# Denne oversettelsen brukes i norsk D&D
 msgid "Ranger"
 msgstr "Jeger"
 
@@ -6644,7 +6627,7 @@ msgstr "Vampyrherre"
 msgid "Vampire Lords"
 msgstr "Vampyrherrer"
 
-# Ser ut som konger og kommer fra mausoleum/kongegrav. Bedre enn hekselik. Lich betyr lik opprinnelig.
+# Ser ut som konger og kommer fra mausoleum/kongegrav. Bedre enn hekselik som virker litt kvinnelig. Konge beholder det som hankjønn. Lich betyr lik opprinnelig.
 msgid "Lich"
 msgstr "Heksekonge"
 
@@ -6882,7 +6865,7 @@ msgstr "De tre Anduran-gjenstandene blir på magisk vis om til én."
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} øker kunnskapen din med %{count}."
 
-# ypperste?
+# ypperste? beste?
 msgid "Ultimate Book of Knowledge"
 msgstr "Den ultimate kunnskapsboka"
 
@@ -7904,9 +7887,8 @@ msgstr "Antimagi"
 
 # en enkelt? flere?
 msgid "Prevents harmful magic against the selected creatures."
-msgstr "Forhindrer skadelig magi mot de utvalgte skapningene."
+msgstr "Forhindrer skadelig magi mot den utvalgte troppen."
 
-# Trolldoms-opphevelse?
 msgid "Dispel Magic"
 msgstr ""
 "Magi-\n"
@@ -8026,9 +8008,8 @@ msgstr ""
 "Drage-\n"
 "slakter"
 
-# Dårlig grammatikk/setningsflyt?
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "En voldsom økning blir gitt til en styrke når den angriper drager."
+msgstr "En tropp får sitt angrep voldsomt forsterket mot drager."
 
 msgid "Blood Lust"
 msgstr "Blodlyst"
@@ -8055,9 +8036,9 @@ msgid ""
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
-"Skaper en innbilning av en tropp som kopierer en av dine eksisterende "
-"krigere. Dette synsbedraget skader like mye som den ekte krigeren, men "
-"skulle det bli angrepet så fordufter det."
+"Tryller fram en illusjonstropp av samme slaget som en av dine eksisterende "
+"tropper. Denne falske troppen skader like mye som en ekte, men skulle den ta "
+"noe som helst skade så forsvinner den."
 
 msgid "Halves damage received from ranged attacks for a single unit."
 msgstr "Halverer skade som mottas fra skuddangrep for en enkelt kriger."
