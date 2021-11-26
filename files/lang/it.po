@@ -5325,7 +5325,7 @@ msgstr "Sfinge"
 msgid "Troll Bridge"
 msgstr "Ponte dei Troll"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Capanna della Strega"
 
 msgid "Xanadu"

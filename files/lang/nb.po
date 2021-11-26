@@ -6017,7 +6017,7 @@ msgstr "Sfinks"
 msgid "Troll Bridge"
 msgstr "Trollbru"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Heksehytte"
 
 msgid "Xanadu"
