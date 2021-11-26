@@ -793,7 +793,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
         const bool isScouteView = isFriend || isVisibleFromCrystalBall;
 
         dst_pt.x = cur_rt.x - 1;
-        dst_pt.y += 18;
+        dst_pt.y += 23;
 
         Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
