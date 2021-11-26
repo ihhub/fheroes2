@@ -699,8 +699,8 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
                         text.draw( cx + chunk - text.width() - offset, cy + 23, display );
                     }
                     else {
-                        const int offsetY = 30 - monster.height();
-                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x(), cy + offsetY + monster.y() );
+                        const int offsetY = 28 - monster.height();
+                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
                         text.draw( cx - text.width() / 2, cy + 29, display );
                     }
                     cx += chunk;
