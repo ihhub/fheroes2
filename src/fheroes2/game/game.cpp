@@ -361,7 +361,7 @@ void Game::EnvironmentSoundMixer()
     }
 
     // Sort positions by distance to the center.
-    std::sort( positions.begin(), positions.end(),
+    std::stable_sort( positions.begin(), positions.end(),
                []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
     const double maxDistance = std::sqrt( maxOffset * maxOffset + maxOffset * maxOffset );
