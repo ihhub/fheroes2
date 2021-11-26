@@ -5957,7 +5957,7 @@ msgstr "Sfinks"
 msgid "Troll Bridge"
 msgstr "Most trolli"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Chatka wiedźmy"
 
 msgid "Xanadu"

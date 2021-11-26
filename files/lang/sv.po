@@ -5754,7 +5754,7 @@ msgstr "Sfinx"
 msgid "Troll Bridge"
 msgstr "Trollbro"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Häxhydda"
 
 msgid "Xanadu"

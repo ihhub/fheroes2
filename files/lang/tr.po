@@ -5152,7 +5152,7 @@ msgstr ""
 msgid "Troll Bridge"
 msgstr ""
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr ""
 
 msgid "Xanadu"

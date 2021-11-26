@@ -6133,7 +6133,7 @@ msgstr "Sphinx"
 msgid "Troll Bridge"
 msgstr "Pont"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Cabane de la sorcière"
 
 msgid "Xanadu"
