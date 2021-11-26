@@ -303,7 +303,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 #endif
             uint8_t fillColor = 0;
 
-            switch ( tile.GetObject( revealHeroes ) ) {
+            switch ( tile.GetObject( true ) ) {
             case MP2::OBJ_HEROES: {
                 if ( visibleTile || revealHeroes ) {
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
