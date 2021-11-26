@@ -2490,8 +2490,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 {
     std::string monsters;
     std::string monsters_upgrade;
-    std::string msg1 = defaultMessage;
-    std::string msg2 = defaultMessage;
+    std::string msg1;
+    std::string msg2;
 
     std::vector<Monster *> mons;
 
@@ -2518,6 +2518,9 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
     }
     case MP2::OBJ_STABLES: {
         assert( !defaultMessage.empty() );
+        msg1 = defaultMessage;
+        msg2 = defaultMessage;
+
         monsToUpgrade = { Monster( Monster::CAVALRY ) };
         break;
     }
