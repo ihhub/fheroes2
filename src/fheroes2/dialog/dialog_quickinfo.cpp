@@ -359,7 +359,6 @@ namespace
     {
         std::string str = _( "%{color} Barrier" );
         StringReplace( str, "%{color}", BarrierColor::String( tile.QuantityColor() ) );
-        str += ' ';
 
         return str;
     }
@@ -368,7 +367,6 @@ namespace
     {
         std::string str = _( "%{color} Tent" );
         StringReplace( str, "%{color}", TentColor::String( tile.QuantityColor() ) );
-        str += ' ';
 
         if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             str.append( "\n \n" );
