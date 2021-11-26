@@ -680,9 +680,10 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
         if ( !compact )
             cx += chunk / 2;
 
-        fheroes2::Text text;
-        /*text.set( Font::SMALL );*/
+
         fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Text text;
 
         for ( const_iterator it = begin(); it != end(); ++it ) {
             if ( ( *it )->isValid() ) {
