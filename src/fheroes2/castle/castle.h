@@ -121,7 +121,7 @@ public:
     Castle( s32, s32, int rs );
     ~Castle() override = default;
 
-    void LoadFromMP2( StreamBuf );
+    void LoadFromMP2( std::vector<uint8_t> & data );
 
     Captain & GetCaptain( void );
     const Captain & GetCaptain( void ) const;
@@ -140,7 +140,12 @@ public:
     CastleHeroes GetHeroes( void ) const;
 
     int GetRace( void ) const;
-    const std::string & GetName( void ) const;
+
+    const std::string & GetName() const;
+
+    // This method must be called only at the time of map loading and only for castles with empty names.
+    void setName( const std::set<std::string> & usedNames );
+
     int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
