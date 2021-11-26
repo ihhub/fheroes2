@@ -374,7 +374,7 @@ void Game::EnvironmentSoundMixer()
     for ( const fheroes2::Point & pos : positions ) {
         const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
         if ( channel < reserved_vols.size() ) {
-            const int32_t distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
+            const double distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
             const int32_t volume = static_cast<int32_t>( ( ( maxDistance - distance ) / maxDistance ) * maxVolume + minVolumeOnMaxDistance );
 
             if ( volume > reserved_vols[channel] ) {
