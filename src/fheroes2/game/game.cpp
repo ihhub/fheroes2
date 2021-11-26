@@ -348,10 +348,12 @@ void Game::EnvironmentSoundMixer()
     const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
+    const int32_t maxOffset = 3;
+
     // Get all valid positions within 7 x 7 area.
     std::vector<fheroes2::Point> positions;
-    for ( int32_t y = -3; y <= 3; ++y ) {
-        for ( int32_t x = -3; x <= 3; ++x ) {
+    for ( int32_t y = -maxOffset; y <= maxOffset; ++y ) {
+        for ( int32_t x = -maxOffset; x <= maxOffset; ++x ) {
             if ( Maps::isValidAbsPoint( x + abs_pt.x, y + abs_pt.y ) ) {
                 positions.emplace_back( x, y );
             }
@@ -362,12 +364,18 @@ void Game::EnvironmentSoundMixer()
     std::sort( positions.begin(), positions.end(),
                []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
+    const double maxDistance = std::sqrt( maxOffset * maxOffset + maxOffset * maxOffset );
+    double maxVolume = Mixer::MaxVolume();
+    double minVolumeOnMaxDistance = maxVolume * 0.1; // 10% from maximum volume
+
+    maxVolume -= minVolumeOnMaxDistance; // need to remove these 10% from max value as we're going to add it later
+    minVolumeOnMaxDistance += 0.5; // this is done to make casting faster. We know that the value is always positive.
+
     for ( const fheroes2::Point & pos : positions ) {
         const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
         if ( channel < reserved_vols.size() ) {
-            // volume calculation
-            const int length = std::max( std::abs( pos.x ), std::abs( pos.y ) );
-            const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
+            const int32_t distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
+            const int32_t volume = static_cast<int32_t>( ( ( maxDistance - distance ) / maxDistance ) * maxVolume + minVolumeOnMaxDistance );
 
             if ( volume > reserved_vols[channel] ) {
                 reserved_vols[channel] = volume;
