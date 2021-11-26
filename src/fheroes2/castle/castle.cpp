@@ -57,21 +57,21 @@ namespace
     const size_t maximumCastles = 72;
 
     const std::array<const char *, maximumCastles> defaultCastleNames
-        = { gettext_noop( "Blackridge" ), gettext_noop( "Pinehurst" ), gettext_noop( "Woodhaven" ), gettext_noop( "Hillstone" ), gettext_noop( "Whiteshield" ),
-            gettext_noop( "Bloodreign" ), gettext_noop( "Dragontooth" ), gettext_noop( "Greywind" ), gettext_noop( "Blackwind" ), gettext_noop( "Portsmith" ),
-            gettext_noop( "Middle Gate" ), gettext_noop( "Tundara" ), gettext_noop( "Vulcania" ), gettext_noop( "Sansobar" ), gettext_noop( "Atlantium" ),
-            gettext_noop( "Baywatch" ), gettext_noop( "Wildabar" ), gettext_noop( "Fountainhead" ), gettext_noop( "Vertigo" ), gettext_noop( "Winterkill" ),
-            gettext_noop( "Nightshadow" ), gettext_noop( "Sandcaster" ), gettext_noop( "Lakeside" ), gettext_noop( "Olympus" ), gettext_noop( "Brindamoor" ),
-            gettext_noop( "Burlock" ), gettext_noop( "Xabran" ), gettext_noop( "Dragadune" ), gettext_noop( "Alamar" ), gettext_noop( "Kalindra" ),
-            gettext_noop( "Blackfang" ), gettext_noop( "Basenji" ), gettext_noop( "Algary" ), gettext_noop( "Sorpigal" ), gettext_noop( "New Dawn" ),
-            gettext_noop( "Erliquin" ), gettext_noop( "Avone" ), gettext_noop( "Big Oak" ), gettext_noop( "Hampshire" ), gettext_noop( "Chandler" ),
-            gettext_noop( "South Mill" ), gettext_noop( "Weed Patch" ), gettext_noop( "Roc Haven" ), gettext_noop( "Avalon" ), gettext_noop( "Antioch" ),
-            gettext_noop( "Brownston" ), gettext_noop( "Weddington" ), gettext_noop( "Whittingham" ), gettext_noop( "Westfork" ), gettext_noop( "Hilltop" ),
-            gettext_noop( "Yorksford" ), gettext_noop( "Sherman" ), gettext_noop( "Roscomon" ), gettext_noop( "Elk's Head" ), gettext_noop( "Cathcart" ),
-            gettext_noop( "Viper's Nest" ), gettext_noop( "Pig's Eye" ), gettext_noop( "Blacksford" ), gettext_noop( "Burton" ), gettext_noop( "Blackburn" ),
-            gettext_noop( "Lankershire" ), gettext_noop( "Lombard" ), gettext_noop( "Timberhill" ), gettext_noop( "Fenton" ), gettext_noop( "Troy" ),
-            gettext_noop( "Forder Oaks" ), gettext_noop( "Meramec" ), gettext_noop( "Quick Silver" ), gettext_noop( "Westmoor" ), gettext_noop( "Willow" ),
-            gettext_noop( "Sheltemburg" ), gettext_noop( "Corackston" ) };
+        = { gettext_noop( "Blackridge" ),   gettext_noop( "Pinehurst" ),   gettext_noop( "Woodhaven" ),    gettext_noop( "Hillstone" ),  gettext_noop( "Whiteshield" ),
+            gettext_noop( "Bloodreign" ),   gettext_noop( "Dragontooth" ), gettext_noop( "Greywind" ),     gettext_noop( "Blackwind" ),  gettext_noop( "Portsmith" ),
+            gettext_noop( "Middle Gate" ),  gettext_noop( "Tundara" ),     gettext_noop( "Vulcania" ),     gettext_noop( "Sansobar" ),   gettext_noop( "Atlantium" ),
+            gettext_noop( "Baywatch" ),     gettext_noop( "Wildabar" ),    gettext_noop( "Fountainhead" ), gettext_noop( "Vertigo" ),    gettext_noop( "Winterkill" ),
+            gettext_noop( "Nightshadow" ),  gettext_noop( "Sandcaster" ),  gettext_noop( "Lakeside" ),     gettext_noop( "Olympus" ),    gettext_noop( "Brindamoor" ),
+            gettext_noop( "Burlock" ),      gettext_noop( "Xabran" ),      gettext_noop( "Dragadune" ),    gettext_noop( "Alamar" ),     gettext_noop( "Kalindra" ),
+            gettext_noop( "Blackfang" ),    gettext_noop( "Basenji" ),     gettext_noop( "Algary" ),       gettext_noop( "Sorpigal" ),   gettext_noop( "New Dawn" ),
+            gettext_noop( "Erliquin" ),     gettext_noop( "Avone" ),       gettext_noop( "Big Oak" ),      gettext_noop( "Hampshire" ),  gettext_noop( "Chandler" ),
+            gettext_noop( "South Mill" ),   gettext_noop( "Weed Patch" ),  gettext_noop( "Roc Haven" ),    gettext_noop( "Avalon" ),     gettext_noop( "Antioch" ),
+            gettext_noop( "Brownston" ),    gettext_noop( "Weddington" ),  gettext_noop( "Whittingham" ),  gettext_noop( "Westfork" ),   gettext_noop( "Hilltop" ),
+            gettext_noop( "Yorksford" ),    gettext_noop( "Sherman" ),     gettext_noop( "Roscomon" ),     gettext_noop( "Elk's Head" ), gettext_noop( "Cathcart" ),
+            gettext_noop( "Viper's Nest" ), gettext_noop( "Pig's Eye" ),   gettext_noop( "Blacksford" ),   gettext_noop( "Burton" ),     gettext_noop( "Blackburn" ),
+            gettext_noop( "Lankershire" ),  gettext_noop( "Lombard" ),     gettext_noop( "Timberhill" ),   gettext_noop( "Fenton" ),     gettext_noop( "Troy" ),
+            gettext_noop( "Forder Oaks" ),  gettext_noop( "Meramec" ),     gettext_noop( "Quick Silver" ), gettext_noop( "Westmoor" ),   gettext_noop( "Willow" ),
+            gettext_noop( "Sheltemburg" ),  gettext_noop( "Corackston" ) };
 }
 
 Castle::Castle()
