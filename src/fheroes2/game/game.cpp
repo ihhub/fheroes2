@@ -359,7 +359,8 @@ void Game::EnvironmentSoundMixer()
     }
 
     // Sort positions by distance to the center.
-    std::sort( positions.begin(), positions.end(), []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
+    std::sort( positions.begin(), positions.end(),
+               []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
     for ( const fheroes2::Point & pos : positions ) {
         const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
