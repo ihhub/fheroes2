@@ -348,20 +348,28 @@ void Game::EnvironmentSoundMixer()
     const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
-    // scan 7x7 area in focus
-    for ( int32_t yy = abs_pt.y - 3; yy <= abs_pt.y + 3; ++yy ) {
-        for ( int32_t xx = abs_pt.x - 3; xx <= abs_pt.x + 3; ++xx ) {
-            if ( Maps::isValidAbsPoint( xx, yy ) ) {
-                const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( xx, yy ) );
-                if ( channel < reserved_vols.size() ) {
-                    // volume calculation
-                    const int length = std::max( std::abs( xx - abs_pt.x ), std::abs( yy - abs_pt.y ) );
-                    const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
+    // Get all valid positions within 7 x 7 area.
+    std::vector<fheroes2::Point> positions;
+    for ( int32_t y = -3; y <= 3; ++y ) {
+        for ( int32_t x = -3; x <= 3; ++x ) {
+            if ( Maps::isValidAbsPoint( x + abs_pt.x, y + abs_pt.y ) ) {
+                positions.emplace_back( x, y );
+            }
+        }
+    }
 
-                    if ( volume > reserved_vols[channel] ) {
-                        reserved_vols[channel] = volume;
-                    }
-                }
+    // Sort positions by distance to the center.
+    std::sort( positions.begin(), positions.end(), []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
+
+    for ( const fheroes2::Point & pos : positions ) {
+        const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
+        if ( channel < reserved_vols.size() ) {
+            // volume calculation
+            const int length = std::max( std::abs( pos.x ), std::abs( pos.y ) );
+            const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
+
+            if ( volume > reserved_vols[channel] ) {
+                reserved_vols[channel] = volume;
             }
         }
     }
