@@ -689,7 +689,7 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
                 if ( 0 == first && count ) {
                     const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
                     text.set( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ), 
-                        { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                              { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
                     if ( compact ) {
                         const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
                         int offset = ( chunk - monster.width() - text.width() ) / 2;
