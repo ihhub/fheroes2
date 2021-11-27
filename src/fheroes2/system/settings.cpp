@@ -49,7 +49,7 @@ namespace
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
-        // UNUSED = 0x00000008,
+        GLOBAL_RENDER_VSYNC = 0x00000008,
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
 
@@ -311,6 +311,15 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "v-sync" ) ) {
+        if ( config.StrParams( "v-sync" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_RENDER_VSYNC );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_RENDER_VSYNC );
+        }
+    }
+
     BinaryLoad();
 
     if ( video_mode.width > 0 && video_mode.height > 0 ) {
@@ -426,6 +435,9 @@ std::string Settings::String() const
 
     os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
     os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
+    os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -1045,7 +1057,7 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: offer to continue the game afer victory condition" );
     default:
         break;
-    };
+    }
 
     return std::string();
 }
@@ -1324,6 +1336,11 @@ void Settings::BinaryLoad()
 bool Settings::FullScreen() const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::isVSyncEnabled() const
+{
+    return opt_global.Modes( GLOBAL_RENDER_VSYNC );
 }
 
 bool Settings::isFirstGameRun() const
