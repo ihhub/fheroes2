@@ -108,7 +108,7 @@ namespace Interface
         void EventOpenFocus( void ) const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;
-        fheroes2::GameMode EventGameInfo() const;
+        static fheroes2::GameMode EventGameInfo();
         void EventSystemDialog() const;
         void EventNextHero( void );
         void EventNextTown( void );

@@ -308,7 +308,7 @@ void Interface::Basic::EventPuzzleMaps( void ) const
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-fheroes2::GameMode Interface::Basic::EventGameInfo() const
+fheroes2::GameMode Interface::Basic::EventGameInfo()
 {
     if ( Settings::Get().isCampaignGameType() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
