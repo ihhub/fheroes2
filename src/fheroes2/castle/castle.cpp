@@ -2287,7 +2287,7 @@ const std::string & Castle::GetName( void ) const
 
 void Castle::setName( const std::set<std::string> & usedNames )
 {
-    assert( name.empty() && !usedNames.empty() );
+    assert( name.empty() );
 
     std::vector<const char *> shuffledCastleNames( defaultCastleNames.begin(), defaultCastleNames.end() );
 
