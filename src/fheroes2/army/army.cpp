@@ -1264,7 +1264,7 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 {
     const uint32_t count = troops.GetCount();
     const int offsetX = lineWidth / 6;
-    const int offsetY = compact ? 31 : 45;
+    const int offsetY = compact ? 31 : 49;
 
     if ( count < 3 ) {
         troops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView );
