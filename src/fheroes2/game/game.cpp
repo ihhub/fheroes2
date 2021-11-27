@@ -345,6 +345,11 @@ u32 & Game::MapsAnimationFrame( void )
 // play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
+    size_t availableChannels = Mixer::getChannelCount();
+    if ( availableChannels == 0 ) {
+        return;
+    }
+
     const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
@@ -376,6 +381,14 @@ void Game::EnvironmentSoundMixer()
         if ( channel < reserved_vols.size() ) {
             const double distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
             const int32_t volume = static_cast<int32_t>( ( ( maxDistance - distance ) / maxDistance ) * maxVolume + minVolumeOnMaxDistance );
+
+            if ( reserved_vols[channel] == 0 ) {
+                if ( availableChannels == 0 ) {
+                    // No new channel can be added.
+                    continue;
+                }
+                --availableChannels;
+            }
 
             if ( volume > reserved_vols[channel] ) {
                 reserved_vols[channel] = volume;
