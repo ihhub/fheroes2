@@ -821,7 +821,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 EventPuzzleMaps();
             // info game
             else if ( HotKeyPressEvent( Game::EVENT_INFOGAME ) )
-                EventGameInfo();
+                res = EventGameInfo();
             // cast spell
             else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
                 EventCastSpell();
