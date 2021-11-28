@@ -241,6 +241,8 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     // message loop
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        result = btnGroups.processEvents();
+
         if ( selector.QueueEventProcessing() ) {
             u32 new_count = Color::Count( selector.recipients );
 
@@ -272,8 +274,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
             btnGroups.draw();
             display.render();
         }
-
-        result = btnGroups.processEvents();
     }
 
     if ( Dialog::OK == result ) {
