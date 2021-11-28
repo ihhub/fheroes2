@@ -512,8 +512,8 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    const fheroes2::StandardWindow frameborder( 290, 252 );
-    const fheroes2::Rect & area = frameborder.activeArea();
+    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
+    const fheroes2::Rect & area = frameborder->activeArea();
 
     int result = Dialog::ZERO;
 
@@ -533,15 +533,16 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     const int32_t border = 10;
     const int icnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
-    const fheroes2::Sprite & buttonOkIcn = fheroes2::AGG::GetICN( icnId, 1 );
-    const fheroes2::Sprite & buttonCancelIcn = fheroes2::AGG::GetICN( icnId, 3 );
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( icnId, 1 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( icnId, 3 );
 
     fheroes2::ButtonGroup btnGroup;
-    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkIcn.height(), buttonOkIcn,
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
                                                         fheroes2::AGG::GetICN( icnId, 2 ), display ),
                         Dialog::OK );
-    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelIcn.width(), area.y + area.height - border - buttonCancelIcn.height(),
-                                                        buttonCancelIcn, fheroes2::AGG::GetICN( icnId, 4 ), display ),
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
+                                                        area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+                                                        fheroes2::AGG::GetICN( icnId, 4 ), display ),
                         Dialog::CANCEL );
     btnGroup.draw();
 
@@ -558,6 +559,9 @@ bool ActionSpellTownPortal( Heroes & hero )
         listbox.Redraw();
         display.render();
     }
+
+    // restore background *before* the spell animation to avoid rendering issues
+    frameborder.reset();
 
     // store
     if ( result == Dialog::OK )

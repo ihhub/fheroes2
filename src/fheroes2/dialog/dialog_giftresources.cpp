@@ -232,15 +232,16 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     const int32_t border = 10;
     const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
-    const fheroes2::Sprite & buttonOkIcn = fheroes2::AGG::GetICN( icnId, 1 );
-    const fheroes2::Sprite & buttonCancelIcn = fheroes2::AGG::GetICN( icnId, 3 );
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( icnId, 1 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( icnId, 3 );
 
     fheroes2::ButtonGroup btnGroup;
-    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkIcn.height(), buttonOkIcn,
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkSprite.height(), buttonOkSprite,
                                                         fheroes2::AGG::GetICN( icnId, 2 ), display ),
                         Dialog::OK );
-    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelIcn.width(), box.y + box.height - border - buttonCancelIcn.height(),
-                                                        buttonCancelIcn, fheroes2::AGG::GetICN( icnId, 4 ), display ),
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelSprite.width(),
+                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite, fheroes2::AGG::GetICN( icnId, 4 ),
+                                                        display ),
                         Dialog::CANCEL );
     btnGroup.button( 0 ).disable();
 

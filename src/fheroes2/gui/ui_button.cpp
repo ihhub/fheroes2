@@ -493,7 +493,8 @@ namespace fheroes2
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( croppedBackground, 0, 0 );
+        Sprite disabledWithBackground( std::move( croppedBackground ) );
+        disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
 
         return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };
@@ -515,7 +516,8 @@ namespace fheroes2
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( croppedBackground, 0, 0 );
+        Sprite disabledWithBackground( std::move( croppedBackground ) );
+        disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
         return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };

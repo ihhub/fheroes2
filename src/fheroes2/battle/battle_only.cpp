@@ -164,7 +164,7 @@ bool Battle::Only::ChangeSettings( void )
     bool allow2 = true;
 
     // hide the shadow from the original EXIT button
-    fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
+    const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( ICN::SYSTEM, 1 );
