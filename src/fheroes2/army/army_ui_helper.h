@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <vector>
+#include "army.h"
 
 namespace fheroes2
 {
