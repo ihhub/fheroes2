@@ -26,6 +26,7 @@
 
 #include "agg_image.h"
 #include "army.h"
+#include "army_ui_helper.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
@@ -681,13 +682,11 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Text text;
-
         for ( const_iterator it = begin(); it != end(); ++it ) {
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
                     const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
-                    text.set( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ),
+                    fheroes2::Text text( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ),
                               { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
                     if ( compact ) {
                         const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
@@ -1250,31 +1249,6 @@ bool Army::isMeleeDominantArmy() const
         }
     }
     return meleeInfantry > other;
-}
-
-/* draw MONS32 sprite in line, first valid = 0, count = 0 */
-void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
-{
-    troops.DrawMons32Line( cx, cy, width, first, count, Skill::Level::EXPERT, false, true );
-}
-
-void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact, bool isScouteView )
-{
-    const uint32_t count = troops.GetCount();
-    const int offsetX = lineWidth / 6;
-    const int offsetY = compact ? 31 : 49;
-
-    if ( count < 3 ) {
-        troops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView );
-    }
-    else {
-        const int firstLineTroopCount = 2;
-        const int secondLineTroopCount = count - firstLineTroopCount;
-        const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
-
-        troops.DrawMons32Line( posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView );
-        troops.DrawMons32Line( posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView );
-    }
 }
 
 NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )

@@ -24,6 +24,7 @@
 
 #include "agg_image.h"
 #include "army.h"
+#include "army_ui_helper.h"
 #include "castle.h"
 #include "castle_ui.h"
 #include "cursor.h"
@@ -795,7 +796,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
         dst_pt.x = cur_rt.x - 1;
         dst_pt.y += 21;
 
-        Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
+        fheroes2::DrawArmy::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
     else {
         text.set( _( "Unknown" ), smallWhiteFont );
@@ -999,11 +1000,11 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
+        fheroes2::DrawArmy::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
     }
     else {
         // show limited
-        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false, true );
+        fheroes2::DrawArmy::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false, true );
     }
 
     display.render();
