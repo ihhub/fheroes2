@@ -692,7 +692,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
     // castle name
     text.set( castle.GetName(), smallWhiteFont );
     dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
-    dst_pt.y = cur_rt.y + 2;
+    dst_pt.y = cur_rt.y + 3;
     text.draw( dst_pt.x, dst_pt.y, display );
 
     // castle icon
@@ -1000,7 +1000,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        fheroes2::DrawArmy::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
+        fheroes2::DrawArmy::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
     }
     else {
         // show limited
