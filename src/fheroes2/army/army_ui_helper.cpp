@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "army.h"
 #include "army_ui_helper.h"
 #include "skill.h"
 

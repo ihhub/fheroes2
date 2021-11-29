@@ -22,8 +22,6 @@
 
 #include <vector>
 
-#include "army.h"
-
 namespace fheroes2
 {
     class DrawArmy
