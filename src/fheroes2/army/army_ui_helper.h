@@ -27,7 +27,7 @@ namespace fheroes2
     class DrawArmy
     {
     public:
-        static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
+        static void DrawMons32Line( const Troops &, int32_t, int32_t, uint32_t, uint32_t = 0, uint32_t = 0 );
         static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
                                       bool isScouteView = true );
     };

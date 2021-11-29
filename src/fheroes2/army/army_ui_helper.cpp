@@ -23,7 +23,7 @@
 #include "skill.h"
 
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */
-void fheroes2::DrawArmy::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
+void fheroes2::DrawArmy::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count )
 {
     troops.DrawMons32Line( cx, cy, width, first, count, Skill::Level::EXPERT, false, true );
 }
