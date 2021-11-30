@@ -366,13 +366,6 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObject
     return MapsIndexesFilteredObject( results, objectType, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
-{
-    Indexes results = getAroundIndexes( center );
-    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
-    return results;
-}
-
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
     Indexes results = getAroundIndexes( center );

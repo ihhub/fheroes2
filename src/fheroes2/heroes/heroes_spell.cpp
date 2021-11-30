@@ -365,30 +365,54 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     }
 
     const int32_t center = hero.GetIndex();
-    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
+    const int32_t worldWidth = world.w();
+    const int32_t centerX = center % worldWidth;
+    const int32_t centerY = center / worldWidth;
 
-    // find water
-    int32_t dst_water = -1;
-    MapsIndexes freeTiles = Maps::GetFreeIndexesAroundTile( center );
-    std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
-        const fheroes2::Point & leftPoint = Maps::GetPoint( left );
-        const fheroes2::Point & rightPoint = Maps::GetPoint( right );
-        const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-        const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-        const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-        const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+    const int tilePassabilty = world.GetTiles( center ).GetPassable();
+    std::vector<int32_t> possibleBoatPositions;
+    if ( ( tilePassabilty & Direction::RIGHT ) != 0 && Maps::isValidAbsPoint( centerX + 1, centerY ) ) {
+        possibleBoatPositions.emplace_back( center + 1 );
+    }
 
-        return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-    } );
+    if ( ( tilePassabilty & Direction::LEFT ) != 0 && Maps::isValidAbsPoint( centerX - 1, centerY ) ) {
+        possibleBoatPositions.emplace_back( center - 1 );
+    }
 
-    for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
+    if ( ( tilePassabilty & Direction::TOP ) != 0 && Maps::isValidAbsPoint( centerX, centerY - 1 ) ) {
+        possibleBoatPositions.emplace_back( center - worldWidth );
+    }
+
+    if ( ( tilePassabilty & Direction::BOTTOM ) != 0 && Maps::isValidAbsPoint( centerX, centerY + 1 ) ) {
+        possibleBoatPositions.emplace_back( center + worldWidth );
+    }
+
+    if ( ( tilePassabilty & Direction::TOP_RIGHT ) != 0 && Maps::isValidAbsPoint( centerX + 1, centerY - 1 ) ) {
+        possibleBoatPositions.emplace_back( center - worldWidth + 1 );
+    }
+
+    if ( ( tilePassabilty & Direction::TOP_LEFT ) != 0 && Maps::isValidAbsPoint( centerX - 1, centerY - 1 ) ) {
+        possibleBoatPositions.emplace_back( center - worldWidth - 1 );
+    }
+
+    if ( ( tilePassabilty & Direction::BOTTOM_RIGHT ) != 0 && Maps::isValidAbsPoint( centerX + 1, centerY + 1 ) ) {
+        possibleBoatPositions.emplace_back( center + worldWidth + 1 );
+    }
+
+    if ( ( tilePassabilty & Direction::BOTTOM_LEFT ) != 0 && Maps::isValidAbsPoint( centerX - 1, centerY + 1 ) ) {
+        possibleBoatPositions.emplace_back( center + worldWidth - 1 );
+    }
+
+    int32_t boatDestination = -1;
+    for ( const int32_t tileId : possibleBoatPositions ) {
+        const Maps::Tiles & tile = world.GetTiles( tileId );
+        if ( tile.isWater() && tile.isClearGround() ) {
+            boatDestination = tileId;
             break;
         }
     }
 
-    if ( !Maps::isValidAbsIndex( dst_water ) ) {
+    if ( !Maps::isValidAbsIndex( boatDestination ) ) {
         Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
         return false;
     }
@@ -398,7 +422,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         if ( Maps::isValidAbsIndex( *it ) ) {
             const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
             if ( distance > 1 ) {
-                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, boatDestination, true, true );
                 Game::ObjectFadeAnimation::PerformFadeTask();
 
                 return true;
