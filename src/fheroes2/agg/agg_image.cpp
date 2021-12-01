@@ -197,10 +197,96 @@ namespace
 
     void generateFrenchAlphabet()
     {
+        // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            _icnVsSprite[icnId].resize( 96 );
+        }
+
+        // Normal font
+        std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
+
+        font[3].resize( font[79].width(), font[79].height() + 3 );
+        font[3].reset();
+        fheroes2::Copy( font[79], 0, 0, font[3], 0, 3, font[79].width(), font[79].height() );
+        // generate ^ on the top.
+        fheroes2::Copy( font[3], 2, 3, font[3], 3, 0, 1, 1 );
+        fheroes2::Copy( font[3], 4, 3, font[3], 4, 0, 1, 1 );
+        fheroes2::Copy( font[3], 2, 3, font[3], 5, 0, 1, 1 );
+        fheroes2::Copy( font[3], 2, 3, font[3], 2, 1, 1, 1 );
+        fheroes2::Copy( font[3], 4, 3, font[3], 3, 1, 1, 1 );
+        fheroes2::Copy( font[3], 4, 3, font[3], 5, 1, 1, 1 );
+        fheroes2::Copy( font[3], 2, 3, font[3], 6, 1, 1, 1 );
+        font[3].setPosition( font[79].x(), font[79].y() - 3 );
+
+        font[4].resize( font[85].width(), font[85].height() + 3 );
+        font[4].reset();
+        fheroes2::Copy( font[85], 0, 0, font[4], 0, 3, font[85].width(), font[85].height() );
+        fheroes2::Copy( font[3], 2, 0, font[4], 3, 0, 5, 2 );
+        font[4].setPosition( font[85].x(), font[85].y() - 3 );
+
+        font[6].resize( font[85].width(), font[85].height() + 3 );
+        font[6].reset();
+        // generate -_ on the top.
+        fheroes2::Copy( font[85], 0, 0, font[6], 0, 3, font[85].width(), font[85].height() );
+        fheroes2::Copy( font[6], 2, 3, font[6], 4, 0, 1, 1 );
+        fheroes2::Copy( font[6], 2, 4, font[6], 5, 0, 1, 1 );
+        fheroes2::Copy( font[6], 2, 3, font[6], 5, 1, 1, 1 );
+        fheroes2::Copy( font[6], 2, 4, font[6], 6, 1, 1, 1 );
+        fheroes2::Copy( font[6], 3, 3, font[6], 7, 1, 1, 1 );
+        font[6].setPosition( font[85].x(), font[85].y() - 3 );
+
+        font[10].resize( font[65].width(), font[65].height() + 3 );
+        font[10].reset();
+        fheroes2::Copy( font[65], 0, 0, font[10], 0, 3, font[65].width(), font[65].height() );
+        fheroes2::Copy( font[3], 2, 0, font[10], 2, 0, 5, 2 );
+        font[10].setPosition( font[65].x(), font[65].y() - 3 );
+
+        font[28] = font[73];
+        font[28].image()[2] = 0;
+        font[28].transform()[2] = 1;
+        font[28].image()[2 + font[28].width()] = 0;
+        font[28].transform()[2 + font[28].width()] = 1;
+        fheroes2::Copy( font[28], 3, 0, font[28], 1, 0, 1, 2 );
+
+        font[30] = font[73];
+        font[28].image()[1] = 0;
+        font[28].transform()[1] = 1;
+        font[28].image()[3] = 0;
+        font[28].transform()[3] = 1;
+        font[28].image()[2 + font[28].width()] = 0;
+        font[28].transform()[2 + font[28].width()] = 1;
+        fheroes2::Copy( font[28], 2, 0, font[28], 1, 1, 1, 1 );
+        fheroes2::Copy( font[28], 2, 0, font[28], 3, 1, 1, 1 );
+
+        font[32].resize( font[65].width(), font[65].height() );
+        font[32].reset();
+        fheroes2::Copy( font[65], 0, 0, font[10], 0, 3, font[65].width(), font[65].height() );
+        font[32].setPosition( font[65].x(), font[65].y() - 3 );
+        fheroes2::Copy( font[6], 4, 0, font[32], 3, 0, 4, 2 );
+
+        font[62].resize( font[67].width(), font[67].height() + 2 );
+        font[62].reset();
+        fheroes2::Copy( font[67], 0, 0, font[62], 0, 0, font[67].width(), font[67].height() );
+        fheroes2::Copy( font[67], 2, 1, font[62], 4, 7, 1, 1 );
+        fheroes2::Copy( font[67], 5, 6, font[62], 5, 7, 1, 1 );
+        fheroes2::Copy( font[67], 2, 6, font[62], 6, 7, 1, 1 );
+        fheroes2::Copy( font[67], 2, 1, font[62], 5, 8, 1, 1 );
+        fheroes2::Copy( font[67], 5, 6, font[62], 6, 8, 1, 1 );
+        fheroes2::Copy( font[67], 2, 1, font[62], 4, 9, 1, 1 );
+        fheroes2::Copy( font[67], 5, 6, font[62], 5, 9, 1, 1 );
+        fheroes2::Copy( font[67], 3, 0, font[62], 6, 9, 1, 1 );
+        font[62].setPosition( font[67].x(), font[67].y() );
+
+        font[64] = font[69];
+        font[91] = font[28];
+        font[92] = font[69];
+        font[93] = font[30];
+        font[94] = font[69];
+        font[95] = font[30];
+
+        for ( const int icnId : { ICN::SMALFONT } ) {
             std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
 
-            original.resize( 96 );
             original[3] = original[79];
             original[4] = original[85];
             original[6] = original[85];
