@@ -29,6 +29,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_credits.h"
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
@@ -555,6 +556,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+        Game::ShowCredits();
+
         AGG::ResetMixer();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
         return fheroes2::GameMode::HIGHSCORES;
