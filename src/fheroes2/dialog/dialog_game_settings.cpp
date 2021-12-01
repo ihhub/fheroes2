@@ -185,6 +185,12 @@ namespace
 
                 fheroes2::showMessage( header, body, 0 );
             }
+            else if ( le.MousePressRight( okayButton.area() ) ) {
+                fheroes2::Text header( _( "OK" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+                fheroes2::Text body( _( "Exit this menu." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
         }
 
         return SelectedWindow::Exit;
