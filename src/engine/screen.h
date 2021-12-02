@@ -71,6 +71,11 @@ namespace fheroes2
             return fheroes2::Size();
         }
 
+        virtual void setVSync( const bool )
+        {
+            // Do nothing.
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )

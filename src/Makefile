@@ -64,10 +64,6 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
 endif
 
-ifdef RELEASE
-CFLAGS := $(CFLAGS) -DBUILD_RELEASE
-endif
-
 # platform specific flags
 ifndef PLATFORM
 ifndef OS

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -54,6 +55,23 @@
 namespace
 {
     const size_t maximumCastles = 72;
+
+    const std::array<const char *, maximumCastles> defaultCastleNames
+        = { gettext_noop( "Blackridge" ),   gettext_noop( "Pinehurst" ),   gettext_noop( "Woodhaven" ),    gettext_noop( "Hillstone" ),  gettext_noop( "Whiteshield" ),
+            gettext_noop( "Bloodreign" ),   gettext_noop( "Dragontooth" ), gettext_noop( "Greywind" ),     gettext_noop( "Blackwind" ),  gettext_noop( "Portsmith" ),
+            gettext_noop( "Middle Gate" ),  gettext_noop( "Tundara" ),     gettext_noop( "Vulcania" ),     gettext_noop( "Sansobar" ),   gettext_noop( "Atlantium" ),
+            gettext_noop( "Baywatch" ),     gettext_noop( "Wildabar" ),    gettext_noop( "Fountainhead" ), gettext_noop( "Vertigo" ),    gettext_noop( "Winterkill" ),
+            gettext_noop( "Nightshadow" ),  gettext_noop( "Sandcaster" ),  gettext_noop( "Lakeside" ),     gettext_noop( "Olympus" ),    gettext_noop( "Brindamoor" ),
+            gettext_noop( "Burlock" ),      gettext_noop( "Xabran" ),      gettext_noop( "Dragadune" ),    gettext_noop( "Alamar" ),     gettext_noop( "Kalindra" ),
+            gettext_noop( "Blackfang" ),    gettext_noop( "Basenji" ),     gettext_noop( "Algary" ),       gettext_noop( "Sorpigal" ),   gettext_noop( "New Dawn" ),
+            gettext_noop( "Erliquin" ),     gettext_noop( "Avone" ),       gettext_noop( "Big Oak" ),      gettext_noop( "Hampshire" ),  gettext_noop( "Chandler" ),
+            gettext_noop( "South Mill" ),   gettext_noop( "Weed Patch" ),  gettext_noop( "Roc Haven" ),    gettext_noop( "Avalon" ),     gettext_noop( "Antioch" ),
+            gettext_noop( "Brownston" ),    gettext_noop( "Weddington" ),  gettext_noop( "Whittingham" ),  gettext_noop( "Westfork" ),   gettext_noop( "Hilltop" ),
+            gettext_noop( "Yorksford" ),    gettext_noop( "Sherman" ),     gettext_noop( "Roscomon" ),     gettext_noop( "Elk's Head" ), gettext_noop( "Cathcart" ),
+            gettext_noop( "Viper's Nest" ), gettext_noop( "Pig's Eye" ),   gettext_noop( "Blacksford" ),   gettext_noop( "Burton" ),     gettext_noop( "Blackburn" ),
+            gettext_noop( "Lankershire" ),  gettext_noop( "Lombard" ),     gettext_noop( "Timberhill" ),   gettext_noop( "Fenton" ),     gettext_noop( "Troy" ),
+            gettext_noop( "Forder Oaks" ),  gettext_noop( "Meramec" ),     gettext_noop( "Quick Silver" ), gettext_noop( "Westmoor" ),   gettext_noop( "Willow" ),
+            gettext_noop( "Sheltemburg" ),  gettext_noop( "Corackston" ) };
 }
 
 Castle::Castle()
@@ -77,8 +95,10 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     army.SetCommander( &captain );
 }
 
-void Castle::LoadFromMP2( StreamBuf st )
+void Castle::LoadFromMP2( std::vector<uint8_t> & data )
 {
+    StreamBuf st( data );
+
     switch ( st.get() ) {
     case 0:
         SetColor( Color::BLUE );
@@ -530,6 +550,11 @@ u32 * Castle::GetDwelling( u32 dw )
 
 void Castle::ActionNewWeek( void )
 {
+    // skip the first week
+    if ( world.CountWeek() < 2 ) {
+        return;
+    }
+
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
@@ -587,6 +612,11 @@ void Castle::ActionNewWeek( void )
 
 void Castle::ActionNewMonth( void )
 {
+    // skip the first month
+    if ( world.GetMonth() < 2 ) {
+        return;
+    }
+
     // population halved
     if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
         for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )
@@ -2253,6 +2283,26 @@ int Castle::GetRace( void ) const
 const std::string & Castle::GetName( void ) const
 {
     return name;
+}
+
+void Castle::setName( const std::set<std::string> & usedNames )
+{
+    assert( name.empty() );
+
+    std::vector<const char *> shuffledCastleNames( defaultCastleNames.begin(), defaultCastleNames.end() );
+
+    Rand::Shuffle( shuffledCastleNames );
+
+    for ( const char * originalName : shuffledCastleNames ) {
+        const char * translatedCastleName = _( originalName );
+        if ( usedNames.count( translatedCastleName ) < 1 ) {
+            name = translatedCastleName;
+            return;
+        }
+    }
+
+    // How is it possible that we're out of castle names?
+    assert( 0 );
 }
 
 int Castle::GetControl( void ) const

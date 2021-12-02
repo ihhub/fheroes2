@@ -689,6 +689,9 @@ void Heroes::ActionNewDay( void )
     move_point = GetMaxMovePoints();
     MovePointsScaleFixed();
 
+    // replenish spell points
+    ReplenishSpellPoints();
+
     // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
@@ -1157,7 +1160,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 /* return true is move enable */
 bool Heroes::isMoveEnabled( void ) const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
+    return Modes( ENABLEMOVE ) && path.isValid() && path.hasAllowedSteps();
 }
 
 bool Heroes::CanMove( void ) const
@@ -1412,8 +1415,9 @@ bool Heroes::MayStillMove( const bool ignorePath ) const
     }
 
     if ( path.isValid() && !ignorePath ) {
-        return move_point >= path.getLastMovePenalty();
+        return path.hasAllowedSteps();
     }
+
     return CanMove();
 }
 

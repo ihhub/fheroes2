@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
 "PO-Revision-Date: 2021-11-07 17:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1912,8 +1912,8 @@ msgstr "Acheter créatures"
 msgid "Town Population Information and Statistics"
 msgstr "Information et statistiques sur la population du village"
 
-msgid "Damage"
-msgstr "Dégâts"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "PV"
@@ -1988,6 +1988,9 @@ msgstr "Tirs"
 
 msgid "Shots Left"
 msgstr "Tirs restants"
+
+msgid "Damage"
+msgstr "Dégâts"
 
 msgid "Hit Points"
 msgstr "Points de vie"
@@ -3844,7 +3847,7 @@ msgstr "Vous tombez sur les restes d'un malheureux aventurier."
 msgid "Treasure"
 msgstr "Trésor"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 "En cherchant dans les vêtements en lambeaux, vous trouvez l'artéfact "
 "'%{artifact}'."
@@ -4063,10 +4066,10 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 "Après avoir vaincu les monstres, vous déchiffrez un ancien glyphe sur le "
-"mur, qui révèle le secret du sort."
+"mur, qui révèle le secret du sort - '"
 
 msgid "Sign"
 msgstr "Panneau"
@@ -6015,6 +6018,19 @@ msgstr "Mine d'Or"
 msgid "Mine"
 msgstr "Mine"
 
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Cité des arbres"
+
+msgid "This space for rent."
+msgstr ""
+
 msgid "No object"
 msgstr ""
 
@@ -6117,7 +6133,7 @@ msgstr "Sphinx"
 msgid "Troll Bridge"
 msgstr "Pont"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Cabane de la sorcière"
 
 msgid "Xanadu"
