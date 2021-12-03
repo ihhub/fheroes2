@@ -154,6 +154,8 @@ public:
     bool MusicMIDI() const;
     bool isShowIntro() const;
 
+    bool isVSyncEnabled() const;
+
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 

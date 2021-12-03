@@ -870,6 +870,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 5 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
+
+                // fix transparent corners
+                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
             case ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON:
                 _icnVsSprite[id].resize( 2 );
@@ -878,6 +881,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 7 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
+
+                // fix transparent corners
+                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
             case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
                 _icnVsSprite[id].resize( 2 );
@@ -886,6 +892,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 3 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
+
+                // fix transparent corners
+                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
             case ICN::NON_UNIFORM_EVIL_OKAY_BUTTON:
                 _icnVsSprite[id].resize( 2 );
@@ -894,6 +903,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 5 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
+
+                // fix transparent corners
+                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
             case ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON:
                 _icnVsSprite[id].resize( 2 );
@@ -902,6 +914,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 7 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
+
+                // fix transparent corners
+                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
             case ICN::NON_UNIFORM_EVIL_RESTART_BUTTON:
                 _icnVsSprite[id].resize( 2 );
@@ -910,6 +925,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 3 );
                 _icnVsSprite[id][1].setPosition( 0, 0 );
+
+                // fix transparent corners
+                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
             case ICN::UNIFORM_GOOD_MAX_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
@@ -1441,6 +1459,40 @@ namespace fheroes2
                         FillTransform( original, 57, 108, 51, 2, 1 );
                     }
                 }
+                return true;
+            }
+            case ICN::GOOD_ARMY_BUTTON:
+            case ICN::GOOD_MARKET_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
+                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
+                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+                AddTransparency( _icnVsSprite[id][0], 36 );
+                AddTransparency( _icnVsSprite[id][1], 36 );
+                AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
+
+                return true;
+            }
+            case ICN::EVIL_ARMY_BUTTON:
+            case ICN::EVIL_MARKET_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
+                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
+                AddTransparency( _icnVsSprite[id][0], 36 );
+
+                Sprite pressed = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
+                AddTransparency( pressed, 36 );
+                AddTransparency( pressed, 61 ); // remove the extra brown border
+
+                _icnVsSprite[id][1] = Sprite( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
+                _icnVsSprite[id][1].reset();
+
+                // put back pixels that actually should be black
+                Fill( _icnVsSprite[id][1], 1, 4, 31, 31, 36 );
+                Blit( pressed, _icnVsSprite[id][1] );
+
                 return true;
             }
             default:

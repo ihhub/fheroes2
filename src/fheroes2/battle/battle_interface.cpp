@@ -1556,11 +1556,9 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 void Battle::Interface::RedrawCover()
 {
     const Settings & conf = Settings::Get();
-
-    RedrawCoverStatic();
-
     const Board & board = *Arena::GetBoard();
-    RedrawCoverBoard( conf, board );
+
+    RedrawCoverStatic( conf, board );
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
@@ -1728,7 +1726,7 @@ void Battle::Interface::RedrawCover()
     }
 }
 
-void Battle::Interface::RedrawCoverStatic()
+void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & board )
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
@@ -1745,6 +1743,12 @@ void Battle::Interface::RedrawCoverStatic()
         fheroes2::Blit( cover, _mainSurface, cover.x(), cover.y() );
     }
 
+    if ( conf.BattleShowGrid() ) { // grid
+        for ( const Cell & cell : board ) {
+            fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+        }
+    }
+
     // ground obstacles
     for ( int32_t cellId = 0; cellId < ARENASIZE; ++cellId ) {
         RedrawLowObjects( cellId );
@@ -1753,15 +1757,6 @@ void Battle::Interface::RedrawCoverStatic()
     const Castle * castle = Arena::GetCastle();
     if ( castle )
         RedrawCastle1( *castle );
-}
-
-void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
-{
-    if ( conf.BattleShowGrid() ) { // grid
-        for ( const Cell & cell : board ) {
-            fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
-        }
-    }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( const Cell & cell : board ) {

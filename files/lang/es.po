@@ -6122,7 +6122,7 @@ msgstr "Esfinge"
 msgid "Troll Bridge"
 msgstr "Puente de los Trolls"
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr "Choza de brujas"
 
 msgid "Xanadu"

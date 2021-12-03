@@ -22,6 +22,7 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
@@ -120,7 +121,7 @@ public:
     Castle( s32, s32, int rs );
     ~Castle() override = default;
 
-    void LoadFromMP2( StreamBuf );
+    void LoadFromMP2( std::vector<uint8_t> & data );
 
     Captain & GetCaptain( void );
     const Captain & GetCaptain( void ) const;
@@ -139,7 +140,12 @@ public:
     CastleHeroes GetHeroes( void ) const;
 
     int GetRace( void ) const;
-    const std::string & GetName( void ) const;
+
+    const std::string & GetName() const;
+
+    // This method must be called only at the time of map loading and only for castles with empty names.
+    void setName( const std::set<std::string> & usedNames );
+
     int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
@@ -353,6 +359,21 @@ public:
     Castle * Get( const fheroes2::Point & position ) const;
 
     void Scoute( int ) const;
+
+    void NewDay()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+    }
+
+    void NewWeek()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+    }
+
+    void NewMonth()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
+    }
 
     // begin/end methods so we can iterate through the elements
     std::vector<Castle *>::const_iterator begin() const

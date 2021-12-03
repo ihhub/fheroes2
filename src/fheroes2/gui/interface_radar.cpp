@@ -262,6 +262,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
     const bool revealTowns = revealAll || ( flags == ViewWorldMode::ViewTowns );
     const bool revealArtifacts = revealAll || ( flags == ViewWorldMode::ViewArtifacts );
     const bool revealResources = revealAll || ( flags == ViewWorldMode::ViewResources );
+    const bool revealOnlyVisible = revealAll || ( flags == ViewWorldMode::OnlyVisible );
 
     const fheroes2::Rect & rect = GetArea();
 
@@ -303,7 +304,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 #endif
             uint8_t fillColor = 0;
 
-            switch ( tile.GetObject( revealHeroes ) ) {
+            switch ( tile.GetObject( revealOnlyVisible || revealHeroes ) ) {
             case MP2::OBJ_HEROES: {
                 if ( visibleTile || revealHeroes ) {
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
