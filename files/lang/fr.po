@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2021-11-07 17:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2299,6 +2299,14 @@ msgstr "(déjà visité)"
 msgid "(not visited)"
 msgstr "(non visité)"
 
+#, fuzzy
+msgid "%{color} Barrier"
+msgstr "Joueur %{color}"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "Joueur %{color}"
+
 msgid "Road"
 msgstr "Route"
 
@@ -4048,11 +4056,11 @@ msgstr ""
 "Allez-vous entrer ?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Vous tombez sur la pyramide d'un grand et ancien roi.\n"
-"Une exploration de routine révèle que la pyramide est complètement vide."
+"Après avoir vaincu les monstres, vous déchiffrez un ancien glyphe sur le "
+"mur, qui révèle le secret du sort - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Malheureusement, vous n'avez pas de grimoire pour enregistrer le sort."
@@ -4065,14 +4073,11 @@ msgstr ""
 "sort et vous ne pouvez pas l'apprendre."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Après avoir vaincu les monstres, vous déchiffrez un ancien glyphe sur le "
-"mur, qui révèle le secret du sort - '"
-
-msgid "Sign"
-msgstr "Panneau"
+"Vous tombez sur la pyramide d'un grand et ancien roi.\n"
+"Une exploration de routine révèle que la pyramide est complètement vide."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4277,9 +4282,6 @@ msgstr ""
 "impitoyable. Reconnaissant, il vous récompense pour votre acte de "
 "gentillesse en vous donnant l'artéfact '%{art}'."
 
-msgid "Artifact"
-msgstr "Artéfact"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 "Un lutin vous offre l'artéfact '%{art}' pour le petit prix de %{gold} pièces "
@@ -4294,6 +4296,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Souhaitez-vous acheter cet artéfact ?"
+
+msgid "Artifact"
+msgstr "Artéfact"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5713,14 +5718,68 @@ msgstr "Orange"
 msgid "Purple"
 msgstr "Violet"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Barrière magique"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Barrière magique"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Barrière magique"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Barrière magique"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Barrière magique"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Orange"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Violet"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Barrière magique"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Turquoise"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Bleu"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Marron"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Or"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Vert"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Orange"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Violet"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr "Héros/Stats"
@@ -6177,6 +6236,9 @@ msgstr "Porte"
 
 msgid "Magic Well"
 msgstr "Puits"
+
+msgid "Sign"
+msgstr "Panneau"
 
 msgid "Nothing Special"
 msgstr "Rien de spécial"
@@ -7804,6 +7866,9 @@ msgstr "Cristal"
 
 msgid "Gems"
 msgstr "Rubis"
+
+msgid "Gold"
+msgstr "Or"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 16:57+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2021-11-07 17:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
@@ -1902,8 +1902,8 @@ msgstr "Kjøp monster"
 msgid "Town Population Information and Statistics"
 msgstr "Info og tall for bybefolkning"
 
-msgid "Damage"
-msgstr "Skade"
+msgid "Damg"
+msgstr ""
 
 msgid "HP"
 msgstr "Liv"
@@ -1976,6 +1976,9 @@ msgstr "Skudd"
 
 msgid "Shots Left"
 msgstr "Skudd igjen"
+
+msgid "Damage"
+msgstr "Skade"
 
 msgid "Hit Points"
 msgstr "Liv"
@@ -2277,6 +2280,14 @@ msgstr "(allerede besøkt)"
 
 msgid "(not visited)"
 msgstr "(ikke besøkt)"
+
+#, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} spiller"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} spiller"
 
 msgid "Road"
 msgstr "Vei"
@@ -3986,11 +3997,11 @@ msgstr ""
 "Vil du lete gjennom den?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Du kommer over pyramiden til en stor og eldgammel konge.\n"
-"En kjapp utforskning viser at pyramiden er fullstendig tom."
+"Etter å ha utryddet monstrene tyder du et eldgammelt skrifttegn på veggen, "
+"og det røper hemmeligheten til trolldommen - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Dessverre har du ingen tryllebok å notere ned trolldommen i."
@@ -4003,14 +4014,11 @@ msgstr ""
 "klarer ikke å lære den."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Etter å ha utryddet monstrene tyder du et eldgammelt skrifttegn på veggen, "
-"og det røper hemmeligheten til trolldommen - '"
-
-msgid "Sign"
-msgstr "Skilt"
+"Du kommer over pyramiden til en stor og eldgammel konge.\n"
+"En kjapp utforskning viser at pyramiden er fullstendig tom."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4211,9 +4219,6 @@ msgstr ""
 "Du berget en skipbrudden fra en sikker død i det nådeløse havet. Takknemlig "
 "belønner han deg for din handling av godhet med å gi deg gjenstanden: %{art}."
 
-msgid "Artifact"
-msgstr "Gjenstand"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr "En regnbuegnom tilbyr deg %{art} for en liten sum på %{gold} gull."
 
@@ -4226,6 +4231,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Ønsker du å kjøpe denne gjenstanden?"
+
+msgid "Artifact"
+msgstr "Gjenstand"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5610,14 +5618,68 @@ msgstr "Oransje"
 msgid "Purple"
 msgstr "Lilla"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Sperre"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Sperre"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Sperre"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Sperre"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Sperre"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Oransje"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Lilla"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Sperre"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Turkis"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Blå"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Brun"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Gull"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Grønn"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Oransje"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Lilla"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr "Helt/Egenskaper"
@@ -5916,6 +5978,19 @@ msgstr "Gullgruve"
 msgid "Mine"
 msgstr "Gruve"
 
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+#, fuzzy
+msgid "See Rock City."
+msgstr "Treby"
+
+msgid "This space for rent."
+msgstr ""
+
 msgid "No object"
 msgstr "Ingen objekt"
 
@@ -6061,6 +6136,9 @@ msgstr "Steinportal"
 
 msgid "Magic Well"
 msgstr "Magisk brønn"
+
+msgid "Sign"
+msgstr "Skilt"
 
 msgid "Nothing Special"
 msgstr "Intet spesielt"
@@ -7665,6 +7743,9 @@ msgstr "Krystall"
 
 msgid "Gems"
 msgstr "Edelsteiner"
+
+msgid "Gold"
+msgstr "Gull"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

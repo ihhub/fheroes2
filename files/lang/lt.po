@@ -2,12 +2,12 @@
 # Copyright (c) 2012 fheroes2 team
 # This file is distributed under the same license as the fheroes2 package.
 # Mantas Kriaučiūnas <mantas@akl.lt>, 2012-2014.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2021-11-07 19:44+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2046,6 +2046,12 @@ msgstr ""
 msgid "(not visited)"
 msgstr ""
 
+msgid "%{color} Barrier"
+msgstr ""
+
+msgid "%{color} Tent"
+msgstr ""
+
 msgid "Road"
 msgstr ""
 
@@ -3603,8 +3609,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
@@ -3618,11 +3624,8 @@ msgstr ""
 "negalite jo išmokti."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
-msgstr ""
-
-msgid "Sign"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
 
 msgid ""
@@ -3767,9 +3770,6 @@ msgid ""
 "%{art}."
 msgstr ""
 
-msgid "Artifact"
-msgstr "Magiškas artefaktas"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 
@@ -3780,6 +3780,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Ar jūs norite pirkti šį magišką artefaktą?"
+
+msgid "Artifact"
+msgstr "Magiškas artefaktas"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -4892,14 +4895,54 @@ msgstr ""
 msgid "Purple"
 msgstr ""
 
-msgid "Aqua"
+msgid "barrier|Aqua"
 msgstr ""
 
-msgid "Brown"
+msgid "barrier|Blue"
 msgstr ""
 
-msgid "Gold"
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+msgid "barrier|Orange"
+msgstr ""
+
+msgid "barrier|Purple"
+msgstr ""
+
+msgid "barrier|Red"
+msgstr ""
+
+msgid "tent|Aqua"
+msgstr ""
+
+msgid "tent|Blue"
+msgstr ""
+
+msgid "tent|Brown"
+msgstr ""
+
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Auksas"
+
+msgid "tent|Green"
+msgstr ""
+
+msgid "tent|Orange"
+msgstr ""
+
+msgid "tent|Purple"
+msgstr ""
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr ""
@@ -5345,6 +5388,9 @@ msgid "Stone Liths"
 msgstr ""
 
 msgid "Magic Well"
+msgstr ""
+
+msgid "Sign"
 msgstr ""
 
 msgid "Nothing Special"
@@ -6884,6 +6930,9 @@ msgstr "Kristalai"
 
 msgid "Gems"
 msgstr "Brangakmeniai"
+
+msgid "Gold"
+msgstr "Auksas"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

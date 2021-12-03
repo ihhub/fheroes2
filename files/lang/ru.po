@@ -4,12 +4,12 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@gmail.com>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2021-08-02 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2245,6 +2245,14 @@ msgstr "(посещено)"
 msgid "(not visited)"
 msgstr "(не посещено)"
 
+#, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} игрок"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} игрок"
+
 msgid "Road"
 msgstr "Дорога"
 
@@ -3944,11 +3952,11 @@ msgstr ""
 "Хотите обыскать пирамиду?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Вы нашли пирамиду древнего великого царя.\n"
-"Первое же обследование показало, что в ней абсолютно ничего нет."
+"Одолев чудовищ, вы расшифровали иероглифы на стене, содержащие секрет "
+"заклинания - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "К сожалению вы не имеете Волшебной книги чтобы записать заклинание."
@@ -3960,14 +3968,11 @@ msgstr ""
 "К сожалению, вам не хватает мудрости чтобы понять и выучить заклинание."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Одолев чудовищ, вы расшифровали иероглифы на стене, содержащие секрет "
-"заклинания - '"
-
-msgid "Sign"
-msgstr "Указатель"
+"Вы нашли пирамиду древнего великого царя.\n"
+"Первое же обследование показало, что в ней абсолютно ничего нет."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4158,9 +4163,6 @@ msgstr ""
 "Вы спасли жертву кораблекрушения от неминуемой гибели в безжалостном океане. "
 "Награда за вашу доброту - %{art}."
 
-msgid "Artifact"
-msgstr "Артефакты"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr "Леприкон предлагает вам %{art} за скромную цену в %{gold} золотых."
 
@@ -4173,6 +4175,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Хотите приобрести этот артефакт?"
+
+msgid "Artifact"
+msgstr "Артефакты"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5531,14 +5536,68 @@ msgstr "Оранжевый"
 msgid "Purple"
 msgstr "Фиолетовый"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Барьер"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Барьер"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Барьер"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Барьер"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Барьер"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Оранжевый"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Фиолетовый"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Барьер"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Изумрудный"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Синий"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Коричневый"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Золото"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Зеленый"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Оранжевый"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Фиолетовый"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr "Герой/Характеристика"
@@ -5998,6 +6057,9 @@ msgstr "Монолиты"
 
 msgid "Magic Well"
 msgstr "Волшебный колодец"
+
+msgid "Sign"
+msgstr "Указатель"
 
 msgid "Nothing Special"
 msgstr "Ничего особенного"
@@ -7601,6 +7663,9 @@ msgstr "Кристаллы"
 
 msgid "Gems"
 msgstr "Самоцветы"
+
+msgid "Gold"
+msgstr "Золото"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

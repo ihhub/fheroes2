@@ -4,12 +4,12 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2013-10-04 21:15+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2179,6 +2179,14 @@ msgstr "(już odwiedzono)"
 msgid "(not visited)"
 msgstr "(nie odwiedzono)"
 
+#, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} Gracz"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} Gracz"
+
 msgid "Road"
 msgstr "Droga"
 
@@ -3903,11 +3911,11 @@ msgstr ""
 "Czy mimo to chcesz wejść do piramidy?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Natrafiasz na piramidę zbudowaną ku chwale potężnego, starożytnego króla.\n"
-"Przeszukujesz ją, ale okazuje się, że jest zupełnie pusta."
+"Pokonawszy potwory, odczytujesz prastary glif na ścianie, dzięki czemu "
+"poznajesz tajemnice zaklęcia."
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Niestety nie masz księgi czarów, w której można zapisać zaklęcie."
@@ -3920,14 +3928,11 @@ msgstr ""
 "jesteś w stanie się go nauczyć."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Pokonawszy potwory, odczytujesz prastary glif na ścianie, dzięki czemu "
-"poznajesz tajemnice zaklęcia."
-
-msgid "Sign"
-msgstr "Drogowskaz"
+"Natrafiasz na piramidę zbudowaną ku chwale potężnego, starożytnego króla.\n"
+"Przeszukujesz ją, ale okazuje się, że jest zupełnie pusta."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4126,9 +4131,6 @@ msgstr ""
 "Uratowałeś rozbitka przed utonięciem. W podzięce za uratowanie, dostajesz "
 "%{art}."
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 "%{art} - leprekaun proponuje, że sprzeda ci ten artefakt za %{gold} sztuk "
@@ -4143,6 +4145,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Czy chcesz go kupić?"
+
+msgid "Artifact"
+msgstr "Artefakt"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5535,14 +5540,68 @@ msgstr "Pomarańczowy"
 msgid "Purple"
 msgstr "Fioletowy"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Bariera"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Bariera"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Bariera"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Bariera"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Bariera"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Pomarańczowy"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Fioletowy"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Bariera"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Seledynowy"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Niebieski"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Brązowy"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Złoty"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Zielony"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Pomarańczowy"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Fioletowy"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr "Bohater/Statystyki"
@@ -6002,6 +6061,9 @@ msgstr "Głazy"
 
 msgid "Magic Well"
 msgstr "Magiczna studnia"
+
+msgid "Sign"
+msgstr "Drogowskaz"
 
 msgid "Nothing Special"
 msgstr "Nic specjalnego"
@@ -7713,6 +7775,9 @@ msgstr "Kryształ"
 
 msgid "Gems"
 msgstr "Klejnoty"
+
+msgid "Gold"
+msgstr "Złoty"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

@@ -2,12 +2,12 @@
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2010-02-09 01:11+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2144,6 +2144,14 @@ msgid "(not visited)"
 msgstr "(Sem Visita)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "Turno do jogador %{color}"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "Turno do jogador %{color}"
+
+#, fuzzy
 msgid "Road"
 msgstr "Modo Estrada"
 
@@ -3862,11 +3870,11 @@ msgstr ""
 "Você vai buscar?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Você chega em cima da pirâmide de um grande rei antigo.\n"
-"Exploração de rotina revela que a pirâmide está completamente vazia."
+"Após derrotar as criaturas, você decifrar um hieróglifo antigo na parede, "
+"contando o segredo da magia - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
@@ -3880,14 +3888,11 @@ msgstr ""
 "incapaz de aprender."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Após derrotar as criaturas, você decifrar um hieróglifo antigo na parede, "
-"contando o segredo da magia - '"
-
-msgid "Sign"
-msgstr ""
+"Você chega em cima da pirâmide de um grande rei antigo.\n"
+"Exploração de rotina revela que a pirâmide está completamente vazia."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4062,9 +4067,6 @@ msgid ""
 "%{art}."
 msgstr ""
 
-msgid "Artifact"
-msgstr "Artefato"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 
@@ -4075,6 +4077,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr ""
+
+msgid "Artifact"
+msgstr "Artefato"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5179,13 +5184,53 @@ msgstr ""
 msgid "Purple"
 msgstr ""
 
-msgid "Aqua"
+msgid "barrier|Aqua"
 msgstr ""
 
-msgid "Brown"
+msgid "barrier|Blue"
 msgstr ""
 
-msgid "Gold"
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+msgid "barrier|Orange"
+msgstr ""
+
+msgid "barrier|Purple"
+msgstr ""
+
+msgid "barrier|Red"
+msgstr ""
+
+msgid "tent|Aqua"
+msgstr ""
+
+msgid "tent|Blue"
+msgstr ""
+
+#, fuzzy
+msgid "tent|Brown"
+msgstr "animação"
+
+msgid "tent|Gold"
+msgstr ""
+
+msgid "tent|Green"
+msgstr ""
+
+msgid "tent|Orange"
+msgstr ""
+
+msgid "tent|Purple"
+msgstr ""
+
+msgid "tent|Red"
 msgstr ""
 
 #, fuzzy
@@ -5633,6 +5678,9 @@ msgid "Stone Liths"
 msgstr ""
 
 msgid "Magic Well"
+msgstr ""
+
+msgid "Sign"
 msgstr ""
 
 msgid "Nothing Special"
@@ -7155,6 +7203,9 @@ msgstr "Cristal"
 
 msgid "Gems"
 msgstr "Gemas"
+
+msgid "Gold"
+msgstr ""
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

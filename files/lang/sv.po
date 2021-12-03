@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2021-12-03 04:17+0100\n"
 "PO-Revision-Date: 2021-11-15 17:00+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2150,6 +2150,14 @@ msgid "(not visited)"
 msgstr "(inte besökt)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} spelares tur."
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} spelares tur."
+
+#, fuzzy
 msgid "Road"
 msgstr "Vägläge"
 
@@ -3841,11 +3849,11 @@ msgstr ""
 "Vill du gå in och söka?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Du stöter på en pyramid av en stor och gammal kung.\n"
-"En rutinerad utforskning avslöjar att pyramiden är helt tom."
+"Medan du besegrar monstren, dechiffrerar du en uråldrig hieroglyf på väggen "
+"som berättar hemligheten om besvärjelsen - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Tyvärr har du ingen magibok att anteckna besvärjelsen med."
@@ -3857,14 +3865,11 @@ msgstr ""
 "Tyvärr är du inte vis nog att förstå besvärjelsen, så kan inte lära dig den."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Medan du besegrar monstren, dechiffrerar du en uråldrig hieroglyf på väggen "
-"som berättar hemligheten om besvärjelsen - '"
-
-msgid "Sign"
-msgstr "Skylt"
+"Du stöter på en pyramid av en stor och gammal kung.\n"
+"En rutinerad utforskning avslöjar att pyramiden är helt tom."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4053,9 +4058,6 @@ msgstr ""
 "Du har dragit ut en skeppsbruten man från en säker död i en oförlåtande "
 "ocean. Tacksamt ger han dig  %{art} för din vänlighet."
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr "En pyssling erbjuder dig en %{art} för en lite summa på %{gold} guld."
 
@@ -4068,6 +4070,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Vill du köpa denna artefakt?"
+
+msgid "Artifact"
+msgstr "Artefakt"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5338,14 +5343,68 @@ msgstr "Orange"
 msgid "Purple"
 msgstr "Lila"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Orange"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Lila"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Akvamarin"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Blå"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Brun"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Guld"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Grön"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Orange"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Lila"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr ""
@@ -5799,6 +5858,9 @@ msgstr ""
 
 msgid "Magic Well"
 msgstr "Magisk brunn"
+
+msgid "Sign"
+msgstr "Skylt"
 
 msgid "Nothing Special"
 msgstr "Ingenting speciellt"
@@ -7364,6 +7426,9 @@ msgstr "Kristall"
 
 msgid "Gems"
 msgstr "Ädelstenar"
+
+msgid "Gold"
+msgstr "Guld"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
