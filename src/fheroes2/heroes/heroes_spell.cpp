@@ -396,7 +396,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     int32_t boatDestination = -1;
     for ( const int32_t tileId : possibleBoatPositions ) {
         const Maps::Tiles & tile = world.GetTiles( tileId );
-        if ( tile.isWater() && tile.isClearGround() ) {
+        if ( tile.isWater() ) {
             boatDestination = tileId;
             break;
         }
