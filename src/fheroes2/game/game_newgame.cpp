@@ -42,6 +42,7 @@
 #include "world.h"
 
 #include <array>
+#include <cmath>
 
 namespace
 {
@@ -292,7 +293,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
             if ( le.MouseCursor( activeCampaignArea[i] ) ) {
                 highlightCampaignId = i;
-                customDelay = static_cast<uint64_t>( 1000.0 / videos[highlightCampaignId]->fps() + 0.5 );
+                customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
                 break;
             }
         }
