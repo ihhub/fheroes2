@@ -29,6 +29,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_credits.h"
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
@@ -463,6 +464,26 @@ namespace
         const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::X_CMPEXT, campaignNameHeader );
         fheroes2::Blit( header, output, offset.x + 24, offset.y + 25 );
     }
+
+    void playCampaignMusic( const int campaignId )
+    {
+        switch ( campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+        case Campaign::DESCENDANTS_CAMPAIGN:
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            AGG::PlayMusic( MUS::ROLAND_CAMPAIGN_SCREEN, true );
+            break;
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            AGG::PlayMusic( MUS::ARCHIBALD_CAMPAIGN_SCREEN, true );
+            break;
+        default:
+            // Implementing a new campaign? Add a new case!
+            assert( 0 );
+            break;
+        }
+    }
 }
 
 bool Game::isSuccessionWarsCampaignPresent()
@@ -555,6 +576,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+        Game::ShowCredits();
+
         AGG::ResetMixer();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
         return fheroes2::GameMode::HIGHSCORES;
@@ -586,6 +609,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
     }
+
+    playCampaignMusic( chosenCampaignID );
 
     int backgroundIconID = ICN::UNKNOWN;
 
@@ -775,9 +800,12 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             return fheroes2::GameMode::START_GAME;
         }
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) ) {
+            AGG::ResetMixer();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();
+
+            playCampaignMusic( chosenCampaignID );
         }
     }
 

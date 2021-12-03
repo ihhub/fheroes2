@@ -512,14 +512,14 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 250 ) );
-
+    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
     const fheroes2::Rect & area = frameborder->activeArea();
+
     int result = Dialog::ZERO;
 
     const int townIcnId = isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD;
     const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-    CastleIndexListBox listbox( frameborder->windowArea(), area.getPosition(), result, townIcnId, listIcnId );
+    CastleIndexListBox listbox( area, area.getPosition(), result, townIcnId, listIcnId );
 
     listbox.SetScrollButtonUp( listIcnId, 3, 4, fheroes2::Point( area.x + 262, area.y + 45 ) );
     listbox.SetScrollButtonDn( listIcnId, 5, 6, fheroes2::Point( area.x + 262, area.y + 190 ) );
@@ -531,16 +531,25 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
-    fheroes2::ButtonGroup btnGroups;
-    btnGroups.createButton( area.x + 5, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
-    btnGroups.createButton( area.x + 187, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1,
-                            Dialog::CANCEL );
-    btnGroups.draw();
+    const int32_t border = 10;
+    const int icnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( icnId, 1 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( icnId, 3 );
+
+    fheroes2::ButtonGroup btnGroup;
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
+                                                        fheroes2::AGG::GetICN( icnId, 2 ), display ),
+                        Dialog::OK );
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
+                                                        area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+                                                        fheroes2::AGG::GetICN( icnId, 4 ), display ),
+                        Dialog::CANCEL );
+    btnGroup.draw();
 
     display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.processEvents();
+        result = btnGroup.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !listbox.IsNeedRedraw() ) {
@@ -550,7 +559,10 @@ bool ActionSpellTownPortal( Heroes & hero )
         listbox.Redraw();
         display.render();
     }
+
+    // restore background *before* the spell animation to avoid rendering issues
     frameborder.reset();
+
     // store
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( listbox.GetCurrent() ) ) );

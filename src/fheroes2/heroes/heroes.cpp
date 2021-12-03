@@ -689,6 +689,9 @@ void Heroes::ActionNewDay( void )
     move_point = GetMaxMovePoints();
     MovePointsScaleFixed();
 
+    // replenish spell points
+    ReplenishSpellPoints();
+
     // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 

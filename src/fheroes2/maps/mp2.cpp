@@ -306,7 +306,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Troll Bridge" );
     case OBJN_WITCHSHUT:
     case OBJ_WITCHSHUT:
-        return _( "Witch Hut" );
+        return _( "Witch's Hut" );
     case OBJN_XANADU:
     case OBJ_XANADU:
         return _( "Xanadu" );
