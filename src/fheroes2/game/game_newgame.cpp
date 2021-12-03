@@ -269,17 +269,17 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        else if ( le.MouseClickLeft( activeCampaignArea[1] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[1] ) ) {
             campaignSaveData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        else if ( le.MouseClickLeft( activeCampaignArea[2] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[2] ) ) {
             campaignSaveData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        else if ( le.MouseClickLeft( activeCampaignArea[3] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[3] ) ) {
             campaignSaveData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
