@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:17+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
 "PO-Revision-Date: 2021-11-07 17:16+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1267,6 +1267,247 @@ msgid "Build %{name}."
 msgstr "%{name} építése"
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Híd"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Fehér Gyöngy"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Fa"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kovácsműhely"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Jó Morál"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Szitakötő"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Vulkán"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Szökőkút"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Boszorkánymester"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Szitakötő"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Fekete Sárkány"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "animáció"
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Arany Óra"
+
+msgid "Brownston"
+msgstr ""
+
+msgid "Hilltop"
+msgstr ""
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Besorolás"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Sherman"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Fekete Sárkány"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Fekete torony"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Vezetés"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Városok mutatása"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Sárga"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Nem lehet tobrozni - túl sok hősöd van."
 
@@ -2023,6 +2264,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "FHeroes2 játék beállítások."
 
+msgid "OK"
+msgstr "Ok"
+
 #, fuzzy
 msgid "Attention"
 msgstr "animáció"
@@ -2268,9 +2512,6 @@ msgstr "Betöltés:"
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Kattints a főmenübe való visszatéréshez."
-
-msgid "OK"
-msgstr "Ok"
 
 #, fuzzy
 msgid "Click to load a previously saved game."
@@ -3465,9 +3706,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3497,9 +3735,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -4665,20 +4900,6 @@ msgstr ""
 "Egy hangot hallasz a torony tetejéről: \"Menj el! Nem tudok neked segíteni!\""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4690,6 +4911,20 @@ msgid ""
 "war horse. \"This steed will help speed you in your travels. Alas, he will "
 "grow tired in a week. You must also let me give better horses to your "
 "mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."

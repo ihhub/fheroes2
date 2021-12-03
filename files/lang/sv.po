@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:17+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
 "PO-Revision-Date: 2021-11-15 17:00+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1243,6 +1243,248 @@ msgid "Build %{name}."
 msgstr "Bygg %{name}."
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Bro"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Vit pärla"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Trä"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Smed"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Bra moral"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Röd drake"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Vulkan"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fontän"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Krigstrollkarl"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Röd drake"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Svart drake"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "\"Tillägg\""
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Gyllene klocka"
+
+msgid "Brownston"
+msgstr ""
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Fornborg"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Betyg"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Sjöjungfru"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Svart drake"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Svart torn"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Ledarskap"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Visa Städer"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Gul"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Kan inte rekrytera - du har för många hjältar."
 
@@ -1978,6 +2220,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Spelinställningar för FHeroes2."
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "\"Tillägg\""
@@ -2218,9 +2463,6 @@ msgstr "Fil att ladda:"
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
-
-msgid "OK"
-msgstr "OK"
 
 #, fuzzy
 msgid "Click to load a previously saved game."
@@ -3436,9 +3678,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3468,9 +3707,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -4683,6 +4919,20 @@ msgstr ""
 "dig!\""
 
 msgid ""
+"The head groom speaks to you, \"That is a fine looking horse you have. I am "
+"afraid we can give you no better, but the horses your cavalry are riding "
+"look to be of poor breeding stock. We have many trained war horses which "
+"would aid your riders greatly. I insist you take them.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, he will "
+"grow tired in a week. You must also let me give better horses to your "
+"mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
 "The head groom approaches you and speaks, \"You already have a fine horse, "
 "and have no inexperienced cavalry which might make use of our trained war "
 "horses.\""
@@ -4697,20 +4947,6 @@ msgid ""
 "endurance will wane with a lot of heavy riding, and you must return for a "
 "fresh mount in a week. We also have many fine war horses which could benefit "
 "mounted soldiers, but you have none we can help.\""
-msgstr ""
-
-msgid ""
-"The head groom speaks to you, \"That is a fine looking horse you have. I am "
-"afraid we can give you no better, but the horses your cavalry are riding "
-"look to be of poor breeding stock. We have many trained war horses which "
-"would aid your riders greatly. I insist you take them.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, he will "
-"grow tired in a week. You must also let me give better horses to your "
-"mounted soldiers, their horses look shoddy and weak.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."

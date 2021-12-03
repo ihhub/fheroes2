@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:17+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
 "PO-Revision-Date: 2021-08-02 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1341,6 +1341,248 @@ msgstr "Невозможно построить: %{name}."
 msgid "Build %{name}."
 msgstr "Построить %{name}."
 
+#, fuzzy
+msgid "Blackridge"
+msgstr "Мост"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Белая Жемчужина"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Древесина"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Кузница"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "В Бой!"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Дракон"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Тандакс"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Вулкан"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Фонтан"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Сандро"
+
+msgid "Alamar"
+msgstr "Аламар"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Чародей"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Дракон"
+
+msgid "Kalindra"
+msgstr "Калиндра"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Черный Дракон"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Дан"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "Внимание"
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Хейлон"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Золотые Часы"
+
+msgid "Brownston"
+msgstr ""
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Форт на холме"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Рейтинг"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Немецкий"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Черный Дракон"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Черная башня"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Лидерство"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Троян"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Пограничные Города"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Желтый"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Найм невозможен - guest to guard automove error."
 
@@ -2073,6 +2315,9 @@ msgstr "Изменить разрешение экрана."
 msgid "Experimental game settings."
 msgstr "Экспериментальные настройки игры."
 
+msgid "OK"
+msgstr "ОК"
+
 #, fuzzy
 msgid "Attention"
 msgstr "Внимание"
@@ -2313,9 +2558,6 @@ msgstr "Загрузить файл:"
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Сохранить текущую игру."
-
-msgid "OK"
-msgstr "ОК"
 
 #, fuzzy
 msgid "Click to load a previously saved game."
@@ -3531,9 +3773,6 @@ msgstr "Ватана"
 msgid "Agar"
 msgstr "Агар"
 
-msgid "Alamar"
-msgstr "Аламар"
-
 msgid "Arie"
 msgstr "Эйри"
 
@@ -3563,9 +3802,6 @@ msgstr "Флинт"
 
 msgid "Halon"
 msgstr "Хейлон"
-
-msgid "Kalindra"
-msgstr "Калиндра"
 
 msgid "Mandigal"
 msgstr "Мандигал"
@@ -4847,6 +5083,26 @@ msgstr ""
 "Вы услышали голос с вершины башни: \"Убирайтесь! Я не могу вам помочь!\""
 
 msgid ""
+"The head groom speaks to you, \"That is a fine looking horse you have. I am "
+"afraid we can give you no better, but the horses your cavalry are riding "
+"look to be of poor breeding stock. We have many trained war horses which "
+"would aid your riders greatly. I insist you take them.\""
+msgstr ""
+"Появился старший конюх ведущий отличных боевых скакунов. \"Какой у вас "
+"прекрасный конь. Я боюсь у нас не найдется лучше, но зато мы можем дать "
+"новых коней вашим всадникам.\""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, he will "
+"grow tired in a week. You must also let me give better horses to your "
+"mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+"Появился старший конюх ведущий отличных боевых скакунов. \"Этот конь поможет "
+"вам быстрее добраться до нужного места, но его сил хватит на 7 дней. К тому "
+"же, мы можем дать новых коней и вашим всадникам.\""
+
+msgid ""
 "The head groom approaches you and speaks, \"You already have a fine horse, "
 "and have no inexperienced cavalry which might make use of our trained war "
 "horses.\""
@@ -4866,26 +5122,6 @@ msgstr ""
 "вам быстрее добраться до нужного места, но его сил хватит на 7 дней. К тому "
 "же, мы могли бы дать новых коней и вашим всадникам, но в вашей армии таких "
 "нет.\""
-
-msgid ""
-"The head groom speaks to you, \"That is a fine looking horse you have. I am "
-"afraid we can give you no better, but the horses your cavalry are riding "
-"look to be of poor breeding stock. We have many trained war horses which "
-"would aid your riders greatly. I insist you take them.\""
-msgstr ""
-"Появился старший конюх ведущий отличных боевых скакунов. \"Какой у вас "
-"прекрасный конь. Я боюсь у нас не найдется лучше, но зато мы можем дать "
-"новых коней вашим всадникам.\""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, he will "
-"grow tired in a week. You must also let me give better horses to your "
-"mounted soldiers, their horses look shoddy and weak.\""
-msgstr ""
-"Появился старший конюх ведущий отличных боевых скакунов. \"Этот конь поможет "
-"вам быстрее добраться до нужного места, но его сил хватит на 7 дней. К тому "
-"же, мы можем дать новых коней и вашим всадникам.\""
 
 msgid "The Arena guards turn you away."
 msgstr "Стража арены преградила вам дорогу и не пропустила внутрь."

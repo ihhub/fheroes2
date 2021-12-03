@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:17+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
 "PO-Revision-Date: 2021-11-07 17:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1316,6 +1316,248 @@ msgid "Build %{name}."
 msgstr "Construir %{name}"
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Puente"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Perla Blanca"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Madera"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Herrero"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Buena Moral"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Dragón rojo"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Volcán"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fuente"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Brujo"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Dragón rojo"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Dragón Negro"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "\"Anexión\""
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Reloj de Oro"
+
+msgid "Brownston"
+msgstr ""
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Fuerte de la Colina"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Nivel"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Sherman"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Dragón Negro"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Torre Negra"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Liderazgo"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Tierras fronterizas"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Amarillo"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "No puedes reclutar, tienes demasiados Héroes."
 
@@ -2089,6 +2331,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "\"Anexión\""
@@ -2334,9 +2579,6 @@ msgstr "Archivo a Cargar:"
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Haz clic para volver al menú principal"
-
-msgid "OK"
-msgstr "OK"
 
 #, fuzzy
 msgid "Click to load a previously saved game."
@@ -3593,9 +3835,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3625,9 +3864,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -4925,6 +5161,28 @@ msgstr ""
 "\""
 
 msgid ""
+"The head groom speaks to you, \"That is a fine looking horse you have. I am "
+"afraid we can give you no better, but the horses your cavalry are riding "
+"look to be of poor breeding stock. We have many trained war horses which "
+"would aid your riders greatly. I insist you take them.\""
+msgstr ""
+"El mozo de establo dice: \"Parece buen caballo el que montas. Me temo que no "
+"puedo ofrecer uno mejor, pero los caballos que lleva tu caballería parecen "
+"no ser de raza. Hemos entrenado muchos caballos de batalla lo cual ayudará a "
+"tus jinetes mucho. Insisto en que te los lleves."
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, he will "
+"grow tired in a week. You must also let me give better horses to your "
+"mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+"Al aproximarte a los establos, el mozo de cuadra aparece guiando un buen "
+"caballo de batalla. \"Este corcel te ayudará a acelerar tus viajes. Oh, se "
+"cansará en una semana. Deberíais permitirme daros mejores caballos para tus "
+"soldados montados, puesto que sus caballos parecen debiluchos."
+
+msgid ""
 "The head groom approaches you and speaks, \"You already have a fine horse, "
 "and have no inexperienced cavalry which might make use of our trained war "
 "horses.\""
@@ -4946,28 +5204,6 @@ msgstr ""
 "en una semana. También tenemos buenos caballos de batalla que podrían "
 "beneficiar a tus solados montados, pero no tienes ninguno así que no te "
 "podemos ayudar\"."
-
-msgid ""
-"The head groom speaks to you, \"That is a fine looking horse you have. I am "
-"afraid we can give you no better, but the horses your cavalry are riding "
-"look to be of poor breeding stock. We have many trained war horses which "
-"would aid your riders greatly. I insist you take them.\""
-msgstr ""
-"El mozo de establo dice: \"Parece buen caballo el que montas. Me temo que no "
-"puedo ofrecer uno mejor, pero los caballos que lleva tu caballería parecen "
-"no ser de raza. Hemos entrenado muchos caballos de batalla lo cual ayudará a "
-"tus jinetes mucho. Insisto en que te los lleves."
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, he will "
-"grow tired in a week. You must also let me give better horses to your "
-"mounted soldiers, their horses look shoddy and weak.\""
-msgstr ""
-"Al aproximarte a los establos, el mozo de cuadra aparece guiando un buen "
-"caballo de batalla. \"Este corcel te ayudará a acelerar tus viajes. Oh, se "
-"cansará en una semana. Deberíais permitirme daros mejores caballos para tus "
-"soldados montados, puesto que sus caballos parecen debiluchos."
 
 msgid "The Arena guards turn you away."
 msgstr "Los Guardas de la Arena te apartan."

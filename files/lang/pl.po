@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:17+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
 "PO-Revision-Date: 2013-10-04 21:15+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1258,6 +1258,247 @@ msgid "Build %{name}."
 msgstr "Zbuduj: %{name}"
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Most"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Biała perła"
+
+msgid "Woodhaven"
+msgstr ""
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kuźnia"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Wysokie morale"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Smok"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Wulkan"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fontanna"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Czarnoksiężnik"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Smok"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Czarny smok"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "Uwaga"
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Złoty zegarek"
+
+msgid "Brownston"
+msgstr ""
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Fort na wzgórzu"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Ocena"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Niemiecki"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Czarny smok"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Czarna wieża"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Dowodzenie"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Borderlands"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Żółty"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Nie możesz rekrutować - masz za dużo bohaterów."
 
@@ -2009,6 +2250,9 @@ msgstr "Zmień rozdzielczość gry."
 msgid "Experimental game settings."
 msgstr "Eksperymentalne ustawienia gry."
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Attention"
 msgstr "Uwaga"
 
@@ -2247,9 +2491,6 @@ msgstr "Wczytaj plik:"
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Zapisz bieżącą grę."
-
-msgid "OK"
-msgstr "OK"
 
 #, fuzzy
 msgid "Click to load a previously saved game."
@@ -3490,9 +3731,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3522,9 +3760,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -4821,28 +5056,6 @@ msgstr ""
 "pomóc!\""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-"Podchodzi do ciebie główny koniuszy i mówi. \"Masz już świetnego konia i nie "
-"dowodzisz niedoświadczoną kawalerią, której mogłyby się przydać nasze "
-"szkolone rumaki bojowe.\""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-"Gdy zbliżasz się do stajni, wychodzi z niej główny koniuszy prowadzący "
-"pięknego konia bojowego. \"Ten rumak pomoże ci w czasie twych podróży. "
-"Niestety osłabnie w przypadku ciężkiej jazdy, więc w przeciągu tygodnia "
-"musisz wrócić po nowego konia. Mamy także wiele rumaków bojowych, które "
-"byłyby dobre dla kawalerii, ale nie masz z sobą takich oddziałów.\""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4863,6 +5076,28 @@ msgstr ""
 "pięknego konia bojowego. \"Ten rumak pomoże ci w czasie twych podróży. "
 "Niestety, po tygodniu jazdy się zmęczy. Pozwól, że dam ci również lepsze "
 "konie dla twych kawalerzystów, bo te wyglądają na dość marne.\""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+"Podchodzi do ciebie główny koniuszy i mówi. \"Masz już świetnego konia i nie "
+"dowodzisz niedoświadczoną kawalerią, której mogłyby się przydać nasze "
+"szkolone rumaki bojowe.\""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
+msgstr ""
+"Gdy zbliżasz się do stajni, wychodzi z niej główny koniuszy prowadzący "
+"pięknego konia bojowego. \"Ten rumak pomoże ci w czasie twych podróży. "
+"Niestety osłabnie w przypadku ciężkiej jazdy, więc w przeciągu tygodnia "
+"musisz wrócić po nowego konia. Mamy także wiele rumaków bojowych, które "
+"byłyby dobre dla kawalerii, ale nie masz z sobą takich oddziałów.\""
 
 msgid "The Arena guards turn you away."
 msgstr "Strażnicy Areny każą ci odejść."

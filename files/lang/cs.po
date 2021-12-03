@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:17+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
 "PO-Revision-Date: 2021-11-07 17:03+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1190,6 +1190,231 @@ msgstr "Není možné postavit %{name}"
 msgid "Build %{name}."
 msgstr "Postavit %{name}"
 
+#, fuzzy
+msgid "Blackridge"
+msgstr "Most"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+msgid "Whiteshield"
+msgstr ""
+
+msgid "Woodhaven"
+msgstr ""
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kovárna"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Morálka"
+
+msgid "Dragontooth"
+msgstr ""
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+msgid "Tundara"
+msgstr ""
+
+msgid "Vulcania"
+msgstr ""
+
+msgid "Baywatch"
+msgstr ""
+
+msgid "Fountainhead"
+msgstr ""
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+msgid "Sandcaster"
+msgstr ""
+
+msgid "Alamar"
+msgstr ""
+
+msgid "Burlock"
+msgstr ""
+
+msgid "Dragadune"
+msgstr ""
+
+msgid "Kalindra"
+msgstr ""
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Černá věž"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Nová hra"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "animace"
+
+msgid "Avalon"
+msgstr ""
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+msgid "Weed Patch"
+msgstr ""
+
+msgid "Brownston"
+msgstr ""
+
+msgid "Hilltop"
+msgstr ""
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Hodnocení"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+msgid "Sherman"
+msgstr ""
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Černá věž"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Černá věž"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+msgid "Lankershire"
+msgstr ""
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+msgid "Troy"
+msgstr ""
+
+msgid "Forder Oaks"
+msgstr ""
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+msgid "Willow"
+msgstr ""
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
 
@@ -1897,6 +2122,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr ""
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "animace"
@@ -2126,9 +2354,6 @@ msgstr ""
 
 msgid "Click to save the current game."
 msgstr ""
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Click to load a previously saved game."
 msgstr ""
@@ -3259,9 +3484,6 @@ msgstr ""
 msgid "Agar"
 msgstr ""
 
-msgid "Alamar"
-msgstr ""
-
 msgid "Arie"
 msgstr ""
 
@@ -3290,9 +3512,6 @@ msgid "Flint"
 msgstr ""
 
 msgid "Halon"
-msgstr ""
-
-msgid "Kalindra"
 msgstr ""
 
 msgid "Mandigal"
@@ -4282,20 +4501,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4307,6 +4512,20 @@ msgid ""
 "war horse. \"This steed will help speed you in your travels. Alas, he will "
 "grow tired in a week. You must also let me give better horses to your "
 "mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."

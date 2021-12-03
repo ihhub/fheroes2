@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-23 03:43+0100\n"
-"PO-Revision-Date: 2021-11-26 03:04+0100\n"
+"POT-Creation-Date: 2021-12-03 04:37+0100\n"
+"PO-Revision-Date: 2021-12-03 04:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -1353,6 +1353,246 @@ msgstr "Ikke mulig å bygge %{name}."
 msgid "Build %{name}."
 msgstr "Bygg %{name}."
 
+msgid "Blackridge"
+msgstr "Svartfjellryggen"
+
+msgid "Hillstone"
+msgstr "Haugstein"
+
+msgid "Pinehurst"
+msgstr "Furuskogen"
+
+msgid "Whiteshield"
+msgstr "Hvitskjold"
+
+msgid "Woodhaven"
+msgstr "Skogheimen"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Smed"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Blodskampånd"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Drage"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Tordøks"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Vulkan"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fontene"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Trollmann"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Drage"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Svartdrage"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Morgengry"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "Advarsel"
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Gulluret"
+
+#, fuzzy
+msgid "Brownston"
+msgstr "Brun"
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Bergfestning"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Skribent"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Tysk"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Svartdrage"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Svart tårn"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Lederskap"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Trojann"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Grensebyene"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Gul"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
 # Ikke mulig å verve?
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
@@ -2103,6 +2343,9 @@ msgstr "Bytt spilloppløsning."
 msgid "Experimental game settings."
 msgstr "Innstillinger for utprøvningsvalg."
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Attention"
 msgstr "Advarsel"
 
@@ -2277,6 +2520,12 @@ msgstr "(allerede besøkt)"
 msgid "(not visited)"
 msgstr "(ikke besøkt)"
 
+msgid "%{color} Barrier"
+msgstr "%{color}farget mur"
+
+msgid "%{color} Tent"
+msgstr "%{color}farget telt"
+
 msgid "Road"
 msgstr "Vei"
 
@@ -2339,9 +2588,6 @@ msgstr "Lastingsfil:"
 
 msgid "Click to save the current game."
 msgstr "Klikk for å lagre det nåværende spillet."
-
-msgid "OK"
-msgstr "OK"
 
 msgid "Click to load a previously saved game."
 msgstr "Klikk for å laste inn et tidligere lagret spill."
@@ -3561,9 +3807,6 @@ msgstr "Vatafna"
 msgid "Agar"
 msgstr "Hagar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Aris"
 
@@ -3593,9 +3836,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -4916,27 +5156,6 @@ msgstr ""
 "deg!\""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-"Stallmesteren kommer mot deg og sier, \"Du har allerede en fin hest og har "
-"ingen uerfarne ryttere som kan dra nytte av våre trente stridshester.\""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-"I det du ankommer stallen dukker stallmesteren opp med en flott stridshest. "
-"\"Denne hingsten vil bringe deg fort fram på reisene dine. Dessverre vil den "
-"etterhvert bli utslitt. Etter ei uke kan du komme tilbake og få en ny hest. "
-"Vi har også mange flotte stridshester for ridende krigere, men det er ingen "
-"av dem i hæren din.\""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4957,6 +5176,27 @@ msgstr ""
 "stridshest. \"Denne hingsten vil få fart på deg i reisene dine. Dessverre "
 "vil hesten bli utmattet om ei uke. Du må også la meg gi deg bedre hester til "
 "dine ridende soldater. Hestene deres ser slitne og svake ut."
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+"Stallmesteren kommer mot deg og sier, \"Du har allerede en fin hest og har "
+"ingen uerfarne ryttere som kan dra nytte av våre trente stridshester.\""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
+msgstr ""
+"I det du ankommer stallen dukker stallmesteren opp med en flott stridshest. "
+"\"Denne hingsten vil bringe deg fort fram på reisene dine. Dessverre vil den "
+"etterhvert bli utslitt. Etter ei uke kan du komme tilbake og få en ny hest. "
+"Vi har også mange flotte stridshester for ridende krigere, men det er ingen "
+"av dem i hæren din.\""
 
 msgid "The Arena guards turn you away."
 msgstr "Vokterne av arenaen avviser deg."
@@ -5058,7 +5298,7 @@ msgstr ""
 "En magisk mur rager foran deg og blokkerer veien. Runene på buen dens sier "
 "det følgende:\n"
 "\"Uttal nøkkelordet og du vil få komme forbi.\"\n"
-"I det du roper ut det magiske ordet oppløses den glødende muren til intet."
+"I det du roper ut det magiske ordet oppløses den skinnende muren til intet."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -5622,14 +5862,53 @@ msgstr "Oransje"
 msgid "Purple"
 msgstr "Lilla"
 
-msgid "Aqua"
-msgstr "Turkis"
+msgid "barrier|Aqua"
+msgstr "Cyan"
 
-msgid "Brown"
+msgid "barrier|Blue"
+msgstr "Blå"
+
+msgid "barrier|Brown"
 msgstr "Brun"
 
-msgid "Gold"
+msgid "barrier|Gold"
 msgstr "Gull"
+
+msgid "barrier|Green"
+msgstr "Grønn"
+
+msgid "barrier|Orange"
+msgstr "Oransje"
+
+msgid "barrier|Purple"
+msgstr "Lilla"
+
+msgid "barrier|Red"
+msgstr "Rød"
+
+msgid "tent|Aqua"
+msgstr "Cyan"
+
+msgid "tent|Blue"
+msgstr "\vBlå"
+
+msgid "tent|Brown"
+msgstr "Brun"
+
+msgid "tent|Gold"
+msgstr "Gull"
+
+msgid "tent|Green"
+msgstr "Grønn"
+
+msgid "tent|Orange"
+msgstr "Oransje"
+
+msgid "tent|Purple"
+msgstr "Lilla"
+
+msgid "tent|Red"
+msgstr "Rød"
 
 msgid "Hero/Stats"
 msgstr "Helt/Egenskaper"
@@ -7705,6 +7984,9 @@ msgstr "Krystall"
 
 msgid "Gems"
 msgstr "Edelsteiner"
+
+msgid "Gold"
+msgstr "Gull"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
