@@ -365,9 +365,6 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     }
 
     const int32_t center = hero.GetIndex();
-    const int32_t worldWidth = world.w();
-    const int32_t centerX = center % worldWidth;
-    const int32_t centerY = center / worldWidth;
 
     const int tilePassability = world.GetTiles( center ).GetPassable();
 
