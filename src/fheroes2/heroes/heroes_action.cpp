@@ -2385,6 +2385,10 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
+    if ( !Settings::Get().MusicMIDI() ) {
+        AGG::PlayMusic( MUS::WATCHTOWER, true );
+    }
+
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
