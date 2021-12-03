@@ -24,7 +24,6 @@
 
 #include "agg_image.h"
 #include "army.h"
-#include "army_ui_helper.h"
 #include "castle.h"
 #include "game_interface.h"
 #include "heroes.h"
@@ -333,7 +332,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const fheroes2::Rect & pos = GetArea();
-        fheroes2::DrawArmy::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
+        Army::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
     }
 }
 
