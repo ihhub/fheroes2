@@ -291,7 +291,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         highlightCampaignId = videos.size();
 
         for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
-            if ( le.MouseCursor( activeCampaignArea[i] ) ) {
+            if ( le.MouseCursor( activeCampaignArea[i] ) && videos[i] ) {
                 highlightCampaignId = i;
                 customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
                 break;
