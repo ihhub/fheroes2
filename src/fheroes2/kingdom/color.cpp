@@ -112,9 +112,9 @@ int Color::GetFirst( int colors )
     return NONE;
 }
 
-const char * BarrierColor::String( int val )
+const char * BarrierColor::String( const int colorBarrier )
 {
-    switch ( val ) {
+    switch ( colorBarrier ) {
     case AQUA:
         return _( "barrier|Aqua" );
     case BLUE:
@@ -138,9 +138,9 @@ const char * BarrierColor::String( int val )
     return "None";
 }
 
-const char * TentColor::String( int val )
+const char * TentColor::String( const int colorTent )
 {
-    switch ( val ) {
+    switch ( colorTent ) {
     case AQUA:
         return _( "tent|Aqua" );
     case BLUE:

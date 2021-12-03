@@ -41,7 +41,7 @@ namespace BarrierColor
         PURPLE = 7,
         RED = 8
     };
-    const char * String( int );
+    const char * String( const int colorBarrier );
 }
 
 namespace TentColor
@@ -58,7 +58,7 @@ namespace TentColor
         PURPLE = 7,
         RED = 8
     };
-    const char * String( int );
+    const char * String( const int colorTent );
 }
 
 namespace Color
