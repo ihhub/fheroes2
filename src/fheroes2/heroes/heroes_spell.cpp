@@ -369,39 +369,32 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     const int32_t centerX = center % worldWidth;
     const int32_t centerY = center / worldWidth;
 
-    const int tilePassabilty = world.GetTiles( center ).GetPassable();
+    const int tilePassability = world.GetTiles( center ).GetPassable();
+
+    const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+
     std::vector<int32_t> possibleBoatPositions;
-    if ( ( tilePassabilty & Direction::RIGHT ) != 0 && Maps::isValidAbsPoint( centerX + 1, centerY ) ) {
-        possibleBoatPositions.emplace_back( center + 1 );
+
+    for ( const int32_t tileId : tilesAround ) {
+        const int direction = Maps::GetDirection( center, tileId );
+        assert( direction != Direction::UNKNOWN );
+
+        if ( ( tilePassability & direction ) != 0 ) {
+            possibleBoatPositions.emplace_back( tileId );
+        }
     }
 
-    if ( ( tilePassabilty & Direction::LEFT ) != 0 && Maps::isValidAbsPoint( centerX - 1, centerY ) ) {
-        possibleBoatPositions.emplace_back( center - 1 );
-    }
+    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
+    std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+        const fheroes2::Point & leftPoint = Maps::GetPoint( left );
+        const fheroes2::Point & rightPoint = Maps::GetPoint( right );
+        const int32_t leftDiffX = leftPoint.x - centerPoint.x;
+        const int32_t leftDiffY = leftPoint.y - centerPoint.y;
+        const int32_t rightDiffX = rightPoint.x - centerPoint.x;
+        const int32_t rightDiffY = rightPoint.y - centerPoint.y;
 
-    if ( ( tilePassabilty & Direction::TOP ) != 0 && Maps::isValidAbsPoint( centerX, centerY - 1 ) ) {
-        possibleBoatPositions.emplace_back( center - worldWidth );
-    }
-
-    if ( ( tilePassabilty & Direction::BOTTOM ) != 0 && Maps::isValidAbsPoint( centerX, centerY + 1 ) ) {
-        possibleBoatPositions.emplace_back( center + worldWidth );
-    }
-
-    if ( ( tilePassabilty & Direction::TOP_RIGHT ) != 0 && Maps::isValidAbsPoint( centerX + 1, centerY - 1 ) ) {
-        possibleBoatPositions.emplace_back( center - worldWidth + 1 );
-    }
-
-    if ( ( tilePassabilty & Direction::TOP_LEFT ) != 0 && Maps::isValidAbsPoint( centerX - 1, centerY - 1 ) ) {
-        possibleBoatPositions.emplace_back( center - worldWidth - 1 );
-    }
-
-    if ( ( tilePassabilty & Direction::BOTTOM_RIGHT ) != 0 && Maps::isValidAbsPoint( centerX + 1, centerY + 1 ) ) {
-        possibleBoatPositions.emplace_back( center + worldWidth + 1 );
-    }
-
-    if ( ( tilePassabilty & Direction::BOTTOM_LEFT ) != 0 && Maps::isValidAbsPoint( centerX - 1, centerY + 1 ) ) {
-        possibleBoatPositions.emplace_back( center + worldWidth - 1 );
-    }
+        return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+    } );
 
     int32_t boatDestination = -1;
     for ( const int32_t tileId : possibleBoatPositions ) {
