@@ -253,10 +253,10 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
                                                             fheroes2::Rect( roiOffset.x + 450, roiOffset.y + 120, 166, 193 ),
                                                             fheroes2::Rect( roiOffset.x + 192, roiOffset.y + 240, 248, 163 ) };
 
-    const std::array<fheroes2::Rect, 4> renderCampaignArea{ fheroes2::Rect( roiOffset.x + 192 + 22, roiOffset.y + 23 + 24, 248, 163 ),
-                                                            fheroes2::Rect( roiOffset.x + 19 + 22, roiOffset.y + 120 + 20, 166, 193 ),
-                                                            fheroes2::Rect( roiOffset.x + 450 + 22, roiOffset.y + 120 + 11, 166, 193 ),
-                                                            fheroes2::Rect( roiOffset.x + 192 + 22, roiOffset.y + 240 + 33, 248, 163 ) };
+    const std::array<fheroes2::Rect, 4> renderCampaignArea{ fheroes2::Rect( roiOffset.x + 214, roiOffset.y + 47, 248, 163 ),
+                                                            fheroes2::Rect( roiOffset.x + 41, roiOffset.y + 140, 166, 193 ),
+                                                            fheroes2::Rect( roiOffset.x + 472, roiOffset.y + 131, 166, 193 ),
+                                                            fheroes2::Rect( roiOffset.x + 214, roiOffset.y + 273, 248, 163 ) };
 
     size_t highlightCampaignId = videos.size();
 
