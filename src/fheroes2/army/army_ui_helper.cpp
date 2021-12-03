@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "army_ui_helper.h"
-#include "image.h"
 #include "agg_image.h"
 #include "army_troop.h"
 #include "game.h"
@@ -27,7 +26,7 @@
 #include "ui_text.h"
 
 
-void fheroes2::DrawTroops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView, Image & output )
+void fheroes2::DrawTroops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView, Image & output ) const
 {
     if ( isValid() ) {
         if ( 0 == count )
