@@ -1257,246 +1257,221 @@ msgstr "%{name} - nie można zbudować"
 msgid "Build %{name}."
 msgstr "Zbuduj: %{name}"
 
-#, fuzzy
 msgid "Blackridge"
-msgstr "Most"
+msgstr "Blackridge"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Hillstone"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Pinehurst"
 
-#, fuzzy
 msgid "Whiteshield"
-msgstr "Biała perła"
+msgstr "Whiteshield"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Woodhaven"
 
-#, fuzzy
 msgid "Blackwind"
-msgstr "Kuźnia"
+msgstr "Blackwind"
 
-#, fuzzy
 msgid "Bloodreign"
-msgstr "Wysokie morale"
+msgstr "Bloodreign"
 
-#, fuzzy
 msgid "Dragontooth"
-msgstr "Smok"
+msgstr "Dragontooth"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Greywind"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Portsmith"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Atlantium"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Middle Gate"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Sansobar"
 
-#, fuzzy
 msgid "Tundara"
-msgstr "Thundax"
+msgstr "Tundara"
 
-#, fuzzy
 msgid "Vulcania"
-msgstr "Wulkan"
+msgstr "Vulcania"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Baywatch"
 
-#, fuzzy
 msgid "Fountainhead"
-msgstr "Fontanna"
+msgstr "Fountainhead"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Vertigo"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Wildabar"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Winterkill"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Brindamoor"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Lakeside"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Nightshadow"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Olympus"
 
-#, fuzzy
 msgid "Sandcaster"
-msgstr "Sandro"
+msgstr "Sandcaster"
 
 msgid "Alamar"
 msgstr "Alamar"
 
-#, fuzzy
 msgid "Burlock"
-msgstr "Czarnoksiężnik"
+msgstr "Burlock"
 
-#, fuzzy
 msgid "Dragadune"
-msgstr "Smok"
+msgstr "Dragadune"
 
 msgid "Kalindra"
 msgstr "Kalindra"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Xabran"
 
 msgid "Algary"
-msgstr ""
+msgstr "Algary"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Basenji"
 
-#, fuzzy
 msgid "Blackfang"
-msgstr "Czarny smok"
+msgstr "Blackfang"
 
-#, fuzzy
 msgid "New Dawn"
-msgstr "Dawn"
+msgstr "New Dawn"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr ""
+msgstr "Avone"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Big Oak"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Chandler"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Erliquin"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Hampshire"
 
-#, fuzzy
 msgid "Antioch"
-msgstr "Uwaga"
+msgstr "Antioch"
 
-#, fuzzy
 msgid "Avalon"
-msgstr "Halon"
+msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Roc Haven"
 
 msgid "South Mill"
-msgstr ""
+msgstr "South Mill"
 
-#, fuzzy
 msgid "Weed Patch"
-msgstr "Złoty zegarek"
+msgstr "Weed Patch"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Brownston"
 
-#, fuzzy
 msgid "Hilltop"
-msgstr "Fort na wzgórzu"
+msgstr "Hilltop"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Weddington"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Westfork"
 
-#, fuzzy
 msgid "Whittingham"
-msgstr "Ocena"
+msgstr "Whittingham"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Cathcart"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Elk's Head"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Roscomon"
 
-#, fuzzy
 msgid "Sherman"
-msgstr "Niemiecki"
+msgstr "Sherman"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Yorksford"
 
-#, fuzzy
 msgid "Blackburn"
-msgstr "Czarny smok"
+msgstr "Blackburn"
 
-#, fuzzy
 msgid "Blacksford"
-msgstr "Czarna wieża"
+msgstr "Blacksford"
 
 msgid "Burton"
-msgstr ""
+msgstr "Burton"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Pig's Eye"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Viper's Nest"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Fenton"
 
-#, fuzzy
 msgid "Lankershire"
-msgstr "Dowodzenie"
+msgstr "Lankershire"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Timberhill"
 
-#, fuzzy
 msgid "Troy"
-msgstr "Troyan"
+msgstr "Troy"
 
-#, fuzzy
 msgid "Forder Oaks"
-msgstr "Borderlands"
+msgstr "Forder Oaks"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Meramec"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Quick Silver"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Westmoor"
 
-#, fuzzy
 msgid "Willow"
-msgstr "Żółty"
+msgstr "Willow"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Corackston"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Sheltemburg"
 
 #, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
@@ -2423,13 +2398,11 @@ msgstr "(już odwiedzono)"
 msgid "(not visited)"
 msgstr "(nie odwiedzono)"
 
-#, fuzzy
 msgid "%{color} Barrier"
-msgstr "%{color} Gracz"
+msgstr "Bariera - kolor %{color}"
 
-#, fuzzy
 msgid "%{color} Tent"
-msgstr "%{color} Gracz"
+msgstr "%{color} namiot podróżnika"
 
 msgid "Road"
 msgstr "Droga"
@@ -5775,68 +5748,53 @@ msgstr "Pomarańczowy"
 msgid "Purple"
 msgstr "Fioletowy"
 
-#, fuzzy
 msgid "barrier|Aqua"
-msgstr "Bariera"
+msgstr "seledynowy"
 
-#, fuzzy
 msgid "barrier|Blue"
-msgstr "Bariera"
+msgstr "niebieski"
 
-#, fuzzy
 msgid "barrier|Brown"
-msgstr "Bariera"
+msgstr "brązowy"
 
-#, fuzzy
 msgid "barrier|Gold"
-msgstr "Bariera"
+msgstr "złoty"
 
-#, fuzzy
 msgid "barrier|Green"
-msgstr "Bariera"
+msgstr "zielony"
 
-#, fuzzy
 msgid "barrier|Orange"
-msgstr "Pomarańczowy"
+msgstr "pomarańczowy"
 
-#, fuzzy
 msgid "barrier|Purple"
-msgstr "Fioletowy"
+msgstr "fioletowy"
 
-#, fuzzy
 msgid "barrier|Red"
-msgstr "Bariera"
+msgstr "czerwony"
 
-#, fuzzy
 msgid "tent|Aqua"
 msgstr "Seledynowy"
 
-#, fuzzy
 msgid "tent|Blue"
 msgstr "Niebieski"
 
-#, fuzzy
 msgid "tent|Brown"
 msgstr "Brązowy"
 
-#, fuzzy
 msgid "tent|Gold"
 msgstr "Złoty"
 
-#, fuzzy
 msgid "tent|Green"
 msgstr "Zielony"
 
-#, fuzzy
 msgid "tent|Orange"
 msgstr "Pomarańczowy"
 
-#, fuzzy
 msgid "tent|Purple"
 msgstr "Fioletowy"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Czerwony"
 
 msgid "Hero/Stats"
 msgstr "Bohater/Statystyki"
