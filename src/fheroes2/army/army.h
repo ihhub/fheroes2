@@ -97,7 +97,6 @@ public:
 
     void JoinStrongest( Troops &, bool );
 
-    void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
@@ -138,7 +137,7 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
+    static void DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first = 0, u32 count = 0 );
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
                                   bool isScouteView = true );
 
