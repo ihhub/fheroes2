@@ -1215,7 +1215,6 @@ void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32
 {
     fheroes2::Image & output = output;
     fheroes2::DrawTroops drawTroops;
-    Troops troops;
     drawTroops.DrawMons32Line( cx, cy, width, first, count, Skill::Level::EXPERT, false, true, output );
 }
 
