@@ -138,7 +138,7 @@ public:
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
     static void DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first = 0, u32 count = 0 );
-    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
+    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
                                   bool isScouteView = true );
 
     explicit Army( HeroBase * s = nullptr );
