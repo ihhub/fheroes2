@@ -53,7 +53,7 @@ public:
     int32_t height() const;
     double fps() const;
     unsigned long frameCount() const;
-    
+
     unsigned long getCurrentFrame() const
     {
         return _currentFrameId;
