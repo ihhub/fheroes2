@@ -21,12 +21,13 @@
 #pragma once
 
 #include "army.h"
+#include "image.h"
 
 namespace fheroes2
 {
     class DrawTroops : Troops
     {
     public:
-        void DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawpower, bool compact, bool isScoutView, Image & output );
+        void DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawpower, bool compact, bool isScoutView, Image & output ) const;
     };
 }
