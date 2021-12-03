@@ -544,7 +544,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     Text text( GetName(), Font::SMALL );
     dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
-    dst_pt.y += 57;
+    dst_pt.y += 58;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = box_rt.x;
