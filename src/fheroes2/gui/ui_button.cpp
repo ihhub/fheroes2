@@ -520,6 +520,6 @@ namespace fheroes2
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
-        return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };
+        return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 }

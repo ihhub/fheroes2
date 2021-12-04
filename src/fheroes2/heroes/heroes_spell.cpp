@@ -545,18 +545,19 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
-    const int32_t border = 10;
-    const int icnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
-    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( icnId, 1 );
-    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( icnId, 3 );
+    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
 
+    const int32_t border = 10;
     fheroes2::ButtonGroup btnGroup;
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
-                                                        fheroes2::AGG::GetICN( icnId, 2 ), display ),
+                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
                         Dialog::OK );
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
                                                         area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
-                                                        fheroes2::AGG::GetICN( icnId, 4 ), display ),
+                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
                         Dialog::CANCEL );
     btnGroup.draw();
 

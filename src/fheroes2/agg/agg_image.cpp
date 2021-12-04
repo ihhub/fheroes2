@@ -857,10 +857,25 @@ namespace fheroes2
                 }
                 return true;
             case ICN::SURRENDR:
+            case ICN::SURRENDE:
                 LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() ) {
-                    // Fix incorrect font color.
-                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                if ( _icnVsSprite[id].size() >= 4 ) {
+                    if ( id == ICN::SURRENDR ) {
+                        // Fix incorrect font color on good ACCEPT button.
+                        ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                    }
+                    // Fix pressed buttons background.
+                    for ( uint32_t i = 0; i < 3; i += 2 ) {
+                        Sprite tmp( _icnVsSprite[id][i + 1].width(), _icnVsSprite[id][i + 1].height() );
+                        tmp.reset();
+                        Blit( _icnVsSprite[id][i + 1], 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
+                        CopyTransformLayer( _icnVsSprite[id][i], tmp );
+
+                        Sprite out( tmp.width(), tmp.height() );
+                        out.reset();
+                        Blit( tmp, 1, 0, out, 0, 1, tmp.width() - 1, tmp.height() - 1 );
+                        _icnVsSprite[id][i + 1] = std::move( out );
+                    }
                 }
                 return true;
             case ICN::NON_UNIFORM_GOOD_OKAY_BUTTON:
@@ -1493,6 +1508,32 @@ namespace fheroes2
                 Fill( _icnVsSprite[id][1], 1, 4, 31, 31, 36 );
                 Blit( pressed, _icnVsSprite[id][1] );
 
+                return true;
+            }
+            case ICN::SPANBTN:
+            case ICN::SPANBTNE: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 1 ) {
+                    _icnVsSprite[id][1].setPosition( -1, 0 );
+                }
+                return true;
+            }
+            case ICN::TRADPOSE: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 19 ) {
+                    // fix background for TRADE and EXIT buttons
+                    for ( uint32_t i = 16; i < 19; i += 2 ) {
+                        Sprite pressed( std::move( _icnVsSprite[id][i] ) );
+                        AddTransparency( pressed, 25 ); // remove too dark background
+
+                        // take background from the empty system button
+                        _icnVsSprite[id][i] = GetICN( ICN::SYSTEME, 12 );
+
+                        // put back dark-gray pixels in the middle of the button
+                        Fill( _icnVsSprite[id][i], 5, 5, 86, 17, 25 );
+                        Blit( pressed, _icnVsSprite[id][i] );
+                    }
+                }
                 return true;
             }
             default:
