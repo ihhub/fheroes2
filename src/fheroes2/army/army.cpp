@@ -1223,18 +1223,16 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
     const int offsetX = lineWidth / 6;
     const int offsetY = compact ? 31 : 49;
 
-    fheroes2::DrawTroops drawTroops;
-
     if ( count < 3 ) {
-        drawTroops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView );
+        troops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView );
     }
     else {
         const int firstLineTroopCount = 2;
         const int secondLineTroopCount = count - firstLineTroopCount;
         const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
 
-        drawTroops.DrawMons32Line( posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView );
-        drawTroops.DrawMons32Line( posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView );
+        troops.DrawMons32Line( posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView );
+        troops.DrawMons32Line( posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView );
     }
 }
 
