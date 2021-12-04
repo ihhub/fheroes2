@@ -35,6 +35,7 @@
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_language.h"
 #include "version.h"
 
 #define STRINGIFY( DEF ) #DEF
@@ -48,7 +49,7 @@ namespace
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
-        // UNUSED = 0x00000008,
+        GLOBAL_RENDER_VSYNC = 0x00000008,
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
 
@@ -185,7 +186,7 @@ bool Settings::Read( const std::string & filename )
         break;
     }
 
-#ifdef BUILD_RELEASE
+#ifndef WITH_DEBUG
     // reset devel
     debug &= ~( DBG_DEVEL );
 #endif
@@ -211,8 +212,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "expansion" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
-            if ( isPriceOfLoyaltySupported() )
-                _musicType = MUSIC_MIDI_EXPANSION;
+            _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
@@ -308,6 +308,15 @@ bool Settings::Read( const std::string & filename )
         }
         else {
             opt_global.ResetModes( GLOBAL_SHOW_INTRO );
+        }
+    }
+
+    if ( config.Exists( "v-sync" ) ) {
+        if ( config.StrParams( "v-sync" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_RENDER_VSYNC );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_RENDER_VSYNC );
         }
     }
 
@@ -427,6 +436,9 @@ std::string Settings::String() const
     os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
     os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
+    os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
+
     return os.str();
 }
 
@@ -474,6 +486,8 @@ const std::string & Settings::getGameLanguage() const
 
 bool Settings::setGameLanguage( const std::string & language )
 {
+    fheroes2::updateAlphabet( language );
+
     Translation::setStripContext( '|' );
 
     _gameLanguage = language;
@@ -593,7 +607,7 @@ int Settings::ScrollSpeed() const
     return scroll_speed;
 }
 
-/* set ai speed: 1 - 10 */
+/* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
     ai_speed = clamp( speed, 0, 10 );
@@ -644,17 +658,7 @@ void Settings::setFullScreen( const bool enable )
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
-    switch ( speed ) {
-    case SCROLL_SLOW:
-    case SCROLL_NORMAL:
-    case SCROLL_FAST1:
-    case SCROLL_FAST2:
-        scroll_speed = speed;
-        break;
-    default:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    }
+    scroll_speed = clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
@@ -757,13 +761,13 @@ MusicSource Settings::MusicType() const
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
-    sound_volume = std::min( v, 10 );
+    sound_volume = clamp( v, 0, 10 );
 }
 
 /* music volume: 0 - 10 */
 void Settings::SetMusicVolume( int v )
 {
-    music_volume = std::min( v, 10 );
+    music_volume = clamp( v, 0, 10 );
 }
 
 /* Set music type: check MusicSource enum */
@@ -1053,7 +1057,7 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: offer to continue the game afer victory condition" );
     default:
         break;
-    };
+    }
 
     return std::string();
 }
@@ -1332,6 +1336,11 @@ void Settings::BinaryLoad()
 bool Settings::FullScreen() const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::isVSyncEnabled() const
+{
+    return opt_global.Modes( GLOBAL_RENDER_VSYNC );
 }
 
 bool Settings::isFirstGameRun() const

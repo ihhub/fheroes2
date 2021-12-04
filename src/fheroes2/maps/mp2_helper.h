@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,55 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #pragma once
 
-#include <string>
-#include <vector>
+class StreamBase;
 
-struct smk_t;
-
-namespace fheroes2
+namespace MP2
 {
-    class Image;
+    struct mp2tile_t;
+    struct mp2addon_t;
+
+    void loadTile( StreamBase & stream, mp2tile_t & tile );
+
+    void loadAddon( StreamBase & stream, mp2addon_t & addon );
 }
-
-class SMKVideoSequence
-{
-public:
-    explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
-
-    SMKVideoSequence( const SMKVideoSequence & ) = delete;
-    SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
-
-    void resetFrame();
-
-    // Input image must be resized to accomodate the frame and also it must be a single layer image as video frames shouldn't have any transform-related information.
-    // If the image is smaller than the frame then only a part of the frame will be drawn.
-    void getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette );
-
-    std::vector<uint8_t> getCurrentPalette() const;
-
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
-
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
-
-    unsigned long getCurrentFrame() const
-    {
-        return _currentFrameId;
-    }
-
-private:
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    int32_t _width;
-    int32_t _height;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
-
-    struct smk_t * _videoFile;
-};

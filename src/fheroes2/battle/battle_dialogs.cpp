@@ -248,40 +248,84 @@ void Battle::DialogBattleSettings( void )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
+        bool saveSpeed = false;
         if ( le.MouseClickLeft( optionAreas[0] ) ) {
             conf.SetBattleSpeed( conf.BattleSpeed() % 10 + 1 );
+            saveSpeed = true;
+        }
+        else if ( le.MouseWheelUp( optionAreas[0] ) ) {
+            conf.SetBattleSpeed( conf.BattleSpeed() + 1 );
+            saveSpeed = true;
+        }
+        else if ( le.MouseWheelDn( optionAreas[0] ) ) {
+            conf.SetBattleSpeed( conf.BattleSpeed() - 1 );
+            saveSpeed = true;
+        }
+        else if ( le.MousePressRight( optionAreas[0] ) ) {
+            Dialog::Message( _( "Speed" ), _( "Set the speed of combat actions and animations." ), Font::BIG );
+        }
+        if ( saveSpeed ) {
             Game::UpdateGameSpeed();
+        }
+
+        // For future use
+        // else if ( le.MousePressRight( optionAreas[1] ) ) {
+        //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
+        // }
+
+        bool saveAutoSpellCast = false;
+        if ( le.MouseClickLeft( optionAreas[2] ) ) {
+            conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
+            saveAutoSpellCast = true;
+        }
+        else if ( le.MousePressRight( optionAreas[2] ) ) {
+            Dialog::Message(
+                _( "Auto Spell Casting" ),
+                _( "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)" ),
+                Font::BIG );
+        }
+
+        bool saveShowGrid = false;
+        if ( le.MouseClickLeft( optionAreas[3] ) ) {
+            conf.SetBattleGrid( !conf.BattleShowGrid() );
+            saveShowGrid = true;
+        }
+        else if ( le.MousePressRight( optionAreas[3] ) ) {
+            Dialog::Message(
+                _( "Grid" ),
+                _( "Toggle the hex grid on or off. The hex grid always underlies movement, even if turned off. This switch only determines if the grid is visible." ),
+                Font::BIG );
+        }
+
+        bool saveShowMoveShadow = false;
+        if ( le.MouseClickLeft( optionAreas[4] ) ) {
+            conf.SetBattleMovementShaded( !conf.BattleShowMoveShadow() );
+            saveShowMoveShadow = true;
+        }
+        else if ( le.MousePressRight( optionAreas[4] ) ) {
+            Dialog::Message( _( "Shadow Movement" ), _( "Toggle on or off shadows showing where your creatures can move and attack." ), Font::BIG );
+        }
+
+        bool saveShowMouseShadow = false;
+        if ( le.MouseClickLeft( optionAreas[5] ) ) {
+            conf.SetBattleMouseShaded( !conf.BattleShowMouseShadow() );
+            saveShowMouseShadow = true;
+        }
+        else if ( le.MousePressRight( optionAreas[5] ) ) {
+            Dialog::Message( _( "Shadow Cursor" ), _( "Toggle on or off a shadow showing the current hex location of the mouse cursor." ), Font::BIG );
+        }
+
+        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
+            break;
+        }
+
+        if ( saveSpeed || saveAutoSpellCast || saveShowGrid || saveShowMoveShadow || saveShowMouseShadow ) {
+            // redraw
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
             display.render();
+
             saveConfiguration = true;
-        }
-        else if ( le.MouseClickLeft( optionAreas[2] ) ) {
-            conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
-        }
-        else if ( le.MouseClickLeft( optionAreas[3] ) ) {
-            conf.SetBattleGrid( !conf.BattleShowGrid() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
-        }
-        else if ( le.MouseClickLeft( optionAreas[4] ) ) {
-            conf.SetBattleMovementShaded( !conf.BattleShowMoveShadow() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
-        }
-        else if ( le.MouseClickLeft( optionAreas[5] ) ) {
-            conf.SetBattleMouseShaded( !conf.BattleShowMouseShadow() );
-            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-            RedrawBattleSettings( optionAreas );
-            saveConfiguration = true;
-        }
-        else if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
-            break;
         }
     }
 
@@ -404,14 +448,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     fheroes2::Blit( sequenceBase, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
-    const int buttonOffset = allowToCancel ? 39 : 121;
-    const int buttonOkICN
-        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
-    const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
-
-    fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 );
-    fheroes2::Button btnCancel( pos_rt.x + buttonOffset + 129, pos_rt.y + 410, buttonCancelICN, 0, 1 );
-
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
         TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
@@ -451,22 +487,39 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     if ( allowToCancel ) {
-        fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
+        const fheroes2::Sprite & buttonOverride = fheroes2::Crop( dialog, 20, 410, 84, 32 );
         fheroes2::Blit( buttonOverride, display, pos_rt.x + 116, pos_rt.y + 410 );
-        btnCancel.draw();
     }
-    btn_ok.draw();
+
+    const int buttonOffset = allowToCancel ? 39 : 120;
+    const int buttonOkICN
+        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
+    const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
+
+    std::unique_ptr<fheroes2::ButtonBase> btnOk;
+    fheroes2::ButtonSprite btnCancel = fheroes2::makeButtonWithShadow( pos_rt.x + buttonOffset + 129, pos_rt.y + 410, fheroes2::AGG::GetICN( buttonCancelICN, 0 ),
+                                                                       fheroes2::AGG::GetICN( buttonCancelICN, 1 ), display );
+
+    if ( allowToCancel ) {
+        btnCancel.draw();
+        btnOk.reset( new fheroes2::ButtonSprite( fheroes2::makeButtonWithShadow( pos_rt.x + buttonOffset, pos_rt.y + 410, fheroes2::AGG::GetICN( buttonOkICN, 0 ),
+                                                                                 fheroes2::AGG::GetICN( buttonOkICN, 1 ), display ) ) );
+    }
+    else {
+        btnOk.reset( new fheroes2::Button( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonOkICN, 0, 1 ) );
+    }
+    btnOk->draw();
 
     display.render();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
+        le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();
         if ( allowToCancel ) {
             le.MousePressLeft( btnCancel.area() ) ? btnCancel.drawOnPress() : btnCancel.drawOnRelease();
         }
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
+        if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
             break;
 
         if ( allowToCancel && le.MouseClickLeft( btnCancel.area() ) ) {
@@ -495,8 +548,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         const bool isWinnerHuman = winner && winner->isControlHuman();
 
-        btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
-        btn_ok.setPosition( pos_rt.x + 120, pos_rt.y + 410 );
+        btnOk.reset( new fheroes2::Button( pos_rt.x + 120, pos_rt.y + 410, isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 ) );
 
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
@@ -504,7 +556,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-                btn_ok.draw();
+
+                btnOk->draw();
 
                 std::string artMsg;
                 if ( art.isUltimate() ) {
@@ -537,14 +590,14 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
 
                 while ( le.HandleEvents() ) {
-                    le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
+                    le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();
 
                     // display captured artifact info on right click
                     if ( le.MousePressRight( artifactArea ) )
                         Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
-                    if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
+                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
                         break;
 
                     // animation
@@ -857,26 +910,16 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
+    const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
 
-    fheroes2::Button btnAccept( pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
-    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
+    fheroes2::ButtonSprite btnAccept
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 1 ), display );
 
-    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
-    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
-    fheroes2::AddTransparency( marketButtonReleased, 36 );
-    fheroes2::AddTransparency( marketButtonPressed, 36 );
+    fheroes2::ButtonSprite btnDecline
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 2 ), fheroes2::AGG::GetICN( icn, 3 ), display );
 
-    const fheroes2::Point buttonMarketPos( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145 );
-
-    fheroes2::Sprite marketButtonReleasedBack( marketButtonReleased.width(), marketButtonReleased.height(), marketButtonReleased.x(), marketButtonReleased.y() );
-    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, 0, 0, marketButtonReleasedBack.width(), marketButtonReleasedBack.height() );
-    fheroes2::Blit( marketButtonReleased, marketButtonReleasedBack );
-
-    fheroes2::Sprite marketButtonPressedBack( marketButtonPressed.width(), marketButtonPressed.height(), marketButtonPressed.x(), marketButtonPressed.y() );
-    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonPressedBack, 0, 0, marketButtonPressedBack.width(), marketButtonPressedBack.height() );
-    fheroes2::Blit( marketButtonPressed, marketButtonPressedBack );
-
-    fheroes2::ButtonSprite btnMarket( buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, marketButtonPressedBack );
+    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, fheroes2::AGG::GetICN( icnMarket, 0 ),
+                                                                       fheroes2::AGG::GetICN( icnMarket, 1 ), display );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();

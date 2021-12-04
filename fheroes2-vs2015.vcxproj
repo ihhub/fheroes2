@@ -176,6 +176,7 @@
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
+    <ClCompile Include="src\engine\image_palette.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\logging.cpp" />
@@ -348,6 +349,7 @@
     <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles_quantity.cpp" />
     <ClCompile Include="src\fheroes2\maps\mp2.cpp" />
+    <ClCompile Include="src\fheroes2\maps\mp2_helper.cpp" />
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
     <ClCompile Include="src\fheroes2\maps\visit.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
@@ -389,6 +391,7 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\image.h" />
+	<ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />
@@ -516,6 +519,7 @@
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles.h" />
     <ClInclude Include="src\fheroes2\maps\mp2.h" />
+	<ClInclude Include="src\fheroes2\maps\mp2_helper.h" />
     <ClInclude Include="src\fheroes2\maps\pairs.h" />
     <ClInclude Include="src\fheroes2\maps\position.h" />
     <ClInclude Include="src\fheroes2\maps\visit.h" />

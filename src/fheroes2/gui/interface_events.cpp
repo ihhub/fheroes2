@@ -209,28 +209,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
         break;
 
     case Dialog::INFO:
-        if ( Settings::Get().isCampaignGameType() ) {
-            fheroes2::Display & display = fheroes2::Display::instance();
-            fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
-
-            AGG::ResetMixer();
-
-            const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
-            if ( returnMode == fheroes2::GameMode::CANCEL ) {
-                saver.restore();
-
-                Game::restoreSoundsForCurrentFocus();
-            }
-            else {
-                saver.reset();
-            }
-
-            return returnMode;
-        }
-        else {
-            EventGameInfo();
-        }
-        break;
+        return EventGameInfo();
 
     case Dialog::DIG:
         return EventDigArtifact();
@@ -329,9 +308,29 @@ void Interface::Basic::EventPuzzleMaps( void ) const
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-void Interface::Basic::EventGameInfo( void ) const
+fheroes2::GameMode Interface::Basic::EventGameInfo()
 {
+    if ( Settings::Get().isCampaignGameType() ) {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
+
+        AGG::ResetMixer();
+
+        const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
+        if ( returnMode == fheroes2::GameMode::CANCEL ) {
+            saver.restore();
+
+            Game::restoreSoundsForCurrentFocus();
+        }
+        else {
+            saver.reset();
+        }
+
+        return returnMode;
+    }
+
     Dialog::GameInfo();
+    return fheroes2::GameMode::CANCEL;
 }
 
 void Interface::Basic::EventSwitchHeroSleeping( void )
@@ -391,7 +390,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode ) const
+fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode )
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -399,6 +398,9 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
+
+            // The action object (e.g. Stables or Well) can alter the status of the hero
+            iconsPanel.RedrawIcons( ICON_HEROES );
 
             // If a hero completed an action we must verify the condition for the scenario.
             if ( hero->isAction() ) {

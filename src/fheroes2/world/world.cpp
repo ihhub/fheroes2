@@ -417,15 +417,15 @@ void World::NewMaps( int32_t sw, int32_t sh )
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.tileIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
+        mp2tile.surfaceType = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
-        mp2tile.indexName1 = 0xff; // index sprite level 1
+        mp2tile.level1IcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
-        mp2tile.indexName2 = 0xff; // index sprite level 2
+        mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
         mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObject = MP2::OBJ_ZERO;
+        mp2tile.mapObjectType = MP2::OBJ_ZERO;
         mp2tile.nextAddonIndex = 0;
         mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
         mp2tile.level2ObjectUID = 0;
@@ -648,37 +648,41 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+
         pickRumor();
 
-        if ( BeginMonth() )
+        if ( BeginMonth() ) {
             ++month;
+        }
     }
 
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
-        // reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
-        hero->ResetModes( Heroes::SAVE_MP_POINTS );
-        // replenish spell points of all heroes
-        hero->ReplenishSpellPoints();
-    } );
-
-    // action new day
-    vec_kingdoms.NewDay();
-
-    // action new week
-    if ( BeginWeek() ) {
-        NewWeek();
-        vec_kingdoms.NewWeek();
-    }
-
-    // action new month
+    // first the routine of the new month
     if ( BeginMonth() ) {
         NewMonth();
+
         vec_kingdoms.NewMonth();
+        vec_castles.NewMonth();
+        vec_heroes.NewMonth();
     }
 
+    // then the routine of the new week
+    if ( BeginWeek() ) {
+        NewWeek();
+
+        vec_kingdoms.NewWeek();
+        vec_castles.NewWeek();
+        vec_heroes.NewWeek();
+    }
+
+    // and finally the routine of the new day
+    vec_kingdoms.NewDay();
+    vec_castles.NewDay();
+    vec_heroes.NewDay();
+
     // remove deprecated events
-    if ( day )
-        vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+    assert( day > 0 );
+
+    vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
@@ -694,16 +698,13 @@ void World::NewWeek( void )
     week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
     week_current = week_next;
 
-    if ( 1 < week ) {
-        // update week object
-        for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-            if ( MP2::isWeekLife( ( *it ).GetObject( false ) ) || MP2::OBJ_MONSTER == ( *it ).GetObject() )
-                ( *it ).QuantityUpdate( false );
-
-        // update gray towns
-        for ( auto & castle : vec_castles )
-            if ( castle->GetColor() == Color::NONE )
-                castle->ActionNewWeek();
+    // update objects
+    if ( week > 1 ) {
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+                tile.QuantityUpdate( false );
+            }
+        }
     }
 
     // add events
@@ -716,14 +717,9 @@ void World::NewWeek( void )
 
 void World::NewMonth( void )
 {
-    // skip first month
-    if ( 1 < week && week_current.GetType() == WeekName::MONSTERS )
+    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
-
-    // update gray towns
-    for ( auto & castle : vec_castles )
-        if ( castle->GetColor() == Color::NONE )
-            castle->ActionNewMonth();
+    }
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )

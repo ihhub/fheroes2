@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "image.h"
-#include "palette_h2.h"
+#include "image_palette.h"
 
 #include <cassert>
 #include <cstdlib>
@@ -331,6 +331,8 @@ namespace
             uint32_t g = 0;
             uint32_t b = 0;
 
+            const uint8_t * gamePalette = fheroes2::getGamePalette();
+
             for ( uint32_t id = 0; id < size; ++id ) {
                 r = ( id % 64 );
                 g = ( id >> 6 ) % 64;
@@ -341,7 +343,7 @@ namespace
                 const uint8_t * correctorX = transformTable + 256 * 15;
 
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
-                    const uint8_t * palette = kb_pal + *correctorX * 3;
+                    const uint8_t * palette = gamePalette + *correctorX * 3;
 
                     const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
                     ++palette;
@@ -713,6 +715,17 @@ namespace fheroes2
         }
     }
 
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return in;
+
+        Sprite out = makeShadow( in, shadowOffset, transformId );
+        Blit( in, out, -shadowOffset.x, 0 );
+
+        return out;
+    }
+
     void AddTransparency( Image & image, uint8_t valueToReplace )
     {
         ReplaceColorIdByTransformId( image, valueToReplace, 1 );
@@ -749,6 +762,8 @@ namespace fheroes2
 
         const uint8_t behindValue = 255 - alphaValue;
 
+        const uint8_t * gamePalette = fheroes2::getGamePalette();
+
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
             const uint8_t * imageInY = in.image() + offsetInY;
@@ -774,8 +789,8 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = kb_pal + inValue * 3;
-                    const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
+                    const uint8_t * inPAL = gamePalette + inValue * 3;
+                    const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                     const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -808,8 +823,8 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = kb_pal + inValue * 3;
-                    const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
+                    const uint8_t * inPAL = gamePalette + inValue * 3;
+                    const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                     const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -876,7 +891,7 @@ namespace fheroes2
     {
         std::vector<uint8_t> palette( 256 );
 
-        const uint8_t * value = kb_pal;
+        const uint8_t * value = fheroes2::getGamePalette();
 
         for ( uint32_t i = 0; i < 256; ++i ) {
             const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
@@ -1108,6 +1123,15 @@ namespace fheroes2
         }
     }
 
+    void CopyTransformLayer( const Image & in, Image & out )
+    {
+        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
+            assert( 0 );
+            return;
+        }
+        memcpy( out.transform(), in.transform(), in.width() * in.height() );
+    }
+
     Image CreateBlurredImage( const Image & in, int32_t blurRadius )
     {
         if ( in.empty() )
@@ -1128,6 +1152,8 @@ namespace fheroes2
 
         uint8_t * imageOutY = out.image();
         const uint8_t * imageIn = in.image();
+
+        const uint8_t * gamePalette = fheroes2::getGamePalette();
 
         for ( int32_t y = 0; y < height; ++y, imageOutY += width ) {
             uint8_t * imageOutX = imageOutY;
@@ -1164,7 +1190,7 @@ namespace fheroes2
                     const uint8_t * imageInX = imageInY;
                     const uint8_t * imageInXEnd = imageInX + roiWidth;
                     for ( ; imageInX != imageInXEnd; ++imageInX ) {
-                        const uint8_t * palette = kb_pal + *imageInX * 3;
+                        const uint8_t * palette = gamePalette + *imageInX * 3;
 
                         sumRed += ( *palette );
                         ++palette;
@@ -1537,6 +1563,23 @@ namespace fheroes2
         }
     }
 
+    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t tranformId )
+    {
+        if ( !Verify( image, x, y, width, height ) )
+            return;
+
+        const int32_t imageWidth = image.width();
+
+        uint8_t * imageY = image.image() + y * imageWidth + x;
+        uint8_t * transformY = image.transform() + y * imageWidth + x;
+        const uint8_t * imageYEnd = imageY + height * imageWidth;
+
+        for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
+            std::fill( imageY, imageY + width, 0 );
+            std::fill( transformY, transformY + width, tranformId );
+        }
+    }
+
     Image FilterOnePixelNoise( const Image & input )
     {
         if ( input.width() < 3 || input.height() < 3 ) {
@@ -1747,6 +1790,39 @@ namespace fheroes2
         return GetPALColorId( red / 4, green / 4, blue / 4 );
     }
 
+    Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return Sprite();
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        // Shadow has (-x, +y) offset.
+        Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
+        out.reset();
+
+        const int32_t widthOut = out.width();
+
+        const uint8_t * transformInY = in.transform();
+        const uint8_t * transformInYEnd = transformInY + width * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+
+        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 ) {
+                    *transformOutX = transformId;
+                }
+            }
+        }
+
+        return out;
+    }
+
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
     {
         if ( image.empty() )
@@ -1817,6 +1893,8 @@ namespace fheroes2
             for ( int32_t y = 0; y < heightRoiOut; ++y )
                 positionY[y] = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
 
+            const uint8_t * gamePalette = fheroes2::getGamePalette();
+
             if ( in.singleLayer() && out.singleLayer() ) {
                 for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
                     const double posY = positionY[y];
@@ -1839,10 +1917,10 @@ namespace fheroes2
                             const double coeff3 = ( 1 - coeffX ) * coeffY;
                             const double coeff4 = coeffX * coeffY;
 
-                            const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *imageInX ) * 3;
-                            const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
-                            const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
-                            const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
+                            const uint8_t * id1 = gamePalette + static_cast<uint32_t>( *imageInX ) * 3;
+                            const uint8_t * id2 = gamePalette + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
+                            const uint8_t * id3 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
+                            const uint8_t * id4 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
 
                             const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
                             const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
@@ -1884,10 +1962,10 @@ namespace fheroes2
                                 const double coeff3 = ( 1 - coeffX ) * coeffY;
                                 const double coeff4 = coeffX * coeffY;
 
-                                const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *imageInX ) * 3;
-                                const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
-                                const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
-                                const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
+                                const uint8_t * id1 = gamePalette + static_cast<uint32_t>( *imageInX ) * 3;
+                                const uint8_t * id2 = gamePalette + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
+                                const uint8_t * id3 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
+                                const uint8_t * id4 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
 
                                 const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
                                 const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;

@@ -40,9 +40,12 @@ namespace Speed
         INSTANT = 9
     };
 
-    std::string String( int );
-    int GetOriginalSlow( int );
-    int GetOriginalFast( int );
+    std::string String( const int speed );
+    int GetOriginalSlow( const int speed );
+    int GetOriginalFast( const int speed );
+
+    int GetSlowSpeedFromSpell( const int currentSpeed );
+    int GetHasteSpeedFromSpell( const int currentSpeed );
 }
 
 #endif

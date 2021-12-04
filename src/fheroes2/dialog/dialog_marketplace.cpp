@@ -144,8 +144,10 @@ public:
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );
 
-        buttonGift.setPosition( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 120 );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 150 );
+        const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
+
+        buttonGift.setPosition( pos_rt.x - 70 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
 
@@ -173,7 +175,8 @@ public:
     }
 
     void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
-    void ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, bool fromTradingPost );
+    void ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, const bool fromTradingPost,
+                        const bool firstExchange );
 
     fheroes2::Rect buttonMax;
     fheroes2::Rect buttonMin;
@@ -194,7 +197,7 @@ private:
 };
 
 void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell,
-                                    bool fromTradingPost )
+                                    const bool fromTradingPost, const bool firstExchange )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     bool disable = kingdom.GetFunds().Get( resourceFrom ) <= 0;
@@ -203,8 +206,11 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         _scrollbar.hide();
         back.restore();
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
-        const TextBox displayMesssage( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ),
-                                       Font::BIG, dst_rt );
+        const std::string message = firstExchange && ( resourceFrom == resourceTo || 0 == max_buy )
+                                        ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
+                                        : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
+
+        const TextBox displayMesssage( message, Font::BIG, dst_rt );
 
         if ( !_singlePlayer ) {
             buttonGift.enable();
@@ -250,12 +256,12 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
-        Text text( _( "max" ), Font::YELLOW_SMALL );
+        Text text( _( "Max" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
         buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
         text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( _( "min" ), Font::YELLOW_SMALL );
+        text.Set( _( "Min" ), Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
         buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
@@ -265,7 +271,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.y = pos_rt.y + 115;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        buttonGift.disable();
+        buttonGift.enable();
         buttonTrade.enable();
         buttonLeft.enable();
         buttonRight.enable();
@@ -392,9 +398,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Scrollbar & scrollbar = gui._scrollbar;
 
     // button exit
-    const fheroes2::Sprite & sprite_exit = fheroes2::AGG::GetICN( tradpost, 17 );
-    dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_exit.width() ) / 2;
-    dst_pt.y = pos_rt.y + pos_rt.height - sprite_exit.height();
+    const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
+
+    dst_pt.x = pos_rt.x + 70 + ( pos_rt.width - spriteExit.width() ) / 2;
+    dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
 
     buttonGift.draw();
@@ -402,6 +409,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
+
+    bool firstExchange = true;
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -419,10 +428,20 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
+        // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
             Dialog::MakeGiftResource( kingdom );
+
+            resourceTo = Resource::UNKNOWN;
+            resourceFrom = Resource::UNKNOWN;
+            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
+
+            cursorTo.hide();
+            cursorFrom.hide();
+
             fundsFrom = kingdom.GetFunds();
             RedrawFromResource( pt1, fundsFrom );
+
             display.render();
         }
 
@@ -450,7 +469,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 RedrawToResource( pt2, true, kingdom, fromTradingPost, resourceFrom );
                 if ( resourceTo ) {
                     cursorTo.show();
-                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost );
+                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost, firstExchange );
                 }
 
                 display.render();
@@ -480,7 +499,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                     cursorTo.hide();
                     RedrawToResource( pt2, true, kingdom, fromTradingPost, resourceFrom );
                     cursorTo.show();
-                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost );
+                    gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost, firstExchange );
                 }
                 display.render();
             }
@@ -531,8 +550,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             kingdom.OddFundsResource( Funds( resourceFrom, count_sell ) );
             kingdom.AddFundsResource( Funds( resourceTo, count_buy ) );
 
-            resourceTo = resourceFrom = Resource::UNKNOWN;
-            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost );
+            firstExchange = false;
+
+            resourceTo = Resource::UNKNOWN;
+            resourceFrom = Resource::UNKNOWN;
+            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
             fundsFrom = kingdom.GetFunds();
             cursorTo.hide();

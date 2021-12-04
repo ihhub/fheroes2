@@ -137,8 +137,8 @@ namespace Battle
     private:
         Text bar1;
         Text bar2;
-        fheroes2::Sprite back1;
-        fheroes2::Sprite back2;
+        const fheroes2::Sprite & back1;
+        const fheroes2::Sprite & back2;
         std::string message;
         StatusListBox * listlog;
     };
@@ -235,8 +235,7 @@ namespace Battle
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
         void RedrawCover( void );
-        void RedrawCoverStatic();
-        void RedrawCoverBoard( const Settings &, const Board & );
+        void RedrawCoverStatic( const Settings & conf, const Board & board );
         void RedrawLowObjects( s32 );
         void RedrawHighObjects( s32 );
         void RedrawCastle1( const Castle & );
@@ -247,7 +246,10 @@ namespace Battle
         void RedrawOpponents( void );
         void RedrawOpponentsFlags( void );
         void RedrawArmies( void );
-        void RedrawTroopSprite( const Unit & );
+        void RedrawTroopSprite( const Unit & unit );
+
+        fheroes2::Point drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
+
         void RedrawTroopCount( const Unit & unit );
 
         void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = nullptr );

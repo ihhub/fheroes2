@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 22:34+0800\n"
-"PO-Revision-Date: 2014-11-08 12:00+0000\n"
-"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
+"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"PO-Revision-Date: 2021-11-07 19:44+0100\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2014-12-05 05:56+0000\n"
-"X-Generator: Launchpad (build 17274)\n"
+"X-Generator: Poedit 3.0\n"
 
 msgid "Warrior"
 msgstr ""
@@ -137,6 +137,9 @@ msgstr "Pasirinkti %{name}"
 msgid "Cannot move last troop"
 msgstr ""
 
+msgid "Set Count"
+msgstr ""
+
 msgid "%{name} half the enemy troops!"
 msgstr ""
 
@@ -193,6 +196,29 @@ msgid "Off"
 msgstr ""
 
 msgid "On"
+msgstr ""
+
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
 msgstr ""
 
 msgid "The enemy has surrendered!"
@@ -323,8 +349,8 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
-msgstr "Žiūrėti %{monster} informaciją."
+msgid "View %{monster} info"
+msgstr "Žiūrėti %{monster} informaciją"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -339,19 +365,19 @@ msgstr[2] ""
 msgid "Attack %{monster}"
 msgstr "Pulti %{monster}"
 
-msgid "Fly %{monster} here."
+msgid "Fly %{monster} here"
 msgstr ""
 
-msgid "Move %{monster} here."
+msgid "Move %{monster} here"
 msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr ""
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr ""
 
 msgid "Cast %{spell} on %{monster}"
@@ -360,28 +386,59 @@ msgstr ""
 msgid "Cast %{spell}"
 msgstr ""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr ""
 
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr ""
 
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Enable auto combat"
 msgstr ""
 
-msgid "Customize system options."
+msgid "Allows the computer to fight out the battle for you."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr ""
+
+msgid "Customize system options"
+msgstr ""
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "System Options"
 msgstr ""
 
 msgid "Wait this unit"
 msgstr "Šis karys palauks"
 
+msgid "Wait"
+msgstr ""
+
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
+msgstr ""
+
 msgid "Skip this unit"
 msgstr "Šis karys praleis ėjimą"
 
-msgid "View Opposing Hero"
+msgid "Skip"
+msgstr ""
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+
+msgid "View Hero's options"
+msgstr ""
+
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"
@@ -393,10 +450,10 @@ msgstr ""
 msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
-msgid "%{name} skip the turn"
+msgid "%{name} skip their turn."
 msgstr ""
 
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr ""
 
 msgid "%{attacker} do %{damage} damage."
@@ -465,10 +522,10 @@ msgstr ""
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr ""
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Good luck shines on the %{attacker}."
 msgstr ""
 
 msgid "High morale enables the %{monster} to attack again."
@@ -480,7 +537,7 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr ""
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr ""
 
 msgid "The mirror image is destroyed!"
@@ -521,6 +578,42 @@ msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+
+msgid "Human"
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+#, fuzzy
+msgid "Set Attack Skill"
+msgstr "Puolimo įgūdis"
+
+#, fuzzy
+msgid "Set Defense Skill"
+msgstr "Gynybos įgūdis"
+
+#, fuzzy
+msgid "Set Power Skill"
+msgstr "Burtų galia"
+
+#, fuzzy
+msgid "Set Knowledge Skill"
+msgstr "Išmanymas"
+
+#, fuzzy
+msgid "%{race1} %{name1}"
+msgstr "Žiūrėti %{name}"
+
+msgid "vs"
+msgstr ""
+
+#, fuzzy
+msgid "%{race2} %{name2}"
+msgstr "Žiūrėti %{name}"
 
 #, fuzzy
 msgid "Monsters"
@@ -1009,29 +1102,38 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Thunder Mace"
-msgstr ""
-
-msgid "Minor Scroll"
-msgstr ""
-
-#, fuzzy
-msgid "Dragon Sword"
-msgstr "Drakonų miestas"
-
-#, fuzzy
-msgid "Breastplate"
-msgstr "Turgus"
-
-msgid "Fizbin of Misfortune"
-msgstr ""
-
-msgid "Mage's ring"
+msgid "Caster's Bracelet"
 msgstr ""
 
 #, fuzzy
 msgid "Defender Helm"
 msgstr "Gynybos įgūdis"
+
+#, fuzzy
+msgid "Breastplate"
+msgstr "Turgus"
+
+#, fuzzy
+msgid "Dragon Sword"
+msgstr "Drakonų miestas"
+
+msgid "Fizbin Medal"
+msgstr ""
+
+msgid "Foremost Scroll"
+msgstr ""
+
+msgid "Mage's Ring"
+msgstr ""
+
+msgid "Major Scroll"
+msgstr ""
+
+msgid "Minor Scroll"
+msgstr ""
+
+msgid "Nomad Boots"
+msgstr ""
 
 msgid "Power Axe"
 msgstr ""
@@ -1039,7 +1141,10 @@ msgstr ""
 msgid "Stealth Shield"
 msgstr ""
 
-msgid "Nomad Boots"
+msgid "Thunder Mace"
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Summon Earth"
@@ -1481,10 +1586,12 @@ msgstr "Rodyti ankstesnį miestą"
 msgid "Show previous town"
 msgstr "Rodyti ankstesnį miestą"
 
-msgid "Army is full"
+msgid "Army joining"
 msgstr ""
 
-msgid "Join Error"
+msgid ""
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
@@ -1591,7 +1698,7 @@ msgstr ""
 msgid "Town Population Information and Statistics"
 msgstr "Miesto gyventojų informacija bei statistika"
 
-msgid "Damage"
+msgid "Damg"
 msgstr ""
 
 msgid "HP"
@@ -1643,6 +1750,9 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1655,6 +1765,9 @@ msgid "Shots"
 msgstr "Šūviai"
 
 msgid "Shots Left"
+msgstr ""
+
+msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -1699,6 +1812,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr ""
 
@@ -1710,6 +1826,9 @@ msgstr "Statyti naują laivą:"
 
 msgid "Resource cost:"
 msgstr "Išteklio kaina:"
+
+msgid "Need: "
+msgstr ""
 
 msgid "Load Game"
 msgstr "Įkelti žaidimą"
@@ -1792,7 +1911,9 @@ msgid "Rating"
 msgstr ""
 
 msgid "Map Size"
-msgstr "Pasaulio dydis"
+msgstr ""
+"Pasaulio\n"
+"dydis"
 
 msgid "Opponents"
 msgstr ""
@@ -1810,7 +1931,7 @@ msgid ""
 "Conditions"
 msgstr ""
 
-msgid "score: "
+msgid "Score: "
 msgstr ""
 
 msgid "First select recipients!"
@@ -1876,11 +1997,12 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
-msgid "max"
+msgid "Max"
 msgstr ""
 
-msgid "min"
-msgstr ""
+#, fuzzy
+msgid "Min"
+msgstr "Apleisti rūmai"
 
 msgid "Qty to trade"
 msgstr ""
@@ -1996,6 +2118,25 @@ msgstr "Ar jūs tikrai norite ištrinti failą:"
 
 msgid "Warning!"
 msgstr "Įspėjimas!"
+
+#, fuzzy
+msgid "Select Monster:"
+msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Select Hero:"
+msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Magiškas artefaktas"
+
+msgid "Select Spell:"
+msgstr ""
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Gynybos įgūdis"
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -2247,9 +2388,6 @@ msgstr ""
 msgid "Knowl"
 msgstr "Išmanymas"
 
-msgid "Human"
-msgstr ""
-
 msgid "1st"
 msgstr ""
 
@@ -2360,6 +2498,9 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
+msgid "and many other contributors!"
+msgstr ""
+
 msgid "Original project before 0.7"
 msgstr ""
 
@@ -2370,6 +2511,64 @@ msgid "Connect with us at"
 msgstr ""
 
 msgid "Need help with the game?"
+msgstr ""
+
+msgid "and many-many other supporters!"
+msgstr ""
+
+msgid "Original Heroes of Might and Magic II team"
+msgstr ""
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid "Vocalists"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+#, fuzzy
+msgid "Artists"
+msgstr "Magiškas artefaktas"
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+msgid "Scenarios"
 msgstr ""
 
 msgid "Unknown Hero"
@@ -2571,6 +2770,9 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2585,6 +2787,10 @@ msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
 msgstr ""
+
+#, fuzzy
+msgid "Ultimate Artifact"
+msgstr "Rasti magišką artefaktą '%{name}'"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -2828,9 +3034,6 @@ msgstr ""
 msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr ""
 
-msgid "System Options"
-msgstr ""
-
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
@@ -2953,6 +3156,12 @@ msgid "Italian"
 msgstr ""
 
 msgid ", FPS: "
+msgstr ""
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
 msgstr ""
 
 msgid "Ambrose"
@@ -3165,12 +3374,6 @@ msgstr ""
 msgid "Martine"
 msgstr ""
 
-msgid "%{object} robber"
-msgstr ""
-
-msgid "%{object} raided"
-msgstr ""
-
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
 
@@ -3258,7 +3461,7 @@ msgstr ""
 msgid "Treasure"
 msgstr ""
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -3416,7 +3619,7 @@ msgstr ""
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Sign"
@@ -3477,8 +3680,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Zombies you spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
@@ -3490,8 +3693,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Ghosts you spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3501,11 +3704,6 @@ msgstr ""
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the ship?"
-msgstr ""
-
-msgid ""
-"Upon defeating the Skeletons you spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3605,6 +3803,11 @@ msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
+msgstr ""
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells is "
+"you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
 msgid ""
@@ -3934,6 +4137,11 @@ msgid ""
 "knows a process that will convert Iron Golems into Steel Golems. "
 "Unfortunately, you have none of these troops in your army, so he can't help "
 "you."
+msgstr ""
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
 msgstr ""
 
 msgid ""
@@ -4980,6 +5188,18 @@ msgstr "Aukso kasykla"
 msgid "Mine"
 msgstr ""
 
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+msgid "See Rock City."
+msgstr ""
+
+msgid "This space for rent."
+msgstr ""
+
 msgid "No object"
 msgstr ""
 
@@ -5082,7 +5302,7 @@ msgstr ""
 msgid "Troll Bridge"
 msgstr ""
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr ""
 
 msgid "Xanadu"
@@ -5990,6 +6210,9 @@ msgid "Medal of Honor"
 msgstr ""
 
 msgid "Medal of Distinction"
+msgstr ""
+
+msgid "Fizbin of Misfortune"
 msgstr ""
 
 msgid "The %{name} greatly decreases your morale by %{count}."

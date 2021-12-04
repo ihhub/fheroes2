@@ -124,6 +124,11 @@ namespace Battle
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & ) const;
 
+        // Returns the cell nearest to the end of the path to the cell with the given index (according to the ArenaPathfinder)
+        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
+        // with the given index is unreachable in principle
+        int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
+
         void ApplyAction( Command & );
 
         TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;

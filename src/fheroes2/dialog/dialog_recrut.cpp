@@ -197,7 +197,7 @@ const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::Butto
             btnMax.enable();
         }
 
-        return max ? "max" : "min";
+        return max ? _( "Max" ) : _( "Min" );
     }
 
     return "";
@@ -212,7 +212,7 @@ u32 CalculateMax( const Monster & monster, const Kingdom & kingdom, u32 availabl
     return max;
 }
 
-Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext )
+Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -232,7 +232,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
 
-    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
+    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 + windowOffsetY );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
@@ -280,7 +280,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::ButtonSprite monsterSwitchLeft;
     fheroes2::ButtonSprite monsterSwitchRight;
 
-    if ( ext && monster0.GetDowngrade() != monster0 ) {
+    if ( allowDowngradedMonster && monster0.GetDowngrade() != monster0 ) {
         monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
         monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
 
@@ -345,7 +345,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
         bool updateCost = false;
-        if ( ext && upgrades.size() > 1 ) {
+        if ( allowDowngradedMonster && upgrades.size() > 1 ) {
             if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {

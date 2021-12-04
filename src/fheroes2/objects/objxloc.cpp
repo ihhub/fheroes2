@@ -148,6 +148,11 @@ int ObjXlc2::GetActionObject( u32 index )
     return MP2::OBJ_ZERO;
 }
 
+bool ObjXlc2::isReefs( const uint8_t index )
+{
+    return index >= 111 && index <= 135;
+}
+
 int ObjXlc3::GetActionObject( u32 index )
 {
     switch ( index ) {

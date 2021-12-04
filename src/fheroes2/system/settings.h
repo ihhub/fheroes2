@@ -28,7 +28,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-enum
+enum : int
 {
     SCROLL_SLOW = 1,
     SCROLL_NORMAL = 2,
@@ -153,6 +153,8 @@ public:
     bool LoadedGameVersion() const;
     bool MusicMIDI() const;
     bool isShowIntro() const;
+
+    bool isVSyncEnabled() const;
 
     bool isFirstGameRun() const;
     void resetFirstGameRun();
