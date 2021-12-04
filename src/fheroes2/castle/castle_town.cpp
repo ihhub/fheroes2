@@ -180,13 +180,13 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     }
 
     // draw castle sprite
-    dst_pt.x = cur_pt.x + 460;
+    dst_pt.x = cur_pt.x + 459;
     dst_pt.y = cur_pt.y + 5;
     DrawImageCastle( dst_pt );
 
     // castle name
     Text text( GetName(), Font::SMALL );
-    text.Blit( cur_pt.x + 536 - text.w() / 2, cur_pt.y + 1 );
+    text.Blit( cur_pt.x + 538 - text.w() / 2, cur_pt.y + 1 );
 
     BuildingInfo dwelling1( *this, DWELLING_MONSTER1 );
     dwelling1.SetPos( cur_pt.x + 5, cur_pt.y + 2 );
