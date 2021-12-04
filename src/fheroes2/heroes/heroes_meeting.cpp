@@ -43,29 +43,15 @@
 
 namespace
 {
-    void createMoveButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    fheroes2::ButtonSprite createMoveButton( const int32_t icnId, const int32_t offsetX, const int32_t offsetY, const fheroes2::Image & display )
     {
-        const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
         const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
         const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
 
-        const int32_t offsetX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
-        const int32_t offsetY = std::min( originalReleasedImage.y(), originalPressedImage.y() );
-        const int32_t width = std::max( originalReleasedImage.width(), originalPressedImage.width() ) - offsetX;
-        const int32_t height = std::max( originalReleasedImage.height(), originalPressedImage.height() ) - offsetY;
+        const int32_t minX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
+        const int32_t minY = std::min( originalReleasedImage.y(), originalPressedImage.y() );
 
-        fheroes2::Sprite releasedButton( width, height );
-        fheroes2::Copy( buttonBackground, offset.x + offsetX, offset.y + offsetY, releasedButton, 0, 0, width, height );
-        fheroes2::Blit( originalReleasedImage, 0, 0, releasedButton, originalReleasedImage.x() - offsetX, originalReleasedImage.y() - offsetY,
-                        originalReleasedImage.width(), originalReleasedImage.height() );
-
-        fheroes2::Sprite pressedButton( width, height );
-        fheroes2::Copy( buttonBackground, offset.x + offsetX, offset.y + offsetY, pressedButton, 0, 0, width, height );
-        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, originalPressedImage.x() - offsetX, originalPressedImage.y() - offsetY, originalPressedImage.width(),
-                        originalPressedImage.height() );
-
-        button.setPosition( screenOffset.x + offset.x + offsetX, screenOffset.y + offset.y + offsetY );
-        button.setSprite( releasedButton, pressedButton );
+        return fheroes2::makeButtonWithShadow( offsetX + minX, offsetY + minY, originalReleasedImage, originalPressedImage, display, fheroes2::Point( -3, 3 ) );
     }
 
     void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
@@ -383,17 +369,15 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // The original resources do not have such animated buttons so we have to create those.
     const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
-    fheroes2::ButtonSprite moveArmyToHero2;
-    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 295, 268 ), windowOffset );
 
-    fheroes2::ButtonSprite moveArmyToHero1;
-    createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
+    const fheroes2::Sprite & moveButtonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+    fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
+    fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
 
-    fheroes2::ButtonSprite moveArtifactsToHero2;
-    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 295, 361 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArtifactsToHero1;
-    createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
+    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 295, cur_pt.y + 268, display );
+    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 295, cur_pt.y + 291, display );
+    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 295, cur_pt.y + 361, display );
+    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 295, cur_pt.y + 384, display );
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
