@@ -180,7 +180,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     }
 
     // draw castle sprite
-    dst_pt.x = cur_pt.x + 460;
+    dst_pt.x = cur_pt.x + 459;
     dst_pt.y = cur_pt.y + 5;
     DrawImageCastle( dst_pt );
 
