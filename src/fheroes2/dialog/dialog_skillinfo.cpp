@@ -78,11 +78,11 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     // small text
     text.Set( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
-    text.Blit( pos.x, pos.y + 3 );
+    text.Blit( pos.x, pos.y + 6 );
 
     text.Set( Skill::Level::StringWithBonus( hero, skill.Skill(), skill.Level() ) );
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
-    text.Blit( pos.x, pos.y + 55 );
+    text.Blit( pos.x, pos.y + 54 );
 
     LocalEvent & le = LocalEvent::Get();
 
