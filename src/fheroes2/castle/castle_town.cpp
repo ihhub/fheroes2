@@ -186,7 +186,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
     // castle name
     Text text( GetName(), Font::SMALL );
-    text.Blit( cur_pt.x + 536 - text.w() / 2, cur_pt.y + 1 );
+    text.Blit( cur_pt.x + 538 - text.w() / 2, cur_pt.y + 1 );
 
     BuildingInfo dwelling1( *this, DWELLING_MONSTER1 );
     dwelling1.SetPos( cur_pt.x + 5, cur_pt.y + 2 );
