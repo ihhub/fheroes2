@@ -27,6 +27,6 @@ namespace fheroes2
     class DrawTroops : public Troops
     {
     public:
-        void DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScoutView ) const;
+        void DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView ) const;
     };
 }
