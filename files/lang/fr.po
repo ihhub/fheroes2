@@ -2,13 +2,13 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 04:37+0100\n"
-"PO-Revision-Date: 2021-11-07 17:15+0100\n"
+"PO-Revision-Date: 2021-12-04 01:16+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -924,7 +924,7 @@ msgid ""
 msgstr ""
 "Il y a deux ennemis alliés contre vous dans cette mission. Tous deux sont "
 "bien armés et cherchent à vous expulser de leur île. Évitez-les et capturez "
-"Dragon City pour gagner"
+"Dragon City pour gagner."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -2544,13 +2544,11 @@ msgstr "(déjà visité)"
 msgid "(not visited)"
 msgstr "(non visité)"
 
-#, fuzzy
 msgid "%{color} Barrier"
-msgstr "Joueur %{color}"
+msgstr "Barrière magique %{color}"
 
-#, fuzzy
 msgid "%{color} Tent"
-msgstr "Joueur %{color}"
+msgstr "Tente %{color}"
 
 msgid "Road"
 msgstr "Route"
@@ -5954,68 +5952,53 @@ msgstr "Orange"
 msgid "Purple"
 msgstr "Violet"
 
-#, fuzzy
 msgid "barrier|Aqua"
-msgstr "Barrière magique"
+msgstr "aqua"
 
-#, fuzzy
 msgid "barrier|Blue"
-msgstr "Barrière magique"
+msgstr "bleue"
 
-#, fuzzy
 msgid "barrier|Brown"
-msgstr "Barrière magique"
+msgstr "marron"
 
-#, fuzzy
 msgid "barrier|Gold"
-msgstr "Barrière magique"
+msgstr "dorée"
 
-#, fuzzy
 msgid "barrier|Green"
-msgstr "Barrière magique"
+msgstr "verte"
 
-#, fuzzy
 msgid "barrier|Orange"
-msgstr "Orange"
+msgstr "orange"
 
-#, fuzzy
 msgid "barrier|Purple"
-msgstr "Violet"
+msgstr "violette"
 
-#, fuzzy
 msgid "barrier|Red"
-msgstr "Barrière magique"
+msgstr "rouge"
 
-#, fuzzy
 msgid "tent|Aqua"
-msgstr "Turquoise"
+msgstr "turquoise"
 
-#, fuzzy
 msgid "tent|Blue"
-msgstr "Bleu"
+msgstr "bleue"
 
-#, fuzzy
 msgid "tent|Brown"
-msgstr "Marron"
+msgstr "marron"
 
-#, fuzzy
 msgid "tent|Gold"
-msgstr "Or"
+msgstr "dorée"
 
-#, fuzzy
 msgid "tent|Green"
-msgstr "Vert"
+msgstr "verte"
 
-#, fuzzy
 msgid "tent|Orange"
-msgstr "Orange"
+msgstr "orange"
 
-#, fuzzy
 msgid "tent|Purple"
-msgstr "Violet"
+msgstr "violette"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "rouge"
 
 msgid "Hero/Stats"
 msgstr "Héros/Stats"
@@ -7470,7 +7453,7 @@ msgstr "Voile de feu"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr ""
-"La %{name} réduit de moitié tous les dégâts de feu subis par vos troupes. "
+"La %{name} réduit de moitié tous les dégâts de feu subis par vos troupes."
 
 msgid "Lightning Helm"
 msgstr "Casque paratonnerre"
