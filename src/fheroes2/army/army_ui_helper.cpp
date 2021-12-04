@@ -65,5 +65,6 @@ void fheroes2::DrawMons32Line( const Army & army, int32_t cx, int32_t cy, uint32
                 }
                 else
                     --first;
+            }
         }
 }
