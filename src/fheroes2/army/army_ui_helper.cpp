@@ -23,10 +23,13 @@
 #include "army_troop.h"
 #include "game.h"
 #include "icn.h"
+#include "image.h"
+#include "monster.h"
+#include "screen.h"
 #include "ui_text.h"
 
 
-void fheroes2::DrawTroops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView, Image & output ) const
+void fheroes2::DrawTroops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView ) const
 {
     if ( isValid() ) {
         if ( 0 == count )
@@ -48,13 +51,13 @@ void fheroes2::DrawTroops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t widt
                         int offset = ( chunk - monster.width() - text.width() ) / 2;
                         if ( offset < 0 )
                             offset = 0;
-                        fheroes2::Blit( monster, output, cx + offset, cy + offsetY + monster.y() );
-                        text.draw( cx + chunk - text.width() - offset, cy + 23, output );
+                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx + offset, cy + offsetY + monster.y() );
+                        text.draw( cx + chunk - text.width() - offset, cy + 23, fheroes2::Display::instance() );
                     }
                     else {
                         const int offsetY = 28 - monster.height();
-                        fheroes2::Blit( monster, output, cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
-                        text.draw( cx - text.width() / 2, cy + 29, output );
+                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
+                        text.draw( cx - text.width() / 2, cy + 29, fheroes2::Display::instance() );
                     }
                     cx += chunk;
                     --count;

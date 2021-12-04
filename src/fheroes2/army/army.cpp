@@ -1213,9 +1213,7 @@ bool Army::isMeleeDominantArmy() const
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */
 void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {
-    fheroes2::Image & output = output;
-    fheroes2::DrawTroops drawTroops;
-    drawTroops.DrawMons32Line( cx, cy, width, first, count, Skill::Level::EXPERT, false, true, output );
+    troops.DrawMons32Line( cx, cy, width, first, count, Skill::Level::EXPERT, false, true );
 }
 
 void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact,
@@ -1225,19 +1223,18 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
     const int offsetX = lineWidth / 6;
     const int offsetY = compact ? 31 : 49;
 
-    fheroes2::Image & output = output;
     fheroes2::DrawTroops drawTroops;
 
     if ( count < 3 ) {
-        drawTroops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView, output );
+        drawTroops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView );
     }
     else {
         const int firstLineTroopCount = 2;
         const int secondLineTroopCount = count - firstLineTroopCount;
         const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
 
-        drawTroops.DrawMons32Line( posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView, output );
-        drawTroops.DrawMons32Line( posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView, output );
+        drawTroops.DrawMons32Line( posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView );
+        drawTroops.DrawMons32Line( posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView );
     }
 }
 
