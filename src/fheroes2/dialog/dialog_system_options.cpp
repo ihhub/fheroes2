@@ -310,12 +310,11 @@ namespace
                 if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
                     ++type;
 
-                const int currentMusic = Game::CurrentMusic();
+                const Game::MusicRestorer musicRestorer;
 
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
 
-                Game::SetCurrentMusic( -1 );
-                AGG::PlayMusic( currentMusic, true );
+                Game::SetCurrentMusic( MUS::UNKNOWN );
 
                 saveMusicType = true;
             }
