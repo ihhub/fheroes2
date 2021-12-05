@@ -24,6 +24,7 @@
 #include "icn.h"
 #include "localevent.h"
 #include "screen.h"
+#include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_text.h"
@@ -59,7 +60,7 @@ namespace fheroes2
 
         Display & display = Display::instance();
 
-        const int okIcnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+        const int okIcnId = Settings::Get().ExtGameEvilInterface() ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
         const Sprite & buttonOkayImage = AGG::GetICN( okIcnId, 0 );
 
         StandardWindow window( languageAreaWidth * languageCount + 2 * offsetFromBorders, 125, display );
