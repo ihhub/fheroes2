@@ -865,16 +865,16 @@ namespace fheroes2
                         ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
                     }
                     // Fix pressed buttons background.
-                    for ( uint32_t i = 0; i < 3; i += 2 ) {
-                        Sprite tmp( _icnVsSprite[id][i + 1].width(), _icnVsSprite[id][i + 1].height() );
+                    for ( uint32_t i : { 0, 2 } ) {
+                        Sprite & out = _icnVsSprite[id][i + 1];
+
+                        Sprite tmp( out.width(), out.height() );
                         tmp.reset();
-                        Blit( _icnVsSprite[id][i + 1], 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
+                        Blit( out, 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
                         CopyTransformLayer( _icnVsSprite[id][i], tmp );
 
-                        Sprite out( tmp.width(), tmp.height() );
                         out.reset();
                         Blit( tmp, 1, 0, out, 0, 1, tmp.width() - 1, tmp.height() - 1 );
-                        _icnVsSprite[id][i + 1] = std::move( out );
                     }
                 }
                 return true;
@@ -1522,8 +1522,9 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 19 ) {
                     // fix background for TRADE and EXIT buttons
-                    for ( uint32_t i = 16; i < 19; i += 2 ) {
-                        Sprite pressed( std::move( _icnVsSprite[id][i] ) );
+                    for ( uint32_t i : { 16, 18 } ) {
+                        Sprite pressed;
+                        std::swap( pressed, _icnVsSprite[id][i] );
                         AddTransparency( pressed, 25 ); // remove too dark background
 
                         // take background from the empty system button
