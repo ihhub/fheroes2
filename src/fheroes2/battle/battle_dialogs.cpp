@@ -236,7 +236,7 @@ void Battle::DialogBattleSettings( void )
     optionAreas.emplace_back( pos_rt.x + 128, pos_rt.y + 157, panelWidth, panelHeight ); // move shadow
     optionAreas.emplace_back( pos_rt.x + 220, pos_rt.y + 157, panelWidth, panelHeight ); // cursor shadow
 
-    fheroes2::Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( isEvilInterface ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
+    fheroes2::Button btn_ok( pos_rt.x + 112, pos_rt.y + 252, ( isEvilInterface ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
     btn_ok.draw();
 
     RedrawBattleSettings( optionAreas );

@@ -1511,10 +1511,21 @@ namespace fheroes2
                 return true;
             }
             case ICN::SPANBTN:
-            case ICN::SPANBTNE: {
+            case ICN::SPANBTNE:
+            case ICN::CSPANBTN:
+            case ICN::CSPANBTE: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 1 ) {
-                    _icnVsSprite[id][1].setPosition( -1, 0 );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // add missing part of the released button state on the left
+                    Sprite & out = _icnVsSprite[id][0];
+
+                    Sprite released( out.width() + 1, out.height() );
+                    released.reset();
+                    uint32_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
+                    DrawLine( released, Point( 0, 3 ), Point( 0, out.height() - 1 ), color );
+                    Blit( out, released, 1, 0 );
+
+                    out = std::move( released );
                 }
                 return true;
             }

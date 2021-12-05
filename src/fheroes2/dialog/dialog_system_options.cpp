@@ -248,7 +248,7 @@ namespace
 
         drawDialog( roi );
 
-        const fheroes2::Point buttonOffset( 113 + dialogArea.x, 362 + dialogArea.y );
+        const fheroes2::Point buttonOffset( 112 + dialogArea.x, 362 + dialogArea.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
         buttonOkay.draw();
 
