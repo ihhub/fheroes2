@@ -40,7 +40,7 @@ void fheroes2::DrawMons32Line( const Army & army, int32_t cx, int32_t cy, uint32
         if ( !compact )
             cx += chunk / 2;
 
-        for ( Army::iterator it = army.begin(); it != army.end(); ++it ) {
+        for ( std::vector<Troop *>::const_iterator it = army.begin(); it != army.end(); ++it ) {
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
                     const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
