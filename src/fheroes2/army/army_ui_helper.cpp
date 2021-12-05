@@ -33,38 +33,41 @@ void fheroes2::DrawMons32Line( const Army & army, int32_t cx, int32_t cy, uint32
     if ( !army.isValid() ) {
         return;
     }
-        if ( 0 == count )
-            count = army.GetCount();
 
-        const int chunk = width / count;
-        if ( !compact )
-            cx += chunk / 2;
+    if ( 0 == count ) {
+        count = army.GetCount();
+    }
 
-        for ( std::vector<Troop *>::const_iterator it = army.begin(); it != army.end(); ++it ) {
-            if ( ( *it )->isValid() ) {
-                if ( 0 == first && count ) {
-                    const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
-                    fheroes2::Text text( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact )
-                                                      : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ),
-                                         { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-                    if ( compact ) {
-                        const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
-                        int offset = ( chunk - monster.width() - text.width() ) / 2;
-                        if ( offset < 0 )
-                            offset = 0;
-                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx + offset, cy + offsetY + monster.y() );
-                        text.draw( cx + chunk - text.width() - offset, cy + 23, fheroes2::Display::instance() );
-                    }
-                    else {
-                        const int offsetY = 28 - monster.height();
-                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
-                        text.draw( cx - text.width() / 2, cy + 29, fheroes2::Display::instance() );
-                    }
-                    cx += chunk;
-                    --count;
+    const int chunk = width / count;
+    if ( !compact ) {
+        cx += chunk / 2;
+    }
+
+    for ( const_iterator it = army.begin(); it != army.end(); ++it ) {
+        if ( ( *it )->isValid() ) {
+            if ( 0 == first && count ) {
+                const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
+                fheroes2::Text text( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact )
+                                                    : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ),
+                                        { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                if ( compact ) {
+                    const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
+                    int offset = ( chunk - monster.width() - text.width() ) / 2;
+                    if ( offset < 0 )
+                        offset = 0;
+                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx + offset, cy + offsetY + monster.y() );
+                    text.draw( cx + chunk - text.width() - offset, cy + 23, fheroes2::Display::instance() );
                 }
-                else
-                    --first;
+                else {
+                    const int offsetY = 28 - monster.height();
+                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
+                    text.draw( cx - text.width() / 2, cy + 29, fheroes2::Display::instance() );
+                }
+                cx += chunk;
+                --count;
             }
+            else
+                --first;
         }
+    }
 }
