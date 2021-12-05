@@ -1556,6 +1556,28 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::HSBTNS: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 4 ) {
+                    // fix DISMISS button: get the EXIT button, then slap the text back
+                    Sprite & outReleased = _icnVsSprite[id][0];
+
+                    Sprite tmpReleased = outReleased;
+                    Blit( _icnVsSprite[id][2], 0, 0, tmpReleased, 5, 0, 27, 120 );
+                    Blit( outReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
+
+                    outReleased = std::move( tmpReleased );
+
+                    Sprite & outPressed = _icnVsSprite[id][1];
+
+                    Sprite tmpPressed = outPressed;
+                    Blit( _icnVsSprite[id][3], 0, 0, tmpPressed, 5, 0, 27, 120 );
+                    Blit( outPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
+
+                    outPressed = std::move( tmpPressed );
+                }
+                return true;
+            }
             default:
                 break;
             }
