@@ -320,10 +320,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
 
     // The original resources do not have such animated buttons so we have to create those.
-    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 264, display );
-    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 287, display );
+    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 267, display );
+    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 290, display );
 
-    fheroes2::ImageRestorer armyCountBackgroundRestorer( display, cur_pt.x + 36, cur_pt.y + 310, 567, 20 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 310, 223, 20 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 310, 223, 20 );
 
     // army
     dst_pt.x = cur_pt.x + 36;
@@ -434,7 +435,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArtifacts2.isSelected() )
                 selectArtifacts2.ResetSelected();
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.Redraw();
             selectArmy2.Redraw();
@@ -500,7 +502,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         if ( le.MouseClickLeft( hero1Area ) ) {
             Game::OpenHeroesDialog( *this, false, false, true );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -520,7 +523,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( hero2Area ) ) {
             Game::OpenHeroesDialog( otherHero, false, false, true );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -540,7 +544,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
             otherHero.GetArmy().MoveTroops( GetArmy() );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
@@ -555,7 +560,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
             GetArmy().MoveTroops( otherHero.GetArmy() );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
@@ -609,7 +615,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.ResetSelected();
 
     backPrimary.reset();
-    armyCountBackgroundRestorer.reset();
+    armyCountBackgroundRestorerLeft.reset();
+    armyCountBackgroundRestorerRight.reset();
     restorer.restore();
     display.render();
 }
