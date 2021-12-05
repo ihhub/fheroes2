@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "agg_image.h"
 #include "dialog.h"
@@ -59,6 +60,8 @@ namespace
             player.SetRace( Race::KNGT );
             break;
         default:
+            // Did you add a new race? Add the logic above
+            assert( 0 );
             break;
         }
     }
@@ -88,6 +91,8 @@ namespace
             player.SetRace( Race::NECR );
             break;
         default:
+            // Did you add a new race? Add the logic above
+            assert( 0 );
             break;
         }
     }
@@ -357,14 +362,16 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 Font::BIG );
     }
     else if ( le.MouseWheelUp() ) {
-        if ( nullptr != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
+        player = GetFromClassClick( le.GetMouseCursor() );
+        if ( nullptr != player ) {
             if ( conf.AllowChangeRace( player->GetColor() ) ) {
                 changeRaceToPrev( *player );
             }
         }
     }
     else if ( le.MouseWheelDn() ) {
-        if ( nullptr != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
+        player = GetFromClassClick( le.GetMouseCursor() );
+        if ( nullptr != player ) {
             if ( conf.AllowChangeRace( player->GetColor() ) ) {
                 changeRaceToNext( *player );
             }
