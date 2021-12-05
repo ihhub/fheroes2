@@ -4,13 +4,13 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@gmail.com>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 04:37+0100\n"
-"PO-Revision-Date: 2021-08-02 15:41+0200\n"
+"PO-Revision-Date: 2021-12-05 06:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -2490,13 +2490,11 @@ msgstr "(посещено)"
 msgid "(not visited)"
 msgstr "(не посещено)"
 
-#, fuzzy
 msgid "%{color} Barrier"
-msgstr "%{color} игрок"
+msgstr "%{color} барьер"
 
-#, fuzzy
 msgid "%{color} Tent"
-msgstr "%{color} игрок"
+msgstr "%{color} шалаш"
 
 msgid "Road"
 msgstr "Дорога"
@@ -5772,68 +5770,53 @@ msgstr "Оранжевый"
 msgid "Purple"
 msgstr "Фиолетовый"
 
-#, fuzzy
 msgid "barrier|Aqua"
-msgstr "Барьер"
+msgstr "бирюзовый"
 
-#, fuzzy
 msgid "barrier|Blue"
-msgstr "Барьер"
+msgstr "Синий"
 
-#, fuzzy
 msgid "barrier|Brown"
-msgstr "Барьер"
+msgstr "Коричневый"
 
-#, fuzzy
 msgid "barrier|Gold"
-msgstr "Барьер"
+msgstr "Золотой"
 
-#, fuzzy
 msgid "barrier|Green"
-msgstr "Барьер"
+msgstr "Зелёный"
 
-#, fuzzy
 msgid "barrier|Orange"
 msgstr "Оранжевый"
 
-#, fuzzy
 msgid "barrier|Purple"
-msgstr "Фиолетовый"
+msgstr "фиолетовый"
 
-#, fuzzy
 msgid "barrier|Red"
-msgstr "Барьер"
+msgstr "Красный"
 
-#, fuzzy
 msgid "tent|Aqua"
-msgstr "Изумрудный"
+msgstr "бирюзовый"
 
-#, fuzzy
 msgid "tent|Blue"
 msgstr "Синий"
 
-#, fuzzy
 msgid "tent|Brown"
 msgstr "Коричневый"
 
-#, fuzzy
 msgid "tent|Gold"
-msgstr "Золото"
+msgstr "Золотой"
 
-#, fuzzy
 msgid "tent|Green"
-msgstr "Зеленый"
+msgstr "Зелёный"
 
-#, fuzzy
 msgid "tent|Orange"
 msgstr "Оранжевый"
 
-#, fuzzy
 msgid "tent|Purple"
-msgstr "Фиолетовый"
+msgstr "фиолетовый"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Красный"
 
 msgid "Hero/Stats"
 msgstr "Герой/Характеристика"
