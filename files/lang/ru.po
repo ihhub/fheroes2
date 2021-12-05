@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 04:37+0100\n"
-"PO-Revision-Date: 2021-12-05 06:57+0100\n"
+"PO-Revision-Date: 2021-12-05 10:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -2491,10 +2491,10 @@ msgid "(not visited)"
 msgstr "(не посещено)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} барьер"
+msgstr "%{color} Барьер"
 
 msgid "%{color} Tent"
-msgstr "%{color} шалаш"
+msgstr "%{color} Шатер путника"
 
 msgid "Road"
 msgstr "Дорога"
@@ -5771,7 +5771,7 @@ msgid "Purple"
 msgstr "Фиолетовый"
 
 msgid "barrier|Aqua"
-msgstr "бирюзовый"
+msgstr "Сизый"
 
 msgid "barrier|Blue"
 msgstr "Синий"
@@ -5789,13 +5789,13 @@ msgid "barrier|Orange"
 msgstr "Оранжевый"
 
 msgid "barrier|Purple"
-msgstr "фиолетовый"
+msgstr "Фиолетовый"
 
 msgid "barrier|Red"
 msgstr "Красный"
 
 msgid "tent|Aqua"
-msgstr "бирюзовый"
+msgstr "Сизый"
 
 msgid "tent|Blue"
 msgstr "Синий"
@@ -5813,7 +5813,7 @@ msgid "tent|Orange"
 msgstr "Оранжевый"
 
 msgid "tent|Purple"
-msgstr "фиолетовый"
+msgstr "Фиолетовый"
 
 msgid "tent|Red"
 msgstr "Красный"
