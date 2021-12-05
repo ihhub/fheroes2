@@ -1537,6 +1537,14 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::RECRUIT: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 10 ) {
+                    // fix transparent corners on OKAY button
+                    CopyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
+                }
+                return true;
+            }
             default:
                 break;
             }
