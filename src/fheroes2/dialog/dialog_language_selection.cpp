@@ -59,13 +59,15 @@ namespace fheroes2
 
         Display & display = Display::instance();
 
-        const Sprite & buttonOkayImage = AGG::GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0 );
+        const int okIcnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+        const Sprite & buttonOkayImage = AGG::GetICN( okIcnId, 0 );
 
         StandardWindow window( languageAreaWidth * languageCount + 2 * offsetFromBorders, 125, display );
         const Rect windowRoi = window.activeArea();
 
-        Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
-                           ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1 );
+        ButtonSprite okayButton
+            = makeButtonWithShadow( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
+                                    buttonOkayImage, AGG::GetICN( okIcnId, 1 ), display );
 
         const Sprite & unselectedButtonSprite = AGG::GetICN( ICN::CELLWIN, 4 );
         const Sprite & selectionSprite = AGG::GetICN( ICN::CELLWIN, 5 );
