@@ -310,7 +310,12 @@ namespace
                 if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
                     ++type;
 
+                const Game::MusicRestorer musicRestorer;
+
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
+
+                Game::SetCurrentMusic( MUS::UNKNOWN );
+
                 saveMusicType = true;
             }
 

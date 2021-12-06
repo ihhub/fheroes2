@@ -715,6 +715,17 @@ namespace fheroes2
         }
     }
 
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return in;
+
+        Sprite out = makeShadow( in, shadowOffset, transformId );
+        Blit( in, out, -shadowOffset.x, 0 );
+
+        return out;
+    }
+
     void AddTransparency( Image & image, uint8_t valueToReplace )
     {
         ReplaceColorIdByTransformId( image, valueToReplace, 1 );
@@ -1110,6 +1121,15 @@ namespace fheroes2
                 memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
             }
         }
+    }
+
+    void CopyTransformLayer( const Image & in, Image & out )
+    {
+        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
+            assert( 0 );
+            return;
+        }
+        memcpy( out.transform(), in.transform(), in.width() * in.height() );
     }
 
     Image CreateBlurredImage( const Image & in, int32_t blurRadius )
@@ -1768,6 +1788,39 @@ namespace fheroes2
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
+    }
+
+    Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return Sprite();
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        // Shadow has (-x, +y) offset.
+        Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
+        out.reset();
+
+        const int32_t widthOut = out.width();
+
+        const uint8_t * transformInY = in.transform();
+        const uint8_t * transformInYEnd = transformInY + width * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+
+        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 ) {
+                    *transformOutX = transformId;
+                }
+            }
+        }
+
+        return out;
     }
 
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
