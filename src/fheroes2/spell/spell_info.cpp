@@ -28,13 +28,15 @@
 
 namespace fheroes2
 {
-    uint32_t getSpellDamage( const Spell & spell, const HeroBase * hero )
+    uint32_t getSpellDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
-        if ( hero == nullptr ) {
-            return spell.Damage();
-        }
+        assert( spellPower > 0 );
 
-        uint32_t damage = spell.Damage() * hero->GetPower();
+        uint32_t damage = spell.Damage() * spellPower;
+
+        if ( hero == nullptr ) {
+            return damage;
+        }
 
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
@@ -64,13 +66,15 @@ namespace fheroes2
         return damage;
     }
 
-    uint32_t getSummonMonsterCount( const Spell & spell, const HeroBase * hero )
+    uint32_t getSummonMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
+        assert( spellPower > 0 );
+
+        uint32_t monsterCount = spell.ExtraValue() * spellPower;
         if ( hero == nullptr ) {
-            return spell.ExtraValue();
+            return monsterCount;
         }
 
-        uint32_t monsterCount = spell.ExtraValue() * hero->GetPower();
         uint32_t artifactCount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
         if ( artifactCount > 0 ) {
             monsterCount *= artifactCount * 2;
@@ -79,22 +83,23 @@ namespace fheroes2
         return monsterCount;
     }
 
-    uint32_t getHPRestorePoints( const Spell & spell, const HeroBase * hero )
+    uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
-        if ( hero == nullptr ) {
-            return spell.Restore();
-        }
+        (void)hero;
 
-        return spell.Restore() * hero->GetPower();
+        assert( spellPower > 0 );
+
+        return spell.Restore() * spellPower;
     }
 
-    uint32_t getResurrectPoints( const Spell & spell, const HeroBase * hero )
+    uint32_t getResurrectPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
-        if ( hero == nullptr ) {
-            return spell.Resurrect();
-        }
+        assert( spellPower > 0 );
 
-        uint32_t resurrectionPoints = spell.Resurrect() * hero->GetPower();
+        uint32_t resurrectionPoints = spell.Resurrect() * spellPower;
+        if ( hero == nullptr ) {
+            return resurrectionPoints;
+        }
 
         uint32_t artifactCount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
         if ( artifactCount ) {
@@ -115,7 +120,7 @@ namespace fheroes2
         if ( spell.isDamage() ) {
             description += "\n \n";
             description += _( "This spell does %{damage} points of damage." );
-            StringReplace( description, "%{damage}", getSpellDamage( spell, hero ) );
+            StringReplace( description, "%{damage}", getSpellDamage( spell, hero->GetPower(), hero ) );
 
             return description;
         }
@@ -129,7 +134,7 @@ namespace fheroes2
                 return spell.GetDescription();
             }
 
-            const uint32_t summonCount = getSummonMonsterCount( spell, hero );
+            const uint32_t summonCount = getSummonMonsterCount( spell, hero->GetPower(), hero );
 
             description += "\n \n";
             description += _( "This spell summons\n%{count} %{monster}." );
@@ -142,7 +147,7 @@ namespace fheroes2
         if ( spell.isRestore() ) {
             description += "\n \n";
             description += _( "This spell restores %{hp} HP." );
-            StringReplace( description, "%{hp}", getHPRestorePoints( spell, hero ) );
+            StringReplace( description, "%{hp}", getHPRestorePoints( spell, hero->GetPower(), hero ) );
 
             return description;
         }
@@ -150,7 +155,7 @@ namespace fheroes2
         if ( spell.isResurrect() ) {
             description += "\n \n";
             description += _( "This spell restores %{hp} HP." );
-            StringReplace( description, "%{hp}", getResurrectPoints( spell, hero ) );
+            StringReplace( description, "%{hp}", getResurrectPoints( spell, hero->GetPower(), hero ) );
 
             return description;
         }

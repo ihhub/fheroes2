@@ -1497,7 +1497,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
             Arena::GetGraveyard()->RemoveTroop( *this );
         }
 
-        const uint32_t restore = fheroes2::getResurrectPoints( spell, hero );
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const u32 resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Puts back the unit in the board

@@ -1145,7 +1145,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
 
-    const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero );
+    const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
     elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( elem ) {

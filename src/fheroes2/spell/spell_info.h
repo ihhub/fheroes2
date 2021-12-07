@@ -28,13 +28,13 @@ class Spell;
 
 namespace fheroes2
 {
-    uint32_t getSpellDamage( const Spell & spell, const HeroBase * hero );
+    uint32_t getSpellDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    uint32_t getSummonMonsterCount( const Spell & spell, const HeroBase * hero );
+    uint32_t getSummonMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    uint32_t getHPRestorePoints( const Spell & spell, const HeroBase * hero );
+    uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    uint32_t getResurrectPoints( const Spell & spell, const HeroBase * hero );
+    uint32_t getResurrectPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 }
