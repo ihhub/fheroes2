@@ -248,7 +248,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
             for ( const auto & spellInfo : spellAreas ) {
                 if ( le.MousePressRight( spellInfo.first ) ) {
-                    Dialog::SpellInfo( spellInfo.second, false );
+                    Dialog::SpellInfo( spellInfo.second, nullptr, false );
                     break;
                 }
             }

@@ -42,6 +42,7 @@
 #include "logging.h"
 #include "race.h"
 #include "settings.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -1143,11 +1144,8 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
-    u32 count = spell.ExtraValue() * hero->GetPower();
-    uint32_t acount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
-    if ( acount )
-        count *= acount * 2;
 
+    const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero );
     elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( elem ) {
