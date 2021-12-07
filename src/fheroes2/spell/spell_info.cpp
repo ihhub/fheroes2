@@ -39,23 +39,23 @@ namespace fheroes2
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING:
-            // +50%
-            if ( hero->hasArtifact( Artifact::EVERCOLD_ICICLE ) )
+            if ( hero->hasArtifact( Artifact::EVERCOLD_ICICLE ) ) {
                 damage += damage * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
+            }
             break;
 
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
-            // +50%
-            if ( hero->hasArtifact( Artifact::EVERHOT_LAVA_ROCK ) )
+            if ( hero->hasArtifact( Artifact::EVERHOT_LAVA_ROCK ) ) {
                 damage += damage * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
+            }
             break;
 
         case Spell::LIGHTNINGBOLT:
         case Spell::CHAINLIGHTNING:
-            // +50%
-            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
+            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) ) {
                 damage += damage * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
+            }
             break;
         default:
             break;
