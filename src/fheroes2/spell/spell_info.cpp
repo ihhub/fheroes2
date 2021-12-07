@@ -99,7 +99,7 @@ namespace fheroes2
             return spell.Resurrect();
         }
 
-        uint32_t resurrectionPoints = spell.Resurrect() * hero->GetPower();;
+        uint32_t resurrectionPoints = spell.Resurrect() * hero->GetPower();
 
         uint32_t artifactCount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
         if ( artifactCount ) {
