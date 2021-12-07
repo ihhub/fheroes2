@@ -52,11 +52,6 @@ namespace fheroes2
             break;
 
         case Spell::LIGHTNINGBOLT:
-            // +50%
-            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
-                damage += damage * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
-            break;
-
         case Spell::CHAINLIGHTNING:
             // +50%
             if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) )
