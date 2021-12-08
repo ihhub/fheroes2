@@ -165,7 +165,6 @@ namespace fheroes2
 
         if ( spell.isSummon() ) {
             const Monster monster( spell );
-
             if ( !monster.isValid() ) {
                 // Did you add a new summoning spell but forgot to add corresponding monster?
                 assert( 0 );
@@ -199,9 +198,19 @@ namespace fheroes2
         }
 
         if ( spell.isGuardianType() ) {
+            const Monster monster( spell );
+            if ( !monster.isValid() ) {
+                // Did you add a new guardian spell but forgot to add corresponding monster?
+                assert( 0 );
+                return spell.GetDescription();
+            }
+
+            const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower(), hero );
+
             description += "\n \n";
-            description += _( "This spell summons %{count} Earth Elementals to guard the mine." );
-            StringReplace( description, "%{count}", getGuardianMonsterCount( spell, hero->GetPower(), hero ) );
+            description += _( "This spell summons %{count} %{monster} to guard the mine." );
+            StringReplace( description, "%{count}", guardianCount );
+            StringReplace( description, "%{monster}", monster.GetPluralName( guardianCount ) );
 
             return description;
         }
