@@ -23,7 +23,9 @@
 
 #include <string>
 
+class Castle;
 class HeroBase;
+class Heroes;
 class Spell;
 
 namespace fheroes2
@@ -35,6 +37,10 @@ namespace fheroes2
     uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
     uint32_t getResurrectPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    const Castle * getNearestCastleTownGate( const Heroes & hero );
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 }

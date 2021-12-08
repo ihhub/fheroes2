@@ -20,6 +20,7 @@
 
 #include "spell_info.h"
 #include "heroes.h"
+#include "kingdom.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -109,6 +110,43 @@ namespace fheroes2
         return resurrectionPoints;
     }
 
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
+    {
+        (void)hero;
+
+        assert( spellPower > 0 );
+
+        return spell.ExtraValue() * spellPower;
+    }
+
+    const Castle * getNearestCastleTownGate( const Heroes & hero )
+    {
+        const Kingdom & kingdom = hero.GetKingdom();
+        const KingdomCastles & castles = kingdom.GetCastles();
+
+        const fheroes2::Point & heroPosition = hero.GetCenter();
+        int32_t minDistance = -1;
+
+        const Castle * nearestCastle = nullptr;
+
+        for ( const Castle * castle : castles ) {
+            if ( castle == nullptr ) {
+                continue;
+            }
+
+            const fheroes2::Point & castlePosition = castle->GetCenter();
+            const int32_t offsetX = heroPosition.x - castlePosition.x;
+            const int32_t offsetY = heroPosition.y - castlePosition.y;
+            const int32_t distance = offsetX * offsetX + offsetY * offsetY;
+            if ( minDistance < 0 || distance < minDistance ) {
+                minDistance = distance;
+                nearestCastle = castle;
+            }
+        }
+
+        return nearestCastle;
+    }
+
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero )
     {
         if ( hero == nullptr ) {
@@ -156,6 +194,37 @@ namespace fheroes2
             description += "\n \n";
             description += _( "This spell restores %{hp} HP." );
             StringReplace( description, "%{hp}", getResurrectPoints( spell, hero->GetPower(), hero ) );
+
+            return description;
+        }
+
+        if ( spell.isGuardianType() ) {
+            description += "\n \n";
+            description += _( "This spell summons %{count} Earth Elementals to guard the mine." );
+            StringReplace( description, "%{count}", getGuardianMonsterCount( spell, hero->GetPower(), hero ) );
+
+            return description;
+        }
+
+        if ( spell == Spell::TOWNGATE ) {
+            if ( hero == nullptr ) {
+                return description;
+            }
+
+            const Heroes * realHero = dynamic_cast<const Heroes *>( hero );
+            if ( realHero == nullptr ) {
+                return description;
+            }
+
+            const Castle * castle = getNearestCastleTownGate( *realHero );
+            if ( castle == nullptr ) {
+                return description;
+            }
+
+            description += "\n \n";
+
+            description += _( "The nearest town is %{town}." );
+            StringReplace( description, "%{town}", castle->GetName() );
 
             return description;
         }
