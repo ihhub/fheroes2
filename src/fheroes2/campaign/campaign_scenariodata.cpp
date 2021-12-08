@@ -111,6 +111,10 @@ namespace
         case 3:
         case 4:
         case 5:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
+            break;
         case 6:
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::NECR, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::WRLK, 1 );
