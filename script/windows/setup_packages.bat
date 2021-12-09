@@ -7,6 +7,7 @@ if not exist "sdl\include"  mkdir "sdl\include"
 if not exist "sdl\lib"      mkdir "sdl\lib"
 if not exist "sdl2\include" mkdir "sdl2\include"
 if not exist "sdl2\lib"     mkdir "sdl2\lib"
+if not exist "asio\include" mkdir "asio\include"
 
 xcopy /Y /s /Q "temp\sdl\SDL-1.2.15\include"  "sdl\include"
 xcopy /Y /s /Q "temp\sdl\SDL-1.2.15\lib"      "sdl\lib"
@@ -57,5 +58,7 @@ xcopy /Y /Q "temp\sdl_image\SDL2_image-2.0.5\lib\x64\zlib1.dll"       "sdl2\lib\
 xcopy /Y /s /Q "temp\zlib\include" "zlib\include"
 xcopy /Y /s /Q "temp\zlib\lib\x86" "zlib\lib\x86"
 xcopy /Y /s /Q "temp\zlib\lib\x64" "zlib\lib\x64"
+
+xcopy /Y /s /Q "temp\asio\asio-1.20.0\include" "asio\include"
 
 rd /S /Q temp
