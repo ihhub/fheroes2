@@ -40,6 +40,8 @@ namespace fheroes2
 
     uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
+    uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
     const Castle * getNearestCastleTownGate( const Heroes & hero );
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );

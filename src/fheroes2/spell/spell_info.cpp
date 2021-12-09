@@ -119,6 +119,16 @@ namespace fheroes2
         return spell.ExtraValue() * spellPower;
     }
 
+    uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
+    {
+        (void)hero;
+
+        assert( spell == Spell::HYPNOTIZE );
+        assert( spellPower > 0 );
+
+        return spell.ExtraValue() * spellPower;
+    }
+
     const Castle * getNearestCastleTownGate( const Heroes & hero )
     {
         const Kingdom & kingdom = hero.GetKingdom();
@@ -216,10 +226,6 @@ namespace fheroes2
         }
 
         if ( spell == Spell::TOWNGATE ) {
-            if ( hero == nullptr ) {
-                return description;
-            }
-
             const Heroes * realHero = dynamic_cast<const Heroes *>( hero );
             if ( realHero == nullptr ) {
                 return description;
@@ -234,6 +240,14 @@ namespace fheroes2
 
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
+
+            return description;
+        }
+
+        if ( spell == Spell::HYPNOTIZE ) {
+            description += "\n \n";
+            description += _( "This spell controls up to\n%{hp} HP." );
+            StringReplace( description, "%{hp}", getHypnorizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
 
             return description;
         }
