@@ -347,6 +347,7 @@ void Interface::Basic::EventSwitchHeroSleeping( void )
         }
 
         SetRedraw( REDRAW_HEROES );
+        buttonsArea.SetRedraw();
     }
 }
 
