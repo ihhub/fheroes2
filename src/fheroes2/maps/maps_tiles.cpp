@@ -617,7 +617,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     addons_level2.clear();
 
     // those bitfields are set by map editor regardless if map object is there
-    tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 & 0xFC ) == ICN::ROAD );
+    tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mp2.objectName1 ) == ICN::ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
     if ( mp2.mapObject == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
@@ -971,7 +971,7 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 
     // MP2 "objectName" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    tileIsRoad = ( ( mt.objectName1 >> 1 ) & 1 ) && ( ( mt.objectName1 & 0xFC ) == ICN::ROAD );
+    tileIsRoad = ( ( mt.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mt.objectName1 ) == ICN::ROAD );
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
