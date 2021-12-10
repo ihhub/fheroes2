@@ -414,7 +414,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
+    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false, false ); } );
 }
 
 void Kingdom::AddFundsResource( const Funds & funds )

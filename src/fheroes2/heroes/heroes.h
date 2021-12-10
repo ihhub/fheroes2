@@ -266,7 +266,7 @@ public:
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );
-    bool MayStillMove( const bool ignorePath ) const;
+    bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
 

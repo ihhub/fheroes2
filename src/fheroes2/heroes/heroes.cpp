@@ -1173,6 +1173,8 @@ bool Heroes::CanMove( void ) const
 void Heroes::SetMove( bool f )
 {
     if ( f ) {
+        ResetModes( SLEEPER );
+
         SetModes( ENABLEMOVE );
     }
     else {
@@ -1408,9 +1410,13 @@ void Heroes::ResetMovePoints( void )
     move_point = 0;
 }
 
-bool Heroes::MayStillMove( const bool ignorePath ) const
+bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
-    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() ) {
+    if ( Modes( GUARDIAN ) || isFreeman() ) {
+        return false;
+    }
+
+    if ( !ignoreSleeper && Modes( SLEEPER ) ) {
         return false;
     }
 
