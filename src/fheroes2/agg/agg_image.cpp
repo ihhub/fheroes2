@@ -1375,11 +1375,7 @@ namespace fheroes2
 
                 ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-                std::vector<Image> dismissImages;
-                dismissImages.emplace_back( released );
-                dismissImages.emplace_back( pressed );
-
-                Image common = ExtractCommonPattern( dismissImages );
+                Image common = ExtractCommonPattern( { released, pressed } );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
@@ -1588,25 +1584,27 @@ namespace fheroes2
                     // make the border parts around EXIT button transparent
                     Image exitCommonMask = ExtractCommonPattern( { exitReleased, exitPressed } );
                     invertTransparency( exitCommonMask );
+
                     CopyTransformLayer( exitCommonMask, exitReleased );
                     CopyTransformLayer( exitCommonMask, exitPressed );
 
                     // fix DISMISS button: get the EXIT button, then slap the text back
-                    Sprite & outReleased = _icnVsSprite[id][0];
+                    Sprite & dismissReleased = _icnVsSprite[id][0];
 
-                    Sprite tmpReleased = outReleased;
+                    Sprite tmpReleased = dismissReleased;
                     Blit( exitReleased, 0, 0, tmpReleased, 5, 0, 27, 120 );
-                    Blit( outReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
+                    Blit( dismissReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
 
-                    outReleased = std::move( tmpReleased );
+                    dismissReleased = std::move( tmpReleased );
 
-                    Sprite & outPressed = _icnVsSprite[id][1];
+                    Sprite & dismissPressed = _icnVsSprite[id][1];
 
-                    Sprite tmpPressed = outPressed;
+                    // start with the released state as well to capture more details
+                    Sprite tmpPressed = dismissReleased;
                     Blit( exitPressed, 0, 0, tmpPressed, 5, 0, 27, 120 );
-                    Blit( outPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
+                    Blit( dismissPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
 
-                    outPressed = std::move( tmpPressed );
+                    dismissPressed = std::move( tmpPressed );
                 }
                 return true;
             }
