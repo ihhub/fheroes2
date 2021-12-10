@@ -342,6 +342,25 @@ namespace
         _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
         _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
     }
+
+    void invertTransparency( fheroes2::Image & image )
+    {
+        if ( image.singleLayer() ) {
+            assert( 0 );
+            return;
+        }
+
+        uint8_t * t = image.transform();
+        uint8_t * tend = t + image.width() * image.height();
+        for ( ; t != tend; ++t ) {
+            if ( *t == 0 ) {
+                *t = 1;
+            }
+            else if ( *t == 1 ) {
+                *t = 0;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -1559,11 +1578,21 @@ namespace fheroes2
             case ICN::HSBTNS: {
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 4 ) {
+                    // extract the EXIT button without background
+                    Image exitReleased = _icnVsSprite[id][2];
+                    Image exitPressed = _icnVsSprite[id][3];
+
+                    // make the border parts around EXIT button transparent
+                    Image exitCommonMask = ExtractCommonPattern( { exitReleased, exitPressed } );
+                    invertTransparency( exitCommonMask );
+                    CopyTransformLayer( exitCommonMask, exitReleased );
+                    CopyTransformLayer( exitCommonMask, exitPressed );
+
                     // fix DISMISS button: get the EXIT button, then slap the text back
                     Sprite & outReleased = _icnVsSprite[id][0];
 
                     Sprite tmpReleased = outReleased;
-                    Blit( _icnVsSprite[id][2], 0, 0, tmpReleased, 5, 0, 27, 120 );
+                    Blit( exitReleased, 0, 0, tmpReleased, 5, 0, 27, 120 );
                     Blit( outReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
 
                     outReleased = std::move( tmpReleased );
@@ -1571,7 +1600,7 @@ namespace fheroes2
                     Sprite & outPressed = _icnVsSprite[id][1];
 
                     Sprite tmpPressed = outPressed;
-                    Blit( _icnVsSprite[id][3], 0, 0, tmpPressed, 5, 0, 27, 120 );
+                    Blit( exitPressed, 0, 0, tmpPressed, 5, 0, 27, 120 );
                     Blit( outPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
 
                     outPressed = std::move( tmpPressed );
