@@ -1105,18 +1105,36 @@ namespace fheroes2
 
         const int32_t offsetOutY = outY * widthOut + outX;
         uint8_t * imageOutY = out.image() + offsetOutY;
-        const uint8_t * imageInYEnd = imageInY + height * widthIn;
+        const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-        if ( out.singleLayer() ) {
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
+        if ( in.singleLayer() && out.singleLayer() ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
             }
+        }
+        else if ( in.singleLayer() && !out.singleLayer() ) {
+            uint8_t * transformOutY = out.transform() + offsetOutY;
+
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
+                memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
+                std::fill( transformOutY, transformOutY + width, 0 );
+            }
+        }
+        else if ( !in.singleLayer() && out.singleLayer() ) {
+            uint8_t * transformOutY = out.transform() + offsetOutY;
+
+            for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut ) {
+                std::fill( imageOutY, imageOutY + width, 0 );
+                std::fill( transformOutY, transformOutY + width, 0 );
+            }
+
+            Blit( in, inX, inY, out, outX, outY, width, height );
         }
         else {
             const uint8_t * transformInY = in.transform() + offsetInY;
             uint8_t * transformOutY = out.transform() + offsetOutY;
 
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
                 memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
             }
