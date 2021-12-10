@@ -1287,6 +1287,8 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
+        _prevRoi = {};
+
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
