@@ -1569,8 +1569,17 @@ namespace fheroes2
             case ICN::RECRUIT: {
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 10 ) {
-                    // fix transparent corners on OKAY button
+                    // fix transparent corners on released OKAY button
                     CopyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
+                }
+                return true;
+            }
+            case ICN::NGEXTRA: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 70 ) {
+                    // fix transparent corners on pressed OKAY and CANCEL buttons
+                    CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
+                    CopyTransformLayer( _icnVsSprite[id][68], _icnVsSprite[id][69] );
                 }
                 return true;
             }
