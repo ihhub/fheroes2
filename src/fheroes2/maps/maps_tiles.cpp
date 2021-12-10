@@ -535,23 +535,18 @@ MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const u
 bool Maps::TilesAddon::isRoad() const
 {
     switch ( MP2::GetICNObject( object ) ) {
-    // from sprite road
+    // road sprite
     case ICN::ROAD:
         if ( 1 == index || 8 == index || 10 == index || 11 == index || 15 == index || 22 == index || 23 == index || 24 == index || 25 == index || 27 == index )
             return false;
         else
             return true;
 
-    // castle and tower (gate)
+    // castle or town gate
     case ICN::OBJNTOWN:
+    case ICN::OBJNTWRD:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
-            return true;
-        break;
-
-        // castle lands (gate)
-    case ICN::OBJNTWBA:
-        if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
             return true;
         break;
 
