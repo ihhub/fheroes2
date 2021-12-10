@@ -350,14 +350,17 @@ namespace
             return;
         }
 
-        uint8_t * t = image.transform();
-        uint8_t * tend = t + image.width() * image.height();
-        for ( ; t != tend; ++t ) {
-            if ( *t == 0 ) {
-                *t = 1;
+        uint8_t * transform = image.transform();
+        uint8_t * transformEnd = transform + image.width() * image.height();
+        for ( ; transform != transformEnd; ++transform ) {
+            if ( *transform == 0 ) {
+                *transform = 1;
             }
-            else if ( *t == 1 ) {
-                *t = 0;
+            else if ( *transform == 1 ) {
+                *transform = 0;
+            }
+            else {
+                // don't touch it
             }
         }
     }
