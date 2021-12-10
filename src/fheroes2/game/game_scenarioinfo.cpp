@@ -331,6 +331,21 @@ namespace
                     display.render();
                 }
             }
+            else if ( le.MouseWheelUp() || le.MouseWheelDn() ) {
+                if ( playersInfo.QueueEventProcessing() ) {
+                    playersInfo.resetSelection();
+
+                    RedrawScenarioStaticInfo( rectPanel );
+                    levelCursor.redraw();
+                    RedrawDifficultyInfo( pointDifficultyInfo );
+
+                    playersInfo.RedrawInfo();
+                    RedrawRatingInfo( rating );
+                    buttonOk.draw();
+                    buttonCancel.draw();
+                    display.render();
+                }
+            }
 
             if ( le.MousePressRight( rectPanel ) ) {
                 if ( le.MousePressRight( buttonSelectMaps.area() ) )
