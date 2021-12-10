@@ -971,7 +971,8 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 
     // MP2 "objectName" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    tileIsRoad = ( ( mt.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mt.objectName1 ) == ICN::ROAD );
+    if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mt.objectName1 ) == ICN::ROAD ) )
+        tileIsRoad = true;
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
