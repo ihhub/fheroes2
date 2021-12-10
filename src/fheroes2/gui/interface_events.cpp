@@ -47,7 +47,6 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
-    hero->ResetModes( Heroes::SLEEPER );
     hero->SetMove( false );
 
     const Route::Path & path = hero->GetPath();
@@ -78,15 +77,17 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
 
     // show path
     if ( path.GetDestinedIndex() != destinationIdx && path.GetDestinationIndex() != destinationIdx ) {
+        hero->ResetModes( Heroes::SLEEPER );
+
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
     else if ( path.isValid() && hero->MayStillMove( false ) ) {
-        SetFocus( hero );
-        RedrawFocus();
-
         hero->SetMove( true );
     }
+
+    SetFocus( hero );
+    RedrawFocus();
 }
 
 void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
