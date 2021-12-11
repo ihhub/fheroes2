@@ -153,7 +153,7 @@ void Interface::Basic::EventContinueMovement( void ) const
     Heroes * hero = GetFocusHeroes();
 
     if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
-        hero->SetMove( !hero->isMoveEnabled() );
+        hero->SetMove( true );
     }
 }
 
