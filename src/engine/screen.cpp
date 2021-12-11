@@ -1401,6 +1401,8 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+
+        _prevRoi = {};
     }
 
     void Display::changePalette( const uint8_t * palette ) const
