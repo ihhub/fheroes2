@@ -1381,8 +1381,12 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
+#if defined( FHEROES2_VITA )
         if ( dpadInputActive ) {
-            if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
+            if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+                key_value = KEY_SHIFT;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
                 key_value = KEY_KP4;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
@@ -1394,18 +1398,13 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
                 key_value = KEY_KP2;
             }
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-            key_value = KEY_SPACE;
-        }
-
-#if defined( FHEROES2_VITA )
-        if ( dpadInputActive && ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) ) {
-            key_value = KEY_SHIFT;
             return;
         }
 #endif
-        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+            key_value = KEY_SPACE;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
             key_value = KEY_h;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
