@@ -615,6 +615,10 @@ namespace fheroes2
     {
         _updateRoi();
         _copy.resize( _width, _height );
+        if ( _image.singleLayer() ) {
+            _copy._disableTransformLayer();
+        }
+
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
@@ -628,6 +632,10 @@ namespace fheroes2
     {
         _updateRoi();
         _copy.resize( _width, _height );
+        if ( _image.singleLayer() ) {
+            _copy._disableTransformLayer();
+        }
+
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
@@ -977,6 +985,7 @@ namespace fheroes2
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
             if ( out.singleLayer() ) {
+                assert( !in.singleLayer() );
                 for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                     const uint8_t * imageInX = imageInY;
                     const uint8_t * transformInX = transformInY;
@@ -1031,6 +1040,7 @@ namespace fheroes2
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
             if ( out.singleLayer() ) {
+                assert( !in.singleLayer() );
                 for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                     const uint8_t * imageInX = imageInY;
                     const uint8_t * transformInX = transformInY;
@@ -1107,7 +1117,7 @@ namespace fheroes2
         uint8_t * imageOutY = out.image() + offsetOutY;
         const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-        if ( in.singleLayer() && out.singleLayer() ) {
+        if ( out.singleLayer() ) {
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
             }
@@ -1119,16 +1129,6 @@ namespace fheroes2
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
                 std::fill( transformOutY, transformOutY + width, 0 );
             }
-        }
-        else if ( out.singleLayer() ) {
-            uint8_t * transformOutY = out.transform() + offsetOutY;
-
-            for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut ) {
-                std::fill( imageOutY, imageOutY + width, 0 );
-                std::fill( transformOutY, transformOutY + width, 0 );
-            }
-
-            Blit( in, inX, inY, out, outX, outY, width, height );
         }
         else {
             const uint8_t * transformInY = in.transform() + offsetInY;
