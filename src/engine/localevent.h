@@ -321,7 +321,7 @@ private:
 
     enum
     {
-        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_L_DEADZONE = 4000,
         CONTROLLER_R_DEADZONE = 25000
     };
 
