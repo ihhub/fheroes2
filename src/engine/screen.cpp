@@ -1293,6 +1293,9 @@ namespace fheroes2
         }
 
         Image::resize( width_, height_ );
+
+        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
+        std::fill( transform(), transform() + width() * height(), 1 );
     }
 
     bool Display::isDefaultSize() const

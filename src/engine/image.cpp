@@ -1112,7 +1112,7 @@ namespace fheroes2
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
             }
         }
-        else if ( in.singleLayer() && !out.singleLayer() ) {
+        else if ( in.singleLayer() ) {
             uint8_t * transformOutY = out.transform() + offsetOutY;
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
@@ -1120,7 +1120,7 @@ namespace fheroes2
                 std::fill( transformOutY, transformOutY + width, 0 );
             }
         }
-        else if ( !in.singleLayer() && out.singleLayer() ) {
+        else if ( out.singleLayer() ) {
             uint8_t * transformOutY = out.transform() + offsetOutY;
 
             for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut ) {
@@ -1304,6 +1304,10 @@ namespace fheroes2
         }
 
         Sprite out( width, height );
+        if ( image.singleLayer() ) {
+            out._disableTransformLayer();
+        }
+
         Copy( image, x, y, out, 0, 0, width, height );
         out.setPosition( x, y );
         return out;
