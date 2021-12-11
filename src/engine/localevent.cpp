@@ -1394,7 +1394,8 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
                 key_value = KEY_KP2;
             }
-        } else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
             key_value = KEY_SPACE;
         }
 
