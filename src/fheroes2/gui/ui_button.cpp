@@ -482,18 +482,21 @@ namespace fheroes2
 
     ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background )
     {
-        Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
+        const Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
 
-        Sprite releasedWithBackground( croppedBackground, 0, 0 );
+        Sprite releasedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Copy( croppedBackground, releasedWithBackground );
         Blit( released, releasedWithBackground, released.x(), released.y() );
 
-        Sprite pressedWithBackground( croppedBackground, 0, 0 );
+        Sprite pressedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Copy( croppedBackground, pressedWithBackground );
         Blit( pressed, pressedWithBackground, pressed.x(), pressed.y() );
 
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( std::move( croppedBackground ) );
+        Sprite disabledWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Copy( croppedBackground, disabledWithBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
 
@@ -507,16 +510,19 @@ namespace fheroes2
         Sprite croppedBackground = Crop( background, offsetX + shadow.x(), offsetY + shadow.y(), shadow.width(), shadow.height() );
         Blit( shadow, croppedBackground );
 
-        Sprite releasedWithBackground( croppedBackground, 0, 0 );
+        Sprite releasedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Copy( croppedBackground, releasedWithBackground );
         Blit( released, releasedWithBackground, released.x() - shadow.x(), released.y() - shadow.y() );
 
-        Sprite pressedWithBackground( croppedBackground, 0, 0 );
+        Sprite pressedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Copy( croppedBackground, pressedWithBackground );
         Blit( pressed, pressedWithBackground, pressed.x() - shadow.x(), pressed.y() - shadow.y() );
 
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( std::move( croppedBackground ) );
+        Sprite disabledWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Copy( croppedBackground, disabledWithBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
