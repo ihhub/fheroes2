@@ -1623,6 +1623,7 @@ namespace fheroes2
                 for ( uint32_t i = 0; i < count; ++i ) {
                     Image & tilImage = originalTIL[i];
                     tilImage.resize( width, height );
+                    tilImage._disableTransformLayer();
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
                     std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
                 }

@@ -1287,12 +1287,17 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
+        _prevRoi = {};
+
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
 
         Image::resize( width_, height_ );
+
+        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
+        std::fill( transform(), transform() + width() * height(), 1 );
     }
 
     bool Display::isDefaultSize() const
@@ -1399,6 +1404,8 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+
+        _prevRoi = {};
     }
 
     void Display::changePalette( const uint8_t * palette ) const

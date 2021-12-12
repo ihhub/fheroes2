@@ -47,7 +47,6 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
-    hero->ResetModes( Heroes::SLEEPER );
     hero->SetMove( false );
 
     const Route::Path & path = hero->GetPath();
@@ -81,7 +80,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() && hero->MayStillMove( false ) ) {
+    else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero );
         RedrawFocus();
 
@@ -130,7 +129,7 @@ void Interface::Basic::EventNextHero( void )
             ++it;
             if ( it == myHeroes.end() )
                 it = myHeroes.begin();
-            if ( ( *it )->MayStillMove( true ) ) {
+            if ( ( *it )->MayStillMove( true, false ) ) {
                 SetFocus( *it );
                 CalculateHeroPath( *it, -1 );
                 break;
@@ -139,7 +138,7 @@ void Interface::Basic::EventNextHero( void )
     }
     else {
         for ( Heroes * hero : myHeroes ) {
-            if ( hero->MayStillMove( true ) ) {
+            if ( hero->MayStillMove( true, false ) ) {
                 SetFocus( hero );
                 CalculateHeroPath( hero, -1 );
                 break;
@@ -153,8 +152,9 @@ void Interface::Basic::EventContinueMovement( void ) const
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValid() )
-        hero->SetMove( !hero->isMoveEnabled() );
+    if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
+        hero->SetMove( true );
+    }
 }
 
 void Interface::Basic::EventKingdomInfo( void ) const
@@ -338,14 +338,10 @@ void Interface::Basic::EventSwitchHeroSleeping( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        if ( hero->Modes( Heroes::SLEEPER ) )
-            hero->ResetModes( Heroes::SLEEPER );
-        else {
-            hero->SetModes( Heroes::SLEEPER );
-            hero->GetPath().Reset();
-        }
+        hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         SetRedraw( REDRAW_HEROES );
+        buttonsArea.SetRedraw();
     }
 }
 

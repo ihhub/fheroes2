@@ -30,7 +30,7 @@ make -f Makefile.vita
 
 ## Controls
 - Left analog stick - Pointer movement
-- D-Pad / Right analog stick - Map scrolling
+- Right analog stick - Map scrolling
 - × - Left mouse button
 - ○ - Right mouse button
 - □ - End turn
@@ -39,6 +39,7 @@ make -f Makefile.vita
 - R1 - Next castle
 - SELECT - System menu
 - START - Enter
+- D-Pad down - re-visit the field that hero stands on
 
 Text input is done with D-Pad.
 

@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "settings.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -467,23 +468,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
 bool ActionSpellTownGate( Heroes & hero )
 {
-    const Kingdom & kingdom = hero.GetKingdom();
-    const KingdomCastles & castles = kingdom.GetCastles();
-    KingdomCastles::const_iterator it;
-
-    const Castle * castle = nullptr;
-    const s32 center = hero.GetIndex();
-    s32 min = -1;
-
-    // find the nearest castle
-    for ( it = castles.begin(); it != castles.end(); ++it )
-        if ( *it ) {
-            int min2 = Maps::GetApproximateDistance( center, ( *it )->GetIndex() );
-            if ( 0 > min || min2 < min ) {
-                min = min2;
-                castle = *it;
-            }
-        }
+    const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -657,7 +642,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         return false;
     }
 
-    const u32 count = hero.GetPower() * spell.ExtraValue();
+    const u32 count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
     if ( count ) {
         tile.SetQuantity3( spell.GetID() );
