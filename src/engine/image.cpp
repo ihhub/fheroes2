@@ -1824,25 +1824,36 @@ namespace fheroes2
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
 
-        const int32_t widthOut = out.width();
+        updateShadow( out, shadowOffset, transformId );
 
-        const uint8_t * transformInY = in.transform();
-        const uint8_t * transformInYEnd = transformInY + width * height;
-        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+        return out;
+    }
 
-        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( image.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) )
+            return;
+
+        const int32_t width = image.width() + shadowOffset.x;
+        const int32_t height = image.height() - shadowOffset.y;
+
+        const int32_t imageWidth = image.width();
+
+        const uint8_t * transformInY = image.transform() - shadowOffset.x;
+        uint8_t * transformOutY = image.transform() + imageWidth * shadowOffset.y;
+        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
+
+        for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth ) {
             const uint8_t * transformInX = transformInY;
             uint8_t * transformOutX = transformOutY;
-            const uint8_t * transformInXEnd = transformInX + width;
+            const uint8_t * transformOutXEnd = transformOutX + width;
 
-            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
-                if ( *transformInX == 0 ) {
+            for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 && *transformOutX == 1 ) {
                     *transformOutX = transformId;
                 }
             }
         }
-
-        return out;
     }
 
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
