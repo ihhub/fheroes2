@@ -1824,7 +1824,23 @@ namespace fheroes2
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
 
-        updateShadow( out, shadowOffset, transformId );
+        const int32_t widthOut = out.width();
+
+        const uint8_t * transformInY = in.transform();
+        const uint8_t * transformInYEnd = transformInY + width * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+
+        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 ) {
+                    *transformOutX = transformId;
+                }
+            }
+        }
 
         return out;
     }
