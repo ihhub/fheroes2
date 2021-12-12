@@ -1287,6 +1287,8 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
+        _prevRoi = {};
+
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
@@ -1402,6 +1404,8 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+
+        _prevRoi = {};
     }
 
     void Display::changePalette( const uint8_t * palette ) const
