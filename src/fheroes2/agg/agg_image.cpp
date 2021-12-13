@@ -1058,94 +1058,43 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::SWAP_ARROW_LEFT_TO_RIGHT: {
-                // Since the original game does not have such resources we could generate it from hero meeting sprite.
-                const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
-                std::vector<Image> input( 4 );
-
-                const int32_t width = 43;
-                const int32_t height = 20;
-
-                for ( Image & image : input )
-                    image.resize( width, height );
-
-                Copy( original, 297, 270, input[0], 0, 0, width, height );
-                Copy( original, 295, 291, input[1], 0, 0, width, height );
-                Copy( original, 297, 363, input[2], 0, 0, width, height );
-                Copy( original, 295, 384, input[3], 0, 0, width, height );
-
-                input[1] = Flip( input[1], true, false );
-                input[3] = Flip( input[3], true, false );
-
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = ExtractCommonPattern( input );
-                Sprite & out = _icnVsSprite[id][0];
-
-                // Here are 2 pixels which should be removed.
-                if ( out.width() == 43 && out.height() == 20 ) {
-                    if ( out.image()[38] != 0 ) {
-                        out.image()[38] = 0;
-                        out.transform()[38] = 1;
-                    }
-                    if ( out.image()[28 + 3 * 43] != 0 ) {
-                        out.image()[28 + 3 * 43] = 0;
-                        out.transform()[28 + 3 * 43] = 1;
-                    }
-                }
-
-                _icnVsSprite[id][1] = _icnVsSprite[id][0];
-                ApplyPalette( _icnVsSprite[id][1], 4 );
-
-                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
-                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
-                _icnVsSprite[id][0].setPosition( -3, 0 );
-                _icnVsSprite[id][1].setPosition( -2, 1 );
-
-                return true;
-            }
+            case ICN::SWAP_ARROW_LEFT_TO_RIGHT:
             case ICN::SWAP_ARROW_RIGHT_TO_LEFT: {
                 // Since the original game does not have such resources we could generate it from hero meeting sprite.
                 const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
                 std::vector<Image> input( 4 );
 
-                const int32_t width = 43;
+                const int32_t width = 45;
                 const int32_t height = 20;
 
                 for ( Image & image : input )
                     image.resize( width, height );
 
-                Copy( original, 297, 270, input[0], 0, 0, width, height );
+                Copy( original, 295, 270, input[0], 0, 0, width, height );
                 Copy( original, 295, 291, input[1], 0, 0, width, height );
-                Copy( original, 297, 363, input[2], 0, 0, width, height );
+                Copy( original, 295, 363, input[2], 0, 0, width, height );
                 Copy( original, 295, 384, input[3], 0, 0, width, height );
 
                 input[1] = Flip( input[1], true, false );
                 input[3] = Flip( input[3], true, false );
 
-                _icnVsSprite[id].resize( 2 );
-                Image temp = ExtractCommonPattern( input );
+                Image out = ExtractCommonPattern( input );
 
                 // Here are 2 pixels which should be removed.
-                if ( temp.width() == 43 && temp.height() == 20 ) {
-                    if ( temp.image()[38] != 0 ) {
-                        temp.image()[38] = 0;
-                        temp.transform()[38] = 1;
-                    }
-                    if ( temp.image()[28 + 3 * 43] != 0 ) {
-                        temp.image()[28 + 3 * 43] = 0;
-                        temp.transform()[28 + 3 * 43] = 1;
-                    }
+                if ( out.width() == width && out.height() == height ) {
+                    out.image()[40] = 0;
+                    out.transform()[40] = 1;
+
+                    out.image()[30 + 3 * width] = 0;
+                    out.transform()[30 + 3 * width] = 1;
                 }
 
-                _icnVsSprite[id][0] = Flip( temp, true, false );
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? out : Flip( out, true, false );
 
                 _icnVsSprite[id][1] = _icnVsSprite[id][0];
+                _icnVsSprite[id][1].setPosition( -1, 1 );
                 ApplyPalette( _icnVsSprite[id][1], 4 );
-
-                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
-                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
-                _icnVsSprite[id][0].setPosition( -3, 0 );
-                _icnVsSprite[id][1].setPosition( -2, 1 );
 
                 return true;
             }

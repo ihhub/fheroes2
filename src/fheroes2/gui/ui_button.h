@@ -198,5 +198,6 @@ namespace fheroes2
     ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background );
 
     // Makes a button with the shadow: for that it needs to capture the background from the display at construct time
-    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background );
+    ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
+                                       const Point & shadowOffset = Point( -4, 6 ) );
 }
