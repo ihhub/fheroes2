@@ -222,97 +222,257 @@ namespace
 
     void generateRussianAlphabet()
     {
+        // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
 
             original.resize( 96 );
             original.insert( original.end(), 128, original[0] );
+        }
+
+        // Normal font.
+        {
+            std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
 
             size_t offset = 0;
 
-            original[168 - 32] = original[37 + offset];
+            // E with 2 dots on top.
+            font[168 - 32].resize( font[37 + offset].width(), font[37 + offset].height() + 3 );
+            font[168 - 32].reset();
+            fheroes2::Copy( font[37 + offset], 0, 0, font[168 - 32], 0, 3, font[37 + offset].width(), font[37 + offset].height() );
+            fheroes2::Copy( font[168 - 32], 5, 5, font[168 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[168 - 32], 5, 5, font[168 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[168 - 32], 4, 5, font[168 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[168 - 32], 4, 5, font[168 - 32], 7, 1, 1, 1 );
+            font[168 - 32].setPosition( font[37 + offset].x(), font[37 + offset].y() - 3 );
 
-            original[192 - 32] = original[33 + offset];
-            original[193 - 32] = original[34 + offset];
-            original[194 - 32] = original[34 + offset];
-            original[195 - 32] = original[52 + offset];
-            original[196 - 32] = original[36 + offset];
-            original[197 - 32] = original[37 + offset];
-            original[198 - 32] = original[56 + offset];
-            original[199 - 32] = original[19];
+            font[192 - 32] = font[33 + offset];
 
-            original[200 - 32] = fheroes2::Flip( original[46 + offset], true, false );
-            original[200 - 32].setPosition( original[46 + offset].x(), original[46 + offset].y() );
+            font[193 - 32] = font[34 + offset];
+            fheroes2::FillTransform( font[193 - 32], 9, 4, 2, 1, 1 );
+            fheroes2::Copy( font[38], 6, 0, font[193 - 32], 6, 0, 5, 4 );
+            fheroes2::Copy( font[193 - 32], 9, 5, font[193 - 32], 8, 4, 1, 1 );
 
-            original[201 - 32] = original[200 - 32];
+            font[194 - 32] = font[34 + offset];
 
-            original[202 - 32] = original[43 + offset];
-            original[203 - 32] = original[44 + offset];
-            original[204 - 32] = original[45 + offset];
-            original[205 - 32] = original[40 + offset];
-            original[206 - 32] = original[47 + offset];
-            original[207 - 32] = original[52 + offset];
-            original[208 - 32] = original[48 + offset];
-            original[209 - 32] = original[35 + offset];
-            original[210 - 32] = original[52 + offset];
-            original[211 - 32] = original[57 + offset];
-            original[212 - 32] = original[49 + offset];
-            original[213 - 32] = original[56 + offset];
-            original[214 - 32] = original[53 + offset];
-            original[215 - 32] = original[20];
-            original[216 - 32] = original[55 + offset];
-            original[217 - 32] = original[55 + offset];
-            original[218 - 32] = original[48 + offset];
-            original[219 - 32] = original[48 + offset];
-            original[220 - 32] = original[48 + offset];
+            font[195 - 32] = font[38];
+            fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
 
-            original[221 - 32] = fheroes2::Flip( original[39 + offset], true, false );
-            original[221 - 32].setPosition( original[39 + offset].x(), original[39 + offset].y() );
+            font[196 - 32] = font[36 + offset];
 
-            original[222 - 32] = original[47 + offset];
+            font[197 - 32] = font[37 + offset];
 
-            original[223 - 32] = fheroes2::Flip( original[50 + offset], true, false );
-            original[223 - 32].setPosition( original[50 + offset].x(), original[50 + offset].y() );
+            font[198 - 32] = font[56 + offset];
+
+            font[199 - 32] = font[19];
+
+            // Reverted N.
+            font[200 - 32] = font[46];
+            fheroes2::FillTransform( font[200 - 32], 6, 1, 5, 11, 1 );
+            fheroes2::Copy( font[46], 6, 2, font[200 - 32], 6, 6, 1, 3 );
+            fheroes2::Copy( font[46], 7, 3, font[200 - 32], 7, 5, 1, 3 );
+            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 8, 4, 1, 3 );
+            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 9, 3, 1, 3 );
+            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 10, 2, 1, 3 );
+            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 11, 1, 1, 3 );
+            fheroes2::Copy( font[46], 11, 7, font[200 - 32], 11, 8, 1, 1 );
+            fheroes2::Copy( font[46], 13, 9, font[200 - 32], 11, 9, 1, 1 );
+
+            font[201 - 32].resize( font[200 - 32].width(), font[200 - 32].height() + 3 );
+            font[201 - 32].reset();
+            fheroes2::Copy( font[200 - 32], 0, 0, font[201 - 32], 0, 3, font[200 - 32].width(), font[200 - 32].height() );
+            font[201 - 32].setPosition( font[200 - 32].x(), font[200 - 32].y() - 3 );
+            fheroes2::Copy( font[201 - 32], 12, 4, font[201 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[201 - 32], 11, 10, font[201 - 32], 8, 1, 1, 1 );
+
+            font[202 - 32] = font[43 + offset];
+            font[203 - 32] = font[44 + offset];
+            font[204 - 32] = font[45 + offset];
+            font[205 - 32] = font[40 + offset];
+            font[206 - 32] = font[47 + offset];
+            font[207 - 32] = font[52 + offset];
+            font[208 - 32] = font[48 + offset];
+            font[209 - 32] = font[35 + offset];
+            font[210 - 32] = font[52 + offset];
+            font[211 - 32] = font[57 + offset];
+            font[212 - 32] = font[49 + offset];
+            font[213 - 32] = font[56 + offset];
+            font[214 - 32] = font[53 + offset];
+            font[215 - 32] = font[20];
+            font[216 - 32] = font[55 + offset];
+            font[217 - 32] = font[55 + offset];
+            font[218 - 32] = font[48 + offset];
+            font[219 - 32] = font[48 + offset];
+            font[220 - 32] = font[48 + offset];
+
+            font[221 - 32] = fheroes2::Flip( font[39 + offset], true, false );
+            font[221 - 32].setPosition( font[39 + offset].x(), font[39 + offset].y() );
+
+            font[222 - 32] = font[47 + offset];
+
+            font[223 - 32] = fheroes2::Flip( font[50 + offset], true, false );
+            font[223 - 32].setPosition( font[50 + offset].x(), font[50 + offset].y() );
 
             offset = 32;
 
-            original[184 - 32] = original[37 + offset];
+            // e with 2 dots on top.
+            font[184 - 32] = font[37 + offset];
 
-            original[224 - 32] = original[33 + offset];
-            original[225 - 32] = original[34 + offset];
-            original[226 - 32] = original[34 + offset];
-            original[227 - 32] = original[82];
-            original[228 - 32] = original[36 + offset];
-            original[229 - 32] = original[37 + offset];
-            original[230 - 32] = original[56 + offset];
-            original[231 - 32] = original[19];
-            original[232 - 32] = original[46 + offset];
-            original[233 - 32] = original[46 + offset];
-            original[234 - 32] = original[43 + offset];
-            original[235 - 32] = original[44 + offset];
-            original[236 - 32] = original[45 + offset];
-            original[237 - 32] = original[40 + offset];
-            original[238 - 32] = original[47 + offset];
-            original[239 - 32] = original[52 + offset];
-            original[240 - 32] = original[48 + offset];
-            original[241 - 32] = original[35 + offset];
-            original[242 - 32] = original[77];
-            original[243 - 32] = original[57 + offset];
-            original[244 - 32] = original[49 + offset];
-            original[245 - 32] = original[56 + offset];
-            original[246 - 32] = original[53 + offset];
-            original[247 - 32] = original[20];
-            original[248 - 32] = original[55 + offset];
-            original[249 - 32] = original[55 + offset];
-            original[250 - 32] = original[48 + offset];
-            original[251 - 32] = original[48 + offset];
-            original[252 - 32] = original[48 + offset];
-            original[253 - 32] = original[35 + offset];
-            original[254 - 32] = original[47 + offset];
-            original[255 - 32] = original[81];
+            font[224 - 32] = font[33 + offset];
+            font[225 - 32] = font[34 + offset];
+            font[226 - 32] = font[34 + offset];
+
+            font[227 - 32] = font[82];
+            fheroes2::Copy( font[227 - 32], 1, 0, font[227 - 32], 3, 0, 2, 1 );
+            fheroes2::Copy( font[227 - 32], 4, 2, font[227 - 32], 4, 1, 1, 1 );
+            fheroes2::SetTransformPixel( font[227 - 32], 4, 2, 1 );
+
+            font[228 - 32] = font[36 + offset];
+            font[229 - 32] = font[37 + offset];
+            font[230 - 32] = font[56 + offset];
+            font[231 - 32] = font[19];
+
+            // Reserted n.
+            font[232 - 32] = font[78];
+            fheroes2::FillTransform( font[232 - 32], 4, 0, 3, 8, 1 );
+            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 4, 3, 1, 3 );
+            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 5, 2, 1, 3 );
+            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 6, 1, 1, 3 );
+            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 7, 0, 1, 2 );
+            fheroes2::Copy( font[78], 8, 1, font[232 - 32], 8, 0, 1, 1 );
+
+            font[233 - 32].resize( font[232 - 32].width(), font[232 - 32].height() + 3 );
+            font[233 - 32].reset();
+            fheroes2::Copy( font[232 - 32], 0, 0, font[233 - 32], 0, 3, font[232 - 32].width(), font[232 - 32].height() );
+            font[233 - 32].setPosition( font[232 - 32].x(), font[232 - 32].y() - 3 );
+            fheroes2::Copy( font[233 - 32], 8, 3, font[233 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[233 - 32], 7, 3, font[233 - 32], 5, 1, 1, 1 );
+
+            // Shorter k.
+            font[234 - 32].resize( font[75].width(), font[75].height() - 3 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[75], 2, 2, font[234 - 32], 2, 0, 7, 4 );
+            fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 3, 1 );
+            fheroes2::Copy( font[75], 0, 7, font[234 - 32], 0, 4, font[75].width(), 6 );
+            font[234 - 32].setPosition( font[75].x(), font[75].y() + 3 );
+
+            font[235 - 32] = font[44 + offset];
+            font[236 - 32] = font[45 + offset];
+
+            font[237 - 32] = font[78];
+            fheroes2::FillTransform( font[237 - 32], 4, 0, 3, 8, 1 );
+            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 4, 3, 1, 2 );
+            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 5, 3, 1, 2 );
+            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 6, 3, 1, 2 );
+            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 7, 3, 1, 1 );
+
+            font[238 - 32] = font[47 + offset];
+            font[239 - 32] = font[52 + offset];
+            font[240 - 32] = font[48 + offset];
+            font[241 - 32] = font[35 + offset];
+            font[242 - 32] = font[77];
+            font[243 - 32] = font[57 + offset];
+            font[244 - 32] = font[49 + offset];
+            font[245 - 32] = font[56 + offset];
+            font[246 - 32] = font[53 + offset];
+            font[247 - 32] = font[20];
+            font[248 - 32] = font[55 + offset];
+            font[249 - 32] = font[55 + offset];
+            font[250 - 32] = font[48 + offset];
+            font[251 - 32] = font[48 + offset];
+            font[252 - 32] = font[48 + offset];
+            font[253 - 32] = font[35 + offset];
+            font[254 - 32] = font[47 + offset];
+            font[255 - 32] = font[81];
         }
 
-        // TODO: modify newly added characters accordingly.
+        // Small font.
+        {
+            std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::SMALFONT];
+
+            size_t offset = 0;
+
+            font[168 - 32] = font[37 + offset];
+
+            font[192 - 32] = font[33 + offset];
+            font[193 - 32] = font[34 + offset];
+            font[194 - 32] = font[34 + offset];
+            font[195 - 32] = font[52 + offset];
+            font[196 - 32] = font[36 + offset];
+            font[197 - 32] = font[37 + offset];
+            font[198 - 32] = font[56 + offset];
+            font[199 - 32] = font[19];
+
+            font[200 - 32] = fheroes2::Flip( font[46 + offset], true, false );
+            font[200 - 32].setPosition( font[46 + offset].x(), font[46 + offset].y() );
+
+            font[201 - 32] = font[200 - 32];
+
+            font[202 - 32] = font[43 + offset];
+            font[203 - 32] = font[44 + offset];
+            font[204 - 32] = font[45 + offset];
+            font[205 - 32] = font[40 + offset];
+            font[206 - 32] = font[47 + offset];
+            font[207 - 32] = font[52 + offset];
+            font[208 - 32] = font[48 + offset];
+            font[209 - 32] = font[35 + offset];
+            font[210 - 32] = font[52 + offset];
+            font[211 - 32] = font[57 + offset];
+            font[212 - 32] = font[49 + offset];
+            font[213 - 32] = font[56 + offset];
+            font[214 - 32] = font[53 + offset];
+            font[215 - 32] = font[20];
+            font[216 - 32] = font[55 + offset];
+            font[217 - 32] = font[55 + offset];
+            font[218 - 32] = font[48 + offset];
+            font[219 - 32] = font[48 + offset];
+            font[220 - 32] = font[48 + offset];
+
+            font[221 - 32] = fheroes2::Flip( font[39 + offset], true, false );
+            font[221 - 32].setPosition( font[39 + offset].x(), font[39 + offset].y() );
+
+            font[222 - 32] = font[47 + offset];
+
+            font[223 - 32] = fheroes2::Flip( font[50 + offset], true, false );
+            font[223 - 32].setPosition( font[50 + offset].x(), font[50 + offset].y() );
+
+            offset = 32;
+
+            font[184 - 32] = font[37 + offset];
+
+            font[224 - 32] = font[33 + offset];
+            font[225 - 32] = font[34 + offset];
+            font[226 - 32] = font[34 + offset];
+            font[227 - 32] = font[82];
+            font[228 - 32] = font[36 + offset];
+            font[229 - 32] = font[37 + offset];
+            font[230 - 32] = font[56 + offset];
+            font[231 - 32] = font[19];
+            font[232 - 32] = font[46 + offset];
+            font[233 - 32] = font[46 + offset];
+            font[234 - 32] = font[43 + offset];
+            font[235 - 32] = font[44 + offset];
+            font[236 - 32] = font[45 + offset];
+            font[237 - 32] = font[40 + offset];
+            font[238 - 32] = font[47 + offset];
+            font[239 - 32] = font[52 + offset];
+            font[240 - 32] = font[48 + offset];
+            font[241 - 32] = font[35 + offset];
+            font[242 - 32] = font[77];
+            font[243 - 32] = font[57 + offset];
+            font[244 - 32] = font[49 + offset];
+            font[245 - 32] = font[56 + offset];
+            font[246 - 32] = font[53 + offset];
+            font[247 - 32] = font[20];
+            font[248 - 32] = font[55 + offset];
+            font[249 - 32] = font[55 + offset];
+            font[250 - 32] = font[48 + offset];
+            font[251 - 32] = font[48 + offset];
+            font[252 - 32] = font[48 + offset];
+            font[253 - 32] = font[35 + offset];
+            font[254 - 32] = font[47 + offset];
+            font[255 - 32] = font[81];
+        }
     }
 
     void generateAlphabet( const fheroes2::SupportedLanguage language )
@@ -1730,8 +1890,7 @@ namespace fheroes2
             case SupportedLanguage::Polish:
             case SupportedLanguage::German:
             case SupportedLanguage::French:
-                // TODO: uncomment the line below once Russian alphabet is good enough
-                // case SupportedLanguage::Russian:
+            case SupportedLanguage::Russian:
                 return true;
             default:
                 break;
