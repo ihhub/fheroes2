@@ -335,7 +335,7 @@ namespace
             font[230 - 32].reset();
             fheroes2::Copy( font[88], 0, 0, font[230 - 32], 0, 0, 6, 7 );
             fheroes2::Copy( font[88], 5, 0, font[230 - 32], 7, 0, 5, 7 );
-            fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, font[230 - 32].image()[3 + font[230 - 32].width() ] );
+            fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, font[230 - 32].image()[3 + font[230 - 32].width()] );
             font[230 - 32].setPosition( font[88].x(), font[88].y() );
 
             font[231 - 32] = font[19];
