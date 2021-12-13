@@ -327,9 +327,17 @@ namespace
             fheroes2::Copy( font[227 - 32], 4, 2, font[227 - 32], 4, 1, 1, 1 );
             fheroes2::SetTransformPixel( font[227 - 32], 4, 2, 1 );
 
-            font[228 - 32] = font[36 + offset];
+            font[228 - 32] = font[71];
             font[229 - 32] = font[37 + offset];
-            font[230 - 32] = font[56 + offset];
+
+            // x with | in the middle.
+            font[230 - 32].resize( font[88].width() + 2, font[88].height() );
+            font[230 - 32].reset();
+            fheroes2::Copy( font[88], 0, 0, font[230 - 32], 0, 0, 6, 7 );
+            fheroes2::Copy( font[88], 5, 0, font[230 - 32], 7, 0, 5, 7 );
+            fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, font[230 - 32].image()[3 + font[230 - 32].width() ] );
+            font[230 - 32].setPosition( font[88].x(), font[88].y() );
+
             font[231 - 32] = font[19];
 
             // Reserted n.
@@ -367,7 +375,9 @@ namespace
             fheroes2::Copy( font[78], 4, 1, font[237 - 32], 7, 3, 1, 1 );
 
             font[238 - 32] = font[47 + offset];
-            font[239 - 32] = font[52 + offset];
+
+            font[239 - 32] = font[78];
+
             font[240 - 32] = font[48 + offset];
             font[241 - 32] = font[35 + offset];
             font[242 - 32] = font[77];
