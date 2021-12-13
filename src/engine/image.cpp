@@ -1845,33 +1845,6 @@ namespace fheroes2
         return out;
     }
 
-    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
-    {
-        if ( image.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) )
-            return;
-
-        const int32_t width = image.width() + shadowOffset.x;
-        const int32_t height = image.height() - shadowOffset.y;
-
-        const int32_t imageWidth = image.width();
-
-        const uint8_t * transformInY = image.transform() - shadowOffset.x;
-        uint8_t * transformOutY = image.transform() + imageWidth * shadowOffset.y;
-        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
-
-        for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth ) {
-            const uint8_t * transformInX = transformInY;
-            uint8_t * transformOutX = transformOutY;
-            const uint8_t * transformOutXEnd = transformOutX + width;
-
-            for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX ) {
-                if ( *transformInX == 0 && *transformOutX == 1 ) {
-                    *transformOutX = transformId;
-                }
-            }
-        }
-    }
-
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
     {
         if ( image.empty() )
@@ -2212,6 +2185,33 @@ namespace fheroes2
             for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, imageOutY += height, transformOutY += height ) {
                 *imageOutY = *imageInX;
                 *transformOutY = *transformInX;
+            }
+        }
+    }
+
+    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( image.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) )
+            return;
+
+        const int32_t width = image.width() + shadowOffset.x;
+        const int32_t height = image.height() - shadowOffset.y;
+
+        const int32_t imageWidth = image.width();
+
+        const uint8_t * transformInY = image.transform() - shadowOffset.x;
+        uint8_t * transformOutY = image.transform() + imageWidth * shadowOffset.y;
+        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
+
+        for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformOutXEnd = transformOutX + width;
+
+            for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 && *transformOutX == 1 ) {
+                    *transformOutX = transformId;
+                }
             }
         }
     }
