@@ -449,7 +449,7 @@ fheroes2::GameMode Game::NewGame()
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
             Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
         else if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
+            Dialog::Message( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Font::BIG );
         else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
