@@ -262,7 +262,13 @@ namespace
 
             font[197 - 32] = font[37 + offset];
 
-            font[198 - 32] = font[56 + offset];
+            // x with | in the middle.
+            font[198 - 32].resize( font[56].width() + 1, font[56].height() );
+            font[198 - 32].reset();
+            fheroes2::Copy( font[56], 1, 0, font[198 - 32], 1, 0, 8, 11 );
+            fheroes2::Copy( font[56], 9, 0, font[198 - 32], 10, 0, 6, 11 );
+            fheroes2::Fill( font[198 - 32], 9, 1, 1, 9, font[198 - 32].image()[1 + font[198 - 32].width()] );
+            font[198 - 32].setPosition( font[56].x(), font[56].y() );
 
             font[199 - 32] = font[19];
 
@@ -290,7 +296,12 @@ namespace
             font[204 - 32] = font[45 + offset];
             font[205 - 32] = font[40 + offset];
             font[206 - 32] = font[47 + offset];
-            font[207 - 32] = font[52 + offset];
+
+            font[207 - 32] = font[195 - 32];
+            fheroes2::Copy( font[207 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
+            fheroes2::Copy( font[207 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
+            fheroes2::Copy( font[207 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
+
             font[208 - 32] = font[48 + offset];
             font[209 - 32] = font[35 + offset];
             font[210 - 32] = font[52 + offset];
@@ -305,7 +316,10 @@ namespace
             font[219 - 32] = font[48 + offset];
             font[220 - 32] = font[48 + offset];
 
-            font[221 - 32] = fheroes2::Flip( font[39 + offset], true, false );
+            font[221 - 32] = font[47];
+            fheroes2::FillTransform( font[221 - 32], 3, 3, 3, 5, 1 );
+            fheroes2::Copy( font[221 - 32], 2, 1, font[221 - 32], 7, 5, 5, 1 );
+
             font[221 - 32].setPosition( font[39 + offset].x(), font[39 + offset].y() );
 
             font[222 - 32] = font[47 + offset];
@@ -319,8 +333,8 @@ namespace
             font[184 - 32] = font[37 + offset];
 
             font[224 - 32] = font[33 + offset];
+
             font[225 - 32] = font[34 + offset];
-            font[226 - 32] = font[34 + offset];
 
             font[227 - 32] = font[82];
             fheroes2::Copy( font[227 - 32], 1, 0, font[227 - 32], 3, 0, 2, 1 );
@@ -338,16 +352,27 @@ namespace
             fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, font[230 - 32].image()[3 + font[230 - 32].width()] );
             font[230 - 32].setPosition( font[88].x(), font[88].y() );
 
-            font[231 - 32] = font[19];
+            // letter 3
+            font[231 - 32].resize( font[19].width(), font[19].height() - 4 );
+            font[231 - 32].reset();
+            fheroes2::Copy( font[19], 0, 0, font[231 - 32], 0, 0, font[19].width(), 3 );
+            fheroes2::Copy( font[19], 0, 5, font[231 - 32], 0, 3, font[19].width(), 1 );
+            fheroes2::Copy( font[19], 0, 8, font[231 - 32], 0, 4, font[19].width(), 4 );
+            fheroes2::FillTransform( font[231 - 32], 0, 2, 3, 3, 1 );
+            font[231 - 32].setPosition( font[19].x(), font[19].y() + 4 );
 
-            // Reserted n.
-            font[232 - 32] = font[78];
-            fheroes2::FillTransform( font[232 - 32], 4, 0, 3, 8, 1 );
-            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 4, 3, 1, 3 );
-            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 5, 2, 1, 3 );
-            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 6, 1, 1, 3 );
-            fheroes2::Copy( font[78], 4, 0, font[232 - 32], 7, 0, 1, 2 );
-            fheroes2::Copy( font[78], 8, 1, font[232 - 32], 8, 0, 1, 1 );
+            // letter B (v)
+            font[226 - 32].resize( font[231 - 32].width() + 1, font[231 - 32].height() );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[231 - 32], 0, 0, font[226 - 32], 1, 0, font[231 - 32].width(), font[231 - 32].height() );
+            fheroes2::Copy( font[77], 1, 0, font[226 - 32], 1, 0, 3, 7 );
+            fheroes2::Copy( font[226 - 32], 7, 1, font[226 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[226 - 32], 7, 1, font[226 - 32], 3, 6, 1, 1 );
+            fheroes2::Copy( font[226 - 32], 3, 4, font[226 - 32], 3, 5, 1, 1 );
+            font[226 - 32].setPosition( font[231 - 32].x(), font[231 - 32].y() );
+
+            // Reversed n.
+            font[232 - 32] = font[85];
 
             font[233 - 32].resize( font[232 - 32].width(), font[232 - 32].height() + 3 );
             font[233 - 32].reset();
@@ -357,15 +382,24 @@ namespace
             fheroes2::Copy( font[233 - 32], 7, 3, font[233 - 32], 5, 1, 1, 1 );
 
             // Shorter k.
-            font[234 - 32].resize( font[75].width(), font[75].height() - 3 );
+            font[234 - 32].resize( font[75].width(), font[75].height() - 4 );
             font[234 - 32].reset();
             fheroes2::Copy( font[75], 2, 2, font[234 - 32], 2, 0, 7, 4 );
             fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 3, 1 );
-            fheroes2::Copy( font[75], 0, 7, font[234 - 32], 0, 4, font[75].width(), 6 );
-            font[234 - 32].setPosition( font[75].x(), font[75].y() + 3 );
+            fheroes2::Copy( font[75], 0, 7, font[234 - 32], 0, 4, font[75].width(), 2 );
+            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
+            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
+            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
 
-            font[235 - 32] = font[44 + offset];
+            font[235 - 32] = font[78];
+            fheroes2::Copy( font[235 - 32], 3, 0, font[235 - 32], 2, 1, 1, 1 );
+            fheroes2::FillTransform( font[235 - 32], 0, 0, 2, 3, 1 );
+            fheroes2::FillTransform( font[235 - 32], 2, 0, 1, 1, 1 );
+
             font[236 - 32] = font[45 + offset];
+            fheroes2::Copy( font[87], 9, 0, font[236 - 32], 3, 0, 4, 7 );
+            fheroes2::Copy( font[87], 9, 0, font[236 - 32], 9, 0, 4, 7 );
+            fheroes2::FillTransform( font[236 - 32], 0, 0, 3, 6, 1 );
 
             font[237 - 32] = font[78];
             fheroes2::FillTransform( font[237 - 32], 4, 0, 3, 8, 1 );
@@ -384,14 +418,49 @@ namespace
             font[243 - 32] = font[57 + offset];
             font[244 - 32] = font[49 + offset];
             font[245 - 32] = font[56 + offset];
-            font[246 - 32] = font[53 + offset];
-            font[247 - 32] = font[20];
+
+            font[246 - 32].resize( font[85].width() + 2, font[85].height() + 1 );
+            font[246 - 32].reset();
+            fheroes2::Copy( font[85], 0, 0, font[246 - 32], 0, 0, font[85].width(), font[85].height() );
+            fheroes2::Copy( font[246 - 32], 7, 4, font[246 - 32], 9, 5, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 7, 4, font[246 - 32], 10, 4, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 8, 1, font[246 - 32], 11, 4, 1, 4 );
+            fheroes2::Copy( font[246 - 32], 8, 1, font[246 - 32], 10, 5, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 9, 5, font[246 - 32], 10, 6, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 9, 5, font[246 - 32], 10, 7, 1, 1 );
+            font[246 - 32].setPosition( font[85].x(), font[85].y() );
+
+            font[247 - 32] = font[85];
+            fheroes2::Copy( font[247 - 32], 2, 5, font[247 - 32], 2, 3, 6, 2 );
+            fheroes2::Copy( font[247 - 32], 8, 0, font[247 - 32], 7, 4, 1, 1 );
+            fheroes2::Copy( font[247 - 32], 8, 0, font[247 - 32], 7, 5, 1, 1 );
+            fheroes2::Copy( font[247 - 32], 8, 0, font[247 - 32], 7, 6, 1, 1 );
+            fheroes2::FillTransform( font[247 - 32], 1, 5, 6, 4, 1 );
+
             font[248 - 32] = font[55 + offset];
             font[249 - 32] = font[55 + offset];
-            font[250 - 32] = font[48 + offset];
-            font[251 - 32] = font[48 + offset];
-            font[252 - 32] = font[48 + offset];
-            font[253 - 32] = font[35 + offset];
+
+            font[252 - 32] = font[226 - 32];
+            fheroes2::FillTransform( font[252 - 32], 4, 0, 5, 3, 1 );
+
+            font[250 - 32].resize( font[252 - 32].width() + 1, font[252 - 32].height() );
+            font[250 - 32].reset();
+            fheroes2::Copy( font[252 - 32], 0, 0, font[250 - 32], 1, 0, font[252 - 32].width(), font[252 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 1, 0, font[250 - 32], 1, 0, 1, 2 );
+            font[250 - 32].setPosition( font[252 - 32].x(), font[252 - 32].y() );
+
+            font[251 - 32].resize( font[252 - 32].width() + 3, font[252 - 32].height() );
+            font[251 - 32].reset();
+            fheroes2::Copy( font[252 - 32], 0, 0, font[251 - 32], 0, 0, font[252 - 32].width(), font[252 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[251 - 32], 10, 0, 2, 7 );
+            font[251 - 32].setPosition( font[252 - 32].x(), font[252 - 32].y() );
+
+            font[253 - 32] = font[79];
+            fheroes2::FillTransform( font[253 - 32], 0, 2, 3, 3, 1 );
+            fheroes2::Copy( font[253 - 32], 8, 3, font[253 - 32], 7, 3, 1, 1 );
+            fheroes2::Copy( font[253 - 32], 8, 3, font[253 - 32], 6, 3, 1, 1 );
+            fheroes2::Copy( font[253 - 32], 8, 3, font[253 - 32], 5, 3, 1, 1 );
+
             font[254 - 32] = font[47 + offset];
             font[255 - 32] = font[81];
         }
@@ -454,18 +523,18 @@ namespace
             font[225 - 32] = font[34 + offset];
             font[226 - 32] = font[34 + offset];
             font[227 - 32] = font[82];
-            font[228 - 32] = font[36 + offset];
+            font[228 - 32] = font[71];
             font[229 - 32] = font[37 + offset];
             font[230 - 32] = font[56 + offset];
             font[231 - 32] = font[19];
-            font[232 - 32] = font[46 + offset];
-            font[233 - 32] = font[46 + offset];
+            font[232 - 32] = font[85];
+            font[233 - 32] = font[232 - 32];
             font[234 - 32] = font[43 + offset];
             font[235 - 32] = font[44 + offset];
             font[236 - 32] = font[45 + offset];
             font[237 - 32] = font[40 + offset];
             font[238 - 32] = font[47 + offset];
-            font[239 - 32] = font[52 + offset];
+            font[239 - 32] = font[78];
             font[240 - 32] = font[48 + offset];
             font[241 - 32] = font[35 + offset];
             font[242 - 32] = font[77];
