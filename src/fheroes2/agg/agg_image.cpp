@@ -353,8 +353,9 @@ namespace
             font[10].reset();
             fheroes2::Copy( font[65], 0, 0, font[10], 0, 2, font[65].width(), font[65].height() );
             font[10].setPosition( font[65].x(), font[65].y() - 2 );
-            fheroes2::Copy( font[10], 2, 2, font[10], 2, 0, 1, 1 );
-            fheroes2::Copy( font[10], 2, 2, font[10], 4, 0, 1, 1 );
+            fheroes2::Copy( font[10], 2, 2, font[10], 2, 1, 1, 1 );
+            fheroes2::Copy( font[10], 2, 2, font[10], 4, 1, 1, 1 );
+            fheroes2::Copy( font[10], 2, 2, font[10], 3, 0, 1, 1 );
             fheroes2::updateShadow( font[10], { -1, 1 }, 2 );
 
             font[28] = font[73];
