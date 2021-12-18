@@ -32,6 +32,7 @@ CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
 ifdef PREFIX
 CFLAGS := $(CFLAGS) -I$(PREFIX)/include
 endif
+CFLAGS := $(CFLAGS) -DASIO_STANDALONE
 
 ifeq ($(PLATFORM), mingw)
 RES := ../resources/$(TARGET).res
