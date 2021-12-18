@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies and clang-tidy
       run: |
         sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tidy-11
+        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext clang-tidy-11
     - name: Setup clang-tidy
       run: |
         sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-11 100

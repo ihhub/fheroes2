@@ -13,19 +13,19 @@ jobs:
         - name: Linux SDL1
           os: ubuntu-latest
           sdl_version: SDL
-          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev
+          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libasio-dev
         - name: Linux SDL2
           os: ubuntu-latest
           sdl_version: SDL2
-          dependencies: libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+          dependencies: libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libasio-dev
         - name: macOS SDL1
           os: macos-latest
           sdl_version: SDL
-          dependencies: sdl sdl_image sdl_mixer
+          dependencies: sdl sdl_image sdl_mixer asio
         - name: macOS SDL2
           os: macos-latest
           sdl_version: SDL2
-          dependencies: sdl2 sdl2_image sdl2_mixer
+          dependencies: sdl2 sdl2_image sdl2_mixer asio
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     steps:

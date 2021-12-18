@@ -15,7 +15,7 @@ jobs:
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools
+        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext clang-tools
     - name: Analyze
       run: scan-build --status-bugs -v make -j 2
       env:
