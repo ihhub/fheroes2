@@ -529,7 +529,7 @@ namespace
                 // TODO: add proper Flip function variant.
                 fheroes2::Sprite temp = fheroes2::Crop( font[48], 6, 0, 5, 6 );
                 temp = fheroes2::Flip( temp, true, false );
-                fheroes2::Copy( temp, 0, 0, font[212 - 32], 1, 0, temp.width(), temp.height () );
+                fheroes2::Copy( temp, 0, 0, font[212 - 32], 1, 0, temp.width(), temp.height() );
             }
             font[212 - 32].setPosition( font[48].x(), font[48].y() );
             fheroes2::updateShadow( font[212 - 32], { -1, 2 }, 2 );
@@ -567,7 +567,7 @@ namespace
             fheroes2::Copy( font[215 - 32], 9, 8, font[215 - 32], 9, 9, 1, 1 );
             fheroes2::updateShadow( font[215 - 32], { -1, 2 }, 2 );
 
-            font[217 - 32].resize( font[216 - 32].width() + 2, font[216 - 32].height() + 1);
+            font[217 - 32].resize( font[216 - 32].width() + 2, font[216 - 32].height() + 1 );
             font[217 - 32].reset();
             fheroes2::Copy( font[216 - 32], 0, 0, font[217 - 32], 0, 0, font[216 - 32].width(), font[216 - 32].height() );
             fheroes2::Copy( font[214 - 32], 11, 8, font[217 - 32], 14, 8, 3, 4 );
