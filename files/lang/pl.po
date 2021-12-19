@@ -329,7 +329,6 @@ msgstr "Szczęście"
 msgid "Spell Points"
 msgstr "Ptk. magii"
 
-#, fuzzy
 msgid "Hero's Options"
 msgstr "Opcje bohatera"
 
@@ -582,14 +581,12 @@ msgstr "Niskie morale sprawia, że jednostka (%{monster}) zamiera w panice."
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} zadaje %{damage} pkt. obrażeń."
 
-#, fuzzy
 msgid "The mirror image is created."
 msgstr "Stworzono lustrzane odbicie."
 
 msgid "The mirror image is destroyed!"
 msgstr "Zniszczono lustrzane odbicie!"
 
-#, fuzzy
 msgid "Break auto battle?"
 msgstr "Zatrzymać automatyczną walkę?"
 
@@ -602,11 +599,9 @@ msgstr "Brak zaklęć."
 msgid "Are you sure you want to retreat?"
 msgstr "Czy na pewno chcesz się wycofać?"
 
-#, fuzzy
 msgid "Retreat disabled"
 msgstr "Ucieczka niemożliwa"
 
-#, fuzzy
 msgid "Surrender disabled"
 msgstr "Kapitulacja niemożliwa"
 
@@ -637,32 +632,26 @@ msgstr ""
 msgid "Please select another hero."
 msgstr ""
 
-#, fuzzy
 msgid "Set Attack Skill"
-msgstr "Atak"
+msgstr "Ustaw wartość Ataku"
 
-#, fuzzy
 msgid "Set Defense Skill"
-msgstr "Obrona"
+msgstr "Ustaw wartość Obrony"
 
-#, fuzzy
 msgid "Set Power Skill"
-msgstr "Moc zaklęć"
+msgstr "Ustaw wartość Mocy zaklęć"
 
-#, fuzzy
 msgid "Set Knowledge Skill"
-msgstr "Wiedza"
+msgstr "Ustaw wartość Wiedzy"
 
-#, fuzzy
 msgid "%{race1} %{name1}"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgstr "%{race1} %{name1}"
 
 msgid "vs"
-msgstr ""
+msgstr "vs"
 
-#, fuzzy
 msgid "%{race2} %{name2}"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Potwory"
@@ -1204,9 +1193,8 @@ msgstr "Większy zwój"
 msgid "Minor Scroll"
 msgstr "Pomniejszy zwój"
 
-#, fuzzy
 msgid "Nomad Boots"
-msgstr "Nomadowie"
+msgstr "Buty nomada"
 
 msgid "Power Axe"
 msgstr "Potężny topór"
@@ -1241,21 +1229,17 @@ msgstr "%{name} - nie można zbudować, zamek jest za daleko od wody"
 msgid "disable build."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford %{name}."
-msgstr "%{name} - nie stać cię na ten budynek"
+msgstr "%{name} - nie stać cię na ten budynek."
 
-#, fuzzy
 msgid "%{name} is already built."
-msgstr "%{name} - ten budynek został już wzniesiony"
+msgstr "%{name} - ten budynek został już wzniesiony."
 
-#, fuzzy
 msgid "Cannot build %{name}."
-msgstr "%{name} - nie można zbudować"
+msgstr "%{name} - nie można zbudować."
 
-#, fuzzy
 msgid "Build %{name}."
-msgstr "Zbuduj: %{name}"
+msgstr "Zbuduj: %{name}."
 
 #, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
@@ -1572,7 +1556,6 @@ msgstr ""
 "Kapliczka zwiększa o 10 procent umiejętność nekromancji u wszystkich twoich "
 "nekromantów."
 
-#, fuzzy
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
@@ -1669,27 +1652,26 @@ msgstr "Wyjście"
 msgid "Exit this menu."
 msgstr "Wyjdź z tego menu."
 
-#, fuzzy
 msgid "Click to show next town."
-msgstr "Pokaż następne miasto"
+msgstr "Kliknij aby przejść do następnego miasta."
 
 msgid "Show next town"
 msgstr "Pokaż następne miasto"
 
-#, fuzzy
 msgid "Click to show previous town."
-msgstr "Pokaż poprzednie miasto"
+msgstr "Kliknij aby przejść do poprzedniego miasta."
 
 msgid "Show previous town"
 msgstr "Pokaż poprzednie miasto"
 
 msgid "Army joining"
-msgstr ""
+msgstr "Łączenie armii"
 
 msgid ""
 "Unable to merge two armies together. Rearrange monsters manually before "
 "moving the hero to the garrison."
-msgstr ""
+msgstr "Nie można połączyć armii. Zmień pozycje potworów w bohaterze"
+"przed wejściem do garnizonu."
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Tego miasta nie można rozbudować do poziomu zamku."
@@ -1697,11 +1679,9 @@ msgstr "Tego miasta nie można rozbudować do poziomu zamku."
 msgid "Town"
 msgstr "Miasto"
 
-#, fuzzy
 msgid "Exit Castle"
 msgstr "Wyjście z zamku"
 
-#, fuzzy
 msgid "Exit Town"
 msgstr "Wyjście z miasta"
 
@@ -1717,9 +1697,8 @@ msgstr ""
 msgid "View Hero"
 msgstr "Pokaż bohatera"
 
-#, fuzzy
 msgid "The above spells are available here."
-msgstr "Powyższe zaklęcia zostały dodane do twojej księgi."
+msgstr "Tu są dostępne powyższe zaklęcia."
 
 msgid "The above spells have been added to your book."
 msgstr "Powyższe zaklęcia zostały dodane do twojej księgi."
@@ -1732,19 +1711,15 @@ msgstr ""
 msgid "Recruit Hero"
 msgstr "Najmij bohatera"
 
-#, fuzzy
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} ma poziom %{value}. To %{race}"
+msgstr "%{name} ma poziom %{value}. To %{race} "
 
-#, fuzzy
 msgid "with %{count} artifacts."
-msgstr " z %{count} artefaktami."
+msgstr "z %{count} artefaktami."
 
-#, fuzzy
 msgid "with 1 artifact."
-msgstr " z jednym artefaktem."
+msgstr "z jednym artefaktem."
 
-#, fuzzy
 msgid "without artifacts."
 msgstr "bez artefaktów."
 
@@ -1783,9 +1758,8 @@ msgstr "Ustaw szyk garnizonu na 'luźny'"
 msgid "Set garrison combat formation to 'Grouped'"
 msgstr "Ustaw szyk garnizonu na 'zwarty'"
 
-#, fuzzy
 msgid "Exit Castle Options"
-msgstr "Opcje zamku"
+msgstr "Wyjście z zamku"
 
 msgid "Castle Options"
 msgstr "Opcje zamku"
@@ -8345,66 +8319,60 @@ msgid "game: offer to continue the game afer victory condition"
 msgstr ""
 "Gra: zaproponuj kontynuację rozgrywki po spełnieniu warunków zwycięstwa."
 
-#, fuzzy
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Ta jednostka (%{name}) zostaje dotknięta klątwą mumii!"
+msgstr "%{name} to naprawdę najpotężniejszy artefakt."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Najpotężniejszy artefakt można znaleść w %{name} części świata."
 
 msgid "north-west"
-msgstr ""
+msgstr "północno-zachodniej"
 
-#, fuzzy
 msgid "north"
-msgstr "Enroth"
+msgstr "północnej"
 
 msgid "north-east"
-msgstr ""
+msgstr "północno-wschodniej"
 
-#, fuzzy
 msgid "west"
-msgstr "Gniazdo"
+msgstr "zachodniej"
 
-#, fuzzy
 msgid "center"
-msgstr "Potwór"
+msgstr "centralnej"
 
-#, fuzzy
 msgid "east"
-msgstr "Gniazdo"
+msgstr "wschodniej"
 
 msgid "south-west"
-msgstr ""
+msgstr "południowo-zachodniej"
 
-#, fuzzy
 msgid "south"
-msgstr "dźwięk"
+msgstr "południowej"
 
 msgid "south-east"
-msgstr ""
+msgstr "południowo-wschodniej"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Gdzieś tam jest prawda."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Mroczna strona jest silniejsza."
 
-#, fuzzy
 msgid "The end of the world is near."
-msgstr "Strzeż się skraju świata!"
+msgstr "Zbliża się koniec świata."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Kości Lorda Slayera są zakopane w fundamentach areny."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Czarny smok pokona Tytana w dowolny dzień tygodnia."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "On powiedział: Yada yada yada... ona odpowiedziała: Blah, blah, blah..."
 
+#,fuzzy
 msgid "An unknown force is being ressurected..."
-msgstr ""
+msgstr "Nieznana siła jest wskrzeszana..."
 
 msgid ""
 "Check the newest version of game at\n"
