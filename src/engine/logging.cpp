@@ -18,12 +18,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "logging.h"
 #include <ctime>
+
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#include <windows.h>
+#endif
+
+#include "logging.h"
 
 namespace
 {
     int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
+
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    // Sets the Windows console codepage to the system codepage
+    class ConsoleCPSwitcher
+    {
+    public:
+        ConsoleCPSwitcher()
+            : _consoleOutputCP( GetConsoleOutputCP() )
+        {
+            if ( _consoleOutputCP > 0 ) {
+                SetConsoleOutputCP( GetACP() );
+            }
+        }
+
+        ConsoleCPSwitcher( const ConsoleCPSwitcher & ) = delete;
+
+        ~ConsoleCPSwitcher()
+        {
+            if ( _consoleOutputCP > 0 ) {
+                SetConsoleOutputCP( _consoleOutputCP );
+            }
+        }
+
+        ConsoleCPSwitcher & operator=( const ConsoleCPSwitcher & ) = delete;
+
+    private:
+        const UINT _consoleOutputCP;
+    };
+
+    ConsoleCPSwitcher consoleCPSwitcher;
+#endif
 }
 
 namespace Logging
