@@ -75,9 +75,9 @@ namespace
         }
     }
 
-    Mix_Chunk * LoadWAV( const char * file )
+    Mix_Chunk * LoadWAV( const std::string & file )
     {
-        Mix_Chunk * sample = Mix_LoadWAV( file );
+        Mix_Chunk * sample = Mix_LoadWAV( System::FileNameToUTF8( file ).c_str() );
 
         if ( !sample ) {
             ERROR_LOG( SDL_GetError() );
@@ -249,7 +249,7 @@ size_t Mixer::getChannelCount()
     return static_cast<size_t>( Mix_AllocateChannels( -1 ) );
 }
 
-int Mixer::Play( const char * file, const int channel /* = -1 */, const bool loop /* = false */ )
+int Mixer::Play( const std::string & file, const int channel /* = -1 */, const bool loop /* = false */ )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
