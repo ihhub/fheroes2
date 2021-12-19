@@ -23,11 +23,13 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <memory>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
 
+#include "logging.h"
 #include "system.h"
 #include "tools.h"
 
@@ -400,3 +402,67 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     return true;
 }
 #endif
+
+std::string System::FileNameToUTF8( const std::string & str )
+{
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    if ( str.empty() ) {
+        return str;
+    }
+
+    auto getLastErrorStr = []() {
+        LPVOID msgBuf;
+
+        const DWORD msgLen = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(),
+                                            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr );
+
+        if ( msgLen > 0 ) {
+            LPTSTR msgStr = static_cast<LPTSTR>( msgBuf );
+
+            const std::string result( msgStr, msgStr + msgLen );
+
+            LocalFree( msgBuf );
+
+            return result;
+        }
+
+        return std::string( "FormatMessage() failed" );
+    };
+
+    const int wLen = MultiByteToWideChar( CP_ACP, 0, str.c_str(), -1, nullptr, 0 );
+
+    if ( wLen <= 0 ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
+
+    if ( MultiByteToWideChar( CP_ACP, 0, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const int uLen = WideCharToMultiByte( CP_UTF8, 0, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
+
+    if ( uLen <= 0 ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::unique_ptr<char[]> uStr( new char[uLen] );
+
+    if ( WideCharToMultiByte( CP_UTF8, 0, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    return std::string( uStr.get() );
+#else
+    return str;
+#endif
+}

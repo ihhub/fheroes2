@@ -31,6 +31,7 @@
 #include "audio.h"
 #include "core.h"
 #include "logging.h"
+#include "system.h"
 
 namespace
 {
@@ -401,7 +402,7 @@ void Music::Play( const std::string & file, const bool loop )
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( valid ) {
-        Mix_Music * mix = Mix_LoadMUS( file.c_str() );
+        Mix_Music * mix = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
 
         if ( !mix ) {
             ERROR_LOG( Mix_GetError() );
