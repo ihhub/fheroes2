@@ -1,8 +1,8 @@
 include $(DEVKITPRO)/libnx/switch_rules
 
 ARCH = -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
-CFLAGS := $(CFLAGS) $(ARCH) -D__SWITCH__
-CXXFLAGS := $(CXXFLAGS) $(ARCH) -D__SWITCH__
+CFLAGS := $(CFLAGS) $(ARCH) -D__SWITCH__ -DNO_NETWORK
+CXXFLAGS := $(CXXFLAGS) $(ARCH) -D__SWITCH__ -DNO_NETWORK
 CFLAGS_TP := $(CFLAGS_TP) $(ARCH)
 CXXFLAGS_TP := $(CXXFLAGS_TP) $(ARCH)
 

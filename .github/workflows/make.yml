@@ -100,9 +100,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgcc1 gettext libasio-dev
-        sudo cp /usr/include/asio.hpp /usr/local/include
-        sudo cp -r /usr/include/asio /usr/local/include/asio
+        sudo apt-get install -y libgcc1 gettext
     - name: Prepare Vita SDK cache
       uses: actions/cache@v2
       with:
@@ -170,9 +168,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y gettext libasio-dev
-        sudo cp /usr/include/asio.hpp /usr/local/include
-        sudo cp -r /usr/include/asio /usr/local/include/asio
+        sudo apt-get install -y gettext
     - name: Build
       run: |
         export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
