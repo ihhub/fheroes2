@@ -401,6 +401,7 @@ void Music::Play( const std::string & file, const bool loop )
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( valid ) {
+        ERROR_LOG( file );
         Mix_Music * mix = Mix_LoadMUS( file.c_str() );
 
         if ( !mix ) {
