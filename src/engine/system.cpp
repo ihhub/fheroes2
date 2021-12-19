@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <map>
 #include <memory>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
@@ -406,9 +407,18 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 std::string System::FileNameToUTF8( const std::string & str )
 {
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+    static std::map<std::string, std::string> acpToUtf8;
+
     if ( str.empty() ) {
         return str;
     }
+
+    if ( acpToUtf8.count( str ) > 0 ) {
+        return acpToUtf8[str];
+    }
+
+    // In case of any issues, the original string will be returned, so let's put it to the cache right away
+    acpToUtf8[str] = str;
 
     auto getLastErrorStr = []() {
         LPVOID msgBuf;
@@ -461,7 +471,12 @@ std::string System::FileNameToUTF8( const std::string & str )
         return str;
     }
 
-    return std::string( uStr.get() );
+    const std::string result( uStr.get() );
+
+    // Put the final result to the cache
+    acpToUtf8[str] = result;
+
+    return result;
 #else
     return str;
 #endif
