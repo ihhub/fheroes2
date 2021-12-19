@@ -429,7 +429,7 @@ std::string System::FileNameToUTF8( const std::string & str )
         return std::string( "FormatMessage() failed" );
     };
 
-    const int wLen = MultiByteToWideChar( CP_ACP, 0, str.c_str(), -1, nullptr, 0 );
+    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
 
     if ( wLen <= 0 ) {
         ERROR_LOG( getLastErrorStr() );
@@ -439,13 +439,13 @@ std::string System::FileNameToUTF8( const std::string & str )
 
     const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
 
-    if ( MultiByteToWideChar( CP_ACP, 0, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
+    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
         ERROR_LOG( getLastErrorStr() );
 
         return str;
     }
 
-    const int uLen = WideCharToMultiByte( CP_UTF8, 0, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
+    const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
 
     if ( uLen <= 0 ) {
         ERROR_LOG( getLastErrorStr() );
@@ -455,7 +455,7 @@ std::string System::FileNameToUTF8( const std::string & str )
 
     const std::unique_ptr<char[]> uStr( new char[uLen] );
 
-    if ( WideCharToMultiByte( CP_UTF8, 0, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
+    if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
         ERROR_LOG( getLastErrorStr() );
 
         return str;
