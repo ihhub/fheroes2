@@ -421,15 +421,12 @@ std::string System::FileNameToUTF8( const std::string & str )
     acpToUtf8[str] = str;
 
     auto getLastErrorStr = []() {
-        LPVOID msgBuf;
+        LPTSTR msgBuf;
 
-        const DWORD msgLen = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(),
-                                            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr );
-
-        if ( msgLen > 0 ) {
-            LPTSTR msgStr = static_cast<LPTSTR>( msgBuf );
-
-            const std::string result( msgStr, msgStr + msgLen );
+        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(),
+                            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
+             > 0 ) {
+            const std::string result( msgBuf );
 
             LocalFree( msgBuf );
 
