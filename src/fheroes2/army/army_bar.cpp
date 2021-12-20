@@ -169,9 +169,9 @@ namespace
 
         fheroes2::Copy( original, offset.x, offset.y, result, 0, 0, result.width(), result.height() );
         // remove black background
-        fheroes2::AddTransparency( result, 36 ); // TODO: what's the magic number 36?
+        fheroes2::AddTransparency( result, 36 );
 
-        return fheroes2::addShadow( result, fheroes2::Point( -2, 2 ), 2 );
+        return result;
     }
 
     fheroes2::Sprite DrawMiniButton( const fheroes2::Sprite & original )
