@@ -58,7 +58,7 @@ namespace
         const UINT _consoleOutputCP;
     };
 
-    ConsoleCPSwitcher consoleCPSwitcher;
+    const ConsoleCPSwitcher consoleCPSwitcher;
 #endif
 }
 
