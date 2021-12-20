@@ -413,8 +413,10 @@ std::string System::FileNameToUTF8( const std::string & str )
         return str;
     }
 
-    if ( acpToUtf8.count( str ) > 0 ) {
-        return acpToUtf8[str];
+    const auto iter = acpToUtf8.find( str );
+
+    if ( iter != acpToUtf8.end() ) {
+        return iter->second;
     }
 
     // In case of any issues, the original string will be returned, so let's put it to the cache right away
