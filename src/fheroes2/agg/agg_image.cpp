@@ -359,9 +359,7 @@ namespace
             else if ( *transform == 1 ) {
                 *transform = 0;
             }
-            else {
-                // don't touch it
-            }
+            // Other transform values are not relevant for transparency checks.
         }
     }
 }
