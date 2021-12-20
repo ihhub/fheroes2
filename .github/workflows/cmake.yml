@@ -39,6 +39,7 @@ jobs:
     - name: Install dependencies (macOS)
       if: ${{ matrix.config.os == 'macos-latest' }}
       run: |
+        brew update
         brew install ${{ matrix.config.dependencies }}
     - name: Build
       run: |
