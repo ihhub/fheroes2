@@ -11,8 +11,8 @@ if not exist "sdl2\lib"     mkdir "sdl2\lib"
 xcopy /Y /s /Q "temp\sdl\SDL-1.2.15\include"  "sdl\include"
 xcopy /Y /s /Q "temp\sdl\SDL-1.2.15\lib"      "sdl\lib"
 
-xcopy /Y /s /Q "temp\sdl\SDL2-2.0.12\include" "sdl2\include"
-xcopy /Y /s /Q "temp\sdl\SDL2-2.0.12\lib"     "sdl2\lib"
+xcopy /Y /s /Q "temp\sdl\SDL2-2.0.18\include" "sdl2\include"
+xcopy /Y /s /Q "temp\sdl\SDL2-2.0.18\lib"     "sdl2\lib"
 
 xcopy /Y /s /Q "temp\sdl_mixer\SDL_mixer-1.2.12\include"                  "sdl\include"
 xcopy /Y /Q "temp\sdl_mixer\SDL_mixer-1.2.12\lib\x86\SDL_mixer.dll"       "sdl\lib\x86"
