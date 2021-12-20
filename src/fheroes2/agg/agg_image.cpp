@@ -892,11 +892,11 @@ namespace fheroes2
 
                         Sprite tmp( out.width(), out.height() );
                         tmp.reset();
-                        Blit( out, 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
+                        Copy( out, 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
                         CopyTransformLayer( _icnVsSprite[id][i], tmp );
 
                         out.reset();
-                        Blit( tmp, 1, 0, out, 0, 1, tmp.width() - 1, tmp.height() - 1 );
+                        Copy( tmp, 1, 0, out, 0, 1, tmp.width() - 1, tmp.height() - 1 );
                     }
                 }
                 return true;
@@ -1539,7 +1539,7 @@ namespace fheroes2
 
                     Sprite released( out.width() + 1, out.height() );
                     released.reset();
-                    uint32_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
+                    const uint8_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
                     DrawLine( released, Point( 0, 3 ), Point( 0, out.height() - 1 ), color );
                     Blit( out, released, 1, 0 );
 
