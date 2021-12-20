@@ -767,9 +767,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     RedrawIcons( *this, heroes, cur_pt );
 
                 // may render new quick upgrade possibilities
-                selectArmy1.Redraw();
-                if ( selectArmy2.isValid() && alphaHero >= 255 )
-                    selectArmy2.Redraw();
+                topArmyBar.Redraw();
+                if ( bottomArmyBar.isValid() && alphaHero >= 255 )
+                    bottomArmyBar.Redraw();
 
                 fheroes2::drawCastleName( *this, display, cur_pt );
                 fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
