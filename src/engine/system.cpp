@@ -423,8 +423,8 @@ std::string System::FileNameToUTF8( const std::string & str )
     auto getLastErrorStr = []() {
         LPTSTR msgBuf;
 
-        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(),
-                            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
+        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0,
+                            reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
              > 0 ) {
             const std::string result( msgBuf );
 
