@@ -433,7 +433,7 @@ std::string System::FileNameToUTF8( const std::string & str )
             return result;
         }
 
-        return std::string( "FormatMessage() failed" );
+        return std::string( "FormatMessage() failed: " ) + std::to_string( GetLastError() );
     };
 
     const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
