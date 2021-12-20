@@ -1250,6 +1250,26 @@ namespace
         _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
         _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
     }
+
+    void invertTransparency( fheroes2::Image & image )
+    {
+        if ( image.singleLayer() ) {
+            assert( 0 );
+            return;
+        }
+
+        uint8_t * transform = image.transform();
+        uint8_t * transformEnd = transform + image.width() * image.height();
+        for ( ; transform != transformEnd; ++transform ) {
+            if ( *transform == 0 ) {
+                *transform = 1;
+            }
+            else if ( *transform == 1 ) {
+                *transform = 0;
+            }
+            // Other transform values are not relevant for transparency checks.
+        }
+    }
 }
 
 namespace fheroes2
@@ -1525,7 +1545,7 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::REQUESTS, 1 + i );
+                    out = GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, i );
 
                     // add 'config'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
@@ -1765,10 +1785,25 @@ namespace fheroes2
                 }
                 return true;
             case ICN::SURRENDR:
+            case ICN::SURRENDE:
                 LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() ) {
-                    // Fix incorrect font color.
-                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                if ( _icnVsSprite[id].size() >= 4 ) {
+                    if ( id == ICN::SURRENDR ) {
+                        // Fix incorrect font color on good ACCEPT button.
+                        ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                    }
+                    // Fix pressed buttons background.
+                    for ( uint32_t i : { 0, 2 } ) {
+                        Sprite & out = _icnVsSprite[id][i + 1];
+
+                        Sprite tmp( out.width(), out.height() );
+                        tmp.reset();
+                        Copy( out, 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
+                        CopyTransformLayer( _icnVsSprite[id][i], tmp );
+
+                        out.reset();
+                        Copy( tmp, 1, 0, out, 0, 1, tmp.width() - 1, tmp.height() - 1 );
+                    }
                 }
                 return true;
             case ICN::NON_UNIFORM_GOOD_OKAY_BUTTON:
@@ -2195,11 +2230,7 @@ namespace fheroes2
 
                 ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-                std::vector<Image> dismissImages;
-                dismissImages.emplace_back( released );
-                dismissImages.emplace_back( pressed );
-
-                Image common = ExtractCommonPattern( dismissImages );
+                Image common = ExtractCommonPattern( { released, pressed } );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
@@ -2350,6 +2381,95 @@ namespace fheroes2
                 Fill( _icnVsSprite[id][1], 1, 4, 31, 31, 36 );
                 Blit( pressed, _icnVsSprite[id][1] );
 
+                return true;
+            }
+            case ICN::SPANBTN:
+            case ICN::SPANBTNE:
+            case ICN::CSPANBTN:
+            case ICN::CSPANBTE: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // add missing part of the released button state on the left
+                    Sprite & out = _icnVsSprite[id][0];
+
+                    Sprite released( out.width() + 1, out.height() );
+                    released.reset();
+                    const uint8_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
+                    DrawLine( released, Point( 0, 3 ), Point( 0, out.height() - 1 ), color );
+                    Blit( out, released, 1, 0 );
+
+                    out = std::move( released );
+                }
+                return true;
+            }
+            case ICN::TRADPOSE: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 19 ) {
+                    // fix background for TRADE and EXIT buttons
+                    for ( uint32_t i : { 16, 18 } ) {
+                        Sprite pressed;
+                        std::swap( pressed, _icnVsSprite[id][i] );
+                        AddTransparency( pressed, 25 ); // remove too dark background
+
+                        // take background from the empty system button
+                        _icnVsSprite[id][i] = GetICN( ICN::SYSTEME, 12 );
+
+                        // put back dark-gray pixels in the middle of the button
+                        Fill( _icnVsSprite[id][i], 5, 5, 86, 17, 25 );
+                        Blit( pressed, _icnVsSprite[id][i] );
+                    }
+                }
+                return true;
+            }
+            case ICN::RECRUIT: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 10 ) {
+                    // fix transparent corners on released OKAY button
+                    CopyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
+                }
+                return true;
+            }
+            case ICN::NGEXTRA: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 70 ) {
+                    // fix transparent corners on pressed OKAY and CANCEL buttons
+                    CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
+                    CopyTransformLayer( _icnVsSprite[id][68], _icnVsSprite[id][69] );
+                }
+                return true;
+            }
+            case ICN::HSBTNS: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 4 ) {
+                    // extract the EXIT button without background
+                    Image exitReleased = _icnVsSprite[id][2];
+                    Image exitPressed = _icnVsSprite[id][3];
+
+                    // make the border parts around EXIT button transparent
+                    Image exitCommonMask = ExtractCommonPattern( { exitReleased, exitPressed } );
+                    invertTransparency( exitCommonMask );
+
+                    CopyTransformLayer( exitCommonMask, exitReleased );
+                    CopyTransformLayer( exitCommonMask, exitPressed );
+
+                    // fix DISMISS button: get the EXIT button, then slap the text back
+                    Sprite & dismissReleased = _icnVsSprite[id][0];
+
+                    Sprite tmpReleased = dismissReleased;
+                    Blit( exitReleased, 0, 0, tmpReleased, 5, 0, 27, 120 );
+                    Blit( dismissReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
+
+                    dismissReleased = std::move( tmpReleased );
+
+                    Sprite & dismissPressed = _icnVsSprite[id][1];
+
+                    // start with the released state as well to capture more details
+                    Sprite tmpPressed = dismissReleased;
+                    Blit( exitPressed, 0, 0, tmpPressed, 5, 0, 27, 120 );
+                    Blit( dismissPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
+
+                    dismissPressed = std::move( tmpPressed );
+                }
                 return true;
             }
             default:

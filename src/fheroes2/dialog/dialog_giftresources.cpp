@@ -230,18 +230,20 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     ResourceBar info2( funds2, box.x + 25, box.y + 150 );
     info2.Redraw();
 
-    const int32_t border = 10;
-    const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
-    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( icnId, 1 );
-    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( icnId, 3 );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
 
+    const int32_t border = 10;
     fheroes2::ButtonGroup btnGroup;
     btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkSprite.height(), buttonOkSprite,
-                                                        fheroes2::AGG::GetICN( icnId, 2 ), display ),
+                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
                         Dialog::OK );
     btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelSprite.width(),
-                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite, fheroes2::AGG::GetICN( icnId, 4 ),
-                                                        display ),
+                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
                         Dialog::CANCEL );
     btnGroup.button( 0 ).disable();
 
