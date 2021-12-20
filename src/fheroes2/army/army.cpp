@@ -125,31 +125,28 @@ std::string Army::TroopSizeString( const Troop & troop )
 
 std::string Army::SizeString( u32 size )
 {
-    const char * str_size[] = { _( "army|Few" ),    _( "army|Several" ), _( "army|Pack" ),   _( "army|Lots" ),  _( "army|Horde" ),
-                                _( "army|Throng" ), _( "army|Swarm" ),   _( "army|Zounds" ), _( "army|Legion" ) };
-
     switch ( ArmyGetSize( size ) ) {
     default:
         break;
     case ARMY_SEVERAL:
-        return str_size[1];
+        return _( "army|Several" );
     case ARMY_PACK:
-        return str_size[2];
+        return _( "army|Pack" );
     case ARMY_LOTS:
-        return str_size[3];
+        return _( "army|Lots" );
     case ARMY_HORDE:
-        return str_size[4];
+        return _( "army|Horde" );
     case ARMY_THRONG:
-        return str_size[5];
+        return _( "army|Throng" );
     case ARMY_SWARM:
-        return str_size[6];
+        return _( "army|Swarm" );
     case ARMY_ZOUNDS:
-        return str_size[7];
+        return _( "army|Zounds" );
     case ARMY_LEGION:
-        return str_size[8];
+        return _( "army|Legion" );
     }
 
-    return str_size[0];
+    return _( "army|Few" );
 }
 
 Troops::Troops( const Troops & troops )
@@ -237,9 +234,12 @@ const Troop * Troops::GetTroop( size_t pos ) const
 
 void Troops::UpgradeMonsters( const Monster & m )
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() && **it == m )
+    for ( iterator it = begin(); it != end(); ++it ) {
+        if ( **it == m ) {
+            assert( ( *it )->isValid() );
             ( *it )->Upgrade();
+        }
+    }
 }
 
 u32 Troops::GetCountMonsters( const Monster & m ) const
@@ -294,8 +294,9 @@ bool Troops::HasMonster( const Monster & mons ) const
 {
     const int monsterID = mons.GetID();
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isMonster( monsterID ) )
+        if ( ( *it )->isValid() && ( *it )->isMonster( monsterID ) ) {
             return true;
+        }
     }
     return false;
 }
@@ -303,8 +304,9 @@ bool Troops::HasMonster( const Monster & mons ) const
 bool Troops::AllTroopsAreUndead() const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() && !( *it )->isUndead() )
+        if ( ( *it )->isValid() && !( *it )->isUndead() ) {
             return false;
+        }
     }
 
     return true;
@@ -354,9 +356,11 @@ bool Troops::CanJoinTroops( const Troops & troops2 ) const
     Troops troops1;
     troops1.Insert( *this );
 
-    for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it )
-        if ( ( *it )->isValid() && !troops1.JoinTroop( **it ) )
+    for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it ) {
+        if ( ( *it )->isValid() && !troops1.JoinTroop( **it ) ) {
             return false;
+        }
+    }
 
     return true;
 }
@@ -455,10 +459,8 @@ Troop * Troops::GetFirstValid( void )
 
 Troop * Troops::GetWeakestTroop( void )
 {
-    iterator first, last, lowest;
-
-    first = begin();
-    last = end();
+    iterator first = begin();
+    iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -468,7 +470,8 @@ Troop * Troops::GetWeakestTroop( void )
 
     if ( first == end() )
         return nullptr;
-    lowest = first;
+
+    iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
@@ -818,11 +821,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
-        at( 0 )->Set( Monster::ROYAL_MUMMY, 10 );
-        at( 1 )->Set( Monster::VAMPIRE_LORD, 10 );
+        at( 0 )->Set( Monster::VAMPIRE_LORD, 10 );
+        at( 1 )->Set( Monster::ROYAL_MUMMY, 10 );
         at( 2 )->Set( Monster::ROYAL_MUMMY, 10 );
-        at( 3 )->Set( Monster::VAMPIRE_LORD, 10 );
-        at( 4 )->Set( Monster::ROYAL_MUMMY, 10 );
+        at( 3 )->Set( Monster::ROYAL_MUMMY, 10 );
+        at( 4 )->Set( Monster::VAMPIRE_LORD, 10 );
         break;
 
     case MP2::OBJ_GRAVEYARD:
@@ -893,13 +896,22 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::TROLL, 4 );
         break;
 
-    case MP2::OBJ_DRAGONCITY:
-        at( 0 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 1 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 2 )->Set( Monster::GREEN_DRAGON, 1 );
-        at( 3 )->Set( Monster::RED_DRAGON, 1 );
-        at( 4 )->Set( Monster::BLACK_DRAGON, 1 );
+    case MP2::OBJ_DRAGONCITY: {
+        uint32_t monsterCount = 1;
+        if ( Settings::Get().isCampaignGameType() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                monsterCount = 2;
+            }
+        }
+
+        at( 0 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 1 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 2 )->Set( Monster::GREEN_DRAGON, monsterCount );
+        at( 3 )->Set( Monster::RED_DRAGON, monsterCount );
+        at( 4 )->Set( Monster::BLACK_DRAGON, monsterCount );
         break;
+    }
 
     case MP2::OBJ_DAEMONCAVE:
         at( 0 )->Set( Monster::EARTH_ELEMENT, 2 );
@@ -995,131 +1007,59 @@ int Army::GetMorale( void ) const
     return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( nullptr );
 }
 
-// TODO:: need optimize
 int Army::GetMoraleModificator( std::string * strs ) const
 {
+    // different race penalty
+    std::set<int> races;
+    bool hasUndead = false;
+    bool allUndead = true;
+
+    for ( const Troop * troop : *this )
+        if ( troop->isValid() ) {
+            races.insert( troop->GetRace() );
+            hasUndead = hasUndead || troop->isUndead();
+            allUndead = allUndead && troop->isUndead();
+        }
+
+    if ( allUndead )
+        return Morale::NORMAL;
+
     int result = Morale::NORMAL;
 
-    // different race penalty
-    u32 count = 0;
-    u32 count_kngt = 0;
-    u32 count_barb = 0;
-    u32 count_sorc = 0;
-    u32 count_wrlk = 0;
-    u32 count_wzrd = 0;
-    u32 count_necr = 0;
-    u32 count_bomg = 0;
-    bool ghost_present = false;
+    // artifact "Arm of the Martyr" adds the undead morale penalty
+    hasUndead = hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) );
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            switch ( ( *it )->GetRace() ) {
-            case Race::KNGT:
-                ++count_kngt;
-                break;
-            case Race::BARB:
-                ++count_barb;
-                break;
-            case Race::SORC:
-                ++count_sorc;
-                break;
-            case Race::WRLK:
-                ++count_wrlk;
-                break;
-            case Race::WZRD:
-                ++count_wzrd;
-                break;
-            case Race::NECR:
-                ++count_necr;
-                break;
-            case Race::NONE:
-                ++count_bomg;
-                break;
-            default:
-                break;
-            }
-            if ( ( *it )->GetID() == Monster::GHOST )
-                ghost_present = true;
-        }
-
-    u32 r = Race::MULT;
-    if ( count_kngt ) {
-        ++count;
-        r = Race::KNGT;
-    }
-    if ( count_barb ) {
-        ++count;
-        r = Race::BARB;
-    }
-    if ( count_sorc ) {
-        ++count;
-        r = Race::SORC;
-    }
-    if ( count_wrlk ) {
-        ++count;
-        r = Race::WRLK;
-    }
-    if ( count_wzrd ) {
-        ++count;
-        r = Race::WZRD;
-    }
-    if ( count_necr ) {
-        ++count;
-        r = Race::NECR;
-    }
-    if ( count_bomg ) {
-        ++count;
-        r = Race::NONE;
-    }
-    const bool hasDifferentTroops = !AllTroopsAreTheSame();
-
+    const int count = static_cast<int>( races.size() );
     switch ( count ) {
-    case 2:
     case 0:
+    case 2:
         break;
     case 1:
-        if ( 0 == count_necr && !ghost_present ) {
-            if ( hasDifferentTroops ) {
-                ++result;
-                if ( strs ) {
-                    std::string str = _( "All %{race} troops +1" );
-                    StringReplace( str, "%{race}", Race::String( r ) );
-                    strs->append( str );
-                    *strs += '\n';
-                }
+        if ( !hasUndead && !AllTroopsAreTheSame() ) { // presence of undead discards "All %{race} troops +1" bonus
+            ++result;
+            if ( strs ) {
+                std::string str = _( "All %{race} troops +1" );
+                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "Multiple" ) : Race::String( *races.begin() ) );
+                strs->append( str );
+                *strs += '\n';
             }
-        }
-        else {
-            return 0;
-        }
-        break;
-    case 3:
-        result -= 1;
-        if ( strs ) {
-            strs->append( _( "Troops of 3 alignments -1" ) );
-            *strs += '\n';
-        }
-        break;
-    case 4:
-        result -= 2;
-        if ( strs ) {
-            strs->append( _( "Troops of 4 alignments -2" ) );
-            *strs += '\n';
         }
         break;
     default:
-        result -= 3;
+        const int penalty = count - 2;
+        result -= penalty;
         if ( strs ) {
-            strs->append( _( "Troops of 5 alignments -3" ) );
+            std::string str = _( "Troops of %{count} alignments -%{penalty}" );
+            StringReplace( str, "%{count}", count );
+            StringReplace( str, "%{penalty}", penalty );
+            strs->append( str );
             *strs += '\n';
         }
         break;
     }
 
     // undead in life group
-    if ( ( hasDifferentTroops && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
-         // or artifact Arm Martyr
-         ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) ) ) {
+    if ( hasUndead ) {
         result -= 1;
         if ( strs ) {
             strs->append( _( "Some undead in group -1" ) );
@@ -1341,7 +1281,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
-    if ( Settings::Get().isCampaignGameType() ) {
+    if ( Settings::Get().isCampaignGameType() && hero.isControlHuman() ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
@@ -1445,6 +1385,15 @@ Monster Army::GetStrongestMonster() const
         }
     }
     return monster;
+}
+
+void Army::resetInvalidMonsters()
+{
+    for ( Troop * troop : *this ) {
+        if ( troop->GetID() != Monster::UNKNOWN && !troop->isValid() ) {
+            troop->Set( Monster::UNKNOWN, 0 );
+        }
+    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const Army & army )

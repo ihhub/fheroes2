@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "screen.h"
-#include "palette_h2.h"
+#include "image_palette.h"
 #include "tools.h"
 
 #include <SDL_version.h>
@@ -80,29 +80,33 @@ namespace
 
     std::vector<fheroes2::Size> FilterResolutions( const std::set<fheroes2::Size> & resolutionSet )
     {
+        static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
+
         if ( resolutionSet.empty() ) {
-            const std::vector<fheroes2::Size> resolutions = {fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )};
-            return resolutions;
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
         std::vector<fheroes2::Size> resolutions( resolutionSet.begin(), resolutionSet.end() );
         std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         // Remove all resolutions lower than the original.
-        if ( resolutions.front().width >= fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height >= fheroes2::Display::DEFAULT_HEIGHT ) {
-            resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+        resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+
+        if ( resolutions.empty() ) {
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
         // If here is only one resolution and it is bigger than the original we failed to find any resolutions except the current.
         // In this case populate the list with missing resolutions.
         if ( resolutions.size() == 1 && resolutions.front().width > fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height > fheroes2::Display::DEFAULT_HEIGHT ) {
-            static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
             const std::vector<fheroes2::Size> possibleResolutions
-                = {fheroes2::Size( 640, 480 ), fheroes2::Size( 800, 600 ), fheroes2::Size( 1024, 768 ), fheroes2::Size( 1280, 960 ), fheroes2::Size( 1920, 1080 )};
+                = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                    { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+
             const fheroes2::Size currentResolution = resolutions.front();
             for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
                 if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
-                    break;
+                    continue;
                 }
                 resolutions.emplace_back( possibleResolutions[i] );
             }
@@ -122,13 +126,15 @@ namespace
         return indexes;
     }
 
-    const uint8_t * PALPAlette()
+    const uint8_t * PALPalette()
     {
         static std::vector<uint8_t> palette;
         if ( palette.empty() ) {
+            const uint8_t * gamePalette = fheroes2::getGamePalette();
+
             palette.resize( 256 * 3 );
             for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = kb_pal[i] << 2;
+                palette[i] = gamePalette[i] << 2;
             }
         }
 
@@ -175,7 +181,7 @@ namespace
         return true;
     }
 
-    const uint8_t * currentPalette = PALPAlette();
+    const uint8_t * currentPalette = PALPalette();
 
 // If SDL library is used
 #if !defined( FHEROES2_VITA )
@@ -559,6 +565,7 @@ namespace
             clear();
 
             const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
             if ( !resolutions.empty() ) {
                 const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
                 width_ = correctResolution.width;
@@ -713,6 +720,8 @@ namespace
 
             SDL_SetWindowFullscreen( _window, flags );
             _retrieveWindowInfo();
+
+            _toggleMouseCaptureMode();
         }
 
         bool isFullScreen() const override
@@ -788,6 +797,11 @@ namespace
             return new RenderEngine;
         }
 
+        void setVSync( const bool enable ) override
+        {
+            _isVSyncEnabled = enable;
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -795,6 +809,7 @@ namespace
             , _renderer( nullptr )
             , _texture( nullptr )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
+            , _isVSyncEnabled( false )
         {}
 
         void clear() override
@@ -871,6 +886,7 @@ namespace
             clear();
 
             const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
             if ( !resolutions.empty() ) {
                 const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
                 width_ = correctResolution.width;
@@ -939,6 +955,9 @@ namespace
             }
 
             _retrieveWindowInfo();
+
+            _toggleMouseCaptureMode();
+
             return true;
         }
 
@@ -971,8 +990,14 @@ namespace
 
         fheroes2::Size _windowedSize;
 
+        bool _isVSyncEnabled;
+
         int renderFlags() const
         {
+            if ( _isVSyncEnabled ) {
+                return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+            }
+
             return SDL_RENDERER_ACCELERATED;
         }
 
@@ -1014,6 +1039,22 @@ namespace
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif
+        }
+
+        void _toggleMouseCaptureMode()
+        {
+            if ( SDL_GetNumVideoDisplays() < 2 ) {
+                // Less than 2 monitors in the system. Nothing to do.
+                return;
+            }
+
+            // This is a multi-display device. To properly support fullscreen mode it is important to lock mouse within application window area.
+            if ( isFullScreen() ) {
+                SDL_SetWindowGrab( _window, SDL_TRUE );
+            }
+            else {
+                SDL_SetWindowGrab( _window, SDL_FALSE );
+            }
         }
     };
 #else
@@ -1138,6 +1179,7 @@ namespace
             clear();
 
             const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
             if ( !resolutions.empty() ) {
                 const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
                 width_ = correctResolution.width;
@@ -1245,12 +1287,17 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
+        _prevRoi = {};
+
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
 
         Image::resize( width_, height_ );
+
+        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
+        std::fill( transform(), transform() + width() * height(), 1 );
     }
 
     bool Display::isDefaultSize() const
@@ -1357,14 +1404,16 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+
+        _prevRoi = {};
     }
 
     void Display::changePalette( const uint8_t * palette ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPAlette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPAlette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPalette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

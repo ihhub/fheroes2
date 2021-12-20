@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "settings.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -70,11 +71,11 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
-    CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const bool isEvilInterface )
+    CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
         : Interface::ListBox<int32_t>( offset )
         , result( res )
-        , _townFrameIcnId( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD )
-        , _listBoxIcnId( isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX )
+        , _townFrameIcnId( townFrameIcnId )
+        , _listBoxIcnId( listBoxIcnId )
         , _area( area )
     {}
 
@@ -143,17 +144,17 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     Text text( _( "Town Portal" ), Font::YELLOW_BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 5 );
+    text.Blit( dst.x + 145 - text.w() / 2, dst.y + 5 );
 
     text.Set( _( "Select town to port to." ), Font::BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 25 );
+    text.Blit( dst.x + 145 - text.w() / 2, dst.y + 25 );
 
     const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( _listBoxIcnId, 0 );
     const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( _listBoxIcnId, 1 );
     const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( _listBoxIcnId, 2 );
 
     int32_t offsetY = 45;
-    fheroes2::Blit( upperPart, display, dst.x + 2, dst.y + offsetY );
+    fheroes2::Blit( upperPart, display, dst.x + 7, dst.y + offsetY );
 
     offsetY += upperPart.height();
 
@@ -161,11 +162,11 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     int32_t middlePartCount = ( totalHeight - upperPart.height() - lowerPart.height() + middlePart.height() - 1 ) / middlePart.height();
 
     for ( int32_t i = 0; i < middlePartCount; ++i ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( _listBoxIcnId, 1 ), display, dst.x + 2, dst.y + offsetY );
+        fheroes2::Blit( fheroes2::AGG::GetICN( _listBoxIcnId, 1 ), display, dst.x + 7, dst.y + offsetY );
         offsetY += middlePart.height();
     }
 
-    fheroes2::Blit( lowerPart, display, dst.x + 2, dst.y + totalHeight - lowerPart.height() + 45 );
+    fheroes2::Blit( lowerPart, display, dst.x + 7, dst.y + totalHeight - lowerPart.height() + 45 );
 
     const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 3 );
     const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 5 );
@@ -177,18 +178,18 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     const fheroes2::Sprite & lowerScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 9 );
 
     offsetY = upperScrollbarArrow.height() + 44;
-    fheroes2::Blit( upperScrollbar, display, dst.x + 256, dst.y + offsetY );
+    fheroes2::Blit( upperScrollbar, display, dst.x + 262, dst.y + offsetY );
     offsetY += upperScrollbar.height();
 
     middlePartCount = ( totalHeight - upperScrollbar.height() - lowerScrollbar.height() + middleScrollbar.height() - 1 ) / middleScrollbar.height();
 
     for ( int32_t i = 0; i < middlePartCount; ++i ) {
-        fheroes2::Blit( middleScrollbar, display, dst.x + 256, dst.y + offsetY );
+        fheroes2::Blit( middleScrollbar, display, dst.x + 262, dst.y + offsetY );
         offsetY += middleScrollbar.height();
     }
 
     offsetY = upperScrollbarArrow.height() + 44 + totalHeight - lowerScrollbar.height();
-    fheroes2::Blit( lowerScrollbar, display, dst.x + 256, dst.y + offsetY );
+    fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -365,12 +366,24 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     }
 
     const int32_t center = hero.GetIndex();
-    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
 
-    // find water
-    int32_t dst_water = -1;
-    MapsIndexes freeTiles = Maps::GetFreeIndexesAroundTile( center );
-    std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+    const int tilePassability = world.GetTiles( center ).GetPassable();
+
+    const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+
+    std::vector<int32_t> possibleBoatPositions;
+
+    for ( const int32_t tileId : tilesAround ) {
+        const int direction = Maps::GetDirection( center, tileId );
+        assert( direction != Direction::UNKNOWN );
+
+        if ( ( tilePassability & direction ) != 0 ) {
+            possibleBoatPositions.emplace_back( tileId );
+        }
+    }
+
+    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
+    std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const fheroes2::Point & leftPoint = Maps::GetPoint( left );
         const fheroes2::Point & rightPoint = Maps::GetPoint( right );
         const int32_t leftDiffX = leftPoint.x - centerPoint.x;
@@ -381,14 +394,16 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
     } );
 
-    for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
+    int32_t boatDestination = -1;
+    for ( const int32_t tileId : possibleBoatPositions ) {
+        const Maps::Tiles & tile = world.GetTiles( tileId );
+        if ( tile.isWater() ) {
+            boatDestination = tileId;
             break;
         }
     }
 
-    if ( !Maps::isValidAbsIndex( dst_water ) ) {
+    if ( !Maps::isValidAbsIndex( boatDestination ) ) {
         Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
         return false;
     }
@@ -398,7 +413,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         if ( Maps::isValidAbsIndex( *it ) ) {
             const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
             if ( distance > 1 ) {
-                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, boatDestination, true, true );
                 Game::ObjectFadeAnimation::PerformFadeTask();
 
                 return true;
@@ -412,8 +427,6 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
 bool ActionSpellDimensionDoor( Heroes & hero )
 {
-    const u32 distance = Spell::CalculateDimensionDoorDistance();
-
     Interface::Basic & I = Interface::Basic::Get();
 
     // center hero
@@ -423,7 +436,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
     const s32 src = hero.GetIndex();
     // get destination
-    const s32 dst = I.GetDimensionDoorDestination( src, distance, hero.isShipMaster() );
+    const s32 dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );
@@ -455,23 +468,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
 bool ActionSpellTownGate( Heroes & hero )
 {
-    const Kingdom & kingdom = hero.GetKingdom();
-    const KingdomCastles & castles = kingdom.GetCastles();
-    KingdomCastles::const_iterator it;
-
-    const Castle * castle = nullptr;
-    const s32 center = hero.GetIndex();
-    s32 min = -1;
-
-    // find the nearest castle
-    for ( it = castles.begin(); it != castles.end(); ++it )
-        if ( *it ) {
-            int min2 = Maps::GetApproximateDistance( center, ( *it )->GetIndex() );
-            if ( 0 > min || min2 < min ) {
-                min = min2;
-                castle = *it;
-            }
-        }
+    const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -514,33 +511,45 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 280, 250 ) );
-
+    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
     const fheroes2::Rect & area = frameborder->activeArea();
+
     int result = Dialog::ZERO;
 
-    CastleIndexListBox listbox( frameborder->windowArea(), area.getPosition(), result, isEvilInterface );
+    const int townIcnId = isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD;
+    const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
+    CastleIndexListBox listbox( area, area.getPosition(), result, townIcnId, listIcnId );
 
-    const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-    listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
-    listbox.SetScrollButtonDn( listId, 5, 6, fheroes2::Point( area.x + 256, area.y + 190 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( listId, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 119 ) );
+    listbox.SetScrollButtonUp( listIcnId, 3, 4, fheroes2::Point( area.x + 262, area.y + 45 ) );
+    listbox.SetScrollButtonDn( listIcnId, 5, 6, fheroes2::Point( area.x + 262, area.y + 190 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( listIcnId, 10 ), fheroes2::Rect( area.x + 266, area.y + 68, 14, 119 ) );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 11, area.y + 49, 250, 160 ) );
     listbox.SetListContent( castles );
+    listbox.Unselect();
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
-    fheroes2::ButtonGroup btnGroups;
-    btnGroups.createButton( area.x, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
-    btnGroups.createButton( area.x + 182, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1,
-                            Dialog::CANCEL );
-    btnGroups.draw();
+    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
+
+    const int32_t border = 10;
+    fheroes2::ButtonGroup btnGroup;
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
+                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
+                        Dialog::OK );
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
+                                                        area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
+                        Dialog::CANCEL );
+    btnGroup.draw();
 
     display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.processEvents();
+        result = btnGroup.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !listbox.IsNeedRedraw() ) {
@@ -550,7 +559,10 @@ bool ActionSpellTownPortal( Heroes & hero )
         listbox.Redraw();
         display.render();
     }
+
+    // restore background *before* the spell animation to avoid rendering issues
     frameborder.reset();
+
     // store
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( listbox.GetCurrent() ) ) );
@@ -599,7 +611,8 @@ bool ActionSpellVisions( Heroes & hero )
                 msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.monsterCount );
                 StringReplace( msg, "%{count}", join.monsterCount );
             }
-            msg.append( "\n" );
+
+            msg += '\n';
             msg.append( _( "\n for a fee of %{gold} gold." ) );
             StringReplace( msg, "%{gold}", troop.GetCost().gold );
             break;
@@ -630,7 +643,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         return false;
     }
 
-    const u32 count = hero.GetPower() * spell.ExtraValue();
+    const u32 count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
     if ( count ) {
         tile.SetQuantity3( spell.GetID() );

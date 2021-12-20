@@ -70,8 +70,6 @@ class Colors : public std::vector<int>
 {
 public:
     explicit Colors( int = Color::ALL );
-
-    std::string String( void ) const;
 };
 
 class Kingdom;

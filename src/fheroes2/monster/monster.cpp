@@ -37,44 +37,6 @@
 #include "speed.h"
 #include "translations.h"
 
-namespace
-{
-    struct monstats_t
-    {
-        u8 attack;
-        u8 defense;
-        u8 damageMin;
-        u8 damageMax;
-        u16 hp;
-        u8 speed;
-        u8 grown;
-        u8 shots;
-        const char * name;
-        const char * multiname;
-        cost_t cost;
-    };
-}
-
-StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
-    return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;
-}
-
-StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
-
-    u32 monsters_size;
-    msg >> monsters_size;
-
-    monstats_t dummyMonster = { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "", "", { 0, 0, 0, 0, 0, 0, 0 } };
-
-    for ( u32 ii = 0; ii < monsters_size; ++ii )
-        msg >> dummyMonster;
-    return msg;
-}
-
 uint32_t Monster::GetMissileICN( uint32_t monsterID )
 {
     switch ( monsterID ) {
@@ -392,6 +354,8 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
             factor = 190;
             break;
         default:
+            // Did you add a new difficulty mode? Add the corresponding case above!
+            assert( 0 );
             break;
         }
 
@@ -464,6 +428,11 @@ bool Monster::isRegenerating() const
 bool Monster::isDoubleCellAttack() const
 {
     return isAbilityPresent( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+}
+
+bool Monster::isAllAdjacentCellsAttack() const
+{
+    return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
 }
 
 bool Monster::isAffectedByMorale() const
@@ -830,178 +799,6 @@ Monster Monster::Rand( const LevelType type )
     return Rand::Get( monstersVec[static_cast<int>( type ) - 1] );
 }
 
-u32 Monster::Rand4WeekOf( void )
-{
-    switch ( Rand::Get( 1, 47 ) ) {
-    case 1:
-        return PEASANT;
-    case 2:
-        return ARCHER;
-    case 3:
-        return RANGER;
-    case 4:
-        return PIKEMAN;
-    case 5:
-        return VETERAN_PIKEMAN;
-    case 6:
-        return SWORDSMAN;
-    case 7:
-        return MASTER_SWORDSMAN;
-    case 8:
-        return CAVALRY;
-    case 9:
-        return CHAMPION;
-    case 10:
-        return GOBLIN;
-    case 11:
-        return ORC;
-    case 12:
-        return ORC_CHIEF;
-    case 13:
-        return WOLF;
-    case 14:
-        return OGRE;
-    case 15:
-        return OGRE_LORD;
-    case 16:
-        return TROLL;
-    case 17:
-        return WAR_TROLL;
-    case 18:
-        return SPRITE;
-    case 19:
-        return DWARF;
-    case 20:
-        return BATTLE_DWARF;
-    case 21:
-        return ELF;
-    case 22:
-        return GRAND_ELF;
-    case 23:
-        return DRUID;
-    case 24:
-        return GREATER_DRUID;
-    case 25:
-        return UNICORN;
-    case 26:
-        return CENTAUR;
-    case 27:
-        return GARGOYLE;
-    case 28:
-        return GRIFFIN;
-    case 29:
-        return MINOTAUR;
-    case 30:
-        return MINOTAUR_KING;
-    case 31:
-        return HYDRA;
-    case 32:
-        return HALFLING;
-    case 33:
-        return BOAR;
-    case 34:
-        return IRON_GOLEM;
-    case 35:
-        return STEEL_GOLEM;
-    case 36:
-        return ROC;
-    case 37:
-        return MAGE;
-    case 38:
-        return ARCHMAGE;
-    case 39:
-        return SKELETON;
-    case 40:
-        return ZOMBIE;
-    case 41:
-        return MUTANT_ZOMBIE;
-    case 42:
-        return MUMMY;
-    case 43:
-        return ROYAL_MUMMY;
-    case 44:
-        return VAMPIRE;
-    case 45:
-        return VAMPIRE_LORD;
-    case 46:
-        return LICH;
-    case 47:
-        return POWER_LICH;
-    default:
-        break;
-    }
-    return UNKNOWN;
-}
-
-u32 Monster::Rand4MonthOf( void )
-{
-    switch ( Rand::Get( 1, 30 ) ) {
-    case 1:
-        return PEASANT;
-    case 2:
-        return ARCHER;
-    case 3:
-        return PIKEMAN;
-    case 4:
-        return SWORDSMAN;
-    case 5:
-        return CAVALRY;
-    case 6:
-        return GOBLIN;
-    case 7:
-        return ORC;
-    case 8:
-        return WOLF;
-    case 9:
-        return OGRE;
-    case 10:
-        return TROLL;
-    case 11:
-        return SPRITE;
-    case 12:
-        return DWARF;
-    case 13:
-        return ELF;
-    case 14:
-        return DRUID;
-    case 15:
-        return UNICORN;
-    case 16:
-        return CENTAUR;
-    case 17:
-        return GARGOYLE;
-    case 18:
-        return GRIFFIN;
-    case 19:
-        return MINOTAUR;
-    case 20:
-        return HYDRA;
-    case 21:
-        return HALFLING;
-    case 22:
-        return BOAR;
-    case 23:
-        return IRON_GOLEM;
-    case 24:
-        return ROC;
-    case 25:
-        return MAGE;
-    case 26:
-        return SKELETON;
-    case 27:
-        return ZOMBIE;
-    case 28:
-        return MUMMY;
-    case 29:
-        return VAMPIRE;
-    case 30:
-        return LICH;
-    default:
-        break;
-    }
-    return UNKNOWN;
-}
-
 int Monster::GetMonsterLevel() const
 {
     return fheroes2::getMonsterData( id ).generalStats.level;
@@ -1252,10 +1049,4 @@ u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
 int Monster::GetMonsterSprite() const
 {
     return fheroes2::getMonsterData( id ).icnId;
-}
-
-MonsterStaticData & MonsterStaticData::Get( void )
-{
-    static MonsterStaticData mgds;
-    return mgds;
 }

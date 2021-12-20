@@ -20,6 +20,7 @@
 
 #include "ui_language.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "icn.h"
 #include "settings.h"
 #include "tools.h"
@@ -27,6 +28,7 @@
 
 #include <cassert>
 #include <map>
+#include <set>
 
 namespace
 {
@@ -34,62 +36,87 @@ namespace
                                                                             { 0x04745D1D, fheroes2::SupportedLanguage::German }, // GoG version
                                                                             { 0x88774771, fheroes2::SupportedLanguage::Polish }, // GoG version
                                                                             { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
-                                                                            { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian } }; // Buka version
+                                                                            { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian }, // Buka version
+                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Italian } };
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
-        = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },  { "de", fheroes2::SupportedLanguage::German },
-            { "german", fheroes2::SupportedLanguage::German }, { "fr", fheroes2::SupportedLanguage::French },      { "french", fheroes2::SupportedLanguage::French },
-            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian } };
+        = { { "pl", fheroes2::SupportedLanguage::Polish },      { "polish", fheroes2::SupportedLanguage::Polish },   { "de", fheroes2::SupportedLanguage::German },
+            { "german", fheroes2::SupportedLanguage::German },  { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },     { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
+            { "italian", fheroes2::SupportedLanguage::Italian } };
 
-    class LanguageSwitcher
-    {
-    public:
-        LanguageSwitcher() = delete;
-
-        LanguageSwitcher( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher( const LanguageSwitcher && ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
-
-        explicit LanguageSwitcher( const fheroes2::SupportedLanguage language )
-            : _currentLanguage( Settings::Get().getGameLanguage() )
-        {
-            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( language ) );
-        }
-
-        ~LanguageSwitcher()
-        {
-            Settings::Get().setGameLanguage( _currentLanguage );
-        }
-
-    private:
-        const std::string _currentLanguage;
-    };
-}
-
-namespace fheroes2
-{
-    SupportedLanguage getSupportedLanguage()
+    fheroes2::SupportedLanguage getResourceLanguage()
     {
         const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
         if ( data.empty() ) {
-            return SupportedLanguage::English;
+            // How is it possible to run the game without a font?
+            assert( 0 );
+            return fheroes2::SupportedLanguage::English;
         }
 
-        const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
+        const uint32_t crc32 = fheroes2::calculateCRC32( data.data(), data.size() );
         auto iter = languageCRC32.find( crc32 );
         if ( iter == languageCRC32.end() ) {
-            return SupportedLanguage::English;
+            return fheroes2::SupportedLanguage::English;
         }
 
         return iter->second;
     }
+}
+
+namespace fheroes2
+{
+    LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
+        : _currentLanguage( Settings::Get().getGameLanguage() )
+    {
+        Settings::Get().setGameLanguage( getLanguageAbbreviation( language ) );
+    }
+
+    LanguageSwitcher::~LanguageSwitcher()
+    {
+        Settings::Get().setGameLanguage( _currentLanguage );
+    }
+
+    std::vector<SupportedLanguage> getSupportedLanguages()
+    {
+        std::vector<SupportedLanguage> languages;
+
+        const SupportedLanguage resourceLanguage = getResourceLanguage();
+        if ( resourceLanguage != SupportedLanguage::English ) {
+            languages.emplace_back( resourceLanguage );
+        }
+
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French, SupportedLanguage::Polish, SupportedLanguage::German, SupportedLanguage::Russian,
+                                                             SupportedLanguage::Italian };
+
+        for ( const SupportedLanguage language : possibleLanguages ) {
+            if ( language != resourceLanguage && AGG::isAlphabetSupported( language ) ) {
+                languages.emplace_back( language );
+            }
+        }
+
+        Settings & conf = Settings::Get();
+
+        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+
+        std::vector<fheroes2::SupportedLanguage> validSupportedLanguages{ fheroes2::SupportedLanguage::English };
+
+        for ( fheroes2::SupportedLanguage language : languages ) {
+            if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
+                validSupportedLanguages.emplace_back( language );
+            }
+        }
+
+        conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
+
+        assert( !validSupportedLanguages.empty() );
+
+        return validSupportedLanguages;
+    }
 
     const char * getLanguageName( const SupportedLanguage language )
     {
-        LanguageSwitcher languageSwitcher( language );
-
         switch ( language ) {
         case SupportedLanguage::English:
             return _( "English" );
@@ -101,6 +128,8 @@ namespace fheroes2
             return _( "German" );
         case SupportedLanguage::Russian:
             return _( "Russian" );
+        case SupportedLanguage::Italian:
+            return _( "Italian" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -121,6 +150,8 @@ namespace fheroes2
             return "de";
         case SupportedLanguage::Russian:
             return "ru";
+        case SupportedLanguage::Italian:
+            return "it";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -143,5 +174,13 @@ namespace fheroes2
         }
 
         return iter->second;
+    }
+
+    void updateAlphabet( const std::string & abbreviation )
+    {
+        const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
+        const bool isOriginalResourceLanguage = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() );
+
+        AGG::updateAlphabet( language, isOriginalResourceLanguage );
     }
 }

@@ -38,17 +38,17 @@
 
 namespace
 {
-    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t maximumValue )
+    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
-        const bool isMaxValue = ( currentValue >= maximumValue );
+        const bool isMinValue = ( currentValue <= minimumValue );
 
-        if ( isMaxValue ) {
-            minButton.show();
-            maxButton.hide();
-        }
-        else {
+        if ( isMinValue ) {
             minButton.hide();
             maxButton.show();
+        }
+        else {
+            minButton.show();
+            maxButton.hide();
         }
 
         minButton.draw();
@@ -102,7 +102,7 @@ public:
         return vcur;
     }
 
-    void Redraw( void )
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & sprite_edit = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
@@ -213,7 +213,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     return result == Dialog::OK;
 }
 
-bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title )
+bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title, const size_t charLimit )
 {
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
@@ -222,8 +222,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    if ( !res.empty() )
-        res.clear();
+    res.clear();
     res.reserve( 48 );
     size_t charInsertPos = 0;
 
@@ -288,7 +287,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
         else if ( le.KeyPress() ) {
-            charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
+            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
+                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
             redraw = true;
         }
 
@@ -389,7 +389,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     const fheroes2::Rect buttonArea( 5, 0, 61, 25 );
-    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMax );
+    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, min );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -434,7 +434,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             }
 
         if ( redraw_count ) {
-            SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMax );
+            SwitchMaxMinButtons( buttonMin, buttonMax, sel.getCur(), min );
             if ( !ssp.empty() )
                 ssp.hide();
             sel.Redraw();

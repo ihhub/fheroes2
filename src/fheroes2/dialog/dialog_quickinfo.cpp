@@ -102,399 +102,381 @@ namespace
 
         return res;
     }
-}
 
-std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t basicScoutingLevel )
-{
-    std::string str;
-    const Troop & troop = tile.QuantityTroop();
+    std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t basicScoutingLevel )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const bool isAbandonnedMine = ( objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE );
 
-    const bool isAbandonnedMine = ( tile.GetObject() == MP2::OBJN_ABANDONEDMINE || tile.GetObject() == MP2::OBJ_ABANDONEDMINE );
-
-    if ( MP2::OBJ_MINES == tile.GetObject() ) {
-        str = Maps::GetMinesName( tile.QuantityResourceCount().first );
-        str.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
-    }
-    else if ( isAbandonnedMine ) {
-        const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
-        if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
-            str = MP2::StringObject( tile.GetObject() );
-        }
-        else {
+        std::string str;
+        if ( MP2::OBJ_MINES == objectType ) {
             str = Maps::GetMinesName( tile.QuantityResourceCount().first );
+            str.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
         }
-    }
-    else {
-        str = MP2::StringObject( tile.GetObject() );
-    }
-
-    if ( troop.isValid() && ( isOwned || isAbandonnedMine || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) ) {
-        str.append( "\n \n" );
-        const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
-        if ( scoutingLevel == Skill::Level::NONE ) {
-            str.append( _( "guarded by " ) ).append( StringLower( Army::TroopSizeString( troop ) ) );
-        }
-        else {
-            str.append( _( "guarded by %{count} %{monster}" ) );
-            StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
-        }
-        if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+        else if ( isAbandonnedMine ) {
+            const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
+            if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
+                str = MP2::StringObject( objectType );
+            }
+            else {
+                str = Maps::GetMinesName( tile.QuantityResourceCount().first );
+            }
         }
         else {
-            StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+            str = MP2::StringObject( objectType );
         }
-    }
 
-    return str;
-}
-
-std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystalBall, bool extendedScoutingOption, uint32_t basicScoutingLevel )
-{
-    const Troop & troop = tile.QuantityTroop();
-
-    if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
-        std::string str = "%{count} %{monster}";
-        const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
-        if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
-        }
-        else {
-            StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        const Troop & troop = tile.QuantityTroop();
+        if ( troop.isValid() && ( isOwned || isAbandonnedMine || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) ) {
+            str.append( "\n \n" );
+            const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
+            if ( scoutingLevel == Skill::Level::NONE ) {
+                str.append( _( "guarded by " ) ).append( StringLower( Army::TroopSizeString( troop ) ) );
+            }
+            else {
+                str.append( _( "guarded by %{count} %{monster}" ) );
+                StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+            }
+            if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
+                StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+            }
+            else {
+                StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+            }
         }
 
         return str;
     }
-    else {
-        return Army::TroopSizeString( troop );
-    }
-}
 
-std::string ShowArtifactInfo( const Maps::Tiles & tile, bool extendedScoutingOption, uint32_t scoutingLevel )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-
-    if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
-        str.append( "\n(" );
-        str.append( tile.QuantityArtifact().GetName() );
-        str += ')';
-    }
-
-    return str;
-}
-
-std::string ShowResourceInfo( const Maps::Tiles & tile, bool extendedScoutingOption, uint32_t scoutingLevel )
-{
-    std::string str;
-
-    if ( MP2::OBJ_RESOURCE == tile.GetObject() ) {
-        str = Resource::String( tile.GetQuantity1() );
-        if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
-            const ResourceCount & rc = tile.QuantityResourceCount();
-            str.append( ": " );
-            str.append( Game::CountScoute( rc.second, scoutingLevel ) );
-        }
-    }
-    else { // Campfire
-        str = MP2::StringObject( tile.GetObject() );
-        if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
-            const Funds & funds = tile.QuantityFunds();
-
-            str.append( "\n(" );
-            str.append( Resource::String( Resource::GOLD ) );
-
-            str.append( ": " );
-            str.append( Game::CountScoute( funds.gold, scoutingLevel ) );
-            str += '\n';
-
-            const ResourceCount & rc = tile.QuantityResourceCount();
-            str.append( Resource::String( rc.first ) );
-
-            str.append( ": " );
-            str.append( Game::CountScoute( rc.second, scoutingLevel ) );
-            str += ')';
-        }
-    }
-
-    return str;
-}
-
-std::string ShowDwellingInfo( const Maps::Tiles & tile, bool owned, bool extendedScoutingOption, uint32_t scoutingLevel )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-
-    if ( owned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
-        str += '\n';
+    std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystalBall, bool extendedScoutingOption, uint32_t basicScoutingLevel )
+    {
         const Troop & troop = tile.QuantityTroop();
-        if ( troop.isValid() ) {
-            str.append( _( "(available: %{count})" ) );
-            StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+
+        if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
+            std::string str = "%{count} %{monster}";
+            const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
+            StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
+            if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
+                StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+            }
+            else {
+                StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+            }
+
+            return str;
         }
         else {
-            str.append( _( "(empty)" ) );
+            return Army::TroopSizeString( troop );
         }
     }
 
-    return str;
-}
+    std::string ShowArtifactInfo( const Maps::Tiles & tile, bool extendedScoutingOption, uint32_t scoutingLevel )
+    {
+        std::string str = MP2::StringObject( tile.GetObject( false ) );
 
-std::string ShowShrineInfo( const Maps::Tiles & tile, const Heroes * hero, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-
-    bool showSpellDetails = false;
-
-    if ( isVisited ) {
-        showSpellDetails = true;
-    }
-    else if ( extendedScoutingOption ) {
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_SHRINE1:
-            showSpellDetails = scoutingLevel >= Skill::Level::BASIC;
-            break;
-        case MP2::OBJ_SHRINE2:
-            showSpellDetails = scoutingLevel >= Skill::Level::ADVANCED;
-            break;
-        case MP2::OBJ_SHRINE3:
-            showSpellDetails = scoutingLevel == Skill::Level::EXPERT;
-            break;
-        default:
-            break;
-        }
-    }
-
-    if ( showSpellDetails ) {
-        const Spell & spell = tile.QuantitySpell();
-        str.append( "\n(" );
-        str.append( spell.GetName() );
-        str += ')';
-        if ( hero && hero->HaveSpell( spell ) ) {
+        if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
             str.append( "\n(" );
-            str.append( _( "already learned" ) );
+            str.append( tile.QuantityArtifact().GetName() );
             str += ')';
         }
+
+        return str;
     }
 
-    return str;
-}
+    std::string ShowResourceInfo( const Maps::Tiles & tile, bool extendedScoutingOption, uint32_t scoutingLevel )
+    {
+        std::string str;
 
-std::string ShowWitchHutInfo( const Maps::Tiles & tile, const Heroes * hero, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
+        const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    const bool show = isVisited || ( extendedScoutingOption && scoutingLevel == Skill::Level::EXPERT );
-
-    if ( show ) {
-        const Skill::Secondary & skill = tile.QuantitySkill();
-        str.append( "\n(" );
-        str.append( Skill::Secondary::String( skill.Skill() ) );
-        str += ')';
-
-        if ( hero ) {
-            if ( hero->HasSecondarySkill( skill.Skill() ) ) {
-                str.append( "\n(" );
-                str.append( _( "already knows this skill" ) );
-                str += ')';
+        if ( MP2::OBJ_RESOURCE == objectType ) {
+            str = Resource::String( tile.GetQuantity1() );
+            if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
+                const ResourceCount & rc = tile.QuantityResourceCount();
+                str.append( ": " );
+                str.append( Game::CountScoute( rc.second, scoutingLevel ) );
             }
-            else if ( hero->HasMaxSecondarySkill() ) {
+        }
+        else { // Campfire
+            str = MP2::StringObject( objectType );
+            if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
+                const Funds & funds = tile.QuantityFunds();
+
                 str.append( "\n(" );
-                str.append( _( "already has max skills" ) );
+                str.append( Resource::String( Resource::GOLD ) );
+
+                str.append( ": " );
+                str.append( Game::CountScoute( funds.gold, scoutingLevel ) );
+                str += '\n';
+
+                const ResourceCount & rc = tile.QuantityResourceCount();
+                str.append( Resource::String( rc.first ) );
+
+                str.append( ": " );
+                str.append( Game::CountScoute( rc.second, scoutingLevel ) );
                 str += ')';
             }
         }
+
+        return str;
     }
 
-    return str;
-}
+    std::string ShowDwellingInfo( const Maps::Tiles & tile, bool owned, bool extendedScoutingOption, uint32_t scoutingLevel )
+    {
+        std::string str = MP2::StringObject( tile.GetObject( false ) );
 
-std::string ShowLocalVisitTileInfo( const Maps::Tiles & tile, const Heroes * hero )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-    if ( hero ) {
-        str.append( "\n \n" );
-        str.append( hero->isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
-    }
-
-    return str;
-}
-
-std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * hero )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-    if ( hero ) {
-        str.append( "\n \n" );
-        str.append( hero->isObjectTypeVisited( tile.GetObject() ) ? _( "(already visited)" ) : _( "(not visited)" ) );
-    }
-
-    return str;
-}
-
-std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-
-    str.append( "\n \n" );
-    str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
-
-    return str;
-}
-
-std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
-{
-    std::string str = BarrierColor::String( tile.QuantityColor() );
-    str.append( " " );
-    str.append( MP2::StringObject( tile.GetObject() ) );
-
-    if ( MP2::OBJ_TRAVELLERTENT == tile.GetObject() && kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
-        str.append( "\n \n" );
-        str.append( _( "(already visited)" ) );
-    }
-
-    return str;
-}
-
-std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
-{
-    const MP2::MapObjectType objectType = tile.GetObject( false );
-
-    std::string str;
-    if ( objectType == MP2::OBJ_COAST ) {
-        str = MP2::StringObject( objectType );
-    }
-    else if ( tile.isRoad() ) {
-        str = _( "Road" );
-    }
-    else {
-        str = Maps::Ground::String( tile.GetGround() );
-    }
-
-    str.append( "\n \n" );
-
-    if ( tile.GoodForUltimateArtifact() ) {
-        str.append( _( "(digging ok)" ) );
-    }
-    else {
-        str.append( _( "(no digging)" ) );
-    }
-
-    if ( showTerrainPenaltyOption && hero ) {
-        const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-        if ( cost > 0 ) {
+        if ( owned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
             str += '\n';
-            str.append( _( "penalty: %{cost}" ) );
-            StringReplace( str, "%{cost}", cost );
-        }
-    }
-
-    return str;
-}
-
-fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
-{
-    if ( position.x > 0 && position.y > 0 ) {
-        return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
-    }
-
-    // place box next to mouse cursor
-    const fheroes2::Point & mp = le.GetMouseCursor();
-
-    const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-    const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const fheroes2::Rect & ar = gamearea.GetROI();
-
-    int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
-    int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
-
-    // clamp box to edges of adventure screen game area
-    xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-    ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
-
-    return fheroes2::Rect( xpos, ypos, imageBox.width(), imageBox.height() );
-}
-
-uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
-{
-    if ( hero == nullptr ) {
-        return Skill::Level::NONE;
-    }
-
-    const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
-    const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject();
-
-    const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
-
-    // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
-    if ( monsterInfo ) {
-        if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
-            return scoutingLevel;
-        }
-        else {
-            return Skill::Level::NONE;
-        }
-    }
-    else if ( Settings::Get().ExtWorldScouteExtended() ) {
-        uint32_t dist = static_cast<uint32_t>( hero->GetScoute() );
-        if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
-            dist = hero->GetVisionsDistance();
-
-        if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= dist )
-            return scoutingLevel;
-        return Skill::Level::NONE;
-    }
-
-    return Skill::Level::NONE;
-}
-
-void Dialog::QuickInfo( const Maps::Tiles & tile )
-{
-    const MP2::MapObjectType objectType = tile.GetObject( false );
-    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
-
-    if ( objectType != correctedObjectType && MP2::isActionObject( correctedObjectType ) ) {
-        // This is non-main tile of an action object. We have to find the main tile.
-        // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
-        const int32_t radiusOfSearch = 3;
-
-        // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
-        std::vector<uint32_t> uids;
-        const Maps::Addons & level2Addons = tile.getLevel2Addons();
-        const Maps::Addons & level1Addons = tile.getLevel1Addons();
-
-        for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
-            if ( iter->uniq != 0 ) {
-                uids.emplace_back( iter->uniq );
+            const Troop & troop = tile.QuantityTroop();
+            if ( troop.isValid() ) {
+                str.append( _( "(available: %{count})" ) );
+                StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+            }
+            else {
+                str.append( _( "(empty)" ) );
             }
         }
 
-        if ( tile.GetObjectUID() != 0 ) {
-            uids.emplace_back( tile.GetObjectUID() );
-        }
+        return str;
+    }
 
-        for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
-            if ( iter->uniq != 0 ) {
-                uids.emplace_back( iter->uniq );
+    std::string ShowShrineInfo( const Maps::Tiles & tile, const Heroes * hero, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        std::string str = MP2::StringObject( objectType );
+
+        bool showSpellDetails = false;
+
+        if ( isVisited ) {
+            showSpellDetails = true;
+        }
+        else if ( extendedScoutingOption ) {
+            switch ( objectType ) {
+            case MP2::OBJ_SHRINE1:
+                showSpellDetails = scoutingLevel >= Skill::Level::BASIC;
+                break;
+            case MP2::OBJ_SHRINE2:
+                showSpellDetails = scoutingLevel >= Skill::Level::ADVANCED;
+                break;
+            case MP2::OBJ_SHRINE3:
+                showSpellDetails = scoutingLevel == Skill::Level::EXPERT;
+                break;
+            default:
+                break;
             }
         }
 
-        const int32_t tileIndex = tile.GetIndex();
-        const int32_t mapWidth = world.w();
+        if ( showSpellDetails ) {
+            const Spell & spell = tile.QuantitySpell();
+            str.append( "\n(" );
+            str.append( spell.GetName() );
+            str += ')';
+            if ( hero && hero->HaveSpell( spell ) ) {
+                str.append( "\n(" );
+                str.append( _( "already learned" ) );
+                str += ')';
+            }
+        }
 
-        assert( correctedObjectType > objectType );
+        return str;
+    }
 
-        for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
-            for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
-                const int32_t index = tileIndex + y * mapWidth + x;
-                if ( Maps::isValidAbsIndex( index ) ) {
-                    const Maps::Tiles & foundTile = world.GetTiles( index );
-                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
-                        QuickInfo( foundTile );
-                        return;
-                    }
+    std::string ShowWitchHutInfo( const Maps::Tiles & tile, const Heroes * hero, bool isVisited, bool extendedScoutingOption, uint32_t scoutingLevel )
+    {
+        std::string str = MP2::StringObject( tile.GetObject( false ) );
+
+        const bool show = isVisited || ( extendedScoutingOption && scoutingLevel == Skill::Level::EXPERT );
+
+        if ( show ) {
+            const Skill::Secondary & skill = tile.QuantitySkill();
+            str.append( "\n(" );
+            str.append( Skill::Secondary::String( skill.Skill() ) );
+            str += ')';
+
+            if ( hero ) {
+                if ( hero->HasSecondarySkill( skill.Skill() ) ) {
+                    str.append( "\n(" );
+                    str.append( _( "already knows this skill" ) );
+                    str += ')';
+                }
+                else if ( hero->HasMaxSecondarySkill() ) {
+                    str.append( "\n(" );
+                    str.append( _( "already has max skills" ) );
+                    str += ')';
                 }
             }
+        }
+
+        return str;
+    }
+
+    std::string ShowLocalVisitTileInfo( const Maps::Tiles & tile, const Heroes * hero )
+    {
+        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        if ( hero ) {
+            str.append( "\n \n" );
+            str.append( hero->isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+        }
+
+        return str;
+    }
+
+    std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * hero )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        std::string str = MP2::StringObject( objectType );
+        if ( hero ) {
+            str.append( "\n \n" );
+            str.append( hero->isObjectTypeVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+        }
+
+        return str;
+    }
+
+    std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    {
+        std::string str = MP2::StringObject( tile.GetObject( false ) );
+
+        str.append( "\n \n" );
+        str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+
+        return str;
+    }
+
+    std::string showUniqueObjectVisitInfo( const MP2::MapObjectType objectType, const Kingdom & kingdom )
+    {
+        std::string str = MP2::StringObject( objectType );
+
+        str.append( "\n \n" );
+        str.append( kingdom.isVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+
+        return str;
+    }
+
+    std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    {
+        std::string str = BarrierColor::String( tile.QuantityColor() );
+        str += ' ';
+
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        str.append( MP2::StringObject( objectType ) );
+
+        if ( MP2::OBJ_TRAVELLERTENT == objectType && kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
+            str.append( "\n \n" );
+            str.append( _( "(already visited)" ) );
+        }
+
+        return str;
+    }
+
+    std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        std::string str;
+        if ( objectType == MP2::OBJ_COAST ) {
+            str = MP2::StringObject( objectType );
+        }
+        else if ( tile.isRoad() ) {
+            str = _( "Road" );
+        }
+        else {
+            str = Maps::Ground::String( tile.GetGround() );
+        }
+
+        str.append( "\n \n" );
+
+        if ( tile.GoodForUltimateArtifact() ) {
+            str.append( _( "(digging ok)" ) );
+        }
+        else {
+            str.append( _( "(no digging)" ) );
+        }
+
+        if ( showTerrainPenaltyOption && hero ) {
+            const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+            if ( cost > 0 ) {
+                str += '\n';
+                str.append( _( "penalty: %{cost}" ) );
+                StringReplace( str, "%{cost}", cost );
+            }
+        }
+
+        return str;
+    }
+
+    fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
+    {
+        if ( position.x > 0 && position.y > 0 ) {
+            return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
+        }
+
+        // place box next to mouse cursor
+        const fheroes2::Point & mp = le.GetMouseCursor();
+
+        const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+        const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+
+        const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+        const fheroes2::Rect & ar = gamearea.GetROI();
+
+        int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
+        int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
+
+        // clamp box to edges of adventure screen game area
+        xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
+        ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
+
+        return fheroes2::Rect( xpos, ypos, imageBox.width(), imageBox.height() );
+    }
+
+    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
+    {
+        if ( hero == nullptr ) {
+            return Skill::Level::NONE;
+        }
+
+        const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
+        const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject( false );
+
+        const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
+
+        // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
+        if ( monsterInfo ) {
+            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
+                return scoutingLevel;
+            }
+            else {
+                return Skill::Level::NONE;
+            }
+        }
+        else if ( Settings::Get().ExtWorldScouteExtended() ) {
+            uint32_t dist = static_cast<uint32_t>( hero->GetScoute() );
+            if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
+                dist = hero->GetVisionsDistance();
+
+            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= dist )
+                return scoutingLevel;
+            return Skill::Level::NONE;
+        }
+
+        return Skill::Level::NONE;
+    }
+}
+
+void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
+{
+    const MP2::MapObjectType objectType = tile.GetObject( !ignoreHeroOnTile );
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
+
+    if ( objectType != correctedObjectType && MP2::isActionObject( correctedObjectType ) && !ignoreHeroOnTile ) {
+        const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+        if ( mainTileIndex != -1 ) {
+            QuickInfo( world.GetTiles( mainTileIndex ), true );
+            return;
         }
     }
 
@@ -557,7 +539,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_LEANTO:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
-
+        case MP2::OBJ_MAGELLANMAPS:
+            name_object = showUniqueObjectVisitInfo( objectType, kingdom );
+            break;
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
@@ -606,6 +590,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE:
+        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_AIRALTAR:
+        case MP2::OBJ_FIREALTAR:
+        case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_WATERALTAR:
             name_object = ShowDwellingInfo( tile, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
             break;
 

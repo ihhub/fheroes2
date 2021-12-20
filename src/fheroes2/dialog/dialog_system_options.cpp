@@ -248,13 +248,12 @@ namespace
 
         drawDialog( roi );
 
-        const fheroes2::Point buttonOffset( 113 + dialogArea.x, 362 + dialogArea.y );
+        const fheroes2::Point buttonOffset( 112 + dialogArea.x, 362 + dialogArea.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
         buttonOkay.draw();
 
         display.render();
 
-        bool redraw = false;
         bool saveConfig = false;
 
         // dialog menu loop
@@ -266,56 +265,107 @@ namespace
                 break;
             }
 
-            // set music volume
-            if ( Audio::isValid() && le.MouseClickLeft( musicVolumeRoi ) ) {
-                conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
-                redraw = true;
-                Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
-                saveConfig = true;
-            }
+            // set music or sound volume
+            bool saveMusicVolume = false;
+            bool saveSoundVolume = false;
+            if ( Audio::isValid() ) {
+                if ( le.MouseClickLeft( musicVolumeRoi ) ) {
+                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
+                    saveMusicVolume = true;
+                }
+                else if ( le.MouseWheelUp( musicVolumeRoi ) ) {
+                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
+                    saveMusicVolume = true;
+                }
+                else if ( le.MouseWheelDn( musicVolumeRoi ) ) {
+                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
+                    saveMusicVolume = true;
+                }
+                if ( saveMusicVolume ) {
+                    Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
+                }
 
-            // set sound volume
-            if ( Audio::isValid() && le.MouseClickLeft( soundVolumeRoi ) ) {
-                conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
-                redraw = true;
-                Game::EnvironmentSoundMixer();
-                saveConfig = true;
+                if ( le.MouseClickLeft( soundVolumeRoi ) ) {
+                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
+                    saveSoundVolume = true;
+                }
+                else if ( le.MouseWheelUp( soundVolumeRoi ) ) {
+                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
+                    saveSoundVolume = true;
+                }
+                else if ( le.MouseWheelDn( soundVolumeRoi ) ) {
+                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
+                    saveSoundVolume = true;
+                }
+                if ( saveSoundVolume ) {
+                    Game::EnvironmentSoundMixer();
+                }
             }
 
             // set music type
+            bool saveMusicType = false;
             if ( le.MouseClickLeft( musicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
                 // If there's no expansion files we skip this option
                 if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
                     ++type;
 
+                const Game::MusicRestorer musicRestorer;
+
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
-                redraw = true;
-                saveConfig = true;
+
+                Game::SetCurrentMusic( MUS::UNKNOWN );
+
+                saveMusicType = true;
             }
 
             // set hero speed
+            bool saveHeroSpeed = false;
             if ( le.MouseClickLeft( heroSpeedRoi ) ) {
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() % 10 + 1 );
-                redraw = true;
-                Game::UpdateGameSpeed();
-                saveConfig = true;
+                saveHeroSpeed = true;
+            }
+            else if ( le.MouseWheelUp( heroSpeedRoi ) ) {
+                conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() + 1 );
+                saveHeroSpeed = true;
+            }
+            else if ( le.MouseWheelDn( heroSpeedRoi ) ) {
+                conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() - 1 );
+                saveHeroSpeed = true;
             }
 
             // set ai speed
+            bool saveAISpeed = false;
             if ( le.MouseClickLeft( aiSpeedRoi ) ) {
-                const int prevAISpeed = conf.AIMoveSpeed();
-                conf.SetAIMoveSpeed( prevAISpeed >= 10 ? 0 : prevAISpeed + 1 );
-                redraw = true;
+                conf.SetAIMoveSpeed( ( conf.AIMoveSpeed() + 1 ) % 11 );
+                saveAISpeed = true;
+            }
+            else if ( le.MouseWheelUp( aiSpeedRoi ) ) {
+                conf.SetAIMoveSpeed( conf.AIMoveSpeed() + 1 );
+                saveAISpeed = true;
+            }
+            else if ( le.MouseWheelDn( aiSpeedRoi ) ) {
+                conf.SetAIMoveSpeed( conf.AIMoveSpeed() - 1 );
+                saveAISpeed = true;
+            }
+
+            if ( saveHeroSpeed || saveAISpeed ) {
                 Game::UpdateGameSpeed();
-                saveConfig = true;
             }
 
             // set scroll speed
+            bool saveScrollSpeed = false;
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( SCROLL_FAST2 > conf.ScrollSpeed() ? conf.ScrollSpeed() + 1 : SCROLL_SLOW );
-                redraw = true;
-                saveConfig = true;
+                conf.SetScrollSpeed( conf.ScrollSpeed() % SCROLL_FAST2 + 1 );
+                saveScrollSpeed = true;
+            }
+            else if ( le.MouseWheelUp( scrollSpeedRoi ) ) {
+                conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
+                saveScrollSpeed = true;
+            }
+            else if ( le.MouseWheelDn( scrollSpeedRoi ) ) {
+                conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
+                saveScrollSpeed = true;
             }
 
             // set interface theme
@@ -329,6 +379,7 @@ namespace
             }
 
             // toggle manual/auto battles
+            bool saveAutoBattle = false;
             if ( le.MouseClickLeft( battleResolveRoi ) ) {
                 if ( conf.BattleAutoResolve() ) {
                     if ( conf.BattleAutoSpellcast() ) {
@@ -342,9 +393,7 @@ namespace
                     conf.setBattleAutoResolve( true );
                     conf.setBattleAutoSpellcast( true );
                 }
-
-                redraw = true;
-                saveConfig = true;
+                saveAutoBattle = true;
             }
 
             if ( le.MousePressRight( musicVolumeRoi ) )
@@ -368,12 +417,14 @@ namespace
             else if ( le.MousePressRight( buttonOkay.area() ) )
                 Dialog::Message( _( "OK" ), _( "Exit this menu." ), Font::BIG );
 
-            if ( redraw ) {
+            if ( saveMusicVolume || saveSoundVolume || saveMusicType || saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
+                // redraw
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
                 drawDialog( roi );
                 buttonOkay.draw();
                 display.render();
-                redraw = false;
+
+                saveConfig = true;
             }
         }
 

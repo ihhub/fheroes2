@@ -47,19 +47,18 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) co
     if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
-    hero->ResetModes( Heroes::SLEEPER );
     hero->SetMove( false );
 
     const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
+
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
-        LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Point & mousePos = le.GetMouseCursor();
+        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
         if ( gameArea.GetROI() & mousePos ) {
             const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
             Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
@@ -81,7 +80,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() && hero->MayStillMove( false ) ) {
+    else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero );
         RedrawFocus();
 
@@ -130,7 +129,7 @@ void Interface::Basic::EventNextHero( void )
             ++it;
             if ( it == myHeroes.end() )
                 it = myHeroes.begin();
-            if ( ( *it )->MayStillMove( true ) ) {
+            if ( ( *it )->MayStillMove( true, false ) ) {
                 SetFocus( *it );
                 CalculateHeroPath( *it, -1 );
                 break;
@@ -139,7 +138,7 @@ void Interface::Basic::EventNextHero( void )
     }
     else {
         for ( Heroes * hero : myHeroes ) {
-            if ( hero->MayStillMove( true ) ) {
+            if ( hero->MayStillMove( true, false ) ) {
                 SetFocus( hero );
                 CalculateHeroPath( hero, -1 );
                 break;
@@ -153,8 +152,9 @@ void Interface::Basic::EventContinueMovement( void ) const
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValid() )
-        hero->SetMove( !hero->isMoveEnabled() );
+    if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
+        hero->SetMove( true );
+    }
 }
 
 void Interface::Basic::EventKingdomInfo( void ) const
@@ -201,7 +201,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
+        EventViewWorld();
         break;
 
     case Dialog::PUZZLE:
@@ -209,24 +209,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
         break;
 
     case Dialog::INFO:
-        if ( Settings::Get().isCampaignGameType() ) {
-            fheroes2::Display & display = fheroes2::Display::instance();
-            fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
-
-            const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
-            if ( returnMode == fheroes2::GameMode::CANCEL ) {
-                saver.restore();
-            }
-            else {
-                saver.reset();
-            }
-
-            return returnMode;
-        }
-        else {
-            EventGameInfo();
-        }
-        break;
+        return EventGameInfo();
 
     case Dialog::DIG:
         return EventDigArtifact();
@@ -236,6 +219,11 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
     }
 
     return fheroes2::GameMode::CANCEL;
+}
+
+void Interface::Basic::EventViewWorld()
+{
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
 }
 
 fheroes2::GameMode Interface::Basic::EventFileDialog() const
@@ -320,9 +308,29 @@ void Interface::Basic::EventPuzzleMaps( void ) const
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-void Interface::Basic::EventGameInfo( void ) const
+fheroes2::GameMode Interface::Basic::EventGameInfo()
 {
+    if ( Settings::Get().isCampaignGameType() ) {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
+
+        AGG::ResetMixer();
+
+        const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
+        if ( returnMode == fheroes2::GameMode::CANCEL ) {
+            saver.restore();
+
+            Game::restoreSoundsForCurrentFocus();
+        }
+        else {
+            saver.reset();
+        }
+
+        return returnMode;
+    }
+
     Dialog::GameInfo();
+    return fheroes2::GameMode::CANCEL;
 }
 
 void Interface::Basic::EventSwitchHeroSleeping( void )
@@ -330,14 +338,10 @@ void Interface::Basic::EventSwitchHeroSleeping( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        if ( hero->Modes( Heroes::SLEEPER ) )
-            hero->ResetModes( Heroes::SLEEPER );
-        else {
-            hero->SetModes( Heroes::SLEEPER );
-            hero->GetPath().Reset();
-        }
+        hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         SetRedraw( REDRAW_HEROES );
+        buttonsArea.SetRedraw();
     }
 }
 
@@ -382,26 +386,32 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventDefaultAction( void )
+fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode )
 {
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
         // 1. action object
-        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
-            const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-
+        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
-            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
-                SetRedraw( REDRAW_HEROES );
-            SetRedraw( REDRAW_GAMEAREA );
+
+            // The action object (e.g. Stables or Well) can alter the status of the hero
+            iconsPanel.RedrawIcons( ICON_HEROES );
+
+            // If a hero completed an action we must verify the condition for the scenario.
+            if ( hero->isAction() ) {
+                hero->ResetAction();
+                // check if the game is over after the hero's action
+                return GameOver::Result::Get().LocalCheckGameOver();
+            }
         }
     }
-    else
+    else if ( GetFocusCastle() ) {
         // 2. town dialog
-        if ( GetFocusCastle() ) {
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
+
+    return gameMode;
 }
 
 void Interface::Basic::EventOpenFocus( void ) const

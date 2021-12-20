@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace fheroes2
 {
@@ -30,17 +31,36 @@ namespace fheroes2
         French, // GoG version
         Polish, // GoG version
         German, // GoG version
-        Russian // Buka and XXI Vek versions
+        Russian, // Buka and XXI Vek versions
+        Italian // Rare version?
     };
 
-    // Game resources can support up to 2 languages. One of them is always English.
-    // This function returns supported from resources language except English, otherwise English language will be returned.
-    SupportedLanguage getSupportedLanguage();
+    class LanguageSwitcher
+    {
+    public:
+        LanguageSwitcher() = delete;
 
-    // Return name of the language.
+        LanguageSwitcher( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher( const LanguageSwitcher && ) = delete;
+        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
+
+        explicit LanguageSwitcher( const SupportedLanguage language );
+        ~LanguageSwitcher();
+
+    private:
+        const std::string _currentLanguage;
+    };
+
+    // This function returns an array of supported languages. If the array contains only one language it must be English.
+    std::vector<SupportedLanguage> getSupportedLanguages();
+
+    // Return name of the language. Call this function only within the scope of LanguageSwitcher object.
     const char * getLanguageName( const SupportedLanguage language );
 
     const char * getLanguageAbbreviation( const SupportedLanguage language );
 
     SupportedLanguage getLanguageFromAbbreviation( const std::string & abbreviation );
+
+    void updateAlphabet( const std::string & abbreviation );
 }

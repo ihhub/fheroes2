@@ -19,13 +19,18 @@
  ***************************************************************************/
 #pragma once
 
-#include "math_base.h"
+#include "image.h"
 
 class Castle;
+class Funds;
 
 namespace fheroes2
 {
-    class Image;
-
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
+
+    Rect drawResourcePanel( const Funds & kingdomTreasures, Image & output, const Point & offset );
+
+    void drawCastleName( const Castle & castle, Image & output, const Point & offset );
+
+    Sprite getHeroExchangeImage();
 }

@@ -24,6 +24,7 @@
 #include "battle_troop.h"
 #include "heroes_base.h"
 #include "logging.h"
+#include "speed.h"
 
 using namespace Battle;
 
@@ -52,8 +53,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.GetForce( _myColor ), true );
-        const Units enemies( arena.GetForce( _myColor, true ), true );
+        const Units friendly( arena.getForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -204,6 +205,77 @@ namespace AI
         return 1;
     }
 
+    // Compute a heuristic for Disrupting Ray spell usage by AI
+    double BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & target ) const
+    {
+        const double targetDefense = target.GetDefense();
+
+        if ( targetDefense <= 1 ) { // target is already at minimum defense: not useful to cast Disrupting Ray
+            return 0.0;
+        }
+
+        double ratio = 0.2;
+        if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) { // disrupting ray can't have full effect
+            const double actualDefenseChange = targetDefense - 1.0;
+            ratio *= actualDefenseChange / Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        }
+
+        const double targetStrength = target.GetStrength();
+
+        // if current army has much lower strength than target unit, we reduce the ratio to prioritize direct damage spells
+        if ( _myArmyStrength < targetStrength ) {
+            ratio *= _myArmyStrength / targetStrength;
+        }
+
+        return ratio;
+    }
+
+    // Compute a heuristic for Slow spell usage by AI
+    double BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
+    {
+        if ( target.isArchers() || _attackingCastle ) {
+            // Slow is useless against archers or troops defending castle
+            return 0.01;
+        }
+        const int currentSpeed = target.GetSpeed( false, true );
+        const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
+        const int lostSpeed = currentSpeed - newSpeed; // usually 2
+        double ratio = 0.15 * lostSpeed;
+
+        if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
+            ratio /= 3;
+        }
+        if ( target.Modes( SP_HASTE ) ) {
+            ratio *= 2;
+        }
+        else if ( !target.isFlying() ) {
+            ratio /= ReduceEffectivenessByDistance( target );
+        }
+        return ratio;
+    }
+
+    // Compute a heuristic for Haste spell usage by AI
+    double BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) const
+    {
+        const int currentSpeed = target.GetSpeed( false, true );
+        const int newSpeed = Speed::GetHasteSpeedFromSpell( currentSpeed );
+        const int gainedSpeed = newSpeed - currentSpeed; // usually 2
+        double ratio = 0.05 * gainedSpeed;
+
+        if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
+            ratio *= 3;
+        }
+        if ( target.Modes( SP_SLOW ) ) {
+            ratio *= 2;
+        }
+        // Reduce effectiveness if we don't have to move
+        else if ( target.isArchers() || _defensiveTactics ) {
+            ratio /= 2;
+        }
+
+        return ratio;
+    }
+
     double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
     {
         const int spellID = spell.GetID();
@@ -219,7 +291,7 @@ namespace AI
         switch ( spellID ) {
         case Spell::SLOW:
         case Spell::MASSSLOW:
-            ratio = 0.3;
+            ratio = getSpellSlowRatio( target );
             break;
         case Spell::BLIND: {
             if ( targetIsLast )
@@ -250,12 +322,11 @@ namespace AI
             break;
         }
         case Spell::DISRUPTINGRAY:
-            ratio = 0.2;
+            ratio = getSpellDisruptingRayRatio( target );
             break;
         case Spell::HASTE:
         case Spell::MASSHASTE:
-            // Haste isn't effective if target is fast already
-            ratio = target.GetSpeed() < _enemyAverageSpeed ? 0.3 : 0.1;
+            ratio = getSpellHasteRatio( target );
             break;
         case Spell::BLOODLUST:
             ratio = 0.1;
@@ -283,28 +354,7 @@ namespace AI
             return 0.0;
         }
 
-        if ( spellID == Spell::SLOW || spellID == Spell::MASSSLOW ) {
-            if ( target.Modes( SP_HASTE ) ) {
-                ratio *= 2;
-            }
-            else if ( target.isArchers() || _attackingCastle ) {
-                // Slow is useless against archers or troops defending castle
-                ratio = 0.01;
-            }
-            else if ( !target.isFlying() ) {
-                ratio /= ReduceEffectivenessByDistance( target );
-            }
-        }
-        if ( spellID == Spell::HASTE || spellID == Spell::MASSHASTE ) {
-            if ( target.Modes( SP_SLOW ) ) {
-                ratio *= 2;
-            }
-            // Reduce effectiveness if we don't have to move
-            else if ( target.isArchers() || _defensiveTactics ) {
-                ratio /= 2;
-            }
-        }
-        else if ( target.Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
+        if ( target.Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
             ratio *= 2;
         }
         else if ( target.Modes( SP_CURSE ) && ( spellID == Spell::BLESS || spellID == Spell::MASSBLESS ) ) {
@@ -420,14 +470,14 @@ namespace AI
         const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
-        const Force & friendlyForce = arena.GetForce( _myColor );
+        const Force & friendlyForce = arena.getForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
             if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
                 continue;
 
             // For dead units: skip if there's another unit standing on top
-            if ( !unit->isValid() && arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
+            if ( !unit->isValid() && Board::GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
             uint32_t missingHP = unit->GetMissingHitPoints();

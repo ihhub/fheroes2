@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "battle.h"
+#include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"
@@ -127,7 +128,7 @@ Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
     return it == end() ? nullptr : *it;
 }
 
-Battle::Force::Force( Army & parent, bool opposite )
+Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator, TroopsUidGenerator & generator )
     : army( parent )
 {
     uids.reserve( army.Size() );
@@ -138,7 +139,7 @@ Battle::Force::Force( Army & parent, bool opposite )
         u32 uid = 0;
 
         if ( troop && troop->isValid() ) {
-            push_back( new Unit( *troop, ( opposite ? position + 10 : position ), opposite ) );
+            push_back( new Unit( *troop, opposite ? position + 10 : position, opposite, randomGenerator, generator.GetUnique() ) );
             back()->SetArmy( army );
             uid = back()->GetUID();
         }

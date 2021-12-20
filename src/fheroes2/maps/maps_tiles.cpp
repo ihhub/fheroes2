@@ -40,16 +40,20 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "monster.h"
+#include "monster_anim.h"
 #include "mounts.h"
 #include "mp2.h"
 #include "objcrck.h"
 #include "objdirt.h"
 #include "objdsrt.h"
 #include "objgras.h"
+#include "objlava.h"
 #include "objmult.h"
 #include "objsnow.h"
 #include "objswmp.h"
+#include "objtown.h"
 #include "objwatr.h"
+#include "objxloc.h"
 #include "race.h"
 #include "save_format_version.h"
 #include "serialize.h"
@@ -64,7 +68,184 @@
 
 namespace
 {
-    const std::array<uint8_t, 15> monsterAnimationSequence = { 0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0 };
+    bool isValidShadowSprite( const int icn, const uint8_t icnIndex )
+    {
+        if ( icn == 0 ) {
+            // Special case when no objects exist.
+            return false;
+        }
+
+        switch ( icn ) {
+        case ICN::MTNDSRT:
+        case ICN::MTNGRAS:
+        case ICN::MTNLAVA:
+        case ICN::MTNMULT:
+        case ICN::MTNSNOW:
+        case ICN::MTNSWMP:
+            return ObjMnts1::isShadow( icnIndex );
+        case ICN::MTNCRCK:
+        case ICN::MTNDIRT:
+            return ObjMnts2::isShadow( icnIndex );
+        case ICN::TREDECI:
+        case ICN::TREEVIL:
+        case ICN::TREFALL:
+        case ICN::TREFIR:
+        case ICN::TREJNGL:
+        case ICN::TRESNOW:
+            return ObjTree::isShadow( icnIndex );
+        case ICN::OBJNCRCK:
+            return ObjCrck::isShadow( icnIndex );
+        case ICN::OBJNDIRT:
+            return ObjDirt::isShadow( icnIndex );
+        case ICN::OBJNDSRT:
+            return ObjDsrt::isShadow( icnIndex );
+        case ICN::OBJNGRA2:
+            return ObjGra2::isShadow( icnIndex );
+        case ICN::OBJNGRAS:
+            return ObjGras::isShadow( icnIndex );
+        case ICN::OBJNMUL2:
+            return ObjMul2::isShadow( icnIndex );
+        case ICN::OBJNMULT:
+            return ObjMult::isShadow( icnIndex );
+        case ICN::OBJNSNOW:
+            return ObjSnow::isShadow( icnIndex );
+        case ICN::OBJNSWMP:
+            return ObjSwmp::isShadow( icnIndex );
+        case ICN::OBJNWAT2:
+            return ObjWat2::isShadow( icnIndex );
+        case ICN::OBJNWATR:
+            return ObjWatr::isShadow( icnIndex );
+        case ICN::OBJNARTI:
+        case ICN::OBJNRSRC:
+            return 0 == ( icnIndex % 2 );
+        case ICN::OBJNTWRD:
+            return icnIndex > 31;
+        case ICN::X_LOC1:
+            return ObjXlc1::isShadow( icnIndex );
+        case ICN::X_LOC2:
+            return ObjXlc2::isShadow( icnIndex );
+        case ICN::X_LOC3:
+            return ObjXlc3::isShadow( icnIndex );
+        case ICN::OBJNTOWN:
+            return ObjTown::isShadow( icnIndex );
+        case ICN::OBJNLAVA:
+            return ObjLava::isShadow( icnIndex );
+        case ICN::OBJNLAV2:
+            return ObjLav2::isShadow( icnIndex );
+        case ICN::OBJNLAV3:
+            return ObjLav3::isShadow( icnIndex );
+        case ICN::OBJNTWSH:
+            return true;
+        case ICN::STREAM:
+        case ICN::OBJNTWBA:
+        case ICN::OBJNXTRA:
+        case ICN::ROAD:
+        case ICN::EXTRAOVR:
+        case ICN::MONS32:
+        case ICN::BOAT32:
+        case ICN::FLAG32:
+        case ICN::MINIHERO:
+            return false;
+        default:
+            break;
+        }
+
+        // Did you add a new type of objects into the game?
+        assert( 0 );
+        return false;
+    }
+
+    bool isValidReefsSprite( const int icn, const uint8_t icnIndex )
+    {
+        return icn == ICN::X_LOC2 && ObjXlc2::isReefs( icnIndex );
+    }
+
+#if defined( VERIFY_SHADOW_SPRITES )
+    // Define VERIFY_SHADOW_SPRITES macro to be able to use these functions.
+    bool isShadowImage( const fheroes2::Image & image )
+    {
+        // The image can't be empty.
+        assert( !image.empty() );
+        if ( image.empty() )
+            return false;
+
+        const uint8_t * data = image.transform();
+        const uint8_t * dataEnd = data + image.width() * image.height();
+
+        size_t transformCounter = 0;
+
+        for ( ; data != dataEnd; ++data ) {
+            if ( *data == 0 ) {
+                return false;
+            }
+            else if ( *data != 1 ) {
+                ++transformCounter;
+            }
+        }
+
+        if ( transformCounter == 0 ) {
+            assert( image.width() == 1 && image.height() == 1 );
+            return true;
+        }
+
+        return true;
+    }
+
+    // Use this function to verify the correctness of data being returned by isValidShadowSprite function.
+    void findAllShadowImages()
+    {
+        static bool completed = false;
+        if ( completed ) {
+            return;
+        }
+
+        const std::vector<int32_t> icnIds
+            = { ICN::MTNDSRT,  ICN::MTNGRAS,  ICN::MTNLAVA,  ICN::MTNMULT,  ICN::MTNSNOW,  ICN::MTNSWMP,  ICN::MTNCRCK,  ICN::MTNDIRT,  ICN::TREDECI,
+                ICN::TREEVIL,  ICN::TREFALL,  ICN::TREFIR,   ICN::TREJNGL,  ICN::TRESNOW,  ICN::OBJNCRCK, ICN::OBJNDIRT, ICN::OBJNDSRT, ICN::OBJNGRA2,
+                ICN::OBJNGRAS, ICN::OBJNMUL2, ICN::OBJNMULT, ICN::OBJNSNOW, ICN::OBJNSWMP, ICN::OBJNWAT2, ICN::OBJNWATR, ICN::OBJNARTI, ICN::OBJNRSRC,
+                ICN::OBJNTWRD, ICN::OBJNTWSH, ICN::STREAM,   ICN::OBJNTWBA, ICN::ROAD,     ICN::EXTRAOVR, ICN::X_LOC1,   ICN::X_LOC2,   ICN::X_LOC3,
+                ICN::OBJNTOWN, ICN::OBJNLAVA, ICN::OBJNLAV2, ICN::OBJNLAV3, ICN::MONS32 };
+
+        for ( const int32_t icnId : icnIds ) {
+            const uint32_t maxIndex = fheroes2::AGG::GetICNCount( icnId );
+            assert( maxIndex != 0 );
+
+            std::string output;
+
+            for ( uint32_t i = 0; i < maxIndex; i++ ) {
+                const uint32_t startIndex = ICN::AnimationFrame( icnId, i, 0, true );
+                const bool hasAnimation = startIndex != 0;
+                bool isImageShadow = isShadowImage( fheroes2::AGG::GetICN( icnId, i ) );
+                if ( isImageShadow && hasAnimation ) {
+                    for ( uint32_t indexOffset = 1;; ++indexOffset ) {
+                        const uint32_t animationIndex = ICN::AnimationFrame( icnId, i, indexOffset, true );
+                        if ( startIndex == animationIndex ) {
+                            break;
+                        }
+
+                        if ( !isShadowImage( fheroes2::AGG::GetICN( icnId, animationIndex ) ) ) {
+                            isImageShadow = false;
+                            break;
+                        }
+                    }
+                }
+
+                if ( isValidShadowSprite( icnId, i ) != isImageShadow ) {
+                    output += std::to_string( i );
+                    output += ", ";
+                }
+            }
+
+            if ( output.empty() ) {
+                continue;
+            }
+
+            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output );
+        }
+
+        completed = true;
+    }
+#endif
 
     bool contains( const int base, const int value )
     {
@@ -162,90 +343,6 @@ namespace
     }
 #endif
 
-    bool isTallObject( const MP2::MapObjectType objectType )
-    {
-        // Some objects don't allow diagonal moves from top to bottom as they're considered as very tall.
-        switch ( objectType ) {
-        case MP2::OBJ_WATERWHEEL:
-        case MP2::OBJN_WATERWHEEL:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJN_WINDMILL:
-        case MP2::OBJ_STONES:
-        case MP2::OBJ_DRAGONCITY:
-        case MP2::OBJN_DRAGONCITY:
-        case MP2::OBJ_FORT:
-        case MP2::OBJN_FORT:
-        case MP2::OBJ_ALCHEMYLAB:
-        case MP2::OBJN_ALCHEMYLAB:
-        case MP2::OBJ_MINES:
-        case MP2::OBJN_MINES:
-        case MP2::OBJ_ABANDONEDMINE:
-        case MP2::OBJN_ABANDONEDMINE:
-        case MP2::OBJ_TRAVELLERTENT:
-        case MP2::OBJN_TRAVELLERTENT:
-        case MP2::OBJ_FREEMANFOUNDRY:
-        case MP2::OBJN_FREEMANFOUNDRY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJN_WAGONCAMP:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJN_TREECITY:
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJN_SAWMILL:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJN_GRAVEYARD:
-        case MP2::OBJ_ARENA:
-        case MP2::OBJN_ARENA:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJN_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJN_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJN_EARTHALTAR:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJN_WATERALTAR:
-        case MP2::OBJ_CITYDEAD:
-        case MP2::OBJN_CITYDEAD:
-        case MP2::OBJ_STABLES:
-        case MP2::OBJN_STABLES:
-        case MP2::OBJ_BARROWMOUNDS:
-        case MP2::OBJN_BARROWMOUNDS:
-        case MP2::OBJ_ORACLE:
-        case MP2::OBJN_ORACLE:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJN_TEMPLE:
-        case MP2::OBJ_MERMAID:
-        case MP2::OBJN_MERMAID:
-        case MP2::OBJ_PYRAMID:
-        case MP2::OBJN_PYRAMID:
-        case MP2::OBJ_TROLLBRIDGE:
-        case MP2::OBJN_TROLLBRIDGE:
-        case MP2::OBJ_HILLFORT:
-        case MP2::OBJ_ALCHEMYTOWER:
-        case MP2::OBJN_ALCHEMYTOWER:
-        case MP2::OBJ_HUTMAGI:
-        case MP2::OBJN_HUTMAGI:
-        case MP2::OBJ_DERELICTSHIP:
-        case MP2::OBJN_DERELICTSHIP:
-        case MP2::OBJ_CASTLE:
-        case MP2::OBJN_CASTLE:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJN_SHIPWRECK:
-        case MP2::OBJ_OBSERVATIONTOWER:
-        case MP2::OBJN_OBSERVATIONTOWER:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJN_TREEHOUSE:
-        case MP2::OBJ_WITCHSHUT:
-        case MP2::OBJN_WITCHSHUT:
-        case MP2::OBJ_XANADU:
-        case MP2::OBJN_XANADU:
-            return true;
-        default:
-            break;
-        }
-
-        return false;
-    }
-
     bool isShortObject( const MP2::MapObjectType objectType )
     {
         // Some objects allow middle moves even being attached to the bottom.
@@ -279,6 +376,7 @@ namespace
         case MP2::OBJN_FAERIERING:
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_MAGICWELL:
+        case MP2::OBJ_NOTHINGSPECIAL:
             return true;
         default:
             break;
@@ -287,14 +385,33 @@ namespace
         return false;
     }
 
-    bool isDetachedObject( const MP2::MapObjectType objectType )
+    bool isDetachedObjectType( const MP2::MapObjectType objectType )
     {
         // Some objects do not take into account other objects below them.
         switch ( objectType ) {
         case MP2::OBJ_CASTLE:
-        case MP2::OBJN_CASTLE:
         case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJN_WAGONCAMP:
+        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL:
+        case MP2::OBJ_WATERALTAR:
+        case MP2::OBJ_AIRALTAR:
+        case MP2::OBJ_FIREALTAR:
+        case MP2::OBJ_EARTHALTAR:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isCombinedObject( const MP2::MapObjectType objectType )
+    {
+        // Trees allow bottom and top movements but they don't allow the same for other trees.
+        switch ( objectType ) {
+        case MP2::OBJ_TREES:
+        case MP2::OBJ_CRATER:
             return true;
         default:
             break;
@@ -311,11 +428,11 @@ Maps::TilesAddon::TilesAddon()
     , index( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( int lv, u32 gid, int obj, u32 ii )
-    : uniq( gid )
+Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ )
+    : uniq( uid )
     , level( lv )
     , object( obj )
-    , index( ii )
+    , index( index_ )
 {}
 
 std::string Maps::TilesAddon::String( int lvl ) const
@@ -325,7 +442,8 @@ std::string Maps::TilesAddon::String( int lvl ) const
        << "uniq            : " << uniq << std::endl
        << "tileset         : " << static_cast<int>( object ) << ", (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
-       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl;
+       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl
+       << "shadow          : " << isShadow( *this ) << std::endl;
     return os.str();
 }
 
@@ -392,7 +510,7 @@ MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const u
             return MP2::OBJ_SIRENS;
         else if ( 46 < icnIndex && icnIndex < 111 )
             return MP2::OBJN_SIRENS;
-        else if ( 110 < icnIndex && icnIndex < 136 )
+        else if ( ObjXlc2::isReefs( icnIndex ) )
             return MP2::OBJ_REEFS;
         break;
 
@@ -417,23 +535,18 @@ MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const u
 bool Maps::TilesAddon::isRoad() const
 {
     switch ( MP2::GetICNObject( object ) ) {
-    // from sprite road
+    // road sprite
     case ICN::ROAD:
         if ( 1 == index || 8 == index || 10 == index || 11 == index || 15 == index || 22 == index || 23 == index || 24 == index || 25 == index || 27 == index )
             return false;
         else
             return true;
 
-    // castle and tower (gate)
+    // castle or town gate
     case ICN::OBJNTOWN:
+    case ICN::OBJNTWRD:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
-            return true;
-        break;
-
-        // castle lands (gate)
-    case ICN::OBJNTWBA:
-        if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
             return true;
         break;
 
@@ -485,64 +598,7 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 
 bool Maps::Tiles::isShadowSprite( const int icn, const uint8_t icnIndex )
 {
-    switch ( icn ) {
-    case ICN::MTNDSRT:
-    case ICN::MTNGRAS:
-    case ICN::MTNLAVA:
-    case ICN::MTNMULT:
-    case ICN::MTNSNOW:
-    case ICN::MTNSWMP:
-        return ObjMnts1::isShadow( icnIndex );
-
-    case ICN::MTNCRCK:
-    case ICN::MTNDIRT:
-        return ObjMnts2::isShadow( icnIndex );
-
-    case ICN::TREDECI:
-    case ICN::TREEVIL:
-    case ICN::TREFALL:
-    case ICN::TREFIR:
-    case ICN::TREJNGL:
-    case ICN::TRESNOW:
-        return ObjTree::isShadow( icnIndex );
-
-    case ICN::OBJNCRCK:
-        return ObjCrck::isShadow( icnIndex );
-    case ICN::OBJNDIRT:
-        return ObjDirt::isShadow( icnIndex );
-    case ICN::OBJNDSRT:
-        return ObjDsrt::isShadow( icnIndex );
-    case ICN::OBJNGRA2:
-        return ObjGra2::isShadow( icnIndex );
-    case ICN::OBJNGRAS:
-        return ObjGras::isShadow( icnIndex );
-    case ICN::OBJNMUL2:
-        return ObjMul2::isShadow( icnIndex );
-    case ICN::OBJNMULT:
-        return ObjMult::isShadow( icnIndex );
-    case ICN::OBJNSNOW:
-        return ObjSnow::isShadow( icnIndex );
-    case ICN::OBJNSWMP:
-        return ObjSwmp::isShadow( icnIndex );
-    case ICN::OBJNWAT2:
-        return ObjWat2::isShadow( icnIndex );
-    case ICN::OBJNWATR:
-        return ObjWatr::isShadow( icnIndex );
-
-    case ICN::OBJNARTI:
-    case ICN::OBJNRSRC:
-        return 0 == ( icnIndex % 2 );
-
-    case ICN::OBJNTWRD:
-        return icnIndex > 31;
-    case ICN::OBJNTWSH:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    return isValidShadowSprite( icn, icnIndex );
 }
 
 bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex )
@@ -662,9 +718,6 @@ Maps::Tiles::Tiles()
     , quantity1( 0 )
     , quantity2( 0 )
     , quantity3( 0 )
-#ifdef WITH_DEBUG
-    , impassableTileRule( 0 )
-#endif
 {}
 
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
@@ -677,23 +730,23 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     quantity3 = 0;
     fog_colors = Color::ALL;
 
-    SetTile( mp2.tileIndex, mp2.flags );
+    SetTile( mp2.surfaceType, mp2.flags );
     SetIndex( index );
-    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObject ) );
+    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
     addons_level1.clear();
     addons_level2.clear();
 
     // those bitfields are set by map editor regardless if map object is there
-    tileIsRoad = ( mp2.objectName1 >> 1 ) & 1;
+    tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mp2.objectName1 ) == ICN::ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
-    if ( mp2.mapObject == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
+    if ( mp2.mapObjectType == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
         objectTileset = mp2.objectName1;
-        objectIndex = mp2.indexName1;
+        objectIndex = mp2.level1IcnImageIndex;
         uniq = mp2.level1ObjectUID;
     }
     AddonsPushLevel2( mp2 );
@@ -852,9 +905,19 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) ) {
+    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
+    }
+
+    if ( isValidReefsSprite( MP2::GetICNObject( objectTileset ), objectIndex ) ) {
+        return 0;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( isValidReefsSprite( MP2::GetICNObject( addon.object ), addon.index ) ) {
+            return 0;
+        }
     }
 
     // Objects have fixed passability.
@@ -883,7 +946,7 @@ void Maps::Tiles::updatePassability()
 
     const MP2::MapObjectType objectType = GetObject( false );
     const bool isActionObject = MP2::isActionObject( objectType );
-    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
+    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 && !isShadow() ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
@@ -907,15 +970,16 @@ void Maps::Tiles::updatePassability()
                 }
             }
 
-            if ( isWater() != bottomTile.isWater() ) {
-                // If object is bordering water then it must be marked as not passable.
+            // If an object locates on land and the bottom tile is water mark the current tile as impassible. It's done for cases that a hero won't be able to
+            // disembark on the tile.
+            if ( !isWater() && bottomTile.isWater() ) {
                 tilePassable = 0;
                 return;
             }
 
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( !isDetachedObject( objectType ) && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
+            if ( !isDetachedObject() && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
                 const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
@@ -923,7 +987,7 @@ void Maps::Tiles::updatePassability()
                 if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                         if ( isShortObject( bottomTileObjectType ) ) {
-                            tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                            tilePassable &= ~Direction::BOTTOM;
                         }
                         else {
                             tilePassable = 0;
@@ -933,10 +997,11 @@ void Maps::Tiles::updatePassability()
                 }
                 else if ( bottomTile.mp2_object != 0 && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-                    tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                    tilePassable &= ~Direction::BOTTOM;
                 }
-                else if ( isShortObject( bottomTileObjectType ) ) {
-                    tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                else if ( isShortObject( bottomTileObjectType )
+                          || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
+                    tilePassable &= ~Direction::BOTTOM;
                 }
                 else {
                     tilePassable = 0;
@@ -953,7 +1018,7 @@ void Maps::Tiles::updatePassability()
     // Left side.
     if ( ( tilePassable & Direction::TOP_LEFT ) && Maps::isValidDirection( _index, Direction::LEFT ) ) {
         const Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
-        const bool leftTileTallObject = isTallObject( leftTile.GetObject( false ) );
+        const bool leftTileTallObject = leftTile.isTallObject();
         if ( leftTileTallObject && ( leftTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
             tilePassable &= ~Direction::TOP_LEFT;
         }
@@ -962,7 +1027,7 @@ void Maps::Tiles::updatePassability()
     // Right side.
     if ( ( tilePassable & Direction::TOP_RIGHT ) && Maps::isValidDirection( _index, Direction::RIGHT ) ) {
         const Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
-        const bool rightTileTallObject = isTallObject( rightTile.GetObject( false ) );
+        const bool rightTileTallObject = rightTile.isTallObject();
         if ( rightTileTallObject && ( rightTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
             tilePassable &= ~Direction::TOP_RIGHT;
         }
@@ -1032,13 +1097,13 @@ bool Maps::Tiles::isClearGround() const
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName1 && mt.indexName1 < 0xFF ) {
-        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.indexName1 );
+    if ( mt.objectName1 != 0 && mt.level1IcnImageIndex != 0xFF ) {
+        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.level1IcnImageIndex );
     }
 
     // MP2 "objectName" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    if ( ( mt.objectName1 >> 1 ) & 1 )
+    if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mt.objectName1 ) == ICN::ROAD ) )
         tileIsRoad = true;
 }
 
@@ -1056,8 +1121,8 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName2 && mt.indexName2 < 0xFF ) {
-        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.indexName2 );
+    if ( mt.objectName2 && mt.level2IcnImageIndex != 0xFF ) {
+        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.level2IcnImageIndex );
     }
 }
 
@@ -1197,24 +1262,18 @@ void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & vi
     RedrawAddon( dst, addons_level1, visibleTileROI, isPuzzleDraw, area );
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( ( visibleTileROI & mp ) && ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
-        fheroes2::Image sf = PassableViewSurface( tilePassable );
-
-        if ( impassableTileRule ) {
-            const Text text( std::to_string( impassableTileRule ), Font::SMALL );
-            text.Blit( 13, 13, sf );
-        }
-
-        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, sf, 0, 0, mp );
+        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp );
     }
 #else
     (void)dst;
     (void)visibleTileROI;
+    (void)area;
 #endif
 }
 
@@ -1255,11 +1314,11 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & v
     const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
-    area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+    area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + 30, mp );
 
     if ( spriteIndicies.second ) {
         const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
-        area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp );
+        area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + 30, mp );
     }
 }
 
@@ -1455,15 +1514,13 @@ std::string Maps::Tiles::String( void ) const
        << "uniq            : " << uniq << std::endl
        << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
-       << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
+       << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "level           : " << static_cast<int>( _level ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
+       << "shadow          : " << isShadowSprite( objectTileset, objectIndex ) << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
-#ifdef WITH_DEBUG
-    if ( impassableTileRule )
-        os << ", disable(" << static_cast<int>( impassableTileRule ) << ")";
-#endif
+
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
@@ -1620,10 +1677,10 @@ bool Maps::Tiles::isStream( void ) const
     return tileICN == ICN::STREAM || ( tileICN == ICN::OBJNMUL2 && objectIndex < 14 );
 }
 
-bool Maps::Tiles::isShadow( void ) const
+bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( objectTileset, objectIndex )
-           && addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+           && addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const
@@ -1695,31 +1752,31 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     switch ( objectType ) {
     case MP2::OBJ_WINDMILL:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
     case MP2::OBJ_WATERWHEEL:
         index += 14;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
     case MP2::OBJ_MAGICGARDEN:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
 
     case MP2::OBJ_MINES:
         index += 14;
-        CorrectFlags32( index, true );
+        CorrectFlags32( col, index, true );
         break;
     case MP2::OBJ_LIGHTHOUSE:
         index += 42;
-        CorrectFlags32( index, false );
+        CorrectFlags32( col, index, false );
         break;
 
     case MP2::OBJ_ALCHEMYLAB: {
         index += 21;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
         break;
     }
@@ -1728,7 +1785,7 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
         index += 28;
         if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
         break;
     }
@@ -1737,13 +1794,13 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
         index *= 2;
         if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
 
         index += 1;
         if ( Maps::isValidDirection( _index, Direction::RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
-            tile.CorrectFlags32( index, true );
+            tile.CorrectFlags32( col, index, true );
         }
         break;
     }
@@ -1753,8 +1810,13 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     }
 }
 
-void Maps::Tiles::CorrectFlags32( u32 index, bool up )
+void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up )
 {
+    if ( col == Color::NONE ) {
+        removeFlags();
+        return;
+    }
+
     TilesAddon * taddon = FindFlags();
 
     // replace flag
@@ -1768,41 +1830,72 @@ void Maps::Tiles::CorrectFlags32( u32 index, bool up )
         addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
 }
 
-void Maps::Tiles::FixedPreload( Tiles & tile )
+void Maps::Tiles::fixTileObjectType( Tiles & tile )
 {
-    // fix skeleton: left position
-    if ( MP2::GetICNObject( tile.objectTileset ) == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
+    const MP2::MapObjectType originalObjectType = tile.GetObject( false );
+    const int originalICN = MP2::GetICNObject( tile.objectTileset );
+
+    // Left tile of a skeleton on Desert should be mark as non-action tile.
+    if ( originalObjectType == MP2::OBJ_SKELETON && originalICN == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
         tile.SetObject( MP2::OBJN_SKELETON );
+
+        // There is no need to check the rest of things as we fixed this object.
+        return;
     }
 
-    // fix price loyalty objects.
-    if ( Settings::Get().isPriceOfLoyaltySupported() )
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_UNKNW_79:
-        case MP2::OBJ_UNKNW_7A:
-        case MP2::OBJ_UNKNW_F9:
-        case MP2::OBJ_UNKNW_FA: {
-            MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
-            if ( objectType == MP2::OBJ_ZERO ) {
-                // if nothing was found it means there's overlay tile on top of the object; search for it
-                for ( auto it = tile.addons_level2.begin(); it != tile.addons_level2.end(); ++it ) {
-                    objectType = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
-                    if ( objectType != MP2::OBJ_ZERO )
-                        break;
-                }
-            }
+    // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
+    // This is also required in order to properly calculate Reefs' passbility.
+    if ( originalObjectType == MP2::OBJ_STONES && isValidReefsSprite( originalICN, tile.objectIndex ) ) {
+        tile.SetObject( MP2::OBJ_REEFS );
 
-            if ( MP2::OBJ_ZERO != objectType )
-                tile.SetObject( objectType );
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile._index );
-            }
+        // There is no need to check the rest of things as we fixed this object.
+        return;
+    }
+
+    // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
+    switch ( originalObjectType ) {
+    case MP2::OBJ_UNKNW_79:
+    case MP2::OBJ_UNKNW_7A:
+    case MP2::OBJ_UNKNW_F9:
+    case MP2::OBJ_UNKNW_FA: {
+        MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
             break;
         }
 
-        default:
+        // Add-ons of level 1 shouldn't even exist if no top object. However, let's play safe and verify it as well.
+        for ( const TilesAddon & addon : tile.addons_level1 ) {
+            objectType = Maps::Tiles::GetLoyaltyObject( addon.object, addon.index );
+            if ( objectType != MP2::OBJ_ZERO )
+                break;
+        }
+
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
             break;
         }
+
+        for ( const TilesAddon & addon : tile.addons_level2 ) {
+            objectType = Maps::Tiles::GetLoyaltyObject( addon.object, addon.index );
+            if ( objectType != MP2::OBJ_ZERO )
+                break;
+        }
+
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
+            break;
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
+                                                << static_cast<int>( tile.objectIndex ) );
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 /* true: if protection or has guardians */
@@ -2099,6 +2192,7 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     }
     else {
         const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
+        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
         spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % monsterAnimationSequence.size()];
     }
     return spriteIndices;
@@ -2426,6 +2520,187 @@ uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
     return 0;
 }
 
+std::vector<uint8_t> Maps::Tiles::getValidTileSets() const
+{
+    std::vector<uint8_t> tileSets;
+
+    if ( objectTileset != 0 ) {
+        tileSets.emplace_back( objectTileset >> 2 );
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.object != 0 ) {
+            tileSets.emplace_back( addon.object >> 2 );
+        }
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
+        if ( addon.object != 0 ) {
+            tileSets.emplace_back( addon.object >> 2 );
+        }
+    }
+
+    return tileSets;
+}
+
+bool Maps::Tiles::containsTileSet( const std::vector<uint8_t> & tileSets ) const
+{
+    for ( const uint8_t tileSetId : tileSets ) {
+        if ( ( objectTileset >> 2 ) == tileSetId ) {
+            return true;
+        }
+
+        for ( const TilesAddon & addon : addons_level1 ) {
+            if ( ( addon.object >> 2 ) == tileSetId ) {
+                return true;
+            }
+        }
+
+        for ( const TilesAddon & addon : addons_level2 ) {
+            if ( ( addon.object >> 2 ) == tileSetId ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Maps::Tiles::isTallObject() const
+{
+    // TODO: possibly cache the output of the method as right now it's in average twice.
+    if ( !Maps::isValidDirection( _index, Direction::TOP ) ) {
+        // Nothing above so this object can't be tall.
+        return false;
+    }
+
+    std::vector<uint32_t> tileUIDs;
+    if ( objectTileset > 0 && objectIndex < 255 && uniq != 0 && ( ( _level >> 1 ) & 1 ) == 0 ) {
+        tileUIDs.emplace_back( uniq );
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.uniq != 0 && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
+            tileUIDs.emplace_back( addon.uniq );
+        }
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
+        if ( addon.uniq != 0 && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
+            tileUIDs.emplace_back( addon.uniq );
+        }
+    }
+
+    const Tiles & topTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
+    for ( const uint32_t tileUID : tileUIDs ) {
+        if ( topTile.uniq == tileUID && !topTile.isShadowSprite( topTile.objectTileset, topTile.objectIndex ) ) {
+            return true;
+        }
+
+        for ( const TilesAddon & addon : topTile.addons_level1 ) {
+            if ( addon.uniq == tileUID && !TilesAddon::isShadow( addon ) ) {
+                return true;
+            }
+        }
+
+        for ( const TilesAddon & addon : topTile.addons_level2 ) {
+            if ( addon.uniq == tileUID && !TilesAddon::isShadow( addon ) ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
+{
+    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
+
+    if ( correctedObjectType == objectType ) {
+        // Nothing to do.
+        return tile._index;
+    }
+
+    // This is non-main tile of an action object. We have to find the main tile.
+    // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
+    const int32_t radiusOfSearch = 3;
+
+    // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
+    std::vector<uint32_t> uids;
+    const Maps::Addons & level2Addons = tile.getLevel2Addons();
+    const Maps::Addons & level1Addons = tile.getLevel1Addons();
+
+    for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
+        if ( iter->uniq != 0 ) {
+            uids.emplace_back( iter->uniq );
+        }
+    }
+
+    if ( tile.GetObjectUID() != 0 ) {
+        uids.emplace_back( tile.GetObjectUID() );
+    }
+
+    for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
+        if ( iter->uniq != 0 ) {
+            uids.emplace_back( iter->uniq );
+        }
+    }
+
+    const int32_t tileIndex = tile.GetIndex();
+    const int32_t mapWidth = world.w();
+
+    assert( correctedObjectType > objectType );
+
+    for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
+        for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
+            const int32_t index = tileIndex + y * mapWidth + x;
+            if ( Maps::isValidAbsIndex( index ) ) {
+                const Maps::Tiles & foundTile = world.GetTiles( index );
+                if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
+                    return foundTile._index;
+                }
+            }
+        }
+    }
+
+    // Most likely we have a broken object put by an editor.
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." );
+    return -1;
+}
+
+bool Maps::Tiles::isDetachedObject() const
+{
+    const MP2::MapObjectType objectType = GetObject( false );
+    if ( isDetachedObjectType( objectType ) ) {
+        return true;
+    }
+
+    const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
+    if ( !isDetachedObjectType( correctedObjectType ) ) {
+        return false;
+    }
+
+    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( *this );
+    if ( mainTileIndex == -1 ) {
+        return false;
+    }
+
+    const uint32_t objectUID = world.GetTiles( mainTileIndex ).GetObjectUID();
+    if ( uniq == objectUID ) {
+        return ( ( _level >> 1 ) & 1 ) == 0;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.uniq == objectUID ) {
+            return ( ( addon.level >> 1 ) & 1 ) == 0;
+        }
+    }
+
+    return false;
+}
+
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
     return msg << ta.level << ta.uniq << ta.object << ta.index;
@@ -2434,12 +2709,6 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove temp variable usage here." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_095_RELEASE ) {
-        uint8_t temp = 0;
-        msg >> temp;
-    }
 
     return msg;
 }
@@ -2453,12 +2722,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
-        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove old saves support here." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
-        msg >> tile._level;
-    }
+        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._level;
 
     return msg;
 }

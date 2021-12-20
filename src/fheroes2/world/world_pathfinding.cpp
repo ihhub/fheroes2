@@ -150,16 +150,60 @@ void WorldPathfinder::checkWorldSize()
     }
 }
 
-uint32_t WorldPathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
+uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) const
 {
-    const Maps::Tiles & tileTo = world.GetTiles( target );
-    uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, skill );
+    const Maps::Tiles & srcTile = world.GetTiles( src );
+    const Maps::Tiles & dstTile = world.GetTiles( dst );
 
-    // diagonal move costs 50% extra
-    if ( Direction::isDiagonal( direction ) )
+    uint32_t penalty = srcTile.isRoad() && dstTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
+
+    // Diagonal movement costs 50% more
+    if ( Direction::isDiagonal( direction ) ) {
         penalty = penalty * 3 / 2;
+    }
+
+    // If we perform pathfinding for a real hero on the map, we have to work out the "last move"
+    // logic: if this move is the last one on the current turn, then we can move to any adjacent
+    // tile (both in straight and diagonal direction) as long as we have enough movement points
+    // to move over our current tile in the straight direction
+    if ( _maxMovePoints > 0 ) {
+        const WorldNode & node = _cache[src];
+
+        // No dead ends allowed
+        assert( src == _pathStart || node._from != -1 );
+
+        const uint32_t remainingMovePoints = node._remainingMovePoints;
+        const uint32_t srcTilePenalty = srcTile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( srcTile, _pathfindingSkill );
+
+        // If we still have enough movement points to move over the src tile in the straight
+        // direction, but not enough to move to the dst tile, then the "last move" logic is
+        // applied and we can move to the dst tile anyway at the expense of all the remaining
+        // movement points
+        if ( remainingMovePoints >= srcTilePenalty && remainingMovePoints < penalty ) {
+            return remainingMovePoints;
+        }
+    }
 
     return penalty;
+}
+
+uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const
+{
+    // We do not perform pathfinding for a real hero on the map, this is no-op
+    if ( _maxMovePoints == 0 ) {
+        return 0;
+    }
+
+    // This movement takes place at the beginning of a new turn: start with max movement points,
+    // don't carry leftovers from the previous turn
+    if ( movePoints < substractedMovePoints ) {
+        assert( _maxMovePoints >= substractedMovePoints );
+
+        return _maxMovePoints - substractedMovePoints;
+    }
+
+    // This movement takes place on the same turn
+    return movePoints - substractedMovePoints;
 }
 
 void WorldPathfinder::processWorldMap( int pathStart )
@@ -170,7 +214,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[pathStart] = PathfindingNode<MP2::MapObjectType>( -1, 0, MP2::MapObjectType::OBJ_ZERO );
+    _cache[pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( pathStart );
@@ -183,7 +227,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
 void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const Directions & directions = Direction::All();
-    const PathfindingNode<MP2::MapObjectType> & currentNode = _cache[currentNodeIdx];
+    const WorldNode & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
@@ -191,14 +235,19 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
             if ( newIndex == pathStart )
                 continue;
 
-            const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], _pathfindingSkill );
-            PathfindingNode<MP2::MapObjectType> & newNode = _cache[newIndex];
+            const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
+            const uint32_t moveCost = currentNode._cost + movementPenalty;
+            const uint32_t remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+
+            WorldNode & newNode = _cache[newIndex];
+
             if ( world.isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
                 const Maps::Tiles & tile = world.GetTiles( newIndex );
 
                 newNode._from = currentNodeIdx;
                 newNode._cost = moveCost;
                 newNode._objectID = tile.GetObject();
+                newNode._remainingMovePoints = remainingMovePoints;
 
                 // duplicates are allowed if we find a cheaper way there
                 if ( tile.isWater() == fromWater )
@@ -216,18 +265,26 @@ void PlayerWorldPathfinder::reset()
         _pathStart = -1;
         _currentColor = Color::NONE;
         _pathfindingSkill = Skill::Level::EXPERT;
+        _remainingMovePoints = 0;
+        _maxMovePoints = 0;
     }
 }
 
 void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
     const int startIndex = hero.GetIndex();
+    const int color = hero.GetColor();
     const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+    const uint32_t remainingMovePoints = hero.GetMovePoints();
+    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
 
-    if ( _pathStart != startIndex || _pathfindingSkill != skill ) {
+    if ( _pathStart != startIndex || _currentColor != color || _pathfindingSkill != skill || _remainingMovePoints != remainingMovePoints
+         || _maxMovePoints != maxMovePoints ) {
         _pathStart = startIndex;
-        _currentColor = hero.GetColor();
+        _currentColor = color;
         _pathfindingSkill = skill;
+        _remainingMovePoints = remainingMovePoints;
+        _maxMovePoints = maxMovePoints;
 
         processWorldMap( startIndex );
     }
@@ -240,7 +297,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
     // trace the path from end point
     int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
+        const WorldNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
@@ -266,8 +323,8 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
-    // if current tile contains a monster, skip it
-    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER ) {
+    // if current tile contains a monster or a barrier, skip it
+    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER || _cache[currentNodeIdx]._objectID == MP2::OBJ_BARRIER ) {
         return;
     }
 
@@ -280,11 +337,16 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
 
             if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction, _currentColor ) ) {
                 // add straight to cache, can't move further from the monster
-                const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, _pathfindingSkill );
-                PathfindingNode<MP2::MapObjectType> & monsterNode = _cache[monsterIndex];
+                const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
+                const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
+                const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
+
+                WorldNode & monsterNode = _cache[monsterIndex];
+
                 if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
                     monsterNode._from = currentNodeIdx;
                     monsterNode._cost = moveCost;
+                    monsterNode._remainingMovePoints = remainingMovePoints;
                 }
             }
         }
@@ -303,12 +365,31 @@ void AIWorldPathfinder::reset()
         _currentColor = Color::NONE;
         _armyStrength = -1;
         _pathfindingSkill = Skill::Level::EXPERT;
+        _remainingMovePoints = 0;
+        _maxMovePoints = 0;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    reEvaluateIfNeeded( hero.GetIndex(), hero.GetColor(), hero.GetArmy().GetStrength(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    const int startIndex = hero.GetIndex();
+    const int color = hero.GetColor();
+    const double armyStrength = hero.GetArmy().GetStrength();
+    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+    const uint32_t remainingMovePoints = hero.GetMovePoints();
+    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
+
+    if ( _pathStart != startIndex || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill
+         || _remainingMovePoints != remainingMovePoints || _maxMovePoints != maxMovePoints ) {
+        _pathStart = startIndex;
+        _currentColor = color;
+        _armyStrength = armyStrength;
+        _pathfindingSkill = skill;
+        _remainingMovePoints = remainingMovePoints;
+        _maxMovePoints = maxMovePoints;
+
+        processWorldMap( startIndex );
+    }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
@@ -318,6 +399,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
         _currentColor = color;
         _armyStrength = armyStrength;
         _pathfindingSkill = skill;
+        _remainingMovePoints = 0;
+        _maxMovePoints = 0;
 
         processWorldMap( start );
     }
@@ -327,7 +410,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const bool isFirstNode = currentNodeIdx == pathStart;
-    PathfindingNode<MP2::MapObjectType> & currentNode = _cache[currentNodeIdx];
+    WorldNode & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
     auto protectionCheck = [this]( const int index ) {
@@ -368,13 +451,15 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
             if ( teleportIdx == pathStart )
                 continue;
 
-            PathfindingNode<MP2::MapObjectType> & teleportNode = _cache[teleportIdx];
+            WorldNode & teleportNode = _cache[teleportIdx];
 
             // check if move is actually faster through teleporter
             if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
                 teleportNode._from = currentNodeIdx;
                 teleportNode._cost = currentNode._cost;
                 teleportNode._objectID = MP2::OBJ_STONELITHS;
+                teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
+
                 nodesToExplore.push_back( teleportIdx );
             }
         }
@@ -472,7 +557,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
-    const int start = hero.GetIndex();
+    const int32_t start = hero.GetIndex();
 
     const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
     const bool rightSideUnreachable = !Maps::isValidDirection( start, Direction::RIGHT ) || _cache[start + 1]._cost == 0;
@@ -482,7 +567,12 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 
     const bool topSideUnreachable = !Maps::isValidDirection( start, Direction::TOP ) || _cache[start - world.w()]._cost == 0;
     const bool bottomSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM ) || _cache[start + world.w()]._cost == 0;
-    return topSideUnreachable && bottomSideUnreachable;
+    if ( topSideUnreachable && bottomSideUnreachable ) {
+        return true;
+    }
+
+    // Is the hero standing on Stoneliths?
+    return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )
@@ -509,7 +599,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     // trace the path from end point
     int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
+        const WorldNode & node = _cache[currentNode];
 
         validateAndAdd( currentNode, node._objectID );
 
@@ -517,7 +607,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNode, directions[i] ) ) {
                     const int newIndex = currentNode + _mapOffset[i];
-                    const PathfindingNode<MP2::MapObjectType> & adjacent = _cache[newIndex];
+                    const WorldNode & adjacent = _cache[newIndex];
 
                     if ( adjacent._cost == 0 || adjacent._objectID == 0 )
                         continue;
@@ -555,7 +645,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
             lastValidNode = currentNode;
         }
 
-        const PathfindingNode<MP2::MapObjectType> & node = _cache[currentNode];
+        const WorldNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );

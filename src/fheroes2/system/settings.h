@@ -28,7 +28,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-enum
+enum : int
 {
     SCROLL_SLOW = 1,
     SCROLL_NORMAL = 2,
@@ -72,8 +72,8 @@ public:
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
-        UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
-        UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
+        // UNUSED = 0x20001000,
+        // UNUSED = 0x20002000,
         WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
         // UNUSED = 0x20008000,
         // UNUSED = 0x20010000,
@@ -97,7 +97,7 @@ public:
         // UNUSED = 0x30008000,
 
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
-        // UNUSED = 0x40008000,
+        BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000
     };
@@ -154,6 +154,8 @@ public:
     bool MusicMIDI() const;
     bool isShowIntro() const;
 
+    bool isVSyncEnabled() const;
+
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
@@ -171,8 +173,6 @@ public:
     bool ExtHeroRememberPointsForRetreating() const;
     bool ExtHeroAllowTranscribingScroll() const;
     bool ExtHeroArenaCanChoiseAnySkills() const;
-    bool ExtUnionsAllowCastleVisiting() const;
-    bool ExtUnionsAllowHeroesMeetings() const;
     bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;
@@ -189,6 +189,7 @@ public:
     bool ExtBattleShowDamage() const;
     bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
+    bool ExtBattleDeterministicResult() const;
     bool ExtBattleReverseWaitOrder() const;
     bool ExtGameRememberLastFocus() const;
     bool ExtGameContinueAfterVictory() const;

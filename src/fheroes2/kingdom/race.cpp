@@ -42,14 +42,14 @@ std::string Race::String( int race )
     case Race::MULT:
         return _( "Multi" );
     case Race::RAND:
-        return "Random";
+        return _( "race|Random" );
     case Race::NONE:
-        return "Neutral";
+        return _( "race|Neutral" );
     default:
         break;
     }
 
-    return "Neutral";
+    return _( "race|Neutral" );
 }
 
 int Race::Rand( void )

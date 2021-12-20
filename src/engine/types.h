@@ -30,6 +30,4 @@ using u16 = uint16_t;
 using s32 = int32_t;
 using u32 = uint32_t;
 
-#define MAXU16 0xFFFF
-
 #endif

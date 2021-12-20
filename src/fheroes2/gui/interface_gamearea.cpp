@@ -66,14 +66,12 @@ fheroes2::Rect Interface::GameArea::RectFixed( fheroes2::Point & dst, int rw, in
     return res.first;
 }
 
-void Interface::GameArea::Build( void )
+void Interface::GameArea::generate( const fheroes2::Size & screenSize, const bool withoutBorders )
 {
-    const fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( Settings::Get().ExtGameHideInterface() )
-        SetAreaPosition( 0, 0, display.width(), display.height() );
+    if ( withoutBorders )
+        SetAreaPosition( 0, 0, screenSize.width, screenSize.height );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
+        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, screenSize.width - RADARWIDTH - 3 * BORDERWIDTH, screenSize.height - 2 * BORDERWIDTH );
 }
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
@@ -411,11 +409,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
             const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
-            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + 30, mp, false, fadeTask.alpha );
 
             if ( fadeTask.animationIndex ) {
                 const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.animationIndex );
-                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + 30, mp, false, fadeTask.alpha );
             }
         }
     }
@@ -468,8 +466,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator nextStep = currentStep;
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
-            const int32_t from = ( *currentStep ).GetIndex();
-            const fheroes2::Point & mp = Maps::GetPoint( from );
+            const fheroes2::Point & mp = Maps::GetPoint( currentStep->GetIndex() );
 
             ++nextStep;
             --green;
@@ -477,14 +474,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // is visible
             if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
                 uint32_t index = 0;
+
                 if ( pathEnd != nextStep ) {
-                    const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
-                    uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
+                    const Maps::Tiles & tile = world.GetTiles( currentStep->GetIndex() );
 
-                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
-                        cost = Maps::Ground::roadPenalty;
+                    // Make no mistake: the cost of moving to this tile depends on the penalty of the PREVIOUS tile,
+                    // BUT the length of the route arrow on this tile depends on the penalty of THIS tile
+                    const uint32_t penalty = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
 
-                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
+                    index = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), penalty );
                 }
 
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
@@ -499,7 +497,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI );
+                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI, *this );
                 }
             }
         }
@@ -641,7 +639,6 @@ void Interface::GameArea::SetScroll( int direct )
 
 void Interface::GameArea::QueueEventProcessing( void )
 {
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
@@ -649,7 +646,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     // change cusor if need
     if ( updateCursor || index != _prevIndexPos ) {
-        cursor.SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
+        Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -659,8 +656,6 @@ void Interface::GameArea::QueueEventProcessing( void )
         return;
 
     const Settings & conf = Settings::Get();
-
-    // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
@@ -696,8 +691,10 @@ void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 
 void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 {
-    int32_t offsetX = point.x - _middlePoint().x;
-    int32_t offsetY = point.y - _middlePoint().y;
+    const fheroes2::Point & middlePos = _middlePoint();
+
+    int32_t offsetX = point.x - middlePos.x;
+    int32_t offsetY = point.y - middlePos.y;
     if ( offsetX < _minLeftOffset )
         offsetX = _minLeftOffset;
     else if ( offsetX > _maxLeftOffset )

@@ -36,13 +36,6 @@ namespace Interface
     template <class Item>
     class ItemsBar
     {
-    protected:
-        using Items = std::list<Item *>;
-        typedef typename std::list<Item *>::iterator ItemsIterator;
-        using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
-
-        Items items;
-
     public:
         ItemsBar()
             : colrows( 0, 0 )
@@ -176,6 +169,12 @@ namespace Interface
         }
 
     protected:
+        using Items = std::list<Item *>;
+        using ItemsIterator = typename std::list<Item *>::iterator;
+        using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
+
+        Items items;
+
         virtual void SetContentItems()
         {
             // Do nothing.
@@ -275,13 +274,6 @@ namespace Interface
     template <class Item>
     class ItemsActionBar : public ItemsBar<Item>
     {
-    protected:
-        typedef typename ItemsBar<Item>::ItemsIterator ItemsIterator;
-        typedef typename ItemsBar<Item>::ItemIterPos ItemIterPos;
-
-        ItemsIterator topItem;
-        ItemIterPos curItemPos;
-
     public:
         ItemsActionBar()
         {
@@ -409,7 +401,7 @@ namespace Interface
 
         bool QueueEventProcessing( ItemsActionBar<Item> & other )
         {
-            LocalEvent & le = LocalEvent::Get();
+            const LocalEvent & le = LocalEvent::Get();
             const fheroes2::Point & cursor = le.GetMouseCursor();
 
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
@@ -421,6 +413,12 @@ namespace Interface
         }
 
     protected:
+        using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
+        using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
+
+        ItemsIterator topItem;
+        ItemIterPos curItemPos;
+
         ItemsIterator GetTopItemIter() override
         {
             return topItem;

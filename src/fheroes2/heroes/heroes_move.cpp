@@ -388,13 +388,14 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
 {
     if ( next.GetObject() == MP2::OBJ_CASTLE ) {
         const Castle * castle = world.getCastleEntrance( next.GetCenter() );
-
         return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
-    else
-        // to coast action
-        if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST )
+    if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
         return true;
+    }
+    if ( !hero.isShipMaster() && next.GetObject() == MP2::OBJ_SHIPWRECK ) {
+        return true;
+    }
 
     return MP2::isNeedStayFront( next.GetObject() );
 }
@@ -404,7 +405,21 @@ bool Heroes::isInVisibleMapArea() const
     return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
-void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+bool Heroes::isInDeepOcean() const
+{
+    // Maximum number of hero's steps per cell is 9 so we check if the hero moved more than half of them.
+    const bool isHeroMovedHalfOfCell = ( sprite_index < 45 && sprite_index % 9 > 4 );
+    const int32_t tileIndex
+        = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
+    for ( const int32_t aroundIndex : Maps::getAroundIndexes( tileIndex ) ) {
+        if ( !world.GetTiles( aroundIndex ).isWater() ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Heroes::RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     if ( !( visibleTileROI & GetCenter() ) )
         return;
@@ -415,89 +430,50 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
     if ( isShipMaster() )
         dy -= 10;
 
-    const fheroes2::Sprite & sprite3 = SpriteShad( *this, sprite_index );
-    const fheroes2::Sprite & sprite4 = SpriteFroth( *this, sprite_index );
+    const fheroes2::Sprite & spriteShad = SpriteShad( *this, sprite_index );
+    const fheroes2::Sprite & spriteFroth = SpriteFroth( *this, sprite_index );
 
-    fheroes2::Point dst_pt3( dx + sprite3.x(), dy + sprite3.y() + TILEWIDTH );
-    fheroes2::Point dst_pt4( dx + ( reflect ? TILEWIDTH - sprite4.x() - sprite4.width() : sprite4.x() ), dy + sprite4.y() + TILEWIDTH );
+    fheroes2::Point dstShad( dx + spriteShad.x(), dy + spriteShad.y() + TILEWIDTH );
+    fheroes2::Point dstFroth( dx + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ), dy + spriteFroth.y() + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {
-        int32_t ox = 0;
-        int32_t oy = 0;
         int frame = ( sprite_index % 9 );
         if ( frame > 0 )
             --frame;
 
-        switch ( direction ) {
-        case Direction::TOP:
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM:
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            break;
-        default:
-            break;
-        }
+        int32_t offsetX = _offset.x;
+        if ( direction & DIRECTION_LEFT_COL )
+            offsetX -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_RIGHT_COL )
+            offsetX += HERO_MOVE_STEP * frame;
 
-        ox += _offset.x;
-        oy += _offset.y;
+        dstShad.x += offsetX;
+        dstFroth.x += offsetX;
 
-        dst_pt3.x += ox;
-        dst_pt3.y += oy;
-        dst_pt4.x += ox;
-        dst_pt4.y += oy;
+        int32_t offsetY = _offset.y;
+        if ( direction & DIRECTION_TOP_ROW )
+            offsetY -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_BOTTOM_ROW )
+            offsetY += HERO_MOVE_STEP * frame;
+
+        dstShad.y += offsetY;
+        dstFroth.y += offsetY;
     }
 
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
 
-    if ( isShipMaster() ) {
-        const Directions & directions = Direction::All();
-        const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
-        const int32_t centerIndex = GetIndex();
-
-        bool ocean = true;
-        for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it ) {
-            if ( ( *it & filter ) && Maps::isValidDirection( centerIndex, *it ) && !world.GetTiles( Maps::GetDirectionIndex( centerIndex, *it ) ).isWater() ) {
-                ocean = false;
-                break;
-            }
-        }
-
-        if ( ocean ) {
-            const fheroes2::Rect blitArea = area.RectFixed( dst_pt4, sprite4.width(), sprite4.height() );
-            fheroes2::AlphaBlit( sprite4, blitArea.x, blitArea.y, dst, dst_pt4.x, dst_pt4.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ),
-                                 reflect );
-        }
+    if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
+        const fheroes2::Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
+        fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ),
+                             reflect );
     }
 
-    const fheroes2::Rect blitArea = area.RectFixed( dst_pt3, sprite3.width(), sprite3.height() );
-    fheroes2::AlphaBlit( sprite3, blitArea.x, blitArea.y, dst, dst_pt3.x, dst_pt3.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ) );
+    const fheroes2::Rect blitArea = area.RectFixed( dstShad, spriteShad.width(), spriteShad.height() );
+    fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ) );
 }
 
-void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Heroes::Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     if ( !( visibleTileROI & GetCenter() ) )
         return;
@@ -514,13 +490,13 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
         dy -= 10;
 
     fheroes2::Point flagOffset;
-    const fheroes2::Sprite & sprite1 = SpriteHero( *this, sprite_index, false );
-    const fheroes2::Sprite & sprite2 = SpriteFlag( *this, flagFrameID, false, flagOffset );
+    const fheroes2::Sprite & spriteHero = SpriteHero( *this, sprite_index, false );
+    const fheroes2::Sprite & spriteFlag = SpriteFlag( *this, flagFrameID, false, flagOffset );
 
     // Reflected hero sprite should be shifted by 1 pixel to right.
-    fheroes2::Point heroSpritePos( dx + ( reflect ? TILEWIDTH + 1 - sprite1.x() - sprite1.width() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    fheroes2::Point shadowSpritePos( dx + ( reflect ? TILEWIDTH - sprite2.x() - flagOffset.x - sprite2.width() : sprite2.x() + flagOffset.x ),
-                                     dy + sprite2.y() + flagOffset.y + TILEWIDTH );
+    fheroes2::Point dstHero( dx + ( reflect ? TILEWIDTH + 1 - spriteHero.x() - spriteHero.width() : spriteHero.x() ), dy + spriteHero.y() + TILEWIDTH );
+    fheroes2::Point dstFlag( dx + ( reflect ? TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() : spriteFlag.x() + flagOffset.x ),
+                             dy + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {
@@ -529,53 +505,34 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
         if ( frame > 0 )
             --frame;
 
-        switch ( direction ) {
-        case Direction::TOP:
-            offset.y = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_RIGHT:
-            offset.x = HERO_MOVE_STEP * frame;
-            offset.y = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_LEFT:
-            offset.x = -HERO_MOVE_STEP * frame;
-            offset.y = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_RIGHT:
-            offset.x = HERO_MOVE_STEP * frame;
-            offset.y = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM:
-            offset.y = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_LEFT:
-            offset.x = -HERO_MOVE_STEP * frame;
-            offset.y = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::RIGHT:
-            offset.x = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::LEFT:
-            offset.x = -HERO_MOVE_STEP * frame;
-            break;
-        default:
-            break;
-        }
+        int32_t offsetX = _offset.x;
+        if ( direction & DIRECTION_LEFT_COL )
+            offsetX -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_RIGHT_COL )
+            offsetX += HERO_MOVE_STEP * frame;
 
-        offset += _offset;
+        dstHero.x += offsetX;
+        dstFlag.x += offsetX;
 
-        heroSpritePos += offset;
-        shadowSpritePos += offset;
+        int32_t offsetY = _offset.y;
+        if ( direction & DIRECTION_TOP_ROW )
+            offsetY -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_BOTTOM_ROW )
+            offsetY += HERO_MOVE_STEP * frame;
+
+        dstHero.y += offsetY;
+        dstFlag.y += offsetY;
     }
 
     // redraw sprites hero and flag
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
 
-    const fheroes2::Rect blitAreaHero = area.RectFixed( heroSpritePos, sprite1.width(), sprite1.height() );
-    fheroes2::AlphaBlit( sprite1, blitAreaHero.x, blitAreaHero.y, dst, heroSpritePos.x, heroSpritePos.y, blitAreaHero.width, blitAreaHero.height,
+    const fheroes2::Rect blitAreaHero = area.RectFixed( dstHero, spriteHero.width(), spriteHero.height() );
+    fheroes2::AlphaBlit( spriteHero, blitAreaHero.x, blitAreaHero.y, dst, dstHero.x, dstHero.y, blitAreaHero.width, blitAreaHero.height,
                          static_cast<uint8_t>( _alphaValue ), reflect );
-    const fheroes2::Rect blitAreaFlag = area.RectFixed( shadowSpritePos, sprite2.width(), sprite2.height() );
-    fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, shadowSpritePos.x, shadowSpritePos.y, blitAreaFlag.width, blitAreaFlag.height,
+
+    const fheroes2::Rect blitAreaFlag = area.RectFixed( dstFlag, spriteFlag.width(), spriteFlag.height() );
+    fheroes2::AlphaBlit( spriteFlag, blitAreaFlag.x, blitAreaFlag.y, dst, dstFlag.x, dstFlag.y, blitAreaFlag.width, blitAreaFlag.height,
                          static_cast<uint8_t>( _alphaValue ), reflect );
 }
 

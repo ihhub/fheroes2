@@ -105,6 +105,7 @@ namespace Game
         EVENT_DIGARTIFACT,
         EVENT_CASTSPELL,
         EVENT_KINGDOM_INFO,
+        EVENT_VIEW_WORLD,
         EVENT_DEFAULTACTION,
         EVENT_OPENFOCUS,
         EVENT_SYSTEMOPTIONS,
@@ -186,18 +187,18 @@ namespace Game
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
-    fheroes2::GameMode CompleteCampaignScenario();
+    fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 
-    void EnvironmentSoundMixer( void );
+    void EnvironmentSoundMixer();
+    void restoreSoundsForCurrentFocus();
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
     void DialogPlayers( int color, std::string );
     void SetCurrentMusic( const int mus );
     int CurrentMusic();
-    u32 & CastleAnimationFrame( void );
     u32 & MapsAnimationFrame( void );
     u32 GetRating( void );
     u32 GetGameOverScores( void );

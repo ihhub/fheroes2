@@ -34,7 +34,18 @@
 
 #include <cassert>
 
-//#define VIEWWORLD_DEBUG_ZOOM_LEVEL  // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+// #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+
+#if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
+#define SAVE_WORLD_MAP
+#include "image_tool.h"
+
+namespace
+{
+    const std::string saveFilePrefix = "_old";
+}
+
+#endif
 
 namespace
 {
@@ -162,7 +173,9 @@ namespace
                 drawingFlags &= ~Interface::RedrawLevelType::LEVEL_FOG;
             }
 
+#if !defined( SAVE_WORLD_MAP )
             drawingFlags ^= Interface::RedrawLevelType::LEVEL_HEROES;
+#endif
 
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
@@ -178,6 +191,10 @@ namespace
                     }
                 }
             }
+
+#if defined( SAVE_WORLD_MAP )
+            fheroes2::Save( cachedImages[3], Settings::Get().MapsName() + saveFilePrefix + ".bmp" );
+#endif
         }
     };
 
@@ -382,28 +399,78 @@ namespace
             return evil ? ICN::EVIWWRLD : ICN::VIEWWRLD;
         }
     }
+
+    void drawViewWorldSprite( const fheroes2::Sprite & viewWorldSprite, fheroes2::Display & display, const bool isEvilInterface )
+    {
+        const int32_t dstX = display.width() - viewWorldSprite.width() - BORDERWIDTH;
+        int32_t dstY = 2 * BORDERWIDTH + RADARWIDTH;
+        const int32_t cutHeight = 275;
+        fheroes2::Blit( viewWorldSprite, 0, 0, display, dstX, dstY, viewWorldSprite.width(), cutHeight );
+        dstY += cutHeight;
+
+        if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
+            const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
+            const int32_t startY = 11;
+            const int32_t copyHeight = 46;
+            const int32_t repeatHeight = display.height() - BORDERWIDTH - dstY - ( viewWorldSprite.height() - cutHeight );
+            const int32_t repeatCount = repeatHeight / copyHeight;
+            for ( int32_t i = 0; i < repeatCount; ++i ) {
+                fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), copyHeight );
+                dstY += copyHeight;
+            }
+            fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), repeatHeight % copyHeight );
+            dstY += repeatHeight % copyHeight;
+        }
+
+        fheroes2::Blit( viewWorldSprite, 0, cutHeight, display, dstX, dstY, viewWorldSprite.width(), viewWorldSprite.height() - cutHeight );
+    }
 }
 
 ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels )
     : _zoomLevel( zoomLevel )
     , _center( centerInPixels )
 {
+    updateZoomLevels();
+    updateCenter();
+}
+
+void ViewWorld::ZoomROIs::updateZoomLevels()
+{
     for ( int i = 0; i < 4; ++i ) {
         _roiForZoomLevels[i] = computeROI( _center, static_cast<ViewWorld::ZoomLevel>( i ) );
     }
 }
 
+bool ViewWorld::ZoomROIs::updateCenter()
+{
+    return ChangeCenter( _center );
+}
+
 bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
-    const fheroes2::Point newCenter( clamp( centerInPixels.x, 0, world.w() * TILEWIDTH ), clamp( centerInPixels.y, 0, world.h() * TILEWIDTH ) );
+    const fheroes2::Rect currentRect = GetROIinPixels();
+    const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
+    fheroes2::Point newCenter;
+
+    if ( worldSize.width <= currentRect.width ) {
+        newCenter.x = worldSize.width / 2;
+    }
+    else {
+        newCenter.x = clamp( centerInPixels.x, currentRect.width / 2, worldSize.width - currentRect.width / 2 );
+    }
+
+    if ( worldSize.height <= currentRect.height ) {
+        newCenter.y = worldSize.height / 2;
+    }
+    else {
+        newCenter.y = clamp( centerInPixels.y, currentRect.height / 2, worldSize.height - currentRect.height / 2 );
+    }
 
     if ( newCenter == _center ) {
         return false;
     }
     _center = newCenter;
-    for ( int i = 0; i < 4; ++i ) {
-        _roiForZoomLevels[i] = computeROI( _center, static_cast<ViewWorld::ZoomLevel>( i ) );
-    }
+    updateZoomLevels();
     return true;
 }
 
@@ -411,6 +478,7 @@ bool ViewWorld::ZoomROIs::changeZoom( const ZoomLevel newLevel )
 {
     const bool changed = ( newLevel != _zoomLevel );
     _zoomLevel = newLevel;
+    updateCenter();
     return changed;
 }
 
@@ -483,7 +551,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     // "View world" sprite
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
-    fheroes2::Blit( viewWorldSprite, display, display.width() - viewWorldSprite.width() - BORDERWIDTH, 2 * BORDERWIDTH + RADARWIDTH );
+    drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
 
     // Zoom button
     const fheroes2::Point buttonZoomPosition( display.width() - RADARWIDTH + 16, 2 * BORDERWIDTH + RADARWIDTH + 128 );
@@ -509,7 +577,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {
@@ -548,7 +616,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             DrawObjectsIcons( color, mode, currentROI );
             Interface::GameBorderRedraw( true );
             radar.RedrawForViewWorld( currentROI, mode );
-            fheroes2::Blit( viewWorldSprite, display, display.width() - viewWorldSprite.width() - BORDERWIDTH, 2 * BORDERWIDTH + RADARWIDTH );
+            drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
         }
     }

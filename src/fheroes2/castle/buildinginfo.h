@@ -31,7 +31,7 @@ class StatusBar;
 class BuildingInfo
 {
 public:
-    BuildingInfo( const Castle &, building_t );
+    BuildingInfo( const Castle & c, const building_t b );
 
     uint32_t getBuilding( void ) const;
     void SetPos( s32, s32 );

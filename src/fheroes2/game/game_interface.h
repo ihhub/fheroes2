@@ -104,11 +104,11 @@ namespace Interface
         void SetHideInterface( bool );
 
         void EventSwitchHeroSleeping( void );
-        void EventDefaultAction( void );
+        fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
         void EventOpenFocus( void ) const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;
-        void EventGameInfo( void ) const;
+        static fheroes2::GameMode EventGameInfo();
         void EventSystemDialog() const;
         void EventNextHero( void );
         void EventNextTown( void );
@@ -124,6 +124,7 @@ namespace Interface
         fheroes2::GameMode EventNewGame() const;
         fheroes2::GameMode EventLoadGame() const;
         fheroes2::GameMode EventAdventureDialog();
+        void EventViewWorld();
         fheroes2::GameMode EventFileDialog( void ) const;
         fheroes2::GameMode EventEndTurn() const;
         static fheroes2::GameMode EventExit();

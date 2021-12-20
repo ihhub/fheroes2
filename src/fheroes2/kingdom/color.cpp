@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "color.h"
 #include "players.h"
 #include "serialize.h"
@@ -45,7 +43,7 @@ std::string Color::String( int color )
     case Color::PURPLE:
         return _( "Purple" );
     case Color::UNUSED:
-        return "Uknown";
+        return "Unknown";
     }
 
     return "None";
@@ -156,16 +154,6 @@ Colors::Colors( int colors )
         push_back( Color::ORANGE );
     if ( colors & Color::PURPLE )
         push_back( Color::PURPLE );
-}
-
-std::string Colors::String( void ) const
-{
-    std::ostringstream os;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << Color::String( *it ) << ", ";
-
-    return os.str();
 }
 
 bool ColorBase::isFriends( int col ) const

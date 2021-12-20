@@ -126,7 +126,7 @@ void Interface::Basic::SetHideInterface( bool f )
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
-    gameArea.Build();
+    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
 }
 
 Interface::Basic & Interface::Basic::Get( void )
@@ -260,7 +260,10 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( spellROI & mp ) && tile.isClearGround() && water == tile.isWater() );
+                const MP2::MapObjectType objectType = tile.GetObject( true );
+                const bool isActionObject = MP2::isActionObject( objectType );
+
+                valid = ( ( spellROI & mp ) && !isActionObject && ( tile.GetPassable() & Direction::CENTER ) != 0 && water == tile.isWater() );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )

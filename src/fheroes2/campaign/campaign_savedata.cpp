@@ -28,12 +28,9 @@
 namespace Campaign
 {
     CampaignSaveData::CampaignSaveData()
-        : _finishedMaps()
-        , _obtainedCampaignAwards()
-        , _currentScenarioID( 0 )
+        : _currentScenarioID( 0 )
         , _campaignID( 0 )
         , _daysPassed( 0 )
-        , _currentScenarioBonus()
     {}
 
     CampaignSaveData & Campaign::CampaignSaveData::Get()
@@ -45,6 +42,11 @@ namespace Campaign
     void CampaignSaveData::addCampaignAward( const int awardID )
     {
         _obtainedCampaignAwards.emplace_back( awardID );
+    }
+
+    void CampaignSaveData::removeCampaignAward( const int awardID )
+    {
+        _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
     }
 
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
@@ -99,7 +101,7 @@ namespace Campaign
         return _finishedMaps.back();
     }
 
-    const std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
+    std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
     {
         std::vector<Campaign::CampaignAwardData> obtainedAwards;
 
@@ -112,18 +114,54 @@ namespace Campaign
             }
         }
 
+        const std::vector<Campaign::CampaignAwardData> extraAwards = Campaign::CampaignAwardData::getExtraCampaignAwardData( _campaignID );
+        for ( const Campaign::CampaignAwardData & award : extraAwards ) {
+            if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), award._id ) != _obtainedCampaignAwards.end() )
+                obtainedAwards.emplace_back( award );
+        }
+
         return obtainedAwards;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
+    StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
     {
         return msg << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed << data._obtainedCampaignAwards
                    << data._carryOverTroops;
     }
 
-    StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
+    StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
         return msg >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps >> data._campaignID >> data._daysPassed >> data._obtainedCampaignAwards
                >> data._carryOverTroops;
+    }
+
+    ScenarioVictoryCondition getCurrentScenarioVictoryCondition()
+    {
+        const CampaignSaveData & campaignData = CampaignSaveData::Get();
+
+        const std::vector<ScenarioData> & scenarios = CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            return scenarios[scenarioId].getVictoryCondition();
+        }
+
+        return ScenarioVictoryCondition::STANDARD;
+    }
+
+    ScenarioLossCondition getCurrentScenarioLossCondition()
+    {
+        const CampaignSaveData & campaignData = CampaignSaveData::Get();
+
+        const std::vector<ScenarioData> & scenarios = CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            return scenarios[scenarioId].getLossCondition();
+        }
+
+        return ScenarioLossCondition::STANDARD;
     }
 }

@@ -142,40 +142,40 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
 void Battle::Arena::ApplyAction( Command & cmd )
 {
     switch ( cmd.GetType() ) {
-    case MSG_BATTLE_CAST:
+    case CommandType::MSG_BATTLE_CAST:
         ApplyActionSpellCast( cmd );
         break;
-    case MSG_BATTLE_ATTACK:
+    case CommandType::MSG_BATTLE_ATTACK:
         ApplyActionAttack( cmd );
         break;
-    case MSG_BATTLE_MOVE:
+    case CommandType::MSG_BATTLE_MOVE:
         ApplyActionMove( cmd );
         break;
-    case MSG_BATTLE_SKIP:
+    case CommandType::MSG_BATTLE_SKIP:
         ApplyActionSkip( cmd );
         break;
-    case MSG_BATTLE_END_TURN:
+    case CommandType::MSG_BATTLE_END_TURN:
         ApplyActionEnd( cmd );
         break;
-    case MSG_BATTLE_MORALE:
+    case CommandType::MSG_BATTLE_MORALE:
         ApplyActionMorale( cmd );
         break;
 
-    case MSG_BATTLE_TOWER:
+    case CommandType::MSG_BATTLE_TOWER:
         ApplyActionTower( cmd );
         break;
-    case MSG_BATTLE_CATAPULT:
+    case CommandType::MSG_BATTLE_CATAPULT:
         ApplyActionCatapult( cmd );
         break;
 
-    case MSG_BATTLE_RETREAT:
+    case CommandType::MSG_BATTLE_RETREAT:
         ApplyActionRetreat( cmd );
         break;
-    case MSG_BATTLE_SURRENDER:
+    case CommandType::MSG_BATTLE_SURRENDER:
         ApplyActionSurrender( cmd );
         break;
 
-    case MSG_BATTLE_AUTO:
+    case CommandType::MSG_BATTLE_AUTO:
         ApplyActionAutoBattle( cmd );
         break;
 
@@ -293,15 +293,14 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
     const int32_t dst = cmd.GetValue();
-    const int32_t path_size = cmd.GetValue();
 
     Battle::Unit * b = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
 
     if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
-        Position pos1, pos2;
+        Position pos2;
         const s32 head = b->GetHeadIndex();
-        pos1 = Position::GetCorrect( *b, dst );
+        Position pos1 = Position::GetPositionWhenMoved( *b, dst );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 )
@@ -338,16 +337,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             pos2 = pos1;
         }
         else {
-            Indexes path;
-
-            // check path
-            if ( 0 == path_size ) {
-                path = GetPath( *b, pos1 );
-                cmd = Command( MSG_BATTLE_MOVE, b->GetUID(), dst, path );
-            }
-            else
-                for ( int index = 0; index < path_size; ++index )
-                    path.push_back( cmd.GetValue() );
+            const Indexes path = GetPath( *b, pos1 );
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -828,7 +818,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         for ( auto & tgt : targets ) {
             const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
-            if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
+            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
                 tgt.resist = true;
             }
         }
@@ -970,7 +960,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     const Spell spell( Spell::TELEPORT );
 
     if ( b ) {
-        Position pos = Position::GetCorrect( *b, dst );
+        Position pos = Position::GetPositionWhenMoved( *b, dst );
         if ( b->isReflect() != pos.isReflect() )
             pos.Swap();
 
@@ -1027,7 +1017,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         Indexes::const_iterator it
             = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
         if ( it != distances.end() ) {
-            const Position pos = Position::GetCorrect( *troop, *it );
+            const Position pos = Position::GetPositionWhenMoved( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
             if ( interface )

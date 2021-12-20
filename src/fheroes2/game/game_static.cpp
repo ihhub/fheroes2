@@ -117,60 +117,6 @@ namespace Skill
         /* estates */ 1,   /* leadership */ 0, /* logistics */ 1, /* luck */ 1,
         /* mysticism */ 1, /* navigation */ 1, /* necromancy*/ 0, /* pathfinding */ 1,
         /* scouting */ 1,  /* wisdom */ 1};
-
-    StreamBase & operator<<( StreamBase & msg, const level_t & obj )
-    {
-        return msg << obj.basic << obj.advanced << obj.expert;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, level_t & obj )
-    {
-        return msg >> obj.basic >> obj.advanced >> obj.expert;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const primary_t & obj )
-    {
-        return msg << obj.attack << obj.defense << obj.power << obj.knowledge;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, primary_t & obj )
-    {
-        return msg >> obj.attack >> obj.defense >> obj.power >> obj.knowledge;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const secondary_t & obj )
-    {
-        return msg << obj.archery << obj.ballistics << obj.diplomacy << obj.eagleeye << obj.estates << obj.leadership << obj.logistics << obj.luck << obj.mysticism
-                   << obj.navigation << obj.necromancy << obj.pathfinding << obj.scouting << obj.wisdom;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, secondary_t & obj )
-    {
-        return msg >> obj.archery >> obj.ballistics >> obj.diplomacy >> obj.eagleeye >> obj.estates >> obj.leadership >> obj.logistics >> obj.luck >> obj.mysticism
-               >> obj.navigation >> obj.necromancy >> obj.pathfinding >> obj.scouting >> obj.wisdom;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const stats_t & obj )
-    {
-        return msg << obj.captain_primary << obj.initial_primary << obj.initial_book << obj.initial_spell << obj.initial_secondary << obj.over_level
-                   << obj.mature_primary_under << obj.mature_primary_over << obj.mature_secondary;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, stats_t & obj )
-    {
-        return msg >> obj.captain_primary >> obj.initial_primary >> obj.initial_book >> obj.initial_spell >> obj.initial_secondary >> obj.over_level
-               >> obj.mature_primary_under >> obj.mature_primary_over >> obj.mature_secondary;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const values_t & obj )
-    {
-        return msg << obj.values;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, values_t & obj )
-    {
-        return msg >> obj.values;
-    }
 }
 
 namespace GameStatic
@@ -184,13 +130,6 @@ namespace GameStatic
 
     // kingdom
     u8 kingdom_max_heroes = 8;
-    cost_t kingdom_starting_resource[] = {{10000, 30, 10, 30, 10, 10, 10},
-                                          {7500, 20, 5, 20, 5, 5, 5},
-                                          {5000, 10, 2, 10, 2, 2, 2},
-                                          {2500, 5, 0, 5, 0, 0, 0},
-                                          {0, 0, 0, 0, 0, 0, 0},
-                                          // ai resource
-                                          {10000, 30, 10, 30, 10, 10, 10}};
 
     // castle
     u8 castle_grown_well = 2;
@@ -198,7 +137,7 @@ namespace GameStatic
     u8 castle_grown_week_of = 5;
     u8 castle_grown_month_of = 100;
 
-    u8 mageguild_restore_spell_points_day[] = {20, 40, 60, 80, 100};
+    const uint32_t mageguild_restore_spell_points_day[5] = { 20, 40, 60, 80, 100 };
 
     // heroes
     u8 heroes_spell_points_day = 1;
@@ -217,58 +156,6 @@ namespace GameStatic
 
     // world
     u32 uniq = 0;
-}
-
-StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
-    return msg;
-}
-
-StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_SECOND_PRE_095_RELEASE ) {
-        return msg;
-    }
-
-    msg >> whirlpool_lost_percent >> kingdom_max_heroes >> castle_grown_well >> castle_grown_wel2 >> castle_grown_week_of >> castle_grown_month_of
-        >> heroes_spell_points_day >> gameover_lost_days >> spell_dd_distance >> spell_dd_sp >> spell_dd_hp;
-
-    u8 array_size = 0;
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> overview_distance[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> kingdom_starting_resource[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> mageguild_restore_spell_points_day[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> objects_mod[ii];
-
-    msg >> monsterUpgradeRatio >> uniq;
-    if ( monsterUpgradeRatio < 0 ) {
-        monsterUpgradeRatio = 1.0f;
-    }
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> Skill::_stats[ii];
-
-    msg >> array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg >> Skill::_values[ii];
-
-    msg >> Skill::_from_witchs_hut;
-
-    return msg;
 }
 
 u32 GameStatic::GetLostOnWhirlpoolPercent( void )
@@ -418,12 +305,6 @@ const Skill::values_t * GameStatic::GetSkillValues( int type )
 const Skill::secondary_t * GameStatic::GetSkillForWitchsHut( void )
 {
     return &Skill::_from_witchs_hut;
-}
-
-GameStatic::Data & GameStatic::Data::Get( void )
-{
-    static Data gds;
-    return gds;
 }
 
 int GameStatic::GetBattleMoatReduceDefense( void )

@@ -173,9 +173,10 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
+    <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
-    <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
+    <ClCompile Include="src\engine\image_palette.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\logging.cpp" />
@@ -185,7 +186,6 @@
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
-    <ClCompile Include="src\engine\timer.cpp" />
     <ClCompile Include="src\engine\timing.cpp" />
     <ClCompile Include="src\engine\tinyconfig.cpp" />
     <ClCompile Include="src\engine\tools.cpp" />
@@ -235,6 +235,7 @@
     <ClCompile Include="src\fheroes2\castle\captain.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_building.cpp" />
+    <ClCompile Include="src\fheroes2\castle\castle_building_info.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_dialog.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_mageguild.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_tavern.cpp" />
@@ -348,6 +349,7 @@
     <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles_quantity.cpp" />
     <ClCompile Include="src\fheroes2\maps\mp2.cpp" />
+    <ClCompile Include="src\fheroes2\maps\mp2_helper.cpp" />
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
     <ClCompile Include="src\fheroes2\maps\visit.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
@@ -371,6 +373,7 @@
     <ClCompile Include="src\fheroes2\resource\resource.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_book.cpp" />
+    <ClCompile Include="src\fheroes2\spell\spell_info.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_storage.cpp" />
     <ClCompile Include="src\fheroes2\system\bitmodes.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
@@ -386,9 +389,10 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
+    <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
-    <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\image.h" />
+	<ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />
@@ -401,7 +405,6 @@
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\system.h" />
-    <ClInclude Include="src\engine\timer.h" />
     <ClInclude Include="src\engine\timing.h" />
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
@@ -442,6 +445,7 @@
     <ClInclude Include="src\fheroes2\castle\buildinginfo.h" />
     <ClInclude Include="src\fheroes2\castle\captain.h" />
     <ClInclude Include="src\fheroes2\castle\castle.h" />
+    <ClInclude Include="src\fheroes2\castle\castle_building_info.h" />
     <ClInclude Include="src\fheroes2\castle\castle_heroes.h" />
     <ClInclude Include="src\fheroes2\castle\castle_ui.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
@@ -516,6 +520,7 @@
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles.h" />
     <ClInclude Include="src\fheroes2\maps\mp2.h" />
+	<ClInclude Include="src\fheroes2\maps\mp2_helper.h" />
     <ClInclude Include="src\fheroes2\maps\pairs.h" />
     <ClInclude Include="src\fheroes2\maps\position.h" />
     <ClInclude Include="src\fheroes2\maps\visit.h" />
@@ -540,6 +545,7 @@
     <ClInclude Include="src\fheroes2\resource\resource.h" />
     <ClInclude Include="src\fheroes2\spell\spell.h" />
     <ClInclude Include="src\fheroes2\spell\spell_book.h" />
+    <ClInclude Include="src\fheroes2\spell\spell_info.h" />
     <ClInclude Include="src\fheroes2\spell\spell_storage.h" />
     <ClInclude Include="src\fheroes2\system\bitmodes.h" />
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />

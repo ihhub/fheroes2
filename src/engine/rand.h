@@ -38,13 +38,28 @@ namespace Rand
     std::mt19937 & CurrentThreadRandomDevice();
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
+
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
+
+    template <typename T, typename std::enable_if<std::is_enum<T>::value>::type * = nullptr>
+    T GetWithSeed( const T from, const T to, const uint32_t seed )
+    {
+        return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );
+    }
+
     uint32_t GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen );
 
     template <typename T>
     void Shuffle( std::vector<T> & vec )
     {
         std::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
+    }
+
+    template <typename T>
+    void ShuffleWithSeed( std::vector<T> & vec, uint32_t seed )
+    {
+        std::mt19937 seededGen( seed );
+        std::shuffle( vec.begin(), vec.end(), seededGen );
     }
 
     template <typename T>
@@ -95,6 +110,40 @@ namespace Rand
 
     private:
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc );
+    };
+
+    // Specific random generator that keeps and update its state
+    class DeterministicRandomGenerator
+    {
+    public:
+        explicit DeterministicRandomGenerator( const size_t initialSeed );
+
+        // prevent accidental copies
+        DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
+        DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
+
+        size_t GetSeed() const;
+        void UpdateSeed( const size_t seed );
+
+        uint32_t Get( const uint32_t from, const uint32_t to = 0 ) const;
+
+        template <typename T>
+        const T & Get( const std::vector<T> & vec ) const
+        {
+            ++_currentSeed;
+            std::mt19937 seededGen( static_cast<uint32_t>( _currentSeed ) );
+            return Rand::GetWithGen( vec, seededGen );
+        }
+
+        template <class T>
+        void Shuffle( std::vector<T> & vector ) const
+        {
+            ++_currentSeed;
+            Rand::ShuffleWithSeed( vector, static_cast<uint32_t>( _currentSeed ) );
+        }
+
+    private:
+        mutable size_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
     };
 }
 

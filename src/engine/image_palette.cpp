@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,27 +18,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SDLTIMER_H
-#define SDLTIMER_H
+#include "image_palette.h"
+#include "palette_h2.h"
 
-#include "types.h"
-#include <SDL.h>
+#include <algorithm>
+#include <array>
+#include <cassert>
 
-namespace SDL
+namespace
 {
-    class Timer
+    const size_t paletteSize = 768;
+
+    struct PaletteHolder
     {
-    public:
-        Timer();
+        PaletteHolder()
+        {
+            std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
+        }
 
-        bool IsValid() const;
-
-        void Run( u32, u32 ( * )( u32, void * ), void * param = nullptr );
-        void Remove();
-
-    private:
-        SDL_TimerID id;
+        std::array<uint8_t, paletteSize> gamePalette;
     };
+
+    PaletteHolder paletteHolder;
 }
 
-#endif
+namespace fheroes2
+{
+    const uint8_t * getGamePalette()
+    {
+        return paletteHolder.gamePalette.data();
+    }
+
+    void setGamePalette( const std::vector<uint8_t> & palette )
+    {
+        assert( palette.size() == paletteSize );
+        if ( palette.size() != paletteSize ) {
+            return;
+        }
+
+        std::copy_n( palette.begin(), paletteSize, paletteHolder.gamePalette.begin() );
+    }
+}

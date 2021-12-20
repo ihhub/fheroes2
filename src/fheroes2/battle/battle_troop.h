@@ -35,6 +35,11 @@
 class Spell;
 class HeroBase;
 
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
+
 namespace Battle
 {
     struct TargetInfo;
@@ -70,7 +75,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop &, s32 pos, bool reflect );
+        Unit( const Troop &, int32_t pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Unit( const Unit & ) = default;
 
         ~Unit() override;
@@ -127,7 +132,7 @@ namespace Battle
         int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
-        u32 GetSpeed( bool skip_standing_check ) const;
+        u32 GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
         int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
@@ -196,7 +201,7 @@ namespace Battle
         AnimationState animation;
 
     private:
-        u32 uid;
+        const uint32_t _uid;
         u32 hp;
         u32 count0;
         u32 dead;
@@ -211,6 +216,8 @@ namespace Battle
 
         bool blindanswer;
         uint32_t customAlphaMask;
+
+        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 

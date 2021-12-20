@@ -187,6 +187,8 @@ public:
 
     Monster GetStrongestMonster() const;
 
+    void resetInvalidMonsters();
+
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );

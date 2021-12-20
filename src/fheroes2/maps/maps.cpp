@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "ai.h"
 #include "difficulty.h"
@@ -123,22 +124,20 @@ struct ComparisonDistance
 
 const char * Maps::SizeString( int s )
 {
-    const char * mapsize[] = { "Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" ) };
-
     switch ( s ) {
     case SMALL:
-        return mapsize[1];
+        return _( "maps|Small" );
     case MEDIUM:
-        return mapsize[2];
+        return _( "maps|Medium" );
     case LARGE:
-        return mapsize[3];
+        return _( "maps|Large" );
     case XLARGE:
-        return mapsize[4];
+        return _( "maps|Extra Large" );
     default:
         break;
     }
 
-    return mapsize[5];
+    return _( "maps|Custom Size" );
 }
 
 const char * Maps::GetMinesName( int type )
@@ -290,59 +289,33 @@ int32_t Maps::GetIndexFromAbsPoint( const int32_t x, const int32_t y )
     return y * world.w() + x;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( int32_t center )
-{
-    Indexes result;
-    if ( !isValidAbsIndex( center ) )
-        return result;
-
-    result.reserve( 8 );
-    const int width = world.w();
-    const int x = center % width;
-    const int y = center / width;
-
-    if ( y > 0 ) {
-        if ( x > 0 )
-            result.push_back( center - width - 1 );
-
-        result.push_back( center - width );
-
-        if ( x < width - 1 )
-            result.push_back( center - width + 1 );
-    }
-
-    if ( x > 0 )
-        result.push_back( center - 1 );
-    if ( x < width - 1 )
-        result.push_back( center + 1 );
-
-    if ( y < world.h() - 1 ) {
-        if ( x > 0 )
-            result.push_back( center + width - 1 );
-
-        result.push_back( center + width );
-
-        if ( x < width - 1 )
-            result.push_back( center + width + 1 );
-    }
-
-    return result;
-}
-
-Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile )
+Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile /* = 1 */ )
 {
     Indexes results;
-    results.reserve( maxDistanceFromTile * 12 );
 
-    const int32_t width = world.w();
-    const int32_t size = world.h() * width;
+    if ( !isValidAbsIndex( tileIndex ) || maxDistanceFromTile <= 0 ) {
+        return results;
+    }
+
+    results.reserve( ( maxDistanceFromTile * 2 + 1 ) * ( maxDistanceFromTile * 2 + 1 ) - 1 );
+
+    assert( world.w() > 0 );
+
+    const int32_t centerX = tileIndex % world.w();
+    const int32_t centerY = tileIndex / world.w();
 
     for ( int32_t y = -maxDistanceFromTile; y <= maxDistanceFromTile; ++y ) {
         for ( int32_t x = -maxDistanceFromTile; x <= maxDistanceFromTile; ++x ) {
-            const int32_t tileId = tileIndex + y * width + x;
+            // the central tile is not included
+            if ( x == 0 && y == 0 ) {
+                continue;
+            }
 
-            if ( tileId >= 0 && tileId < size && tileId != tileIndex ) {
-                results.push_back( tileId );
+            const int32_t tileX = centerX + x;
+            const int32_t tileY = centerY + y;
+
+            if ( isValidAbsPoint( tileX, tileY ) ) {
+                results.push_back( tileY * world.w() + tileX );
             }
         }
     }
@@ -389,26 +362,26 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes )
 {
-    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType, ignoreHeroes );
 }
 
 Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 {
-    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    Indexes results = getAroundIndexes( center );
     results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
     return results;
 }
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
-    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType );
 }
 
 Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType )
 {
-    Indexes results = Maps::getAroundIndexes( center, dist );
+    Indexes results = getAroundIndexes( center, dist );
     std::sort( results.begin(), results.end(), ComparisonDistance( center ) );
     return MapsIndexesFilteredObject( results, objectType );
 }
@@ -573,14 +546,14 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         break;
     }
 
+    const int castleCoordinates[16][2] = { { 0, -3 }, { -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 }, { -2, -1 }, { -1, -1 },
+                                           { 0, -1 }, { 1, -1 },  { 2, -1 },  { -2, 0 }, { -1, 0 }, { 0, 0 },  { 1, 0 },   { 2, 0 } };
+    const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
+                                           { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
+
     for ( int index = 0; index < 16; ++index ) {
         const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
         const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
-
-        static const int castleCoordinates[16][2] = { { 0, -3 }, { -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 }, { -2, -1 }, { -1, -1 },
-                                                      { 0, -1 }, { 1, -1 },  { 2, -1 },  { -2, 0 }, { -1, 0 }, { 0, 0 },  { 1, 0 },   { 2, 0 } };
-        static const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
-                                                      { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {

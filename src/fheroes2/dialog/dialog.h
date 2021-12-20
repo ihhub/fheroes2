@@ -37,6 +37,7 @@
 
 class Castle;
 class Kingdom;
+class HeroBase;
 class Heroes;
 class Artifact;
 class Spell;
@@ -86,14 +87,14 @@ namespace Dialog
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
     // show info cell maps
-    void QuickInfo( const Maps::Tiles & tile );
+    void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
     void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     void QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
     bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );
-    void SpellInfo( const Spell &, bool ok_button = true );
+    void SpellInfo( const Spell & spell, const HeroBase * hero, const bool showOkayButton );
     void SpellInfo( const std::string &, const std::string &, const Spell &, bool ok_button = true );
     void SecondarySkillInfo( const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
     void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
@@ -103,8 +104,8 @@ namespace Dialog
     int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
-    bool InputString( const std::string &, std::string &, const std::string & title = std::string() );
-    Troop RecruitMonster( const Monster &, u32 available, bool );
+    bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
+    Troop RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, u32 available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int TroopUpgrade( const Troop & troop, const bool cannotAfford );

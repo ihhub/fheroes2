@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -40,6 +41,13 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+
+namespace
+{
+    const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
+        = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
+              { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+}
 
 enum
 {
@@ -370,6 +378,10 @@ int Artifact::LoyaltyLevel( void ) const
 
 int Artifact::Level( void ) const
 {
+    if ( isUltimate() ) {
+        return ART_ULTIMATE;
+    }
+
     switch ( id ) {
     case MEDAL_VALOR:
     case MEDAL_COURAGE:
@@ -391,13 +403,13 @@ int Artifact::Level( void ) const
     case HOLY_PENDANT:
     case PENDANT_FREE_WILL:
     case PENDANT_LIFE:
+    case SERENITY_PENDANT:
+    case SEEING_EYE_PENDANT:
+    case KINETIC_PENDANT:
     case PENDANT_DEATH:
     case GOLDEN_BOW:
     case TELESCOPE:
-    case SERENITY_PENDANT:
     case STATESMAN_QUILL:
-    case KINETIC_PENDANT:
-    case SEEING_EYE_PENDANT:
         return ART_LEVEL1;
 
     case CASTER_BRACELET:
@@ -407,20 +419,21 @@ int Artifact::Level( void ) const
     case MINOR_SCROLL:
     case ENDLESS_PURSE_GOLD:
     case SAILORS_ASTROLABE_MOBILITY:
+    case EVIL_EYE:
+    case GOLD_WATCH:
+    case SKULLCAP:
+    case EVERCOLD_ICICLE:
+    case EVERHOT_LAVA_ROCK:
+    case LIGHTNING_ROD:
+    case ANKH:
+    case BOOK_ELEMENTS:
+    case ELEMENTAL_RING:
+    case POWER_RING:
+    case AMMO_CART:
     case ENDLESS_CORD_WOOD:
     case ENDLESS_CART_ORE:
     case SPIKED_HELM:
     case WHITE_PEARL:
-    case EVIL_EYE:
-    case GOLD_WATCH:
-    case ANKH:
-    case BOOK_ELEMENTS:
-    case ELEMENTAL_RING:
-    case SKULLCAP:
-    case EVERCOLD_ICICLE:
-    case POWER_RING:
-    case AMMO_CART:
-    case EVERHOT_LAVA_ROCK:
         return ART_LEVEL2;
 
     case ARCANE_NECKLACE:
@@ -436,26 +449,15 @@ int Artifact::Level( void ) const
     case NOMAD_BOOTS_MOBILITY:
     case TRAVELER_BOOTS_MOBILITY:
     case TRUE_COMPASS_MOBILITY:
-    case ENDLESS_POUCH_SULFUR:
-    case ENDLESS_POUCH_GEMS:
-    case ENDLESS_POUCH_CRYSTAL:
-    case ENDLESS_VIAL_MERCURY:
-    case SPIKED_SHIELD:
-    case BLACK_PEARL:
-    case LIGHTNING_ROD:
     case WAND_NEGATION:
     case WIZARD_HAT:
+    case ENDLESS_POUCH_SULFUR:
+    case ENDLESS_VIAL_MERCURY:
+    case ENDLESS_POUCH_GEMS:
+    case ENDLESS_POUCH_CRYSTAL:
+    case SPIKED_SHIELD:
+    case BLACK_PEARL:
         return ART_LEVEL3;
-
-    case ULTIMATE_BOOK:
-    case ULTIMATE_SWORD:
-    case ULTIMATE_CLOAK:
-    case ULTIMATE_WAND:
-    case ULTIMATE_SHIELD:
-    case ULTIMATE_STAFF:
-    case ULTIMATE_CROWN:
-    case GOLDEN_GOOSE:
-        return ART_ULTIMATE;
 
     // no random
     case MAGIC_BOOK:
@@ -720,27 +722,16 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     return false;
 }
 
+void BagArtifacts::RemoveArtifact( const Artifact & art )
+{
+    iterator it = std::find( begin(), end(), art );
+    if ( it != end() )
+        ( *it ).Reset();
+}
+
 bool BagArtifacts::isFull( void ) const
 {
     return end() == std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-}
-
-bool BagArtifacts::MakeBattleGarb( void )
-{
-    iterator it1, it2, it3;
-    it1 = std::find( begin(), end(), Artifact( Artifact::BREASTPLATE_ANDURAN ) );
-    it2 = std::find( begin(), end(), Artifact( Artifact::HELMET_ANDURAN ) );
-    it3 = std::find( begin(), end(), Artifact( Artifact::SWORD_ANDURAN ) );
-    if ( it1 == end() || it2 == end() || it3 == end() )
-        return false;
-
-    *it1 = Artifact::UNKNOWN;
-    *it2 = Artifact::UNKNOWN;
-    *it3 = Artifact::UNKNOWN;
-
-    PushArtifact( Artifact::BATTLE_GARB );
-
-    return true;
 }
 
 u32 BagArtifacts::CountArtifacts( void ) const
@@ -807,12 +798,14 @@ void BagArtifacts::RemoveScroll( const Artifact & art )
 
 std::string BagArtifacts::String( void ) const
 {
-    std::ostringstream os;
+    std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << ( *it ).GetName() << ", ";
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        output += it->GetName();
+        output += ", ";
+    }
 
-    return os.str();
+    return output;
 }
 
 u32 BagArtifacts::Count( const Artifact & art ) const
@@ -882,7 +875,12 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
         SetItemSize( sprite.width(), sprite.height() );
-        spcursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+
+        spcursor.resize( 70, 70 );
+        spcursor.reset();
+        fheroes2::DrawRect( spcursor, { 0, 0, 70, 70 }, 190 );
+        fheroes2::DrawRect( spcursor, { 1, 1, 68, 68 }, 180 );
+        fheroes2::DrawRect( spcursor, { 2, 2, 66, 66 }, 190 );
     }
 }
 
@@ -987,8 +985,6 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*curs
             DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
         else if ( _hero->CanLearnSpell( spell ) ) {
-            payment_t cost = spell.GetCost();
-            u32 answer = 0;
             std::string text = _(
                 "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
 
@@ -996,18 +992,12 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*curs
             StringReplace( text, "%{sp}", spell.SpellPoint() );
 
             if ( spell.MovePoint() ) {
-                text.append( "\n" );
-                text.append( "Move point: %{mp}" );
+                text += '\n';
+                text.append( _( "Move points: %{mp}" ) );
                 StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
-            const std::string title = _( "Transcribe Spell Scroll" );
-
-            if ( cost.GetValidItemsCount() )
-                answer = Dialog::ResourceInfo( title, text, cost, Dialog::YES | Dialog::NO );
-            else
-                answer = Dialog::Message( title, text, Font::BIG, Dialog::YES | Dialog::NO );
-
+            const uint32_t answer = Dialog::Message( _( "Transcribe Spell Scroll" ), text, Font::BIG, Dialog::YES | Dialog::NO );
             if ( answer == Dialog::YES )
                 const_cast<Heroes *>( _hero )->TranscribeScroll( art );
         }
@@ -1135,4 +1125,44 @@ bool ArtifactsBar::isMagicBook( const Artifact & artifact )
 void ArtifactsBar::messageMagicBookAbortTrading() const
 {
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
+}
+
+ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
+    : _assembledArtifactID( artifactID )
+    , _assembleMessage( assembleMessage )
+{}
+
+std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
+{
+    std::set<ArtifactSetData> assembledArtifactSets;
+
+    for ( const auto & setData : artifactSets ) {
+        bool foundAllArtifacts = true;
+        while ( foundAllArtifacts ) {
+            for ( const int artifactId : setData.second ) {
+                if ( std::find( begin(), end(), Artifact( artifactId ) ) == end() ) {
+                    foundAllArtifacts = false;
+                    break;
+                }
+            }
+
+            if ( !foundAllArtifacts )
+                break;
+
+            // At this point, we have confirmed that all the artifact parts are present
+            // so remove the parts and then add the assembled artifact to BagArtifacts
+            for ( const int artifactId : setData.second )
+                RemoveArtifact( artifactId );
+
+            assembledArtifactSets.insert( setData.first );
+            PushArtifact( setData.first._assembledArtifactID );
+        }
+    }
+
+    return assembledArtifactSets;
+}
+
+bool ArtifactSetData::operator<( const ArtifactSetData & other ) const
+{
+    return _assembledArtifactID < other._assembledArtifactID;
 }

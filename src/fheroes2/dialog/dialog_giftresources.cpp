@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <sstream>
-
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -133,10 +131,7 @@ struct ResourceBar
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
     {
-        std::ostringstream os;
-
-        os << count;
-        Text text( os.str(), Font::SMALL );
+        Text text( std::to_string( count ), Font::SMALL );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::GetIndexSprite2( type ) );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
         text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
@@ -210,7 +205,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::StandardWindow frameborder( 320, 224 );
+    const fheroes2::StandardWindow frameborder( 320, 234 );
     const fheroes2::Rect box( frameborder.activeArea() );
 
     Funds funds1( kingdom.GetFunds() );
@@ -235,9 +230,24 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     ResourceBar info2( funds2, box.x + 25, box.y + 150 );
     info2.Redraw();
 
-    fheroes2::ButtonGroup btnGroups( box, Dialog::OK | Dialog::CANCEL );
-    btnGroups.button( 0 ).disable();
-    btnGroups.draw();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
+
+    const int32_t border = 10;
+    fheroes2::ButtonGroup btnGroup;
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkSprite.height(), buttonOkSprite,
+                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
+                        Dialog::OK );
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelSprite.width(),
+                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
+                        Dialog::CANCEL );
+    btnGroup.button( 0 ).disable();
+
+    btnGroup.draw();
 
     display.render();
 
@@ -246,13 +256,15 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     // message loop
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        result = btnGroup.processEvents();
+
         if ( selector.QueueEventProcessing() ) {
             u32 new_count = Color::Count( selector.recipients );
 
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
-                btnGroups.button( 0 ).disable();
+                btnGroup.button( 0 ).disable();
             else
-                btnGroups.button( 0 ).enable();
+                btnGroup.button( 0 ).enable();
 
             if ( count != new_count ) {
                 funds1 = kingdom.GetFunds();
@@ -262,23 +274,21 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
                 count = new_count;
             }
 
-            btnGroups.draw();
+            btnGroup.draw();
             selector.Redraw();
             display.render();
         }
         else if ( info2.QueueEventProcessing( funds1, count ) ) {
             if ( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() )
-                btnGroups.button( 0 ).disable();
+                btnGroup.button( 0 ).disable();
             else
-                btnGroups.button( 0 ).enable();
+                btnGroup.button( 0 ).enable();
 
             info1.Redraw();
             info2.Redraw();
-            btnGroups.draw();
+            btnGroup.draw();
             display.render();
         }
-
-        result = btnGroups.processEvents();
     }
 
     if ( Dialog::OK == result ) {
@@ -290,7 +300,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         event.subsequent = 0;
         event.colors = selector.recipients;
         event.message = _( "Gift from %{name}" );
-        const Player * player = Settings::Get().GetPlayers().Get( kingdom.GetColor() );
+        const Player * player = Players::Get( kingdom.GetColor() );
         if ( player )
             StringReplace( event.message, "%{name}", player->GetName() );
 

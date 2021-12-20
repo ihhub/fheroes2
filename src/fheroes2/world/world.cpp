@@ -43,6 +43,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -50,6 +51,7 @@ namespace
     bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
+
         for ( const int32_t indexId : indexes ) {
             if ( excludeTiles.count( indexId ) > 0 ) {
                 return true;
@@ -73,33 +75,30 @@ namespace
     {
         std::vector<int32_t> suitableIds;
 
-        if ( allDirections ) {
-            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
-            for ( const int32_t indexId : tiles ) {
-                const Maps::Tiles & indexedTile = mapTiles[indexId];
-                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
-                    continue;
-                }
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
 
-                suitableIds.emplace_back( indexId );
+        for ( const int32_t indexId : indexes ) {
+            // If allDirections is false, we should only consider tiles below the current object
+            if ( !allDirections && indexId < tileId + world.w() - 2 ) {
+                continue;
             }
-        }
-        else {
-            const int32_t width = world.w();
-            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
-            for ( const int32_t indexId : tiles ) {
-                if ( indexId < tileId + width - 2 ) {
-                    // Only tiles which are lower than current object.
-                    continue;
-                }
 
-                const Maps::Tiles & indexedTile = mapTiles[indexId];
-                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
-                    continue;
-                }
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
 
-                suitableIds.emplace_back( indexId );
+            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                continue;
             }
+
+            // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
+            if ( indexedTile.GetObject( false ) == MP2::OBJ_COAST ) {
+                const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
+
+                if ( coastTiles.empty() ) {
+                    continue;
+                }
+            }
+
+            suitableIds.emplace_back( indexId );
         }
 
         if ( suitableIds.empty() ) {
@@ -112,8 +111,10 @@ namespace
     int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
-        const MapsIndexes & suitableIds = Maps::GetAroundIndexes( tileId );
-        for ( const int32_t indexId : suitableIds ) {
+
+        const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
+
+        for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
                 continue;
@@ -292,8 +293,10 @@ void CapturedObjects::ResetColor( int color )
         ObjectColor & objcol = ( *it ).second.objcol;
 
         if ( objcol.isColor( color ) ) {
-            objcol.second = Color::UNUSED;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( static_cast<MP2::MapObjectType>( objcol.first ), objcol.second );
+            const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
+
+            objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
+            world.GetTiles( ( *it ).first ).CaptureFlags32( objectType, objcol.second );
         }
     }
 }
@@ -334,6 +337,8 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
+    week_next = Week::RandomWeek( *this, false, _weekSeed );
+
     // initialize all heroes
     vec_heroes.Init();
 
@@ -342,6 +347,9 @@ void World::Defaults( void )
 
 void World::Reset( void )
 {
+    width = 0;
+    height = 0;
+
     // maps tiles
     vec_tiles.clear();
 
@@ -371,8 +379,8 @@ void World::Reset( void )
     week = 0;
     month = 0;
 
-    week_current = Week::TORTOISE;
-    week_next = Week::WeekRand();
+    week_current = Week( WeekName::TORTOISE );
+    week_next = Week::RandomWeek( *this, false, _weekSeed );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -409,15 +417,15 @@ void World::NewMaps( int32_t sw, int32_t sh )
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.tileIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
+        mp2tile.surfaceType = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
-        mp2tile.indexName1 = 0xff; // index sprite level 1
+        mp2tile.level1IcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
-        mp2tile.indexName2 = 0xff; // index sprite level 2
+        mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
         mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObject = MP2::OBJ_ZERO;
+        mp2tile.mapObjectType = MP2::OBJ_ZERO;
         mp2tile.nextAddonIndex = 0;
         mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
         mp2tile.level2ObjectUID = 0;
@@ -640,61 +648,63 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+
         pickRumor();
 
-        if ( BeginMonth() )
+        if ( BeginMonth() ) {
             ++month;
+        }
     }
 
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
-        // reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
-        hero->ResetModes( Heroes::SAVE_MP_POINTS );
-        // replenish spell points of all heroes
-        hero->ReplenishSpellPoints();
-    } );
-
-    // action new day
-    vec_kingdoms.NewDay();
-
-    // action new week
-    if ( BeginWeek() ) {
-        NewWeek();
-        vec_kingdoms.NewWeek();
-    }
-
-    // action new month
+    // first the routine of the new month
     if ( BeginMonth() ) {
         NewMonth();
+
         vec_kingdoms.NewMonth();
+        vec_castles.NewMonth();
+        vec_heroes.NewMonth();
     }
 
+    // then the routine of the new week
+    if ( BeginWeek() ) {
+        NewWeek();
+
+        vec_kingdoms.NewWeek();
+        vec_castles.NewWeek();
+        vec_heroes.NewWeek();
+    }
+
+    // and finally the routine of the new day
+    vec_kingdoms.NewDay();
+    vec_castles.NewDay();
+    vec_heroes.NewDay();
+
     // remove deprecated events
-    if ( day )
-        vec_eventsday.remove_if( [&]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+    assert( day > 0 );
+
+    vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
 {
+    // update week seed: it depends on the current day and the state of the map
+    _weekSeed = _seed;
+    fheroes2::hashCombine( _weekSeed, day );
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
+    }
+
     // update week type
-    week_current = week_next;
-    const int type = LastWeek() ? Week::MonthRand() : Week::WeekRand();
-    if ( Week::MONSTERS == type )
-        week_next = Week( type, LastWeek() ? Monster::Rand4MonthOf() : Monster::Rand4WeekOf() );
-    else
-        week_next = Week( type );
-
+    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
     week_current = week_next;
 
-    if ( 1 < week ) {
-        // update week object
-        for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-            if ( MP2::isWeekLife( ( *it ).GetObject( false ) ) || MP2::OBJ_MONSTER == ( *it ).GetObject() )
-                ( *it ).QuantityUpdate( false );
-
-        // update gray towns
-        for ( auto & castle : vec_castles )
-            if ( castle->GetColor() == Color::NONE )
-                castle->ActionNewWeek();
+    // update objects
+    if ( week > 1 ) {
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+                tile.QuantityUpdate( false );
+            }
+        }
     }
 
     // add events
@@ -707,14 +717,9 @@ void World::NewWeek( void )
 
 void World::NewMonth( void )
 {
-    // skip first month
-    if ( 1 < week && week_current.GetType() == Week::MONSTERS )
+    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
-
-    // update gray towns
-    for ( auto & castle : vec_castles )
-        if ( castle->GetColor() == Color::NONE )
-            castle->ActionNewMonth();
+    }
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )
@@ -1005,8 +1010,8 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
     // puts hole sprite
-    int obj = 0;
-    u32 idx = 0;
+    uint8_t obj = 0;
+    uint32_t idx = 0;
 
     switch ( tile.GetGround() ) {
     case Maps::Ground::WASTELAND:
@@ -1060,11 +1065,14 @@ EventsDate World::GetEventsDate( int color ) const
 
 std::string World::DateString( void ) const
 {
-    std::ostringstream os;
-    os << "month: " << GetMonth() << ", "
-       << "week: " << GetWeek() << ", "
-       << "day: " << GetDay();
-    return os.str();
+    std::string output( "month: " );
+    output += std::to_string( GetMonth() );
+    output += ", week: ";
+    output += std::to_string( GetWeek() );
+    output += ", day: ";
+    output += std::to_string( GetDay() );
+
+    return output;
 }
 
 u32 World::CountObeliskOnMaps( void )
@@ -1075,9 +1083,13 @@ u32 World::CountObeliskOnMaps( void )
 
 void World::ActionForMagellanMaps( int color )
 {
-    for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-        if ( ( *it ).isWater() )
-            ( *it ).ClearFog( color );
+    const int alliedColors = Players::GetPlayerFriends( color );
+
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        if ( tile.isWater() ) {
+            tile.ClearFog( alliedColors );
+        }
+    }
 }
 
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
@@ -1207,23 +1219,14 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     const Settings & conf = Settings::Get();
 
     if ( conf.isCampaignGameType() ) {
-        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
-
-        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-        const int scenarioId = campaignData.getCurrentScenarioID();
-        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
-
-        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-                const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
-                if ( visited ) {
-                    return GameOver::WINS_SIDE;
-                }
-                else {
-                    return GameOver::COND_NONE;
-                }
+        const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
+        if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+            if ( visited ) {
+                return GameOver::WINS_SIDE;
             }
+
+            return GameOver::COND_NONE;
         }
     }
 
@@ -1260,29 +1263,21 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
-        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+        const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
+        if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+            const KingdomCastles & castles = kingdom.GetCastles();
+            bool hasSorceressVillage = false;
 
-        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
-        const int scenarioId = campaignData.getCurrentScenarioID();
-        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+            for ( size_t i = 0; i < castles.size(); ++i ) {
+                if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
+                    continue;
 
-        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-            const Campaign::ScenarioLossCondition lossCondition = scenarios[scenarioId].getLossCondition();
-            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-                const KingdomCastles & castles = kingdom.GetCastles();
-                bool hasSorceressVillage = false;
-
-                for ( size_t i = 0; i < castles.size(); ++i ) {
-                    if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
-                        continue;
-
-                    hasSorceressVillage = true;
-                    break;
-                }
-
-                if ( !hasSorceressVillage )
-                    return GameOver::LOSS_ALL;
+                hasSorceressVillage = true;
+                break;
             }
+
+            if ( !hasSorceressVillage )
+                return GameOver::LOSS_ALL;
         }
     }
 
@@ -1421,13 +1416,6 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             objs[index] = ptr;
             break;
         }
-
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_MONSTER:
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
-            assert( 0 );
-            break;
 
         default: {
             MapObjectSimple * ptr = new MapObjectSimple();

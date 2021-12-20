@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
 
 #include "agg.h"
@@ -118,7 +119,7 @@ namespace AI
     void AIToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToPyramid( Heroes & hero, s32 dst_index );
-    void AIToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+    void AIToGoodLuckObject( Heroes & hero, s32 dst_index );
     void AIToObelisk( Heroes & hero, const Maps::Tiles & tile );
     void AIToTreeKnowledge( Heroes & hero, s32 dst_index );
     void AIToDaemonCave( Heroes & hero, s32 dst_index );
@@ -139,6 +140,7 @@ namespace AI
     void AIWhirlpoolTroopLooseEffect( Heroes & hero );
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
+    void AIToAlchemistTower( Heroes & hero );
 
     int AISelectPrimarySkill( const Heroes & hero )
     {
@@ -362,7 +364,7 @@ namespace AI
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_IDOL:
         case MP2::OBJ_MERMAID:
-            AIToGoodLuckObject( hero, objectType, dst_index );
+            AIToGoodLuckObject( hero, dst_index );
             break;
 
         // morale modification
@@ -472,13 +474,15 @@ namespace AI
         case MP2::OBJ_HUTMAGI:
             AIToHutMagi( hero, objectType, dst_index );
             break;
+        case MP2::OBJ_ALCHEMYTOWER:
+            AIToAlchemistTower( hero );
+            break;
 
         case MP2::OBJ_ORACLE:
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_SIRENS:
-        case MP2::OBJ_ALCHEMYTOWER:
             // AI has no advantage or knowledge to use this object.
             break;
         default:
@@ -497,12 +501,11 @@ namespace AI
 
     void AIToHeroes( Heroes & hero, s32 dst_index )
     {
-        const Settings & conf = Settings::Get();
         Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
         if ( !other_hero )
             return;
 
-        if ( hero.GetColor() == other_hero->GetColor() || ( conf.ExtUnionsAllowHeroesMeetings() && Players::isFriends( hero.GetColor(), other_hero->GetColor() ) ) ) {
+        if ( hero.GetColor() == other_hero->GetColor() ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() );
             AIMeeting( hero, *other_hero );
         }
@@ -545,7 +548,6 @@ namespace AI
 
     void AIToCastle( Heroes & hero, s32 dst_index )
     {
-        const Settings & conf = Settings::Get();
         Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
         if ( castle == nullptr ) {
             // Something is wrong while calling this function for incorrect tile.
@@ -553,7 +555,7 @@ namespace AI
             return;
         }
 
-        if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
+        if ( hero.GetColor() == castle->GetColor() ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
             castle->MageGuildEducateHero( hero );
             hero.SetVisited( dst_index );
@@ -726,8 +728,16 @@ namespace AI
 
             if ( gold ) {
                 const u32 expr = gold > 500 ? gold - 500 : 500;
-                // Only 10% chance of choosing experience. Make AI rich!
-                if ( Rand::Get( 1, 10 ) == 1 ) {
+
+                if ( hero.getAIRole() == Heroes::Role::HUNTER ) {
+                    // Only 10% chance of choosing experience. Make AI rich!
+                    if ( Rand::Get( 1, 10 ) == 1 ) {
+                        gold = 0;
+                        hero.IncreaseExperience( expr );
+                    }
+                }
+                else if ( Rand::Get( 1, 2 ) == 1 ) {
+                    // 50/50 chance.
                     gold = 0;
                     hero.IncreaseExperience( expr );
                 }
@@ -815,7 +825,6 @@ namespace AI
                 const Troop & troop = tile.QuantityTroop();
                 Army army;
                 army.JoinTroop( troop );
-                army.SetColor( tile.QuantityColor() );
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
 
@@ -875,6 +884,7 @@ namespace AI
 
         if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
+            hero.setVisitedForAllies( dst_index );
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
         }
@@ -882,23 +892,38 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToTeleports( Heroes & hero, s32 index_from )
+    void AIToTeleports( Heroes & hero, const int32_t startIndex )
     {
-        int indexTo = world.NextTeleport( index_from );
+        MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
 
         const Route::Path & path = hero.GetPath();
         if ( !path.empty() ) {
-            const int dest = path.front().GetIndex();
-            while ( indexTo != dest ) {
-                indexTo = world.NextTeleport( index_from );
-                const Maps::Tiles & tile = world.GetTiles( indexTo );
-                if ( index_from == indexTo || tile.isFog( hero.GetColor() ) || tile.GetObject() == MP2::OBJ_HEROES )
-                    break;
-            }
+            // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
+            // So we get the list of them and remove those which are unsuitable.
+            const int32_t endIndex = path.front().GetIndex();
+            const int32_t heroColor = hero.GetColor();
+
+            teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
+                                             [endIndex, heroColor]( const int32_t index ) {
+                                                 if ( endIndex == index ) {
+                                                     return false;
+                                                 }
+                                                 const Maps::Tiles & tile = world.GetTiles( index );
+                                                 assert( tile.GetObject() != MP2::OBJ_HEROES );
+
+                                                 return !tile.isFog( heroColor );
+                                             } ),
+                             teleports.end() );
         }
 
-        if ( index_from == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
+        if ( teleports.empty() ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
+            return;
+        }
+
+        const int32_t indexTo = Rand::Get( teleports );
+        if ( startIndex == indexTo ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has teleportation tile the same as starting position: " << startIndex );
             return;
         }
 
@@ -1064,18 +1089,17 @@ namespace AI
              // check valid level spell and wisdom skill
              !( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
             hero.AppendSpellToBook( spell );
-
-            // All heroes will know which spell is here.
-            hero.SetVisited( dst_index, Visit::GLOBAL );
         }
+
+        // All heroes will know which spell is here.
+        hero.SetVisited( dst_index, Visit::GLOBAL );
+
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+    void AIToGoodLuckObject( Heroes & hero, s32 dst_index )
     {
-        // check already visited
-        if ( !hero.isObjectTypeVisited( objectType ) )
-            hero.SetVisited( dst_index );
+        hero.SetVisited( dst_index );
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
@@ -1112,24 +1136,24 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( hero.GetSpellPoints() != max &&
-             // check already visited
-             !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
-            hero.SetVisited( dst_index );
+        if ( hero.GetSpellPoints() < max && !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
             hero.SetSpellPoints( max );
         }
+
+        hero.SetVisited( dst_index );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+    void AIToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         const u32 max = hero.GetMaxSpellPoints();
 
         if ( !world.isAnyKingdomVisited( objectType, dst_index ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
-            hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
         }
+
+        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1527,7 +1551,7 @@ namespace AI
         const fheroes2::Point offset( destPos - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            hero.FadeOut( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
+            hero.FadeOut( offset );
         }
 
         hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
@@ -1749,5 +1773,28 @@ namespace AI
                 Maps::ClearFog( index, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
             }
         }
+    }
+
+    void AIToAlchemistTower( Heroes & hero )
+    {
+        BagArtifacts & bag = hero.GetBagArtifacts();
+        const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
+        if ( cursed == 0 ) {
+            return;
+        }
+
+        const payment_t payment = PaymentConditions::ForAlchemist();
+
+        if ( hero.GetKingdom().AllowPayment( payment ) ) {
+            hero.GetKingdom().OddFundsResource( payment );
+
+            for ( Artifact & artifact : bag ) {
+                if ( artifact.isAlchemistRemove() ) {
+                    artifact = Artifact::UNKNOWN;
+                }
+            }
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." );
     }
 }

@@ -517,7 +517,8 @@ StreamBase & operator<<( StreamBase & msg, const Players & players )
 
 StreamBase & operator>>( StreamBase & msg, Players & players )
 {
-    int colors, current;
+    int colors;
+    int current;
     msg >> colors >> current;
 
     players.clear();

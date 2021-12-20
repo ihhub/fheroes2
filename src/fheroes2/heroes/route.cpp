@@ -20,8 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <iostream>
-#include <sstream>
+#include <cassert>
 
 #include "heroes.h"
 #include "maps.h"
@@ -29,27 +28,6 @@
 #include "serialize.h"
 #include "world.h"
 
-s32 Route::Step::GetIndex( void ) const
-{
-    return currentIndex;
-}
-
-s32 Route::Step::GetFrom( void ) const
-{
-    return from;
-}
-
-int Route::Step::GetDirection( void ) const
-{
-    return direction;
-}
-
-u32 Route::Step::GetPenalty( void ) const
-{
-    return penalty;
-}
-
-/* construct */
 Route::Path::Path( const Heroes & h )
     : hero( &h )
     , dst( h.GetIndex() )
@@ -58,7 +36,15 @@ Route::Path::Path( const Heroes & h )
 
 int Route::Path::GetFrontDirection( void ) const
 {
-    return empty() ? ( dst != hero->GetIndex() ? Maps::GetDirection( hero->GetIndex(), dst ) : Direction::CENTER ) : front().GetDirection();
+    if ( empty() ) {
+        if ( dst != hero->GetIndex() ) {
+            return Maps::GetDirection( hero->GetIndex(), dst );
+        }
+
+        return Direction::CENTER;
+    }
+
+    return front().GetDirection();
 }
 
 u32 Route::Path::GetFrontPenalty( void ) const
@@ -384,11 +370,16 @@ int Route::Path::GetIndexSprite( int from, int to, int mod )
     return index;
 }
 
-uint32_t Route::Path::getLastMovePenalty() const
+bool Route::Path::hasAllowedSteps() const
 {
-    const Route::Step & firstStep = front();
-    const uint32_t penalty = firstStep.GetPenalty();
-    return Direction::isDiagonal( firstStep.GetDirection() ) ? ( penalty * 2 / 3 ) : penalty;
+    if ( !isValid() ) {
+        return false;
+    }
+
+    assert( hero != nullptr );
+    assert( !empty() );
+
+    return hero->GetMovePoints() >= front().GetPenalty();
 }
 
 int Route::Path::GetAllowedSteps( void ) const
@@ -398,11 +389,6 @@ int Route::Path::GetAllowedSteps( void ) const
 
     for ( const_iterator it = begin(); it != end() && movePoints > 0; ++it ) {
         uint32_t penalty = it->GetPenalty();
-
-        // allow diagonal move at a lower cost if it's a last one
-        if ( movePoints < penalty && Direction::isDiagonal( it->GetDirection() ) ) {
-            penalty = penalty * 2 / 3;
-        }
 
         if ( movePoints >= penalty ) {
             movePoints -= penalty;
@@ -418,16 +404,24 @@ int Route::Path::GetAllowedSteps( void ) const
 
 std::string Route::Path::String( void ) const
 {
-    std::ostringstream os;
+    std::string output( "from: " );
+    output += std::to_string( hero->GetIndex() );
+    output += ", to: ";
+    output += std::to_string( GetLastIndex() );
+    output += ", obj: ";
+    output += MP2::StringObject( world.GetTiles( dst ).GetObject() );
+    output += ", dump: ";
 
-    os << "from: " << hero->GetIndex() << ", to: " << GetLastIndex() << ", obj: " << MP2::StringObject( world.GetTiles( dst ).GetObject() ) << ", dump: ";
+    for ( const Step & step : *this ) {
+        output += Direction::String( step.GetDirection() );
+        output += '(';
+        output += std::to_string( step.GetPenalty() );
+        output += ')';
+    }
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        os << Direction::String( ( *it ).GetDirection() ) << "(" << ( *it ).GetPenalty() << ")"
-           << ", ";
+    output += "end";
 
-    os << "end";
-    return os.str();
+    return output;
 }
 
 bool StepIsObstacle( const Route::Step & s )

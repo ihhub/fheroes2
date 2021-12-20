@@ -96,12 +96,6 @@ StreamBase & StreamBase::operator>>( u8 & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( int8_t & v )
-{
-    v = get8();
-    return *this;
-}
-
 StreamBase & StreamBase::operator>>( u16 & v )
 {
     v = get16();
@@ -123,15 +117,6 @@ StreamBase & StreamBase::operator>>( u32 & v )
 StreamBase & StreamBase::operator>>( s32 & v )
 {
     v = get32();
-    return *this;
-}
-
-StreamBase & StreamBase::operator>>( float & v )
-{
-    s32 intpart;
-    s32 decpart;
-    *this >> intpart >> decpart;
-    v = intpart + decpart / 100000000;
     return *this;
 }
 
@@ -201,13 +186,6 @@ StreamBase & StreamBase::operator<<( const u32 v )
 {
     put32( v );
     return *this;
-}
-
-StreamBase & StreamBase::operator<<( const float v )
-{
-    s32 intpart = static_cast<s32>( v );
-    float decpart = ( v - intpart ) * 100000000;
-    return *this << intpart << static_cast<s32>( decpart );
 }
 
 StreamBase & StreamBase::operator<<( const std::string & v )
@@ -394,7 +372,7 @@ u8 StreamBuf::get8()
 u16 StreamBuf::getBE16()
 {
     u16 result = ( get8() << 8 );
-    result += get8();
+    result |= get8();
 
     return result;
 }
@@ -402,7 +380,7 @@ u16 StreamBuf::getBE16()
 u16 StreamBuf::getLE16()
 {
     u16 result = get8();
-    result += ( get8() << 8 );
+    result |= ( get8() << 8 );
 
     return result;
 }
@@ -410,9 +388,9 @@ u16 StreamBuf::getLE16()
 u32 StreamBuf::getBE32()
 {
     u32 result = ( get8() << 24 );
-    result += ( get8() << 16 );
-    result += ( get8() << 8 );
-    result += get8();
+    result |= ( get8() << 16 );
+    result |= ( get8() << 8 );
+    result |= get8();
 
     return result;
 }
@@ -420,9 +398,9 @@ u32 StreamBuf::getBE32()
 u32 StreamBuf::getLE32()
 {
     u32 result = get8();
-    result += ( get8() << 8 );
-    result += ( get8() << 16 );
-    result += ( get8() << 24 );
+    result |= ( get8() << 8 );
+    result |= ( get8() << 16 );
+    result |= ( get8() << 24 );
 
     return result;
 }

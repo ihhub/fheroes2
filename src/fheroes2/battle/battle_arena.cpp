@@ -42,6 +42,7 @@
 #include "logging.h"
 #include "race.h"
 #include "settings.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -51,52 +52,74 @@ namespace Battle
     Arena * arena = nullptr;
 }
 
-int GetCovr( int ground, std::mt19937 & gen )
+namespace
 {
-    std::vector<int> covrs;
+    // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
+    size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+    {
+        size_t newSeed = seed;
 
-    switch ( ground ) {
-    case Maps::Ground::SNOW:
-        covrs.push_back( ICN::COVR0007 );
-        covrs.push_back( ICN::COVR0008 );
-        covrs.push_back( ICN::COVR0009 );
-        covrs.push_back( ICN::COVR0010 );
-        covrs.push_back( ICN::COVR0011 );
-        covrs.push_back( ICN::COVR0012 );
-        break;
+        for ( const Battle::Command & command : actions ) {
+            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
+                continue; // "auto battle" button event is ignored for the purpose of this hash
+            }
 
-    case Maps::Ground::WASTELAND:
-        covrs.push_back( ICN::COVR0019 );
-        covrs.push_back( ICN::COVR0020 );
-        covrs.push_back( ICN::COVR0021 );
-        covrs.push_back( ICN::COVR0022 );
-        covrs.push_back( ICN::COVR0023 );
-        covrs.push_back( ICN::COVR0024 );
-        break;
+            fheroes2::hashCombine( newSeed, command.GetType() );
+            for ( const int commandArg : command ) {
+                fheroes2::hashCombine( newSeed, commandArg );
+            }
+        }
 
-    case Maps::Ground::DIRT:
-        covrs.push_back( ICN::COVR0013 );
-        covrs.push_back( ICN::COVR0014 );
-        covrs.push_back( ICN::COVR0015 );
-        covrs.push_back( ICN::COVR0016 );
-        covrs.push_back( ICN::COVR0017 );
-        covrs.push_back( ICN::COVR0018 );
-        break;
-
-    case Maps::Ground::GRASS:
-        covrs.push_back( ICN::COVR0001 );
-        covrs.push_back( ICN::COVR0002 );
-        covrs.push_back( ICN::COVR0003 );
-        covrs.push_back( ICN::COVR0004 );
-        covrs.push_back( ICN::COVR0005 );
-        covrs.push_back( ICN::COVR0006 );
-        break;
-
-    default:
-        break;
+        return newSeed;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
+    int GetCovr( int ground, std::mt19937 & gen )
+    {
+        std::vector<int> covrs;
+
+        switch ( ground ) {
+        case Maps::Ground::SNOW:
+            covrs.push_back( ICN::COVR0007 );
+            covrs.push_back( ICN::COVR0008 );
+            covrs.push_back( ICN::COVR0009 );
+            covrs.push_back( ICN::COVR0010 );
+            covrs.push_back( ICN::COVR0011 );
+            covrs.push_back( ICN::COVR0012 );
+            break;
+
+        case Maps::Ground::WASTELAND:
+            covrs.push_back( ICN::COVR0019 );
+            covrs.push_back( ICN::COVR0020 );
+            covrs.push_back( ICN::COVR0021 );
+            covrs.push_back( ICN::COVR0022 );
+            covrs.push_back( ICN::COVR0023 );
+            covrs.push_back( ICN::COVR0024 );
+            break;
+
+        case Maps::Ground::DIRT:
+            covrs.push_back( ICN::COVR0013 );
+            covrs.push_back( ICN::COVR0014 );
+            covrs.push_back( ICN::COVR0015 );
+            covrs.push_back( ICN::COVR0016 );
+            covrs.push_back( ICN::COVR0017 );
+            covrs.push_back( ICN::COVR0018 );
+            break;
+
+        case Maps::Ground::GRASS:
+            covrs.push_back( ICN::COVR0001 );
+            covrs.push_back( ICN::COVR0002 );
+            covrs.push_back( ICN::COVR0003 );
+            covrs.push_back( ICN::COVR0004 );
+            covrs.push_back( ICN::COVR0005 );
+            covrs.push_back( ICN::COVR0006 );
+            break;
+
+        default:
+            break;
+        }
+
+        return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
+    }
 }
 
 bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
@@ -149,7 +172,7 @@ Battle::Tower * Battle::Arena::GetTower( int type )
     return nullptr;
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
+Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )
     , armies_order( nullptr )
@@ -164,14 +187,16 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     , current_turn( 0 )
     , auto_battle( 0 )
     , end_turn( false )
+    , _randomGenerator( randomGenerator )
 {
     const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;
-    army1 = new Force( a1, false );
-    army2 = new Force( a2, true );
+
+    army1 = new Force( a1, false, _randomGenerator, _uidGenerator );
+    army2 = new Force( a2, true, _randomGenerator, _uidGenerator );
 
     // init castle (interface ahead)
     if ( castle ) {
@@ -211,21 +236,22 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
 
     if ( castle ) {
         // init
-        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT ) : nullptr;
-        towers[1] = new Tower( *castle, TWR_CENTER );
-        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT ) : nullptr;
-        const bool fortification = ( Race::KNGT == castle->GetRace() ) && castle->isBuild( BUILD_SPEC );
-        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander() ) : nullptr;
+        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
+        towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
+        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
+
+        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), _randomGenerator ) : nullptr;
         bridge = new Bridge();
 
         // catapult cell
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
-        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( fortification ? 3 : 2 );
+        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
+        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
         // tower
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
@@ -300,7 +326,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
             // bad morale, happens only if the unit wasn't waiting for a turn
-            actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), false ) );
+            actions.push_back( Command( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false ) );
             end_turn = true;
         }
         else {
@@ -320,8 +346,10 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
+        const size_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        _randomGenerator.UpdateSeed( newSeed );
 
+        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
         // apply task
         while ( !actions.empty() ) {
             // apply action
@@ -344,7 +372,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             // good morale
             if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
-                actions.emplace_back( MSG_BATTLE_MORALE, troop->GetUID(), true );
+                actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), true );
             }
         }
 
@@ -541,7 +569,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     const Unit * enemy = GetEnemyMaxQuality( twr.GetColor() );
 
     if ( enemy ) {
-        Command cmd( MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
+        Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
         ApplyAction( cmd );
     }
 }
@@ -561,7 +589,7 @@ void Battle::Arena::CatapultAction( void )
         values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
         values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
 
-        Command cmd( MSG_BATTLE_CATAPULT );
+        Command cmd( CommandType::MSG_BATTLE_CATAPULT );
 
         cmd << shots;
 
@@ -605,7 +633,7 @@ Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
 {
-    std::pair<int, uint32_t> result = { -1, MAXU16 };
+    std::pair<int, uint32_t> result = { -1, 65535 };
 
     const Position & pos = target.GetPosition();
     const Cell * head = pos.GetHead();
@@ -632,7 +660,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
 
 uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
+    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : 65535;
 }
 
 bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
@@ -643,6 +671,34 @@ bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
 {
     return _pathfinder.getAllAvailableMoves( moveRange );
+}
+
+int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
+{
+    const Position dstPos = Position::GetReachable( currentUnit, dst );
+
+    if ( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) ) {
+        // Destination cell is already reachable
+        return dstPos.GetHead()->GetIndex();
+    }
+
+    const Indexes path = _pathfinder.buildPath( dst );
+
+    // Destination cell is unreachable in principle according to the ArenaPathfinder
+    if ( path.empty() ) {
+        return -1;
+    }
+
+    // Search for the reachable cell nearest to the end of the path
+    for ( auto it = path.crbegin(); it != path.crend(); ++it ) {
+        const Position pos = Position::GetReachable( currentUnit, *it );
+
+        if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
+            return pos.GetHead()->GetIndex();
+        }
+    }
+
+    return -1;
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
@@ -1088,12 +1144,9 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
-    u32 count = spell.ExtraValue() * hero->GetPower();
-    uint32_t acount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
-    if ( acount )
-        count *= acount * 2;
 
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander() );
+    const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
+    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( elem ) {
         elem->SetModes( CAP_SUMMONELEM );
@@ -1109,7 +1162,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
 Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 {
-    Unit * image = new Unit( b, pos, b.isReflect() );
+    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( image ) {
         b.SetMirror( image );
@@ -1129,30 +1182,38 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
 
 bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const
 {
-    if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
-        return false;
-
-    // check golden bow artifact
-    const HeroBase * hero = attacker.GetCommander();
-    if ( hero && hero->hasArtifact( Artifact::GOLDEN_BOW ) )
-        return false;
-
+    // no castle - no castle walls, penalty does not apply
     if ( castle == nullptr ) {
         return false;
     }
 
-    // archery skill
-    if ( hero && hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+    // penalty does not apply to towers
+    if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
         return false;
 
-    // attacker is castle owner
-    if ( attacker.GetColor() == castle->GetColor() && !attacker.OutOfWalls() )
-        return false;
+    // penalty does not apply if the attacker's hero has certain artifacts or skills
+    const HeroBase * hero = attacker.GetCommander();
+    if ( hero ) {
+        // golden bow artifact
+        if ( hero->hasArtifact( Artifact::GOLDEN_BOW ) )
+            return false;
 
-    if ( defender.GetColor() == castle->GetColor() && defender.OutOfWalls() )
-        return false;
+        // archery skill
+        if ( hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+            return false;
+    }
 
-    // check castle walls defensed
+    // penalty does not apply if the attacking unit (be it a castle attacker or a castle defender) is inside the castle walls
+    if ( !attacker.OutOfWalls() ) {
+        return false;
+    }
+
+    // penalty does not apply if both units are on the same side relative to the castle walls
+    if ( attacker.OutOfWalls() == defender.OutOfWalls() ) {
+        return false;
+    }
+
+    // penalty does not apply if the target unit is exposed due to the broken castle wall
     const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
@@ -1176,17 +1237,19 @@ Battle::Force & Battle::Arena::GetForce2( void )
     return *army2;
 }
 
-Battle::Force & Battle::Arena::GetForce( int color, bool invert )
+Battle::Force & Battle::Arena::getForce( const int color )
 {
-    if ( army1->GetColor() == color )
-        return invert ? *army2 : *army1;
+    return ( army1->GetColor() == color ) ? *army1 : *army2;
+}
 
-    return invert ? *army1 : *army2;
+Battle::Force & Battle::Arena::getEnemyForce( const int color )
+{
+    return ( army1->GetColor() == color ) ? *army2 : *army1;
 }
 
 Battle::Force & Battle::Arena::GetCurrentForce( void )
 {
-    return GetForce( current_color, false );
+    return getForce( current_color );
 }
 
 int Battle::Arena::GetICNCovr( void ) const
@@ -1212,4 +1275,9 @@ bool Battle::Arena::CanBreakAutoBattle( void ) const
 void Battle::Arena::BreakAutoBattle( void )
 {
     auto_battle &= ~current_color;
+}
+
+const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const
+{
+    return _randomGenerator;
 }

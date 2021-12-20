@@ -233,7 +233,6 @@ u32 Maps::Tiles::QuantityGold( void ) const
     case MP2::OBJ_DAEMONCAVE:
         switch ( QuantityVariant() ) {
         case 2:
-        case 3:
         case 4:
             return 2500;
         default:
@@ -941,8 +940,9 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
-    // if there was another sprite here (shadow for example) push it down to Addons
-    if ( tile.objectTileset != 0 && tile.objectIndex != 255 ) {
+    // if there was another sprite here (shadow for example) push it down to Addons,
+    // except when there is already MONS32.ICN here (a random monster for example)
+    if ( tile.objectTileset != 0 && tile.objectTileset != 48 && tile.objectIndex != 255 ) {
         tile.AddonsPushLevel1( TilesAddon( 0, tile.uniq, tile.objectTileset, tile.objectIndex ) );
     }
     // replace sprite with the one for the new monster
@@ -962,7 +962,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         // Ghosts and elementals never join hero's army.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
     }
-    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
         // Monsters will be willing to join for some amount of money.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
     }

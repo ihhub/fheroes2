@@ -83,26 +83,26 @@ fheroes2::Rect Battle::Position::GetRect( void ) const
     return fheroes2::Rect();
 }
 
-Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
+Battle::Position Battle::Position::GetPositionWhenMoved( const Unit & unit, const int32_t dst )
 {
     Position result;
 
-    result.first = Board::GetCell( head );
+    result.first = Board::GetCell( dst );
 
-    if ( result.first && b.isWide() ) {
-        result.second = Board::GetCell( head, b.isReflect() ? RIGHT : LEFT );
+    if ( result.first && unit.isWide() ) {
+        result.second = Board::GetCell( dst, unit.isReflect() ? RIGHT : LEFT );
 
-        if ( !result.second || ( result.second != b.GetPosition().GetHead() && !result.second->isPassable1( true ) ) ) {
-            result.second = Board::GetCell( head, b.isReflect() ? LEFT : RIGHT );
+        if ( !result.second || ( result.second != unit.GetPosition().GetHead() && !result.second->isPassable1( true ) ) ) {
+            result.second = Board::GetCell( dst, unit.isReflect() ? LEFT : RIGHT );
 
             if ( !result.second )
-                result.second = Board::GetCell( head, b.isReflect() ? RIGHT : LEFT );
+                result.second = Board::GetCell( dst, unit.isReflect() ? RIGHT : LEFT );
 
             if ( result.second ) {
                 std::swap( result.first, result.second );
             }
             else {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "nullptr pointer, " << b.String() << ", dst: " << head );
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "nullptr pointer, " << unit.String() << ", dst: " << dst );
             }
         }
     }

@@ -34,6 +34,11 @@
 #include "ui_window.h"
 #include "world.h"
 
+namespace
+{
+    const uint32_t maximumTroopCount = 65535;
+}
+
 class ArmyCell : public fheroes2::Rect
 {
 public:
@@ -230,7 +235,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
                         troop1->SetCount( troop.GetCount() + troop1->GetCount() );
                         troop.Reset();
                     }
-                    else if ( troop1->GetCount() >= MAXU16 )
+                    else if ( troop1->GetCount() >= maximumTroopCount )
                         Dialog::Message( "", _( "Your army too big!" ), Font::BIG, Dialog::OK );
                     // swap
                     else {
@@ -265,16 +270,16 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
                 if ( troop1 ) {
                     // combine
                     if ( troop.GetMonster() == troop1->GetID() ) {
-                        if ( troop1->GetCount() + troop.GetCount() < MAXU16 ) {
+                        if ( troop1->GetCount() + troop.GetCount() < maximumTroopCount ) {
                             troop.SetCount( troop1->GetCount() + troop.GetCount() );
                             troop1->Reset();
                         }
                         else {
-                            troop1->SetCount( troop1->GetCount() + troop.GetCount() - MAXU16 );
-                            troop.SetCount( MAXU16 );
+                            troop1->SetCount( troop1->GetCount() + troop.GetCount() - maximumTroopCount );
+                            troop.SetCount( maximumTroopCount );
                         }
                     }
-                    else if ( troop1->GetCount() >= MAXU16 )
+                    else if ( troop1->GetCount() >= maximumTroopCount )
                         Dialog::Message( "", _( "Your army too big!" ), Font::BIG, Dialog::OK );
                     // swap
                     else {

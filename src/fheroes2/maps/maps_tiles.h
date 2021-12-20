@@ -52,7 +52,7 @@ namespace Maps
 {
     struct TilesAddon
     {
-        enum level_t
+        enum level_t : uint8_t
         {
             GROUND = 0,
             DOWN = 1,
@@ -61,7 +61,7 @@ namespace Maps
         };
 
         TilesAddon();
-        TilesAddon( int lv, u32 gid, int obj, u32 ii );
+        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
         TilesAddon( const TilesAddon & ta );
 
         ~TilesAddon() = default;
@@ -86,10 +86,10 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
 
-        u32 uniq;
-        u8 level;
-        u8 object;
-        u8 index;
+        uint32_t uniq;
+        uint8_t level;
+        uint8_t object;
+        uint8_t index;
     };
 
     struct Addons : public std::list<TilesAddon>
@@ -150,7 +150,7 @@ namespace Maps
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
         bool isRoad() const;
         bool isStream( void ) const;
-        bool isShadow( void ) const;
+        bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
@@ -205,7 +205,7 @@ namespace Maps
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
+        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -288,6 +288,10 @@ namespace Maps
 
         uint32_t getObjectIdByICNType( const int icnId ) const;
 
+        std::vector<uint8_t> getValidTileSets() const;
+
+        bool containsTileSet( const std::vector<uint8_t> & tileSets ) const;
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
         static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
@@ -299,13 +303,17 @@ namespace Maps
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
         static void UpdateAbandoneMineSprite( Tiles & tile );
-        static void FixedPreload( Tiles & tile );
+
+        // Some tiles have incorrect object type. This is due to original Editor issues.
+        static void fixTileObjectType( Tiles & tile );
+
+        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
     private:
         TilesAddon * FindFlags( void );
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( u32 index, bool );
+        void CorrectFlags32( const int col, const u32 index, const bool up );
         void RemoveJailSprite( void );
 
         void QuantitySetVariant( int );
@@ -314,6 +322,10 @@ namespace Maps
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
+
+        bool isTallObject() const;
+
+        bool isDetachedObject() const;
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
@@ -355,10 +367,6 @@ namespace Maps
         uint32_t _region = 0;
 
         uint8_t _level = 0;
-
-#ifdef WITH_DEBUG
-        uint8_t impassableTileRule = 0;
-#endif
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

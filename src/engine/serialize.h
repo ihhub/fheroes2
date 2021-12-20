@@ -37,20 +37,6 @@
 
 class StreamBase
 {
-protected:
-    size_t flags;
-
-    virtual u8 get8() = 0;
-    virtual void put8( const uint8_t ) = 0;
-
-    virtual size_t sizeg( void ) const = 0;
-    virtual size_t sizep( void ) const = 0;
-    virtual size_t tellg( void ) const = 0;
-    virtual size_t tellp( void ) const = 0;
-
-    void setconstbuf( bool );
-    void setfail( bool );
-
 public:
     StreamBase()
         : flags( 0 )
@@ -97,12 +83,10 @@ public:
     StreamBase & operator>>( bool & );
     StreamBase & operator>>( char & );
     StreamBase & operator>>( u8 & );
-    StreamBase & operator>>( int8_t & );
     StreamBase & operator>>( u16 & );
     StreamBase & operator>>( int16_t & );
     StreamBase & operator>>( u32 & );
     StreamBase & operator>>( s32 & );
-    StreamBase & operator>>( float & );
     StreamBase & operator>>( std::string & );
 
     StreamBase & operator>>( fheroes2::Point & point_ );
@@ -114,7 +98,6 @@ public:
     StreamBase & operator<<( const int16_t );
     StreamBase & operator<<( const u32 );
     StreamBase & operator<<( const s32 );
-    StreamBase & operator<<( const float );
     StreamBase & operator<<( const std::string & );
 
     StreamBase & operator<<( const fheroes2::Point & point_ );
@@ -190,6 +173,20 @@ public:
             *this << *it;
         return *this;
     }
+
+protected:
+    size_t flags;
+
+    virtual u8 get8() = 0;
+    virtual void put8( const uint8_t ) = 0;
+
+    virtual size_t sizeg() const = 0;
+    virtual size_t sizep() const = 0;
+    virtual size_t tellg() const = 0;
+    virtual size_t tellp() const = 0;
+
+    void setconstbuf( bool );
+    void setfail( bool );
 };
 
 class StreamBuf : public StreamBase

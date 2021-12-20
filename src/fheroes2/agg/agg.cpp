@@ -100,21 +100,37 @@ namespace AGG
         ~AsyncSoundManager()
         {
             if ( _worker ) {
-                _mutex.lock();
+                {
+                    std::lock_guard<std::mutex> guard( _mutex );
 
-                _exitFlag = 1;
-                _runFlag = 1;
-                _workerNotification.notify_all();
-
-                _mutex.unlock();
+                    _exitFlag = 1;
+                    _runFlag = 1;
+                    _workerNotification.notify_all();
+                }
 
                 _worker->join();
                 _worker.reset();
             }
         }
 
+        void pushStopMusic()
+        {
+            _createThreadIfNeeded();
+
+            std::lock_guard<std::mutex> mutexLock( _mutex );
+
+            while ( !_musicTasks.empty() ) {
+                _musicTasks.pop();
+            }
+
+            _musicTasks.emplace( -1, MUSIC_MIDI_ORIGINAL, true );
+            _runFlag = 1;
+            _workerNotification.notify_all();
+        }
+
         void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
         {
+            assert( musicId >= 0 );
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
@@ -239,10 +255,11 @@ namespace AGG
         {
             assert( manager != nullptr );
 
-            manager->_mutex.lock();
-            manager->_runFlag = 0;
-            manager->_masterNotification.notify_one();
-            manager->_mutex.unlock();
+            {
+                std::lock_guard<std::mutex> guard( manager->_mutex );
+                manager->_runFlag = 0;
+                manager->_masterNotification.notify_one();
+            }
 
             while ( manager->_exitFlag == 0 ) {
                 std::unique_lock<std::mutex> mutexLock( manager->_mutex );
@@ -278,8 +295,12 @@ namespace AGG
                     }
 
                     manager->_mutex.unlock();
-
-                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
+                    if ( musicTask.musicId >= 0 ) {
+                        PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
+                    }
+                    else {
+                        Music::Reset();
+                    }
                 }
                 else {
                     manager->_runFlag = 0;
@@ -322,10 +343,10 @@ bool AGG::ReadDataDir( void )
     return heroes2_agg.isGood();
 }
 
-std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
+std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 {
-    if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
-        const std::vector<u8> & buf = heroes2x_agg.read( key );
+    if ( heroes2x_agg.isGood() ) {
+        const std::vector<uint8_t> & buf = heroes2x_agg.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -606,40 +627,45 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
-void AGG::ResetMixer()
+void AGG::ResetMixer( bool asyncronizedCall /* = false */ )
 {
-    g_asyncSoundManager.sync();
+    if ( asyncronizedCall ) {
+        g_asyncSoundManager.pushStopMusic();
+        Mixer::Stop();
+    }
+    else {
+        g_asyncSoundManager.sync();
 
-    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    Mixer::Reset();
+        Mixer::Reset();
+    }
     loop_sounds.clear();
     loop_sounds.reserve( 7 );
 }
 
-bool AGG::Init( void )
+AGG::AGGInitializer::AGGInitializer()
 {
-    // read data dir
-    if ( !ReadDataDir() ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "data files not found" );
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-        display.fill( 0 );
-        fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
-
-        LocalEvent & le = LocalEvent::Get();
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
-            ;
-
-        return false;
+    if ( ReadDataDir() ) {
+        return;
     }
 
-    return true;
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+    display.fill( 0 );
+    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+        // Do nothing.
+    }
+
+    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "No data files found." );
+    throw std::logic_error( "No data files found." );
 }
 
-void AGG::Quit( void )
+AGG::AGGInitializer::~AGGInitializer()
 {
     wav_cache.clear();
     mid_cache.clear();

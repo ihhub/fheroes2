@@ -36,7 +36,6 @@ namespace System
 
     std::string GetDirname( const std::string & );
     std::string GetBasename( const std::string & );
-    std::string GetUniversalBasename( const std::string & str );
 
     std::string GetMessageLocale( int /* 3: en_us.utf-8, 2: en_us, 1: en */ );
 

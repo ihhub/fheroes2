@@ -449,6 +449,12 @@ namespace fheroes2
         return _text.empty();
     }
 
+    void Text::set( const std::string & text, const FontType fontType )
+    {
+        _text = text;
+        _fontType = fontType;
+    }
+
     MultiFontText::~MultiFontText() = default;
 
     void MultiFontText::add( const Text & text )

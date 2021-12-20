@@ -85,7 +85,7 @@ namespace
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
-        return msg >> hdr.status >> hdr.info >> hdr.info._version >> hdr.gameType;
+        return msg >> hdr.status >> hdr.info >> hdr.gameType;
     }
 }
 
@@ -121,7 +121,7 @@ bool Game::Save( const std::string & fn )
     fz.setbigendian( true );
 
     // zip game data content
-    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get();
+    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get();
 
     if ( conf.isCampaignGameType() )
         fz << Campaign::CampaignSaveData::Get();
@@ -213,17 +213,10 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
 
-    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
+    fz >> World::Get() >> conf >> GameOver::Result::Get();
 
     // Settings should contain the full path to the current map file, if this map is available
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove the System::GetUniversalBasename()" );
-    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetUniversalBasename( conf.MapsFile() ) ) );
-
-    // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove MonsterStaticData usage" );
-    if ( binver < FORMAT_VERSION_PRE_095_RELEASE ) {
-        fz >> MonsterStaticData::Get();
-    }
+    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetBasename( conf.MapsFile() ) ) );
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
@@ -281,7 +274,8 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
         return false;
     }
 
-    char major, minor;
+    char major;
+    char minor;
     fs >> major >> minor;
     const u16 savid = ( static_cast<u16>( major ) << 8 ) | static_cast<u16>( minor );
 

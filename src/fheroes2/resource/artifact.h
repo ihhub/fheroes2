@@ -22,6 +22,7 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <set>
 #include <vector>
 
 #include "interface_itemsbar.h"
@@ -215,6 +216,16 @@ namespace fheroes2
     void ExcludeArtifactFromRandom( const int artifactID );
 }
 
+struct ArtifactSetData
+{
+    ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
+
+    uint32_t _assembledArtifactID = Artifact::UNKNOWN;
+    std::string _assembleMessage;
+
+    bool operator<( const ArtifactSetData & other ) const;
+};
+
 class BagArtifacts : public std::vector<Artifact>
 {
 public:
@@ -223,8 +234,10 @@ public:
     bool ContainSpell( const Spell & ) const;
     bool isPresentArtifact( const Artifact & ) const;
     bool PushArtifact( const Artifact & );
+
+    void RemoveArtifact( const Artifact & art );
+
     bool isFull( void ) const;
-    bool MakeBattleGarb( void );
     bool ContainUltimateArtifact( void ) const;
 
     void RemoveScroll( const Artifact & );
@@ -233,6 +246,8 @@ public:
     int getArtifactValue() const;
     u32 CountArtifacts( void ) const;
     u32 Count( const Artifact & ) const;
+
+    std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
     std::string String( void ) const;
 };

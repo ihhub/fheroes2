@@ -22,6 +22,7 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
@@ -40,18 +41,6 @@ namespace fheroes2
 }
 
 class Heroes;
-
-class MeetingButton : public fheroes2::ButtonSprite
-{
-public:
-    MeetingButton( s32, s32 );
-};
-
-class SwapButton : public fheroes2::ButtonSprite
-{
-public:
-    SwapButton( s32, s32 );
-};
 
 enum building_t : uint32_t
 {
@@ -118,11 +107,21 @@ public:
         CAPITAL = 0x0020
     };
 
+    enum class CastleDialogReturnValue : int
+    {
+        DoNothing,
+        Close, // Close the dialog.
+        NextCastle, // Open main dialog of the next castle.
+        PreviousCastle, // Open main dialog of the previous castle.
+        NextCostructionWindow, // Open construction dialog of the next castle.
+        PreviousCostructionWindow // Open construction dialog of the previous castle.
+    };
+
     Castle();
     Castle( s32, s32, int rs );
     ~Castle() override = default;
 
-    void LoadFromMP2( StreamBuf );
+    void LoadFromMP2( std::vector<uint8_t> & data );
 
     Captain & GetCaptain( void );
     const Captain & GetCaptain( void ) const;
@@ -141,7 +140,12 @@ public:
     CastleHeroes GetHeroes( void ) const;
 
     int GetRace( void ) const;
-    const std::string & GetName( void ) const;
+
+    const std::string & GetName() const;
+
+    // This method must be called only at the time of map loading and only for castles with empty names.
+    void setName( const std::set<std::string> & usedNames );
+
     int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
@@ -149,6 +153,8 @@ public:
     bool HaveLibraryCapability( void ) const;
     bool isLibraryBuild( void ) const;
     void MageGuildEducateHero( HeroBase & ) const;
+
+    bool isFortificationBuild() const;
 
     const Army & GetArmy( void ) const;
     Army & GetArmy( void );
@@ -178,7 +184,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    int OpenDialog( bool readonly = false );
+    CastleDialogReturnValue OpenDialog( const bool readOnly, const bool openConstructionWindow );
 
     int GetAttackModificator( const std::string * ) const;
     int GetDefenseModificator( const std::string * ) const;
@@ -201,10 +207,6 @@ public:
 
     std::string GetStringBuilding( u32 ) const;
     std::string GetDescriptionBuilding( u32 ) const;
-
-    // Returns message displayed in the status bar on the castle view
-    // when hover over the building
-    std::string buildingStatusMessage( const uint32_t buildingId ) const;
 
     static const char * GetStringBuilding( u32, int race );
     static const char * GetDescriptionBuilding( u32, int race );
@@ -230,10 +232,20 @@ public:
     void SwapCastleHeroes( CastleHeroes & );
 
 private:
+    enum class ConstructionDialogResult : int
+    {
+        DoNothing,
+        NextConstructionWindow, // Open construction dialog for the next castle.
+        PrevConstructionWindow, // Open construction dialog for the previous castle.
+        Build, // Build something.
+        RecruitHero // Recruit a hero.
+    };
+
     u32 * GetDwelling( u32 dw );
     void EducateHeroes( void );
-    fheroes2::Rect RedrawResourcePanel( const fheroes2::Point & ) const;
-    u32 OpenTown( void );
+
+    ConstructionDialogResult openConstructionDialog( uint32_t & dwellingTobuild );
+
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
@@ -241,7 +253,6 @@ private:
     void JoinRNDArmy( void );
     void PostLoad( void );
 
-private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
 
@@ -314,7 +325,8 @@ namespace CastleDialog
         CacheBuildings( const Castle &, const fheroes2::Point & );
     };
 
-    void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
+    void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
+                            const uint32_t animationIndex );
     void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const fheroes2::Rect &, uint8_t alpha = 255 );
 
     void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
@@ -347,6 +359,21 @@ public:
     Castle * Get( const fheroes2::Point & position ) const;
 
     void Scoute( int ) const;
+
+    void NewDay()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+    }
+
+    void NewWeek()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+    }
+
+    void NewMonth()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
+    }
 
     // begin/end methods so we can iterate through the elements
     std::vector<Castle *>::const_iterator begin() const

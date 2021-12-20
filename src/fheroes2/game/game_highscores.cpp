@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <ctime>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -32,11 +32,13 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_over.h"
 #include "icn.h"
 #ifdef WITH_DEBUG
 #include "logging.h"
 #endif
+#include "monster_anim.h"
 #include "mus.h"
 #include "settings.h"
 #include "system.h"
@@ -90,16 +92,260 @@ bool RatingSort( const hgs_t & h1, const hgs_t & h2 )
 class HGSData
 {
 public:
-    HGSData() = default;
+    HGSData();
 
     bool Load( const std::string & );
     bool Save( const std::string & ) const;
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
 
+    void populateHighScoresStandard();
+
 private:
+    uint32_t _monsterAnimationFrameId;
     std::vector<hgs_t> list;
+    std::array<Monster::monster_t, 229> _monsterRating;
+
+    Monster getMonsterByRatingStandardGame( const size_t rating ) const
+    {
+        const size_t id = std::min( rating, _monsterRating.size() - 1 );
+        return Monster( _monsterRating[id] );
+    }
 };
+
+HGSData::HGSData()
+    : _monsterAnimationFrameId( 0 )
+{
+    _monsterRating = { Monster::PEASANT,
+                       Monster::PEASANT,
+                       Monster::PEASANT,
+                       Monster::PEASANT,
+                       Monster::GOBLIN,
+                       Monster::GOBLIN,
+                       Monster::GOBLIN,
+                       Monster::GOBLIN,
+                       Monster::SPRITE,
+                       Monster::SPRITE,
+                       Monster::SPRITE,
+                       Monster::SPRITE,
+                       Monster::HALFLING,
+                       Monster::HALFLING,
+                       Monster::HALFLING,
+                       Monster::HALFLING,
+                       Monster::CENTAUR,
+                       Monster::CENTAUR,
+                       Monster::CENTAUR,
+                       Monster::CENTAUR,
+                       Monster::ROGUE,
+                       Monster::ROGUE,
+                       Monster::ROGUE,
+                       Monster::ROGUE,
+                       Monster::SKELETON,
+                       Monster::SKELETON,
+                       Monster::SKELETON,
+                       Monster::SKELETON,
+                       Monster::ORC,
+                       Monster::ORC,
+                       Monster::ORC,
+                       Monster::ORC,
+                       Monster::ZOMBIE,
+                       Monster::ZOMBIE,
+                       Monster::ZOMBIE,
+                       Monster::ZOMBIE,
+                       Monster::ARCHER,
+                       Monster::ARCHER,
+                       Monster::ARCHER,
+                       Monster::ARCHER,
+                       Monster::RANGER,
+                       Monster::RANGER,
+                       Monster::RANGER,
+                       Monster::RANGER,
+                       Monster::BOAR,
+                       Monster::BOAR,
+                       Monster::BOAR,
+                       Monster::BOAR,
+                       Monster::DWARF,
+                       Monster::DWARF,
+                       Monster::DWARF,
+                       Monster::DWARF,
+                       Monster::MUTANT_ZOMBIE,
+                       Monster::MUTANT_ZOMBIE,
+                       Monster::MUTANT_ZOMBIE,
+                       Monster::MUTANT_ZOMBIE,
+                       Monster::ORC_CHIEF,
+                       Monster::ORC_CHIEF,
+                       Monster::ORC_CHIEF,
+                       Monster::ORC_CHIEF,
+                       Monster::ELF,
+                       Monster::ELF,
+                       Monster::ELF,
+                       Monster::ELF,
+                       Monster::GARGOYLE,
+                       Monster::GARGOYLE,
+                       Monster::GARGOYLE,
+                       Monster::GARGOYLE,
+                       Monster::PIKEMAN,
+                       Monster::PIKEMAN,
+                       Monster::PIKEMAN,
+                       Monster::PIKEMAN,
+                       Monster::GRAND_ELF,
+                       Monster::GRAND_ELF,
+                       Monster::GRAND_ELF,
+                       Monster::GRAND_ELF,
+                       Monster::BATTLE_DWARF,
+                       Monster::BATTLE_DWARF,
+                       Monster::BATTLE_DWARF,
+                       Monster::BATTLE_DWARF,
+                       Monster::NOMAD,
+                       Monster::NOMAD,
+                       Monster::NOMAD,
+                       Monster::NOMAD,
+                       Monster::VETERAN_PIKEMAN,
+                       Monster::VETERAN_PIKEMAN,
+                       Monster::VETERAN_PIKEMAN,
+                       Monster::VETERAN_PIKEMAN,
+                       Monster::WOLF,
+                       Monster::WOLF,
+                       Monster::WOLF,
+                       Monster::WOLF,
+                       Monster::MUMMY,
+                       Monster::MUMMY,
+                       Monster::MUMMY,
+                       Monster::MUMMY,
+                       Monster::IRON_GOLEM,
+                       Monster::IRON_GOLEM,
+                       Monster::IRON_GOLEM,
+                       Monster::IRON_GOLEM,
+                       Monster::ROYAL_MUMMY,
+                       Monster::ROYAL_MUMMY,
+                       Monster::ROYAL_MUMMY,
+                       Monster::ROYAL_MUMMY,
+                       Monster::OGRE,
+                       Monster::OGRE,
+                       Monster::OGRE,
+                       Monster::OGRE,
+                       Monster::GRIFFIN,
+                       Monster::GRIFFIN,
+                       Monster::GRIFFIN,
+                       Monster::GRIFFIN,
+                       Monster::SWORDSMAN,
+                       Monster::SWORDSMAN,
+                       Monster::SWORDSMAN,
+                       Monster::SWORDSMAN,
+                       Monster::DRUID,
+                       Monster::DRUID,
+                       Monster::DRUID,
+                       Monster::DRUID,
+                       Monster::STEEL_GOLEM,
+                       Monster::STEEL_GOLEM,
+                       Monster::STEEL_GOLEM,
+                       Monster::STEEL_GOLEM,
+                       Monster::MASTER_SWORDSMAN,
+                       Monster::MASTER_SWORDSMAN,
+                       Monster::MASTER_SWORDSMAN,
+                       Monster::MASTER_SWORDSMAN,
+                       Monster::AIR_ELEMENT,
+                       Monster::AIR_ELEMENT,
+                       Monster::AIR_ELEMENT,
+                       Monster::AIR_ELEMENT,
+                       Monster::GREATER_DRUID,
+                       Monster::GREATER_DRUID,
+                       Monster::GREATER_DRUID,
+                       Monster::FIRE_ELEMENT,
+                       Monster::FIRE_ELEMENT,
+                       Monster::FIRE_ELEMENT,
+                       Monster::GHOST,
+                       Monster::GHOST,
+                       Monster::GHOST,
+                       Monster::VAMPIRE,
+                       Monster::VAMPIRE,
+                       Monster::VAMPIRE,
+                       Monster::WATER_ELEMENT,
+                       Monster::WATER_ELEMENT,
+                       Monster::WATER_ELEMENT,
+                       Monster::EARTH_ELEMENT,
+                       Monster::EARTH_ELEMENT,
+                       Monster::EARTH_ELEMENT,
+                       Monster::ROC,
+                       Monster::ROC,
+                       Monster::ROC,
+                       Monster::MINOTAUR,
+                       Monster::MINOTAUR,
+                       Monster::MINOTAUR,
+                       Monster::CAVALRY,
+                       Monster::CAVALRY,
+                       Monster::CAVALRY,
+                       Monster::TROLL,
+                       Monster::TROLL,
+                       Monster::TROLL,
+                       Monster::MAGE,
+                       Monster::MAGE,
+                       Monster::MAGE,
+                       Monster::MEDUSA,
+                       Monster::MEDUSA,
+                       Monster::MEDUSA,
+                       Monster::LICH,
+                       Monster::LICH,
+                       Monster::LICH,
+                       Monster::OGRE_LORD,
+                       Monster::OGRE_LORD,
+                       Monster::OGRE_LORD,
+                       Monster::MINOTAUR_KING,
+                       Monster::MINOTAUR_KING,
+                       Monster::MINOTAUR_KING,
+                       Monster::CHAMPION,
+                       Monster::CHAMPION,
+                       Monster::CHAMPION,
+                       Monster::WAR_TROLL,
+                       Monster::WAR_TROLL,
+                       Monster::WAR_TROLL,
+                       Monster::VAMPIRE_LORD,
+                       Monster::VAMPIRE_LORD,
+                       Monster::VAMPIRE_LORD,
+                       Monster::ARCHMAGE,
+                       Monster::ARCHMAGE,
+                       Monster::ARCHMAGE,
+                       Monster::POWER_LICH,
+                       Monster::POWER_LICH,
+                       Monster::POWER_LICH,
+                       Monster::UNICORN,
+                       Monster::UNICORN,
+                       Monster::UNICORN,
+                       Monster::HYDRA,
+                       Monster::HYDRA,
+                       Monster::HYDRA,
+                       Monster::PALADIN,
+                       Monster::PALADIN,
+                       Monster::PALADIN,
+                       Monster::GENIE,
+                       Monster::GENIE,
+                       Monster::GENIE,
+                       Monster::CRUSADER,
+                       Monster::CRUSADER,
+                       Monster::CRUSADER,
+                       Monster::CYCLOPS,
+                       Monster::CYCLOPS,
+                       Monster::CYCLOPS,
+                       Monster::GIANT,
+                       Monster::GIANT,
+                       Monster::GIANT,
+                       Monster::PHOENIX,
+                       Monster::PHOENIX,
+                       Monster::PHOENIX,
+                       Monster::BONE_DRAGON,
+                       Monster::BONE_DRAGON,
+                       Monster::BONE_DRAGON,
+                       Monster::GREEN_DRAGON,
+                       Monster::GREEN_DRAGON,
+                       Monster::GREEN_DRAGON,
+                       Monster::RED_DRAGON,
+                       Monster::RED_DRAGON,
+                       Monster::RED_DRAGON,
+                       Monster::TITAN,
+                       Monster::TITAN,
+                       Monster::TITAN,
+                       Monster::BLACK_DRAGON };
+}
 
 bool HGSData::Load( const std::string & fn )
 {
@@ -151,6 +397,8 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 
 void HGSData::RedrawList( int32_t ox, int32_t oy )
 {
+    ++_monsterAnimationFrameId;
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
@@ -166,6 +414,8 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
     Text text;
     text.Set( Font::BIG );
 
+    const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
+
     for ( ; it1 != it2 && ( it1 - list.begin() < HGS_MAX ); ++it1 ) {
         const hgs_t & hgs = *it1;
 
@@ -173,16 +423,41 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         text.Blit( ox + 88, oy + 70 );
 
         text.Set( hgs.land );
-        text.Blit( ox + 260, oy + 70 );
+        text.Blit( ox + 244, oy + 70 );
 
         text.Set( std::to_string( hgs.days ) );
-        text.Blit( ox + 420, oy + 70 );
+        text.Blit( ox + 403, oy + 70 );
 
         text.Set( std::to_string( hgs.rating ) );
-        text.Blit( ox + 480, oy + 70 );
+        text.Blit( ox + 484, oy + 70 );
+
+        const Monster monster = HGSData::getMonsterByRatingStandardGame( hgs.rating );
+        const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
+        const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
+        fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
+
+        // Animation frame of a creature is based on its position on screen and common animation frame ID.
+        const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs.days + _monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+        const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
+        fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
 
         oy += 40;
     }
+}
+
+void HGSData::populateHighScoresStandard()
+{
+    ScoreRegistry( "Lord Kilburn", "Beltway", 70, 150 );
+    ScoreRegistry( "Tsabu", "Deathgate", 80, 140 );
+    ScoreRegistry( "Sir Galant", "Enroth", 90, 130 );
+    ScoreRegistry( "Thundax", "Lost Continent", 100, 120 );
+    ScoreRegistry( "Lord Haart", "Mountain King", 120, 110 );
+    ScoreRegistry( "Ariel", "Pandemonium", 140, 100 );
+    ScoreRegistry( "Rebecca", "Terra Firma", 160, 90 );
+    ScoreRegistry( "Sandro", "The Clearing", 180, 80 );
+    ScoreRegistry( "Crodo", "Vikings!", 200, 70 );
+    ScoreRegistry( "Barock", "Wastelands", 240, 60 );
 }
 
 fheroes2::GameMode Game::HighScores()
@@ -200,12 +475,15 @@ fheroes2::GameMode Game::HighScores()
 
     HGSData hgs;
 
-    std::ostringstream stream;
-    stream << System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
+    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    hgs.Load( stream.str() );
+    if ( !hgs.Load( highScoreDataPath ) ) {
+        // Unable to load the file. Let's populate with the default values.
+        hgs.populateHighScoresStandard();
+        hgs.Save( highScoreDataPath );
+    }
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
@@ -231,11 +509,11 @@ fheroes2::GameMode Game::HighScores()
 
     if ( rating && ( gameResult.GetResult() & GameOver::WINS ) ) {
         std::string player( _( "Unknown Hero" ) );
-        Dialog::InputString( _( "Your Name" ), player );
+        Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
-        hgs.Save( stream.str() );
+        hgs.Save( highScoreDataPath );
         hgs.RedrawList( top.x, top.y );
         buttonCampain.draw();
         buttonExit.draw();
@@ -257,6 +535,20 @@ fheroes2::GameMode Game::HighScores()
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return fheroes2::GameMode::MAIN_MENU;
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonCampain.area() ) ) {
+            Dialog::Message( _( "Campaign" ), _( "View High Scores for Campaigns." ), Font::BIG );
+        }
+
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            hgs.RedrawList( top.x, top.y );
+            buttonCampain.draw();
+            buttonExit.draw();
+            display.render();
+        }
     }
 
     return fheroes2::GameMode::QUIT_GAME;

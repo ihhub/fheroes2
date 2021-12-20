@@ -62,8 +62,7 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const fheroes2::Point & mp );
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
-    Indexes GetAroundIndexes( s32 );
-    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile );
+    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
 
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );

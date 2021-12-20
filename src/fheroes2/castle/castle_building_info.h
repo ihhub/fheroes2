@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,31 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "timer.h"
+#pragma once
 
-using namespace SDL;
+#include "castle.h"
 
-Timer::Timer()
-    : id( 0 )
-{}
+enum class GameVersion : int;
 
-void Timer::Run( u32 interval, u32 ( *fn )( u32, void * ), void * param )
+namespace fheroes2
 {
-    if ( id )
-        Remove();
+    Rect getCastleBuildingArea( const int race, const building_t buildingId );
 
-    id = SDL_AddTimer( interval, fn, param );
-}
+    const char * getBuildingName( const int race, const building_t buildingId );
 
-void Timer::Remove( void )
-{
-    if ( id ) {
-        SDL_RemoveTimer( id );
-        id = 0;
-    }
-}
+    const char * getBuildingDescription( const int race, const building_t buildingId );
 
-bool Timer::IsValid( void ) const
-{
-    return id != 0;
+    std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version );
 }

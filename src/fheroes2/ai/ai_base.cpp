@@ -153,7 +153,7 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove( false ) && !hero.Modes( Heroes::MOVED );
+        return hero.MayStillMove( false, false ) && !hero.Modes( Heroes::MOVED );
     }
 
     void Base::HeroTurn( Heroes & hero )
@@ -230,7 +230,7 @@ namespace AI
     void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
         // end action
-        actions.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+        actions.push_back( Battle::Command( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
     }
 
     StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )

@@ -29,9 +29,6 @@
 #include "serialize.h"
 #include "types.h"
 
-std::vector<u8> zlibCompress( const u8 *, size_t srcsz );
-std::vector<u8> zlibDecompress( const u8 *, size_t srcsz, size_t realsz = 0 );
-
 class ZStreamFile : public StreamBuf
 {
 public:

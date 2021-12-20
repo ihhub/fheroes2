@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <iomanip>
 
@@ -35,8 +36,8 @@
 #include "logging.h"
 #include "monster_anim.h"
 #include "morale.h"
-#include "rand.h"
 #include "speed.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -102,10 +103,10 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
+Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )
-    , uid( World::GetUniq() )
+    , _uid( uid )
     , hp( t.GetHitPoints() )
     , count0( t.GetCount() )
     , dead( 0 )
@@ -116,6 +117,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , idleTimer( animation.getIdleDelay() )
     , blindanswer( false )
     , customAlphaMask( 255 )
+    , _randomGenerator( randomGenerator )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -210,17 +212,24 @@ std::string Battle::Unit::GetShotString( void ) const
     if ( Troop::GetShots() == GetShots() )
         return std::to_string( Troop::GetShots() );
 
-    std::ostringstream os;
-    os << Troop::GetShots() << " (" << GetShots() << ")";
-    return os.str();
+    std::string output( std::to_string( Troop::GetShots() ) );
+    output += " (";
+    output += std::to_string( GetShots() );
+    output += ')';
+
+    return output;
 }
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    std::ostringstream os;
-    const uint32_t speedValue = GetSpeed( true );
-    os << Speed::String( speedValue ) << " (" << speedValue << ")";
-    return os.str();
+    const uint32_t speedValue = GetSpeed( true, false );
+
+    std::string output( Speed::String( speedValue ) );
+    output += " (";
+    output += std::to_string( speedValue );
+    output += ')';
+
+    return output;
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
@@ -252,7 +261,7 @@ u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 
 u32 Battle::Unit::GetSpeed( void ) const
 {
-    return GetSpeed( false );
+    return GetSpeed( false, false );
 }
 
 int Battle::Unit::GetMorale() const
@@ -260,7 +269,7 @@ int Battle::Unit::GetMorale() const
     int armyTroopMorale = ArmyTroop::GetMorale();
 
     // enemy Bone dragons affect morale
-    if ( isAffectedByMorale() && GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
+    if ( isAffectedByMorale() && GetArena()->getEnemyForce( GetArmyColor() ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
         --armyTroopMorale;
 
     return armyTroopMorale;
@@ -268,12 +277,12 @@ int Battle::Unit::GetMorale() const
 
 bool Battle::Unit::isUID( u32 v ) const
 {
-    return uid == v;
+    return _uid == v;
 }
 
 u32 Battle::Unit::GetUID( void ) const
 {
-    return uid;
+    return _uid;
 }
 
 Battle::Unit * Battle::Unit::GetMirror()
@@ -310,15 +319,15 @@ void Battle::Unit::SetRandomMorale( void )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int32_t>( Rand::Get( 1, 12 ) ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( Rand::Get( 1, 4 ) != 1 ) {
+        else if ( _randomGenerator.Get( 1, 4 ) != 1 ) {
             SetModes( MORALE_BAD );
         }
     }
@@ -327,7 +336,7 @@ void Battle::Unit::SetRandomMorale( void )
 void Battle::Unit::SetRandomLuck( void )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( Rand::Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -369,7 +378,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return Board::GetDistance( from, index ) <= GetSpeed( true );
+    return Board::GetDistance( from, index ) <= GetSpeed( true, false );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const
@@ -458,21 +467,24 @@ void Battle::Unit::NewTurn( void )
     }
 }
 
-u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
+u32 Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
 {
-    if ( !skip_standing_check && ( !GetCount() || Modes( TR_MOVED | SP_BLIND | IS_PARALYZE_MAGIC ) ) )
+    uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
+    if ( !skipMovedCheck ) {
+        modesToCheck |= TR_MOVED;
+    }
+
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
         return Speed::STANDING;
 
     uint32_t speed = Monster::GetSpeed();
     Spell spell;
 
     if ( Modes( SP_HASTE ) ) {
-        spell = Spell::HASTE;
-        return spell.ExtraValue() ? speed + spell.ExtraValue() : Speed::GetOriginalFast( speed );
+        return Speed::GetHasteSpeedFromSpell( speed );
     }
     else if ( Modes( SP_SLOW ) ) {
-        spell = Spell::SLOW;
-        return spell.ExtraValue() ? speed - spell.ExtraValue() : Speed::GetOriginalSlow( speed );
+        return Speed::GetSlowSpeedFromSpell( speed );
     }
 
     return speed;
@@ -480,7 +492,7 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
 
 uint32_t Battle::Unit::GetMoveRange() const
 {
-    return isFlying() ? ARENASIZE : GetSpeed( false );
+    return isFlying() ? ARENASIZE : GetSpeed( false, false );
 }
 
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
@@ -588,7 +600,7 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     else if ( Modes( SP_CURSE ) )
         res = CalculateMinDamage( enemy );
     else
-        res = Rand::Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+        res = _randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res <<= 1; // mul 2
@@ -962,7 +974,7 @@ std::string Battle::Unit::String( bool more ) const
         ss << ", mode("
            << "0x" << std::hex << modes << std::dec << ")"
            << ", uid("
-           << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid << std::dec << ")"
+           << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << _uid << std::dec << ")"
            << ", speed(" << Speed::String( GetSpeed() ) << ", " << static_cast<int>( GetSpeed() ) << ")"
            << ", hp(" << hp << ")"
            << ", die(" << dead << ")"
@@ -1298,6 +1310,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const HeroBase * hero, TargetInfo & target )
 {
+    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     u32 dmg = spell.Damage() * spoint;
 
     switch ( GetID() ) {
@@ -1478,18 +1491,17 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        u32 restore = spell.Resurrect() * spoint;
         // remove from graveyard
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
         }
-        // restore hp
-        uint32_t acount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
-        if ( acount )
-            restore *= acount * 2;
 
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const u32 resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
+
+        // Puts back the unit in the board
+        SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
             std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );
@@ -1530,11 +1542,6 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     if ( Modes( SP_ANTIMAGIC ) )
         return 100;
 
-    const uint32_t spellImmunity = fheroes2::getSpellResistance( id, spell.GetID() );
-    if ( spellImmunity > 0 ) {
-        return spellImmunity;
-    }
-
     switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
@@ -1555,7 +1562,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
 
     case Spell::HYPNOTIZE:
-        if ( spell.ExtraValue() * spower < hp )
+        if ( fheroes2::getHypnorizeMonsterHPPoints( spell, spower, nullptr ) < hp )
             return 100;
         break;
 
@@ -1563,7 +1570,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
     }
 
-    return 0;
+    return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
 int Battle::Unit::GetSpellMagic() const
@@ -1575,7 +1582,7 @@ int Battle::Unit::GetSpellMagic() const
         return Spell::NONE;
     }
 
-    if ( Rand::Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( _randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }

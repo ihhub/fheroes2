@@ -28,3 +28,5 @@ CheckOptions:
     value: true
   - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
     value: true
+  - key: readability-redundant-member-init.IgnoreBaseInCopyConstructors
+    value: true

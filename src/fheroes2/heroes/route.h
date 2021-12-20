@@ -43,10 +43,25 @@ namespace Route
             , penalty( cost )
         {}
 
-        s32 GetIndex( void ) const;
-        u32 GetPenalty( void ) const;
-        s32 GetFrom( void ) const;
-        int GetDirection( void ) const;
+        int32_t GetIndex() const
+        {
+            return currentIndex;
+        }
+
+        uint32_t GetPenalty() const
+        {
+            return penalty;
+        }
+
+        int32_t GetFrom() const
+        {
+            return from;
+        }
+
+        int GetDirection() const
+        {
+            return direction;
+        }
 
     protected:
         friend StreamBase & operator<<( StreamBase &, const Step & );
@@ -71,7 +86,6 @@ namespace Route
         s32 GetDestinedIndex( void ) const;
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
-        uint32_t getLastMovePenalty() const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
         void Show( void )
@@ -94,6 +108,7 @@ namespace Route
             return !hide;
         }
         bool hasObstacle( void ) const;
+        bool hasAllowedSteps() const;
 
         std::string String( void ) const;
 

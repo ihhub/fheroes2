@@ -97,6 +97,9 @@ namespace AI
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
+        double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
+        double getSpellSlowRatio( const Battle::Unit & target ) const;
+        double getSpellHasteRatio( const Battle::Unit & target ) const;
         uint32_t spellDurationMultiplier( const Battle::Unit & target ) const;
 
         // turn variables that wouldn't persist
@@ -106,6 +109,7 @@ namespace AI
         double _enemyArmyStrength = 0;
         double _myShooterStr = 0;
         double _enemyShooterStr = 0;
+        double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;
         double _enemySpellStrength = 0;
         int _highestDamageExpected = 0;
@@ -113,6 +117,8 @@ namespace AI
         bool _defendingCastle = false;
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
+
+        const Rand::DeterministicRandomGenerator * _randomGenerator = nullptr;
     };
 
     class Normal : public Base
@@ -140,6 +146,10 @@ namespace AI
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
+
+        double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+
+        double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
     };
 }
 

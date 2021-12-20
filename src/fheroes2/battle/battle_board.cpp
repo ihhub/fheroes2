@@ -103,7 +103,7 @@ void Battle::Board::Reset( void )
 void Battle::Board::SetPositionQuality( const Unit & b ) const
 {
     Arena * arena = GetArena();
-    Units enemies( arena->GetForce( b.GetCurrentColor(), true ), true );
+    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
     enemies.SortArchers();
@@ -134,9 +134,9 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
 void Battle::Board::SetEnemyQuality( const Unit & unit ) const
 {
     Arena * arena = GetArena();
-    Units enemies( arena->GetForce( unit.GetColor(), true ), true );
+    Units enemies( arena->getEnemyForce( unit.GetColor() ), true );
     if ( unit.Modes( SP_BERSERKER ) ) {
-        Units allies( arena->GetForce( unit.GetColor(), false ), true );
+        Units allies( arena->getForce( unit.GetColor() ), true );
         enemies.insert( enemies.end(), allies.begin(), allies.end() );
     }
 
@@ -207,7 +207,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
     else {
         // Set passable cells.
         for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
-            GetPath( unit, Position::GetCorrect( unit, idx ), false );
+            GetPath( unit, Position::GetPositionWhenMoved( unit, idx ), false );
         }
     }
 }
@@ -522,6 +522,26 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
     if ( attacker.isDoubleCellAttack() ) {
         const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
         return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
+    }
+
+    if ( attacker.isAllAdjacentCellsAttack() ) {
+        Position position = Position::GetPositionWhenMoved( attacker, from );
+        Indexes aroundAttacker = GetAroundIndexes( position );
+
+        std::set<const Unit *> unitsUnderAttack;
+        Board * board = Arena::GetBoard();
+        for ( const int32_t index : aroundAttacker ) {
+            const Unit * unit = board->at( index ).GetUnit();
+            if ( unit != nullptr && unit->GetColor() != attacker.GetColor() ) {
+                unitsUnderAttack.insert( unit );
+            }
+        }
+
+        int32_t attackValue = 0;
+        for ( const Unit * unit : unitsUnderAttack ) {
+            attackValue += unit->GetScoreQuality( attacker );
+        }
+        return attackValue;
     }
     return target.GetScoreQuality( attacker );
 }
@@ -1025,10 +1045,15 @@ Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 
 Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & b )
 {
-    const int headIdx = b.GetHeadIndex();
+    return GetAroundIndexes( b.GetPosition() );
+}
 
-    if ( b.isWide() ) {
-        const int tailIdx = b.GetTailIndex();
+Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
+{
+    const int headIdx = position.GetHead()->GetIndex();
+
+    if ( position.GetTail() ) {
+        const int tailIdx = position.GetTail()->GetIndex();
 
         Indexes around = GetAroundIndexes( headIdx, tailIdx );
         const Indexes & tail = GetAroundIndexes( tailIdx, headIdx );
@@ -1159,12 +1184,16 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
+        if ( !CanAttackUnitFromCell( currentUnit, cell->GetIndex() ) ) {
+            continue;
+        }
+
         for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
             const Cell * aroundCell = GetCell( aroundIdx );
             assert( aroundCell != nullptr );
 
             if ( aroundCell->GetUnit() == &target ) {
-                return CanAttackUnitFromCell( currentUnit, cell->GetIndex() );
+                return true;
             }
         }
     }
@@ -1221,35 +1250,6 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     }
 
     return result;
-}
-
-int32_t Battle::Board::FindNearestReachableCell( const Unit & currentUnit, const int32_t dst )
-{
-    const Position dstPos = Position::GetReachable( currentUnit, dst );
-
-    if ( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) ) {
-        // Destination cell is already reachable
-        return dstPos.GetHead()->GetIndex();
-    }
-
-    const Cell * nearestCell = nullptr;
-    uint32_t nearestDistance = UINT32_MAX;
-
-    // Search for the nearest reachable cell
-    for ( const Cell & cell : *Arena::GetBoard() ) {
-        const Position pos = Position::GetReachable( currentUnit, cell.GetIndex() );
-
-        if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
-            const uint32_t distance = GetDistance( dst, cell.GetIndex() );
-
-            if ( distance < nearestDistance ) {
-                nearestCell = pos.GetHead();
-                nearestDistance = distance;
-            }
-        }
-    }
-
-    return nearestCell ? nearestCell->GetIndex() : -1;
 }
 
 int32_t Battle::Board::FixupDestinationCell( const Unit & currentUnit, const int32_t dst )

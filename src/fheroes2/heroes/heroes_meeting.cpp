@@ -43,31 +43,15 @@
 
 namespace
 {
-    void createMoveButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    fheroes2::ButtonSprite createMoveButton( const int32_t icnId, const int32_t offsetX, const int32_t offsetY, const fheroes2::Image & display )
     {
-        const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
         const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
         const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
 
-        const int32_t offsetX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
-        const int32_t width = std::min( originalReleasedImage.width(), originalPressedImage.width() );
-        const int32_t height = std::min( originalReleasedImage.height(), originalPressedImage.height() );
+        const int32_t minX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
+        const int32_t minY = std::min( originalReleasedImage.y(), originalPressedImage.y() );
 
-        fheroes2::Point extraOffset( 2, 1 );
-
-        const int32_t extendedWidth = width + extraOffset.x * 2;
-        const int32_t extendedHeight = height + extraOffset.y * 2;
-
-        fheroes2::Sprite releasedButton( extendedWidth, extendedHeight );
-        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, releasedButton, 0, 0, extendedWidth, extendedHeight );
-        fheroes2::Blit( originalReleasedImage, 0, 0, releasedButton, extraOffset.x, extraOffset.y, originalReleasedImage.width(), originalReleasedImage.height() );
-
-        fheroes2::Sprite pressedButton( extendedWidth, height + extraOffset.y * 2 );
-        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, pressedButton, 0, 0, extendedWidth, extendedHeight );
-        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, extraOffset.x, extraOffset.y + 1, originalPressedImage.width(), originalPressedImage.height() );
-
-        button.setPosition( screenOffset.x + offset.x + offsetX - extraOffset.x, screenOffset.y + offset.y - extraOffset.y );
-        button.setSprite( releasedButton, pressedButton );
+        return fheroes2::makeButtonWithShadow( offsetX + minX, offsetY + minY, originalReleasedImage, originalPressedImage, display, fheroes2::Point( -3, 3 ) );
     }
 
     void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
@@ -336,11 +320,19 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     secskill_bar2.SetPos( cur_pt.x + 353, cur_pt.y + 199 );
     secskill_bar2.Redraw();
 
+    const fheroes2::Sprite & moveButtonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+    fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
+
+    // The original resources do not have such animated buttons so we have to create those.
+    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 267, display );
+    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 290, display );
+
+    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 310, 223, 20 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 310, 223, 20 );
+
     // army
     dst_pt.x = cur_pt.x + 36;
     dst_pt.y = cur_pt.y + 267;
-
-    fheroes2::ImageRestorer armyCountBackgroundRestorer( display, cur_pt.x + 36, cur_pt.y + 310, 567, 20 );
 
     MeetingArmyBar selectArmy1( &GetArmy() );
     selectArmy1.SetColRows( 5, 1 );
@@ -380,31 +372,20 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
     selectArtifacts2.Redraw();
 
+    fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
+    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 361, display );
+    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 384, display );
+
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
 
-    buttonExit.draw();
-
-    // The original resources do not have such animated buttons so we have to create those.
-    const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
-    fheroes2::ButtonSprite moveArmyToHero2;
-    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArmyToHero1;
-    createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArtifactsToHero2;
-    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArtifactsToHero1;
-    createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
-
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
+    buttonExit.draw();
 
     display.render();
 
@@ -458,7 +439,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArtifacts2.isSelected() )
                 selectArtifacts2.ResetSelected();
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.Redraw();
             selectArmy2.Redraw();
@@ -479,9 +461,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            if ( bag_artifacts.MakeBattleGarb() || otherHero.bag_artifacts.MakeBattleGarb() ) {
-                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
-            }
+            std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+
+            // Use insert instead of std::merge to make appveyour happy
+            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
+                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
@@ -519,7 +506,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         if ( le.MouseClickLeft( hero1Area ) ) {
             Game::OpenHeroesDialog( *this, false, false, true );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -539,7 +527,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( hero2Area ) ) {
             Game::OpenHeroesDialog( otherHero, false, false, true );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -559,7 +548,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
             otherHero.GetArmy().MoveTroops( GetArmy() );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
@@ -574,7 +564,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
             GetArmy().MoveTroops( otherHero.GetArmy() );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
@@ -628,7 +619,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.ResetSelected();
 
     backPrimary.reset();
-    armyCountBackgroundRestorer.reset();
+    armyCountBackgroundRestorerLeft.reset();
+    armyCountBackgroundRestorerRight.reset();
     restorer.restore();
     display.render();
 }
@@ -684,7 +676,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
                      teach.end() );
     }
 
-    std::string message, spells1, spells2;
+    std::string spells1;
+    std::string spells2;
 
     // learning
     for ( SpellStorage::const_iterator it = learn.begin(); it != learn.end(); ++it ) {
@@ -703,6 +696,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     }
 
     if ( teacher->isControlHuman() || learner->isControlHuman() ) {
+        std::string message;
+
         if ( !spells1.empty() && !spells2.empty() )
             message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns %{spells1} from %{learner}, and teaches %{spells2} to %{learner}." );
         else if ( !spells1.empty() )

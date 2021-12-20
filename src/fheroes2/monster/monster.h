@@ -178,6 +178,7 @@ public:
     bool isTwiceAttack( void ) const;
     bool isRegenerating( void ) const;
     bool isDoubleCellAttack( void ) const;
+    bool isAllAdjacentCellsAttack() const;
     bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
@@ -195,8 +196,6 @@ public:
     int GetMonsterSprite() const;
 
     static Monster Rand( const LevelType type );
-    static u32 Rand4WeekOf( void );
-    static u32 Rand4MonthOf( void );
 
     static u32 GetCountFromHitPoints( const Monster &, u32 );
 
@@ -207,14 +206,5 @@ protected:
 
     int id;
 };
-
-struct MonsterStaticData
-{
-    // wrapper for stream
-    static MonsterStaticData & Get( void );
-};
-
-// TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-StreamBase & operator>>( StreamBase &, const MonsterStaticData & );
 
 #endif

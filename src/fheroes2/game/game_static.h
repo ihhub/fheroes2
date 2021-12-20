@@ -37,15 +37,6 @@ namespace Skill
 
 namespace GameStatic
 {
-    struct Data
-    {
-        static Data & Get( void );
-        // wrapper for stream
-    };
-
-    StreamBase & operator<<( StreamBase &, const Data & );
-    StreamBase & operator>>( StreamBase &, const Data & );
-
     u32 GetLostOnWhirlpoolPercent( void );
     u32 GetGameOverLostDays( void );
     u32 GetOverViewDistance( u32 );

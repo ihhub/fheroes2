@@ -26,9 +26,15 @@
 #include "army.h"
 #include "bitmodes.h"
 
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
+
 namespace Battle
 {
     class Unit;
+    class TroopsUidGenerator;
 
     class Units : public std::vector<Unit *>
     {
@@ -50,7 +56,7 @@ namespace Battle
     class Force : public Units, public BitModes
     {
     public:
-        Force( Army &, bool );
+        Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator, TroopsUidGenerator & generator );
         Force( const Force & ) = delete;
 
         ~Force() override;

@@ -23,6 +23,7 @@
 #ifndef H2HEROES_H
 #define H2HEROES_H
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <vector>
@@ -118,14 +119,14 @@ public:
         ROXANA,
         SANDRO,
         CELIA,
-        // from campain
+        // From The Succession Wars campaign.
         ROLAND,
         CORLAGON,
         ELIZA,
         ARCHIBALD,
         HALTON,
         BAX,
-        // from extended
+        // From The Price of Loyalty expansion.
         SOLMYR,
         DAINWIN,
         MOG,
@@ -170,13 +171,28 @@ public:
         MOVED = 0x00100000
     };
 
-    // Values are set by BitModes; shared with previous enum
-    enum class Role
+    // Types of heroes. Used only for AI as humans are smart enough to manage heroes by themselves.
+    enum class Role : int
     {
-        SCOUT = 0x01000000,
-        HUNTER = 0x02000000,
-        COURIER = 0x04000000,
-        CHAMPION = 0x08000000
+        // The most ordinary hero's role with no any specialization. This type does eveything what a hero can do:
+        // collecting resources, fighting (mostly weak) monsters, claiming towns and mines and expanding the visible territory.
+        HUNTER,
+
+        // The type of hero with a skew towards fights. His main priority is to kill monsters and enemies, capture castles and guarded mines.
+        // This type still can capture valuable mines or dwellings if they're on the way to something better.
+        FIGHTER,
+
+        // The main goal for Scout is to discover new areas so he should run towards the fog of war to expand the visible territory.
+        // These heroes usually appear when either no tasks exist on the map or when AI has too many heroes.
+        SCOUT,
+
+        // Courier's life is to deliver things from one place to another. Usually they bring an army for Fighters or Champions from
+        // dwellings, castles or from one hero to another.
+        COURIER,
+
+        // The mightiest hero among others. The main purpose of this type is to run over the enemy's territory and defeat all heroes there while
+        // capturing all castles and towns. This type of hero is set when one (or few) heroes are too strong in comparison to others.
+        CHAMPION
     };
 
     struct RedrawIndex
@@ -250,7 +266,7 @@ public:
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );
-    bool MayStillMove( const bool ignorePath ) const;
+    bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
 
@@ -282,9 +298,6 @@ public:
     void ActionNewMonth( void );
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
-
-    // Called from World::NewDay() for all heroes, hired or not
-    void ReplenishSpellPoints();
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
@@ -333,10 +346,10 @@ public:
     void UpdateRedrawBottom( const Maps::Tiles & tile );
     void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
     void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
-    void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
@@ -355,7 +368,7 @@ public:
     void setLastGroundRegion( uint32_t regionID );
 
     u32 GetExperience( void ) const;
-    void IncreaseExperience( u32 );
+    void IncreaseExperience( const uint32_t amount, const bool autoselect = false );
 
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
@@ -369,6 +382,16 @@ public:
 
     int GetAttackedMonsterTileIndex() const;
     void SetAttackedMonsterTileIndex( int idx );
+
+    void setAIRole( const Role role )
+    {
+        _aiRole = role;
+    }
+
+    Role getAIRole() const
+    {
+        return _aiRole;
+    }
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
@@ -392,6 +415,11 @@ private:
     void SetValidDirectionSprite();
 
     uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
+
+    // Daily replenishment of spell points
+    void ReplenishSpellPoints();
+
+    bool isInDeepOcean() const;
 
     enum
     {
@@ -430,6 +458,9 @@ private:
 
     int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
 
+    // This value should NOT be saved in save file as it's dynamically set during AI turn.
+    Role _aiRole;
+
     enum
     {
         HERO_MOVE_STEP = 4 // in pixels
@@ -455,6 +486,21 @@ struct AllHeroes : public VecHeroes
     void clear( void );
 
     void Scoute( int ) const;
+
+    void NewDay()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
+    }
+
+    void NewWeek()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
+    }
+
+    void NewMonth()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
+    }
 
     Heroes * GetGuest( const Castle & ) const;
     Heroes * GetGuard( const Castle & ) const;

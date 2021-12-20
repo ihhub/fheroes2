@@ -24,16 +24,18 @@
 #include "icn.h"
 #include "localevent.h"
 #include "screen.h"
+#include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_text.h"
 #include "ui_window.h"
 
+#include <algorithm>
 #include <cassert>
 
 namespace fheroes2
 {
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, size_t selectionId )
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
     {
         if ( languages.empty() ) {
             // Why do you even call this function having 0 languages?
@@ -45,8 +47,10 @@ namespace fheroes2
             return languages.front();
         }
 
-        if ( selectionId >= languages.size() ) {
-            selectionId = 0;
+        size_t selectionId = 0;
+        auto currentLanguageIt = std::find( languages.begin(), languages.end(), currentLanguage );
+        if ( currentLanguageIt != languages.end() ) {
+            selectionId = static_cast<size_t>( currentLanguageIt - languages.begin() );
         }
 
         const int32_t languageAreaWidth = 100;
@@ -56,13 +60,15 @@ namespace fheroes2
 
         Display & display = Display::instance();
 
-        const Sprite & buttonOkayImage = AGG::GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0 );
+        const int okIcnId = Settings::Get().ExtGameEvilInterface() ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+        const Sprite & buttonOkayImage = AGG::GetICN( okIcnId, 0 );
 
         StandardWindow window( languageAreaWidth * languageCount + 2 * offsetFromBorders, 125, display );
         const Rect windowRoi = window.activeArea();
 
-        Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
-                           ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1 );
+        ButtonSprite okayButton
+            = makeButtonWithShadow( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
+                                    buttonOkayImage, AGG::GetICN( okIcnId, 1 ), display );
 
         const Sprite & unselectedButtonSprite = AGG::GetICN( ICN::CELLWIN, 4 );
         const Sprite & selectionSprite = AGG::GetICN( ICN::CELLWIN, 5 );
@@ -91,6 +97,7 @@ namespace fheroes2
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {
+            fheroes2::LanguageSwitcher languageSwitcher( languages[i] );
             const Text languageName( getLanguageName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
             languageName.draw( windowRoi.x + offsetFromBorders + languageAreaWidth * i + languageAreaWidth / 2 - languageName.width() / 2, windowRoi.y + 40, display );
         }

@@ -26,36 +26,38 @@
 
 #include "types.h"
 
-#define MP2OFFSETDATA 428
-#define SIZEOFMP2TILE 20
-#define SIZEOFMP2ADDON 15
-#define SIZEOFMP2CASTLE 0x46
-#define SIZEOFMP2HEROES 0x4c
-
-#define SIZEOFMP2SIGN 0x0a
-#define SIZEOFMP2RUMOR 0x09
-#define SIZEOFMP2EVENT 0x32
-#define SIZEOFMP2RIDDLE 0x8a
-
 namespace MP2
 {
+    enum MP2Info
+    {
+        MP2OFFSETDATA = 428,
+        SIZEOFMP2TILE = 20,
+        SIZEOFMP2ADDON = 15,
+        SIZEOFMP2CASTLE = 70,
+        SIZEOFMP2HEROES = 76,
+        SIZEOFMP2SIGN = 10,
+        SIZEOFMP2RUMOR = 9,
+        SIZEOFMP2EVENT = 50,
+        SIZEOFMP2RIDDLE = 138
+    };
+
     // origin mp2 tile
     struct mp2tile_t
     {
-        uint16_t tileIndex; // Tile index representing a type of surface: ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach.
+        uint16_t surfaceType; // Tile index representing a type of surface: ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach.
 
-        u8 objectName1; // level 1.0
-        u8 indexName1; // index level 1.0 or 0xFF
-        u8 quantity1; // Bitfield, first 3 bits are flags, rest is used as quantity
-        u8 quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
-        u8 objectName2; // level 2.0
-        u8 indexName2; // index level 2.0 or 0xFF
+        uint8_t objectName1; // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
+        uint8_t level1IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        uint8_t quantity1; // Bitfield, first 3 bits are flags, rest is used as quantity
+        uint8_t quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
+        uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
+        uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
 
         // First 2 bits responsible for tile shape (0 - 3). Subsequent 3 bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
-        // between land and sea.
+        // between land and sea. They can be related to passabilities.
         uint8_t flags;
 
-        u8 mapObject; // zero or object
+        uint8_t mapObjectType; // Object type. Please refer to MapObjectType enumeration.
 
         uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
 
@@ -75,11 +77,11 @@ namespace MP2
     {
         uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
 
-        u8 objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
-        u8 indexNameN1; // level 1.N or 0xFF
-        u8 quantityN; // Bitfield containing metadata
-        u8 objectNameN2; // level 2.N
-        u8 indexNameN2; // level 1.N or 0xFF
+        uint8_t objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
+        uint8_t indexNameN1; // level 1.N or 0xFF
+        uint8_t quantityN; // Bitfield containing metadata
+        uint8_t objectNameN2; // level 2.N
+        uint8_t indexNameN2; // level 1.N or 0xFF
 
         // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
         // UID is used to find all pieces/addons which belong to the same object.
@@ -100,31 +102,31 @@ namespace MP2
         bool customBuilding;
         u16 building;
         /*
-        0000 0000 0000 0010	Thieve's Guild
-        0000 0000 0000 0100	Tavern
-        0000 0000 0000 1000	Shipyard
-        0000 0000 0001 0000	Well
-        0000 0000 1000 0000	Statue
-        0000 0001 0000 0000	Left Turret
-        0000 0010 0000 0000	Right Turret
-        0000 0100 0000 0000	Marketplace
-        0000 1000 0000 0000	Farm, Garbage He, Crystal Gar, Waterfall, Orchard, Skull Pile
-        0001 0000 0000 0000	Moat
-        0010 0000 0000 0000	Fortification, Coliseum, Rainbow, Dungeon, Library, Storm
+        0000 0000 0000 0010 Thieve's Guild
+        0000 0000 0000 0100 Tavern
+        0000 0000 0000 1000 Shipyard
+        0000 0000 0001 0000 Well
+        0000 0000 1000 0000 Statue
+        0000 0001 0000 0000 Left Turret
+        0000 0010 0000 0000 Right Turret
+        0000 0100 0000 0000 Marketplace
+        0000 1000 0000 0000 Farm, Garbage He, Crystal Gar, Waterfall, Orchard, Skull Pile
+        0001 0000 0000 0000 Moat
+        0010 0000 0000 0000 Fortification, Coliseum, Rainbow, Dungeon, Library, Storm
         */
         u16 dwelling;
         /*
-        0000 0000 0000 1000	dweling1
-        0000 0000 0001 0000	dweling2
-        0000 0000 0010 0000	dweling3
-        0000 0000 0100 0000	dweling4
-        0000 0000 1000 0000	dweling5
-        0000 0001 0000 0000	dweling6
-        0000 0010 0000 0000	upgDweling2
-        0000 0100 0000 0000	upgDweling3
-        0000 1000 0000 0000	upgDweling4
-        0001 0000 0000 0000	upgDweling5
-        0010 0000 0000 0000	upgDweling6
+        0000 0000 0000 1000 dweling1
+        0000 0000 0001 0000 dweling2
+        0000 0000 0010 0000 dweling3
+        0000 0000 0100 0000 dweling4
+        0000 0000 1000 0000 dweling5
+        0000 0001 0000 0000 dweling6
+        0000 0010 0000 0000 upgDweling2
+        0000 0100 0000 0000 upgDweling3
+        0000 1000 0000 0000 upgDweling4
+        0001 0000 0000 0000 upgDweling5
+        0010 0000 0000 0000 upgDweling6
         */
         u8 magicTower;
         bool customTroops;
@@ -561,7 +563,9 @@ namespace MP2
         OBJ_WATERALTAR = 0xFF
     };
 
-    int GetICNObject( int tileset );
+    // Return Icn ID related to this tileset value.
+    int GetICNObject( const uint8_t tileset );
+
     const char * StringObject( const MapObjectType objectType );
 
     // This function returns plural forms only for certain object types.
@@ -587,11 +591,12 @@ namespace MP2
     bool isHeroUpgradeObject( const MapObjectType objectType );
     bool isMonsterDwelling( const MapObjectType objectType );
     bool isRemoveObject( const MapObjectType objectType );
-    bool isMoveObject( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
 
     bool isNeedStayFront( const MapObjectType objectType );
+
+    bool isAccessibleFromBeach( const MapObjectType objectType );
 
     bool isDayLife( const MapObjectType objectType );
     bool isWeekLife( const MapObjectType objectType );

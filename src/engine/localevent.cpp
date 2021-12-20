@@ -37,6 +37,188 @@ namespace
         MOD_NUM = KMOD_NUM
     };
 
+    char CharFromKeySym( const KeySym sym, const int32_t mod )
+    {
+        switch ( sym ) {
+        case KEY_1:
+            return ( MOD_SHIFT & mod ? '!' : '1' );
+        case KEY_2:
+            return ( MOD_SHIFT & mod ? '@' : '2' );
+        case KEY_3:
+            return ( MOD_SHIFT & mod ? '#' : '3' );
+        case KEY_4:
+            return ( MOD_SHIFT & mod ? '$' : '4' );
+        case KEY_5:
+            return ( MOD_SHIFT & mod ? '%' : '5' );
+        case KEY_6:
+            return ( MOD_SHIFT & mod ? '^' : '6' );
+        case KEY_7:
+            return ( MOD_SHIFT & mod ? '&' : '7' );
+        case KEY_8:
+            return ( MOD_SHIFT & mod ? '*' : '8' );
+        case KEY_9:
+            return ( MOD_SHIFT & mod ? '(' : '9' );
+        case KEY_0:
+            return ( MOD_SHIFT & mod ? ')' : '0' );
+
+        case KEY_KP0:
+            if ( MOD_NUM & mod )
+                return '0';
+            break;
+        case KEY_KP1:
+            if ( MOD_NUM & mod )
+                return '1';
+            break;
+        case KEY_KP2:
+            if ( MOD_NUM & mod )
+                return '2';
+            break;
+        case KEY_KP3:
+            if ( MOD_NUM & mod )
+                return '3';
+            break;
+        case KEY_KP4:
+            if ( MOD_NUM & mod )
+                return '4';
+            break;
+        case KEY_KP5:
+            if ( MOD_NUM & mod )
+                return '5';
+            break;
+        case KEY_KP6:
+            if ( MOD_NUM & mod )
+                return '6';
+            break;
+        case KEY_KP7:
+            if ( MOD_NUM & mod )
+                return '7';
+            break;
+        case KEY_KP8:
+            if ( MOD_NUM & mod )
+                return '8';
+            break;
+        case KEY_KP9:
+            if ( MOD_NUM & mod )
+                return '9';
+            break;
+
+        case KEY_MINUS:
+            return ( MOD_SHIFT & mod ? '_' : '-' );
+        case KEY_EQUALS:
+            return ( MOD_SHIFT & mod ? '+' : '=' );
+        case KEY_BACKSLASH:
+            return ( MOD_SHIFT & mod ? '|' : '\\' );
+        case KEY_LEFTBRACKET:
+            return ( MOD_SHIFT & mod ? '{' : '[' );
+        case KEY_RIGHTBRACKET:
+            return ( MOD_SHIFT & mod ? '}' : ']' );
+        case KEY_SEMICOLON:
+            return ( MOD_SHIFT & mod ? ':' : ';' );
+        case KEY_QUOTE:
+            return ( MOD_SHIFT & mod ? '"' : '\'' );
+        case KEY_COMMA:
+            return ( MOD_SHIFT & mod ? '<' : ',' );
+        case KEY_PERIOD:
+            return ( MOD_SHIFT & mod ? '>' : '.' );
+        case KEY_SLASH:
+            return ( MOD_SHIFT & mod ? '?' : '/' );
+
+        case KEY_EXCLAIM:
+            return '!';
+        case KEY_AT:
+            return '@';
+        case KEY_HASH:
+            return '#';
+        case KEY_DOLLAR:
+            return '$';
+        case KEY_AMPERSAND:
+            return '&';
+        case KEY_ASTERISK:
+            return '*';
+        case KEY_LEFTPAREN:
+            return '(';
+        case KEY_RIGHTPAREN:
+            return ')';
+        case KEY_QUOTEDBL:
+            return '"';
+        case KEY_PLUS:
+            return '+';
+        case KEY_COLON:
+            return ':';
+        case KEY_LESS:
+            return '<';
+        case KEY_GREATER:
+            return '>';
+        case KEY_QUESTION:
+            return '?';
+        case KEY_CARET:
+            return '^';
+        case KEY_UNDERSCORE:
+            return '_';
+
+        case KEY_SPACE:
+            return ' ';
+
+        case KEY_a:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'A' : 'a' );
+        case KEY_b:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'B' : 'b' );
+        case KEY_c:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'C' : 'c' );
+        case KEY_d:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'D' : 'd' );
+        case KEY_e:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'E' : 'e' );
+        case KEY_f:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'F' : 'f' );
+        case KEY_g:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'G' : 'g' );
+        case KEY_h:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'H' : 'h' );
+        case KEY_i:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'I' : 'i' );
+        case KEY_j:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'J' : 'j' );
+        case KEY_k:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'K' : 'k' );
+        case KEY_l:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'L' : 'l' );
+        case KEY_m:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'M' : 'm' );
+        case KEY_n:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'N' : 'n' );
+        case KEY_o:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'O' : 'o' );
+        case KEY_p:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'P' : 'p' );
+        case KEY_q:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Q' : 'q' );
+        case KEY_r:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'R' : 'r' );
+        case KEY_s:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'S' : 's' );
+        case KEY_t:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'T' : 't' );
+        case KEY_u:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'U' : 'u' );
+        case KEY_v:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'V' : 'v' );
+        case KEY_w:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'W' : 'w' );
+        case KEY_x:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'X' : 'x' );
+        case KEY_y:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Y' : 'y' );
+        case KEY_z:
+            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Z' : 'z' );
+
+        default:
+            break;
+        }
+
+        return 0;
+    }
+
 #if defined( FHEROES2_VITA )
     const int totalCharactersDPad = 38;
     bool dpadInputActive = false;
@@ -645,189 +827,7 @@ bool PressIntKey( u32 max, u32 & result )
     return false;
 }
 
-char CharFromKeySym( KeySym sym, u16 mod )
-{
-    switch ( sym ) {
-    case KEY_1:
-        return ( MOD_SHIFT & mod ? '!' : '1' );
-    case KEY_2:
-        return ( MOD_SHIFT & mod ? '@' : '2' );
-    case KEY_3:
-        return ( MOD_SHIFT & mod ? '#' : '3' );
-    case KEY_4:
-        return ( MOD_SHIFT & mod ? '$' : '4' );
-    case KEY_5:
-        return ( MOD_SHIFT & mod ? '%' : '5' );
-    case KEY_6:
-        return ( MOD_SHIFT & mod ? '^' : '6' );
-    case KEY_7:
-        return ( MOD_SHIFT & mod ? '&' : '7' );
-    case KEY_8:
-        return ( MOD_SHIFT & mod ? '*' : '8' );
-    case KEY_9:
-        return ( MOD_SHIFT & mod ? '(' : '9' );
-    case KEY_0:
-        return ( MOD_SHIFT & mod ? ')' : '0' );
-
-    case KEY_KP0:
-        if ( MOD_NUM & mod )
-            return '0';
-        break;
-    case KEY_KP1:
-        if ( MOD_NUM & mod )
-            return '1';
-        break;
-    case KEY_KP2:
-        if ( MOD_NUM & mod )
-            return '2';
-        break;
-    case KEY_KP3:
-        if ( MOD_NUM & mod )
-            return '3';
-        break;
-    case KEY_KP4:
-        if ( MOD_NUM & mod )
-            return '4';
-        break;
-    case KEY_KP5:
-        if ( MOD_NUM & mod )
-            return '5';
-        break;
-    case KEY_KP6:
-        if ( MOD_NUM & mod )
-            return '6';
-        break;
-    case KEY_KP7:
-        if ( MOD_NUM & mod )
-            return '7';
-        break;
-    case KEY_KP8:
-        if ( MOD_NUM & mod )
-            return '8';
-        break;
-    case KEY_KP9:
-        if ( MOD_NUM & mod )
-            return '9';
-        break;
-
-    case KEY_MINUS:
-        return ( MOD_SHIFT & mod ? '_' : '-' );
-    case KEY_EQUALS:
-        return ( MOD_SHIFT & mod ? '+' : '=' );
-    case KEY_BACKSLASH:
-        return ( MOD_SHIFT & mod ? '|' : '\\' );
-    case KEY_LEFTBRACKET:
-        return ( MOD_SHIFT & mod ? '{' : '[' );
-    case KEY_RIGHTBRACKET:
-        return ( MOD_SHIFT & mod ? '}' : ']' );
-    case KEY_SEMICOLON:
-        return ( MOD_SHIFT & mod ? ':' : ';' );
-    case KEY_QUOTE:
-        return ( MOD_SHIFT & mod ? '"' : '\'' );
-    case KEY_COMMA:
-        return ( MOD_SHIFT & mod ? '<' : ',' );
-    case KEY_PERIOD:
-        return ( MOD_SHIFT & mod ? '>' : '.' );
-    case KEY_SLASH:
-        return ( MOD_SHIFT & mod ? '?' : '/' );
-
-    case KEY_EXCLAIM:
-        return '!';
-    case KEY_AT:
-        return '@';
-    case KEY_HASH:
-        return '#';
-    case KEY_DOLLAR:
-        return '$';
-    case KEY_AMPERSAND:
-        return '&';
-    case KEY_ASTERISK:
-        return '*';
-    case KEY_LEFTPAREN:
-        return '(';
-    case KEY_RIGHTPAREN:
-        return ')';
-    case KEY_QUOTEDBL:
-        return '"';
-    case KEY_PLUS:
-        return '+';
-    case KEY_COLON:
-        return ':';
-    case KEY_LESS:
-        return '<';
-    case KEY_GREATER:
-        return '>';
-    case KEY_QUESTION:
-        return '?';
-    case KEY_CARET:
-        return '^';
-    case KEY_UNDERSCORE:
-        return '_';
-
-    case KEY_SPACE:
-        return ' ';
-
-    case KEY_a:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'A' : 'a' );
-    case KEY_b:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'B' : 'b' );
-    case KEY_c:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'C' : 'c' );
-    case KEY_d:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'D' : 'd' );
-    case KEY_e:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'E' : 'e' );
-    case KEY_f:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'F' : 'f' );
-    case KEY_g:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'G' : 'g' );
-    case KEY_h:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'H' : 'h' );
-    case KEY_i:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'I' : 'i' );
-    case KEY_j:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'J' : 'j' );
-    case KEY_k:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'K' : 'k' );
-    case KEY_l:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'L' : 'l' );
-    case KEY_m:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'M' : 'm' );
-    case KEY_n:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'N' : 'n' );
-    case KEY_o:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'O' : 'o' );
-    case KEY_p:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'P' : 'p' );
-    case KEY_q:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Q' : 'q' );
-    case KEY_r:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'R' : 'r' );
-    case KEY_s:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'S' : 's' );
-    case KEY_t:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'T' : 't' );
-    case KEY_u:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'U' : 'u' );
-    case KEY_v:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'V' : 'v' );
-    case KEY_w:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'W' : 'w' );
-    case KEY_x:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'X' : 'x' );
-    case KEY_y:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Y' : 'y' );
-    case KEY_z:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Z' : 'z' );
-
-    default:
-        break;
-    }
-
-    return 0;
-}
-
-size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
+size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod )
 {
 #if defined( FHEROES2_VITA )
     (void)mod;
@@ -1112,22 +1112,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     ResetModes( MOUSE_MOTION );
     ResetModes( MOUSE_RELEASED );
     ResetModes( MOUSE_CLICKED );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( _gameController != nullptr ) {
-        // fast map scroll with dpad
-#if defined( FHEROES2_VITA )
-        if ( !_dpadScrollActive || dpadInputActive )
-#else
-        if ( !_dpadScrollActive )
-#endif
-            ResetModes( KEY_PRESSED );
-    }
-    else {
-        ResetModes( KEY_PRESSED );
-    }
-#else
     ResetModes( KEY_PRESSED );
-#endif
 
     mouse_wm = fheroes2::Point();
 
@@ -1396,31 +1381,30 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
-        _dpadScrollActive = true;
-
-        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
-            key_value = KEY_KP4;
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
-            key_value = KEY_KP6;
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
-            key_value = KEY_KP8;
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-            key_value = KEY_KP2;
-        }
-        else {
-            _dpadScrollActive = false;
-        }
-
 #if defined( FHEROES2_VITA )
-        if ( dpadInputActive && ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) ) {
-            key_value = KEY_SHIFT;
+        if ( dpadInputActive ) {
+            if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+                key_value = KEY_SHIFT;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
+                key_value = KEY_KP4;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
+                key_value = KEY_KP6;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
+                key_value = KEY_KP8;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+                key_value = KEY_KP2;
+            }
             return;
         }
 #endif
-        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+            key_value = KEY_SPACE;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
             key_value = KEY_h;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {

@@ -136,10 +136,11 @@ namespace Maps
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
 
-StreamBase & operator>>( StreamBase & stream, GameVersion & version );
-
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
-bool PrepareMapsFileInfoList( MapsFileInfoList &, bool multi );
+namespace Maps
+{
+    MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
+}
 
 #endif

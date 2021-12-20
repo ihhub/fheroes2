@@ -22,6 +22,7 @@
 #ifndef H2TOOLS_H
 #define H2TOOLS_H
 
+#include <bitset>
 #include <list>
 #include <string>
 #include <vector>
@@ -71,6 +72,23 @@ namespace fheroes2
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
+
+    template <class T>
+    void hashCombine( std::size_t & seed, const T & v )
+    {
+        std::hash<T> hasher;
+        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
+
+    template <size_t N>
+    std::bitset<N> makeBitsetFromVector( const std::vector<int> & vector )
+    {
+        std::bitset<N> result;
+        for ( const int index : vector ) {
+            result.set( index, true );
+        }
+        return result;
+    }
 }
 
 #endif

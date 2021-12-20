@@ -24,7 +24,9 @@
 #include <locale>
 #endif
 #include <algorithm>
+#include <cassert>
 #include <cstring>
+#include <map>
 
 #include "artifact.h"
 #include "color.h"
@@ -36,18 +38,17 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "mp2.h"
+#include "mp2_helper.h"
 #include "race.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
 
-#include <cassert>
-
 namespace
 {
     const size_t mapNameLength = 16;
-    const size_t mapDescriptionLength = 143;
+    const size_t mapDescriptionLength = 200;
 
     template <typename CharType>
     bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
@@ -165,9 +166,9 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     size_h = f.size_h;
     difficulty = f.difficulty;
 
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
-        races[ii] = f.races[ii];
-        unions[ii] = f.unions[ii];
+    for ( int32_t i = 0; i < KINGDOMMAX; ++i ) {
+        races[i] = f.races[i];
+        unions[i] = f.unions[i];
     }
 
     kingdom_colors = f.kingdom_colors;
@@ -214,9 +215,9 @@ void Maps::FileInfo::Reset( void )
 
     _version = GameVersion::SUCCESSION_WARS;
 
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
-        races[ii] = Race::NONE;
-        unions[ii] = ByteToColor( ii );
+    for ( int32_t i = 0; i < KINGDOMMAX; ++i ) {
+        races[i] = Race::NONE;
+        unions[i] = ByteToColor( i );
     }
 }
 
@@ -340,24 +341,10 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     // If the color is under computer control only we have to make it as an ally for human player.
     if ( conditions_loss == LOSS_HERO && conditions_wins == VICTORY_DEFEAT_EVERYONE && Colors( allow_human_colors ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
-        fs.seek( MP2OFFSETDATA + ( loss1 + loss2 * size_w ) * 20 );
+        fs.seek( MP2::MP2OFFSETDATA + ( loss1 + loss2 * size_w ) * 20 );
 
         MP2::mp2tile_t mp2tile;
-        mp2tile.tileIndex = fs.getLE16();
-        mp2tile.objectName1 = fs.get();
-        mp2tile.indexName1 = fs.get();
-        mp2tile.quantity1 = fs.get();
-        mp2tile.quantity2 = fs.get();
-        mp2tile.objectName2 = fs.get();
-        mp2tile.indexName2 = fs.get();
-        mp2tile.flags = fs.get();
-        mp2tile.mapObject = fs.get();
-
-        // offset first addon
-        fs.getLE16();
-
-        mp2tile.level1ObjectUID = fs.getLE32();
-        mp2tile.level2ObjectUID = fs.getLE32();
+        MP2::loadTile( fs, mp2tile );
 
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );
@@ -584,38 +571,6 @@ std::string Maps::FileInfo::String( void ) const
     return os.str();
 }
 
-bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
-{
-    const Settings & conf = Settings::Get();
-
-    ListFiles maps_old = Settings::FindFiles( "maps", ".mp2", false );
-    if ( conf.isPriceOfLoyaltySupported() )
-        maps_old.Append( Settings::FindFiles( "maps", ".mx2", false ) );
-
-    for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
-        Maps::FileInfo fi;
-        if ( fi.ReadMP2( *it ) )
-            lists.push_back( fi );
-    }
-
-    if ( lists.empty() )
-        return false;
-
-    std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
-
-    // set preferably count filter
-    const int prefPlayerCount = conf.PreferablyCountPlayers();
-    if ( !multi || prefPlayerCount > 0 ) {
-        lists.erase( std::remove_if( lists.begin(), lists.end(),
-                                     [multi, prefPlayerCount]( const Maps::FileInfo & info ) {
-                                         return ( !multi && info.isMultiPlayerMap() ) || ( prefPlayerCount > 0 && !info.isAllowCountPlayers( prefPlayerCount ) );
-                                     } ),
-                     lists.end() );
-    }
-
-    return !lists.empty();
-}
-
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
     // Only the basename of map filename (fi.file) is saved
@@ -627,7 +582,6 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
     msg << fi.kingdom_colors << fi.allow_human_colors << fi.allow_comp_colors << fi.rnd_races << fi.conditions_wins << fi.comp_also_wins << fi.allow_normal_victory
         << fi.wins1 << fi.wins2 << fi.conditions_loss << fi.loss1 << fi.loss2 << fi.localtime << fi.startWithHeroInEachCastle;
 
-    // Please take a note that game version is written to save files starting from FORMAT_VERSION_094_RELEASE.
     msg << static_cast<int>( fi._version );
 
     return msg;
@@ -646,16 +600,45 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     msg >> fi.kingdom_colors >> fi.allow_human_colors >> fi.allow_comp_colors >> fi.rnd_races >> fi.conditions_wins >> fi.comp_also_wins >> fi.allow_normal_victory
         >> fi.wins1 >> fi.wins2 >> fi.conditions_loss >> fi.loss1 >> fi.loss2 >> fi.localtime >> fi.startWithHeroInEachCastle;
 
-    // Versions of FileInfo before FORMAT_VERSION_094_RELEASE do not contain GameVersion flag and in this case the only to properly support it is to load separately.
-    // Please take a look at HeaderSAV class in game_io.cpp file.
-    // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE add GameVersion loading code here and remove the separate function below.
+    int temp = 0;
+    msg >> temp;
+    fi._version = static_cast<GameVersion>( temp );
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & stream, GameVersion & version )
+MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
 {
-    int temp = 0;
-    stream >> temp;
-    version = static_cast<GameVersion>( temp );
-    return stream;
+    const Settings & conf = Settings::Get();
+
+    ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
+    }
+
+    // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
+    std::map<std::string, Maps::FileInfo> uniqueMaps;
+
+    const int prefNumOfPlayers = conf.PreferablyCountPlayers();
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        if ( fi.ReadMP2( mapFile ) ) {
+            if ( ( !multi && !fi.isMultiPlayerMap() ) || ( multi && prefNumOfPlayers > 1 && fi.isAllowCountPlayers( prefNumOfPlayers ) ) ) {
+                uniqueMaps[System::GetBasename( mapFile )] = fi;
+            }
+        }
+    }
+
+    MapsFileInfoList result;
+
+    result.reserve( uniqueMaps.size() );
+
+    for ( const auto & item : uniqueMaps ) {
+        result.push_back( item.second );
+    }
+
+    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+
+    return result;
 }

@@ -42,6 +42,8 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -67,6 +69,15 @@ namespace
 
         return text.size();
     }
+
+    std::string ResizeToShortName( const std::string & str )
+    {
+        std::string res = System::GetBasename( str );
+        size_t it = res.rfind( '.' );
+        if ( std::string::npos != it )
+            res.resize( it );
+        return res;
+    }
 }
 
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
@@ -75,7 +86,7 @@ bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::s
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
-    FileInfoListBox( const fheroes2::Point & pt )
+    explicit FileInfoListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , _isDoubleClicked( false )
     {}
@@ -83,14 +94,27 @@ public:
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override;
-    void ActionCurrentDn( void ) override;
+    void ActionCurrentUp() override;
+    void ActionCurrentDn() override;
     void ActionListDoubleClick( Maps::FileInfo & ) override;
     void ActionListSingleClick( Maps::FileInfo & ) override;
 
-    void ActionListPressRight( Maps::FileInfo & ) override
+    void ActionListPressRight( Maps::FileInfo & info ) override
     {
-        // Do nothing.
+        // On some OS like Windows path contains '\' symbol. This symbol doesn't exist in the resources.
+        // To avoid this we have to replace all '\' symbols by '/' symbols.
+        std::string fullPath = info.file;
+        StringReplace( fullPath, "\\", "/" );
+
+        fheroes2::Text header( ResizeToShortName( info.file ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+        fheroes2::MultiFontText body;
+        body.add( { _( "Map: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "\n\nLocation: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+
+        fheroes2::showMessage( header, body, Dialog::ZERO );
     }
 
     bool isDoubleClicked() const
@@ -165,15 +189,6 @@ void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & )
 void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
 {
     // Do nothing.
-}
-
-std::string ResizeToShortName( const std::string & str )
-{
-    std::string res = System::GetBasename( str );
-    size_t it = res.rfind( '.' );
-    if ( std::string::npos != it )
-        res.resize( it );
-    return res;
 }
 
 MapsFileInfoList GetSortedMapsFileInfoList( void )
@@ -332,6 +347,19 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             listbox.Unselect();
             isListboxSelected = false;
         }
+
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
+            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            if ( isEditing ) {
+                Dialog::Message( _( "OK" ), _( "Click to save the current game." ), Font::BIG );
+            }
+            else {
+                Dialog::Message( _( "OK" ), _( "Click to load a previously saved game." ), Font::BIG );
+            }
+        }
+
         if ( !isEditing && le.KeyPress( KEY_DELETE ) && isListboxSelected ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );

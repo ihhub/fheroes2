@@ -173,9 +173,7 @@ KeySym GetKeySym( int );
 
 bool PressIntKey( u32 max, u32 & result );
 
-size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
-
-char CharFromKeySym( KeySym, u16 mod = 0 );
+size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod );
 
 class LocalEvent
 {
@@ -267,8 +265,8 @@ private:
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
 
-    void StopSounds();
-    void ResumeSounds();
+    static void StopSounds();
+    static void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     static int GlobalFilterEvents( void *, SDL_Event * );
@@ -323,7 +321,7 @@ private:
 
     enum
     {
-        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_L_DEADZONE = 4000,
         CONTROLLER_R_DEADZONE = 25000
     };
 
@@ -345,7 +343,6 @@ private:
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
 #endif

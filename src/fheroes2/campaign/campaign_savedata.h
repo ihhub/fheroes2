@@ -35,11 +35,6 @@ namespace Campaign
     public:
         CampaignSaveData();
 
-        const ScenarioBonusData & getCurrentScenarioBonus() const
-        {
-            return _currentScenarioBonus;
-        }
-
         const std::vector<int> & getFinishedMaps() const
         {
             return _finishedMaps;
@@ -73,7 +68,7 @@ namespace Campaign
             return _carryOverTroops;
         }
 
-        const std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
+        std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
 
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
@@ -83,6 +78,7 @@ namespace Campaign
         void setCarryOverTroops( const Troops & troops );
         void reset();
         void addDaysPassed( const uint32_t days );
+        void removeCampaignAward( const int awardID );
 
         static CampaignSaveData & Get();
 
@@ -98,6 +94,12 @@ namespace Campaign
         uint32_t _daysPassed;
         ScenarioBonusData _currentScenarioBonus;
     };
+
+    // Call this function only when playing campaign scenario.
+    ScenarioVictoryCondition getCurrentScenarioVictoryCondition();
+
+    // Call this function only when playing campaign scenario.
+    ScenarioLossCondition getCurrentScenarioLossCondition();
 }
 
 #endif
