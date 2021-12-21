@@ -414,7 +414,6 @@ std::string System::FileNameToUTF8( const std::string & str )
     static std::map<std::string, std::string> acpToUtf8;
 
     const auto iter = acpToUtf8.find( str );
-
     if ( iter != acpToUtf8.end() ) {
         return iter->second;
     }
@@ -439,7 +438,6 @@ std::string System::FileNameToUTF8( const std::string & str )
     };
 
     const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
-
     if ( wLen <= 0 ) {
         ERROR_LOG( getLastErrorStr() );
 
@@ -455,7 +453,6 @@ std::string System::FileNameToUTF8( const std::string & str )
     }
 
     const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
-
     if ( uLen <= 0 ) {
         ERROR_LOG( getLastErrorStr() );
 
