@@ -79,7 +79,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV( file );
 
         if ( !sample ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
 
         return sample;
@@ -90,7 +90,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
 
         if ( !sample ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
 
         return sample;
@@ -101,7 +101,7 @@ namespace
         int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
 
         if ( res == -1 ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
 
         return res;
@@ -136,7 +136,7 @@ void Audio::Init()
         hardware.samples = 2048;
 
         if ( 0 != Mix_OpenAudio( hardware.freq, hardware.format, hardware.channels, hardware.samples ) ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
 
             valid = false;
         }
