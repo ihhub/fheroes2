@@ -373,8 +373,6 @@ namespace AI
         }
         _considerRetreat = _considerRetreat || initialUnitCount < 4;
 
-        const double myShooterStengthNoCastle = _myShooterStr;
-
         // Add castle siege (and battle arena) modifiers
         _attackingCastle = false;
         _defendingCastle = false;
