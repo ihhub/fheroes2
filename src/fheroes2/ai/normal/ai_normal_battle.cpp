@@ -427,7 +427,7 @@ namespace AI
 
         double enemyArcherThreshold = 0.75;
         if ( _defendingCastle ) {
-            // Don't make shooters kill us while standing in the castle.
+            // Don't make shooters to kill us while we are standing in the castle.
             enemyArcherThreshold /= 2;
         }
 
