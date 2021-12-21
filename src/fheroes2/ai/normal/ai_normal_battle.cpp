@@ -413,10 +413,6 @@ namespace AI
             _enemyShooterStr += _enemySpellStrength;
         }
 
-        if ( _defendingCastle ) {
-            assert( castle != nullptr );
-        }
-
         double overPowerRatio = 10; // for melee creatures
         if ( currentUnit.isFlying() ) {
             overPowerRatio = 6;
