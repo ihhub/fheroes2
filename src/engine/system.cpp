@@ -407,11 +407,11 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 std::string System::FileNameToUTF8( const std::string & str )
 {
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-    static std::map<std::string, std::string> acpToUtf8;
-
     if ( str.empty() ) {
         return str;
     }
+
+    static std::map<std::string, std::string> acpToUtf8;
 
     const auto iter = acpToUtf8.find( str );
 
