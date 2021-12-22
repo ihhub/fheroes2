@@ -44,7 +44,7 @@ namespace Mixer
 
     size_t getChannelCount();
 
-    int Play( const char * file, const int channel = -1, const bool loop = false );
+    int Play( const std::string & file, const int channel = -1, const bool loop = false );
     int Play( const uint8_t * ptr, const uint32_t size, const int channel = -1, const bool loop = false );
 
     int MaxVolume();
