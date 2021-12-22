@@ -380,6 +380,7 @@ namespace AI
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->hasArtifact( Artifact::GOLDEN_BOW );
 
+            // TODO: verify that GetScoreQuality method always returns positive values here. Most likely for neutral castle it returns negative.
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 
             double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
@@ -412,11 +413,25 @@ namespace AI
             _enemyShooterStr += _enemySpellStrength;
         }
 
-        // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
-        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * 10;
+        double overPowerRatio = 10; // for melee creatures
+        if ( currentUnit.isFlying() ) {
+            overPowerRatio = 6;
+        }
+        if ( _defendingCastle ) {
+            overPowerRatio /= 2; // don't make shooters to kill us.
+        }
+
+        // When we have in X times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
+        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * overPowerRatio;
         const double enemyArcherRatio = _enemyShooterStr / _enemyArmyStrength;
 
-        _defensiveTactics = enemyArcherRatio < 0.75 && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
+        double enemyArcherThreshold = 0.75;
+        if ( _defendingCastle ) {
+            // Don't make shooters to kill us while we are standing in the castle.
+            enemyArcherThreshold /= 2;
+        }
+
+        _defensiveTactics = enemyArcherRatio < enemyArcherThreshold && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio );
     }
