@@ -31,9 +31,13 @@
 #include "localevent.h"
 #include "maps.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
+
+#include <cassert>
 
 void LossConditionInfo( const Maps::FileInfo & );
 void VictoryConditionInfo( const Maps::FileInfo & );
@@ -111,6 +115,35 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
 void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
 {
     selectOk = true;
+}
+
+void ScenarioListBox::ActionListPressRight( Maps::FileInfo & info )
+{
+    // On some OS like Windows path contains '\' symbol. This symbol doesn't exist in the resources.
+    // To avoid this we have to replace all '\' symbols by '/' symbols.
+    std::string fullPath = info.file;
+    StringReplace( fullPath, "\\", "/" );
+
+    fheroes2::Text header( info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+    fheroes2::MultiFontText body;
+    body.add( { _( "Location: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+    body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+    body.add( { _( "\n\nMap Type:\n" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+    switch ( info._version ) {
+    case GameVersion::SUCCESSION_WARS:
+        body.add( { _( "The Succession Wars" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        break;
+    case GameVersion::PRICE_OF_LOYALTY:
+        body.add( { _( "The Price of Loyalty" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        break;
+    default:
+        // Did you add a new map version? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    fheroes2::showMessage( header, body, Dialog::ZERO );
 }
 
 void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
