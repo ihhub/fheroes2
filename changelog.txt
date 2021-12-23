@@ -1,3 +1,27 @@
+version 0.9.11 (23 December 2021)
+- add popup dialog for map information
+- fix hero's path not being updated properly after new monster month event
+- show available game languages in vertical order rather than horizonal
+- fix handling of national symbols in the paths to music files on Windows
+- improve AI behavior during castle defence
+- fix pressed buttons' background
+- fix incorrect output on console window for Windows users with non-English system language
+- add support of Russian language by default
+- update Polish translation
+- generate correct letters for French language
+- update Settings description to cover all actions
+- fix heroes meeting swap arrows
+- update PS Vita controls
+- fix crash for some systems after changing game resolution
+- add hotkey for settings in Main Menu
+- do not reset the hero's path in Sleeper mode, reset the Sleeper mode only with the beginning of the hero's movement
+- fix River being considered as a Road
+- allow to select player class using mouse wheel
+- add additional spell info for spells owned by a hero
+- fix button rendering artifacts after changing resolution
+- fix crash on Windows for some Archibald scenarios
+- always mark the entrance to the castle/town as a road, do not automatically mark the tile south of the entrance as a road
+
 version 0.9.10 (05 December 2021)
 - update background music on the fly while changing it within settings
 - fix horizontal position of town name and town icon in town construction dialog
@@ -24,7 +48,7 @@ version 0.9.10 (05 December 2021)
 - show heroes on minimap
 - update Norwegian translation
 - show available creature count for the Price of Loyalty monster objects
-- fix With's Hut name
+- fix Witch's Hut name
 - add Italian translation
 - properly handle the day-week-month routine
 - add titles for most of dialogs from map's objects
@@ -32,7 +56,7 @@ version 0.9.10 (05 December 2021)
 - fix movement penalty calculation algorithm
 - implement last move logic for hero movement on the map
 - update hero movement points UI upon visiting multiple objects on the map
-- fix rendering for difficulty text in scenarion info dialog
+- fix rendering for difficulty text in scenario info dialog
 - fix AI obsession with whirlpools and being always in sea
 - load palette from AGG file
 - fix monster recruit window position for multiple places
