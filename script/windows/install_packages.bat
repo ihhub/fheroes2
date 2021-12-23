@@ -12,7 +12,7 @@ xcopy /Y /Q "..\..\VisualStudio\packages\zlib1.2.11.zip" "%tempPath%\zlib\"
 echo [2/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip', '%tempPath%\sdl\sdl.zip')"
 echo [3/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.18-VC.zip', '%tempPath%\sdl\sdl2.zip')"
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.12-VC.zip', '%tempPath%\sdl\sdl2.zip')"
 echo [4/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer.zip')"
 echo [5/6] Downloading packages
