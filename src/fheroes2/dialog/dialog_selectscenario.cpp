@@ -119,7 +119,7 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
 
 void ScenarioListBox::ActionListPressRight( Maps::FileInfo & info )
 {
-    // On some OS like Windows path contains '\' symbol. This symbol doesn't exist in the resources.
+    // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
     // To avoid this we have to replace all '\' symbols by '/' symbols.
     std::string fullPath = info.file;
     StringReplace( fullPath, "\\", "/" );
