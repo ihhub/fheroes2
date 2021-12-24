@@ -2463,10 +2463,12 @@ msgid ""
 "Indicates whether the map is made for The Succession Wars or The Price of "
 "Loyalty version of the game."
 msgstr ""
+"Indique si la carte a été créée pour la version Guerres de Succession ou "
+"Le Prix de la Loyauté du jeu."
 
 #, fuzzy
 msgid "Map Type"
-msgstr "Musique"
+msgstr "Type de carte"
 
 msgid "Selected Map Difficulty"
 msgstr "Difficulté de la carte choisie"
