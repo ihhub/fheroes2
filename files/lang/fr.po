@@ -2400,7 +2400,7 @@ msgid "No maps exist at that size"
 msgstr "Aucune carte de cette taille n'existe"
 
 msgid "Small Maps"
-msgstr "Petite cartes"
+msgstr "Petites cartes"
 
 msgid "View only maps of size small (36 x 36)."
 msgstr "Voir seulement les petites cartes (36x36)."
