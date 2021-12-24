@@ -424,51 +424,63 @@ std::string Route::Path::String( void ) const
     return output;
 }
 
-bool StepIsObstacle( const Route::Step & s )
+Route::Path::const_iterator Route::Path::findObstacle() const
 {
-    s32 index = s.GetIndex();
-    const MP2::MapObjectType objectType = 0 <= index ? world.GetTiles( index ).GetObject() : MP2::OBJ_ZERO;
+    const int32_t lastStepIndex = GetLastIndex();
+    const int32_t penultimateStepIndex = empty() ? -1 : back().GetFrom();
 
-    switch ( objectType ) {
-    case MP2::OBJ_HEROES:
-    case MP2::OBJ_MONSTER:
-        return true;
+    const MP2::MapObjectType lastStepObjectType = ( lastStepIndex >= 0 ? world.GetTiles( lastStepIndex ).GetObject() : MP2::OBJ_ZERO );
 
-    default:
-        break;
-    }
+    return std::find_if( begin(), end(), [lastStepIndex, penultimateStepIndex, lastStepObjectType]( const Step & step ) {
+        const int32_t stepIndex = step.GetIndex();
 
-    // consider the protected tile as an obstacle because the hero will not be able to step on it without a battle
-    if ( Maps::TileIsUnderProtection( index ) ) {
-        return true;
-    }
+        // There can be no obstacle at the last step
+        if ( stepIndex == lastStepIndex ) {
+            return false;
+        }
 
-    return false;
+        const MP2::MapObjectType objectType = ( stepIndex >= 0 ? world.GetTiles( stepIndex ).GetObject() : MP2::OBJ_ZERO );
+
+        // There is a hero or a monster on the tile, consider this as an obstacle
+        if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
+            return true;
+        }
+
+        // A tile protected by a monster is considered as an obstacle, but we can ignore
+        // this if this step is the penultimate and the path ends at the monster
+        if ( Maps::TileIsUnderProtection( stepIndex ) && ( stepIndex != penultimateStepIndex || lastStepObjectType != MP2::OBJ_MONSTER ) ) {
+            return true;
+        }
+
+        return false;
+    } );
 }
 
-bool Route::Path::hasObstacle( void ) const
+bool Route::Path::hasObstacle() const
 {
-    const_iterator it = std::find_if( begin(), end(), StepIsObstacle );
-    return it != end() && ( *it ).GetIndex() != GetLastIndex();
+    return findObstacle() != end();
 }
 
-void Route::Path::RescanObstacle( void )
+void Route::Path::RescanObstacle()
 {
-    // scan obstacle
-    iterator it = std::find_if( begin(), end(), StepIsObstacle );
+    const_iterator it = findObstacle();
 
-    if ( it != end() && ( *it ).GetIndex() != GetLastIndex() ) {
-        size_t size1 = size();
-        s32 reduce = ( *it ).GetFrom();
-
-        std::list<Step> path = world.getPath( *hero, dst );
-        const bool reducePath = path.size() > size1 * 2;
-        // reduce
-        if ( reducePath )
-            path = world.getPath( *hero, reduce );
-
-        setPath( path, reducePath ? reduce : dst );
+    if ( it == end() ) {
+        return;
     }
+
+    const size_t currentSize = size();
+    const int32_t beforeObstacleIndex = it->GetFrom();
+
+    std::list<Step> newPath = world.getPath( *hero, dst );
+
+    const bool truncatePath = newPath.size() > currentSize * 2;
+
+    if ( truncatePath ) {
+        newPath = world.getPath( *hero, beforeObstacleIndex );
+    }
+
+    setPath( newPath, truncatePath ? beforeObstacleIndex : dst );
 }
 
 void Route::Path::RescanPassable( void )

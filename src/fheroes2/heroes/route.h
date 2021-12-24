@@ -99,7 +99,7 @@ namespace Route
         void Reset( void );
         void PopFront( void );
         void PopBack( void );
-        void RescanObstacle( void );
+        void RescanObstacle();
         void RescanPassable( void );
 
         bool isValid( void ) const;
@@ -107,7 +107,7 @@ namespace Route
         {
             return !hide;
         }
-        bool hasObstacle( void ) const;
+        bool hasObstacle() const;
         bool hasAllowedSteps() const;
 
         std::string String( void ) const;
@@ -116,6 +116,7 @@ namespace Route
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
+        const_iterator findObstacle() const;
 
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );
