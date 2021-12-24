@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-13 13:39+0100\n"
-"PO-Revision-Date: 2021-12-24 11:28-0800\n"
+"PO-Revision-Date: 2021-12-24 13:21-0800\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -344,7 +344,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Hero Screen"
-msgstr "Écran Héros"
+msgstr "Écran des héros"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The round "
@@ -370,7 +370,7 @@ msgstr ""
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
-"Ouvrir l'écran Héros pour afficher toutes les informations sur le héros."
+"Ouvrir l'écran des héros pour afficher toutes les informations sur le héros."
 
 msgid "Return to the battle."
 msgstr "Retourner à la bataille."
@@ -668,7 +668,7 @@ msgid "Right Turret"
 msgstr "Tourelle droite"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr "Le %{name} tire avec la force de %{count} Archers"
+msgstr "La %{name} tire avec la force de %{count} Archers"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "chacun avec un bonus de +%{attack} à sa compétence d'attaque."
@@ -1308,9 +1308,8 @@ msgstr "Parchemin majeur"
 msgid "Minor Scroll"
 msgstr "Parchemin Mineur"
 
-#, fuzzy
 msgid "Nomad Boots"
-msgstr "Nomades"
+msgstr "Bottes de Nomades"
 
 msgid "Power Axe"
 msgstr "Puissante Hache"
@@ -1735,8 +1734,8 @@ msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
-"Le Château améliore la défense du village et augmente les revenus à %{count} "
-"pièces par jour."
+"Le Château améliore la défense du village et augmente les revenus de %{count} "
+"pièces d’or par jour."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
@@ -1782,16 +1781,14 @@ msgstr "Quitter le village"
 msgid "Exit this menu."
 msgstr "Quitter ce menu."
 
-#, fuzzy
 msgid "Click to show next town."
-msgstr "Montrer le village suivant"
+msgstr "Cliquez pour montrer le village suivant."
 
 msgid "Show next town"
 msgstr "Montrer le village suivant"
 
-#, fuzzy
 msgid "Click to show previous town."
-msgstr "Montrer le village précédent"
+msgstr "Cliquez pour montrer le village précédent."
 
 msgid "Show previous town"
 msgstr "Montrer le village précédent"
@@ -1945,7 +1942,7 @@ msgstr "Creuser pour l'Ultime Artéfact."
 
 #, fuzzy
 msgid "Digging"
-msgstr "(fouille possible)"
+msgstr "Creuser"
 
 msgid "Exit this menu without doing anything."
 msgstr "Sortir de ce menu sans modification."
@@ -2057,7 +2054,7 @@ msgid "Resource cost:"
 msgstr "Coût en ressources :"
 
 msgid "Need: "
-msgstr ""
+msgstr "Nécessaire :"
 
 msgid "Load Game"
 msgstr "Charger une partie"
@@ -2089,24 +2086,20 @@ msgstr "Quittez le jeu Free Heroes of Might and Magic II."
 msgid "Language"
 msgstr ""
 
-#, fuzzy
 msgid "Resolution"
-msgstr "Choisir la résolution d'écran"
+msgstr "Résolution"
 
-#, fuzzy
 msgid "Experimental"
-msgstr "Esprit"
+msgstr "Expérimental"
 
 msgid "Settings"
 msgstr "Paramètres"
 
-#, fuzzy
 msgid "Select Game Language"
-msgstr "Choix de la langue :"
+msgstr "Choisissez la langue du jeu"
 
-#, fuzzy
 msgid "Change language of the game."
-msgstr "Charger la résolution du jeu."
+msgstr "Change la langue du jeu."
 
 msgid "Select Game Resolution"
 msgstr "Choisir la résolution d'écran"
@@ -2239,13 +2232,11 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Je peux vous offrir 1 unité de %{resto} pour %{count} unités de %{resfrom}."
 
-#, fuzzy
 msgid "Max"
-msgstr "Maximus"
+msgstr "Max."
 
-#, fuzzy
 msgid "Min"
-msgstr "Mine"
+msgstr "Min."
 
 msgid "Qty to trade"
 msgstr "Qté à échanger"
@@ -2447,7 +2438,7 @@ msgid "Size Icon"
 msgstr "Taille de l'icône"
 
 msgid "Selected Name"
-msgstr "Nom choisi"
+msgstr "Carte sélectionée"
 
 msgid "The name of the currently selected map."
 msgstr "Le nom de la carte actuellement sélectionnée."
@@ -3295,14 +3286,14 @@ msgid ""
 "banished from this land."
 msgstr ""
 "%{color}, c'est votre dernier jour pour capturer une ville, ou vous serez "
-"banni de cette terre."
+"banni de ces terres."
 
 msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
 "Joueur %{color}, il ne vous reste que %{day} jours pour capturer un village, "
-"sinon vous serez banni de cette terre."
+"sinon vous serez banni de ces terres."
 
 msgid "%{color} player's turn."
 msgstr "tour du joueur %{color}."
@@ -3329,7 +3320,7 @@ msgid "Continue Movement"
 msgstr "Continuer le mouvement"
 
 msgid "Continue the Hero's movement along the current path."
-msgstr "Fait continuer le mouvement du Héros le long du chemin actuel."
+msgstr "Continue le mouvement du héros le long du chemin actuel."
 
 msgid "Kingdom Summary"
 msgstr "Informations sur votre Royaume"
@@ -3406,7 +3397,7 @@ msgid "Congratulations!"
 msgstr "Félicitations !"
 
 msgid "Nothing here. Where could it be?"
-msgstr "Rien ici. Où cela pourrait-il être ?"
+msgstr "Rien ici. Où pourrait-il être ?"
 
 msgid "Try searching on clear ground."
 msgstr "Essayez de chercher sur un terrain dégagé."
@@ -3450,12 +3441,12 @@ msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date. Left click here to cycle throungh these windows."
 msgstr ""
-"Cette fenêtre fournit des informations sur le statut de votre héros ou "
-"royaume, et affiche la date. Faites un clic gauche ici pour d'une à l'autre "
-"de ces fenêtres."
+"Cette fenêtre fournit des informations sur le statut de votre héros et de "
+"votre royaume, et affiche la date. Faites un clic gauche ici pour passer "
+"d'une fenêtre à l'autre."
 
 msgid "Necroman"
-msgstr "Nécroman"
+msgstr "Nécromant"
 
 msgid ""
 "This lets you change player starting positions and colors. A particular color "
@@ -3498,9 +3489,8 @@ msgstr "Allemand"
 msgid "Russian"
 msgstr "Russe"
 
-#, fuzzy
 msgid "Italian"
-msgstr " alliance"
+msgstr "Italien"
 
 msgid ", FPS: "
 msgstr ""
@@ -3732,7 +3722,7 @@ msgstr ""
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr ""
-"Malheureusement, vous semblez être un peu à court d'argent pour le moment."
+"Malheureusement, vous semblez être un peu à court d'argent en ce moment."
 
 msgid "Do you wish to buy one?"
 msgstr "Voulez-vous en acheter un ?"
@@ -3762,7 +3752,7 @@ msgstr ""
 "Voulez-vous les poursuivre et les attaquer ?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
-msgstr "En fouillant le camp, vous découvrez des trésors cachés."
+msgstr "En fouillant le camp ennemi, vous découvrez des trésors cachés."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -3860,17 +3850,17 @@ msgstr "En cherchant à l'intérieur, vous trouvez l'artéfact '%{artifact}'."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
 msgstr ""
-"A l'intérieur, vous trouvez une partie de la cargaison du wagon encore "
+"A l'intérieur, vous trouvez une partie de la cargaison du chariot encore "
 "intacte."
 
 msgid "You search through the flotsam, and find some wood and some gold."
-msgstr "Vous cherchez dans les débris, et vous trouvez du bois et de l'or."
+msgstr "Vous cherchez dans les débris et vous trouvez du bois et de l'or."
 
 msgid "You search through the flotsam, and find some wood."
 msgstr "Vous cherchez dans les débris et trouvez du bois."
 
 msgid "You search through the flotsam, but find nothing."
-msgstr "Vous cherchez parmi les débris, mais ne trouvez rien."
+msgstr "Vous cherchez parmi les débris mais ne trouvez rien."
 
 msgid "Shrine of the 1st Circle"
 msgstr "Sanctuaire du premier cercle"
@@ -4472,12 +4462,12 @@ msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
 "you accept?"
 msgstr ""
-"Un groupe de %{monster} avec un désir de plus grande gloire souhaitent vous "
-"rallier. Acceptez-vous ?"
+"Un groupe de %{monster} avec un désir de plus grande gloire souhaitent se "
+"rallier à vous. Acceptez-vous ?"
 
 msgid "As you approach the dwelling, you notice that there is no one here."
 msgstr ""
-"En vous approchant du logement, vous remarquez qu'il n'y a personne ici."
+"En vous approchant de l'habitation, vous remarquez qu'il n'y a personne ici."
 
 msgid ""
 "You search the ruins, but the Medusas that used to live here are gone. "
@@ -4838,7 +4828,7 @@ msgid ""
 "learned over the ages for a mere %{count} %{res}.\""
 msgstr ""
 "\"Ahh, un aventurier ! Je serai heureux de vous enseigner un peu de ce que "
-"j'ai appris au cours des âges pour un prix de %{count} %{res}.\""
+"j'ai appris au cours des âges pour seulement %{count} %{res}.\""
 
 msgid "(Just bury it around my roots.)"
 msgstr "(Enterrez-les juste autour de mes racines.)"
@@ -5189,7 +5179,7 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Utiliser la formation de combat 'Groupée'"
 
 msgid "Exit Hero Screen"
-msgstr "Quitter l'écran Héros"
+msgstr "Quitter l'écran des héros"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr "Vous ne pouvez pas renvoyer un héros dans un château"
@@ -5722,17 +5712,14 @@ msgstr "Or par jour :"
 msgid "Heroes"
 msgstr "Héros"
 
-#, fuzzy
 msgid "View Heroes."
-msgstr "Voir Héros"
+msgstr "Voir les héros."
 
-#, fuzzy
 msgid "Towns/Castles"
-msgstr "Village/Château"
+msgstr "Villages/Châteaux"
 
-#, fuzzy
 msgid "View Towns and Castles."
-msgstr "Voir Villages"
+msgstr "Voir Villages et Châteaux."
 
 msgid "luck|Cursed"
 msgstr "Maudite"
@@ -5798,7 +5785,7 @@ msgid "morale|Blood!"
 msgstr "Sanglant !"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr "Un mauvais moral peut entraîner le gel de vos armées au combat."
+msgstr "Un mauvais moral peut entraîner l'immobilisation de vos armées au combat."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
@@ -6055,11 +6042,10 @@ msgstr "Tente de désert"
 msgid "Wagon Camp"
 msgstr "Roulotte"
 
-#, fuzzy
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Moulin à vent"
-msgstr[1] "Moulin à vent"
+msgstr[1] "Moulins à vent"
 
 msgid "Random Town"
 msgstr "Village aléatoire"
@@ -6244,29 +6230,23 @@ msgstr "Tourbillon"
 msgid "Boat"
 msgstr "Navire"
 
-#, fuzzy
 msgid "Random Artifact"
-msgstr "Artéfact"
+msgstr "Artéfact aléatoire"
 
-#, fuzzy
 msgid "Random Resource"
-msgstr "Ressource"
+msgstr "Ressource aléatoire"
 
-#, fuzzy
 msgid "Random Monster - weak"
-msgstr "Monstre Aléatoire 1"
+msgstr "Monstre aléatoire - faible"
 
-#, fuzzy
 msgid "Random Monster - medium"
-msgstr "Monstre Aléatoire 1"
+msgstr "Monstre aléatoire - moyen"
 
-#, fuzzy
 msgid "Random Monster - strong"
-msgstr "Monstres Aléatoires"
+msgstr "Monstre aléatoire - fort"
 
-#, fuzzy
 msgid "Random Monster - very strong"
-msgstr "Monstres Aléatoires"
+msgstr "Monstre aléatoire - très fort"
 
 msgid "Standing Stones"
 msgstr "Pierres dressées"
@@ -6277,9 +6257,8 @@ msgstr ""
 msgid "Random Monster"
 msgstr "Monstre Aléatoire"
 
-#, fuzzy
 msgid "Random Ultimate Artifact"
-msgstr "Trouver l'ultime artéfact."
+msgstr "Artéfact ultime aléatoire"
 
 msgid "Idol"
 msgstr "Idole"
@@ -6308,26 +6287,25 @@ msgstr "Survivant du naufrage"
 msgid "Bottle"
 msgstr "Bouteille"
 
-#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Jardin magique"
-msgstr[1] "Jardin magique"
+msgstr[1] "Jardins magiques"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Artéfact aléatoire - trésor"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Artéfact aléatoire - mineur"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Artéfact aléatoire - majeur"
 
 msgid "Jail"
 msgstr "Prison"
 
 msgid "Traveller's Tent"
-msgstr "Tente de voyageur"
+msgstr "Tente du voyageur"
 
 msgid "Barrier"
 msgstr "Barrière magique"
@@ -6351,13 +6329,13 @@ msgid "Stables"
 msgstr "Ecurie"
 
 msgid "Alchemist's Tower"
-msgstr "Tour d'alchimiste"
+msgstr "Tour de l'alchimiste"
 
 msgid "Hut of the Magi"
-msgstr "Hutte du Mage"
+msgstr "Hutte du mage"
 
 msgid "Eye of the Magi"
-msgstr "Oeil du Mage"
+msgstr "Œil du mage"
 
 msgid "Mermaid"
 msgstr "Nymphe"
@@ -7739,9 +7717,8 @@ msgstr ""
 "Le parchemin de sort sera consommé.\n"
 " Coût en points de magie : %{sp}"
 
-#, fuzzy
 msgid "Move points: %{mp}"
-msgstr "Mouvement"
+msgstr "Points de Mouvement: %{mp}"
 
 msgid "Transcribe Spell Scroll"
 msgstr "Transcrire le Parchemin de sort"
