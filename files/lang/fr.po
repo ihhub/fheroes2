@@ -3247,14 +3247,14 @@ msgstr ""
 "supplémentaires à l'ordinateur."
 
 msgid "Difficulty Rating"
-msgstr "Taux de Difficulté"
+msgstr "Niveau de Difficulté"
 
 msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
-"Le taux de difficulté reflète une combinaison de différents paramètres pour "
-"votre jeu. Cette note sera appliqué à votre score final."
+"Le niveau de difficulté reflète une combinaison de différents paramètres pour "
+"votre jeu. Ce taux sera appliqué à votre score final."
 
 msgid "Click to accept these settings and start a new game."
 msgstr "Cliquez pour accepter ces paramètres et démarrer un nouveau jeu."
