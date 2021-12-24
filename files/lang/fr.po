@@ -2913,11 +2913,11 @@ msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
-"Une partie multi-joueurs, avec plusieurs joueurs humains en compétition les "
+"Une partie multijoueur, avec plusieurs joueurs humains en compétition les "
 "uns contre les autres sur une seule carte."
 
 msgid "Multi-Player Game"
-msgstr "Jeu multi-joueur"
+msgstr "Jeu multijoueur"
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "L'équipe fheroes2 Resurrection présente"
