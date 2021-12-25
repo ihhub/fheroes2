@@ -147,8 +147,8 @@ void Kingdom::LossPostActions( void )
 
 void Kingdom::ActionBeforeTurn( void )
 {
-    // rescan heroes path
-    std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->RescanPath(); } );
+    // recalculate the existing paths of heroes
+    std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->calculatePath( -1 ); } );
 }
 
 void Kingdom::ActionNewDay( void )

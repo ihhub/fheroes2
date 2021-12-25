@@ -66,19 +66,13 @@ void Route::Path::PopBack( void )
     }
 }
 
-s32 Route::Path::GetDestinationIndex( void ) const
+int32_t Route::Path::GetDestinationIndex( const bool returnLastStep /* = false */ ) const
 {
-    return empty() ? GetDestinedIndex() : GetLastIndex();
-}
+    if ( returnLastStep ) {
+        return empty() ? dst : back().GetIndex();
+    }
 
-s32 Route::Path::GetLastIndex( void ) const
-{
-    return empty() ? -1 : back().GetIndex();
-}
-
-s32 Route::Path::GetDestinedIndex( void ) const
-{
-    return dst;
+    return empty() ? -1 : dst;
 }
 
 void Route::Path::setPath( const std::list<Route::Step> & path, int32_t destIndex )
@@ -407,7 +401,7 @@ std::string Route::Path::String( void ) const
     std::string output( "from: " );
     output += std::to_string( hero->GetIndex() );
     output += ", to: ";
-    output += std::to_string( GetLastIndex() );
+    output += std::to_string( dst );
     output += ", obj: ";
     output += MP2::StringObject( world.GetTiles( dst ).GetObject() );
     output += ", dump: ";
@@ -422,89 +416,6 @@ std::string Route::Path::String( void ) const
     output += "end";
 
     return output;
-}
-
-Route::Path::const_iterator Route::Path::findObstacle() const
-{
-    const int32_t lastStepIndex = GetLastIndex();
-    const int32_t penultimateStepIndex = empty() ? -1 : back().GetFrom();
-
-    const MP2::MapObjectType lastStepObjectType = ( lastStepIndex >= 0 ? world.GetTiles( lastStepIndex ).GetObject() : MP2::OBJ_ZERO );
-
-    return std::find_if( begin(), end(), [lastStepIndex, penultimateStepIndex, lastStepObjectType]( const Step & step ) {
-        const int32_t stepIndex = step.GetIndex();
-
-        // There can be no obstacle at the last step
-        if ( stepIndex == lastStepIndex ) {
-            return false;
-        }
-
-        const MP2::MapObjectType objectType = ( stepIndex >= 0 ? world.GetTiles( stepIndex ).GetObject() : MP2::OBJ_ZERO );
-
-        // There is a hero or a monster on the tile, consider this as an obstacle
-        if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
-            return true;
-        }
-
-        // A tile protected by a monster is considered as an obstacle, but we can ignore
-        // this if this step is the penultimate and the path ends at the monster
-        if ( Maps::TileIsUnderProtection( stepIndex ) && ( stepIndex != penultimateStepIndex || lastStepObjectType != MP2::OBJ_MONSTER ) ) {
-            return true;
-        }
-
-        return false;
-    } );
-}
-
-bool Route::Path::hasObstacle() const
-{
-    return findObstacle() != end();
-}
-
-void Route::Path::RescanObstacle()
-{
-    const_iterator it = findObstacle();
-
-    if ( it == end() ) {
-        return;
-    }
-
-    const size_t currentSize = size();
-    const int32_t beforeObstacleIndex = it->GetFrom();
-
-    std::list<Step> newPath = world.getPath( *hero, dst );
-
-    const bool truncatePath = newPath.size() > currentSize * 2;
-
-    if ( truncatePath ) {
-        newPath = world.getPath( *hero, beforeObstacleIndex );
-    }
-
-    setPath( newPath, truncatePath ? beforeObstacleIndex : dst );
-}
-
-void Route::Path::RescanPassable( void )
-{
-    // scan passable
-    iterator it = begin();
-
-    for ( ; it != end(); ++it ) {
-        if ( !world.GetTiles( it->GetFrom() ).isPassable( it->GetDirection(), hero->isShipMaster(), false, hero->GetColor() ) ) {
-            break;
-        }
-    }
-
-    if ( hero->isControlAI() ) {
-        Reset();
-    }
-    else if ( it != end() ) {
-        if ( it == begin() )
-            Reset();
-        else {
-            dst = it->GetFrom();
-            erase( it, end() );
-        }
-    }
 }
 
 StreamBase & Route::operator<<( StreamBase & msg, const Step & step )

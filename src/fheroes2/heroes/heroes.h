@@ -305,8 +305,8 @@ public:
     Route::Path & GetPath();
     int GetRangeRouteDays( s32 ) const;
     void ShowPath( bool );
-    void RescanPath();
-    void RescanPathPassable();
+    // Calculates the hero's path to the tile with the dstIdx index. Recalculates the existing path if dstIdx is negative.
+    void calculatePath( int32_t dstIdx );
 
     int GetDirection() const;
     void setDirection( int directionToSet );

@@ -256,9 +256,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return returnValue;
     }
 
-    // rescan path passability for all heroes, for this we need actual info about players from Settings
-    World::Get().RescanAllHeroesPathPassable();
-
     return returnValue;
 }
 

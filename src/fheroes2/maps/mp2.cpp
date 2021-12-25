@@ -1177,21 +1177,6 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     return isPickupObject( objectType );
 }
 
-bool MP2::isAccessibleFromBeach( const MapObjectType objectType )
-{
-    switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_HEROES:
-    case OBJ_BOAT:
-    case OBJ_SHIPWRECK:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
 int MP2::getActionObjectDirection( const MapObjectType objectType )
 {
     switch ( objectType ) {
