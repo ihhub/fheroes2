@@ -1,6 +1,10 @@
 if(USE_SYSTEM_LIBSMACKER)
 	include(FindPkgConfig)
-	pkg_check_modules(smacker REQUIRED smacker)
+	pkg_check_modules(smacker smacker)
+	if(NOT smacker_FOUND)
+		find_library(smacker smacker REQUIRED)
+		message(STATUS "Found smacker: ${smacker}")
+	endif(NOT smacker_FOUND)
 else()
 	set(LIBSMACKER_SOURCES
 		libsmacker/smacker.c
