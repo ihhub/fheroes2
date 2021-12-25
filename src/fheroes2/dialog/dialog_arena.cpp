@@ -163,7 +163,15 @@ void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2,
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
 
     if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 ), display, rect4.x, rect4.y );
+		{
+			constexpr int32_t BORDER_WIDTH=2;
+			const fheroes2::Sprite& knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 );
+			const fheroes2::Sprite croppedICN = fheroes2::Crop(knowledgeICN, BORDER_WIDTH+1, BORDER_WIDTH, rect4.width-2*BORDER_WIDTH-1, rect4.height-2*BORDER_WIDTH);
+
+			fheroes2::Blit( knowledgeICN, display, rect4.x , rect4.y );
+			fheroes2::Blit( croppedICN, display, rect4.x+BORDER_WIDTH, rect4.y+BORDER_WIDTH );
+		}
+        
 }
 
 void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
@@ -181,8 +189,15 @@ void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::R
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
         break;
     case Skill::Primary::KNOWLEDGE:
-        if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 ), display, rect4.x, rect4.y );
+        if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
+					constexpr int32_t BORDER_WIDTH=2;
+					const fheroes2::Sprite& knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 );
+					const fheroes2::Sprite croppedICN = fheroes2::Crop(knowledgeICN, BORDER_WIDTH+1, BORDER_WIDTH, rect4.width-2*BORDER_WIDTH-1, rect4.height-2*BORDER_WIDTH);
+					
+					fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
+					fheroes2::Blit( croppedICN, display, rect4.x+BORDER_WIDTH, rect4.y+BORDER_WIDTH );
+				}
+            
         break;
     default:
         break;
