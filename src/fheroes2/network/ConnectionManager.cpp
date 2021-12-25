@@ -1,9 +1,9 @@
 #ifndef NO_NETWORK
 
-#include <iostream>
-#include <cstdint>
-#include <chrono>
 #include <cassert>
+#include <chrono>
+#include <cstdint>
+#include <iostream>
 
 #include "ConnectionManager.h"
 #include "logging.h"
@@ -24,7 +24,6 @@ namespace
         return header;
     }
 }
-
 
 using namespace fheroes2::Network;
 
@@ -125,12 +124,15 @@ bool NetworkConnection::acceptConnectionAsync( const int port, std::atomic<int> 
     return true;
 }
 
-
 void NetworkConnection::closeAfterAllPendingWrites()
 {
     if ( _timeoutForConnecting ) {
-        // cancel pending timer so "run()" method can finish executing without waiting for this timer to complete
-        asio::post( _readStrand, [this]() { _timeoutForConnecting->cancel(); } );
+        // cancel pending timer so "run()" method on io_context can finish executing without waiting for this timer to expire
+        asio::post( _readStrand, [this]() {
+            if ( _timeoutForConnecting ) {
+                _timeoutForConnecting->cancel();
+            }
+        } );
     }
 
     asio::post( _writeStrand, [this]() {
@@ -144,24 +146,21 @@ void NetworkConnection::closeAfterAllPendingWrites()
     } );
 }
 
-
 // asynchronously sends a payload to the endpoint. This is thread-safe.
-bool NetworkConnection::sendPayload(std::vector<uint8_t>&& payload) {
-
-	if (!_isConnected)
-	{
-		return false;
-	}
+bool NetworkConnection::sendPayload( std::vector<uint8_t> && payload )
+{
+    if ( !_isConnected ) {
+        return false;
+    }
 
     // payload is never copied but moved until it is stored into _messagesToWrite
-	_writeStrand.post(
-		[this, payload_ = std::move(payload)]() mutable {
-		MessageData messageData(MakeHeader(payload_), std::move(payload_));
-		_messagesToWrite.emplace_back(std::move(messageData));
-		do_write();
-	});
+    _writeStrand.post( [this, payload_ = std::move( payload )]() mutable {
+        MessageData messageData( MakeHeader( payload_ ), std::move( payload_ ) );
+        _messagesToWrite.emplace_back( std::move( messageData ) );
+        do_write();
+    } );
 
-	return true;
+    return true;
 }
 
 bool NetworkConnection::getNextPayload( std::vector<uint8_t> & payload, int timeoutMilliseconds /*= 10*/ )
@@ -233,7 +232,6 @@ bool NetworkConnection::getNextPayloadInstant( std::vector<uint8_t> & payload )
     return signal == 1;
 }
 
-
 void NetworkConnection::do_read_header()
 {
     asio::async_read( _socket, asio::buffer( _readMessageHeader ), _readStrand.wrap( [this]( asio::error_code ec, std::size_t /*length*/ ) {
@@ -260,10 +258,10 @@ void NetworkConnection::do_read_header()
     } ) );
 }
 
-void NetworkConnection::do_read_body(const int payloadSize)
+void NetworkConnection::do_read_body( const int payloadSize )
 {
-	// resize to have enough data for payload + footer
-	_readMessageData.resize(payloadSize + 2);
+    // resize to have enough data for payload + footer
+    _readMessageData.resize( payloadSize + 2 );
 
     asio::async_read( _socket, asio::buffer( _readMessageData ), _readStrand.wrap( [this, payloadSize]( asio::error_code ec, std::size_t /*length*/ ) {
         if ( !ec ) {

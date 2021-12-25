@@ -145,7 +145,7 @@ namespace fheroes2
                 return false;
             }
 
-            // due to the font, some dots are stored are either '<' or '>' so we correct this
+            // due to the font, some dots are stored as either '<' or '>' so we correct this
             std::replace( ipAddress.begin(), ipAddress.end(), '<', '.' );
             std::replace( ipAddress.begin(), ipAddress.end(), '>', '.' );
 
