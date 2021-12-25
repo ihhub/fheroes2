@@ -2,7 +2,7 @@ name: VS2019
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, network ]
 
 jobs:
   build:
