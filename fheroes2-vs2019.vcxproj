@@ -356,6 +356,7 @@
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster_anim.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster_info.cpp" />
+    <ClCompile Include="src\fheroes2\network\test.cpp" />
     <ClCompile Include="src\fheroes2\objects\mounts.cpp" />
     <ClCompile Include="src\fheroes2\objects\objcrck.cpp" />
     <ClCompile Include="src\fheroes2\objects\objdirt.cpp" />

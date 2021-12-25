@@ -30,6 +30,8 @@ set(CONFIGURE_FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STR
 find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(asio REQUIRED)
+include_directories( SYSTEM ${asio_INCLUDE_DIR} )
 find_package(Threads)
 
 if(ENABLE_IMAGE)

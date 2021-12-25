@@ -30,6 +30,7 @@ target_include_directories(fheroes2 PRIVATE
 	kingdom
 	maps
 	monster
+	network
 	objects
 	pocketpc
 	resource
