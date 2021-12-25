@@ -356,7 +356,9 @@
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster_anim.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster_info.cpp" />
-    <ClCompile Include="src\fheroes2\network\test.cpp" />
+    <ClCompile Include="src\fheroes2\network\ConnectionManager.cpp" />
+    <ClCompile Include="src\fheroes2\network\NetworkGameMessage.cpp" />
+    <ClCompile Include="src\fheroes2\network\NetworkHandshake.cpp" />
     <ClCompile Include="src\fheroes2\objects\mounts.cpp" />
     <ClCompile Include="src\fheroes2\objects\objcrck.cpp" />
     <ClCompile Include="src\fheroes2\objects\objdirt.cpp" />
@@ -529,6 +531,9 @@
     <ClInclude Include="src\fheroes2\monster\monster.h" />
     <ClInclude Include="src\fheroes2\monster\monster_anim.h" />
     <ClInclude Include="src\fheroes2\monster\monster_info.h" />
+    <ClInclude Include="src\fheroes2\network\ConnectionManager.h" />
+    <ClInclude Include="src\fheroes2\network\NetworkGameMessage.h" />
+    <ClInclude Include="src\fheroes2\network\NetworkHandshake.h" />
     <ClInclude Include="src\fheroes2\objects\mounts.h" />
     <ClInclude Include="src\fheroes2\objects\objcrck.h" />
     <ClInclude Include="src\fheroes2\objects\objdirt.h" />

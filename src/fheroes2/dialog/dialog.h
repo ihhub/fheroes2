@@ -22,6 +22,7 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
+#include <atomic>
 #include <list>
 #include <memory>
 #include <string>
@@ -91,6 +92,7 @@ namespace Dialog
     void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     void QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
+    int MessageUntilSignal( const std::string & header, const std::string & message, std::atomic<int> & signal, int ft );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
     bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );

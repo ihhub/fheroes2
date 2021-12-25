@@ -33,6 +33,7 @@
 #include "game_video.h"
 #include "icn.h"
 #include "mus.h"
+#include "NetworkHandshake.h"
 #include "settings.h"
 #include "smk_decoder.h"
 #include "text.h"
@@ -471,12 +472,14 @@ fheroes2::GameMode Game::NewMulti()
     const fheroes2::Point buttonPos = drawButtonPanel();
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BTNMP, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonHost( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNNET, 0, 1 );
+    fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNET, 2, 3 );
     fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.draw();
+    buttonHost.draw();
+    buttonGuest.draw();
     buttonCancelGame.draw();
-    buttonNetwork.disable();
 
     fheroes2::Display::instance().render();
 
@@ -484,6 +487,8 @@ fheroes2::GameMode Game::NewMulti()
     // newgame loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
+        le.MousePressLeft( buttonHost.area() ) ? buttonHost.drawOnPress() : buttonHost.drawOnRelease();
+        le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( EVENT_BUTTON_HOTSEAT ) )
@@ -491,10 +496,38 @@ fheroes2::GameMode Game::NewMulti()
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
 
+        if ( le.MouseClickLeft( buttonHost.area() ) ) {
+            std::string playerName;
+            bool ok = Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
+            if ( !ok )
+                continue;
+            if ( playerName.empty() )
+                playerName = _( "Unknown Hero" );
+            fheroes2::Network::HandshakeServer( playerName );
+        }
+
+        if ( le.MouseClickLeft( buttonGuest.area() ) ) {
+            std::string playerName;
+            bool ok = Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
+            if ( !ok )
+                continue;
+            if ( playerName.empty() )
+                playerName = _( "Unknown Hero" );
+            fheroes2::Network::HandshakeClient( playerName );
+        }
+
         // right info
         if ( le.MousePressRight( buttonHotSeat.area() ) )
             Dialog::Message( _( "Hot Seat" ),
                              _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
+                             Font::BIG );
+        if ( le.MousePressRight( buttonHost.area() ) )
+            Dialog::Message( _( "Server handshake" ),
+                             _( "Open a server for connection and try to establish a handshake with a client" ),
+                             Font::BIG );
+        if ( le.MousePressRight( buttonGuest.area() ) )
+            Dialog::Message( _( "Client handshake" ),
+                             _( "Create a client for connection and try to establish a handshake with a server" ),
                              Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );

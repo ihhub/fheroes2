@@ -64,3 +64,49 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 
     return result;
 }
+
+// Creates a dialog box that will return either YES or NO when signal changes values. It's also possible to exit the dialog by clicking CANCEL button
+int Dialog::MessageUntilSignal( const std::string & header, const std::string & message, std::atomic<int> & signal, int ft )
+{
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const int buttons = Dialog::CANCEL;
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( buttons != 0, Cursor::POINTER );
+
+    TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
+    TextBox textbox2( message, ft, BOXAREA_WIDTH );
+
+    const int32_t headerHeight = !header.empty() ? textbox1.h() + 10 : 0;
+    FrameBox box( 10 + headerHeight + textbox2.h(), buttons != 0 );
+    const fheroes2::Rect & pos = box.GetArea();
+
+    if ( !header.empty() )
+        textbox1.Blit( pos.x, pos.y + 10 );
+    if ( !message.empty() )
+        textbox2.Blit( pos.x, pos.y + 10 + headerHeight );
+
+    LocalEvent & le = LocalEvent::Get();
+
+    fheroes2::ButtonGroup group( pos, buttons );
+    group.draw();
+
+    display.render();
+
+    // message loop
+    int result = Dialog::ZERO;
+
+    while ( signal == 0 && result == Dialog::ZERO && le.HandleEvents() ) {
+        result = group.processEvents();
+    }
+
+    if ( result != Dialog::ZERO || signal == 0 ) {
+        return Dialog::CANCEL;
+    }
+    else if ( signal > 0 ) {
+        return Dialog::YES;
+    }
+    else {
+        return Dialog::NO;
+    }
+}
