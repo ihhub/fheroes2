@@ -63,14 +63,16 @@ namespace fheroes2
                     _work_guard.reset();
                 }
 
-                for ( auto & c : _connections ) {
-                    // closes all connections
-                    c->close();
+                // close all connections
+                for ( std::shared_ptr<NetworkConnection> & connection : _connections ) {
+                    if ( connection ) {
+                        connection->close();
+                    }
                 }
                 _connections.clear();
 
-                for ( auto & t : _io_context_threads ) {
-                    // allow all pending work to complete, this includes calls made through closeAfterAllPendingWrites()
+                // allow all pending work to complete
+                for ( std::unique_ptr<std::thread> & t : _io_context_threads ) {
                     t->join();
                 }
                 _io_context_threads.clear();

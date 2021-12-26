@@ -102,13 +102,13 @@ namespace fheroes2
 
             if ( connectionResult == Dialog::CANCEL ) { // cancelled by user
                 server.close();
-                gResourceHandlerServer.getConnections().clear();
+                gResourceHandlerServer.getConnections()[0].reset();
                 Dialog::Message( "Handshake failed", "Connection cancelled", Font::BIG, Dialog::OK );
                 return false;
             }
             else if ( connectionResult == Dialog::NO ) { // timed out
                 server.close();
-                gResourceHandlerServer.getConnections().clear();
+                gResourceHandlerServer.getConnections()[0].reset();
                 Dialog::Message( "Handshake failed", "Connection timed out", Font::BIG, Dialog::OK );
                 return false;
             }
@@ -130,14 +130,14 @@ namespace fheroes2
                 else {
                     Dialog::Message( "Handshake failed", gotMessage ? "Incorrect message received from client" : "Timed out", Font::BIG, Dialog::OK );
                     server.close();
-                    gResourceHandlerServer.getConnections().clear();
+                    gResourceHandlerServer.getConnections()[0].reset();
                     return false;
                 }
             }
             else {
                 Dialog::Message( "Handshake failed", gotMessage ? "Incorrect message received from client" : "Timed out", Font::BIG, Dialog::OK );
                 server.close();
-                gResourceHandlerServer.getConnections().clear();
+                gResourceHandlerServer.getConnections()[0].reset();
                 return false;
             }
         }
