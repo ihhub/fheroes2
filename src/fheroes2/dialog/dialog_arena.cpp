@@ -167,9 +167,11 @@ void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2,
         const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 );
         const fheroes2::Sprite & croppedICN
             = fheroes2::Crop( knowledgeICN, BORDER_WIDTH + 1, BORDER_WIDTH, rect4.width - 2 * BORDER_WIDTH - 1, rect4.height - 2 * BORDER_WIDTH );
+        const fheroes2::Sprite & pixelLine = fheroes2::Crop( knowledgeICN, BORDER_WIDTH, 0, 1, rect4.height );
 
         fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
         fheroes2::Blit( croppedICN, display, rect4.x + BORDER_WIDTH, rect4.y + BORDER_WIDTH );
+        fheroes2::Blit( pixelLine, display, rect4.x + rect4.width - 2 * BORDER_WIDTH, rect4.y );
     }
 }
 
@@ -193,9 +195,11 @@ void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::R
             const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 );
             const fheroes2::Sprite & croppedICN
                 = fheroes2::Crop( knowledgeICN, BORDER_WIDTH + 1, BORDER_WIDTH, rect4.width - 2 * BORDER_WIDTH - 1, rect4.height - 2 * BORDER_WIDTH );
+            const fheroes2::Sprite & pixelLine = fheroes2::Crop( knowledgeICN, BORDER_WIDTH, 0, 1, rect4.height );
 
             fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
             fheroes2::Blit( croppedICN, display, rect4.x + BORDER_WIDTH, rect4.y + BORDER_WIDTH );
+            fheroes2::Blit( pixelLine, display, rect4.x + rect4.width - 2 * BORDER_WIDTH, rect4.y );
         }
 
         break;
