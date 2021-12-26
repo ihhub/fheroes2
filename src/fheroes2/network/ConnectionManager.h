@@ -64,7 +64,7 @@ namespace fheroes2
             void do_read_header();
             void do_read_body( const int payloadSize );
             void do_write();
-            void try_get_payload( std::atomic<int> & signal, std::vector<uint8_t> & payload, std::chrono::steady_clock::time_point expirationTime );
+            void try_get_payload( std::atomic<int> & signal, std::vector<uint8_t> & payload, std::chrono::high_resolution_clock::time_point expirationTime );
 
             // used for debug only
             const std::string _name;

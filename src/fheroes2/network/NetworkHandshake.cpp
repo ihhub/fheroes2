@@ -119,7 +119,7 @@ namespace fheroes2
             if ( gotMessage && gameMessage.getMessageType() == GameMessageType::Handshake1 ) {
                 std::string clientName( gameMessage.data().begin() + 2, gameMessage.data().end() );
                 gResourceHandlerServer.setPlayerName( clientName );
-                server.sendPayload( std::move( createHandshake2Message( serverName ) ) );
+                server.sendPayload( createHandshake2Message( serverName ) );
                 gotMessage = getNextGameMessage( server, gameMessage );
                 if ( gotMessage && gameMessage.getMessageType() == GameMessageType::Handshake3 ) {
                     std::ostringstream oss;
@@ -194,7 +194,7 @@ namespace fheroes2
                 return false;
             }
 
-            client.sendPayload( std::move( createHandshake1Message( clientName ) ) );
+            client.sendPayload( createHandshake1Message( clientName ) );
 
             IncomingGameMessage gameMessage;
             getNextGameMessage( client, gameMessage );
@@ -202,7 +202,7 @@ namespace fheroes2
             if ( gameMessage.getMessageType() == GameMessageType::Handshake2 ) {
                 std::string serverName( gameMessage.data().begin() + 2, gameMessage.data().end() );
                 gResourceHandlerClient.setPlayerName( serverName );
-                client.sendPayload( std::move( createHandshake3Message() ) );
+                client.sendPayload( createHandshake3Message() );
                 std::ostringstream oss;
                 oss << "Client Handshake completed with player " << serverName;
                 Dialog::Message( "Handshake suceeded", oss.str(), Font::BIG, Dialog::OK );

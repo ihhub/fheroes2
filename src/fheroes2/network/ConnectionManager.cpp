@@ -113,7 +113,7 @@ bool NetworkConnection::acceptConnectionAsync( const int port, std::atomic<int> 
     DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Accepting connections on port " << port << "..." );
     acceptor->async_accept( _socket, _readStrand.wrap( [self, this, acceptor, &signal]( const asio::error_code & ec ) {
         if ( !ec ) {
-            _readStrand.post( [self = shared_from_this(), this]() { do_read_header(); } );
+            _readStrand.post( [self, this]() { do_read_header(); } );
             _isConnected = true;
             signal = 1;
         }
@@ -186,8 +186,9 @@ void NetworkConnection::try_get_payload( std::atomic<int> & signal, std::vector<
         signal = 0; // no time left, signal that we abort
     }
     else {
+        auto self = shared_from_this();
         // Post a task that will retry. Potentially another task is already pending that will add an item.
-        _readStrand.post( [self = shared_from_this(), this, &signal, &payload, expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
+        _readStrand.post( [self, this, &signal, &payload, expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
     }
 }
 
@@ -222,7 +223,8 @@ bool NetworkConnection::getNextPayloadInstant( std::vector<uint8_t> & payload )
 
 void NetworkConnection::do_read_header()
 {
-    asio::async_read( _socket, asio::buffer( _readMessageHeader ), _readStrand.wrap( [self = shared_from_this(), this]( asio::error_code ec, std::size_t /*length*/ ) {
+    auto self = shared_from_this();
+    asio::async_read( _socket, asio::buffer( _readMessageHeader ), _readStrand.wrap( [self, this]( asio::error_code ec, std::size_t /*length*/ ) {
         if ( !ec ) {
             if ( _readMessageHeader[0] != 0xFE || _readMessageHeader[1] != 0xEF ) // check header magic values
             {
@@ -286,6 +288,7 @@ void NetworkConnection::do_write()
     std::array<asio::const_buffer, 3> message{ asio::buffer( firstMessage.first ), asio::buffer( firstMessage.second ), asio::buffer( _messageFooter ) };
     auto self = shared_from_this();
     asio::async_write( _socket, message, _writeStrand.wrap( [self, this]( asio::error_code ec, std::size_t length ) {
+        (void)length;
         _isWriting = false;
         if ( !ec ) {
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Wrote " << length << " bytes" );
