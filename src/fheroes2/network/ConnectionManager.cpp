@@ -33,6 +33,7 @@ NetworkConnection::NetworkConnection( const std::string & name, asio::io_context
     , _readStrand( io_context )
     , _writeStrand( io_context )
     , _socket( io_context )
+    , _timeoutForConnecting( io_context )
     , _readMessageHeader()
     , _isConnected( false )
     , _isConnecting( false )
@@ -49,9 +50,8 @@ bool NetworkConnection::connectAsync( const asio::ip::tcp::endpoint endpoint, st
 
     _isConnecting = true;
 
-    _timeoutForConnecting = std::make_shared<asio::steady_timer>( _ioContext );
-    _timeoutForConnecting->expires_after( std::chrono::seconds( timeoutSeconds ) );
-    _timeoutForConnecting->async_wait( _readStrand.wrap( [this, &signal]( asio::error_code ) {
+    _timeoutForConnecting.expires_after( std::chrono::seconds( timeoutSeconds ) );
+    _timeoutForConnecting.async_wait( _readStrand.wrap( [self = shared_from_this(), this, &signal]( asio::error_code ) {
         if ( !_isConnected ) {
             _socket.cancel();
             signal = -1;
@@ -64,9 +64,9 @@ bool NetworkConnection::connectAsync( const asio::ip::tcp::endpoint endpoint, st
 
     DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Connecting to " << endpoint << "..." );
 
-    _socket.async_connect( endpoint, _readStrand.wrap( [this, &signal]( const asio::error_code & ec ) {
+    _socket.async_connect( endpoint, _readStrand.wrap( [self = shared_from_this(), this, &signal]( const asio::error_code & ec ) {
         if ( !ec ) {
-            _readStrand.post( [this]() { do_read_header(); } );
+            _readStrand.post( [self = shared_from_this(), this]() { do_read_header(); } );
             _isConnected = true;
             signal = 1;
         }
@@ -75,7 +75,7 @@ bool NetworkConnection::connectAsync( const asio::ip::tcp::endpoint endpoint, st
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Connection failed with error " << ec.message() );
         }
         _isConnecting = false;
-        _timeoutForConnecting->cancel();
+        _timeoutForConnecting.cancel();
     } ) );
 
     return true;
@@ -93,9 +93,8 @@ bool NetworkConnection::acceptConnectionAsync( const int port, std::atomic<int> 
 
     std::shared_ptr<asio::ip::tcp::acceptor> acceptor = std::make_shared<asio::ip::tcp::acceptor>( _ioContext, asio::ip::tcp::endpoint( asio::ip::tcp::v4(), port ) );
 
-    _timeoutForConnecting = std::make_shared<asio::steady_timer>( _ioContext );
-    _timeoutForConnecting->expires_after( std::chrono::seconds( timeoutSeconds ) );
-    _timeoutForConnecting->async_wait( _readStrand.wrap( [this, acceptor, &signal]( asio::error_code ) {
+    _timeoutForConnecting.expires_after( std::chrono::seconds( timeoutSeconds ) );
+    _timeoutForConnecting.async_wait( _readStrand.wrap( [self = shared_from_this(), this, acceptor, &signal]( asio::error_code ) {
         if ( !_isConnected ) {
             acceptor->cancel();
             signal = -1;
@@ -107,9 +106,9 @@ bool NetworkConnection::acceptConnectionAsync( const int port, std::atomic<int> 
     } ) );
 
     DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Accepting connections on port " << port << "..." );
-    acceptor->async_accept( _socket, _readStrand.wrap( [this, acceptor, &signal]( const asio::error_code & ec ) {
+    acceptor->async_accept( _socket, _readStrand.wrap( [self = shared_from_this(), this, acceptor, &signal]( const asio::error_code & ec ) {
         if ( !ec ) {
-            _readStrand.post( [this]() { do_read_header(); } );
+            _readStrand.post( [self = shared_from_this(), this]() { do_read_header(); } );
             _isConnected = true;
             signal = 1;
         }
@@ -118,32 +117,16 @@ bool NetworkConnection::acceptConnectionAsync( const int port, std::atomic<int> 
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Acceptor failed with error " << ec.message() );
         }
         _isConnecting = false;
-        _timeoutForConnecting->cancel();
+        _timeoutForConnecting.cancel();
     } ) );
 
     return true;
 }
 
-void NetworkConnection::closeAfterAllPendingWrites()
+void NetworkConnection::close()
 {
-    if ( _timeoutForConnecting ) {
-        // cancel pending timer so "run()" method on io_context can finish executing without waiting for this timer to expire
-        asio::post( _readStrand, [this]() {
-            if ( _timeoutForConnecting ) {
-                _timeoutForConnecting->cancel();
-            }
-        } );
-    }
-
-    asio::post( _writeStrand, [this]() {
-        if ( _isConnected && ( !_messagesToWrite.empty() || _isWriting ) ) {
-            closeAfterAllPendingWrites();
-        }
-        else {
-            _socket.close();
-            _isConnected = false;
-        }
-    } );
+    _timeoutForConnecting.cancel();
+    _isConnected = false;
 }
 
 // asynchronously sends a payload to the endpoint. This is thread-safe.
@@ -154,7 +137,7 @@ bool NetworkConnection::sendPayload( std::vector<uint8_t> && payload )
     }
 
     // payload is never copied but moved until it is stored into _messagesToWrite
-    _writeStrand.post( [this, payload_ = std::move( payload )]() mutable {
+    _writeStrand.post( [self = shared_from_this(), this, payload_ = std::move( payload )]() mutable {
         MessageData messageData( MakeHeader( payload_ ), std::move( payload_ ) );
         _messagesToWrite.emplace_back( std::move( messageData ) );
         do_write();
@@ -169,10 +152,10 @@ bool NetworkConnection::getNextPayload( std::vector<uint8_t> & payload, int time
         return false;
     }
 
-    std::atomic<int> signal = -1;
+    std::atomic<int> signal = { -1 };
     const std::chrono::steady_clock::time_point expirationTime = std::chrono::high_resolution_clock::now() + std::chrono::milliseconds( timeoutMilliseconds );
 
-    _readStrand.post( [this, &signal, &payload, &expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
+    _readStrand.post( [self = shared_from_this(), this, &signal, &payload, &expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
 
     while ( signal == -1 ) {
     }
@@ -199,7 +182,7 @@ void NetworkConnection::try_get_payload( std::atomic<int> & signal, std::vector<
     }
     else {
         // Post a task that will retry. Potentially another task is already pending that will add an item.
-        _readStrand.post( [this, &signal, &payload, expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
+        _readStrand.post( [self = shared_from_this(), this, &signal, &payload, expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
     }
 }
 
@@ -209,9 +192,9 @@ bool NetworkConnection::getNextPayloadInstant( std::vector<uint8_t> & payload )
         return false;
     }
 
-    std::atomic<int> signal = -1;
+    std::atomic<int> signal = { -1 };
 
-    _readStrand.post( [this, &signal, &payload]() {
+    _readStrand.post( [self = shared_from_this(), this, &signal, &payload]() {
         if ( !_messagesToRead.empty() ) {
             payload = std::move( _messagesToRead.front() );
             _messagesToRead.pop_front();
@@ -234,12 +217,12 @@ bool NetworkConnection::getNextPayloadInstant( std::vector<uint8_t> & payload )
 
 void NetworkConnection::do_read_header()
 {
-    asio::async_read( _socket, asio::buffer( _readMessageHeader ), _readStrand.wrap( [this]( asio::error_code ec, std::size_t /*length*/ ) {
+    asio::async_read( _socket, asio::buffer( _readMessageHeader ), _readStrand.wrap( [self = shared_from_this(), this]( asio::error_code ec, std::size_t /*length*/ ) {
         if ( !ec ) {
             if ( _readMessageHeader[0] != 0xFE || _readMessageHeader[1] != 0xEF ) // check header magic values
             {
                 DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received invalid header, disconnecting" );
-                closeAfterAllPendingWrites();
+                close();
             }
 
             // read message size info
@@ -253,7 +236,7 @@ void NetworkConnection::do_read_header()
         }
         else {
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received error code in do_read_header " << ec.message() );
-            closeAfterAllPendingWrites();
+            close();
         }
     } ) );
 }
@@ -263,26 +246,27 @@ void NetworkConnection::do_read_body( const int payloadSize )
     // resize to have enough data for payload + footer
     _readMessageData.resize( payloadSize + 2 );
 
-    asio::async_read( _socket, asio::buffer( _readMessageData ), _readStrand.wrap( [this, payloadSize]( asio::error_code ec, std::size_t /*length*/ ) {
-        if ( !ec ) {
-            if ( _readMessageData[payloadSize] != 0xFA || _readMessageData[payloadSize + 1] != 0xAF ) // check footer magic values
-            {
-                DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received invalid footer, disconnecting" );
-                closeAfterAllPendingWrites();
-            }
+    asio::async_read( _socket, asio::buffer( _readMessageData ),
+                      _readStrand.wrap( [self = shared_from_this(), this, payloadSize]( asio::error_code ec, std::size_t /*length*/ ) {
+                          if ( !ec ) {
+                              if ( _readMessageData[payloadSize] != 0xFA || _readMessageData[payloadSize + 1] != 0xAF ) // check footer magic values
+                              {
+                                  DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received invalid footer, disconnecting" );
+                                  close();
+                              }
 
-            DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Read message of size " << payloadSize + 8 );
+                              DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Read message of size " << payloadSize + 8 );
 
-            _readMessageData.resize( _readMessageData.size() - 2 );
-            _messagesToRead.emplace_back( std::move( _readMessageData ) );
+                              _readMessageData.resize( _readMessageData.size() - 2 );
+                              _messagesToRead.emplace_back( std::move( _readMessageData ) );
 
-            do_read_header();
-        }
-        else {
-            DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received error code in do_read_body " << ec.message() );
-            closeAfterAllPendingWrites();
-        }
-    } ) );
+                              do_read_header();
+                          }
+                          else {
+                              DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received error code in do_read_body " << ec.message() );
+                              close();
+                          }
+                      } ) );
 }
 
 void NetworkConnection::do_write()
@@ -297,7 +281,7 @@ void NetworkConnection::do_write()
 
     std::array<asio::const_buffer, 3> message{ asio::buffer( firstMessage.first ), asio::buffer( firstMessage.second ), asio::buffer( _messageFooter ) };
 
-    asio::async_write( _socket, message, _writeStrand.wrap( [this]( asio::error_code ec, std::size_t length ) {
+    asio::async_write( _socket, message, _writeStrand.wrap( [self = shared_from_this(), this]( asio::error_code ec, std::size_t length ) {
         _isWriting = false;
         if ( !ec ) {
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Wrote " << length << " bytes" );
@@ -306,17 +290,15 @@ void NetworkConnection::do_write()
         }
         else {
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Received error code in async_write " << ec.message() );
-            closeAfterAllPendingWrites();
+            close();
         }
     } ) );
 }
 
 NetworkConnection::~NetworkConnection()
 {
-    closeAfterAllPendingWrites();
-    // we have to block until deconnected otherwise we may have pending tasks that still refer to this instance
-    while ( _isConnected ) {
-    }
+    close();
+    DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : instance destroyed" );
 }
 
 #endif

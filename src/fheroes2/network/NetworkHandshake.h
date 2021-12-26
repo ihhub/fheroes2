@@ -9,36 +9,45 @@ namespace fheroes2
 {
     namespace Network
     {
-        // Manages the lifecycle of all io and network objects necessary for a client or a server
+        // Manages the lifecycle of all io and network objects necessary for a server or a client
+        // The difference with between Client and Server version is the number of connections we manage (only one for client)
         class ConnectionResourcesHandler
         {
         public:
-            NetworkConnection * getNetworkConnection()
-            {
-                return _networkConnection.get();
-            }
 
             std::string getPlayerName() const
             {
                 return _playerName;
             }
 
-            void setPlayerName( std::string name )
+            void setPlayerName( const std::string & name )
             {
                 _playerName = name;
             }
 
-            void init( const std::string & name, const int nbThreads )
+            std::vector<std::shared_ptr<NetworkConnection>>&  getConnections()
             {
-                assert( nbThreads > 0 );
+                return _connections;
+            }
+
+            void init( const std::string & name, const int nbConnections )
+            {
+                assert( nbConnections > 0 );
                 stop();
+
+                const int nbThreads = nbConnections + 1;
 
                 _io_context.reset( new asio::io_context() );
                 _work_guard.reset( new asio::executor_work_guard<asio::io_context::executor_type>( _io_context->get_executor() ) );
                 for ( int i = 0; i < nbThreads; ++i ) {
                     _io_context_threads.emplace_back( new std::thread( [this]() { _io_context->run(); } ) );
                 }
-                _networkConnection.reset( new NetworkConnection( name, *_io_context ) );
+
+                for ( int i = 0; i < nbConnections; ++i ) {
+                    std::ostringstream stream;
+                    stream << name << '_' << i;
+                    _connections.emplace_back( std::make_shared<NetworkConnection>( stream.str(), *_io_context ) );
+                }
             }
 
             ~ConnectionResourcesHandler()
@@ -55,18 +64,17 @@ namespace fheroes2
                     _work_guard.reset();
                 }
 
-                if ( _networkConnection ) {
-                    // ask networkConnection to disconnect (this is async so it will be effective later)
-                    _networkConnection->closeAfterAllPendingWrites();
+                for ( auto & c : _connections ) {
+                    // closes all connections
+                    c->close();
                 }
+                _connections.clear();
 
                 for ( auto & t : _io_context_threads ) {
                     // allow all pending work to complete, this includes calls made through closeAfterAllPendingWrites()
                     t->join();
                 }
                 _io_context_threads.clear();
-
-                _networkConnection.reset();
 
                 // _io_context is deleted last
                 _io_context.reset();
@@ -76,13 +84,17 @@ namespace fheroes2
             std::unique_ptr<asio::io_context> _io_context = nullptr;
             std::vector<std::unique_ptr<std::thread>> _io_context_threads;
             std::unique_ptr<asio::executor_work_guard<asio::io_context::executor_type>> _work_guard = nullptr;
-            std::unique_ptr<NetworkConnection> _networkConnection = nullptr;
+
+            std::vector<std::shared_ptr<NetworkConnection>> _connections;
             std::string _playerName;
         };
+
 
         bool HandshakeServer( const std::string & serverName );
         bool HandshakeClient( const std::string & clientName );
     }
+
+
 
 }
 

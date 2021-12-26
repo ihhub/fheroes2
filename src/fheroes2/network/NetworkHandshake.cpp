@@ -14,7 +14,7 @@ namespace
 
     // These will have to not be global later on when we have real usage beyond just handshake
     ConnectionResourcesHandler gResourceHandlerClient;
-    ConnectionResourcesHandler gResourceHandlerServer; // use the same type for server but it may change later when server needs to handle several connections
+    ConnectionResourcesHandler gResourceHandlerServer;
 
     // Helper to get the external IP address of this host by doing a HTTP GET to api.ipify.org and parse its result
     std::string getHostIpAddress()
@@ -79,17 +79,22 @@ namespace fheroes2
 {
     namespace Network
     {
+
+        // Open an handshake connection for a server.
+        // Here, I purposefully create a server with 2 open connections to test the behavior
+        // Also note that if there is a failure, I don't close the full gResourceHandlerServer instance, but I just delete a NetworkConnection instance.
+        // This brings no benefits, except testing that the gResourceHandlerServer still behaves correctly.
         bool HandshakeServer( const std::string & serverName )
         {
-            const int timeoutSeconds = 30;
+            const int timeoutSeconds = 50;
 
             std::ostringstream name;
             name << "Server[" << serverName << "]";
-            gResourceHandlerServer.init( name.str(), 2 );
+            gResourceHandlerServer.init( name.str(), 2 ); // create server with 2 open connections, just to try
 
-            NetworkConnection & server = *gResourceHandlerServer.getNetworkConnection();
+            NetworkConnection & server = *gResourceHandlerServer.getConnections()[0];
 
-            std::atomic<int> signal = 0;
+            std::atomic<int> signal = { 0 };
             server.acceptConnectionAsync( fheroes2port, signal, timeoutSeconds );
 
             std::ostringstream dialogMessage;
@@ -97,12 +102,14 @@ namespace fheroes2
             const int connectionResult = Dialog::MessageUntilSignal( "Connecting", dialogMessage.str(), signal, Font::BIG );
 
             if ( connectionResult == Dialog::CANCEL ) { // cancelled by user
-                gResourceHandlerServer.stop();
+                server.close();
+                gResourceHandlerServer.getConnections().clear();
                 Dialog::Message( "Handshake failed", "Connection cancelled", Font::BIG, Dialog::OK );
                 return false;
             }
             else if ( connectionResult == Dialog::NO ) { // timed out
-                gResourceHandlerServer.stop();
+                server.close();
+                gResourceHandlerServer.getConnections().clear();
                 Dialog::Message( "Handshake failed", "Connection timed out", Font::BIG, Dialog::OK );
                 return false;
             }
@@ -123,20 +130,24 @@ namespace fheroes2
                 }
                 else {
                     Dialog::Message( "Handshake failed", gotMessage ? "Incorrect message received from client" : "Timed out", Font::BIG, Dialog::OK );
-                    gResourceHandlerServer.stop();
+                    server.close();
+                    gResourceHandlerServer.getConnections().clear();
                     return false;
                 }
             }
             else {
                 Dialog::Message( "Handshake failed", gotMessage ? "Incorrect message received from client" : "Timed out", Font::BIG, Dialog::OK );
-                gResourceHandlerServer.stop();
+                server.close();
+                gResourceHandlerServer.getConnections().clear();
                 return false;
             }
         }
 
+        // Open an handshake connection for a client.
+        // If there is an error, we completely close the gResourceHandlerClient instance
         bool HandshakeClient( const std::string & clientName )
         {
-            const int timeoutSeconds = 5;
+            const int timeoutSeconds = 3;
             std::ostringstream ss;
 
             std::string ipAddress = getHostIpAddress();
@@ -162,11 +173,11 @@ namespace fheroes2
 
             std::ostringstream name;
             name << "Client[" << clientName << "]";
-            gResourceHandlerClient.init( name.str(), 2 );
+            gResourceHandlerClient.init( name.str(), 1 );
 
-            NetworkConnection & client = *gResourceHandlerClient.getNetworkConnection();
+            NetworkConnection & client = *gResourceHandlerClient.getConnections()[0];
 
-            std::atomic<int> signal = 0;
+            std::atomic<int> signal = { 0 };
             client.connectAsync( endpoint, signal, timeoutSeconds );
 
             std::ostringstream dialogMessage;
@@ -174,12 +185,12 @@ namespace fheroes2
             const int connectionResult = Dialog::MessageUntilSignal( "Connecting", dialogMessage.str(), signal, Font::BIG );
 
             if ( connectionResult == Dialog::CANCEL ) { // cancelled by user
-                gResourceHandlerServer.stop();
+                gResourceHandlerClient.stop();
                 Dialog::Message( "Handshake failed", "Connection cancelled", Font::BIG, Dialog::OK );
                 return false;
             }
             else if ( connectionResult == Dialog::NO ) { // timed out
-                gResourceHandlerServer.stop();
+                gResourceHandlerClient.stop();
                 Dialog::Message( "Handshake failed", "Connection timed out", Font::BIG, Dialog::OK );
                 return false;
             }

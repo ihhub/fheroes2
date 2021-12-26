@@ -5,6 +5,7 @@
 #include <atomic>
 #include <cstdint>
 #include <deque>
+#include <memory>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -24,7 +25,7 @@ namespace fheroes2
     namespace Network
     {
         // This class is the low-level class that manages a connection through a socket and writing/reading data.
-        class NetworkConnection
+        class NetworkConnection : public std::enable_shared_from_this<NetworkConnection>
         {
         public:
             NetworkConnection( const std::string & name, asio::io_context & io_context );
@@ -46,7 +47,7 @@ namespace fheroes2
             bool acceptConnectionAsync( const int port, std::atomic<int> & signal, int timeoutSeconds = 50 );
 
             // Closes the connection
-            void closeAfterAllPendingWrites();
+            void close();
 
             // Asynchronously sends a payload to the endpoint. This is thread-safe.
             bool sendPayload( std::vector<uint8_t> && payload );
@@ -78,7 +79,7 @@ namespace fheroes2
 
             // the pending timer that we have for timeout when connecting.
             // It needs to be visible at class level so we can cancel it when the class is destroyed, otherwise we will keep waiting on it.
-            std::shared_ptr<asio::steady_timer> _timeoutForConnecting;
+            asio::steady_timer _timeoutForConnecting;
 
             //--- reading part
 
