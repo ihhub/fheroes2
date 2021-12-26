@@ -14,7 +14,6 @@ namespace fheroes2
         class ConnectionResourcesHandler
         {
         public:
-
             std::string getPlayerName() const
             {
                 return _playerName;
@@ -25,7 +24,7 @@ namespace fheroes2
                 _playerName = name;
             }
 
-            std::vector<std::shared_ptr<NetworkConnection>>&  getConnections()
+            std::vector<std::shared_ptr<NetworkConnection>> & getConnections()
             {
                 return _connections;
             }
@@ -89,14 +88,10 @@ namespace fheroes2
             std::string _playerName;
         };
 
-
         bool HandshakeServer( const std::string & serverName );
         bool HandshakeClient( const std::string & clientName );
     }
 
-
-
 }
-
 
 #endif // NO_NETWORK

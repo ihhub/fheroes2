@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "game.h"
+#include "NetworkHandshake.h"
 #include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
@@ -33,7 +34,6 @@
 #include "game_video.h"
 #include "icn.h"
 #include "mus.h"
-#include "NetworkHandshake.h"
 #include "settings.h"
 #include "smk_decoder.h"
 #include "text.h"

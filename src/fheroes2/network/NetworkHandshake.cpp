@@ -79,7 +79,6 @@ namespace fheroes2
 {
     namespace Network
     {
-
         // Open an handshake connection for a server.
         // Here, I purposefully create a server with 2 open connections to test the behavior
         // Also note that if there is a failure, I don't close the full gResourceHandlerServer instance, but I just delete a NetworkConnection instance.

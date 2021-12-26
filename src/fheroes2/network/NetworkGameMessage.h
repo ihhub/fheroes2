@@ -24,7 +24,7 @@ namespace fheroes2
         //--- Outgoing game messages ---
 
         // Game message data that is ready to be sent over the network
-        typedef std::vector<uint8_t> OutgoingGameMessage;
+        using OutgoingGameMessage = std::vector<uint8_t>;
 
         OutgoingGameMessage createHandshake1Message( const std::string & playerName );
         OutgoingGameMessage createHandshake2Message( const std::string & playerName );
