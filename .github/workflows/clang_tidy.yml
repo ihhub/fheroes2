@@ -2,7 +2,7 @@ name: Clang-Tidy
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, network ]
     paths: [ '**.cpp', '**.h' ]
 
 jobs:

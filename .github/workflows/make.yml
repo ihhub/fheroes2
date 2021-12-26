@@ -2,9 +2,9 @@ name: Make
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, network ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, network ]
 
 jobs:
   build:
