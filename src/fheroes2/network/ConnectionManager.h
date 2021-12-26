@@ -102,7 +102,7 @@ namespace fheroes2
             bool _isWriting;
 
             // type of data we store before writing the message to socket: it's a 6 bytes header and a message
-            typedef std::pair<std::array<uint8_t, 6>, std::vector<uint8_t>> MessageData;
+            using MessageData = std::pair<std::array<uint8_t, 6>, std::vector<uint8_t>>;
             // we also write a footer to the socket but it's always the same
             const std::array<uint8_t, 2> _messageFooter = { 0xFA, 0xAF };
 

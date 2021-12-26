@@ -30,14 +30,17 @@ using namespace fheroes2::Network;
 NetworkConnection::NetworkConnection( const std::string & name, asio::io_context & io_context )
     : _name( name )
     , _ioContext( io_context )
-    , _readStrand( io_context )
-    , _writeStrand( io_context )
     , _socket( io_context )
-    , _timeoutForConnecting( io_context )
-    , _readMessageHeader()
     , _isConnected( false )
     , _isConnecting( false )
+    , _timeoutForConnecting( io_context )
+    , _readStrand( io_context )
+    , _readMessageHeader()
+    , _readMessageData()
+    , _messagesToRead()
+    , _writeStrand( io_context )
     , _isWriting( false )
+    , _messagesToWrite()
 {}
 
 bool NetworkConnection::connectAsync( const asio::ip::tcp::endpoint endpoint, std::atomic<int> & signal, int timeoutSeconds /*= 5*/ )
@@ -153,7 +156,7 @@ bool NetworkConnection::getNextPayload( std::vector<uint8_t> & payload, int time
     }
 
     std::atomic<int> signal = { -1 };
-    const std::chrono::steady_clock::time_point expirationTime = std::chrono::high_resolution_clock::now() + std::chrono::milliseconds( timeoutMilliseconds );
+    const std::chrono::high_resolution_clock::time_point expirationTime = std::chrono::high_resolution_clock::now() + std::chrono::milliseconds( timeoutMilliseconds );
 
     _readStrand.post( [self = shared_from_this(), this, &signal, &payload, &expirationTime]() { try_get_payload( signal, payload, expirationTime ); } );
 
@@ -170,7 +173,7 @@ bool NetworkConnection::getNextPayload( std::vector<uint8_t> & payload, int time
     return signal == 1;
 }
 
-void NetworkConnection::try_get_payload( std::atomic<int> & signal, std::vector<uint8_t> & payload, std::chrono::steady_clock::time_point expirationTime )
+void NetworkConnection::try_get_payload( std::atomic<int> & signal, std::vector<uint8_t> & payload, std::chrono::high_resolution_clock::time_point expirationTime )
 {
     if ( !_messagesToRead.empty() ) {
         payload = std::move( _messagesToRead.front() );
@@ -281,7 +284,7 @@ void NetworkConnection::do_write()
 
     std::array<asio::const_buffer, 3> message{ asio::buffer( firstMessage.first ), asio::buffer( firstMessage.second ), asio::buffer( _messageFooter ) };
 
-    asio::async_write( _socket, message, _writeStrand.wrap( [self = shared_from_this(), this]( asio::error_code ec, std::size_t length ) {
+    asio::async_write( _socket, message, _writeStrand.wrap( [self = shared_from_this(), this]( asio::error_code ec, std::size_t /* length */ ) {
         _isWriting = false;
         if ( !ec ) {
             DEBUG_LOG( DBG_NETWORK, DBG_INFO, _name << " : Wrote " << length << " bytes" );
