@@ -146,7 +146,7 @@ public:
 
         const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
 
-        buttonGift.setPosition( pos_rt.x - 72 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
+        buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
         buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
