@@ -20,9 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -332,11 +332,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pos_rt.y;
     text.Blit( dst_pt.x, dst_pt.y );
 
-		std::cout << pos_rt.x << std::endl;
+    std::cout << pos_rt.x << std::endl;
 
     TradeWindowGUI gui( pos_rt );
 
-		std::cout << pos_rt.x << std::endl;
+    std::cout << pos_rt.x << std::endl;
 
     const std::string & header_from = _( "Your Resources" );
 
