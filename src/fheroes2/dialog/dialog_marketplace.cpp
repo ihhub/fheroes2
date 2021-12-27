@@ -295,14 +295,14 @@ void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_s
 
     textSell.Hide();
     textSell.SetText( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - textSell.w() / 2;
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - ( textSell.w() + 1 ) / 2;
     dst_pt.y = pos_rt.y + 116;
     textSell.SetPos( dst_pt.x, dst_pt.y );
     textSell.Show();
 
     textBuy.Hide();
     textBuy.SetText( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - textBuy.w() / 2;
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - ( textBuy.w() + 1 ) / 2;
     dst_pt.y = pos_rt.y + 116;
     textBuy.SetPos( dst_pt.x, dst_pt.y );
     textBuy.Show();
