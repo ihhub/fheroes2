@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -146,7 +147,7 @@ public:
 
         const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
 
-        buttonGift.setPosition( pos_rt.x - 70 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
+        buttonGift.setPosition( pos_rt.x - 72 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
         buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
@@ -331,7 +332,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pos_rt.y;
     text.Blit( dst_pt.x, dst_pt.y );
 
+		std::cout << pos_rt.x << std::endl;
+
     TradeWindowGUI gui( pos_rt );
+
+		std::cout << pos_rt.x << std::endl;
 
     const std::string & header_from = _( "Your Resources" );
 
@@ -359,7 +364,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     Funds fundsTo;
     int resourceTo = 0;
-    const fheroes2::Point pt2( 138 + pos_rt.x, pos_rt.y + 190 );
+    const fheroes2::Point pt2( 136 + pos_rt.x, pos_rt.y + 190 );
     std::vector<fheroes2::Rect> rectsTo;
     rectsTo.reserve( 7 );
     rectsTo.emplace_back( pt2.x, pt2.y, 34, 34 ); // wood
@@ -400,7 +405,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     // button exit
     const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
 
-    dst_pt.x = pos_rt.x + 70 + ( pos_rt.width - spriteExit.width() ) / 2;
+    dst_pt.x = pos_rt.x + 68 + ( pos_rt.width - spriteExit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
 
