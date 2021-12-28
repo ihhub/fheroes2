@@ -592,7 +592,8 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & sele
         RedistributeArmy( selectedTroop, destTroop, _army );
         return true;
     }
-    else if ( destTroop.isValid() ) {
+
+    if ( destTroop.isValid() ) {
         Army::SwapTroops( selectedTroop, destTroop );
         return true;
     }
