@@ -245,11 +245,11 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         }
         const TextBox displayMessage( message, Font::BIG, fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
         const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceFrom ) );
-        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() + 1 ) / 2 - 70;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() ) / 2 - 70;
         dst_pt.y = pos_rt.y + 115 - sprite_from.height();
         fheroes2::Blit( sprite_from, display, dst_pt.x, dst_pt.y );
         const fheroes2::Sprite & sprite_to = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceTo ) );
-        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_to.width() + 1 ) / 2 + 70;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_to.width() ) / 2 + 70;
         dst_pt.y = pos_rt.y + 115 - sprite_to.height();
         fheroes2::Blit( sprite_to, display, dst_pt.x, dst_pt.y );
         const fheroes2::Sprite & sprite_fromto = fheroes2::AGG::GetICN( tradpost, 0 );
@@ -295,14 +295,14 @@ void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_s
 
     textSell.Hide();
     textSell.SetText( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - ( textSell.w() + 1 ) / 2;
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - textSell.w() / 2;
     dst_pt.y = pos_rt.y + 116;
     textSell.SetPos( dst_pt.x, dst_pt.y );
     textSell.Show();
 
     textBuy.Hide();
     textBuy.SetText( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - ( textBuy.w() + 1 ) / 2;
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - textBuy.w() / 2;
     dst_pt.y = pos_rt.y + 116;
     textBuy.SetPos( dst_pt.x, dst_pt.y );
     textBuy.Show();
