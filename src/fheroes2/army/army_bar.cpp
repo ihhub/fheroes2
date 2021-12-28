@@ -574,6 +574,9 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
             if ( isSelected() )
                 ResetSelected();
         }
+        else if ( troop.isValid() ) {
+            Army::SwapTroops( *troopPress, troop );
+        }
     }
 
     return true;
@@ -587,6 +590,10 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & sele
     // cross-army drag split
     if ( selectedTroop.isValid() && ( !destTroop.isValid() || selectedTroop.GetID() == destTroop.GetID() ) ) {
         RedistributeArmy( selectedTroop, destTroop, _army );
+        return true;
+    }
+    else if ( destTroop.isValid() ) {
+        Army::SwapTroops( selectedTroop, destTroop );
         return true;
     }
 
