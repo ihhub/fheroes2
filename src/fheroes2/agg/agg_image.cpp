@@ -639,7 +639,13 @@ namespace
             offset = 32;
 
             // e with 2 dots on top.
-            font[184 - 32] = font[37 + offset];
+            font[184 - 32].resize( font[69].width(), font[69].height() + 3 );
+            font[184 - 32].reset();
+            fheroes2::Copy( font[69], 0, 0, font[184 - 32], 0, 3, font[69].width(), font[69].height() );
+            fheroes2::Copy( font[168 - 32], 3, 0, font[184 - 32], 3, 0, 2, 4 );
+            fheroes2::Copy( font[168 - 32], 3, 0, font[184 - 32], 5, 0, 2, 4 );
+            font[184 - 32].setPosition( font[69].x(), font[69].y() - 3 );
+            // Not shadow needs to be updated here.
 
             font[224 - 32] = font[33 + offset];
 
@@ -841,7 +847,14 @@ namespace
 
             size_t offset = 0;
 
-            font[168 - 32] = font[37 + offset];
+            // E with 2 dots on top.
+            font[168 - 32].resize( font[37].width(), font[37].height() + 2 );
+            font[168 - 32].reset();
+            fheroes2::Copy( font[37], 0, 0, font[168 - 32], 0, 2, font[37].width(), font[37].height() );
+            fheroes2::Copy( font[37], 3, 0, font[168 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[37], 3, 0, font[168 - 32], 5, 0, 1, 1 );
+            font[168 - 32].setPosition( font[37].x(), font[37].y() );
+            fheroes2::updateShadow( font[168 - 32], { -1, 1 }, 2 );
 
             font[192 - 32] = font[33 + offset];
 
@@ -1020,7 +1033,14 @@ namespace
 
             offset = 32;
 
-            font[184 - 32] = font[37 + offset];
+            // e with 2 dots on top.
+            font[184 - 32].resize( font[69].width(), font[69].height() + 2 );
+            font[184 - 32].reset();
+            fheroes2::Copy( font[69], 0, 0, font[184 - 32], 0, 2, font[69].width(), font[69].height() );
+            fheroes2::Copy( font[69], 2, 0, font[184 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[69], 2, 0, font[184 - 32], 4, 0, 1, 1 );
+            font[184 - 32].setPosition( font[69].x(), font[69].y() );
+            fheroes2::updateShadow( font[184 - 32], { -1, 1 }, 2 );
 
             font[224 - 32] = font[33 + offset];
 
