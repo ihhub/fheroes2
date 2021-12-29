@@ -740,7 +740,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         ShowEventDayDialog();
 
         // autosave
-        if ( conf.ExtGameAutosaveOn() && conf.ExtGameAutosaveBeginOfDay() )
+        if ( conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 
@@ -1125,7 +1125,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             RedrawFocus();
         }
 
-        if ( conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
+        if ( !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 
