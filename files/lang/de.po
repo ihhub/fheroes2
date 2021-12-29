@@ -428,6 +428,12 @@ msgstr ""
 msgid "View Hero's options"
 msgstr ""
 
+msgid "View Captain's options"
+msgstr ""
+
+msgid "View opposing Captain"
+msgstr ""
+
 msgid "View opposing Hero"
 msgstr ""
 
