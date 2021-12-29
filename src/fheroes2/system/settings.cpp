@@ -99,8 +99,6 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
-    ExtSetModes( GAME_AUTOSAVE_ON );
-
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
@@ -1043,8 +1041,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:
         return _( "game: show system info" );
-    case Settings::GAME_AUTOSAVE_ON:
-        return _( "game: autosave on" );
     case Settings::GAME_AUTOSAVE_BEGIN_DAY:
         return _( "game: autosave will be made at the beginning of the day" );
     case Settings::GAME_USE_FADE:
@@ -1197,11 +1193,6 @@ bool Settings::ExtGameShowSystemInfo() const
 bool Settings::ExtGameAutosaveBeginOfDay() const
 {
     return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
-}
-
-bool Settings::ExtGameAutosaveOn() const
-{
-    return ExtModes( GAME_AUTOSAVE_ON );
 }
 
 bool Settings::ExtGameUseFade() const
