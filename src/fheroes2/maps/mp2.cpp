@@ -216,7 +216,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Lighthouse" );
     case OBJN_WATERWHEEL:
     case OBJ_WATERWHEEL:
-        return _( "Water Wheel" );
+        return _n( "Water Wheel", "Water Wheels", 1 );
     case OBJN_MINES:
     case OBJ_MINES:
         return _( "Mines" );
@@ -243,7 +243,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Wagon Camp" );
     case OBJN_WINDMILL:
     case OBJ_WINDMILL:
-        return _( "Windmill" );
+        return _n( "Windmill", "Windmills", 1 );
     case OBJN_RNDTOWN:
     case OBJ_RNDTOWN:
         return _( "Random Town" );
@@ -461,7 +461,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
     case OBJ_BOTTLE:
         return _( "Bottle" );
     case OBJ_MAGICGARDEN:
-        return _( "Magic Garden" );
+        return _n( "Magic Garden", "Magic Gardens", 1 );
     case OBJ_RNDARTIFACT1:
         return _( "Random Artifact - Treasure" );
     case OBJ_RNDARTIFACT2:
