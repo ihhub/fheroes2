@@ -44,7 +44,6 @@ void Interface::Basic::SetFocus( Heroes * hero )
             focus.GetHeroes()->ShowPath( false );
         }
 
-        hero->RescanPath();
         hero->ShowPath( true );
         focus.Set( hero );
 

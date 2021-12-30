@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <functional>
 
@@ -754,32 +755,25 @@ void Heroes::ReplenishSpellPoints()
     SetSpellPoints( std::min( curr, maxp ) );
 }
 
-void Heroes::RescanPathPassable( void )
+void Heroes::calculatePath( int32_t dstIdx )
 {
-    if ( path.isValid() )
-        path.RescanPassable();
-}
-
-void Heroes::RescanPath( void )
-{
-    if ( !path.isValid() )
-        path.clear();
-
-    if ( path.isValid() ) {
-        const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
-
-        if ( !isShipMaster() && tile.isWater() && !MP2::isAccessibleFromBeach( tile.GetObject() ) )
-            path.PopBack();
+    if ( dstIdx < 0 ) {
+        // Recalculating an existing path
+        dstIdx = path.GetDestinationIndex();
     }
 
-    if ( path.isValid() ) {
-        if ( isControlAI() ) {
-            if ( path.hasObstacle() )
-                path.Reset();
-        }
-        else {
-            path.RescanObstacle();
-        }
+    if ( !path.isValid() ) {
+        path.Reset();
+    }
+
+    if ( dstIdx < 0 ) {
+        return;
+    }
+
+    path.setPath( world.getPath( *this, dstIdx ), dstIdx );
+
+    if ( !path.isValid() ) {
+        path.Reset();
     }
 }
 
@@ -1520,7 +1514,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             GetPath().Hide();
 
             // first fight the monsters on the destination tile (if any)
-            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
+            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
                 Action( *it, true );

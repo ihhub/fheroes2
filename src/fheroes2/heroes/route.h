@@ -81,9 +81,7 @@ namespace Route
 
         Path & operator=( const Path & ) = delete;
 
-        s32 GetDestinationIndex( void ) const;
-        s32 GetLastIndex( void ) const;
-        s32 GetDestinedIndex( void ) const;
+        int32_t GetDestinationIndex( const bool returnLastStep = false ) const;
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
@@ -99,15 +97,12 @@ namespace Route
         void Reset( void );
         void PopFront( void );
         void PopBack( void );
-        void RescanObstacle( void );
-        void RescanPassable( void );
 
         bool isValid( void ) const;
         bool isShow( void ) const
         {
             return !hide;
         }
-        bool hasObstacle( void ) const;
         bool hasAllowedSteps() const;
 
         std::string String( void ) const;
@@ -116,7 +111,6 @@ namespace Route
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
-
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );
 
