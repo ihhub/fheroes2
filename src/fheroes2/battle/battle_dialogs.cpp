@@ -738,9 +738,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     std::string str;
     Text text;
     text.Set( Font::SMALL );
-    str = _( "%{name} the %{race}" );
+    str = _( "Captain of %{name}" );
     StringReplace( str, "%{name}", hero.GetName() );
-    StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
     text.Set( str );
     tp.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
     tp.y = pos_rt.y + 11;
