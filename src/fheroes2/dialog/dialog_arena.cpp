@@ -163,7 +163,7 @@ void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2,
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
 
     if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-        constexpr int32_t BORDER_WIDTH = 2;
+        const int32_t BORDER_WIDTH = 2;
         const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 );
 
         fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
@@ -189,7 +189,7 @@ void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::R
         break;
     case Skill::Primary::KNOWLEDGE:
         if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-            constexpr int32_t BORDER_WIDTH = 2;
+            const int32_t BORDER_WIDTH = 2;
             const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 );
 
             fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
