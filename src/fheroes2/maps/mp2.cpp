@@ -191,7 +191,7 @@ bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
     return ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) );
 }
 
-const char * MP2::StringObject( const MapObjectType objectType )
+const char * MP2::StringObject( const MapObjectType objectType, const int count )
 {
     switch ( objectType ) {
     case OBJ_ZERO:
@@ -216,7 +216,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Lighthouse" );
     case OBJN_WATERWHEEL:
     case OBJ_WATERWHEEL:
-        return _n( "Water Wheel", "Water Wheels", 1 );
+        return _n( "Water Wheel", "Water Wheels", count );
     case OBJN_MINES:
     case OBJ_MINES:
         return _( "Mines" );
@@ -243,7 +243,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Wagon Camp" );
     case OBJN_WINDMILL:
     case OBJ_WINDMILL:
-        return _n( "Windmill", "Windmills", 1 );
+        return _n( "Windmill", "Windmills", count );
     case OBJN_RNDTOWN:
     case OBJ_RNDTOWN:
         return _( "Random Town" );
@@ -461,7 +461,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
     case OBJ_BOTTLE:
         return _( "Bottle" );
     case OBJ_MAGICGARDEN:
-        return _n( "Magic Garden", "Magic Gardens", 1 );
+        return _n( "Magic Garden", "Magic Gardens", count );
     case OBJ_RNDARTIFACT1:
         return _( "Random Artifact - Treasure" );
     case OBJ_RNDARTIFACT2:
@@ -642,22 +642,6 @@ const char * MP2::StringObject( const MapObjectType objectType )
     }
 
     return nullptr;
-}
-
-const char * MP2::getPluralObjectName( const MapObjectType objectType, const size_t count )
-{
-    switch ( objectType ) {
-    case OBJ_WATERWHEEL:
-        return _n( "Water Wheel", "Water Wheels", count );
-    case OBJ_WINDMILL:
-        return _n( "Windmill", "Windmills", count );
-    case OBJ_MAGICGARDEN:
-        return _n( "Magic Garden", "Magic Gardens", count );
-    default:
-        break;
-    }
-
-    return StringObject( objectType );
 }
 
 bool MP2::isDayLife( const MapObjectType objectType )

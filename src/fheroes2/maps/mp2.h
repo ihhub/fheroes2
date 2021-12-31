@@ -566,10 +566,7 @@ namespace MP2
     // Return Icn ID related to this tileset value.
     int GetICNObject( const uint8_t tileset );
 
-    const char * StringObject( const MapObjectType objectType );
-
-    // This function returns plural forms only for certain object types.
-    const char * getPluralObjectName( const MapObjectType objectType, const size_t count );
+    const char * StringObject( const MapObjectType objectType, const int count = 1 );
 
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
 
