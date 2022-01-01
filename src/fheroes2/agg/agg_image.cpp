@@ -247,20 +247,26 @@ namespace
             fheroes2::updateShadow( font[10], { -1, 2 }, 2 );
 
             font[28] = font[73];
-            font[28].image()[2] = 0;
-            font[28].transform()[2] = 1;
-            font[28].image()[2 + font[28].width()] = 0;
-            font[28].transform()[2 + font[28].width()] = 1;
+            // Just to be safe and not to write something out of buffer.
+            if ( font[28].width() > 2 && font[28].height() > 1 ) {
+                font[28].image()[2] = 0;
+                font[28].transform()[2] = 1;
+                font[28].image()[2 + font[28].width()] = 0;
+                font[28].transform()[2 + font[28].width()] = 1;
+            }
             fheroes2::Copy( font[28], 3, 0, font[28], 1, 0, 1, 2 );
             fheroes2::updateShadow( font[28], { -1, 2 }, 2 );
 
             font[30] = font[73];
-            font[30].image()[1] = 0;
-            font[30].transform()[1] = 1;
-            font[30].image()[3] = 0;
-            font[30].transform()[3] = 1;
-            font[30].image()[2 + font[30].width()] = 0;
-            font[30].transform()[2 + font[30].width()] = 1;
+            // Just to be safe and not to write something out of buffer.
+            if ( font[30].width() > 4 && font[30].height() > 1 ) {
+                font[30].image()[1] = 0;
+                font[30].transform()[1] = 1;
+                font[30].image()[3] = 0;
+                font[30].transform()[3] = 1;
+                font[30].image()[2 + font[30].width()] = 0;
+                font[30].transform()[2 + font[30].width()] = 1;
+            }
             fheroes2::Copy( font[30], 2, 0, font[30], 1, 1, 1, 1 );
             fheroes2::Copy( font[30], 2, 0, font[30], 3, 1, 1, 1 );
             fheroes2::updateShadow( font[30], { -1, 2 }, 2 );
