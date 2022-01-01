@@ -837,7 +837,7 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 if ( objectCount > 1 ) {
                     event.title = std::to_string( objectCount );
                     event.title += ' ';
-                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                    event.title += MP2::StringObject( objectType, objectCount );
                 }
                 else {
                     event.title = MP2::StringObject( objectType );
