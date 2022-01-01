@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-07 17:03+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1190,6 +1190,231 @@ msgstr "Není možné postavit %{name}"
 msgid "Build %{name}."
 msgstr "Postavit %{name}"
 
+#, fuzzy
+msgid "Blackridge"
+msgstr "Most"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+msgid "Whiteshield"
+msgstr ""
+
+msgid "Woodhaven"
+msgstr ""
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kovárna"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Morálka"
+
+msgid "Dragontooth"
+msgstr ""
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+msgid "Tundara"
+msgstr ""
+
+msgid "Vulcania"
+msgstr ""
+
+msgid "Baywatch"
+msgstr ""
+
+msgid "Fountainhead"
+msgstr ""
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+msgid "Sandcaster"
+msgstr ""
+
+msgid "Alamar"
+msgstr ""
+
+msgid "Burlock"
+msgstr ""
+
+msgid "Dragadune"
+msgstr ""
+
+msgid "Kalindra"
+msgstr ""
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Černá věž"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Nová hra"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "animace"
+
+msgid "Avalon"
+msgstr ""
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+msgid "Weed Patch"
+msgstr ""
+
+msgid "Brownston"
+msgstr ""
+
+msgid "Hilltop"
+msgstr ""
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Hodnocení"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+msgid "Sherman"
+msgstr ""
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Černá věž"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Černá věž"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+msgid "Lankershire"
+msgstr ""
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+msgid "Troy"
+msgstr ""
+
+msgid "Forder Oaks"
+msgstr ""
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+msgid "Willow"
+msgstr ""
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
 
@@ -1897,6 +2122,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr ""
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "animace"
@@ -2088,6 +2316,9 @@ msgstr ""
 msgid "Move Points"
 msgstr ""
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr ""
 
@@ -2121,9 +2352,6 @@ msgstr ""
 msgid "Click to save the current game."
 msgstr ""
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Click to load a previously saved game."
 msgstr ""
 
@@ -2150,6 +2378,22 @@ msgid "Select Spell:"
 msgstr "Seslat kouzlo"
 
 msgid "Select Skill:"
+msgstr ""
+
+msgid "Location: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Velikost mapy"
+
+msgid "The Succession Wars"
+msgstr ""
+
+msgid "The Price of Loyalty"
 msgstr ""
 
 #, fuzzy
@@ -2718,7 +2962,10 @@ msgstr "Nejlepší výsledky"
 msgid "View the high scores screen."
 msgstr ""
 
-msgid "Game settings."
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
+msgid "Game Settings"
 msgstr ""
 
 msgid ""
@@ -3253,9 +3500,6 @@ msgstr ""
 msgid "Agar"
 msgstr ""
 
-msgid "Alamar"
-msgstr ""
-
 msgid "Arie"
 msgstr ""
 
@@ -3284,9 +3528,6 @@ msgid "Flint"
 msgstr ""
 
 msgid "Halon"
-msgstr ""
-
-msgid "Kalindra"
 msgstr ""
 
 msgid "Mandigal"
@@ -3605,8 +3846,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
@@ -3618,11 +3859,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
-msgstr ""
-
-msgid "Sign"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
 
 msgid ""
@@ -3767,9 +4005,6 @@ msgid ""
 "%{art}."
 msgstr ""
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 
@@ -3780,6 +4015,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -3806,7 +4044,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -4279,20 +4517,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4304,6 +4528,20 @@ msgid ""
 "war horse. \"This steed will help speed you in your travels. Alas, he will "
 "grow tired in a week. You must also let me give better horses to your "
 "mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."
@@ -5344,6 +5582,9 @@ msgstr ""
 msgid "Magic Well"
 msgstr ""
 
+msgid "Sign"
+msgstr ""
+
 msgid "Nothing Special"
 msgstr ""
 
@@ -5994,7 +6235,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -6016,27 +6256,21 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% damage from Elemental spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6079,7 +6313,6 @@ msgstr ""
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6093,25 +6326,21 @@ msgstr ""
 msgid "No Morale"
 msgstr "Morálka"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
 msgid "Lightning"
 msgstr ""
 
-#, c-format
 msgid "% damage from "
 msgstr ""
 
@@ -7319,6 +7548,29 @@ msgstr "Seslat kouzlo"
 msgid "View %{spell}"
 msgstr "Zobrazit %{name}"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "%{spell} způsobil %{value} škod."
+
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr ""
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr ""
 
@@ -7397,9 +7649,6 @@ msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"
-msgstr ""
-
-msgid "game: autosave on"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

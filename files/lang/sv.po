@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-15 17:00+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1243,6 +1243,249 @@ msgid "Build %{name}."
 msgstr "Bygg %{name}."
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Bro"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Vit pärla"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Trä"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Smed"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Bra moral"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Röd drake"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Vulkan"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fontän"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Krigstrollkarl"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Röd drake"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Svart drake"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "\"Tillägg\""
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Gyllene klocka"
+
+#, fuzzy
+msgid "Brownston"
+msgstr "Brun"
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Fornborg"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Betyg"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Sjöjungfru"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Svart drake"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Svart torn"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Ledarskap"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Visa Städer"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Gul"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Kan inte rekrytera - du har för många hjältar."
 
@@ -1978,6 +2221,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Spelinställningar för FHeroes2."
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "\"Tillägg\""
@@ -2177,6 +2423,9 @@ msgstr "%{name} (Level %{level})"
 msgid "Move Points"
 msgstr "Förflyttningspoäng"
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr "Tillgängligt: %{count}"
 
@@ -2211,9 +2460,6 @@ msgstr "Fil att ladda:"
 msgid "Click to save the current game."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Ladda ett tidigare sparat spel."
@@ -2243,6 +2489,24 @@ msgstr "Välj besvärjelsemåltavla"
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Försvarsfärdighet"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Utgrävning"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Kartstorlek"
+
+#, fuzzy
+msgid "The Succession Wars"
+msgstr "Den andra sidan"
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 msgid "Map difficulty:"
 msgstr "Kartornas svårighetsgrad:"
@@ -2818,8 +3082,11 @@ msgstr "Poänglistan"
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
 
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
 #, fuzzy
-msgid "Game settings."
+msgid "Game Settings"
 msgstr "Inställningar"
 
 msgid ""
@@ -3428,9 +3695,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3460,9 +3724,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -3841,11 +4102,11 @@ msgstr ""
 "Vill du gå in och söka?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Du stöter på en pyramid av en stor och gammal kung.\n"
-"En rutinerad utforskning avslöjar att pyramiden är helt tom."
+"Medan du besegrar monstren, dechiffrerar du en uråldrig hieroglyf på väggen "
+"som berättar hemligheten om besvärjelsen - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Tyvärr har du ingen magibok att anteckna besvärjelsen med."
@@ -3857,14 +4118,11 @@ msgstr ""
 "Tyvärr är du inte vis nog att förstå besvärjelsen, så kan inte lära dig den."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Medan du besegrar monstren, dechiffrerar du en uråldrig hieroglyf på väggen "
-"som berättar hemligheten om besvärjelsen - '"
-
-msgid "Sign"
-msgstr "Skylt"
+"Du stöter på en pyramid av en stor och gammal kung.\n"
+"En rutinerad utforskning avslöjar att pyramiden är helt tom."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4053,9 +4311,6 @@ msgstr ""
 "Du har dragit ut en skeppsbruten man från en säker död i en oförlåtande "
 "ocean. Tacksamt ger han dig  %{art} för din vänlighet."
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr "En pyssling erbjuder dig en %{art} för en lite summa på %{gold} guld."
 
@@ -4068,6 +4323,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Vill du köpa denna artefakt?"
+
+msgid "Artifact"
+msgstr "Artefakt"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -4098,7 +4356,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -4678,6 +4936,20 @@ msgstr ""
 "dig!\""
 
 msgid ""
+"The head groom speaks to you, \"That is a fine looking horse you have. I am "
+"afraid we can give you no better, but the horses your cavalry are riding "
+"look to be of poor breeding stock. We have many trained war horses which "
+"would aid your riders greatly. I insist you take them.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, he will "
+"grow tired in a week. You must also let me give better horses to your "
+"mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
 "The head groom approaches you and speaks, \"You already have a fine horse, "
 "and have no inexperienced cavalry which might make use of our trained war "
 "horses.\""
@@ -4692,20 +4964,6 @@ msgid ""
 "endurance will wane with a lot of heavy riding, and you must return for a "
 "fresh mount in a week. We also have many fine war horses which could benefit "
 "mounted soldiers, but you have none we can help.\""
-msgstr ""
-
-msgid ""
-"The head groom speaks to you, \"That is a fine looking horse you have. I am "
-"afraid we can give you no better, but the horses your cavalry are riding "
-"look to be of poor breeding stock. We have many trained war horses which "
-"would aid your riders greatly. I insist you take them.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, he will "
-"grow tired in a week. You must also let me give better horses to your "
-"mounted soldiers, their horses look shoddy and weak.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."
@@ -5800,6 +6058,9 @@ msgstr ""
 msgid "Magic Well"
 msgstr "Magisk brunn"
 
+msgid "Sign"
+msgstr "Skylt"
+
 msgid "Nothing Special"
 msgstr "Ingenting speciellt"
 
@@ -6477,7 +6738,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -6500,27 +6760,22 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Vattenelement"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6567,7 +6822,6 @@ msgstr "Molnslott"
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6582,18 +6836,15 @@ msgstr "Luftelement"
 msgid "No Morale"
 msgstr "Moral"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
@@ -6601,7 +6852,7 @@ msgstr ""
 msgid "Lightning"
 msgstr "Blixtstav"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Vattenelement"
 
@@ -7854,6 +8105,30 @@ msgstr "Kasta besvärjelse"
 msgid "View %{spell}"
 msgstr "Visa %{name}"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "Besvärjelsen %{spell} tar %{damage} skada."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "Kasta %{spell} på %{monster}"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr "spel: Tillåt alltid överskrivning av sparfil"
 
@@ -7934,9 +8209,6 @@ msgstr ""
 
 msgid "game: show system info"
 msgstr "spel: Visa systeminfo"
-
-msgid "game: autosave on"
-msgstr "spel: Autospara på"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "spel: automatisk sparning kommer att utföras i början på dagen"
@@ -8022,6 +8294,9 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave on"
+#~ msgstr "spel: Autospara på"
 
 #, fuzzy
 #~ msgid "Join Error"
