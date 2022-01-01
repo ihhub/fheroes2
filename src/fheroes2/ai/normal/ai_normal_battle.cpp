@@ -377,16 +377,20 @@ namespace AI
         _attackingCastle = false;
         _defendingCastle = false;
         const Castle * castle = Arena::GetCastle();
-        if ( castle ) {
+        // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
+        if ( castle != nullptr && Arena::isAnyTowerPresent() ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->hasArtifact( Artifact::GOLDEN_BOW );
 
-            // TODO: verify that GetScoreQuality method always returns positive values here. Most likely for neutral castle it returns negative.
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 
             double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
+
+            // Tower strength can't be negative. If this assertion triggers something is wrong with the logic above.
+            assert( towerStr >= 0 );
 
             if ( _myColor == castle->GetColor() ) {
                 _defendingCastle = true;
