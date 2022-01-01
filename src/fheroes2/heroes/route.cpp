@@ -30,14 +30,14 @@
 
 Route::Path::Path( const Heroes & h )
     : hero( &h )
-    , dst( h.GetIndex() )
+    , dst( -1 )
     , hide( true )
 {}
 
 int Route::Path::GetFrontDirection( void ) const
 {
     if ( empty() ) {
-        if ( dst != hero->GetIndex() ) {
+        if ( Maps::isValidAbsIndex( dst ) ) {
             return Maps::GetDirection( hero->GetIndex(), dst );
         }
 
@@ -61,25 +61,27 @@ void Route::Path::PopFront( void )
 int32_t Route::Path::GetDestinationIndex( const bool returnLastStep /* = false */ ) const
 {
     if ( returnLastStep ) {
-        return empty() ? dst : back().GetIndex();
+        return empty() ? -1 : back().GetIndex();
     }
 
-    return empty() ? -1 : dst;
+    return dst;
 }
 
 void Route::Path::setPath( const std::list<Route::Step> & path, int32_t destIndex )
 {
     assign( path.begin(), path.end() );
+
     dst = destIndex;
 }
 
-void Route::Path::Reset( void )
+void Route::Path::Reset()
 {
-    dst = hero->GetIndex();
+    dst = -1;
 
     if ( !empty() ) {
-        clear();
         hide = true;
+
+        clear();
     }
 }
 
@@ -395,7 +397,7 @@ std::string Route::Path::String( void ) const
     output += ", to: ";
     output += std::to_string( dst );
     output += ", obj: ";
-    output += MP2::StringObject( world.GetTiles( dst ).GetObject() );
+    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_ZERO );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {

@@ -94,7 +94,7 @@ namespace Route
         {
             hide = true;
         }
-        void Reset( void );
+        void Reset();
         void PopFront( void );
 
         bool isValid( void ) const;
