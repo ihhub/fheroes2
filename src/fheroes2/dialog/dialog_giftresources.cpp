@@ -58,7 +58,7 @@ struct SelectRecipientsColors
     std::vector<fheroes2::Rect> positions;
 
     SelectRecipientsColors( const fheroes2::Point & pos, int senderColor )
-        : colors( Settings::Get().GetPlayers().GetColors() & ~senderColor )
+        : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
         , recipients( 0 )
     {
         positions.reserve( colors.size() );
