@@ -96,7 +96,6 @@ namespace Route
         }
         void Reset( void );
         void PopFront( void );
-        void PopBack( void );
 
         bool isValid( void ) const;
         bool isShow( void ) const

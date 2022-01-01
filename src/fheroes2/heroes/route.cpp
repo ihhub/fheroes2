@@ -58,14 +58,6 @@ void Route::Path::PopFront( void )
         pop_front();
 }
 
-void Route::Path::PopBack( void )
-{
-    if ( !empty() ) {
-        pop_back();
-        dst = empty() ? -1 : back().GetIndex();
-    }
-}
-
 int32_t Route::Path::GetDestinationIndex( const bool returnLastStep /* = false */ ) const
 {
     if ( returnLastStep ) {
