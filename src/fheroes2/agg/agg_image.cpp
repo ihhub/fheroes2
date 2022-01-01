@@ -2506,6 +2506,15 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::TWNWUP_5: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
+                    // Fix glowing red pixel.
+                    Copy( _icnVsSprite[id].front(), 52, 92, _icnVsSprite[id].front(), 54, 92, 1, 1 );
+                }
+
+                return true;
+            }
             default:
                 break;
             }
