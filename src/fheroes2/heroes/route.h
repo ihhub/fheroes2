@@ -81,6 +81,10 @@ namespace Route
 
         Path & operator=( const Path & ) = delete;
 
+        // Returns the destination index of the path, or, if the returnLastStep is true, returns the index of the last
+        // step of the path. Usually it's the same thing if PlayerWorldPathfinder was used to calculate the path, but
+        // this may not be the case if AIWorldPathfinder was used - due to the peculiarities of laying the path through
+        // heroes, neutral armies, teleports or water.
         int32_t GetDestinationIndex( const bool returnLastStep = false ) const;
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
