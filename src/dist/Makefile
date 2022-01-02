@@ -72,4 +72,4 @@ VPATH := $(SOURCEDIR)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.pot *.o *.d *.rc *.res *.exe $(TARGET)
+	rm -f *.pot *.o *.d *.exe $(TARGET) $(RES)
