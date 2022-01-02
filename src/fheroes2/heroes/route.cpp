@@ -41,7 +41,7 @@ int Route::Path::GetFrontDirection( void ) const
             return Maps::GetDirection( hero->GetIndex(), dst );
         }
 
-        return Direction::CENTER;
+        return Direction::UNKNOWN;
     }
 
     return front().GetDirection();
