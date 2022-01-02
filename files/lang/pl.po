@@ -4,12 +4,12 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2013-10-04 21:15+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1242,6 +1242,248 @@ msgid "Build %{name}."
 msgstr "Zbuduj: %{name}."
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Most"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Biała perła"
+
+msgid "Woodhaven"
+msgstr ""
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kuźnia"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Wysokie morale"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Smok"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Wulkan"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fontanna"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Czarnoksiężnik"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Smok"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Czarny smok"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "Uwaga"
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Złoty zegarek"
+
+#, fuzzy
+msgid "Brownston"
+msgstr "Brązowy"
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Fort na wzgórzu"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Ocena"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Niemiecki"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Czarny smok"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Czarna wieża"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Dowodzenie"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Borderlands"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Żółty"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Nie możesz rekrutować - masz za dużo bohaterów."
 
@@ -1670,8 +1912,9 @@ msgstr "Łączenie armii"
 msgid ""
 "Unable to merge two armies together. Rearrange monsters manually before "
 "moving the hero to the garrison."
-msgstr "Nie można połączyć armii. Zmień pozycje potworów w bohaterze"
-"przed wejściem do garnizonu."
+msgstr ""
+"Nie można połączyć armii. Zmień pozycje potworów w bohaterzeprzed wejściem "
+"do garnizonu."
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Tego miasta nie można rozbudować do poziomu zamku."
@@ -1983,6 +2226,9 @@ msgstr "Zmień rozdzielczość gry."
 msgid "Experimental game settings."
 msgstr "Eksperymentalne ustawienia gry."
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Attention"
 msgstr "Uwaga"
 
@@ -2180,6 +2426,9 @@ msgstr "%{name} (poziom %{level})"
 msgid "Move Points"
 msgstr "Ptk. ruchu"
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr "Dostępne: %{count}"
 
@@ -2214,9 +2463,6 @@ msgstr "Wczytaj plik:"
 msgid "Click to save the current game."
 msgstr "Zapisz bieżącą grę."
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Wczytaj uprzednio zapisaną grę"
@@ -2246,6 +2492,24 @@ msgstr "Wybierz cel zaklęcia"
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Obrona"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Wykopalisko"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Rodzaj muzyki"
+
+#, fuzzy
+msgid "The Succession Wars"
+msgstr "Druga Strona"
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 msgid "Map difficulty:"
 msgstr "Poziom:"
@@ -2830,7 +3094,12 @@ msgstr "Najlepsze wyniki"
 msgid "View the high scores screen."
 msgstr "Obejrzyj najlepsze wyniki"
 
-msgid "Game settings."
+#, fuzzy
+msgid "Change language, resolution and settings of the game."
+msgstr "Zmień rozdzielczość gry."
+
+#, fuzzy
+msgid "Game Settings"
 msgstr "Ustawienia gry."
 
 msgid ""
@@ -3456,9 +3725,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3488,9 +3754,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -3877,11 +4140,11 @@ msgstr ""
 "Czy mimo to chcesz wejść do piramidy?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Natrafiasz na piramidę zbudowaną ku chwale potężnego, starożytnego króla.\n"
-"Przeszukujesz ją, ale okazuje się, że jest zupełnie pusta."
+"Pokonawszy potwory, odczytujesz prastary glif na ścianie, dzięki czemu "
+"poznajesz tajemnice zaklęcia."
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Niestety nie masz księgi czarów, w której można zapisać zaklęcie."
@@ -3894,14 +4157,11 @@ msgstr ""
 "jesteś w stanie się go nauczyć."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Pokonawszy potwory, odczytujesz prastary glif na ścianie, dzięki czemu "
-"poznajesz tajemnice zaklęcia."
-
-msgid "Sign"
-msgstr "Drogowskaz"
+"Natrafiasz na piramidę zbudowaną ku chwale potężnego, starożytnego króla.\n"
+"Przeszukujesz ją, ale okazuje się, że jest zupełnie pusta."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4100,9 +4360,6 @@ msgstr ""
 "Uratowałeś rozbitka przed utonięciem. W podzięce za uratowanie, dostajesz "
 "%{art}."
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 "%{art} - leprekaun proponuje, że sprzeda ci ten artefakt za %{gold} sztuk "
@@ -4117,6 +4374,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Czy chcesz go kupić?"
+
+msgid "Artifact"
+msgstr "Artefakt"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -4151,7 +4411,7 @@ msgstr ""
 "%{art} będzie należeć do pierwszego prawdziwego dowódcy, który go odwiedzi..."
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -4790,28 +5050,6 @@ msgstr ""
 "pomóc!\""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-"Podchodzi do ciebie główny koniuszy i mówi. \"Masz już świetnego konia i nie "
-"dowodzisz niedoświadczoną kawalerią, której mogłyby się przydać nasze "
-"szkolone rumaki bojowe.\""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-"Gdy zbliżasz się do stajni, wychodzi z niej główny koniuszy prowadzący "
-"pięknego konia bojowego. \"Ten rumak pomoże ci w czasie twych podróży. "
-"Niestety osłabnie w przypadku ciężkiej jazdy, więc w przeciągu tygodnia "
-"musisz wrócić po nowego konia. Mamy także wiele rumaków bojowych, które "
-"byłyby dobre dla kawalerii, ale nie masz z sobą takich oddziałów.\""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4832,6 +5070,28 @@ msgstr ""
 "pięknego konia bojowego. \"Ten rumak pomoże ci w czasie twych podróży. "
 "Niestety, po tygodniu jazdy się zmęczy. Pozwól, że dam ci również lepsze "
 "konie dla twych kawalerzystów, bo te wyglądają na dość marne.\""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+"Podchodzi do ciebie główny koniuszy i mówi. \"Masz już świetnego konia i nie "
+"dowodzisz niedoświadczoną kawalerią, której mogłyby się przydać nasze "
+"szkolone rumaki bojowe.\""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
+msgstr ""
+"Gdy zbliżasz się do stajni, wychodzi z niej główny koniuszy prowadzący "
+"pięknego konia bojowego. \"Ten rumak pomoże ci w czasie twych podróży. "
+"Niestety osłabnie w przypadku ciężkiej jazdy, więc w przeciągu tygodnia "
+"musisz wrócić po nowego konia. Mamy także wiele rumaków bojowych, które "
+"byłyby dobre dla kawalerii, ale nie masz z sobą takich oddziałów.\""
 
 msgid "The Arena guards turn you away."
 msgstr "Strażnicy Areny każą ci odejść."
@@ -5977,6 +6237,9 @@ msgstr "Głazy"
 msgid "Magic Well"
 msgstr "Magiczna studnia"
 
+msgid "Sign"
+msgstr "Drogowskaz"
+
 msgid "Nothing Special"
 msgstr "Nic specjalnego"
 
@@ -6707,7 +6970,6 @@ msgstr "Podwójny strzał"
 msgid "Double damage to Undead"
 msgstr "Podwójne obrażenia Umarłym"
 
-#, c-format
 msgid "% magic resistance"
 msgstr "% odporności magicznej"
 
@@ -6731,27 +6993,22 @@ msgstr "Odporny na "
 msgid "% immunity to %{spell} spell"
 msgstr "% odporności na czar %{spell}"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Żywiołaki wody"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6795,7 +7052,6 @@ msgstr "Atak trującą chmurą"
 msgid "Decreases enemy's morale by "
 msgstr "Obniża morale przeciwnika o "
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr "% szans na unicestwienie połowy atakowanego oddziału"
 
@@ -6810,18 +7066,16 @@ msgstr "Żywiołak powietrza"
 msgid "No Morale"
 msgstr "Morale"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% immunity to "
 msgstr "% odporności na czar %{spell}"
 
@@ -6829,7 +7083,7 @@ msgstr "% odporności na czar %{spell}"
 msgid "Lightning"
 msgstr "Piorunochron"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Żywiołaki wody"
 
@@ -8215,6 +8469,30 @@ msgstr "Rzuć zaklęcie"
 msgid "View %{spell}"
 msgstr "Obejrzyj jednostkę (%{name})"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "%{spell} zadaje %{damage} pkt. obrażeń."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "Rzuć zaklęcie: %{spell} na: %{monster}"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr "gra: zawsze potwierdzaj nadpisanie zapisu stanu gry"
 
@@ -8300,9 +8578,6 @@ msgstr "walka: deterministyczne zdarzenia"
 msgid "game: show system info"
 msgstr "game: pokaż informacje systemowe"
 
-msgid "game: autosave on"
-msgstr "game: autozapis włączony"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Gra: Autozapis nastąpi na początku każdego dnia"
 
@@ -8368,9 +8643,10 @@ msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "Czarny smok pokona Tytana w dowolny dzień tygodnia."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr "On powiedział: Yada yada yada... ona odpowiedziała: Blah, blah, blah..."
+msgstr ""
+"On powiedział: Yada yada yada... ona odpowiedziała: Blah, blah, blah..."
 
-#,fuzzy
+#, fuzzy
 msgid "An unknown force is being ressurected..."
 msgstr "Nieznana siła jest wskrzeszana..."
 
@@ -8382,6 +8658,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave on"
+#~ msgstr "game: autozapis włączony"
 
 #~ msgid "Monster Info"
 #~ msgstr "Jednostka"
