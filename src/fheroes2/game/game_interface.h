@@ -140,7 +140,7 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
         static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
-        void CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const;
+        void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
         void Reset(); // call this function only when changing the resolution
 

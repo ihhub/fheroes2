@@ -172,6 +172,14 @@ Battle::Tower * Battle::Arena::GetTower( int type )
     return nullptr;
 }
 
+bool Battle::Arena::isAnyTowerPresent()
+{
+    assert( arena != nullptr );
+
+    return ( arena->towers[0] != nullptr && arena->towers[0]->isValid() ) || ( arena->towers[1] != nullptr && arena->towers[1]->isValid() )
+           || ( arena->towers[2] != nullptr && arena->towers[2]->isValid() );
+}
+
 Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )

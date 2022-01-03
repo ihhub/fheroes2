@@ -31,6 +31,7 @@
 #include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
+#include "battle_tower.h"
 #include "battle_troop.h"
 #include "game_static.h"
 #include "logging.h"
@@ -1142,7 +1143,11 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     }
     // Otherwise heavy penalty for hiting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
-        attackerThreat *= -2;
+        const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
+        if ( !isTower ) {
+            // Calculation score quality of tower should not effect units.
+            attackerThreat *= -2;
+        }
     }
     // Finally ignore disabled units (if belong to the enemy)
     else if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) ) {

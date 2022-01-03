@@ -1805,7 +1805,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 else {
                     // Did you add a new condition? If yes add a proper if-else branch.
                     assert( 0 );
-                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells you that he is willing to give %{art} if you have %{skill}." );
                     StringReplace( msg, "%{skill}", skill.GetName() );
                 }
 
