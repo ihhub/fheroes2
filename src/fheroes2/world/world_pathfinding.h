@@ -66,8 +66,8 @@ protected:
     // Calculates the movement penalty when moving from the src tile to the adjacent dst tile in the specified direction.
     // If the "last move" logic should be taken into account (when performing pathfinding for a real hero on the map),
     // then the src tile should be already accessible for this hero and it should also have a valid information about
-    // the hero's remaining movement points.
-    uint32_t getMovementPenalty( int src, int dst, int direction ) const;
+    // the hero's remaining movement points. The default implementation can be overridden by a derived class.
+    virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
     // Substracts movement points taking the transition between turns into account
     uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
@@ -131,6 +131,9 @@ public:
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
+
+    // Adds special logic for AI-controlled heroes.
+    uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
 
     double _armyStrength = -1;
     double _advantage = 1.0;

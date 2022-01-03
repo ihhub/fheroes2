@@ -466,6 +466,36 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 }
 
+uint32_t AIWorldPathfinder::getMovementPenalty( int src, int dst, int direction ) const
+{
+    const uint32_t defaultPenalty = WorldPathfinder::getMovementPenalty( src, dst, direction );
+
+    // If we perform pathfinding for a real AI-controlled hero on the map, we should encourage him
+    // to overcome water obstacles using boats.
+    if ( _maxMovePoints > 0 ) {
+        const WorldNode & node = _cache[src];
+
+        // No dead ends allowed
+        assert( src == _pathStart || node._from != -1 );
+
+        const Maps::Tiles & srcTile = world.GetTiles( src );
+        const Maps::Tiles & dstTile = world.GetTiles( dst );
+
+        // When the hero gets into a boat or disembarks, he spends all remaining movement points.
+        if ( ( !srcTile.isWater() && dstTile.GetObject() == MP2::OBJ_BOAT ) || ( srcTile.isWater() && dstTile.GetObject() == MP2::OBJ_COAST ) ) {
+            // If the hero is not able to make this movement this turn, then he will have to spend
+            // all the movement points next turn.
+            if ( defaultPenalty > node._remainingMovePoints ) {
+                return _maxMovePoints;
+            }
+
+            return node._remainingMovePoints;
+        }
+    }
+
+    return defaultPenalty;
+}
+
 int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
