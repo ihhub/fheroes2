@@ -7467,7 +7467,7 @@ msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
 "past obstacles (e.g. castle walls)."
 msgstr ""
-"L'%{name} élimine la pénalité de %{count} pour vos troupes qui tirent au-"
+"L'%{name} élimine la pénalité de %{count} pourcent pour vos troupes qui tirent au-"
 "delà des obstacles (par exemple, les murs d'un château)."
 
 msgid "Telescope"
