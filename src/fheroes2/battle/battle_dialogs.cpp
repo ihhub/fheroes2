@@ -738,7 +738,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     std::string str;
     Text text;
     text.Set( Font::SMALL );
-    str = _( "%{name} the %{race}" );
+    str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );
     StringReplace( str, "%{name}", hero.GetName() );
     StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
     text.Set( str );
