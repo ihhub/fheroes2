@@ -1852,6 +1852,21 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         return;
     }
 
+    // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_ZERO
+    if ( originalObjectType == MP2::OBJ_COAST && tile.isWater() ) {
+        Heroes * hero = tile.GetHeroes();
+
+        if ( hero ) {
+            hero->SetMapsObject( MP2::OBJ_ZERO );
+        }
+        else {
+            tile.SetObject( MP2::OBJ_ZERO );
+        }
+
+        // There is no need to check the rest of things as we fixed this object.
+        return;
+    }
+
     // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
     switch ( originalObjectType ) {
     case MP2::OBJ_UNKNW_79:
