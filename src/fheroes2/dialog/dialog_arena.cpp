@@ -163,13 +163,13 @@ void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2,
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
 
     if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-        const int32_t BORDER_WIDTH = 2;
+        const int32_t borderWidth = 2;
         const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 );
 
         fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
-        fheroes2::Blit( knowledgeICN, BORDER_WIDTH + 1, BORDER_WIDTH, display, rect4.x + BORDER_WIDTH, rect4.y + BORDER_WIDTH, rect4.width - 2 * BORDER_WIDTH - 1,
-                        rect4.height - 2 * BORDER_WIDTH );
-        fheroes2::Blit( knowledgeICN, BORDER_WIDTH, 0, display, rect4.x + rect4.width - BORDER_WIDTH - 1, rect4.y, 1, rect4.height );
+        fheroes2::Blit( knowledgeICN, borderWidth + 1, borderWidth, display, rect4.x + borderWidth, rect4.y + borderWidth, rect4.width - 2 * borderWidth - 1,
+                        rect4.height - 2 * borderWidth );
+        fheroes2::Blit( knowledgeICN, borderWidth, 0, display, rect4.x + rect4.width - borderWidth - 1, rect4.y, 1, rect4.height );
     }
 }
 
@@ -189,13 +189,13 @@ void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::R
         break;
     case Skill::Primary::KNOWLEDGE:
         if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-            const int32_t BORDER_WIDTH = 2;
+            const int32_t borderWidth = 2;
             const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 );
 
             fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
-            fheroes2::Blit( knowledgeICN, BORDER_WIDTH + 1, BORDER_WIDTH, display, rect4.x + BORDER_WIDTH, rect4.y + BORDER_WIDTH, rect4.width - 2 * BORDER_WIDTH - 1,
-                            rect4.height - 2 * BORDER_WIDTH );
-            fheroes2::Blit( knowledgeICN, BORDER_WIDTH, 0, display, rect4.x + rect4.width - BORDER_WIDTH - 1, rect4.y, 1, rect4.height );
+            fheroes2::Blit( knowledgeICN, borderWidth + 1, borderWidth, display, rect4.x + borderWidth, rect4.y + borderWidth, rect4.width - 2 * borderWidth - 1,
+                            rect4.height - 2 * borderWidth );
+            fheroes2::Blit( knowledgeICN, borderWidth, 0, display, rect4.x + rect4.width - borderWidth - 1, rect4.y, 1, rect4.height );
         }
 
         break;
