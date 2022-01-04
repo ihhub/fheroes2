@@ -483,10 +483,10 @@ msgid "View Hero's options"
 msgstr "Opcje bohatera"
 
 msgid "View Captain's options"
-msgstr ""
+msgstr "Opcje kapitana"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Obejrzyj wrogiego kapitana"
 
 msgid "View opposing Hero"
 msgstr "Obejrzyj wrogiego bohatera"
