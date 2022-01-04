@@ -112,9 +112,9 @@ int Color::GetFirst( int colors )
     return NONE;
 }
 
-const char * BarrierColor::String( const int colorBarrier )
+const char * fheroes2::getBarrierColorName( const int color )
 {
-    switch ( colorBarrier ) {
+    switch ( color ) {
     case AQUA:
         return _( "barrier|Aqua" );
     case BLUE:
@@ -138,9 +138,9 @@ const char * BarrierColor::String( const int colorBarrier )
     return "None";
 }
 
-const char * TentColor::String( const int colorTent )
+const char * fheroes2::getTentColorName( const int color)
 {
-    switch ( colorTent ) {
+    switch ( color ) {
     case AQUA:
         return _( "tent|Aqua" );
     case BLUE:

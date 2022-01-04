@@ -358,7 +358,7 @@ namespace
     std::string ShowBarrierInfo( const Maps::Tiles & tile )
     {
         std::string str = _( "%{color} Barrier" );
-        StringReplace( str, "%{color}", BarrierColor::String( tile.QuantityColor() ) );
+        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( tile.QuantityColor() ) );
 
         return str;
     }
@@ -366,7 +366,7 @@ namespace
     std::string ShowTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Tent" );
-        StringReplace( str, "%{color}", TentColor::String( tile.QuantityColor() ) );
+        StringReplace( str, "%{color}", fheroes2::getTentColorName( tile.QuantityColor() ) );
 
         if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             str.append( "\n \n" );
