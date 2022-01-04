@@ -138,7 +138,7 @@ const char * fheroes2::getBarrierColorName( const int color )
     return "None";
 }
 
-const char * fheroes2::getTentColorName( const int color)
+const char * fheroes2::getTentColorName( const int color )
 {
     switch ( color ) {
     case AQUA:
