@@ -134,7 +134,7 @@ public:
     void AddCastle( const Castle * );
     void RemoveCastle( const Castle * );
 
-    void ActionBeforeTurn( void );
+    void ActionBeforeTurn();
     void ActionNewDay( void );
     void ActionNewWeek( void );
     void ActionNewMonth( void );

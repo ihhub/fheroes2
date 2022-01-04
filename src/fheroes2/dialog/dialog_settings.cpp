@@ -124,10 +124,6 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
 
     if ( !readonly || conf.CanChangeInGame( item ) ) {
         conf.ExtModes( item ) ? conf.ExtResetModes( item ) : conf.ExtSetModes( item );
-
-        if ( item == Settings::GAME_AUTOSAVE_BEGIN_DAY && conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
-            conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-        }
     }
 }
 
@@ -153,7 +149,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
 
-    states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 
     if ( conf.VideoMode() == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )

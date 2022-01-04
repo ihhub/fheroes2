@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "agg_image.h"
 #include "dialog.h"
@@ -31,6 +32,71 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+
+namespace
+{
+    void changeRaceToNext( Player & player )
+    {
+        switch ( player.GetRace() ) {
+        case Race::KNGT:
+            player.SetRace( Race::BARB );
+            break;
+        case Race::BARB:
+            player.SetRace( Race::SORC );
+            break;
+        case Race::SORC:
+            player.SetRace( Race::WRLK );
+            break;
+        case Race::WRLK:
+            player.SetRace( Race::WZRD );
+            break;
+        case Race::WZRD:
+            player.SetRace( Race::NECR );
+            break;
+        case Race::NECR:
+            player.SetRace( Race::RAND );
+            break;
+        case Race::RAND:
+            player.SetRace( Race::KNGT );
+            break;
+        default:
+            // Did you add a new race? Add the logic above
+            assert( 0 );
+            break;
+        }
+    }
+
+    void changeRaceToPrev( Player & player )
+    {
+        switch ( player.GetRace() ) {
+        case Race::KNGT:
+            player.SetRace( Race::RAND );
+            break;
+        case Race::BARB:
+            player.SetRace( Race::KNGT );
+            break;
+        case Race::SORC:
+            player.SetRace( Race::BARB );
+            break;
+        case Race::WRLK:
+            player.SetRace( Race::SORC );
+            break;
+        case Race::WZRD:
+            player.SetRace( Race::WRLK );
+            break;
+        case Race::NECR:
+            player.SetRace( Race::WZRD );
+            break;
+        case Race::RAND:
+            player.SetRace( Race::NECR );
+            break;
+        default:
+            // Did you add a new race? Add the logic above
+            assert( 0 );
+            break;
+        }
+    }
+}
 
 Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )
@@ -295,8 +361,23 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
                 Font::BIG );
     }
-    // le.MouseClickLeft()
-    else {
+    else if ( le.MouseWheelUp() ) {
+        player = GetFromClassClick( le.GetMouseCursor() );
+        if ( nullptr != player ) {
+            if ( conf.AllowChangeRace( player->GetColor() ) ) {
+                changeRaceToPrev( *player );
+            }
+        }
+    }
+    else if ( le.MouseWheelDn() ) {
+        player = GetFromClassClick( le.GetMouseCursor() );
+        if ( nullptr != player ) {
+            if ( conf.AllowChangeRace( player->GetColor() ) ) {
+                changeRaceToNext( *player );
+            }
+        }
+    }
+    else { // if ( le.MouseClickLeft() )
         // select opponent
         if ( nullptr != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
             const Maps::FileInfo & fi = conf.CurrentFileInfo();
@@ -337,31 +418,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         // select class
         else if ( nullptr != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
             if ( conf.AllowChangeRace( player->GetColor() ) ) {
-                switch ( player->GetRace() ) {
-                case Race::KNGT:
-                    player->SetRace( Race::BARB );
-                    break;
-                case Race::BARB:
-                    player->SetRace( Race::SORC );
-                    break;
-                case Race::SORC:
-                    player->SetRace( Race::WRLK );
-                    break;
-                case Race::WRLK:
-                    player->SetRace( Race::WZRD );
-                    break;
-                case Race::WZRD:
-                    player->SetRace( Race::NECR );
-                    break;
-                case Race::NECR:
-                    player->SetRace( Race::RAND );
-                    break;
-                case Race::RAND:
-                    player->SetRace( Race::KNGT );
-                    break;
-                default:
-                    break;
-                }
+                changeRaceToNext( *player );
             }
         }
         // swap players

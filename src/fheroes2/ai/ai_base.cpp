@@ -153,7 +153,7 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove( false ) && !hero.Modes( Heroes::MOVED );
+        return hero.MayStillMove( false, false ) && !hero.Modes( Heroes::MOVED );
     }
 
     void Base::HeroTurn( Heroes & hero )

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:37+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-07 17:16+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1418,8 +1418,9 @@ msgstr ""
 msgid "Weed Patch"
 msgstr "Arany Óra"
 
+#, fuzzy
 msgid "Brownston"
-msgstr ""
+msgstr "Barna"
 
 msgid "Hilltop"
 msgstr ""
@@ -2479,6 +2480,9 @@ msgstr "%{level} szint"
 msgid "Move Points"
 msgstr ""
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr "Használható: %{count}"
 
@@ -2542,6 +2546,23 @@ msgstr "Varázslat célpontjának választása."
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Védőerő"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Ásatás"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Térkép mérete"
+
+msgid "The Succession Wars"
+msgstr ""
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -3118,8 +3139,11 @@ msgstr "Dicsőségtábla"
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
 
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
 #, fuzzy
-msgid "Game settings."
+msgid "Game Settings"
 msgstr "Beállítások"
 
 msgid ""
@@ -4335,7 +4359,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -6881,7 +6905,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -6904,27 +6927,22 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Vízelementál"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6971,7 +6989,6 @@ msgstr "Fellegvár"
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6986,18 +7003,15 @@ msgstr "Elemi Gyűrű"
 msgid "No Morale"
 msgstr "Morál"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
@@ -7005,7 +7019,7 @@ msgstr ""
 msgid "Lightning"
 msgstr "Villámló Bot"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Vízelementál"
 
@@ -8231,6 +8245,30 @@ msgstr "Varázslás"
 msgid "View %{spell}"
 msgstr "%{name} mutatása"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "The %{spell} varázslat %{damage} sebzést okoz."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr ""
 
@@ -8310,9 +8348,6 @@ msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"
-msgstr ""
-
-msgid "game: autosave on"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

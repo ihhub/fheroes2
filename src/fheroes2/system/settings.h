@@ -52,7 +52,7 @@ public:
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
-        GAME_AUTOSAVE_ON = 0x10000200,
+        // UNUSED = 0x10000200,
         GAME_USE_FADE = 0x10000400,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
@@ -196,7 +196,6 @@ public:
     bool ExtGameRewriteConfirm() const;
     bool ExtGameShowSystemInfo() const;
     bool ExtGameAutosaveBeginOfDay() const;
-    bool ExtGameAutosaveOn() const;
     bool ExtGameUseFade() const;
     bool ExtGameEvilInterface() const;
     bool ExtGameHideInterface() const;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:37+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-07 17:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1467,8 +1467,9 @@ msgstr ""
 msgid "Weed Patch"
 msgstr "Reloj de Oro"
 
+#, fuzzy
 msgid "Brownston"
-msgstr ""
+msgstr "Marrón"
 
 #, fuzzy
 msgid "Hilltop"
@@ -2546,6 +2547,9 @@ msgstr "%{name} ( Nivel %{level} )"
 msgid "Move Points"
 msgstr "Puntos de movimiento"
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr "Disponible: %{count}"
 
@@ -2609,6 +2613,24 @@ msgstr "Seleccionar objetivo del hechizo"
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Defensa"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Excavación"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Tamaño del Mapa"
+
+#, fuzzy
+msgid "The Succession Wars"
+msgstr "El Otro Lado"
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -3199,8 +3221,11 @@ msgstr "Puntuaciones más altas"
 msgid "View the high scores screen."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
 #, fuzzy
-msgid "Game settings."
+msgid "Game Settings"
 msgstr "Ajustes"
 
 msgid ""
@@ -4533,7 +4558,7 @@ msgstr ""
 "está dispuesto a darle el %{art} al primer líder auténtico que se encuentre."
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -7139,7 +7164,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -7162,27 +7186,22 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Elementales del Agua"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -7229,7 +7248,6 @@ msgstr "Castillo de las Nubes"
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -7244,18 +7262,15 @@ msgstr "Elemental del Aire"
 msgid "No Morale"
 msgstr "Moral"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
@@ -7263,7 +7278,7 @@ msgstr ""
 msgid "Lightning"
 msgstr "Vara Relampagueante"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Elementales del Agua"
 
@@ -8611,6 +8626,30 @@ msgstr "Lanzar hechizo"
 msgid "View %{spell}"
 msgstr "Ver %{name}"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "%{spell} hacen %{damage} de daño."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "Lanzar %{spell} sobre %{monster}"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr "juego: siempre confirmar al sobreescribir una paritda guardada"
 
@@ -8692,9 +8731,6 @@ msgstr ""
 
 msgid "game: show system info"
 msgstr "juego: mostrar información del sistema"
-
-msgid "game: autosave on"
-msgstr "juego: autoguardado activado"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
@@ -8781,6 +8817,9 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave on"
+#~ msgstr "juego: autoguardado activado"
 
 #, fuzzy
 #~ msgid "Join Error"

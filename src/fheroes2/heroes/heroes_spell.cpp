@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "settings.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -365,12 +366,24 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     }
 
     const int32_t center = hero.GetIndex();
-    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
 
-    // find water
-    int32_t dst_water = -1;
-    MapsIndexes freeTiles = Maps::GetFreeIndexesAroundTile( center );
-    std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+    const int tilePassability = world.GetTiles( center ).GetPassable();
+
+    const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+
+    std::vector<int32_t> possibleBoatPositions;
+
+    for ( const int32_t tileId : tilesAround ) {
+        const int direction = Maps::GetDirection( center, tileId );
+        assert( direction != Direction::UNKNOWN );
+
+        if ( ( tilePassability & direction ) != 0 ) {
+            possibleBoatPositions.emplace_back( tileId );
+        }
+    }
+
+    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
+    std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const fheroes2::Point & leftPoint = Maps::GetPoint( left );
         const fheroes2::Point & rightPoint = Maps::GetPoint( right );
         const int32_t leftDiffX = leftPoint.x - centerPoint.x;
@@ -381,14 +394,16 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
     } );
 
-    for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
+    int32_t boatDestination = -1;
+    for ( const int32_t tileId : possibleBoatPositions ) {
+        const Maps::Tiles & tile = world.GetTiles( tileId );
+        if ( tile.isWater() ) {
+            boatDestination = tileId;
             break;
         }
     }
 
-    if ( !Maps::isValidAbsIndex( dst_water ) ) {
+    if ( !Maps::isValidAbsIndex( boatDestination ) ) {
         Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
         return false;
     }
@@ -398,7 +413,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         if ( Maps::isValidAbsIndex( *it ) ) {
             const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
             if ( distance > 1 ) {
-                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, boatDestination, true, true );
                 Game::ObjectFadeAnimation::PerformFadeTask();
 
                 return true;
@@ -453,23 +468,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
 bool ActionSpellTownGate( Heroes & hero )
 {
-    const Kingdom & kingdom = hero.GetKingdom();
-    const KingdomCastles & castles = kingdom.GetCastles();
-    KingdomCastles::const_iterator it;
-
-    const Castle * castle = nullptr;
-    const s32 center = hero.GetIndex();
-    s32 min = -1;
-
-    // find the nearest castle
-    for ( it = castles.begin(); it != castles.end(); ++it )
-        if ( *it ) {
-            int min2 = Maps::GetApproximateDistance( center, ( *it )->GetIndex() );
-            if ( 0 > min || min2 < min ) {
-                min = min2;
-                castle = *it;
-            }
-        }
+    const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -531,18 +530,19 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
-    const int32_t border = 10;
-    const int icnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
-    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( icnId, 1 );
-    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( icnId, 3 );
+    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
 
+    const int32_t border = 10;
     fheroes2::ButtonGroup btnGroup;
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
-                                                        fheroes2::AGG::GetICN( icnId, 2 ), display ),
+                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
                         Dialog::OK );
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
                                                         area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
-                                                        fheroes2::AGG::GetICN( icnId, 4 ), display ),
+                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
                         Dialog::CANCEL );
     btnGroup.draw();
 
@@ -643,7 +643,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         return false;
     }
 
-    const u32 count = hero.GetPower() * spell.ExtraValue();
+    const u32 count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
     if ( count ) {
         tile.SetQuantity3( spell.GetID() );

@@ -2,13 +2,13 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:37+0100\n"
-"PO-Revision-Date: 2021-12-03 04:47+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
+"PO-Revision-Date: 2021-11-26 03:04+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -2553,6 +2553,9 @@ msgstr "%{name} (Level %{level})"
 msgid "Move Points"
 msgstr "Flyttepoeng"
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr "Tilgjengelig: %{count}"
 
@@ -2612,6 +2615,27 @@ msgstr "Velg trolldom:"
 
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
+
+#, fuzzy
+msgid "Location: "
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Brett-type"
+
+#, fuzzy
+msgid "The Succession Wars"
+msgstr "Krigen i sør"
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 msgid "Map difficulty:"
 msgstr "Brettets utfordring:"
@@ -3196,7 +3220,12 @@ msgstr "Rekordtavle"
 msgid "View the high scores screen."
 msgstr "Vis rekordtavleskjermen."
 
-msgid "Game settings."
+#, fuzzy
+msgid "Change language, resolution and settings of the game."
+msgstr "Bytt spilloppløsning."
+
+#, fuzzy
+msgid "Game Settings"
 msgstr "Innstillinger for spillet."
 
 msgid ""
@@ -4504,8 +4533,9 @@ msgstr ""
 "forteller deg at han er villig til å gi gjenstanden %{art} videre til den "
 "første sanne lederen han møter."
 
+#, fuzzy
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 "Du har møtt på en merkelig person med en hatt med en ugle på seg. Han "
@@ -7027,7 +7057,6 @@ msgstr "Dobbeltslag"
 msgid "Double damage to Undead"
 msgstr "Dobbel skade mot vandøde"
 
-#, c-format
 msgid "% magic resistance"
 msgstr "% magimotstand"
 
@@ -7049,27 +7078,21 @@ msgstr "Immun mot "
 msgid "% immunity to %{spell} spell"
 msgstr "% immunitet mot trolldommen %{spell}"
 
-#, c-format
 msgid "% damage from Elemental spells"
 msgstr "% skade fra elementbasert magi"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr "% sjanse til å oppheve fordelaktig trolldom"
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr "% sjanse til å lamme"
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr "% sjanse til å forsteine"
 
-#, c-format
 msgid "% chance to Blind"
 msgstr "% sjanse til å forblinde"
 
-#, c-format
 msgid "% chance to Curse"
 msgstr "% sjanse for forbannelse"
 
@@ -7112,7 +7135,6 @@ msgstr "Tåkeskudd"
 msgid "Decreases enemy's morale by "
 msgstr "Senker fiendtlig kampånd med "
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr "% sjanse til å halvere fienden"
 
@@ -7125,25 +7147,21 @@ msgstr "Elementær"
 msgid "No Morale"
 msgstr "Ingen kampånd"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr "200% skade fra ildmagi"
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr "200% skade fra kuldemagi"
 
 msgid "% damage from %{spell} spell"
 msgstr "% skade fra trolldommen %{spell}"
 
-#, c-format
 msgid "% immunity to "
 msgstr "% immunitet mot trolldommen %{spell} "
 
 msgid "Lightning"
 msgstr "Lynnedslag"
 
-#, c-format
 msgid "% damage from "
 msgstr "% skade fra "
 
@@ -8530,6 +8548,30 @@ msgstr "Lukk tryllebok"
 msgid "View %{spell}"
 msgstr "Vis %{spell}"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "%{spell} gjør %{damage} skadepoeng."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "Bruk %{spell} på %{monster}"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr "Parti: Be alltid om bekreftelse ved overskrivning av lagringsfil"
 
@@ -8613,9 +8655,6 @@ msgstr "Kamp: Forutbestemte turer"
 msgid "game: show system info"
 msgstr "Parti: Vis systeminfo"
 
-msgid "game: autosave on"
-msgstr "Parti: Autolagring på"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
 
@@ -8693,6 +8732,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave on"
+#~ msgstr "Parti: Autolagring på"
 
 #~ msgid "Monster Info"
 #~ msgstr "Monsterinfo"

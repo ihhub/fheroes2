@@ -225,10 +225,10 @@ namespace
                                         "undef21\n"
                                         "Arkadiy Illarionov\n"
                                         "shprotru\n"
-                                        "eos428\n"
                                         "vincent-grosbois\n"
-                                        "Vasilenko Alexey\n"
+                                        "eos428\n"
                                         "a1exsh\n"
+                                        "Vasilenko Alexey\n"
                                         "Andrii Kurdiumov\n"
                                         "felix642\n"
                                         "dimag0g\n" );

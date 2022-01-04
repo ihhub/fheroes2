@@ -127,7 +127,7 @@ bool RowSpells::QueueEventProcessing( void )
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            Dialog::SpellInfo( spell, !le.MousePressRight() );
+            Dialog::SpellInfo( spell, nullptr, !le.MousePressRight() );
             fheroes2::Display::instance().render();
         }
     }
