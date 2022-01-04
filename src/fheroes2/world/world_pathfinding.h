@@ -132,7 +132,10 @@ public:
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
 
-    // Adds special logic for AI-controlled heroes.
+    // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats.
+    // If this logic should be taken into account (when performing pathfinding for a real hero on the map),
+    // then the src tile should be already accessible for this hero and it should also have a valid information
+    // about the hero's remaining movement points.
     uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
 
     double _armyStrength = -1;
