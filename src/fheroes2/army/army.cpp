@@ -235,8 +235,7 @@ const Troop * Troops::GetTroop( size_t pos ) const
 void Troops::UpgradeMonsters( const Monster & m )
 {
     for ( iterator it = begin(); it != end(); ++it ) {
-        if ( **it == m ) {
-            assert( ( *it )->isValid() );
+        if ( **it == m && ( *it )->isValid() ) {
             ( *it )->Upgrade();
         }
     }

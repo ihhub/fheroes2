@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,48 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SELECT_SCENARIO_H
-#define H2SELECT_SCENARIO_H
+#ifndef H2_SPELL_INFO_H
+#define H2_SPELL_INFO_H
 
-#include "interface_list.h"
-#include "maps_fileinfo.h"
+#include <string>
 
-class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
+class Castle;
+class HeroBase;
+class Heroes;
+class Spell;
+
+namespace fheroes2
 {
-public:
-    explicit ScenarioListBox( const fheroes2::Point & pt )
-        : Interface::ListBox<Maps::FileInfo>( pt )
-        , selectOk( false )
-    {}
+    uint32_t getSpellDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
-    void RedrawBackground( const fheroes2::Point & ) override;
+    uint32_t getSummonMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    void ActionCurrentUp() override
-    {
-        // Do nothing.
-    }
+    uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    void ActionCurrentDn() override
-    {
-        // Do nothing.
-    }
+    uint32_t getResurrectPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    void ActionListDoubleClick( Maps::FileInfo & ) override;
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    void ActionListSingleClick( Maps::FileInfo & ) override
-    {
-        // Do nothing.
-    }
+    uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    void ActionListPressRight( Maps::FileInfo & info ) override;
+    const Castle * getNearestCastleTownGate( const Heroes & hero );
 
-    bool selectOk;
-};
-
-namespace Dialog
-{
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & maps, size_t selectedId );
+    std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 }
 
 #endif

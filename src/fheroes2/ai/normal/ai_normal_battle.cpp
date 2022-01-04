@@ -377,7 +377,8 @@ namespace AI
         _attackingCastle = false;
         _defendingCastle = false;
         const Castle * castle = Arena::GetCastle();
-        if ( castle ) {
+        // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
+        if ( castle != nullptr && Arena::isAnyTowerPresent() ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->hasArtifact( Artifact::GOLDEN_BOW );
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
@@ -385,7 +386,11 @@ namespace AI
             double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
+
+            // Tower strength can't be negative. If this assertion triggers something is wrong with the logic above.
+            assert( towerStr >= 0 );
 
             if ( _myColor == castle->GetColor() ) {
                 _defendingCastle = true;
@@ -412,11 +417,25 @@ namespace AI
             _enemyShooterStr += _enemySpellStrength;
         }
 
-        // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
-        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * 10;
+        double overPowerRatio = 10; // for melee creatures
+        if ( currentUnit.isFlying() ) {
+            overPowerRatio = 6;
+        }
+        if ( _defendingCastle ) {
+            overPowerRatio /= 2; // don't make shooters to kill us.
+        }
+
+        // When we have in X times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
+        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * overPowerRatio;
         const double enemyArcherRatio = _enemyShooterStr / _enemyArmyStrength;
 
-        _defensiveTactics = enemyArcherRatio < 0.75 && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
+        double enemyArcherThreshold = 0.75;
+        if ( _defendingCastle ) {
+            // Don't make shooters to kill us while we are standing in the castle.
+            enemyArcherThreshold /= 2;
+        }
+
+        _defensiveTactics = enemyArcherRatio < enemyArcherThreshold && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio );
     }

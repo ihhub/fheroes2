@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include "agg.h"
@@ -42,31 +43,36 @@
 #include "translations.h"
 #include "world.h"
 
-void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const
+void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
-    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
+    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) ) {
         return;
+    }
 
-    hero->ResetModes( Heroes::SLEEPER );
     hero->SetMove( false );
+    hero->calculatePath( destinationIdx );
 
     const Route::Path & path = hero->GetPath();
-    if ( destinationIdx == -1 )
-        destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
 
-    if ( destinationIdx != -1 ) {
-        hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
-        gameArea.SetRedraw();
-
-        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
-        if ( gameArea.GetROI() & mousePos ) {
-            const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
-            Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
-        }
-
-        Interface::Basic::Get().buttonsArea.Redraw();
+    if ( destinationIdx < 0 ) {
+        destinationIdx = path.GetDestinationIndex();
     }
+
+    if ( destinationIdx < 0 ) {
+        return;
+    }
+
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
+
+    gameArea.SetRedraw();
+
+    const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
+    if ( gameArea.GetROI() & mousePos ) {
+        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
+        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
+    }
+
+    Interface::Basic::Get().buttonsArea.Redraw();
 }
 
 void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationIdx )
@@ -77,11 +83,11 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
     const Route::Path & path = hero->GetPath();
 
     // show path
-    if ( path.GetDestinedIndex() != destinationIdx && path.GetDestinationIndex() != destinationIdx ) {
+    if ( path.GetDestinationIndex() != destinationIdx ) {
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() && hero->MayStillMove( false ) ) {
+    else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero );
         RedrawFocus();
 
@@ -130,7 +136,7 @@ void Interface::Basic::EventNextHero( void )
             ++it;
             if ( it == myHeroes.end() )
                 it = myHeroes.begin();
-            if ( ( *it )->MayStillMove( true ) ) {
+            if ( ( *it )->MayStillMove( true, false ) ) {
                 SetFocus( *it );
                 CalculateHeroPath( *it, -1 );
                 break;
@@ -139,7 +145,7 @@ void Interface::Basic::EventNextHero( void )
     }
     else {
         for ( Heroes * hero : myHeroes ) {
-            if ( hero->MayStillMove( true ) ) {
+            if ( hero->MayStillMove( true, false ) ) {
                 SetFocus( hero );
                 CalculateHeroPath( hero, -1 );
                 break;
@@ -153,8 +159,9 @@ void Interface::Basic::EventContinueMovement( void ) const
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValid() )
-        hero->SetMove( !hero->isMoveEnabled() );
+    if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
+        hero->SetMove( true );
+    }
 }
 
 void Interface::Basic::EventKingdomInfo( void ) const
@@ -338,14 +345,10 @@ void Interface::Basic::EventSwitchHeroSleeping( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        if ( hero->Modes( Heroes::SLEEPER ) )
-            hero->ResetModes( Heroes::SLEEPER );
-        else {
-            hero->SetModes( Heroes::SLEEPER );
-            hero->GetPath().Reset();
-        }
+        hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         SetRedraw( REDRAW_HEROES );
+        buttonsArea.SetRedraw();
     }
 }
 

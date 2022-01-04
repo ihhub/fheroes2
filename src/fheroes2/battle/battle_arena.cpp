@@ -42,6 +42,7 @@
 #include "logging.h"
 #include "race.h"
 #include "settings.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -169,6 +170,14 @@ Battle::Tower * Battle::Arena::GetTower( int type )
         break;
     }
     return nullptr;
+}
+
+bool Battle::Arena::isAnyTowerPresent()
+{
+    assert( arena != nullptr );
+
+    return ( arena->towers[0] != nullptr && arena->towers[0]->isValid() ) || ( arena->towers[1] != nullptr && arena->towers[1]->isValid() )
+           || ( arena->towers[2] != nullptr && arena->towers[2]->isValid() );
 }
 
 Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
@@ -1143,11 +1152,8 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
-    u32 count = spell.ExtraValue() * hero->GetPower();
-    uint32_t acount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
-    if ( acount )
-        count *= acount * 2;
 
+    const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
     elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( elem ) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 04:37+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-15 17:00+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1394,8 +1394,9 @@ msgstr ""
 msgid "Weed Patch"
 msgstr "Gyllene klocka"
 
+#, fuzzy
 msgid "Brownston"
-msgstr ""
+msgstr "Brun"
 
 #, fuzzy
 msgid "Hilltop"
@@ -2430,6 +2431,9 @@ msgstr "%{name} (Level %{level})"
 msgid "Move Points"
 msgstr "Förflyttningspoäng"
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr "Tillgängligt: %{count}"
 
@@ -2493,6 +2497,24 @@ msgstr "Välj besvärjelsemåltavla"
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Försvarsfärdighet"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Utgrävning"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Kartstorlek"
+
+#, fuzzy
+msgid "The Succession Wars"
+msgstr "Den andra sidan"
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 msgid "Map difficulty:"
 msgstr "Kartornas svårighetsgrad:"
@@ -3068,8 +3090,11 @@ msgstr "Poänglistan"
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
 
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
 #, fuzzy
-msgid "Game settings."
+msgid "Game Settings"
 msgstr "Inställningar"
 
 msgid ""
@@ -4339,7 +4364,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -6775,7 +6800,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -6798,27 +6822,22 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Vattenelement"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6865,7 +6884,6 @@ msgstr "Molnslott"
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6880,18 +6898,15 @@ msgstr "Luftelement"
 msgid "No Morale"
 msgstr "Moral"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
@@ -6899,7 +6914,7 @@ msgstr ""
 msgid "Lightning"
 msgstr "Blixtstav"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Vattenelement"
 
@@ -8155,6 +8170,30 @@ msgstr "Kasta besvärjelse"
 msgid "View %{spell}"
 msgstr "Visa %{name}"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "Besvärjelsen %{spell} tar %{damage} skada."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "Kasta %{spell} på %{monster}"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr "spel: Tillåt alltid överskrivning av sparfil"
 
@@ -8235,9 +8274,6 @@ msgstr ""
 
 msgid "game: show system info"
 msgstr "spel: Visa systeminfo"
-
-msgid "game: autosave on"
-msgstr "spel: Autospara på"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "spel: automatisk sparning kommer att utföras i början på dagen"
@@ -8323,6 +8359,9 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave on"
+#~ msgstr "spel: Autospara på"
 
 #, fuzzy
 #~ msgid "Join Error"

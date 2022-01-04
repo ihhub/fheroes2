@@ -1805,7 +1805,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 else {
                     // Did you add a new condition? If yes add a proper if-else branch.
                     assert( 0 );
-                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells you that he is willing to give %{art} if you have %{skill}." );
                     StringReplace( msg, "%{skill}", skill.GetName() );
                 }
 
@@ -2385,6 +2385,10 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
+    if ( !Settings::Get().MusicMIDI() ) {
+        AGG::PlayMusic( MUS::WATCHTOWER, true );
+    }
+
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );

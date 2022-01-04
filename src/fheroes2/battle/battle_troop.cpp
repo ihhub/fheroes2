@@ -31,12 +31,14 @@
 #include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
+#include "battle_tower.h"
 #include "battle_troop.h"
 #include "game_static.h"
 #include "logging.h"
 #include "monster_anim.h"
 #include "morale.h"
 #include "speed.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -1141,7 +1143,11 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     }
     // Otherwise heavy penalty for hiting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
-        attackerThreat *= -2;
+        const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
+        if ( !isTower ) {
+            // Calculation score quality of tower should not effect units.
+            attackerThreat *= -2;
+        }
     }
     // Finally ignore disabled units (if belong to the enemy)
     else if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) ) {
@@ -1309,6 +1315,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const HeroBase * hero, TargetInfo & target )
 {
+    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     u32 dmg = spell.Damage() * spoint;
 
     switch ( GetID() ) {
@@ -1489,17 +1496,13 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        u32 restore = spell.Resurrect() * spoint;
         // remove from graveyard
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
         }
-        // restore hp
-        uint32_t acount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
-        if ( acount )
-            restore *= acount * 2;
 
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const u32 resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Puts back the unit in the board
@@ -1564,7 +1567,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
 
     case Spell::HYPNOTIZE:
-        if ( spell.ExtraValue() * spower < hp )
+        if ( fheroes2::getHypnorizeMonsterHPPoints( spell, spower, nullptr ) < hp )
             return 100;
         break;
 

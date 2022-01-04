@@ -544,7 +544,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     Text text( GetName(), Font::SMALL );
     dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
-    dst_pt.y += 57;
+    dst_pt.y += 58;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = box_rt.x;
@@ -731,8 +731,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, f
 bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
 {
     if ( castle.isBuild( dwl.type ) ) {
-        const int32_t recruitMonsterWindowOffsetY = -65;
-        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true, recruitMonsterWindowOffsetY ) );
+        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true, 0 ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         Dialog::Message( "", GetBuildConditionDescription( NEED_CASTLE ), Font::BIG, Dialog::OK );

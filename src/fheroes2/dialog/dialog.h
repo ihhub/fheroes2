@@ -37,6 +37,7 @@
 
 class Castle;
 class Kingdom;
+class HeroBase;
 class Heroes;
 class Artifact;
 class Spell;
@@ -93,7 +94,7 @@ namespace Dialog
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
     bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );
-    void SpellInfo( const Spell &, bool ok_button = true );
+    void SpellInfo( const Spell & spell, const HeroBase * hero, const bool showOkayButton );
     void SpellInfo( const std::string &, const std::string &, const Spell &, bool ok_button = true );
     void SecondarySkillInfo( const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
     void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
