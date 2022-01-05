@@ -688,8 +688,8 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // de-prioritize the water movement even harder
-            return -5000.0;
+            // Boat boarding has the lowest priority. AI should board it only when there's nothing else left.
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_MAGICWELL ) {
             if ( !hero.HaveSpellBook() ) {
@@ -930,8 +930,8 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // de-prioritize the water movement even harder
-            return -5000.0;
+            // Boat boarding has the lowest priority. AI should board it only when there's nothing else left.
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_MAGICWELL ) {
             if ( !hero.HaveSpellBook() ) {
@@ -1134,13 +1134,22 @@ namespace AI
             }
         }
 
-        if ( priorityTarget != -1 ) {
+        // Boat boarding should be the last thing to do. Normally a AI hero still can explore something on the way, even through boat embarkation.
+        if ( priorityTarget != -1 && objectType != MP2::OBJ_BOAT ) {
             DEBUG_LOG( DBG_AI, DBG_INFO,
                        hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
         }
         else if ( !heroInPatrolMode ) {
+            const int prevPriorityTarget = priorityTarget;
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+            if ( objectType == MP2::OBJ_BOAT && priorityTarget < 0 ) {
+                priorityTarget = prevPriorityTarget;
+                DEBUG_LOG( DBG_AI, DBG_INFO,
+                           hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
+            }
+            else {
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+            }
         }
 
         return priorityTarget;
