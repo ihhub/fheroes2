@@ -55,9 +55,7 @@ namespace
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
-        // AI heroes must not take into account coast tile as an action tile. They should calculate paths through them.
-        // TODO: remove the condition for coast once AI is capable to create a path between land and water.
-        if ( !MP2::isActionObject( objectType ) && objectType != MP2::OBJ_COAST ) {
+        if ( !MP2::isActionObject( objectType ) ) {
             return false;
         }
 
@@ -82,7 +80,9 @@ namespace
         case MP2::OBJ_WHIRLPOOL:
             return hero.isShipMaster() && !hero.isVisited( tile );
         case MP2::OBJ_COAST:
-            return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
+            // Coast is not an action object. If this assertion blows up then something wrong with logic above.
+            assert( 0 );
+            return false;
 
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_MINES:
