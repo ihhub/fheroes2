@@ -544,7 +544,6 @@ namespace
     // Multiply by this value if you are getting a FREE upgrade.
     const double freeMonsterUpgradeModifier = 3;
 
-    const double suboptimalTaskPenalty = 10000.0;
     const double dangerousTaskPenalty = 20000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
