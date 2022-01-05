@@ -58,7 +58,7 @@ public:
 
 protected:
     void processWorldMap( int pathStart );
-    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx );
 
     // This method defines pathfinding rules. This has to be implemented by the derived class.
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
