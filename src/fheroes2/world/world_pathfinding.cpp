@@ -130,13 +130,12 @@ namespace
             }
         }
 
-        /*
-        if ( !fromTile.isPassable( direction, fromWater, false, heroColor ) )
+        if ( !fromTile.isPassableTo( direction ) ) {
             return false;
-        */
+        }
 
         const Maps::Tiles & toTile = world.GetTiles( Maps::GetDirectionIndex( index, direction ) );
-        return toTile.isPassable( Direction::Reflect( direction ), fromWater, false, heroColor );
+        return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 }
 
