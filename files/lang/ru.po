@@ -127,7 +127,7 @@ msgid "Multiple"
 msgstr "Многообразный"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Отряды %{count} -%{penalty}"
+msgstr "Отряды %{count} классов -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "В армии нежить -1"
