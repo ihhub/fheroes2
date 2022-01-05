@@ -1137,7 +1137,6 @@ namespace AI
             }
         }
 
-        // Boat boarding should be the last thing to do. Normally a AI hero still can explore something on the way, even through boat embarkation.
         if ( priorityTarget != -1 ) {
             DEBUG_LOG( DBG_AI, DBG_INFO,
                        hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
