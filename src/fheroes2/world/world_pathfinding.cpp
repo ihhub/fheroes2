@@ -213,8 +213,6 @@ uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const 
 
 void WorldPathfinder::processWorldMap( int pathStart )
 {
-    const bool fromWater = world.GetTiles( pathStart ).isWater();
-
     // reset cache back to default value
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
@@ -225,7 +223,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
     nodesToExplore.push_back( pathStart );
 
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-        processCurrentNode( nodesToExplore, pathStart, nodesToExplore[lastProcessedNode], fromWater );
+        processCurrentNode( nodesToExplore, pathStart, nodesToExplore[lastProcessedNode] );
     }
 }
 
@@ -324,7 +322,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 }
 
 // Follows regular (for user's interface) passability rules
-void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
+void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
 {
     // if current tile contains a monster or a barrier, skip it
     if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER || _cache[currentNodeIdx]._objectID == MP2::OBJ_BARRIER ) {
@@ -354,7 +352,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
             }
         }
     }
-    else if ( currentNodeIdx == pathStart || !isTileBlocked( currentNodeIdx, fromWater ) ) {
+    else if ( currentNodeIdx == pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( pathStart ).isWater() ) ) {
         checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx );
     }
 }
@@ -410,7 +408,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 }
 
 // Overwrites base version in WorldPathfinder, using custom node passability rules
-void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool /* fromWater */ )
+void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
 {
     const bool isFirstNode = currentNodeIdx == pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
