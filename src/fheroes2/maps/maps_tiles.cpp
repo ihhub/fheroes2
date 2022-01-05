@@ -1506,33 +1506,6 @@ Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( u32 uniq2 )
 
 std::string Maps::Tiles::String( void ) const
 {
-    Maps::ClearFog( 0, 1024, Color::BLUE );
-    Maps::ClearFog( 0, 1024, Color::GREEN );
-
-    Heroes * debugHero = world.GetHeroes( Heroes::DEBUG_HERO );
-
-    if ( debugHero->isFreeman() ) {
-        debugHero = world.GetHeroes( Heroes::MAXIMUS );
-    }
-
-    if ( !debugHero->isFreeman() ) {
-        AIWorldPathfinder aiPathfinder( 1.8 );
-
-        aiPathfinder.reset();
-        aiPathfinder.reEvaluateIfNeeded( *debugHero );
-
-        auto path = aiPathfinder.buildPath( _index, true );
-
-        printf( "DEBUG: " );
-        for ( const auto & item : path ) {
-            printf( "%d ", item.GetIndex() );
-        }
-        printf( "\n" );
-
-        debugHero->GetPath().setPath( path, _index );
-        debugHero->GetPath().Show();
-    }
-
     std::ostringstream os;
 
     os << "----------------:>>>>>>>>" << std::endl
