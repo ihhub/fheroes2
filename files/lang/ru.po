@@ -121,7 +121,7 @@ msgid "army|Few"
 msgstr "Мало"
 
 msgid "All %{race} troops +1"
-msgstr "Все отряды одной расы +1"
+msgstr "Все отряды класса %{race} +1"
 
 msgid "Multiple"
 msgstr "Многообразный"
