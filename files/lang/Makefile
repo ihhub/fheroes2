@@ -44,9 +44,10 @@ de.mo: de.po
 	sed -e 's/ä/ae/g' $< > $<.tmp
 	sed -i~ -e 's/ö/oe/g' $<.tmp
 	sed -i~ -e 's/ü/ue/g' $<.tmp
+	sed -i~ -e 's/Ä/Ae/g' $<.tmp
 	sed -i~ -e 's/Ö/Oe/g' $<.tmp
 	sed -i~ -e 's/Ü/Ue/g' $<.tmp
-	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	LANG=de_DE.UTF-8 LC_ALL=de_DE.UTF-8 LC_CTYPE=de_DE.UTF-8 iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # Norwegian has locale-specific transliteration rules (æ -> ae, etc)
