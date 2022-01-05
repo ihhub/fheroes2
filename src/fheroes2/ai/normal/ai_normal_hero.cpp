@@ -672,15 +672,9 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            const RegionStats & regionStats = _regions[tile.GetRegion()];
-            const size_t objectCount = regionStats.validObjects.size();
-            if ( objectCount < 1 )
-                return valueToIgnore;
-
-            double value = objectCount * 100.0 - 7500;
-            if ( regionStats.friendlyHeroCount )
-                value -= suboptimalTaskPenalty;
-            return value;
+            // Coast is not an object. If this assertion blows up something is wrong the the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
             const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
@@ -691,7 +685,8 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // Boat boarding has the lowest priority. AI should board it only when there's nothing else left.
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
+            assert( 0 );
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_MAGICWELL ) {
@@ -914,15 +909,9 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            const RegionStats & regionStats = _regions[tile.GetRegion()];
-            const size_t objectCount = regionStats.validObjects.size();
-            if ( objectCount < 1 )
-                return valueToIgnore;
-
-            double value = objectCount * 100.0 - 7500;
-            if ( regionStats.friendlyHeroCount )
-                value -= suboptimalTaskPenalty;
-            return value;
+            // Coast is not an object. If this assertion blows up something is wrong the the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
             const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
@@ -933,7 +922,8 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // Boat boarding has the lowest priority. AI should board it only when there's nothing else left.
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
+            assert( 0 );
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_MAGICWELL ) {
