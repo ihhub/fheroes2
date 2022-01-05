@@ -1634,7 +1634,7 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
         return false;
     }
 
-    // From the ground we can get to the water tile only if this tile contains a certain object
+    // From the ground we can get to the water tile only if this tile contains a certain object.
     if ( !fromWater && tileIsWater && mp2_object != MP2::OBJ_SHIPWRECK && mp2_object != MP2::OBJ_HEROES && mp2_object != MP2::OBJ_BOAT ) {
         return false;
     }
