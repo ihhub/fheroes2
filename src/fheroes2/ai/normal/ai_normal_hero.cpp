@@ -80,7 +80,7 @@ namespace
         case MP2::OBJ_WHIRLPOOL:
             return hero.isShipMaster() && !hero.isVisited( tile );
         case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something wrong with logic above.
+            // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
             assert( 0 );
             return false;
 
@@ -671,7 +671,7 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            // Coast is not an object. If this assertion blows up something is wrong the the logic.
+            // Coast is not an object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
@@ -684,7 +684,7 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
