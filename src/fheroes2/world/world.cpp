@@ -901,8 +901,6 @@ s32 World::NextWhirlpool( s32 index ) const
     return Rand::Get( whilrpools );
 }
 
-/* return message from sign */
-
 /* return count captured object */
 u32 World::CountCapturedObject( int obj, int col ) const
 {
