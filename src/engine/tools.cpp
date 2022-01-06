@@ -163,22 +163,22 @@ void StringReplace( std::string & dst, const char * pred, int value )
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-std::list<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
 {
-    std::list<std::string> list;
+    std::vector<std::string> vec;
     size_t pos1 = 0;
     size_t pos2 = std::string::npos;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
-        list.push_back( str.substr( pos1, pos2 - pos1 ) );
+        vec.push_back( str.substr( pos1, pos2 - pos1 ) );
         pos1 = pos2 + sep.size();
     }
 
     // tail
     if ( pos1 < str.size() )
-        list.push_back( str.substr( pos1, str.size() - pos1 ) );
+        vec.push_back( str.substr( pos1, str.size() - pos1 ) );
 
-    return list;
+    return vec;
 }
 
 std::string InsertString( const std::string & src, size_t pos, const char * c )

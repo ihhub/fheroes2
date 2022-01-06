@@ -186,8 +186,15 @@ public:
 
     void InitKingdoms( void );
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( int color )
+    {
+        return vec_kingdoms.GetKingdom( color );
+    }
+
+    const Kingdom & GetKingdom( int color ) const
+    {
+        return vec_kingdoms.GetKingdom( color );
+    }
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
     const Castle * getCastle( const fheroes2::Point & tilePosition ) const;

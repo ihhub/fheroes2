@@ -37,8 +37,11 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+// clang-format off
+// shellapi.h must be included after windows.h
 #include <windows.h>
 #include <shellapi.h>
+// clang-format on
 #else
 #include <dirent.h>
 #endif
@@ -212,7 +215,7 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
         // 2: en_us
         // 1: en
         if ( length < 3 ) {
-            std::list<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
+            std::vector<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
             return list.empty() ? locname : list.front();
         }
     }

@@ -229,20 +229,60 @@ public:
 
     bool setGameLanguage( const std::string & language );
 
-    int SoundVolume() const;
-    int MusicVolume() const;
-    MusicSource MusicType() const;
+    int SoundVolume() const
+    {
+        return sound_volume;
+    }
 
-    bool IsGameType( int type ) const;
-    int GameType() const;
-    void SetGameType( int );
+    int MusicVolume() const
+    {
+        return music_volume;
+    }
+
+    MusicSource MusicType() const
+    {
+        return _musicType;
+    }
+
+    /* check game type */
+    bool IsGameType( int type ) const
+    {
+        return ( game_type & type ) != 0;
+    }
+
+    int GameType() const
+    {
+        return game_type;
+    }
+
+    /* set game type */
+    void SetGameType( int type )
+    {
+        game_type = type;
+    }
+
     bool isCampaignGameType() const;
 
-    Players & GetPlayers();
-    const Players & GetPlayers() const;
+    Players & GetPlayers()
+    {
+        return players;
+    }
 
-    int CurrentColor() const;
-    void SetCurrentColor( int );
+    const Players & GetPlayers() const
+    {
+        return players;
+    }
+
+    int CurrentColor() const
+    {
+        return players.current_color;
+    }
+
+    void SetCurrentColor( int color )
+    {
+        players.current_color = color;
+    }
+
     int PreferablyCountPlayers() const;
     void SetPreferablyCountPlayers( int );
 

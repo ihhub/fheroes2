@@ -480,17 +480,6 @@ size_t World::getSize() const
     return vec_tiles.size();
 }
 
-/* get kingdom */
-Kingdom & World::GetKingdom( int color )
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
-const Kingdom & World::GetKingdom( int color ) const
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
 Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
     return vec_castles.Get( tilePosition );

@@ -59,8 +59,15 @@ namespace fheroes2
         virtual uint8_t * image();
         virtual const uint8_t * image() const;
 
-        uint8_t * transform();
-        const uint8_t * transform() const;
+        uint8_t * transform()
+        {
+            return _data.get() + width() * height();
+        }
+
+        const uint8_t * transform() const
+        {
+            return _data.get() + width() * height();
+        }
 
         bool empty() const
         {
