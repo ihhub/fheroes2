@@ -61,7 +61,7 @@ void Route::Path::PopFront( void )
 int32_t Route::Path::GetDestinationIndex( const bool returnLastStep /* = false */ ) const
 {
     if ( returnLastStep ) {
-        return empty() ? -1 : back().GetIndex();
+        return empty() ? dst : back().GetIndex();
     }
 
     return dst;
