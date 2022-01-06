@@ -864,40 +864,29 @@ s32 World::NextTeleport( s32 index ) const
     return Rand::Get( teleports );
 }
 
-MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
+MapsIndexes World::GetWhirlpoolEndPoints( int32_t index ) const
 {
-    if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        std::map<s32, MapsIndexes> uniq_whirlpools;
+    MapsIndexes result;
 
-        for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( tile.GetHeroes() != nullptr ) {
-                continue;
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
 
-            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
-        }
-
-        if ( 2 > uniq_whirlpools.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is empty" );
-            return MapsIndexes();
-        }
-
-        const uint32_t currentUID = GetTiles( center ).GetObjectUID();
-        MapsIndexes uniqs;
-        uniqs.reserve( uniq_whirlpools.size() );
-
-        for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-            const u32 uniq = ( *it ).first;
-            if ( uniq == currentUID )
-                continue;
-            uniqs.push_back( uniq );
-        }
-
-        return uniq_whirlpools[Rand::Get( uniqs )];
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_WHIRLPOOL ) {
+        return result;
     }
 
-    return MapsIndexes();
+    const uint32_t entranceUID = entranceTile.GetObjectUID();
+
+    for ( const int32_t whirlpoolIndex : _whirlpoolTiles ) {
+        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+
+        if ( whirlpoolTile.GetObjectUID() == entranceUID || whirlpoolTile.GetHeroes() != nullptr ) {
+            continue;
+        }
+
+        result.push_back( whirlpoolIndex );
+    }
+
+    return result;
 }
 
 /* return random whirlpools destination */

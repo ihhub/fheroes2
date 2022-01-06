@@ -246,7 +246,7 @@ public:
     MapsIndexes GetTeleportEndPoints( s32 ) const;
 
     s32 NextWhirlpool( s32 ) const;
-    MapsIndexes GetWhirlpoolEndPoints( s32 ) const;
+    MapsIndexes GetWhirlpoolEndPoints( int32_t index ) const;
 
     void CaptureObject( s32, int col );
     u32 CountCapturedObject( int obj, int col ) const;
