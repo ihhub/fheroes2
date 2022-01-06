@@ -21,6 +21,7 @@
 #include <cassert>
 #include <cmath>
 #include <set>
+#include <tuple>
 
 #include "ground.h"
 #include "logging.h"
@@ -273,19 +274,12 @@ void PlayerWorldPathfinder::reset()
 
 void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    const int startIndex = hero.GetIndex();
-    const int color = hero.GetColor();
-    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
-    const uint32_t remainingMovePoints = hero.GetMovePoints();
-    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
+    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints() );
 
-    if ( _pathStart != startIndex || _currentColor != color || _pathfindingSkill != skill || _remainingMovePoints != remainingMovePoints
-         || _maxMovePoints != maxMovePoints ) {
-        _pathStart = startIndex;
-        _currentColor = color;
-        _pathfindingSkill = skill;
-        _remainingMovePoints = remainingMovePoints;
-        _maxMovePoints = maxMovePoints;
+    if ( currentSettings != newSettings ) {
+        currentSettings = newSettings;
 
         processWorldMap();
     }
@@ -374,22 +368,13 @@ void AIWorldPathfinder::reset()
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero, const bool considerWhirlpools /* = false */ )
 {
-    const int startIndex = hero.GetIndex();
-    const int color = hero.GetColor();
-    const double armyStrength = hero.GetArmy().GetStrength();
-    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
-    const uint32_t remainingMovePoints = hero.GetMovePoints();
-    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
+    auto currentSettings
+        = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _considerWhirlpools, _armyStrength );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), considerWhirlpools, hero.GetArmy().GetStrength() );
 
-    if ( _pathStart != startIndex || _currentColor != color || _considerWhirlpools != considerWhirlpools || std::fabs( _armyStrength - armyStrength ) > 0.001
-         || _pathfindingSkill != skill || _remainingMovePoints != remainingMovePoints || _maxMovePoints != maxMovePoints ) {
-        _pathStart = startIndex;
-        _currentColor = color;
-        _considerWhirlpools = considerWhirlpools;
-        _armyStrength = armyStrength;
-        _pathfindingSkill = skill;
-        _remainingMovePoints = remainingMovePoints;
-        _maxMovePoints = maxMovePoints;
+    if ( currentSettings != newSettings ) {
+        currentSettings = newSettings;
 
         processWorldMap();
     }
@@ -398,15 +383,12 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero, const bool cons
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill,
                                             const bool considerWhirlpools /* = false */ )
 {
-    if ( _pathStart != start || _currentColor != color || _considerWhirlpools != considerWhirlpools || std::fabs( _armyStrength - armyStrength ) > 0.001
-         || _pathfindingSkill != skill ) {
-        _pathStart = start;
-        _currentColor = color;
-        _considerWhirlpools = considerWhirlpools;
-        _armyStrength = armyStrength;
-        _pathfindingSkill = skill;
-        _remainingMovePoints = 0;
-        _maxMovePoints = 0;
+    auto currentSettings
+        = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _considerWhirlpools, _armyStrength );
+    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, considerWhirlpools, armyStrength );
+
+    if ( currentSettings != newSettings ) {
+        currentSettings = newSettings;
 
         processWorldMap();
     }
