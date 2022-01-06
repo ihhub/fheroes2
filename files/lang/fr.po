@@ -914,7 +914,7 @@ msgid ""
 msgstr ""
 "Il y a deux ennemis alliés contre vous dans cette mission. Tous deux sont "
 "bien armés et cherchent à vous expulser de leur île. Évitez-les et capturez "
-"Dragon City pour gagner"
+"Dragon City pour gagner."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -2491,6 +2491,12 @@ msgstr "(déjà visité)"
 
 msgid "(not visited)"
 msgstr "(non visité)"
+
+msgid "%{color} Barrier"
+msgstr "Barrière magique %{color}"
+
+msgid "%{color} Tent"
+msgstr "Tente %{color}"
 
 msgid "Road"
 msgstr "Route"
@@ -5910,14 +5916,53 @@ msgstr "Orange"
 msgid "Purple"
 msgstr "Violet"
 
-msgid "Aqua"
-msgstr "Turquoise"
+msgid "barrier|Aqua"
+msgstr "turquoise"
 
-msgid "Brown"
-msgstr "Marron"
+msgid "barrier|Blue"
+msgstr "bleue"
 
-msgid "Gold"
-msgstr "Or"
+msgid "barrier|Brown"
+msgstr "marron"
+
+msgid "barrier|Gold"
+msgstr "dorée"
+
+msgid "barrier|Green"
+msgstr "verte"
+
+msgid "barrier|Orange"
+msgstr "orange"
+
+msgid "barrier|Purple"
+msgstr "violette"
+
+msgid "barrier|Red"
+msgstr "rouge"
+
+msgid "tent|Aqua"
+msgstr "turquoise"
+
+msgid "tent|Blue"
+msgstr "bleue"
+
+msgid "tent|Brown"
+msgstr "marron"
+
+msgid "tent|Gold"
+msgstr "dorée"
+
+msgid "tent|Green"
+msgstr "verte"
+
+msgid "tent|Orange"
+msgstr "orange"
+
+msgid "tent|Purple"
+msgstr "violette"
+
+msgid "tent|Red"
+msgstr "rouge"
 
 msgid "Hero/Stats"
 msgstr "Héros/Stats"
@@ -7976,6 +8021,9 @@ msgstr "Cristal"
 
 msgid "Gems"
 msgstr "Rubis"
+
+msgid "Gold"
+msgstr "Or"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

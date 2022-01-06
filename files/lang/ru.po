@@ -2491,6 +2491,12 @@ msgstr "(посещено)"
 msgid "(not visited)"
 msgstr "(не посещено)"
 
+msgid "%{color} Barrier"
+msgstr "%{color} Барьер"
+
+msgid "%{color} Tent"
+msgstr "%{color} Шатер путника"
+
 msgid "Road"
 msgstr "Дорога"
 
@@ -5790,14 +5796,53 @@ msgstr "Оранжевый"
 msgid "Purple"
 msgstr "Фиолетовый"
 
-msgid "Aqua"
-msgstr "Изумрудный"
+msgid "barrier|Aqua"
+msgstr "Сизый"
 
-msgid "Brown"
+msgid "barrier|Blue"
+msgstr "Синий"
+
+msgid "barrier|Brown"
 msgstr "Коричневый"
 
-msgid "Gold"
-msgstr "Золото"
+msgid "barrier|Gold"
+msgstr "Золотой"
+
+msgid "barrier|Green"
+msgstr "Зелёный"
+
+msgid "barrier|Orange"
+msgstr "Оранжевый"
+
+msgid "barrier|Purple"
+msgstr "Фиолетовый"
+
+msgid "barrier|Red"
+msgstr "Красный"
+
+msgid "tent|Aqua"
+msgstr "Сизый"
+
+msgid "tent|Blue"
+msgstr "Синий"
+
+msgid "tent|Brown"
+msgstr "Коричневый"
+
+msgid "tent|Gold"
+msgstr "Золотой"
+
+msgid "tent|Green"
+msgstr "Зелёный"
+
+msgid "tent|Orange"
+msgstr "Оранжевый"
+
+msgid "tent|Purple"
+msgstr "Фиолетовый"
+
+msgid "tent|Red"
+msgstr "Красный"
 
 msgid "Hero/Stats"
 msgstr "Герой/Характеристика"
@@ -7853,6 +7898,9 @@ msgstr "Кристаллы"
 
 msgid "Gems"
 msgstr "Самоцветы"
+
+msgid "Gold"
+msgstr "Золото"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

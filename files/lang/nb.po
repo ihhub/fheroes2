@@ -1353,23 +1353,20 @@ msgstr "Ikke mulig å bygge %{name}."
 msgid "Build %{name}."
 msgstr "Bygg %{name}."
 
-#, fuzzy
 msgid "Blackridge"
-msgstr "Bru"
+msgstr "Svartfjellryggen"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Haugstein"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Furuskogen"
 
-#, fuzzy
 msgid "Whiteshield"
-msgstr "Den hvite perlen"
+msgstr "Hvitskjold"
 
-#, fuzzy
 msgid "Woodhaven"
-msgstr "Ved"
+msgstr "Skogheimen"
 
 #, fuzzy
 msgid "Blackwind"
@@ -2522,6 +2519,12 @@ msgstr "(allerede besøkt)"
 
 msgid "(not visited)"
 msgstr "(ikke besøkt)"
+
+msgid "%{color} Barrier"
+msgstr "%{color}farget mur"
+
+msgid "%{color} Tent"
+msgstr "%{color}farget telt"
 
 msgid "Road"
 msgstr "Vei"
@@ -5325,7 +5328,7 @@ msgstr ""
 "En magisk mur rager foran deg og blokkerer veien. Runene på buen dens sier "
 "det følgende:\n"
 "\"Uttal nøkkelordet og du vil få komme forbi.\"\n"
-"I det du roper ut det magiske ordet oppløses den glødende muren til intet."
+"I det du roper ut det magiske ordet oppløses den skinnende muren til intet."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -5889,14 +5892,53 @@ msgstr "Oransje"
 msgid "Purple"
 msgstr "Lilla"
 
-msgid "Aqua"
-msgstr "Turkis"
+msgid "barrier|Aqua"
+msgstr "Cyan"
 
-msgid "Brown"
+msgid "barrier|Blue"
+msgstr "Blå"
+
+msgid "barrier|Brown"
 msgstr "Brun"
 
-msgid "Gold"
+msgid "barrier|Gold"
 msgstr "Gull"
+
+msgid "barrier|Green"
+msgstr "Grønn"
+
+msgid "barrier|Orange"
+msgstr "Oransje"
+
+msgid "barrier|Purple"
+msgstr "Lilla"
+
+msgid "barrier|Red"
+msgstr "Rød"
+
+msgid "tent|Aqua"
+msgstr "Cyan"
+
+msgid "tent|Blue"
+msgstr "\vBlå"
+
+msgid "tent|Brown"
+msgstr "Brun"
+
+msgid "tent|Gold"
+msgstr "Gull"
+
+msgid "tent|Green"
+msgstr "Grønn"
+
+msgid "tent|Orange"
+msgstr "Oransje"
+
+msgid "tent|Purple"
+msgstr "Lilla"
+
+msgid "tent|Red"
+msgstr "Rød"
 
 msgid "Hero/Stats"
 msgstr "Helt/Egenskaper"
@@ -7960,6 +8002,9 @@ msgstr "Krystall"
 
 msgid "Gems"
 msgstr "Edelsteiner"
+
+msgid "Gold"
+msgstr "Gull"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

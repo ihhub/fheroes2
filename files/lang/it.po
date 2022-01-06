@@ -2286,6 +2286,12 @@ msgstr "(già visitato/a)"
 msgid "(not visited)"
 msgstr "(non visitato/a)"
 
+msgid "%{color} Barrier"
+msgstr "Barriera %{color}"
+
+msgid "%{color} Tent"
+msgstr "Tenda %{color}"
+
 msgid "Road"
 msgstr "Strada"
 
@@ -5166,14 +5172,53 @@ msgstr "Arancio"
 msgid "Purple"
 msgstr "Viola"
 
-msgid "Aqua"
+msgid "barrier|Aqua"
 msgstr "Acqua"
 
-msgid "Brown"
+msgid "barrier|Blue"
+msgstr "Blu"
+
+msgid "barrier|Brown"
 msgstr "Marrone"
 
-msgid "Gold"
-msgstr "Oro"
+msgid "barrier|Gold"
+msgstr "Dorata"
+
+msgid "barrier|Green"
+msgstr "Verde"
+
+msgid "barrier|Orange"
+msgstr "Arancia"
+
+msgid "barrier|Purple"
+msgstr "Viola"
+
+msgid "barrier|Red"
+msgstr "Rossa"
+
+msgid "tent|Aqua"
+msgstr "Acqua"
+
+msgid "tent|Blue"
+msgstr "Blu"
+
+msgid "tent|Brown"
+msgstr "Marrone"
+
+msgid "tent|Gold"
+msgstr "Dorata"
+
+msgid "tent|Green"
+msgstr "\vVerde"
+
+msgid "tent|Orange"
+msgstr "Arancia"
+
+msgid "tent|Purple"
+msgstr "Viola"
+
+msgid "tent|Red"
+msgstr "Rossa"
 
 msgid "Hero/Stats"
 msgstr "Dati Eroe"
@@ -7107,6 +7152,9 @@ msgstr "Crystallo"
 
 msgid "Gems"
 msgstr "Gemme"
+
+msgid "Gold"
+msgstr "Oro"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

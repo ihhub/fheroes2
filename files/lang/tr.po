@@ -2199,6 +2199,12 @@ msgstr ""
 msgid "(not visited)"
 msgstr ""
 
+msgid "%{color} Barrier"
+msgstr ""
+
+msgid "%{color} Tent"
+msgstr ""
+
 msgid "Road"
 msgstr ""
 
@@ -4977,13 +4983,52 @@ msgstr ""
 msgid "Purple"
 msgstr ""
 
-msgid "Aqua"
+msgid "barrier|Aqua"
 msgstr ""
 
-msgid "Brown"
+msgid "barrier|Blue"
 msgstr ""
 
-msgid "Gold"
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+msgid "barrier|Orange"
+msgstr ""
+
+msgid "barrier|Purple"
+msgstr ""
+
+msgid "barrier|Red"
+msgstr ""
+
+msgid "tent|Aqua"
+msgstr ""
+
+msgid "tent|Blue"
+msgstr ""
+
+msgid "tent|Brown"
+msgstr ""
+
+msgid "tent|Gold"
+msgstr ""
+
+msgid "tent|Green"
+msgstr ""
+
+msgid "tent|Orange"
+msgstr ""
+
+msgid "tent|Purple"
+msgstr ""
+
+msgid "tent|Red"
 msgstr ""
 
 msgid "Hero/Stats"
@@ -6892,6 +6937,9 @@ msgid "Crystal"
 msgstr ""
 
 msgid "Gems"
+msgstr ""
+
+msgid "Gold"
 msgstr ""
 
 msgid ""

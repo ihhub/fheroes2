@@ -2510,6 +2510,14 @@ msgid "(not visited)"
 msgstr "(no visitado)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} jugador"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} jugador"
+
+#, fuzzy
 msgid "Road"
 msgstr "Fin del camino"
 
@@ -5901,14 +5909,68 @@ msgstr "Naranja"
 msgid "Purple"
 msgstr "Morado"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Naranja"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Morado"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Agua"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Azul"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Marrón"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Oro"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Verde"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Naranja"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Morado"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr ""
@@ -8039,6 +8101,9 @@ msgstr "Cristal"
 
 msgid "Gems"
 msgstr "Gemas"
+
+msgid "Gold"
+msgstr "Oro"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

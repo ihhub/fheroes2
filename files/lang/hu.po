@@ -2442,6 +2442,14 @@ msgid "(not visited)"
 msgstr "(nem látogatott)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} játékos köre"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} játékos köre"
+
+#, fuzzy
 msgid "Road"
 msgstr "Út Mód"
 
@@ -5643,14 +5651,62 @@ msgstr "Narancs"
 msgid "Purple"
 msgstr "Lila"
 
-msgid "Aqua"
+msgid "barrier|Aqua"
+msgstr ""
+
+msgid "barrier|Blue"
+msgstr ""
+
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Narancs"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Lila"
+
+msgid "barrier|Red"
+msgstr ""
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Tengerkék"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Kék"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Barna"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Arany"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Zöld"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Narancs"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Lila"
+
+msgid "tent|Red"
+msgstr ""
 
 #, fuzzy
 msgid "Hero/Stats"
@@ -7708,6 +7764,9 @@ msgstr "Kristály"
 
 msgid "Gems"
 msgstr "Drágakövek"
+
+msgid "Gold"
+msgstr "Arany"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "

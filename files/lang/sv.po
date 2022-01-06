@@ -2396,6 +2396,14 @@ msgid "(not visited)"
 msgstr "(inte besökt)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} spelares tur."
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} spelares tur."
+
+#, fuzzy
 msgid "Road"
 msgstr "Vägläge"
 
@@ -5596,14 +5604,68 @@ msgstr "Orange"
 msgid "Purple"
 msgstr "Lila"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Orange"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Lila"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Barriär"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Akvamarin"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Blå"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Brun"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Guld"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Grön"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Orange"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Lila"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr ""
@@ -7615,6 +7677,9 @@ msgstr "Kristall"
 
 msgid "Gems"
 msgstr "Ädelstenar"
+
+msgid "Gold"
+msgstr "Guld"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
