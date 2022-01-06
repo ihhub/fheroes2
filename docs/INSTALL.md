@@ -113,7 +113,7 @@ brew install fheroes2
 * Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos10_15_sdl2_x86-64.zip).
   Currently only x86-64 binaries are provided. If you use a machine with an Apple Silicon chip, you should choose another installation
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
-  [**build the project from source**](https://github.com/ihhub/fheroes2/blob/master/docs/DEVELOPMENT.md#macos-and-linux).
+  [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_1.sh` or
   `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries
