@@ -58,7 +58,8 @@ $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
 	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(wildcard $(SEARCH)))
-	@sed -i -e 's/, c-format//' $(POT)
+	@sed -i~ -e 's/, c-format//' $(POT)
+	@rm -f $(POT)~
 
 $(RES): $(RC)
 	@echo "gen: $@"
