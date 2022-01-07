@@ -112,7 +112,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
             break;
 
         default:
-            allow = ( tile.isPassable( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
+            allow = ( tile.isPassableFrom( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
             break;
         }
 
