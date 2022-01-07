@@ -211,23 +211,23 @@ uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const 
     return movePoints - substractedMovePoints;
 }
 
-void WorldPathfinder::processWorldMap( int pathStart )
+void WorldPathfinder::processWorldMap()
 {
     // reset cache back to default value
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
+    _cache[_pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
-    nodesToExplore.push_back( pathStart );
+    nodesToExplore.push_back( _pathStart );
 
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-        processCurrentNode( nodesToExplore, pathStart, nodesToExplore[lastProcessedNode] );
+        processCurrentNode( nodesToExplore, nodesToExplore[lastProcessedNode] );
     }
 }
 
-void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
+void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
     const Directions & directions = Direction::All();
     const WorldNode & currentNode = _cache[currentNodeIdx];
@@ -235,7 +235,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
             const int newIndex = currentNodeIdx + _mapOffset[i];
-            if ( newIndex == pathStart )
+            if ( newIndex == _pathStart )
                 continue;
 
             const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
@@ -287,7 +287,7 @@ void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
         _remainingMovePoints = remainingMovePoints;
         _maxMovePoints = maxMovePoints;
 
-        processWorldMap( startIndex );
+        processWorldMap();
     }
 }
 
@@ -322,7 +322,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 }
 
 // Follows regular (for user's interface) passability rules
-void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
+void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
     // if current tile contains a monster or a barrier, skip it
     if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER || _cache[currentNodeIdx]._objectID == MP2::OBJ_BARRIER ) {
@@ -332,7 +332,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster
-    if ( currentNodeIdx != pathStart && !monsters.empty() ) {
+    if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
@@ -352,8 +352,8 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
             }
         }
     }
-    else if ( currentNodeIdx == pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( pathStart ).isWater() ) ) {
-        checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx );
+    else if ( currentNodeIdx == _pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 }
 
@@ -364,6 +364,7 @@ void AIWorldPathfinder::reset()
     if ( _pathStart != -1 ) {
         _pathStart = -1;
         _currentColor = Color::NONE;
+        _considerWhirlpools = false;
         _armyStrength = -1;
         _pathfindingSkill = Skill::Level::EXPERT;
         _remainingMovePoints = 0;
@@ -371,7 +372,7 @@ void AIWorldPathfinder::reset()
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
+void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero, const bool considerWhirlpools /* = false */ )
 {
     const int startIndex = hero.GetIndex();
     const int color = hero.GetColor();
@@ -380,37 +381,41 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     const uint32_t remainingMovePoints = hero.GetMovePoints();
     const uint32_t maxMovePoints = hero.GetMaxMovePoints();
 
-    if ( _pathStart != startIndex || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill
-         || _remainingMovePoints != remainingMovePoints || _maxMovePoints != maxMovePoints ) {
+    if ( _pathStart != startIndex || _currentColor != color || _considerWhirlpools != considerWhirlpools || std::fabs( _armyStrength - armyStrength ) > 0.001
+         || _pathfindingSkill != skill || _remainingMovePoints != remainingMovePoints || _maxMovePoints != maxMovePoints ) {
         _pathStart = startIndex;
         _currentColor = color;
+        _considerWhirlpools = considerWhirlpools;
         _armyStrength = armyStrength;
         _pathfindingSkill = skill;
         _remainingMovePoints = remainingMovePoints;
         _maxMovePoints = maxMovePoints;
 
-        processWorldMap( startIndex );
+        processWorldMap();
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill,
+                                            const bool considerWhirlpools /* = false */ )
 {
-    if ( _pathStart != start || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill ) {
+    if ( _pathStart != start || _currentColor != color || _considerWhirlpools != considerWhirlpools || std::fabs( _armyStrength - armyStrength ) > 0.001
+         || _pathfindingSkill != skill ) {
         _pathStart = start;
         _currentColor = color;
+        _considerWhirlpools = considerWhirlpools;
         _armyStrength = armyStrength;
         _pathfindingSkill = skill;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
 
-        processWorldMap( start );
+        processWorldMap();
     }
 }
 
 // Overwrites base version in WorldPathfinder, using custom node passability rules
-void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
+void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    const bool isFirstNode = currentNodeIdx == pathStart;
+    const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
@@ -440,17 +445,22 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
     if ( isFirstNode || ( !isProtected && !isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
-        const MapsIndexes & teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+        MapsIndexes teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+
+        if ( teleporters.empty() && _considerWhirlpools ) {
+            teleporters = world.GetWhirlpoolEndPoints( currentNodeIdx );
+        }
 
         // do not check adjacent if we're going through the teleport in the middle of the path
         if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
-            checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx );
+            checkAdjacentNodes( nodesToExplore, currentNodeIdx );
         }
 
         // special case: move through teleporters
         for ( const int teleportIdx : teleporters ) {
-            if ( teleportIdx == pathStart )
+            if ( teleportIdx == _pathStart ) {
                 continue;
+            }
 
             WorldNode & teleportNode = _cache[teleportIdx];
 
@@ -458,7 +468,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
             if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
                 teleportNode._from = currentNodeIdx;
                 teleportNode._cost = currentNode._cost;
-                teleportNode._objectID = MP2::OBJ_STONELITHS;
+                teleportNode._objectID = world.GetTiles( teleportIdx ).GetObject();
                 teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
 
                 nodesToExplore.push_back( teleportIdx );
