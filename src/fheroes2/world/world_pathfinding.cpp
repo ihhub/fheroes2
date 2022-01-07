@@ -265,8 +265,9 @@ void PlayerWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
-        _currentColor = Color::NONE;
+
         _pathfindingSkill = Skill::Level::EXPERT;
+        _currentColor = Color::NONE;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
     }
@@ -357,12 +358,14 @@ void AIWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
-        _currentColor = Color::NONE;
-        _considerWhirlpools = false;
-        _armyStrength = -1;
+
         _pathfindingSkill = Skill::Level::EXPERT;
+        _currentColor = Color::NONE;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
+
+        _considerWhirlpools = false;
+        _armyStrength = -1;
     }
 }
 
