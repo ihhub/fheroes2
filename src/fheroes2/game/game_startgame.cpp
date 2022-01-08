@@ -403,10 +403,12 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     default:
         if ( water ) {
-            if ( MP2::isWaterActionObject( tile.GetObject() ) )
+            if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-            else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
+            }
+            if ( tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            }
         }
         break;
     }
@@ -502,7 +504,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-        else if ( tile.isPassable( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
+        else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
             bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -740,7 +742,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         ShowEventDayDialog();
 
         // autosave
-        if ( conf.ExtGameAutosaveOn() && conf.ExtGameAutosaveBeginOfDay() )
+        if ( conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 
@@ -778,9 +780,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 res = fheroes2::GameMode::QUIT_GAME;
                 break;
             }
-            else {
-                continue;
-            }
+            continue;
         }
 
         // hot keys
@@ -1125,7 +1125,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             RedrawFocus();
         }
 
-        if ( conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
+        if ( !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 

@@ -54,10 +54,7 @@ public:
         // Do nothing.
     }
 
-    void ActionListPressRight( Maps::FileInfo & ) override
-    {
-        // Do nothing.
-    }
+    void ActionListPressRight( Maps::FileInfo & info ) override;
 
     bool selectOk;
 };

@@ -31,6 +31,7 @@
 #include "audio.h"
 #include "core.h"
 #include "logging.h"
+#include "system.h"
 
 namespace
 {
@@ -74,12 +75,12 @@ namespace
         }
     }
 
-    Mix_Chunk * LoadWAV( const char * file )
+    Mix_Chunk * LoadWAV( const std::string & file )
     {
-        Mix_Chunk * sample = Mix_LoadWAV( file );
+        Mix_Chunk * sample = Mix_LoadWAV( System::FileNameToUTF8( file ).c_str() );
 
         if ( !sample ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
 
         return sample;
@@ -90,7 +91,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
 
         if ( !sample ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
 
         return sample;
@@ -101,7 +102,7 @@ namespace
         int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
 
         if ( res == -1 ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
 
         return res;
@@ -136,7 +137,7 @@ void Audio::Init()
         hardware.samples = 2048;
 
         if ( 0 != Mix_OpenAudio( hardware.freq, hardware.format, hardware.channels, hardware.samples ) ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( Mix_GetError() );
 
             valid = false;
         }
@@ -248,7 +249,7 @@ size_t Mixer::getChannelCount()
     return static_cast<size_t>( Mix_AllocateChannels( -1 ) );
 }
 
-int Mixer::Play( const char * file, const int channel /* = -1 */, const bool loop /* = false */ )
+int Mixer::Play( const std::string & file, const int channel /* = -1 */, const bool loop /* = false */ )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
@@ -401,7 +402,7 @@ void Music::Play( const std::string & file, const bool loop )
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( valid ) {
-        Mix_Music * mix = Mix_LoadMUS( file.c_str() );
+        Mix_Music * mix = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
 
         if ( !mix ) {
             ERROR_LOG( Mix_GetError() );

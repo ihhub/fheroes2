@@ -1610,7 +1610,7 @@ void Maps::Tiles::FixObject( void )
 
 bool Maps::Tiles::GoodForUltimateArtifact() const
 {
-    if ( isWater() || !isPassable( Direction::CENTER, false, true, 0 ) ) {
+    if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, 0 ) ) {
         return false;
     }
 
@@ -1621,28 +1621,30 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
     return false;
 }
 
-bool Maps::Tiles::validateWaterRules( bool fromWater ) const
+bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
 {
+    if ( !skipFog && isFog( heroColor ) ) {
+        return false;
+    }
+
     const bool tileIsWater = isWater();
-    if ( fromWater )
-        return mp2_object == MP2::OBJ_COAST || ( tileIsWater && mp2_object != MP2::OBJ_BOAT );
 
-    // if we're not in water but tile is; allow movement in three cases
-    if ( tileIsWater )
-        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES || mp2_object == MP2::OBJ_BOAT;
+    // From the water we can get either to the coast tile or to the water tile (provided there is no boat on this tile).
+    if ( fromWater && mp2_object != MP2::OBJ_COAST && ( !tileIsWater || mp2_object == MP2::OBJ_BOAT ) ) {
+        return false;
+    }
 
-    return true;
+    // From the ground we can get to the water tile only if this tile contains a certain object.
+    if ( !fromWater && tileIsWater && mp2_object != MP2::OBJ_SHIPWRECK && mp2_object != MP2::OBJ_HEROES && mp2_object != MP2::OBJ_BOAT ) {
+        return false;
+    }
+
+    return ( direction & tilePassable ) != 0;
 }
 
-bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const
+bool Maps::Tiles::isPassableTo( const int direction ) const
 {
-    if ( !skipfog && isFog( heroColor ) )
-        return false;
-
-    if ( !validateWaterRules( fromWater ) )
-        return false;
-
-    return ( direct & tilePassable ) != 0;
+    return ( direction & tilePassable ) != 0;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )
@@ -1847,6 +1849,21 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     // This is also required in order to properly calculate Reefs' passbility.
     if ( originalObjectType == MP2::OBJ_STONES && isValidReefsSprite( originalICN, tile.objectIndex ) ) {
         tile.SetObject( MP2::OBJ_REEFS );
+
+        // There is no need to check the rest of things as we fixed this object.
+        return;
+    }
+
+    // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_ZERO
+    if ( originalObjectType == MP2::OBJ_COAST && tile.isWater() ) {
+        Heroes * hero = tile.GetHeroes();
+
+        if ( hero ) {
+            hero->SetMapsObject( MP2::OBJ_ZERO );
+        }
+        else {
+            tile.SetObject( MP2::OBJ_ZERO );
+        }
 
         // There is no need to check the rest of things as we fixed this object.
         return;

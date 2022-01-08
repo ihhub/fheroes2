@@ -285,7 +285,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                         else {
                             StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-                            Dialog::Message( "", str, Font::BIG, Dialog::OK );
+                            Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
                             display.render();
                         }
                     }

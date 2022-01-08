@@ -683,7 +683,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
 
         // possible that hero loses the battle
         if ( !hero.isFreeman() ) {
-            const bool isDestination = indexTo == hero.GetPath().GetDestinationIndex();
+            const bool isDestination = indexTo == hero.GetPath().GetDestinationIndex( true );
             hero.Action( indexTo, isDestination );
 
             if ( isDestination ) {
@@ -702,7 +702,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
 bool Heroes::MoveStep( bool fast )
 {
     const int32_t indexTo = Maps::GetDirectionIndex( GetIndex(), path.GetFrontDirection() );
-    const int32_t indexDest = path.GetDestinationIndex();
+    const int32_t indexDest = path.GetDestinationIndex( true );
     const fheroes2::Point & mp = GetCenter();
 
     if ( fast ) {

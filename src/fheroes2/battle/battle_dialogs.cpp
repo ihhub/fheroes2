@@ -738,7 +738,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     std::string str;
     Text text;
     text.Set( Font::SMALL );
-    str = _( "%{name} the %{race}" );
+    str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );
     StringReplace( str, "%{name}", hero.GetName() );
     StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
     text.Set( str );
@@ -814,19 +814,23 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         le.MousePressLeft( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
 
         if ( buttons ) {
-            if ( le.MouseCursor( btnCast.area() ) ) {
+            // The Cast Spell is available for a hero and a captain.
+            if ( le.MouseCursor( btnCast.area() ) && current_color == hero.GetColor() ) {
                 statusMessage = _( "Cast Spell" );
             }
-            else if ( le.MouseCursor( btnRetreat.area() ) ) {
+            // The retreat is available during a player's turn only. A captain cannot retreat.
+            else if ( le.MouseCursor( btnRetreat.area() ) && current_color == hero.GetColor() && !hero.isCaptain() ) {
                 statusMessage = _( "Retreat" );
             }
-            else if ( le.MouseCursor( btnSurrender.area() ) ) {
+            // The surrender is available during a player's turn only. A captain cannot surrender.
+            else if ( le.MouseCursor( btnSurrender.area() ) && current_color == hero.GetColor() && !hero.isCaptain() ) {
                 statusMessage = _( "Surrender" );
             }
             else if ( le.MouseCursor( btnClose.area() ) ) {
                 statusMessage = _( "Cancel" );
             }
-            else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr ) {
+            // The Hero Screen is available for a Hero only (not Captain) and when UI is not read-only.
+            else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr && actionHero->isHeroes() && !readonly ) {
                 statusMessage = _( "Hero Screen" );
             }
             else {
@@ -852,24 +856,24 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
         }
 
-        if ( le.MousePressRight( btnCast.area() ) ) {
+        if ( le.MousePressRight( btnCast.area() ) && current_color == hero.GetColor() ) {
             Dialog::Message( _( "Cast Spell" ),
                              _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
         }
-        else if ( le.MousePressRight( btnRetreat.area() ) ) {
+        else if ( le.MousePressRight( btnRetreat.area() ) && current_color == hero.GetColor() && !hero.isCaptain() ) {
             Dialog::Message(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Font::BIG );
         }
-        else if ( le.MousePressRight( btnSurrender.area() ) ) {
+        else if ( le.MousePressRight( btnSurrender.area() ) && current_color == hero.GetColor() && !hero.isCaptain() ) {
             Dialog::Message(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
                 Font::BIG );
         }
-        else if ( le.MousePressRight( portraitArea ) ) {
+        else if ( le.MousePressRight( portraitArea ) && actionHero != nullptr ) {
             Dialog::Message( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Font::BIG );
         }
         else if ( le.MousePressRight( btnClose.area() ) ) {

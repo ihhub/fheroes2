@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-07 17:16+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1267,6 +1267,248 @@ msgid "Build %{name}."
 msgstr "%{name} építése"
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Híd"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Fehér Gyöngy"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Fa"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kovácsműhely"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Jó Morál"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Szitakötő"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Vulkán"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Szökőkút"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Boszorkánymester"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Szitakötő"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Fekete Sárkány"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "animáció"
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Arany Óra"
+
+#, fuzzy
+msgid "Brownston"
+msgstr "Barna"
+
+msgid "Hilltop"
+msgstr ""
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Besorolás"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Sherman"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Fekete Sárkány"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Fekete torony"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Vezetés"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Városok mutatása"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Sárga"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Nem lehet tobrozni - túl sok hősöd van."
 
@@ -2023,6 +2265,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "FHeroes2 játék beállítások."
 
+msgid "OK"
+msgstr "Ok"
+
 #, fuzzy
 msgid "Attention"
 msgstr "animáció"
@@ -2197,6 +2442,14 @@ msgid "(not visited)"
 msgstr "(nem látogatott)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} játékos köre"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} játékos köre"
+
+#, fuzzy
 msgid "Road"
 msgstr "Út Mód"
 
@@ -2225,6 +2478,9 @@ msgid "%{name} (Level %{level})"
 msgstr "%{level} szint"
 
 msgid "Move Points"
+msgstr ""
+
+msgid "Cost per troop:"
 msgstr ""
 
 msgid "Available: %{count}"
@@ -2261,9 +2517,6 @@ msgstr "Betöltés:"
 msgid "Click to save the current game."
 msgstr "Kattints a főmenübe való visszatéréshez."
 
-msgid "OK"
-msgstr "Ok"
-
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Mentett játék betöltése."
@@ -2293,6 +2546,23 @@ msgstr "Varázslat célpontjának választása."
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Védőerő"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Ásatás"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Térkép mérete"
+
+msgid "The Succession Wars"
+msgstr ""
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -2869,8 +3139,11 @@ msgstr "Dicsőségtábla"
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
 
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
 #, fuzzy
-msgid "Game settings."
+msgid "Game Settings"
 msgstr "Beállítások"
 
 msgid ""
@@ -3457,9 +3730,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3489,9 +3759,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -3857,8 +4124,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
@@ -3873,12 +4140,9 @@ msgstr ""
 "hogy megtanuld..."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-
-msgid "Sign"
-msgstr "Jel"
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4054,9 +4318,6 @@ msgstr ""
 "Megmentesz egy hajótöröttet az óceán halálosan ölelő karjából. Jótettedért "
 "cserébe megjutalmaz egy %{art} varázstárggyal."
 
-msgid "Artifact"
-msgstr "Varázstárgy"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr "Egy manó %{art}-t kínál neked %{gold} aranyért cserébe."
 
@@ -4069,6 +4330,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Meg akarod venni ezt a varázstárgyat?"
+
+msgid "Artifact"
+msgstr "Varázstárgy"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -4095,7 +4359,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -4660,20 +4924,6 @@ msgstr ""
 "Egy hangot hallasz a torony tetejéről: \"Menj el! Nem tudok neked segíteni!\""
 
 msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
-msgstr ""
-
-msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
 "afraid we can give you no better, but the horses your cavalry are riding "
 "look to be of poor breeding stock. We have many trained war horses which "
@@ -4685,6 +4935,20 @@ msgid ""
 "war horse. \"This steed will help speed you in your travels. Alas, he will "
 "grow tired in a week. You must also let me give better horses to your "
 "mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."
@@ -5387,14 +5651,62 @@ msgstr "Narancs"
 msgid "Purple"
 msgstr "Lila"
 
-msgid "Aqua"
+msgid "barrier|Aqua"
+msgstr ""
+
+msgid "barrier|Blue"
+msgstr ""
+
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Narancs"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Lila"
+
+msgid "barrier|Red"
+msgstr ""
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Tengerkék"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Kék"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Barna"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Arany"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Zöld"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Narancs"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Lila"
+
+msgid "tent|Red"
+msgstr ""
 
 #, fuzzy
 msgid "Hero/Stats"
@@ -5858,6 +6170,9 @@ msgstr ""
 
 msgid "Magic Well"
 msgstr "Varázskút"
+
+msgid "Sign"
+msgstr "Jel"
 
 msgid "Nothing Special"
 msgstr "Semmi érdekes"
@@ -6590,7 +6905,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -6613,27 +6927,22 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Vízelementál"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6680,7 +6989,6 @@ msgstr "Fellegvár"
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6695,18 +7003,15 @@ msgstr "Elemi Gyűrű"
 msgid "No Morale"
 msgstr "Morál"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
@@ -6714,7 +7019,7 @@ msgstr ""
 msgid "Lightning"
 msgstr "Villámló Bot"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Vízelementál"
 
@@ -7460,6 +7765,9 @@ msgstr "Kristály"
 msgid "Gems"
 msgstr "Drágakövek"
 
+msgid "Gold"
+msgstr "Arany"
+
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
@@ -7937,6 +8245,30 @@ msgstr "Varázslás"
 msgid "View %{spell}"
 msgstr "%{name} mutatása"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "The %{spell} varázslat %{damage} sebzést okoz."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr ""
 
@@ -8016,9 +8348,6 @@ msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"
-msgstr ""
-
-msgid "game: autosave on"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

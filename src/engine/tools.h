@@ -39,7 +39,7 @@ int Sign( int );
 std::string StringTrim( std::string );
 std::string StringLower( std::string );
 
-std::list<std::string> StringSplit( const std::string &, const std::string & );
+std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );

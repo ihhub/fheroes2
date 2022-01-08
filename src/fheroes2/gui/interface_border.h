@@ -41,8 +41,11 @@ namespace Interface
         void Redraw() const;
         bool QueueEventProcessing( void );
 
-        const fheroes2::Rect & GetArea( void ) const;
         const fheroes2::Rect & GetRect( void ) const;
+        const fheroes2::Rect & GetArea( void ) const
+        {
+            return area;
+        }
 
     protected:
         void SetPosition( int32_t, int32_t, uint32_t, uint32_t );

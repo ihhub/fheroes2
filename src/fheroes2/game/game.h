@@ -236,10 +236,18 @@ namespace Game
         {
             if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
                 SetCurrentMusic( _music );
+
+                return;
             }
-            else {
-                AGG::PlayMusic( _music, true, true );
+
+            // Set current music to MUS::UNKNOWN to prevent attempts to play the old music
+            // by new instances of MusicRestorer while the music being currently restored
+            // is starting in the background
+            if ( _music != CurrentMusic() ) {
+                SetCurrentMusic( MUS::UNKNOWN );
             }
+
+            AGG::PlayMusic( _music, true, true );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;

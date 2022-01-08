@@ -49,6 +49,8 @@ namespace System
     bool isEmbededDevice( void );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
+
+    std::string FileNameToUTF8( const std::string & str );
 }
 
 #endif
