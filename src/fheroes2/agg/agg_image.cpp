@@ -247,20 +247,26 @@ namespace
             fheroes2::updateShadow( font[10], { -1, 2 }, 2 );
 
             font[28] = font[73];
-            font[28].image()[2] = 0;
-            font[28].transform()[2] = 1;
-            font[28].image()[2 + font[28].width()] = 0;
-            font[28].transform()[2 + font[28].width()] = 1;
+            // Just to be safe and not to write something out of buffer.
+            if ( font[28].width() > 2 && font[28].height() > 1 ) {
+                font[28].image()[2] = 0;
+                font[28].transform()[2] = 1;
+                font[28].image()[2 + font[28].width()] = 0;
+                font[28].transform()[2 + font[28].width()] = 1;
+            }
             fheroes2::Copy( font[28], 3, 0, font[28], 1, 0, 1, 2 );
             fheroes2::updateShadow( font[28], { -1, 2 }, 2 );
 
             font[30] = font[73];
-            font[30].image()[1] = 0;
-            font[30].transform()[1] = 1;
-            font[30].image()[3] = 0;
-            font[30].transform()[3] = 1;
-            font[30].image()[2 + font[30].width()] = 0;
-            font[30].transform()[2 + font[30].width()] = 1;
+            // Just to be safe and not to write something out of buffer.
+            if ( font[30].width() > 4 && font[30].height() > 1 ) {
+                font[30].image()[1] = 0;
+                font[30].transform()[1] = 1;
+                font[30].image()[3] = 0;
+                font[30].transform()[3] = 1;
+                font[30].image()[2 + font[30].width()] = 0;
+                font[30].transform()[2 + font[30].width()] = 1;
+            }
             fheroes2::Copy( font[30], 2, 0, font[30], 1, 1, 1, 1 );
             fheroes2::Copy( font[30], 2, 0, font[30], 3, 1, 1, 1 );
             fheroes2::updateShadow( font[30], { -1, 2 }, 2 );
@@ -639,7 +645,13 @@ namespace
             offset = 32;
 
             // e with 2 dots on top.
-            font[184 - 32] = font[37 + offset];
+            font[184 - 32].resize( font[69].width(), font[69].height() + 3 );
+            font[184 - 32].reset();
+            fheroes2::Copy( font[69], 0, 0, font[184 - 32], 0, 3, font[69].width(), font[69].height() );
+            fheroes2::Copy( font[168 - 32], 3, 0, font[184 - 32], 3, 0, 2, 4 );
+            fheroes2::Copy( font[168 - 32], 3, 0, font[184 - 32], 5, 0, 2, 4 );
+            font[184 - 32].setPosition( font[69].x(), font[69].y() - 3 );
+            // Not shadow needs to be updated here.
 
             font[224 - 32] = font[33 + offset];
 
@@ -841,7 +853,14 @@ namespace
 
             size_t offset = 0;
 
-            font[168 - 32] = font[37 + offset];
+            // E with 2 dots on top.
+            font[168 - 32].resize( font[37].width(), font[37].height() + 2 );
+            font[168 - 32].reset();
+            fheroes2::Copy( font[37], 0, 0, font[168 - 32], 0, 2, font[37].width(), font[37].height() );
+            fheroes2::Copy( font[37], 3, 0, font[168 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[37], 3, 0, font[168 - 32], 5, 0, 1, 1 );
+            font[168 - 32].setPosition( font[37].x(), font[37].y() );
+            fheroes2::updateShadow( font[168 - 32], { -1, 1 }, 2 );
 
             font[192 - 32] = font[33 + offset];
 
@@ -1020,7 +1039,14 @@ namespace
 
             offset = 32;
 
-            font[184 - 32] = font[37 + offset];
+            // e with 2 dots on top.
+            font[184 - 32].resize( font[69].width(), font[69].height() + 2 );
+            font[184 - 32].reset();
+            fheroes2::Copy( font[69], 0, 0, font[184 - 32], 0, 2, font[69].width(), font[69].height() );
+            fheroes2::Copy( font[69], 2, 0, font[184 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[69], 2, 0, font[184 - 32], 4, 0, 1, 1 );
+            font[184 - 32].setPosition( font[69].x(), font[69].y() );
+            fheroes2::updateShadow( font[184 - 32], { -1, 1 }, 2 );
 
             font[224 - 32] = font[33 + offset];
 
@@ -2431,6 +2457,14 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 34 ) {
+                    // Fix extra column at the end of AI controlled player.
+                    for ( size_t i = 27; i < 34; ++i ) {
+                        if ( _icnVsSprite[id][i].width() == 62 && _icnVsSprite[id][i].height() == 58 ) {
+                            Copy( _icnVsSprite[id][i], 58, 44, _icnVsSprite[id][i], 59, 44, 1, 11 );
+                        }
+                    }
+                }
                 if ( _icnVsSprite[id].size() >= 70 ) {
                     // fix transparent corners on pressed OKAY and CANCEL buttons
                     CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
@@ -2470,6 +2504,15 @@ namespace fheroes2
 
                     dismissPressed = std::move( tmpPressed );
                 }
+                return true;
+            }
+            case ICN::TWNWUP_5: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
+                    // Fix glowing red pixel.
+                    Copy( _icnVsSprite[id].front(), 52, 92, _icnVsSprite[id].front(), 54, 92, 1, 1 );
+                }
+
                 return true;
             }
             default:

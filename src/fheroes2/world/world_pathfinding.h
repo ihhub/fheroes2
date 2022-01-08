@@ -58,16 +58,16 @@ public:
 
 protected:
     void processWorldMap( int pathStart );
-    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx );
 
     // This method defines pathfinding rules. This has to be implemented by the derived class.
-    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
+    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx ) = 0;
 
     // Calculates the movement penalty when moving from the src tile to the adjacent dst tile in the specified direction.
     // If the "last move" logic should be taken into account (when performing pathfinding for a real hero on the map),
     // then the src tile should be already accessible for this hero and it should also have a valid information about
-    // the hero's remaining movement points.
-    uint32_t getMovementPenalty( int src, int dst, int direction ) const;
+    // the hero's remaining movement points. The default implementation can be overridden by a derived class.
+    virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
     // Substracts movement points taking the transition between turns into account
     uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
@@ -90,7 +90,7 @@ public:
     std::list<Route::Step> buildPath( int targetIndex ) const;
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx ) override;
 };
 
 class AIWorldPathfinder : public WorldPathfinder
@@ -130,7 +130,13 @@ public:
     void setArmyStrengthMultplier( const double multiplier );
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx ) override;
+
+    // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats.
+    // If this logic should be taken into account (when performing pathfinding for a real hero on the map),
+    // then the src tile should be already accessible for this hero and it should also have a valid information
+    // about the hero's remaining movement points.
+    uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
 
     double _armyStrength = -1;
     double _advantage = 1.0;

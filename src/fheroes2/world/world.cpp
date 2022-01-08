@@ -480,17 +480,6 @@ size_t World::getSize() const
     return vec_tiles.size();
 }
 
-/* get kingdom */
-Kingdom & World::GetKingdom( int color )
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
-const Kingdom & World::GetKingdom( int color ) const
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
 Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
     return vec_castles.Get( tilePosition );
@@ -563,11 +552,6 @@ Heroes * World::FromJailHeroes( s32 index )
 CastleHeroes World::GetHeroes( const Castle & castle ) const
 {
     return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
-}
-
-void World::RescanAllHeroesPathPassable() const
-{
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 }
 
 int World::GetDay( void ) const

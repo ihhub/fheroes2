@@ -32,7 +32,8 @@
 
 namespace
 {
-    const std::vector<std::string> videoDir = { "anim", System::ConcatePath( "heroes2", "anim" ), "data" };
+    // Anim2 directory is used in Russian Buka version of the game.
+    const std::vector<std::string> videoDir = { "anim", "anim2", System::ConcatePath( "heroes2", "anim" ), "data" };
 
     void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color )
     {

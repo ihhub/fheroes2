@@ -99,8 +99,6 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
-    ExtSetModes( GAME_AUTOSAVE_ON );
-
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
@@ -474,11 +472,6 @@ int Settings::GameDifficulty() const
     return game_difficulty;
 }
 
-int Settings::CurrentColor() const
-{
-    return players.current_color;
-}
-
 const std::string & Settings::getGameLanguage() const
 {
     return _gameLanguage;
@@ -740,24 +733,6 @@ void Settings::SetGameDifficulty( int d )
     game_difficulty = d;
 }
 
-void Settings::SetCurrentColor( int color )
-{
-    players.current_color = color;
-}
-
-int Settings::SoundVolume() const
-{
-    return sound_volume;
-}
-int Settings::MusicVolume() const
-{
-    return music_volume;
-}
-MusicSource Settings::MusicType() const
-{
-    return _musicType;
-}
-
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
@@ -776,36 +751,9 @@ void Settings::SetMusicType( int v )
     _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
 }
 
-/* check game type */
-bool Settings::IsGameType( int f ) const
-{
-    return ( game_type & f ) != 0;
-}
-
-int Settings::GameType() const
-{
-    return game_type;
-}
-
-/* set game type */
-void Settings::SetGameType( int type )
-{
-    game_type = type;
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
-}
-
-const Players & Settings::GetPlayers() const
-{
-    return players;
-}
-
-Players & Settings::GetPlayers()
-{
-    return players;
 }
 
 void Settings::SetPreferablyCountPlayers( int c )
@@ -1043,8 +991,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:
         return _( "game: show system info" );
-    case Settings::GAME_AUTOSAVE_ON:
-        return _( "game: autosave on" );
     case Settings::GAME_AUTOSAVE_BEGIN_DAY:
         return _( "game: autosave will be made at the beginning of the day" );
     case Settings::GAME_USE_FADE:
@@ -1197,11 +1143,6 @@ bool Settings::ExtGameShowSystemInfo() const
 bool Settings::ExtGameAutosaveBeginOfDay() const
 {
     return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
-}
-
-bool Settings::ExtGameAutosaveOn() const
-{
-    return ExtModes( GAME_AUTOSAVE_ON );
 }
 
 bool Settings::ExtGameUseFade() const

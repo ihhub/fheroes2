@@ -145,10 +145,17 @@ void Kingdom::LossPostActions( void )
     }
 }
 
-void Kingdom::ActionBeforeTurn( void )
+void Kingdom::ActionBeforeTurn()
 {
-    // rescan heroes path
-    std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->RescanPath(); } );
+    if ( isControlHuman() ) {
+        // Recalculate the existing paths of heroes if the kingdom is controlled by a human
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->calculatePath( -1 ); } );
+    }
+    else {
+        // Reset the paths of heroes if the kingdom is controlled by AI, because it uses a
+        // special pathfinder implementation and revises its goals every turn
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->GetPath().Reset(); } );
+    }
 }
 
 void Kingdom::ActionNewDay( void )
@@ -830,7 +837,7 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 if ( objectCount > 1 ) {
                     event.title = std::to_string( objectCount );
                     event.title += ' ';
-                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                    event.title += MP2::StringObject( objectType, objectCount );
                 }
                 else {
                     event.title = MP2::StringObject( objectType );

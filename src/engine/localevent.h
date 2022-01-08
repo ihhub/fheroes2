@@ -225,7 +225,11 @@ public:
 
     bool MouseCursor( const fheroes2::Rect & rt ) const;
 
-    bool KeyPress() const;
+    bool KeyPress() const
+    {
+        return modes & KEY_PRESSED;
+    }
+
     bool KeyPress( KeySym key ) const;
 
     bool KeyHold() const
@@ -277,7 +281,7 @@ private:
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    void OnSdl2WindowEvent( const SDL_Event & event );
+    static void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 
