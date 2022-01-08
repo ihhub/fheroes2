@@ -119,7 +119,7 @@ public:
     void SetControl( int );
     void SetPlay( bool );
     void SetFriends( int );
-    void SetName( const std::string & );
+    void SetName( const std::string & newName );
 
     int GetControl( void ) const override;
 
@@ -139,7 +139,7 @@ public:
     }
 
     std::string GetDefaultName() const;
-    const std::string & GetName( void ) const;
+    std::string GetName() const;
 
     std::string GetPersonalityString() const;
 
