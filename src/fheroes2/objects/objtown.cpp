@@ -23,8 +23,12 @@
 #include "objtown.h"
 #include "direction.h"
 #include "mp2.h"
+#include "tools.h"
 
-#include <set>
+namespace
+{
+    const std::bitset<256> obTownShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 } );
+}
 
 int ObjTown::GetPassable( const uint8_t index0 )
 {
@@ -73,8 +77,7 @@ bool ObjTwba::isAction( u32 index )
 
 bool ObjTown::isShadow( const uint8_t index )
 {
-    const std::set<uint32_t> shadows{ 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 };
-    return shadows.count( index ) > 0;
+    return obTownShadowBitset[index];
 }
 
 bool ObjTwba::isShadow( const uint8_t /*index*/ )

@@ -225,7 +225,11 @@ public:
 
     bool MouseCursor( const fheroes2::Rect & rt ) const;
 
-    bool KeyPress() const;
+    bool KeyPress() const
+    {
+        return modes & KEY_PRESSED;
+    }
+
     bool KeyPress( KeySym key ) const;
 
     bool KeyHold() const
@@ -265,8 +269,8 @@ private:
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
 
-    void StopSounds();
-    void ResumeSounds();
+    static void StopSounds();
+    static void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     static int GlobalFilterEvents( void *, SDL_Event * );
@@ -277,7 +281,7 @@ private:
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    void OnSdl2WindowEvent( const SDL_Event & event );
+    static void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 
@@ -321,7 +325,7 @@ private:
 
     enum
     {
-        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_L_DEADZONE = 4000,
         CONTROLLER_R_DEADZONE = 25000
     };
 
@@ -343,7 +347,6 @@ private:
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
 #endif

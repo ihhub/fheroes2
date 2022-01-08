@@ -134,29 +134,9 @@ int Player::GetControl( void ) const
     return control;
 }
 
-int Player::GetColor( void ) const
-{
-    return color;
-}
-
-int Player::GetRace( void ) const
-{
-    return race;
-}
-
-int Player::GetFriends( void ) const
-{
-    return friends;
-}
-
 std::string Player::GetPersonalityString() const
 {
     return _ai->GetPersonalityString();
-}
-
-bool Player::isColor( int col ) const
-{
-    return col == color;
 }
 
 bool Player::isPlay( void ) const
@@ -517,7 +497,8 @@ StreamBase & operator<<( StreamBase & msg, const Players & players )
 
 StreamBase & operator>>( StreamBase & msg, Players & players )
 {
-    int colors, current;
+    int colors;
+    int current;
     msg >> colors >> current;
 
     players.clear();

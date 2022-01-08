@@ -256,7 +256,7 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
             if ( target.cell != -1 ) {
-                const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+                const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
@@ -308,7 +308,7 @@ namespace AI
         if ( enemyForce.empty() )
             return;
 
-        uint32_t slowestUnitSpeed = Speed::INSTANT;
+        double sumEnemyStr = 0.0;
         for ( const Unit * unitPtr : enemyForce ) {
             if ( !unitPtr || !unitPtr->isValid() )
                 continue;
@@ -325,17 +325,18 @@ namespace AI
             if ( dmg > _highestDamageExpected )
                 _highestDamageExpected = dmg;
 
-            const uint32_t speed = unit.GetSpeed();
-            _enemyAverageSpeed += speed;
-            if ( speed < slowestUnitSpeed )
-                slowestUnitSpeed = speed;
+            // average speed is weighted by troop strength
+            const uint32_t speed = unit.GetSpeed( false, true );
+            _enemyAverageSpeed += speed * unitStr;
+            sumEnemyStr += unitStr;
         }
-        if ( enemyForce.size() > 2 ) {
-            _enemyAverageSpeed -= slowestUnitSpeed;
+
+        if ( sumEnemyStr > 0.0 ) {
+            _enemyAverageSpeed /= sumEnemyStr;
         }
-        _enemyAverageSpeed /= enemyForce.size();
 
         uint32_t initialUnitCount = 0;
+        double sumArmyStr = 0.0;
         for ( const Unit * unitPtr : friendlyForce ) {
             // Do not check isValid() here to handle dead troops
             if ( !unitPtr )
@@ -349,17 +350,26 @@ namespace AI
             if ( count > 0 || dead > 0 ) {
                 ++initialUnitCount;
             }
+
+            const double unitStr = unit.GetStrength();
+
+            // average speed is weighted by troop strength
+            const uint32_t speed = unit.GetSpeed( false, true );
+            _myArmyAverageSpeed += speed * unitStr;
+            sumArmyStr += unitStr;
+
             // Dead unit: trigger retreat condition and skip strength calculation
             if ( count == 0 && dead > 0 ) {
                 _considerRetreat = true;
                 continue;
             }
-
-            const double unitStr = unit.GetStrength();
             _myArmyStrength += unitStr;
             if ( unit.isArchers() ) {
                 _myShooterStr += unitStr;
             }
+        }
+        if ( sumArmyStr > 0.0 ) {
+            _myArmyAverageSpeed /= sumArmyStr;
         }
         _considerRetreat = _considerRetreat || initialUnitCount < 4;
 
@@ -367,7 +377,8 @@ namespace AI
         _attackingCastle = false;
         _defendingCastle = false;
         const Castle * castle = Arena::GetCastle();
-        if ( castle ) {
+        // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
+        if ( castle != nullptr && Arena::isAnyTowerPresent() ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->hasArtifact( Artifact::GOLDEN_BOW );
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetMonsterStrength() : 0; };
@@ -375,7 +386,11 @@ namespace AI
             double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
             towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
+
+            // Tower strength can't be negative. If this assertion triggers something is wrong with the logic above.
+            assert( towerStr >= 0 );
 
             if ( _myColor == castle->GetColor() ) {
                 _defendingCastle = true;
@@ -401,11 +416,25 @@ namespace AI
             _enemyShooterStr += commanderDamageValue( *enemyCommander );
         }
 
-        // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
-        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * 10;
+        double overPowerRatio = 10; // for melee creatures
+        if ( currentUnit.isFlying() ) {
+            overPowerRatio = 6;
+        }
+        if ( _defendingCastle ) {
+            overPowerRatio /= 2; // don't make shooters to kill us.
+        }
+
+        // When we have in X times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
+        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * overPowerRatio;
         const double enemyArcherRatio = _enemyShooterStr / _enemyArmyStrength;
 
-        _defensiveTactics = enemyArcherRatio < 0.75 && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
+        double enemyArcherThreshold = 0.75;
+        if ( _defendingCastle ) {
+            // Don't make shooters to kill us while we are standing in the castle.
+            enemyArcherThreshold /= 2;
+        }
+
+        _defensiveTactics = enemyArcherRatio < enemyArcherThreshold && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio );
     }
@@ -452,7 +481,7 @@ namespace AI
                 if ( target.cell != -1 ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
 
-                    const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, target.cell );
+                    const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 
@@ -699,7 +728,7 @@ namespace AI
                     if ( targetCell != -1 ) {
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
 
-                        const int32_t reachableCell = Board::FindNearestReachableCell( currentUnit, targetCell );
+                        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
 

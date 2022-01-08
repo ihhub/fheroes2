@@ -22,6 +22,7 @@
 #ifndef H2TOOLS_H
 #define H2TOOLS_H
 
+#include <bitset>
 #include <list>
 #include <string>
 #include <vector>
@@ -38,7 +39,7 @@ int Sign( int );
 std::string StringTrim( std::string );
 std::string StringLower( std::string );
 
-std::list<std::string> StringSplit( const std::string &, const std::string & );
+std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
@@ -77,6 +78,16 @@ namespace fheroes2
     {
         std::hash<T> hasher;
         seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
+
+    template <size_t N>
+    std::bitset<N> makeBitsetFromVector( const std::vector<int> & vector )
+    {
+        std::bitset<N> result;
+        for ( const int index : vector ) {
+            result.set( index, true );
+        }
+        return result;
     }
 }
 

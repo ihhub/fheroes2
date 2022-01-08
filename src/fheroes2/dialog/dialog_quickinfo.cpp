@@ -345,16 +345,30 @@ namespace
         return str;
     }
 
-    std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    std::string showUniqueObjectVisitInfo( const MP2::MapObjectType objectType, const Kingdom & kingdom )
     {
-        std::string str = BarrierColor::String( tile.QuantityColor() );
-        str += ' ';
+        std::string str = MP2::StringObject( objectType );
 
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        str.append( "\n \n" );
+        str.append( kingdom.isVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
 
-        str.append( MP2::StringObject( objectType ) );
+        return str;
+    }
 
-        if ( MP2::OBJ_TRAVELLERTENT == objectType && kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
+    std::string ShowBarrierInfo( const Maps::Tiles & tile )
+    {
+        std::string str = _( "%{color} Barrier" );
+        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( tile.QuantityColor() ) );
+
+        return str;
+    }
+
+    std::string ShowTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    {
+        std::string str = _( "%{color} Tent" );
+        StringReplace( str, "%{color}", fheroes2::getTentColorName( tile.QuantityColor() ) );
+
+        if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             str.append( "\n \n" );
             str.append( _( "(already visited)" ) );
         }
@@ -529,7 +543,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_LEANTO:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
-
+        case MP2::OBJ_MAGELLANMAPS:
+            name_object = showUniqueObjectVisitInfo( objectType, kingdom );
+            break;
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
@@ -578,6 +594,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE:
+        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_AIRALTAR:
+        case MP2::OBJ_FIREALTAR:
+        case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_WATERALTAR:
             name_object = ShowDwellingInfo( tile, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
             break;
 
@@ -625,8 +646,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
             break;
 
         case MP2::OBJ_BARRIER:
+            name_object = ShowBarrierInfo( tile );
+            break;
+
         case MP2::OBJ_TRAVELLERTENT:
-            name_object = ShowBarrierTentInfo( tile, kingdom );
+            name_object = ShowTentInfo( tile, kingdom );
             break;
 
         default:

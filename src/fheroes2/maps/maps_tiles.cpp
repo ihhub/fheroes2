@@ -138,11 +138,13 @@ namespace
             return true;
         case ICN::STREAM:
         case ICN::OBJNTWBA:
+        case ICN::OBJNXTRA:
         case ICN::ROAD:
         case ICN::EXTRAOVR:
         case ICN::MONS32:
         case ICN::BOAT32:
         case ICN::FLAG32:
+        case ICN::MINIHERO:
             return false;
         default:
             break;
@@ -151,6 +153,11 @@ namespace
         // Did you add a new type of objects into the game?
         assert( 0 );
         return false;
+    }
+
+    bool isValidReefsSprite( const int icn, const uint8_t icnIndex )
+    {
+        return icn == ICN::X_LOC2 && ObjXlc2::isReefs( icnIndex );
     }
 
 #if defined( VERIFY_SHADOW_SPRITES )
@@ -503,7 +510,7 @@ MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const u
             return MP2::OBJ_SIRENS;
         else if ( 46 < icnIndex && icnIndex < 111 )
             return MP2::OBJN_SIRENS;
-        else if ( 110 < icnIndex && icnIndex < 136 )
+        else if ( ObjXlc2::isReefs( icnIndex ) )
             return MP2::OBJ_REEFS;
         break;
 
@@ -528,23 +535,18 @@ MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const u
 bool Maps::TilesAddon::isRoad() const
 {
     switch ( MP2::GetICNObject( object ) ) {
-    // from sprite road
+    // road sprite
     case ICN::ROAD:
         if ( 1 == index || 8 == index || 10 == index || 11 == index || 15 == index || 22 == index || 23 == index || 24 == index || 25 == index || 27 == index )
             return false;
         else
             return true;
 
-    // castle and tower (gate)
+    // castle or town gate
     case ICN::OBJNTOWN:
+    case ICN::OBJNTWRD:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
-            return true;
-        break;
-
-        // castle lands (gate)
-    case ICN::OBJNTWBA:
-        if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
             return true;
         break;
 
@@ -728,23 +730,23 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     quantity3 = 0;
     fog_colors = Color::ALL;
 
-    SetTile( mp2.tileIndex, mp2.flags );
+    SetTile( mp2.surfaceType, mp2.flags );
     SetIndex( index );
-    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObject ) );
+    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
     addons_level1.clear();
     addons_level2.clear();
 
     // those bitfields are set by map editor regardless if map object is there
-    tileIsRoad = ( mp2.objectName1 >> 1 ) & 1;
+    tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mp2.objectName1 ) == ICN::ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
-    if ( mp2.mapObject == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
+    if ( mp2.mapObjectType == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
         objectTileset = mp2.objectName1;
-        objectIndex = mp2.indexName1;
+        objectIndex = mp2.level1IcnImageIndex;
         uniq = mp2.level1ObjectUID;
     }
     AddonsPushLevel2( mp2 );
@@ -908,6 +910,16 @@ int Maps::Tiles::getOriginalPassability() const
         return DIRECTION_ALL;
     }
 
+    if ( isValidReefsSprite( MP2::GetICNObject( objectTileset ), objectIndex ) ) {
+        return 0;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( isValidReefsSprite( MP2::GetICNObject( addon.object ), addon.index ) ) {
+            return 0;
+        }
+    }
+
     // Objects have fixed passability.
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
@@ -958,8 +970,9 @@ void Maps::Tiles::updatePassability()
                 }
             }
 
-            if ( isWater() != bottomTile.isWater() ) {
-                // If object is bordering water then it must be marked as not passable.
+            // If an object locates on land and the bottom tile is water mark the current tile as impassible. It's done for cases that a hero won't be able to
+            // disembark on the tile.
+            if ( !isWater() && bottomTile.isWater() ) {
                 tilePassable = 0;
                 return;
             }
@@ -974,7 +987,7 @@ void Maps::Tiles::updatePassability()
                 if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                         if ( isShortObject( bottomTileObjectType ) ) {
-                            tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                            tilePassable &= ~Direction::BOTTOM;
                         }
                         else {
                             tilePassable = 0;
@@ -984,11 +997,11 @@ void Maps::Tiles::updatePassability()
                 }
                 else if ( bottomTile.mp2_object != 0 && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-                    tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                    tilePassable &= ~Direction::BOTTOM;
                 }
                 else if ( isShortObject( bottomTileObjectType )
                           || ( !bottomTile.containsTileSet( getValidTileSets() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
-                    tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                    tilePassable &= ~Direction::BOTTOM;
                 }
                 else {
                     tilePassable = 0;
@@ -1084,13 +1097,13 @@ bool Maps::Tiles::isClearGround() const
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName1 && mt.indexName1 < 0xFF ) {
-        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.indexName1 );
+    if ( mt.objectName1 != 0 && mt.level1IcnImageIndex != 0xFF ) {
+        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.level1IcnImageIndex );
     }
 
     // MP2 "objectName" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
-    if ( ( mt.objectName1 >> 1 ) & 1 )
+    if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mt.objectName1 ) == ICN::ROAD ) )
         tileIsRoad = true;
 }
 
@@ -1108,8 +1121,8 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName2 && mt.indexName2 < 0xFF ) {
-        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.indexName2 );
+    if ( mt.objectName2 && mt.level2IcnImageIndex != 0xFF ) {
+        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.level2IcnImageIndex );
     }
 }
 
@@ -1597,7 +1610,7 @@ void Maps::Tiles::FixObject( void )
 
 bool Maps::Tiles::GoodForUltimateArtifact() const
 {
-    if ( isWater() || !isPassable( Direction::CENTER, false, true, 0 ) ) {
+    if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, 0 ) ) {
         return false;
     }
 
@@ -1608,28 +1621,30 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
     return false;
 }
 
-bool Maps::Tiles::validateWaterRules( bool fromWater ) const
+bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
 {
+    if ( !skipFog && isFog( heroColor ) ) {
+        return false;
+    }
+
     const bool tileIsWater = isWater();
-    if ( fromWater )
-        return mp2_object == MP2::OBJ_COAST || ( tileIsWater && mp2_object != MP2::OBJ_BOAT );
 
-    // if we're not in water but tile is; allow movement in three cases
-    if ( tileIsWater )
-        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES || mp2_object == MP2::OBJ_BOAT;
+    // From the water we can get either to the coast tile or to the water tile (provided there is no boat on this tile).
+    if ( fromWater && mp2_object != MP2::OBJ_COAST && ( !tileIsWater || mp2_object == MP2::OBJ_BOAT ) ) {
+        return false;
+    }
 
-    return true;
+    // From the ground we can get to the water tile only if this tile contains a certain object.
+    if ( !fromWater && tileIsWater && mp2_object != MP2::OBJ_SHIPWRECK && mp2_object != MP2::OBJ_HEROES && mp2_object != MP2::OBJ_BOAT ) {
+        return false;
+    }
+
+    return ( direction & tilePassable ) != 0;
 }
 
-bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const
+bool Maps::Tiles::isPassableTo( const int direction ) const
 {
-    if ( !skipfog && isFog( heroColor ) )
-        return false;
-
-    if ( !validateWaterRules( fromWater ) )
-        return false;
-
-    return ( direct & tilePassable ) != 0;
+    return ( direction & tilePassable ) != 0;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )
@@ -1817,41 +1832,87 @@ void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up 
         addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
 }
 
-void Maps::Tiles::FixedPreload( Tiles & tile )
+void Maps::Tiles::fixTileObjectType( Tiles & tile )
 {
-    // fix skeleton: left position
-    if ( MP2::GetICNObject( tile.objectTileset ) == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
+    const MP2::MapObjectType originalObjectType = tile.GetObject( false );
+    const int originalICN = MP2::GetICNObject( tile.objectTileset );
+
+    // Left tile of a skeleton on Desert should be mark as non-action tile.
+    if ( originalObjectType == MP2::OBJ_SKELETON && originalICN == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
         tile.SetObject( MP2::OBJN_SKELETON );
+
+        // There is no need to check the rest of things as we fixed this object.
+        return;
     }
 
-    // fix price loyalty objects.
-    if ( Settings::Get().isPriceOfLoyaltySupported() )
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_UNKNW_79:
-        case MP2::OBJ_UNKNW_7A:
-        case MP2::OBJ_UNKNW_F9:
-        case MP2::OBJ_UNKNW_FA: {
-            MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
-            if ( objectType == MP2::OBJ_ZERO ) {
-                // if nothing was found it means there's overlay tile on top of the object; search for it
-                for ( auto it = tile.addons_level2.begin(); it != tile.addons_level2.end(); ++it ) {
-                    objectType = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
-                    if ( objectType != MP2::OBJ_ZERO )
-                        break;
-                }
-            }
+    // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
+    // This is also required in order to properly calculate Reefs' passbility.
+    if ( originalObjectType == MP2::OBJ_STONES && isValidReefsSprite( originalICN, tile.objectIndex ) ) {
+        tile.SetObject( MP2::OBJ_REEFS );
 
-            if ( MP2::OBJ_ZERO != objectType )
-                tile.SetObject( objectType );
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile._index );
-            }
+        // There is no need to check the rest of things as we fixed this object.
+        return;
+    }
+
+    // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_ZERO
+    if ( originalObjectType == MP2::OBJ_COAST && tile.isWater() ) {
+        Heroes * hero = tile.GetHeroes();
+
+        if ( hero ) {
+            hero->SetMapsObject( MP2::OBJ_ZERO );
+        }
+        else {
+            tile.SetObject( MP2::OBJ_ZERO );
+        }
+
+        // There is no need to check the rest of things as we fixed this object.
+        return;
+    }
+
+    // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
+    switch ( originalObjectType ) {
+    case MP2::OBJ_UNKNW_79:
+    case MP2::OBJ_UNKNW_7A:
+    case MP2::OBJ_UNKNW_F9:
+    case MP2::OBJ_UNKNW_FA: {
+        MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
             break;
         }
 
-        default:
+        // Add-ons of level 1 shouldn't even exist if no top object. However, let's play safe and verify it as well.
+        for ( const TilesAddon & addon : tile.addons_level1 ) {
+            objectType = Maps::Tiles::GetLoyaltyObject( addon.object, addon.index );
+            if ( objectType != MP2::OBJ_ZERO )
+                break;
+        }
+
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
             break;
         }
+
+        for ( const TilesAddon & addon : tile.addons_level2 ) {
+            objectType = Maps::Tiles::GetLoyaltyObject( addon.object, addon.index );
+            if ( objectType != MP2::OBJ_ZERO )
+                break;
+        }
+
+        if ( objectType != MP2::OBJ_ZERO ) {
+            tile.SetObject( objectType );
+            break;
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
+                                                << static_cast<int>( tile.objectIndex ) );
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 /* true: if protection or has guardians */

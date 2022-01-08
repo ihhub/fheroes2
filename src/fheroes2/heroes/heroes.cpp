@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <functional>
 
@@ -56,6 +57,51 @@
 #include "translations.h"
 #include "world.h"
 
+namespace
+{
+    int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
+    {
+        int result = 0;
+
+        for ( const MP2::MapObjectType objectType : objectTypes ) {
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                result += GameStatic::ObjectVisitedModifiers( objectType );
+
+                if ( strs ) {
+                    switch ( objectType ) {
+                    case MP2::OBJ_GRAVEYARD:
+                    case MP2::OBJN_GRAVEYARD:
+                    case MP2::OBJ_SHIPWRECK:
+                    case MP2::OBJN_SHIPWRECK:
+                    case MP2::OBJ_DERELICTSHIP:
+                    case MP2::OBJN_DERELICTSHIP: {
+                        std::string modRobber = _( "%{object} robber" );
+                        StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        strs->append( modRobber );
+                        break;
+                    }
+                    case MP2::OBJ_PYRAMID:
+                    case MP2::OBJN_PYRAMID: {
+                        std::string modRaided = _( "%{object} raided" );
+                        StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        strs->append( modRaided );
+                        break;
+                    }
+                    default:
+                        strs->append( _( MP2::StringObject( objectType ) ) );
+                        break;
+                    }
+
+                    StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
+                    strs->append( "\n" );
+                }
+            }
+        }
+
+        return result;
+    }
+}
+
 const char * Heroes::GetName( int id )
 {
     const char * names[]
@@ -80,49 +126,6 @@ const char * Heroes::GetName( int id )
             "Debug Hero", "Unknown" };
 
     return names[id];
-}
-
-template <std::size_t size>
-int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType ( &objectTypes )[size], const Heroes & hero, std::string * strs )
-{
-    int result = 0;
-
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isObjectTypeVisited( objectTypes[ii] ) ) {
-            result += GameStatic::ObjectVisitedModifiers( objectTypes[ii] );
-
-            if ( strs ) {
-                switch ( objectTypes[ii] ) {
-                case MP2::OBJ_GRAVEYARD:
-                case MP2::OBJN_GRAVEYARD:
-                case MP2::OBJ_SHIPWRECK:
-                case MP2::OBJN_SHIPWRECK:
-                case MP2::OBJ_DERELICTSHIP:
-                case MP2::OBJN_DERELICTSHIP: {
-                    std::string modRobber = _( "%{object} robber" );
-                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
-                    strs->append( modRobber );
-                    break;
-                }
-                case MP2::OBJ_PYRAMID:
-                case MP2::OBJN_PYRAMID: {
-                    std::string modRaided = _( "%{object} raided" );
-                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectTypes[ii] ) ) );
-                    strs->append( modRaided );
-                    break;
-                }
-                default:
-                    strs->append( _( MP2::StringObject( objectTypes[ii] ) ) );
-                    break;
-                }
-
-                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectTypes[ii] ) );
-                strs->append( "\n" );
-            }
-        }
-    }
-
-    return result;
 }
 
 Heroes::Heroes()
@@ -333,7 +336,7 @@ void Heroes::PostLoad( void )
 
     // fix zero army
     if ( !army.isValid() )
-        army.Reset( true );
+        army.Reset( false );
     else
         SetModes( CUSTOMARMY );
 
@@ -605,9 +608,9 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const MP2::MapObjectType objectTypes[]
-        = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objectTypes, *this, strs );
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,        MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE,
+                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // result
     return Morale::Normalize( result );
@@ -629,8 +632,8 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const MP2::MapObjectType objectTypes[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objectTypes, *this, strs );
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     return Luck::Normalize( result );
 }
@@ -687,6 +690,9 @@ void Heroes::ActionNewDay( void )
     move_point = GetMaxMovePoints();
     MovePointsScaleFixed();
 
+    // replenish spell points
+    ReplenishSpellPoints();
+
     // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
@@ -710,7 +716,7 @@ void Heroes::ActionAfterBattle( void )
 {
     // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
-    //
+
     SetModes( ACTION );
 }
 
@@ -749,32 +755,25 @@ void Heroes::ReplenishSpellPoints()
     SetSpellPoints( std::min( curr, maxp ) );
 }
 
-void Heroes::RescanPathPassable( void )
+void Heroes::calculatePath( int32_t dstIdx )
 {
-    if ( path.isValid() )
-        path.RescanPassable();
-}
-
-void Heroes::RescanPath( void )
-{
-    if ( !path.isValid() )
-        path.clear();
-
-    if ( path.isValid() ) {
-        const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
-
-        if ( !isShipMaster() && tile.isWater() && !MP2::isNeedStayFront( tile.GetObject() ) )
-            path.PopBack();
+    if ( dstIdx < 0 ) {
+        // Recalculating an existing path
+        dstIdx = path.GetDestinationIndex();
     }
 
-    if ( path.isValid() ) {
-        if ( isControlAI() ) {
-            if ( path.hasObstacle() )
-                path.Reset();
-        }
-        else {
-            path.RescanObstacle();
-        }
+    if ( !path.isValid() ) {
+        path.Reset();
+    }
+
+    if ( dstIdx < 0 ) {
+        return;
+    }
+
+    path.setPath( world.getPath( *this, dstIdx ), dstIdx );
+
+    if ( !path.isValid() ) {
+        path.Reset();
     }
 }
 
@@ -987,15 +986,15 @@ void Heroes::ShowPath( bool f )
     f ? path.Show() : path.Hide();
 }
 
-void Heroes::IncreaseExperience( u32 exp )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
 {
-    int level_old = GetLevelFromExperience( experience );
-    int level_new = GetLevelFromExperience( experience + exp );
+    int oldLevel = GetLevelFromExperience( experience );
+    int newLevel = GetLevelFromExperience( experience + amount );
 
-    for ( int ii = 0; ii < level_new - level_old; ++ii )
-        LevelUp( false );
+    for ( int level = oldLevel; level < newLevel; ++level )
+        LevelUp( false, autoselect );
 
-    experience += exp;
+    experience += amount;
 }
 
 /* calc level from exp */
@@ -1155,7 +1154,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 /* return true is move enable */
 bool Heroes::isMoveEnabled( void ) const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
+    return Modes( ENABLEMOVE ) && path.isValid() && path.hasAllowedSteps();
 }
 
 bool Heroes::CanMove( void ) const
@@ -1168,6 +1167,8 @@ bool Heroes::CanMove( void ) const
 void Heroes::SetMove( bool f )
 {
     if ( f ) {
+        ResetModes( SLEEPER );
+
         SetModes( ENABLEMOVE );
     }
     else {
@@ -1326,10 +1327,8 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
 
         return 8;
     }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
-    }
 
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
     return 0;
 }
 
@@ -1405,15 +1404,20 @@ void Heroes::ResetMovePoints( void )
     move_point = 0;
 }
 
-bool Heroes::MayStillMove( const bool ignorePath ) const
+bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
-    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() ) {
+    if ( Modes( GUARDIAN ) || isFreeman() ) {
+        return false;
+    }
+
+    if ( !ignoreSleeper && Modes( SLEEPER ) ) {
         return false;
     }
 
     if ( path.isValid() && !ignorePath ) {
-        return move_point >= path.getLastMovePenalty();
+        return path.hasAllowedSteps();
     }
+
     return CanMove();
 }
 
@@ -1510,7 +1514,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             GetPath().Hide();
 
             // first fight the monsters on the destination tile (if any)
-            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
+            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
                 Action( *it, true );
@@ -1603,7 +1607,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int type ) const
     return Heroes::GetPortrait( portrait, type );
 }
 
-void Heroes::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const
+void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
 {
     const fheroes2::Sprite & port = GetPortrait( portrait, type );
     fheroes2::Point mp;

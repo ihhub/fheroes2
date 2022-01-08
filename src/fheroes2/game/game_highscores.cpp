@@ -99,6 +99,8 @@ public:
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
 
+    void populateHighScoresStandard();
+
 private:
     uint32_t _monsterAnimationFrameId;
     std::vector<hgs_t> list;
@@ -444,6 +446,20 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
     }
 }
 
+void HGSData::populateHighScoresStandard()
+{
+    ScoreRegistry( "Lord Kilburn", "Beltway", 70, 150 );
+    ScoreRegistry( "Tsabu", "Deathgate", 80, 140 );
+    ScoreRegistry( "Sir Galant", "Enroth", 90, 130 );
+    ScoreRegistry( "Thundax", "Lost Continent", 100, 120 );
+    ScoreRegistry( "Lord Haart", "Mountain King", 120, 110 );
+    ScoreRegistry( "Ariel", "Pandemonium", 140, 100 );
+    ScoreRegistry( "Rebecca", "Terra Firma", 160, 90 );
+    ScoreRegistry( "Sandro", "The Clearing", 180, 80 );
+    ScoreRegistry( "Crodo", "Vikings!", 200, 70 );
+    ScoreRegistry( "Barock", "Wastelands", 240, 60 );
+}
+
 fheroes2::GameMode Game::HighScores()
 {
 #ifdef WITH_DEBUG
@@ -463,7 +479,11 @@ fheroes2::GameMode Game::HighScores()
 
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    hgs.Load( highScoreDataPath );
+    if ( !hgs.Load( highScoreDataPath ) ) {
+        // Unable to load the file. Let's populate with the default values.
+        hgs.populateHighScoresStandard();
+        hgs.Save( highScoreDataPath );
+    }
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
@@ -525,6 +545,8 @@ fheroes2::GameMode Game::HighScores()
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             hgs.RedrawList( top.x, top.y );
+            buttonCampain.draw();
+            buttonExit.draw();
             display.render();
         }
     }

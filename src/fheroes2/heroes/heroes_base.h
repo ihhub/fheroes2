@@ -55,7 +55,7 @@ enum PortraitType
 class HeroBase : public Skill::Primary, public MapPosition, public BitModes, public Control
 {
 public:
-    HeroBase( int type, int race );
+    HeroBase( const int type, const int race );
     HeroBase();
 
     enum
@@ -65,29 +65,29 @@ public:
         HEROES
     };
 
-    virtual const std::string & GetName( void ) const = 0;
-    virtual int GetColor( void ) const = 0;
-    int GetControl( void ) const override = 0;
-    virtual bool isValid( void ) const = 0;
+    virtual const std::string & GetName() const = 0;
+    virtual int GetColor() const = 0;
+    int GetControl() const override = 0;
+    virtual bool isValid() const = 0;
 
-    virtual const Army & GetArmy( void ) const = 0;
-    virtual Army & GetArmy( void ) = 0;
+    virtual const Army & GetArmy() const = 0;
+    virtual Army & GetArmy() = 0;
 
-    virtual u32 GetMaxSpellPoints( void ) const = 0;
+    virtual u32 GetMaxSpellPoints() const = 0;
 
     virtual int GetLevelSkill( int skill ) const = 0;
     virtual u32 GetSecondaryValues( int skill ) const = 0;
 
-    virtual void ActionAfterBattle( void ) = 0;
-    virtual void ActionPreBattle( void ) = 0;
+    virtual void ActionAfterBattle() = 0;
+    virtual void ActionPreBattle() = 0;
 
-    virtual const Castle * inCastle( void ) const = 0;
-    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const = 0;
+    virtual const Castle * inCastle() const = 0;
+    virtual void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const = 0;
 
-    virtual int GetType( void ) const = 0;
+    virtual int GetType() const = 0;
 
-    virtual bool isCaptain( void ) const;
-    virtual bool isHeroes( void ) const;
+    virtual bool isCaptain() const;
+    virtual bool isHeroes() const;
 
     int GetAttackModificator( std::string * = nullptr ) const;
     int GetDefenseModificator( std::string * = nullptr ) const;
@@ -97,38 +97,38 @@ public:
     int GetLuckModificator( std::string * = nullptr ) const;
     double GetMagicStrategicValue( const double armyStrength ) const;
 
-    u32 GetSpellPoints( void ) const;
-    bool HaveSpellPoints( const Spell & ) const;
-    bool CanCastSpell( const Spell &, std::string * = nullptr ) const;
-    bool CanTeachSpell( const Spell & ) const;
-    bool CanLearnSpell( const Spell & ) const;
-    bool CanTranscribeScroll( const Artifact & ) const;
-    void TranscribeScroll( const Artifact & );
-    void SpellCasted( const Spell & );
-    void SetSpellPoints( u32 );
+    uint32_t GetSpellPoints() const;
+    bool HaveSpellPoints( const Spell & spell ) const;
+    bool CanCastSpell( const Spell & spell, std::string * = nullptr ) const;
+    bool CanTeachSpell( const Spell & spell ) const;
+    bool CanLearnSpell( const Spell & spell ) const;
+    bool CanTranscribeScroll( const Artifact & art ) const;
+    void TranscribeScroll( const Artifact & art );
+    void SpellCasted( const Spell & spell );
+    void SetSpellPoints( const uint32_t points );
 
-    std::vector<Spell> GetSpells( int lvl = -1 ) const;
-    void EditSpellBook( void );
-    Spell OpenSpellBook( const SpellBook::Filter filter, bool canSelect, std::function<void( const std::string & )> * statusCallback ) const;
-    bool HaveSpellBook( void ) const;
-    bool HaveSpell( const Spell &, bool skip_bag = false ) const;
-    void AppendSpellToBook( const Spell &, bool without_wisdom = false );
-    void AppendSpellsToBook( const SpellStorage &, bool without_wisdom = false );
-    bool SpellBookActivate( void );
+    std::vector<Spell> GetSpells( const int lvl = -1 ) const;
+    void EditSpellBook();
+    Spell OpenSpellBook( const SpellBook::Filter filter, const bool canSelect, const std::function<void( const std::string & )> * statusCallback ) const;
+    bool HaveSpellBook() const;
+    bool HaveSpell( const Spell &, const bool skip_bag = false ) const;
+    void AppendSpellToBook( const Spell &, const bool without_wisdom = false );
+    void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
+    bool SpellBookActivate();
 
-    BagArtifacts & GetBagArtifacts( void );
-    const BagArtifacts & GetBagArtifacts( void ) const;
+    BagArtifacts & GetBagArtifacts();
+    const BagArtifacts & GetBagArtifacts() const;
     uint32_t artifactCount( const Artifact & art ) const;
     bool hasArtifact( const Artifact & art ) const;
 
-    void LoadDefaults( int type, int race );
+    void LoadDefaults( const int type, const int race );
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const HeroBase & );
     friend StreamBase & operator>>( StreamBase &, HeroBase & );
 
-    u32 magic_point;
-    u32 move_point;
+    uint32_t magic_point;
+    uint32_t move_point;
 
     SpellBook spell_book;
     BagArtifacts bag_artifacts;

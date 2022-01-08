@@ -2,14 +2,14 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 21:44+0800\n"
-"PO-Revision-Date: 2009-08-10 08:45+0000\n"
-"Last-Translator: Vojtěch Trefný <vojtech.trefny@gmail.com>\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
+"PO-Revision-Date: 2021-11-07 17:03+0100\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Generator: Poedit 3.0\n"
 
 msgid "Warrior"
 msgstr ""
@@ -77,31 +77,31 @@ msgstr ""
 "Legie\n"
 "%{monster}"
 
-msgid "army|Few"
-msgstr ""
-
-msgid "army|Horde"
-msgstr ""
-
-msgid "army|Lots"
+msgid "army|Several"
 msgstr ""
 
 msgid "army|Pack"
 msgstr ""
 
-msgid "army|Several"
+msgid "army|Lots"
 msgstr ""
 
-msgid "army|Legion"
-msgstr ""
-
-msgid "army|Swarm"
+msgid "army|Horde"
 msgstr ""
 
 msgid "army|Throng"
 msgstr ""
 
+msgid "army|Swarm"
+msgstr ""
+
 msgid "army|Zounds"
+msgstr ""
+
+msgid "army|Legion"
+msgstr ""
+
+msgid "army|Few"
 msgstr ""
 
 msgid "All %{race} troops +1"
@@ -132,6 +132,9 @@ msgid "Select %{name}"
 msgstr "Vybrat %{name}"
 
 msgid "Cannot move last troop"
+msgstr ""
+
+msgid "Set Count"
 msgstr ""
 
 msgid "%{name} half the enemy troops!"
@@ -193,6 +196,29 @@ msgstr "off"
 msgid "On"
 msgstr ""
 
+msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+
 msgid "The enemy has surrendered!"
 msgstr ""
 
@@ -229,6 +255,12 @@ msgstr ""
 msgid "Defender"
 msgstr "Obránce"
 
+msgid "As you reach for the %{name}, it mysteriously disappears."
+msgstr ""
+
+msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
+msgstr ""
+
 msgid "You have captured an enemy artifact!"
 msgstr ""
 
@@ -264,8 +296,9 @@ msgstr "Štěstí"
 msgid "Spell Points"
 msgstr ""
 
+#, fuzzy
 msgid "Hero's Options"
-msgstr ""
+msgstr "Nastavení systému"
 
 msgid "Cast Spell"
 msgstr "Seslat kouzlo"
@@ -319,7 +352,7 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
-msgid "View %{monster} info."
+msgid "View %{monster} info"
 msgstr ""
 
 #, fuzzy
@@ -337,19 +370,19 @@ msgstr[2] ""
 msgid "Attack %{monster}"
 msgstr ""
 
-msgid "Fly %{monster} here."
+msgid "Fly %{monster} here"
 msgstr ""
 
-msgid "Move %{monster} here."
+msgid "Move %{monster} here"
 msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
 
-msgid "Teleport Here"
+msgid "Teleport here"
 msgstr ""
 
-msgid "Invalid Teleport Destination"
+msgid "Invalid teleport destination"
 msgstr ""
 
 msgid "Cast %{spell} on %{monster}"
@@ -358,30 +391,60 @@ msgstr ""
 msgid "Cast %{spell}"
 msgstr ""
 
-msgid "Select Spell Target"
+msgid "Select spell target"
 msgstr ""
 
 #, fuzzy
-msgid "View Ballista Info"
+msgid "View Ballista info"
 msgstr "Zobrazit informace o %{name}."
 
 msgid "Ballista"
 msgstr ""
 
-msgid "Auto combat"
+msgid "Enable auto combat"
 msgstr ""
 
-msgid "Customize system options."
+msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
-#, fuzzy
+msgid "Auto Combat"
+msgstr ""
+
+msgid "Customize system options"
+msgstr ""
+
+msgid "Allows you to customize the combat screen."
+msgstr ""
+
+msgid "System Options"
+msgstr "Nastavení systému"
+
 msgid "Wait this unit"
 msgstr "Přeskočit tuto jednotku"
+
+msgid "Wait"
+msgstr ""
+
+msgid ""
+"Waits the current creature. The current creature delays its turn until after "
+"all other creatures have had their turn."
+msgstr ""
 
 msgid "Skip this unit"
 msgstr "Přeskočit tuto jednotku"
 
-msgid "View Opposing Hero"
+msgid "Skip"
+msgstr ""
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+
+msgid "View Hero's options"
+msgstr ""
+
+msgid "View opposing Hero"
 msgstr ""
 
 msgid "Hide logs"
@@ -393,10 +456,10 @@ msgstr ""
 msgid "%{color} casts a spell: %{spell}"
 msgstr ""
 
-msgid "%{name} skip the turn"
+msgid "%{name} skip their turn."
 msgstr ""
 
-msgid "%{name} wait their turn"
+msgid "%{name} wait their turn."
 msgstr ""
 
 msgid "%{attacker} do %{damage} damage."
@@ -472,10 +535,10 @@ msgstr ""
 msgid "The Archmagi dispel all good spells on your %{name}!"
 msgstr ""
 
-msgid "Bad luck descends on the %{attacker}"
+msgid "Bad luck descends on the %{attacker}."
 msgstr ""
 
-msgid "Good luck shines on the %{attacker}"
+msgid "Good luck shines on the %{attacker}."
 msgstr ""
 
 msgid "High morale enables the %{monster} to attack again."
@@ -488,7 +551,7 @@ msgstr ""
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} způsobila %{dmg} škod."
 
-msgid "The mirror image is created"
+msgid "The mirror image is created."
 msgstr ""
 
 msgid "The mirror image is destroyed!"
@@ -531,6 +594,40 @@ msgid ""
 "%{spell}."
 msgstr ""
 
+msgid "Human"
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr ""
+
+msgid "Set Attack Skill"
+msgstr ""
+
+msgid "Set Defense Skill"
+msgstr ""
+
+#, fuzzy
+msgid "Set Power Skill"
+msgstr "Síla kouzel"
+
+#, fuzzy
+msgid "Set Knowledge Skill"
+msgstr "Znalosti"
+
+#, fuzzy
+msgid "%{race1} %{name1}"
+msgstr "Zobrazit %{name}"
+
+msgid "vs"
+msgstr ""
+
+#, fuzzy
+msgid "%{race2} %{name2}"
+msgstr "Zobrazit %{name}"
+
 msgid "Monsters"
 msgstr ""
 
@@ -571,6 +668,9 @@ msgid "Dragon Alliance"
 msgstr ""
 
 msgid "Elven Alliance"
+msgstr ""
+
+msgid "Kraeger defeated"
 msgstr ""
 
 msgid "Wayward Son"
@@ -732,7 +832,7 @@ msgstr ""
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
-"City to win"
+"City to win."
 msgstr ""
 
 msgid ""
@@ -1009,30 +1109,48 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Thunder Mace"
-msgstr ""
-
-msgid "Minor Scroll"
-msgstr ""
-
-msgid "Dragon Sword"
-msgstr ""
-
-#, fuzzy
-msgid "Breastplate"
-msgstr "Tržiště"
-
-msgid "Fizbin of Misfortune"
-msgstr ""
-
-msgid "Mage's ring"
+msgid "Caster's Bracelet"
 msgstr ""
 
 #, fuzzy
 msgid "Defender Helm"
 msgstr "Obránce"
 
+#, fuzzy
+msgid "Breastplate"
+msgstr "Tržiště"
+
+msgid "Dragon Sword"
+msgstr ""
+
+msgid "Fizbin Medal"
+msgstr ""
+
+msgid "Foremost Scroll"
+msgstr ""
+
+msgid "Mage's Ring"
+msgstr ""
+
+msgid "Major Scroll"
+msgstr ""
+
+msgid "Minor Scroll"
+msgstr ""
+
+msgid "Nomad Boots"
+msgstr ""
+
 msgid "Power Axe"
+msgstr ""
+
+msgid "Stealth Shield"
+msgstr ""
+
+msgid "Thunder Mace"
+msgstr ""
+
+msgid "Traveler's Boots"
 msgstr ""
 
 msgid "Summon Earth"
@@ -1071,6 +1189,487 @@ msgstr "Není možné postavit %{name}"
 #, fuzzy
 msgid "Build %{name}."
 msgstr "Postavit %{name}"
+
+#, fuzzy
+msgid "Blackridge"
+msgstr "Most"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+msgid "Whiteshield"
+msgstr ""
+
+msgid "Woodhaven"
+msgstr ""
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Kovárna"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Morálka"
+
+msgid "Dragontooth"
+msgstr ""
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+msgid "Tundara"
+msgstr ""
+
+msgid "Vulcania"
+msgstr ""
+
+msgid "Baywatch"
+msgstr ""
+
+msgid "Fountainhead"
+msgstr ""
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+msgid "Sandcaster"
+msgstr ""
+
+msgid "Alamar"
+msgstr ""
+
+msgid "Burlock"
+msgstr ""
+
+msgid "Dragadune"
+msgstr ""
+
+msgid "Kalindra"
+msgstr ""
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Černá věž"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Nová hra"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "animace"
+
+msgid "Avalon"
+msgstr ""
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+msgid "Weed Patch"
+msgstr ""
+
+msgid "Brownston"
+msgstr ""
+
+msgid "Hilltop"
+msgstr ""
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Hodnocení"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+msgid "Sherman"
+msgstr ""
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Černá věž"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Černá věž"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+msgid "Lankershire"
+msgstr ""
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+msgid "Troy"
+msgstr ""
+
+msgid "Forder Oaks"
+msgstr ""
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+msgid "Willow"
+msgstr ""
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+msgid "Cannot recruit - guest to guard automove error."
+msgstr ""
+
+msgid "Cannot recruit - you already have a Hero in this town."
+msgstr ""
+
+msgid "Cannot recruit - you have too many Heroes."
+msgstr ""
+
+msgid "Cannot afford a Hero"
+msgstr ""
+
+msgid "There is no room in the garrison for this army."
+msgstr ""
+
+msgid "Fortifications"
+msgstr "Opevnění"
+
+msgid "Farm"
+msgstr "Farma"
+
+msgid "Thatched Hut"
+msgstr ""
+
+msgid "Archery Range"
+msgstr ""
+
+msgid "Upg. Archery Range"
+msgstr ""
+
+msgid "Blacksmith"
+msgstr "Kovárna"
+
+msgid "Upg. Blacksmith"
+msgstr "Rozšířit Kovárna"
+
+msgid "Armory"
+msgstr "Zbrojnice"
+
+msgid "Upg. Armory"
+msgstr "Rozšířit Zbrojnice"
+
+msgid "Jousting Arena"
+msgstr "Turnajové pole"
+
+msgid "Upg. Jousting Arena"
+msgstr ""
+
+msgid "Cathedral"
+msgstr "Katedrála"
+
+msgid "Upg. Cathedral"
+msgstr "Rozšířit Katedrála"
+
+msgid "Coliseum"
+msgstr "Koloseum"
+
+msgid "Garbage Heap"
+msgstr "Halda hnoje"
+
+msgid "Hut"
+msgstr ""
+
+msgid "Stick Hut"
+msgstr ""
+
+msgid "Upg. Stick Hut"
+msgstr ""
+
+msgid "Den"
+msgstr "Doupě"
+
+msgid "Adobe"
+msgstr ""
+
+msgid "Upg. Adobe"
+msgstr ""
+
+msgid "Bridge"
+msgstr "Most"
+
+msgid "Upg. Bridge"
+msgstr "Rozšířit Most"
+
+msgid "Pyramid"
+msgstr "Pyramida"
+
+msgid "Rainbow"
+msgstr "Duha"
+
+msgid "Crystal Garden"
+msgstr "Křišťálová zahrada"
+
+msgid "Treehouse"
+msgstr ""
+
+msgid "Cottage"
+msgstr ""
+
+msgid "Upg. Cottage"
+msgstr ""
+
+msgid "Stonehenge"
+msgstr "Stonehenge"
+
+msgid "Upg. Stonehenge"
+msgstr "Rozšířit Stonehenge"
+
+msgid "Fenced Meadow"
+msgstr ""
+
+msgid "Red Tower"
+msgstr "Červená věž"
+
+msgid "Dungeon"
+msgstr "Kobka"
+
+msgid "Waterfall"
+msgstr "Vodopád"
+
+msgid "Cave"
+msgstr "Jeskyně"
+
+msgid "Crypt"
+msgstr "Krypta"
+
+msgid "Nest"
+msgstr "Hnízdo"
+
+msgid "Maze"
+msgstr "Labyrint"
+
+msgid "Upg. Maze"
+msgstr ""
+
+msgid "Swamp"
+msgstr "Bažina"
+
+msgid "Green Tower"
+msgstr "Zelená věž"
+
+msgid "Black Tower"
+msgstr "Černá věž"
+
+msgid "Library"
+msgstr "Knihovna"
+
+msgid "Orchard"
+msgstr "Ovocný sad"
+
+msgid "Habitat"
+msgstr ""
+
+msgid "Pen"
+msgstr ""
+
+msgid "Foundry"
+msgstr "Slévárna"
+
+msgid "Upg. Foundry"
+msgstr "Rozšířit Slevárna"
+
+msgid "Cliff Nest"
+msgstr "Útes"
+
+msgid "Ivory Tower"
+msgstr ""
+
+msgid "Upg. Ivory Tower"
+msgstr ""
+
+msgid "Cloud Castle"
+msgstr ""
+
+msgid "Upg. Cloud Castle"
+msgstr ""
+
+msgid "Storm"
+msgstr "Bouře"
+
+msgid "Skull Pile"
+msgstr ""
+
+msgid "Excavation"
+msgstr ""
+
+msgid "Graveyard"
+msgstr "Hřbitov"
+
+msgid "Upg. Graveyard"
+msgstr "Rozšířit Hřbitov"
+
+msgid "Upg. Pyramid"
+msgstr "Rozšířit Pyramida"
+
+msgid "Mansion"
+msgstr "Zámek"
+
+msgid "Upg. Mansion"
+msgstr ""
+
+msgid "Mausoleum"
+msgstr "Mauzoleum"
+
+msgid "Upg. Mausoleum"
+msgstr "Rozšířit Mauzoleum"
+
+msgid "Laboratory"
+msgstr "Laboratoř"
+
+msgid "Shrine"
+msgstr "Svatyně"
+
+msgid ""
+"The Fortifications increase the toughness of the walls, increasing the "
+"number of turns it takes to knock them down."
+msgstr "Opevnění zvyšuje odolnost zdí - zvyšuje počet kol než budou zničeny."
+
+msgid "The Farm increases production of Peasants by %{count} per week."
+msgstr ""
+
+msgid ""
+"The Coliseum provides inspiring spectacles to defending troops, raising "
+"their morale by two during combat."
+msgstr ""
+
+msgid "The Garbage Heap increases production of Goblins by %{count} per week."
+msgstr ""
+
+msgid "The Rainbow increases the luck of the defending units by two."
+msgstr "Duha zvyšuje štěstí bránících jednotek o dvě."
+
+msgid ""
+"The Crystal Garden increases production of Sprites by %{count} per week."
+msgstr ""
+
+msgid "The Dungeon increases the income of the town by %{count} / day."
+msgstr ""
+
+msgid "The Waterfall increases production of Centaurs by %{count} per week."
+msgstr ""
+
+msgid ""
+"The Library increases the number of spells in the Guild by one for each "
+"level of the guild."
+msgstr ""
+
+msgid "The Orchard increases production of Halflings by %{count} per week."
+msgstr ""
+
+msgid "The Storm adds +2 to the power of spells of a defending spell caster."
+msgstr ""
+
+msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
 
 msgid "Thieves' Guild"
 msgstr "Cech zlodějů"
@@ -1117,203 +1716,11 @@ msgstr ""
 msgid "Mage Guild, Level 5"
 msgstr ""
 
-msgid "Crystal Garden"
-msgstr "Křišťálová zahrada"
-
-msgid "Farm"
-msgstr "Farma"
-
-msgid "Garbage Heap"
-msgstr "Halda hnoje"
-
-msgid "Orchard"
-msgstr "Ovocný sad"
-
-msgid "Skull Pile"
+msgid ""
+"The Shrine increases the necromancy skill of all your necromancers by 10 "
+"percent."
 msgstr ""
-
-msgid "Waterfall"
-msgstr "Vodopád"
-
-msgid "Coliseum"
-msgstr "Koloseum"
-
-msgid "Dungeon"
-msgstr "Kobka"
-
-msgid "Fortifications"
-msgstr "Opevnění"
-
-msgid "Library"
-msgstr "Knihovna"
-
-msgid "Rainbow"
-msgstr "Duha"
-
-msgid "Storm"
-msgstr "Bouře"
-
-msgid "Cave"
-msgstr "Jeskyně"
-
-msgid "Excavation"
-msgstr ""
-
-msgid "Habitat"
-msgstr ""
-
-msgid "Hut"
-msgstr ""
-
-msgid "Thatched Hut"
-msgstr ""
-
-msgid "Treehouse"
-msgstr ""
-
-msgid "Archery Range"
-msgstr ""
-
-msgid "Cottage"
-msgstr ""
-
-msgid "Crypt"
-msgstr "Krypta"
-
-msgid "Graveyard"
-msgstr "Hřbitov"
-
-msgid "Pen"
-msgstr ""
-
-msgid "Stick Hut"
-msgstr ""
-
-msgid "Blacksmith"
-msgstr "Kovárna"
-
-msgid "Den"
-msgstr "Doupě"
-
-msgid "Foundry"
-msgstr "Slévárna"
-
-msgid "Nest"
-msgstr "Hnízdo"
-
-msgid "Pyramid"
-msgstr "Pyramida"
-
-msgid "Adobe"
-msgstr ""
-
-msgid "Armory"
-msgstr "Zbrojnice"
-
-msgid "Cliff Nest"
-msgstr "Útes"
-
-msgid "Mansion"
-msgstr "Zámek"
-
-msgid "Maze"
-msgstr "Labyrint"
-
-msgid "Stonehenge"
-msgstr "Stonehenge"
-
-msgid "Bridge"
-msgstr "Most"
-
-msgid "Fenced Meadow"
-msgstr ""
-
-msgid "Ivory Tower"
-msgstr ""
-
-msgid "Jousting Arena"
-msgstr "Turnajové pole"
-
-msgid "Mausoleum"
-msgstr "Mauzoleum"
-
-msgid "Swamp"
-msgstr "Bažina"
-
-msgid "Cathedral"
-msgstr "Katedrála"
-
-msgid "Cloud Castle"
-msgstr ""
-
-msgid "Green Tower"
-msgstr "Zelená věž"
-
-msgid "Laboratory"
-msgstr "Laboratoř"
-
-msgid "Red Tower"
-msgstr "Červená věž"
-
-msgid "Upg. Archery Range"
-msgstr ""
-
-msgid "Upg. Stick Hut"
-msgstr ""
-
-msgid "Upg. Cottage"
-msgstr ""
-
-msgid "Upg. Graveyard"
-msgstr "Rozšířit Hřbitov"
-
-msgid "Upg. Blacksmith"
-msgstr "Rozšířit Kovárna"
-
-msgid "Upg. Foundry"
-msgstr "Rozšířit Slevárna"
-
-msgid "Upg. Pyramid"
-msgstr "Rozšířit Pyramida"
-
-msgid "Upg. Armory"
-msgstr "Rozšířit Zbrojnice"
-
-msgid "Upg. Adobe"
-msgstr ""
-
-msgid "Upg. Stonehenge"
-msgstr "Rozšířit Stonehenge"
-
-msgid "Upg. Maze"
-msgstr ""
-
-msgid "Upg. Mansion"
-msgstr ""
-
-msgid "Upg. Jousting Arena"
-msgstr ""
-
-msgid "Upg. Bridge"
-msgstr "Rozšířit Most"
-
-msgid "Upg. Ivory Tower"
-msgstr ""
-
-msgid "Upg. Mausoleum"
-msgstr "Rozšířit Mauzoleum"
-
-msgid "Upg. Cathedral"
-msgstr "Rozšířit Katedrála"
-
-msgid "Upg. Cloud Castle"
-msgstr ""
-
-msgid "Black Tower"
-msgstr "Černá věž"
-
-msgid "Shrine"
-msgstr "Svatyně"
+"Svatyně zvyšuje úroveň nekromacie o 10 procent u všech vašich nekromatnů."
 
 #, fuzzy
 msgid ""
@@ -1378,89 +1785,49 @@ msgid ""
 "points."
 msgstr ""
 
-msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
-
-msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
-
-msgid ""
-"The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
-
-msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
-
-msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
-
-msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
-
-msgid ""
-"The Fortifications increase the toughness of the walls, increasing the "
-"number of turns it takes to knock them down."
-msgstr "Opevnění zvyšuje odolnost zdí - zvyšuje počet kol než budou zničeny."
-
-msgid ""
-"The Coliseum provides inspiring spectacles to defending troops, raising "
-"their morale by two during combat."
-msgstr ""
-
-msgid "The Rainbow increases the luck of the defending units by two."
-msgstr "Duha zvyšuje štěstí bránících jednotek o dvě."
-
-msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr ""
-
-msgid ""
-"The Library increases the number of spells in the Guild by one for each "
-"level of the guild."
-msgstr ""
-
-msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
-
-msgid ""
-"The Shrine increases the necromancy skill of all your necromancers by 10 "
-"percent."
-msgstr ""
-"Svatyně zvyšuje úroveň nekromacie o 10 procent u všech vašich nekromatnů."
-
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-
-msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
-
-msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
-
-msgid "Cannot afford a Hero"
-msgstr ""
-
-msgid "There is no room in the garrison for this army."
-msgstr ""
-
 msgid "Recruit %{name}"
 msgstr ""
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr ""
 
+msgid ""
+"You must purchase a spell book to use the mage guild, but you currently have "
+"no room for a spell book. Try giving one of your artifacts to another hero."
+msgstr ""
+
 #, fuzzy
 msgid "Income"
 msgstr "Příjem:"
 
-msgid "Army is full"
-msgstr ""
+#, fuzzy
+msgid "Exit"
+msgstr "Opustit město"
 
-msgid "Join Error"
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Přeskočit tuto jednotku"
+
+#, fuzzy
+msgid "Click to show next town."
+msgstr "Zobrazit následující město"
+
+msgid "Show next town"
+msgstr "Zobrazit následující město"
+
+#, fuzzy
+msgid "Click to show previous town."
+msgstr "Zobrazit předchozí město"
+
+msgid "Show previous town"
+msgstr "Zobrazit předchozí město"
+
+msgid "Army joining"
 msgstr ""
 
 msgid ""
-"You must purchase a spell book to use the mage guild, but you currently have "
-"no room for a spell book. Try giving one of your artifacts to another hero."
+"Unable to merge two armies together. Rearrange monsters manually before "
+"moving the hero to the garrison."
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
@@ -1480,12 +1847,6 @@ msgstr "Opustit město"
 #, fuzzy
 msgid "Show Income"
 msgstr "Příjem:"
-
-msgid "Show previous town"
-msgstr "Zobrazit předchozí město"
-
-msgid "Show next town"
-msgstr "Zobrazit následující město"
 
 #, fuzzy
 msgid "Swap Heroes"
@@ -1573,7 +1934,7 @@ msgstr ""
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damage"
+msgid "Damg"
 msgstr ""
 
 msgid "HP"
@@ -1626,6 +1987,9 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
@@ -1638,6 +2002,9 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
+msgstr ""
+
+msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -1682,6 +2049,9 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
+msgid "Total: "
+msgstr ""
+
 msgid "No room in"
 msgstr ""
 
@@ -1692,6 +2062,9 @@ msgid "Build a new ship:"
 msgstr ""
 
 msgid "Resource cost:"
+msgstr ""
+
+msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
@@ -1749,6 +2122,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr ""
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "animace"
@@ -1776,7 +2152,9 @@ msgid "Rating"
 msgstr "Hodnocení"
 
 msgid "Map Size"
-msgstr "Velikost mapy"
+msgstr ""
+"Velikost\n"
+"mapy"
 
 msgid "Opponents"
 msgstr "Protivníci"
@@ -1794,7 +2172,7 @@ msgid ""
 "Conditions"
 msgstr ""
 
-msgid "score: "
+msgid "Score: "
 msgstr ""
 
 msgid "First select recipients!"
@@ -1861,11 +2239,12 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
-msgid "max"
+msgid "Max"
 msgstr ""
 
-msgid "min"
-msgstr ""
+#, fuzzy
+msgid "Min"
+msgstr "Zámek"
 
 msgid "Qty to trade"
 msgstr ""
@@ -1910,6 +2289,12 @@ msgstr ""
 msgid "(not visited)"
 msgstr ""
 
+msgid "%{color} Barrier"
+msgstr ""
+
+msgid "%{color} Tent"
+msgstr ""
+
 msgid "Road"
 msgstr ""
 
@@ -1937,6 +2322,9 @@ msgstr ""
 msgid "Move Points"
 msgstr ""
 
+msgid "Cost per troop:"
+msgstr ""
+
 msgid "Available: %{count}"
 msgstr ""
 
@@ -1952,16 +2340,66 @@ msgstr ""
 msgid "Fast separation into slots:"
 msgstr ""
 
+msgid "Map: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Location: "
+msgstr ""
+
 msgid "File to Save:"
 msgstr ""
 
 msgid "File to Load:"
 msgstr ""
 
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "Click to load a previously saved game."
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+#, fuzzy
+msgid "Select Monster:"
+msgstr "Vybrat %{name}"
+
+#, fuzzy
+msgid "Select Hero:"
+msgstr "Nejlepší hrdina:"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Seslat kouzlo"
+
+msgid "Select Skill:"
+msgstr ""
+
+msgid "Location: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Velikost mapy"
+
+msgid "The Succession Wars"
+msgstr ""
+
+msgid "The Price of Loyalty"
 msgstr ""
 
 #, fuzzy
@@ -1981,7 +2419,7 @@ msgid "View only maps of size small (36 x 36)."
 msgstr "Zobrazí pouze mapy velikosti \"malá\" (36x36)."
 
 msgid "Medium Maps"
-msgstr "Střední mapy."
+msgstr "Střední mapy"
 
 #, fuzzy
 msgid "View only maps of size medium (72 x 72)."
@@ -2030,6 +2468,15 @@ msgstr ""
 
 msgid "The name of the currently selected map."
 msgstr ""
+
+msgid ""
+"Indicates whether the map is made for The Succession Wars or The Price of "
+"Loyalty version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Velikost mapy"
 
 msgid "Selected Map Difficulty"
 msgstr ""
@@ -2200,13 +2647,6 @@ msgstr ""
 msgid "Toggle instant battle mode."
 msgstr ""
 
-#, fuzzy
-msgid "Exit this menu."
-msgstr "Přeskočit tuto jednotku"
-
-msgid "OK"
-msgstr "OK"
-
 msgid "Att."
 msgstr ""
 
@@ -2219,9 +2659,6 @@ msgstr ""
 #, fuzzy
 msgid "Knowl"
 msgstr "Znalosti"
-
-msgid "Human"
-msgstr ""
 
 msgid "1st"
 msgstr ""
@@ -2333,6 +2770,9 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
+msgid "and many other contributors!"
+msgstr ""
+
 msgid "Original project before 0.7"
 msgstr ""
 
@@ -2345,10 +2785,77 @@ msgstr ""
 msgid "Need help with the game?"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
+#, fuzzy
+msgid "Original Heroes of Might and Magic II team"
+msgstr "Ukončí Heroes of Might and Magic a vrátí se do operačního systému."
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid "Vocalists"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+#, fuzzy
+msgid "Artists"
+msgstr "Artefakt"
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+#, fuzzy
+msgid "Writing"
+msgstr "Hodnocení"
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+#, fuzzy
+msgid "Scenarios"
+msgstr "Scénář"
+
 msgid "Unknown Hero"
 msgstr ""
 
 msgid "Your Name"
+msgstr ""
+
+msgid "Campaign"
+msgstr ""
+
+msgid "View High Scores for Campaigns."
 msgstr ""
 
 msgid ""
@@ -2461,7 +2968,10 @@ msgstr "Nejlepší výsledky"
 msgid "View the high scores screen."
 msgstr ""
 
-msgid "Game settings."
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
+msgid "Game Settings"
 msgstr ""
 
 msgid ""
@@ -2538,6 +3048,9 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
@@ -2552,6 +3065,10 @@ msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
 msgstr ""
+
+#, fuzzy
+msgid "Ultimate Artifact"
+msgstr "Artefakt"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -2643,7 +3160,19 @@ msgstr ""
 msgid "Do you wish to continue the game?"
 msgstr ""
 
-msgid "No maps available!"
+msgid "Scenario:"
+msgstr ""
+
+msgid "Game Difficulty:"
+msgstr ""
+
+msgid "Opponents:"
+msgstr ""
+
+msgid "Class:"
+msgstr ""
+
+msgid "Rating %{rating}%"
 msgstr ""
 
 msgid "Click here to select which scenario to play."
@@ -2675,19 +3204,7 @@ msgstr ""
 msgid "Click to return to the main menu."
 msgstr ""
 
-msgid "Scenario:"
-msgstr ""
-
-msgid "Game Difficulty:"
-msgstr ""
-
-msgid "Opponents:"
-msgstr ""
-
-msgid "Class:"
-msgstr ""
-
-msgid "Rating %{rating}%"
+msgid "No maps available!"
 msgstr ""
 
 msgid "Astrologers proclaim Month of the %{name}."
@@ -2782,9 +3299,6 @@ msgstr ""
 
 msgid "Bring up the system options menu, alloving you to customize your game."
 msgstr ""
-
-msgid "System Options"
-msgstr "Nastavení systému"
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -2896,7 +3410,16 @@ msgstr ""
 msgid "Russian"
 msgstr ""
 
+msgid "Italian"
+msgstr ""
+
 msgid ", FPS: "
+msgstr ""
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
 msgstr ""
 
 msgid "Ambrose"
@@ -2983,9 +3506,6 @@ msgstr ""
 msgid "Agar"
 msgstr ""
 
-msgid "Alamar"
-msgstr ""
-
 msgid "Arie"
 msgstr ""
 
@@ -3014,9 +3534,6 @@ msgid "Flint"
 msgstr ""
 
 msgid "Halon"
-msgstr ""
-
-msgid "Kalindra"
 msgstr ""
 
 msgid "Mandigal"
@@ -3109,16 +3626,7 @@ msgstr ""
 msgid "Martine"
 msgstr ""
 
-msgid "%{object} robber"
-msgstr ""
-
-msgid "%{object} raided"
-msgstr ""
-
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
-
-msgid "The three Anduran artifacts magically combine into one."
 msgstr ""
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
@@ -3205,7 +3713,7 @@ msgstr ""
 msgid "Treasure"
 msgstr "Poklady"
 
-msgid "Searching through the tattered clothing, you find %{artifact}."
+msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find nothing."
@@ -3344,8 +3852,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
@@ -3357,11 +3865,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell."
-msgstr ""
-
-msgid "Sign"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
 
 msgid ""
@@ -3419,8 +3924,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Zombies you spend several hours searching the graves and "
-"find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
@@ -3432,8 +3937,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Upon defeating the Ghosts you spend several hours sifting through the debris "
-"and find nothing. Such a despicable act reduces your army's morale."
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3443,11 +3948,6 @@ msgstr ""
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the ship?"
-msgstr ""
-
-msgid ""
-"Upon defeating the Skeletons you spend several hours sifting through the "
-"debris and find nothing. Such a despicable act reduces your army's morale."
 msgstr ""
 
 msgid ""
@@ -3522,6 +4022,9 @@ msgstr ""
 msgid "Do you wish to buy this artifact?"
 msgstr ""
 
+msgid "Artifact"
+msgstr "Artefakt"
+
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
 "leprechaun stamps his foot and ignores you."
@@ -3544,6 +4047,11 @@ msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
+msgstr ""
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells "
+"you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
 msgid ""
@@ -3864,6 +4372,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
+
+msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
 "you maps of the sea he made in his younger days for 1,000 gold. Do you wish "
 "to buy the maps?"
@@ -3948,13 +4461,13 @@ msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and find the %{art} in the back of the cave."
+"battle, you slay the monster and receive %{exp} experience points and "
+"%{count} gold."
 msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and receive %{exp} experience points and "
-"%{count} gold."
+"battle, you slay the monster and find the %{art} in the back of the cave."
 msgstr ""
 
 msgid ""
@@ -3984,7 +4497,21 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
-msgstr ""
+msgid_plural ""
+"For %{gold} gold, the alchemist will remove them for you. Do you pay?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"the cursed artifact and throws it into his magical cauldron."
+msgid_plural ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"all cursed artifacts and throws them into his magical cauldron."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid ""
 "You hear a voice from behind the locked door, \"You don't have enough gold "
@@ -3993,20 +4520,6 @@ msgstr ""
 
 msgid ""
 "You hear a voice from high above in the tower, \"Go away! I can't help you!\""
-msgstr ""
-
-msgid ""
-"The head groom approaches you and speaks, \"You already have a fine horse, "
-"and have no inexperienced cavalry which might make use of our trained war "
-"horses.\""
-msgstr ""
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, his "
-"endurance will wane with a lot of heavy riding, and you must return for a "
-"fresh mount in a week. We also have many fine war horses which could benefit "
-"mounted soldiers, but you have none we can help.\""
 msgstr ""
 
 msgid ""
@@ -4021,6 +4534,20 @@ msgid ""
 "war horse. \"This steed will help speed you in your travels. Alas, he will "
 "grow tired in a week. You must also let me give better horses to your "
 "mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
 msgstr ""
 
 msgid "The Arena guards turn you away."
@@ -4106,9 +4633,19 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
+msgid "Spell book is not present."
+msgstr ""
+
+#, fuzzy
+msgid "The spell is not found."
+msgstr "Toto kouzlo nebude na nikoho učinkovat!"
+
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
+msgstr ""
+
+msgid "Not enough move points."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -4121,10 +4658,6 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
-
-#, fuzzy
-msgid "View Stats"
-msgstr "Hrdinové"
 
 msgid "View Experience Info"
 msgstr ""
@@ -4298,10 +4831,10 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr ""
 
-msgid "skill|Advanced"
+msgid "skill|Basic"
 msgstr ""
 
-msgid "skill|Basic"
+msgid "skill|Advanced"
 msgstr ""
 
 #, fuzzy
@@ -4596,13 +5129,53 @@ msgstr ""
 msgid "Purple"
 msgstr ""
 
-msgid "Aqua"
+msgid "barrier|Aqua"
 msgstr ""
 
-msgid "Brown"
+msgid "barrier|Blue"
 msgstr ""
 
-msgid "Gold"
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+msgid "barrier|Orange"
+msgstr ""
+
+msgid "barrier|Purple"
+msgstr ""
+
+msgid "barrier|Red"
+msgstr ""
+
+msgid "tent|Aqua"
+msgstr ""
+
+msgid "tent|Blue"
+msgstr ""
+
+#, fuzzy
+msgid "tent|Brown"
+msgstr "animace"
+
+msgid "tent|Gold"
+msgstr ""
+
+msgid "tent|Green"
+msgstr ""
+
+msgid "tent|Orange"
+msgstr ""
+
+msgid "tent|Purple"
+msgstr ""
+
+msgid "tent|Red"
 msgstr ""
 
 #, fuzzy
@@ -4641,10 +5214,6 @@ msgstr "Hrad"
 
 msgid "View Towns and Castles."
 msgstr ""
-
-#, fuzzy
-msgid "Exit"
-msgstr "Opustit město"
 
 msgid "luck|Cursed"
 msgstr ""
@@ -4733,6 +5302,12 @@ msgid "Necromancer"
 msgstr ""
 
 msgid "Multi"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "race|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -4837,23 +5412,8 @@ msgstr ""
 msgid "week|Condor"
 msgstr ""
 
-msgid "Beach"
-msgstr "Pláž"
-
 msgid "Desert"
 msgstr "Poušť"
-
-msgid "Dirt"
-msgstr ""
-
-msgid "Grass"
-msgstr "Tráva"
-
-msgid "Lava"
-msgstr "Láva"
-
-msgid "Ocean"
-msgstr ""
 
 msgid "Snow"
 msgstr "Sníh"
@@ -4861,19 +5421,34 @@ msgstr "Sníh"
 msgid "Wasteland"
 msgstr "Pustina"
 
-msgid "maps|Custom Size"
+msgid "Beach"
+msgstr "Pláž"
+
+msgid "Lava"
+msgstr "Láva"
+
+msgid "Dirt"
 msgstr ""
 
-msgid "maps|Extra Large"
+msgid "Grass"
+msgstr "Tráva"
+
+msgid "Ocean"
 msgstr ""
 
-msgid "maps|Large"
+msgid "maps|Small"
 msgstr ""
 
 msgid "maps|Medium"
 msgstr ""
 
-msgid "maps|Small"
+msgid "maps|Large"
+msgstr ""
+
+msgid "maps|Extra Large"
+msgstr ""
+
+msgid "maps|Custom Size"
 msgstr ""
 
 msgid "Ore Mine"
@@ -4892,6 +5467,21 @@ msgid "Gold Mine"
 msgstr ""
 
 msgid "Mine"
+msgstr ""
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr ""
+
+msgid "See Rock City."
+msgstr ""
+
+msgid "This space for rent."
+msgstr ""
+
+msgid "No object"
 msgstr ""
 
 msgid "Alchemist Lab"
@@ -4993,13 +5583,13 @@ msgstr ""
 msgid "Troll Bridge"
 msgstr ""
 
-msgid "Witch Hut"
+msgid "Witch's Hut"
 msgstr ""
 
 msgid "Xanadu"
 msgstr ""
 
-msgid "Magellan Maps"
+msgid "Magellan's Maps"
 msgstr ""
 
 msgid "Derelict Ship"
@@ -5036,6 +5626,9 @@ msgid "Stone Liths"
 msgstr ""
 
 msgid "Magic Well"
+msgstr ""
+
+msgid "Sign"
 msgstr ""
 
 msgid "Nothing Special"
@@ -5122,13 +5715,38 @@ msgstr ""
 msgid "Whirlpool"
 msgstr ""
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "Boat"
 msgstr ""
 
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Artefakt"
+
+msgid "Random Resource"
+msgstr ""
+
+msgid "Random Monster - weak"
+msgstr ""
+
+msgid "Random Monster - medium"
+msgstr ""
+
+msgid "Random Monster - strong"
+msgstr ""
+
+msgid "Random Monster - very strong"
+msgstr ""
+
 msgid "Standing Stones"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Random Monster"
+msgstr ""
+
+msgid "Random Ultimate Artifact"
 msgstr ""
 
 msgid "Idol"
@@ -5163,6 +5781,15 @@ msgid_plural "Magic Gardens"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgid "Random Artifact - Treasure"
+msgstr ""
+
+msgid "Random Artifact - Minor"
+msgstr ""
+
+msgid "Random Artifact - Major"
+msgstr ""
 
 msgid "Jail"
 msgstr ""
@@ -5612,9 +6239,6 @@ msgstr ""
 msgid "Water Elementals"
 msgstr ""
 
-msgid "Random Monster"
-msgstr ""
-
 msgid "Random Monsters"
 msgstr ""
 
@@ -5657,7 +6281,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -5679,27 +6302,21 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% damage from Elemental spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -5742,7 +6359,6 @@ msgstr ""
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -5756,26 +6372,25 @@ msgstr ""
 msgid "No Morale"
 msgstr "Morálka"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
 msgid "Lightning"
 msgstr ""
 
-#, c-format
 msgid "% damage from "
+msgstr ""
+
+msgid "The three Anduran artifacts magically combine into one."
 msgstr ""
 
 msgid "The %{name} increases your knowledge by %{count}."
@@ -5851,6 +6466,9 @@ msgid "Medal of Honor"
 msgstr ""
 
 msgid "Medal of Distinction"
+msgstr ""
+
+msgid "Fizbin of Misfortune"
 msgstr ""
 
 msgid "The %{name} greatly decreases your morale by %{count}."
@@ -6472,6 +7090,10 @@ msgid ""
 " Cost in spell points: %{sp}"
 msgstr ""
 
+#, fuzzy
+msgid "Move points: %{mp}"
+msgstr "Zobrazit %{name}"
+
 msgid "Transcribe Spell Scroll"
 msgstr ""
 
@@ -6493,10 +7115,7 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
-msgid "Crystal"
-msgstr ""
-
-msgid "Gems"
+msgid "Wood"
 msgstr ""
 
 msgid "Mercury"
@@ -6508,7 +7127,13 @@ msgstr ""
 msgid "Sulfur"
 msgstr ""
 
-msgid "Wood"
+msgid "Crystal"
+msgstr ""
+
+msgid "Gems"
+msgstr ""
+
+msgid "Gold"
 msgstr ""
 
 msgid ""
@@ -6750,12 +7375,12 @@ msgstr ""
 msgid "Death Ripple"
 msgstr ""
 
+msgid "Death Wave"
+msgstr ""
+
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
-msgstr ""
-
-msgid "Death Wave"
 msgstr ""
 
 msgid "Dragon Slayer"
@@ -6934,6 +7559,15 @@ msgstr ""
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
+#, fuzzy
+msgid "Petrification"
+msgstr "Opevnění"
+
+msgid ""
+"Turns the affected creature into stone.  A petrified creature receives half "
+"damage from a direct attack."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr ""
 
@@ -6962,6 +7596,29 @@ msgstr "Seslat kouzlo"
 #, fuzzy
 msgid "View %{spell}"
 msgstr "Zobrazit %{name}"
+
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "%{spell} způsobil %{value} škod."
+
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr ""
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
 
 msgid "game: always confirm for rewrite savefile"
 msgstr ""
@@ -7028,12 +7685,6 @@ msgstr ""
 msgid "heroes: in Arena can choose any of primary skills"
 msgstr ""
 
-msgid "unions: allow meeting heroes"
-msgstr ""
-
-msgid "unions: allow castle visiting"
-msgstr ""
-
 msgid "battle: show army order"
 msgstr ""
 
@@ -7047,9 +7698,6 @@ msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: show system info"
-msgstr ""
-
-msgid "game: autosave on"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"
@@ -7130,3 +7778,7 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "View Stats"
+#~ msgstr "Hrdinové"

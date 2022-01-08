@@ -298,9 +298,9 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
-        Position pos1, pos2;
+        Position pos2;
         const s32 head = b->GetHeadIndex();
-        pos1 = Position::GetPositionWhenMoved( *b, dst );
+        Position pos1 = Position::GetPositionWhenMoved( *b, dst );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 )

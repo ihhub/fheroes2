@@ -26,6 +26,13 @@
 #include "direction.h"
 #include "mp2.h"
 #include "objdsrt.h"
+#include "tools.h"
+
+namespace
+{
+    const std::bitset<256> objDsrtShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 46, 47, 50, 52, 54, 55, 56, 57, 58, 59, 60, 71, 75, 77, 80, 86, 103, 115, 118 } );
+}
 
 int ObjDsrt::GetPassable( const uint8_t index )
 {
@@ -48,8 +55,7 @@ bool ObjDsrt::isAction( u32 index )
 
 bool ObjDsrt::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 46, 47, 50, 52, 54, 55, 56, 57, 58, 59, 60, 71, 75, 77, 80, 86, 103, 115, 118 };
-    return shadows.count( index ) > 0;
+    return objDsrtShadowBitset[index];
 }
 
 int ObjDsrt::GetActionObject( u32 index )

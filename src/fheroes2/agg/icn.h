@@ -955,6 +955,12 @@ namespace ICN
         NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE,
 
         MAP_TYPE_ICON,
+        BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
+
+        GOOD_ARMY_BUTTON,
+        GOOD_MARKET_BUTTON,
+        EVIL_ARMY_BUTTON,
+        EVIL_MARKET_BUTTON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

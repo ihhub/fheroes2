@@ -42,6 +42,7 @@
 #include "logging.h"
 #include "race.h"
 #include "settings.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -169,6 +170,14 @@ Battle::Tower * Battle::Arena::GetTower( int type )
         break;
     }
     return nullptr;
+}
+
+bool Battle::Arena::isAnyTowerPresent()
+{
+    assert( arena != nullptr );
+
+    return ( arena->towers[0] != nullptr && arena->towers[0]->isValid() ) || ( arena->towers[1] != nullptr && arena->towers[1]->isValid() )
+           || ( arena->towers[2] != nullptr && arena->towers[2]->isValid() );
 }
 
 Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
@@ -672,6 +681,34 @@ Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
     return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
+int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
+{
+    const Position dstPos = Position::GetReachable( currentUnit, dst );
+
+    if ( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) ) {
+        // Destination cell is already reachable
+        return dstPos.GetHead()->GetIndex();
+    }
+
+    const Indexes path = _pathfinder.buildPath( dst );
+
+    // Destination cell is unreachable in principle according to the ArenaPathfinder
+    if ( path.empty() ) {
+        return -1;
+    }
+
+    // Search for the reachable cell nearest to the end of the path
+    for ( auto it = path.crbegin(); it != path.crend(); ++it ) {
+        const Position pos = Position::GetReachable( currentUnit, *it );
+
+        if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
+            return pos.GetHead()->GetIndex();
+        }
+    }
+
+    return -1;
+}
+
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
@@ -1115,11 +1152,8 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
-    u32 count = spell.ExtraValue() * hero->GetPower();
-    uint32_t acount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
-    if ( acount )
-        count *= acount * 2;
 
+    const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
     elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
     if ( elem ) {

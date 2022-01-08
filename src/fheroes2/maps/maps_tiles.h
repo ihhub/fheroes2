@@ -146,8 +146,10 @@ namespace Maps
 
         bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
-        bool validateWaterRules( bool fromWater ) const;
-        bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
+        // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
+        bool isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const;
+        // Checks whether it is possible to exit this tile in the specified direction
+        bool isPassableTo( const int direction ) const;
         bool isRoad() const;
         bool isStream( void ) const;
         bool isShadow() const;
@@ -303,7 +305,9 @@ namespace Maps
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
         static void UpdateAbandoneMineSprite( Tiles & tile );
-        static void FixedPreload( Tiles & tile );
+
+        // Some tiles have incorrect object type. This is due to original Editor issues.
+        static void fixTileObjectType( Tiles & tile );
 
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 

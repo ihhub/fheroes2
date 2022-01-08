@@ -43,7 +43,7 @@ std::string StringTrim( std::string str )
 
     // left
     iter = str.begin();
-    while ( iter != str.end() && std::isspace( *iter ) )
+    while ( iter != str.end() && std::isspace( static_cast<unsigned char>( *iter ) ) )
         ++iter;
     if ( iter != str.begin() )
         str.erase( str.begin(), iter );
@@ -53,7 +53,7 @@ std::string StringTrim( std::string str )
 
     // right
     iter = str.end() - 1;
-    while ( iter != str.begin() && std::isspace( *iter ) )
+    while ( iter != str.begin() && std::isspace( static_cast<unsigned char>( *iter ) ) )
         --iter;
     if ( iter != str.end() - 1 )
         str.erase( iter + 1, str.end() );
@@ -64,7 +64,7 @@ std::string StringTrim( std::string str )
 /* convert to lower case */
 std::string StringLower( std::string str )
 {
-    std::transform( str.begin(), str.end(), str.begin(), ::tolower );
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
     return str;
 }
 
@@ -104,19 +104,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( std::all_of( str.begin(), str.end(), []( const char c ) { return std::isdigit( c ); } ) ) {
+    if ( std::all_of( str.begin(), str.end(), []( const unsigned char c ) { return std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && std::all_of( str.begin() + 1, str.end(), []( const char c ) { return std::isdigit( c ); } ) ) {
+              && std::all_of( str.begin() + 1, str.end(), []( const unsigned char c ) { return std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && std::all_of( str.begin() + 2, str.end(), []( const char c ) { return std::isxdigit( c ); } ) ) {
+             && std::all_of( str.begin() + 2, str.end(), []( const unsigned char c ) { return std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -163,22 +163,22 @@ void StringReplace( std::string & dst, const char * pred, int value )
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-std::list<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
 {
-    std::list<std::string> list;
+    std::vector<std::string> vec;
     size_t pos1 = 0;
     size_t pos2 = std::string::npos;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
-        list.push_back( str.substr( pos1, pos2 - pos1 ) );
+        vec.push_back( str.substr( pos1, pos2 - pos1 ) );
         pos1 = pos2 + sep.size();
     }
 
     // tail
     if ( pos1 < str.size() )
-        list.push_back( str.substr( pos1, str.size() - pos1 ) );
+        vec.push_back( str.substr( pos1, str.size() - pos1 ) );
 
-    return list;
+    return vec;
 }
 
 std::string InsertString( const std::string & src, size_t pos, const char * c )
@@ -312,10 +312,9 @@ namespace fheroes2
     std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step )
     {
         std::vector<Point> res;
-        Point pt1, pt2;
 
-        pt1 = from;
-        pt2 = Point( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
+        Point pt1( from );
+        Point pt2( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
         const std::vector<Point> & pts1 = GetLinePoints( pt1, pt2, step );
         res.insert( res.end(), pts1.begin(), pts1.end() );
 

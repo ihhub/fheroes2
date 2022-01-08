@@ -203,6 +203,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
 
     if ( townIcnId != -1 ) {
+        // We shouldn't Blit this image. This is a background image so a normal Copy is enough.
         const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
         fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
     }
@@ -214,43 +215,39 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
 
     // Bay animation
     if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
-        fheroes2::Sprite sprite50;
-        fheroes2::Sprite sprite51;
+        int bayIcnId = 0;
+        const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
         switch ( castle.GetRace() ) {
         case Race::KNGT:
-            sprite50 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 1 + animationIndex % 5 );
+            bayIcnId = ICN::TWNKEXT0;
             break;
         case Race::BARB:
-            sprite50 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 1 + animationIndex % 5 );
+            bayIcnId = ICN::TWNBEXT0;
             break;
         case Race::SORC:
-            sprite50 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 1 + animationIndex % 5 );
+            bayIcnId = ICN::TWNSEXT0;
             break;
         case Race::NECR:
-            sprite50 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 1 + animationIndex % 5 );
+            bayIcnId = ICN::TWNNEXT0;
             break;
         case Race::WRLK:
-            sprite50 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 1 + animationIndex % 5 );
+            bayIcnId = ICN::TWNWEXT0;
             break;
         case Race::WZRD:
-            sprite50 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 0 );
-            sprite51 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 1 + animationIndex % 5 );
+            bayIcnId = ICN::TWNZEXT0;
             break;
         default:
+            // Did you add a new race? Add the logic for it!
+            assert( 0 );
             break;
         }
 
-        if ( !sprite50.empty() )
-            CastleDialog::RedrawBuildingSpriteToArea( sprite50, dst_pt.x + sprite50.x(), dst_pt.y + sprite50.y(), max );
+        const fheroes2::Sprite & bayBaseSprite = fheroes2::AGG::GetICN( bayIcnId, 0 );
+        const fheroes2::Sprite & bayExtraSprite = fheroes2::AGG::GetICN( bayIcnId, bayExtraIndex );
 
-        if ( !sprite51.empty() )
-            CastleDialog::RedrawBuildingSpriteToArea( sprite51, dst_pt.x + sprite51.x(), dst_pt.y + sprite51.y(), max );
+        CastleDialog::RedrawBuildingSpriteToArea( bayBaseSprite, dst_pt.x + bayBaseSprite.x(), dst_pt.y + bayBaseSprite.y(), max );
+        CastleDialog::RedrawBuildingSpriteToArea( bayExtraSprite, dst_pt.x + bayExtraSprite.x(), dst_pt.y + bayExtraSprite.y(), max );
     }
 
     // redraw all builds
@@ -426,6 +423,12 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
         const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
         CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
+    }
+    else if ( castle.GetRace() == Race::BARB && BUILD_CAPTAIN == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
+        const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
+        CastleDialog::RedrawBuildingSpriteToArea( leftCaptainQuarters, dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width() + leftCaptainQuarters.x(),
+                                                  dst_pt.y + rightCaptainQuarters.y() + leftCaptainQuarters.y(), max, alpha );
     }
 }
 

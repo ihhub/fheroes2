@@ -220,7 +220,7 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
     return fheroes2::AGG::GetICN( -1, 0 );
 }
 
-void Captain::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const
+void Captain::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
 {
     if ( !isValid() )
         return;

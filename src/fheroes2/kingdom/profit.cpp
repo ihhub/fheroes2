@@ -20,173 +20,81 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
-
 #include "castle.h"
 #include "profit.h"
 #include "race.h"
 
-struct profitstats_t
+payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
 {
-    const char * id;
-    cost_t cost;
-};
-
-profitstats_t _profits[] = {
-    { "castle", { 1000, 0, 0, 0, 0, 0, 0 } },
-    { "town", { 250, 0, 0, 0, 0, 0, 0 } },
-    { "statue", { 250, 0, 0, 0, 0, 0, 0 } },
-    { "dungeon", { 500, 0, 0, 0, 0, 0, 0 } },
-
-    { "sawmill", { 0, 2, 0, 0, 0, 0, 0 } },
-    { "alchemylab", { 0, 0, 1, 0, 0, 0, 0 } },
-    { "mine_ore", { 0, 0, 0, 2, 0, 0, 0 } },
-    { "mine_sulfur", { 0, 0, 0, 0, 1, 0, 0 } },
-    { "mine_crystal", { 0, 0, 0, 0, 0, 1, 0 } },
-    { "mine_gems", { 0, 0, 0, 0, 0, 0, 1 } },
-    { "mine_gold", { 1000, 0, 0, 0, 0, 0, 0 } },
-
-    { "ultimate_golden_goose", { 10000, 0, 0, 0, 0, 0, 0 } },
-    { "tax_lien", { 250, 0, 0, 0, 0, 0, 0 } },
-    { "endless_sack_gold", { 1000, 0, 0, 0, 0, 0, 0 } },
-    { "endless_bag_gold", { 750, 0, 0, 0, 0, 0, 0 } },
-    { "endless_purse_gold", { 500, 0, 0, 0, 0, 0, 0 } },
-    { "endless_cord_wood", { 0, 1, 0, 0, 0, 0, 0 } },
-    { "endless_vial_mercury", { 0, 0, 1, 0, 0, 0, 0 } },
-    { "endless_cart_ore", { 0, 0, 0, 1, 0, 0, 0 } },
-    { "endless_pouch_sulfur", { 0, 0, 0, 0, 1, 0, 0 } },
-    { "endless_pouch_crystal", { 0, 0, 0, 0, 0, 1, 0 } },
-    { "endless_pouch_gems", { 0, 0, 0, 0, 0, 0, 1 } },
-
-    { nullptr, { 0, 0, 0, 0, 0, 0, 0 } },
-};
-
-payment_t ProfitConditions::FromBuilding( u32 building, int race )
-{
-    payment_t result;
-    const char * id = nullptr;
-
     switch ( building ) {
     case BUILD_CASTLE:
-        id = "castle";
-        break;
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case BUILD_TENT:
-        id = "town";
-        break;
     case BUILD_STATUE:
-        id = "statue";
-        break;
+        return payment_t( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
     case BUILD_SPEC:
         if ( race == Race::WRLK )
-            id = "dungeon";
+            return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
         break;
     default:
         break;
     }
 
-    if ( id ) {
-        const profitstats_t * ptr = &_profits[0];
-        while ( ptr->id && std::strcmp( id, ptr->id ) )
-            ++ptr;
-        if ( ptr->id )
-            result = ptr->cost;
-    }
-
-    return result;
+    return {};
 }
 
 payment_t ProfitConditions::FromArtifact( int artifact )
 {
-    payment_t result;
-    const char * id = nullptr;
-
     switch ( artifact ) {
     case Artifact::TAX_LIEN:
-        id = "tax_lien";
-        break;
+        return payment_t( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
     case Artifact::GOLDEN_GOOSE:
-        id = "ultimate_golden_goose";
-        break;
+        return payment_t( cost_t{ 10000, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_SACK_GOLD:
-        id = "endless_sack_gold";
-        break;
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_BAG_GOLD:
-        id = "endless_bag_gold";
-        break;
+        return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_PURSE_GOLD:
-        id = "endless_purse_gold";
-        break;
+        return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_POUCH_SULFUR:
-        id = "endless_pouch_sulfur";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
     case Artifact::ENDLESS_VIAL_MERCURY:
-        id = "endless_vial_mercury";
-        break;
+        return payment_t( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_POUCH_GEMS:
-        id = "endless_pouch_gems";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
     case Artifact::ENDLESS_CORD_WOOD:
-        id = "endless_cord_wood";
-        break;
+        return payment_t( cost_t{ 0, 1, 0, 0, 0, 0, 0 } );
     case Artifact::ENDLESS_CART_ORE:
-        id = "endless_cart_ore";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 1, 0, 0, 0 } );
     case Artifact::ENDLESS_POUCH_CRYSTAL:
-        id = "endless_pouch_crystal";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
     default:
         break;
     }
 
-    if ( id ) {
-        const profitstats_t * ptr = &_profits[0];
-        while ( ptr->id && std::strcmp( id, ptr->id ) )
-            ++ptr;
-        if ( ptr->id )
-            result = ptr->cost;
-    }
-
-    return result;
+    return {};
 }
 
 payment_t ProfitConditions::FromMine( int type )
 {
-    payment_t result;
-    const char * id = nullptr;
-
     switch ( type ) {
     case Resource::ORE:
-        id = "mine_ore";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 2, 0, 0, 0 } );
     case Resource::WOOD:
-        id = "sawmill";
-        break;
+        return payment_t( cost_t{ 0, 2, 0, 0, 0, 0, 0 } );
     case Resource::MERCURY:
-        id = "alchemylab";
-        break;
+        return payment_t( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
     case Resource::SULFUR:
-        id = "mine_sulfur";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
     case Resource::CRYSTAL:
-        id = "mine_crystal";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
     case Resource::GEMS:
-        id = "mine_gems";
-        break;
+        return payment_t( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
     case Resource::GOLD:
-        id = "mine_gold";
-        break;
+        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     default:
         break;
     }
 
-    if ( id ) {
-        const profitstats_t * ptr = &_profits[0];
-        while ( ptr->id && std::strcmp( id, ptr->id ) )
-            ++ptr;
-        if ( ptr->id )
-            result = ptr->cost;
-    }
-
-    return result;
+    return {};
 }

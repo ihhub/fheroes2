@@ -35,6 +35,7 @@
 #include "system.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_language.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -220,9 +221,9 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
-        warningMessage.append( conf.loadedFileLanguage() );
+        warningMessage.append( fheroes2::getLanguageName( fheroes2::getLanguageFromAbbreviation( conf.loadedFileLanguage() ) ) );
         warningMessage.append( _( "' language, but the current language of the game is '" ) );
-        warningMessage.append( conf.getGameLanguage() );
+        warningMessage.append( fheroes2::getLanguageName( fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) ) );
         warningMessage += "'.";
         Dialog::Message( _( "Warning" ), warningMessage, Font::BIG, Dialog::OK );
     }
@@ -256,9 +257,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return returnValue;
     }
 
-    // rescan path passability for all heroes, for this we need actual info about players from Settings
-    World::Get().RescanAllHeroesPathPassable();
-
     return returnValue;
 }
 
@@ -274,7 +272,8 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
         return false;
     }
 
-    char major, minor;
+    char major;
+    char minor;
     fs >> major >> minor;
     const u16 savid = ( static_cast<u16>( major ) << 8 ) | static_cast<u16>( minor );
 

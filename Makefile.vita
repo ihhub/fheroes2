@@ -24,19 +24,27 @@ MAKE	:= make
 PROJECT_TITLE := Free Heroes of Might & Magic II
 PROJECT_TITLEID := FHOMM0002
 
-.PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf
+.PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf translations
 
 all: package
 
 package: $(TARGET).vpk
 
-$(TARGET).vpk: eboot.bin param.sfo
+$(TARGET).vpk: eboot.bin param.sfo translations
 	vita-pack-vpk -s param.sfo -b eboot.bin \
 		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
+		--add files/data=files/data \
+		--add files/lang/vita_temp=files/lang \
 	$(TARGET).vpk
+	@rm -r files/lang/vita_temp
+
+translations:
+	$(MAKE) -C files/lang
+	mkdir -p files/lang/vita_temp
+	cp files/lang/*.mo files/lang/vita_temp
 
 eboot.bin: $(TARGET).velf
 	vita-make-fself $(TARGET).velf eboot.bin
@@ -49,9 +57,10 @@ $(TARGET).velf: $(TARGET).elf
 	vita-elf-create $< $@
 
 $(TARGET).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true
 	@cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:
 	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -C files/lang clean
 	@rm -rf $(TARGET).velf $(TARGET).elf $(TARGET).vpk eboot.bin param.sfo

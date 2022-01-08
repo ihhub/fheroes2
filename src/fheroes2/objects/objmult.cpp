@@ -26,6 +26,18 @@
 #include "direction.h"
 #include "mp2.h"
 #include "objmult.h"
+#include "tools.h"
+
+namespace
+{
+    const std::bitset<256> objMultShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 1,  3,  15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54, 57,
+          61, 67, 68, 75, 77, 79, 81, 83, 97, 98, 99, 100, 101, 102, 103, 105, 106, 107, 108, 109, 110, 113, 115, 121, 122, 124, 125, 126, 127, 128, 129, 130 } );
+
+    const std::bitset<256> objMul2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+        { 14,  17,  20,  24,  34,  36,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+          147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 164, 180, 181, 182, 183, 184, 185, 186, 189, 199, 200, 202, 206 } );
+}
 
 int ObjMult::GetPassable( const uint8_t index )
 {
@@ -46,11 +58,7 @@ bool ObjMult::isAction( u32 index )
 
 bool ObjMult::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 1,   3,   15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33, 34,
-                                     45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  57,  61,  67,  68,  75,  77,  79,  81,  83,  97,  98, 99,
-                                     100, 101, 102, 103, 105, 106, 107, 108, 109, 110, 113, 115, 121, 122, 124, 125, 126, 127, 128, 129, 130 };
-
-    return shadows.count( index ) > 0;
+    return objMultShadowBitset[index];
 }
 
 int ObjMul2::GetPassable( const uint8_t index )
@@ -73,11 +81,7 @@ bool ObjMul2::isAction( u32 index )
 
 bool ObjMul2::isShadow( const uint8_t index )
 {
-    const std::set<uint8_t> shadows{ 14,  17,  20,  24,  34,  36,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127,
-                                     137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155,
-                                     156, 157, 158, 159, 160, 161, 164, 180, 181, 182, 183, 184, 185, 186, 189, 199, 200, 202, 206 };
-
-    return shadows.count( index ) > 0;
+    return objMul2ShadowBitset[index];
 }
 
 int ObjMul2::GetActionObject( u32 index )

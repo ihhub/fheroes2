@@ -81,7 +81,7 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    AGG::ResetMixer();
+    AGG::ResetMixer( true );
 
     Interface::Basic::Get().Reset();
 
@@ -139,26 +139,30 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
     if ( it != myCastles.end() ) {
-        int result = Dialog::ZERO;
-        while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false );
+        Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
 
-            if ( it != myCastles.end() ) {
-                if ( Dialog::PREV == result ) {
-                    if ( it == myCastles.begin() )
-                        it = myCastles.end();
-                    --it;
-                }
-                else if ( Dialog::NEXT == result ) {
-                    ++it;
-                    if ( it == myCastles.end() )
-                        it = myCastles.begin();
-                }
+        while ( result != Castle::CastleDialogReturnValue::Close ) {
+            assert( it != myCastles.end() );
+
+            const bool openConstructionWindow
+                = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+
+            result = ( *it )->OpenDialog( false, openConstructionWindow );
+
+            if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+                if ( it == myCastles.begin() )
+                    it = myCastles.end();
+                --it;
+            }
+            else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+                ++it;
+                if ( it == myCastles.end() )
+                    it = myCastles.begin();
             }
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true );
+        castle.OpenDialog( true, false );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -287,7 +291,7 @@ void ShowNewWeekDialog( void )
                 message += _( "%{monster} population increases by +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n";
+            message += "\n \n";
         }
     }
 
@@ -399,10 +403,12 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     default:
         if ( water ) {
-            if ( MP2::isWaterActionObject( tile.GetObject() ) )
+            if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-            else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
+            }
+            if ( tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            }
         }
         break;
     }
@@ -498,7 +504,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-        else if ( tile.isPassable( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
+        else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
             bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -736,7 +742,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         ShowEventDayDialog();
 
         // autosave
-        if ( conf.ExtGameAutosaveOn() && conf.ExtGameAutosaveBeginOfDay() )
+        if ( conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 
@@ -774,9 +780,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 res = fheroes2::GameMode::QUIT_GAME;
                 break;
             }
-            else {
-                continue;
-            }
+            continue;
         }
 
         // hot keys
@@ -817,7 +821,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 EventPuzzleMaps();
             // info game
             else if ( HotKeyPressEvent( Game::EVENT_INFOGAME ) )
-                EventGameInfo();
+                res = EventGameInfo();
             // cast spell
             else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
                 EventCastSpell();
@@ -879,7 +883,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULTACTION ) )
-                EventDefaultAction();
+                res = EventDefaultAction( res );
             // open focus
             else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
                 EventOpenFocus();
@@ -1121,7 +1125,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             RedrawFocus();
         }
 
-        if ( conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
+        if ( !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 

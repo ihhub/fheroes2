@@ -75,26 +75,76 @@ namespace Interface
     class Basic
     {
     public:
-        static Basic & Get( void );
+        static Basic & Get();
 
-        bool NeedRedraw( void ) const;
-        void SetRedraw( int );
-        int GetRedrawMask() const;
+        bool NeedRedraw() const
+        {
+            return redraw != 0;
+        }
+
+        void SetRedraw( int f )
+        {
+            redraw |= f;
+        }
+
+        int GetRedrawMask() const
+        {
+            return redraw;
+        }
+
         void Redraw( int f = 0 );
 
-        const fheroes2::Rect & GetScrollLeft( void ) const;
-        const fheroes2::Rect & GetScrollRight( void ) const;
-        const fheroes2::Rect & GetScrollTop( void ) const;
-        const fheroes2::Rect & GetScrollBottom( void ) const;
+        const fheroes2::Rect & GetScrollLeft() const
+        {
+            return scrollLeft;
+        }
+
+        const fheroes2::Rect & GetScrollRight() const
+        {
+            return scrollRight;
+        }
+
+        const fheroes2::Rect & GetScrollTop() const
+        {
+            return scrollTop;
+        }
+
+        const fheroes2::Rect & GetScrollBottom() const
+        {
+            return scrollBottom;
+        }
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
-        GameArea & GetGameArea( void );
-        Radar & GetRadar( void );
-        IconsPanel & GetIconsPanel( void );
-        ButtonsArea & GetButtonsArea( void );
-        StatusWindow & GetStatusWindow( void );
-        ControlPanel & GetControlPanel( void );
+        GameArea & GetGameArea()
+        {
+            return gameArea;
+        }
+
+        Radar & GetRadar()
+        {
+            return radar;
+        }
+
+        IconsPanel & GetIconsPanel()
+        {
+            return iconsPanel;
+        }
+
+        ButtonsArea & GetButtonsArea()
+        {
+            return buttonsArea;
+        }
+
+        StatusWindow & GetStatusWindow()
+        {
+            return statusWindow;
+        }
+
+        ControlPanel & GetControlPanel()
+        {
+            return controlPanel;
+        }
 
         void SetFocus( Heroes * );
         void SetFocus( Castle * );
@@ -104,11 +154,11 @@ namespace Interface
         void SetHideInterface( bool );
 
         void EventSwitchHeroSleeping( void );
-        void EventDefaultAction() const;
+        fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
         void EventOpenFocus( void ) const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;
-        void EventGameInfo( void ) const;
+        static fheroes2::GameMode EventGameInfo();
         void EventSystemDialog() const;
         void EventNextHero( void );
         void EventNextTown( void );
@@ -140,7 +190,7 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
         static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
-        void CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const;
+        void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
         void Reset(); // call this function only when changing the resolution
 

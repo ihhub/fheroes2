@@ -353,6 +353,22 @@ bool Spell::isCold() const
     return id == COLDRAY || id == COLDRING;
 }
 
+bool Spell::isGuardianType() const
+{
+    switch ( id ) {
+    case HAUNT:
+    case SETEGUARDIAN:
+    case SETAGUARDIAN:
+    case SETFGUARDIAN:
+    case SETWGUARDIAN:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
+}
+
 bool Spell::isAdventure( void ) const
 {
     return !isCombat();

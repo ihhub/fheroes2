@@ -4,33 +4,43 @@
 
 Please follow the instructions below to be able to build the project from source:
 
+<a name="windows"></a>
 ### Windows
 
 * Go to the directory `script/windows` and run the file `install_packages.bat`. This script will install all the
   required packages to build the project using Microsoft Visual Studio.
-* Go to the directory `script/demo` and run the file `download_demo_version.bat`. This script will download a demo
-  version of the original game, which is the minimum required for development.
+* If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
+  be missing depending on the version of the original game) to the project root directory.
+* Alternatively, go to the directory `script/demo` and run the file `download_demo_version.bat`.
+  This script will download a demo version of the original game, which is the minimum required for development.
 * Open the file `fheroes2-vs2015.vcxproj` or `fheroes2-vs2019.vcxproj` depending on the version of Microsoft Visual
   Studio installed and build the project.
+* Visual Studio will automatically copy game files in the root directory to the build directory.
 
+<a name="macos-and-linux"></a>
 ### macOS and Linux
 
 * Depending on your OS, run the following scripts to install the dependencies required for the build:
   * macOS: go to the directory `script/macos` and run the file `install_sdl_2.sh` (default setup) or `install_sdl_1.sh`.
   * Linux: go to the directory `script/linux` and run the file `install_sdl_2_dev.sh` (default setup) or `install_sdl_1_dev.sh`.
-* Go to the directory `script/demo` and run the file `download_demo_version.sh`. This script will download a demo version of the
-  original game, which is the minimum required for development.
+* If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
+  be missing depending on the version of the original game) to the project root directory.
+* Alternatively, go to the directory `script/demo` and run the file `download_demo_version.bat`.
+  This script will download a demo version of the original game, which is the minimum required for development.
 * Run the `make` command in the root directory of the project to build it with **SDL2** or `make FHEROES2_SDL1="ON"` to build it
   with **SDL1**.
 
+<a name="playstation-vita"></a>
 ### PlayStation Vita
 
 If you would like to build and run this project on PlayStation Vita please follow the instructions on [**this page**](README_PSV.md).
 
+<a name="nintendo-switch"></a>
 ### Nintendo Switch
 
 If you would like to build and run this project on Nintendo Switch please follow the instructions on [**this page**](README_switch.md).
 
+<a name="build-with-cmake"></a>
 ### Build with CMake
 
 If you would like to build the project using CMake please follow the instructions on [**this page**](README_cmake.md).

@@ -54,6 +54,11 @@ public:
     double fps() const;
     unsigned long frameCount() const;
 
+    unsigned long getCurrentFrame() const
+    {
+        return _currentFrameId;
+    }
+
 private:
     std::vector<std::vector<uint8_t> > _audioChannel;
     int32_t _width;
