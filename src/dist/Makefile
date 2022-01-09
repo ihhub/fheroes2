@@ -59,7 +59,6 @@ pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
 	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(wildcard $(SEARCH)))
 	@sed -i~ -e 's/, c-format//' $(POT)
-	@rm -f $(POT)~
 
 $(RES): $(RC)
 	@echo "gen: $@"
@@ -73,4 +72,4 @@ VPATH := $(SOURCEDIR)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.pot *.o *.d *.exe $(TARGET) $(RES)
+	rm -f *.pot *.pot~ *.o *.d *.exe $(TARGET) $(RES)
