@@ -171,6 +171,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
+    states.push_back( Settings::HEROES_RANDOM_LEVEL_UP );
 
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );

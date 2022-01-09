@@ -1950,6 +1950,8 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = world.GetMapSeed();
+    if ( Settings::Get().ExtHeroRandomLevelUp() )
+	fheroes2::hashCombine( hash, Rand::Get( std::numeric_limits<uint32_t>::max() ) );
     fheroes2::hashCombine( hash, hid );
     fheroes2::hashCombine( hash, _race );
     fheroes2::hashCombine( hash, attack );

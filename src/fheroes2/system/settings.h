@@ -99,7 +99,8 @@ public:
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
         BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
-        BATTLE_REVERSE_WAIT_ORDER = 0x40020000
+        BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
+        HEROES_RANDOM_LEVEL_UP = 0x40040000,
     };
 
     Settings( const Settings & ) = delete;
@@ -173,6 +174,7 @@ public:
     bool ExtHeroRememberPointsForRetreating() const;
     bool ExtHeroAllowTranscribingScroll() const;
     bool ExtHeroArenaCanChoiseAnySkills() const;
+    bool ExtHeroRandomLevelUp() const;
     bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;

@@ -981,6 +981,8 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: in Arena can choose any of primary skills" );
+    case Settings::HEROES_RANDOM_LEVEL_UP:
+        return _( "heroes: random skills on level up" );
     case Settings::BATTLE_SHOW_ARMY_ORDER:
         return _( "battle: show army order" );
     case Settings::BATTLE_SOFT_WAITING:
@@ -1103,6 +1105,11 @@ bool Settings::ExtHeroRecruitCostDependedFromLevel() const
 bool Settings::ExtHeroRememberPointsForRetreating() const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
+}
+
+bool Settings::ExtHeroRandomLevelUp() const
+{
+    return ExtModes( HEROES_RANDOM_LEVEL_UP );
 }
 
 bool Settings::ExtBattleShowDamage() const
