@@ -75,11 +75,17 @@ endif(NOT WIN32)
 #
 # Installation of auxiliary files
 #
+install(
+	FILES fheroes2.key
+	DESTINATION ${CONFIGURE_FHEROES2_DATA}
+	)
+
 file(GLOB H2D_FILES ${CMAKE_SOURCE_DIR}/files/data/*.h2d)
 install(
 	FILES ${H2D_FILES}
 	DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
 	)
+
 install(
 	FILES docs/README.txt LICENSE changelog.txt
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}
