@@ -195,7 +195,7 @@ namespace
         TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
-        const int textChoiceWidth = 150;
+        const int textChoiceWidth = 155;
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
             Text choice( bonuses[i].ToString(), Font::BIG );
             choice.Blit( top.x + 425, top.y + 209 + 22 * static_cast<int>( i ) - choice.h() / 2, textChoiceWidth );
