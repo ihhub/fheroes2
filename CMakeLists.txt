@@ -80,10 +80,11 @@ install(
 	DESTINATION ${CONFIGURE_FHEROES2_DATA}
 	)
 
-file(GLOB H2D_FILES files/data/*.h2d)
 install(
-	FILES ${H2D_FILES}
+	DIRECTORY files/data/
 	DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
+	FILES_MATCHING
+	PATTERN *.h2d
 	)
 
 install(
@@ -119,10 +120,11 @@ if(WIN32)
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 else(WIN32)
-	file(GLOB MO_FILES files/lang/*.mo)
 	install(
-		FILES ${MO_FILES}
+		DIRECTORY files/lang/
 		DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/lang
+		FILES_MATCHING
+		PATTERN *.mo
 		)
 
 	install(
