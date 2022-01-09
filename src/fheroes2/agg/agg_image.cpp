@@ -718,7 +718,7 @@ namespace
             fheroes2::updateShadow( font[233 - 32], { -1, 2 }, 2 );
 
             // Shorter k.
-            font[234 - 32].resize( font[75].width(), font[75].height() - 4 );
+            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
             font[234 - 32].reset();
             fheroes2::Copy( font[75], 2, 2, font[234 - 32], 2, 0, 7, 4 );
             fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 3, 1 );
