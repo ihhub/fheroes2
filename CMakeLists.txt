@@ -53,7 +53,7 @@ if(NOT WIN32)
 	find_program(SED_EXECUTABLE sed)
 	find_program(XGETTEXT_EXECUTABLE xgettext)
 
-	file(GLOB_RECURSE ALL_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
+	file(GLOB_RECURSE ALL_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 	add_custom_target(
 		${PROJECT_NAME}.pot
 		ALL
@@ -80,7 +80,7 @@ install(
 	DESTINATION ${CONFIGURE_FHEROES2_DATA}
 	)
 
-file(GLOB H2D_FILES ${CMAKE_SOURCE_DIR}/files/data/*.h2d)
+file(GLOB H2D_FILES files/data/*.h2d)
 install(
 	FILES ${H2D_FILES}
 	DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
@@ -119,7 +119,7 @@ if(WIN32)
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 else(WIN32)
-	file(GLOB MO_FILES ${CMAKE_SOURCE_DIR}/files/lang/*.mo)
+	file(GLOB MO_FILES files/lang/*.mo)
 	install(
 		FILES ${MO_FILES}
 		DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/lang
