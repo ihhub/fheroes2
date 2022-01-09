@@ -56,7 +56,6 @@ if(NOT WIN32)
 	file(GLOB_RECURSE ALL_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 	add_custom_target(
 		${PROJECT_NAME}.pot
-		ALL
 		COMMAND ${XGETTEXT_EXECUTABLE} -d ${PROJECT_NAME} -C -F -k_ -k_n:1,2 -o ${PROJECT_NAME}.pot ${ALL_SOURCES}
 		COMMAND ${SED_EXECUTABLE} -i~ -e "s/, c-format//" ${PROJECT_NAME}.pot
 		DEPENDS fheroes2
