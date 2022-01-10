@@ -1389,15 +1389,15 @@ namespace fheroes2
                 // German version uses CP1252
                 verifiedFontWidth = ( id == ICN::FONT ) ? 10 : 7;
                 if ( imageArray.size() == 103 && imageArray[99].width() == verifiedFontWidth ) {
-                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xFC - 0x80, imageArray[0] );
-                    std::swap( imageArray[0xC4 - 0x20], imageArray[100 + 0xFC - 0x80] );
-                    std::swap( imageArray[0xD6 - 0x20], imageArray[101 + 0xFC - 0x80] );
-                    std::swap( imageArray[0xDC - 0x20], imageArray[102 + 0xFC - 0x80] );
-                    std::swap( imageArray[0xDF - 0x20], imageArray[99 + 0xFC - 0x80] );
-                    std::swap( imageArray[0xE4 - 0x20], imageArray[96 + 0xFC - 0x80] );
-                    std::swap( imageArray[0xF6 - 0x20], imageArray[97 + 0xFC - 0x80] );
-                    std::swap( imageArray[0xFC - 0x20], imageArray[98 + 0xFC - 0x80] );
-                    imageArray.erase( imageArray.begin() + 0xFC - 0x20 + 1, imageArray.end() );
+                    imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
+                    std::swap( imageArray[164], imageArray[224] );
+                    std::swap( imageArray[182], imageArray[225] );
+                    std::swap( imageArray[188], imageArray[226] );
+                    std::swap( imageArray[191], imageArray[223] );
+                    std::swap( imageArray[196], imageArray[220] );
+                    std::swap( imageArray[214], imageArray[221] );
+                    std::swap( imageArray[220], imageArray[222] );
+                    imageArray.erase( imageArray.begin() + 221, imageArray.end() );
                 }
                 return true;
             }
