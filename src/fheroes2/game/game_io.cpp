@@ -53,13 +53,13 @@ namespace
 
         HeaderSAV() = delete;
 
-        explicit HeaderSAV( const int saveFileVersion )
+        explicit HeaderSAV( const uint16_t saveFileVersion )
             : status( 0 )
             , gameType( 0 )
             , _saveFileVersion( saveFileVersion )
         {}
 
-        HeaderSAV( const Maps::FileInfo & fi, const int gameType_, const int saveFileVersion )
+        HeaderSAV( const Maps::FileInfo & fi, const int gameType_, const uint16_t saveFileVersion )
             : status( 0 )
             , info( fi )
             , gameType( gameType_ )
@@ -76,7 +76,7 @@ namespace
         uint16_t status;
         Maps::FileInfo info;
         int gameType;
-        const int _saveFileVersion;
+        const uint16_t _saveFileVersion;
     };
 
     StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )

@@ -20,7 +20,9 @@
 
 #pragma once
 
-enum SaveFileFormat
+#include <cstdint>
+
+enum SaveFileFormat : uint16_t
 {
     // TODO: if you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
     FORMAT_VERSION_0912_RELEASE = 9702,

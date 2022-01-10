@@ -41,8 +41,8 @@ namespace Game
 
     const std::string & GetLastSavename( void );
     void SetLastSavename( const std::string & );
-    void SetLoadVersion( int );
-    int GetLoadVersion( void );
+    void SetLoadVersion( uint16_t ver );
+    uint16_t GetLoadVersion();
 
     // type_t
     enum
