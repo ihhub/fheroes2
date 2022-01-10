@@ -429,10 +429,15 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
     if ( isFirstNode || ( !isProtected && !isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
-        MapsIndexes teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+        MapsIndexes teleporters;
 
-        if ( teleporters.empty() && _considerWhirlpools ) {
-            teleporters = world.GetWhirlpoolEndPoints( currentNodeIdx );
+        // we shouldn't use teleporter at the starting tile
+        if ( currentNodeIdx != _pathStart ) {
+            teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+
+            if ( teleporters.empty() && _considerWhirlpools ) {
+                teleporters = world.GetWhirlpoolEndPoints( currentNodeIdx );
+            }
         }
 
         // do not check adjacent if we're going through the teleport in the middle of the path
