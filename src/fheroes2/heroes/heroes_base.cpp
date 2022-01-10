@@ -405,13 +405,13 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
             }
             // These high impact spells can turn tide of battle
             else if ( spell.isResurrect() || spell.isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
-                bestValue = std::max( bestValue, armyStrength * 0.2 * amountModifier );
+                bestValue = std::max( bestValue, armyStrength * 0.1 * amountModifier );
             }
             else if ( spell.isSummon() ) {
                 bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower * amountModifier );
             }
             else {
-                bestValue = std::max( bestValue, armyStrength * 0.05 * amountModifier );
+                bestValue = std::max( bestValue, armyStrength * 0.04 * amountModifier );
             }
         }
     }
