@@ -151,6 +151,7 @@ msgstr "Wybierz jednostkę (%{name})"
 msgid "Cannot move last troop"
 msgstr "Nie można przenieść ostatniej jednostki"
 
+#, fuzzy
 msgid "Set Count"
 msgstr ""
 
@@ -287,10 +288,10 @@ msgid "Defender"
 msgstr "Obrońca"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Gdy sięgasz po artefakt %{name}, przedmiot w tajemniczy sposób znika."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Gdy przeciwnik sięga po artefakt %{name}, przedmiot w tajemniczy sposób znika."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Udało ci się zdobyć artfeakt przeciwnika!"
@@ -627,10 +628,10 @@ msgid "Human"
 msgstr "Człowiek"
 
 msgid "AI"
-msgstr ""
+msgstr "Komputer"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Wybierz innego bohatera."
 
 msgid "Set Attack Skill"
 msgstr "Ustaw wartość Ataku"
@@ -6313,7 +6314,6 @@ msgstr "Krzak"
 msgid "Buoy"
 msgstr "Boja"
 
-#, fuzzy
 msgid "Skeleton"
 msgstr "Szkielet"
 
@@ -6347,39 +6347,32 @@ msgstr "Wir"
 msgid "Boat"
 msgstr "Łódź"
 
-#, fuzzy
 msgid "Random Artifact"
-msgstr "Artefakt"
+msgstr "Losowy artefakt"
 
-#, fuzzy
 msgid "Random Resource"
-msgstr "Surowiec"
+msgstr "Losowe zasoby"
 
-#, fuzzy
 msgid "Random Monster - weak"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - słaby"
 
-#, fuzzy
 msgid "Random Monster - medium"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - średni"
 
-#, fuzzy
 msgid "Random Monster - strong"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - silny"
 
-#, fuzzy
 msgid "Random Monster - very strong"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - bardzo silny"
 
 msgid "Standing Stones"
 msgstr "Krąg kamieni"
 
 msgid "Event"
-msgstr ""
+msgstr "Zdarzenie"
 
-#, fuzzy
 msgid "Random Monster"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór"
 
 #, fuzzy
 msgid "Random Ultimate Artifact"
@@ -6419,13 +6412,13 @@ msgstr[1] "Magiczne ogrody"
 msgstr[2] "Magicznych ogrodów"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Losowy artefakt - skarb"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Losowy artefakt - mniejszy"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Losowy artefakt - większy"
 
 msgid "Jail"
 msgstr "Więzienie"
@@ -6472,57 +6465,48 @@ msgstr "Syreny"
 msgid "Reefs"
 msgstr "Rafy"
 
-#, fuzzy
 msgid "Unknown Monster"
-msgstr "Potwór"
+msgstr "Nieznany potwór"
 
-#, fuzzy
 msgid "Unknown Monsters"
-msgstr "Potwory"
+msgstr "Nieznane potwory"
 
-#, fuzzy
 msgid "Peasant"
 msgstr "Chłop"
 
 msgid "Peasants"
 msgstr "Chłopi"
 
-#, fuzzy
 msgid "Archer"
 msgstr "Łucznik"
 
 msgid "Archers"
 msgstr "Łucznicy"
 
-#, fuzzy
 msgid "Ranger"
 msgstr "Łowca"
 
 msgid "Rangers"
 msgstr "Łowcy"
 
-#, fuzzy
 msgid "Pikeman"
 msgstr "Pikinier"
 
 msgid "Pikemen"
 msgstr "Pikinierzy"
 
-#, fuzzy
 msgid "Veteran Pikeman"
 msgstr "Weteran"
 
 msgid "Veteran Pikemen"
 msgstr "Weterani"
 
-#, fuzzy
 msgid "Swordsman"
 msgstr "Zbrojny"
 
 msgid "Swordsmen"
 msgstr "Zbrojni"
 
-#, fuzzy
 msgid "Master Swordsman"
 msgstr "Mistrz miecza"
 
@@ -6532,81 +6516,69 @@ msgstr "Mistrzowie miecza"
 msgid "Cavalries"
 msgstr "Konni"
 
-#, fuzzy
 msgid "Cavalry"
 msgstr "Konny"
 
-#, fuzzy
 msgid "Champion"
 msgstr "Czempion"
 
 msgid "Champions"
 msgstr "Czempioni"
 
-#, fuzzy
 msgid "Paladin"
 msgstr "Paladyn"
 
 msgid "Paladins"
 msgstr "Paladyni"
 
-#, fuzzy
 msgid "Crusader"
 msgstr "Krzyżowiec"
 
 msgid "Crusaders"
 msgstr "Krzyżowcy"
 
-#, fuzzy
 msgid "Goblin"
 msgstr "Goblin"
 
 msgid "Goblins"
 msgstr "Gobliny"
 
-#, fuzzy
 msgid "Orc"
 msgstr "Ork"
 
 msgid "Orcs"
 msgstr "Orkowie"
 
-#, fuzzy
 msgid "Orc Chief"
 msgstr "Ork wojownik"
 
 msgid "Orc Chiefs"
 msgstr "Orkowie wojownicy"
 
-#, fuzzy
 msgid "Wolf"
 msgstr "Wilk"
 
 msgid "Wolves"
 msgstr "Wilki"
 
-#, fuzzy
 msgid "Ogre"
 msgstr "Ogr"
 
 msgid "Ogres"
 msgstr "Ogry"
 
-#, fuzzy
 msgid "Ogre Lord"
 msgstr "Wielki ogr"
 
 msgid "Ogre Lords"
 msgstr "Wielkie ogry"
 
-#, fuzzy
 msgid "Troll"
 msgstr "Troll"
 
 msgid "Trolls"
 msgstr "Trolle"
 
-#, fuzzy
 msgid "War Troll"
 msgstr "Troll bojowy"
 
@@ -6616,195 +6588,165 @@ msgstr "Trolle bojowe"
 msgid "Cyclopes"
 msgstr "Cyklopy"
 
-#, fuzzy
 msgid "Cyclops"
 msgstr "Cyklop"
 
-#, fuzzy
 msgid "Sprite"
 msgstr "Rusałka"
 
 msgid "Sprites"
 msgstr "Rusałki"
 
-#, fuzzy
 msgid "Dwarf"
 msgstr "Krasnolud"
 
 msgid "Dwarves"
 msgstr "Krasnoludy"
 
-#, fuzzy
 msgid "Battle Dwarf"
-msgstr "Butelka"
+msgstr "Krasnolud wojownik"
 
-#, fuzzy
 msgid "Battle Dwarves"
 msgstr "Krasnoludzcy wojownicy"
 
-#, fuzzy
 msgid "Elf"
 msgstr "Elf"
 
 msgid "Elves"
 msgstr "Elfy"
 
-#, fuzzy
 msgid "Grand Elf"
 msgstr "Wysoki elf"
 
 msgid "Grand Elves"
 msgstr "Wysokie elfy"
 
-#, fuzzy
 msgid "Druid"
 msgstr "Druid"
 
 msgid "Druids"
 msgstr "Druidzi"
 
-#, fuzzy
 msgid "Greater Druid"
-msgstr "Wielcy druidzi"
+msgstr "Wielki druid"
 
 msgid "Greater Druids"
 msgstr "Wielcy druidzi"
 
-#, fuzzy
 msgid "Unicorn"
 msgstr "Jednorożec"
 
 msgid "Unicorns"
 msgstr "Jednorożce"
 
-#, fuzzy
 msgid "Phoenix"
 msgstr "Feniks"
 
-#, fuzzy
 msgid "Phoenixes"
-msgstr "Feniks"
+msgstr "Feniksy"
 
-#, fuzzy
 msgid "Centaur"
 msgstr "Centaur"
 
 msgid "Centaurs"
 msgstr "Centaury"
 
-#, fuzzy
 msgid "Gargoyle"
 msgstr "Gargulec"
 
 msgid "Gargoyles"
 msgstr "Gargulce"
 
-#, fuzzy
 msgid "Griffin"
 msgstr "Gryf"
 
 msgid "Griffins"
 msgstr "Gryfy"
 
-#, fuzzy
 msgid "Minotaur"
 msgstr "Minotaur"
 
 msgid "Minotaurs"
 msgstr "Minotaury"
 
-#, fuzzy
 msgid "Minotaur King"
 msgstr "Królewski minotaur"
 
 msgid "Minotaur Kings"
 msgstr "Królewskie minotaury"
 
-#, fuzzy
 msgid "Hydra"
 msgstr "Hydra"
 
 msgid "Hydras"
 msgstr "Hydry"
 
-#, fuzzy
 msgid "Green Dragon"
 msgstr "Zielony smok"
 
 msgid "Green Dragons"
 msgstr "Zielone smoki"
 
-#, fuzzy
 msgid "Red Dragon"
 msgstr "Czerwony smok"
 
 msgid "Red Dragons"
 msgstr "Czerwone smoki"
 
-#, fuzzy
 msgid "Black Dragon"
 msgstr "Czarny smok"
 
 msgid "Black Dragons"
 msgstr "Czarne smoki"
 
-#, fuzzy
 msgid "Halfling"
 msgstr "Niziołek"
 
 msgid "Halflings"
 msgstr "Niziołki"
 
-#, fuzzy
 msgid "Boar"
 msgstr "Dzik"
 
 msgid "Boars"
 msgstr "Dziki"
 
-#, fuzzy
 msgid "Iron Golem"
 msgstr "Żelazny golem"
 
 msgid "Iron Golems"
 msgstr "Żelazne golemy"
 
-#, fuzzy
 msgid "Steel Golem"
 msgstr "Stalowy golem"
 
 msgid "Steel Golems"
 msgstr "Stalowe golemy"
 
-#, fuzzy
 msgid "Roc"
 msgstr "Rok"
 
 msgid "Rocs"
 msgstr "Roki"
 
-#, fuzzy
 msgid "Mage"
 msgstr "Mag"
 
 msgid "Magi"
 msgstr "Magowie"
 
-#, fuzzy
 msgid "Archmage"
 msgstr "Arcymag"
 
 msgid "Archmagi"
 msgstr "Arcymagowie"
 
-#, fuzzy
 msgid "Giant"
 msgstr "Olbrzym"
 
 msgid "Giants"
 msgstr "Olbrzymy"
 
-#, fuzzy
 msgid "Titan"
 msgstr "Tytan"
 
@@ -6814,14 +6756,12 @@ msgstr "Tytani"
 msgid "Skeletons"
 msgstr "Szkielety"
 
-#, fuzzy
 msgid "Zombie"
 msgstr "Zombie"
 
 msgid "Zombies"
 msgstr "Zombie"
 
-#, fuzzy
 msgid "Mutant Zombie"
 msgstr "Zmutowany zombie"
 
@@ -6831,157 +6771,131 @@ msgstr "Zmutowane zombie"
 msgid "Mummies"
 msgstr "Mumie"
 
-#, fuzzy
 msgid "Mummy"
 msgstr "Mumia"
 
 msgid "Royal Mummies"
 msgstr "Królewskie mumie"
 
-#, fuzzy
 msgid "Royal Mummy"
 msgstr "Królewska mumia"
 
-#, fuzzy
 msgid "Vampire"
 msgstr "Wampir"
 
 msgid "Vampires"
 msgstr "Wampiry"
 
-#, fuzzy
 msgid "Vampire Lord"
 msgstr "Wampirzy lord"
 
 msgid "Vampire Lords"
 msgstr "Wampirzy lordowi"
 
-#, fuzzy
 msgid "Lich"
 msgstr "Lisz"
 
 msgid "Liches"
 msgstr "Lisze"
 
-#, fuzzy
 msgid "Power Lich"
 msgstr "Potężny lisz"
 
 msgid "Power Liches"
 msgstr "Potężne lisze"
 
-#, fuzzy
 msgid "Bone Dragon"
 msgstr "Kościany smok"
 
 msgid "Bone Dragons"
 msgstr "Kościane smoki"
 
-#, fuzzy
 msgid "Rogue"
 msgstr "Rozbójnik"
 
 msgid "Rogues"
 msgstr "Rozbójnicy"
 
-#, fuzzy
 msgid "Nomad"
 msgstr "Nomad"
 
 msgid "Nomads"
 msgstr "Nomadowie"
 
-#, fuzzy
 msgid "Ghost"
 msgstr "Duch"
 
 msgid "Ghosts"
 msgstr "Duchy"
 
-#, fuzzy
 msgid "Genie"
 msgstr "Dżinn"
 
 msgid "Genies"
 msgstr "Dżinny"
 
-#, fuzzy
 msgid "Medusa"
 msgstr "Meduza"
 
 msgid "Medusas"
 msgstr "Meduzy"
 
-#, fuzzy
 msgid "Earth Elemental"
 msgstr "Żywiołak ziemi"
 
 msgid "Earth Elementals"
 msgstr "Żywiołaki ziemi"
 
-#, fuzzy
 msgid "Air Elemental"
 msgstr "Żywiołak powietrza"
 
 msgid "Air Elementals"
 msgstr "Żywiołaki powietrza"
 
-#, fuzzy
 msgid "Fire Elemental"
 msgstr "Żywiołak ognia"
 
 msgid "Fire Elementals"
 msgstr "Żywiołaki ognia"
 
-#, fuzzy
 msgid "Water Elemental"
 msgstr "Żywiołak wody"
 
 msgid "Water Elementals"
 msgstr "Żywiołaki wody"
 
-#, fuzzy
 msgid "Random Monsters"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór"
 
-#, fuzzy
 msgid "Random Monster 1"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - słaby"
 
-#, fuzzy
 msgid "Random Monsters 1"
-msgstr "Losowy zamek"
+msgstr "Losowe potwory - słabe"
 
-#, fuzzy
 msgid "Random Monster 2"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - średni"
 
-#, fuzzy
 msgid "Random Monsters 2"
-msgstr "Losowy zamek"
+msgstr "Losowe potwory - średnie"
 
-#, fuzzy
 msgid "Random Monster 3"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - silny"
 
-#, fuzzy
 msgid "Random Monsters 3"
-msgstr "Losowy zamek"
+msgstr "Losowe potwory - silne"
 
-#, fuzzy
 msgid "Random Monster 4"
-msgstr "Losowy zamek"
+msgstr "Losowy potwór - bardzo silny"
 
-#, fuzzy
 msgid "Random Monsters 4"
-msgstr "Losowy zamek"
+msgstr "Losowe potwory - bardzo silne"
 
 msgid "Double shot"
 msgstr "Podwójny strzał"
 
-#, fuzzy
 msgid "2-hex monster"
-msgstr "2-hex poczwara"
+msgstr "Rozmiar 2-hex"
 
 msgid "Double strike"
 msgstr "Podwójny strzał"
@@ -6993,18 +6907,16 @@ msgid "% magic resistance"
 msgstr "% odporności magicznej"
 
 msgid "Immune to Mind spells"
-msgstr "Odporny na czary Umysłu"
+msgstr "Odporny na czary umysłu"
 
-#, fuzzy
 msgid "Immune to Elemental spells"
-msgstr "Przywołanie żywiołaka ziemi"
+msgstr "Odporny na czary żywiołów"
 
 msgid "Immune to Fire spells"
-msgstr "Odporny na czary Ognia"
+msgstr "Odporny na czary ognia"
 
-#, fuzzy
 msgid "Immune to Cold spells"
-msgstr "Odporny na czary Lodu"
+msgstr "Odporny na czary zimna"
 
 msgid "Immune to "
 msgstr "Odporny na "
@@ -7012,28 +6924,26 @@ msgstr "Odporny na "
 msgid "% immunity to %{spell} spell"
 msgstr "% odporności na czar %{spell}"
 
-#, fuzzy
 msgid "% damage from Elemental spells"
-msgstr "Żywiołaki wody"
+msgstr "% odporności na czary żywiołów"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% szans na rozproszenie pozytywnych czarów"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% szans na paraliż"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% szans na zamianę w kamień"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% szans na oślepienie"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% szans na klątwę"
 
-#, fuzzy
 msgid "% chance to cast %{spell} spell"
-msgstr "%{color} rzuconych zaklęć: %{spell}"
+msgstr "% szans na rzucenie zaklęcia %{spell}"
 
 msgid "HP regeneration"
 msgstr "Regeneruje się"
@@ -7077,34 +6987,29 @@ msgstr "% szans na unicestwienie połowy atakowanego oddziału"
 msgid "Soul Eater"
 msgstr "Pożeracz dusz"
 
-#, fuzzy
 msgid "Elemental"
-msgstr "Żywiołak powietrza"
+msgstr "Żywiołak"
 
-#, fuzzy
 msgid "No Morale"
-msgstr "Morale"
+msgstr "Neutralne morale"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% obrażeń od czarów ognia"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% obrażeń od czarów zimna"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% obrażeń od czaru %{spell}"
 
-#, fuzzy
 msgid "% immunity to "
 msgstr "% odporności na czar %{spell}"
 
-#, fuzzy
 msgid "Lightning"
-msgstr "Piorunochron"
+msgstr "błyskawic"
 
-#, fuzzy
 msgid "% damage from "
-msgstr "Żywiołaki wody"
+msgstr "% obrażeń od "
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "Trzy Anduriańskie artefakty magicznie połączone w jeden."
