@@ -690,8 +690,12 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
         }
     }
 
-    // Cut the path to the last valid tile/obstacle if not in planning mode
-    if ( !isPlanningMode && lastValidNode != targetIndex ) {
+    // Check a corner case when a path is blocked by something else and the destination is not reachable anymore.
+    if ( currentNode == -1 && path.size() == 1 ) {
+        path.clear();
+    }
+    // Cut the path to the last valid tile/obstacle if not in planning mode.
+    else if ( !isPlanningMode && lastValidNode != targetIndex ) {
         path.erase( std::find_if( path.begin(), path.end(), [&lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
     }
 
