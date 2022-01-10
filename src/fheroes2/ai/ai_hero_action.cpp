@@ -893,27 +893,9 @@ namespace AI
 
     void AIToTeleports( Heroes & hero, const int32_t startIndex )
     {
+        assert( hero.GetPath().empty() );
+
         MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
-
-        const Route::Path & path = hero.GetPath();
-        if ( !path.empty() ) {
-            // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
-            // So we get the list of them and remove those which are unsuitable.
-            const int32_t endIndex = path.front().GetIndex();
-            const int32_t heroColor = hero.GetColor();
-
-            teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
-                                             [endIndex, heroColor]( const int32_t index ) {
-                                                 if ( endIndex == index ) {
-                                                     return false;
-                                                 }
-                                                 const Maps::Tiles & tile = world.GetTiles( index );
-                                                 assert( tile.GetObject() != MP2::OBJ_HEROES );
-
-                                                 return !tile.isFog( heroColor );
-                                             } ),
-                             teleports.end() );
-        }
 
         if ( teleports.empty() ) {
             DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
@@ -926,26 +908,8 @@ namespace AI
             return;
         }
 
-        if ( MP2::OBJ_HEROES == world.GetTiles( indexTo ).GetObject() ) {
-            const Heroes * other_hero = world.GetTiles( indexTo ).GetHeroes();
-
-            if ( other_hero ) {
-                AIToHeroes( hero, indexTo );
-
-                // lose battle
-                if ( hero.isFreeman() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero.String() + " hero dismissed, teleport action cancelled" );
-                    if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-                        hero.FadeOut();
-                    }
-                    return;
-                }
-                else if ( !other_hero->isFreeman() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN, other_hero->String() + " hero is blocking teleporter exit" );
-                    return;
-                }
-            }
-        }
+        // TODO: remove this assertion, this should never happen
+        assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             hero.FadeOut();
@@ -953,10 +917,12 @@ namespace AI
 
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
+
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
+
         hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
@@ -964,27 +930,9 @@ namespace AI
 
     void AIToWhirlpools( Heroes & hero, const int32_t startIndex )
     {
+        assert( hero.GetPath().empty() );
+
         MapsIndexes whirlpools = world.GetWhirlpoolEndPoints( startIndex );
-
-        const Route::Path & path = hero.GetPath();
-        if ( !path.empty() ) {
-            // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
-            // So we get the list of them and remove those which are unsuitable.
-            const int32_t endIndex = path.front().GetIndex();
-            const int32_t heroColor = hero.GetColor();
-
-            whirlpools.erase( std::remove_if( whirlpools.begin(), whirlpools.end(),
-                                              [endIndex, heroColor]( const int32_t index ) {
-                                                  if ( endIndex == index ) {
-                                                      return false;
-                                                  }
-                                                  const Maps::Tiles & tile = world.GetTiles( index );
-                                                  assert( tile.GetObject() != MP2::OBJ_HEROES );
-
-                                                  return !tile.isFog( heroColor );
-                                              } ),
-                              whirlpools.end() );
-        }
 
         if ( whirlpools.empty() ) {
             DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool." );
@@ -1000,15 +948,17 @@ namespace AI
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             hero.FadeOut();
         }
+
         hero.Move2Dest( indexTo );
+        hero.GetPath().Reset();
 
         AIWhirlpoolTroopLooseEffect( hero );
 
-        hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
+
         hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
