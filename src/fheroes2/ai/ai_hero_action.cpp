@@ -105,8 +105,8 @@ namespace AI
     void AIToFlotSam( const Heroes & hero, s32 dst_index );
     void AIToObservationTower( Heroes & hero, s32 dst_index );
     void AIToMagellanMaps( Heroes & hero, s32 dst_index );
-    void AIToTeleports( Heroes & hero, s32 dst_index );
-    void AIToWhirlpools( Heroes & hero, s32 dst_index );
+    void AIToTeleports( Heroes & hero, const int32_t startIndex );
+    void AIToWhirlpools( Heroes & hero, const int32_t startIndex );
     void AIToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToExperienceObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToWitchsHut( Heroes & hero, s32 dst_index );
@@ -234,7 +234,7 @@ namespace AI
         hero.SetFreeman( reason );
     }
 
-    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
+    void HeroesAction( Heroes & hero, s32 dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
@@ -330,8 +330,7 @@ namespace AI
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
-            if ( isDestination )
-                AIToWhirlpools( hero, dst_index );
+            AIToWhirlpools( hero, dst_index );
             break;
 
         // primary skill modification
@@ -963,19 +962,45 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToWhirlpools( Heroes & hero, s32 index_from )
+    void AIToWhirlpools( Heroes & hero, const int32_t startIndex )
     {
-        const int32_t index_to = world.NextWhirlpool( index_from );
+        MapsIndexes whirlpools = world.GetWhirlpoolEndPoints( startIndex );
 
-        if ( index_from == index_to ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "action unsuccessfully..." );
+        const Route::Path & path = hero.GetPath();
+        if ( !path.empty() ) {
+            // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
+            // So we get the list of them and remove those which are unsuitable.
+            const int32_t endIndex = path.front().GetIndex();
+            const int32_t heroColor = hero.GetColor();
+
+            whirlpools.erase( std::remove_if( whirlpools.begin(), whirlpools.end(),
+                                              [endIndex, heroColor]( const int32_t index ) {
+                                                  if ( endIndex == index ) {
+                                                      return false;
+                                                  }
+                                                  const Maps::Tiles & tile = world.GetTiles( index );
+                                                  assert( tile.GetObject() != MP2::OBJ_HEROES );
+
+                                                  return !tile.isFog( heroColor );
+                                              } ),
+                              whirlpools.end() );
+        }
+
+        if ( whirlpools.empty() ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool." );
+            return;
+        }
+
+        const int32_t indexTo = Rand::Get( whirlpools );
+        if ( startIndex == indexTo ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has teleportation tile the same as starting position: " << startIndex );
             return;
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             hero.FadeOut();
         }
-        hero.Move2Dest( index_to );
+        hero.Move2Dest( indexTo );
 
         AIWhirlpoolTroopLooseEffect( hero );
 

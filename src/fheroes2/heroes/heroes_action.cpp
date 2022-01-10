@@ -369,7 +369,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const Game::MusicRestorer musicRestorer;
 
     if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex, isDestination );
+        return AI::HeroesAction( *this, tileIndex );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
