@@ -96,12 +96,12 @@ namespace AI
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
-        double commanderDamageValue( const HeroBase & commander ) const;
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
         double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
         uint32_t spellDurationMultiplier( const Battle::Unit & target ) const;
+        static double CommanderDamageValue( const HeroBase & commander );
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;

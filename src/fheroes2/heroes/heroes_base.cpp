@@ -394,7 +394,7 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
             const int id = spell.GetID();
 
             const uint32_t spellCost = spell.SpellPoint();
-            const uint32_t casts = spellCost ? std::min( 10u, currentSpellPoints / spellCost ) : 0;
+            const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
 
             // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
             const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );

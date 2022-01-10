@@ -519,8 +519,7 @@ namespace AI
         return bestOutcome;
     }
 
-    
-    double BattlePlanner::commanderDamageValue( const HeroBase & commander ) const
+    double BattlePlanner::CommanderDamageValue( const HeroBase & commander )
     {
         const std::vector<Spell> & spells = commander.GetSpells();
         const double spellPower = static_cast<double>( commander.GetPower() );
