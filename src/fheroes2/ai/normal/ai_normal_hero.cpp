@@ -34,6 +34,28 @@
 
 namespace
 {
+    bool isHeroAllowedToUseWhirlpool( const Heroes & hero )
+    {
+        if ( hero.GetArmy().getTotalCount() == 1 ) {
+            // No way a hero can loose any army.
+            return true;
+        }
+
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::HUNTER:
+            break;
+        case Heroes::Role::FIGHTER:
+            // Fighters shouldn't use whirlpools as they can loose an important army.
+            return false;
+        default:
+            // If you set a new type of a hero you must add the logic here.
+            assert( 0 );
+            break;
+        }
+
+        return true;
+    }
+
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
@@ -1063,7 +1085,7 @@ namespace AI
 #endif
 
         // pre-cache the pathfinder
-        _pathfinder.reEvaluateIfNeeded( hero );
+        _pathfinder.reEvaluateIfNeeded( hero, isHeroAllowedToUseWhirlpool( hero ) );
 
         const uint32_t leftMovePoints = hero.GetMovePoints();
 
@@ -1229,7 +1251,7 @@ namespace AI
                 }
             }
 
-            _pathfinder.reEvaluateIfNeeded( *bestHero );
+            _pathfinder.reEvaluateIfNeeded( *bestHero, isHeroAllowedToUseWhirlpool( *bestHero ) );
             bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
 
             const size_t heroesBefore = heroes.size();
