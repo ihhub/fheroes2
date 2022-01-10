@@ -1153,7 +1153,7 @@ namespace AI
                        hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
         }
         else if ( !heroInPatrolMode ) {
-            priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
+            priorityTarget = _pathfinder.getFogDiscoveryTile( hero, isHeroAllowedToUseWhirlpool( hero ) );
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 
@@ -1231,11 +1231,11 @@ namespace AI
                             continue;
                         }
 
-                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero, isHeroAllowedToUseWhirlpool( *heroInfo.hero ) ) ) {
                             continue;
                         }
 
-                        const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero );
+                        const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero, isHeroAllowedToUseWhirlpool( *heroInfo.hero ) );
                         if ( targetIndex != -1 ) {
                             bestTargetIndex = targetIndex;
                             bestHero = heroInfo.hero;

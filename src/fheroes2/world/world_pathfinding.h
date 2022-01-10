@@ -102,14 +102,14 @@ public:
 
     void reset() override;
 
-    void reEvaluateIfNeeded( const Heroes & hero, const bool considerWhirlpools = false );
-    void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill, const bool considerWhirlpools = false );
-    int getFogDiscoveryTile( const Heroes & hero );
+    void reEvaluateIfNeeded( const Heroes & hero, const bool considerWhirlpools );
+    void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill, const bool considerWhirlpools );
+    int getFogDiscoveryTile( const Heroes & hero, const bool considerWhirlpools );
 
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
-    int getNeareastTileToMove( const Heroes & hero );
+    int getNeareastTileToMove( const Heroes & hero, const bool considerWhirlpools );
 
-    bool isHeroPossiblyBlockingWay( const Heroes & hero );
+    bool isHeroPossiblyBlockingWay( const Heroes & hero, const bool considerWhirlpools );
 
     std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
 

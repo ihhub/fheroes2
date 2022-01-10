@@ -369,7 +369,7 @@ void AIWorldPathfinder::reset()
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero, const bool considerWhirlpools /* = false */ )
+void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero, const bool considerWhirlpools )
 {
     auto currentSettings
         = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _considerWhirlpools, _armyStrength );
@@ -383,8 +383,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero, const bool cons
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill,
-                                            const bool considerWhirlpools /* = false */ )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill, const bool considerWhirlpools )
 {
     auto currentSettings
         = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _considerWhirlpools, _armyStrength );
@@ -492,10 +491,10 @@ uint32_t AIWorldPathfinder::getMovementPenalty( int src, int dst, int direction 
     return defaultPenalty;
 }
 
-int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
+int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, const bool considerWhirlpools )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
-    reEvaluateIfNeeded( hero );
+    reEvaluateIfNeeded( hero, considerWhirlpools );
     const int start = hero.GetIndex();
 
     const Directions & directions = Direction::All();
@@ -549,10 +548,10 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     return -1;
 }
 
-int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
+int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero, const bool considerWhirlpools )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
-    reEvaluateIfNeeded( hero );
+    reEvaluateIfNeeded( hero, considerWhirlpools );
     const int start = hero.GetIndex();
 
     Directions directions = Direction::All();
@@ -579,10 +578,10 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
     return -1;
 }
 
-bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
+bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero, const bool considerWhirlpools )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
-    reEvaluateIfNeeded( hero );
+    reEvaluateIfNeeded( hero, considerWhirlpools );
     const int32_t start = hero.GetIndex();
 
     const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
@@ -696,7 +695,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
 
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
 {
-    reEvaluateIfNeeded( start, color, armyStrength, skill );
+    reEvaluateIfNeeded( start, color, armyStrength, skill, false );
     return _cache[targetIndex]._cost;
 }
 
