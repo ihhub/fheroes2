@@ -265,10 +265,10 @@ msgid "Defender"
 msgstr "Обороняющийся"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Когда вы тянетесь к артефакту \"%{name}\", он таинственным образом исчезает."
+msgstr "Когда вы притрагиваетесь к артефакту %{name}, он таинственным образом исчезает."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "Когда ваш враг тянется к артефакту "%{name}", тот таинственным образом исчезает."
+msgstr "Когда ваш враг притрагивается к артефакту %{name}, тот таинственным образом исчезает."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Вы захватили вражеский артефакт!"
@@ -1876,7 +1876,7 @@ msgid "Opponents"
 msgstr "Оппоненты"
 
 msgid "Class"
-msgstr "Класс"
+msgstr "Фракции"
 
 msgid ""
 "Victory\n"
@@ -2032,10 +2032,10 @@ msgid "Move Points"
 msgstr "Очки движения"
 
 msgid "Available: %{count}"
-msgstr "Доступно: %{count}"
+msgstr "        Доступно: %{count}"
 
 msgid "Number to buy:"
-msgstr "       Купить:"
+msgstr "            Нанять:"
 
 msgid "MAX"
 msgstr "Максимум"
@@ -2847,7 +2847,7 @@ msgid "Opponents:"
 msgstr "Оппоненты:"
 
 msgid "Class:"
-msgstr "Класс:"
+msgstr "Фракции:"
 
 msgid "Rating %{rating}%"
 msgstr "Рейтинг %{rating}%"
@@ -6629,8 +6629,8 @@ msgid ""
 "you, and you notice an inscription. It reads: \"Brains best brawn and magic beats might. Heed my words, and you'll win every "
 "fight.\""
 msgstr ""
-"Вы находите таинственный посох, парящий около трёх футов от земли. На нем Вы заметили надпись: \"Ум лучше Мускулов и Магия "
-"победит Силу. Всегда помни это.\""
+"Спугивая дичь, Ваши войска заметили таинственный посох, парящий около трёх футов от земли. На нём Вы заметили надпись: \"Ум лучше мускулов, а магия "
+"победит силу. Всегда помни это.\""
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted Sword Breaker that he relied on during his tour of "
