@@ -7,7 +7,7 @@ on:
 jobs:
   clang:
     name: Clang Analyzer
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
@@ -15,7 +15,10 @@ jobs:
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-10
+    - name: Setup clang-tools
+      run: |
+        sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-10 100
     - name: Analyze
       run: scan-build --status-bugs -v make -j 2
       env:
