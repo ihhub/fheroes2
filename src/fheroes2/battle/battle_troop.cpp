@@ -1562,6 +1562,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
 
     case Spell::DISPEL:
+    case Spell::MASSDISPEL:
         if ( !( modes & IS_MAGIC ) )
             return 100;
         break;
