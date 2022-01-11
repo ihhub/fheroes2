@@ -20,7 +20,12 @@ jobs:
       run: |
         sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-10 100
     - name: Analyze
-      run: scan-build --status-bugs -v make -j 2
+      run: scan-build --status-bugs -v -o scan-build-result make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
         WITH_TOOLS: ON
+    - uses: actions/upload-artifact@v2
+      if: ${{ failure() }}
+      with:
+        name: scan-build-result
+        path: scan-build-result/
