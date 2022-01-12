@@ -620,6 +620,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
+
     const int32_t start = hero.GetIndex();
 
     const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
@@ -738,6 +739,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );
+
     return _cache[targetIndex]._cost;
 }
 

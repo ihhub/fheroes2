@@ -1722,7 +1722,8 @@ namespace AI
                 weakestTroop->Reset();
             }
             else {
-                weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+                weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints()
+                                                                                                   - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
             }
         }
     }
