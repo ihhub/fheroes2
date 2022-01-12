@@ -34,28 +34,6 @@
 
 namespace
 {
-    bool isHeroAllowedToUseWhirlpool( const Heroes & hero )
-    {
-        if ( hero.GetArmy().getTotalCount() == 1 ) {
-            // No way a hero can loose any army.
-            return true;
-        }
-
-        switch ( hero.getAIRole() ) {
-        case Heroes::Role::HUNTER:
-            break;
-        case Heroes::Role::FIGHTER:
-            // Fighters shouldn't use whirlpools as they can loose an important army.
-            return false;
-        default:
-            // If you set a new type of a hero you must add the logic here.
-            assert( 0 );
-            break;
-        }
-
-        return true;
-    }
-
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
@@ -1076,7 +1054,7 @@ namespace AI
 #endif
 
         // pre-cache the pathfinder
-        _pathfinder.reEvaluateIfNeeded( hero, isHeroAllowedToUseWhirlpool( hero ) );
+        _pathfinder.reEvaluateIfNeeded( hero );
 
         const uint32_t leftMovePoints = hero.GetMovePoints();
 
@@ -1144,7 +1122,7 @@ namespace AI
                        hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
         }
         else if ( !heroInPatrolMode ) {
-            priorityTarget = _pathfinder.getFogDiscoveryTile( hero, isHeroAllowedToUseWhirlpool( hero ) );
+            priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 
@@ -1222,11 +1200,11 @@ namespace AI
                             continue;
                         }
 
-                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero, isHeroAllowedToUseWhirlpool( *heroInfo.hero ) ) ) {
+                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
                             continue;
                         }
 
-                        const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero, isHeroAllowedToUseWhirlpool( *heroInfo.hero ) );
+                        const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
                         if ( targetIndex != -1 ) {
                             bestTargetIndex = targetIndex;
                             bestHero = heroInfo.hero;
@@ -1242,7 +1220,7 @@ namespace AI
                 }
             }
 
-            _pathfinder.reEvaluateIfNeeded( *bestHero, isHeroAllowedToUseWhirlpool( *bestHero ) );
+            _pathfinder.reEvaluateIfNeeded( *bestHero );
             bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
 
             const size_t heroesBefore = heroes.size();
