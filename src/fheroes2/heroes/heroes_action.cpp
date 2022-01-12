@@ -492,7 +492,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToFlotSam( *this, objectType, tileIndex );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             ActionToShipwreckSurvivor( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:

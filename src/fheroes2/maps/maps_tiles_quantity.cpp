@@ -31,7 +31,7 @@ bool Maps::Tiles::QuantityIsValid( void ) const
     case MP2::OBJ_RESOURCE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
     case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_WATERCHEST:
     case MP2::OBJ_ABANDONEDMINE:
@@ -168,7 +168,7 @@ Artifact Maps::Tiles::QuantityArtifact( void ) const
     case MP2::OBJ_DAEMONCAVE:
     case MP2::OBJ_WATERCHEST:
     case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
         return Artifact( quantity1 );
@@ -432,7 +432,7 @@ void Maps::Tiles::QuantityReset( void )
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_WAGON:
     case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
     case MP2::OBJ_WATERCHEST:
     case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_SHIPWRECK:
@@ -613,7 +613,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_SHIPWRECKSURVIROR: {
+    case MP2::OBJ_SHIPWRECKSURVIVOR: {
         Rand::Queue percents( 3 );
         // 55%: artifact 1
         percents.Push( 1, 55 );

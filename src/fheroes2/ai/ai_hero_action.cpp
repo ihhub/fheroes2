@@ -304,7 +304,7 @@ namespace AI
             AIToAbandoneMine( hero, objectType, dst_index );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             AIToShipwreckSurvivor( hero, objectType, dst_index );
             break;
 

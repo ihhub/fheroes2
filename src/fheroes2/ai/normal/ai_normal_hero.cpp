@@ -82,7 +82,7 @@ namespace
         }
 
         switch ( objectType ) {
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:

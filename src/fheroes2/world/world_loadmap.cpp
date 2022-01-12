@@ -613,7 +613,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
         case MP2::OBJ_DERELICTSHIP:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
