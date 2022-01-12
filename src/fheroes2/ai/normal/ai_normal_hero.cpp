@@ -101,8 +101,8 @@ namespace
             return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
-            // Additional checks will follow
-            return true;
+            // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
+            return false;
 
         case MP2::OBJ_COAST:
             // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
@@ -424,8 +424,8 @@ namespace
             return false;
 
         case MP2::OBJ_STONELITHS:
-            // Additional checks will follow
-            return true;
+            // AI should never consider a stone lith as a destination point. It uses them only to make a path.
+            return false;
 
         case MP2::OBJ_JAIL:
             return hero.GetKingdom().GetHeroes().size() < Kingdom::GetMaxHeroes();
@@ -676,12 +676,9 @@ namespace AI
             return tile.QuantityTroop().GetStrength();
         }
         else if ( objectType == MP2::OBJ_STONELITHS ) {
-            const MapsIndexes & list = world.GetTeleportEndPoints( index );
-            for ( const int teleportIndex : list ) {
-                if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
-                    return 0;
-            }
-            return valueToIgnore;
+            // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
             const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
@@ -701,12 +698,9 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
-            const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
-            for ( const int whirlpoolIndex : list ) {
-                if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
-                    return -3000.0;
-            }
-            return valueToIgnore;
+            // Whirlpool is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
             // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
@@ -913,12 +907,9 @@ namespace AI
             return tile.QuantityTroop().GetStrength();
         }
         else if ( objectType == MP2::OBJ_STONELITHS ) {
-            const MapsIndexes & list = world.GetTeleportEndPoints( index );
-            for ( const int teleportIndex : list ) {
-                if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
-                    return 0;
-            }
-            return valueToIgnore;
+            // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
             const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
@@ -938,12 +929,9 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
-            const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
-            for ( const int whirlpoolIndex : list ) {
-                if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
-                    return -3000.0;
-            }
-            return valueToIgnore;
+            // Whirlpool is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
             // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
