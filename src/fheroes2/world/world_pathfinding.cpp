@@ -500,16 +500,17 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, const bool cons
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero, considerWhirlpools );
+
     const int start = hero.GetIndex();
+    const int scouteValue = hero.GetScoute();
 
     const Directions & directions = Direction::All();
     std::vector<bool> tilesVisited( world.getSize(), false );
     std::vector<int> nodesToExplore;
 
-    nodesToExplore.push_back( start );
     tilesVisited[start] = true;
 
-    const int scouteValue = hero.GetScoute();
+    nodesToExplore.push_back( start );
 
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
@@ -533,23 +534,51 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, const bool cons
         }
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
-            if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                const int newIndex = currentNodeIdx + _mapOffset[i];
-                if ( !tilesVisited[newIndex] ) {
-                    tilesVisited[newIndex] = true;
+            if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                continue;
+            }
 
-                    // Don't go onto action objects as they might be castles or dwellings with guards.
-                    if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
-                        continue;
-                    }
+            const int newIndex = currentNodeIdx + _mapOffset[i];
 
-                    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-                    if ( _cache[newIndex]._cost && monsters.empty() )
-                        nodesToExplore.push_back( newIndex );
+            if ( tilesVisited[newIndex] ) {
+                continue;
+            }
+
+            tilesVisited[newIndex] = true;
+
+            const MP2::MapObjectType newTileObject = world.GetTiles( newIndex ).GetObject( true );
+
+            // Don't go onto action objects (except Stone Liths and Whirlpools) as they might be castles or dwellings with guards.
+            if ( MP2::isActionObject( newTileObject ) && newTileObject != MP2::OBJ_STONELITHS && newTileObject != MP2::OBJ_WHIRLPOOL ) {
+                continue;
+            }
+
+            // Tile is either unreachable or guarded by monsters
+            if ( _cache[newIndex]._cost == 0 || !Maps::GetTilesUnderProtection( newIndex ).empty() ) {
+                continue;
+            }
+
+            nodesToExplore.push_back( newIndex );
+
+            // If there is a teleporter on this tile, we should also consider the endpoints
+            MapsIndexes teleporters = world.GetTeleportEndPoints( newIndex );
+
+            if ( teleporters.empty() && _considerWhirlpools ) {
+                teleporters = world.GetWhirlpoolEndPoints( newIndex );
+            }
+
+            for ( const int teleportIndex : teleporters ) {
+                if ( tilesVisited[teleportIndex] ) {
+                    continue;
                 }
+
+                tilesVisited[teleportIndex] = true;
+
+                nodesToExplore.push_back( teleportIndex );
             }
         }
     }
+
     return -1;
 }
 
@@ -557,6 +586,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero, const bool con
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero, considerWhirlpools );
+
     const int start = hero.GetIndex();
 
     Directions directions = Direction::All();
@@ -564,22 +594,26 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero, const bool con
     Rand::Shuffle( directions );
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
-        if ( Maps::isValidDirection( start, directions[i] ) ) {
-            const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
-            if ( newIndex == start )
-                continue;
+        if ( !Maps::isValidDirection( start, directions[i] ) ) {
+            continue;
+        }
 
-            // Don't go onto action objects as they maybe castles or dwellings with battles.
-            if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
-                continue;
-            }
+        const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
+        if ( newIndex == start ) {
+            continue;
+        }
 
-            const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-            if ( _cache[newIndex]._cost && monsters.empty() ) {
-                return newIndex;
-            }
+        // Don't go onto action objects as they might be castles or dwellings with guards.
+        if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+            continue;
+        }
+
+        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
+        if ( _cache[newIndex]._cost && monsters.empty() ) {
+            return newIndex;
         }
     }
+
     return -1;
 }
 
