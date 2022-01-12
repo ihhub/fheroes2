@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 13:39+0100\n"
+"POT-Creation-Date: 2022-01-01 09:45+0100\n"
 "PO-Revision-Date: 2021-11-07 17:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1316,6 +1316,249 @@ msgid "Build %{name}."
 msgstr "Construir %{name}"
 
 #, fuzzy
+msgid "Blackridge"
+msgstr "Puente"
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+#, fuzzy
+msgid "Whiteshield"
+msgstr "Perla Blanca"
+
+#, fuzzy
+msgid "Woodhaven"
+msgstr "Madera"
+
+#, fuzzy
+msgid "Blackwind"
+msgstr "Herrero"
+
+#, fuzzy
+msgid "Bloodreign"
+msgstr "Buena Moral"
+
+#, fuzzy
+msgid "Dragontooth"
+msgstr "Dragón rojo"
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+#, fuzzy
+msgid "Tundara"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Vulcania"
+msgstr "Volcán"
+
+msgid "Baywatch"
+msgstr ""
+
+#, fuzzy
+msgid "Fountainhead"
+msgstr "Fuente"
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+#, fuzzy
+msgid "Sandcaster"
+msgstr "Sandro"
+
+msgid "Alamar"
+msgstr "Alamar"
+
+#, fuzzy
+msgid "Burlock"
+msgstr "Brujo"
+
+#, fuzzy
+msgid "Dragadune"
+msgstr "Dragón rojo"
+
+msgid "Kalindra"
+msgstr "Kalindra"
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+#, fuzzy
+msgid "Blackfang"
+msgstr "Dragón Negro"
+
+#, fuzzy
+msgid "New Dawn"
+msgstr "Dawn"
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+#, fuzzy
+msgid "Antioch"
+msgstr "\"Anexión\""
+
+#, fuzzy
+msgid "Avalon"
+msgstr "Halon"
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+#, fuzzy
+msgid "Weed Patch"
+msgstr "Reloj de Oro"
+
+#, fuzzy
+msgid "Brownston"
+msgstr "Marrón"
+
+#, fuzzy
+msgid "Hilltop"
+msgstr "Fuerte de la Colina"
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+#, fuzzy
+msgid "Whittingham"
+msgstr "Nivel"
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+#, fuzzy
+msgid "Sherman"
+msgstr "Sherman"
+
+msgid "Yorksford"
+msgstr ""
+
+#, fuzzy
+msgid "Blackburn"
+msgstr "Dragón Negro"
+
+#, fuzzy
+msgid "Blacksford"
+msgstr "Torre Negra"
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+#, fuzzy
+msgid "Lankershire"
+msgstr "Liderazgo"
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+#, fuzzy
+msgid "Troy"
+msgstr "Troyan"
+
+#, fuzzy
+msgid "Forder Oaks"
+msgstr "Tierras fronterizas"
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+#, fuzzy
+msgid "Willow"
+msgstr "Amarillo"
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "No puedes reclutar, tienes demasiados Héroes."
 
@@ -2089,6 +2332,9 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
+msgid "OK"
+msgstr "OK"
+
 #, fuzzy
 msgid "Attention"
 msgstr "\"Anexión\""
@@ -2264,6 +2510,14 @@ msgid "(not visited)"
 msgstr "(no visitado)"
 
 #, fuzzy
+msgid "%{color} Barrier"
+msgstr "%{color} jugador"
+
+#, fuzzy
+msgid "%{color} Tent"
+msgstr "%{color} jugador"
+
+#, fuzzy
 msgid "Road"
 msgstr "Fin del camino"
 
@@ -2292,6 +2546,9 @@ msgstr "%{name} ( Nivel %{level} )"
 
 msgid "Move Points"
 msgstr "Puntos de movimiento"
+
+msgid "Cost per troop:"
+msgstr ""
 
 msgid "Available: %{count}"
 msgstr "Disponible: %{count}"
@@ -2327,9 +2584,6 @@ msgstr "Archivo a Cargar:"
 msgid "Click to save the current game."
 msgstr "Haz clic para volver al menú principal"
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Cargar una partida previamente grabada."
@@ -2359,6 +2613,24 @@ msgstr "Seleccionar objetivo del hechizo"
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Defensa"
+
+#, fuzzy
+msgid "Location: "
+msgstr "Excavación"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Map Type:\n"
+msgstr "Tamaño del Mapa"
+
+#, fuzzy
+msgid "The Succession Wars"
+msgstr "El Otro Lado"
+
+msgid "The Price of Loyalty"
+msgstr ""
 
 #, fuzzy
 msgid "Map difficulty:"
@@ -2949,8 +3221,11 @@ msgstr "Puntuaciones más altas"
 msgid "View the high scores screen."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
 #, fuzzy
-msgid "Game settings."
+msgid "Game Settings"
 msgstr "Ajustes"
 
 msgid ""
@@ -3585,9 +3860,6 @@ msgstr "Vatawna"
 msgid "Agar"
 msgstr "Agar"
 
-msgid "Alamar"
-msgstr "Alamar"
-
 msgid "Arie"
 msgstr "Arie"
 
@@ -3617,9 +3889,6 @@ msgstr "Flint"
 
 msgid "Halon"
 msgstr "Halon"
-
-msgid "Kalindra"
-msgstr "Kalindra"
 
 msgid "Mandigal"
 msgstr "Mandigal"
@@ -4014,11 +4283,11 @@ msgstr ""
 "¿Vas a buscar?"
 
 msgid ""
-"You come upon the pyramid of a great and ancient king.\n"
-"Routine exploration reveals that the pyramid is completely empty."
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
 msgstr ""
-"Te aproximas a la pirámide de un antiguo y gran rey.\n"
-"Exploraciones rutinarias te indican que la pirámide está completamente vacía."
+"Al derrotar a los monstruos, descrifras un antiguo  jeroglífico de la pared "
+"que explica el secreto del hechizo - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
@@ -4032,14 +4301,11 @@ msgstr ""
 "hechizo y no eres capaz de aprenderlo."
 
 msgid ""
-"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
-"telling the secret of the spell - '"
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
-"Al derrotar a los monstruos, descrifras un antiguo  jeroglífico de la pared "
-"que explica el secreto del hechizo - '"
-
-msgid "Sign"
-msgstr "Señal"
+"Te aproximas a la pirámide de un antiguo y gran rey.\n"
+"Exploraciones rutinarias te indican que la pirámide está completamente vacía."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -4240,9 +4506,6 @@ msgstr ""
 "segura en un océano sin compasión. Agradecido, te recompensa por tu acto de "
 "bondad con %{art}"
 
-msgid "Artifact"
-msgstr "Artefacto"
-
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 "Un Leprechaun te ofrece %{art} por el pequeño precio de %{gold} piezas de "
@@ -4257,6 +4520,9 @@ msgstr ""
 
 msgid "Do you wish to buy this artifact?"
 msgstr "¿Deseas comprar este artefacto?"
+
+msgid "Artifact"
+msgstr "Artefacto"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -4292,7 +4558,7 @@ msgstr ""
 "está dispuesto a darle el %{art} al primer líder auténtico que se encuentre."
 
 msgid ""
-"You've encountered a strange person with a hat and an owl on it. He tells is "
+"You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 
@@ -4920,6 +5186,28 @@ msgstr ""
 "\""
 
 msgid ""
+"The head groom speaks to you, \"That is a fine looking horse you have. I am "
+"afraid we can give you no better, but the horses your cavalry are riding "
+"look to be of poor breeding stock. We have many trained war horses which "
+"would aid your riders greatly. I insist you take them.\""
+msgstr ""
+"El mozo de establo dice: \"Parece buen caballo el que montas. Me temo que no "
+"puedo ofrecer uno mejor, pero los caballos que lleva tu caballería parecen "
+"no ser de raza. Hemos entrenado muchos caballos de batalla lo cual ayudará a "
+"tus jinetes mucho. Insisto en que te los lleves."
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, he will "
+"grow tired in a week. You must also let me give better horses to your "
+"mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+"Al aproximarte a los establos, el mozo de cuadra aparece guiando un buen "
+"caballo de batalla. \"Este corcel te ayudará a acelerar tus viajes. Oh, se "
+"cansará en una semana. Deberíais permitirme daros mejores caballos para tus "
+"soldados montados, puesto que sus caballos parecen debiluchos."
+
+msgid ""
 "The head groom approaches you and speaks, \"You already have a fine horse, "
 "and have no inexperienced cavalry which might make use of our trained war "
 "horses.\""
@@ -4941,28 +5229,6 @@ msgstr ""
 "en una semana. También tenemos buenos caballos de batalla que podrían "
 "beneficiar a tus solados montados, pero no tienes ninguno así que no te "
 "podemos ayudar\"."
-
-msgid ""
-"The head groom speaks to you, \"That is a fine looking horse you have. I am "
-"afraid we can give you no better, but the horses your cavalry are riding "
-"look to be of poor breeding stock. We have many trained war horses which "
-"would aid your riders greatly. I insist you take them.\""
-msgstr ""
-"El mozo de establo dice: \"Parece buen caballo el que montas. Me temo que no "
-"puedo ofrecer uno mejor, pero los caballos que lleva tu caballería parecen "
-"no ser de raza. Hemos entrenado muchos caballos de batalla lo cual ayudará a "
-"tus jinetes mucho. Insisto en que te los lleves."
-
-msgid ""
-"As you approach the stables, the head groom appears, leading a fine looking "
-"war horse. \"This steed will help speed you in your travels. Alas, he will "
-"grow tired in a week. You must also let me give better horses to your "
-"mounted soldiers, their horses look shoddy and weak.\""
-msgstr ""
-"Al aproximarte a los establos, el mozo de cuadra aparece guiando un buen "
-"caballo de batalla. \"Este corcel te ayudará a acelerar tus viajes. Oh, se "
-"cansará en una semana. Deberíais permitirme daros mejores caballos para tus "
-"soldados montados, puesto que sus caballos parecen debiluchos."
 
 msgid "The Arena guards turn you away."
 msgstr "Los Guardas de la Arena te apartan."
@@ -5643,14 +5909,68 @@ msgstr "Naranja"
 msgid "Purple"
 msgstr "Morado"
 
-msgid "Aqua"
+#, fuzzy
+msgid "barrier|Aqua"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Blue"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Brown"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Gold"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Green"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "barrier|Orange"
+msgstr "Naranja"
+
+#, fuzzy
+msgid "barrier|Purple"
+msgstr "Morado"
+
+#, fuzzy
+msgid "barrier|Red"
+msgstr "Barrera"
+
+#, fuzzy
+msgid "tent|Aqua"
 msgstr "Agua"
 
-msgid "Brown"
+#, fuzzy
+msgid "tent|Blue"
+msgstr "Azul"
+
+#, fuzzy
+msgid "tent|Brown"
 msgstr "Marrón"
 
-msgid "Gold"
+#, fuzzy
+msgid "tent|Gold"
 msgstr "Oro"
+
+#, fuzzy
+msgid "tent|Green"
+msgstr "Verde"
+
+#, fuzzy
+msgid "tent|Orange"
+msgstr "Naranja"
+
+#, fuzzy
+msgid "tent|Purple"
+msgstr "Morado"
+
+msgid "tent|Red"
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr ""
@@ -6109,6 +6429,9 @@ msgstr ""
 
 msgid "Magic Well"
 msgstr "Pozo Mágico"
+
+msgid "Sign"
+msgstr "Señal"
 
 msgid "Nothing Special"
 msgstr "Nada especial"
@@ -6841,7 +7164,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#, c-format
 msgid "% magic resistance"
 msgstr ""
 
@@ -6864,27 +7186,22 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from Elemental spells"
 msgstr "Elementales del Agua"
 
-#, c-format
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#, c-format
 msgid "% chance to Paralyze"
 msgstr ""
 
-#, c-format
 msgid "% chance to Petrify"
 msgstr ""
 
-#, c-format
 msgid "% chance to Blind"
 msgstr ""
 
-#, c-format
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6931,7 +7248,6 @@ msgstr "Castillo de las Nubes"
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#, c-format
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6946,18 +7262,15 @@ msgstr "Elemental del Aire"
 msgid "No Morale"
 msgstr "Moral"
 
-#, c-format
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#, c-format
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#, c-format
 msgid "% immunity to "
 msgstr ""
 
@@ -6965,7 +7278,7 @@ msgstr ""
 msgid "Lightning"
 msgstr "Vara Relampagueante"
 
-#, fuzzy, c-format
+#, fuzzy
 msgid "% damage from "
 msgstr "Elementales del Agua"
 
@@ -7789,6 +8102,9 @@ msgstr "Cristal"
 msgid "Gems"
 msgstr "Gemas"
 
+msgid "Gold"
+msgstr "Oro"
+
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
@@ -8310,6 +8626,30 @@ msgstr "Lanzar hechizo"
 msgid "View %{spell}"
 msgstr "Ver %{name}"
 
+#, fuzzy
+msgid "This spell does %{damage} points of damage."
+msgstr "%{spell} hacen %{damage} de daño."
+
+#, fuzzy
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr "Lanzar %{spell} sobre %{monster}"
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
 msgid "game: always confirm for rewrite savefile"
 msgstr "juego: siempre confirmar al sobreescribir una paritda guardada"
 
@@ -8391,9 +8731,6 @@ msgstr ""
 
 msgid "game: show system info"
 msgstr "juego: mostrar información del sistema"
-
-msgid "game: autosave on"
-msgstr "juego: autoguardado activado"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
@@ -8480,6 +8817,9 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave on"
+#~ msgstr "juego: autoguardado activado"
 
 #, fuzzy
 #~ msgid "Join Error"

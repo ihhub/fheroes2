@@ -23,19 +23,25 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <map>
+#include <memory>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
 
+#include "logging.h"
 #include "system.h"
 #include "tools.h"
 
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+// clang-format off
+// shellapi.h must be included after windows.h
 #include <windows.h>
 #include <shellapi.h>
+// clang-format on
 #else
 #include <dirent.h>
 #endif
@@ -209,7 +215,7 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
         // 2: en_us
         // 1: en
         if ( length < 3 ) {
-            std::list<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
+            std::vector<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
             return list.empty() ? locname : list.front();
         }
     }
@@ -400,3 +406,77 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     return true;
 }
 #endif
+
+std::string System::FileNameToUTF8( const std::string & str )
+{
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    if ( str.empty() ) {
+        return str;
+    }
+
+    static std::map<std::string, std::string> acpToUtf8;
+
+    const auto iter = acpToUtf8.find( str );
+    if ( iter != acpToUtf8.end() ) {
+        return iter->second;
+    }
+
+    // In case of any issues, the original string will be returned, so let's put it to the cache right away
+    acpToUtf8[str] = str;
+
+    auto getLastErrorStr = []() {
+        LPTSTR msgBuf;
+
+        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0,
+                            reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
+             > 0 ) {
+            const std::string result( msgBuf );
+
+            LocalFree( msgBuf );
+
+            return result;
+        }
+
+        return std::string( "FormatMessage() failed: " ) + std::to_string( GetLastError() );
+    };
+
+    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
+    if ( wLen <= 0 ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
+
+    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
+    if ( uLen <= 0 ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::unique_ptr<char[]> uStr( new char[uLen] );
+
+    if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::string result( uStr.get() );
+
+    // Put the final result to the cache
+    acpToUtf8[str] = result;
+
+    return result;
+#else
+    return str;
+#endif
+}

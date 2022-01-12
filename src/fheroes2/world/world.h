@@ -186,8 +186,15 @@ public:
 
     void InitKingdoms( void );
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( int color )
+    {
+        return vec_kingdoms.GetKingdom( color );
+    }
+
+    const Kingdom & GetKingdom( int color ) const
+    {
+        return vec_kingdoms.GetKingdom( color );
+    }
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
     const Castle * getCastle( const fheroes2::Point & tilePosition ) const;
@@ -211,8 +218,6 @@ public:
     const Heroes * GetHeroesCondLoss( void ) const;
 
     CastleHeroes GetHeroes( const Castle & ) const;
-
-    void RescanAllHeroesPathPassable() const;
 
     const UltimateArtifact & GetUltimateArtifact( void ) const;
     bool DiggingForUltimateArtifact( const fheroes2::Point & );
@@ -270,8 +275,6 @@ public:
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
 
-    bool isTileBlocked( int toTile, bool fromWater ) const;
-    bool isValidPath( const int index, const int direction, const int heroColor ) const;
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();

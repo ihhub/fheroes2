@@ -545,6 +545,8 @@ fheroes2::GameMode Game::HighScores()
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             hgs.RedrawList( top.x, top.y );
+            buttonCampain.draw();
+            buttonExit.draw();
             display.render();
         }
     }

@@ -169,6 +169,8 @@ namespace Battle
         static Interface * GetInterface( void );
         static Graveyard * GetGraveyard( void );
 
+        static bool isAnyTowerPresent();
+
         enum
         {
             CATAPULT_POS = 77,

@@ -55,9 +55,7 @@ namespace
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
-        // AI heroes must not take into account coast tile as an action tile. They should calculate paths through them.
-        // TODO: remove the condition for coast once AI is capable to create a path between land and water.
-        if ( !MP2::isActionObject( objectType ) && objectType != MP2::OBJ_COAST ) {
+        if ( !MP2::isActionObject( objectType ) ) {
             return false;
         }
 
@@ -82,7 +80,9 @@ namespace
         case MP2::OBJ_WHIRLPOOL:
             return hero.isShipMaster() && !hero.isVisited( tile );
         case MP2::OBJ_COAST:
-            return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
+            // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
+            assert( 0 );
+            return false;
 
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_MINES:
@@ -395,6 +395,9 @@ namespace
             return AIShouldVisitCastle( hero, index );
 
         case MP2::OBJ_BOAT:
+            // AI should never consider a boat as a destination point. It uses them only to make a path.
+            return false;
+
         case MP2::OBJ_STONELITHS:
             // check later
             return true;
@@ -446,7 +449,7 @@ namespace
         }
 
         hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
-        if ( !hero->MayStillMove( false ) ) {
+        if ( !hero->MayStillMove( false, false ) ) {
             hero->SetModes( Heroes::MOVED );
         }
         else {
@@ -541,7 +544,6 @@ namespace
     // Multiply by this value if you are getting a FREE upgrade.
     const double freeMonsterUpgradeModifier = 3;
 
-    const double suboptimalTaskPenalty = 10000.0;
     const double dangerousTaskPenalty = 20000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
@@ -669,15 +671,9 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            const RegionStats & regionStats = _regions[tile.GetRegion()];
-            const size_t objectCount = regionStats.validObjects.size();
-            if ( objectCount < 1 )
-                return valueToIgnore;
-
-            double value = objectCount * 100.0 - 7500;
-            if ( regionStats.friendlyHeroCount )
-                value -= suboptimalTaskPenalty;
-            return value;
+            // Coast is not an object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
             const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
@@ -688,8 +684,9 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // de-prioritize the water movement even harder
-            return -5000.0;
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_MAGICWELL ) {
             if ( !hero.HaveSpellBook() ) {
@@ -911,15 +908,9 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            const RegionStats & regionStats = _regions[tile.GetRegion()];
-            const size_t objectCount = regionStats.validObjects.size();
-            if ( objectCount < 1 )
-                return valueToIgnore;
-
-            double value = objectCount * 100.0 - 7500;
-            if ( regionStats.friendlyHeroCount )
-                value -= suboptimalTaskPenalty;
-            return value;
+            // Coast is not an object. If this assertion blows up something is wrong the the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
             const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
@@ -930,8 +921,9 @@ namespace AI
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // de-prioritize the water movement even harder
-            return -5000.0;
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_MAGICWELL ) {
             if ( !hero.HaveSpellBook() ) {
@@ -1249,7 +1241,7 @@ namespace AI
             }
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
-                if ( !availableHeroes[i].hero->MayStillMove( false ) ) {
+                if ( !availableHeroes[i].hero->MayStillMove( false, false ) ) {
                     availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
@@ -1264,7 +1256,7 @@ namespace AI
         const bool allHeroesMoved = availableHeroes.empty();
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
-            if ( !heroInfo.hero->MayStillMove( false ) ) {
+            if ( !heroInfo.hero->MayStillMove( false, false ) ) {
                 heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }

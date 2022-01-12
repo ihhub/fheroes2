@@ -85,7 +85,7 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType );
+void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType, const std::string & defaultMessage );
 void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToEvent( Heroes & hero, s32 dst_index );
 void ActionToObelisk( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
@@ -631,7 +631,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
         case MP2::OBJ_HILLFORT:
         case MP2::OBJ_FREEMANFOUNDRY:
-            ActionToUpgradeArmyObject( *this, objectType );
+            ActionToUpgradeArmyObject( *this, objectType, "" );
             break;
 
         case MP2::OBJ_EVENT:
@@ -1805,7 +1805,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 else {
                     // Did you add a new condition? If yes add a proper if-else branch.
                     assert( 0 );
-                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells is you that he is willing to give %{art} if you have %{skill}." );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells you that he is willing to give %{art} if you have %{skill}." );
                     StringReplace( msg, "%{skill}", skill.GetName() );
                 }
 
@@ -2385,6 +2385,10 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
+    if ( !Settings::Get().MusicMIDI() ) {
+        AGG::PlayMusic( MUS::WATCHTOWER, true );
+    }
+
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
@@ -2486,7 +2490,7 @@ bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1,
     return false;
 }
 
-void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType )
+void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType, const std::string & defaultMessage )
 {
     std::string monsters;
     std::string monsters_upgrade;
@@ -2514,6 +2518,14 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
         msg2 = _(
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
+        break;
+    }
+    case MP2::OBJ_STABLES: {
+        assert( !defaultMessage.empty() );
+        msg1 = defaultMessage;
+        msg2 = defaultMessage;
+
+        monsToUpgrade = { Monster( Monster::CAVALRY ) };
         break;
     }
 
@@ -2934,22 +2946,26 @@ void ActionToAlchemistsTower( Heroes & hero )
 
 void ActionToStables( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
-    const bool cavalry = hero.GetArmy().HasMonster( Monster::CAVALRY );
+    const bool isCavalryPresent = hero.GetArmy().HasMonster( Monster::CAVALRY );
     const bool visited = hero.isObjectTypeVisited( objectType );
     std::string body;
 
-    if ( !cavalry && visited )
-        body = _(
-            "The head groom approaches you and speaks, \"You already have a fine horse, and have no inexperienced cavalry which might make use of our trained war horses.\"" );
-    else if ( !cavalry && !visited )
-        body = _(
-            "As you approach the stables, the head groom appears, leading a fine looking war horse. \"This steed will help speed you in your travels. Alas, his endurance will wane with a lot of heavy riding, and you must return for a fresh mount in a week. We also have many fine war horses which could benefit mounted soldiers, but you have none we can help.\"" );
-    else if ( cavalry && visited )
+    if ( isCavalryPresent && visited ) {
         body = _(
             "The head groom speaks to you, \"That is a fine looking horse you have. I am afraid we can give you no better, but the horses your cavalry are riding look to be of poor breeding stock. We have many trained war horses which would aid your riders greatly. I insist you take them.\"" );
-    else if ( cavalry && !visited )
+    }
+    if ( isCavalryPresent && !visited ) {
         body = _(
             "As you approach the stables, the head groom appears, leading a fine looking war horse. \"This steed will help speed you in your travels. Alas, he will grow tired in a week. You must also let me give better horses to your mounted soldiers, their horses look shoddy and weak.\"" );
+    }
+    else if ( !isCavalryPresent && visited ) {
+        body = _(
+            "The head groom approaches you and speaks, \"You already have a fine horse, and have no inexperienced cavalry which might make use of our trained war horses.\"" );
+    }
+    else {
+        body = _(
+            "As you approach the stables, the head groom appears, leading a fine looking war horse. \"This steed will help speed you in your travels. Alas, his endurance will wane with a lot of heavy riding, and you must return for a fresh mount in a week. We also have many fine war horses which could benefit mounted soldiers, but you have none we can help.\"" );
+    }
 
     // check if already visited
     if ( !visited ) {
@@ -2958,10 +2974,12 @@ void ActionToStables( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
         hero.IncreaseMovePoints( 400 );
     }
 
-    if ( cavalry )
-        hero.GetArmy().UpgradeMonsters( Monster::CAVALRY );
-
-    Dialog::Message( MP2::StringObject( objectType ), body, Font::BIG, Dialog::OK );
+    if ( isCavalryPresent ) {
+        ActionToUpgradeArmyObject( hero, objectType, body );
+    }
+    else {
+        Dialog::Message( MP2::StringObject( objectType ), body, Font::BIG, Dialog::OK );
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

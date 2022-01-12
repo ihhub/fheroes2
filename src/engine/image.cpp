@@ -463,16 +463,6 @@ namespace fheroes2
         return _data.get();
     }
 
-    uint8_t * Image::transform()
-    {
-        return _data.get() + _width * _height;
-    }
-
-    const uint8_t * Image::transform() const
-    {
-        return _data.get() + _width * _height;
-    }
-
     void Image::clear()
     {
         _data.reset();
@@ -615,6 +605,10 @@ namespace fheroes2
     {
         _updateRoi();
         _copy.resize( _width, _height );
+        if ( _image.singleLayer() ) {
+            _copy._disableTransformLayer();
+        }
+
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
@@ -628,6 +622,10 @@ namespace fheroes2
     {
         _updateRoi();
         _copy.resize( _width, _height );
+        if ( _image.singleLayer() ) {
+            _copy._disableTransformLayer();
+        }
+
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
@@ -713,6 +711,17 @@ namespace fheroes2
             }
             _height -= offsetY;
         }
+    }
+
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return in;
+
+        Sprite out = makeShadow( in, shadowOffset, transformId );
+        Blit( in, out, -shadowOffset.x, 0 );
+
+        return out;
     }
 
     void AddTransparency( Image & image, uint8_t valueToReplace )
@@ -966,6 +975,7 @@ namespace fheroes2
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
             if ( out.singleLayer() ) {
+                assert( !in.singleLayer() );
                 for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                     const uint8_t * imageInX = imageInY;
                     const uint8_t * transformInX = transformInY;
@@ -1020,6 +1030,7 @@ namespace fheroes2
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
             if ( out.singleLayer() ) {
+                assert( !in.singleLayer() );
                 for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                     const uint8_t * imageInX = imageInY;
                     const uint8_t * transformInX = transformInY;
@@ -1094,22 +1105,39 @@ namespace fheroes2
 
         const int32_t offsetOutY = outY * widthOut + outX;
         uint8_t * imageOutY = out.image() + offsetOutY;
-        const uint8_t * imageInYEnd = imageInY + height * widthIn;
+        const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
         if ( out.singleLayer() ) {
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
+            }
+        }
+        else if ( in.singleLayer() ) {
+            uint8_t * transformOutY = out.transform() + offsetOutY;
+
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
+                memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
+                std::fill( transformOutY, transformOutY + width, 0 );
             }
         }
         else {
             const uint8_t * transformInY = in.transform() + offsetInY;
             uint8_t * transformOutY = out.transform() + offsetOutY;
 
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
                 memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
             }
         }
+    }
+
+    void CopyTransformLayer( const Image & in, Image & out )
+    {
+        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
+            assert( 0 );
+            return;
+        }
+        memcpy( out.transform(), in.transform(), in.width() * in.height() );
     }
 
     Image CreateBlurredImage( const Image & in, int32_t blurRadius )
@@ -1266,6 +1294,10 @@ namespace fheroes2
         }
 
         Sprite out( width, height );
+        if ( image.singleLayer() ) {
+            out._disableTransformLayer();
+        }
+
         Copy( image, x, y, out, 0, 0, width, height );
         out.setPosition( x, y );
         return out;
@@ -1770,6 +1802,39 @@ namespace fheroes2
         return GetPALColorId( red / 4, green / 4, blue / 4 );
     }
 
+    Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return Sprite();
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        // Shadow has (-x, +y) offset.
+        Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
+        out.reset();
+
+        const int32_t widthOut = out.width();
+
+        const uint8_t * transformInY = in.transform();
+        const uint8_t * transformInYEnd = transformInY + width * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+
+        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 ) {
+                    *transformOutX = transformId;
+                }
+            }
+        }
+
+        return out;
+    }
+
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
     {
         if ( image.empty() )
@@ -2110,6 +2175,33 @@ namespace fheroes2
             for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, imageOutY += height, transformOutY += height ) {
                 *imageOutY = *imageInX;
                 *transformOutY = *transformInX;
+            }
+        }
+    }
+
+    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( image.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) )
+            return;
+
+        const int32_t width = image.width() + shadowOffset.x;
+        const int32_t height = image.height() - shadowOffset.y;
+
+        const int32_t imageWidth = image.width();
+
+        const uint8_t * transformInY = image.transform() - shadowOffset.x;
+        uint8_t * transformOutY = image.transform() + imageWidth * shadowOffset.y;
+        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
+
+        for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformOutXEnd = transformOutX + width;
+
+            for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 && *transformOutX == 1 ) {
+                    *transformOutX = transformId;
+                }
             }
         }
     }

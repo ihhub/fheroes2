@@ -28,14 +28,15 @@
 #include "localevent.h"
 #include "settings.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 
-void Dialog::SpellInfo( const Spell & spell, bool ok_button )
+void Dialog::SpellInfo( const Spell & spell, const HeroBase * hero, const bool showOkayButton )
 {
-    std::string msg = spell.GetDescription();
+    std::string msg = fheroes2::getSpellDescription( spell, hero );
     u32 extra = spell.ExtraValue();
 
     switch ( spell.GetID() ) {
@@ -56,7 +57,7 @@ void Dialog::SpellInfo( const Spell & spell, bool ok_button )
     else
         StringReplace( msg, "%{count}", extra );
 
-    Dialog::SpellInfo( spell.GetName(), msg, spell, ok_button );
+    Dialog::SpellInfo( spell.GetName(), msg, spell, showOkayButton );
 }
 
 void Dialog::SpellInfo( const std::string & header, const std::string & message, const Spell & spell, bool ok_button )

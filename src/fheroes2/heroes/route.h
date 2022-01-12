@@ -81,9 +81,11 @@ namespace Route
 
         Path & operator=( const Path & ) = delete;
 
-        s32 GetDestinationIndex( void ) const;
-        s32 GetLastIndex( void ) const;
-        s32 GetDestinedIndex( void ) const;
+        // Returns the destination index of the path, or, if the returnLastStep is true, returns the index of the last
+        // step of the path. Usually it's the same thing if PlayerWorldPathfinder was used to calculate the path, but
+        // this may not be the case if AIWorldPathfinder was used - due to the peculiarities of laying the path through
+        // heroes, neutral armies, teleports or water.
+        int32_t GetDestinationIndex( const bool returnLastStep = false ) const;
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
@@ -96,18 +98,14 @@ namespace Route
         {
             hide = true;
         }
-        void Reset( void );
+        void Reset();
         void PopFront( void );
-        void PopBack( void );
-        void RescanObstacle( void );
-        void RescanPassable( void );
 
         bool isValid( void ) const;
         bool isShow( void ) const
         {
             return !hide;
         }
-        bool hasObstacle( void ) const;
         bool hasAllowedSteps() const;
 
         std::string String( void ) const;
@@ -116,7 +114,6 @@ namespace Route
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
-
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );
 

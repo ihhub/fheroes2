@@ -49,7 +49,7 @@ namespace
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
-        // UNUSED = 0x00000008,
+        GLOBAL_RENDER_VSYNC = 0x00000008,
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
 
@@ -99,8 +99,6 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
-    ExtSetModes( GAME_AUTOSAVE_ON );
-
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
@@ -311,6 +309,15 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "v-sync" ) ) {
+        if ( config.StrParams( "v-sync" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_RENDER_VSYNC );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_RENDER_VSYNC );
+        }
+    }
+
     BinaryLoad();
 
     if ( video_mode.width > 0 && video_mode.height > 0 ) {
@@ -427,6 +434,9 @@ std::string Settings::String() const
     os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
     os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
+    os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
+
     return os.str();
 }
 
@@ -460,11 +470,6 @@ int Settings::Debug() const
 int Settings::GameDifficulty() const
 {
     return game_difficulty;
-}
-
-int Settings::CurrentColor() const
-{
-    return players.current_color;
 }
 
 const std::string & Settings::getGameLanguage() const
@@ -728,24 +733,6 @@ void Settings::SetGameDifficulty( int d )
     game_difficulty = d;
 }
 
-void Settings::SetCurrentColor( int color )
-{
-    players.current_color = color;
-}
-
-int Settings::SoundVolume() const
-{
-    return sound_volume;
-}
-int Settings::MusicVolume() const
-{
-    return music_volume;
-}
-MusicSource Settings::MusicType() const
-{
-    return _musicType;
-}
-
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
@@ -764,36 +751,9 @@ void Settings::SetMusicType( int v )
     _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
 }
 
-/* check game type */
-bool Settings::IsGameType( int f ) const
-{
-    return ( game_type & f ) != 0;
-}
-
-int Settings::GameType() const
-{
-    return game_type;
-}
-
-/* set game type */
-void Settings::SetGameType( int type )
-{
-    game_type = type;
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
-}
-
-const Players & Settings::GetPlayers() const
-{
-    return players;
-}
-
-Players & Settings::GetPlayers()
-{
-    return players;
 }
 
 void Settings::SetPreferablyCountPlayers( int c )
@@ -1031,8 +991,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:
         return _( "game: show system info" );
-    case Settings::GAME_AUTOSAVE_ON:
-        return _( "game: autosave on" );
     case Settings::GAME_AUTOSAVE_BEGIN_DAY:
         return _( "game: autosave will be made at the beginning of the day" );
     case Settings::GAME_USE_FADE:
@@ -1045,7 +1003,7 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: offer to continue the game afer victory condition" );
     default:
         break;
-    };
+    }
 
     return std::string();
 }
@@ -1187,11 +1145,6 @@ bool Settings::ExtGameAutosaveBeginOfDay() const
     return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
 }
 
-bool Settings::ExtGameAutosaveOn() const
-{
-    return ExtModes( GAME_AUTOSAVE_ON );
-}
-
 bool Settings::ExtGameUseFade() const
 {
     return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
@@ -1324,6 +1277,11 @@ void Settings::BinaryLoad()
 bool Settings::FullScreen() const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::isVSyncEnabled() const
+{
+    return opt_global.Modes( GLOBAL_RENDER_VSYNC );
 }
 
 bool Settings::isFirstGameRun() const

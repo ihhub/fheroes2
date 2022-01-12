@@ -163,7 +163,14 @@ bool Battle::Only::ChangeSettings( void )
     bool allow1 = true;
     bool allow2 = true;
 
-    fheroes2::Button buttonStart( cur_pt.x + 280, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
+    // hide the shadow from the original EXIT button
+    const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
+    fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
+
+    const int icnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( icnId, 0 );
+    fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, buttonStartImage,
+                                                                         fheroes2::AGG::GetICN( icnId, 1 ), display );
     buttonStart.draw();
 
     display.render();

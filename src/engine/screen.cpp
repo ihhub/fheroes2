@@ -797,6 +797,11 @@ namespace
             return new RenderEngine;
         }
 
+        void setVSync( const bool enable ) override
+        {
+            _isVSyncEnabled = enable;
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -804,6 +809,7 @@ namespace
             , _renderer( nullptr )
             , _texture( nullptr )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
+            , _isVSyncEnabled( false )
         {}
 
         void clear() override
@@ -984,8 +990,14 @@ namespace
 
         fheroes2::Size _windowedSize;
 
+        bool _isVSyncEnabled;
+
         int renderFlags() const
         {
+            if ( _isVSyncEnabled ) {
+                return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+            }
+
             return SDL_RENDERER_ACCELERATED;
         }
 
@@ -1275,12 +1287,17 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
+        _prevRoi = {};
+
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
 
         Image::resize( width_, height_ );
+
+        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
+        std::fill( transform(), transform() + width() * height(), 1 );
     }
 
     bool Display::isDefaultSize() const
@@ -1387,6 +1404,8 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+
+        _prevRoi = {};
     }
 
     void Display::changePalette( const uint8_t * palette ) const

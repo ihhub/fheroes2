@@ -153,6 +153,8 @@ public:
     bool isFire() const;
     bool isCold() const;
 
+    bool isGuardianType() const;
+
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;
 

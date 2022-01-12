@@ -28,6 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
+#include "game_delays.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "icn.h"
@@ -39,6 +40,9 @@
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
+
+#include <array>
+#include <cmath>
 
 namespace
 {
@@ -62,6 +66,21 @@ namespace
         const int32_t buttonYPos = 46;
 
         return fheroes2::Point( buttonXPos, buttonYPos );
+    }
+
+    std::unique_ptr<SMKVideoSequence> getVideo( const std::string & fileName )
+    {
+        std::string videoPath;
+        if ( !Video::isVideoFile( fileName, videoPath ) ) {
+            return nullptr;
+        }
+
+        std::unique_ptr<SMKVideoSequence> video( new SMKVideoSequence( videoPath ) );
+        if ( video->frameCount() < 1 ) {
+            return nullptr;
+        }
+
+        return video;
     }
 }
 
@@ -200,15 +219,10 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
     campaignSaveData.setCurrentScenarioID( 0 );
 
-    std::string videoPath;
-    if ( !Video::isVideoFile( "IVYPOL.SMK", videoPath ) ) {
-        // File doesn't exist. Fallback to PoL campaign.
-        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
-    }
+    std::array<std::unique_ptr<SMKVideoSequence>, 4> videos{ getVideo( "IVYPOL.SMK" ), getVideo( "IVYVOY.SMK" ), getVideo( "IVYWIZ.SMK" ), getVideo( "IVYDES.SMK" ) };
 
-    SMKVideoSequence video( videoPath );
-    if ( video.frameCount() < 1 ) {
-        // File is incorrect. Fallback to PoL campaign.
+    if ( !videos[0] ) {
+        // File doesn't exist. Fallback to PoL campaign.
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
 
@@ -216,7 +230,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const std::vector<uint8_t> palette = video.getCurrentPalette();
+    std::vector<uint8_t> palette = videos[0]->getCurrentPalette();
     screenRestorer.changePalette( palette.data() );
 
     Cursor::Get().setVideoPlaybackCursor();
@@ -234,34 +248,76 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     display.render();
 
-    const fheroes2::Rect priceOfLoyaltyRoi( roiOffset.x + 192, roiOffset.y + 23, 248, 163 );
-    const fheroes2::Rect voyageHomeRoi( roiOffset.x + 19, roiOffset.y + 120, 166, 193 );
-    const fheroes2::Rect wizardsIsleRoi( roiOffset.x + 450, roiOffset.y + 120, 166, 193 );
-    const fheroes2::Rect descendantsRoi( roiOffset.x + 192, roiOffset.y + 240, 248, 163 );
+    const std::array<fheroes2::Rect, 4> activeCampaignArea{ fheroes2::Rect( roiOffset.x + 192, roiOffset.y + 23, 248, 163 ),
+                                                            fheroes2::Rect( roiOffset.x + 19, roiOffset.y + 120, 166, 193 ),
+                                                            fheroes2::Rect( roiOffset.x + 450, roiOffset.y + 120, 166, 193 ),
+                                                            fheroes2::Rect( roiOffset.x + 192, roiOffset.y + 240, 248, 163 ) };
+
+    const std::array<fheroes2::Rect, 4> renderCampaignArea{ fheroes2::Rect( roiOffset.x + 214, roiOffset.y + 47, 248, 163 ),
+                                                            fheroes2::Rect( roiOffset.x + 41, roiOffset.y + 140, 166, 193 ),
+                                                            fheroes2::Rect( roiOffset.x + 472, roiOffset.y + 131, 166, 193 ),
+                                                            fheroes2::Rect( roiOffset.x + 214, roiOffset.y + 273, 248, 163 ) };
+
+    size_t highlightCampaignId = videos.size();
 
     fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
+    uint64_t customDelay = 0;
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( priceOfLoyaltyRoi ) ) {
+    while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[0] ) ) {
             campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        else if ( le.MouseClickLeft( voyageHomeRoi ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[1] ) ) {
             campaignSaveData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        else if ( le.MouseClickLeft( wizardsIsleRoi ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[2] ) ) {
             campaignSaveData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        else if ( le.MouseClickLeft( descendantsRoi ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[3] ) ) {
             campaignSaveData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
+        }
+
+        const size_t beforeCampaignId = highlightCampaignId;
+
+        highlightCampaignId = videos.size();
+
+        for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
+            if ( le.MouseCursor( activeCampaignArea[i] ) && videos[i] ) {
+                highlightCampaignId = i;
+                customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
+                break;
+            }
+        }
+
+        if ( highlightCampaignId != beforeCampaignId ) {
+            fheroes2::Blit( background, 0, 0, display, roiOffset.x, roiOffset.y, background.width(), background.height() );
+            fheroes2::Blit( campaignChoice, 0, 0, display, roiOffset.x + campaignChoice.x(), roiOffset.y + campaignChoice.y(), campaignChoice.width(),
+                            campaignChoice.height() );
+            if ( highlightCampaignId >= videos.size() ) {
+                display.render();
+            }
+        }
+
+        if ( highlightCampaignId < videos.size() && Game::validateCustomAnimationDelay( customDelay ) ) {
+            fheroes2::Rect frameRoi( renderCampaignArea[highlightCampaignId].x, renderCampaignArea[highlightCampaignId].y, 0, 0 );
+            videos[highlightCampaignId]->getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
+
+            fheroes2::Blit( background, frameRoi.x - roiOffset.x, frameRoi.y - roiOffset.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height );
+
+            display.render( frameRoi );
+
+            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrame() ) {
+                videos[highlightCampaignId]->resetFrame();
+            }
         }
     }
 
@@ -393,7 +449,7 @@ fheroes2::GameMode Game::NewGame()
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
             Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
         else if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
+            Dialog::Message( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Font::BIG );
         else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
