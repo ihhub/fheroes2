@@ -319,36 +319,33 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    // if current tile contains a monster or a barrier, skip it
-    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER || _cache[currentNodeIdx]._objectID == MP2::OBJ_BARRIER ) {
-        return;
-    }
+    if ( currentNodeIdx == _pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
-    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+        // check if current tile is protected, can move only to adjacent monster
+        if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
+            for ( int monsterIndex : monsters ) {
+                const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
-    // check if current tile is protected, can move only to adjacent monster
-    if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
-        for ( int monsterIndex : monsters ) {
-            const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
+                if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && isValidPath( currentNodeIdx, direction, _currentColor ) ) {
+                    // add straight to cache, can't move further from the monster
+                    const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
+                    const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
+                    const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
 
-            if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && isValidPath( currentNodeIdx, direction, _currentColor ) ) {
-                // add straight to cache, can't move further from the monster
-                const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
-                const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
-                const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
+                    WorldNode & monsterNode = _cache[monsterIndex];
 
-                WorldNode & monsterNode = _cache[monsterIndex];
-
-                if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
-                    monsterNode._from = currentNodeIdx;
-                    monsterNode._cost = moveCost;
-                    monsterNode._remainingMovePoints = remainingMovePoints;
+                    if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
+                        monsterNode._from = currentNodeIdx;
+                        monsterNode._cost = moveCost;
+                        monsterNode._remainingMovePoints = remainingMovePoints;
+                    }
                 }
             }
         }
-    }
-    else if ( currentNodeIdx == _pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
-        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
+        else {
+            checkAdjacentNodes( nodesToExplore, currentNodeIdx );
+        }
     }
 }
 

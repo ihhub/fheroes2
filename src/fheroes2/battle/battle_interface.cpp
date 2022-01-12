@@ -2649,10 +2649,16 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
 
 void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
 {
-    const Unit * b = cell.GetUnit();
+    const Unit * unitOnCell = cell.GetUnit();
 
-    if ( b ) {
-        Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
+    if ( unitOnCell != nullptr ) {
+        Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+    }
+    else {
+        unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
+        if ( unitOnCell != nullptr ) {
+            Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+        }
     }
 }
 

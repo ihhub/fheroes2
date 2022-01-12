@@ -27,7 +27,12 @@
 *.out
 *.app
 
-# gettext Machine Objects
+# GNU gettext
+*.pot
+*.pot~
+*.po~
+*.po.tmp
+*.po.tmp~
 *.mo
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -68,7 +73,6 @@ files/save
 # Never put 'fheroes2' in this list. It breaks SonarQube analysis
 fheroes2.cfg
 fheroes2.bin
-fheroes2.pot
 
 # demo directory
 script/demo/demo
