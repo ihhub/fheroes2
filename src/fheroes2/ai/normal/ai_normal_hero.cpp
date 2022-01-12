@@ -99,8 +99,11 @@ namespace
 
         case MP2::OBJ_MAGELLANMAPS:
             return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+
         case MP2::OBJ_WHIRLPOOL:
-            return hero.isShipMaster() && !hero.isVisited( tile );
+            // Additional checks will follow
+            return true;
+
         case MP2::OBJ_COAST:
             // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
             assert( 0 );
@@ -421,7 +424,7 @@ namespace
             return false;
 
         case MP2::OBJ_STONELITHS:
-            // check later
+            // Additional checks will follow
             return true;
 
         case MP2::OBJ_JAIL:
@@ -703,7 +706,7 @@ namespace AI
                 if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
                     return -3000.0;
             }
-            return -dangerousTaskPenalty; // no point to even loose the army for this
+            return valueToIgnore;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
             // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
@@ -940,7 +943,7 @@ namespace AI
                 if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
                     return -3000.0;
             }
-            return -dangerousTaskPenalty; // no point to even loose the army for this
+            return valueToIgnore;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
             // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
