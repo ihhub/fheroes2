@@ -319,33 +319,35 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    if ( currentNodeIdx == _pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
-        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+    if ( currentNodeIdx != _pathStart && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+        return;
+    }
 
-        // check if current tile is protected, can move only to adjacent monster
-        if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
-            for ( int monsterIndex : monsters ) {
-                const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
+    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
-                if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && isValidPath( currentNodeIdx, direction, _currentColor ) ) {
-                    // add straight to cache, can't move further from the monster
-                    const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
-                    const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
-                    const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
+    // check if current tile is protected, can move only to adjacent monster
+    if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
+        for ( int monsterIndex : monsters ) {
+            const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
-                    WorldNode & monsterNode = _cache[monsterIndex];
+            if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && isValidPath( currentNodeIdx, direction, _currentColor ) ) {
+                // add straight to cache, can't move further from the monster
+                const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
+                const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
+                const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
 
-                    if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
-                        monsterNode._from = currentNodeIdx;
-                        monsterNode._cost = moveCost;
-                        monsterNode._remainingMovePoints = remainingMovePoints;
-                    }
+                WorldNode & monsterNode = _cache[monsterIndex];
+
+                if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
+                    monsterNode._from = currentNodeIdx;
+                    monsterNode._cost = moveCost;
+                    monsterNode._remainingMovePoints = remainingMovePoints;
                 }
             }
         }
-        else {
-            checkAdjacentNodes( nodesToExplore, currentNodeIdx );
-        }
+    }
+    else {
+        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 }
 
@@ -421,44 +423,47 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 
     // if we can't move here, reset
-    if ( isProtected )
+    if ( isProtected ) {
         currentNode.resetNode();
+    }
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( isFirstNode || ( !isProtected && !isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
-        MapsIndexes teleporters;
+    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
+        return;
+    }
 
-        // we shouldn't use teleporter at the starting tile
-        if ( currentNodeIdx != _pathStart ) {
-            teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+    MapsIndexes teleporters;
 
-            if ( teleporters.empty() && _considerWhirlpools ) {
-                teleporters = world.GetWhirlpoolEndPoints( currentNodeIdx );
-            }
+    // we shouldn't use teleporter at the starting tile
+    if ( currentNodeIdx != _pathStart ) {
+        teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+
+        if ( teleporters.empty() && _considerWhirlpools ) {
+            teleporters = world.GetWhirlpoolEndPoints( currentNodeIdx );
+        }
+    }
+
+    // do not check adjacent if we're going through the teleport in the middle of the path
+    if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
+        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
+    }
+
+    // special case: move through teleporters
+    for ( const int teleportIdx : teleporters ) {
+        if ( teleportIdx == _pathStart ) {
+            continue;
         }
 
-        // do not check adjacent if we're going through the teleport in the middle of the path
-        if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
-            checkAdjacentNodes( nodesToExplore, currentNodeIdx );
-        }
+        WorldNode & teleportNode = _cache[teleportIdx];
 
-        // special case: move through teleporters
-        for ( const int teleportIdx : teleporters ) {
-            if ( teleportIdx == _pathStart ) {
-                continue;
-            }
+        // check if move is actually faster through teleporter
+        if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
+            teleportNode._from = currentNodeIdx;
+            teleportNode._cost = currentNode._cost;
+            teleportNode._objectID = world.GetTiles( teleportIdx ).GetObject();
+            teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
 
-            WorldNode & teleportNode = _cache[teleportIdx];
-
-            // check if move is actually faster through teleporter
-            if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
-                teleportNode._from = currentNodeIdx;
-                teleportNode._cost = currentNode._cost;
-                teleportNode._objectID = world.GetTiles( teleportIdx ).GetObject();
-                teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
-
-                nodesToExplore.push_back( teleportIdx );
-            }
+            nodesToExplore.push_back( teleportIdx );
         }
     }
 }
