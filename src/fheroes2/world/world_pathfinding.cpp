@@ -553,7 +553,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, const bool cons
     return -1;
 }
 
-int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero, const bool considerWhirlpools )
+int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero, const bool considerWhirlpools )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero, considerWhirlpools );

@@ -1238,7 +1238,7 @@ namespace AI
                             continue;
                         }
 
-                        const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero, isHeroAllowedToUseWhirlpool( *heroInfo.hero ) );
+                        const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero, isHeroAllowedToUseWhirlpool( *heroInfo.hero ) );
                         if ( targetIndex != -1 ) {
                             bestTargetIndex = targetIndex;
                             bestHero = heroInfo.hero;

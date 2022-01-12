@@ -107,7 +107,7 @@ public:
     int getFogDiscoveryTile( const Heroes & hero, const bool considerWhirlpools );
 
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
-    int getNeareastTileToMove( const Heroes & hero, const bool considerWhirlpools );
+    int getNearestTileToMove( const Heroes & hero, const bool considerWhirlpools );
 
     bool isHeroPossiblyBlockingWay( const Heroes & hero, const bool considerWhirlpools );
 
