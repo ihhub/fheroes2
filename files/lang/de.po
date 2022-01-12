@@ -134,8 +134,7 @@ msgstr "%{name} ansehen"
 
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
-"Verschieben oder mit der rechten Maustaste tippen, um %{name} "
-"umzuverteilen."
+"%{name} verteilen: ziehen oder mit der rechten Maustaste tippen"
 
 msgid "Combine %{name} armies"
 msgstr "%{name} Armeen kombinieren"
@@ -282,7 +281,7 @@ msgid "Attacker"
 msgstr "Angreifer"
 
 msgid "None"
-msgstr "Nichts"
+msgstr "Niemand"
 
 msgid "Defender"
 msgstr "Verteidiger"
@@ -311,7 +310,7 @@ msgstr ""
 "unter Ihren Dienst zurückkehren."
 
 msgid "%{name} the %{race}"
-msgstr "%{name} der %{race}"
+msgstr "%{name} (%{race})"
 
 msgid "Captain of %{name}"
 msgstr "Hauptmann von %{name}"
@@ -320,7 +319,7 @@ msgid "Attack"
 msgstr "Angriff"
 
 msgid "Defense"
-msgstr "Verteidigung"
+msgstr "Verteid."
 
 msgid "Spell Power"
 msgstr "Zauberkraft"
@@ -335,7 +334,7 @@ msgid "Luck"
 msgstr "Glück"
 
 msgid "Spell Points"
-msgstr "Zauberspruchpunkte"
+msgstr "ZS-Punkte"
 
 msgid "Hero's Options"
 msgstr "Helden-Optionen"
@@ -377,7 +376,7 @@ msgid ""
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
 "Das Aufgeben kostet Gold. Wenn Sie jedoch das Lösegeld bezahlen, können der "
-"Held und alle seine überlebenden Kreaturen wieder rekrutiert werden."
+"Held und alle seine überlebende Kreaturen wieder rekrutiert werden."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
@@ -420,7 +419,7 @@ msgid "Move %{monster} here"
 msgstr "Bewegen %{monster} hier"
 
 msgid "Turn %{turn}"
-msgstr "Zug %{turn}"
+msgstr "Runde %{turn}"
 
 msgid "Teleport here"
 msgstr "Hier teleportieren"
@@ -462,7 +461,7 @@ msgid "System Options"
 msgstr "System-Optionen"
 
 msgid "Wait this unit"
-msgstr "Auf dieses Zug warten"
+msgstr "Auf diesen Zug warten"
 
 msgid "Wait"
 msgstr "Warten"
@@ -577,7 +576,7 @@ msgid "Good luck shines on the %{attacker}."
 msgstr "Viel Glück scheint auf den %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr "Eine hohe Moral ermöglicht den %{monster} erneut anzugreifen."
+msgstr "Hohe Moral erlaubt dem %{monster} erneut anzugreifen."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Niedrige Moral lässt die %{monster} in Panik einfrieren."
@@ -743,11 +742,11 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
-"Roland braucht Ihnen, um die Herren in der Nähe seiner Burg zu besiegen, um "
-"seinen Rebellionskrieg gegen seinen Bruder zu beginnen.  Die sind nicht "
-"miteinander verbündet, also werden sie die meiste Zeit damit verbringen, "
-"miteinander zu kämpfen.  Der Sieg gehört Ihnen, wenn Sie alle ihre Burgen und "
-"Helden besiegt haben."
+"Roland braucht Ihnen für seinen Rebellionskrieg gegen seinen Bruder, "
+"um die Herren in der Nähe seiner Burg zu besiegen.  Die sind nicht "
+"miteinander verbündet, also werden sie die meiste Zeit miteinander zu "
+"kämpfen.  Der Sieg gehört Ihnen, wenn Sie alle ihre Burgen und Helden "
+"besiegt haben."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -804,11 +803,11 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
-"Sammle eine so große Armee wie möglich und erobere die feindliche Burg "
+"Sammlen Sie eine so große Armee wie möglich und eroberen Sie die feindliche Burg "
 "innerhalb von 8 Wochen. Sie werden nur von einem Feind bekämpft, müssen aber "
 "einen langen Weg zurücklegen, um zur feindlichen Burg zu gelangen. Alle "
-"Truppen, die Sie am Ende dieses Szenarios in Ihrer Armee haben, werden Sie "
-"in der letzten Schlacht begleiten."
+"Truppen, die Sie am Ende dieses Szenarios haben, werden in der letzten "
+"Schlacht übergetragen."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
@@ -833,8 +832,8 @@ msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
-"Dies ist die letzte Schlacht. Sowohl du als auch dein Feind sind bis an die "
-"Zähne bewaffnet, und alle sind gegen dich verbündet. Fang Archibald ein, um "
+"Dies ist die letzte Schlacht. Sowohl Sie als auch Ihre Feinde sind bis an die "
+"Zähne bewaffnet, und alle Feinde sind gegen Sie verbündet. Fangen Sie Archibald ein, um "
 "den Krieg zu beenden!"
 
 msgid "Barbarian Wars"
@@ -871,10 +870,10 @@ msgid ""
 "enemy castles and there are no more heroes left to fight."
 msgstr ""
 "König Archibald verlangt von Ihnen, dass Sie die drei Feinde in dieser "
-"Region besiegen.  Sie sind nicht miteinander verbündet, also werden sie den "
-"größten Teil ihrer Energie damit verbringen, untereinander zu kämpfen.  Sie "
-"werden gewinnen, wenn Sie alle feindlichen Burgen besitzen und es keine "
-"Helden mehr gibt, die Sie bekämpfen können."
+"Region besiegen.  Sie sind nicht miteinander verbündet, also werden sie "
+"die meiste Zeit miteinander zu kämpfen.  Sie "
+"werden gewinnen, wenn Sie alle feindlichen Burgen besitzen und alle "
+"Helden besiegen."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -885,7 +884,7 @@ msgstr ""
 "Sie müssen die Barbarenstämme des Nordens vereinen, indem Sie sie erobern. "
 "Wie in der vorherigen Mission sind die Feinde nicht miteinander verbündet, "
 "aber sie haben mehr Ressourcen zur Verfügung. Sie werden gewinnen, wenn Sie "
-"alle feindlichen Burgen besitzen und keine Helden mehr zum Kämpfen übrig sind."
+"alle feindlichen Burgen besitzen und alle Helden besiegen."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -894,10 +893,10 @@ msgid ""
 "The nearest castle is to the southeast.)"
 msgstr ""
 "Gutmenschen-Zauberer haben die Burg der Nekromanten eingenommen. Sie müssen "
-"sie zurückerobern, um den Sieg zu erringen. Denkt daran, dass ihr zwar mit "
-"einer mächtigen Armee startet, aber keine Burg habt und innerhalb von 7 "
-"Tagen eine einnehmen müsst, sonst verliert ihr diese Schlacht. (Tipp: Die "
-"nächstgelegene Burg liegt im Südosten)."
+"sie zurückerobern, um den Sieg zu erringen. Obwohl Sie mit "
+"einer mächtigen Armee starten, haben Sie keine Burg und innerhalb von 7 "
+"Tagen eine einnehmen müssen, sonst verlieren Sie die Schlacht. (Tipp: Die "
+"nächstgelegene Burg ist im Südosten)."
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1165,8 +1164,8 @@ msgid ""
 "surely have gotten to the fount before you."
 msgstr ""
 "Finden Sie die Kugel der Negation, von der gesagt wird, dass sie in diesem Land "
-"begraben ist. Es gibt Hinweise, die auf Steinobelisken eingeschrieben sind, "
-"die Ihnen helfen werden, zu Ihrem Preis zu führen. Finden Sie die Kugel vor dem "
+"begraben ist. Es gibt Hinweise auf die Steinobelisken, "
+"die in Ihren Suchen helfen sollen. Finden Sie die Kugel vor dem "
 "ersten Tag des sechsten Monats, oder deine Rivalen werden sicherlich die "
 "Quelle vor Ihnen erreicht haben."
 
@@ -1179,7 +1178,7 @@ msgstr ""
 "sein."
 
 msgid "Blood is Thicker"
-msgstr "Das Blut ist dicker"
+msgstr "Blut ist dicker"
 
 msgid "King and Country"
 msgstr "König und Vaterland"
@@ -1220,7 +1219,7 @@ msgstr ""
 "Sie das ganze Land in Ihrem Namen. Gallavant darf nicht sterben."
 
 msgid " bane"
-msgstr "Fluch"
+msgstr " Fluch"
 
 msgid " alliance"
 msgstr " Allianz"
@@ -1229,7 +1228,7 @@ msgid "Carry-over forces"
 msgstr "Übertragungskräfte"
 
 msgid " bonus"
-msgstr "Bonus"
+msgstr " Bonus"
 
 msgid " defeated"
 msgstr " besiegt"
@@ -1936,11 +1935,11 @@ msgstr "Die Statue erhöht das Einkommen Ihrer Stadt um %{count} pro Tag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
-"Der linke Geschützturm bietet zusätzliche Feuerkraft während der Belagerung."
+"Der linker Geschützturm bietet zusätzliche Feuerkraft während der Belagerung."
 
 msgid "The Right Turret provides extra firepower during castle combat."
 msgstr ""
-"Der rechte Geschützturm bietet zusätzliche Feuerkraft während der Belagerung."
+"Der rechter Geschützturm bietet zusätzliche Feuerkraft während der Belagerung."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
@@ -2107,7 +2106,7 @@ msgid "Grouped Formation"
 msgstr "Gruppierte Formation"
 
 msgid "Recruit %{name} the %{race}"
-msgstr "%{name} die %{race} rekrutieren"
+msgstr "%{name} (%{race}) rekrutieren"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Garnisonskampfformation auf \"Ausbreitend\" einstellen"
@@ -2134,7 +2133,7 @@ msgid "Town Population Information and Statistics"
 msgstr "Informationen und Statistiken zur Bevölkerung der Stadt"
 
 msgid "Damg"
-msgstr "Schad"
+msgstr "Schaden"
 
 msgid "HP"
 msgstr "HP"
@@ -2208,13 +2207,13 @@ msgid "Shots Left"
 msgstr "Schüsse übrig"
 
 msgid "Damage"
-msgstr "Beschädigung"
+msgstr "Schaden"
 
 msgid "Hit Points"
 msgstr "Trefferpunkte"
 
 msgid "Hit Points Left"
-msgstr "Verbleibende Trefferpunkte"
+msgstr "TP übrig"
 
 msgid "Followers"
 msgstr "Anhänger"
@@ -2363,8 +2362,8 @@ msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
-"Spiel\n"
-"Schwierigkeit"
+"Spiel-\n"
+"schwierigkeit"
 
 msgid "Rating"
 msgstr "Grad"
@@ -2435,7 +2434,7 @@ msgid "You have learned %{skill}."
 msgstr "Sie haben %{skill} gelernt."
 
 msgid "You may learn either:"
-msgstr "Sie dürfen entweder lernen:"
+msgstr "Sie dürfen lernen entweder"
 
 msgid "or"
 msgstr "oder"
@@ -2512,10 +2511,10 @@ msgid "(not visited)"
 msgstr "(nicht besucht)"
 
 msgid "%{color} Barrier"
-msgstr "%{color}e Barriere"
+msgstr "%{color} Barriere"
 
 msgid "%{color} Tent"
-msgstr "%{color}es Zelt"
+msgstr "%{color} Zelt"
 
 msgid "Road"
 msgstr "Weg"
@@ -2551,13 +2550,13 @@ msgid "Available: %{count}"
 msgstr "Vorhanden: %{count}"
 
 msgid "Number to buy:"
-msgstr "Anzahl zu kaufen:"
+msgstr "Anzahl:"
 
 msgid "MAX"
 msgstr "MAX"
 
 msgid "How many troops to move?"
-msgstr "Wie viele Truppen sollen verlegt werden?"
+msgstr "Truppen zu verlegen"
 
 msgid "Fast separation into slots:"
 msgstr "Schnelle Trennung in Schlitze:"
@@ -2922,7 +2921,7 @@ msgid "Wood & Ore:"
 msgstr "Holz & Erz:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Est, Kr, Sch & Que:"
+msgstr "Andere Rohstoffe:"
 
 msgid "Obelisks Found:"
 msgstr "Obelisken gefunden:"
@@ -3435,7 +3434,7 @@ msgstr ""
 "gewinnen."
 
 msgid "%{color} player has been vanquished!"
-msgstr "Der %{color}er Spieler wurde besiegt!"
+msgstr "%{color} wurde besiegt!"
 
 msgid "Do you wish to continue the game?"
 msgstr "Möchten Sie das Spiel fortsetzen?"
@@ -3463,7 +3462,7 @@ msgid "Scenario"
 msgstr "Szenario"
 
 msgid "Game Difficulty"
-msgstr "Spiel-Schwierigkeit"
+msgstr "Spielschwierigkeit"
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
@@ -3530,24 +3529,24 @@ msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
 msgstr ""
-"%{color}er Spieler, dies ist Ihr letzter Tag, um eine Stadt zu erobern, "
+"%{color}, dies ist Ihr letzter Tag, um eine Stadt zu erobern, "
 "oder Sie werden aus diesem Land verbannt."
 
 msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
-"%{color}er Spieler, Sie haben nur noch %{day} Tage Zeit, um eine Stadt zu "
+"%{color}, Sie haben nur noch %{day} Tage Zeit, um eine Stadt zu "
 "erobern, oder werden Sie aus diesem Land verbannt."
 
 msgid "%{color} player's turn."
-msgstr "Der %{color}er Spieler ist dran."
+msgstr "%{color} ist dran."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
-"%{color}er Spieler, Sie haben Ihre letzte Stadt verloren. Wenn Sie in der "
+"%{color}, Sie haben Ihre letzte Stadt verloren. Wenn Sie in der "
 "nächsten Woche keine weitere Stadt erobern, werden Sie aus diesem Land "
 "verbannt."
 
@@ -3555,7 +3554,7 @@ msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
 msgstr ""
-"%{color}er Spieler, Ihre Helden lassen Sie im Stich, und Sie werden aus "
+"%{color}, Ihre Helden lassen Sie im Stich, und Sie werden aus "
 "diesem Land verbannt."
 
 msgid "Next Hero"
@@ -3639,7 +3638,7 @@ msgstr "Versuchen Sie es, auf dem Land zu suchen!!!"
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
-"Nachdem Sie hier viele Stunden gegraben haben, haben Sie das %{artefakt} "
+"Nachdem Sie hier viele Stunden gegraben haben, haben Sie das %{artifact} "
 "gefunden."
 
 msgid "Congratulations!"
@@ -3696,7 +3695,7 @@ msgstr ""
 "diese Fenster zu ziehen."
 
 msgid "Necroman"
-msgstr "Nekroman"
+msgstr "Totenbesc"
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
@@ -3718,7 +3717,7 @@ msgstr ""
 "oder Helden erhalten, die nicht seiner primären Ausrichtung angehören."
 
 msgid "%{color} player"
-msgstr "%{color}er Spieler"
+msgstr "%{color}"
 
 msgid "View %{skill} Info"
 msgstr "Info über %{skill} anzeigen"
@@ -4432,7 +4431,7 @@ msgid ""
 "The drink at the oasis is refreshing, but offers no further benefit. The "
 "oasis might help again if you fought a battle first."
 msgstr ""
-"Das Getränk an der Oase ist erfrischend, bietet aber keinen weiteren Nutzen. "
+"Der Schluck an der Oase ist erfrischend, bietet aber keinen weiteren Nutzen. "
 "Die Oase könnte wieder helfen, wenn Sie zuerst eine Schlacht gekämpft "
 "haben."
 
@@ -4440,14 +4439,14 @@ msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits.  You can travel a bit further today."
 msgstr ""
-"Ein Getränk in der Oase füllt Ihre Truppen mit Kraft und hebt ihre Laune.  "
+"Ein Schluck an der Oase in der Oase füllt Ihre Truppen mit Kraft und hebt ihre Laune.  "
 "Sie können heute ein Stück weiter reisen."
 
 msgid ""
 "The drink at the watering hole is refreshing, but offers no further benefit. "
 "The watering hole might help again if you fought a battle first."
 msgstr ""
-"Das Getränk an der Wasserstelle ist erfrischend, bietet aber keinen weiteren "
+"Der Schluck an der Wasserstelle ist erfrischend, bietet aber keinen weiteren "
 "Nutzen. Die Wasserstelle könnte wieder helfen, wenn Sie zuerst eine Schlacht "
 "geschlagen haben."
 
@@ -4455,7 +4454,7 @@ msgid ""
 "A drink at the watering hole fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
-"Ein Getränk an der Wasserstelle füllt Ihre Truppen mit Kraft und hebt ihre "
+"Ein Schluck an der Wasserstelle füllt Ihre Truppen mit Kraft und hebt ihre "
 "Laune. Sie können heute ein Stück weiter reisen."
 
 msgid ""
@@ -5414,7 +5413,7 @@ msgid "Not enough move points."
 msgstr "Nicht genug Bewegungspunkte."
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr "%{name} der %{race} (Stufe %{level})"
+msgstr "%{name} (Stufe %{level} %{race})"
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
@@ -5445,10 +5444,10 @@ msgid "You cannot dismiss a hero in a castle"
 msgstr "Man kann einen Helden nicht in einer Burg entlassen"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr "Die Entlassung von %{name} der %{race} ist durch das Szenario verboten"
+msgstr "Die Entlassung von %{name} (%{race}) ist durch das Szenario verboten"
 
 msgid "Dismiss %{name} the %{race}"
-msgstr "%{name} der %{race} entlassen"
+msgstr "%{name} (%{race}) entlassen"
 
 msgid "Show previous hero"
 msgstr "Vorherigen Helden anzeigen"
@@ -5947,55 +5946,55 @@ msgid "Orange"
 msgstr "Orange"
 
 msgid "Purple"
-msgstr "Purpur"
+msgstr "Lila"
 
 msgid "barrier|Aqua"
-msgstr "Aquablau"
+msgstr "Aqua"
 
 msgid "barrier|Blue"
-msgstr "Blau"
+msgstr "Blaue"
 
 msgid "barrier|Brown"
-msgstr "Braun"
+msgstr "Braune"
 
 msgid "barrier|Gold"
-msgstr "Golden"
+msgstr "Goldene"
 
 msgid "barrier|Green"
-msgstr "Grün"
+msgstr "Grüne"
 
 msgid "barrier|Orange"
 msgstr "Orange"
 
 msgid "barrier|Purple"
-msgstr "Purpur"
+msgstr "Lila"
 
 msgid "barrier|Red"
-msgstr "Rot"
+msgstr "Rote"
 
 msgid "tent|Aqua"
-msgstr "Aquablau"
+msgstr "Aqua"
 
 msgid "tent|Blue"
-msgstr "Blau"
+msgstr "Blaues"
 
 msgid "tent|Brown"
-msgstr "Braun"
+msgstr "Braunes"
 
 msgid "tent|Gold"
-msgstr "Golden"
+msgstr "Goldenes"
 
 msgid "tent|Green"
-msgstr "Grün"
+msgstr "Grünes"
 
 msgid "tent|Orange"
 msgstr "Orange"
 
 msgid "tent|Purple"
-msgstr "Purpur"
+msgstr "Lila"
 
 msgid "tent|Red"
-msgstr "Rot"
+msgstr "Rotes"
 
 msgid "Hero/Stats"
 msgstr "Held/Stats"
@@ -6028,25 +6027,25 @@ msgid "View Towns and Castles."
 msgstr "Städte anzeigen"
 
 msgid "luck|Cursed"
-msgstr "Verflucht"
+msgstr "Verfluchtes"
 
 msgid "luck|Awful"
-msgstr "Furchtbar"
+msgstr "Furchtbares"
 
 msgid "luck|Bad"
-msgstr "Schlecht"
+msgstr "Schlechtes"
 
 msgid "luck|Normal"
-msgstr "Normal"
+msgstr "Normales"
 
 msgid "luck|Good"
-msgstr "Gut"
+msgstr "Gutes"
 
 msgid "luck|Great"
-msgstr "Wunderbar"
+msgstr "Wunderbares"
 
 msgid "luck|Irish"
-msgstr "Irisch"
+msgstr "Irisches"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -6070,22 +6069,22 @@ msgstr ""
 "Stärke) im Kampf erhalten."
 
 msgid "morale|Treason"
-msgstr "Verrat"
+msgstr "Verrate"
 
 msgid "morale|Awful"
-msgstr "Furchtbar"
+msgstr "Furchtbare"
 
 msgid "morale|Poor"
-msgstr "Schlecht"
+msgstr "Schlechte"
 
 msgid "morale|Normal"
-msgstr "Normal"
+msgstr "Normale"
 
 msgid "morale|Good"
-msgstr "Hoch"
+msgstr "Hoche"
 
 msgid "morale|Great"
-msgstr "Wunderbar"
+msgstr "Wunderbare"
 
 msgid "morale|Blood!"
 msgstr "Blut!"
@@ -6380,7 +6379,7 @@ msgid "Tree of Knowledge"
 msgstr "Baum des Wissens"
 
 msgid "Witch Doctor's Hut"
-msgstr "Hütte des Medizinmanns"
+msgstr "Hütte des Hexendoktors"
 
 msgid "Temple"
 msgstr "Tempel"
@@ -7982,7 +7981,7 @@ msgstr ""
 " Kosten in Zauberpunkten: %{sp}"
 
 msgid "Move points: %{mp}"
-msgstr "Bewegungspunkte: %{mp}"
+msgstr "Beweg.-pt.: %{mp}"
 
 msgid "Transcribe Spell Scroll"
 msgstr "Zauberschriftrolle umschreiben"
@@ -7994,7 +7993,7 @@ msgid "View %{name} Info"
 msgstr "Info von %{name} anzeigen"
 
 msgid "Move %{name}"
-msgstr "%{name} übergeben"
+msgstr "%{name} umstellen"
 
 msgid "Cannot move artifact"
 msgstr "Artefakt kann nicht übergibt werden"
@@ -8034,7 +8033,7 @@ msgid "Fireball"
 msgstr "Feuerball"
 
 msgid "Fireblast"
-msgstr "Feuerstrahl"
+msgstr "Feuerstoß"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
@@ -8052,7 +8051,7 @@ msgid "Lightning Bolt"
 msgstr "Blitzstrahl"
 
 msgid "Chain Lightning"
-msgstr "Blitzstrahl-Salve"
+msgstr "Kettenblitzstrahl"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -8215,7 +8214,7 @@ msgid "Removes all magic spells from a single target."
 msgstr "Entfernt alle Zaubersprüche von einem einzigen Ziel."
 
 msgid "Mass Dispel"
-msgstr "Magie-Massenzerstreuung"
+msgstr "Magie-Mas- senzerstrg."
 
 msgid "Removes all magic spells from all creatures."
 msgstr "Entfernt alle Zaubersprüche von allen Kreaturen."
@@ -8433,7 +8432,7 @@ msgstr ""
 "Helden einzusehen."
 
 msgid "Identify Hero"
-msgstr "Held identifizieren"
+msgstr "Held identifiz."
 
 msgid "Summon Boat"
 msgstr "Boot herbeirufen"
@@ -8457,7 +8456,7 @@ msgstr "Dimensionstor"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
-"Bringt den Zaubernden in jede Stadt oder Burg zurück, die er gerade besitzt."
+"Bringt den Zaubernden in jene Stadt oder Burg zurück, die er gerade besitzt."
 
 msgid "Town Gate"
 msgstr "Stadttor"
@@ -8496,19 +8495,19 @@ msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr "Setzt Erdwesen ein, um eine Mine vor feindlichen Armeen zu schützen."
 
 msgid "Set Air Guardian"
-msgstr "Luftwesen-Wache"
+msgstr "Luftwsn.-Wache"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr "Setzt Luftwesen ein, um eine Mine vor feindlichen Armeen zu schützen."
 
 msgid "Set Fire Guardian"
-msgstr "Feuerwesen-Wache"
+msgstr "Feuerwsn.-Wache"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr "Setzt Feuerwesen ein, um eine Mine vor feindlichen Armeen zu schützen."
 
 msgid "Set Water Guardian"
-msgstr "Wasserwesen-Wache"
+msgstr "Wasserws.-Wache"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
@@ -8543,7 +8542,7 @@ msgid "View next page"
 msgstr "Nächste Seite anzeigen"
 
 msgid "Close Spellbook"
-msgstr "Zaubersprüche schließen"
+msgstr "Zauberbuch schließen"
 
 msgid "View %{spell}"
 msgstr "%{spell} Anzeigen"
@@ -8578,7 +8577,7 @@ msgid "game: always confirm for rewrite savefile"
 msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"
 
 msgid "game: remember last focus"
-msgstr "Spiel: den letzten Fokus erinnern"
+msgstr "Spiel: den letzten Fokus merken"
 
 msgid "battle: show damage info"
 msgstr "Kampf: Schadensinformationen anzeigen"
@@ -8597,14 +8596,14 @@ msgstr "Welt: Eagle Eye funktioniert auch als Scholar in H3."
 
 msgid "world: Crystal Ball also added Identify Hero and Visions spells"
 msgstr ""
-"Welt: Kristallkugel fügte auch die Zauber \"Held identifizieren\" und "
+"Welt: Kristallkugel fügt auch die Zauber \"Held identifizieren\" und "
 "\"Visionen\" hinzu"
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr "Welt: Neutrale Armeen skalieren mit der Spielschwierigkeit"
+msgstr "Welt: Neutrale Armeen steigen mit der Spielschwierigkeit"
 
 msgid "world: use unique artifacts for resource affecting"
-msgstr "Welt: einzigartiger Artefakte zur Ressourcenversorgung verwenden"
+msgstr "Welt: einzigartige Artefakte zur Ressourcenversorgung verwenden"
 
 msgid "world: use unique artifacts for primary skills"
 msgstr "Welt: einzigartige Artefakte für Primärfähigkeiten verwenden"
@@ -8613,10 +8612,10 @@ msgid "world: use unique artifacts for secondary skills"
 msgstr "Welt: einzigartige Artefakte für sekundäre Fertigkeiten verwenden"
 
 msgid "world: Wind/Water Mills and Magic Garden can be captured"
-msgstr "Welt: Wind-/Wassermühlen und Magischer Garten können erobert werden"
+msgstr "Welt: Wind-/Wassermühlen und Magische Gärten können erobert werden"
 
 msgid "world: disable Barrow Mounds"
-msgstr "Welt: Vergrabener Karren deaktivieren"
+msgstr "Welt: Vergrabenen Karren deaktivieren"
 
 msgid "castle: allow guardians"
 msgstr "Burg: Wächter zulassen"
@@ -8638,13 +8637,13 @@ msgid "heroes: remember move points for retreat/surrender result"
 msgstr "Helden: Bewegungspunkte sind nach Rückzug/Aufgabe gespeihert"
 
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr "Helden: Umschreiben von Schriftrollen erlauben (benötigt Augenadler)"
+msgstr "Helden: Umschreiben von Schriftrollen erlauben (benötigt Adleraugen)"
 
 msgid "heroes: in Arena can choose any of primary skills"
 msgstr "Helden: in der Arena kann man jeder Primärfähigkeit wählen"
 
 msgid "battle: show army order"
-msgstr "Schlacht: Armeeordnung anzeigen"
+msgstr "Schlacht: Reihenfolge von Armeen anzeigen"
 
 msgid "battle: soft wait troop"
 msgstr "Kampf: weiche Warteschleife erlauben"
@@ -8672,41 +8671,41 @@ msgid "game: hide interface"
 msgstr "Spiel: Schnittstelle verstecken"
 
 msgid "game: offer to continue the game afer victory condition"
-msgstr "Spiel: weitere Spiel nach der Siegbedingung anbieten"
+msgstr "Spiel: weiteres Spiel nach der Siegbedingung anbieten"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Das ultimative Artefakt ist eigentlich der %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
-"Das ultimative Artefakt kann in den %{name} von der Welt gefunden werden."
+"Das ultimative Artefakt kann im %{name} von der Welt gefunden werden."
 
 msgid "north-west"
-msgstr "Nord-west"
+msgstr "Nordwesten"
 
 msgid "north"
 msgstr "Nord"
 
 msgid "north-east"
-msgstr "Nord-ost"
+msgstr "Nordosten"
 
 msgid "west"
-msgstr "West"
+msgstr "Westen"
 
 msgid "center"
-msgstr "Mitte"
+msgstr "Zentrum"
 
 msgid "east"
-msgstr "Ost"
+msgstr "Osten"
 
 msgid "south-west"
-msgstr "Süd-west"
+msgstr "Südwesten"
 
 msgid "south"
-msgstr "Süd"
+msgstr "Süden"
 
 msgid "south-east"
-msgstr "Süd-Ost"
+msgstr "Südosten"
 
 msgid "The truth is out there."
 msgstr "Die Wahrheit liegt auf der Hand."
