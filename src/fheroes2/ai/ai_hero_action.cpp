@@ -1701,22 +1701,28 @@ namespace AI
 
     void AIWhirlpoolTroopLooseEffect( Heroes & hero )
     {
-        Troop * troop = hero.GetArmy().GetWeakestTroop();
-        assert( troop );
-        if ( !troop )
+        Army & heroArmy = hero.GetArmy();
+
+        // Arrange the hero's army for the passage of the whirlpool first
+        heroArmy.ArrangeForWhirlpool();
+
+        Troop * weakestTroop = heroArmy.GetWeakestTroop();
+        assert( weakestTroop != nullptr );
+        if ( weakestTroop == nullptr ) {
             return;
+        }
 
         // Whirlpool effect affects heroes only with more than one creature in more than one slot
-        if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+        if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
             return;
         }
 
         if ( 1 == Rand::Get( 1, 3 ) ) {
-            if ( troop->GetCount() == 1 ) {
-                troop->Reset();
+            if ( weakestTroop->GetCount() == 1 ) {
+                weakestTroop->Reset();
             }
             else {
-                troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+                weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
             }
         }
     }
