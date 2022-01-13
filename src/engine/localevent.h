@@ -264,7 +264,7 @@ public:
 private:
     LocalEvent();
 
-    static void SetState( const uint8_t type, const bool enable );
+    static void SetState( const uint32_t type, const bool enable );
 
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
