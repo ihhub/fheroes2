@@ -219,7 +219,7 @@ std::vector<u8> LoadFileToMem( const std::string & path )
         return {};
     }
 
-    file.seekg( 0, file.end );
+    file.seekg( 0, std::fstream::end );
     std::streamoff length = file.tellg();
     if ( length < 1 ) {
         return {};
