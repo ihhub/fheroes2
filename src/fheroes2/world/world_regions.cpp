@@ -338,12 +338,18 @@ void World::ComputeStaticAnalysis()
             vec_tiles[node.index].UpdateRegion( node.type );
 
             // connect regions through teleports
+            MapsIndexes exits;
+
             if ( node.mapObject == MP2::OBJ_STONELITHS ) {
-                const MapsIndexes & exits = GetTeleportEndPoints( node.index );
-                for ( const int exitIndex : exits ) {
-                    // neighbours is a set that will force the uniqness
-                    reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
-                }
+                exits = GetTeleportEndPoints( node.index );
+            }
+            else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
+                exits = GetWhirlpoolEndPoints( node.index );
+            }
+
+            for ( const int exitIndex : exits ) {
+                // neighbours is a set that will force the uniqness
+                reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
         }
     }
