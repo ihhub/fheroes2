@@ -607,8 +607,8 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
             continue;
         }
 
-        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-        if ( _cache[newIndex]._cost && monsters.empty() ) {
+        // Tile is reachable and not guarded by monsters
+        if ( _cache[newIndex]._cost > 0 && Maps::GetTilesUnderProtection( newIndex ).empty() ) {
             return newIndex;
         }
     }
