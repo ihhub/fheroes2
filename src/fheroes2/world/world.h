@@ -244,10 +244,10 @@ public:
     const std::string & GetRumors( void );
 
     s32 NextTeleport( s32 ) const;
-    MapsIndexes GetTeleportEndPoints( s32 ) const;
+    MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
 
     s32 NextWhirlpool( s32 ) const;
-    MapsIndexes GetWhirlpoolEndPoints( int32_t index ) const;
+    MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
     void CaptureObject( s32, int col );
     u32 CountCapturedObject( int obj, int col ) const;
@@ -334,7 +334,7 @@ private:
     MapObjects map_objects;
 
     // This data isn't serialized
-    Maps::Indexes _allTeleporters;
+    Maps::Indexes _allTeleports;
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;

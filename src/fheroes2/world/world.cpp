@@ -834,19 +834,25 @@ const std::string & World::GetRumors( void )
     return *_rumor;
 }
 
-MapsIndexes World::GetTeleportEndPoints( s32 center ) const
+MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
-    const Maps::Tiles & entrance = GetTiles( center );
-    if ( _allTeleporters.size() > 1 && entrance.GetObject( false ) == MP2::OBJ_STONELITHS ) {
-        for ( MapsIndexes::const_iterator it = _allTeleporters.begin(); it != _allTeleporters.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.GetObject() != MP2::OBJ_HEROES
-                 && tile.isWater() == entrance.isWater() ) {
-                result.push_back( *it );
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
+
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+        return result;
+    }
+
+    for ( const int32_t teleportIndex : _allTeleports ) {
+        const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
+
+        if ( teleportIndex == index || teleportTile.GetObjectSpriteIndex() != entranceTile.GetObjectSpriteIndex() || teleportTile.GetHeroes() != nullptr
+             || teleportTile.isWater() != entranceTile.isWater() ) {
+            continue;
         }
+
+        result.push_back( teleportIndex );
     }
 
     return result;
@@ -864,7 +870,7 @@ s32 World::NextTeleport( s32 index ) const
     return Rand::Get( teleports );
 }
 
-MapsIndexes World::GetWhirlpoolEndPoints( int32_t index ) const
+MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
@@ -1301,7 +1307,7 @@ void World::PostLoad( const bool setTilePassabilities )
     }
 
     // Cache all teleport tiles
-    _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+    _allTeleports = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();

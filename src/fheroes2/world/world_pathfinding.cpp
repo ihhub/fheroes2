@@ -429,31 +429,31 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
         return;
     }
 
-    MapsIndexes teleporters;
+    MapsIndexes teleports;
 
-    // we shouldn't use teleporter at the starting tile
+    // we shouldn't use teleport at the starting tile
     if ( currentNodeIdx != _pathStart ) {
-        teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+        teleports = world.GetTeleportEndPoints( currentNodeIdx );
 
-        if ( teleporters.empty() ) {
-            teleporters = world.GetWhirlpoolEndPoints( currentNodeIdx );
+        if ( teleports.empty() ) {
+            teleports = world.GetWhirlpoolEndPoints( currentNodeIdx );
         }
     }
 
     // do not check adjacent if we're going through the teleport in the middle of the path
-    if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
+    if ( isFirstNode || teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
         checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 
-    // special case: move through teleporters
-    for ( const int teleportIdx : teleporters ) {
+    // special case: move through teleports
+    for ( const int teleportIdx : teleports ) {
         if ( teleportIdx == _pathStart ) {
             continue;
         }
 
         WorldNode & teleportNode = _cache[teleportIdx];
 
-        // check if move is actually faster through teleporter
+        // check if move is actually faster through teleport
         if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
             teleportNode._from = currentNodeIdx;
             teleportNode._cost = currentNode._cost;
@@ -559,14 +559,14 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 
             nodesToExplore.push_back( newIndex );
 
-            // If there is a teleporter on this tile, we should also consider the endpoints
-            MapsIndexes teleporters = world.GetTeleportEndPoints( newIndex );
+            // If there is a teleport on this tile, we should also consider the endpoints
+            MapsIndexes teleports = world.GetTeleportEndPoints( newIndex );
 
-            if ( teleporters.empty() ) {
-                teleporters = world.GetWhirlpoolEndPoints( newIndex );
+            if ( teleports.empty() ) {
+                teleports = world.GetWhirlpoolEndPoints( newIndex );
             }
 
-            for ( const int teleportIndex : teleporters ) {
+            for ( const int teleportIndex : teleports ) {
                 if ( tilesVisited[teleportIndex] ) {
                     continue;
                 }

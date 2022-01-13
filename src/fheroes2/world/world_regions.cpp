@@ -337,7 +337,7 @@ void World::ComputeStaticAnalysis()
         for ( const MapRegionNode & node : reg._nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
 
-            // connect regions through teleporters
+            // connect regions through teleports
             if ( node.mapObject == MP2::OBJ_STONELITHS ) {
                 const MapsIndexes & exits = GetTeleportEndPoints( node.index );
                 for ( const int exitIndex : exits ) {
