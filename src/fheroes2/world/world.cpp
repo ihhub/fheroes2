@@ -874,12 +874,11 @@ MapsIndexes World::GetWhirlpoolEndPoints( int32_t index ) const
         return result;
     }
 
-    const uint32_t entranceUID = entranceTile.GetObjectUID();
-
-    for ( const int32_t whirlpoolIndex : _whirlpoolTiles ) {
+    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.GetObjectUID() == entranceUID || whirlpoolTile.GetHeroes() != nullptr ) {
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHeroes() != nullptr ) {
             continue;
         }
 
@@ -1301,9 +1300,15 @@ void World::PostLoad( const bool setTilePassabilities )
         }
     }
 
-    // cache data that's accessed often
+    // Cache all teleport tiles
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
-    _whirlpoolTiles = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
+
+    // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
+    _allWhirlpools.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true ) ) {
+        _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
 
     resetPathfinder();
     ComputeStaticAnalysis();

@@ -22,6 +22,7 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -334,7 +335,7 @@ private:
 
     // This data isn't serialized
     Maps::Indexes _allTeleporters;
-    Maps::Indexes _whirlpoolTiles;
+    std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 
