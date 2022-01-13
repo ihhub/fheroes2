@@ -47,7 +47,7 @@ namespace fheroes2
 
 namespace Color
 {
-    enum
+    enum : uint8_t
     {
         NONE = 0x00,
         BLUE = 0x01,

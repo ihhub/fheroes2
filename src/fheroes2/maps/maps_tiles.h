@@ -135,7 +135,7 @@ namespace Maps
             return quantity3;
         }
 
-        int GetPassable() const;
+        uint16_t GetPassable() const;
         int GetGround() const;
         bool isWater() const;
 
