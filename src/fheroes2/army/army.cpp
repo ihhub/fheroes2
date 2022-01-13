@@ -587,7 +587,7 @@ void Troops::ArrangeForBattle( bool upgrade )
 
 void Troops::ArrangeForWhirlpool()
 {
-    // Make an "optimized" version first (each type of monster occupies one slot)
+    // Make an "optimized" version first (each unit type occupies just one slot)
     const Troops optimizedTroops = GetOptimized();
     assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= ARMYMAXTROOPS );
 
