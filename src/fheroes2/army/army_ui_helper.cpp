@@ -28,14 +28,14 @@
 #include "screen.h"
 #include "ui_text.h"
 
-void fheroes2::DrawMons32Line( const Army & army, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView )
+void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView )
 {
-    if ( !army.isValid() ) {
+    if ( !troops.isValid() ) {
         return;
     }
 
     if ( 0 == count ) {
-        count = army.GetCount();
+        count = troops.GetCount();
     }
 
     const int chunk = width / count;
@@ -43,7 +43,7 @@ void fheroes2::DrawMons32Line( const Army & army, int32_t cx, int32_t cy, uint32
         cx += chunk / 2;
     }
 
-    for ( auto it = army.begin(); it <= army.end(); ++it ) {
+    for ( auto it = troops.begin(); it <= troops.end(); ++it ) {
         if ( ( *it )->isValid() ) {
             if ( 0 == first && count ) {
                 const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
