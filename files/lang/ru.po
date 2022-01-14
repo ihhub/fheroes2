@@ -3130,7 +3130,7 @@ msgid "Fineous"
 msgstr "Файнеус"
 
 msgid "Jaclyn"
-msgstr "Йаслин"
+msgstr "Жаклин"
 
 msgid "Jezebel"
 msgstr "Изабэль"
@@ -3256,7 +3256,7 @@ msgid "Archibald"
 msgstr "Арчибальд"
 
 msgid "Brother Brax"
-msgstr "Брат Бэкс"
+msgstr "Брат Бракс"
 
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"
@@ -4317,7 +4317,9 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
 
 msgid "'Grouped' combat formation bunches your army together in the center of your side of the battlefield."
-msgstr "Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать плотный ряд в центре поля боя."
+msgstr ""
+"Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать построение плотным рядом по центру "
+"стартового расположения войск в бою."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Вы действительно хотите уволить героя?"
@@ -4385,7 +4387,7 @@ msgid ""
 "knowledge. It is occasionally possible to have more than your maximum spell points via special events."
 msgstr ""
 "%{name} имеет %{point} очков магии из максимальных %{max}. Максимальное число очков магии - количество "
-"очков знания, умноженное на 10. Допускается иметь очков магии выше максимума после посещения специальных мест."
+"очков знания в десятикратном размере. Допускается иметь очков магии выше максимума после посещения специальных мест."
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
@@ -4863,7 +4865,7 @@ msgid "Bad morale may cause your armies to freeze in combat."
 msgstr "Плохая мораль может заставить отряд застыть на месте от ужаса."
 
 msgid "Neutral morale means your armies will never be blessed with extra attacks or freeze in combat."
-msgstr "Обычная мораль подразумевает, что ваши отряды не будут получать бонус дополнительной атаки или пропуска хода."
+msgstr "Обычная мораль подразумевает, что ваши отряды не будут поощряться дополнительной атакой или пропускать ход."
 
 msgid "Good morale may give your armies extra attacks in combat."
 msgstr "Хорошая мораль может дать вашим войскам возможность дополнительной атаки в сражении."
@@ -6411,7 +6413,7 @@ msgid "Arm of the Martyr"
 msgstr "Рука мученика"
 
 msgid "The %{name} increases your spell power by %{count} but adds the undead morale penalty."
-msgstr "%{name} увеличивает силу магии на %{count}, но добавляет штраф \"Мертвецы в отряде\"."
+msgstr "%{name} увеличивает силу магии на %{count}, но добавляет штраф к морали, как за нахождение нежити в отряде."
 
 msgid "Breastplate of Anduran"
 msgstr "Кираса Андурана"
