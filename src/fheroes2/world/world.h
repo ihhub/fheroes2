@@ -22,6 +22,7 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -242,11 +243,11 @@ public:
 
     const std::string & GetRumors( void );
 
-    s32 NextTeleport( s32 ) const;
-    MapsIndexes GetTeleportEndPoints( s32 ) const;
+    int32_t NextTeleport( const int32_t index ) const;
+    MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
 
-    s32 NextWhirlpool( s32 ) const;
-    MapsIndexes GetWhirlpoolEndPoints( s32 ) const;
+    int32_t NextWhirlpool( const int32_t index ) const;
+    MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
     void CaptureObject( s32, int col );
     u32 CountCapturedObject( int obj, int col ) const;
@@ -333,8 +334,8 @@ private:
     MapObjects map_objects;
 
     // This data isn't serialized
-    Maps::Indexes _allTeleporters;
-    Maps::Indexes _whirlpoolTiles;
+    std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
+    std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 

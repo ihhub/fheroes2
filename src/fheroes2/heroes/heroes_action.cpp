@@ -369,7 +369,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const Game::MusicRestorer musicRestorer;
 
     if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex, isDestination );
+        return AI::HeroesAction( *this, tileIndex );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
@@ -492,7 +492,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToFlotSam( *this, objectType, tileIndex );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             ActionToShipwreckSurvivor( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
@@ -1991,19 +1991,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         return;
     }
 
-    const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
-    if ( other_hero ) {
-        ActionToHeroes( hero, index_to );
-
-        // lose battle
-        if ( hero.isFreeman() ) {
-            return;
-        }
-        else if ( !other_hero->isFreeman() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is busy..." );
-            return;
-        }
-    }
+    assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
