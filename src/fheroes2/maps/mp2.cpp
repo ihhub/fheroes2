@@ -1122,6 +1122,20 @@ bool MP2::isProtectedObject( const MapObjectType objectType )
     return isCaptureObject( objectType );
 }
 
+bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
+{
+    switch ( objectType ) {
+    // Stone liths and whirlpools are mandatory because they open access to new tiles
+    case OBJ_STONELITHS:
+    case OBJ_WHIRLPOOL:
+        return true;
+    default:
+        break;
+    }
+
+    return !isActionObject( objectType );
+}
+
 bool MP2::isAbandonedMine( const MapObjectType objectType )
 {
     return objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE;

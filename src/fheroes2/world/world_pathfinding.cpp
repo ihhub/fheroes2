@@ -545,10 +545,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 
             tilesVisited[newIndex] = true;
 
-            const MP2::MapObjectType newTileObject = world.GetTiles( newIndex ).GetObject( true );
-
-            // Don't go onto action objects (except Stone Liths and Whirlpools) as they might be castles or dwellings with guards.
-            if ( MP2::isActionObject( newTileObject ) && newTileObject != MP2::OBJ_STONELITHS && newTileObject != MP2::OBJ_WHIRLPOOL ) {
+            if ( !MP2::isSafeForFogDiscoveryObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
                 continue;
             }
 
