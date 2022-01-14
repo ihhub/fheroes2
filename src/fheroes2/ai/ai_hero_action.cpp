@@ -895,20 +895,12 @@ namespace AI
     {
         assert( hero.GetPath().empty() );
 
-        MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
-
-        if ( teleports.empty() ) {
+        const int32_t indexTo = world.NextTeleport( startIndex );
+        if ( startIndex == indexTo ) {
             DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
             return;
         }
 
-        const int32_t indexTo = Rand::Get( teleports );
-        if ( startIndex == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has teleportation tile the same as starting position: " << startIndex );
-            return;
-        }
-
-        // TODO: remove this assertion, this should never happen
         assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -932,16 +924,9 @@ namespace AI
     {
         assert( hero.GetPath().empty() );
 
-        MapsIndexes whirlpools = world.GetWhirlpoolEndPoints( startIndex );
-
-        if ( whirlpools.empty() ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool." );
-            return;
-        }
-
-        const int32_t indexTo = Rand::Get( whirlpools );
+        const int32_t indexTo = world.NextWhirlpool( startIndex );
         if ( startIndex == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has teleportation tile the same as starting position: " << startIndex );
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool." );
             return;
         }
 

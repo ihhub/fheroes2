@@ -243,10 +243,10 @@ public:
 
     const std::string & GetRumors( void );
 
-    s32 NextTeleport( s32 ) const;
+    int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
 
-    s32 NextWhirlpool( s32 ) const;
+    int32_t NextWhirlpool( const int32_t index ) const;
     MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
     void CaptureObject( s32, int col );

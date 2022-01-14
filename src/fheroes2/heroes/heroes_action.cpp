@@ -1991,7 +1991,6 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         return;
     }
 
-    // TODO: remove this assertion, this should never happen
     assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
     AGG::PlaySound( M82::KILLFADE );

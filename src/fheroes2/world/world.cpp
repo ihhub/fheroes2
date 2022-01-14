@@ -858,8 +858,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     return result;
 }
 
-/* return random teleport destination */
-s32 World::NextTeleport( s32 index ) const
+int32_t World::NextTeleport( const int32_t index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
@@ -894,12 +893,11 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     return result;
 }
 
-/* return random whirlpools destination */
-s32 World::NextWhirlpool( s32 index ) const
+int32_t World::NextWhirlpool( const int32_t index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
         return index;
     }
 
