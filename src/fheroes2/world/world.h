@@ -334,7 +334,7 @@ private:
     MapObjects map_objects;
 
     // This data isn't serialized
-    Maps::Indexes _allTeleports;
+    std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;

@@ -844,11 +844,11 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
         return result;
     }
 
-    for ( const int32_t teleportIndex : _allTeleports ) {
+    // The type of destination stone liths must match the type of the source stone liths.
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.GetObjectSpriteIndex() != entranceTile.GetObjectSpriteIndex() || teleportTile.GetHeroes() != nullptr
-             || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.GetHeroes() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
 
@@ -1304,8 +1304,12 @@ void World::PostLoad( const bool setTilePassabilities )
         }
     }
 
-    // Cache all teleport tiles
-    _allTeleports = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+    // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
+    _allTeleports.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+        _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
