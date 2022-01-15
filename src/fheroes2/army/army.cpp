@@ -1215,8 +1215,7 @@ void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32
     fheroes2::DrawMons32Line( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true );
 }
 
-void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact,
-                             bool isScouteView )
+void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact, bool isScouteView )
 {
     const uint32_t count = troops.GetCount();
     const int offsetX = lineWidth / 6;

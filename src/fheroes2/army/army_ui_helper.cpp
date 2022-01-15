@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 #include "army_ui_helper.h"
-#include "army.h"
 #include "agg_image.h"
+#include "army.h"
 #include "army_troop.h"
 #include "game.h"
 #include "icn.h"
@@ -28,7 +28,8 @@
 #include "screen.h"
 #include "ui_text.h"
 
-void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView )
+void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
+                               bool isScouteView )
 {
     if ( !troops.isValid() ) {
         return;
@@ -48,8 +49,8 @@ void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, ui
             if ( 0 == first && count ) {
                 const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
                 fheroes2::Text text( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact )
-                                                    : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ),
-                                        { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                                                   : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ),
+                                     { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
                 if ( compact ) {
                     const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
                     int offset = ( chunk - monster.width() - text.width() ) / 2;
