@@ -137,7 +137,7 @@ namespace AI
     void AIToBoat( Heroes & hero, s32 dst_index );
     void AIToCoast( Heroes & hero, s32 dst_index );
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
-    void AIWhirlpoolTroopLooseEffect( Heroes & hero );
+    void AIWhirlpoolTroopLoseEffect( Heroes & hero );
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
@@ -937,7 +937,7 @@ namespace AI
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
 
-        AIWhirlpoolTroopLooseEffect( hero );
+        AIWhirlpoolTroopLoseEffect( hero );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -1684,7 +1684,7 @@ namespace AI
         }
     }
 
-    void AIWhirlpoolTroopLooseEffect( Heroes & hero )
+    void AIWhirlpoolTroopLoseEffect( Heroes & hero )
     {
         Army & heroArmy = hero.GetArmy();
 
