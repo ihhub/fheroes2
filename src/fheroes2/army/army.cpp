@@ -457,10 +457,10 @@ Troop * Troops::GetFirstValid( void )
     return it == end() ? nullptr : *it;
 }
 
-Troop * Troops::GetWeakestTroop( void )
+Troop * Troops::GetWeakestTroop() const
 {
-    iterator first = begin();
-    iterator last = end();
+    const_iterator first = begin();
+    const_iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -471,7 +471,7 @@ Troop * Troops::GetWeakestTroop( void )
     if ( first == end() )
         return nullptr;
 
-    iterator lowest = first;
+    const_iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
