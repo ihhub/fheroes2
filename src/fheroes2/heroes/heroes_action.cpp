@@ -459,7 +459,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToCoast( *this, tileIndex );
             break;
 
-            // resource object
+        // resource object
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
@@ -499,7 +499,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToArtifact( *this, tileIndex );
             break;
 
-            // shrine circle
+        // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
@@ -563,7 +563,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDaemonCave( *this, objectType, tileIndex );
             break;
 
-            // teleports
+        // teleports
         case MP2::OBJ_STONELITHS:
             ActionToTeleports( *this, tileIndex );
             break;
@@ -592,7 +592,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToAbandoneMine( *this, objectType, tileIndex );
             break;
 
-            // accept army
+        // accept army
         case MP2::OBJ_WATCHTOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
@@ -606,7 +606,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDwellingJoinMonster( *this, objectType, tileIndex );
             break;
 
-            // recruit army
+        // recruit army
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREECITY:
         case MP2::OBJ_WAGONCAMP:
@@ -653,7 +653,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToSphinx( *this, objectType, tileIndex );
             break;
 
-            // loyalty version
+        // loyalty version
         case MP2::OBJ_WATERALTAR:
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
@@ -693,7 +693,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToTravellersTent( *this, objectType, tileIndex );
             break;
 
-            // object
+        // other object
         default:
             break;
         }

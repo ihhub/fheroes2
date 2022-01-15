@@ -325,7 +325,7 @@ namespace AI
             AIToMagellanMaps( hero, dst_index );
             break;
 
-            // teleports
+        // teleports
         case MP2::OBJ_STONELITHS:
             AIToTeleports( hero, dst_index );
             break;
@@ -341,7 +341,7 @@ namespace AI
             AIToPrimarySkillObject( hero, objectType, dst_index );
             break;
 
-            // experience modification
+        // experience modification
         case MP2::OBJ_GAZEBO:
             AIToExperienceObject( hero, objectType, dst_index );
             break;
@@ -351,7 +351,7 @@ namespace AI
             AIToWitchsHut( hero, dst_index );
             break;
 
-            // shrine circle
+        // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
@@ -378,7 +378,7 @@ namespace AI
             AIToObelisk( hero, tile );
             break;
 
-            // magic point
+        // magic point
         case MP2::OBJ_ARTESIANSPRING:
             AIToArtesianSpring( hero, objectType, dst_index );
             break;
@@ -386,7 +386,7 @@ namespace AI
             AIToMagicWell( hero, dst_index );
             break;
 
-            // increase skill
+        // increase skill
         case MP2::OBJ_XANADU:
             AIToXanadu( hero, dst_index );
             break;
@@ -477,12 +477,12 @@ namespace AI
             AIToAlchemistTower( hero );
             break;
 
+        // AI has no advantage or knowledge to use these objects
         case MP2::OBJ_ORACLE:
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_SIRENS:
-            // AI has no advantage or knowledge to use this object.
             break;
         default:
             assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
