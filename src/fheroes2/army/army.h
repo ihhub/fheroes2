@@ -89,7 +89,7 @@ public:
     void UpgradeTroops( const Castle & );
 
     Troop * GetFirstValid( void );
-    Troop * GetWeakestTroop( void );
+    Troop * GetWeakestTroop() const;
     const Troop * GetSlowestTroop() const;
 
     void SortStrongest();
