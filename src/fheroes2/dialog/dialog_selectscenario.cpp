@@ -122,7 +122,7 @@ namespace
         Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
     }
 
-    fheroes2::Image GetNonStandardSizeIcon( void )
+    fheroes2::Image GetNonStandardSizeIcon()
     {
         fheroes2::Image icon( 17, 17 );
         icon.reset();
