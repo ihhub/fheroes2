@@ -1122,6 +1122,24 @@ bool MP2::isProtectedObject( const MapObjectType objectType )
     return isCaptureObject( objectType );
 }
 
+bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
+{
+    switch ( objectType ) {
+    // Stone liths and whirlpools are mandatory because they open access to new tiles
+    case OBJ_STONELITHS:
+    case OBJ_WHIRLPOOL:
+    // Sign messages are useless for AI, but they are harmless for fog discovery purposes
+    case OBJ_SIGN:
+        return true;
+    default:
+        break;
+    }
+
+    // Action objects in general should be avoided for fog discovery purposes, because
+    // they may be guarded or may require wasting resources
+    return !isActionObject( objectType );
+}
+
 bool MP2::isAbandonedMine( const MapObjectType objectType )
 {
     return objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE;
