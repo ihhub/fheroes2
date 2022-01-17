@@ -1066,7 +1066,7 @@ u32 Maps::Tiles::GetObjectUID() const
     return uniq;
 }
 
-int Maps::Tiles::GetPassable( void ) const
+uint16_t Maps::Tiles::GetPassable() const
 {
     return tilePassable;
 }
@@ -2542,18 +2542,18 @@ std::vector<uint8_t> Maps::Tiles::getValidTileSets() const
     std::vector<uint8_t> tileSets;
 
     if ( objectTileset != 0 ) {
-        tileSets.emplace_back( objectTileset >> 2 );
+        tileSets.emplace_back( static_cast<uint8_t>( objectTileset >> 2 ) );
     }
 
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( addon.object != 0 ) {
-            tileSets.emplace_back( addon.object >> 2 );
+            tileSets.emplace_back( static_cast<uint8_t>( addon.object >> 2 ) );
         }
     }
 
     for ( const TilesAddon & addon : addons_level2 ) {
         if ( addon.object != 0 ) {
-            tileSets.emplace_back( addon.object >> 2 );
+            tileSets.emplace_back( static_cast<uint8_t>( addon.object >> 2 ) );
         }
     }
 

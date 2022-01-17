@@ -185,7 +185,6 @@ public:
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
 
     static void SetStateDefaults( void );
-    static void SetState( u32 type, bool enable );
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
@@ -264,6 +263,8 @@ public:
 
 private:
     LocalEvent();
+
+    static void SetState( const uint32_t type, const bool enable );
 
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );

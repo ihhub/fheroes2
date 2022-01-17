@@ -2559,7 +2559,7 @@ namespace fheroes2
                     tilImage.resize( width, height );
                     tilImage._disableTransformLayer();
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
-                    std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
+                    std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
                 }
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {

@@ -315,7 +315,7 @@ void StreamBuf::reallocbuf( size_t sz )
 
         itbeg = new u8[sz];
         itend = itbeg + sz;
-        std::fill( itbeg, itend, 0 );
+        std::fill( itbeg, itend, static_cast<uint8_t>( 0 ) );
 
         reset();
     }
@@ -325,7 +325,7 @@ void StreamBuf::reallocbuf( size_t sz )
 
         u8 * ptr = new u8[sz];
 
-        std::fill( ptr, ptr + sz, 0 );
+        std::fill( ptr, ptr + sz, static_cast<uint8_t>( 0 ) );
         std::copy( itbeg, itput, ptr );
 
         itput = ptr + tellp();

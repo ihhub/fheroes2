@@ -48,8 +48,8 @@ int CountBits( u32 );
 
 std::string InsertString( const std::string &, size_t, const char * );
 
-bool SaveMemToFile( const std::vector<u8> &, const std::string & );
-std::vector<u8> LoadFileToMem( const std::string & );
+bool SaveMemToFile( const std::vector<u8> & data, const std::string & path );
+std::vector<u8> LoadFileToMem( const std::string & path );
 
 // std::clamp replacement until we can use C++17
 template <typename T>

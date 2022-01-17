@@ -1798,7 +1798,7 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
     return 1;
 }
 
-void LocalEvent::SetState( u32 type, bool enable )
+void LocalEvent::SetState( const uint32_t type, const bool enable )
 {
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
 }
