@@ -53,7 +53,7 @@ namespace
     std::string lastMapFileName;
     std::vector<Player> savedPlayers;
 
-    int save_version = CURRENT_FORMAT_VERSION;
+    uint16_t save_version = CURRENT_FORMAT_VERSION;
 
     std::string last_name;
 
@@ -167,12 +167,12 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     }
 }
 
-void Game::SetLoadVersion( int ver )
+void Game::SetLoadVersion( uint16_t ver )
 {
     save_version = ver;
 }
 
-int Game::GetLoadVersion( void )
+uint16_t Game::GetLoadVersion()
 {
     return save_version;
 }

@@ -1516,12 +1516,7 @@ StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_096_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_096_RELEASE ) {
-        msg >> obj.title;
-    }
+    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message >> obj.title;
 
     return msg;
 }
