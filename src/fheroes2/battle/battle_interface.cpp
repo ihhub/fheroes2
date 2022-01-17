@@ -2990,7 +2990,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
-    ptrdiff_t finish = 0;
+    int finish = 0;
     int deathColor = Color::UNUSED;
 
     std::vector<Unit *> mirrorImages;
@@ -3093,7 +3093,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 return TargetInfo::isFinishAnimFrame( info );
             } );
 
-            finishedAnimation = ( finish == finishedAnimationCount );
+            finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {

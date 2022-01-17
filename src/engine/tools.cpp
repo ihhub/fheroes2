@@ -228,16 +228,16 @@ std::vector<u8> LoadFileToMem( const std::string & path )
     std::vector<uint8_t> data( length );
 
     size_t dataToRead = static_cast<size_t>( length );
-    size_t dataReaded = 0;
+    size_t dataAlreadyRead = 0;
 
     const size_t blockSize = 4 * 1024 * 1024; // read by 4 MB blocks
 
     while ( dataToRead > 0 ) {
         size_t readSize = dataToRead > blockSize ? blockSize : dataToRead;
 
-        file.read( reinterpret_cast<char *>( data.data() + dataReaded ), static_cast<std::streamsize>( readSize ) );
+        file.read( reinterpret_cast<char *>( data.data() + dataAlreadyRead ), static_cast<std::streamsize>( readSize ) );
 
-        dataReaded += readSize;
+        dataAlreadyRead += readSize;
         dataToRead -= readSize;
     }
 
