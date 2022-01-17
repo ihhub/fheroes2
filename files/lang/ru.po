@@ -1481,8 +1481,12 @@ msgstr "Таверна повышает мораль защитников зам
 msgid "The Shipyard allows ships to be built."
 msgstr "Верфь позволяет вам строить корабли."
 
-msgid "The Well increases the growth rate of all dwellings by %{count} creatures per week."
-msgstr "Колодец увеличивает прирост всех существ в замке на %{count} каждую неделю."
+msgid ""
+"The Well increases the growth rate of all dwellings by %{count} creatures "
+"per week."
+msgstr ""
+"Колодец увеличивает прирост всех существ в замке на %{count} каждую " 
+"неделю."
 
 msgid "The Statue increases your town's income by %{count} per day."
 msgstr "Статуя приносит в казну %{count} золотых ежедневно."
