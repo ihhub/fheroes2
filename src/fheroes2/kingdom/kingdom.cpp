@@ -446,12 +446,12 @@ Recruits & Kingdom::GetRecruits( void )
         if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
             const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
-            for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
-                if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO ) {
+            for ( const auto & obtainedAward : obtainedAwards ) {
+                if ( obtainedAward._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO ) {
                     continue;
                 }
 
-                Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+                Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
                 if ( hero && hero->isFreeman() ) {
                     return hero;
