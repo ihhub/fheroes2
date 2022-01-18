@@ -894,10 +894,14 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_0912_RELEASE ) {
-        int intDummy;
-        uint32_t uint32Dummy;
+        int heroId;
+        uint32_t heroSurrenderDay;
 
-        msg >> intDummy >> uint32Dummy;
+        msg >> heroId >> heroSurrenderDay;
+
+        if ( heroId != Heroes::UNKNOWN && heroSurrenderDay > 0 ) {
+            kingdom.recruits.SetHero2Tmp( world.GetHeroes( heroId ), heroSurrenderDay );
+        }
     }
 
     msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;

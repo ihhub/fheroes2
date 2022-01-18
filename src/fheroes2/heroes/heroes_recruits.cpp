@@ -104,6 +104,16 @@ void Recruits::SetHero2( Heroes * hero )
     }
 }
 
+void Recruits::SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this method." );
+    assert( hero != nullptr );
+
+    SetHero2( hero );
+
+    second.surrenderDay = heroSurrenderDay;
+}
+
 void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay )
 {
     assert( heroSurrenderDay > 0 );
