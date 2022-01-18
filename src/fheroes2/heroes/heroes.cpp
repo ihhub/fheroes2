@@ -1924,12 +1924,6 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     return at( Rand::Get( freeman_heroes ) );
 }
 
-Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const
-{
-    assert( at( heroID ) && at( heroID )->isFreemanNotAvailableForHire() );
-    return at( heroID );
-}
-
 void AllHeroes::Scoute( int colors ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )

@@ -213,7 +213,6 @@ public:
 
     Heroes * FromJailHeroes( s32 );
     Heroes * GetFreemanHeroes( int race = 0 ) const;
-    Heroes * GetFreemanHeroesSpecial( int heroID ) const;
 
     const Heroes * GetHeroesCondWins( void ) const;
     const Heroes * GetHeroesCondLoss( void ) const;

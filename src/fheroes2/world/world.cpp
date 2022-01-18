@@ -539,11 +539,6 @@ Heroes * World::GetFreemanHeroes( int race ) const
     return vec_heroes.GetFreeman( race );
 }
 
-Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
-{
-    return vec_heroes.GetFreemanSpecial( heroID );
-}
-
 Heroes * World::FromJailHeroes( s32 index )
 {
     return vec_heroes.FromJail( index );

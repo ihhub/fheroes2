@@ -472,7 +472,6 @@ void Kingdom::UpdateRecruits( void )
             if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
                 continue;
 
-            // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
             Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
 
             if ( hero && hero->isFreeman() ) {
