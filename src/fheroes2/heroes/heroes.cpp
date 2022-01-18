@@ -671,6 +671,8 @@ bool Heroes::Recruit( const int cl, const fheroes2::Point & pt )
 
     kingdom.AddHeroes( this );
 
+    ResetModes( JAIL );
+
     return true;
 }
 
