@@ -20,66 +20,123 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "heroes_recruits.h"
-#include "heroes.h"
+#include "game.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 
 Recruits::Recruits()
-    : std::pair<int, int>( Heroes::UNKNOWN, Heroes::UNKNOWN )
+    : std::pair<Recruit, Recruit>()
 {}
 
-void Recruits::Reset( void )
+void Recruits::Reset()
 {
-    first = Heroes::UNKNOWN;
-    second = Heroes::UNKNOWN;
+    first = {};
+    second = {};
 }
 
-int Recruits::GetID1( void ) const
+int Recruits::GetID1() const
 {
-    return first;
+    return first.id;
 }
 
-int Recruits::GetID2( void ) const
+int Recruits::GetID2() const
 {
-    return second;
+    return second.id;
 }
 
-Heroes * Recruits::GetHero1( void )
+Heroes * Recruits::GetHero1() const
 {
-    return world.GetHeroes( first );
+    return world.GetHeroes( first.id );
 }
 
-Heroes * Recruits::GetHero2( void )
+Heroes * Recruits::GetHero2() const
 {
-    return world.GetHeroes( second );
+    return world.GetHeroes( second.id );
+}
+
+uint32_t Recruits::getSurrenderDay1() const
+{
+    return first.surrenderDay;
+}
+
+uint32_t Recruits::getSurrenderDay2() const
+{
+    return second.surrenderDay;
 }
 
 void Recruits::SetHero1( Heroes * hero )
 {
+    Heroes * oldHero = world.GetHeroes( first.id );
+
+    if ( oldHero ) {
+        oldHero->ResetModes( Heroes::AVAILFORHIRE );
+    }
+
     if ( hero ) {
-        first = hero->hid;
+        first = Recruit( *hero );
 
         hero->SetModes( Heroes::AVAILFORHIRE );
     }
     else {
-        first = Heroes::UNKNOWN;
+        first = {};
     }
 }
 
 void Recruits::SetHero2( Heroes * hero )
 {
+    Heroes * oldHero = world.GetHeroes( second.id );
+
+    if ( oldHero ) {
+        oldHero->ResetModes( Heroes::AVAILFORHIRE );
+    }
+
     if ( hero ) {
-        second = hero->hid;
+        second = Recruit( *hero );
 
         hero->SetModes( Heroes::AVAILFORHIRE );
     }
     else {
-        second = Heroes::UNKNOWN;
+        second = {};
     }
 }
 
-StreamBase & operator>>( StreamBase & sb, Recruits & rt )
+void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay )
 {
-    return sb >> rt.first >> rt.second;
+    assert( heroSurrenderDay > 0 );
+
+    Recruit & recruit = ( first.surrenderDay > second.surrenderDay ? second : first );
+
+    Heroes * oldHero = world.GetHeroes( recruit.id );
+
+    if ( oldHero ) {
+        oldHero->ResetModes( Heroes::AVAILFORHIRE );
+    }
+
+    recruit = Recruit( hero, heroSurrenderDay );
+
+    hero.SetModes( Heroes::AVAILFORHIRE );
+}
+
+StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
+{
+    return msg << recruit.id << recruit.surrenderDay;
+}
+
+StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
+{
+    msg >> recruit.id;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0912_RELEASE ) {
+        msg >> recruit.surrenderDay;
+    }
+    else {
+        recruit.surrenderDay = 0;
+    }
+
+    return msg;
 }

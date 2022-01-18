@@ -670,8 +670,12 @@ bool Heroes::Recruit( const int cl, const fheroes2::Point & pt )
     world.GetTiles( pt.x, pt.y ).SetHeroes( this );
 
     kingdom.AddHeroes( this );
+    kingdom.GetRecruits();
 
-    ResetModes( AVAILFORHIRE | JAIL );
+    // AVAILFORHIRE mode should already be cleared by Kingdom::GetRecruits()
+    assert( !Modes( AVAILFORHIRE ) );
+
+    ResetModes( JAIL );
 
     return true;
 }
@@ -1456,9 +1460,11 @@ void Heroes::SetFreeman( int reason )
         Kingdom & kingdom = GetKingdom();
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberPointsForRetreating() )
+            if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
                 savepoints = true;
-            kingdom.SetLastLostHero( *this );
+            }
+
+            kingdom.appendSurrenderedHero( *this );
         }
 
         // if not surrendering, reset army
@@ -1935,11 +1941,6 @@ Heroes * AllHeroes::FromJail( s32 index ) const
 {
     const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
     return end() != it ? *it : nullptr;
-}
-
-void AllHeroes::resetFreemansAvailableForHire() const
-{
-    std::for_each( begin(), end(), []( Heroes * hero ) { hero->ResetModes( Heroes::AVAILFORHIRE ); } );
 }
 
 HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const

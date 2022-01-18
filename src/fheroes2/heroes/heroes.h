@@ -509,8 +509,6 @@ struct AllHeroes : public VecHeroes
     Heroes * GetGuard( const Castle & ) const;
     Heroes * GetFreeman( int race ) const;
     Heroes * FromJail( s32 ) const;
-
-    void resetFreemansAvailableForHire() const;
 };
 
 StreamBase & operator<<( StreamBase &, const VecHeroes & );

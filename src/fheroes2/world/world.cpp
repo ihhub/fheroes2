@@ -969,11 +969,6 @@ void World::ClearFog( int colors )
     map_captureobj.ClearFog( colors );
 }
 
-void World::resetFreemansAvailableForHire() const
-{
-    vec_heroes.resetFreemansAvailableForHire();
-}
-
 const UltimateArtifact & World::GetUltimateArtifact( void ) const
 {
     return ultimate_artifact;

@@ -500,7 +500,7 @@ bool World::LoadMapMP2( const std::string & filename )
                             hero = vec_heroes.Get( pblock[18] );
 
                         if ( !hero || !hero->isFreeman() )
-                            hero = vec_heroes.GetFreeman( colorRace.second );
+                            hero = GetFreemanHeroes( colorRace.second );
 
                         if ( hero )
                             hero->LoadFromMP2( findobject, colorRace.first, colorRace.second, StreamBuf( pblock ) );
