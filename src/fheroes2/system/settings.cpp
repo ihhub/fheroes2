@@ -976,17 +976,17 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
         return _( "world: Eagle Eye also works like Scholar in H3." );
     case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
-        return _( "world: Crystal Ball also added Identify Hero and Visions spells" );
+        return _( "world: Crystal Ball also adds Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
-        return _( "world: use unique artifacts for resource affecting" );
+        return _( "world: use unique artifacts providing resources" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
-        return _( "world: use unique artifacts for primary skills" );
+        return _( "world: use unique artifacts affecting primary skills" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
-        return _( "world: use unique artifacts for secondary skills" );
+        return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Wind/Water Mills and Magic Garden can be captured" );
+        return _( "world: Wind/Water Mills and Magic Gardens can be captured" );
     case Settings::WORLD_DISABLE_BARROW_MOUNDS:
         return _( "world: disable Barrow Mounds" );
     case Settings::CASTLE_ALLOW_GUARDIANS:

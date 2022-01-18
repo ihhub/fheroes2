@@ -83,7 +83,7 @@ namespace
         { 0, 6, TYPE3, _( "Ultimate Shield" ), _( "The %{name} increases your attack and defense skills by %{count} each." ) },
         { 0, 6, TYPE3, _( "Ultimate Staff" ), _( "The %{name} increases your spell power and knowledge by %{count} each." ) },
         { 0, 4, TYPE3, _( "Ultimate Crown" ), _( "The %{name} increases each of your basic skills by %{count} points." ) },
-        { 0, 10, TYPE2, _( "Golden Goose" ), _( "The %{name} brings in an income of %{count} gold per turn." ) },
+        { 0, 10, TYPE2, _( "Golden Goose" ), _( "The %{name} brings in an income of %{count} gold per day." ) },
         { 0, 4, TYPE3, _( "Arcane Necklace of Magic" ), _( "The %{name} increases your spell power by %{count}." ) },
         { 0, 2, TYPE3, _( "Caster's Bracelet of Magic" ), _( "The %{name} increases your spell power by %{count}." ) },
         { 0, 2, TYPE3, _( "Mage's Ring of Power" ), _( "The %{name} increases your spell power by %{count}." ) },
@@ -144,16 +144,16 @@ namespace
         { 0, 10, TYPE0, _( "Statesman's Quill" ),
           _( "The %{name} reduces the cost of surrender to %{count} percent of the total cost of troops you have in your army." ) },
         { 0, 10, TYPE0, _( "Wizard's Hat" ), _( "The %{name} increases the duration of your spells by %{count} turns." ) },
-        { 0, 2, TYPE4, _( "Power Ring" ), _( "The %{name} returns %{count} extra power points/turn to your hero." ) },
+        { 0, 2, TYPE4, _( "Power Ring" ), _( "The %{name} returns %{count} extra spell points per day to your hero." ) },
         { 0, 0, TYPE0, _( "Ammo Cart" ), _( "The %{name} provides endless ammunition for all your troops that shoot." ) },
-        { 0, 25, TYPE2, _( "Tax Lien" ), _( "The %{name} costs you %{count} gold pieces/turn." ) },
+        { 0, 25, TYPE2, _( "Tax Lien" ), _( "The %{name} costs you %{count} gold pieces per day." ) },
         { 0, 0, TYPE0, _( "Hideous Mask" ), _( "The %{name} prevents all 'wandering' armies from joining your hero." ) },
         { 0, 1, TYPE2, _( "Endless Pouch of Sulfur" ), _( "The %{name} provides %{count} unit of sulfur per day." ) },
         { 0, 1, TYPE2, _( "Endless Vial of Mercury" ), _( "The %{name} provides %{count} unit of mercury per day." ) },
         { 0, 1, TYPE2, _( "Endless Pouch of Gems" ), _( "The %{name} provides %{count} unit of gems per day." ) },
         { 0, 1, TYPE2, _( "Endless Cord of Wood" ), _( "The %{name} provides %{count} unit of wood per day." ) },
         { 0, 1, TYPE2, _( "Endless Cart of Ore" ), _( "The %{name} provides %{count} unit of ore per day." ) },
-        { 0, 1, TYPE2, _( "Endless Pouch of Crystal" ), _( "The %{name} provides %{count} unit of crystal/day." ) },
+        { 0, 1, TYPE2, _( "Endless Pouch of Crystal" ), _( "The %{name} provides %{count} unit of crystal per day." ) },
         { 0, 1, TYPE3, _( "Spiked Helm" ), _( "The %{name} increases your attack and defense skills by %{count} each." ) },
         { 0, 2, TYPE3, _( "Spiked Shield" ), _( "The %{name} increases your attack and defense skills by %{count} each." ) },
         { 0, 1, TYPE3, _( "White Pearl" ), _( "The %{name} increases your spell power and knowledge by %{count} each." ) },
@@ -1024,13 +1024,13 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         }
         else if ( !art.isValid() ) {
             if ( !read_only ) {
-                msg = _( "Move %{name}" );
+                msg = _( "Transfer %{name}" );
                 StringReplace( msg, "%{name}", art2->GetName() );
             }
         }
         else if ( !read_only ) {
             if ( isMagicBook( art ) ) {
-                msg = _( "Cannot move artifact" );
+                msg = _( "Cannot exchange artifact" );
             }
             else {
                 msg = _( "Exchange %{name2} with %{name}" );
@@ -1055,14 +1055,14 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
 bool ArtifactsBar::ActionBarCursor( Artifact & art1, Artifact & art2 /* selected */ )
 {
     if ( isMagicBook( art2 ) || isMagicBook( art1 ) )
-        msg = _( "Cannot move artifact" );
+        msg = _( "Cannot exchange artifact" );
     else if ( art1.isValid() ) {
         msg = _( "Exchange %{name2} with %{name}" );
         StringReplace( msg, "%{name}", art1.GetName() );
         StringReplace( msg, "%{name2}", art2.GetName() );
     }
     else {
-        msg = _( "Move %{name}" );
+        msg = _( "Transfer %{name}" );
         StringReplace( msg, "%{name}", art2.GetName() );
     }
 
