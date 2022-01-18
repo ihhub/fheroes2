@@ -638,7 +638,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     return Luck::Normalize( result );
 }
 
-bool Heroes::Recruit( const int cl, const fheroes2::Point & pt )
+bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "hero is not a freeman" );
@@ -646,13 +646,13 @@ bool Heroes::Recruit( const int cl, const fheroes2::Point & pt )
         return false;
     }
 
-    Kingdom & kingdom = world.GetKingdom( cl );
+    Kingdom & kingdom = world.GetKingdom( col );
 
     if ( !kingdom.AllowRecruitHero( false, 0 ) ) {
         return false;
     }
 
-    SetColor( cl );
+    SetColor( col );
     killer_color.SetColor( Color::NONE );
 
     SetCenter( pt );
