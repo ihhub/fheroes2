@@ -638,50 +638,56 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     return Luck::Normalize( result );
 }
 
-/* recrut hero */
-bool Heroes::Recruit( int cl, const fheroes2::Point & pt )
+bool Heroes::Recruit( const int cl, const fheroes2::Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not freeman" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "hero is not a freeman" );
+
         return false;
     }
 
     Kingdom & kingdom = world.GetKingdom( cl );
 
-    if ( kingdom.AllowRecruitHero( false, 0 ) ) {
-        Maps::Tiles & tiles = world.GetTiles( pt.x, pt.y );
-        SetColor( cl );
-        killer_color.SetColor( Color::NONE );
-        SetCenter( pt );
-        setDirection( Direction::RIGHT );
-        if ( !Modes( SAVE_MP_POINTS ) )
-            move_point = GetMaxMovePoints();
-        MovePointsScaleFixed();
-
-        if ( !army.isValid() )
-            army.Reset( false );
-
-        tiles.SetHeroes( this );
-        kingdom.AddHeroes( this );
-
-        return true;
+    if ( !kingdom.AllowRecruitHero( false, 0 ) ) {
+        return false;
     }
 
-    return false;
+    SetColor( cl );
+    killer_color.SetColor( Color::NONE );
+
+    SetCenter( pt );
+    setDirection( Direction::RIGHT );
+
+    if ( !Modes( SAVE_MP_POINTS ) ) {
+        move_point = GetMaxMovePoints();
+    }
+    MovePointsScaleFixed();
+
+    if ( !army.isValid() ) {
+        army.Reset( false );
+    }
+
+    world.GetTiles( pt.x, pt.y ).SetHeroes( this );
+
+    kingdom.AddHeroes( this );
+
+    return true;
 }
 
 bool Heroes::Recruit( const Castle & castle )
 {
-    if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
-        if ( castle.GetLevelMageGuild() ) {
-            // learn spells
-            castle.MageGuildEducateHero( *this );
-        }
-        SetVisited( GetIndex() );
-        return true;
+    if ( !Recruit( castle.GetColor(), castle.GetCenter() ) ) {
+        return false;
     }
 
-    return false;
+    if ( castle.GetLevelMageGuild() ) {
+        // learn spells
+        castle.MageGuildEducateHero( *this );
+    }
+
+    SetVisited( GetIndex() );
+
+    return true;
 }
 
 void Heroes::ActionNewDay( void )

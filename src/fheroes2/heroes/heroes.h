@@ -290,7 +290,7 @@ public:
     int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
-    bool Recruit( int col, const fheroes2::Point & pt );
+    bool Recruit( const int col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
     void ActionNewDay( void );
