@@ -671,7 +671,7 @@ bool Heroes::Recruit( const int cl, const fheroes2::Point & pt )
 
     kingdom.AddHeroes( this );
 
-    ResetModes( JAIL );
+    ResetModes( AVAILFORHIRE | JAIL );
 
     return true;
 }
@@ -1444,6 +1444,11 @@ bool Heroes::isFreeman( void ) const
     return isValid() && Color::NONE == GetColor() && !Modes( JAIL );
 }
 
+bool Heroes::isFreemanNotAvailableForHire() const
+{
+    return isFreeman() && !Modes( AVAILFORHIRE );
+}
+
 void Heroes::SetFreeman( int reason )
 {
     if ( !isFreeman() ) {
@@ -1897,7 +1902,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
 
     // find freeman in race (skip: manual changes)
     for ( int ii = min; ii <= max; ++ii )
-        if ( at( ii )->isFreeman() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
+        if ( at( ii )->isFreemanNotAvailableForHire() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
             freeman_heroes.push_back( ii );
 
     // not found, find any race
@@ -1906,7 +1911,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
         max = Heroes::CELIA;
 
         for ( int ii = min; ii <= max; ++ii )
-            if ( at( ii )->isFreeman() )
+            if ( at( ii )->isFreemanNotAvailableForHire() )
                 freeman_heroes.push_back( ii );
     }
 
@@ -1921,7 +1926,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
 
 Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const
 {
-    assert( at( heroID ) && at( heroID )->isFreeman() );
+    assert( at( heroID ) && at( heroID )->isFreemanNotAvailableForHire() );
     return at( heroID );
 }
 
@@ -1938,9 +1943,9 @@ Heroes * AllHeroes::FromJail( s32 index ) const
     return end() != it ? *it : nullptr;
 }
 
-bool AllHeroes::HaveTwoFreemans( void ) const
+void AllHeroes::resetFreemansAvailableForHire() const
 {
-    return 2 <= std::count_if( begin(), end(), []( const Heroes * hero ) { return hero->isFreeman(); } );
+    std::for_each( begin(), end(), []( Heroes * hero ) { hero->ResetModes( Heroes::AVAILFORHIRE ); } );
 }
 
 HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const

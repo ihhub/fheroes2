@@ -260,7 +260,7 @@ public:
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
-    void UpdateRecruits( Recruits & ) const;
+    void resetFreemansAvailableForHire() const;
 
     uint32_t CheckKingdomWins( const Kingdom & ) const;
     bool KingdomIsWins( const Kingdom &, uint32_t wins ) const;

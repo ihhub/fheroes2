@@ -41,8 +41,8 @@ public:
     Heroes * GetHero1( void );
     Heroes * GetHero2( void );
 
-    void SetHero1( const Heroes * );
-    void SetHero2( const Heroes * );
+    void SetHero1( Heroes * hero );
+    void SetHero2( Heroes * hero );
 };
 
 StreamBase & operator>>( StreamBase &, Recruits & );

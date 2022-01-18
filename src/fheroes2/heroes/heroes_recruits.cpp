@@ -55,14 +55,28 @@ Heroes * Recruits::GetHero2( void )
     return world.GetHeroes( second );
 }
 
-void Recruits::SetHero1( const Heroes * hero )
+void Recruits::SetHero1( Heroes * hero )
 {
-    first = hero ? hero->hid : Heroes::UNKNOWN;
+    if ( hero ) {
+        first = hero->hid;
+
+        hero->SetModes( Heroes::AVAILFORHIRE );
+    }
+    else {
+        first = Heroes::UNKNOWN;
+    }
 }
 
-void Recruits::SetHero2( const Heroes * hero )
+void Recruits::SetHero2( Heroes * hero )
 {
-    second = hero ? hero->hid : Heroes::UNKNOWN;
+    if ( hero ) {
+        second = hero->hid;
+
+        hero->SetModes( Heroes::AVAILFORHIRE );
+    }
+    else {
+        second = Heroes::UNKNOWN;
+    }
 }
 
 StreamBase & operator>>( StreamBase & sb, Recruits & rt )

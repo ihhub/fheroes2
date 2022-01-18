@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "ai.h"
 #include "battle.h"
@@ -454,14 +455,15 @@ Recruits & Kingdom::GetRecruits( void )
     if ( Heroes::UNKNOWN == recruits.GetID2() || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) )
         recruits.SetHero2( world.GetFreemanHeroes() );
 
-    if ( recruits.GetID1() == recruits.GetID2() )
-        world.UpdateRecruits( recruits );
+    assert( recruits.GetID1() != recruits.GetID2() || ( recruits.GetHero1() == nullptr && recruits.GetHero2() == nullptr ) );
 
     return recruits;
 }
 
 void Kingdom::UpdateRecruits( void )
 {
+    world.resetFreemansAvailableForHire();
+
     bool hasSpecialHireableHero = false;
     if ( isControlHuman() && ( Settings::Get().isCampaignGameType() ) && world.CountWeek() < 2 ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
@@ -471,7 +473,7 @@ void Kingdom::UpdateRecruits( void )
                 continue;
 
             // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
-            const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+            Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
 
             if ( hero && hero->isFreeman() ) {
                 recruits.SetHero1( hero );
@@ -488,8 +490,7 @@ void Kingdom::UpdateRecruits( void )
 
     recruits.SetHero2( world.GetFreemanHeroes() );
 
-    if ( recruits.GetID1() == recruits.GetID2() )
-        world.UpdateRecruits( recruits );
+    assert( recruits.GetID1() != recruits.GetID2() || ( recruits.GetHero1() == nullptr && recruits.GetHero2() == nullptr ) );
 }
 
 Puzzle & Kingdom::PuzzleMaps( void )

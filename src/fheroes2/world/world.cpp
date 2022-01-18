@@ -974,6 +974,11 @@ void World::ClearFog( int colors )
     map_captureobj.ClearFog( colors );
 }
 
+void World::resetFreemansAvailableForHire() const
+{
+    vec_heroes.resetFreemansAvailableForHire();
+}
+
 const UltimateArtifact & World::GetUltimateArtifact( void ) const
 {
     return ultimate_artifact;
@@ -1081,15 +1086,6 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
 {
     if ( obj )
         map_objects.remove( obj->GetUID() );
-}
-
-void World::UpdateRecruits( Recruits & recruits ) const
-{
-    if ( vec_heroes.HaveTwoFreemans() )
-        while ( recruits.GetID1() == recruits.GetID2() )
-            recruits.SetHero2( GetFreemanHeroes() );
-    else
-        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const
