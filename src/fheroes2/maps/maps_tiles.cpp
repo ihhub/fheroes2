@@ -978,15 +978,14 @@ void Maps::Tiles::updatePassability()
             }
 
             // Count how many objects are there excluding shadows, roads and river streams.
-            const std::ptrdiff_t validLevel1ObjectCount = std::count_if( addons_level1.begin(), addons_level1.end(),
-                []( const TilesAddon & addon ) {
-                    if ( TilesAddon::isShadow( addon ) ) {
-                        return false;
-                    }
+            const std::ptrdiff_t validLevel1ObjectCount = std::count_if( addons_level1.begin(), addons_level1.end(), []( const TilesAddon & addon ) {
+                if ( TilesAddon::isShadow( addon ) ) {
+                    return false;
+                }
 
-                    const int icnType = MP2::GetICNObject( addon.object );
-                    return icnType != ICN::ROAD && icnType != ICN::STREAM;
-                } );
+                const int icnType = MP2::GetICNObject( addon.object );
+                return icnType != ICN::ROAD && icnType != ICN::STREAM;
+            } );
 
             const bool singleObjectTile = validLevel1ObjectCount == 0 && addons_level2.empty() && ( bottomTile.objectTileset >> 2 ) != ( objectTileset >> 2 );
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
