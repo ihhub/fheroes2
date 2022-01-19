@@ -148,8 +148,6 @@ public:
     static u32 GetMaxHeroes( void );
 
 private:
-    void resetRecruits();
-
     cost_t _getKingdomStartingResources( const int difficulty );
 
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );

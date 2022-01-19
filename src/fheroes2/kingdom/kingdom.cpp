@@ -215,7 +215,16 @@ void Kingdom::ActionNewWeek( void )
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 
-    resetRecruits();
+    // Heroes who surrendered on Sunday should still be available for hire next week
+    if ( world.CountDay() - recruits.getSurrenderDay1() > 1 ) {
+        recruits.SetHero1( nullptr );
+    }
+    if ( world.CountDay() - recruits.getSurrenderDay2() > 1 ) {
+        recruits.SetHero2( nullptr );
+    }
+
+    // Settle a new set of recruits
+    GetRecruits();
 }
 
 void Kingdom::ActionNewMonth( void )
@@ -486,20 +495,6 @@ const Recruits & Kingdom::GetRecruits()
     assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );
 
     return recruits;
-}
-
-void Kingdom::resetRecruits()
-{
-    // Heroes who surrendered on Sunday should still be available for hire next week
-    if ( world.CountDay() - recruits.getSurrenderDay1() > 1 ) {
-        recruits.SetHero1( nullptr );
-    }
-    if ( world.CountDay() - recruits.getSurrenderDay2() > 1 ) {
-        recruits.SetHero2( nullptr );
-    }
-
-    // Immediately settle a new set of recruits
-    GetRecruits();
 }
 
 Puzzle & Kingdom::PuzzleMaps( void )
