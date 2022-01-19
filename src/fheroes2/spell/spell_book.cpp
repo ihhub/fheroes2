@@ -285,12 +285,12 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                         else {
                             StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-                            Dialog::Message( "", str, Font::BIG, Dialog::OK );
+                            Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
                             display.render();
                         }
                     }
                     else {
-                        Dialog::SpellInfo( *spell, true );
+                        Dialog::SpellInfo( *spell, &hero, true );
                         display.render();
                     }
                 }
@@ -345,7 +345,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, false );
+                    Dialog::SpellInfo( *spell, &hero, false );
                     display.render();
                 }
             }
@@ -420,7 +420,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, true );
+                    Dialog::SpellInfo( *spell, &hero, true );
                     redraw = true;
                 }
             }
@@ -439,7 +439,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, false );
+                    Dialog::SpellInfo( *spell, &hero, false );
                     redraw = true;
                 }
             }

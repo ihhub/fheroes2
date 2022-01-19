@@ -17,7 +17,7 @@ jobs:
           dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
           package_name: fheroes2_ubuntu_sdl1.zip
-          package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh download_demo_version.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux SDL1 Debug
@@ -29,7 +29,7 @@ jobs:
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
           package_name: fheroes2_ubuntu_sdl2.zip
-          package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh download_demo_version.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux SDL2 Debug
@@ -41,7 +41,7 @@ jobs:
           dependencies: sdl sdl_mixer sdl_image
           env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
           package_name: fheroes2_macos10_15_sdl1_x86-64.zip
-          package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh download_demo_version.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: MacOS build with SDL 1 support (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL2
@@ -49,7 +49,7 @@ jobs:
           dependencies: sdl2 sdl2_mixer sdl2_image
           env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
           package_name: fheroes2_macos10_15_sdl2_x86-64.zip
-          package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh download_demo_version.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: MacOS build with SDL 2 support (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
     name: Make (${{ matrix.config.name }})
@@ -61,11 +61,12 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
-        sudo apt-get update
-        sudo apt-get install -y ${{ matrix.config.dependencies }}
+        sudo apt-get -y update
+        sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
       if: ${{ matrix.config.os == 'macos-10.15' }}
       run: |
+        brew update
         brew install ${{ matrix.config.dependencies }}
     - name: Build
       run: |
@@ -77,7 +78,7 @@ jobs:
     - name: Create package
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
-        cp docs/README.txt script/demo/download_demo_version.sh .
+        cp docs/README.txt script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh .
         zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
@@ -99,8 +100,8 @@ jobs:
         fetch-depth: 50
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libgcc1 gettext
+        sudo apt-get -y update
+        sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
       uses: actions/cache@v2
       with:
@@ -167,8 +168,8 @@ jobs:
         fetch-depth: 50
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y gettext
+        sudo apt-get -y update
+        sudo apt-get -y install gettext
     - name: Build
       run: |
         export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH

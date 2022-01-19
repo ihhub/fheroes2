@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <iomanip>
 #include <list>
@@ -73,17 +74,17 @@ XMI_Time readXMITime( const uint8_t * data )
     }
 
     res.first += *p;
-    res.second = p - data + 1;
+    res.second = static_cast<uint32_t>( p - data ) + 1; // it's safe to cast since p is always bigger or equal to data
 
     return res;
 }
 
 std::vector<u8> packToMIDITime( u32 delta )
 {
-    u8 c1 = delta & 0x0000007F;
-    u8 c2 = ( delta & 0x00003F80 ) >> 7;
-    u8 c3 = ( delta & 0x001FC000 ) >> 14;
-    u8 c4 = ( delta & 0x0FE00000 ) >> 21;
+    const uint8_t c1 = delta & 0x0000007F;
+    const uint8_t c2 = ( ( delta & 0x00003F80 ) >> 7 ) & 0xFF;
+    const uint8_t c3 = ( ( delta & 0x001FC000 ) >> 14 ) & 0xFF;
+    const uint8_t c4 = ( ( delta & 0x0FE00000 ) >> 21 ) & 0xFF;
 
     std::vector<u8> res;
     res.reserve( 4 );
@@ -408,7 +409,7 @@ struct MidiEvents : std::vector<MidiChunk>
             }
         }
 
-        std::sort( this->begin(), this->end() );
+        std::stable_sort( this->begin(), this->end() );
 
         // update duration
         delta = 0;
@@ -498,6 +499,9 @@ struct MidData
         , ppqn( 60 )
         , tracks( t )
     {
+        // MIDI format 0 can contain only one track
+        assert( tracks.count() == 1 );
+
         // XMI files play MIDI at a fixed clock rate of 120 Hz
         if ( !tracks.empty() && tracks.front().events.trackTempo > 0 ) {
             ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );

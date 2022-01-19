@@ -61,6 +61,39 @@ namespace
 
         return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
+
+    void fixCastleNames( AllCastles & castles )
+    {
+        // Find castles with no names.
+        std::vector<Castle *> castleWithNoName;
+        std::set<std::string> castleNames;
+
+        for ( Castle * castle : castles ) {
+            if ( castle == nullptr ) {
+                // How do we have an empty pointer in this container?
+                assert( 0 );
+                continue;
+            }
+
+            const std::string & name = castle->GetName();
+
+            if ( name.empty() ) {
+                castleWithNoName.emplace_back( castle );
+            }
+            else {
+                castleNames.emplace( name );
+            }
+        }
+
+        if ( castleWithNoName.empty() ) {
+            return;
+        }
+
+        for ( Castle * castle : castleWithNoName ) {
+            castle->setName( castleNames );
+            castleNames.emplace( castle->GetName() );
+        }
+    }
 }
 
 namespace GameStatic
@@ -374,7 +407,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 else {
                     Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
                     if ( castle ) {
-                        castle->LoadFromMP2( StreamBuf( pblock ) );
+                        castle->LoadFromMP2( pblock );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -396,7 +429,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
                     Castle * castle = getCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
-                        castle->LoadFromMP2( StreamBuf( pblock ) );
+                        castle->LoadFromMP2( pblock );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
                         Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
@@ -527,6 +560,8 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
+    fixCastleNames( vec_castles );
+
     // clear artifact flags to correctly generate random artifacts
     fheroes2::ResetArtifactStats();
 
@@ -578,7 +613,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
         case MP2::OBJ_DERELICTSHIP:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:

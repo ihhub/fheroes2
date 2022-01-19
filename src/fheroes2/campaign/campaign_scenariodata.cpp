@@ -111,10 +111,14 @@ namespace
         case 3:
         case 4:
         case 5:
-        case 6:
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
+            break;
+        case 6:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::NECR, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::WRLK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY, Race::BARB, 1 );
             break;
         case 7:
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
@@ -319,26 +323,36 @@ namespace
     const char * getArtifactCampaignName( const int32_t artifactId )
     {
         switch ( artifactId ) {
-        case Artifact::THUNDER_MACE:
-            return _( "Thunder Mace" );
-        case Artifact::MINOR_SCROLL:
-            return _( "Minor Scroll" );
-        case Artifact::DRAGON_SWORD:
-            return _( "Dragon Sword" );
-        case Artifact::DIVINE_BREASTPLATE:
-            return _( "Breastplate" );
-        case Artifact::FIZBIN_MISFORTUNE:
-            return _( "Fizbin of Misfortune" );
-        case Artifact::MAGE_RING:
-            return _( "Mage's ring" );
+        case Artifact::BALLISTA:
+            return _( "Ballista" );
+        case Artifact::CASTER_BRACELET:
+            return _( "Caster's Bracelet" );
         case Artifact::DEFENDER_HELM:
             return _( "Defender Helm" );
+        case Artifact::DIVINE_BREASTPLATE:
+            return _( "Breastplate" );
+        case Artifact::DRAGON_SWORD:
+            return _( "Dragon Sword" );
+        case Artifact::FIZBIN_MISFORTUNE:
+            return _( "Fizbin Medal" );
+        case Artifact::FOREMOST_SCROLL:
+            return _( "Foremost Scroll" );
+        case Artifact::MAGE_RING:
+            return _( "Mage's Ring" );
+        case Artifact::MAJOR_SCROLL:
+            return _( "Major Scroll" );
+        case Artifact::MINOR_SCROLL:
+            return _( "Minor Scroll" );
+        case Artifact::NOMAD_BOOTS_MOBILITY:
+            return _( "Nomad Boots" );
         case Artifact::POWER_AXE:
             return _( "Power Axe" );
         case Artifact::STEALTH_SHIELD:
             return _( "Stealth Shield" );
-        case Artifact::NOMAD_BOOTS_MOBILITY:
-            return _( "Nomad Boots" );
+        case Artifact::THUNDER_MACE:
+            return _( "Thunder Mace" );
+        case Artifact::TRAVELER_BOOTS_MOBILITY:
+            return _( "Traveler's Boots" );
         default:
             return Artifact( artifactId ).GetName();
         }
@@ -415,6 +429,7 @@ namespace Campaign
             objectName = getSpellCampaignName( _subType );
             break;
         case ScenarioBonusData::STARTING_RACE:
+        case ScenarioBonusData::STARTING_RACE_AND_ARMY:
             objectName = Race::String( _subType );
             break;
         case ScenarioBonusData::SKILL_PRIMARY:

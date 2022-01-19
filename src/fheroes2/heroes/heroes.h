@@ -23,6 +23,7 @@
 #ifndef H2HEROES_H
 #define H2HEROES_H
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <vector>
@@ -265,7 +266,7 @@ public:
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );
-    bool MayStillMove( const bool ignorePath ) const;
+    bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
 
@@ -298,17 +299,16 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    // Called from World::NewDay() for all heroes, hired or not
-    void ReplenishSpellPoints();
-
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
     const Route::Path & GetPath() const;
     Route::Path & GetPath();
     int GetRangeRouteDays( s32 ) const;
     void ShowPath( bool );
-    void RescanPath();
-    void RescanPathPassable();
+    // Calculates the hero's path to the tile with the dstIdx index using the pathfinder from the World global object.
+    // Recalculates the existing path if dstIdx is negative. Not applicable if you want to use a pathfinder other than
+    // PlayerWorldPathfinder.
+    void calculatePath( int32_t dstIdx );
 
     int GetDirection() const;
     void setDirection( int directionToSet );
@@ -370,7 +370,7 @@ public:
     void setLastGroundRegion( uint32_t regionID );
 
     u32 GetExperience( void ) const;
-    void IncreaseExperience( u32 );
+    void IncreaseExperience( const uint32_t amount, const bool autoselect = false );
 
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
@@ -417,6 +417,9 @@ private:
     void SetValidDirectionSprite();
 
     uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
+
+    // Daily replenishment of spell points
+    void ReplenishSpellPoints();
 
     bool isInDeepOcean() const;
 
@@ -485,6 +488,21 @@ struct AllHeroes : public VecHeroes
     void clear( void );
 
     void Scoute( int ) const;
+
+    void NewDay()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
+    }
+
+    void NewWeek()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
+    }
+
+    void NewMonth()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
+    }
 
     Heroes * GetGuest( const Castle & ) const;
     Heroes * GetGuard( const Castle & ) const;

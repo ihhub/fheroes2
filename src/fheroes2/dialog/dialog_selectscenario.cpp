@@ -31,21 +31,106 @@
 #include "localevent.h"
 #include "maps.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 
-void LossConditionInfo( const Maps::FileInfo & );
-void VictoryConditionInfo( const Maps::FileInfo & );
+#include <cassert>
 
-fheroes2::Image GetNonStandardSizeIcon( void )
+namespace
 {
-    fheroes2::Image icon( 17, 17 );
-    icon.reset();
-    fheroes2::Fill( icon, 1, 1, 15, 15, fheroes2::GetColorId( 0x8D, 0x73, 0xFF ) );
-    Text text( "N", Font::SMALL );
-    text.Blit( ( 17 - text.w() ) / 2, ( 17 - text.h() ) / 2, icon );
-    return icon;
+    void mapInfo( const Maps::FileInfo & info )
+    {
+        // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
+        // To avoid this we have to replace all '\' symbols by '/' symbols.
+        std::string fullPath = info.file;
+        StringReplace( fullPath, "\\", "/" );
+
+        fheroes2::Text header( info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+        fheroes2::MultiFontText body;
+        body.add( { _( "Location: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "\n\nMap Type:\n" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        switch ( info._version ) {
+        case GameVersion::SUCCESSION_WARS:
+            body.add( { _( "The Succession Wars" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+            break;
+        case GameVersion::PRICE_OF_LOYALTY:
+            body.add( { _( "The Price of Loyalty" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+            break;
+        default:
+            // Did you add a new map version? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        fheroes2::showMessage( header, body, Dialog::ZERO );
+    }
+
+    void LossConditionInfo( const Maps::FileInfo & info )
+    {
+        std::string msg;
+
+        switch ( info.conditions_loss ) {
+        case 0:
+            msg = _( "Lose all your heroes and towns." );
+            break;
+        case 1:
+            msg = _( "Lose a specific town." );
+            break;
+        case 2:
+            msg = _( "Lose a specific hero." );
+            break;
+        case 3:
+            msg = _( "Run out of time. Fail to win by a certain point." );
+            break;
+        default:
+            return;
+        }
+        Dialog::Message( _( "Loss Condition" ), msg, Font::BIG );
+    }
+
+    void VictoryConditionInfo( const Maps::FileInfo & info )
+    {
+        std::string msg;
+
+        switch ( info.conditions_wins ) {
+        case 0:
+            msg = _( "Defeat all enemy heroes and towns." );
+            break;
+        case 1:
+            msg = _( "Capture a specific town." );
+            break;
+        case 2:
+            msg = _( "Defeat a specific hero." );
+            break;
+        case 3:
+            msg = _( "Find a specific artifact." );
+            break;
+        case 4:
+            msg = _( "Your side defeats the opposing side." );
+            break;
+        case 5:
+            msg = _( "Accumulate a large amount of gold." );
+            break;
+        default:
+            return;
+        }
+        Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
+    }
+
+    fheroes2::Image GetNonStandardSizeIcon()
+    {
+        fheroes2::Image icon( 17, 17 );
+        icon.reset();
+        fheroes2::Fill( icon, 1, 1, 15, 15, fheroes2::GetColorId( 0x8D, 0x73, 0xFF ) );
+        Text text( "N", Font::SMALL );
+        text.Blit( ( 17 - text.w() ) / 2, ( 17 - text.h() ) / 2, icon );
+        return icon;
+    }
 }
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
@@ -226,7 +311,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
 
     const fheroes2::Rect countPlayers( rt.x + 45, rt.y + 55, 19, 175 );
     const fheroes2::Rect sizeMaps( rt.x + 64, rt.y + 55, 19, 175 );
-    const fheroes2::Rect mapType( rt.x + 83, rt.y + 55, 19, 175 );
+    const fheroes2::Rect mapTypes( rt.x + 83, rt.y + 55, 19, 175 );
+    const fheroes2::Rect mapNames( rt.x + 102, rt.y + 55, 166, 175 );
     const fheroes2::Rect victoryConds( rt.x + 268, rt.y + 55, 19, 175 );
     const fheroes2::Rect lossConds( rt.x + 287, rt.y + 55, 19, 175 );
 
@@ -385,10 +471,15 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
             Dialog::Message( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ),
                              Font::BIG );
+        else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
+            Dialog::Message( _( "Map Type" ), _( "Indicates whether the map is made for The Succession Wars or The Price of Loyalty version of the game." ), Font::BIG );
+        else if ( le.MousePressRight( mapNames ) ) {
+            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
+            if ( item )
+                mapInfo( *item );
+        }
         else if ( le.MousePressRight( curMapName ) )
             Dialog::Message( _( "Selected Name" ), _( "The name of the currently selected map." ), Font::BIG );
-        else if ( le.MousePressRight( mapType ) || le.MousePressRight( curMapType ) )
-            Dialog::Message( _( "Map Type" ), _( "Indicates whether the map is made for The Succession Wars or The Price of Loyalty version of the game." ), Font::BIG );
         else if ( le.MousePressRight( victoryConds ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
@@ -428,56 +519,4 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     }
 
     return result;
-}
-
-void LossConditionInfo( const Maps::FileInfo & info )
-{
-    std::string msg;
-
-    switch ( info.conditions_loss ) {
-    case 0:
-        msg = _( "Lose all your heroes and towns." );
-        break;
-    case 1:
-        msg = _( "Lose a specific town." );
-        break;
-    case 2:
-        msg = _( "Lose a specific hero." );
-        break;
-    case 3:
-        msg = _( "Run out of time. Fail to win by a certain point." );
-        break;
-    default:
-        return;
-    }
-    Dialog::Message( _( "Loss Condition" ), msg, Font::BIG );
-}
-
-void VictoryConditionInfo( const Maps::FileInfo & info )
-{
-    std::string msg;
-
-    switch ( info.conditions_wins ) {
-    case 0:
-        msg = _( "Defeat all enemy heroes and towns." );
-        break;
-    case 1:
-        msg = _( "Capture a specific town." );
-        break;
-    case 2:
-        msg = _( "Defeat a specific hero." );
-        break;
-    case 3:
-        msg = _( "Find a specific artifact." );
-        break;
-    case 4:
-        msg = _( "Your side defeats the opposing side." );
-        break;
-    case 5:
-        msg = _( "Accumulate a large amount of gold." );
-        break;
-    default:
-        return;
-    }
-    Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
 }

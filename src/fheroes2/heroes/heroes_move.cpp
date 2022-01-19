@@ -390,10 +390,12 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
         const Castle * castle = world.getCastleEntrance( next.GetCenter() );
         return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
-    else
-        // to coast action
-        if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST )
+    if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
         return true;
+    }
+    if ( !hero.isShipMaster() && next.GetObject() == MP2::OBJ_SHIPWRECK ) {
+        return true;
+    }
 
     return MP2::isNeedStayFront( next.GetObject() );
 }
@@ -681,7 +683,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
 
         // possible that hero loses the battle
         if ( !hero.isFreeman() ) {
-            const bool isDestination = indexTo == hero.GetPath().GetDestinationIndex();
+            const bool isDestination = indexTo == hero.GetPath().GetDestinationIndex( true );
             hero.Action( indexTo, isDestination );
 
             if ( isDestination ) {
@@ -700,7 +702,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
 bool Heroes::MoveStep( bool fast )
 {
     const int32_t indexTo = Maps::GetDirectionIndex( GetIndex(), path.GetFrontDirection() );
-    const int32_t indexDest = path.GetDestinationIndex();
+    const int32_t indexDest = path.GetDestinationIndex( true );
     const fheroes2::Point & mp = GetCenter();
 
     if ( fast ) {

@@ -22,6 +22,7 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -186,8 +187,15 @@ public:
 
     void InitKingdoms( void );
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( int color )
+    {
+        return vec_kingdoms.GetKingdom( color );
+    }
+
+    const Kingdom & GetKingdom( int color ) const
+    {
+        return vec_kingdoms.GetKingdom( color );
+    }
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
     const Castle * getCastle( const fheroes2::Point & tilePosition ) const;
@@ -212,8 +220,6 @@ public:
 
     CastleHeroes GetHeroes( const Castle & ) const;
 
-    void RescanAllHeroesPathPassable() const;
-
     const UltimateArtifact & GetUltimateArtifact( void ) const;
     bool DiggingForUltimateArtifact( const fheroes2::Point & );
 
@@ -237,11 +243,11 @@ public:
 
     const std::string & GetRumors( void );
 
-    s32 NextTeleport( s32 ) const;
-    MapsIndexes GetTeleportEndPoints( s32 ) const;
+    int32_t NextTeleport( const int32_t index ) const;
+    MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
 
-    s32 NextWhirlpool( s32 ) const;
-    MapsIndexes GetWhirlpoolEndPoints( s32 ) const;
+    int32_t NextWhirlpool( const int32_t index ) const;
+    MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
     void CaptureObject( s32, int col );
     u32 CountCapturedObject( int obj, int col ) const;
@@ -270,8 +276,6 @@ public:
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
 
-    bool isTileBlocked( int toTile, bool fromWater ) const;
-    bool isValidPath( const int index, const int direction, const int heroColor ) const;
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();
@@ -330,8 +334,8 @@ private:
     MapObjects map_objects;
 
     // This data isn't serialized
-    Maps::Indexes _allTeleporters;
-    Maps::Indexes _whirlpoolTiles;
+    std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
+    std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 

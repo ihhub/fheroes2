@@ -160,9 +160,9 @@ struct mofile
             const std::string sep2( ": " );
 
             buf.seek( offset2 );
-            std::list<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
+            std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
 
-            for ( std::list<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
+            for ( std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
                 if ( encoding.empty() )
                     encoding = get_tag( *it, tag1, sep1 );
 
@@ -377,6 +377,7 @@ namespace Translation
             case LOCALE_GL:
             case LOCALE_HE:
             case LOCALE_IT:
+                return current->ngettext( str, 0 );
             case LOCALE_NL:
             case LOCALE_SV:
                 return current->ngettext( str, ( n != 1 ) );

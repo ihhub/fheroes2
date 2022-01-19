@@ -420,11 +420,6 @@ const fheroes2::Rect & Interface::BorderWindow::GetRect() const
     return Settings::Get().ExtGameHideInterface() && border.isValid() ? border.GetRect() : GetArea();
 }
 
-const fheroes2::Rect & Interface::BorderWindow::GetArea() const
-{
-    return area;
-}
-
 void Interface::BorderWindow::Redraw() const
 {
     Dialog::FrameBorder::RenderRegular( border.GetRect() );

@@ -28,7 +28,8 @@
 #include "icn.h"
 #include "interface_list.h"
 #include "settings.h"
-#include "text.h"
+#include "translations.h"
+#include "ui_text.h"
 
 class SelectEnum : public Interface::ListBox<int>
 {
@@ -107,14 +108,20 @@ public:
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( mons.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 10 );
+        if ( current ) {
+            fheroes2::Text text( mons.GetName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( mons.GetName(), fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Monster:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Monster:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -142,14 +149,19 @@ public:
         if ( !port.empty() )
             fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( Heroes::GetName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 5 );
+        if ( current ) {
+            fheroes2::Text text( Heroes::GetName( index ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
+        }
     }
-
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Hero:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Hero:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -167,14 +179,20 @@ public:
         Artifact art( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( art.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 10 );
+        if ( current ) {
+            fheroes2::Text text( art.GetName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( art.GetName(), fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Artifact:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Artifact:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -194,14 +212,20 @@ public:
         Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
-        Text text( spell.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 80, dsty + 10 );
+        if ( current ) {
+            fheroes2::Text text( spell.GetName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 80, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( spell.GetName(), fheroes2::FontType() );
+            text.draw( dstx + 80, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Spell:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Spell:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
@@ -221,14 +245,21 @@ public:
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
         std::string str = skill.GetName();
-        Text text( str, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 50, dsty + 10 );
+
+        if ( current ) {
+            fheroes2::Text text( str, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
+        else {
+            fheroes2::Text text( str, fheroes2::FontType() );
+            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        Text text( "Select Skill:", Font::YELLOW_BIG );
-        text.Blit( dst.x + ( area.width - text.w() ) / 2, dst.y );
+        fheroes2::Text text( _( "Select Skill:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }

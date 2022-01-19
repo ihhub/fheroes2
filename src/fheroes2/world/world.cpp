@@ -480,17 +480,6 @@ size_t World::getSize() const
     return vec_tiles.size();
 }
 
-/* get kingdom */
-Kingdom & World::GetKingdom( int color )
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
-const Kingdom & World::GetKingdom( int color ) const
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
 Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
     return vec_castles.Get( tilePosition );
@@ -563,11 +552,6 @@ Heroes * World::FromJailHeroes( s32 index )
 CastleHeroes World::GetHeroes( const Castle & castle ) const
 {
     return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
-}
-
-void World::RescanAllHeroesPathPassable() const
-{
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 }
 
 int World::GetDay( void ) const
@@ -648,37 +632,41 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+
         pickRumor();
 
-        if ( BeginMonth() )
+        if ( BeginMonth() ) {
             ++month;
+        }
     }
 
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
-        // reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
-        hero->ResetModes( Heroes::SAVE_MP_POINTS );
-        // replenish spell points of all heroes
-        hero->ReplenishSpellPoints();
-    } );
-
-    // action new day
-    vec_kingdoms.NewDay();
-
-    // action new week
-    if ( BeginWeek() ) {
-        NewWeek();
-        vec_kingdoms.NewWeek();
-    }
-
-    // action new month
+    // first the routine of the new month
     if ( BeginMonth() ) {
         NewMonth();
+
         vec_kingdoms.NewMonth();
+        vec_castles.NewMonth();
+        vec_heroes.NewMonth();
     }
 
+    // then the routine of the new week
+    if ( BeginWeek() ) {
+        NewWeek();
+
+        vec_kingdoms.NewWeek();
+        vec_castles.NewWeek();
+        vec_heroes.NewWeek();
+    }
+
+    // and finally the routine of the new day
+    vec_kingdoms.NewDay();
+    vec_castles.NewDay();
+    vec_heroes.NewDay();
+
     // remove deprecated events
-    if ( day )
-        vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+    assert( day > 0 );
+
+    vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
@@ -694,16 +682,13 @@ void World::NewWeek( void )
     week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
     week_current = week_next;
 
-    if ( 1 < week ) {
-        // update week object
-        for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
-            if ( MP2::isWeekLife( ( *it ).GetObject( false ) ) || MP2::OBJ_MONSTER == ( *it ).GetObject() )
-                ( *it ).QuantityUpdate( false );
-
-        // update gray towns
-        for ( auto & castle : vec_castles )
-            if ( castle->GetColor() == Color::NONE )
-                castle->ActionNewWeek();
+    // update objects
+    if ( week > 1 ) {
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+                tile.QuantityUpdate( false );
+            }
+        }
     }
 
     // add events
@@ -716,14 +701,9 @@ void World::NewWeek( void )
 
 void World::NewMonth( void )
 {
-    // skip first month
-    if ( 1 < week && week_current.GetType() == WeekName::MONSTERS )
+    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
-
-    // update gray towns
-    for ( auto & castle : vec_castles )
-        if ( castle->GetColor() == Color::NONE )
-            castle->ActionNewMonth();
+    }
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )
@@ -854,26 +834,31 @@ const std::string & World::GetRumors( void )
     return *_rumor;
 }
 
-MapsIndexes World::GetTeleportEndPoints( s32 center ) const
+MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
-    const Maps::Tiles & entrance = GetTiles( center );
-    if ( _allTeleporters.size() > 1 && entrance.GetObject( false ) == MP2::OBJ_STONELITHS ) {
-        for ( MapsIndexes::const_iterator it = _allTeleporters.begin(); it != _allTeleporters.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.GetObject() != MP2::OBJ_HEROES
-                 && tile.isWater() == entrance.isWater() ) {
-                result.push_back( *it );
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
+
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+        return result;
+    }
+
+    // The type of destination stone liths must match the type of the source stone liths.
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
+        const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
+
+        if ( teleportIndex == index || teleportTile.GetHeroes() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+            continue;
         }
+
+        result.push_back( teleportIndex );
     }
 
     return result;
 }
 
-/* return random teleport destination */
-s32 World::NextTeleport( s32 index ) const
+int32_t World::NextTeleport( const int32_t index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
@@ -884,55 +869,40 @@ s32 World::NextTeleport( s32 index ) const
     return Rand::Get( teleports );
 }
 
-MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
+MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 {
-    if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        std::map<s32, MapsIndexes> uniq_whirlpools;
+    MapsIndexes result;
 
-        for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( tile.GetHeroes() != nullptr ) {
-                continue;
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
 
-            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
-        }
-
-        if ( 2 > uniq_whirlpools.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is empty" );
-            return MapsIndexes();
-        }
-
-        const uint32_t currentUID = GetTiles( center ).GetObjectUID();
-        MapsIndexes uniqs;
-        uniqs.reserve( uniq_whirlpools.size() );
-
-        for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-            const u32 uniq = ( *it ).first;
-            if ( uniq == currentUID )
-                continue;
-            uniqs.push_back( uniq );
-        }
-
-        return uniq_whirlpools[Rand::Get( uniqs )];
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_WHIRLPOOL ) {
+        return result;
     }
 
-    return MapsIndexes();
+    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
+        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHeroes() != nullptr ) {
+            continue;
+        }
+
+        result.push_back( whirlpoolIndex );
+    }
+
+    return result;
 }
 
-/* return random whirlpools destination */
-s32 World::NextWhirlpool( s32 index ) const
+int32_t World::NextWhirlpool( const int32_t index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
         return index;
     }
 
     return Rand::Get( whilrpools );
 }
-
-/* return message from sign */
 
 /* return count captured object */
 u32 World::CountCapturedObject( int obj, int col ) const
@@ -1334,9 +1304,19 @@ void World::PostLoad( const bool setTilePassabilities )
         }
     }
 
-    // cache data that's accessed often
-    _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
-    _whirlpoolTiles = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
+    // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
+    _allTeleports.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+        _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
+
+    // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
+    _allWhirlpools.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true ) ) {
+        _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
 
     resetPathfinder();
     ComputeStaticAnalysis();
@@ -1536,12 +1516,7 @@ StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_096_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_096_RELEASE ) {
-        msg >> obj.title;
-    }
+    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message >> obj.title;
 
     return msg;
 }

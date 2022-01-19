@@ -525,7 +525,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         return;
     }
 
-    int raceIndex = 0; // Race::KNIGHT
+    uint8_t raceIndex = 0; // Race::KNIGHT
     switch ( race ) {
     case Race::BARB:
         raceIndex = 1;
@@ -551,9 +551,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
                                            { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
-    for ( int index = 0; index < 16; ++index ) {
-        const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
-        const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
+    for ( uint8_t index = 0; index < 16; ++index ) {
+        const uint8_t fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
+        const uint8_t lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {

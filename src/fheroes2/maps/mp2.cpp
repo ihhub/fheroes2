@@ -191,7 +191,7 @@ bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
     return ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) );
 }
 
-const char * MP2::StringObject( const MapObjectType objectType )
+const char * MP2::StringObject( const MapObjectType objectType, const int count )
 {
     switch ( objectType ) {
     case OBJ_ZERO:
@@ -216,7 +216,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Lighthouse" );
     case OBJN_WATERWHEEL:
     case OBJ_WATERWHEEL:
-        return _( "Water Wheel" );
+        return _n( "Water Wheel", "Water Wheels", count );
     case OBJN_MINES:
     case OBJ_MINES:
         return _( "Mines" );
@@ -243,7 +243,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Wagon Camp" );
     case OBJN_WINDMILL:
     case OBJ_WINDMILL:
-        return _( "Windmill" );
+        return _n( "Windmill", "Windmills", count );
     case OBJN_RNDTOWN:
     case OBJ_RNDTOWN:
         return _( "Random Town" );
@@ -306,7 +306,7 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Troll Bridge" );
     case OBJN_WITCHSHUT:
     case OBJ_WITCHSHUT:
-        return _( "Witch Hut" );
+        return _( "Witch's Hut" );
     case OBJN_XANADU:
     case OBJ_XANADU:
         return _( "Xanadu" );
@@ -456,12 +456,12 @@ const char * MP2::StringObject( const MapObjectType objectType )
         return _( "Lean To" );
     case OBJ_FLOTSAM:
         return _( "Flotsam" );
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
         return _( "Shipwreck Survivor" );
     case OBJ_BOTTLE:
         return _( "Bottle" );
     case OBJ_MAGICGARDEN:
-        return _( "Magic Garden" );
+        return _n( "Magic Garden", "Magic Gardens", count );
     case OBJ_RNDARTIFACT1:
         return _( "Random Artifact - Treasure" );
     case OBJ_RNDARTIFACT2:
@@ -644,22 +644,6 @@ const char * MP2::StringObject( const MapObjectType objectType )
     return nullptr;
 }
 
-const char * MP2::getPluralObjectName( const MapObjectType objectType, const size_t count )
-{
-    switch ( objectType ) {
-    case OBJ_WATERWHEEL:
-        return _n( "Water Wheel", "Water Wheels", count );
-    case OBJ_WINDMILL:
-        return _n( "Windmill", "Windmills", count );
-    case OBJ_MAGICGARDEN:
-        return _n( "Magic Garden", "Magic Gardens", count );
-    default:
-        break;
-    }
-
-    return StringObject( objectType );
-}
-
 bool MP2::isDayLife( const MapObjectType objectType )
 {
     // TODO: list day object life
@@ -767,7 +751,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_WHIRLPOOL:
     case OBJ_BUOY:
     case OBJ_BOTTLE:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANMAPS:
     case OBJ_COAST:
@@ -981,7 +965,7 @@ bool MP2::isQuantityObject( const MapObjectType objectType )
     case OBJ_LEANTO:
     case OBJ_CAMPFIRE:
     case OBJ_FLOTSAM:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_WATERCHEST:
     case OBJ_DERELICTSHIP:
     case OBJ_SHIPWRECK:
@@ -1025,7 +1009,7 @@ bool MP2::isPickupObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_WATERCHEST:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_FLOTSAM:
     case OBJ_BOTTLE:
     case OBJ_TREASURECHEST:
@@ -1050,7 +1034,7 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     case OBJ_DAEMONCAVE:
     case OBJ_WATERCHEST:
     case OBJ_TREASURECHEST:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_SHIPWRECK:
     case OBJ_GRAVEYARD:
         return true;
@@ -1138,6 +1122,24 @@ bool MP2::isProtectedObject( const MapObjectType objectType )
     return isCaptureObject( objectType );
 }
 
+bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
+{
+    switch ( objectType ) {
+    // Stone liths and whirlpools are mandatory because they open access to new tiles
+    case OBJ_STONELITHS:
+    case OBJ_WHIRLPOOL:
+    // Sign messages are useless for AI, but they are harmless for fog discovery purposes
+    case OBJ_SIGN:
+        return true;
+    default:
+        break;
+    }
+
+    // Action objects in general should be avoided for fog discovery purposes, because
+    // they may be guarded or may require wasting resources
+    return !isActionObject( objectType );
+}
+
 bool MP2::isAbandonedMine( const MapObjectType objectType )
 {
     return objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE;
@@ -1164,9 +1166,11 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     case OBJ_BOAT:
     case OBJ_BARRIER:
     case OBJ_JAIL:
-    case OBJ_SHIPWRECK:
     case OBJ_BUOY:
     case OBJ_SKELETON:
+    case OBJ_MERMAID:
+    case OBJ_SIRENS:
+    case OBJ_SHIPWRECK:
         return true;
     default:
         break;
@@ -1186,7 +1190,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_MONSTER:
     case OBJ_ANCIENTLAMP:
     case OBJ_CAMPFIRE:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_FLOTSAM:
     case OBJ_WATERCHEST:
     case OBJ_BUOY:
@@ -1195,9 +1199,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_BOAT:
     case OBJ_HEROES:
         return DIRECTION_ALL;
-    case OBJ_SHIPWRECK:
-        // Logically right tile from Shipwreck is ocean so it could be safe to allow it.
-        return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;
     case OBJ_DERELICTSHIP:
     case OBJ_TROLLBRIDGE:
     case OBJ_ARCHERHOUSE:
@@ -1273,6 +1274,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_WATERWHEEL:
     case OBJ_MAGELLANMAPS:
     case OBJ_WHIRLPOOL:
+    case OBJ_SHIPWRECK:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
     case OBJ_CASTLE:
         return Direction::CENTER | Direction::BOTTOM;

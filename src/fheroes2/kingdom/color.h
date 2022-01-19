@@ -27,9 +27,9 @@
 
 class StreamBase;
 
-namespace BarrierColor
+namespace fheroes2
 {
-    enum
+    enum ObjectColor
     {
         NONE = 0,
         AQUA = 1,
@@ -41,12 +41,13 @@ namespace BarrierColor
         PURPLE = 7,
         RED = 8
     };
-    const char * String( int );
+    const char * getBarrierColorName( const int color );
+    const char * getTentColorName( const int color );
 }
 
 namespace Color
 {
-    enum
+    enum : uint8_t
     {
         NONE = 0x00,
         BLUE = 0x01,

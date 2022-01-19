@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,54 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#ifndef H2_SPELL_INFO_H
+#define H2_SPELL_INFO_H
 
 #include <string>
-#include <vector>
 
-struct smk_t;
+class Castle;
+class HeroBase;
+class Heroes;
+class Spell;
 
 namespace fheroes2
 {
-    class Image;
+    uint32_t getSpellDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    uint32_t getSummonMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    uint32_t getResurrectPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+
+    const Castle * getNearestCastleTownGate( const Heroes & hero );
+
+    std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 }
 
-class SMKVideoSequence
-{
-public:
-    explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
-
-    SMKVideoSequence( const SMKVideoSequence & ) = delete;
-    SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
-
-    void resetFrame();
-
-    // Input image must be resized to accomodate the frame and also it must be a single layer image as video frames shouldn't have any transform-related information.
-    // If the image is smaller than the frame then only a part of the frame will be drawn.
-    void getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette );
-
-    std::vector<uint8_t> getCurrentPalette() const;
-
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
-
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
-
-    unsigned long getCurrentFrame() const
-    {
-        return _currentFrameId;
-    }
-
-private:
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    int32_t _width;
-    int32_t _height;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
-
-    struct smk_t * _videoFile;
-};
+#endif

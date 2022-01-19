@@ -1,3 +1,164 @@
+version 0.9.11 (23 December 2021)
+- add popup dialog for map information
+- fix hero's path not being updated properly after new monster month event
+- show available game languages in vertical order rather than horizonal
+- fix handling of national symbols in the paths to music files on Windows
+- improve AI behavior during castle defence
+- fix pressed buttons' background
+- fix incorrect output on console window for Windows users with non-English system language
+- add support of Russian language by default
+- update Polish translation
+- generate correct letters for French language
+- update Settings description to cover all actions
+- fix heroes meeting swap arrows
+- update PS Vita controls
+- fix crash for some systems after changing game resolution
+- add hotkey for settings in Main Menu
+- do not reset the hero's path in Sleeper mode, reset the Sleeper mode only with the beginning of the hero's movement
+- fix River being considered as a Road
+- allow to select player class using mouse wheel
+- add additional spell info for spells owned by a hero
+- fix button rendering artifacts after changing resolution
+- fix crash on Windows for some Archibald scenarios
+- always mark the entrance to the castle/town as a road, do not automatically mark the tile south of the entrance as a road
+
+version 0.9.10 (05 December 2021)
+- update background music on the fly while changing it within settings
+- fix horizontal position of town name and town icon in town construction dialog
+- improve marketplace gift button placement
+- fix vertical text position in skill icon
+- fix Summon Boat logic
+- add video playback in the Price of Loyalty campaign selection window
+- play sound for visiting Observation Tower
+- fix vertical position of building construction name
+- add missing button shadows in dialogs
+- add popup window to OK button in game settings
+- play campaign music in campaign scenario selection screen
+- fix Enter button pressed state being passed from gift dialog
+- show credits at the end of campaign
+- fix passability for Dimension Door spell
+- add V-Sync option for SDL2
+- update troops split logic change
+- properly draw battle grid
+- use the OK button instead of YES button for the Tavern window
+- add Champion image for Stables object
+- play sounds from closest surrounding objects first
+- make consistent campaign info dialog
+- add default castle's name if none is specified by editor
+- show heroes on minimap
+- update Norwegian translation
+- show available creature count for the Price of Loyalty monster objects
+- fix Witch's Hut name
+- add Italian translation
+- properly handle the day-week-month routine
+- add titles for most of dialogs from map's objects
+- always mark Artesian Spring as visited, even if the hero was not able to drink from it
+- fix movement penalty calculation algorithm
+- implement last move logic for hero movement on the map
+- update hero movement points UI upon visiting multiple objects on the map
+- fix rendering for difficulty text in scenario info dialog
+- fix AI obsession with whirlpools and being always in sea
+- load palette from AGG file
+- fix monster recruit window position for multiple places
+- fix logic for Slow and Haste spell AI usage during battle
+- add random sign messages
+- fix maximum music and sound volume
+- use correct message in marketplace for first exchange when not enough resources
+- speed up for multiple image readings and for unit rendering during battle
+- allow to change Battle Speed using mouse wheel
+- update UI elements in Well's dialog
+- if a hero on the map has the custom empty army (OG editor bug/feature), give him a minimum army (one unit of level 1)
+- add translations for Battle Only mode texts
+- set correct starting army in Archibald 7 scenario
+- fix cases when AI creature doesn't move during battle
+- fix sound effects when receiving artifacts from world map
+- add hotkey to Okay button in Campaign select window
+- fix results on instant battle when Resurrect spell was being used
+- fix cases when opposing heroes still exist on the map after defeat
+- improve AI usage of Disrupting Ray spell during battle
+- add runtime language generation
+- fix terrain music being played during battle 
+- fix water object passabilities
+- allow to use mouse wheel to change system options
+- set correct building requirements for Upgraded Jousting Arena and Upgraded Cathedral
+- update messages during battle
+- shorten artifacts names to be fit for campaign UI
+- always highlight the cell under the cursor in combat if the Shadow Cursor is enabled, even if this cell is not reachable by the current unit
+
+version 0.9.9 (05 November 2021)
+- do not leak the hotkey state from the experimental settings dialog to the scenario info dialog
+- fix Stonehenge gold cost
+- fix Stonehenge building requirements
+- add buttons in castle construction window
+- fix rendering of Captain's Quarters in Warlock castle
+- fix Marketplace messaging
+- fix MIDI Expansion music option being always reset upon restarting the game
+- fix incorrect sounds while playing MIDI music in certain platforms
+- add credits to the original HoMM2 team
+- correct original Waterfall images to remove Cave
+- use original alignment for Rating, Map Size in gameinfo window
+- fix interaction passability with water objects
+- change Shipwreck, Graveyard and Derelict Ship messages
+- add the Resources Settings page to the Windows installer
+- fix passability for Reefs
+- fix invalid Stonelithts after Barrier removal
+- fix passabilities for diagonal moves
+- clear fog for allies upon visiting Magellan's maps
+- fix Archibald scenario 7 description
+- fix bad pixels on multiple images
+- verify Victory/Loss conditions after a static hero action
+- modify Magellan's maps logic and UI
+- fix monster count in Dragon City for Archibald scenario 7
+- update Victory message for Archibald scenario 7
+- fix possible crash for Russian version of the game
+- fix incorrect map description length
+- fix spell points in Battle Only mode
+- apply Bane and Alliance condition only for Human heroes
+- add extra empty line in New Month window
+- disable bonus choice for campaign scenario info window during scenario play
+- add Norwegian Translation
+- fix the position of campaign days spent text
+- close certain dialogs containing only one Exit button with Enter key
+- add Barbarian Captain Quarter's missing part
+- add hotkeys for selection of SW/PoL campaign
+- generate the default High Score values
+- fix "show damage" feature for blessed/cursed troops
+- fix high scores word
+- fix AI lust for Magellan Maps object
+- hide the OKAY button in campaign info window
+- handle default exit hotkey in Campaign scenario select / info
+- add Sphinx handling by AI
+- remove incorrect status message for hero portrait in hero screen
+- fix map size button states on hotkey press
+- restore environment music & ambient sounds after exiting from the campaign info screen to the adventure map
+- do not allow to use lower than original resolutions
+- freed from Jail AI hero starts movement at the same turn
+- add AI interaction with Alchemist Tower
+- fix incorrect visiting status of Magic Well, Stables, Artesian Spring and Bad Luck objects for AI
+- fix invalid assessment of Monster upgrade objects for AI
+- fix cases when AI hero ignores some objects while defeating an army just on the way to them
+- fix losing hero artifacts upon flee or surrender
+- enable a pressed state for View Intro button post-launch in Campaign screen
+- fix bonus artifact names in campaign screen
+- return to the Main Menu after cancelling campaign scenario
+- fix AI heroes being stuck on teleports
+- fix button rendering in Restart battle dialog
+- update Portuguese translation
+- fix inability to dig on a tile where monster was located
+- fix inability to apply Hypnotize spell on Dwarves
+- fix shooting penalty detection
+- add extra popup windows for UI elements in castle dialog
+- fix passability with shadow sprites
+- AI to use Hydra ability in battle
+- reinforce a AI hero standing in a castle at the start of turn
+- update status bar in castle screen dialog even during construction animation
+- fix incorrect active area of certain buildings in castle screen dialog due to invalid Z levels
+- hide cursor while opening a dwelling info in castle screen dialog by right mouse click
+- add Italian language support
+- update Polish translation
+- properly show the attack cursor when the attack square is located at the top of the castle sprite
+- fix infinite loop for AI trying to use Stoneliths
+
 version 0.9.8 (05 October 2021)
 - fix a case when a hero loses his artifacts after retreat in multiplayer mode
 - fix monster position on World Map

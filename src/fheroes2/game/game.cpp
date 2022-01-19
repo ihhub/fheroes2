@@ -53,7 +53,7 @@ namespace
     std::string lastMapFileName;
     std::vector<Player> savedPlayers;
 
-    int save_version = CURRENT_FORMAT_VERSION;
+    uint16_t save_version = CURRENT_FORMAT_VERSION;
 
     std::string last_name;
 
@@ -167,12 +167,12 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     }
 }
 
-void Game::SetLoadVersion( int ver )
+void Game::SetLoadVersion( uint16_t ver )
 {
     save_version = ver;
 }
 
-int Game::GetLoadVersion( void )
+uint16_t Game::GetLoadVersion()
 {
     return save_version;
 }
@@ -345,23 +345,53 @@ u32 & Game::MapsAnimationFrame( void )
 // play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
+    size_t availableChannels = Mixer::getChannelCount();
+    if ( availableChannels == 0 ) {
+        return;
+    }
+
     const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
-    // scan 7x7 area in focus
-    for ( int32_t yy = abs_pt.y - 3; yy <= abs_pt.y + 3; ++yy ) {
-        for ( int32_t xx = abs_pt.x - 3; xx <= abs_pt.x + 3; ++xx ) {
-            if ( Maps::isValidAbsPoint( xx, yy ) ) {
-                const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( xx, yy ) );
-                if ( channel < reserved_vols.size() ) {
-                    // volume calculation
-                    const int length = std::max( std::abs( xx - abs_pt.x ), std::abs( yy - abs_pt.y ) );
-                    const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
+    const int32_t maxOffset = 3;
 
-                    if ( volume > reserved_vols[channel] ) {
-                        reserved_vols[channel] = volume;
-                    }
+    // Get all valid positions within 7 x 7 area.
+    std::vector<fheroes2::Point> positions;
+    for ( int32_t y = -maxOffset; y <= maxOffset; ++y ) {
+        for ( int32_t x = -maxOffset; x <= maxOffset; ++x ) {
+            if ( Maps::isValidAbsPoint( x + abs_pt.x, y + abs_pt.y ) ) {
+                positions.emplace_back( x, y );
+            }
+        }
+    }
+
+    // Sort positions by distance to the center.
+    std::stable_sort( positions.begin(), positions.end(),
+                      []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
+
+    const double maxDistance = std::sqrt( maxOffset * maxOffset + maxOffset * maxOffset );
+    double maxVolume = Mixer::MaxVolume();
+    double minVolumeOnMaxDistance = maxVolume * 0.1; // 10% from maximum volume
+
+    maxVolume -= minVolumeOnMaxDistance; // need to remove these 10% from max value as we're going to add it later
+    minVolumeOnMaxDistance += 0.5; // this is done to make casting faster. We know that the value is always positive.
+
+    for ( const fheroes2::Point & pos : positions ) {
+        const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
+        if ( channel < reserved_vols.size() ) {
+            const double distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
+            const int32_t volume = static_cast<int32_t>( ( ( maxDistance - distance ) / maxDistance ) * maxVolume + minVolumeOnMaxDistance );
+
+            if ( reserved_vols[channel] == 0 ) {
+                if ( availableChannels == 0 ) {
+                    // No new channel can be added.
+                    continue;
                 }
+                --availableChannels;
+            }
+
+            if ( volume > reserved_vols[channel] ) {
+                reserved_vols[channel] = volume;
             }
         }
     }

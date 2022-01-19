@@ -28,7 +28,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-enum
+enum : int
 {
     SCROLL_SLOW = 1,
     SCROLL_NORMAL = 2,
@@ -52,7 +52,7 @@ public:
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
-        GAME_AUTOSAVE_ON = 0x10000200,
+        // UNUSED = 0x10000200,
         GAME_USE_FADE = 0x10000400,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
@@ -154,6 +154,8 @@ public:
     bool MusicMIDI() const;
     bool isShowIntro() const;
 
+    bool isVSyncEnabled() const;
+
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
@@ -194,7 +196,6 @@ public:
     bool ExtGameRewriteConfirm() const;
     bool ExtGameShowSystemInfo() const;
     bool ExtGameAutosaveBeginOfDay() const;
-    bool ExtGameAutosaveOn() const;
     bool ExtGameUseFade() const;
     bool ExtGameEvilInterface() const;
     bool ExtGameHideInterface() const;
@@ -228,20 +229,60 @@ public:
 
     bool setGameLanguage( const std::string & language );
 
-    int SoundVolume() const;
-    int MusicVolume() const;
-    MusicSource MusicType() const;
+    int SoundVolume() const
+    {
+        return sound_volume;
+    }
 
-    bool IsGameType( int type ) const;
-    int GameType() const;
-    void SetGameType( int );
+    int MusicVolume() const
+    {
+        return music_volume;
+    }
+
+    MusicSource MusicType() const
+    {
+        return _musicType;
+    }
+
+    /* check game type */
+    bool IsGameType( int type ) const
+    {
+        return ( game_type & type ) != 0;
+    }
+
+    int GameType() const
+    {
+        return game_type;
+    }
+
+    /* set game type */
+    void SetGameType( int type )
+    {
+        game_type = type;
+    }
+
     bool isCampaignGameType() const;
 
-    Players & GetPlayers();
-    const Players & GetPlayers() const;
+    Players & GetPlayers()
+    {
+        return players;
+    }
 
-    int CurrentColor() const;
-    void SetCurrentColor( int );
+    const Players & GetPlayers() const
+    {
+        return players;
+    }
+
+    int CurrentColor() const
+    {
+        return players.current_color;
+    }
+
+    void SetCurrentColor( int color )
+    {
+        players.current_color = color;
+    }
+
     int PreferablyCountPlayers() const;
     void SetPreferablyCountPlayers( int );
 

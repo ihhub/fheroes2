@@ -383,7 +383,7 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 
     h.player = p;
     h.land = m;
-    h.localtime = std::time( nullptr );
+    h.localtime = static_cast<uint32_t>( std::time( nullptr ) );
     h.days = r;
     h.rating = s;
 
@@ -545,6 +545,8 @@ fheroes2::GameMode Game::HighScores()
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             hgs.RedrawList( top.x, top.y );
+            buttonCampain.draw();
+            buttonExit.draw();
             display.render();
         }
     }

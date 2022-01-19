@@ -163,10 +163,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
-        fheroes2::SupportedLanguage supportedLanguage = fheroes2::getSupportedLanguage();
-        if ( supportedLanguage != fheroes2::SupportedLanguage::English && conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) ) ) {
-            supportedLanguage = fheroes2::selectLanguage( { fheroes2::SupportedLanguage::English, supportedLanguage }, 0 );
-            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( supportedLanguage ) );
+        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+        const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+
+        if ( supportedLanguages.size() > 1 ) {
+            currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
+            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
         }
 
         Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
@@ -217,8 +219,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
-    const fheroes2::Rect resolutionArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
-                                         static_cast<int32_t>( 160 * scaleY ) );
+    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
+                                       static_cast<int32_t>( 160 * scaleY ) );
 
     u32 lantern_frame = 0;
 
@@ -296,7 +298,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
-        else if ( le.MouseClickLeft( resolutionArea ) ) {
+        else if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
             fheroes2::openGameSettings();
 
             // force interface to reset area and positions
@@ -315,14 +317,14 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             Dialog::Message( _( "High Scores" ), _( "View the high scores screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
-        else if ( le.MousePressRight( resolutionArea ) )
-            Dialog::Message( _( "Settings" ), _( "Game settings." ), Font::BIG );
+        else if ( le.MousePressRight( settingsArea ) )
+            Dialog::Message( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Font::BIG );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
-            if ( le.MouseCursor( resolutionArea ) ) {
+            if ( le.MouseCursor( settingsArea ) ) {
                 const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
                 fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
             }

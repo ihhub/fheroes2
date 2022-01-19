@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,54 +18,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "image_palette.h"
+#include "palette_h2.h"
 
-#include <string>
-#include <vector>
+#include <algorithm>
+#include <array>
+#include <cassert>
 
-struct smk_t;
+namespace
+{
+    const size_t paletteSize = 768;
+
+    struct PaletteHolder
+    {
+        PaletteHolder()
+        {
+            std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
+        }
+
+        std::array<uint8_t, paletteSize> gamePalette;
+    };
+
+    PaletteHolder paletteHolder;
+}
 
 namespace fheroes2
 {
-    class Image;
-}
-
-class SMKVideoSequence
-{
-public:
-    explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
-
-    SMKVideoSequence( const SMKVideoSequence & ) = delete;
-    SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
-
-    void resetFrame();
-
-    // Input image must be resized to accomodate the frame and also it must be a single layer image as video frames shouldn't have any transform-related information.
-    // If the image is smaller than the frame then only a part of the frame will be drawn.
-    void getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette );
-
-    std::vector<uint8_t> getCurrentPalette() const;
-
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
-
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
-
-    unsigned long getCurrentFrame() const
+    const uint8_t * getGamePalette()
     {
-        return _currentFrameId;
+        return paletteHolder.gamePalette.data();
     }
 
-private:
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    int32_t _width;
-    int32_t _height;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
+    void setGamePalette( const std::vector<uint8_t> & palette )
+    {
+        assert( palette.size() == paletteSize );
+        if ( palette.size() != paletteSize ) {
+            return;
+        }
 
-    struct smk_t * _videoFile;
-};
+        std::copy_n( palette.begin(), paletteSize, paletteHolder.gamePalette.begin() );
+    }
+}

@@ -1016,8 +1016,8 @@ namespace fheroes2
             priorities.emplace_back( BUILD_CASTLE );
             priorities.emplace_back( BUILD_LEFTTURRET );
             priorities.emplace_back( BUILD_RIGHTTURRET );
-            priorities.emplace_back( BUILD_CAPTAIN );
             priorities.emplace_back( BUILD_MOAT );
+            priorities.emplace_back( BUILD_CAPTAIN );
             priorities.emplace_back( BUILD_SHIPYARD );
             priorities.emplace_back( BUILD_MAGEGUILD1 );
             priorities.emplace_back( BUILD_MAGEGUILD2 );

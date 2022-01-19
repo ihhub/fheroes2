@@ -127,22 +127,35 @@ void Kingdom::LossPostActions( void )
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
 
-        if ( !heroes.empty() ) {
-            std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) ); } );
-            heroes.clear();
+        // Heroes::SetFreeman() calls Kingdom::RemoveHeroes(), which eventually calls heroes.erase()
+        while ( !heroes.empty() ) {
+            Heroes * hero = heroes.back();
+
+            assert( hero->GetColor() == GetColor() );
+
+            hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) );
         }
+
         if ( !castles.empty() ) {
             castles.ChangeColors( GetColor(), Color::NONE );
             castles.clear();
         }
+
         world.ResetCapturedObjects( GetColor() );
     }
 }
 
-void Kingdom::ActionBeforeTurn( void )
+void Kingdom::ActionBeforeTurn()
 {
-    // rescan heroes path
-    std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->RescanPath(); } );
+    if ( isControlHuman() ) {
+        // Recalculate the existing paths of heroes if the kingdom is controlled by a human
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->calculatePath( -1 ); } );
+    }
+    else {
+        // Reset the paths of heroes if the kingdom is controlled by AI, because it uses a
+        // special pathfinder implementation and revises its goals every turn
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->GetPath().Reset(); } );
+    }
 }
 
 void Kingdom::ActionNewDay( void )
@@ -161,14 +174,8 @@ void Kingdom::ActionNewDay( void )
     // modes
     ResetModes( IDENTIFYHERO );
 
-    // castle New Day
-    std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
-
-    // skip incomes for first day, and heroes New Day too because it would do nothing
-    if ( 1 < world.CountDay() ) {
-        // heroes New Day
-        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
-
+    // skip the income for the first day
+    if ( world.CountDay() > 1 ) {
         // income
         AddFundsResource( GetIncome() );
 
@@ -196,15 +203,9 @@ void Kingdom::ActionNewDay( void )
 
 void Kingdom::ActionNewWeek( void )
 {
-    // skip first day
-    if ( 1 < world.CountDay() ) {
-        // castle New Week
-        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
-
-        // heroes New Week
-        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
-
-        // debug an gift
+    // skip the first week
+    if ( world.CountWeek() > 1 ) {
+        // debug a gift
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
             DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() );
@@ -220,16 +221,7 @@ void Kingdom::ActionNewWeek( void )
 
 void Kingdom::ActionNewMonth( void )
 {
-    // skip first day
-    if ( 1 < world.CountDay() ) {
-        // castle New Month
-        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
-
-        // heroes New Month
-        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
-    }
-
-    // remove week visit object
+    // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
 }
 
@@ -429,7 +421,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false ); } );
+    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false, false ); } );
 }
 
 void Kingdom::AddFundsResource( const Funds & funds )
@@ -845,7 +837,7 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 if ( objectCount > 1 ) {
                     event.title = std::to_string( objectCount );
                     event.title += ' ';
-                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                    event.title += MP2::StringObject( objectType, objectCount );
                 }
                 else {
                     event.title = MP2::StringObject( objectType );
