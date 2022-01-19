@@ -1375,8 +1375,8 @@ namespace fheroes2
                     const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
                     const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
                     if ( crc32 == 0xE9EC7A63 ) {
-                        for ( size_t i = 0; i < imageArray.size(); ++i ) {
-                            imageArray[i].setPosition( imageArray[i].x(), imageArray[i].y() - 1 );
+                        for ( auto & letter : imageArray ) {
+                            letter.setPosition( letter.x(), letter.y() - 1 );
                         }
                     }
                 }
