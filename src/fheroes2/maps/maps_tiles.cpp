@@ -977,9 +977,22 @@ void Maps::Tiles::updatePassability()
                 return;
             }
 
+            // Count how many objects are there excluding shadows, roads and river streams.
+            const std::ptrdiff_t validLevel1ObjectCount = std::count_if( addons_level1.begin(), addons_level1.end(),
+                []( const TilesAddon & addon ) {
+                    if ( TilesAddon::isShadow( addon ) ) {
+                        return false;
+                    }
+
+                    const int icnType = MP2::GetICNObject( addon.object );
+                    return icnType != ICN::ROAD && icnType != ICN::STREAM;
+                } );
+
+            const bool singleObjectTile = validLevel1ObjectCount == 0 && addons_level2.empty() && ( bottomTile.objectTileset >> 2 ) != ( objectTileset >> 2 );
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( !isDetachedObject() && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
+            // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
+            if ( !singleObjectTile && !isDetachedObject() && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
                 const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
