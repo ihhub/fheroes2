@@ -38,14 +38,13 @@ struct Recruit
         , surrenderDay( 0 )
     {}
 
-    Recruit( const Heroes & hero )
-        : id( hero.GetID() )
-        , surrenderDay( 0 )
-    {}
-
     Recruit( const Heroes & hero, const uint32_t heroSurrenderDay )
         : id( hero.GetID() )
         , surrenderDay( heroSurrenderDay )
+    {}
+
+    Recruit( const Heroes & hero )
+        : Recruit( hero, 0 )
     {}
 
     int id;
