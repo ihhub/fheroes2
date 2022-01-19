@@ -68,43 +68,27 @@ uint32_t Recruits::getSurrenderDay2() const
     return second.surrenderDay;
 }
 
-void Recruits::SetHero1( Heroes * hero )
+void Recruits::SetHero1( const Heroes * hero )
 {
-    Heroes * oldHero = world.GetHeroes( first.id );
-
-    if ( oldHero ) {
-        oldHero->ResetModes( Heroes::AVAILFORHIRE );
-    }
-
     if ( hero ) {
         first = Recruit( *hero );
-
-        hero->SetModes( Heroes::AVAILFORHIRE );
     }
     else {
         first = {};
     }
 }
 
-void Recruits::SetHero2( Heroes * hero )
+void Recruits::SetHero2( const Heroes * hero )
 {
-    Heroes * oldHero = world.GetHeroes( second.id );
-
-    if ( oldHero ) {
-        oldHero->ResetModes( Heroes::AVAILFORHIRE );
-    }
-
     if ( hero ) {
         second = Recruit( *hero );
-
-        hero->SetModes( Heroes::AVAILFORHIRE );
     }
     else {
         second = {};
     }
 }
 
-void Recruits::SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay )
+void Recruits::SetHero2Tmp( const Heroes * hero, const uint32_t heroSurrenderDay )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this method." );
     assert( hero != nullptr );
@@ -114,21 +98,13 @@ void Recruits::SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay )
     second.surrenderDay = heroSurrenderDay;
 }
 
-void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay )
+void Recruits::appendSurrenderedHero( const Heroes & hero, const uint32_t heroSurrenderDay )
 {
     assert( heroSurrenderDay > 0 );
 
     Recruit & recruit = ( first.surrenderDay > second.surrenderDay ? second : first );
 
-    Heroes * oldHero = world.GetHeroes( recruit.id );
-
-    if ( oldHero ) {
-        oldHero->ResetModes( Heroes::AVAILFORHIRE );
-    }
-
     recruit = Recruit( hero, heroSurrenderDay );
-
-    hero.SetModes( Heroes::AVAILFORHIRE );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )

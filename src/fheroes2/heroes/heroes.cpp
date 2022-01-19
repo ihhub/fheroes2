@@ -652,6 +652,8 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         return false;
     }
 
+    ResetModes( JAIL );
+
     SetColor( col );
     killer_color.SetColor( Color::NONE );
 
@@ -670,13 +672,6 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     world.GetTiles( pt.x, pt.y ).SetHeroes( this );
 
     kingdom.AddHeroes( this );
-    // Update the set of recruits in the kingdom
-    kingdom.GetRecruits();
-
-    // AVAILFORHIRE mode should already be cleared by Kingdom::GetRecruits()
-    assert( !Modes( AVAILFORHIRE ) );
-
-    ResetModes( JAIL );
 
     return true;
 }
@@ -1449,11 +1444,6 @@ bool Heroes::isFreeman( void ) const
     return isValid() && Color::NONE == GetColor() && !Modes( JAIL );
 }
 
-bool Heroes::isFreemanNotAvailableForHire() const
-{
-    return isFreeman() && !Modes( AVAILFORHIRE );
-}
-
 void Heroes::SetFreeman( int reason )
 {
     if ( !isFreeman() ) {
@@ -1909,7 +1899,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
 
     // find freeman in race (skip: manual changes)
     for ( int ii = min; ii <= max; ++ii )
-        if ( at( ii )->isFreemanNotAvailableForHire() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
+        if ( at( ii )->isFreeman() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
             freeman_heroes.push_back( ii );
 
     // not found, find any race
@@ -1918,7 +1908,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
         max = Heroes::CELIA;
 
         for ( int ii = min; ii <= max; ++ii )
-            if ( at( ii )->isFreemanNotAvailableForHire() )
+            if ( at( ii )->isFreeman() )
                 freeman_heroes.push_back( ii );
     }
 

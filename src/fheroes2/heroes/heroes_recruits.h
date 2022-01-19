@@ -68,12 +68,12 @@ public:
     uint32_t getSurrenderDay1() const;
     uint32_t getSurrenderDay2() const;
 
-    void SetHero1( Heroes * hero );
-    void SetHero2( Heroes * hero );
+    void SetHero1( const Heroes * hero );
+    void SetHero2( const Heroes * hero );
 
-    void SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay );
+    void SetHero2Tmp( const Heroes * hero, const uint32_t heroSurrenderDay );
 
-    void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
+    void appendSurrenderedHero( const Heroes & hero, const uint32_t heroSurrenderDay );
 };
 
 StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
