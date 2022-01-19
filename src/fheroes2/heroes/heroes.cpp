@@ -672,6 +672,8 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     world.GetTiles( pt.x, pt.y ).SetHeroes( this );
 
     kingdom.AddHeroes( this );
+    // Update the set of recruits in the kingdom
+    kingdom.GetRecruits();
 
     return true;
 }
