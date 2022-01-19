@@ -94,7 +94,7 @@ public:
 
     uint32_t GetCountArtifacts() const;
 
-    Recruits & GetRecruits( void );
+    const Recruits & GetRecruits();
 
     const KingdomHeroes & GetHeroes( void ) const
     {

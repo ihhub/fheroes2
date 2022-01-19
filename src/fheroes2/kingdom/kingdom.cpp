@@ -440,7 +440,7 @@ u32 Kingdom::GetLostTownDays( void ) const
     return lost_town_days;
 }
 
-Recruits & Kingdom::GetRecruits( void )
+const Recruits & Kingdom::GetRecruits()
 {
     static Heroes * specialHireableHero = [this]() -> Heroes * {
         if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
