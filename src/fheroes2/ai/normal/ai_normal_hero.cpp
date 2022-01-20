@@ -1192,24 +1192,22 @@ namespace AI
             }
 
             if ( bestTargetIndex == -1 ) {
-                if ( availableHeroes.size() > 1 ) {
-                    // Possibly heroes have nothing to do because one of them is blocking the way. Move a hero randomly and see what happens.
-                    for ( HeroToMove & heroInfo : availableHeroes ) {
-                        // Skip heroes who are in castles or on patrol.
-                        if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
-                            continue;
-                        }
+                // Possibly heroes have nothing to do because one of them is blocking the way. Move a hero randomly and see what happens.
+                for ( HeroToMove & heroInfo : availableHeroes ) {
+                    // Skip heroes who are in castles or on patrol.
+                    if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+                        continue;
+                    }
 
-                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
-                            continue;
-                        }
+                    if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                        continue;
+                    }
 
-                        const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
-                        if ( targetIndex != -1 ) {
-                            bestTargetIndex = targetIndex;
-                            bestHero = heroInfo.hero;
-                            break;
-                        }
+                    const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
+                    if ( targetIndex != -1 ) {
+                        bestTargetIndex = targetIndex;
+                        bestHero = heroInfo.hero;
+                        break;
                     }
                 }
 
