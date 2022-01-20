@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <set>
 #include <vector>
 
@@ -51,7 +52,7 @@ struct MapRegion
 public:
     uint32_t _id = REGION_NODE_FOUND;
     bool _isWater = false;
-    std::set<int> _neighbours;
+    std::set<uint32_t> _neighbours;
     std::vector<MapRegionNode> _nodes;
     size_t _lastProcessedNode = 0;
 

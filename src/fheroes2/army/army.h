@@ -89,11 +89,14 @@ public:
     void UpgradeTroops( const Castle & );
 
     Troop * GetFirstValid( void );
-    Troop * GetWeakestTroop( void );
+    Troop * GetWeakestTroop() const;
     const Troop * GetSlowestTroop() const;
 
     void SortStrongest();
     void ArrangeForBattle( bool = false );
+    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit
+    // to a separate slot, if possible)
+    void ArrangeForWhirlpool();
 
     void JoinStrongest( Troops &, bool );
 

@@ -977,9 +977,21 @@ void Maps::Tiles::updatePassability()
                 return;
             }
 
+            // Count how many objects are there excluding shadows, roads and river streams.
+            const std::ptrdiff_t validLevel1ObjectCount = std::count_if( addons_level1.begin(), addons_level1.end(), []( const TilesAddon & addon ) {
+                if ( TilesAddon::isShadow( addon ) ) {
+                    return false;
+                }
+
+                const int icnType = MP2::GetICNObject( addon.object );
+                return icnType != ICN::ROAD && icnType != ICN::STREAM;
+            } );
+
+            const bool singleObjectTile = validLevel1ObjectCount == 0 && addons_level2.empty() && ( bottomTile.objectTileset >> 2 ) != ( objectTileset >> 2 );
             const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
-            if ( !isDetachedObject() && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
+            // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
+            if ( !singleObjectTile && !isDetachedObject() && isBottomTileObject && bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 ) {
                 const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
                 const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
@@ -1066,7 +1078,7 @@ u32 Maps::Tiles::GetObjectUID() const
     return uniq;
 }
 
-int Maps::Tiles::GetPassable( void ) const
+uint16_t Maps::Tiles::GetPassable() const
 {
     return tilePassable;
 }
@@ -2542,18 +2554,18 @@ std::vector<uint8_t> Maps::Tiles::getValidTileSets() const
     std::vector<uint8_t> tileSets;
 
     if ( objectTileset != 0 ) {
-        tileSets.emplace_back( objectTileset >> 2 );
+        tileSets.emplace_back( static_cast<uint8_t>( objectTileset >> 2 ) );
     }
 
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( addon.object != 0 ) {
-            tileSets.emplace_back( addon.object >> 2 );
+            tileSets.emplace_back( static_cast<uint8_t>( addon.object >> 2 ) );
         }
     }
 
     for ( const TilesAddon & addon : addons_level2 ) {
         if ( addon.object != 0 ) {
-            tileSets.emplace_back( addon.object >> 2 );
+            tileSets.emplace_back( static_cast<uint8_t>( addon.object >> 2 ) );
         }
     }
 

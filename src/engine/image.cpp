@@ -476,7 +476,7 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width * _height );
             std::fill( image(), image() + totalSize, value );
-            std::fill( transform(), transform() + totalSize, 0 );
+            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 0 ) );
         }
     }
 
@@ -504,8 +504,8 @@ namespace fheroes2
     {
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width * _height );
-            std::fill( image(), image() + totalSize, 0 );
-            std::fill( transform(), transform() + totalSize, 1 ); // skip all data
+            std::fill( image(), image() + totalSize, static_cast<uint8_t>( 0 ) );
+            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 1 ) ); // skip all data
         }
     }
 

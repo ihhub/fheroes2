@@ -35,6 +35,7 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
+#include "tools.h"
 #include "ui_language.h"
 #include "ui_text.h"
 
@@ -1045,7 +1046,7 @@ namespace
             fheroes2::Copy( font[69], 0, 0, font[184 - 32], 0, 2, font[69].width(), font[69].height() );
             fheroes2::Copy( font[69], 2, 0, font[184 - 32], 2, 0, 1, 1 );
             fheroes2::Copy( font[69], 2, 0, font[184 - 32], 4, 0, 1, 1 );
-            font[184 - 32].setPosition( font[69].x(), font[69].y() );
+            font[184 - 32].setPosition( font[69].x(), font[69].y() - 2 );
             fheroes2::updateShadow( font[184 - 32], { -1, 1 }, 2 );
 
             font[224 - 32] = font[33 + offset];
@@ -1366,7 +1367,20 @@ namespace fheroes2
             case ICN::FONT:
             case ICN::SMALFONT: {
                 LoadOriginalICN( id );
+
                 auto & imageArray = _icnVsSprite[id];
+
+                if ( id == ICN::SMALFONT ) {
+                    // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
+                    const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+                    const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
+                    if ( crc32 == 0xE9EC7A63 ) {
+                        for ( Sprite & letter : imageArray ) {
+                            letter.setPosition( letter.x(), letter.y() - 1 );
+                        }
+                    }
+                }
+
                 if ( id == ICN::FONT ) {
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
                     for ( size_t i = 0; i < imageArray.size(); ++i ) {
@@ -2559,7 +2573,7 @@ namespace fheroes2
                     tilImage.resize( width, height );
                     tilImage._disableTransformLayer();
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
-                    std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
+                    std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
                 }
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {

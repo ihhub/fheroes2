@@ -51,23 +51,19 @@ namespace
             IS_LOYALTY = 0x4000
         };
 
-        HeaderSAV() = delete;
-
-        explicit HeaderSAV( const int saveFileVersion )
+        HeaderSAV()
             : status( 0 )
             , gameType( 0 )
-            , _saveFileVersion( saveFileVersion )
         {}
 
-        HeaderSAV( const Maps::FileInfo & fi, const int gameType_, const int saveFileVersion )
+        HeaderSAV( const Maps::FileInfo & fi, const int gameType_ )
             : status( 0 )
             , info( fi )
             , gameType( gameType_ )
-            , _saveFileVersion( saveFileVersion )
         {
             time_t rawtime;
             std::time( &rawtime );
-            info.localtime = rawtime;
+            info.localtime = static_cast<uint32_t>( rawtime );
 
             if ( fi._version == GameVersion::PRICE_OF_LOYALTY )
                 status |= IS_LOYALTY;
@@ -76,7 +72,6 @@ namespace
         uint16_t status;
         Maps::FileInfo info;
         int gameType;
-        const int _saveFileVersion;
     };
 
     StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )
@@ -115,7 +110,7 @@ bool Game::Save( const std::string & fn )
 
     // raw info content
     fs << static_cast<uint8_t>( SAV2ID3 >> 8 ) << static_cast<uint8_t>( SAV2ID3 & 0xFF ) << std::to_string( loadver ) << loadver
-       << HeaderSAV( conf.CurrentFileInfo(), conf.GameType(), CURRENT_FORMAT_VERSION );
+       << HeaderSAV( conf.CurrentFileInfo(), conf.GameType() );
     fs.close();
 
     ZStreamFile fz;
@@ -168,7 +163,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return fheroes2::GameMode::CANCEL;
 
     int fileGameType = Game::TYPE_STANDARD;
-    HeaderSAV header( binver );
+    HeaderSAV header;
     fs >> header;
     fileGameType = header.gameType;
 
@@ -294,7 +289,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;
-    HeaderSAV header( binver );
+    HeaderSAV header;
     fs >> header;
     fileGameType = header.gameType;
 

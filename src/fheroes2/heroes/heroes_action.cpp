@@ -335,15 +335,18 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     }
 }
 
-static void WhirlpoolTroopLooseEffect( Heroes & hero )
+static void WhirlpoolTroopLoseEffect( Heroes & hero )
 {
-    Troop * troop = hero.GetArmy().GetWeakestTroop();
-    assert( troop );
-    if ( !troop )
+    const Army & heroArmy = hero.GetArmy();
+
+    Troop * weakestTroop = heroArmy.GetWeakestTroop();
+    assert( weakestTroop != nullptr );
+    if ( weakestTroop == nullptr ) {
         return;
+    }
 
     // Whirlpool effect affects heroes only with more than one creature in more than one slot
-    if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+    if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
         return;
     }
 
@@ -351,11 +354,12 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
         // TODO: Do we really have this dialog in-game in OG?
         Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
 
-        if ( troop->GetCount() == 1 ) {
-            troop->Reset();
+        if ( weakestTroop->GetCount() == 1 ) {
+            weakestTroop->Reset();
         }
         else {
-            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(),
+                                                                    weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
 
         Interface::Basic::Get().GetStatusWindow().SetRedraw();
@@ -369,7 +373,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const Game::MusicRestorer musicRestorer;
 
     if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex, isDestination );
+        return AI::HeroesAction( *this, tileIndex );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
@@ -459,7 +463,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToCoast( *this, tileIndex );
             break;
 
-            // resource object
+        // resource object
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
@@ -492,14 +496,14 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToFlotSam( *this, objectType, tileIndex );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             ActionToShipwreckSurvivor( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
             ActionToArtifact( *this, tileIndex );
             break;
 
-            // shrine circle
+        // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
@@ -563,7 +567,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDaemonCave( *this, objectType, tileIndex );
             break;
 
-            // teleports
+        // teleports
         case MP2::OBJ_STONELITHS:
             ActionToTeleports( *this, tileIndex );
             break;
@@ -592,7 +596,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToAbandoneMine( *this, objectType, tileIndex );
             break;
 
-            // accept army
+        // accept army
         case MP2::OBJ_WATCHTOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
@@ -606,7 +610,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDwellingJoinMonster( *this, objectType, tileIndex );
             break;
 
-            // recruit army
+        // recruit army
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREECITY:
         case MP2::OBJ_WAGONCAMP:
@@ -653,7 +657,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToSphinx( *this, objectType, tileIndex );
             break;
 
-            // loyalty version
+        // loyalty version
         case MP2::OBJ_WATERALTAR:
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
@@ -693,7 +697,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToTravellersTent( *this, objectType, tileIndex );
             break;
 
-            // object
+        // other object
         default:
             break;
         }
@@ -1991,19 +1995,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         return;
     }
 
-    const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
-    if ( other_hero ) {
-        ActionToHeroes( hero, index_to );
-
-        // lose battle
-        if ( hero.isFreeman() ) {
-            return;
-        }
-        else if ( !other_hero->isFreeman() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is busy..." );
-            return;
-        }
-    }
+    assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2052,7 +2044,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeIn();
 
-    WhirlpoolTroopLooseEffect( hero );
+    WhirlpoolTroopLoseEffect( hero );
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back

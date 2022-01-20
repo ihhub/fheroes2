@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <numeric>
 
@@ -457,10 +458,10 @@ Troop * Troops::GetFirstValid( void )
     return it == end() ? nullptr : *it;
 }
 
-Troop * Troops::GetWeakestTroop( void )
+Troop * Troops::GetWeakestTroop() const
 {
-    iterator first = begin();
-    iterator last = end();
+    const_iterator first = begin();
+    const_iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -471,7 +472,7 @@ Troop * Troops::GetWeakestTroop( void )
     if ( first == end() )
         return nullptr;
 
-    iterator lowest = first;
+    const_iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
@@ -583,6 +584,52 @@ void Troops::ArrangeForBattle( bool upgrade )
     else {
         Assign( priority );
     }
+}
+
+void Troops::ArrangeForWhirlpool()
+{
+    // Make an "optimized" version first (each unit type occupies just one slot)
+    const Troops optimizedTroops = GetOptimized();
+    assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= ARMYMAXTROOPS );
+
+    // Already a full house, there is no room for further optimization
+    if ( optimizedTroops.size() == ARMYMAXTROOPS ) {
+        return;
+    }
+
+    Assign( optimizedTroops );
+
+    // Look for a troop consisting of the weakest units
+    Troop * troopOfWeakestUnits = nullptr;
+
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->Monster::GetHitPoints() > troop->Monster::GetHitPoints() ) {
+            troopOfWeakestUnits = troop;
+        }
+    }
+
+    assert( troopOfWeakestUnits != nullptr );
+    assert( troopOfWeakestUnits->GetCount() > 0 );
+
+    // There is already just one unit in this troop, let's leave it as it is
+    if ( troopOfWeakestUnits->GetCount() == 1 ) {
+        return;
+    }
+
+    // Move one unit from this troop's slot...
+    troopOfWeakestUnits->SetCount( troopOfWeakestUnits->GetCount() - 1 );
+
+    // To the separate slot
+    auto emptySlot = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
+    assert( emptySlot != end() );
+
+    ( *emptySlot )->Set( Monster( troopOfWeakestUnits->GetID() ), 1 );
 }
 
 void Troops::JoinStrongest( Troops & troops2, bool saveLast )

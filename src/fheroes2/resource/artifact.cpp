@@ -788,7 +788,7 @@ u32 GoldInsteadArtifact( const MP2::MapObjectType objectType )
     switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
         return 1000;
     case MP2::OBJ_WATERCHEST:
         return 1500;

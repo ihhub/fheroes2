@@ -523,7 +523,7 @@ namespace MP2
         OBJ_MAGELLANMAPS = 0xD9,
         OBJ_FLOTSAM = 0xDA,
         OBJ_DERELICTSHIP = 0xDB,
-        OBJ_SHIPWRECKSURVIROR = 0xDC,
+        OBJ_SHIPWRECKSURVIVOR = 0xDC,
         OBJ_BOTTLE = 0xDD,
         OBJ_MAGICWELL = 0xDE,
         OBJ_MAGICGARDEN = 0xDF,
@@ -590,6 +590,8 @@ namespace MP2
     bool isRemoveObject( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
+    // Returns true if this object can be safely visited by AI for fog discovery purposes.
+    bool isSafeForFogDiscoveryObject( const MapObjectType objectType );
 
     bool isNeedStayFront( const MapObjectType objectType );
 

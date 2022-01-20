@@ -105,17 +105,19 @@ Player::Player( int col )
     , friends( col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
-{
-    name = GetDefaultName();
-}
+{}
 
 std::string Player::GetDefaultName() const
 {
     return Color::String( color );
 }
 
-const std::string & Player::GetName( void ) const
+std::string Player::GetName() const
 {
+    if ( name.empty() ) {
+        return GetDefaultName();
+    }
+
     return name;
 }
 
@@ -149,9 +151,14 @@ void Player::SetFriends( int f )
     friends = f;
 }
 
-void Player::SetName( const std::string & n )
+void Player::SetName( const std::string & newName )
 {
-    name = n;
+    if ( newName == GetDefaultName() ) {
+        name.clear();
+    }
+    else {
+        name = newName;
+    }
 }
 
 void Player::SetControl( int ctl )

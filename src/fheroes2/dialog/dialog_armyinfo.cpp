@@ -350,7 +350,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    if ( troop.isBattle() ) {
+    if ( troop.isBattle() && troop.GetCount() != 0 ) {
         text.Set( std::string( _( "Hit Points Left" ) ) + ":" );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;
@@ -578,10 +578,12 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     }
 
     // amount
-    text.Set( std::to_string( troop.GetCount() ), Font::BIG );
-    pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
-    pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
-    text.Blit( pos.x, pos.y );
+    if ( troop.GetCount() != 0 ) {
+        text.Set( std::to_string( troop.GetCount() ), Font::BIG );
+        pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
+        pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
+        text.Blit( pos.x, pos.y );
+    }
 }
 
 void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,

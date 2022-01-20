@@ -76,7 +76,7 @@ namespace
         return li == lhs.end() && ri != rhs.end();
     }
 
-    int ByteToColor( const int byte )
+    uint8_t ByteToColor( const int byte )
     {
         switch ( byte ) {
         case 0:
