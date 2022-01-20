@@ -1854,7 +1854,7 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
     return end() != it ? *it : nullptr;
 }
 
-Heroes * AllHeroes::GetFreeman( int race ) const
+Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
 {
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
@@ -1899,24 +1899,28 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     std::vector<int> freeman_heroes;
     freeman_heroes.reserve( HEROESMAXCOUNT );
 
-    // find freeman in race (skip: manual changes)
-    for ( int ii = min; ii <= max; ++ii )
-        if ( at( ii )->isFreeman() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
-            freeman_heroes.push_back( ii );
+    // First try to find a free hero of the specified race (skipping custom heroes)
+    for ( int i = min; i <= max; ++i ) {
+        if ( i != heroIDToIgnore && at( i )->isFreeman() && !at( i )->Modes( Heroes::NOTDEFAULTS ) ) {
+            freeman_heroes.push_back( i );
+        }
+    }
 
-    // not found, find any race
-    if ( Race::NONE != race && freeman_heroes.empty() ) {
+    // If no heroes are found, then try to find a free hero of any race
+    if ( race != Race::NONE && freeman_heroes.empty() ) {
         min = Heroes::LORDKILBURN;
         max = Heroes::CELIA;
 
-        for ( int ii = min; ii <= max; ++ii )
-            if ( at( ii )->isFreeman() )
-                freeman_heroes.push_back( ii );
+        for ( int i = min; i <= max; ++i ) {
+            if ( i != heroIDToIgnore && at( i )->isFreeman() ) {
+                freeman_heroes.push_back( i );
+            }
+        }
     }
 
-    // not found, all heroes busy
+    // All the heroes are busy
     if ( freeman_heroes.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman is not found, all the heroes are busy." );
         return nullptr;
     }
 

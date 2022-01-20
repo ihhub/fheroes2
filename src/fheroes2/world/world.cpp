@@ -534,9 +534,9 @@ const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
     return vec_heroes.Get( center );
 }
 
-Heroes * World::GetFreemanHeroes( int race ) const
+Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.GetFreeman( race );
+    return vec_heroes.GetFreeman( race, heroIDToIgnore );
 }
 
 Heroes * World::FromJailHeroes( s32 index )

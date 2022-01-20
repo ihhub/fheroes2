@@ -506,7 +506,7 @@ struct AllHeroes : public VecHeroes
 
     Heroes * GetGuest( const Castle & ) const;
     Heroes * GetGuard( const Castle & ) const;
-    Heroes * GetFreeman( int race ) const;
+    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( s32 ) const;
 };
 

@@ -480,16 +480,12 @@ const Recruits & Kingdom::GetRecruits()
         else {
             const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
 
-            do {
-                recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
-            } while ( recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID1() == recruits.GetID2() );
+            recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE, recruits.GetID2() ) );
         }
     }
 
     if ( recruits.GetID2() == Heroes::UNKNOWN || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) ) {
-        do {
-            recruits.SetHero2( world.GetFreemanHeroes() );
-        } while ( recruits.GetID2() != Heroes::UNKNOWN && recruits.GetID1() == recruits.GetID2() );
+        recruits.SetHero2( world.GetFreemanHeroes( Race::NONE, recruits.GetID1() ) );
     }
 
     assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );

@@ -212,7 +212,7 @@ public:
     Heroes * GetHeroes( const fheroes2::Point & );
 
     Heroes * FromJailHeroes( s32 );
-    Heroes * GetFreemanHeroes( int race = 0 ) const;
+    Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins( void ) const;
     const Heroes * GetHeroesCondLoss( void ) const;
