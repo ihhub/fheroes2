@@ -271,7 +271,7 @@ namespace
             // Eszett.
             font[223 - 32].resize( font[34].width(), font[34].height() + 3 );
             font[223 - 32].reset();
-            fheroes2::Copy( font[34], 1, 0, font[223 - 32], 0, 3, font[34].width(), font[34].height() );
+            fheroes2::Copy( font[34], 1, 0, font[223 - 32], 0, 3, font[34].width() - 1, font[34].height() );
             fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 0 + 3, 3, 1 );
             fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 1 + 3, 3, 1 );
             fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 2 + 3, 3, 1 );
@@ -285,6 +285,8 @@ namespace
             fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 6 + 3, 3, 1 );
             fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 7 + 3, 3, 1 );
             fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 8 + 3, 3, 1 );
+            fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 9 + 3, 3, 1 );
+            fheroes2::Copy( font[223 - 32], 0, 4 + 3, font[223 - 32], 0, 10 + 3, 3, 1 );
             fheroes2::Copy( font[223 - 32], 0, 0 + 3, font[223 - 32], 3, 0 + 3, 1, 1 );
             fheroes2::Copy( font[223 - 32], 3, 1 + 3, font[223 - 32], 4, 0 + 3, 1, 1 );
             fheroes2::Copy( font[223 - 32], 4, 3 + 3, font[223 - 32], 3, 7 + 3, 1, 1 );
