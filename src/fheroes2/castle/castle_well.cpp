@@ -213,6 +213,18 @@ void Castle::OpenWell( void )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER6 ) && ( le.MouseClickLeft( rectMonster6 ) || pressedHotkeyBuildingID == DWELLING_MONSTER6 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true, 0 ) );
+        else if ( ( building & DWELLING_MONSTER1 ) && le.MousePressRight( rectMonster1 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER1 ), dwelling[0] );
+        else if ( ( building & DWELLING_MONSTER2 ) && le.MousePressRight( rectMonster2 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER2 ), dwelling[1] );
+        else if ( ( building & DWELLING_MONSTER3 ) && le.MousePressRight( rectMonster3 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER3 ), dwelling[2] );
+        else if ( ( building & DWELLING_MONSTER4 ) && le.MousePressRight( rectMonster4 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER4 ), dwelling[3] );
+        else if ( ( building & DWELLING_MONSTER5 ) && le.MousePressRight( rectMonster5 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER5 ), dwelling[4] );
+        else if ( ( building & DWELLING_MONSTER6 ) && le.MousePressRight( rectMonster6 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER6 ), dwelling[5] );
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );
