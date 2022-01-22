@@ -345,6 +345,7 @@ private:
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );
 StreamBase & operator>>( StreamBase &, CapturedObject & );
+
 StreamBase & operator<<( StreamBase &, const World & );
 StreamBase & operator>>( StreamBase &, World & );
 
