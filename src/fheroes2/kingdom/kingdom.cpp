@@ -451,8 +451,10 @@ u32 Kingdom::GetLostTownDays( void ) const
 
 const Recruits & Kingdom::GetRecruits()
 {
-    static Heroes * specialHireableHero = [this]() -> Heroes * {
-        if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
+    const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+
+    const Heroes * specialHireableHero = [this, offerNativeHero]() -> const Heroes * {
+        if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
             const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
             for ( const auto & obtainedAward : obtainedAwards ) {
@@ -460,7 +462,7 @@ const Recruits & Kingdom::GetRecruits()
                     continue;
                 }
 
-                Heroes * hero = world.GetHeroes( obtainedAward._subType );
+                const Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
                 if ( hero && hero->isFreeman() ) {
                     return hero;
@@ -474,13 +476,9 @@ const Recruits & Kingdom::GetRecruits()
     if ( recruits.GetID1() == Heroes::UNKNOWN || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
         if ( specialHireableHero ) {
             recruits.SetHero1( specialHireableHero );
-
-            specialHireableHero = nullptr;
         }
         else {
-            const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
-
-            recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE, recruits.GetID2() ) );
+            recruits.SetHero1( world.GetFreemanHeroes( offerNativeHero ? GetRace() : Race::NONE, recruits.GetID2() ) );
         }
     }
 
