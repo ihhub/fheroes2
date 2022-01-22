@@ -386,6 +386,9 @@ void World::Reset( void )
     heroes_cond_loss = Heroes::UNKNOWN;
 
     _seed = 0;
+
+    // current rumor
+    _rumor = nullptr;
 }
 
 /* new maps */
@@ -1300,6 +1303,9 @@ void World::resetPathfinder()
 
 void World::PostLoad( const bool setTilePassabilities )
 {
+    // Reset the current rumor
+    _rumor = nullptr;
+
     if ( setTilePassabilities ) {
         // update tile passable
         for ( Maps::Tiles & tile : vec_tiles ) {

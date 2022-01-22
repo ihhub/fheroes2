@@ -290,8 +290,6 @@ public:
 private:
     World()
         : fheroes2::Size( 0, 0 )
-        , _rumor( nullptr )
-        , _seed( 0 )
     {}
 
     void Defaults( void );
@@ -314,7 +312,6 @@ private:
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
     Rumors vec_rumors;
-    const std::string * _rumor;
     EventsDate vec_eventsday;
 
     // index, object, color
@@ -335,14 +332,19 @@ private:
     MapActions map_actions;
     MapObjects map_objects;
 
-    // This data isn't serialized
+    uint32_t _seed{ 0 }; // global seed for the map
+
+    // The following fields are not serialized
+
+    size_t _weekSeed{ 0 }; // global seed for the map, for this week
+
+    const std::string * _rumor{ nullptr }; // Current rumor in taverns
+
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
+
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
-
-    uint32_t _seed{ 0 }; // global seed for the map
-    size_t _weekSeed{ 0 }; // global seed for the map, for this week
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );
