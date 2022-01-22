@@ -300,6 +300,8 @@ private:
     void ProcessNewMap();
     void PostLoad( const bool setTilePassabilities );
     void pickRumor();
+    void updateWeekSeed();
+    void updateWeekType();
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 

@@ -625,7 +625,23 @@ void World::pickRumor()
     }
 }
 
-/* new day */
+void World::updateWeekSeed()
+{
+    _weekSeed = _seed;
+
+    fheroes2::hashCombine( _weekSeed, day );
+
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
+    }
+}
+
+void World::updateWeekType()
+{
+    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
+    week_current = week_next;
+}
+
 void World::NewDay( void )
 {
     ++day;
@@ -633,7 +649,8 @@ void World::NewDay( void )
     if ( BeginWeek() ) {
         ++week;
 
-        pickRumor();
+        updateWeekSeed();
+        updateWeekType();
 
         if ( BeginMonth() ) {
             ++month;
@@ -671,17 +688,6 @@ void World::NewDay( void )
 
 void World::NewWeek( void )
 {
-    // update week seed: it depends on the current day and the state of the map
-    _weekSeed = _seed;
-    fheroes2::hashCombine( _weekSeed, day );
-    for ( const Maps::Tiles & tile : vec_tiles ) {
-        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
-    }
-
-    // update week type
-    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
-    week_current = week_next;
-
     // update objects
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
@@ -697,6 +703,9 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
+
+    // pick a weekly rumor
+    pickRumor();
 }
 
 void World::NewMonth( void )
