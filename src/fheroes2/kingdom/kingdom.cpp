@@ -451,6 +451,7 @@ u32 Kingdom::GetLostTownDays( void ) const
 
 const Recruits & Kingdom::GetRecruits()
 {
+    // In the first week, it is necessary to offer one native hero (or a hero given as a campaign reward)
     const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
 
     const Heroes * specialHireableHero = [this, offerNativeHero]() -> const Heroes * {
