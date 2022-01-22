@@ -337,8 +337,6 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
-    week_next = Week::RandomWeek( *this, false, _weekSeed );
-
     // initialize all heroes
     vec_heroes.Init();
 
@@ -380,7 +378,6 @@ void World::Reset( void )
     month = 0;
 
     week_current = Week( WeekName::TORTOISE );
-    week_next = Week::RandomWeek( *this, false, _weekSeed );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -641,8 +638,7 @@ void World::updateWeekSeed()
 
 void World::updateWeekType()
 {
-    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
-    week_current = week_next;
+    week_current = Week::RandomWeek( *this, LastWeek(), _weekSeed );
 }
 
 void World::NewDay( void )
@@ -1434,8 +1430,11 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t width = static_cast<uint16_t>( w.width );
     const uint16_t height = static_cast<uint16_t>( w.height );
 
+    // TODO: remove this
+    Week dummyWeek;
+
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
+               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << dummyWeek << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
                << w.map_objects << w._seed;
 }
 
@@ -1449,8 +1448,11 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
+    // TODO: remove this
+    Week dummyWeek;
+
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.week_current >> dummyWeek >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
