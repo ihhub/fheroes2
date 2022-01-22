@@ -176,6 +176,7 @@ void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
     Text text( str, Font::SMALL );
     text.Blit( areas[0].x + ( sprite.width() - text.w() ) / 2, areas[0].y + sprite.height() + 3 );
 
+    RedrawOnOffSetting( areas[1], _( "Army Order" ), 3, conf.BattleShowArmyOrder() );
     RedrawOnOffSetting( areas[2], _( "Auto Spell Casting" ), 6, conf.BattleAutoSpellcast() );
     RedrawOnOffSetting( areas[3], _( "Grid" ), 8, conf.BattleShowGrid() );
     RedrawOnOffSetting( areas[4], _( "Shadow Movement" ), 10, conf.BattleShowMoveShadow() );
@@ -273,16 +274,25 @@ void Battle::DialogBattleSettings( void )
         //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
         // }
 
-        bool saveAutoSpellCast = false;
+        bool saveShowArmyOrder = false;
         if ( le.MouseClickLeft( optionAreas[2] ) ) {
             conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
-            saveAutoSpellCast = true;
+            saveShowArmyOrder = true;
         }
         else if ( le.MousePressRight( optionAreas[2] ) ) {
             Dialog::Message(
                 _( "Auto Spell Casting" ),
                 _( "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)" ),
                 Font::BIG );
+        }
+
+        bool saveAutoSpellCast = false;
+        if ( le.MouseClickLeft( optionAreas[1] ) ) {
+            conf.setBattleShowArmyOrder( !conf.BattleShowArmyOrder() );
+            saveAutoSpellCast = true;
+        }
+        else if ( le.MousePressRight( optionAreas[1] ) ) {
+            Dialog::Message( _( "Army Order" ), _( "Toggle to display army order during the battle." ), Font::BIG );
         }
 
         bool saveShowGrid = false;
@@ -319,7 +329,7 @@ void Battle::DialogBattleSettings( void )
             break;
         }
 
-        if ( saveSpeed || saveAutoSpellCast || saveShowGrid || saveShowMoveShadow || saveShowMouseShadow ) {
+        if ( saveSpeed || saveShowArmyOrder || saveAutoSpellCast || saveShowGrid || saveShowMoveShadow || saveShowMouseShadow ) {
             // redraw
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );

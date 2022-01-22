@@ -796,19 +796,7 @@ Battle::ArmiesOrder::ArmiesOrder()
     : orders( nullptr )
     , army_color2( 0 )
 {
-    const fheroes2::Size sz( ARMYORDERW, ARMYORDERW );
-
-    sf_color[0].resize( sz.width, sz.height );
-    sf_color[0].reset();
-    fheroes2::DrawBorder( sf_color[0], fheroes2::GetColorId( 0xe0, 0xe0, 0 ) );
-
-    sf_color[1].resize( sz.width, sz.height );
-    sf_color[1].reset();
-    fheroes2::DrawBorder( sf_color[1], fheroes2::GetColorId( 0xe0, 0x48, 0 ) );
-
-    sf_color[2].resize( sz.width, sz.height );
-    sf_color[2].reset();
-    fheroes2::DrawBorder( sf_color[2], fheroes2::GetColorId( 0x90, 0xc0, 0 ) );
+    // Do nothing.
 }
 
 void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const Units * units, int color )
@@ -841,7 +829,8 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         }
 }
 
-void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const
+void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                                      fheroes2::Image & output ) const
 {
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
 
@@ -851,20 +840,52 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
     fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
                     revert );
 
-    // window
-    if ( current )
-        fheroes2::Blit( sf_color[0], output, pos.x + 1, pos.y + 1 );
-    else if ( unit.Modes( Battle::TR_MOVED ) )
-        fheroes2::Blit( sf_color[1], output, pos.x + 1, pos.y + 1 );
-    else
-        fheroes2::Blit( sf_color[2], output, pos.x + 1, pos.y + 1 );
-
-    // number
     Text number( std::to_string( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
+
+    if ( isCurrentUnit ) {
+        fheroes2::DrawRect( output, { pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW }, currentUnitColor );
+    }
+    else {
+        uint8_t color = 0;
+
+        switch ( unit.GetCurrentColor() ) {
+        case Color::BLUE:
+            color = ARMY_COLOR_BLUE;
+            break;
+        case Color::GREEN:
+            color = ARMY_COLOR_GREEN;
+            break;
+        case Color::RED:
+            color = ARMY_COLOR_RED;
+            break;
+        case Color::YELLOW:
+            color = ARMY_COLOR_YELLOW;
+            break;
+        case Color::ORANGE:
+            color = ARMY_COLOR_ORANGE;
+            break;
+        case Color::PURPLE:
+            color = ARMY_COLOR_PURPLE;
+            break;
+        case Color::NONE:
+            color = ARMY_COLOR_GRAY;
+            break;
+        default:
+            assert( 0 ); // Did you add another player color?
+            break;
+        }
+
+        fheroes2::DrawRect( output, { pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW }, color );
+
+        if ( unit.Modes( Battle::TR_MOVED ) ) {
+            fheroes2::ApplyPalette( output, pos.x + 1, pos.y + 1, output, pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( output, pos.x + 1, pos.y + 1, output, pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW, 3 );
+        }
+    }
 }
 
-void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output )
+void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
     if ( orders ) {
         const int32_t ow = ARMYORDERW + 2;
@@ -883,7 +904,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output
         for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it )
             if ( *it && ( *it )->isValid() ) {
                 rects.emplace_back( *it, fheroes2::Rect( ox, oy, ow, ow ) );
-                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, output );
+                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
                 ox += ow;
                 fheroes2::Rect::width += ow;
             }
@@ -1100,8 +1121,8 @@ void Battle::Interface::RedrawPartialFinish()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( Settings::Get().ExtBattleShowBattleOrder() )
-        armies_order.Redraw( _currentUnit, _mainSurface );
+    if ( Settings::Get().BattleShowArmyOrder() )
+        armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
@@ -2340,7 +2361,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armiesOrderRect ) ) {
+    else if ( conf.BattleShowArmyOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
