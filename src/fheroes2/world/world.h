@@ -298,7 +298,6 @@ private:
     void ProcessNewMap();
     void PostLoad( const bool setTilePassabilities );
     void pickRumor();
-    void updateWeekSeed();
     void updateWeekType();
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
@@ -334,8 +333,6 @@ private:
     uint32_t _seed{ 0 }; // global seed for the map
 
     // The following fields are not serialized
-
-    size_t _weekSeed{ 0 }; // global seed for the map, for this week
 
     const std::string * _rumor{ nullptr }; // Current rumor in taverns
 

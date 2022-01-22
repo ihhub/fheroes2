@@ -625,20 +625,17 @@ void World::pickRumor()
     }
 }
 
-void World::updateWeekSeed()
-{
-    _weekSeed = _seed;
-
-    fheroes2::hashCombine( _weekSeed, day );
-
-    for ( const Maps::Tiles & tile : vec_tiles ) {
-        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
-    }
-}
-
 void World::updateWeekType()
 {
-    week_current = Week::RandomWeek( *this, LastWeek(), _weekSeed );
+    size_t weekSeed = _seed;
+
+    fheroes2::hashCombine( weekSeed, day );
+
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        fheroes2::hashCombine( weekSeed, tile.GetQuantity1() );
+    }
+
+    week_current = Week::RandomWeek( *this, LastWeek(), weekSeed );
 }
 
 void World::NewDay( void )
@@ -648,7 +645,6 @@ void World::NewDay( void )
     if ( BeginWeek() ) {
         ++week;
 
-        updateWeekSeed();
         updateWeekType();
 
         if ( BeginMonth() ) {
