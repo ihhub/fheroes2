@@ -192,22 +192,28 @@ msgstr ""
 "den tritt, um -%{count} und verlangsamt seine Bewegungsrate auf die Hälfte."
 
 msgid "Speed"
-msgstr "Geschw."
+msgstr "Geschwindigkeit"
 
 msgid "Speed: %{speed}"
 msgstr "Geschw.: %{speed}"
 
 msgid "Auto Spell Casting"
-msgstr "Automatische Zaubersprüche"
+msgstr ""
+"Auto-\n"
+"zauber"
 
 msgid "Grid"
 msgstr "Raster"
 
 msgid "Shadow Movement"
-msgstr "Schattenbewegung"
+msgstr ""
+"Schatten-\n"
+"bewegung"
 
 msgid "Shadow Cursor"
-msgstr "Schatten-Zeiger"
+msgstr ""
+"Schatten-\n"
+"zeiger"
 
 msgid "Off"
 msgstr "Aus"
@@ -1173,7 +1179,7 @@ msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
-"Sie müssen die Kontrolle über das Burg der Magie übernehmen, in dem die "
+"Sie müssen die Kontrolle über die Burg der Magie übernehmen, in dem die "
 "Quelle der Zauberei liegt. Tun Sie dies und Ihr Sieg wird der Höchste "
 "sein."
 
@@ -1347,14 +1353,14 @@ msgid "Requires:"
 msgstr "Erfordert:"
 
 msgid "Cannot build. Already built here this turn."
-msgstr "Kann nicht bauen. Sie haben an diesem Tag bereits hier etwas gebaut."
+msgstr "Kann nicht bauen. Sie haben an diesem Tag bereits hier gebaut."
 
 msgid "For this action it is necessary first to build a castle."
 msgstr "Für diese Aktion ist es notwendig, zuerst eine Burg zu bauen."
 
 msgid "Cannot build %{name} because castle is too far from water."
 msgstr ""
-"Kann %{name} nicht bauen, weil die Burg zu weit von der Gewässer entfernt ist."
+"Kann %{name} nicht bauen. Zu weit von der Gewässer entfernt."
 
 msgid "disable build."
 msgstr "Bauen deaktivieren."
@@ -1366,7 +1372,7 @@ msgid "%{name} is already built."
 msgstr "%{name} ist bereits gebaut."
 
 msgid "Cannot build %{name}."
-msgstr "Kann %{name} nicht erstellen."
+msgstr "Kann %{name} nicht bauen."
 
 msgid "Build %{name}."
 msgstr "%{name} Bauen."
@@ -1592,7 +1598,7 @@ msgstr "Kann nicht rekrutieren - guest to guard automove error."
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
-"Kann nicht rekrutieren - Sie haben bereits einen Helden in dieser Stadt."
+"Kann nicht rekrutieren - ein Held steht bereits in dieser Stadt."
 
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Kann nicht rekrutieren - Sie haben zu viele Helden."
@@ -2057,7 +2063,7 @@ msgid "The above spells are available here."
 msgstr "Die oben genannten Zaubersprüche sind hier verfügbar."
 
 msgid "The above spells have been added to your book."
-msgstr "Die oben genannten Zaubersprüche wurden Ihrem Buch hinzugefügt."
+msgstr "Diese Zaubersprüche wurden Ihrem Buch hinzugefügt."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2136,7 +2142,7 @@ msgid "Damg"
 msgstr "Schaden"
 
 msgid "HP"
-msgstr "HP"
+msgstr "TP"
 
 msgid "Growth"
 msgstr "Wachstum"
@@ -2797,7 +2803,7 @@ msgid "Jump"
 msgstr "Sprung"
 
 msgid "Hero Speed"
-msgstr "Held-Geschw."
+msgstr "Heldgeschw."
 
 msgid "Don't Show"
 msgstr "Nicht anzeigen"
@@ -2806,7 +2812,7 @@ msgid "Enemy Speed"
 msgstr "Feindgeschw."
 
 msgid "Scroll Speed"
-msgstr "Scroll-Geschw."
+msgstr "Scrollgeschw."
 
 msgid "Evil"
 msgstr "Böse"
@@ -3962,7 +3968,7 @@ msgstr ""
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
-"Um Zaubersprüche zu wirken, müssen Sie zunächst ein Zauberbuch für %{gold} "
+"Um Zaubersprüche zu wirken, müssen Sie zuerst ein Zauberbuch für %{gold} "
 "Gold kaufen."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
@@ -4298,7 +4304,6 @@ msgid ""
 msgstr ""
 "Ein Schluck aus dem Brunnen soll Ihre Zauberpunkte wiederherstellen, aber "
 "Sie sind bereits am Maximum."
-
 msgid "A second drink at the well in one day will not help you."
 msgstr ""
 "Ein zweiter Schluck aus dem Brunnen an einem Tag wird Ihnen nicht helfen."
@@ -7136,7 +7141,7 @@ msgid "% chance to cast %{spell} spell"
 msgstr "% Chance um %{spell} zu wirken"
 
 msgid "HP regeneration"
-msgstr "HP-Regeneration"
+msgstr "TP-Regeneration"
 
 msgid "Two hexes attack"
 msgstr "Angriff an zwei Felder"
@@ -7163,7 +7168,7 @@ msgid "No enemy retaliation"
 msgstr "Keine feindliche Vergeltung"
 
 msgid "HP drain"
-msgstr "HP-Abfluss"
+msgstr "TP-Abfluss"
 
 msgid "Cloud attack"
 msgstr "Wolke-Angriff"
@@ -8084,7 +8089,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Entfernt alle negativen Zauber, die auf eine Ihrer Einheiten gewirkt "
-"wurden, und stellt bis zu %{count} HP pro Stufe der Zauberkraft wieder her."
+"wurden, und stellt bis zu %{count} TP pro Stufe der Zauberkraft wieder her."
 
 msgid "Mass Cure"
 msgstr "Massenheilung"
@@ -8094,7 +8099,7 @@ msgid ""
 "%{count} HP per level of spell power, per creature."
 msgstr ""
 "Entfernt alle negativen Zauber, die auf Ihre Truppen gewirkt wurden, und "
-"stellt bis zu %{count} HP pro Stufe der Zauberkraft und pro Kreatur wieder "
+"stellt bis zu %{count} TP pro Stufe der Zauberkraft und pro Kreatur wieder "
 "her."
 
 msgid "Resurrect"
@@ -8560,7 +8565,7 @@ msgstr ""
 "%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr "Dieser Zauber stellt %{hp} HP her."
+msgstr "Dieser Zauber stellt %{hp} TP wieder her."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Dieser Zauber beschwört %{count} %{monster}, um die Mine zu bewachen."
@@ -8573,7 +8578,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 "Dieser Zauberspruch kontrolliert bis zu\n"
-"%{hp} HP."
+"%{hp} TP."
 
 msgid "game: always confirm for rewrite savefile"
 msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"
