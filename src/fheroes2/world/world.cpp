@@ -337,6 +337,9 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
+    // Seed for the current week depends on the map seed
+    updateWeekSeed();
+
     // initialize all heroes
     vec_heroes.Init();
 
@@ -383,9 +386,7 @@ void World::Reset( void )
     heroes_cond_loss = Heroes::UNKNOWN;
 
     _seed = 0;
-
-    // current rumor
-    _rumor = nullptr;
+    _weekSeed = 0;
 }
 
 /* new maps */
@@ -604,38 +605,23 @@ const Week & World::GetWeekType( void ) const
     return week_current;
 }
 
-void World::pickRumor()
+void World::updateWeekSeed()
 {
-    if ( vec_rumors.empty() ) {
-        _rumor = nullptr;
-        assert( 0 );
-        return;
-    }
+    _weekSeed = _seed;
 
-    if ( vec_rumors.size() == 1 ) {
-        _rumor = &vec_rumors.front();
-        assert( 0 );
-        return;
-    }
+    fheroes2::hashCombine( _weekSeed, day );
 
-    const std::string * current = _rumor;
-    while ( current == _rumor ) {
-        // vec_rumors always contain values
-        _rumor = &Rand::Get( vec_rumors );
+    // FIXME: despite its name, _weekSeed does not always depend on the state of the adventure
+    // map at the first day of a new week. If the game was loaded from the savefile, _weekSeed
+    // depends on the state of the adventure map at the time when this savefile was made.
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
     }
 }
 
 void World::updateWeekType()
 {
-    size_t weekSeed = _seed;
-
-    fheroes2::hashCombine( weekSeed, day );
-
-    for ( const Maps::Tiles & tile : vec_tiles ) {
-        fheroes2::hashCombine( weekSeed, tile.GetQuantity1() );
-    }
-
-    week_current = Week::RandomWeek( *this, LastWeek(), weekSeed );
+    week_current = Week::RandomWeek( *this, LastWeek(), _weekSeed );
 }
 
 void World::NewDay( void )
@@ -644,6 +630,11 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+
+        // Seed for the first week should have already been calculated when loading the map
+        if ( week > 1 ) {
+            updateWeekSeed();
+        }
 
         updateWeekType();
 
@@ -698,9 +689,6 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
-
-    // pick a weekly rumor
-    pickRumor();
 }
 
 void World::NewMonth( void )
@@ -832,10 +820,9 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
 const std::string & World::GetRumors( void )
 {
-    if ( !_rumor ) {
-        pickRumor();
-    }
-    return *_rumor;
+    assert( !vec_rumors.empty() );
+
+    return Rand::GetWithSeed( vec_rumors, static_cast<uint32_t>( _weekSeed ) );
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -1295,8 +1282,8 @@ void World::resetPathfinder()
 
 void World::PostLoad( const bool setTilePassabilities )
 {
-    // Reset the current rumor
-    _rumor = nullptr;
+    // Update the seed for the current week
+    updateWeekSeed();
 
     if ( setTilePassabilities ) {
         // update tile passable

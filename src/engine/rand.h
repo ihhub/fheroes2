@@ -96,6 +96,16 @@ namespace Rand
         return *it;
     }
 
+    template <typename T>
+    const T & GetWithSeed( const std::list<T> & list, uint32_t seed )
+    {
+        assert( !list.empty() );
+
+        typename std::list<T>::const_iterator it = list.begin();
+        std::advance( it, Rand::GetWithSeed( 0, static_cast<uint32_t>( list.size() - 1 ), seed ) );
+        return *it;
+    }
+
     using ValuePercent = std::pair<int32_t, uint32_t>;
 
     class Queue : private std::vector<ValuePercent>

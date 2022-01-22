@@ -297,7 +297,7 @@ private:
     void MonthOfMonstersAction( const Monster & );
     void ProcessNewMap();
     void PostLoad( const bool setTilePassabilities );
-    void pickRumor();
+    void updateWeekSeed();
     void updateWeekType();
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
@@ -330,11 +330,11 @@ private:
     MapActions map_actions;
     MapObjects map_objects;
 
-    uint32_t _seed{ 0 }; // global seed for the map
+    uint32_t _seed{ 0 }; // Map seed
 
     // The following fields are not serialized
 
-    const std::string * _rumor{ nullptr }; // Current rumor in taverns
+    size_t _weekSeed{ 0 }; // Seed for the current week, depends on the map seed, as well as on the current state of the map
 
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
