@@ -986,7 +986,7 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
         return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Wind Mills, Water Wheels and Magic Gardens can be captured" );
+        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::WORLD_DISABLE_BARROW_MOUNDS:
         return _( "world: disable Barrow Mounds" );
     case Settings::CASTLE_ALLOW_GUARDIANS:

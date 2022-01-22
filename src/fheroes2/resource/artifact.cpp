@@ -1024,13 +1024,13 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         }
         else if ( !art.isValid() ) {
             if ( !read_only ) {
-                msg = _( "Transfer %{name}" );
+                msg = _( "Move %{name}" );
                 StringReplace( msg, "%{name}", art2->GetName() );
             }
         }
         else if ( !read_only ) {
             if ( isMagicBook( art ) ) {
-                msg = _( "Cannot exchange artifact" );
+                msg = _( "Cannot move the Spellbook" );
             }
             else {
                 msg = _( "Exchange %{name2} with %{name}" );
@@ -1055,14 +1055,14 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
 bool ArtifactsBar::ActionBarCursor( Artifact & art1, Artifact & art2 /* selected */ )
 {
     if ( isMagicBook( art2 ) || isMagicBook( art1 ) )
-        msg = _( "Cannot exchange artifact" );
+        msg = _( "Cannot move the Spellbook" );
     else if ( art1.isValid() ) {
         msg = _( "Exchange %{name2} with %{name}" );
         StringReplace( msg, "%{name}", art1.GetName() );
         StringReplace( msg, "%{name2}", art2.GetName() );
     }
     else {
-        msg = _( "Transfer %{name}" );
+        msg = _( "Move %{name}" );
         StringReplace( msg, "%{name}", art2.GetName() );
     }
 
