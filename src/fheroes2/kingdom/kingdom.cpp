@@ -453,26 +453,24 @@ const Recruits & Kingdom::GetRecruits()
 {
     // In the first week, it is necessary to offer one native hero (or a hero given as a campaign reward)
     const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    // Special hero given as a campaign reward
+    const Heroes * specialHireableHero = nullptr;
 
-    const Heroes * specialHireableHero = [this, offerNativeHero]() -> const Heroes * {
-        if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
-            const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+    if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
-            for ( const auto & obtainedAward : obtainedAwards ) {
-                if ( obtainedAward._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO ) {
-                    continue;
-                }
+        for ( const auto & obtainedAward : obtainedAwards ) {
+            if ( obtainedAward._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO ) {
+                continue;
+            }
 
-                const Heroes * hero = world.GetHeroes( obtainedAward._subType );
+            const Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
-                if ( hero && hero->isFreeman() ) {
-                    return hero;
-                }
+            if ( hero && hero->isFreeman() ) {
+                specialHireableHero = hero;
             }
         }
-
-        return nullptr;
-    }();
+    }
 
     if ( recruits.GetID1() == Heroes::UNKNOWN || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
         if ( specialHireableHero ) {
