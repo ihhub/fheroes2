@@ -863,7 +863,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
+cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() )
         return { 10000, 30, 10, 30, 10, 10, 10 };

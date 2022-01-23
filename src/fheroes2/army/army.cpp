@@ -1433,7 +1433,7 @@ Monster Army::GetStrongestMonster() const
     return monster;
 }
 
-void Army::resetInvalidMonsters()
+void Army::resetInvalidMonsters() const
 {
     for ( Troop * troop : *this ) {
         if ( troop->GetID() != Monster::UNKNOWN && !troop->isValid() ) {

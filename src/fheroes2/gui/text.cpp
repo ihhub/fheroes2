@@ -56,7 +56,7 @@ public:
     int w( size_t s, size_t c ) const;
     int h( int width ) const;
 
-    void blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() );
+    void blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
     static int charWidth( const uint8_t character, const int ft );
     static int fontHeight( const int ft );
 
@@ -188,7 +188,7 @@ int TextAscii::h( int width ) const
     return res;
 }
 
-void TextAscii::blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst )
+void TextAscii::blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
 {
     if ( _message.empty() )
         return;
