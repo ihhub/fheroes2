@@ -803,7 +803,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( const auto & castle : castles ) {
+    for ( const Castle * castle : castles ) {
         // skip gray color
         if ( castle->GetColor() )
             GetKingdom( castle->GetColor() ).AddCastle( castle );
