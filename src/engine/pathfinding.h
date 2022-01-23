@@ -51,6 +51,8 @@ template <class T>
 class Pathfinder
 {
 public:
+    virtual ~Pathfinder() = default;
+
     virtual void reset() = 0;
 
     virtual uint32_t getDistance( int targetIndex ) const
