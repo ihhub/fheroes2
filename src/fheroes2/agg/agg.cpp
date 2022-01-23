@@ -97,6 +97,8 @@ namespace AGG
             , _runFlag( 1 )
         {}
 
+        AsyncSoundManager( const AsyncSoundManager & ) = delete;
+
         ~AsyncSoundManager()
         {
             if ( _worker ) {
@@ -112,6 +114,8 @@ namespace AGG
                 _worker.reset();
             }
         }
+
+        AsyncSoundManager & operator=( const AsyncSoundManager & ) = delete;
 
         void pushStopMusic()
         {
@@ -263,7 +267,7 @@ namespace AGG
 
             while ( manager->_exitFlag == 0 ) {
                 std::unique_lock<std::mutex> mutexLock( manager->_mutex );
-                manager->_workerNotification.wait( mutexLock, [&] { return manager->_runFlag == 1; } );
+                manager->_workerNotification.wait( mutexLock, [manager] { return manager->_runFlag == 1; } );
                 mutexLock.unlock();
 
                 if ( manager->_exitFlag )
