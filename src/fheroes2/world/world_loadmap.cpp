@@ -62,7 +62,7 @@ namespace
         return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
 
-    void fixCastleNames( AllCastles & castles )
+    void fixCastleNames( const AllCastles & castles )
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;

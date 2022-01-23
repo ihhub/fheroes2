@@ -377,7 +377,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from )
+void Troops::MoveTroops( const Troops & from )
 {
     if ( this == &from )
         return;

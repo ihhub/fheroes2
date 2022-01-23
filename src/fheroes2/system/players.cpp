@@ -57,7 +57,7 @@ void PlayerFixMultiControl( Player * player )
         player->SetControl( CONTROL_AI );
 }
 
-void PlayerRemoveAlreadySelectedRaces( Player * player, std::vector<int> & availableRaces )
+void PlayerRemoveAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
 {
     const int raceToRemove = player->GetRace();
     availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),

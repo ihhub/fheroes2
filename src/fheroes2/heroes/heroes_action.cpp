@@ -100,7 +100,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
 void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToEyeMagi( const Heroes & hero, const MP2::MapObjectType objectType );
 void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 
 u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, u32 res, u32 buttons = Dialog::OK )
@@ -3157,7 +3157,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
     assert( hero.GetIndex() != dst_index );
