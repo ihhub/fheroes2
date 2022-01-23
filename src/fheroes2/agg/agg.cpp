@@ -247,7 +247,7 @@ namespace AGG
                 _worker.reset( new std::thread( AsyncSoundManager::_workerThread, this ) );
 
                 std::unique_lock<std::mutex> mutexLock( _mutex );
-                _masterNotification.wait( mutexLock, [&] { return _runFlag == 0; } );
+                _masterNotification.wait( mutexLock, [this] { return _runFlag == 0; } );
             }
         }
 
