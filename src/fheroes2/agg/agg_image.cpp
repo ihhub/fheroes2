@@ -2363,7 +2363,7 @@ namespace fheroes2
                         FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
                     }
 
-                    for ( size_t i = 1; i < 7; i++ ) {
+                    for ( size_t i = 1; i < 7; ++i ) {
                         Sprite & original = _icnVsSprite[id][i];
                         if ( original.width() == 121 && original.height() == 151 ) {
                             FillTransform( original, 0, 0, 64, 39, 1 );
