@@ -55,11 +55,11 @@
 
 #include <cassert>
 
-#define ARMYORDERW 40
-
 namespace
 {
     const int32_t cellYOffset = -9;
+
+    const int32_t armyOrderMonsterIconSize = 43; // in both directions.
 
     struct LightningPoint
     {
@@ -832,19 +832,20 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
 void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
                                       fheroes2::Image & output ) const
 {
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    // Render background.
+    const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, armyOrderMonsterIconSize - 2, armyOrderMonsterIconSize - 2 );
 
-    // background
-    fheroes2::Fill( output, pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x33, 0x33, 0x33 ) );
-    // mons32 sprite
+    // Draw a monster's sprite.
+    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
     fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
                     revert );
 
-    Text number( std::to_string( unit.GetCount() ), Font::SMALL );
+    Text number( GetStringShort( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
 
     if ( isCurrentUnit ) {
-        fheroes2::DrawRect( output, { pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW }, currentUnitColor );
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, currentUnitColor );
     }
     else {
         uint8_t color = 0;
@@ -876,38 +877,40 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
             break;
         }
 
-        fheroes2::DrawRect( output, { pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW }, color );
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, color );
 
         if ( unit.Modes( Battle::TR_MOVED ) ) {
-            fheroes2::ApplyPalette( output, pos.x + 1, pos.y + 1, output, pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW, PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            fheroes2::ApplyPalette( output, pos.x + 1, pos.y + 1, output, pos.x + 1, pos.y + 1, ARMYORDERW, ARMYORDERW, 3 );
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize, 3 );
         }
     }
 }
 
 void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( orders ) {
-        const int32_t ow = ARMYORDERW + 2;
+    if ( orders == nullptr ) {
+        // Nothing to show.
+        return;
+    }
 
-        const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
 
-        int32_t ox = area.x + ( area.width - ow * validUnitCount ) / 2;
-        int32_t oy = area.y;
+    int32_t ox = area.x + ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+    int32_t oy = area.y;
 
-        fheroes2::Rect::x = ox;
-        fheroes2::Rect::y = oy;
-        fheroes2::Rect::height = ow;
+    fheroes2::Rect::x = ox;
+    fheroes2::Rect::y = oy;
+    fheroes2::Rect::height = armyOrderMonsterIconSize;
 
-        rects.clear();
+    rects.clear();
 
-        for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it )
-            if ( *it && ( *it )->isValid() ) {
-                rects.emplace_back( *it, fheroes2::Rect( ox, oy, ow, ow ) );
-                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
-                ox += ow;
-                fheroes2::Rect::width += ow;
-            }
+    for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it ) {
+        if ( *it && ( *it )->isValid() ) {
+            rects.emplace_back( *it, fheroes2::Rect( ox, oy, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+            RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
+            ox += armyOrderMonsterIconSize;
+            fheroes2::Rect::width += armyOrderMonsterIconSize;
+        }
     }
 }
 

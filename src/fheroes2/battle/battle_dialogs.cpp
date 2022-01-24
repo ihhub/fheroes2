@@ -274,25 +274,26 @@ void Battle::DialogBattleSettings( void )
         //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
         // }
 
+        
         bool saveShowArmyOrder = false;
+        if ( le.MouseClickLeft( optionAreas[1] ) ) {
+            conf.setBattleShowArmyOrder( !conf.BattleShowArmyOrder() );
+            saveShowArmyOrder = true;
+        }
+        else if ( le.MousePressRight( optionAreas[1] ) ) {
+            Dialog::Message( _( "Army Order" ), _( "Toggle to display army order during the battle." ), Font::BIG );
+        }
+
+        bool saveAutoSpellCast = false;
         if ( le.MouseClickLeft( optionAreas[2] ) ) {
             conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
-            saveShowArmyOrder = true;
+            saveAutoSpellCast = true;
         }
         else if ( le.MousePressRight( optionAreas[2] ) ) {
             Dialog::Message(
                 _( "Auto Spell Casting" ),
                 _( "Toggle whether or not the computer will cast spells for you when auto combat is on. (Note: This does not affect spell casting for computer players in any way, nor does it affect quick combat.)" ),
                 Font::BIG );
-        }
-
-        bool saveAutoSpellCast = false;
-        if ( le.MouseClickLeft( optionAreas[1] ) ) {
-            conf.setBattleShowArmyOrder( !conf.BattleShowArmyOrder() );
-            saveAutoSpellCast = true;
-        }
-        else if ( le.MousePressRight( optionAreas[1] ) ) {
-            Dialog::Message( _( "Army Order" ), _( "Toggle to display army order during the battle." ), Font::BIG );
         }
 
         bool saveShowGrid = false;
