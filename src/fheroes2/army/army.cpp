@@ -383,7 +383,7 @@ void Troops::MoveTroops( const Troops & from )
         return;
 
     size_t validTroops = 0;
-    for ( Troop * troop : from ) {
+    for ( const Troop * troop : from ) {
         if ( troop && troop->isValid() ) {
             ++validTroops;
         }

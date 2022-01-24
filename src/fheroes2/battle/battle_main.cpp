@@ -292,7 +292,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman(), arena );
 
         if ( winnerHero ) {
-            Heroes * kingdomHero = dynamic_cast<Heroes *>( winnerHero );
+            const Heroes * kingdomHero = dynamic_cast<const Heroes *>( winnerHero );
 
             if ( kingdomHero ) {
                 Kingdom & kingdom = kingdomHero->GetKingdom();
