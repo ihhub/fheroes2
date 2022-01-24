@@ -24,6 +24,7 @@
 #include "color.h"
 #include "mp2.h"
 #include "pathfinding.h"
+#include "route.h"
 #include "skill.h"
 
 class IndexObject;

@@ -699,7 +699,7 @@ namespace AI
         return target;
     }
 
-    Actions BattlePlanner::berserkTurn( Arena & arena, const Unit & currentUnit ) const
+    Actions BattlePlanner::berserkTurn( const Arena & arena, const Unit & currentUnit ) const
     {
         assert( currentUnit.Modes( SP_BERSERKER ) );
         Actions actions;

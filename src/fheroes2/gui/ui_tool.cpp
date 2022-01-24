@@ -31,6 +31,7 @@
 #include <cstring>
 #include <ctime>
 #include <deque>
+#include <utility>
 
 namespace
 {
@@ -163,7 +164,7 @@ namespace fheroes2
     }
 
     TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
-        : _verification( verification )
+        : _verification( std::move( verification ) )
         , _delayBetweenUpdateMs( delayBetweenUpdateMs )
         , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
     {}

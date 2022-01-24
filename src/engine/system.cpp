@@ -202,11 +202,11 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-    char * clocale = std::setlocale( LC_MONETARY, nullptr );
+    const char * clocale = std::setlocale( LC_MONETARY, nullptr );
 #elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    char * clocale = setlocale( LC_MESSAGES, nullptr );
+    const char * clocale = setlocale( LC_MESSAGES, nullptr );
 #else
-    char * clocale = std::setlocale( LC_MESSAGES, nullptr );
+    const char * clocale = std::setlocale( LC_MESSAGES, nullptr );
 #endif
 
     if ( clocale ) {
@@ -374,7 +374,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
         correctedPath.append( delimiter );
 
-        struct dirent * e = readdir( d );
+        const struct dirent * e = readdir( d );
         while ( e ) {
             if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
                 correctedPath += e->d_name;

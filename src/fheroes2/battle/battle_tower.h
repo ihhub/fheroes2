@@ -41,6 +41,11 @@ namespace Battle
     public:
         Tower( const Castle &, int, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t );
 
+        Tower( const Tower & ) = delete;
+        Tower( Tower && ) = default;
+
+        Tower & operator=( const Tower & ) = delete;
+
         bool isValid( void ) const override;
         int GetColor( void ) const override;
         u32 GetType( void ) const;

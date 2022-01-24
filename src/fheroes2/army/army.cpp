@@ -377,13 +377,13 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from )
+void Troops::MoveTroops( const Troops & from )
 {
     if ( this == &from )
         return;
 
     size_t validTroops = 0;
-    for ( Troop * troop : from ) {
+    for ( const Troop * troop : from ) {
         if ( troop && troop->isValid() ) {
             ++validTroops;
         }
@@ -1433,7 +1433,7 @@ Monster Army::GetStrongestMonster() const
     return monster;
 }
 
-void Army::resetInvalidMonsters()
+void Army::resetInvalidMonsters() const
 {
     for ( Troop * troop : *this ) {
         if ( troop->GetID() != Monster::UNKNOWN && !troop->isValid() ) {

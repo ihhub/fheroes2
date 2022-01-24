@@ -2553,7 +2553,7 @@ StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 {
     msg << static_cast<u32>( castles.Size() );
 
-    for ( const auto & castle : castles )
+    for ( const Castle * castle : castles )
         msg << *castle;
 
     return msg;
