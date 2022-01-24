@@ -233,8 +233,9 @@ public:
     bool BeginWeek( void ) const;
     bool BeginMonth( void ) const;
     bool LastDay( void ) const;
-    bool LastWeek( void ) const;
-    const Week & GetWeekType( void ) const;
+    bool FirstWeek() const;
+    bool LastWeek() const;
+    const Week & GetWeekType() const;
     std::string DateString( void ) const;
 
     void NewDay( void );
@@ -284,6 +285,7 @@ public:
     static u32 GetUniq( void );
 
     uint32_t GetMapSeed() const;
+    uint32_t GetWeekSeed() const;
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
@@ -297,8 +299,6 @@ private:
     void MonthOfMonstersAction( const Monster & );
     void ProcessNewMap();
     void PostLoad( const bool setTilePassabilities );
-    void updateWeekSeed();
-    void updateWeekType();
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
@@ -322,8 +322,6 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
-    Week week_current;
-
     int heroes_cond_wins = Heroes::UNKNOWN;
     int heroes_cond_loss = Heroes::UNKNOWN;
 
@@ -333,8 +331,6 @@ private:
     uint32_t _seed{ 0 }; // Map seed
 
     // The following fields are not serialized
-
-    size_t _weekSeed{ 0 }; // Seed for the current week, depends on the map seed, as well as on the current state of the map
 
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool

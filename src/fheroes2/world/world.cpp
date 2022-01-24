@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <tuple>
 
 #include "ai.h"
 #include "artifact.h"
@@ -337,9 +338,6 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
-    // Seed for the current week depends on the map seed
-    updateWeekSeed();
-
     // initialize all heroes
     vec_heroes.Init();
 
@@ -380,13 +378,10 @@ void World::Reset( void )
     week = 0;
     month = 0;
 
-    week_current = Week( WeekName::TORTOISE );
-
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
 
     _seed = 0;
-    _weekSeed = 0;
 }
 
 /* new maps */
@@ -595,33 +590,29 @@ bool World::LastDay( void ) const
     return ( 0 == ( day % DAYOFWEEK ) );
 }
 
-bool World::LastWeek( void ) const
+bool World::FirstWeek() const
+{
+    return ( 1 == ( week % WEEKOFMONTH ) );
+}
+
+bool World::LastWeek() const
 {
     return ( 0 == ( week % WEEKOFMONTH ) );
 }
 
-const Week & World::GetWeekType( void ) const
+const Week & World::GetWeekType() const
 {
-    return week_current;
-}
+    static auto cachedWeekProperties = std::make_tuple( week, GetWeekSeed() );
+    static Week cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
 
-void World::updateWeekSeed()
-{
-    _weekSeed = _seed;
+    auto currentWeekProperties = std::make_tuple( week, GetWeekSeed() );
 
-    fheroes2::hashCombine( _weekSeed, day );
-
-    // FIXME: despite its name, _weekSeed does not always depend on the state of the adventure
-    // map at the first day of a new week. If the game was loaded from the savefile, _weekSeed
-    // depends on the state of the adventure map at the time when this savefile was made.
-    for ( const Maps::Tiles & tile : vec_tiles ) {
-        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
+    if ( cachedWeekProperties != currentWeekProperties ) {
+        cachedWeekProperties = currentWeekProperties;
+        cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
     }
-}
 
-void World::updateWeekType()
-{
-    week_current = Week::RandomWeek( *this, LastWeek(), _weekSeed );
+    return cachedWeek;
 }
 
 void World::NewDay( void )
@@ -630,13 +621,6 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
-
-        // Seed for the first week should have already been calculated when loading the map
-        if ( week > 1 ) {
-            updateWeekSeed();
-        }
-
-        updateWeekType();
 
         if ( BeginMonth() ) {
             ++month;
@@ -693,8 +677,8 @@ void World::NewWeek( void )
 
 void World::NewMonth( void )
 {
-    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
-        MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
+    if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
+        MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
 
@@ -822,7 +806,7 @@ const std::string & World::GetRumors( void )
 {
     assert( !vec_rumors.empty() );
 
-    return Rand::GetWithSeed( vec_rumors, static_cast<uint32_t>( _weekSeed ) );
+    return Rand::GetWithSeed( vec_rumors, static_cast<uint32_t>( GetWeekSeed() ) );
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -1282,9 +1266,6 @@ void World::resetPathfinder()
 
 void World::PostLoad( const bool setTilePassabilities )
 {
-    // Update the seed for the current week
-    updateWeekSeed();
-
     if ( setTilePassabilities ) {
         // update tile passable
         for ( Maps::Tiles & tile : vec_tiles ) {
@@ -1319,6 +1300,15 @@ void World::PostLoad( const bool setTilePassabilities )
 uint32_t World::GetMapSeed() const
 {
     return _seed;
+}
+
+uint32_t World::GetWeekSeed() const
+{
+    size_t weekSeed = _seed;
+
+    fheroes2::hashCombine( weekSeed, week );
+
+    return static_cast<uint32_t>( weekSeed );
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1417,7 +1407,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     Week dummyWeek;
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << dummyWeek << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
+               << w.ultimate_artifact << w.day << w.week << w.month << dummyWeek << dummyWeek << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
                << w.map_objects << w._seed;
 }
 
@@ -1435,7 +1425,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     Week dummyWeek;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> dummyWeek >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> dummyWeek >> dummyWeek >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
