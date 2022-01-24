@@ -216,10 +216,10 @@ void Kingdom::ActionNewWeek( void )
     visit_object.remove_if( Visit::isWeekLife );
 
     // Heroes who surrendered on Sunday should still be available for hire next week
-    if ( world.CountDay() - recruits.getSurrenderDay1() > 1 ) {
+    if ( world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
         recruits.SetHero1( nullptr );
     }
-    if ( world.CountDay() - recruits.getSurrenderDay2() > 1 ) {
+    if ( world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
         recruits.SetHero2( nullptr );
     }
 

@@ -58,12 +58,12 @@ Heroes * Recruits::GetHero2() const
     return world.GetHeroes( second.id );
 }
 
-uint32_t Recruits::getSurrenderDay1() const
+uint32_t Recruits::getSurrenderDayOfHero1() const
 {
     return first.surrenderDay;
 }
 
-uint32_t Recruits::getSurrenderDay2() const
+uint32_t Recruits::getSurrenderDayOfHero2() const
 {
     return second.surrenderDay;
 }

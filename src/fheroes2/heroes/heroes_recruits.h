@@ -64,8 +64,8 @@ public:
     Heroes * GetHero1() const;
     Heroes * GetHero2() const;
 
-    uint32_t getSurrenderDay1() const;
-    uint32_t getSurrenderDay2() const;
+    uint32_t getSurrenderDayOfHero1() const;
+    uint32_t getSurrenderDayOfHero2() const;
 
     void SetHero1( const Heroes * hero );
     void SetHero2( const Heroes * hero );
