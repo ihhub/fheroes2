@@ -30,16 +30,6 @@
 
 struct CapturedObjects;
 
-struct LastLoseHero
-{
-    LastLoseHero()
-        : id( Heroes::UNKNOWN )
-        , date( 0 )
-    {}
-    int id;
-    u32 date;
-};
-
 struct KingdomCastles : public VecCastles
 {};
 
@@ -70,13 +60,10 @@ public:
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment, int level ) const;
 
-    void SetLastLostHero( const Heroes & );
-    void ResetLastLostHero( void );
-
     void SetLastBattleWinHero( const Heroes & hero );
-
-    Heroes * GetLastLostHero( void ) const;
     Heroes * GetLastBattleWinHero() const;
+
+    void appendSurrenderedHero( Heroes & hero );
 
     Heroes * GetBestHero();
 
@@ -107,7 +94,7 @@ public:
 
     uint32_t GetCountArtifacts() const;
 
-    Recruits & GetRecruits( void );
+    const Recruits & GetRecruits();
 
     const KingdomHeroes & GetHeroes( void ) const
     {
@@ -154,7 +141,6 @@ public:
     void SetVisitTravelersTent( int color );
     bool IsVisitTravelersTent( int ) const;
 
-    void UpdateRecruits( void );
     void LossPostActions( void );
 
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
@@ -177,7 +163,6 @@ private:
     KingdomHeroes heroes;
 
     Recruits recruits;
-    LastLoseHero lost_hero;
 
     std::list<IndexObject> visit_object;
 
@@ -228,8 +213,5 @@ StreamBase & operator>>( StreamBase &, Kingdom & );
 
 StreamBase & operator<<( StreamBase &, const Kingdoms & );
 StreamBase & operator>>( StreamBase &, Kingdoms & );
-
-StreamBase & operator<<( StreamBase & sb, const LastLoseHero & hero );
-StreamBase & operator>>( StreamBase & sb, LastLoseHero & hero );
 
 #endif
