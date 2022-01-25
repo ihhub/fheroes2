@@ -43,7 +43,7 @@ struct Recruit
         , surrenderDay( heroSurrenderDay )
     {}
 
-    Recruit( const Heroes & hero )
+    explicit Recruit( const Heroes & hero )
         : Recruit( hero, 0 )
     {}
 
