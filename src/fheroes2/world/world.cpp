@@ -600,7 +600,7 @@ const Week & World::GetWeekType() const
     static auto cachedWeekProperties = std::make_tuple( week, GetWeekSeed() );
     static Week cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
 
-    auto currentWeekProperties = std::make_tuple( week, GetWeekSeed() );
+    const auto currentWeekProperties = std::make_tuple( week, GetWeekSeed() );
 
     if ( cachedWeekProperties != currentWeekProperties ) {
         cachedWeekProperties = currentWeekProperties;
