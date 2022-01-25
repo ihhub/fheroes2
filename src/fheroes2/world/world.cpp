@@ -1389,12 +1389,8 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t width = static_cast<uint16_t>( w.width );
     const uint16_t height = static_cast<uint16_t>( w.height );
 
-    // TODO: remove this
-    Week dummyWeek;
-
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << dummyWeek << dummyWeek << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
-               << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1407,11 +1403,17 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
-    // TODO: remove this
-    Week dummyWeek;
-
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> dummyWeek >> dummyWeek >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0912_RELEASE ) {
+        Week dummyWeek;
+
+        msg >> dummyWeek >> dummyWeek;
+    }
+
+    msg >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
