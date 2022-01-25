@@ -63,7 +63,7 @@ public:
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;
 
-    void appendSurrenderedHero( Heroes & hero );
+    void appendSurrenderedHero( const Heroes & hero );
 
     Heroes * GetBestHero();
 

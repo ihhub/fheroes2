@@ -736,7 +736,7 @@ Heroes * Kingdom::GetLastBattleWinHero() const
     return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
-void Kingdom::appendSurrenderedHero( Heroes & hero )
+void Kingdom::appendSurrenderedHero( const Heroes & hero )
 {
     recruits.appendSurrenderedHero( hero, world.CountDay() );
 }
