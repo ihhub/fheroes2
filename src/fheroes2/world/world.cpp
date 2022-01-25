@@ -801,7 +801,7 @@ const std::string & World::GetRumors( void )
 {
     assert( !vec_rumors.empty() );
 
-    return Rand::GetWithSeed( vec_rumors, static_cast<uint32_t>( GetWeekSeed() ) );
+    return Rand::GetWithSeed( vec_rumors, GetWeekSeed() );
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
