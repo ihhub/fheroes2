@@ -2951,7 +2951,7 @@ namespace fheroes2
 
         void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
-            if ( ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) && !SkipAlphabetRessource( language ) ) {
+            if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
                 alphabetPreserver.restore();
             }
             else {
@@ -2967,18 +2967,6 @@ namespace fheroes2
             case SupportedLanguage::German:
             case SupportedLanguage::French:
             case SupportedLanguage::Russian:
-                return true;
-            default:
-                break;
-            }
-
-            return false;
-        }
-
-        bool SkipAlphabetRessource( const SupportedLanguage language )
-        {
-            switch ( language ) {
-            case SupportedLanguage::German:
                 return true;
             default:
                 break;
