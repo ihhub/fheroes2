@@ -32,6 +32,7 @@
 #include "image.h"
 #include "image_tool.h"
 #include "pal.h"
+#include "settings.h"
 #include "screen.h"
 #include "text.h"
 #include "til.h"
@@ -1415,28 +1416,7 @@ namespace fheroes2
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::BTNBATTLEONLY:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::BTNNEWGM, 6 + i );
-                    // clean the button
-                    Image uniform( 83, 23 );
-                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
-                    Copy( uniform, 0, 0, out, 28, 18, uniform.width(), uniform.height() );
-                    // add 'ba'
-                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
-                    // add 'tt'
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
-                    // add 'le'
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
-                    // add 'on'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
-                    // add 'ly'
-                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
-                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
-                }
+                generateICNLanguage( id );
                 return true;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 _icnVsSprite[id].resize( 2 );
@@ -2534,6 +2514,80 @@ namespace fheroes2
             }
 
             return false;
+        }
+        
+        void generateICNLanguage( int id )
+        {
+            fheroes2::SupportedLanguage language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+            
+            switch ( language ) {
+            case fheroes2::SupportedLanguage::German:
+                generateICNGerman( id );
+                break;
+            default:
+                generateICNEnglish( id );
+                break;
+            }
+        }
+        
+        void generateICNEnglish( int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    Image uniform( 83, 23 );
+                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
+                    Copy( uniform, 0, 0, out, 28, 18, uniform.width(), uniform.height() );
+                    // add 'ba'
+                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
+                    // add 'tt'
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
+                    // add 'le'
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
+                    // add 'on'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
+                    // add 'ly'
+                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
+                }
+            default:
+                break;
+            }
+        }
+
+        void generateICNGerman( int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    Image uniform( 88, 23 );
+                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
+                    Copy( uniform, 0, 0, out, 25, 18, uniform.width(), uniform.height() );
+                    // add 'K'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
+                    //'add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 52 - i, 23, 13, 14 );
+                    Blit( out, 20, 20, out, 52 - i + 12, 25, 3, 3 );
+                    // add 'M'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 65 - i, 23, 14, 14 );
+                    // add 'F'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 87 - i, 23, 10, 14 );
+                    // add 'P'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
+                }
+            default:
+                break;
+            }
         }
 
         size_t GetMaximumICNIndex( int id )
