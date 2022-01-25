@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-25 08:58+0100\n"
-"PO-Revision-Date: 2021-08-02 15:41+0200\n"
+"POT-Creation-Date: 2022-01-25 09:23+0100\n"
+"PO-Revision-Date: 2022-01-25 10:25+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -308,9 +308,8 @@ msgstr ""
 msgid "%{name} the %{race}"
 msgstr "%{name} %{race}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "Недостаточно золота для найма %{name}."
+msgstr "Капитан замка %{name}."
 
 msgid "Attack"
 msgstr "Атака"
@@ -1314,10 +1313,10 @@ msgstr "В %{building} можно нанять %{monster}."
 msgid "Requires:"
 msgstr "Требует:"
 
-msgid "Cannot build. Already built here this turn."
-msgstr "Нельзя строить. Вы уже строили здесь на этом ходу."
+msgid "Cannot build. You have already built here today."
+msgstr "Нельзя строить. Вы уже строили здесь сегодня."
 
-msgid "For this action it is necessary first to build a castle."
+msgid "For this action it is necessary to build a castle first."
 msgstr "Для этого вам нужно сперва построить замок."
 
 msgid "Cannot build %{name} because castle is too far from water."
@@ -1338,248 +1337,221 @@ msgstr "Невозможно построить: %{name}."
 msgid "Build %{name}."
 msgstr "Построить %{name}."
 
-#, fuzzy
 msgid "Blackridge"
-msgstr "Мост"
+msgstr "Блэкбридж"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Хилстон"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Пайнхёрст"
 
-#, fuzzy
 msgid "Whiteshield"
-msgstr "Белая жемчужина"
+msgstr "Вайтшилд"
 
-#, fuzzy
 msgid "Woodhaven"
-msgstr "Древесина"
+msgstr "Вудхавен"
 
-#, fuzzy
 msgid "Blackwind"
-msgstr "Кузница"
+msgstr "Блэквинд"
 
-#, fuzzy
 msgid "Bloodreign"
-msgstr "В Бой!"
+msgstr "Бладрейн"
 
-#, fuzzy
 msgid "Dragontooth"
-msgstr "Дракон"
+msgstr "Драгонтус"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Грейвинд"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Портсмис"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Атлантиум"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Мидлгейт"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Занзобар"
 
-#, fuzzy
 msgid "Tundara"
-msgstr "Тандакс"
+msgstr "Тундара"
 
-#, fuzzy
 msgid "Vulcania"
-msgstr "Вулкан"
+msgstr "Вулкания"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Байвоч"
 
-#, fuzzy
 msgid "Fountainhead"
-msgstr "Фонтан"
+msgstr "Фонтанхейд"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Вертиго"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Вилдабар"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Винтеркил"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Бриндамур"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Лэйксайт"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Найтшэдоу"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Олимпус"
 
-#, fuzzy
 msgid "Sandcaster"
-msgstr "Сандро"
+msgstr "Сэндкастер"
 
 msgid "Alamar"
 msgstr "Аламар"
 
-#, fuzzy
 msgid "Burlock"
-msgstr "Чародей"
+msgstr "Бурлок"
 
-#, fuzzy
 msgid "Dragadune"
-msgstr "Дракон"
+msgstr "Драгадун"
 
 msgid "Kalindra"
 msgstr "Калиндра"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Ксабран"
 
 msgid "Algary"
-msgstr ""
+msgstr "Алгари"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Бесенджи"
 
-#, fuzzy
 msgid "Blackfang"
-msgstr "Чёрный дракон"
+msgstr "Блэкфанг"
 
-#, fuzzy
 msgid "New Dawn"
-msgstr "Дан"
+msgstr "Ньюдавн"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Сорпигал"
 
 msgid "Avone"
-msgstr ""
+msgstr "Авон"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Биг Оак"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Чандлер"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Эрликиум"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Хампшир"
 
-#, fuzzy
 msgid "Antioch"
-msgstr "Внимание"
+msgstr "Антиох"
 
-#, fuzzy
 msgid "Avalon"
-msgstr "Хейлон"
+msgstr "Авалон"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Рокхавен"
 
 msgid "South Mill"
-msgstr ""
+msgstr "Саусмил"
 
-#, fuzzy
 msgid "Weed Patch"
-msgstr "Золотые часы"
+msgstr "Видпас"
 
-#, fuzzy
 msgid "Brownston"
-msgstr "Коричневый"
+msgstr "Браунстон"
 
-#, fuzzy
 msgid "Hilltop"
-msgstr "Форт на холме"
+msgstr "Хилтоп"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Ведингтон"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Вестфорк"
 
-#, fuzzy
 msgid "Whittingham"
-msgstr "Главный сценарист"
+msgstr "Ватингем"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Кетчкарт"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Элькхеад"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Роскомон"
 
-#, fuzzy
 msgid "Sherman"
-msgstr "Немецкий"
+msgstr "Шерман"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Йорксфорд"
 
-#, fuzzy
 msgid "Blackburn"
-msgstr "Чёрный дракон"
+msgstr "Блэкбурн"
 
-#, fuzzy
 msgid "Blacksford"
-msgstr "Чёрная башня"
+msgstr "Блэксфорд"
 
 msgid "Burton"
-msgstr ""
+msgstr "Буртон"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Пигай"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Гнездо гадюк"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Фентон"
 
-#, fuzzy
 msgid "Lankershire"
-msgstr "Лидерство"
+msgstr "Ланкшир"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Ломбард"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Тимберхил"
 
-#, fuzzy
 msgid "Troy"
-msgstr "Троян"
+msgstr "Троя"
 
-#, fuzzy
 msgid "Forder Oaks"
-msgstr "Пограничные города"
+msgstr "Фордер Оак"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Меремек"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Квиксильвер"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Вестмур"
 
-#, fuzzy
 msgid "Willow"
-msgstr "Жёлтый"
+msgstr "Вилоу"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Коракстоун"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Шелтембург"
 
 msgid "Cannot recruit - guest to guard automove error."
 msgstr "Найм невозможен - guest to guard automove error."
@@ -2093,20 +2065,20 @@ msgstr "Закрыть Настройки Замка"
 msgid "Castle Options"
 msgstr "Настройки замка"
 
-msgid "Not enough resources to buy monsters."
+msgid "Not enough resources to buy creatures."
 msgstr "Недостаточно средств для найма."
 
-msgid "No monsters available for purchase."
+msgid "No creatures available for purchase."
 msgstr "Нет доступных существ для найма."
 
-msgid "Buy Monsters"
+msgid "Buy Creatures"
 msgstr "Нанять существ"
 
 msgid "Town Population Information and Statistics"
 msgstr "Информация о населении города"
 
 msgid "Damg"
-msgstr ""
+msgstr "Урон"
 
 msgid "HP"
 msgstr "Здоровье"
@@ -2515,7 +2487,7 @@ msgid "Move Points"
 msgstr "Очки движения"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Цена воина:"
 
 msgid "Available: %{count}"
 msgstr "        Доступно: %{count}"
@@ -2577,26 +2549,23 @@ msgstr "Выберите заклинание:"
 msgid "Select Skill:"
 msgstr "Выберите навык:"
 
-#, fuzzy
 msgid "Location: "
-msgstr ""
-"\n"
-"\n"
-"Путь к файлу: "
+msgstr "Путь к файлу: "
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Map Type:\n"
-msgstr "Тип карты"
+msgstr ""
+"\n"
+"\n"
+"Тип карты:\n"
 
-#, fuzzy
 msgid "The Succession Wars"
-msgstr "Южная война"
+msgstr "Война за престол"
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Цена верности"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -2695,10 +2664,10 @@ msgid "Size Icon"
 msgstr "Значок размера"
 
 msgid ""
-"Indicates whether the map is made for The Succession Wars or The Price of "
-"Loyalty version of the game."
+"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
+"of Loyalty\" version of the game."
 msgstr ""
-"Указывает, создана ли карта для версии игры \"Войны за престол\" или \"Цена "
+"Указывает, создана ли карта для версии игры \"Война за престол\" или \"Цена "
 "верности\"."
 
 msgid "Map Type"
@@ -3060,7 +3029,7 @@ msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
 msgstr ""
-"Этот файл сохранен в версии \"Price Loyalty\".\n"
+"Этот файл сохранен в версии \"Цена верности\".\n"
 "Некоторые возможности игры будут недоступны."
 
 msgid "Usupported save format: "
@@ -3539,13 +3508,17 @@ msgstr "Игровые действия"
 msgid "Bring up the adventure options menu."
 msgstr "Открыть окно доступных игровы действий."
 
-msgid "Bring up the file options menu, alloving you to load menu, save etc."
-msgstr "Открывает меню, где вы можете загружать или сохранять игры."
+msgid ""
+"Bring up the file options menu, allowing you to load, save, start a new game "
+"or quit."
+msgstr ""
+"Открывает меню, где вы можете загрузить, сохранить, начать игру и выйти из "
+"нее."
 
 msgid "File Options"
 msgstr "Настройки файла карты"
 
-msgid "Bring up the system options menu, alloving you to customize your game."
+msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Открывает окно системных настроек, позволяющих настроить игру."
 
 msgid ""
@@ -4589,7 +4562,7 @@ msgstr ""
 
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
-"move further each turn."
+"move further each day."
 msgstr ""
 "Вы стали хозяином маяка, теперь все Ваши корабли будут передвигаться по морю "
 "гораздо дальше."
@@ -4970,7 +4943,7 @@ msgstr ""
 "прошептало оно, всхлипнув. \"Ну, возвращайся когда сможешь мне заплатить.\""
 
 msgid ""
-"Nestled among the trees sits a blind seer. After explaining the intent of "
+"Nestled among the trees sits a blind seer. After you explain the intent of "
 "your journey, the seer activates his crystal ball, allowing you to see the "
 "strengths and weaknesses of your opponents."
 msgstr ""
@@ -5208,8 +5181,8 @@ msgstr ""
 "Ваш ответ?"
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle "
-"so here's your reward. Now begone."
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
 "Несколько разочарованно Сфинкс промолвил: \"Ты дал верный ответ, вот твоя "
 "награда. А теперь убирайся.\""
@@ -5766,7 +5739,7 @@ msgstr ""
 "сражении, в виде Скелетов."
 
 msgid ""
-"Your hero produces %{count} gold pieces per turn as tax revenue from estates."
+"Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 "Ваш герой ежедневно собирает налоги со своих владений в размере %{count} "
 "золота."
@@ -7091,7 +7064,7 @@ msgstr "Корона всевластия"
 msgid "Golden Goose"
 msgstr "Золотой гусь"
 
-msgid "The %{name} brings in an income of %{count} gold per turn."
+msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} приносит каждый день по %{count} золотых."
 
 msgid "Arcane Necklace of Magic"
@@ -7406,7 +7379,7 @@ msgstr "Шляпа мага"
 msgid "Power Ring"
 msgstr "Кольцо силы"
 
-msgid "The %{name} returns %{count} extra power points/turn to your hero."
+msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr "%{name} восстанавливает %{count} очка магии в ход."
 
 msgid "Ammo Cart"
@@ -7418,7 +7391,7 @@ msgstr "%{name} обеспечивает бесконечными боеприп
 msgid "Tax Lien"
 msgstr "Долговая расписка"
 
-msgid "The %{name} costs you %{count} gold pieces/turn."
+msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "%{name} взымает с вас %{count} золотых ежедневно."
 
 msgid "Hideous Mask"
@@ -7430,42 +7403,37 @@ msgstr "%{name} не позволяет кому попало вступить �
 msgid "Endless Pouch of Sulfur"
 msgstr "Мешочек серы"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ежедневно приносит вам %{count} меру серы."
 
 msgid "Endless Vial of Mercury"
 msgstr "Колба ртути"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ежедневно приносит вам %{count} меру ртути."
 
 msgid "Endless Pouch of Gems"
 msgstr "Мешочек самоцветов"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ежедневно приносит вам %{count} меру самоцветов."
 
 msgid "Endless Cord of Wood"
 msgstr "Вязанка дров"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} ежедневно приносит вам %{count} меру древесины."
 
 msgid "Endless Cart of Ore"
 msgstr "Вагонетка руды"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ежедневно приносит вам %{count} меру руды."
 
 msgid "Endless Pouch of Crystal"
 msgstr "Мешочек кристаллов"
 
-msgid "The %{name} provides %{count} unit of crystal/day."
+msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит вам %{count} меру кристаллов."
 
 msgid "Spiked Helm"
@@ -7808,8 +7776,8 @@ msgstr "Информация о %{name}"
 msgid "Move %{name}"
 msgstr "Переместить %{name}"
 
-msgid "Cannot move artifact"
-msgstr "Невозможно передать артефакт"
+msgid "Cannot move the Spellbook"
+msgstr "Невозможно переместить книгу заклинаний"
 
 msgid "This item can't be traded."
 msgstr "Эту вещь нельзя продать."
@@ -8385,16 +8353,16 @@ msgstr "битва: показывать урон"
 msgid "world: show terrain penalty"
 msgstr "мир: показывать штраф при перемещении"
 
-msgid "world: scouting skill show extended content info"
+msgid "world: scouting skill shows extended content info"
 msgstr "мир: умение разведчика покажет дополнительную информацию"
 
-msgid "world: allow set guardian to objects"
+msgid "world: allow to set guardian to objects"
 msgstr "мир: разрешить охранников для дополнительных объектов"
 
 msgid "world: Eagle Eye also works like Scholar in H3."
 msgstr "мир: Орлиный Взор также работает как Scholar (H3)"
 
-msgid "world: Crystal Ball also added Identify Hero and Visions spells"
+msgid "world: Crystal Ball gives Identify Hero and Visions spells"
 msgstr ""
 "мир: артефакт Кристальный Шар добавляет заклинания Опознать героя и Видения "
 "в книгу героя"
@@ -8402,17 +8370,16 @@ msgstr ""
 msgid "world: Neutral armies scale with game difficulty"
 msgstr "мир: размер нейтральных армий зависит от сложности"
 
-msgid "world: use unique artifacts for resource affecting"
-msgstr "мир: запретить эффект повторных артефактов, влияющих на доход ресурсов"
+msgid "world: use unique artifacts providing resources"
+msgstr "мир: запретить эффект повторных артефактов, приносящих доход ресурсов"
 
-msgid "world: use unique artifacts for primary skills"
+msgid "world: use unique artifacts affecting primary skills"
 msgstr "мир: запретить эффект повторных артефактов для первичных навыков"
 
-msgid "world: use unique artifacts for secondary skills"
-msgstr ""
-"мир: запретить эффект повторных артефактов, влияющих на вторичные навыки"
+msgid "world: use unique artifacts affecting secondary skills"
+msgstr "мир: запретить эффект повторных артефактов для вторичных навыков"
 
-msgid "world: Wind/Water Mills and Magic Garden can be captured"
+msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "мир: возможность установить флаг на постройках: Водяная/Ветренная Мельница, "
 "Магический Гриб"
@@ -8433,7 +8400,7 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: разрешить покупку магической книги в святилищах"
 
-msgid "heroes: recruit cost to be dependent on hero level"
+msgid "heroes: recruit cost depends on hero level"
 msgstr "герои: цена найма зависит от уровня"
 
 msgid "heroes: remember move points for retreat/surrender result"
@@ -8442,13 +8409,13 @@ msgstr "герои: при бегстве запомнить MP/SP для тек
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr "герои: возможность выучить свитки (необходимо умение Орлиный Взор)"
 
-msgid "heroes: in Arena can choose any of primary skills"
+msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
 
 msgid "battle: show army order"
 msgstr "битва: показывать порядок армии"
 
-msgid "battle: soft wait troop"
+msgid "battle: allow soft wait for troops"
 msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
 
 msgid "battle: reverse wait order (fast, average, slow)"
@@ -8530,13 +8497,22 @@ msgid "An unknown force is being ressurected..."
 msgstr "Возрождается неведомая сила..."
 
 msgid ""
-"Check the newest version of game at\n"
+"Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Buy Monsters"
+#~ msgstr "Нанять существ"
+
+#~ msgid "The %{name} provides %{count} unit of crystal/day."
+#~ msgstr "%{name} ежедневно приносит вам %{count} меру кристаллов."
+
+#~ msgid "Cannot move artifact"
+#~ msgstr "Невозможно передать артефакт"
 
 #~ msgid "Aqua"
 #~ msgstr "Бирюзовый"
@@ -8571,12 +8547,6 @@ msgstr ""
 #~ msgstr[0] "%{name} восстанавливает %{count} пункт магии за ход."
 #~ msgstr[1] "%{name} восстанавливает %{count} пункта магии за ход."
 #~ msgstr[2] "%{name} восстанавливает %{count} пунктов магии за ход."
-
-#~ msgid "The %{name} provides %{count} unit of crystal per day."
-#~ msgid_plural "The %{name} provides %{count} units of crystal per day."
-#~ msgstr[0] "%{name} ежедневно приносит вам %{count} меру кристалов."
-#~ msgstr[1] "%{name} ежедневно приносит вам %{count} меры кристалов."
-#~ msgstr[2] "%{name} ежедневно приносит вам %{count} мер кристалов."
 
 #~ msgid "game: autosave on"
 #~ msgstr "игра: включить автосохранение"
