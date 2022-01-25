@@ -447,13 +447,6 @@ std::string Maps::TilesAddon::String( int lvl ) const
     return os.str();
 }
 
-Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
-    : uniq( ta.uniq )
-    , level( ta.level )
-    , object( ta.object )
-    , index( ta.index )
-{}
-
 bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
 {
     return ( ( ta1.level % 4 ) > ( ta2.level % 4 ) );

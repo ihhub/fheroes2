@@ -212,8 +212,7 @@ public:
     Heroes * GetHeroes( const fheroes2::Point & );
 
     Heroes * FromJailHeroes( s32 );
-    Heroes * GetFreemanHeroes( int race = 0 ) const;
-    Heroes * GetFreemanHeroesSpecial( int heroID ) const;
+    Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins( void ) const;
     const Heroes * GetHeroesCondLoss( void ) const;
@@ -261,7 +260,6 @@ public:
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
-    void UpdateRecruits( Recruits & ) const;
 
     uint32_t CheckKingdomWins( const Kingdom & ) const;
     bool KingdomIsWins( const Kingdom &, uint32_t wins ) const;

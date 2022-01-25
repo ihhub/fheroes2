@@ -638,50 +638,60 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     return Luck::Normalize( result );
 }
 
-/* recrut hero */
-bool Heroes::Recruit( int cl, const fheroes2::Point & pt )
+bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not freeman" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "hero is not a freeman" );
+
         return false;
     }
 
-    Kingdom & kingdom = world.GetKingdom( cl );
+    Kingdom & kingdom = world.GetKingdom( col );
 
-    if ( kingdom.AllowRecruitHero( false, 0 ) ) {
-        Maps::Tiles & tiles = world.GetTiles( pt.x, pt.y );
-        SetColor( cl );
-        killer_color.SetColor( Color::NONE );
-        SetCenter( pt );
-        setDirection( Direction::RIGHT );
-        if ( !Modes( SAVE_MP_POINTS ) )
-            move_point = GetMaxMovePoints();
-        MovePointsScaleFixed();
-
-        if ( !army.isValid() )
-            army.Reset( false );
-
-        tiles.SetHeroes( this );
-        kingdom.AddHeroes( this );
-
-        return true;
+    if ( !kingdom.AllowRecruitHero( false, 0 ) ) {
+        return false;
     }
 
-    return false;
+    ResetModes( JAIL );
+
+    SetColor( col );
+    killer_color.SetColor( Color::NONE );
+
+    SetCenter( pt );
+    setDirection( Direction::RIGHT );
+
+    if ( !Modes( SAVE_MP_POINTS ) ) {
+        move_point = GetMaxMovePoints();
+    }
+    MovePointsScaleFixed();
+
+    if ( !army.isValid() ) {
+        army.Reset( false );
+    }
+
+    world.GetTiles( pt.x, pt.y ).SetHeroes( this );
+
+    kingdom.AddHeroes( this );
+    // Update the set of recruits in the kingdom
+    kingdom.GetRecruits();
+
+    return true;
 }
 
 bool Heroes::Recruit( const Castle & castle )
 {
-    if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
-        if ( castle.GetLevelMageGuild() ) {
-            // learn spells
-            castle.MageGuildEducateHero( *this );
-        }
-        SetVisited( GetIndex() );
-        return true;
+    if ( !Recruit( castle.GetColor(), castle.GetCenter() ) ) {
+        return false;
     }
 
-    return false;
+    if ( castle.GetLevelMageGuild() ) {
+        // learn spells
+        castle.MageGuildEducateHero( *this );
+    }
+
+    SetVisited( GetIndex() );
+
+    return true;
 }
 
 void Heroes::ActionNewDay( void )
@@ -1443,9 +1453,11 @@ void Heroes::SetFreeman( int reason )
         Kingdom & kingdom = GetKingdom();
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberPointsForRetreating() )
+            if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
                 savepoints = true;
-            kingdom.SetLastLostHero( *this );
+            }
+
+            kingdom.appendSurrenderedHero( *this );
         }
 
         // if not surrendering, reset army
@@ -1842,7 +1854,7 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
     return end() != it ? *it : nullptr;
 }
 
-Heroes * AllHeroes::GetFreeman( int race ) const
+Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
 {
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
@@ -1887,34 +1899,32 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     std::vector<int> freeman_heroes;
     freeman_heroes.reserve( HEROESMAXCOUNT );
 
-    // find freeman in race (skip: manual changes)
-    for ( int ii = min; ii <= max; ++ii )
-        if ( at( ii )->isFreeman() && !at( ii )->Modes( Heroes::NOTDEFAULTS ) )
-            freeman_heroes.push_back( ii );
+    // First try to find a free hero of the specified race (skipping custom heroes)
+    for ( int i = min; i <= max; ++i ) {
+        if ( i != heroIDToIgnore && at( i )->isFreeman() && !at( i )->Modes( Heroes::NOTDEFAULTS ) ) {
+            freeman_heroes.push_back( i );
+        }
+    }
 
-    // not found, find any race
-    if ( Race::NONE != race && freeman_heroes.empty() ) {
+    // If no heroes are found, then try to find a free hero of any race
+    if ( race != Race::NONE && freeman_heroes.empty() ) {
         min = Heroes::LORDKILBURN;
         max = Heroes::CELIA;
 
-        for ( int ii = min; ii <= max; ++ii )
-            if ( at( ii )->isFreeman() )
-                freeman_heroes.push_back( ii );
+        for ( int i = min; i <= max; ++i ) {
+            if ( i != heroIDToIgnore && at( i )->isFreeman() ) {
+                freeman_heroes.push_back( i );
+            }
+        }
     }
 
-    // not found, all heroes busy
+    // All the heroes are busy
     if ( freeman_heroes.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman is not found, all the heroes are busy." );
         return nullptr;
     }
 
     return at( Rand::Get( freeman_heroes ) );
-}
-
-Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const
-{
-    assert( at( heroID ) && at( heroID )->isFreeman() );
-    return at( heroID );
 }
 
 void AllHeroes::Scoute( int colors ) const
@@ -1928,11 +1938,6 @@ Heroes * AllHeroes::FromJail( s32 index ) const
 {
     const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
     return end() != it ? *it : nullptr;
-}
-
-bool AllHeroes::HaveTwoFreemans( void ) const
-{
-    return 2 <= std::count_if( begin(), end(), []( const Heroes * hero ) { return hero->isFreeman(); } );
 }
 
 HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const

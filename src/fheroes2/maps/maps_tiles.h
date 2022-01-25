@@ -62,7 +62,8 @@ namespace Maps
 
         TilesAddon();
         TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
-        TilesAddon( const TilesAddon & ta );
+
+        TilesAddon( const TilesAddon & ) = default;
 
         ~TilesAddon() = default;
 

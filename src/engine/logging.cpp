@@ -92,7 +92,7 @@ namespace Logging
     {
         time_t raw;
         std::time( &raw );
-        struct tm * tmi = std::localtime( &raw );
+        const struct tm * tmi = std::localtime( &raw );
 
         char buf[13] = {0};
         std::strftime( buf, sizeof( buf ) - 1, "%X", tmi );

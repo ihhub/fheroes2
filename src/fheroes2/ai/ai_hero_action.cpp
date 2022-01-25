@@ -1725,8 +1725,8 @@ namespace AI
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
 
-            if ( prisoner && prisoner->Recruit( hero.GetColor(), Maps::GetPoint( tileIndex ) ) ) {
-                prisoner->ResetModes( Heroes::JAIL );
+            if ( prisoner ) {
+                prisoner->Recruit( hero.GetColor(), Maps::GetPoint( tileIndex ) );
             }
         }
     }

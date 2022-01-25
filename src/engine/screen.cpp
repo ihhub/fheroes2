@@ -344,10 +344,14 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
+        RenderCursor( const RenderCursor & ) = delete;
+
         ~RenderCursor() override
         {
             clear();
         }
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
 
         void show( const bool enable ) override
         {
@@ -472,6 +476,12 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
+        RenderCursor() = default;
+
+        RenderCursor( const RenderCursor & ) = delete;
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
+
         static RenderCursor * create()
         {
             return new RenderCursor;

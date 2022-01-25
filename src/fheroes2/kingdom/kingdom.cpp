@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "ai.h"
 #include "battle.h"
@@ -93,8 +94,6 @@ void Kingdom::clear( void )
 
     heroes_cond_loss.clear();
     puzzle_maps.reset();
-
-    ResetLastLostHero();
 }
 
 int Kingdom::GetControl( void ) const
@@ -216,7 +215,16 @@ void Kingdom::ActionNewWeek( void )
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 
-    UpdateRecruits();
+    // Heroes who surrendered on Sunday should still be available for hire next week
+    if ( world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
+        recruits.SetHero1( nullptr );
+    }
+    if ( world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
+        recruits.SetHero2( nullptr );
+    }
+
+    // Settle a new set of recruits
+    GetRecruits();
 }
 
 void Kingdom::ActionNewMonth( void )
@@ -441,55 +449,45 @@ u32 Kingdom::GetLostTownDays( void ) const
     return lost_town_days;
 }
 
-Recruits & Kingdom::GetRecruits( void )
+const Recruits & Kingdom::GetRecruits()
 {
-    // update hero1
-    if ( Heroes::UNKNOWN == recruits.GetID1() || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
-        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    // In the first week, it is necessary to offer one native hero (or a hero given as a campaign award)
+    const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    // Special hero given as a campaign award
+    const Heroes * specialHireableHero = nullptr;
 
-        recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
-    }
-
-    // update hero2
-    if ( Heroes::UNKNOWN == recruits.GetID2() || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) )
-        recruits.SetHero2( world.GetFreemanHeroes() );
-
-    if ( recruits.GetID1() == recruits.GetID2() )
-        world.UpdateRecruits( recruits );
-
-    return recruits;
-}
-
-void Kingdom::UpdateRecruits( void )
-{
-    bool hasSpecialHireableHero = false;
-    if ( isControlHuman() && ( Settings::Get().isCampaignGameType() ) && world.CountWeek() < 2 ) {
+    if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
-        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
-            if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
+        for ( const auto & obtainedAward : obtainedAwards ) {
+            if ( obtainedAward._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO ) {
                 continue;
+            }
 
-            // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
-            const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+            const Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
             if ( hero && hero->isFreeman() ) {
-                recruits.SetHero1( hero );
-                hasSpecialHireableHero = true;
-                break;
+                specialHireableHero = hero;
             }
         }
     }
 
-    if ( !hasSpecialHireableHero ) {
-        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
-        recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
+    if ( recruits.GetID1() == Heroes::UNKNOWN || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
+        if ( specialHireableHero ) {
+            recruits.SetHero1( specialHireableHero );
+        }
+        else {
+            recruits.SetHero1( world.GetFreemanHeroes( offerNativeHero ? GetRace() : Race::NONE, recruits.GetID2() ) );
+        }
     }
 
-    recruits.SetHero2( world.GetFreemanHeroes() );
+    if ( recruits.GetID2() == Heroes::UNKNOWN || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) ) {
+        recruits.SetHero2( world.GetFreemanHeroes( Race::NONE, recruits.GetID1() ) );
+    }
 
-    if ( recruits.GetID1() == recruits.GetID2() )
-        world.UpdateRecruits( recruits );
+    assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );
+
+    return recruits;
 }
 
 Puzzle & Kingdom::PuzzleMaps( void )
@@ -728,31 +726,19 @@ Kingdom & Kingdoms::GetKingdom( int color )
     return kingdoms[6];
 }
 
-void Kingdom::SetLastLostHero( const Heroes & hero )
-{
-    lost_hero.id = hero.GetID();
-    lost_hero.date = world.CountDay();
-}
-
 void Kingdom::SetLastBattleWinHero( const Heroes & hero )
 {
     _lastBattleWinHeroID = hero.GetID();
 }
 
-void Kingdom::ResetLastLostHero( void )
-{
-    lost_hero.id = Heroes::UNKNOWN;
-    lost_hero.date = 0;
-}
-
-Heroes * Kingdom::GetLastLostHero( void ) const
-{
-    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : nullptr;
-}
-
 Heroes * Kingdom::GetLastBattleWinHero() const
 {
     return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
+}
+
+void Kingdom::appendSurrenderedHero( Heroes & hero )
+{
+    recruits.appendSurrenderedHero( hero, world.CountDay() );
 }
 
 void Kingdoms::NewDay( void )
@@ -803,7 +789,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( const auto & castle : castles ) {
+    for ( const Castle * castle : castles ) {
         // skip gray color
         if ( castle->GetColor() )
             GetKingdom( castle->GetColor() ).AddCastle( castle );
@@ -863,7 +849,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
+cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() )
         return { 10000, 30, 10, 30, 10, 10, 10 };
@@ -891,14 +877,27 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss
-               << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
+               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss << kingdom._lastBattleWinHeroID
+               << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
-        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0912_RELEASE ) {
+        int heroId;
+        uint32_t heroSurrenderDay;
+
+        msg >> heroId >> heroSurrenderDay;
+
+        if ( heroId != Heroes::UNKNOWN && heroSurrenderDay > 0 ) {
+            kingdom.recruits.SetHero2Tmp( world.GetHeroes( heroId ), heroSurrenderDay );
+        }
+    }
+
+    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
@@ -931,14 +930,4 @@ StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
     }
 
     return msg;
-}
-
-StreamBase & operator>>( StreamBase & sb, LastLoseHero & st )
-{
-    return sb >> st.id >> st.date;
-}
-
-StreamBase & operator<<( StreamBase & sb, const LastLoseHero & hero )
-{
-    return sb << hero.id << hero.date;
 }

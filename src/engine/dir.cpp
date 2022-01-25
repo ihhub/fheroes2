@@ -123,7 +123,7 @@ namespace
 
         const StrCmp strCmp = sensitive ? strcmp : strcasecmp;
 
-        struct dirent * ep;
+        const struct dirent * ep;
         while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 

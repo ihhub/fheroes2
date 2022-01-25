@@ -21,7 +21,7 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
-    file.seekg( 0, file.end );
+    file.seekg( 0, std::fstream::end );
     std::streamoff length = file.tellg();
 
     const std::streamoff correctLength = 821;
@@ -31,7 +31,7 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
-    file.seekg( 0, file.beg );
+    file.seekg( 0, std::fstream::beg );
 
     std::vector<char> data( correctLength, 0 );
 

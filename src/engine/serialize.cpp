@@ -235,7 +235,7 @@ StreamBuf::StreamBuf( const std::vector<u8> & buf )
     , itput( nullptr )
     , itend( nullptr )
 {
-    itbeg = (u8 *)&buf[0];
+    itbeg = const_cast<u8 *>( &buf[0] );
     itend = itbeg + buf.size();
     itget = itbeg;
     itput = itend;

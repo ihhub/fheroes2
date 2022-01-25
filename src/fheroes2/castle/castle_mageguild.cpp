@@ -225,8 +225,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
-        if ( spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
-             || spells5.QueueEventProcessing() ) {
-        }
+        spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
+            || spells5.QueueEventProcessing();
     }
 }
