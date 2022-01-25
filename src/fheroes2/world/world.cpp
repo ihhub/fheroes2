@@ -597,13 +597,13 @@ bool World::LastWeek() const
 
 const Week & World::GetWeekType() const
 {
-    static auto cachedWeekProperties = std::make_tuple( week, GetWeekSeed() );
+    static auto cachedWeekDependencies = std::make_tuple( week, GetWeekSeed() );
     static Week cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
 
-    const auto currentWeekProperties = std::make_tuple( week, GetWeekSeed() );
+    const auto currentWeekDependencies = std::make_tuple( week, GetWeekSeed() );
 
-    if ( cachedWeekProperties != currentWeekProperties ) {
-        cachedWeekProperties = currentWeekProperties;
+    if ( cachedWeekDependencies != currentWeekDependencies ) {
+        cachedWeekDependencies = currentWeekDependencies;
         cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
     }
 
