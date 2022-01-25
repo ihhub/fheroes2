@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-01 09:45+0100\n"
+"POT-Creation-Date: 2022-01-22 15:33+0100\n"
 "PO-Revision-Date: 2021-11-26 03:04+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
@@ -311,6 +311,10 @@ msgstr ""
 
 msgid "%{name} the %{race}"
 msgstr "%{race}en %{name}"
+
+#, fuzzy
+msgid "Captain of %{name}"
+msgstr "Du har ikke råd til %{name}."
 
 msgid "Attack"
 msgstr "Angrep"
@@ -1328,10 +1332,11 @@ msgstr "%{building} gir %{monster}."
 msgid "Requires:"
 msgstr "Krever:"
 
-msgid "Cannot build. Already built here this turn."
+#, fuzzy
+msgid "Cannot build. You have already built here today."
 msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
 
-msgid "For this action it is necessary first to build a castle."
+msgid "For this action it is necessary to build a castle first."
 msgstr "For å utføre denne handlingen må man bygge en borg først."
 
 msgid "Cannot build %{name} because castle is too far from water."
@@ -2124,14 +2129,15 @@ msgstr "Forlat slottsvalg"
 msgid "Castle Options"
 msgstr "Slottsvalg"
 
-msgid "Not enough resources to buy monsters."
+msgid "Not enough resources to buy creatures."
 msgstr "Ikke nok råvarer til å kjøpe krigere."
 
-msgid "No monsters available for purchase."
+#, fuzzy
+msgid "No creatures available for purchase."
 msgstr "Ingen monster tilgjengelige for verving."
 
-msgid "Buy Monsters"
-msgstr "Kjøp krigere"
+msgid "Buy Creatures"
+msgstr ""
 
 msgid "Town Population Information and Statistics"
 msgstr "Info og tall for byens bosteder"
@@ -2637,6 +2643,42 @@ msgstr "Krigen i sør"
 msgid "The Price of Loyalty"
 msgstr ""
 
+msgid "Lose all your heroes and towns."
+msgstr "Mist alle helter og byer."
+
+msgid "Lose a specific town."
+msgstr "Mist en spesifikk by."
+
+msgid "Lose a specific hero."
+msgstr "Mist en spesifikk helt."
+
+msgid "Run out of time. Fail to win by a certain point."
+msgstr "Gå tom for tid. Mislykkes i å vinne innen en gitt tid."
+
+msgid "Loss Condition"
+msgstr "Tapsvilkår"
+
+msgid "Defeat all enemy heroes and towns."
+msgstr "Slå ut alle fiendtlige helter og byer."
+
+msgid "Capture a specific town."
+msgstr "Overta en spesifikk by."
+
+msgid "Defeat a specific hero."
+msgstr "Slå en spesifikk helt."
+
+msgid "Find a specific artifact."
+msgstr "Finn en spesifikk gjenstand."
+
+msgid "Your side defeats the opposing side."
+msgstr "Siden din må slå ut motstandersiden."
+
+msgid "Accumulate a large amount of gold."
+msgstr "Du må samle opp en stor mengde gull."
+
+msgid "Victory Condition"
+msgstr "Seiersvilkår"
+
 msgid "Map difficulty:"
 msgstr "Brettets utfordring:"
 
@@ -2697,21 +2739,22 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
-msgid "Selected Name"
-msgstr "Navn"
-
-msgid "The name of the currently selected map."
-msgstr "Navnet til det utvalgte brettet."
-
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for The Succession Wars or The Price of "
-"Loyalty version of the game."
+"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
+"of Loyalty\" version of the game."
 msgstr ""
 "Viser om brettet er laget for The Succession Wars eller The Price of Loyalty-"
 "utgavene av spillet."
 
 msgid "Map Type"
 msgstr "Brett-type"
+
+msgid "Selected Name"
+msgstr "Navn"
+
+msgid "The name of the currently selected map."
+msgstr "Navnet til det utvalgte brettet."
 
 msgid "Selected Map Difficulty"
 msgstr "Utfordringen til det utvalgte brettet"
@@ -2738,42 +2781,6 @@ msgstr "Bekreft valget."
 
 msgid "Okay"
 msgstr "Okay"
-
-msgid "Lose all your heroes and towns."
-msgstr "Mist alle helter og byer."
-
-msgid "Lose a specific town."
-msgstr "Mist en spesifikk by."
-
-msgid "Lose a specific hero."
-msgstr "Mist en spesifikk helt."
-
-msgid "Run out of time. Fail to win by a certain point."
-msgstr "Gå tom for tid. Mislykkes i å vinne innen en gitt tid."
-
-msgid "Loss Condition"
-msgstr "Tapsvilkår"
-
-msgid "Defeat all enemy heroes and towns."
-msgstr "Slå ut alle fiendtlige helter og byer."
-
-msgid "Capture a specific town."
-msgstr "Overta en spesifikk by."
-
-msgid "Defeat a specific hero."
-msgstr "Slå en spesifikk helt."
-
-msgid "Find a specific artifact."
-msgstr "Finn en spesifikk gjenstand."
-
-msgid "Your side defeats the opposing side."
-msgstr "Siden din må slå ut motstandersiden."
-
-msgid "Accumulate a large amount of gold."
-msgstr "Du må samle opp en stor mengde gull."
-
-msgid "Victory Condition"
-msgstr "Seiersvilkår"
 
 msgid "Experimental Game Settings"
 msgstr "Utprøvningsinnstillinger"
@@ -3602,13 +3609,16 @@ msgstr "Brettinnstillinger"
 msgid "Bring up the adventure options menu."
 msgstr "Hent fram menyen for brettinnstillinger."
 
-msgid "Bring up the file options menu, alloving you to load menu, save etc."
+#, fuzzy
+msgid ""
+"Bring up the file options menu, allowing you to load, save, start a new game "
+"or quit."
 msgstr "Åpne menyen for filvalg, som lar deg laste inn, lagre osv."
 
 msgid "File Options"
 msgstr "Filvalg"
 
-msgid "Bring up the system options menu, alloving you to customize your game."
+msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Hent fram menyen for systeminnstillinger og skreddersy spillet."
 
 msgid ""
@@ -4678,9 +4688,10 @@ msgstr ""
 "Du har tatt kontrollen over ei gullgruve. Den vil forsyne deg med %{count} "
 "gullstykker hver dag."
 
+#, fuzzy
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
-"move further each turn."
+"move further each day."
 msgstr ""
 "Fyrtårnet er herved under din kontroll, og alle skipene dine vil fra nå av "
 "kunne flytte seg lengre hver tur."
@@ -5060,8 +5071,9 @@ msgstr "\"Jeg trenger %{count} %{res}.\""
 msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
 msgstr "det visker. (snufs) \"Vel, kom tilbake når du kan betale meg.\""
 
+#, fuzzy
 msgid ""
-"Nestled among the trees sits a blind seer. After explaining the intent of "
+"Nestled among the trees sits a blind seer. After you explain the intent of "
 "your journey, the seer activates his crystal ball, allowing you to see the "
 "strengths and weaknesses of your opponents."
 msgstr ""
@@ -5301,8 +5313,8 @@ msgstr ""
 "Ditt svar?"
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle "
-"so here's your reward. Now begone."
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
 "Tilsynelatende litt skuffet, sukker Sfinksen: \"Du klarte å løse gåten min, "
 "så her er belønningen din. Nå forsvinn.\"."
@@ -5869,7 +5881,7 @@ msgstr ""
 "fra de døde som skjeletter."
 
 msgid ""
-"Your hero produces %{count} gold pieces per turn as tax revenue from estates."
+"Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 "Helten din tjener %{count} gullstykker daglig fra skatteinntekter på faste "
 "eiendommer."
@@ -7214,7 +7226,8 @@ msgstr "Den ultimate kronen"
 msgid "Golden Goose"
 msgstr "Gullgåsa"
 
-msgid "The %{name} brings in an income of %{count} gold per turn."
+#, fuzzy
+msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} håver inn en inntekt på %{count} gullstykker hver runde."
 
 msgid "Arcane Necklace of Magic"
@@ -7534,7 +7547,8 @@ msgstr "Magimesterens hatt"
 msgid "Power Ring"
 msgstr "Tryllekraftsring"
 
-msgid "The %{name} returns %{count} extra power points/turn to your hero."
+#, fuzzy
+msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr "%{name}en fyller opp %{count} mana hver runde til helten din."
 
 msgid "Ammo Cart"
@@ -7546,7 +7560,8 @@ msgstr "%{name}en forsyner de skytende styrkene dine med uendelig ammunisjon."
 msgid "Tax Lien"
 msgstr "Skattepant"
 
-msgid "The %{name} costs you %{count} gold pieces/turn."
+#, fuzzy
+msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "%{name}en koster deg %{count} gullstykker hver tur."
 
 msgid "Hideous Mask"
@@ -7559,48 +7574,44 @@ msgstr ""
 msgid "Endless Pouch of Sulfur"
 msgstr "Den uendelige posen av svovel"
 
+#, fuzzy
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgid_plural "The %{name} provides %{count} units of sulfur per day."
-msgstr[0] "%{name} forsyner deg med %{count} enhet svovel hver dag."
-msgstr[1] "%{name} forsyner deg med %{count} enheter svovel hver dag."
+msgstr "%{name} forsyner deg med %{count} enhet svovel hver dag."
 
 msgid "Endless Vial of Mercury"
 msgstr "Den uendelige kvikksølvkolben"
 
+#, fuzzy
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgid_plural "The %{name} provides %{count} units of mercury per day."
-msgstr[0] "%{name} forsyner deg med %{count} enhet kvikksølv hver dag."
-msgstr[1] "%{name} forsyner deg med %{count} enheter kvikksølv hver dag."
+msgstr "%{name} forsyner deg med %{count} enhet kvikksølv hver dag."
 
 msgid "Endless Pouch of Gems"
 msgstr "Den uendelige edesteinsposen"
 
+#, fuzzy
 msgid "The %{name} provides %{count} unit of gems per day."
-msgid_plural "The %{name} provides %{count} units of gems per day."
-msgstr[0] "%{name} forsyner deg med %{count} enhet edelstein hver dag."
-msgstr[1] "%{name} forsyner deg med %{count} enheter edelstein hver dag."
+msgstr "%{name} forsyner deg med %{count} enhet edelstein hver dag."
 
 msgid "Endless Cord of Wood"
 msgstr "Den uendelige vedfavnen"
 
+#, fuzzy
 msgid "The %{name} provides %{count} unit of wood per day."
-msgid_plural "The %{name} provides %{count} units of wood per day."
-msgstr[0] "%{name} forsyner deg med %{count} enhet ved hver dag."
-msgstr[1] "%{name} forsyner deg med %{count} enheter ved hver dag."
+msgstr "%{name} forsyner deg med %{count} enhet ved hver dag."
 
 msgid "Endless Cart of Ore"
 msgstr "Den uendelige malmvogna"
 
+#, fuzzy
 msgid "The %{name} provides %{count} unit of ore per day."
-msgid_plural "The %{name} provides %{count} units of ore per day."
-msgstr[0] "%{name} forsyner deg med %{count} enhet malm hver dag."
-msgstr[1] "%{name} forsyner deg med %{count} enheter malm hver dag."
+msgstr "%{name} forsyner deg med %{count} enhet malm hver dag."
 
 msgid "Endless Pouch of Crystal"
 msgstr "Den uendelige krystallposen"
 
-msgid "The %{name} provides %{count} unit of crystal/day."
-msgstr "%{name} forsyner deg med %{count} enhet krystall hver dag."
+#, fuzzy
+msgid "The %{name} provides %{count} unit of crystal per day."
+msgstr "%{name} gir %{count} enhet krystall hver dag."
 
 msgid "Spiked Helm"
 msgstr "Den piggete hjelmen"
@@ -7737,33 +7748,6 @@ msgstr "Sortekunstnerens spade"
 
 msgid "The %{name} gives you increased necromancy skill."
 msgstr "%{name} forbedrer sortekunstevnen din."
-
-msgid "The %{name} extends the duration of all your spells by %{count} turn."
-msgid_plural ""
-"The %{name} extends the duration of all your spells by %{count} turns."
-msgstr[0] ""
-"%{name} forlenger varigheten til alle trolldommene dine med %{count} runde."
-msgstr[1] ""
-"%{name} forlenger varigheten til alle trolldommene dine med %{count} runder."
-
-msgid "The %{name} increases the duration of your spells by %{count} turn."
-msgid_plural ""
-"The %{name} increases the duration of your spells by %{count} turns."
-msgstr[0] ""
-"%{name} forlenger varigheten til alle trolldommene dine med %{count} runde."
-msgstr[1] ""
-"%{name} forlenger varigheten til alle trolldommene dine med %{count} runder."
-
-msgid "The %{name} returns %{count} extra power point/turn to your hero."
-msgid_plural ""
-"The %{name} returns %{count} extra power points/turn to your hero."
-msgstr[0] "%{name} gir tilbake %{count} mana hver runde til helten din."
-msgstr[1] "%{name} gir tilbake %{count} mana hver runde til helten din."
-
-msgid "The %{name} provides %{count} unit of crystal per day."
-msgid_plural "The %{name} provides %{count} units of crystal per day."
-msgstr[0] "%{name} gir %{count} enhet krystall hver dag."
-msgstr[1] "%{name} forsyner deg med %{count} enheter krystall hver dag."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -7979,8 +7963,9 @@ msgstr "Vis info om %{name}"
 msgid "Move %{name}"
 msgstr "Flytt %{name}"
 
-msgid "Cannot move artifact"
-msgstr "Umulig å flytte gjenstand"
+#, fuzzy
+msgid "Cannot move the Spellbook"
+msgstr "Kan ikke flytte siste styrke i garnisonen"
 
 msgid "This item can't be traded."
 msgstr "Denne tingen kan ikke byttes."
@@ -8584,32 +8569,37 @@ msgstr "Kamp: Vis skadeinfo"
 msgid "world: show terrain penalty"
 msgstr "Verden: Vis flyttepoengstap for terreng"
 
-msgid "world: scouting skill show extended content info"
+msgid "world: scouting skill shows extended content info"
 msgstr "Verden: Speiding gir deg utvidet info"
 
-msgid "world: allow set guardian to objects"
+#, fuzzy
+msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
 
 msgid "world: Eagle Eye also works like Scholar in H3."
 msgstr "Verden: Ørneblikk virker som \"Scholar\" i Heroes 3."
 
-msgid "world: Crystal Ball also added Identify Hero and Visions spells"
+msgid "world: Crystal Ball gives Identify Hero and Visions spells"
 msgstr ""
 "Verden: Krystallkula gir også \"undersøk helt\" og \"syner\" trolldommene."
 
 msgid "world: Neutral armies scale with game difficulty"
 msgstr "Verden: Nøytrale hærer øker med spillets vanskelighetsgrad"
 
-msgid "world: use unique artifacts for resource affecting"
+#, fuzzy
+msgid "world: use unique artifacts providing resources"
 msgstr "Verden: Bruk spesielle gjenstander for å påvirke råvarer"
 
-msgid "world: use unique artifacts for primary skills"
+#, fuzzy
+msgid "world: use unique artifacts affecting primary skills"
 msgstr "Verden: Bruke spesielle gjenstander for grunnferdigheter"
 
-msgid "world: use unique artifacts for secondary skills"
+#, fuzzy
+msgid "world: use unique artifacts affecting secondary skills"
 msgstr "Verden: Bruk spesielle gjenstander for sideferdigheter"
 
-msgid "world: Wind/Water Mills and Magic Garden can be captured"
+#, fuzzy
+msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget."
 
 msgid "world: disable Barrow Mounds"
@@ -8628,7 +8618,8 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
-msgid "heroes: recruit cost to be dependent on hero level"
+#, fuzzy
+msgid "heroes: recruit cost depends on hero level"
 msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten."
 
 msgid "heroes: remember move points for retreat/surrender result"
@@ -8637,13 +8628,15 @@ msgstr "Helter: Husk flyttepoengene for tilbaketrekks-/overgivelsesresultatet"
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)"
 
-msgid "heroes: in Arena can choose any of primary skills"
+#, fuzzy
+msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene."
 
 msgid "battle: show army order"
 msgstr "Kamp: Vis rekkefølgen av styrkenes tur."
 
-msgid "battle: soft wait troop"
+#, fuzzy
+msgid "battle: allow soft wait for troops"
 msgstr "Kamp: Avvent styrke til rundens slutt."
 
 msgid "battle: reverse wait order (fast, average, slow)"
@@ -8724,14 +8717,51 @@ msgstr "Han sa til henne: Bla, bla, bla... og så sa hun: Bla, bla, bla..."
 msgid "An unknown force is being ressurected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
 
+#, fuzzy
 msgid ""
-"Check the newest version of game at\n"
+"Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Buy Monsters"
+#~ msgstr "Kjøp krigere"
+
+#~ msgid "The %{name} provides %{count} unit of crystal/day."
+#~ msgstr "%{name} forsyner deg med %{count} enhet krystall hver dag."
+
+#~ msgid ""
+#~ "The %{name} extends the duration of all your spells by %{count} turn."
+#~ msgid_plural ""
+#~ "The %{name} extends the duration of all your spells by %{count} turns."
+#~ msgstr[0] ""
+#~ "%{name} forlenger varigheten til alle trolldommene dine med %{count} "
+#~ "runde."
+#~ msgstr[1] ""
+#~ "%{name} forlenger varigheten til alle trolldommene dine med %{count} "
+#~ "runder."
+
+#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
+#~ msgid_plural ""
+#~ "The %{name} increases the duration of your spells by %{count} turns."
+#~ msgstr[0] ""
+#~ "%{name} forlenger varigheten til alle trolldommene dine med %{count} "
+#~ "runde."
+#~ msgstr[1] ""
+#~ "%{name} forlenger varigheten til alle trolldommene dine med %{count} "
+#~ "runder."
+
+#~ msgid "The %{name} returns %{count} extra power point/turn to your hero."
+#~ msgid_plural ""
+#~ "The %{name} returns %{count} extra power points/turn to your hero."
+#~ msgstr[0] "%{name} gir tilbake %{count} mana hver runde til helten din."
+#~ msgstr[1] "%{name} gir tilbake %{count} mana hver runde til helten din."
+
+#~ msgid "Cannot move artifact"
+#~ msgstr "Umulig å flytte gjenstand"
 
 #~ msgid "game: autosave on"
 #~ msgstr "Parti: Autolagring på"
