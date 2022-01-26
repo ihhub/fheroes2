@@ -1501,8 +1501,9 @@ namespace fheroes2
         if ( input.empty() )
             return Image();
 
+        assert( input.front() != nullptr );
+
         if ( input.size() == 1 ) {
-            assert( input.front() != nullptr );
             return *input.front();
         }
 
