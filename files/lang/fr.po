@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:33+0100\n"
+"POT-Creation-Date: 2022-01-26 22:41+0100\n"
 "PO-Revision-Date: 2022-01-22 22:10+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -197,6 +197,9 @@ msgstr "Vitesse"
 msgid "Speed: %{speed}"
 msgstr "Vitesse : %{speed}"
 
+msgid "Army Order"
+msgstr "Ordre de jeu"
+
 msgid "Auto Spell Casting"
 msgstr "Sorts auto"
 
@@ -204,7 +207,7 @@ msgid "Grid"
 msgstr "Grille"
 
 msgid "Shadow Movement"
-msgstr "Ombre du déplacement"
+msgstr "Ombre de portée"
 
 msgid "Shadow Cursor"
 msgstr "Ombre du curseur"
@@ -217,6 +220,9 @@ msgstr "Activé"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Définir la vitesse des actions et animations de combat."
+
+msgid "Toggle to display army order during the battle."
+msgstr "Activer ou désactiver l'affichage de l'ordre de jeu des créatures pendant le combat."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -2111,7 +2117,7 @@ msgid "No creatures available for purchase."
 msgstr "Pas de créatures disponibles à l'achat."
 
 msgid "Buy Creatures"
-msgstr "Acheter des Creatures"
+msgstr "Acheter des créatures"
 
 msgid "Town Population Information and Statistics"
 msgstr "Information et statistiques sur la population du village"
@@ -2625,13 +2631,13 @@ msgid "Loss Condition"
 msgstr "Conditions de Défaite"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr "Détruire tous les héros et villages ennemis."
+msgstr "Vaincre tous les héros et villages ennemis."
 
 msgid "Capture a specific town."
 msgstr "Capturer un village spécifique."
 
 msgid "Defeat a specific hero."
-msgstr "Détruire un héros spécifique."
+msgstr "Vaincre un héros spécifique."
 
 msgid "Find a specific artifact."
 msgstr "Trouver un artéfact spécifique."
@@ -5074,8 +5080,8 @@ msgid ""
 "your journey, the seer activates his crystal ball, allowing you to see the "
 "strengths and weaknesses of your opponents."
 msgstr ""
-"Niché parmi les arbres se trouve un voyant aveugle. Lorsque vous lui "
-"expliquez l'intention de votre voyage, le voyant active sa boule de cristal, "
+"Niché parmi les arbres se trouve un devin aveugle. Lorsque vous lui "
+"expliquez l'intention de votre voyage, le devin active sa boule de cristal, "
 "vous permettant de voir les forces et les faiblesses de vos adversaires."
 
 msgid ""
@@ -7551,7 +7557,7 @@ msgstr "Anneau de puissance"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
-"L'%{name} rend %{count} points de magie supplémentaires par jour à votre "
+"L'%{name} restaure %{count} points de magie supplémentaires par jour à votre "
 "héros."
 
 msgid "Ammo Cart"
@@ -8554,20 +8560,21 @@ msgid "world: show terrain penalty"
 msgstr "monde : afficher la pénalité de terrain"
 
 msgid "world: scouting skill shows extended content info"
-msgstr "monde : reconnaissance permet d'afficher des infos supplémentaires"
+msgstr "monde : Reconnaissance аffiche des infos supplémentaires"
 
 msgid "world: allow to set guardian to objects"
-msgstr "monde : sort Gardien applicable aux objets divers"
+msgstr "monde : autoriser le placement de gardiens pour certains lieux"
 
 msgid "world: Eagle Eye also works like Scholar in H3."
-msgstr "monde : oeil d'aigle fonctionne aussi comme Érudition dans HoMM3"
+msgstr "monde : Oeil d'Aigle fonctionne aussi comme Érudition dans Heroes 3"
 
 msgid "world: Crystal Ball gives Identify Hero and Visions spells"
 msgstr ""
-"monde : La Boule de Cristal ajoute les sorts Identifier Héros et Visions"
+"monde : La Boule de Cristal donne les sorts Identifier Héros et Visions"
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr "monde : armées neutres adaptées à la difficulté du jeu"
+msgstr ""
+"monde : la puissance des armées neutres augmente avec la difficulté du jeu"
 
 msgid "world: use unique artifacts providing resources"
 msgstr "monde : utiliser des artéfacts uniques pour affecter les ressources"
@@ -8581,10 +8588,10 @@ msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
-"monde : moulins, roues hydrauliques et jardins magiques peuvent être capturés"
+"monde : Moulins, Roues Hydrauliques et Jardins Magiques peuvent être capturés"
 
 msgid "world: disable Barrow Mounds"
-msgstr "monde : désactivation des Tumulus"
+msgstr "monde : désactiver les Tumulus"
 
 msgid "castle: allow guardians"
 msgstr "château : les Héros peuvent remplacer le Capitaine"
@@ -8596,7 +8603,7 @@ msgstr ""
 "château : les guildes de magiciens régénèrent 20% de mana/tour par niveau"
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "héros : possibilité d'acheter un Grimoire dans les sanctuaires"
+msgstr "héros : permettre l'achat d'un Grimoire dans les Sanctuaires"
 
 msgid "heroes: recruit cost depends on hero level"
 msgstr "héros : le coût de recrutement dépend du niveau du héros"
@@ -8606,19 +8613,19 @@ msgstr ""
 "héros : les points de mouvement sont mémorisés après la retraite/reddition"
 
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr "héros : transcription des parchemins (avec l'Oeil d'Aigle)"
+msgstr "héros : permettre la transcription des parchemins (avec Oeil d'Aigle)"
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "héros : l'arène permet de choisir parmi les compétences primaires"
-
-msgid "battle: show army order"
-msgstr "combat : afficher l'ordre de l'armée"
+msgstr ""
+"héros : permettre le choix parmi toutes les compétences primaires dans "
+"l'Arène"
 
 msgid "battle: allow soft wait for troops"
-msgstr "combat : mise en attente des troupes"
+msgstr "combat : permettre aux créatures d'attendre au cours du combat"
 
 msgid "battle: reverse wait order (fast, average, slow)"
-msgstr "combat : ordre d'attente inversé (rapide, moyen, lent)"
+msgstr ""
+"combat : inverser l'ordre des créatures qui ont attendu (rapide, moyen, lent)"
 
 msgid "battle: deterministic events"
 msgstr "bataille : événements déterministes"
@@ -8701,9 +8708,12 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-"Cherchez la dernière version du jeu sur\n"
+"Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show army order"
+#~ msgstr "combat : afficher l'ordre de jeu des créatures"
 
 #~ msgid "Buy Monsters"
 #~ msgstr "Acheter créatures"
