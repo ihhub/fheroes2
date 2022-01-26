@@ -358,9 +358,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     Kingdom & kingdom = GetKingdom();
 
     Heroes * hero1 = kingdom.GetRecruits().GetHero1();
-
-    Heroes * lastLostHero = kingdom.GetLastLostHero();
-    Heroes * hero2 = lastLostHero && lastLostHero != hero1 ? lastLostHero : kingdom.GetRecruits().GetHero2();
+    Heroes * hero2 = kingdom.GetRecruits().GetHero2();
 
     std::string not_allow1_msg;
     std::string not_allow2_msg;

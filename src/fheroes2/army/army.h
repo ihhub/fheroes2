@@ -78,7 +78,7 @@ public:
     bool CanJoinTroops( const Troops & ) const;
 
     // Used only for moving full army in hero's meeting dialog.
-    void MoveTroops( Troops & from );
+    void MoveTroops( const Troops & from );
 
     void MergeTroops();
     Troops GetOptimized( void ) const;
@@ -189,7 +189,7 @@ public:
 
     Monster GetStrongestMonster() const;
 
-    void resetInvalidMonsters();
+    void resetInvalidMonsters() const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );

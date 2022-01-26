@@ -69,8 +69,8 @@ namespace
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
-        // UNUSED = 0x00400000,
 
+        GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -265,6 +265,10 @@ bool Settings::Read( const std::string & filename )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
+    if ( config.Exists( "battle army order" ) ) {
+        setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    }
+
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -421,6 +425,9 @@ std::string Settings::String() const
 
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show army order during battle: on/off" << std::endl;
+    os << "battle army order = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
@@ -638,6 +645,16 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
+void Settings::setBattleShowArmyOrder( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -714,6 +731,11 @@ bool Settings::BattleAutoResolve() const
 bool Settings::BattleAutoSpellcast() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+}
+
+bool Settings::BattleShowArmyOrder() const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
 const fheroes2::Size & Settings::VideoMode() const
@@ -981,8 +1003,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: in Arena can choose any of primary skills" );
-    case Settings::BATTLE_SHOW_ARMY_ORDER:
-        return _( "battle: show army order" );
     case Settings::BATTLE_SOFT_WAITING:
         return _( "battle: soft wait troop" );
     case Settings::BATTLE_REVERSE_WAIT_ORDER:
@@ -1113,11 +1133,6 @@ bool Settings::ExtBattleShowDamage() const
 bool Settings::ExtHeroAllowTranscribingScroll() const
 {
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
-}
-
-bool Settings::ExtBattleShowBattleOrder() const
-{
-    return ExtModes( BATTLE_SHOW_ARMY_ORDER );
 }
 
 bool Settings::ExtBattleSoftWait() const

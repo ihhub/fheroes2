@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "route.h"
+#include <cstdint>
+#include <vector>
 
 // Base representation of the dataset that mirrors the 2D map being traversed
 template <class T>
@@ -51,6 +52,8 @@ template <class T>
 class Pathfinder
 {
 public:
+    virtual ~Pathfinder() = default;
+
     virtual void reset() = 0;
 
     virtual uint32_t getDistance( int targetIndex ) const

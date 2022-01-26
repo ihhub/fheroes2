@@ -194,7 +194,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const Bridge * bridge = Arena::GetBridge();
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
-        for ( std::size_t i = 0; i < size(); i++ ) {
+        for ( std::size_t i = 0; i < size(); ++i ) {
             if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).setReachableForHead();
 
@@ -432,7 +432,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
         std::reverse( result.begin(), result.end() );
 
         // Set direction info for cells
-        for ( std::size_t i = 0; i < result.size(); i++ ) {
+        for ( std::size_t i = 0; i < result.size(); ++i ) {
             const int32_t cellId = result[i];
 
             Cell * headCell = GetCell( cellId );

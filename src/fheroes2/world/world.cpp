@@ -534,14 +534,9 @@ const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
     return vec_heroes.Get( center );
 }
 
-Heroes * World::GetFreemanHeroes( int race ) const
+Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.GetFreeman( race );
-}
-
-Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
-{
-    return vec_heroes.GetFreemanSpecial( heroID );
+    return vec_heroes.GetFreeman( race, heroIDToIgnore );
 }
 
 Heroes * World::FromJailHeroes( s32 index )
@@ -1081,15 +1076,6 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
 {
     if ( obj )
         map_objects.remove( obj->GetUID() );
-}
-
-void World::UpdateRecruits( Recruits & recruits ) const
-{
-    if ( vec_heroes.HaveTwoFreemans() )
-        while ( recruits.GetID1() == recruits.GetID2() )
-            recruits.SetHero2( GetFreemanHeroes() );
-    else
-        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const

@@ -275,7 +275,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
     };
     auto redrawGameArea = []() {
         fheroes2::Display & display = fheroes2::Display::instance();
-        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+        const Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
 
         gameArea.Redraw( display, Interface::LEVEL_ALL );
 

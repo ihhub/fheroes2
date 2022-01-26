@@ -23,28 +23,59 @@
 #ifndef H2RECRUITS_H
 #define H2RECRUITS_H
 
+#include <cstdint>
 #include <utility>
+
+#include "heroes.h"
 
 class Heroes;
 class StreamBase;
 
-class Recruits : public std::pair<int, int>
+struct Recruit
+{
+    Recruit()
+        : id( Heroes::UNKNOWN )
+        , surrenderDay( 0 )
+    {}
+
+    Recruit( const Heroes & hero, const uint32_t heroSurrenderDay )
+        : id( hero.GetID() )
+        , surrenderDay( heroSurrenderDay )
+    {}
+
+    explicit Recruit( const Heroes & hero )
+        : Recruit( hero, 0 )
+    {}
+
+    int id;
+    uint32_t surrenderDay;
+};
+
+class Recruits : public std::pair<Recruit, Recruit>
 {
 public:
     Recruits();
 
-    void Reset( void );
+    void Reset();
 
-    int GetID1( void ) const;
-    int GetID2( void ) const;
+    int GetID1() const;
+    int GetID2() const;
 
-    Heroes * GetHero1( void );
-    Heroes * GetHero2( void );
+    Heroes * GetHero1() const;
+    Heroes * GetHero2() const;
 
-    void SetHero1( const Heroes * );
-    void SetHero2( const Heroes * );
+    uint32_t getSurrenderDayOfHero1() const;
+    uint32_t getSurrenderDayOfHero2() const;
+
+    void SetHero1( const Heroes * hero );
+    void SetHero2( const Heroes * hero );
+
+    void SetHero2Tmp( const Heroes * hero, const uint32_t heroSurrenderDay );
+
+    void appendSurrenderedHero( const Heroes & hero, const uint32_t heroSurrenderDay );
 };
 
-StreamBase & operator>>( StreamBase &, Recruits & );
+StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
+StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
 
 #endif
