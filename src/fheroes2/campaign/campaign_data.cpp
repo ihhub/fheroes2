@@ -151,20 +151,29 @@ namespace
     Campaign::CampaignData getRolandCampaignData()
     {
         const std::string rolandCampaignScenarioNames[10]
-            = { gettext_noop( "Force of Arms" ), gettext_noop( "Annexation" ),   gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),      gettext_noop( "Turning Point" ),
-                gettext_noop( "Defender" ),      gettext_noop( "The Gauntlet" ), gettext_noop( "The Crown" ),        gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ) };
+            = { gettext_noop( "Force of Arms" ),      gettext_noop( "Annexation" ),   gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),
+                gettext_noop( "Turning Point" ),      gettext_noop( "Defender" ),     gettext_noop( "The Gauntlet" ),     gettext_noop( "The Crown" ),
+                gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ) };
         const std::string rolandCampaignDescription[10] = {
-            gettext_noop( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-               " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
-            gettext_noop( "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
-            gettext_noop( "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
-            gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
-            gettext_noop( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-            gettext_noop( "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
-            gettext_noop( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-            gettext_noop( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
-            gettext_noop( "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
-            gettext_noop( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ) };
+            gettext_noop(
+                "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
+                " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
+            gettext_noop(
+                "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
+            gettext_noop(
+                "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
+             gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
+            gettext_noop(
+                "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
+            gettext_noop(
+                "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
+            gettext_noop(
+                "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
+             gettext_noop( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
+            gettext_noop(
+                "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
+            gettext_noop(
+                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 10 );
 
@@ -223,21 +232,32 @@ namespace
     Campaign::CampaignData getArchibaldCampaignData()
     {
         const std::string archibaldCampaignScenarioNames[11]
-            = { gettext_noop( "First Blood" ),   gettext_noop( "Barbarian Wars" ), gettext_noop( "Necromancers" ), gettext_noop( "Slay the Dwarves" ), gettext_noop( "Turning Point" ), gettext_noop( "Rebellion" ),
-                gettext_noop( "Dragon Master" ), gettext_noop( "Country Lords" ),  gettext_noop( "The Crown" ),    gettext_noop( "Greater Glory" ),    gettext_noop( "Apocalypse" ) };
+            = { gettext_noop( "First Blood" ),   gettext_noop( "Barbarian Wars" ), gettext_noop( "Necromancers" ),  gettext_noop( "Slay the Dwarves" ),
+                gettext_noop( "Turning Point" ), gettext_noop( "Rebellion" ),      gettext_noop( "Dragon Master" ), gettext_noop( "Country Lords" ),
+                gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ) };
         const std::string archibaldCampaignDescription[11] = {
-            gettext_noop( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-               " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
-            gettext_noop( "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
-            gettext_noop( "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
-            gettext_noop( "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
-            gettext_noop( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-            gettext_noop( "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
-            gettext_noop( "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win." ),
-            gettext_noop( "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
-            gettext_noop( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
-            gettext_noop( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-            gettext_noop( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
+            gettext_noop(
+                "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
+                " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+            gettext_noop(
+                "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+            gettext_noop(
+                "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
+            gettext_noop(
+                "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
+            gettext_noop(
+                "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
+            gettext_noop(
+                "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
+            gettext_noop(
+                "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win." ),
+            gettext_noop(
+                "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
+             gettext_noop( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
+            gettext_noop(
+                "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
+            gettext_noop(
+                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 11 );
 
@@ -296,17 +316,23 @@ namespace
 
     Campaign::CampaignData getPriceOfLoyaltyCampaignData()
     {
-        const std::string priceOfLoyaltyCampaignScenarioNames[8] = { gettext_noop( "Uprising" ),         gettext_noop( "Island of Chaos" ), gettext_noop( "Arrow's Flight" ), gettext_noop( "The Abyss" ),
-                                                                     gettext_noop( "The Giant's Pass" ), gettext_noop( "Aurora Borealis" ), gettext_noop( "Betrayal's End" ), gettext_noop( "Corruption's Heart" ) };
+        const std::string priceOfLoyaltyCampaignScenarioNames[8]
+            = { gettext_noop( "Uprising" ),         gettext_noop( "Island of Chaos" ), gettext_noop( "Arrow's Flight" ), gettext_noop( "The Abyss" ),
+                gettext_noop( "The Giant's Pass" ), gettext_noop( "Aurora Borealis" ), gettext_noop( "Betrayal's End" ), gettext_noop( "Corruption's Heart" ) };
         const std::string priceOfLoyaltyCampaignDescription[8] = {
             gettext_noop( "Subdue the unruly local lords in order to provide the Empire with facilities to operate in this region." ),
             gettext_noop( "Eliminate all oposition in this area. Then the first piece of the artifact will be yours." ),
-            gettext_noop( "The sorceresses to the northeast are rebelling! For the good of the empire you must quash their feeble uprising on your way to the mountains." ),
-            gettext_noop( "Having prepared for your arrival, Kraeger has arranged for a force of necromancers to thwart your quest. You must capture the castle of Scabsdale before the first day of the third week, or the Necromancers will be too strong for you." ),
-            gettext_noop( "The barbarian despot in this area is, as yet, ignorant of your presence. Quickly, build up your forces before you are discovered and attacked! Secure the region by subduing all enemy forces." ),
-            gettext_noop( "The Empire is weak in this region. You will be unable to completely subdue all forces in this area, so take what you can before reprisal strikes. Remember, your true goal is to claim the Helmet of Anduran." ),
-            gettext_noop( "For the good of the Empire, eliminate Kraeger." ),
-            gettext_noop( "At last, you have the opportunity and the facilities to rid the Empire of the necromancer's evil. Eradicate them completely, and you will be sung as a hero for all time." ) };
+            gettext_noop(
+                "The sorceresses to the northeast are rebelling! For the good of the empire you must quash their feeble uprising on your way to the mountains." ),
+            gettext_noop(
+                "Having prepared for your arrival, Kraeger has arranged for a force of necromancers to thwart your quest. You must capture the castle of Scabsdale before the first day of the third week, or the Necromancers will be too strong for you." ),
+            gettext_noop(
+                "The barbarian despot in this area is, as yet, ignorant of your presence. Quickly, build up your forces before you are discovered and attacked! Secure the region by subduing all enemy forces." ),
+            gettext_noop(
+                "The Empire is weak in this region. You will be unable to completely subdue all forces in this area, so take what you can before reprisal strikes. Remember, your true goal is to claim the Helmet of Anduran." ),
+             gettext_noop( "For the good of the Empire, eliminate Kraeger." ),
+            gettext_noop(
+                "At last, you have the opportunity and the facilities to rid the Empire of the necromancer's evil. Eradicate them completely, and you will be sung as a hero for all time." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
 
@@ -355,16 +381,20 @@ namespace
 
     Campaign::CampaignData getDescendantsCampaignData()
     {
-        const std::string descendantsCampaignScenarioNames[8] = { gettext_noop( "Conquer and Unify" ), gettext_noop( "Border Towns" ), gettext_noop( "The Wayward Son" ), gettext_noop( "Crazy Uncle Ivan" ),
-                                                                  gettext_noop( "The Southern War" ),  gettext_noop( "Ivory Gates" ),  gettext_noop( "The Elven Lands" ), gettext_noop( "The Epic Battle" ) };
+        const std::string descendantsCampaignScenarioNames[8]
+            = { gettext_noop( "Conquer and Unify" ), gettext_noop( "Border Towns" ), gettext_noop( "The Wayward Son" ), gettext_noop( "Crazy Uncle Ivan" ),
+                gettext_noop( "The Southern War" ),  gettext_noop( "Ivory Gates" ),  gettext_noop( "The Elven Lands" ), gettext_noop( "The Epic Battle" ) };
         const std::string descendantsCampaignDescription[8] = {
             gettext_noop( "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the forefather of all descendants." ),
             gettext_noop( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
-            gettext_noop( "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
-            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
-            gettext_noop( "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
-            gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
-            gettext_noop( "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
+            gettext_noop(
+                "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
+             gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
+            gettext_noop(
+                "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
+             gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
+            gettext_noop(
+                "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
             gettext_noop( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
@@ -413,11 +443,14 @@ namespace
 
     Campaign::CampaignData getWizardsIsleCampaignData()
     {
-        const std::string wizardsIsleCampaignScenarioNames[4] = { gettext_noop( "The Shrouded Isles" ), gettext_noop( "The Eternal Scrolls" ), gettext_noop( "Power's End" ), gettext_noop( "Fount of Wizardry" ) };
+        const std::string wizardsIsleCampaignScenarioNames[4]
+            = { gettext_noop( "The Shrouded Isles" ), gettext_noop( "The Eternal Scrolls" ), gettext_noop( "Power's End" ), gettext_noop( "Fount of Wizardry" ) };
         const std::string wizardsIsleCampaignDescription[4] = {
-            gettext_noop( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
+            gettext_noop(
+                "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
             gettext_noop( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
-            gettext_noop( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
+            gettext_noop(
+                "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
             gettext_noop( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 4 );
@@ -453,9 +486,11 @@ namespace
 
     Campaign::CampaignData getVoyageHomeCampaignData()
     {
-        const std::string voyageHomeCampaignScenarioNames[4] = { gettext_noop( "Stranded" ), gettext_noop( "Pirate Isles" ), gettext_noop( "King and Country" ), gettext_noop( "Blood is Thicker" ) };
+        const std::string voyageHomeCampaignScenarioNames[4]
+            = { gettext_noop( "Stranded" ), gettext_noop( "Pirate Isles" ), gettext_noop( "King and Country" ), gettext_noop( "Blood is Thicker" ) };
         const std::string voyageHomeCampaignDescription[4] = {
-            gettext_noop( "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ),
+            gettext_noop(
+                "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ),
             gettext_noop( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ),
             gettext_noop( "Eliminate all the other forces who oppose the rule of Lord Alberon. Gallavant must not die." ),
             gettext_noop( "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in your name. Gallavant must not die." ) };
