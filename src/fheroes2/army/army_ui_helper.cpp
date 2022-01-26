@@ -24,7 +24,6 @@
 #include "army_troop.h"
 #include "game.h"
 #include "icn.h"
-#include "image.h"
 #include "screen.h"
 #include "ui_text.h"
 
