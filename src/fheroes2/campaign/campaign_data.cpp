@@ -162,14 +162,14 @@ namespace
                 "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
             gettext_noop(
                 "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
-             gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
+            gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
             gettext_noop(
                 "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
             gettext_noop(
                 "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
             gettext_noop(
                 "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-             gettext_noop( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
+            gettext_noop( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
             gettext_noop(
                 "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
             gettext_noop(
@@ -253,7 +253,7 @@ namespace
                 "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win." ),
             gettext_noop(
                 "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
-             gettext_noop( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
+            gettext_noop( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
             gettext_noop(
                 "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
             gettext_noop(
@@ -330,7 +330,7 @@ namespace
                 "The barbarian despot in this area is, as yet, ignorant of your presence. Quickly, build up your forces before you are discovered and attacked! Secure the region by subduing all enemy forces." ),
             gettext_noop(
                 "The Empire is weak in this region. You will be unable to completely subdue all forces in this area, so take what you can before reprisal strikes. Remember, your true goal is to claim the Helmet of Anduran." ),
-             gettext_noop( "For the good of the Empire, eliminate Kraeger." ),
+            gettext_noop( "For the good of the Empire, eliminate Kraeger." ),
             gettext_noop(
                 "At last, you have the opportunity and the facilities to rid the Empire of the necromancer's evil. Eradicate them completely, and you will be sung as a hero for all time." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
@@ -389,10 +389,10 @@ namespace
             gettext_noop( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
             gettext_noop(
                 "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
-             gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
+            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
             gettext_noop(
                 "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
-             gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
+            gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
             gettext_noop(
                 "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
             gettext_noop( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
