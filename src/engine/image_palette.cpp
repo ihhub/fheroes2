@@ -31,22 +31,28 @@ namespace
 
     struct PaletteHolder
     {
+    private:
         PaletteHolder()
         {
             std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
         }
 
+    public:
+        static PaletteHolder & instance()
+        {
+            static PaletteHolder paletteHolder;
+            return paletteHolder;
+        }
+
         std::array<uint8_t, paletteSize> gamePalette;
     };
-
-    PaletteHolder paletteHolder;
 }
 
 namespace fheroes2
 {
     const uint8_t * getGamePalette()
     {
-        return paletteHolder.gamePalette.data();
+        return PaletteHolder::instance().gamePalette.data();
     }
 
     void setGamePalette( const std::vector<uint8_t> & palette )
@@ -56,6 +62,6 @@ namespace fheroes2
             return;
         }
 
-        std::copy_n( palette.begin(), paletteSize, paletteHolder.gamePalette.begin() );
+        std::copy_n( palette.begin(), paletteSize, PaletteHolder::instance().gamePalette.begin() );
     }
 }
