@@ -320,6 +320,8 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
+    Week _currentWeek;
+
     int heroes_cond_wins = Heroes::UNKNOWN;
     int heroes_cond_loss = Heroes::UNKNOWN;
 
