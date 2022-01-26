@@ -1261,7 +1261,7 @@ void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32
 {
     fheroes2::Image & output = fheroes2::Display::instance();
 
-    fheroes2::DrawMons32Line( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, output);
+    fheroes2::DrawMons32Line( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, output );
 }
 
 void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact, bool isScouteView )
@@ -1273,7 +1273,7 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
     fheroes2::Image & output = fheroes2::Display::instance();
 
     if ( count < 3 ) {
-        fheroes2::DrawMons32Line( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView, output);
+        fheroes2::DrawMons32Line( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView, output );
     }
     else {
         const int firstLineTroopCount = 2;
