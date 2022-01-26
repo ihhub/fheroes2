@@ -1496,19 +1496,22 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    Image ExtractCommonPattern( const std::vector<Image> & input )
+    Image ExtractCommonPattern( const std::vector<const Image *> & input )
     {
         if ( input.empty() )
             return Image();
 
-        if ( input.size() == 1 )
-            return input.front();
+        if ( input.size() == 1 ) {
+            assert( input.front() != nullptr );
+            return *input.front();
+        }
 
-        if ( input[0].empty() )
+        if ( input[0]->empty() )
             return Image();
 
         for ( size_t i = 1; i < input.size(); ++i ) {
-            if ( input[i].width() != input[0].width() || input[i].height() != input[0].height() )
+            assert( input[i] != nullptr );
+            if ( input[i]->width() != input[0]->width() || input[i]->height() != input[0]->height() )
                 return Image();
         }
 
@@ -1516,11 +1519,11 @@ namespace fheroes2
         std::vector<const uint8_t *> transformIn( input.size() );
 
         for ( size_t i = 0; i < input.size(); ++i ) {
-            imageIn[i] = input[i].image();
-            transformIn[i] = input[i].transform();
+            imageIn[i] = input[i]->image();
+            transformIn[i] = input[i]->transform();
         }
 
-        Image out( input[0].width(), input[0].height() );
+        Image out( input[0]->width(), input[0]->height() );
         out.reset();
 
         uint8_t * imageOut = out.image();
