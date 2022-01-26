@@ -48,9 +48,9 @@ void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, ui
         const Troop * troop = troops.GetTroop( slot );
         if ( troop && troop->isValid() ) {
             if ( 0 == first && count ) {
-                const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( troops.GetTroop( slot ) )->GetSpriteIndex() );
-                fheroes2::Text text( isScouteView ? Game::CountScoute( ( troops.GetTroop( slot ) )->GetCount(), drawPower, compact )
-                                                  : Game::CountThievesGuild( ( troops.GetTroop( slot ) )->GetCount(), drawPower ),
+                const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
+                fheroes2::Text text( isScouteView ? Game::CountScoute( troop->GetCount(), drawPower, compact )
+                                                  : Game::CountThievesGuild( troop->GetCount(), drawPower ),
                                      { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
                 if ( compact ) {
                     const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
