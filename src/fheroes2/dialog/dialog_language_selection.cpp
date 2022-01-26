@@ -108,6 +108,12 @@ namespace fheroes2
 
         SupportedLanguage chosenLanguage = languages[selectionId];
 
+        std::vector<fheroes2::Rect> languageArea( languages.size() );
+        for ( size_t i = 0; i < languages.size(); ++i ) {
+            languageArea[i] = buttonGroup.button( i ).area();
+            languageArea[i].width += languageAreaWidth + offsetFromBorders;
+        }
+
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             if ( le.MousePressLeft( okayButton.area() ) ) {
@@ -122,7 +128,7 @@ namespace fheroes2
             }
 
             for ( size_t i = 0; i < languages.size(); ++i ) {
-                if ( le.MousePressLeft( buttonGroup.button( i ).area() ) ) {
+                if ( le.MousePressLeft( languageArea[i] ) ) {
                     buttonGroup.button( i ).press();
                     optionButtonGroup.draw();
                     chosenLanguage = languages[i];
