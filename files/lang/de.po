@@ -4703,7 +4703,7 @@ msgid ""
 "move further each day."
 msgstr ""
 "Der Leuchtturm ist nun unter Ihrer Kontrolle, und alle Ihre Schiffe bewegen "
-"sich nun jeder Tag weiter."
+"sich nun jeden Tag weiter."
 
 msgid "You gain control of a %{name}."
 msgstr "Sie erhalten die Kontrolle über einen %{name}."
