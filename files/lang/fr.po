@@ -8579,7 +8579,7 @@ msgstr ""
 "monde : la puissance des armées neutres augmente avec la difficulté du jeu"
 
 msgid "world: use unique artifacts providing resources"
-msgstr "monde : utiliser des artéfacts uniques pour affecter les ressources"
+msgstr "monde : utiliser des artéfacts uniques pour les ressources"
 
 msgid "world: use unique artifacts affecting primary skills"
 msgstr "monde : utiliser des artéfacts uniques pour les compétences primaires"
