@@ -2212,7 +2212,7 @@ namespace fheroes2
                 input[1] = Flip( input[1], true, false );
                 input[3] = Flip( input[3], true, false );
 
-                Image out = ExtractCommonPattern( input );
+                Image out = ExtractCommonPattern( { &input[0], &input[1], &input[2], &input[3] } );
 
                 // Here are 2 pixels which should be removed.
                 if ( out.width() == width && out.height() == height ) {
@@ -2421,7 +2421,7 @@ namespace fheroes2
 
                 ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-                Image common = ExtractCommonPattern( { released, pressed } );
+                Image common = ExtractCommonPattern( { &released, &pressed } );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
@@ -2641,11 +2641,11 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 4 ) {
                     // extract the EXIT button without background
-                    Image exitReleased = _icnVsSprite[id][2];
-                    Image exitPressed = _icnVsSprite[id][3];
+                    Sprite exitReleased = _icnVsSprite[id][2];
+                    Sprite exitPressed = _icnVsSprite[id][3];
 
                     // make the border parts around EXIT button transparent
-                    Image exitCommonMask = ExtractCommonPattern( { exitReleased, exitPressed } );
+                    Image exitCommonMask = ExtractCommonPattern( { &exitReleased, &exitPressed } );
                     invertTransparency( exitCommonMask );
 
                     CopyTransformLayer( exitCommonMask, exitReleased );
