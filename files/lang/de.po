@@ -2640,7 +2640,7 @@ msgid "Loss Condition"
 msgstr "Verlustbedingungen-Icon"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr "Besiegen Sie alle feindlichen Helden und Städte."
+msgstr "Alle feindlichen Helden und Städte besiegen."
 
 msgid "Capture a specific town."
 msgstr "Nehmen Sie eine bestimmte Stadt ein."
