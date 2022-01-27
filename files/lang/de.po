@@ -995,7 +995,7 @@ msgid ""
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
 "Die Magierinnen im Nordosten rebellieren! Zum Wohle des Reiches müssen "
-"Sieihren schwachen Aufstand auf Ihren Weg in die Berge niederschlagen."
+"Sie ihren schwachen Aufstand auf Ihren Weg in die Berge niederschlagen."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
