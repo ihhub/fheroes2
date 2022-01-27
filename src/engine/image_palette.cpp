@@ -31,12 +31,6 @@ namespace
 
     struct PaletteHolder
     {
-    private:
-        PaletteHolder()
-        {
-            std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
-        }
-
     public:
         static PaletteHolder & instance()
         {
@@ -45,6 +39,11 @@ namespace
         }
 
         std::array<uint8_t, paletteSize> gamePalette;
+    private:
+        PaletteHolder()
+        {
+            std::copy_n( kb_pal, paletteSize, gamePalette.begin() );
+        }
     };
 }
 
