@@ -2127,7 +2127,7 @@ msgid "No creatures available for purchase."
 msgstr "Keine Kreatur zum Kauf verfügbar."
 
 msgid "Buy Creatures"
-msgstr "Kreaturen Kaufen"
+msgstr "Kreaturen kaufen"
 
 msgid "Town Population Information and Statistics"
 msgstr "Informationen und Statistiken zur Bevölkerung der Stadt"
