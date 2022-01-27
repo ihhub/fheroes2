@@ -39,6 +39,7 @@ namespace
         }
 
         std::array<uint8_t, paletteSize> gamePalette;
+
     private:
         PaletteHolder()
         {
