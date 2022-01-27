@@ -970,7 +970,7 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::WORLD_SHOW_TERRAIN_PENALTY:
         return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: scouting skill shows extended content info" );
+        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:

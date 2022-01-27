@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-25 09:23+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2022-01-25 10:25+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -197,6 +197,9 @@ msgstr "Скорость"
 msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
+msgid "Army Order"
+msgstr "Порядок действий"
+
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
 
@@ -217,6 +220,9 @@ msgstr "Вкл."
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Скорость анимации в бою."
+
+msgid "Toggle to display army order during the battle."
+msgstr "Включить/выключить показ порядка действий отрядов в бою."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -3599,7 +3605,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 "Это окно сообщает информацию о состоянии вашего героя или королевства, а "
 "также показывает календарь. Кликните мышью, чтобы просмотреть всю доступную "
@@ -8353,7 +8359,7 @@ msgstr "битва: показывать урон"
 msgid "world: show terrain penalty"
 msgstr "мир: показывать штраф при перемещении"
 
-msgid "world: scouting skill shows extended content info"
+msgid "world: Scouting skill shows extended content info"
 msgstr "мир: умение разведчика покажет дополнительную информацию"
 
 msgid "world: allow to set guardian to objects"
@@ -8411,9 +8417,6 @@ msgstr "герои: возможность выучить свитки (необ
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
-
-msgid "battle: show army order"
-msgstr "битва: показывать порядок армии"
 
 msgid "battle: allow soft wait for troops"
 msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
@@ -8504,6 +8507,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show army order"
+#~ msgstr "битва: показывать порядок армии"
 
 #~ msgid "Buy Monsters"
 #~ msgstr "Нанять существ"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:33+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2021-11-07 17:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -199,6 +199,9 @@ msgstr "Velocidad"
 msgid "Speed: %{speed}"
 msgstr "velocidad: %{speed}"
 
+msgid "Army Order"
+msgstr ""
+
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Conjuradores"
@@ -221,6 +224,9 @@ msgid "On"
 msgstr ""
 
 msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Toggle to display army order during the battle."
 msgstr ""
 
 msgid ""
@@ -3720,7 +3726,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 "Esta ventana muestra información de la situación de tu héroe o reino y "
 "muestra la fecha. Cliquea en el botón izquierdo para alternar entre las "
@@ -8639,7 +8645,7 @@ msgstr "juego: mostrar información del sistema"
 msgid "world: show terrain penalty"
 msgstr ""
 
-msgid "world: scouting skill shows extended content info"
+msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
 #, fuzzy
@@ -8692,10 +8698,6 @@ msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
-
-#, fuzzy
-msgid "battle: show army order"
-msgstr "batalla: espera de tropa fluido"
 
 #, fuzzy
 msgid "battle: allow soft wait for troops"
@@ -8795,6 +8797,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "battle: show army order"
+#~ msgstr "batalla: espera de tropa fluido"
 
 #, fuzzy
 #~ msgid "Buy Monsters"

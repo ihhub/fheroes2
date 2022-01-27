@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:33+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2021-11-26 03:04+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
@@ -195,6 +195,9 @@ msgstr "Hurtighet"
 msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
+msgid "Army Order"
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr ""
 "Auto-\n"
@@ -221,6 +224,9 @@ msgstr "På"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlinger og animasjoner i kamp."
+
+msgid "Toggle to display army order during the battle."
+msgstr ""
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -3702,7 +3708,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 "Dette vinduet viser informasjon om tilstanden til helten eller kongedømmet "
 "ditt, samt viser datoen. Venstre-klikk her for å rullere mellom disse "
@@ -8569,7 +8575,7 @@ msgstr "Kamp: Vis skadeinfo"
 msgid "world: show terrain penalty"
 msgstr "Verden: Vis flyttepoengstap for terreng"
 
-msgid "world: scouting skill shows extended content info"
+msgid "world: Scouting skill shows extended content info"
 msgstr "Verden: Speiding gir deg utvidet info"
 
 #, fuzzy
@@ -8631,9 +8637,6 @@ msgstr "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)
 #, fuzzy
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene."
-
-msgid "battle: show army order"
-msgstr "Kamp: Vis rekkefølgen av styrkenes tur."
 
 #, fuzzy
 msgid "battle: allow soft wait for troops"
@@ -8726,6 +8729,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show army order"
+#~ msgstr "Kamp: Vis rekkefølgen av styrkenes tur."
 
 #~ msgid "Buy Monsters"
 #~ msgstr "Kjøp krigere"

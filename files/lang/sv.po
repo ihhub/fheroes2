@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:33+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2021-11-15 17:00+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -196,6 +196,9 @@ msgstr "Hastighet"
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
 
+msgid "Army Order"
+msgstr ""
+
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Besvärjelsekastning"
@@ -217,6 +220,9 @@ msgid "On"
 msgstr ""
 
 msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Toggle to display army order during the battle."
 msgstr ""
 
 msgid ""
@@ -3568,7 +3574,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 "Detta fönster ger information om din hjältes eller kungarikes status, och "
 "visar datumet. Vänsterklicka här för att bläddra genom dessa fönster."
@@ -8183,7 +8189,7 @@ msgstr "spel: Visa systeminfo"
 msgid "world: show terrain penalty"
 msgstr ""
 
-msgid "world: scouting skill shows extended content info"
+msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
 msgid "world: allow to set guardian to objects"
@@ -8234,9 +8240,6 @@ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: show army order"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"

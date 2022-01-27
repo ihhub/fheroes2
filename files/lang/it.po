@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:33+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2021-11-23 23:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -189,6 +189,9 @@ msgstr "Velocità"
 msgid "Speed: %{speed}"
 msgstr "Velocità: %{speed}"
 
+msgid "Army Order"
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr ""
 "Lancio Magie\n"
@@ -210,6 +213,9 @@ msgid "On"
 msgstr "Sì"
 
 msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Toggle to display army order during the battle."
 msgstr ""
 
 msgid ""
@@ -3399,7 +3405,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 
 msgid "Necroman"
@@ -7689,7 +7695,7 @@ msgstr ""
 msgid "world: show terrain penalty"
 msgstr ""
 
-msgid "world: scouting skill shows extended content info"
+msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
 msgid "world: allow to set guardian to objects"
@@ -7740,9 +7746,6 @@ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: show army order"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"

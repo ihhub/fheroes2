@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:33+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2013-10-04 21:15+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -200,6 +200,9 @@ msgstr "Szybkość"
 msgid "Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
+msgid "Army Order"
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr "Auto. czary"
 
@@ -220,6 +223,9 @@ msgstr "Włączone"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
+
+msgid "Toggle to display army order during the battle."
+msgstr ""
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -3516,7 +3522,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 "W tym oknie umieszczone są informacje na temat stanu twojego bohatera lub "
 "królestwa, a także aktualna data. Kliknij tu lewym przyciskiem, aby "
@@ -8339,7 +8345,8 @@ msgstr "game: pokaż informacje o uszkodzeniach w bitwie"
 msgid "world: show terrain penalty"
 msgstr ""
 
-msgid "world: scouting skill shows extended content info"
+#, fuzzy
+msgid "world: Scouting skill shows extended content info"
 msgstr ""
 "świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
 
@@ -8399,9 +8406,6 @@ msgstr "bohaterowie: pozwól transkrybować zwoje (potrzeba: Umj. Orli Wzrok)"
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 "bohaterowie: na Arenie pozwól wybrać dowolną z podstawowych umiejętności"
-
-msgid "battle: show army order"
-msgstr "walka: pokaż kolejność jednostek"
 
 #, fuzzy
 msgid "battle: allow soft wait for troops"
@@ -8496,6 +8500,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show army order"
+#~ msgstr "walka: pokaż kolejność jednostek"
 
 #~ msgid "Buy Monsters"
 #~ msgstr "Kup potwory"
