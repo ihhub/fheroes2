@@ -2151,7 +2151,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                                 int clockWiseDirection = currentDirection;
                                 int antiClockWiseDirection = currentDirection;
 
-                                do {
+                                while ( true ) {
                                     switch ( clockWiseDirection ) {
                                     case BOTTOM_RIGHT:
                                         clockWiseDirection = BOTTOM_LEFT;
@@ -2213,8 +2213,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                                         currentDirection = antiClockWiseDirection;
                                         break;
                                     }
-
-                                } while ( true );
+                                }
                             }
                         }
 
