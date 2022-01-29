@@ -123,7 +123,7 @@ namespace
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
             if ( isSpaceChar( *data ) ) {
-                spaceWidth += getSpaceCharWidth( fontType.size );;
+                spaceWidth += getSpaceCharWidth( fontType.size );
             }
             else {
                 width += spaceWidth;
