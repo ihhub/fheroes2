@@ -585,7 +585,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         }
     }
     // attack of all adjacent cells
-    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) ) {
+    else if ( attacker.isAllAdjacentCellsAttack() ) {
         for ( const int32_t aroundIdx : Board::GetAroundIndexes( attacker ) ) {
             assert( Board::GetCell( aroundIdx ) != nullptr );
 

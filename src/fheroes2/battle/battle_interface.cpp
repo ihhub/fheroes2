@@ -1717,7 +1717,7 @@ void Battle::Interface::RedrawCover()
                     highlightCells.emplace( secondAttackedCell );
                 }
             }
-            else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) ) {
+            else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
                 for ( const int32_t aroundIdx : Board::GetAroundIndexes( pos ) ) {
                     // Should already be highlighted
                     if ( aroundIdx == index_pos ) {
