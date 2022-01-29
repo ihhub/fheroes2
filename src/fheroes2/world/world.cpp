@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <tuple>
 
 #include "ai.h"
 #include "artifact.h"
@@ -377,8 +378,6 @@ void World::Reset( void )
     week = 0;
     month = 0;
 
-    _currentWeek = {};
-
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
 
@@ -598,7 +597,17 @@ bool World::LastWeek() const
 
 const Week & World::GetWeekType() const
 {
-    return _currentWeek;
+    static auto cachedWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+    static Week cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
+
+    const auto currentWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+
+    if ( cachedWeekDependencies != currentWeekDependencies ) {
+        cachedWeekDependencies = currentWeekDependencies;
+        cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
+    }
+
+    return cachedWeek;
 }
 
 void World::NewDay( void )
@@ -607,15 +616,6 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
-
-        // First of all, recalculate the type of the current week. It depends on the seed of the current week and the state of the map.
-        size_t seed = GetWeekSeed();
-
-        for ( const Maps::Tiles & tile : vec_tiles ) {
-            fheroes2::hashCombine( seed, tile.GetQuantity1() );
-        }
-
-        _currentWeek = Week::RandomWeek( *this, FirstWeek(), seed );
 
         if ( BeginMonth() ) {
             ++month;
@@ -672,8 +672,8 @@ void World::NewWeek( void )
 
 void World::NewMonth( void )
 {
-    if ( month > 1 && _currentWeek.GetType() == WeekName::MONSTERS ) {
-        MonthOfMonstersAction( Monster( _currentWeek.GetMonster() ) );
+    if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
+        MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
 
@@ -1390,8 +1390,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t height = static_cast<uint16_t>( w.height );
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w._currentWeek << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects
-               << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1405,13 +1404,13 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w._currentWeek;
+        >> w.month;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_0912_RELEASE ) {
         Week dummyWeek;
 
-        msg >> dummyWeek;
+        msg >> dummyWeek >> dummyWeek;
     }
 
     msg >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;

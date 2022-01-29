@@ -76,7 +76,7 @@ struct Week
 
     const char * GetName() const;
 
-    static Week RandomWeek( const World & world, const bool isNewMonth, const size_t seed );
+    static Week RandomWeek( const World & world, const bool isNewMonth, const size_t weekSeed );
 
     friend StreamBase & operator>>( StreamBase & stream, Week & week );
 

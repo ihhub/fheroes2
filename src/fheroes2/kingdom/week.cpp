@@ -22,6 +22,7 @@
 
 #include "week.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "tools.h"
 #include "translations.h"
@@ -273,15 +274,15 @@ const char * Week::GetName( void ) const
     return "Unnamed";
 }
 
-Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const size_t seed )
+Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const size_t weekSeed )
 {
-    size_t weekTypeSeed = seed;
+    size_t weekTypeSeed = weekSeed;
     fheroes2::hashCombine( weekTypeSeed, 34582445 ); // random value to add salt
 
     const WeekName weekName = isNewMonth ? MonthRand( worldInstance, weekTypeSeed ) : WeekRand( worldInstance, weekTypeSeed );
 
     if ( weekName == WeekName::MONSTERS ) {
-        size_t monsterTypeSeed = seed;
+        size_t monsterTypeSeed = weekSeed;
         fheroes2::hashCombine( monsterTypeSeed, 284631 ); // random value to add salt
         if ( isNewMonth ) {
             return { weekName, RandomMonsterMonthOf( monsterTypeSeed ) };
@@ -295,6 +296,8 @@ Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const
 
 StreamBase & operator>>( StreamBase & stream, Week & week )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this operator." );
+
     int32_t weekType;
     int32_t monster;
     StreamBase & sb = stream >> weekType >> monster;
@@ -305,5 +308,7 @@ StreamBase & operator>>( StreamBase & stream, Week & week )
 
 StreamBase & operator<<( StreamBase & stream, const Week & week )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this operator." );
+
     return stream << static_cast<int32_t>( week.GetType() ) << static_cast<int32_t>( week.GetMonster() );
 }
