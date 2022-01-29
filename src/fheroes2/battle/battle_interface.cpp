@@ -2129,18 +2129,101 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
-                    const int dir = cell->GetTriangleDirection( GetMouseCursor() );
-                    const int cursor = GetSwordCursorDirection( dir );
+                    // Find all possible directions where the current monster can attack.
+                    std::set<int> availableAttackDirection;
 
-                    if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
-                        const s32 from = Board::GetIndexDirection( index_pos, dir );
-
-                        if ( Board::CanAttackUnitFromCell( *_currentUnit, from ) ) {
-                            statusMsg = _( "Attack %{monster}" );
-                            StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                            return cursor;
+                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                        if ( Board::isValidDirection( index_pos, direction )
+                            && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                            availableAttackDirection.emplace( direction );
                         }
+                    }
+
+                    if ( !availableAttackDirection.empty() ) {
+                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                            // This direction is not valid. Find the nearest one.
+                            if ( availableAttackDirection.size() == 1 ) {
+                                currentDirection = *availableAttackDirection.begin();
+                            }
+                            else {
+                                // First seach clockwise.
+                                int clockWiseDirection = currentDirection;
+                                int antiClockWiseDirection = currentDirection;
+
+                                do {
+                                    switch ( clockWiseDirection ) {
+                                    case BOTTOM_RIGHT:
+                                        clockWiseDirection = BOTTOM_LEFT;
+                                        break;
+                                    case BOTTOM_LEFT:
+                                        clockWiseDirection = LEFT;
+                                        break;
+                                    case LEFT:
+                                        clockWiseDirection = TOP_LEFT;
+                                        break;
+                                    case TOP_LEFT:
+                                        clockWiseDirection = TOP_RIGHT;
+                                        break;
+                                    case TOP_RIGHT:
+                                        clockWiseDirection = RIGHT;
+                                        break;
+                                    case CENTER:
+                                    case RIGHT:
+                                        clockWiseDirection = BOTTOM_RIGHT;
+                                        break;
+                                    default:
+                                        // This is an incorrect direction!
+                                        assert( 0 );
+                                        break;
+                                    }
+
+                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                        currentDirection = clockWiseDirection;
+                                        break;
+                                    }
+
+                                    switch ( antiClockWiseDirection ) {
+                                    case BOTTOM_RIGHT:
+                                        antiClockWiseDirection = RIGHT;
+                                        break;
+                                    case RIGHT:
+                                        antiClockWiseDirection = TOP_RIGHT;
+                                        break;
+                                    case TOP_RIGHT:
+                                        antiClockWiseDirection = TOP_LEFT;
+                                        break;
+                                    case TOP_LEFT:
+                                        antiClockWiseDirection = LEFT;
+                                        break;
+                                    case LEFT:
+                                        antiClockWiseDirection = BOTTOM_LEFT;
+                                        break;
+                                    case CENTER:
+                                    case BOTTOM_LEFT:
+                                        antiClockWiseDirection = BOTTOM_RIGHT;
+                                        break;
+                                    default:
+                                        // This is an incorrect direction!
+                                        assert( 0 );
+                                        break;
+                                    }
+
+                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                        currentDirection = antiClockWiseDirection;
+                                        break;
+                                    }
+
+                                } while ( true );
+                            }
+                        }
+
+                        const int cursor = GetSwordCursorDirection( currentDirection );
+
+                        statusMsg = _( "Attack %{monster}" );
+                        StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
+
+                        return cursor;
                     }
                 }
             }
