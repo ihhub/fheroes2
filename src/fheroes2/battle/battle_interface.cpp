@@ -2141,6 +2141,12 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
                     if ( !availableAttackDirection.empty() ) {
                         int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                        if ( currentDirection == UNKNOWN ) {
+                            // This function should never return this value.
+                            assert( 0 );
+                            currentDirection = CENTER;
+                        }
+
                         if ( availableAttackDirection.count( currentDirection ) == 0 ) {
                             // This direction is not valid. Find the nearest one.
                             if ( availableAttackDirection.size() == 1 ) {
