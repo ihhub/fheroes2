@@ -29,6 +29,8 @@ namespace
 {
     const uint8_t lineSeparator = '\n';
 
+    const uint8_t invalidChar = '?';
+
     class CharValidator
     {
     public:
@@ -45,7 +47,12 @@ namespace
         const uint32_t _charLimit;
     };
 
-    int32_t getInvalidCharWidth( const fheroes2::FontSize fontSize )
+    bool isSpaceChar( const uint8_t character )
+    {
+        return ( character == 0x20 );
+    }
+
+    int32_t getSpaceCharWidth( const fheroes2::FontSize fontSize )
     {
         switch ( fontSize ) {
         case fheroes2::FontSize::SMALL:
@@ -90,8 +97,11 @@ namespace
             if ( validator.isValid( *data ) ) {
                 width += fheroes2::AGG::getChar( *data, fontType ).width();
             }
+            else if ( isSpaceChar( *data ) ) {
+                width += getSpaceCharWidth( fontType.size );
+            }
             else {
-                width += getInvalidCharWidth( fontType.size );
+                width += fheroes2::AGG::getChar( invalidChar, fontType ).width();
             }
             ++data;
         }
@@ -99,7 +109,7 @@ namespace
         return width;
     }
 
-    // Ignore all spaces or invalid characters at the end of the line.
+    // Ignore spaces at the end of the line. This function must be used only at the time of final rendering.
     int32_t getTruncatedLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
     {
         assert( data != nullptr && size != 0 );
@@ -108,17 +118,23 @@ namespace
 
         int32_t width = 0;
 
-        int32_t invalidCharWidth = 0;
+        int32_t spaceWidth = 0;
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
-            if ( validator.isValid( *data ) ) {
-                width += invalidCharWidth;
-                invalidCharWidth = 0;
-                width += fheroes2::AGG::getChar( *data, fontType ).width();
+            if ( isSpaceChar( *data ) ) {
+                spaceWidth += getSpaceCharWidth( fontType.size );
             }
             else {
-                invalidCharWidth += getInvalidCharWidth( fontType.size );
+                width += spaceWidth;
+                spaceWidth = 0;
+
+                if ( validator.isValid( *data ) ) {
+                    width += fheroes2::AGG::getChar( *data, fontType ).width();
+                }
+                else {
+                    width += fheroes2::AGG::getChar( invalidChar, fontType ).width();
+                }
             }
             ++data;
         }
@@ -152,7 +168,7 @@ namespace
                 // End of line.
                 if ( lineLength > 0 ) {
                     const uint8_t * line = character - lineLength;
-                    offset->x += getTruncatedLineWidth( line, lineLength, fontType );
+                    offset->x += getLineWidth( line, lineLength, fontType );
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
@@ -169,19 +185,23 @@ namespace
                     ++lastWordLength;
                     lineWidth += fheroes2::AGG::getChar( *character, fontType ).width();
                 }
-                else {
+                else if ( isSpaceChar( *character ) ) {
                     lastWordLength = 0;
-                    lineWidth += getInvalidCharWidth( fontType.size );
+                    lineWidth += getSpaceCharWidth( fontType.size );
+                }
+                else {
+                    ++lastWordLength;
+                    lineWidth += fheroes2::AGG::getChar( invalidChar, fontType ).width();
                 }
 
                 if ( offset->x + lineWidth > maxWidth ) {
                     const uint8_t * line = character - ( lineLength - 1 );
                     if ( lineLength == lastWordLength ) {
-                        offset->x += getTruncatedLineWidth( line, lineLength, fontType );
+                        offset->x += getLineWidth( line, lineLength, fontType );
                         ++character;
                     }
                     else {
-                        offset->x += getTruncatedLineWidth( line, lineLength - lastWordLength, fontType );
+                        offset->x += getLineWidth( line, lineLength - lastWordLength, fontType );
                         character -= lastWordLength - 1;
                     }
 
@@ -213,12 +233,12 @@ namespace
         const uint8_t * characterEnd = character + size;
 
         for ( ; character != characterEnd; ++character ) {
-            if ( !validator.isValid( *character ) ) {
-                offsetX += getInvalidCharWidth( fontType.size );
+            if ( isSpaceChar( *character ) ) {
+                offsetX += getSpaceCharWidth( fontType.size );
                 continue;
             }
 
-            const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( *character, fontType );
+            const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( validator.isValid( *character ) ? *character : invalidChar, fontType );
             assert( !charSprite.empty() );
 
             fheroes2::Blit( charSprite, output, offsetX + charSprite.x(), y + charSprite.y() );
@@ -299,9 +319,13 @@ namespace
                     ++lastWordLength;
                     lineWidth += fheroes2::AGG::getChar( *character, fontType ).width();
                 }
-                else {
+                else if ( isSpaceChar( *character ) ) {
                     lastWordLength = 0;
-                    lineWidth += getInvalidCharWidth( fontType.size );
+                    lineWidth += getSpaceCharWidth( fontType.size );
+                }
+                else {
+                    ++lastWordLength;
+                    lineWidth += fheroes2::AGG::getChar( invalidChar, fontType ).width();
                 }
 
                 if ( offset->x + lineWidth > maxWidth ) {
