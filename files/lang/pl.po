@@ -2526,7 +2526,8 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
-"Wskazuje czy mapa jest mała (36 x 36), średnia (72 x 72), duża (108 x 108), czy też bardzo duża (144 x 144)."
+"Wskazuje czy mapa jest mała (36 x 36), średnia (72 x 72), duża (108 x 108), "
+"czy też bardzo duża (144 x 144)."
 
 msgid "Size Icon"
 msgstr "Ikona wielkości"
@@ -3346,7 +3347,6 @@ msgstr[2] ""
 # literally, this wont work in Polish. I.e. single: "Feniks", plural "Feniksy", but "Populacja Feniksów zwiększa się o +3."...
 msgid "%{monster} population increases by +%{count}."
 msgstr "%{monster} zwiększają populację o +%{count}."
-# msgstr "Populacja %{monster} zwiększa się o +%{count}."
 
 msgid " All populations are halved."
 msgstr " Ginie połowa populacji królestwa."
