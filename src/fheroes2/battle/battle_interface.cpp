@@ -2134,7 +2134,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
                     for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
                         if ( Board::isValidDirection( index_pos, direction )
-                            && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                             && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
                             availableAttackDirection.emplace( direction );
                         }
                     }
