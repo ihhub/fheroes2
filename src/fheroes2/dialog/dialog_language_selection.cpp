@@ -56,6 +56,7 @@ namespace fheroes2
         const int32_t languageAreaWidth = 200;
         const int32_t languageAreaHeight = 25;
         const int32_t offsetFromBorders = 10;
+        const int32_t offsetFromButton = 15;
 
         const int32_t languageCount = static_cast<int32_t>( languages.size() );
 
@@ -100,13 +101,19 @@ namespace fheroes2
         for ( int32_t i = 0; i < languageCount; ++i ) {
             fheroes2::LanguageSwitcher languageSwitcher( languages[i] );
             const Text languageName( getLanguageName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
-            languageName.draw( windowRoi.x + offsetFromBorders + selectedButtonSprite.width() + 15,
+            languageName.draw( windowRoi.x + offsetFromBorders + selectedButtonSprite.width() + offsetFromButton,
                                windowRoi.y + 40 + languageAreaHeight * i + 2 + ( selectedButtonSprite.height() - languageName.height() ) / 2, display );
         }
 
         display.render();
 
         SupportedLanguage chosenLanguage = languages[selectionId];
+
+        std::vector<fheroes2::Rect> languageArea( languages.size() );
+        for ( size_t i = 0; i < languages.size(); ++i ) {
+            languageArea[i] = buttonGroup.button( i ).area();
+            languageArea[i].width += languageAreaWidth + offsetFromButton;
+        }
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -122,7 +129,7 @@ namespace fheroes2
             }
 
             for ( size_t i = 0; i < languages.size(); ++i ) {
-                if ( le.MousePressLeft( buttonGroup.button( i ).area() ) ) {
+                if ( le.MousePressLeft( languageArea[i] ) ) {
                     buttonGroup.button( i ).press();
                     optionButtonGroup.draw();
                     chosenLanguage = languages[i];

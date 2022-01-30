@@ -232,7 +232,7 @@ namespace AI
         sortedCastleList.SortByBuildingValue();
 
         if ( ( moreTasksForHeroes && heroes.size() < static_cast<size_t>( heroLimit ) ) || heroes.empty() ) { // safe to cast as heroLimit is > 0
-            Recruits & rec = kingdom.GetRecruits();
+            const Recruits & rec = kingdom.GetRecruits();
             Castle * recruitmentCastle = nullptr;
             int lowestHeroCount = heroLimit;
 

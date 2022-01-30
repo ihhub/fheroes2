@@ -290,7 +290,7 @@ public:
     int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
-    bool Recruit( int col, const fheroes2::Point & pt );
+    bool Recruit( const int col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
     void ActionNewDay( void );
@@ -506,11 +506,8 @@ struct AllHeroes : public VecHeroes
 
     Heroes * GetGuest( const Castle & ) const;
     Heroes * GetGuard( const Castle & ) const;
-    Heroes * GetFreeman( int race ) const;
+    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( s32 ) const;
-    Heroes * GetFreemanSpecial( int heroID ) const;
-
-    bool HaveTwoFreemans( void ) const;
 };
 
 StreamBase & operator<<( StreamBase &, const VecHeroes & );

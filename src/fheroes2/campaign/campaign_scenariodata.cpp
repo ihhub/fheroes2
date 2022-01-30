@@ -498,6 +498,16 @@ namespace Campaign
         , _endScenarioVideoPlayback( endScenarioVideoPlayback )
     {}
 
+    const char * ScenarioData::getScenarioName() const
+    {
+        return _( _scenarioName );
+    }
+
+    const char * ScenarioData::getDescription() const
+    {
+        return _( _description );
+    }
+
     bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;

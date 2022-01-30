@@ -598,10 +598,10 @@ const char * GetBuildConditionDescription( int bcond )
 {
     switch ( bcond ) {
     case NOT_TODAY:
-        return _( "Cannot build. Already built here this turn." );
+        return _( "Cannot build. You have already built here today." );
 
     case NEED_CASTLE:
-        return _( "For this action it is necessary first to build a castle." );
+        return _( "For this action it is necessary to build a castle first." );
 
     default:
         break;

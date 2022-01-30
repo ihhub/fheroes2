@@ -100,7 +100,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
 void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToEyeMagi( const Heroes & hero, const MP2::MapObjectType objectType );
 void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 
 u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, u32 res, u32 buttons = Dialog::OK )
@@ -2117,7 +2117,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( objectType );
-        body = _( "The lighthouse is now under your control, and all of your ships will now move further each turn." );
+        body = _( "The lighthouse is now under your control, and all of your ships will now move further each day." );
         break;
 
     default:
@@ -2770,7 +2770,7 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 {
     Dialog::Message(
         MP2::StringObject( objectType ),
-        _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
+        _( "Nestled among the trees sits a blind seer. After you explain the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
         Font::BIG, Dialog::OK );
 
     Dialog::ThievesGuild( true );
@@ -3036,8 +3036,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
         Heroes * prisoner = world.FromJailHeroes( dst_index );
 
         if ( prisoner ) {
-            if ( prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) ) )
-                prisoner->ResetModes( Heroes::JAIL );
+            prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
         }
     }
     else {
@@ -3111,7 +3110,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
             if ( riddle->AnswerCorrect( answer ) ) {
                 const Funds & res = riddle->resources;
                 const Artifact art = riddle->artifact;
-                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle so here's your reward. Now begone." );
+                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle so here's your reward. Now begone.\"" );
                 const u32 count = res.GetValidItemsCount();
 
                 if ( count ) {
@@ -3157,7 +3156,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
     assert( hero.GetIndex() != dst_index );

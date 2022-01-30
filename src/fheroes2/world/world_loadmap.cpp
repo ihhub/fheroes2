@@ -62,7 +62,7 @@ namespace
         return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
 
-    void fixCastleNames( AllCastles & castles )
+    void fixCastleNames( const AllCastles & castles )
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;
@@ -500,7 +500,7 @@ bool World::LoadMapMP2( const std::string & filename )
                             hero = vec_heroes.Get( pblock[18] );
 
                         if ( !hero || !hero->isFreeman() )
-                            hero = vec_heroes.GetFreeman( colorRace.second );
+                            hero = GetFreemanHeroes( colorRace.second );
 
                         if ( hero )
                             hero->LoadFromMP2( findobject, colorRace.first, colorRace.second, StreamBuf( pblock ) );
@@ -792,5 +792,5 @@ void World::ProcessNewMap()
     vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
     vec_rumors.emplace_back( _( "An unknown force is being ressurected..." ) );
 
-    vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
+    vec_rumors.emplace_back( _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

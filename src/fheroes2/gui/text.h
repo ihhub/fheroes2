@@ -57,6 +57,9 @@ class Text
 public:
     Text();
     Text( const std::string &, int ft = Font::BIG );
+
+    Text( const Text & ) = delete;
+
     ~Text();
 
     Text & operator=( const Text & ) = delete;

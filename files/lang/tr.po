@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-01 09:45+0100\n"
+"POT-Creation-Date: 2022-01-27 13:40+0100\n"
 "PO-Revision-Date: 2009-12-08 00:41+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -173,6 +173,9 @@ msgstr ""
 msgid "Speed: %{speed}"
 msgstr ""
 
+msgid "Army Order"
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr ""
 
@@ -192,6 +195,9 @@ msgid "On"
 msgstr ""
 
 msgid "Set the speed of combat actions and animations."
+msgstr ""
+
+msgid "Toggle to display army order during the battle."
 msgstr ""
 
 msgid ""
@@ -268,6 +274,9 @@ msgid ""
 msgstr ""
 
 msgid "%{name} the %{race}"
+msgstr ""
+
+msgid "Captain of %{name}"
 msgstr ""
 
 msgid "Attack"
@@ -1121,10 +1130,10 @@ msgstr ""
 msgid "Requires:"
 msgstr ""
 
-msgid "Cannot build. Already built here this turn."
+msgid "Cannot build. You have already built here today."
 msgstr ""
 
-msgid "For this action it is necessary first to build a castle."
+msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
 msgid "Cannot build %{name} because castle is too far from water."
@@ -1848,13 +1857,13 @@ msgstr ""
 msgid "Castle Options"
 msgstr ""
 
-msgid "Not enough resources to buy monsters."
+msgid "Not enough resources to buy creatures."
 msgstr ""
 
-msgid "No monsters available for purchase."
+msgid "No creatures available for purchase."
 msgstr ""
 
-msgid "Buy Monsters"
+msgid "Buy Creatures"
 msgstr ""
 
 msgid "Town Population Information and Statistics"
@@ -2307,6 +2316,42 @@ msgstr ""
 msgid "The Price of Loyalty"
 msgstr ""
 
+msgid "Lose all your heroes and towns."
+msgstr ""
+
+msgid "Lose a specific town."
+msgstr ""
+
+msgid "Lose a specific hero."
+msgstr ""
+
+msgid "Run out of time. Fail to win by a certain point."
+msgstr ""
+
+msgid "Loss Condition"
+msgstr ""
+
+msgid "Defeat all enemy heroes and towns."
+msgstr ""
+
+msgid "Capture a specific town."
+msgstr ""
+
+msgid "Defeat a specific hero."
+msgstr ""
+
+msgid "Find a specific artifact."
+msgstr ""
+
+msgid "Your side defeats the opposing side."
+msgstr ""
+
+msgid "Accumulate a large amount of gold."
+msgstr ""
+
+msgid "Victory Condition"
+msgstr ""
+
 msgid "Map difficulty:"
 msgstr ""
 
@@ -2361,18 +2406,18 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
+"of Loyalty\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
 msgid "Selected Name"
 msgstr ""
 
 msgid "The name of the currently selected map."
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for The Succession Wars or The Price of "
-"Loyalty version of the game."
-msgstr ""
-
-msgid "Map Type"
 msgstr ""
 
 msgid "Selected Map Difficulty"
@@ -2395,42 +2440,6 @@ msgid "Accept the choice made."
 msgstr ""
 
 msgid "Okay"
-msgstr ""
-
-msgid "Lose all your heroes and towns."
-msgstr ""
-
-msgid "Lose a specific town."
-msgstr ""
-
-msgid "Lose a specific hero."
-msgstr ""
-
-msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
-
-msgid "Loss Condition"
-msgstr ""
-
-msgid "Defeat all enemy heroes and towns."
-msgstr ""
-
-msgid "Capture a specific town."
-msgstr ""
-
-msgid "Defeat a specific hero."
-msgstr ""
-
-msgid "Find a specific artifact."
-msgstr ""
-
-msgid "Your side defeats the opposing side."
-msgstr ""
-
-msgid "Accumulate a large amount of gold."
-msgstr ""
-
-msgid "Victory Condition"
 msgstr ""
 
 msgid "Experimental Game Settings"
@@ -3171,13 +3180,15 @@ msgstr ""
 msgid "Bring up the adventure options menu."
 msgstr ""
 
-msgid "Bring up the file options menu, alloving you to load menu, save etc."
+msgid ""
+"Bring up the file options menu, allowing you to load, save, start a new game "
+"or quit."
 msgstr ""
 
 msgid "File Options"
 msgstr ""
 
-msgid "Bring up the system options menu, alloving you to customize your game."
+msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
 msgid ""
@@ -3249,7 +3260,7 @@ msgstr ""
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
-"shows the date. Left click here to cycle throungh these windows."
+"shows the date. Left click here to cycle through these windows."
 msgstr ""
 
 msgid "Necroman"
@@ -4031,7 +4042,7 @@ msgstr ""
 
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
-"move further each turn."
+"move further each day."
 msgstr ""
 
 msgid "You gain control of a %{name}."
@@ -4309,7 +4320,7 @@ msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
 msgstr ""
 
 msgid ""
-"Nestled among the trees sits a blind seer. After explaining the intent of "
+"Nestled among the trees sits a blind seer. After you explain the intent of "
 "your journey, the seer activates his crystal ball, allowing you to see the "
 "strengths and weaknesses of your opponents."
 msgstr ""
@@ -4470,8 +4481,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle "
-"so here's your reward. Now begone."
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
 
 msgid ""
@@ -4962,7 +4973,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Your hero produces %{count} gold pieces per turn as tax revenue from estates."
+"Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 
 msgid "Blue"
@@ -6269,7 +6280,7 @@ msgstr ""
 msgid "Golden Goose"
 msgstr ""
 
-msgid "The %{name} brings in an income of %{count} gold per turn."
+msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr ""
 
 msgid "Arcane Necklace of Magic"
@@ -6571,7 +6582,7 @@ msgstr ""
 msgid "Power Ring"
 msgstr ""
 
-msgid "The %{name} returns %{count} extra power points/turn to your hero."
+msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
 
 msgid "Ammo Cart"
@@ -6583,7 +6594,7 @@ msgstr ""
 msgid "Tax Lien"
 msgstr ""
 
-msgid "The %{name} costs you %{count} gold pieces/turn."
+msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr ""
 
 msgid "Hideous Mask"
@@ -6596,41 +6607,36 @@ msgid "Endless Pouch of Sulfur"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgid_plural "The %{name} provides %{count} units of sulfur per day."
-msgstr[0] ""
+msgstr ""
 
 msgid "Endless Vial of Mercury"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgid_plural "The %{name} provides %{count} units of mercury per day."
-msgstr[0] ""
+msgstr ""
 
 msgid "Endless Pouch of Gems"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgid_plural "The %{name} provides %{count} units of gems per day."
-msgstr[0] ""
+msgstr ""
 
 msgid "Endless Cord of Wood"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgid_plural "The %{name} provides %{count} units of wood per day."
-msgstr[0] ""
+msgstr ""
 
 msgid "Endless Cart of Ore"
 msgstr ""
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgid_plural "The %{name} provides %{count} units of ore per day."
-msgstr[0] ""
+msgstr ""
 
 msgid "Endless Pouch of Crystal"
 msgstr ""
 
-msgid "The %{name} provides %{count} unit of crystal/day."
+msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
 
 msgid "Spiked Helm"
@@ -6755,25 +6761,6 @@ msgstr ""
 
 msgid "The %{name} gives you increased necromancy skill."
 msgstr ""
-
-msgid "The %{name} extends the duration of all your spells by %{count} turn."
-msgid_plural ""
-"The %{name} extends the duration of all your spells by %{count} turns."
-msgstr[0] ""
-
-msgid "The %{name} increases the duration of your spells by %{count} turn."
-msgid_plural ""
-"The %{name} increases the duration of your spells by %{count} turns."
-msgstr[0] ""
-
-msgid "The %{name} returns %{count} extra power point/turn to your hero."
-msgid_plural ""
-"The %{name} returns %{count} extra power points/turn to your hero."
-msgstr[0] ""
-
-msgid "The %{name} provides %{count} unit of crystal per day."
-msgid_plural "The %{name} provides %{count} units of crystal per day."
-msgstr[0] ""
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -6915,7 +6902,7 @@ msgstr ""
 msgid "Move %{name}"
 msgstr ""
 
-msgid "Cannot move artifact"
+msgid "Cannot move the Spellbook"
 msgstr ""
 
 msgid "This item can't be traded."
@@ -7431,31 +7418,31 @@ msgstr ""
 msgid "world: show terrain penalty"
 msgstr ""
 
-msgid "world: scouting skill show extended content info"
+msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
-msgid "world: allow set guardian to objects"
+msgid "world: allow to set guardian to objects"
 msgstr ""
 
 msgid "world: Eagle Eye also works like Scholar in H3."
 msgstr ""
 
-msgid "world: Crystal Ball also added Identify Hero and Visions spells"
+msgid "world: Crystal Ball gives Identify Hero and Visions spells"
 msgstr ""
 
 msgid "world: Neutral armies scale with game difficulty"
 msgstr ""
 
-msgid "world: use unique artifacts for resource affecting"
+msgid "world: use unique artifacts providing resources"
 msgstr ""
 
-msgid "world: use unique artifacts for primary skills"
+msgid "world: use unique artifacts affecting primary skills"
 msgstr ""
 
-msgid "world: use unique artifacts for secondary skills"
+msgid "world: use unique artifacts affecting secondary skills"
 msgstr ""
 
-msgid "world: Wind/Water Mills and Magic Garden can be captured"
+msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
 msgid "world: disable Barrow Mounds"
@@ -7472,7 +7459,7 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
-msgid "heroes: recruit cost to be dependent on hero level"
+msgid "heroes: recruit cost depends on hero level"
 msgstr ""
 
 msgid "heroes: remember move points for retreat/surrender result"
@@ -7481,13 +7468,10 @@ msgstr ""
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr ""
 
-msgid "heroes: in Arena can choose any of primary skills"
+msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
-msgid "battle: show army order"
-msgstr ""
-
-msgid "battle: soft wait troop"
+msgid "battle: allow soft wait for troops"
 msgstr ""
 
 msgid "battle: reverse wait order (fast, average, slow)"
@@ -7569,7 +7553,7 @@ msgid "An unknown force is being ressurected..."
 msgstr ""
 
 msgid ""
-"Check the newest version of game at\n"
+"Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""

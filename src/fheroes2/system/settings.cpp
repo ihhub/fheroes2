@@ -69,8 +69,8 @@ namespace
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
-        // UNUSED = 0x00400000,
 
+        GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -265,6 +265,10 @@ bool Settings::Read( const std::string & filename )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
+    if ( config.Exists( "battle army order" ) ) {
+        setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    }
+
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -421,6 +425,9 @@ std::string Settings::String() const
 
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show army order during battle: on/off" << std::endl;
+    os << "battle army order = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
@@ -638,6 +645,16 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
+void Settings::setBattleShowArmyOrder( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -714,6 +731,11 @@ bool Settings::BattleAutoResolve() const
 bool Settings::BattleAutoSpellcast() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+}
+
+bool Settings::BattleShowArmyOrder() const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
 const fheroes2::Size & Settings::VideoMode() const
@@ -948,23 +970,23 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::WORLD_SHOW_TERRAIN_PENALTY:
         return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: scouting skill show extended content info" );
+        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
-        return _( "world: allow set guardian to objects" );
+        return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
         return _( "world: Eagle Eye also works like Scholar in H3." );
     case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
-        return _( "world: Crystal Ball also added Identify Hero and Visions spells" );
+        return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
-        return _( "world: use unique artifacts for resource affecting" );
+        return _( "world: use unique artifacts providing resources" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
-        return _( "world: use unique artifacts for primary skills" );
+        return _( "world: use unique artifacts affecting primary skills" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
-        return _( "world: use unique artifacts for secondary skills" );
+        return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Wind/Water Mills and Magic Garden can be captured" );
+        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::WORLD_DISABLE_BARROW_MOUNDS:
         return _( "world: disable Barrow Mounds" );
     case Settings::CASTLE_ALLOW_GUARDIANS:
@@ -974,17 +996,15 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
     case Settings::HEROES_COST_DEPENDED_FROM_LEVEL:
-        return _( "heroes: recruit cost to be dependent on hero level" );
+        return _( "heroes: recruit cost depends on hero level" );
     case Settings::HEROES_REMEMBER_POINTS_RETREAT:
         return _( "heroes: remember move points for retreat/surrender result" );
     case Settings::HEROES_TRANSCRIBING_SCROLLS:
         return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
-        return _( "heroes: in Arena can choose any of primary skills" );
-    case Settings::BATTLE_SHOW_ARMY_ORDER:
-        return _( "battle: show army order" );
+        return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
-        return _( "battle: soft wait troop" );
+        return _( "battle: allow soft wait for troops" );
     case Settings::BATTLE_REVERSE_WAIT_ORDER:
         return _( "battle: reverse wait order (fast, average, slow)" );
     case Settings::BATTLE_DETERMINISTIC_RESULT:
@@ -1113,11 +1133,6 @@ bool Settings::ExtBattleShowDamage() const
 bool Settings::ExtHeroAllowTranscribingScroll() const
 {
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
-}
-
-bool Settings::ExtBattleShowBattleOrder() const
-{
-    return ExtModes( BATTLE_SHOW_ARMY_ORDER );
 }
 
 bool Settings::ExtBattleSoftWait() const

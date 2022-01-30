@@ -48,7 +48,8 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    StreamFile sf1, sf2;
+    StreamFile sf1;
+    StreamFile sf2;
 
     if ( !sf1.open( argv[1], "rb" ) ) {
         std::cout << "error open file: " << argv[1] << std::endl;

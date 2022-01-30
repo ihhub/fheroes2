@@ -193,9 +193,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
     else if ( le.MousePressRight( adventureRect ) )
         Dialog::Message( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Font::BIG );
     else if ( le.MousePressRight( fileRect ) )
-        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, alloving you to load menu, save etc." ), Font::BIG );
+        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ), Font::BIG );
     else if ( le.MousePressRight( systemRect ) )
-        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, alloving you to customize your game." ), Font::BIG );
+        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Font::BIG );
 
     return res;
 }
