@@ -1290,11 +1290,11 @@ uint32_t World::GetMapSeed() const
 
 uint32_t World::GetWeekSeed() const
 {
-    size_t weekSeed = _seed;
+    uint32_t weekSeed = _seed;
 
     fheroes2::hashCombine( weekSeed, week );
 
-    return static_cast<uint32_t>( weekSeed );
+    return weekSeed;
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )

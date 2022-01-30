@@ -74,7 +74,7 @@ namespace fheroes2
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
     template <class T>
-    void hashCombine( std::size_t & seed, const T & v )
+    void hashCombine( uint32_t & seed, const T & v )
     {
         std::hash<T> hasher;
         seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
