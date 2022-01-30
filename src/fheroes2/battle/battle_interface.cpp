@@ -1717,6 +1717,23 @@ void Battle::Interface::RedrawCover()
                     highlightCells.emplace( secondAttackedCell );
                 }
             }
+            else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) ) {
+                for ( const int32_t aroundIdx : Board::GetAroundIndexes( pos ) ) {
+                    // Should already be highlighted
+                    if ( aroundIdx == index_pos ) {
+                        continue;
+                    }
+
+                    const Cell * aroundCell = Board::GetCell( aroundIdx );
+                    assert( aroundCell != nullptr );
+
+                    const Unit * aroundUnit = aroundCell->GetUnit();
+
+                    if ( aroundUnit && aroundUnit->GetColor() != _currentUnit->GetColor() ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+                }
+            }
         }
         else {
             highlightCells.emplace( cell );
