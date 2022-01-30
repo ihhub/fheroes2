@@ -2154,34 +2154,13 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                             }
                             else {
                                 // First seach clockwise.
-                                int clockWiseDirection = currentDirection;
-                                int antiClockWiseDirection = currentDirection;
+                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
 
                                 while ( true ) {
-                                    switch ( clockWiseDirection ) {
-                                    case BOTTOM_RIGHT:
-                                        clockWiseDirection = BOTTOM_LEFT;
-                                        break;
-                                    case BOTTOM_LEFT:
-                                        clockWiseDirection = LEFT;
-                                        break;
-                                    case LEFT:
-                                        clockWiseDirection = TOP_LEFT;
-                                        break;
-                                    case TOP_LEFT:
-                                        clockWiseDirection = TOP_RIGHT;
-                                        break;
-                                    case TOP_RIGHT:
-                                        clockWiseDirection = RIGHT;
-                                        break;
-                                    case CENTER:
-                                    case RIGHT:
-                                        clockWiseDirection = BOTTOM_RIGHT;
-                                        break;
-                                    default:
-                                        // This is an incorrect direction!
-                                        assert( 0 );
-                                        break;
+                                    ++clockWiseDirection;
+                                    if ( clockWiseDirection == CENTER ) {
+                                        ++clockWiseDirection;
                                     }
 
                                     if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
@@ -2189,30 +2168,9 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                                         break;
                                     }
 
-                                    switch ( antiClockWiseDirection ) {
-                                    case BOTTOM_RIGHT:
-                                        antiClockWiseDirection = RIGHT;
-                                        break;
-                                    case RIGHT:
-                                        antiClockWiseDirection = TOP_RIGHT;
-                                        break;
-                                    case TOP_RIGHT:
-                                        antiClockWiseDirection = TOP_LEFT;
-                                        break;
-                                    case TOP_LEFT:
-                                        antiClockWiseDirection = LEFT;
-                                        break;
-                                    case LEFT:
-                                        antiClockWiseDirection = BOTTOM_LEFT;
-                                        break;
-                                    case CENTER:
-                                    case BOTTOM_LEFT:
-                                        antiClockWiseDirection = BOTTOM_RIGHT;
-                                        break;
-                                    default:
-                                        // This is an incorrect direction!
-                                        assert( 0 );
-                                        break;
+                                    --antiClockWiseDirection;
+                                    if ( antiClockWiseDirection == CENTER ) {
+                                        --antiClockWiseDirection;
                                     }
 
                                     if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
