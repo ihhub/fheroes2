@@ -186,7 +186,7 @@ bool Settings::Read( const std::string & filename )
 
 #ifndef WITH_DEBUG
     // reset devel
-    debug &= ~( DBG_DEVEL );
+    debug &= ~DBG_DEVEL;
 #endif
 
     Logging::SetDebugLevel( debug );
