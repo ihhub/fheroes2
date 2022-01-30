@@ -2648,19 +2648,19 @@ msgid "Defeat all enemy heroes and towns."
 msgstr "Alle feindlichen Helden und Städte besiegen."
 
 msgid "Capture a specific town."
-msgstr "Nehmen Sie eine bestimmte Stadt ein."
+msgstr "Eine bestimmte Stadt einnehmen."
 
 msgid "Defeat a specific hero."
-msgstr "Besiegen Sie einen bestimmten Helden."
+msgstr "Einen bestimmten Helden besiegen."
 
 msgid "Find a specific artifact."
-msgstr "Finden Sie ein bestimmtes Artefakt."
+msgstr "Ein bestimmtes Artefakt finden."
 
 msgid "Your side defeats the opposing side."
 msgstr "Ihre Seite besiegt die gegnerische Seite."
 
 msgid "Accumulate a large amount of gold."
-msgstr "Akkumulieren Sie eine große Menge an Gold."
+msgstr "Eine große Menge an Gold ansammeln."
 
 msgid "Victory Condition"
 msgstr "Siegbedingung-Icon"
