@@ -2159,20 +2159,12 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
                                 while ( true ) {
                                     ++clockWiseDirection;
-                                    if ( clockWiseDirection == CENTER ) {
-                                        ++clockWiseDirection;
-                                    }
-
                                     if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
                                         currentDirection = clockWiseDirection;
                                         break;
                                     }
 
                                     --antiClockWiseDirection;
-                                    if ( antiClockWiseDirection == CENTER ) {
-                                        --antiClockWiseDirection;
-                                    }
-
                                     if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
                                         currentDirection = antiClockWiseDirection;
                                         break;
