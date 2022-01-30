@@ -31,8 +31,6 @@
 #include "tools.h"
 #include "translations.h"
 
-#define SIZEMESSAGE 400
-
 StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
 {
     return msg << obj.type << obj.uid << static_cast<const MapPosition &>( obj );

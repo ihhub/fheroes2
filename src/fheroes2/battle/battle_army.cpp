@@ -31,7 +31,10 @@
 #include "settings.h"
 #include "speed.h"
 
-#define CAPACITY 16
+namespace
+{
+    const size_t unitSizeCapacity = 16;
+}
 
 namespace Battle
 {
@@ -87,13 +90,13 @@ namespace Battle
 
 Battle::Units::Units()
 {
-    reserve( CAPACITY );
+    reserve( unitSizeCapacity );
 }
 
 Battle::Units::Units( const Units & units, bool filter )
     : std::vector<Unit *>()
 {
-    reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
+    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
     if ( filter )
         erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );

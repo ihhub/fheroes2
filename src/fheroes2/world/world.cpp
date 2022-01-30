@@ -680,7 +680,7 @@ void World::NewWeek( void )
     // update objects
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
-            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+            if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
                 tile.QuantityUpdate( false );
             }
         }
