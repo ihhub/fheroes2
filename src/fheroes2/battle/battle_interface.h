@@ -26,6 +26,7 @@
 #include <string>
 
 #include "battle_animation.h"
+#include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "spell.h"
@@ -42,13 +43,16 @@ namespace fheroes2
 
 namespace Battle
 {
+    class Actions;
     class Arena;
+    class Board;
+    class Cell;
+    class Position;
+    class StatusListBox;
+    class Tower;
     class Unit;
     class Units;
-    class Tower;
-    class StatusListBox;
-    class Cell;
-    class Actions;
+
     struct TargetInfo;
     struct TargetsInfo;
 
