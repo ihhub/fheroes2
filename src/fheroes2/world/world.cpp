@@ -797,7 +797,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-const std::string & World::GetRumors( void )
+const std::string & World::GetRumors() const
 {
     assert( !vec_rumors.empty() );
 
