@@ -35,7 +35,6 @@
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
-class Recruits;
 class MapObjectSimple;
 class ActionSimple;
 struct MapEvent;
