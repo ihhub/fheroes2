@@ -189,13 +189,13 @@ void Castle::OpenWell( void )
                     }
                 }
                 if ( isCreaturePresent ) {
-                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
+                    Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
                 }
                 else {
-                    Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
+                    Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
+            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Creatures" ), str, total, Dialog::YES | Dialog::NO ) ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }

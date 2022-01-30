@@ -792,5 +792,5 @@ void World::ProcessNewMap()
     vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
     vec_rumors.emplace_back( _( "An unknown force is being ressurected..." ) );
 
-    vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
+    vec_rumors.emplace_back( _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

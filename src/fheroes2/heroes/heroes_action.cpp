@@ -2117,7 +2117,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( objectType );
-        body = _( "The lighthouse is now under your control, and all of your ships will now move further each turn." );
+        body = _( "The lighthouse is now under your control, and all of your ships will now move further each day." );
         break;
 
     default:
@@ -2770,7 +2770,7 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 {
     Dialog::Message(
         MP2::StringObject( objectType ),
-        _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
+        _( "Nestled among the trees sits a blind seer. After you explain the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
         Font::BIG, Dialog::OK );
 
     Dialog::ThievesGuild( true );
@@ -3110,7 +3110,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
             if ( riddle->AnswerCorrect( answer ) ) {
                 const Funds & res = riddle->resources;
                 const Artifact art = riddle->artifact;
-                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle so here's your reward. Now begone." );
+                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle so here's your reward. Now begone.\"" );
                 const u32 count = res.GetValidItemsCount();
 
                 if ( count ) {
