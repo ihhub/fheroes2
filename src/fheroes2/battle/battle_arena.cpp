@@ -122,11 +122,6 @@ namespace
     }
 }
 
-bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
-{
-    return defender == ta.defender;
-}
-
 Battle::Arena * Battle::GetArena( void )
 {
     return arena;

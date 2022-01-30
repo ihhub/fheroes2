@@ -82,7 +82,6 @@ namespace Battle
             , resist( false )
         {}
 
-        bool operator==( const TargetInfo & ) const;
         static bool isFinishAnimFrame( const TargetInfo & info );
     };
 

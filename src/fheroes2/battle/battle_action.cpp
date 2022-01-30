@@ -714,13 +714,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     TargetsInfo targets;
     targets.reserve( 8 );
 
-    bool ignoreMagicResistance = false;
-
     if ( playResistSound ) {
         *playResistSound = true;
     }
 
-    TargetInfo res;
     Unit * target = GetTroopBoard( dest );
 
     // from spells
@@ -735,27 +732,45 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         break;
     }
 
+    std::set<const Unit *> consideredTargets;
+
+    TargetInfo res;
+
     // first target
-    if ( target && target->AllowApplySpell( spell, hero ) ) {
+    if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
         res.defender = target;
+
         targets.push_back( res );
     }
+
+    bool ignoreMagicResistance = false;
 
     // resurrect spell? get target from graveyard
     if ( nullptr == target && GraveyardAllowResurrect( dest, spell ) ) {
         target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
 
-        if ( target && target->AllowApplySpell( spell, hero ) ) {
+        if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
             res.defender = target;
+
             targets.push_back( res );
         }
     }
-    else
+    else {
         // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
-            TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dest );
-            targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
+            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dest ) ) {
+                assert( spellTarget.defender != nullptr );
+
+                if ( consideredTargets.insert( spellTarget.defender ).second ) {
+                    targets.push_back( spellTarget );
+                }
+                else {
+                    // TargetsForChainLightning() should never return duplicates
+                    assert( 0 );
+                }
+            }
+
             ignoreMagicResistance = true;
 
             if ( playResistSound ) {
@@ -769,18 +784,15 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
         case Spell::FIREBLAST: {
-            const Indexes positions = Board::GetDistanceIndexes( dest, ( spell == Spell::FIREBLAST ? 2 : 1 ) );
+            for ( const int32_t index : Board::GetDistanceIndexes( dest, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
+                Unit * targetUnit = GetTroopBoard( index );
 
-            for ( Indexes::const_iterator it = positions.begin(); it != positions.end(); ++it ) {
-                Unit * targetUnit = GetTroopBoard( *it );
-                if ( targetUnit && targetUnit->AllowApplySpell( spell, hero ) ) {
+                if ( targetUnit && targetUnit->AllowApplySpell( spell, hero ) && consideredTargets.insert( targetUnit ).second ) {
                     res.defender = targetUnit;
+
                     targets.push_back( res );
                 }
             }
-
-            // unique
-            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
@@ -802,16 +814,15 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::MASSHASTE:
         case Spell::MASSSHIELD:
         case Spell::MASSSLOW: {
-            for ( Board::iterator it = board.begin(); it != board.end(); ++it ) {
-                target = ( *it ).GetUnit();
-                if ( target && target->AllowApplySpell( spell, hero ) ) {
+            for ( Cell & cell : board ) {
+                target = cell.GetUnit();
+
+                if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
                     res.defender = target;
+
                     targets.push_back( res );
                 }
             }
-
-            // unique
-            targets.erase( std::unique( targets.begin(), targets.end() ), targets.end() );
 
             if ( playResistSound ) {
                 *playResistSound = false;
@@ -822,6 +833,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         default:
             break;
         }
+    }
 
     if ( !ignoreMagicResistance ) {
         // Mark magically resistant troops (should be ignored in case of built-in creature spells)
