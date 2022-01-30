@@ -547,6 +547,9 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender
 
 Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir )
 {
+    // The attacked unit should be located on the attacked cell
+    assert( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst );
+
     TargetsInfo targets;
     targets.reserve( 8 );
 
@@ -559,10 +562,12 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     // Genie special attack
     if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
         // Replaces the damage, not adding to it
-        if ( defender.GetCount() == 1 )
+        if ( defender.GetCount() == 1 ) {
             res.damage = defender.GetHitPoints();
-        else
+        }
+        else {
             res.damage = defender.GetHitPoints() / 2;
+        }
 
         if ( Arena::GetInterface() ) {
             std::string str( _( "%{name} half the enemy troops!" ) );
@@ -602,24 +607,19 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
             }
         }
     }
-    // lich cloud damages
+    // lich cloud damage
     else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
-        if ( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst ) {
-            for ( const int32_t aroundIdx : Board::GetAroundIndexes( dst ) ) {
-                assert( Board::GetCell( aroundIdx ) != nullptr );
+        for ( const int32_t aroundIdx : Board::GetAroundIndexes( dst ) ) {
+            assert( Board::GetCell( aroundIdx ) != nullptr );
 
-                Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
+            Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
 
-                if ( enemy && consideredTargets.insert( enemy ).second ) {
-                    res.defender = enemy;
-                    res.damage = attacker.GetDamage( *enemy );
+            if ( enemy && consideredTargets.insert( enemy ).second ) {
+                res.defender = enemy;
+                res.damage = attacker.GetDamage( *enemy );
 
-                    targets.push_back( res );
-                }
+                targets.push_back( res );
             }
-        }
-        else {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Lich shot at a cell where no monster exists: " << dst );
         }
     }
 
