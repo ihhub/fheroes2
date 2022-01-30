@@ -8092,7 +8092,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Entfernt alle negativen Zauber, die auf eine Ihrer Einheiten gewirkt "
-"wurden, und stellt bis zu %{count} HP pro Stufe der Zauberkraft wieder her."
+"wurden, und stellt bis zu %{count} TP pro Stufe der Zauberkraft wieder her."
 
 msgid "Mass Cure"
 msgstr "Massenheilung"
