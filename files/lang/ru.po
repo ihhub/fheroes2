@@ -137,7 +137,7 @@ msgid "View %{name}"
 msgstr "Просмотреть %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Перемеcтить или нажать правую кнопку, чтобы перераспределить %{name}"
+msgstr "Перемеcтить %{name} или разделить (правой кнопкой)"
 
 msgid "Combine %{name} armies"
 msgstr "Комбинировать %{name} армии"
@@ -1326,7 +1326,7 @@ msgid "For this action it is necessary to build a castle first."
 msgstr "Для этого Вам нужно сперва построить замок."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr "%{name} невозможно построить, потому что замок слишком далеко от воды."
+msgstr "%{name} невозможно построить - замок слишком далеко от воды."
 
 msgid "disable build."
 msgstr "отключить строение."
@@ -2373,7 +2373,7 @@ msgid "Choose game language:"
 msgstr "Выберите язык игры:"
 
 msgid "%{name} has gained a level."
-msgstr "%{name} получил уровень."
+msgstr "%{name} получает уровень."
 
 msgid "%{skill} +1"
 msgstr "%{skill} +1"
@@ -3442,7 +3442,7 @@ msgstr[2] ""
 "процентов!"
 
 msgid "%{monster} population increases by +%{count}."
-msgstr "популяция %{monster} увеличивается на %{count}."
+msgstr "%{monster}: популяция увеличивается на %{count}."
 
 msgid " All populations are halved."
 msgstr " Всё население уменьшилось вдвое."
@@ -3903,7 +3903,7 @@ msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
 "Do you wish to pursue and engage them?"
 msgstr ""
-"%{monster}, страшась мощи Вашего воинства, бросились в рассыпную.\n"
+"%{monster}, страшась мощи Вашего воинства, бросились врассыпную.\n"
 "Соизволите преследовать их и заставить драться?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
