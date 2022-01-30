@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iomanip>
+#include <set>
 
 #include "battle_arena.h"
 #include "battle_army.h"
@@ -572,12 +573,14 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
     targets.push_back( res );
 
+    std::set<const Unit *> consideredTargets{ &defender };
+
     // long distance attack
     if ( attacker.isDoubleCellAttack() ) {
         Cell * cell = Board::GetCell( dst, dir );
         Unit * enemy = cell ? cell->GetUnit() : nullptr;
 
-        if ( enemy && enemy != &defender ) {
+        if ( enemy && consideredTargets.insert( enemy ).second ) {
             res.defender = enemy;
             res.damage = attacker.GetDamage( *enemy );
 
@@ -591,7 +594,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
 
-            if ( enemy && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
+            if ( enemy && enemy->GetColor() != attacker.GetColor() && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
 
@@ -607,7 +610,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
                 Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
 
-                if ( enemy && enemy != &defender ) {
+                if ( enemy && consideredTargets.insert( enemy ).second ) {
                     res.defender = enemy;
                     res.damage = attacker.GetDamage( *enemy );
 
