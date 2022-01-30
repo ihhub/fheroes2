@@ -131,7 +131,7 @@ namespace Battle
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
         void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;

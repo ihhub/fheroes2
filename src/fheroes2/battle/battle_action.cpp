@@ -88,7 +88,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
     // check luck right before the attack
     attacker.SetRandomLuck();
 
-    TargetsInfo targets = GetTargetsForDamage( attacker, defender, dst );
+    TargetsInfo targets = GetTargetsForDamage( attacker, defender, dst, dir );
 
     if ( Board::isReflectDirection( dir ) != attacker.isReflect() )
         attacker.UpdateDirection( board[dst].GetPos() );
@@ -544,13 +544,11 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender
     }
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, s32 dst ) const
+Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const
 {
     TargetsInfo targets;
     targets.reserve( 8 );
 
-    Unit * enemy = nullptr;
-    Cell * cell = nullptr;
     TargetInfo res;
 
     // first target
@@ -571,26 +569,32 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
             Arena::GetInterface()->SetStatus( str, true );
         }
     }
+
     targets.push_back( res );
 
     // long distance attack
     if ( attacker.isDoubleCellAttack() ) {
-        const int dir = Board::GetDirection( attacker.GetHeadIndex(), dst );
-        if ( !defender.isWide() || 0 == ( ( RIGHT | LEFT ) & dir ) ) {
-            if ( nullptr != ( cell = Board::GetCell( dst, dir ) ) && nullptr != ( enemy = cell->GetUnit() ) && enemy != &defender ) {
-                res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
-                targets.push_back( res );
-            }
+        Cell * cell = Board::GetCell( dst, dir );
+        Unit * enemy = cell ? cell->GetUnit() : nullptr;
+
+        if ( enemy && enemy != &defender ) {
+            res.defender = enemy;
+            res.damage = attacker.GetDamage( *enemy );
+
+            targets.push_back( res );
         }
     }
+    // attack of all adjacent cells
     else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) ) {
-        const Indexes around = Board::GetAroundIndexes( attacker );
+        for ( const int32_t aroundIdx : Board::GetAroundIndexes( attacker ) ) {
+            assert( Board::GetCell( aroundIdx ) != nullptr );
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            if ( nullptr != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
+            Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
+
+            if ( enemy && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
+
                 targets.push_back( res );
             }
         }
@@ -598,12 +602,15 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     // lich cloud damages
     else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
         if ( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst ) {
-            const Indexes around = Board::GetAroundIndexes( dst );
+            for ( const int32_t aroundIdx : Board::GetAroundIndexes( dst ) ) {
+                assert( Board::GetCell( aroundIdx ) != nullptr );
 
-            for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-                if ( nullptr != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
+                Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
+
+                if ( enemy && enemy != &defender ) {
                     res.defender = enemy;
                     res.damage = attacker.GetDamage( *enemy );
+
                     targets.push_back( res );
                 }
             }
