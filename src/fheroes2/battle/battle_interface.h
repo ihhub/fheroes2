@@ -212,10 +212,10 @@ namespace Battle
 
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
-        void RedrawActionAttackPart2( Unit &, TargetsInfo & );
+        void RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
-        void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
+        void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
         void RedrawActionMove( Unit &, const Indexes & );
@@ -263,7 +263,7 @@ namespace Battle
 
         void RedrawTroopCount( const Unit & unit );
 
-        void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = nullptr );
+        void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( const Unit & );
