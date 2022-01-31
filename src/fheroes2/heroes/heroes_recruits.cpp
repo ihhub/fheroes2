@@ -28,6 +28,37 @@
 #include "serialize.h"
 #include "world.h"
 
+Recruit::Recruit()
+    : _id( Heroes::UNKNOWN )
+    , _surrenderDay( 0 )
+{}
+
+Recruit::Recruit( const Heroes & hero, const uint32_t surrenderDay )
+    : _id( hero.GetID() )
+    , _surrenderDay( surrenderDay )
+{}
+
+Recruit::Recruit( const Heroes & hero )
+    : Recruit( hero, 0 )
+{}
+
+int Recruit::getID() const
+{
+    return _id;
+}
+
+uint32_t Recruit::getSurrenderDay() const
+{
+    return _surrenderDay;
+}
+
+void Recruit::setSurrenderDayTmp( const uint32_t surrenderDay )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
+
+    _surrenderDay = surrenderDay;
+}
+
 Recruits::Recruits()
     : std::pair<Recruit, Recruit>()
 {}
@@ -40,37 +71,39 @@ void Recruits::Reset()
 
 int Recruits::GetID1() const
 {
-    return first.id;
+    return first.getID();
 }
 
 int Recruits::GetID2() const
 {
-    return second.id;
+    return second.getID();
 }
 
 Heroes * Recruits::GetHero1() const
 {
-    return world.GetHeroes( first.id );
+    return world.GetHeroes( first.getID() );
 }
 
 Heroes * Recruits::GetHero2() const
 {
-    return world.GetHeroes( second.id );
+    return world.GetHeroes( second.getID() );
 }
 
 uint32_t Recruits::getSurrenderDayOfHero1() const
 {
-    return first.surrenderDay;
+    return first.getSurrenderDay();
 }
 
 uint32_t Recruits::getSurrenderDayOfHero2() const
 {
-    return second.surrenderDay;
+    return second.getSurrenderDay();
 }
 
-void Recruits::SetHero1( const Heroes * hero )
+void Recruits::SetHero1( Heroes * hero )
 {
     if ( hero ) {
+        hero->SetModes( Heroes::RECRUIT );
+
         first = Recruit( *hero );
     }
     else {
@@ -78,9 +111,11 @@ void Recruits::SetHero1( const Heroes * hero )
     }
 }
 
-void Recruits::SetHero2( const Heroes * hero )
+void Recruits::SetHero2( Heroes * hero )
 {
     if ( hero ) {
+        hero->SetModes( Heroes::RECRUIT );
+
         second = Recruit( *hero );
     }
     else {
@@ -88,40 +123,42 @@ void Recruits::SetHero2( const Heroes * hero )
     }
 }
 
-void Recruits::SetHero2Tmp( const Heroes * hero, const uint32_t heroSurrenderDay )
+void Recruits::SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
     assert( hero != nullptr );
 
     SetHero2( hero );
 
-    second.surrenderDay = heroSurrenderDay;
+    second.setSurrenderDayTmp( heroSurrenderDay );
 }
 
-void Recruits::appendSurrenderedHero( const Heroes & hero, const uint32_t heroSurrenderDay )
+void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay )
 {
     assert( heroSurrenderDay > 0 );
 
-    Recruit & recruit = ( first.surrenderDay > second.surrenderDay ? second : first );
+    hero.SetModes( Heroes::RECRUIT );
+
+    Recruit & recruit = ( first.getSurrenderDay() > second.getSurrenderDay() ? second : first );
 
     recruit = Recruit( hero, heroSurrenderDay );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
 {
-    return msg << recruit.id << recruit.surrenderDay;
+    return msg << recruit._id << recruit._surrenderDay;
 }
 
 StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
 {
-    msg >> recruit.id;
+    msg >> recruit._id;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE2_0912_RELEASE ) {
-        msg >> recruit.surrenderDay;
+        msg >> recruit._surrenderDay;
     }
     else {
-        recruit.surrenderDay = 0;
+        recruit._surrenderDay = 0;
     }
 
     return msg;

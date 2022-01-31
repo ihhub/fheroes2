@@ -652,6 +652,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         return false;
     }
 
+    ResetModes( RECRUIT );
     ResetModes( JAIL );
 
     SetColor( col );
@@ -1924,6 +1925,19 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
         return nullptr;
     }
 
+    // Try to get a list of freeman heroes who are not yet available for recruitment in any kingdom
+    std::vector<int> freemanHeroesNotRecruits = freeman_heroes;
+
+    freemanHeroesNotRecruits.erase( std::remove_if( freemanHeroesNotRecruits.begin(), freemanHeroesNotRecruits.end(),
+                                                    [this]( const int heroID ) { return at( heroID )->Modes( Heroes::RECRUIT ); } ),
+                                    freemanHeroesNotRecruits.end() );
+
+    if ( !freemanHeroesNotRecruits.empty() ) {
+        return at( Rand::Get( freemanHeroesNotRecruits ) );
+    }
+
+    // There is no freeman heroes who are not yet available for recruitment, allow
+    // heroes to be available for recruitment in several kingdoms at the same time
     return at( Rand::Get( freeman_heroes ) );
 }
 

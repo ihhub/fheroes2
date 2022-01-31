@@ -63,7 +63,7 @@ public:
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;
 
-    void appendSurrenderedHero( const Heroes & hero );
+    void appendSurrenderedHero( Heroes & hero );
 
     Heroes * GetBestHero();
 
@@ -94,7 +94,12 @@ public:
 
     uint32_t GetCountArtifacts() const;
 
+    // Returns a reference to the pair of heroes available for recruitment,
+    // updating it on the fly if necessary
     const Recruits & GetRecruits();
+    // Returns a reference to the pair of heroes available for recruitment
+    // without making any changes in it
+    Recruits & GetCurrentRecruits();
 
     const KingdomHeroes & GetHeroes( void ) const
     {
