@@ -32,8 +32,8 @@
 #include "image.h"
 #include "image_tool.h"
 #include "pal.h"
-#include "settings.h"
 #include "screen.h"
+#include "settings.h"
 #include "text.h"
 #include "til.h"
 #include "tools.h"
@@ -1515,7 +1515,7 @@ namespace fheroes2
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
@@ -1546,7 +1546,7 @@ namespace fheroes2
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
