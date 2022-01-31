@@ -570,8 +570,8 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CAPTURED & type ) {
         // captured object
-        const int resources[]
-            = {Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN};
+        const int resources[8]
+            = { Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN };
 
         for ( u32 index = 0; resources[index] != Resource::UNKNOWN; ++index )
             totalIncome += ProfitConditions::FromMine( resources[index] ) * world.CountCapturedMines( resources[index], GetColor() );
@@ -736,7 +736,7 @@ Heroes * Kingdom::GetLastBattleWinHero() const
     return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
-void Kingdom::appendSurrenderedHero( Heroes & hero )
+void Kingdom::appendSurrenderedHero( const Heroes & hero )
 {
     recruits.appendSurrenderedHero( hero, world.CountDay() );
 }
@@ -885,8 +885,8 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0912_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_0912_RELEASE ) {
         int heroId;
         uint32_t heroSurrenderDay;
 

@@ -149,18 +149,29 @@ namespace Battle
         ArmiesOrder();
 
         void Set( const fheroes2::Rect &, const Units *, int );
-        void Redraw( const Unit * current, fheroes2::Image & output );
+        void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
         void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset );
 
     private:
+        enum ArmyColor : uint8_t
+        {
+            ARMY_COLOR_BLUE = 0x47,
+            ARMY_COLOR_GREEN = 0x67,
+            ARMY_COLOR_RED = 0xbd,
+            ARMY_COLOR_YELLOW = 0x70,
+            ARMY_COLOR_ORANGE = 0xcd,
+            ARMY_COLOR_PURPLE = 0x87,
+            ARMY_COLOR_GRAY = 0x10
+        };
+
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        void RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
+        void RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                         fheroes2::Image & output ) const;
 
         const Units * orders;
         int army_color2;
         fheroes2::Rect area;
-        fheroes2::Image sf_color[3];
         std::vector<UnitPos> rects;
     };
 

@@ -55,11 +55,11 @@
 
 #include <cassert>
 
-#define ARMYORDERW 40
-
 namespace
 {
     const int32_t cellYOffset = -9;
+
+    const int32_t armyOrderMonsterIconSize = 43; // in both directions.
 
     struct LightningPoint
     {
@@ -796,19 +796,7 @@ Battle::ArmiesOrder::ArmiesOrder()
     : orders( nullptr )
     , army_color2( 0 )
 {
-    const fheroes2::Size sz( ARMYORDERW, ARMYORDERW );
-
-    sf_color[0].resize( sz.width, sz.height );
-    sf_color[0].reset();
-    fheroes2::DrawBorder( sf_color[0], fheroes2::GetColorId( 0xe0, 0xe0, 0 ) );
-
-    sf_color[1].resize( sz.width, sz.height );
-    sf_color[1].reset();
-    fheroes2::DrawBorder( sf_color[1], fheroes2::GetColorId( 0xe0, 0x48, 0 ) );
-
-    sf_color[2].resize( sz.width, sz.height );
-    sf_color[2].reset();
-    fheroes2::DrawBorder( sf_color[2], fheroes2::GetColorId( 0x90, 0xc0, 0 ) );
+    // Do nothing.
 }
 
 void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const Units * units, int color )
@@ -841,52 +829,89 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         }
 }
 
-void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const
+void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                                      fheroes2::Image & output ) const
 {
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    // Render background.
+    const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, armyOrderMonsterIconSize - 2, armyOrderMonsterIconSize - 2 );
 
-    // background
-    fheroes2::Fill( output, pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x33, 0x33, 0x33 ) );
-    // mons32 sprite
+    // Draw a monster's sprite.
+    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
     fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
                     revert );
 
-    // window
-    if ( current )
-        fheroes2::Blit( sf_color[0], output, pos.x + 1, pos.y + 1 );
-    else if ( unit.Modes( Battle::TR_MOVED ) )
-        fheroes2::Blit( sf_color[1], output, pos.x + 1, pos.y + 1 );
-    else
-        fheroes2::Blit( sf_color[2], output, pos.x + 1, pos.y + 1 );
-
-    // number
-    Text number( std::to_string( unit.GetCount() ), Font::SMALL );
+    Text number( GetStringShort( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
+
+    if ( isCurrentUnit ) {
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, currentUnitColor );
+    }
+    else {
+        uint8_t color = 0;
+
+        switch ( unit.GetCurrentColor() ) {
+        case Color::BLUE:
+            color = ARMY_COLOR_BLUE;
+            break;
+        case Color::GREEN:
+            color = ARMY_COLOR_GREEN;
+            break;
+        case Color::RED:
+            color = ARMY_COLOR_RED;
+            break;
+        case Color::YELLOW:
+            color = ARMY_COLOR_YELLOW;
+            break;
+        case Color::ORANGE:
+            color = ARMY_COLOR_ORANGE;
+            break;
+        case Color::PURPLE:
+            color = ARMY_COLOR_PURPLE;
+            break;
+        case Color::NONE:
+            color = ARMY_COLOR_GRAY;
+            break;
+        default:
+            assert( 0 ); // Did you add another player color?
+            break;
+        }
+
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, color );
+
+        if ( unit.Modes( Battle::TR_MOVED ) ) {
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize, 3 );
+        }
+    }
 }
 
-void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output )
+void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( orders ) {
-        const int32_t ow = ARMYORDERW + 2;
+    if ( orders == nullptr ) {
+        // Nothing to show.
+        return;
+    }
 
-        const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
 
-        int32_t ox = area.x + ( area.width - ow * validUnitCount ) / 2;
-        int32_t oy = area.y;
+    int32_t ox = area.x + ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+    int32_t oy = area.y;
 
-        fheroes2::Rect::x = ox;
-        fheroes2::Rect::y = oy;
-        fheroes2::Rect::height = ow;
+    fheroes2::Rect::x = ox;
+    fheroes2::Rect::y = oy;
+    fheroes2::Rect::height = armyOrderMonsterIconSize;
 
-        rects.clear();
+    rects.clear();
 
-        for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it )
-            if ( *it && ( *it )->isValid() ) {
-                rects.emplace_back( *it, fheroes2::Rect( ox, oy, ow, ow ) );
-                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, output );
-                ox += ow;
-                fheroes2::Rect::width += ow;
-            }
+    for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it ) {
+        if ( *it && ( *it )->isValid() ) {
+            rects.emplace_back( *it, fheroes2::Rect( ox, oy, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+            RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
+            ox += armyOrderMonsterIconSize;
+            fheroes2::Rect::width += armyOrderMonsterIconSize;
+        }
     }
 }
 
@@ -1100,8 +1125,8 @@ void Battle::Interface::RedrawPartialFinish()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( Settings::Get().ExtBattleShowBattleOrder() )
-        armies_order.Redraw( _currentUnit, _mainSurface );
+    if ( Settings::Get().BattleShowArmyOrder() )
+        armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
@@ -2104,18 +2129,56 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
-                    const int dir = cell->GetTriangleDirection( GetMouseCursor() );
-                    const int cursor = GetSwordCursorDirection( dir );
+                    // Find all possible directions where the current monster can attack.
+                    std::set<int> availableAttackDirection;
 
-                    if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
-                        const s32 from = Board::GetIndexDirection( index_pos, dir );
-
-                        if ( Board::CanAttackUnitFromCell( *_currentUnit, from ) ) {
-                            statusMsg = _( "Attack %{monster}" );
-                            StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                            return cursor;
+                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                        if ( Board::isValidDirection( index_pos, direction )
+                             && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                            availableAttackDirection.emplace( direction );
                         }
+                    }
+
+                    if ( !availableAttackDirection.empty() ) {
+                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                        if ( currentDirection == UNKNOWN ) {
+                            // This function should never return this value.
+                            assert( 0 );
+                            currentDirection = CENTER;
+                        }
+
+                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                            // This direction is not valid. Find the nearest one.
+                            if ( availableAttackDirection.size() == 1 ) {
+                                currentDirection = *availableAttackDirection.begin();
+                            }
+                            else {
+                                // First seach clockwise.
+                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+
+                                while ( true ) {
+                                    ++clockWiseDirection;
+                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                        currentDirection = clockWiseDirection;
+                                        break;
+                                    }
+
+                                    --antiClockWiseDirection;
+                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                        currentDirection = antiClockWiseDirection;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        const int cursor = GetSwordCursorDirection( currentDirection );
+
+                        statusMsg = _( "Attack %{monster}" );
+                        StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
+
+                        return cursor;
                     }
                 }
             }
@@ -2340,7 +2403,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armiesOrderRect ) ) {
+    else if ( conf.BattleShowArmyOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
@@ -3493,7 +3556,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
+            opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
     }

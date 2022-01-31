@@ -112,15 +112,9 @@ namespace Campaign
             return _scenarioID;
         }
 
-        const std::string & getScenarioName() const
-        {
-            return _scenarioName;
-        }
+        const char * getScenarioName() const;
 
-        const std::string & getDescription() const
-        {
-            return _description;
-        }
+        const char * getDescription() const;
 
         ScenarioVictoryCondition getVictoryCondition() const
         {

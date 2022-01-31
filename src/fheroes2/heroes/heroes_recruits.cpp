@@ -90,7 +90,7 @@ void Recruits::SetHero2( const Heroes * hero )
 
 void Recruits::SetHero2Tmp( const Heroes * hero, const uint32_t heroSurrenderDay )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this method." );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
     assert( hero != nullptr );
 
     SetHero2( hero );
@@ -116,8 +116,8 @@ StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
 {
     msg >> recruit.id;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0912_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE2_0912_RELEASE ) {
         msg >> recruit.surrenderDay;
     }
     else {

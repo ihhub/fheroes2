@@ -536,7 +536,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case ESTATES:
-        str = _( "Your hero produces %{count} gold pieces per turn as tax revenue from estates." );
+        str = _( "Your hero produces %{count} gold pieces per day as tax revenue from estates." );
         break;
     default:
         break;

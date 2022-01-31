@@ -472,7 +472,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             Dialog::Message( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ),
                              Font::BIG );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
-            Dialog::Message( _( "Map Type" ), _( "Indicates whether the map is made for The Succession Wars or The Price of Loyalty version of the game." ), Font::BIG );
+            Dialog::Message( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ),
+                             Font::BIG );
         else if ( le.MousePressRight( mapNames ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )

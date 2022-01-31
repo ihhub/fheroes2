@@ -728,6 +728,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     display.render();
 
+    std::vector<fheroes2::Rect> choiceArea( bonusChoiceCount );
+    for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+        choiceArea[i] = buttonChoices.button( i ).area();
+        choiceArea[i].x -= 170;
+        choiceArea[i].width += 170;
+    }
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -738,7 +745,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else {
             for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-                if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
+                if ( le.MousePressLeft( choiceArea[i] ) ) {
                     buttonChoices.button( i ).press();
                     optionButtonGroup.draw();
                     scenarioBonus = bonusChoices[i];

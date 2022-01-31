@@ -27,7 +27,10 @@
 #include "logging.h"
 #include "serialize.h"
 
-#define MINCAPACITY 1024
+namespace
+{
+    const size_t minBufferCapacity = 1024;
+}
 
 void StreamBase::setconstbuf( bool f )
 {
@@ -310,8 +313,8 @@ void StreamBuf::reallocbuf( size_t sz )
     setconstbuf( false );
 
     if ( !itbeg ) {
-        if ( sz < MINCAPACITY )
-            sz = MINCAPACITY;
+        if ( sz < minBufferCapacity )
+            sz = minBufferCapacity;
 
         itbeg = new u8[sz];
         itend = itbeg + sz;
@@ -320,8 +323,8 @@ void StreamBuf::reallocbuf( size_t sz )
         reset();
     }
     else if ( sizep() < sz ) {
-        if ( sz < MINCAPACITY )
-            sz = MINCAPACITY;
+        if ( sz < minBufferCapacity )
+            sz = minBufferCapacity;
 
         u8 * ptr = new u8[sz];
 

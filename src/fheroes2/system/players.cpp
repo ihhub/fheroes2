@@ -422,7 +422,7 @@ void Players::SetStartGame( void )
     vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), [&races]( Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( const Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
     for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 

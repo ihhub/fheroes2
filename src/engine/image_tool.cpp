@@ -182,7 +182,7 @@ namespace fheroes2
                         if ( alpha == 0 ) {
                             *transformX = 1;
                         }
-                        else if ( *( inX ) == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
+                        else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
                             *transformX = 2;
                         }
                         else {
