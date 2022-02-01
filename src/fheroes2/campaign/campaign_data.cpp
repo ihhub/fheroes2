@@ -209,7 +209,7 @@ namespace
                                                              { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "GOOD07QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8] }, "CAMPG07.H2C", scenarioName[6],  scenarioDescription[6],
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8] }, "CAMPG07.H2C", scenarioName[6], scenarioDescription[6],
                                     emptyPlayback, emptyPlayback );
         scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8] }, "CAMPG08.H2C", scenarioName[7], scenarioDescription[7],
                                     emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
@@ -345,38 +345,35 @@ namespace
             scenarioInfo.emplace_back( Campaign::PRICE_OF_LOYALTY_CAMPAIGN, i );
         }
 
-        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP1_01.HXC",
-                                    scenarioName[0], scenarioDescription[0],
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP1_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXPOL1.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL1.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP1_02.HXC",
-                                    scenarioName[1], scenarioDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP1_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXPOL2.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL2.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXPOL3.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL3.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP1_03.HXC",
-                                    scenarioName[2], scenarioDescription[2], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMP1_04.HXC",
-                                    scenarioName[3], scenarioDescription[3], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMP1_05.HXC",
-                                    scenarioName[4], scenarioDescription[4],
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP1_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMP1_04.HXC", scenarioName[3], scenarioDescription[3],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMP1_05.HXC", scenarioName[4], scenarioDescription[4],
                                     Campaign::VideoSequence{ { "MIXPOL4.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL4.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMP1_06.HXC",
-                                    scenarioName[5], scenarioDescription[5],
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMP1_06.HXC", scenarioName[5],
+                                    scenarioDescription[5],
                                     Campaign::VideoSequence{ { "MIXPOL5.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL5.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXPOL6.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL6.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP1_07.HXC",
-                                    scenarioName[6], scenarioDescription[6], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP1_07.HXC", scenarioName[6], scenarioDescription[6],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXPOL7.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL7.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP1_08.HXC",
-                                    scenarioName[7], scenarioDescription[7], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP1_08.HXC", scenarioName[7], scenarioDescription[7], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXPOL8.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL8.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
@@ -412,35 +409,32 @@ namespace
             scenarioInfo.emplace_back( Campaign::DESCENDANTS_CAMPAIGN, i );
         }
 
-        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP2_01.HXC",
-                                    scenarioName[0], scenarioDescription[0],
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP2_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXDES9.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES9.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP2_02.HXC",
-                                    scenarioName[1], scenarioDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP2_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXDES10.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXDES11.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES11.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP2_03.HXC",
-                                    scenarioName[2], scenarioDescription[2], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP2_04.HXC",
-                                    scenarioName[3], scenarioDescription[3], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5], scenarioInfo[6] }, "CAMP2_05.HXC",
-                                    scenarioName[4], scenarioDescription[4],
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP2_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP2_04.HXC", scenarioName[3], scenarioDescription[3],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5], scenarioInfo[6] }, "CAMP2_05.HXC", scenarioName[4],
+                                    scenarioDescription[4],
                                     Campaign::VideoSequence{ { "MIXDES12.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES12.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC",
-                                    scenarioName[5], scenarioDescription[5],
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC", scenarioName[5], scenarioDescription[5],
                                     Campaign::VideoSequence{ { "MIXDES13.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_07.HXC",
-                                    scenarioName[6], scenarioDescription[6], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP2_08.HXC",
-                                    scenarioName[7], scenarioDescription[7],
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_07.HXC", scenarioName[6], scenarioDescription[6],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP2_08.HXC", scenarioName[7], scenarioDescription[7],
                                     Campaign::VideoSequence{ { "MIXDES14.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES14.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXDES15.SMK", Video::VideoAction::IGNORE_VIDEO },
@@ -472,24 +466,22 @@ namespace
             scenarioInfo.emplace_back( Campaign::WIZARDS_ISLE_CAMPAIGN, i );
         }
 
-        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP3_01.HXC",
-                                    scenarioName[0], scenarioDescription[0],
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP3_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXWIZ16.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ16.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP3_02.HXC",
-                                    scenarioName[1], scenarioDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP3_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXWIZ17.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ17.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXWIZ18.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ18.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[3] }, "CAMP3_03.HXC",
-                                    scenarioName[2], scenarioDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[3] }, "CAMP3_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXWIZ19.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ19.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION );
-        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP3_04.HXC",
-                                    scenarioName[3], scenarioDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP3_04.HXC", scenarioName[3], scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXWIZ20.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ20.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
@@ -518,23 +510,21 @@ namespace
             scenarioInfo.emplace_back( Campaign::VOYAGE_HOME_CAMPAIGN, i );
         }
 
-        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP4_01.HXC",
-                                    scenarioName[0], scenarioDescription[0],
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP4_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXVOY21.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY21.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP4_02.HXC",
-                                    scenarioName[1], scenarioDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP4_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXVOY22.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY22.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXVOY23.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY23.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[3] }, "CAMP4_03.HXC",
-                                    scenarioName[2], scenarioDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[3] }, "CAMP4_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY24.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY24.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_04.HXC",
-                                    scenarioName[3], scenarioDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_04.HXC", scenarioName[3], scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY25.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY25.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 

@@ -147,7 +147,8 @@ namespace
             availableMaps.emplace_back( saveData.getCampaignID(), chosenScenarioId );
         }
         else {
-            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioInfoID().scenarioId );
+            availableMaps
+                = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioInfoID().scenarioId );
         }
 
         assert( iconOffsets.size() == scenarios.size() );
@@ -517,8 +518,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
 
-    const std::vector<Campaign::CampaignAwardData> obtainableAwards
-        = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getLastCompletedScenarioInfoID() );
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getLastCompletedScenarioInfoID() );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
@@ -706,8 +706,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         selectableScenarios.emplace_back( campaignSaveData.getCampaignID(), chosenScenarioID );
     }
     else {
-        selectableScenarios
-            = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID().scenarioId );
+        selectableScenarios = campaignSaveData.isStarting() ? campaignData.getStartingScenarios()
+                                                            : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID().scenarioId );
     }
 
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );

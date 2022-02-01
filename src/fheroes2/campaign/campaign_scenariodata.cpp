@@ -492,12 +492,12 @@ namespace Campaign
         return msg >> data._type >> data._subType >> data._amount;
     }
 
-    ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, const std::vector<ScenarioInfoId> & nextScenarios, const std::string & fileName,
+    ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, const std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,
                                 const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
                                 const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition,
                                 const ScenarioLossCondition lossCondition )
         : _scenarioInfo( scenarioInfo )
-        , _nextScenarios( nextScenarios )
+        , _nextScenarios( std::move( nextScenarios ) )
         , _bonuses( ScenarioBonusData::getCampaignBonusData( scenarioInfo ) )
         , _fileName( StringLower( fileName ) )
         , _scenarioName( scenarioName )

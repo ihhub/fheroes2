@@ -129,7 +129,7 @@ namespace Campaign
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
         return msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps
-                   >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
+               >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
     }
 
     void CampaignSaveData::loadOldSaveSata( StreamBase & msg, CampaignSaveData & data )
