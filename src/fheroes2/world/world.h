@@ -35,7 +35,6 @@
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
-class Recruits;
 class MapObjectSimple;
 class ActionSimple;
 struct MapEvent;
@@ -241,7 +240,7 @@ public:
     void NewWeek( void );
     void NewMonth( void );
 
-    const std::string & GetRumors( void );
+    const std::string & GetRumors() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
