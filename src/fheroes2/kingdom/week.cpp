@@ -296,7 +296,7 @@ Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const
 
 StreamBase & operator>>( StreamBase & stream, Week & week )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this operator." );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove this operator." );
 
     int32_t weekType;
     int32_t monster;
@@ -308,7 +308,7 @@ StreamBase & operator>>( StreamBase & stream, Week & week )
 
 StreamBase & operator<<( StreamBase & stream, const Week & week )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this operator." );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove this operator." );
 
     return stream << static_cast<int32_t>( week.GetType() ) << static_cast<int32_t>( week.GetMonster() );
 }

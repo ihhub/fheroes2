@@ -126,7 +126,7 @@ namespace
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
-            break;
+            return;
         }
 
         const fheroes2::Sprite & track = fheroes2::AGG::GetICN( campaignTrack, 0 );
@@ -141,26 +141,26 @@ namespace
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
         std::vector<int> prevScenarioNextMaps;
-        const std::vector<int> & clearedMaps = saveData.getFinishedMaps();
-        std::vector<int> availableMaps;
+        const std::vector<Campaign::ScenarioInfoId> & clearedMaps = saveData.getFinishedMaps();
+        std::vector<Campaign::ScenarioInfoId> availableMaps;
         if ( chosenScenarioId >= 0 ) {
-            availableMaps.emplace_back( chosenScenarioId );
+            availableMaps.emplace_back( saveData.getCampaignID(), chosenScenarioId );
         }
         else {
-            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
+            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioInfoID().scenarioId );
         }
 
         assert( iconOffsets.size() == scenarios.size() );
 
         for ( size_t i = 0; i < scenarios.size(); ++i ) {
-            const int scenarioID = scenarios[i].getScenarioID();
+            const Campaign::ScenarioInfoId scenarioInfo{ scenarios[i].getCampaignId(), scenarios[i].getScenarioID() };
 
-            assert( scenarioID >= 0 && static_cast<size_t>( scenarioID ) < iconOffsets.size() );
-            if ( scenarioID < 0 || static_cast<size_t>( scenarioID ) >= iconOffsets.size() ) {
+            assert( scenarioInfo.scenarioId >= 0 && static_cast<size_t>( scenarioInfo.scenarioId ) < iconOffsets.size() );
+            if ( scenarioInfo.scenarioId < 0 || static_cast<size_t>( scenarioInfo.scenarioId ) >= iconOffsets.size() ) {
                 continue;
             }
 
-            fheroes2::Point offset = iconOffsets[scenarioID];
+            fheroes2::Point offset = iconOffsets[scenarioInfo.scenarioId];
             offset.x *= deltaX;
             offset.y *= deltaY;
 
@@ -168,13 +168,13 @@ namespace
             offset.y -= 2;
 
             // available scenario (one of which should be selected)
-            if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() ) {
+            if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioInfo ) != availableMaps.end() ) {
                 const fheroes2::Sprite & availableIcon = fheroes2::AGG::GetICN( iconsId, iconStatusOffset + SCENARIO_ICON_AVAILABLE );
                 const fheroes2::Sprite & selectedIcon = fheroes2::AGG::GetICN( iconsId, selectedIconIdx );
                 buttonGroup.createButton( trackOffset.x + offset.x, trackOffset.y + offset.y, availableIcon, selectedIcon, static_cast<int>( i ) );
             }
             // cleared scenario
-            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), static_cast<int>( i ) ) != clearedMaps.end() ) {
+            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), scenarioInfo ) != clearedMaps.end() ) {
                 DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_CLEARED, trackOffset, offset.x, offset.y );
             }
             else {
@@ -234,11 +234,11 @@ namespace
             army.GetTroop( i )->Set( troops[i] );
     }
 
-    void setHeroAndArmyBonus( Heroes * hero, const int campaignID, const uint32_t currentScenarioID )
+    void setHeroAndArmyBonus( Heroes * hero, const Campaign::ScenarioInfoId & scenarioInfoId )
     {
-        switch ( campaignID ) {
+        switch ( scenarioInfoId.campaignId ) {
         case Campaign::ARCHIBALD_CAMPAIGN: {
-            if ( currentScenarioID != 6 ) {
+            if ( scenarioInfoId.scenarioId != 6 ) {
                 assert( 0 ); // no other scenario has this bonus
                 return;
             }
@@ -266,7 +266,7 @@ namespace
         }
     }
 
-    void SetScenarioBonus( const int campaignID, const uint32_t currentScenarioID, const Campaign::ScenarioBonusData & scenarioBonus )
+    void SetScenarioBonus( const Campaign::ScenarioInfoId & scenarioInfoId, const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
         for ( const Player * player : sortedPlayers ) {
@@ -312,7 +312,7 @@ namespace
             case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY:
                 assert( bestHero != nullptr );
                 if ( bestHero != nullptr ) {
-                    setHeroAndArmyBonus( bestHero, campaignID, currentScenarioID );
+                    setHeroAndArmyBonus( bestHero, scenarioInfoId );
                 }
                 break;
             case Campaign::ScenarioBonusData::SKILL_PRIMARY:
@@ -380,7 +380,7 @@ namespace
             return;
         }
 
-        const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
+        const int lastCompletedScenarioID = saveData.getLastCompletedScenarioInfoID().scenarioId;
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
 
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
@@ -515,11 +515,10 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         Game::SaveCompletedCampaignScenario();
     }
 
-    const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards
-        = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
+        = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getLastCompletedScenarioInfoID() );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
@@ -575,6 +574,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     playPreviosScenarioVideo();
 
     // TODO: do proper calc based on all scenarios cleared?
+    const int lastCompletedScenarioID = saveData.getLastCompletedScenarioInfoID().scenarioId;
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
         Game::ShowCredits();
 
@@ -583,8 +583,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         return fheroes2::GameMode::HIGHSCORES;
     }
 
-    const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
-    saveData.setCurrentScenarioID( firstNextMap );
+    const Campaign::ScenarioInfoId firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
+    saveData.setCurrentScenarioInfoId( firstNextMap );
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
@@ -701,13 +701,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     DrawCampaignScenarioDescription( scenario, top );
     drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
 
-    std::vector<int> selectableScenarios;
+    std::vector<Campaign::ScenarioInfoId> selectableScenarios;
     if ( allowToRestart ) {
-        selectableScenarios.emplace_back( chosenScenarioID );
+        selectableScenarios.emplace_back( campaignSaveData.getCampaignID(), chosenScenarioID );
     }
     else {
         selectableScenarios
-            = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
+            = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID().scenarioId );
     }
 
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
@@ -718,7 +718,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     DrawCampaignScenarioIcons( selectableScenarioButtons, campaignData, top, highlightedScenarioId );
 
     for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-        if ( chosenScenarioID == selectableScenarios[i] )
+        if ( chosenScenarioID == selectableScenarios[i].scenarioId )
             selectableScenarioButtons.button( i ).press();
 
         selectableScenarioButtons.button( i ).draw();
@@ -756,8 +756,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-            if ( chosenScenarioID != selectableScenarios[i] && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
-                campaignSaveData.setCurrentScenarioID( selectableScenarios[i] );
+            if ( chosenScenarioID != selectableScenarios[i].scenarioId && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
+                campaignSaveData.setCurrentScenarioInfoId( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
         }
@@ -773,7 +773,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
                 // but the army has to be set after starting the game, so first only set the race
-                SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID,
+                SetScenarioBonus( { campaignSaveData.getCampaignID(), chosenScenarioID },
                                   { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
 
@@ -796,13 +796,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
-                SetScenarioBonus( campaignSaveData.getCampaignID(), chosenScenarioID, scenarioBonus );
+                SetScenarioBonus( { campaignSaveData.getCampaignID(), chosenScenarioID }, scenarioBonus );
             }
 
             applyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
-            campaignSaveData.setCurrentScenarioID( chosenScenarioID );
+            campaignSaveData.setCurrentScenarioInfoId( { campaignSaveData.getCampaignID(), chosenScenarioID } );
 
             return fheroes2::GameMode::START_GAME;
         }

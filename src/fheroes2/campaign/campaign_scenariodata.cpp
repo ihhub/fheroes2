@@ -396,6 +396,16 @@ namespace
 
 namespace Campaign
 {
+    StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data )
+    {
+        return msg << data.campaignId << data.scenarioId;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data )
+    {
+        return msg >> data.campaignId >> data.scenarioId;
+    }
+
     ScenarioBonusData::ScenarioBonusData()
         : _type( 0 )
         , _subType( 0 )
@@ -446,22 +456,22 @@ namespace Campaign
         return useAmount ? std::to_string( _amount ) + " " + objectName : objectName;
     }
 
-    std::vector<ScenarioBonusData> ScenarioBonusData::getCampaignBonusData( const int campaignID, const int scenarioID )
+    std::vector<ScenarioBonusData> ScenarioBonusData::getCampaignBonusData( const ScenarioInfoId & scenarioInfo )
     {
-        assert( scenarioID >= 0 );
-        switch ( campaignID ) {
+        assert( scenarioInfo.scenarioId >= 0 );
+        switch ( scenarioInfo.campaignId ) {
         case Campaign::ROLAND_CAMPAIGN:
-            return getRolandCampaignBonusData( scenarioID );
+            return getRolandCampaignBonusData( scenarioInfo.scenarioId );
         case Campaign::ARCHIBALD_CAMPAIGN:
-            return getArchibaldCampaignBonusData( scenarioID );
+            return getArchibaldCampaignBonusData( scenarioInfo.scenarioId );
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-            return getPriceOfLoyaltyCampaignBonusData( scenarioID );
+            return getPriceOfLoyaltyCampaignBonusData( scenarioInfo.scenarioId );
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            return getVoyageHomeCampaignBonusData( scenarioID );
+            return getVoyageHomeCampaignBonusData( scenarioInfo.scenarioId );
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
-            return getWizardsIsleCampaignBonusData( scenarioID );
+            return getWizardsIsleCampaignBonusData( scenarioInfo.scenarioId );
         case Campaign::DESCENDANTS_CAMPAIGN:
-            return getDescendantsCampaignBonusData( scenarioID );
+            return getDescendantsCampaignBonusData( scenarioInfo.scenarioId );
         default:
             // Did you add a new campaign? Add the corresponding case above.
             assert( 0 );
@@ -482,13 +492,13 @@ namespace Campaign
         return msg >> data._type >> data._subType >> data._amount;
     }
 
-    ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
+    ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, const std::vector<ScenarioInfoId> & nextScenarios, const std::string & fileName,
                                 const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
                                 const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition,
                                 const ScenarioLossCondition lossCondition )
-        : _scenarioID( scenarioID )
-        , _nextMaps( nextMaps )
-        , _bonuses( bonuses )
+        : _scenarioInfo( scenarioInfo )
+        , _nextScenarios( nextScenarios )
+        , _bonuses( ScenarioBonusData::getCampaignBonusData( scenarioInfo ) )
         , _fileName( StringLower( fileName ) )
         , _scenarioName( scenarioName )
         , _description( description )

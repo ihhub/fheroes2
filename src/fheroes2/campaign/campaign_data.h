@@ -40,12 +40,11 @@ namespace Campaign
             return _scenarios;
         }
 
-        const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
-        std::vector<int> getStartingScenarios() const;
+        const std::vector<ScenarioInfoId> & getScenariosAfter( const int scenarioID ) const;
+        std::vector<ScenarioInfoId> getStartingScenarios() const;
 
         bool isAllCampaignMapsPresent() const;
         bool isLastScenario( const int scenarioID ) const;
-        bool isStartingScenario( const int scenarioID ) const;
 
         void setCampaignID( const int campaignID );
         void setCampaignDescription( const std::string & campaignDescription );
@@ -57,6 +56,8 @@ namespace Campaign
         int _campaignID;
         std::string _campaignDescription;
         std::vector<ScenarioData> _scenarios;
+
+        bool isStartingScenario( const ScenarioInfoId & scenarioInfo ) const;
     };
 
     struct CampaignAwardData
@@ -91,7 +92,7 @@ namespace Campaign
 
         std::string ToString() const;
 
-        static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID );
+        static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const ScenarioInfoId & scenarioInfo );
         static std::vector<Campaign::CampaignAwardData> getExtraCampaignAwardData( const int campaignID );
 
         static const char * getAllianceJoiningMessage( const int monsterId );

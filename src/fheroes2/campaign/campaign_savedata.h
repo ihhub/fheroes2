@@ -35,23 +35,23 @@ namespace Campaign
     public:
         CampaignSaveData();
 
-        const std::vector<int> & getFinishedMaps() const
+        const std::vector<ScenarioInfoId> & getFinishedMaps() const
         {
             return _finishedMaps;
         }
 
         int getCampaignID() const
         {
-            return _campaignID;
+            return _currentScenarioInfoId.campaignId;
         }
 
         int getCurrentScenarioID() const
         {
-            return _currentScenarioID;
+            return _currentScenarioInfoId.scenarioId;
         }
 
         // Make sure that this is not the first scenario in the campaign. Please call isStarting to verify this.
-        int getLastCompletedScenarioID() const;
+        const ScenarioInfoId & getLastCompletedScenarioInfoID() const;
 
         bool isStarting() const
         {
@@ -71,8 +71,7 @@ namespace Campaign
         std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
 
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
-        void setCurrentScenarioID( const int scenarioID );
-        void setCampaignID( const int campaignID );
+        void setCurrentScenarioInfoId( const ScenarioInfoId & scenarioInfoId );
         void addCurrentMapToFinished();
         void addCampaignAward( const int awardID );
         void setCarryOverTroops( const Troops & troops );
@@ -82,15 +81,18 @@ namespace Campaign
 
         static CampaignSaveData & Get();
 
+        static void loadOldSaveSata( StreamBase & msg, CampaignSaveData & data );
+
     private:
         friend StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data );
         friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
 
-        std::vector<int> _finishedMaps;
+        std::vector<ScenarioInfoId> _finishedMaps;
         std::vector<int> _obtainedCampaignAwards;
         std::vector<Troop> _carryOverTroops;
-        int _currentScenarioID;
-        int _campaignID;
+
+        ScenarioInfoId _currentScenarioInfoId;
+
         uint32_t _daysPassed;
         ScenarioBonusData _currentScenarioBonus;
     };
