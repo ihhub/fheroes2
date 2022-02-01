@@ -1711,18 +1711,27 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
-                // We have to invert the direction.
-                int attackDirection = Board::GetDirection( pos.GetHead()->GetIndex(), index_pos );
-                if ( attackDirection == 0 ) {
-                    // It happens when a creature needs to swap tail and head for an attack move.
-                    attackDirection = Board::GetDirection( pos.GetTail()->GetIndex(), index_pos );
-                }
+                const Cell * secondAttackedCell = Board::GetCell( index_pos, Board::GetReflectDirection( direction ) );
 
-                assert( attackDirection != 0 );
-
-                const Cell * secondAttackedCell = Board::GetCell( index_pos, attackDirection );
-                if ( secondAttackedCell != nullptr ) {
+                if ( secondAttackedCell ) {
                     highlightCells.emplace( secondAttackedCell );
+                }
+            }
+            else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
+                for ( const int32_t aroundIdx : Board::GetAroundIndexes( pos ) ) {
+                    // Should already be highlighted
+                    if ( aroundIdx == index_pos ) {
+                        continue;
+                    }
+
+                    const Cell * aroundCell = Board::GetCell( aroundIdx );
+                    assert( aroundCell != nullptr );
+
+                    const Unit * aroundUnit = aroundCell->GetUnit();
+
+                    if ( aroundUnit && aroundUnit->GetColor() != _currentUnit->GetColor() ) {
+                        highlightCells.emplace( aroundCell );
+                    }
                 }
             }
         }
@@ -2989,7 +2998,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets )
 {
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
@@ -3048,7 +3057,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
+void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */ )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3059,7 +3068,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         Unit * defender = it->defender;
         if ( defender == nullptr ) {
             continue;
@@ -3126,7 +3135,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 redrawBattleField = true;
             }
             else {
-                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                     if ( ( *it ).defender ) {
                         redrawBattleField = true;
                         break;
@@ -3158,7 +3167,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
             finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
                     if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
                         it->defender->SwitchAnimation( Monster_Info::STATIC );
@@ -3562,7 +3571,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     }
 }
 
-void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
         uint32_t killed = 0;

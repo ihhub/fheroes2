@@ -131,7 +131,6 @@ namespace Battle
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
         void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
@@ -200,6 +199,8 @@ namespace Battle
 
         void SetCastleTargetValue( int, u32 );
         void CatapultAction( void );
+
+        static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
 
         std::vector<int> GetCastleTargets( void ) const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
