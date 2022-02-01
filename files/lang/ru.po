@@ -1314,7 +1314,7 @@ msgid "Summon Earth"
 msgstr "Элементаль"
 
 msgid "The %{building} produces %{monster}."
-msgstr "В %{building} можно нанять %{monster}."
+msgstr "%{monster} доступны для найма в этом строении."
 
 msgid "Requires:"
 msgstr "Требует:"
@@ -1593,7 +1593,7 @@ msgid "Blacksmith"
 msgstr "Кузница"
 
 msgid "Upg. Blacksmith"
-msgstr "Ковальня"
+msgstr "Мастерская"
 
 msgid "Armory"
 msgstr "Оружейная"
@@ -1707,7 +1707,7 @@ msgid "Library"
 msgstr "Библиотека"
 
 msgid "Orchard"
-msgstr "Цветник"
+msgstr "Фруктовый сад"
 
 msgid "Habitat"
 msgstr "Нора"
@@ -1813,7 +1813,7 @@ msgstr ""
 "заклинание для каждого уровня."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Цветник увеличивает прирост Хоббитов на %{count} в неделю."
+msgstr "Фруктовый сад увеличивает прирост Хоббитов на %{count} в неделю."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
@@ -1852,19 +1852,19 @@ msgid "Captain's Quarters"
 msgstr "Капитанский штаб"
 
 msgid "Mage Guild, Level 1"
-msgstr "Гильдия магов 1 уровня"
+msgstr "Гильдия магов 1 ур."
 
 msgid "Mage Guild, Level 2"
-msgstr "Гильдия магов 2 уровня"
+msgstr "Гильдия магов 2 ур."
 
 msgid "Mage Guild, Level 3"
-msgstr "Гильдия магов 3 уровня"
+msgstr "Гильдия магов 3 ур."
 
 msgid "Mage Guild, Level 4"
-msgstr "Гильдия магов 4 уровня"
+msgstr "Гильдия магов 4 ур."
 
 msgid "Mage Guild, Level 5"
-msgstr "Гильдия магов 5 уровня"
+msgstr "Гильдия магов 5 ур."
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2490,16 +2490,16 @@ msgid "%{name} (Level %{level})"
 msgstr "%{name} (Уровень %{level})"
 
 msgid "Move Points"
-msgstr "Очки движения"
+msgstr "Запас хода"
 
 msgid "Cost per troop:"
 msgstr "Цена воина:"
 
 msgid "Available: %{count}"
-msgstr "        Доступно: %{count}"
+msgstr "Доступно: %{count}"
 
 msgid "Number to buy:"
-msgstr "            Нанять:"
+msgstr "Нанять:"
 
 msgid "MAX"
 msgstr "Максимум"
@@ -7768,7 +7768,7 @@ msgstr ""
 "Цена: %{sp} очков магии"
 
 msgid "Move points: %{mp}"
-msgstr "Запас хода: %{mp}"
+msgstr "Очки движения: %{mp}"
 
 msgid "Transcribe Spell Scroll"
 msgstr "Переписать свиток заклинания"
