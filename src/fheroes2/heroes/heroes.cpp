@@ -1931,7 +1931,7 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
         return nullptr;
     }
 
-    // Try to get a list of freeman heroes who are not yet available for recruitment in any kingdom
+    // Try to avoid freeman heroes who are already available for recruitment in any kingdom
     std::vector<int> freemanHeroesNotRecruits = freeman_heroes;
 
     freemanHeroesNotRecruits.erase( std::remove_if( freemanHeroesNotRecruits.begin(), freemanHeroesNotRecruits.end(),

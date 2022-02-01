@@ -673,10 +673,10 @@ void World::NewWeek( void )
     // Reset RECRUIT mode for all heroes at once
     vec_heroes.ResetModes( Heroes::RECRUIT );
 
-    // Reset recruits in all kingdoms at once to expand the set of heroes available for recruitment
+    // Reset recruits in all kingdoms at once
     std::set<Heroes *> remainingRecruits = vec_kingdoms.resetRecruits();
 
-    // Restore the RECRUIT mode for the remaining recruits (e.g. heroes who surrendered on Sunday)
+    // Restore the RECRUIT mode for the remaining recruits
     for ( Heroes * hero : remainingRecruits ) {
         assert( hero != nullptr );
 
