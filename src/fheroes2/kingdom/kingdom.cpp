@@ -748,8 +748,9 @@ void Kingdoms::NewWeek( void )
     for ( Kingdom & kingdom : kingdoms ) {
         Recruits & recruits = kingdom.GetCurrentRecruits();
 
-        // Heroes who surrendered on Sunday should still be available for hire next week
-        if ( world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
+        // Heroes who surrendered on Sunday should still be available for hire next week in the
+        // same kingdom, provided that this kingdom is still playable
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
             Heroes * hero = recruits.GetHero1();
             if ( hero ) {
                 hero->ResetModes( Heroes::RECRUIT );
@@ -757,7 +758,7 @@ void Kingdoms::NewWeek( void )
 
             recruits.SetHero1( nullptr );
         }
-        if ( world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
             Heroes * hero = recruits.GetHero2();
             if ( hero ) {
                 hero->ResetModes( Heroes::RECRUIT );
