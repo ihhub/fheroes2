@@ -718,11 +718,10 @@ namespace AI
                 }
                 else {
                     int targetCell = -1;
-                    const Indexes & around = Board::GetAroundIndexes( *targetUnit );
-                    for ( const int cell : around ) {
-                        if ( arena.hexIsPassable( cell ) ) {
+
+                    for ( const int cell : Board::GetAroundIndexes( *targetUnit ) ) {
+                        if ( arena.hexIsPassable( cell ) && ( targetCell == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetCell ) ) ) {
                             targetCell = cell;
-                            break;
                         }
                     }
 
