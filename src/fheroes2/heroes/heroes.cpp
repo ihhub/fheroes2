@@ -1450,34 +1450,40 @@ bool Heroes::isFreeman( void ) const
 void Heroes::SetFreeman( int reason )
 {
     if ( !isFreeman() ) {
-        bool savepoints = false;
+        // if not surrendering, reset army
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
+            army.Reset( true );
+        }
+
+        const int heroColor = GetColor();
         Kingdom & kingdom = GetKingdom();
+
+        if ( heroColor != Color::NONE ) {
+            kingdom.RemoveHeroes( this );
+        }
+        SetColor( Color::NONE );
+
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+        SetIndex( -1 );
+
+        modes = 0;
+        move_point_scale = -1;
+
+        path.Reset();
+
+        SetMove( false );
+
+        SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
             if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
-                savepoints = true;
+                SetModes( SAVE_MP_POINTS );
             }
 
-            kingdom.appendSurrenderedHero( *this );
+            if ( heroColor != Color::NONE ) {
+                kingdom.appendSurrenderedHero( *this );
+            }
         }
-
-        // if not surrendering, reset army
-        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
-            army.Reset( true );
-
-        if ( GetColor() != Color::NONE )
-            kingdom.RemoveHeroes( this );
-
-        SetColor( Color::NONE );
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
-        modes = 0;
-        SetIndex( -1 );
-        move_point_scale = -1;
-        path.Reset();
-        SetMove( false );
-        SetModes( ACTION );
-        if ( savepoints )
-            SetModes( SAVE_MP_POINTS );
     }
 }
 
