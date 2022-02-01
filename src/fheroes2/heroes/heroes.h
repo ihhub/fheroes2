@@ -146,7 +146,7 @@ public:
     static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
-    enum flags_t
+    enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
         // UNUSED = 0x00000002,
@@ -488,6 +488,11 @@ struct AllHeroes : public VecHeroes
     void clear( void );
 
     void Scoute( int ) const;
+
+    void ResetModes( uint32_t modes ) const
+    {
+        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
+    }
 
     void NewDay()
     {

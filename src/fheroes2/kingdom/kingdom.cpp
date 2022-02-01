@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <set>
 
 #include "ai.h"
 #include "battle.h"
@@ -215,6 +214,9 @@ void Kingdom::ActionNewWeek( void )
 
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
+
+    // Settle a new set of recruits
+    GetRecruits();
 }
 
 void Kingdom::ActionNewMonth( void )
@@ -745,55 +747,6 @@ void Kingdoms::NewDay( void )
 
 void Kingdoms::NewWeek( void )
 {
-    std::set<Heroes *> remainingRecruits;
-
-    // Reset recruits in all kingdoms at once to expand the set of heroes available for recruitment
-    for ( Kingdom & kingdom : kingdoms ) {
-        Recruits & recruits = kingdom.GetCurrentRecruits();
-
-        Heroes * hero1 = recruits.GetHero1();
-        Heroes * hero2 = recruits.GetHero2();
-
-        // Heroes who surrendered on Sunday should still be available for recruitment next week in
-        // the same kingdom, provided that this kingdom is still playable
-        if ( hero1 ) {
-            if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
-                hero1->ResetModes( Heroes::RECRUIT );
-
-                recruits.SetHero1( nullptr );
-            }
-            else {
-                remainingRecruits.insert( hero1 );
-            }
-        }
-        if ( hero2 ) {
-            if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
-                hero2->ResetModes( Heroes::RECRUIT );
-
-                recruits.SetHero2( nullptr );
-            }
-            else {
-                remainingRecruits.insert( hero2 );
-            }
-        }
-    }
-
-    // Heroes who surrendered on Sunday (and are still available for recruitment in the same kingdom)
-    // may have previously been available for recruitment in several kingdoms at once in case of a
-    // lack of heroes, so we should ensure that they still have the RECRUIT mode set
-    for ( Heroes * hero : remainingRecruits ) {
-        assert( hero != nullptr );
-
-        hero->SetModes( Heroes::RECRUIT );
-    }
-
-    // Settle a new set of recruits in all playable kingdoms
-    for ( Kingdom & kingdom : kingdoms ) {
-        if ( kingdom.isPlay() ) {
-            kingdom.GetRecruits();
-        }
-    }
-
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewWeek();
@@ -877,6 +830,40 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
             }
         }
     }
+}
+
+std::set<Heroes *> Kingdoms::resetRecruits()
+{
+    std::set<Heroes *> remainingRecruits;
+
+    for ( Kingdom & kingdom : kingdoms ) {
+        Recruits & recruits = kingdom.GetCurrentRecruits();
+
+        // Heroes who surrendered on Sunday should still be available for recruitment next week in
+        // the same kingdom, provided that this kingdom is still playable
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
+            recruits.SetHero1( nullptr );
+        }
+        else {
+            Heroes * hero = recruits.GetHero1();
+
+            if ( hero ) {
+                remainingRecruits.insert( hero );
+            }
+        }
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
+            recruits.SetHero2( nullptr );
+        }
+        else {
+            Heroes * hero = recruits.GetHero2();
+
+            if ( hero ) {
+                remainingRecruits.insert( hero );
+            }
+        }
+    }
+
+    return remainingRecruits;
 }
 
 // Check if tile is visible from any crystal ball of any hero

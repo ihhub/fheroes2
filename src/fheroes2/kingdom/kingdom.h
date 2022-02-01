@@ -22,6 +22,8 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <set>
+
 #include "castle.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
@@ -204,6 +206,10 @@ public:
     void AddCastles( const AllCastles & );
 
     void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
+
+    // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
+    // in the kingdoms
+    std::set<Heroes *> resetRecruits();
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
