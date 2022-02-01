@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <set>
 
 #include "ai.h"
 #include "battle.h"
@@ -744,28 +745,46 @@ void Kingdoms::NewDay( void )
 
 void Kingdoms::NewWeek( void )
 {
+    std::set<Heroes *> remainingRecruits;
+
     // Reset recruits in all kingdoms at once to expand the set of heroes available for recruitment
     for ( Kingdom & kingdom : kingdoms ) {
         Recruits & recruits = kingdom.GetCurrentRecruits();
 
-        // Heroes who surrendered on Sunday should still be available for hire next week in the
-        // same kingdom, provided that this kingdom is still playable
-        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
-            Heroes * hero = recruits.GetHero1();
-            if ( hero ) {
-                hero->ResetModes( Heroes::RECRUIT );
-            }
+        Heroes * hero1 = recruits.GetHero1();
+        Heroes * hero2 = recruits.GetHero2();
 
-            recruits.SetHero1( nullptr );
-        }
-        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
-            Heroes * hero = recruits.GetHero2();
-            if ( hero ) {
-                hero->ResetModes( Heroes::RECRUIT );
-            }
+        // Heroes who surrendered on Sunday should still be available for recruitment next week in
+        // the same kingdom, provided that this kingdom is still playable
+        if ( hero1 ) {
+            if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
+                hero1->ResetModes( Heroes::RECRUIT );
 
-            recruits.SetHero2( nullptr );
+                recruits.SetHero1( nullptr );
+            }
+            else {
+                remainingRecruits.insert( hero1 );
+            }
         }
+        if ( hero2 ) {
+            if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
+                hero2->ResetModes( Heroes::RECRUIT );
+
+                recruits.SetHero2( nullptr );
+            }
+            else {
+                remainingRecruits.insert( hero2 );
+            }
+        }
+    }
+
+    // Heroes who surrendered on Sunday (and are still available for recruitment in the same kingdom)
+    // may have previously been available for recruitment in several kingdoms at once in case of a
+    // lack of heroes, so we should ensure that they still have the RECRUIT mode set
+    for ( Heroes * hero : remainingRecruits ) {
+        assert( hero != nullptr );
+
+        hero->SetModes( Heroes::RECRUIT );
     }
 
     // Settle a new set of recruits in all playable kingdoms
