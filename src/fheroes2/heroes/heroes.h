@@ -489,7 +489,7 @@ struct AllHeroes : public VecHeroes
 
     void Scoute( int ) const;
 
-    void ResetModes( uint32_t modes ) const
+    void ResetModes( const uint32_t modes ) const
     {
         std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
     }
