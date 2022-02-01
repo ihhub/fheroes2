@@ -532,7 +532,7 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         Board * board = Arena::GetBoard();
         for ( const int32_t index : aroundAttacker ) {
             const Unit * unit = board->at( index ).GetUnit();
-            if ( unit != nullptr && unit->GetColor() != attacker.GetColor() ) {
+            if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
                 unitsUnderAttack.insert( unit );
             }
         }
