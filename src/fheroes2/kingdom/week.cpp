@@ -30,20 +30,19 @@
 
 namespace
 {
-    WeekName WeekRand( const World & worldInstance, const size_t seed )
+    WeekName WeekRand( const World & worldInstance, const uint32_t seed )
     {
-        return ( 0 == ( worldInstance.CountWeek() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::ANT, WeekName::CONDOR, static_cast<uint32_t>( seed ) );
+        return ( 0 == ( worldInstance.CountWeek() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::ANT, WeekName::CONDOR, seed );
     }
 
-    WeekName MonthRand( const World & worldInstance, const size_t seed )
+    WeekName MonthRand( const World & worldInstance, const uint32_t seed )
     {
-        return ( 0 == ( worldInstance.GetMonth() + 1 ) % 3 ) ? WeekName::MONSTERS
-                                                             : Rand::GetWithSeed( WeekName::PLAGUE, WeekName::CONDOR, static_cast<uint32_t>( seed ) );
+        return ( 0 == ( worldInstance.GetMonth() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::PLAGUE, WeekName::CONDOR, seed );
     }
 
-    Monster::monster_t RandomMonsterWeekOf( const size_t seed )
+    Monster::monster_t RandomMonsterWeekOf( const uint32_t seed )
     {
-        switch ( Rand::GetWithSeed( 1, 47, static_cast<uint32_t>( seed ) ) ) {
+        switch ( Rand::GetWithSeed( 1, 47, seed ) ) {
         case 1:
             return Monster::PEASANT;
         case 2:
@@ -144,9 +143,9 @@ namespace
         }
     }
 
-    Monster::monster_t RandomMonsterMonthOf( const size_t seed )
+    Monster::monster_t RandomMonsterMonthOf( const uint32_t seed )
     {
-        switch ( Rand::GetWithSeed( 1, 30, static_cast<uint32_t>( seed ) ) ) {
+        switch ( Rand::GetWithSeed( 1, 30, seed ) ) {
         case 1:
             return Monster::PEASANT;
         case 2:
@@ -274,15 +273,15 @@ const char * Week::GetName( void ) const
     return "Unnamed";
 }
 
-Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const size_t weekSeed )
+Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const uint32_t weekSeed )
 {
-    size_t weekTypeSeed = weekSeed;
+    uint32_t weekTypeSeed = weekSeed;
     fheroes2::hashCombine( weekTypeSeed, 34582445 ); // random value to add salt
 
     const WeekName weekName = isNewMonth ? MonthRand( worldInstance, weekTypeSeed ) : WeekRand( worldInstance, weekTypeSeed );
 
     if ( weekName == WeekName::MONSTERS ) {
-        size_t monsterTypeSeed = weekSeed;
+        uint32_t monsterTypeSeed = weekSeed;
         fheroes2::hashCombine( monsterTypeSeed, 284631 ); // random value to add salt
         if ( isNewMonth ) {
             return { weekName, RandomMonsterMonthOf( monsterTypeSeed ) };

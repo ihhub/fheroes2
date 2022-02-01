@@ -55,9 +55,9 @@ namespace Battle
 namespace
 {
     // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
-    size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+    uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
     {
-        size_t newSeed = seed;
+        uint32_t newSeed = seed;
 
         for ( const Battle::Command & command : actions ) {
             if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
@@ -349,7 +349,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const size_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        const uint32_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
         _randomGenerator.UpdateSeed( newSeed );
 
         const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
