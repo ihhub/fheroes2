@@ -325,6 +325,8 @@ namespace
         switch ( artifactId ) {
         case Artifact::BALLISTA:
             return _( "Ballista" );
+        case Artifact::BLACK_PEARL:
+            return _( "short|Black Pearl" );
         case Artifact::CASTER_BRACELET:
             return _( "Caster's Bracelet" );
         case Artifact::DEFENDER_HELM:
@@ -337,22 +339,34 @@ namespace
             return _( "Fizbin Medal" );
         case Artifact::FOREMOST_SCROLL:
             return _( "Foremost Scroll" );
+        case Artifact::HIDEOUS_MASK:
+            return _( "short|Hideous Mask" );
         case Artifact::MAGE_RING:
             return _( "Mage's Ring" );
         case Artifact::MAJOR_SCROLL:
             return _( "Major Scroll" );
+        case Artifact::MEDAL_HONOR:
+            return _( "short|Medal of Honor" );
+        case Artifact::MEDAL_VALOR:
+            return _( "short|Medal of Valor" );
         case Artifact::MINOR_SCROLL:
             return _( "Minor Scroll" );
         case Artifact::NOMAD_BOOTS_MOBILITY:
             return _( "Nomad Boots" );
         case Artifact::POWER_AXE:
             return _( "Power Axe" );
+        case Artifact::SPIKED_SHIELD:
+            return _( "short|Spiked Shield" );
         case Artifact::STEALTH_SHIELD:
             return _( "Stealth Shield" );
+        case Artifact::TAX_LIEN:
+            return _( "short|Tax Lien" );
         case Artifact::THUNDER_MACE:
             return _( "Thunder Mace" );
         case Artifact::TRAVELER_BOOTS_MOBILITY:
             return _( "Traveler's Boots" );
+        case Artifact::WHITE_PEARL:
+            return _( "short|White Pearl" );
         default:
             return Artifact( artifactId ).GetName();
         }
