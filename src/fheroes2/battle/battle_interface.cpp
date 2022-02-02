@@ -851,6 +851,9 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
         uint8_t color = 0;
 
         switch ( unit.GetCurrentColor() ) {
+        case -1: // Berserkers
+            color = ARMY_COLOR_BLACK;
+            break;
         case Color::BLUE:
             color = ARMY_COLOR_BLUE;
             break;

@@ -159,6 +159,7 @@ namespace Battle
     private:
         enum ArmyColor : uint8_t
         {
+            ARMY_COLOR_BLACK = 0x00,
             ARMY_COLOR_BLUE = 0x47,
             ARMY_COLOR_GREEN = 0x67,
             ARMY_COLOR_RED = 0xbd,
