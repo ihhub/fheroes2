@@ -131,17 +131,17 @@ namespace
             str.append( "\n \n" );
             const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
             if ( scoutingLevel == Skill::Level::NONE ) {
-                str.append( _( "guarded by " ) ).append( StringLower( Army::TroopSizeString( troop ) ) );
+                str.append( _( "guarded by " ) ).append( Translation::StringLower( Army::TroopSizeString( troop ) ) );
             }
             else {
                 str.append( _( "guarded by %{count} %{monster}" ) );
-                StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+                StringReplace( str, "%{count}", Translation::StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
             }
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-                StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
             }
             else {
-                StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
             }
         }
 
@@ -157,10 +157,10 @@ namespace
             const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
             StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-                StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
             }
             else {
-                StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
             }
 
             return str;

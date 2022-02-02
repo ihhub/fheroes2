@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <list>
 #include <map>
 #include <string>
@@ -69,8 +70,10 @@ struct mofile
     uint32_t offset_strings2;
     uint32_t hash_size;
     uint32_t hash_offset;
+    int locale;
     StreamBuf buf;
     std::map<u32, chunk> hash_offsets;
+    std::string domain;
     std::string encoding;
     std::string plural_forms;
     u32 nplurals;
@@ -236,7 +239,6 @@ namespace Translation
 
     mofile * current = nullptr;
     std::map<std::string, mofile> domains;
-    int locale = LOCALE_EN;
     char context = 0;
 
     void setStripContext( char strip )
@@ -256,87 +258,86 @@ namespace Translation
 
     bool bindDomain( const char * domain, const char * file )
     {
-        std::map<std::string, mofile>::const_iterator it = domains.find( domain );
-        if ( it != domains.end() )
-            return true;
-
         std::string str( domain );
 
-        if ( str == "af" || str == "afrikaans" )
-            locale = LOCALE_AF;
-        else if ( str == "ar" || str == "arabic" )
-            locale = LOCALE_AR;
-        else if ( str == "bg" || str == "bulgarian" )
-            locale = LOCALE_BG;
-        else if ( str == "ca" || str == "catalan" )
-            locale = LOCALE_CA;
-        else if ( str == "da" || str == "danish" )
-            locale = LOCALE_DA;
-        else if ( str == "de" || str == "german" )
-            locale = LOCALE_DE;
-        else if ( str == "el" || str == "greek" )
-            locale = LOCALE_EL;
-        else if ( str == "es" || str == "spanish" )
-            locale = LOCALE_ES;
-        else if ( str == "et" || str == "estonian" )
-            locale = LOCALE_ET;
-        else if ( str == "eu" || str == "basque" )
-            locale = LOCALE_EU;
-        else if ( str == "fi" || str == "finnish" )
-            locale = LOCALE_FI;
-        else if ( str == "fr" || str == "french" )
-            locale = LOCALE_FR;
-        else if ( str == "gl" || str == "galician" )
-            locale = LOCALE_GL;
-        else if ( str == "he" || str == "hebrew" )
-            locale = LOCALE_HE;
-        else if ( str == "hr" || str == "croatian" )
-            locale = LOCALE_HR;
-        else if ( str == "hu" || str == "hungarian" )
-            locale = LOCALE_HU;
-        else if ( str == "id" || str == "indonesian" )
-            locale = LOCALE_ID;
-        else if ( str == "it" || str == "italian" )
-            locale = LOCALE_IT;
-        else if ( str == "la" || str == "latin" )
-            locale = LOCALE_LA;
-        else if ( str == "lt" || str == "lithuanian" )
-            locale = LOCALE_LT;
-        else if ( str == "lv" || str == "latvian" )
-            locale = LOCALE_LV;
-        else if ( str == "mk" || str == "macedonia" )
-            locale = LOCALE_MK;
-        else if ( str == "nb" || str == "norwegian" )
-            locale = LOCALE_NB;
-        else if ( str == "nl" || str == "dutch" )
-            locale = LOCALE_NL;
-        else if ( str == "pl" || str == "polish" )
-            locale = LOCALE_PL;
-        else if ( str == "pt" || str == "portuguese" )
-            locale = LOCALE_PT;
-        else if ( str == "ru" || str == "russian" )
-            locale = LOCALE_RU;
-        else if ( str == "sk" || str == "slovak" )
-            locale = LOCALE_SK;
-        else if ( str == "sl" || str == "slovenian" )
-            locale = LOCALE_SL;
-        else if ( str == "sr" || str == "serbian" )
-            locale = LOCALE_SR;
-        else if ( str == "sv" || str == "swedish" )
-            locale = LOCALE_SV;
-        else if ( str == "tr" || str == "turkish" )
-            locale = LOCALE_TR;
+        // Search for already loaded domain or load from file
+        std::map<std::string, mofile>::iterator it = domains.find( str );
+        if ( it == domains.end() ) {
+            if ( !domains[str].open( file ) )
+                return false;
 
-        return domains[domain].open( file );
-    }
+            current = &domains[str];
 
-    bool setDomain( const char * domain )
-    {
-        std::map<std::string, mofile>::iterator it = domains.find( domain );
-        if ( it == domains.end() )
-            return false;
+            // Update locale
+            current->domain = str;
+            if ( str == "af" || str == "afrikaans" )
+                current->locale = LOCALE_AF;
+            else if ( str == "ar" || str == "arabic" )
+                current->locale = LOCALE_AR;
+            else if ( str == "bg" || str == "bulgarian" )
+                current->locale = LOCALE_BG;
+            else if ( str == "ca" || str == "catalan" )
+                current->locale = LOCALE_CA;
+            else if ( str == "da" || str == "danish" )
+                current->locale = LOCALE_DA;
+            else if ( str == "de" || str == "german" )
+                current->locale = LOCALE_DE;
+            else if ( str == "el" || str == "greek" )
+                current->locale = LOCALE_EL;
+            else if ( str == "es" || str == "spanish" )
+                current->locale = LOCALE_ES;
+            else if ( str == "et" || str == "estonian" )
+                current->locale = LOCALE_ET;
+            else if ( str == "eu" || str == "basque" )
+                current->locale = LOCALE_EU;
+            else if ( str == "fi" || str == "finnish" )
+                current->locale = LOCALE_FI;
+            else if ( str == "fr" || str == "french" )
+                current->locale = LOCALE_FR;
+            else if ( str == "gl" || str == "galician" )
+                current->locale = LOCALE_GL;
+            else if ( str == "he" || str == "hebrew" )
+                current->locale = LOCALE_HE;
+            else if ( str == "hr" || str == "croatian" )
+                current->locale = LOCALE_HR;
+            else if ( str == "hu" || str == "hungarian" )
+                current->locale = LOCALE_HU;
+            else if ( str == "id" || str == "indonesian" )
+                current->locale = LOCALE_ID;
+            else if ( str == "it" || str == "italian" )
+                current->locale = LOCALE_IT;
+            else if ( str == "la" || str == "latin" )
+                current->locale = LOCALE_LA;
+            else if ( str == "lt" || str == "lithuanian" )
+                current->locale = LOCALE_LT;
+            else if ( str == "lv" || str == "latvian" )
+                current->locale = LOCALE_LV;
+            else if ( str == "mk" || str == "macedonia" )
+                current->locale = LOCALE_MK;
+            else if ( str == "nb" || str == "norwegian" )
+                current->locale = LOCALE_NB;
+            else if ( str == "nl" || str == "dutch" )
+                current->locale = LOCALE_NL;
+            else if ( str == "pl" || str == "polish" )
+                current->locale = LOCALE_PL;
+            else if ( str == "pt" || str == "portuguese" )
+                current->locale = LOCALE_PT;
+            else if ( str == "ru" || str == "russian" )
+                current->locale = LOCALE_RU;
+            else if ( str == "sk" || str == "slovak" )
+                current->locale = LOCALE_SK;
+            else if ( str == "sl" || str == "slovenian" )
+                current->locale = LOCALE_SL;
+            else if ( str == "sr" || str == "serbian" )
+                current->locale = LOCALE_SR;
+            else if ( str == "sv" || str == "swedish" )
+                current->locale = LOCALE_SV;
+            else if ( str == "tr" || str == "turkish" )
+                current->locale = LOCALE_TR;
+        }
+        else
+            current = &( *it ).second;
 
-        current = &( *it ).second;
         return true;
     }
 
@@ -359,7 +360,7 @@ namespace Translation
     const char * ngettext( const char * str, const char * plural, size_t n )
     {
         if ( current )
-            switch ( locale ) {
+            switch ( current->locale ) {
             case LOCALE_AF:
             case LOCALE_EU:
             case LOCALE_ID:
@@ -412,5 +413,83 @@ namespace Translation
             }
 
         return stripContext( n == 1 ? str : plural );
+    }
+
+    // Character lookup table for custom tolower
+    // Compatible with ASCII, custom French encoding, CP1250 and CP1251
+    const std::array<unsigned char, 256> tolowerLUT
+        = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, // Non-printable characters
+            0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
+
+            // SP !    "    #    $    %    &     '    (    )    *    +    ,    -    .    /  (ASCII)
+            // SP !    "    ô    û    %    ù     '    (    )    â    +    ,    -    .    /  (French, #$&* are ôûùâ)
+            ' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
+
+            // 0  1    2    3    4    5    6    7    8    9    :    ;    <    =    >    ?   (ASCII)
+            // 0  1    2    3    4    5    6    7    8    9    :    ;    ï    =    î    ?   (French, <> are ïî)
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?',
+
+            // @  A→a  B→b  C→c  D→d  E→e  F→f  G→g  H→h  I→i  J→j  K→k  L→l  M→m  N→n  O→o (ASCII)
+            // à  A→a  B→b  C→c  D→d  E→e  F→f  G→g  H→h  I→i  J→j  K→k  L→l  M→m  N→n  O→o (French, @ is à)
+            '@', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+
+            // P→p Q→q R→r  S→s  T→t  U→u  V→v  W→w  X→x  Y→y  Z→z  [    \     ]    ^    _  (ASCII)
+            // P→p Q→q R→r  S→s  T→t  U→u  V→v  W→w  X→x  Y→y  Z→z  [    \     ]    ç    _  (French, ^ is ç)
+            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '[', '\\', ']', '^', '_',
+
+            // `  a    b    c    d    e    f    g    h    i    j    k    l    m    n    o   (ASCII)
+            // è  a    b    c    d    e    f    g    h    i    j    k    l    m    n    o   (French, ` is è)
+            '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+
+            // p  q    r    s    t    u    v    w    x    y    z    {    |    }    ~    DEL (ASCII)
+            // p  q    r    s    t    u    v    w    x    y    z    {    ê    }    é    DEL (French, |~ are êé)
+            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', 0x7F,
+
+            // €         ‚           „     …     †     ‡           ‰     Š→š   ‹     Ś→ś   Ť→ť   Ž→ž   Ź→ź (1250, except €)
+            // Ђ→ђ Ѓ→ѓ   ‚     ѓ     „     …     †     ‡     €     ‰     Љ→љ   ‹     Њ→њ   Ќ→ќ   Ћ→ћ   Џ→џ (1251)
+            0x90, 0x83, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x9A, 0x8B, 0x9C, 0x9D, 0x9E, 0x9F,
+
+            //     ‘     ’     “     ”     •     –     —           ™     š     ›     ś     ť     ž     ź   (1250)
+            // ђ   ‘     ’     “     ”     •     –     —           ™     љ     ›     њ     ќ     ћ     џ   (1251)
+            0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F,
+
+            // NBS ˇ     ˘     Ł→ł   ¤     Ą→ą   ¦     §     ¨     ©     Ş→ş   «     ¬     SHY   ®     Ż→ż (1250 except ˇ¨)
+            // NBP Ў→ў   ў     Ј     ¤     Ґ     ¦     §     Ё→ё   ©     Є→є   «     ¬     SHY   ®     Ї→ї (1251 except ЈҐ)
+            0xA0, 0xA2, 0xA2, 0xB3, 0xA4, 0xB9, 0xA6, 0xA7, 0xB8, 0xA9, 0xBA, 0xAB, 0xAC, 0xAD, 0xAE, 0xBF,
+
+            // °   ±     ˛     ł     ´     µ     ¶     ·     ¸     ą     ş     »     Ľ→ľ   ˝     ľ     ż   (1250 except ˛˝)
+            // °   ±     І→і   і     ґ     µ     ¶     ·     ё     №     є     »     ј     Ѕ→ѕ   ѕ     ї   (1251 except ј)
+            0xB0, 0xB1, 0xB3, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBE, 0xBE, 0xBE, 0xBF,
+
+            // Ŕ→ŕ Á→á   Â→â   Ă→ă   Ä→ä   Ĺ→ĺ   Ć→ć   Ç→ç   Č→č   É→é   Ę→ę   Ë→ë   Ě→ě   Í→í   Î→î   Ď→ď (1250)
+            // А→а Б→б   В→в   Г→г   Д→д   Е→е   Ж→ж   З→з   И→и   Й→й   К→к   Л→л   М→м   Н→н   О→о   П→п (1251)
+            0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF,
+
+            // Đ→đ Ń→ń   Ň→ň   Ó→ó   Ô→ô   Ő→ő   Ö→ö   ×     Ř→ř   Ů→ů   Ú→ú   Ű→ű   Ü→ü   Ý→ý   Ţ→ţ   ß   (1250, except ×ß)
+            // Р→р С→с   Т→т   У→у   Ф→ф   Х→х   Ц→ц   Ч→ч   Ш→ш   Щ→щ   Ъ→ъ   Ы→ы   Ь→ь   Э→э   Ю→ю   Я→я (1251)
+            0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
+
+            // ŕ   á     â     ă     ä     ĺ     ć     ç     č     é     ę     ë     ě     í     î     ď   (1250)
+            // а   б     в     г     д     е     ж     з     и     й     к     л     м     н     о     п   (1251)
+            0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF,
+
+            // đ   ń     ň     ó     ô     ő     ö     ÷     ř     ů     ú     ű     ü     ý     ţ     ˙   (1250)
+            // р   с     т     у     ф     х     ц     ч     ш     щ     ъ     ы     ь     э     ю     я   (1251)
+            0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF };
+
+    std::string StringLower( std::string str )
+    {
+        if ( current ) {
+            // With German, lowercasing strings does more harm than good
+            if ( current->locale == LOCALE_DE )
+                return str;
+
+            // For CP1250/1251 codepages a custom lowercase LUT is implemented
+            if ( ( current->encoding == "CP1250" ) || ( current->encoding == "CP1251" ) ) {
+                std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return tolowerLUT[c]; } );
+                return str;
+            }
+        }
+        return ::StringLower( str );
     }
 }
