@@ -137,13 +137,13 @@ msgid "View %{name}"
 msgstr "Просмотреть %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Перемеcтить %{name} или разделить (правой кнопкой)"
+msgstr "Перемеcтить отряд или разделить (правой кнопкой)"
 
 msgid "Combine %{name} armies"
-msgstr "Комбинировать %{name} армии"
+msgstr "Объединить отряды или перераспределить (правой кнопкой)"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr "Обмен %{name2} с %{name}"
+msgstr "Переставить отряды"
 
 msgid "Select %{name}"
 msgstr "Выбрать %{name}"
@@ -1039,7 +1039,7 @@ msgid "Conquer and Unify"
 msgstr "Завоевать и объединить"
 
 msgid "Crazy Uncle Ivan"
-msgstr "Дядя Иван"
+msgstr "Безумный дядя"
 
 msgid "The Wayward Son"
 msgstr "Блудный сын"
