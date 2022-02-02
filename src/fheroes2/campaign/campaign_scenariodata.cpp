@@ -391,10 +391,10 @@ namespace
             return _( "short|Resurrect" );
         case Spell::STEELSKIN:
             return _( "short|Steel Skin" );
-        case Spell::VIEWHEROES:
-            return _( "short|View Heroes" );
         case Spell::SUMMONEELEMENT:
             return _( "Summon Earth" );
+        case Spell::VIEWHEROES:
+            return _( "short|View Heroes" );
         default:
             return Spell( spellId ).GetName();
         }
