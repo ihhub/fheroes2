@@ -236,7 +236,7 @@ namespace AI
 
         // Step 4. Current unit decision tree
         const size_t actionsSize = actions.size();
-        Battle::Arena::GetBoard()->SetPositionQuality( currentUnit );
+        Arena::GetBoard()->SetPositionQuality( currentUnit );
 
         if ( currentUnit.isArchers() ) {
             const Actions & archerActions = archerDecision( arena, currentUnit );
@@ -706,10 +706,9 @@ namespace AI
         assert( currentUnit.Modes( SP_BERSERKER ) );
         Actions actions;
 
-        Board & board = *Arena::GetBoard();
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
-        const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
+        const std::vector<Unit *> nearestUnits = Arena::GetBoard()->GetNearestTroops( &currentUnit, {} );
         if ( !nearestUnits.empty() ) {
             // If the berserker is an archer, then just shoot at the nearest unit
             if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
