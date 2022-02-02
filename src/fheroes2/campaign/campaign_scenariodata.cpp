@@ -375,6 +375,24 @@ namespace
     const char * getSpellCampaignName( const Uint32 spellId )
     {
         switch ( spellId ) {
+        case Spell::ANIMATEDEAD:
+            return _( "short|Animate Dead" );
+        case Spell::CHAINLIGHTNING:
+            return _( "short|Chain Lightning" );
+        case Spell::FIREBLAST:
+            return _( "short|Fireblast" );
+        case Spell::MASSCURSE:
+            return _( "short|Mass Curse" );
+        case Spell::MASSHASTE:
+            return _( "short|Mass Haste" );
+        case Spell::MIRRORIMAGE:
+            return _( "short|Mirror Image" );
+        case Spell::RESURRECT:
+            return _( "short|Resurrect" );
+        case Spell::STEELSKIN:
+            return _( "short|Steel Skin" );
+        case Spell::VIEWHEROES:
+            return _( "short|View Heroes" );
         case Spell::SUMMONEELEMENT:
             return _( "Summon Earth" );
         default:
