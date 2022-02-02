@@ -599,7 +599,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
 
-            if ( enemy && enemy->GetColor() != attacker.GetColor() && consideredTargets.insert( enemy ).second ) {
+            if ( enemy && enemy->GetColor() != attacker.GetCurrentColor() && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
 

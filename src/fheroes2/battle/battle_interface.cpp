@@ -1732,7 +1732,7 @@ void Battle::Interface::RedrawCover()
 
                     const Unit * aroundUnit = aroundCell->GetUnit();
 
-                    if ( aroundUnit && aroundUnit->GetColor() != _currentUnit->GetColor() ) {
+                    if ( aroundUnit && aroundUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
                         highlightCells.emplace( aroundCell );
                     }
                 }
