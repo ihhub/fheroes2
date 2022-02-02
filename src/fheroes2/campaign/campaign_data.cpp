@@ -565,14 +565,15 @@ namespace Campaign
         return std::vector<Campaign::CampaignAwardData>();
     }
 
-    const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const int scenarioID ) const
+    const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo ) const
     {
         for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            if ( _scenarios[i].getScenarioID() == scenarioID )
+            if ( _scenarios[i].getScenarioID() == scenarioInfo.scenarioId && _scenarios[i].getCampaignId() == scenarioInfo.campaignId )
                 return _scenarios[i].getNextScenarios();
         }
 
-        return _scenarios[scenarioID].getNextScenarios();
+        // TODO: Should we really allow to reach this code?
+        return _scenarios[scenarioInfo.scenarioId].getNextScenarios();
     }
 
     std::vector<ScenarioInfoId> CampaignData::getStartingScenarios() const

@@ -142,13 +142,16 @@ namespace
 
         std::vector<int> prevScenarioNextMaps;
         const std::vector<Campaign::ScenarioInfoId> & clearedMaps = saveData.getFinishedMaps();
+
+        const Campaign::ScenarioInfoId lastCompletedScenario = saveData.getLastCompletedScenarioInfoID();
+
         std::vector<Campaign::ScenarioInfoId> availableMaps;
         if ( chosenScenarioId >= 0 ) {
             availableMaps.emplace_back( saveData.getCampaignID(), chosenScenarioId );
         }
         else {
             availableMaps
-                = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioInfoID().scenarioId );
+                = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( lastCompletedScenario );
         }
 
         assert( iconOffsets.size() == scenarios.size() );
@@ -574,8 +577,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     playPreviosScenarioVideo();
 
     // TODO: do proper calc based on all scenarios cleared?
-    const int lastCompletedScenarioID = saveData.getLastCompletedScenarioInfoID().scenarioId;
-    if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+    const Campaign::ScenarioInfoId lastCompletedScenarioInfo = saveData.getLastCompletedScenarioInfoID();
+    if ( campaignData.isLastScenario( lastCompletedScenarioInfo.scenarioId ) ) {
         Game::ShowCredits();
 
         AGG::ResetMixer();
@@ -583,7 +586,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         return fheroes2::GameMode::HIGHSCORES;
     }
 
-    const Campaign::ScenarioInfoId firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
+    const Campaign::ScenarioInfoId firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioInfo ).front();
     saveData.setCurrentScenarioInfoId( firstNextMap );
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -707,7 +710,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     }
     else {
         selectableScenarios = campaignSaveData.isStarting() ? campaignData.getStartingScenarios()
-                                                            : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID().scenarioId );
+                                                            : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID() );
     }
 
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
