@@ -37,7 +37,9 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <map>
 #include <set>
+#include <utility>
 
 using namespace Battle;
 
@@ -709,41 +711,87 @@ namespace AI
 
         const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
         if ( !nearestUnits.empty() ) {
-            for ( const Unit * targetUnit : nearestUnits ) {
-                const uint32_t targetUnitUID = targetUnit->GetUID();
-                const int32_t targetUnitHead = targetUnit->GetHeadIndex();
-                if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
-                    break;
-                }
-                else {
-                    int targetCell = -1;
+            // If the berserker is an archer, then just shoot at the nearest unit
+            if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, will shoot" );
 
-                    for ( const int cell : Board::GetAroundIndexes( *targetUnit ) ) {
-                        if ( arena.hexIsPassable( cell ) && ( targetCell == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetCell ) ) ) {
-                            targetCell = cell;
+                const Unit * targetUnit = nearestUnits.front();
+                assert( targetUnit != nullptr );
+
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), targetUnit->GetHeadIndex(), 0 );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer focusing enemy " << targetUnit->GetName() );
+            }
+            else {
+                // The index of the cell from which the attack will be performed, and the target unit
+                std::pair<int, const Unit *> targetInfo{ -1, nullptr };
+
+                std::map<const Unit *, Indexes> aroundIndexesCache;
+
+                // First, try to find a unit nearby that can be attacked on this turn
+                for ( const Unit * nearbyUnit : nearestUnits ) {
+                    assert( nearbyUnit != nullptr );
+
+                    const auto cacheItemIter = aroundIndexesCache.emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
+                    assert( cacheItemIter != aroundIndexesCache.end() );
+
+                    for ( const int cell : cacheItemIter->second ) {
+                        if ( !arena.hexIsPassable( cell ) ) {
+                            continue;
+                        }
+
+                        if ( Board::CanAttackUnitFromPosition( currentUnit, *nearbyUnit, cell ) ) {
+                            targetInfo = { cell, nearbyUnit };
+
+                            break;
                         }
                     }
 
-                    if ( targetCell != -1 ) {
-                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
-
-                        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
-
-                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
-
-                        if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
-                        }
-
-                        // Attack only if target unit is reachable and can be attacked
-                        if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
-                            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
-
-                            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
-                        }
-
+                    if ( targetInfo.first != -1 ) {
                         break;
+                    }
+                }
+
+                // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
+                if ( targetInfo.first == -1 ) {
+                    for ( const Unit * nearbyUnit : nearestUnits ) {
+                        assert( nearbyUnit != nullptr );
+
+                        const auto cacheItemIter = aroundIndexesCache.find( nearbyUnit );
+                        assert( cacheItemIter != aroundIndexesCache.end() );
+
+                        for ( const int cell : cacheItemIter->second ) {
+                            if ( !arena.hexIsPassable( cell ) ) {
+                                continue;
+                            }
+
+                            if ( targetInfo.first == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetInfo.first ) ) {
+                                targetInfo = { cell, nearbyUnit };
+                            }
+                        }
+                    }
+                }
+
+                if ( targetInfo.first != -1 ) {
+                    const int targetCell = targetInfo.first;
+                    const Unit * targetUnit = targetInfo.second;
+                    assert( targetUnit != nullptr );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
+
+                    const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
+
+                    if ( currentUnit.GetHeadIndex() != reachableCell ) {
+                        actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+                    }
+
+                    // Attack only if target unit is reachable and can be attacked
+                    if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
+                        actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), targetUnit->GetHeadIndex(), 0 );
+
+                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
                     }
                 }
             }
