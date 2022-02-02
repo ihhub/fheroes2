@@ -124,7 +124,7 @@ namespace Battle
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & ) const;
 
-        // Returns the cell nearest to the end of the path to the cell with the given index (according to the ArenaPathfinder)
+        // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
         // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
         // with the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
@@ -244,7 +244,7 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
-        ArenaPathfinder _pathfinder;
+        AIBattlePathfinder _globalAIPathfinder;
         int icn_covr;
 
         u32 current_turn;

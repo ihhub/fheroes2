@@ -334,7 +334,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else {
             // re-calculate possible paths in case unit moved or it's a new turn
-            _pathfinder.calculate( *troop );
+            _globalAIPathfinder.calculate( *troop );
 
             // get task from player
             if ( troop->isControlRemote() )
@@ -631,7 +631,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
 
 Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange ) const
 {
-    return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
+    return _globalAIPathfinder.findTwoMovesOverlap( indexTo, movementRange );
 }
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
@@ -643,7 +643,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     const Cell * tail = pos.GetTail();
 
     if ( head ) {
-        const ArenaNode & headNode = _pathfinder.getNode( head->GetIndex() );
+        const BattleNode & headNode = _globalAIPathfinder.getNode( head->GetIndex() );
         if ( headNode._from != -1 ) {
             result.first = headNode._from;
             result.second = headNode._cost;
@@ -651,7 +651,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     }
 
     if ( tail ) {
-        const ArenaNode & tailNode = _pathfinder.getNode( tail->GetIndex() );
+        const BattleNode & tailNode = _globalAIPathfinder.getNode( tail->GetIndex() );
         if ( tailNode._from != -1 && tailNode._cost < result.second ) {
             result.first = tailNode._from;
             result.second = tailNode._cost;
@@ -663,17 +663,17 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
 
 uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : 65535;
+    return Board::isValidIndex( indexTo ) ? _globalAIPathfinder.getDistance( indexTo ) : 65535;
 }
 
 bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+    return Board::isValidIndex( indexTo ) && _globalAIPathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
 {
-    return _pathfinder.getAllAvailableMoves( moveRange );
+    return _globalAIPathfinder.getAllAvailableMoves( moveRange );
 }
 
 int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
@@ -685,9 +685,9 @@ int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const 
         return dstPos.GetHead()->GetIndex();
     }
 
-    const Indexes path = _pathfinder.buildPath( dst );
+    const Indexes path = _globalAIPathfinder.buildPath( dst );
 
-    // Destination cell is unreachable in principle according to the ArenaPathfinder
+    // Destination cell is unreachable in principle according to the AIBattlePathfinder
     if ( path.empty() ) {
         return -1;
     }
