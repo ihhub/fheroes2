@@ -732,9 +732,7 @@ namespace AI
             return actions;
         }
 
-        // The index of the cell from which the attack will be performed, and the target unit
-        std::pair<int, const Unit *> targetInfo{ -1, nullptr };
-
+        BattleTargetPair targetInfo;
         std::map<const Unit *, Indexes> aroundIndexesCache;
 
         // First, try to find a unit nearby that can be attacked on this turn
@@ -750,19 +748,20 @@ namespace AI
                 }
 
                 if ( Board::CanAttackUnitFromPosition( currentUnit, *nearbyUnit, cell ) ) {
-                    targetInfo = { cell, nearbyUnit };
+                    targetInfo.cell = cell;
+                    targetInfo.unit = nearbyUnit;
 
                     break;
                 }
             }
 
-            if ( targetInfo.first != -1 ) {
+            if ( targetInfo.cell != -1 ) {
                 break;
             }
         }
 
         // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
-        if ( targetInfo.first == -1 ) {
+        if ( targetInfo.cell == -1 ) {
             for ( const Unit * nearbyUnit : nearestUnits ) {
                 assert( nearbyUnit != nullptr );
 
@@ -774,23 +773,21 @@ namespace AI
                         continue;
                     }
 
-                    if ( targetInfo.first == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetInfo.first ) ) {
-                        targetInfo = { cell, nearbyUnit };
+                    if ( targetInfo.cell == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetInfo.cell ) ) {
+                        targetInfo.cell = cell;
                     }
                 }
             }
         }
 
         // There is no reachable unit in sight, skip the turn
-        if ( targetInfo.first == -1 ) {
+        if ( targetInfo.cell == -1 ) {
             actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnitUID, true );
 
             return actions;
         }
 
-        const int targetCell = targetInfo.first;
-        const Unit * targetUnit = targetInfo.second;
-        assert( targetUnit != nullptr );
+        const int targetCell = targetInfo.cell;
 
         DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
 
@@ -802,8 +799,9 @@ namespace AI
             actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
         }
 
-        // Attack only if target unit is reachable and can be attacked
-        if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
+        if ( targetInfo.unit ) {
+            const Unit * targetUnit = targetInfo.unit;
+
             actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1 );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
