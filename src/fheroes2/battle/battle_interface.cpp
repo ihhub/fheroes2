@@ -4996,7 +4996,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_AUTOSWITCH )
-                        || ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_RETREAT )
+                        || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
         arena.BreakAutoBattle();
     }
