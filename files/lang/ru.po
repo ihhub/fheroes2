@@ -264,7 +264,7 @@ msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "За доблесть в бою %{name} получает %{exp} опыта."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr "Трусливый %{name} бежал с поля битвы."
+msgstr "Струсив, %{name} бежит с поля битвы."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} сдаётся врагу и уходит с позором."
@@ -1332,7 +1332,7 @@ msgid "disable build."
 msgstr "отключить строение."
 
 msgid "Cannot afford %{name}."
-msgstr "Недостаточно золота для найма %{name}."
+msgstr "Недостаточно золота для постройки."
 
 msgid "%{name} is already built."
 msgstr "Это здание уже построено."
@@ -3637,7 +3637,7 @@ msgid "%{color} player"
 msgstr "%{color} игрок"
 
 msgid "View %{skill} Info"
-msgstr "Информация об умении %{skill}"
+msgstr "Информация о навыке %{skill}"
 
 msgid "English"
 msgstr "Английский"
@@ -4391,7 +4391,7 @@ msgid "Do you wish to buy this artifact?"
 msgstr "Хотите приобрести этот артефакт?"
 
 msgid "Artifact"
-msgstr "Артефакты"
+msgstr "Артефакт"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -4574,7 +4574,7 @@ msgstr ""
 "гораздо дальше."
 
 msgid "You gain control of a %{name}."
-msgstr "Персонаж %{name} переходит под Ваш контроль."
+msgstr "%{name} переходит под Ваш контроль."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -8360,13 +8360,13 @@ msgid "world: show terrain penalty"
 msgstr "мир: показывать штраф при перемещении"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr "мир: умение разведчика покажет дополнительную информацию"
+msgstr "мир: навык разведки покажет дополнительную информацию"
 
 msgid "world: allow to set guardian to objects"
 msgstr "мир: разрешить охранников для дополнительных объектов"
 
 msgid "world: Eagle Eye also works like Scholar in H3."
-msgstr "мир: Орлиный Взор также работает как Scholar (H3)"
+msgstr "мир: Орлиный взор также работает как Scholar (H3)"
 
 msgid "world: Crystal Ball gives Identify Hero and Visions spells"
 msgstr ""
@@ -8413,8 +8413,8 @@ msgid "heroes: remember move points for retreat/surrender result"
 msgstr "герои: при бегстве запомнить MP/SP для текущего дня"
 
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr "герои: переписывание заклинаний из свитков в книгу (необходимо умение "
-"Орлиный Взор)"
+msgstr "герои: переписывание заклинаний из свитков в книгу (необходим навык "
+"Орлиный взор)"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
