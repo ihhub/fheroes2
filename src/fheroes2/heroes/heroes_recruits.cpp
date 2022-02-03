@@ -42,16 +42,6 @@ Recruit::Recruit( const Heroes & hero )
     : Recruit( hero, 0 )
 {}
 
-int Recruit::getID() const
-{
-    return _id;
-}
-
-uint32_t Recruit::getSurrenderDay() const
-{
-    return _surrenderDay;
-}
-
 void Recruit::setSurrenderDayTmp( const uint32_t surrenderDay )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );

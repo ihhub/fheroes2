@@ -44,8 +44,15 @@ public:
     Recruit & operator=( const Recruit & ) = delete;
     Recruit & operator=( Recruit && ) = default;
 
-    int getID() const;
-    uint32_t getSurrenderDay() const;
+    int getID() const
+    {
+        return _id;
+    }
+
+    uint32_t getSurrenderDay() const
+    {
+        return _surrenderDay;
+    }
 
     void setSurrenderDayTmp( const uint32_t surrenderDay );
 
