@@ -569,12 +569,32 @@ void Battle::Arena::TowerAction( const Tower & twr )
 {
     board.Reset();
     board.SetEnemyQuality( twr );
-    const Unit * enemy = GetEnemyMaxQuality( twr.GetColor() );
 
-    if ( enemy ) {
-        Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
-        ApplyAction( cmd );
+    // Target unit and its quality
+    std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
+
+    for ( const Cell & cell : board ) {
+        const Unit * unit = cell.GetUnit();
+
+        if ( unit == nullptr || unit->GetColor() == twr.GetColor() || ( unit->isWide() && unit->GetTailIndex() == cell.GetIndex() ) ) {
+            continue;
+        }
+
+        if ( targetInfo.first == nullptr || targetInfo.second < cell.GetQuality() ) {
+            targetInfo = { unit, cell.GetQuality() };
+        }
     }
+
+    // Normally this shouldn't happen
+    if ( targetInfo.first == nullptr ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "No target found for the tower!" );
+
+        return;
+    }
+
+    Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), targetInfo.first->GetUID() );
+
+    ApplyAction( cmd );
 }
 
 void Battle::Arena::CatapultAction( void )
@@ -766,23 +786,6 @@ const Battle::Unit * Battle::Arena::GetTroopUID( u32 uid ) const
     it = std::find_if( army2->begin(), army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     return it != army2->end() ? *it : nullptr;
-}
-
-const Battle::Unit * Battle::Arena::GetEnemyMaxQuality( int my_color ) const
-{
-    const Unit * res = nullptr;
-    s32 quality = 0;
-
-    for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-        const Unit * enemy = ( *it ).GetUnit();
-
-        if ( enemy && enemy->GetColor() != my_color && ( !enemy->isWide() || enemy->GetTailIndex() != ( *it ).GetIndex() ) && quality < ( *it ).GetQuality() ) {
-            res = enemy;
-            quality = ( *it ).GetQuality();
-        }
-    }
-
-    return res;
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const

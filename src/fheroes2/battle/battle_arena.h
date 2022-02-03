@@ -23,7 +23,9 @@
 #ifndef H2BATTLE_ARENA_H
 #define H2BATTLE_ARENA_H
 
+#include <cstdint>
 #include <list>
+#include <utility>
 
 #include "battle.h"
 #include "battle_board.h"
@@ -104,8 +106,6 @@ namespace Battle
 
         Unit * GetTroopUID( u32 );
         const Unit * GetTroopUID( u32 ) const;
-
-        const Unit * GetEnemyMaxQuality( int ) const;
 
         const SpellStorage & GetUsageSpells( void ) const;
 
