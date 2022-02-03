@@ -31,8 +31,6 @@
 #include "tools.h"
 #include "translations.h"
 
-#define SIZEMESSAGE 400
-
 StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
 {
     return msg << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
@@ -172,7 +170,7 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
 bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
     const std::string ans = StringLower( answer ).substr( 0, 4 );
-    auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 

@@ -126,16 +126,16 @@ int32_t Rand::Queue::GetWithSeed( uint32_t seed )
     return Rand::Queue::Get( [seed]( uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
 }
 
-Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const size_t initialSeed )
+Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const uint32_t initialSeed )
     : _currentSeed( initialSeed )
 {}
 
-size_t Rand::DeterministicRandomGenerator::GetSeed() const
+uint32_t Rand::DeterministicRandomGenerator::GetSeed() const
 {
     return _currentSeed;
 }
 
-void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
+void Rand::DeterministicRandomGenerator::UpdateSeed( const uint32_t seed )
 {
     _currentSeed = seed;
 }
@@ -143,5 +143,5 @@ void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
 uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /*= 0*/ ) const
 {
     ++_currentSeed;
-    return Rand::GetWithSeed( from, to, static_cast<uint32_t>( _currentSeed ) );
+    return Rand::GetWithSeed( from, to, _currentSeed );
 }

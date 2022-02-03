@@ -851,6 +851,9 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
         uint8_t color = 0;
 
         switch ( unit.GetCurrentColor() ) {
+        case -1: // Berserkers
+            color = ARMY_COLOR_BLACK;
+            break;
         case Color::BLUE:
             color = ARMY_COLOR_BLUE;
             break;
@@ -1711,18 +1714,27 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
-                // We have to invert the direction.
-                int attackDirection = Board::GetDirection( pos.GetHead()->GetIndex(), index_pos );
-                if ( attackDirection == 0 ) {
-                    // It happens when a creature needs to swap tail and head for an attack move.
-                    attackDirection = Board::GetDirection( pos.GetTail()->GetIndex(), index_pos );
-                }
+                const Cell * secondAttackedCell = Board::GetCell( index_pos, Board::GetReflectDirection( direction ) );
 
-                assert( attackDirection != 0 );
-
-                const Cell * secondAttackedCell = Board::GetCell( index_pos, attackDirection );
-                if ( secondAttackedCell != nullptr ) {
+                if ( secondAttackedCell ) {
                     highlightCells.emplace( secondAttackedCell );
+                }
+            }
+            else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
+                for ( const int32_t aroundIdx : Board::GetAroundIndexes( pos ) ) {
+                    // Should already be highlighted
+                    if ( aroundIdx == index_pos ) {
+                        continue;
+                    }
+
+                    const Cell * aroundCell = Board::GetCell( aroundIdx );
+                    assert( aroundCell != nullptr );
+
+                    const Unit * aroundUnit = aroundCell->GetUnit();
+
+                    if ( aroundUnit && aroundUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
+                        highlightCells.emplace( aroundCell );
+                    }
                 }
             }
         }
@@ -2129,18 +2141,56 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
-                    const int dir = cell->GetTriangleDirection( GetMouseCursor() );
-                    const int cursor = GetSwordCursorDirection( dir );
+                    // Find all possible directions where the current monster can attack.
+                    std::set<int> availableAttackDirection;
 
-                    if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
-                        const s32 from = Board::GetIndexDirection( index_pos, dir );
-
-                        if ( Board::CanAttackUnitFromCell( *_currentUnit, from ) ) {
-                            statusMsg = _( "Attack %{monster}" );
-                            StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                            return cursor;
+                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                        if ( Board::isValidDirection( index_pos, direction )
+                             && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                            availableAttackDirection.emplace( direction );
                         }
+                    }
+
+                    if ( !availableAttackDirection.empty() ) {
+                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                        if ( currentDirection == UNKNOWN ) {
+                            // This function should never return this value.
+                            assert( 0 );
+                            currentDirection = CENTER;
+                        }
+
+                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                            // This direction is not valid. Find the nearest one.
+                            if ( availableAttackDirection.size() == 1 ) {
+                                currentDirection = *availableAttackDirection.begin();
+                            }
+                            else {
+                                // First seach clockwise.
+                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+
+                                while ( true ) {
+                                    ++clockWiseDirection;
+                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                        currentDirection = clockWiseDirection;
+                                        break;
+                                    }
+
+                                    --antiClockWiseDirection;
+                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                        currentDirection = antiClockWiseDirection;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        const int cursor = GetSwordCursorDirection( currentDirection );
+
+                        statusMsg = _( "Attack %{monster}" );
+                        StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
+
+                        return cursor;
                     }
                 }
             }
@@ -2951,7 +3001,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets )
 {
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
@@ -3010,7 +3060,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
+void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */ )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3021,7 +3071,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         Unit * defender = it->defender;
         if ( defender == nullptr ) {
             continue;
@@ -3088,7 +3138,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 redrawBattleField = true;
             }
             else {
-                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                     if ( ( *it ).defender ) {
                         redrawBattleField = true;
                         break;
@@ -3120,7 +3170,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
             finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
                     if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
                         it->defender->SwitchAnimation( Monster_Info::STATIC );
@@ -3518,13 +3568,13 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
+            opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
     }
 }
 
-void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
         uint32_t killed = 0;

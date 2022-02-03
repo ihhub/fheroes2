@@ -96,6 +96,16 @@ namespace Rand
         return *it;
     }
 
+    template <typename T>
+    const T & GetWithSeed( const std::list<T> & list, uint32_t seed )
+    {
+        assert( !list.empty() );
+
+        typename std::list<T>::const_iterator it = list.begin();
+        std::advance( it, Rand::GetWithSeed( 0, static_cast<uint32_t>( list.size() - 1 ), seed ) );
+        return *it;
+    }
+
     using ValuePercent = std::pair<int32_t, uint32_t>;
 
     class Queue : private std::vector<ValuePercent>
@@ -116,14 +126,14 @@ namespace Rand
     class DeterministicRandomGenerator
     {
     public:
-        explicit DeterministicRandomGenerator( const size_t initialSeed );
+        explicit DeterministicRandomGenerator( const uint32_t initialSeed );
 
         // prevent accidental copies
         DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
         DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
 
-        size_t GetSeed() const;
-        void UpdateSeed( const size_t seed );
+        uint32_t GetSeed() const;
+        void UpdateSeed( const uint32_t seed );
 
         uint32_t Get( const uint32_t from, const uint32_t to = 0 ) const;
 
@@ -131,7 +141,7 @@ namespace Rand
         const T & Get( const std::vector<T> & vec ) const
         {
             ++_currentSeed;
-            std::mt19937 seededGen( static_cast<uint32_t>( _currentSeed ) );
+            std::mt19937 seededGen( _currentSeed );
             return Rand::GetWithGen( vec, seededGen );
         }
 
@@ -139,11 +149,11 @@ namespace Rand
         void Shuffle( std::vector<T> & vector ) const
         {
             ++_currentSeed;
-            Rand::ShuffleWithSeed( vector, static_cast<uint32_t>( _currentSeed ) );
+            Rand::ShuffleWithSeed( vector, _currentSeed );
         }
 
     private:
-        mutable size_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
+        mutable uint32_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
     };
 }
 

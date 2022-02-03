@@ -528,12 +528,12 @@ int Maps::FileInfo::AllowHumanColors( void ) const
 
 int Maps::FileInfo::HumanOnlyColors( void ) const
 {
-    return allow_human_colors & ~( allow_comp_colors );
+    return allow_human_colors & ~allow_comp_colors;
 }
 
 int Maps::FileInfo::ComputerOnlyColors( void ) const
 {
-    return allow_comp_colors & ~( allow_human_colors );
+    return allow_comp_colors & ~allow_human_colors;
 }
 
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const

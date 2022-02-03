@@ -1954,7 +1954,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * skill would always be the same once the 1st one is selected.
      * */
 
-    size_t hash = world.GetMapSeed();
+    uint32_t hash = world.GetMapSeed();
     fheroes2::hashCombine( hash, hid );
     fheroes2::hashCombine( hash, _race );
     fheroes2::hashCombine( hash, attack );
@@ -1966,10 +1966,10 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
     }
 
     HeroSeedsForLevelUp seeds;
-    seeds.seedPrimarySkill = static_cast<uint32_t>( hash );
-    seeds.seedSecondaySkill1 = seeds.seedPrimarySkill + 1;
-    seeds.seedSecondaySkill2 = seeds.seedPrimarySkill + 2;
-    seeds.seedSecondaySkillRandomChoose = seeds.seedPrimarySkill + 3;
+    seeds.seedPrimarySkill = hash;
+    seeds.seedSecondaySkill1 = hash + 1;
+    seeds.seedSecondaySkill2 = hash + 2;
+    seeds.seedSecondaySkillRandomChoose = hash + 3;
     return seeds;
 }
 
