@@ -267,7 +267,7 @@ namespace AI
 
                 if ( target.unit ) {
                     actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                          Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), 0 );
+                                          Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), -1 );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
@@ -474,7 +474,7 @@ namespace AI
             if ( target.unit && target.cell != -1 ) {
                 // Melee attack selected target
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, -1 );
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
@@ -802,7 +802,7 @@ namespace AI
 
         // Attack only if target unit is reachable and can be attacked
         if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), targetUnit->GetHeadIndex(), 0 );
+            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), targetUnit->GetHeadIndex(), -1 );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
         }

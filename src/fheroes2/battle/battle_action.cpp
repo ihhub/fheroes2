@@ -64,10 +64,40 @@ namespace
     }
 }
 
-void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, int dir )
+void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst /* = -1 */, int dir /* = -1 */ )
 {
-    if ( 0 > dst )
-        dst = defender.GetHeadIndex();
+    if ( dst < 0 ) {
+        // The defender's head cell is near the attacker
+        if ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetHeadIndex() )
+             || ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetHeadIndex() ) ) ) {
+            dst = defender.GetHeadIndex();
+        }
+        // The defender's tail cell is near the attacker
+        else if ( defender.isWide()
+                  && ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetTailIndex() )
+                       || ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetTailIndex() ) ) ) ) {
+            dst = defender.GetTailIndex();
+        }
+        // Units don't stand next to each other, this is most likely a shot
+        else {
+            dst = defender.GetHeadIndex();
+        }
+    }
+
+    if ( dir < 0 ) {
+        // The target cell of the attack is near the attacker's head cell
+        if ( Board::isNearIndexes( attacker.GetHeadIndex(), dst ) ) {
+            dir = Board::GetDirection( attacker.GetHeadIndex(), dst );
+        }
+        // The target cell of the attack is near the attacker's tail cell
+        else if ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), dst ) ) {
+            dir = Board::GetDirection( attacker.GetTailIndex(), dst );
+        }
+        // Units don't stand next to each other, this is most likely a shot
+        else {
+            dir = UNKNOWN;
+        }
+    }
 
     if ( dir ) {
         if ( attacker.isWide() ) {
