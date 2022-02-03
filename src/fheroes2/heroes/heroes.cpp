@@ -1942,7 +1942,7 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
         return at( Rand::Get( freemanHeroesNotRecruits ) );
     }
 
-    // There is no freeman heroes who are not yet available for recruitment, allow
+    // There are no freeman heroes who are not yet available for recruitment, allow
     // heroes to be available for recruitment in several kingdoms at the same time
     return at( Rand::Get( freeman_heroes ) );
 }
