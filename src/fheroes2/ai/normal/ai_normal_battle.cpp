@@ -266,8 +266,10 @@ namespace AI
                 }
 
                 if ( target.unit ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                          Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), -1 );
+                    const int32_t optimalTargetIdx = Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell );
+
+                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), optimalTargetIdx,
+                                          Board::GetDirection( target.cell, optimalTargetIdx ) );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
