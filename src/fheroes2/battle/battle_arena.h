@@ -78,8 +78,8 @@ namespace Battle
         void Turns( void );
         bool BattleValid( void ) const;
 
-        bool CanBreakAutoBattle( void ) const;
-        void BreakAutoBattle( void );
+        bool AutoBattleInProgress() const;
+        bool CanToggleAutoBattle() const;
 
         u32 GetCurrentTurn( void ) const;
         Result & GetResult( void );

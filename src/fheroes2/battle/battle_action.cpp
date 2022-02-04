@@ -910,19 +910,33 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 {
     const int color = cmd.GetValue();
-    if ( current_color != color ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param" );
-        return;
-    }
 
     if ( auto_battle & color ) {
-        if ( interface )
-            interface->SetStatus( _( "Set auto battle off" ), true );
+        if ( interface ) {
+            const Player * player = Players::Get( color );
+
+            if ( player ) {
+                std::string msg = _( "%{name} has turned off the auto battle" );
+                StringReplace( msg, "%{name}", player->GetName() );
+
+                interface->SetStatus( msg, true );
+            }
+        }
+
         auto_battle &= ~color;
     }
     else {
-        if ( interface )
-            interface->SetStatus( _( "Set auto battle on" ), true );
+        if ( interface ) {
+            const Player * player = Players::Get( color );
+
+            if ( player ) {
+                std::string msg = _( "%{name} has turned on the auto battle" );
+                StringReplace( msg, "%{name}", player->GetName() );
+
+                interface->SetStatus( msg, true );
+            }
+        }
+
         auto_battle |= color;
     }
 }

@@ -324,7 +324,15 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     while ( !end_turn ) {
         Actions actions;
 
-        if ( !troop->isValid() ) { // looks like the unit died
+        if ( interface ) {
+            interface->getPendingActions( actions );
+        }
+
+        if ( !actions.empty() ) {
+            // Pending actions from the user interface (such as toggling auto battle) have a higher priority
+            // and should be handled first, before any other actions
+        }
+        else if ( !troop->isValid() ) { // looks like the unit died
             end_turn = true;
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
@@ -1273,14 +1281,14 @@ Battle::Result & Battle::Arena::GetResult( void )
     return result_game;
 }
 
-bool Battle::Arena::CanBreakAutoBattle( void ) const
+bool Battle::Arena::AutoBattleInProgress() const
 {
     return ( auto_battle & current_color ) && GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
 }
 
-void Battle::Arena::BreakAutoBattle( void )
+bool Battle::Arena::CanToggleAutoBattle() const
 {
-    auto_battle &= ~current_color;
+    return GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
 }
 
 const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const
