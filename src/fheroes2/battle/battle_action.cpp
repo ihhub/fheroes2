@@ -188,12 +188,11 @@ void Battle::Arena::ApplyAction( Command & cmd )
 void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 {
     const Spell spell( cmd.GetValue() );
-    HeroBase * current_commander = GetCurrentForce().GetCommander();
 
-    if ( current_commander && current_commander->HaveSpellBook() && !current_commander->Modes( Heroes::SPELLCASTED ) && current_commander->CanCastSpell( spell )
-         && spell.isCombat() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   current_commander->GetName() << ", color: " << Color::String( current_commander->GetColor() ) << ", spell: " << spell.GetName() );
+    HeroBase * commander = GetCurrentForce().GetCommander();
+
+    if ( commander && commander->HaveSpellBook() && !commander->Modes( Heroes::SPELLCASTED ) && commander->CanCastSpell( spell ) && spell.isCombat() ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, commander->GetName() << ", color: " << Color::String( commander->GetColor() ) << ", spell: " << spell.GetName() );
 
         // uniq spells action
         switch ( spell.GetID() ) {
@@ -221,8 +220,8 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
             break;
         }
 
-        current_commander->SetModes( Heroes::SPELLCASTED );
-        current_commander->SpellCasted( spell );
+        commander->SetModes( Heroes::SPELLCASTED );
+        commander->SpellCasted( spell );
 
         // save spell for "eagle eye" capability
         usage_spells.Append( spell );
