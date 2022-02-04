@@ -943,18 +943,17 @@ void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, co
 
 void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
 {
-    const HeroBase * current_commander = GetCurrentCommander();
-    if ( !current_commander )
-        return;
+    const HeroBase * commander = GetCurrentCommander();
+    assert( commander != nullptr );
 
     const int32_t dst = cmd.GetValue();
 
     bool playResistSound = false;
-    TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst, &playResistSound );
+    TargetsInfo targets = GetTargetsForSpells( commander, spell, dst, &playResistSound );
     TargetsInfo resistTargets;
 
     if ( interface ) {
-        interface->RedrawActionSpellCastStatus( spell, dst, current_commander->GetName(), targets );
+        interface->RedrawActionSpellCastStatus( spell, dst, commander->GetName(), targets );
 
         for ( const auto & target : targets ) {
             if ( target.resist ) {
@@ -966,13 +965,13 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     targets.erase( std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ), targets.end() );
 
     if ( interface ) {
-        interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );
+        interface->RedrawActionSpellCastPart1( spell, dst, commander, targets );
         for ( const TargetInfo & target : resistTargets ) {
             interface->RedrawActionResistSpell( *target.defender, playResistSound );
         }
     }
 
-    TargetsApplySpell( current_commander, spell, targets );
+    TargetsApplySpell( commander, spell, targets );
 
     if ( interface )
         interface->RedrawActionSpellCastPart2( spell, targets );
