@@ -1017,13 +1017,17 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 
 void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 {
+    const HeroBase * commander = GetCurrentCommander();
+    assert( commander != nullptr );
+
     std::vector<int> targets = GetCastleTargets();
+
     if ( interface ) {
+        interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
         interface->RedrawActionEarthQuakeSpell( targets );
     }
 
-    const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
+    const std::pair<int, int> range = getEarthquakeDamageRange( commander );
     const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
