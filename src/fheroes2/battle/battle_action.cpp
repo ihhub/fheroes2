@@ -930,8 +930,13 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
+    assert( elem != nullptr );
+
     if ( interface ) {
-        assert( elem != nullptr );
+        const HeroBase * commander = GetCurrentCommander();
+        assert( commander != nullptr );
+
+        interface->RedrawActionSpellCastStatus( spell, -1, commander->GetName(), {} );
         interface->RedrawActionSummonElementalSpell( *elem );
     }
 }
