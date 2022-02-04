@@ -624,10 +624,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     }
     // attack of all adjacent cells
     else if ( attacker.isAllAdjacentCellsAttack() ) {
-        for ( const int32_t aroundIdx : Board::GetAroundIndexes( attacker ) ) {
-            assert( Board::GetCell( aroundIdx ) != nullptr );
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( attacker ) ) {
+            assert( Board::GetCell( nearbyIdx ) != nullptr );
 
-            Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
+            Unit * enemy = Board::GetCell( nearbyIdx )->GetUnit();
 
             if ( enemy && enemy->GetColor() != attacker.GetCurrentColor() && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
@@ -639,10 +639,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     }
     // lich cloud damage
     else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
-        for ( const int32_t aroundIdx : Board::GetAroundIndexes( dst ) ) {
-            assert( Board::GetCell( aroundIdx ) != nullptr );
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( dst ) ) {
+            assert( Board::GetCell( nearbyIdx ) != nullptr );
 
-            Unit * enemy = Board::GetCell( aroundIdx )->GetUnit();
+            Unit * enemy = Board::GetCell( nearbyIdx )->GetUnit();
 
             if ( enemy && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;

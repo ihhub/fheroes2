@@ -1612,9 +1612,9 @@ void Battle::Interface::RedrawCover()
             case Spell::COLDRING: {
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
-                    const Cell * aroundCell = Board::GetCell( around[i] );
-                    if ( aroundCell != nullptr ) {
-                        highlightCells.emplace( aroundCell );
+                    const Cell * nearbyCell = Board::GetCell( around[i] );
+                    if ( nearbyCell != nullptr ) {
+                        highlightCells.emplace( nearbyCell );
                     }
                 }
                 break;
@@ -1624,9 +1624,9 @@ void Battle::Interface::RedrawCover()
                 highlightCells.emplace( cell );
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
-                    const Cell * aroundCell = Board::GetCell( around[i] );
-                    if ( aroundCell != nullptr ) {
-                        highlightCells.emplace( aroundCell );
+                    const Cell * nearbyCell = Board::GetCell( around[i] );
+                    if ( nearbyCell != nullptr ) {
+                        highlightCells.emplace( nearbyCell );
                     }
                 }
                 break;
@@ -1635,16 +1635,16 @@ void Battle::Interface::RedrawCover()
                 highlightCells.emplace( cell );
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
-                    const Cell * aroundCell = Board::GetCell( around[i] );
-                    if ( aroundCell != nullptr ) {
-                        highlightCells.emplace( aroundCell );
+                    const Cell * nearbyCell = Board::GetCell( around[i] );
+                    if ( nearbyCell != nullptr ) {
+                        highlightCells.emplace( nearbyCell );
                     }
 
                     const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
                     for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
-                        const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
-                        if ( aroundCellTwice != nullptr ) {
-                            highlightCells.emplace( aroundCellTwice );
+                        const Cell * nearbyCellTwice = Board::GetCell( aroundTwice[j] );
+                        if ( nearbyCellTwice != nullptr ) {
+                            highlightCells.emplace( nearbyCellTwice );
                         }
                     }
                 }
@@ -1659,9 +1659,9 @@ void Battle::Interface::RedrawCover()
             highlightCells.emplace( cell );
             const Indexes around = Board::GetAroundIndexes( index_pos );
             for ( size_t i = 0; i < around.size(); ++i ) {
-                const Cell * aroundCell = Board::GetCell( around[i] );
-                if ( aroundCell != nullptr ) {
-                    highlightCells.emplace( aroundCell );
+                const Cell * nearbyCell = Board::GetCell( around[i] );
+                if ( nearbyCell != nullptr ) {
+                    highlightCells.emplace( nearbyCell );
                 }
             }
         }
@@ -1721,19 +1721,19 @@ void Battle::Interface::RedrawCover()
                 }
             }
             else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
-                for ( const int32_t aroundIdx : Board::GetAroundIndexes( pos ) ) {
+                for ( const int32_t nearbyIdx : Board::GetAroundIndexes( pos ) ) {
                     // Should already be highlighted
-                    if ( aroundIdx == index_pos ) {
+                    if ( nearbyIdx == index_pos ) {
                         continue;
                     }
 
-                    const Cell * aroundCell = Board::GetCell( aroundIdx );
-                    assert( aroundCell != nullptr );
+                    const Cell * nearbyCell = Board::GetCell( nearbyIdx );
+                    assert( nearbyCell != nullptr );
 
-                    const Unit * aroundUnit = aroundCell->GetUnit();
+                    const Unit * nearbyUnit = nearbyCell->GetUnit();
 
-                    if ( aroundUnit && aroundUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
-                        highlightCells.emplace( aroundCell );
+                    if ( nearbyUnit && nearbyUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
+                        highlightCells.emplace( nearbyCell );
                     }
                 }
             }

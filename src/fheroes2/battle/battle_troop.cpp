@@ -395,8 +395,8 @@ bool Battle::Unit::canReach( const Unit & unit ) const
 bool Battle::Unit::isHandFighting() const
 {
     if ( GetCount() && !Modes( CAP_TOWER ) ) {
-        for ( const int32_t aroundIdx : Board::GetAroundIndexes( *this ) ) {
-            const Unit * nearbyUnit = Board::GetCell( aroundIdx )->GetUnit();
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *this ) ) {
+            const Unit * nearbyUnit = Board::GetCell( nearbyIdx )->GetUnit();
 
             if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
                 return true;
