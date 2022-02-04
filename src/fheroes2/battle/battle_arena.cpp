@@ -329,8 +329,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
 
         if ( !actions.empty() ) {
-            // Pending actions from the user interface (such as toggling auto battle) have a higher priority
-            // and should be handled first, before any other actions
+            // Pending actions from the user interface (such as toggling auto battle) have "already occured"
+            // and therefore should be handled first, before any other actions
         }
         else if ( !troop->isValid() ) { // looks like the unit died
             end_turn = true;
