@@ -1028,8 +1028,16 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     const std::pair<int, int> range = getEarthquakeDamageRange( commander );
     const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
     for ( int position : wallHexPositions ) {
-        if ( 0 != board[position].GetObject() ) {
-            board[position].SetObject( Rand::Get( range.first, range.second ) );
+        const int wallCondition = board[position].GetObject();
+
+        if ( wallCondition > 0 ) {
+            uint32_t wallDamage = Rand::Get( range.first, range.second );
+
+            if ( wallDamage > static_cast<uint32_t>( wallCondition ) ) {
+                wallDamage = wallCondition;
+            }
+
+            board[position].SetObject( wallCondition - wallDamage );
         }
     }
 
