@@ -1633,19 +1633,11 @@ void Battle::Interface::RedrawCover()
             }
             case Spell::FIREBLAST: {
                 highlightCells.emplace( cell );
-                const Indexes around = Board::GetAroundIndexes( index_pos );
+                const Indexes around = Board::GetDistanceIndexes( index_pos, 2 );
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
                         highlightCells.emplace( nearbyCell );
-                    }
-
-                    const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
-                    for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
-                        const Cell * nearbyCellTwice = Board::GetCell( aroundTwice[j] );
-                        if ( nearbyCellTwice != nullptr ) {
-                            highlightCells.emplace( nearbyCellTwice );
-                        }
                     }
                 }
                 break;
