@@ -1059,17 +1059,34 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         if ( it != distances.end() ) {
             const Position pos = Position::GetPositionWhenMoved( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
-            if ( interface )
+
+            if ( interface ) {
+                const HeroBase * commander = GetCurrentCommander();
+                assert( commander != nullptr );
+
+                TargetInfo targetInfo;
+                targetInfo.defender = troop;
+
+                TargetsInfo targetsInfo;
+                targetsInfo.push_back( targetInfo );
+
+                interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
                 interface->RedrawActionMirrorImageSpell( *troop, pos );
+            }
+
             Unit * mirror = CreateMirrorImage( *troop, dst );
-            if ( mirror )
+            if ( mirror ) {
                 mirror->SetPosition( pos );
+            }
         }
         else {
-            if ( interface )
-                interface->SetStatus( _( "spell failed!" ), true );
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "new position not found!" );
+
+            if ( interface ) {
+                interface->SetStatus( _( "Spell failed!" ), true );
+            }
         }
     }
     else {
