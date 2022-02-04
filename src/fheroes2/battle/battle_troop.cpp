@@ -392,15 +392,15 @@ bool Battle::Unit::canReach( const Unit & unit ) const
     return canReach( target );
 }
 
-bool Battle::Unit::isHandFighting( void ) const
+bool Battle::Unit::isHandFighting() const
 {
     if ( GetCount() && !Modes( CAP_TOWER ) ) {
-        const Indexes around = Board::GetAroundIndexes( *this );
+        for ( const int32_t aroundIdx : Board::GetAroundIndexes( *this ) ) {
+            const Unit * nearbyUnit = Board::GetCell( aroundIdx )->GetUnit();
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            const Unit * enemy = Board::GetCell( *it )->GetUnit();
-            if ( enemy && enemy->GetColor() != GetColor() )
+            if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
                 return true;
+            }
         }
     }
 
