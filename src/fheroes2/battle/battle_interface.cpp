@@ -2579,15 +2579,6 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
                 return;
             }
 
-            if ( listlog ) {
-                std::string str = _( "%{color} casts a spell: %{spell}" );
-                const HeroBase * current_commander = arena.GetCurrentCommander();
-                if ( current_commander )
-                    StringReplace( str, "%{color}", Color::String( current_commander->GetColor() ) );
-                StringReplace( str, "%{spell}", humanturn_spell.GetName() );
-                listlog->AddMessage( str );
-            }
-
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
@@ -3397,7 +3388,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
         msg = _( "%{name} casts %{spell} on the %{troop}." );
         StringReplace( msg, "%{troop}", target->GetName() );
     }
-    else if ( spell.isApplyWithoutFocusObject() ) {
+    else {
         msg = _( "%{name} casts %{spell}." );
     }
 
