@@ -324,49 +324,49 @@ namespace
     {
         switch ( artifactId ) {
         case Artifact::BALLISTA:
-            return _( "Ballista" );
+            return _( "campaignBonus|Ballista" );
         case Artifact::BLACK_PEARL:
-            return _( "short|Black Pearl" );
+            return _( "campaignBonus|Black Pearl" );
         case Artifact::CASTER_BRACELET:
-            return _( "Caster's Bracelet" );
+            return _( "campaignBonus|Caster's Bracelet" );
         case Artifact::DEFENDER_HELM:
-            return _( "Defender Helm" );
+            return _( "campaignBonus|Defender Helm" );
         case Artifact::DIVINE_BREASTPLATE:
-            return _( "Breastplate" );
+            return _( "campaignBonus|Breastplate" );
         case Artifact::DRAGON_SWORD:
-            return _( "Dragon Sword" );
+            return _( "campaignBonus|Dragon Sword" );
         case Artifact::FIZBIN_MISFORTUNE:
-            return _( "Fizbin Medal" );
+            return _( "campaignBonus|Fizbin Medal" );
         case Artifact::FOREMOST_SCROLL:
-            return _( "Foremost Scroll" );
+            return _( "campaignBonus|Foremost Scroll" );
         case Artifact::HIDEOUS_MASK:
-            return _( "short|Hideous Mask" );
+            return _( "campaignBonus|Hideous Mask" );
         case Artifact::MAGE_RING:
-            return _( "Mage's Ring" );
+            return _( "campaignBonus|Mage's Ring" );
         case Artifact::MAJOR_SCROLL:
-            return _( "Major Scroll" );
+            return _( "campaignBonus|Major Scroll" );
         case Artifact::MEDAL_HONOR:
-            return _( "short|Medal of Honor" );
+            return _( "campaignBonus|Medal of Honor" );
         case Artifact::MEDAL_VALOR:
-            return _( "short|Medal of Valor" );
+            return _( "campaignBonus|Medal of Valor" );
         case Artifact::MINOR_SCROLL:
-            return _( "Minor Scroll" );
+            return _( "campaignBonus|Minor Scroll" );
         case Artifact::NOMAD_BOOTS_MOBILITY:
-            return _( "Nomad Boots" );
+            return _( "campaignBonus|Nomad Boots" );
         case Artifact::POWER_AXE:
-            return _( "Power Axe" );
+            return _( "campaignBonus|Power Axe" );
         case Artifact::SPIKED_SHIELD:
-            return _( "short|Spiked Shield" );
+            return _( "campaignBonus|Spiked Shield" );
         case Artifact::STEALTH_SHIELD:
-            return _( "Stealth Shield" );
+            return _( "campaignBonus|Stealth Shield" );
         case Artifact::TAX_LIEN:
-            return _( "short|Tax Lien" );
+            return _( "campaignBonus|Tax Lien" );
         case Artifact::THUNDER_MACE:
-            return _( "Thunder Mace" );
+            return _( "campaignBonus|Thunder Mace" );
         case Artifact::TRAVELER_BOOTS_MOBILITY:
-            return _( "Traveler's Boots" );
+            return _( "campaignBonus|Traveler's Boots" );
         case Artifact::WHITE_PEARL:
-            return _( "short|White Pearl" );
+            return _( "campaignBonus|White Pearl" );
         default:
             return Artifact( artifactId ).GetName();
         }
@@ -376,25 +376,25 @@ namespace
     {
         switch ( spellId ) {
         case Spell::ANIMATEDEAD:
-            return _( "short|Animate Dead" );
+            return _( "campaignBonus|Animate Dead" );
         case Spell::CHAINLIGHTNING:
-            return _( "short|Chain Lightning" );
+            return _( "campaignBonus|Chain Lightning" );
         case Spell::FIREBLAST:
-            return _( "short|Fireblast" );
+            return _( "campaignBonus|Fireblast" );
         case Spell::MASSCURSE:
-            return _( "short|Mass Curse" );
+            return _( "campaignBonus|Mass Curse" );
         case Spell::MASSHASTE:
-            return _( "short|Mass Haste" );
+            return _( "campaignBonus|Mass Haste" );
         case Spell::MIRRORIMAGE:
-            return _( "short|Mirror Image" );
+            return _( "campaignBonus|Mirror Image" );
         case Spell::RESURRECT:
-            return _( "short|Resurrect" );
+            return _( "campaignBonus|Resurrect" );
         case Spell::STEELSKIN:
-            return _( "short|Steel Skin" );
+            return _( "campaignBonus|Steel Skin" );
         case Spell::SUMMONEELEMENT:
-            return _( "Summon Earth" );
+            return _( "campaignBonus|Summon Earth" );
         case Spell::VIEWHEROES:
-            return _( "short|View Heroes" );
+            return _( "campaignBonus|View Heroes" );
         default:
             return Spell( spellId ).GetName();
         }
