@@ -30,7 +30,7 @@
 #include <map>
 #include <set>
 
-namespace
+namespace fheroes2
 {
     const std::map<uint32_t, fheroes2::SupportedLanguage> languageCRC32 = { { 0x406967B9, fheroes2::SupportedLanguage::French }, // GoG version
                                                                             { 0x04745D1D, fheroes2::SupportedLanguage::German }, // GoG version
@@ -63,10 +63,7 @@ namespace
 
         return iter->second;
     }
-}
 
-namespace fheroes2
-{
     LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
         : _currentLanguage( Settings::Get().getGameLanguage() )
     {
