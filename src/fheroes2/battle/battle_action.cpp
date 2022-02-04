@@ -986,8 +986,19 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
         if ( b->isReflect() != pos.isReflect() )
             pos.Swap();
 
-        if ( interface )
+        if ( interface ) {
+            const HeroBase * commander = GetCurrentCommander();
+            assert( commander != nullptr );
+
+            TargetInfo targetInfo;
+            targetInfo.defender = b;
+
+            TargetsInfo targetsInfo;
+            targetsInfo.push_back( targetInfo );
+
+            interface->RedrawActionSpellCastStatus( spell, src, commander->GetName(), targetsInfo );
             interface->RedrawActionTeleportSpell( *b, pos.GetHead()->GetIndex() );
+        }
 
         b->SetPosition( pos );
         b->UpdateDirection();
