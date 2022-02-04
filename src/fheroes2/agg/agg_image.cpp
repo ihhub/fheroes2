@@ -33,7 +33,6 @@
 #include "image_tool.h"
 #include "pal.h"
 #include "screen.h"
-#include "settings.h"
 #include "text.h"
 #include "til.h"
 #include "tools.h"
@@ -1572,7 +1571,7 @@ namespace fheroes2
 
         void generateICNLanguage( int id )
         {
-            fheroes2::SupportedLanguage language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+            fheroes2::SupportedLanguage language = fheroes2::getResourceLanguage();
             
             switch ( language ) {
             case fheroes2::SupportedLanguage::German:
