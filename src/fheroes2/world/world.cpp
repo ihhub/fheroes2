@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <set>
 #include <tuple>
 
 #include "ai.h"
@@ -667,6 +668,19 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WATERWHEEL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
+    }
+
+    // Reset RECRUIT mode for all heroes at once
+    vec_heroes.ResetModes( Heroes::RECRUIT );
+
+    // Reset recruits in all kingdoms at once
+    std::set<Heroes *> remainingRecruits = vec_kingdoms.resetRecruits();
+
+    // Restore the RECRUIT mode for the remaining recruits
+    for ( Heroes * hero : remainingRecruits ) {
+        assert( hero != nullptr );
+
+        hero->SetModes( Heroes::RECRUIT );
     }
 }
 

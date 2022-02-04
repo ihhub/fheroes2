@@ -652,6 +652,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         return false;
     }
 
+    ResetModes( RECRUIT );
     ResetModes( JAIL );
 
     SetColor( col );
@@ -1449,34 +1450,40 @@ bool Heroes::isFreeman( void ) const
 void Heroes::SetFreeman( int reason )
 {
     if ( !isFreeman() ) {
-        bool savepoints = false;
+        // if not surrendering, reset army
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
+            army.Reset( true );
+        }
+
+        const int heroColor = GetColor();
         Kingdom & kingdom = GetKingdom();
+
+        if ( heroColor != Color::NONE ) {
+            kingdom.RemoveHeroes( this );
+        }
+        SetColor( Color::NONE );
+
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+        SetIndex( -1 );
+
+        modes = 0;
+        move_point_scale = -1;
+
+        path.Reset();
+
+        SetMove( false );
+
+        SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
             if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
-                savepoints = true;
+                SetModes( SAVE_MP_POINTS );
             }
 
-            kingdom.appendSurrenderedHero( *this );
+            if ( heroColor != Color::NONE ) {
+                kingdom.appendSurrenderedHero( *this );
+            }
         }
-
-        // if not surrendering, reset army
-        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
-            army.Reset( true );
-
-        if ( GetColor() != Color::NONE )
-            kingdom.RemoveHeroes( this );
-
-        SetColor( Color::NONE );
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
-        modes = 0;
-        SetIndex( -1 );
-        move_point_scale = -1;
-        path.Reset();
-        SetMove( false );
-        SetModes( ACTION );
-        if ( savepoints )
-            SetModes( SAVE_MP_POINTS );
     }
 }
 
@@ -1924,6 +1931,19 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
         return nullptr;
     }
 
+    // Try to avoid freeman heroes who are already available for recruitment in any kingdom
+    std::vector<int> freemanHeroesNotRecruits = freeman_heroes;
+
+    freemanHeroesNotRecruits.erase( std::remove_if( freemanHeroesNotRecruits.begin(), freemanHeroesNotRecruits.end(),
+                                                    [this]( const int heroID ) { return at( heroID )->Modes( Heroes::RECRUIT ); } ),
+                                    freemanHeroesNotRecruits.end() );
+
+    if ( !freemanHeroesNotRecruits.empty() ) {
+        return at( Rand::Get( freemanHeroesNotRecruits ) );
+    }
+
+    // There are no freeman heroes who are not yet available for recruitment, allow
+    // heroes to be available for recruitment in several kingdoms at the same time
     return at( Rand::Get( freeman_heroes ) );
 }
 

@@ -146,7 +146,7 @@ public:
     static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
-    enum flags_t
+    enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
         // UNUSED = 0x00000002,
@@ -154,7 +154,7 @@ public:
         ENABLEMOVE = 0x00000008,
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
-        // UNUSED = 0x00000040,
+        RECRUIT = 0x00000040, // Hero is available for recruitment in any kingdom
         JAIL = 0x00000080,
         ACTION = 0x00000100,
         SAVE_MP_POINTS = 0x00000200,
@@ -488,6 +488,11 @@ struct AllHeroes : public VecHeroes
     void clear( void );
 
     void Scoute( int ) const;
+
+    void ResetModes( const uint32_t modes ) const
+    {
+        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
+    }
 
     void NewDay()
     {
