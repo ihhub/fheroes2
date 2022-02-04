@@ -2317,9 +2317,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
         else
             HumanBattleTurn( b, a, msg );
 
-        if ( humanturn_exit )
-            cursor.SetThemes( Cursor::WAIT );
-
         // update status
         if ( msg != status.GetMessage() ) {
             status.SetMessage( msg );
