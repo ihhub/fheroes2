@@ -150,8 +150,7 @@ namespace
             availableMaps.emplace_back( saveData.getCampaignID(), chosenScenarioId );
         }
         else {
-            availableMaps
-                = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( lastCompletedScenario );
+            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( lastCompletedScenario );
         }
 
         assert( iconOffsets.size() == scenarios.size() );
@@ -709,8 +708,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         selectableScenarios.emplace_back( campaignSaveData.getCampaignID(), chosenScenarioID );
     }
     else {
-        selectableScenarios = campaignSaveData.isStarting() ? campaignData.getStartingScenarios()
-                                                            : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID() );
+        selectableScenarios
+            = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID() );
     }
 
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
