@@ -2146,8 +2146,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     if ( !availableAttackDirection.empty() ) {
                         int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
                         if ( currentDirection == UNKNOWN ) {
-                            // This function should never return this value.
-                            assert( 0 );
+                            // This could happen when another window has popped up and the user moved the mouse.
                             currentDirection = CENTER;
                         }
 
