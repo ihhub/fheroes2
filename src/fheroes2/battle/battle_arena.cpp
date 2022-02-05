@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 
 #include "ai.h"
 #include "army.h"
@@ -126,11 +127,13 @@ namespace
     {
         Battle::Unit * result = nullptr;
 
-        auto unitFilter = firstStage ? []( const Battle::Unit * unit ) { return !unit->Modes( Battle::TR_SKIPMOVE ) && unit->GetSpeed() > Speed::STANDING; }
-                                     : []( const Battle::Unit * unit ) { return unit->Modes( Battle::TR_SKIPMOVE ) && unit->GetSpeed() > Speed::STANDING; };
+        std::function<bool( const Battle::Unit * )> firstStageFilter
+            = []( const Battle::Unit * unit ) { return !unit->Modes( Battle::TR_SKIPMOVE ) && unit->GetSpeed() > Speed::STANDING; };
+        std::function<bool( const Battle::Unit * )> secondStageFilter
+            = []( const Battle::Unit * unit ) { return unit->Modes( Battle::TR_SKIPMOVE ) && unit->GetSpeed() > Speed::STANDING; };
 
-        Battle::Units::iterator it1 = std::find_if( units1.begin(), units1.end(), unitFilter );
-        Battle::Units::iterator it2 = std::find_if( units2.begin(), units2.end(), unitFilter );
+        Battle::Units::iterator it1 = std::find_if( units1.begin(), units1.end(), firstStage ? firstStageFilter : secondStageFilter );
+        Battle::Units::iterator it2 = std::find_if( units2.begin(), units2.end(), firstStage ? firstStageFilter : secondStageFilter );
 
         if ( it1 != units1.end() && it2 != units2.end() ) {
             if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
