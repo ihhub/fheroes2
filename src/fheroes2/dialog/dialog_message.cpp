@@ -38,7 +38,9 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     TextBox textbox2( message, ft, BOXAREA_WIDTH );
 
     const int32_t headerHeight = !header.empty() ? textbox1.h() + 10 : 0;
-    FrameBox box( 10 + headerHeight + textbox2.h(), buttons != 0 );
+    const int32_t bottomPadding = headerHeight * 2 < textbox2.h() ? headerHeight * 2 : 10;
+
+    FrameBox box( 10 + headerHeight + textbox2.h() + bottomPadding, buttons != 0 );
     const fheroes2::Rect & pos = box.GetArea();
 
     if ( !header.empty() )
