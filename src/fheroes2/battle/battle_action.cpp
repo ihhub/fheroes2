@@ -43,7 +43,7 @@
 
 namespace
 {
-    std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander )
+    std::pair<uint32_t, uint32_t> getEarthquakeDamageRange( const HeroBase * commander )
     {
         const int spellPower = commander->GetPower();
         if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
@@ -1025,7 +1025,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
         interface->RedrawActionEarthQuakeSpell( targets );
     }
 
-    const std::pair<int, int> range = getEarthquakeDamageRange( commander );
+    const std::pair<uint32_t, uint32_t> range = getEarthquakeDamageRange( commander );
     const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
     for ( int position : wallHexPositions ) {
         const int wallCondition = board[position].GetObject();
