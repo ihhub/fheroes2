@@ -100,32 +100,32 @@ namespace
             iconsId = ICN::CAMPXTRG;
             iconStatusOffset = 10;
             selectedIconIdx = isBetrayalScenario( scenarioInfoId ) ? 17 : 14;
-            break;
+            return;
         case Campaign::ARCHIBALD_CAMPAIGN:
             iconsId = ICN::CAMPXTRE;
             iconStatusOffset = 10;
             selectedIconIdx = isBetrayalScenario( scenarioInfoId ) ? 14 : 17;
-            break;
+            return;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
             iconsId = ICN::X_CMPEXT;
             iconStatusOffset = 0;
             selectedIconIdx = 4;
-            break;
+            return;
         case Campaign::DESCENDANTS_CAMPAIGN:
             iconsId = ICN::X_CMPEXT;
             iconStatusOffset = 0;
             selectedIconIdx = 7;
-            break;
+            return;
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
             iconsId = ICN::X_CMPEXT;
             iconStatusOffset = 0;
             selectedIconIdx = 10;
-            break;
+            return;
         case Campaign::VOYAGE_HOME_CAMPAIGN:
             iconsId = ICN::X_CMPEXT;
             iconStatusOffset = 0;
             selectedIconIdx = 13;
-            break;
+            return;
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
@@ -175,6 +175,7 @@ namespace
         // cleared scenario
         else if ( std::find( clearedMaps.begin(), clearedMaps.end(), scenarioInfo ) != clearedMaps.end() ) {
             if ( isBetrayalScenario( scenarioInfo ) ) {
+                assert( static_cast<size_t>( betrayalScenarioId ) < iconOffsets.size() );
                 offset = iconOffsets[betrayalScenarioId];
                 offset.x *= deltaX;
                 offset.y *= deltaY;
@@ -328,7 +329,7 @@ namespace
         int scenarioId = scenario.getScenarioID() + 1;
         if ( isBetrayalScenario( scenario.getScenarioInfoId() ) ) {
             assert( scenario.getCampaignId() == Campaign::ARCHIBALD_CAMPAIGN || scenario.getCampaignId() == Campaign::ROLAND_CAMPAIGN );
-            scenarioId = 5;
+            scenarioId = betrayalScenarioId + 1;
         }
 
         Text campaignMapId( std::to_string( scenarioId ), Font::BIG );

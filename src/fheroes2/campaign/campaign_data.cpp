@@ -239,7 +239,7 @@ namespace
                                     Campaign::VideoSequence{ { "LIBRARYW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "LIBRARY.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
-        // At the end of Betrayal scenario we should start Archibald scenario.
+        // At the end of the Betrayal scenario we should start an Archibald scenario.
         scenarioDatas.emplace_back( scenarioInfo[10], std::vector<Campaign::ScenarioInfoId>{ Campaign::ScenarioInfoId( Campaign::ARCHIBALD_CAMPAIGN, 5 ) },
                                     "CAMPG05B.H2C", scenarioName[10], scenarioDescription[10], emptyPlayback, emptyPlayback );
 
@@ -336,7 +336,7 @@ namespace
                                                              { "EVIL10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "PRISON.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } } );
 
-        // At the end of Betrayal scenario we should start Roland scenario.
+        // At the end of the Betrayal scenario we should start a Roland scenario.
         scenarioDatas.emplace_back( scenarioInfo[11], std::vector<Campaign::ScenarioInfoId>{ Campaign::ScenarioInfoId( Campaign::ROLAND_CAMPAIGN, 5 ) }, "CAMPE05B.H2C",
                                     scenarioName[11], scenarioDescription[11], emptyPlayback, emptyPlayback );
 
