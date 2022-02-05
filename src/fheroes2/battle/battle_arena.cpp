@@ -329,10 +329,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
 
         if ( !actions.empty() ) {
-            // Pending actions from the user interface (such as toggling auto battle) have "already occured"
-            // and therefore should be handled first, before any other actions
+            // Pending actions from the user interface (such as toggling auto battle) have "already occured" and
+            // therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
-        else if ( !troop->isValid() ) { // looks like the unit died
+        else if ( !troop->isValid() ) {
+            // looks like the unit is dead
             end_turn = true;
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
@@ -368,11 +369,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             actions.pop_front();
 
             if ( armies_order ) {
-                // some spell could kill someone or affect the speed of some unit, update units order
+                // applied action could kill or resurrect someone, or affect the speed of some unit, update units order
                 Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
-            // check end battle
+            // check for the end of the battle
             if ( !BattleValid() ) {
                 end_turn = true;
                 break;
