@@ -80,8 +80,8 @@ namespace Battle
         void NewTurn( void );
         void SyncArmyCount();
 
-        static Unit * GetCurrentUnit( const Force & army1, const Force & army2, bool part1, int preferredColor );
-        static void UpdateOrderUnits( const Force & army1, const Force & army2, const Unit * activeUnit, int preferredColor, const Units & orderHistory, Units & orders );
+        static Unit * GetCurrentUnit( const Force & army1, const Force & army2, const bool firstStage, const int preferredColor );
+        static void UpdateOrderOfUnits( const Force & army1, const Force & army2, const Unit * currentUnit, int preferredColor, const Units & orderHistory, Units & orderOfUnits );
 
     private:
         Army & army;

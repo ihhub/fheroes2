@@ -361,7 +361,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             if ( armies_order ) {
                 // some spell could kill someone or affect the speed of some unit, update units order
-                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                Force::UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
             // check end battle
@@ -418,7 +418,7 @@ void Battle::Arena::Turns( void )
         orderHistory.reserve( 25 );
 
         // build initial units order
-        Force::UpdateOrderUnits( *army1, *army2, nullptr, preferredColor, orderHistory, *armies_order );
+        Force::UpdateOrderOfUnits( *army1, *army2, nullptr, preferredColor, orderHistory, *armies_order );
     }
 
     {
@@ -438,7 +438,7 @@ void Battle::Arena::Turns( void )
                 orderHistory.push_back( troop );
 
                 // update units order
-                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                Force::UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
             // first turn: castle and catapult action
@@ -454,7 +454,7 @@ void Battle::Arena::Turns( void )
 
                         if ( armies_order ) {
                             // tower could kill someone, update units order
-                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                            Force::UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
                     if ( towers[0] && towers[0]->isValid() ) {
@@ -462,7 +462,7 @@ void Battle::Arena::Turns( void )
 
                         if ( armies_order ) {
                             // tower could kill someone, update units order
-                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                            Force::UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
                     if ( towers[2] && towers[2]->isValid() ) {
@@ -470,7 +470,7 @@ void Battle::Arena::Turns( void )
 
                         if ( armies_order ) {
                             // tower could kill someone, update units order
-                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                            Force::UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
                     tower_moved = true;
@@ -512,7 +512,7 @@ void Battle::Arena::Turns( void )
                 orderHistory.push_back( troop );
 
                 // update units order
-                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                Force::UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
             // set bridge passable
