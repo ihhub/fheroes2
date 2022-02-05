@@ -119,9 +119,9 @@ namespace Campaign
     {
     public:
         ScenarioData() = delete;
-        ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,
-                      const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
-                      const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+        ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName, const std::string & scenarioName,
+                      const std::string & description, const VideoSequence & startScenarioVideoPlayback, const VideoSequence & endScenarioVideoPlayback,
+                      const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
                       const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
         const std::vector<ScenarioInfoId> & getNextScenarios() const
