@@ -2265,7 +2265,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 void Battle::Interface::getPendingActions( Actions & actions )
 {
     if ( _breakAutoBattleForColor ) {
-        actions.push_back( Command( CommandType::MSG_BATTLE_AUTO, _breakAutoBattleForColor ) );
+        actions.emplace_back( CommandType::MSG_BATTLE_AUTO, _breakAutoBattleForColor );
 
         _breakAutoBattleForColor = 0;
     }
@@ -2675,7 +2675,7 @@ void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
     btn_auto.drawOnPress();
 
     if ( arena.CanToggleAutoBattle() ) {
-        a.push_back( Command( CommandType::MSG_BATTLE_AUTO, b.GetColor() ) );
+        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
     }
 
     humanturn_redraw = true;
