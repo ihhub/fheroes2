@@ -231,7 +231,7 @@ void Game::HotKeysDefaults( void )
 
     // battle
     key_events[EVENT_BATTLE_CASTSPELL] = KEY_c;
-    key_events[EVENT_BATTLE_RETREAT] = KEY_ESCAPE;
+    key_events[EVENT_BATTLE_RETREAT] = KEY_r;
     key_events[EVENT_BATTLE_SURRENDER] = KEY_s;
     key_events[EVENT_BATTLE_AUTOSWITCH] = KEY_a;
     key_events[EVENT_BATTLE_OPTIONS] = KEY_o;

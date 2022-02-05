@@ -109,9 +109,9 @@ namespace
         }
     }
 
-    size_t computeBattleSeed( const int32_t mapIndex, const uint32_t mapSeed, const Army & army1, const Army & army2 )
+    uint32_t computeBattleSeed( const int32_t mapIndex, const uint32_t mapSeed, const Army & army1, const Army & army2 )
     {
-        size_t seed = static_cast<size_t>( mapIndex ) + static_cast<size_t>( mapSeed );
+        uint32_t seed = static_cast<uint32_t>( mapIndex ) + mapSeed;
 
         for ( size_t i = 0; i < army1.Size(); ++i ) {
             const Troop * troop = army1.GetTroop( i );
@@ -207,8 +207,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 )
-                                                                             : Rand::Get( std::numeric_limits<uint32_t>::max() );
+    const uint32_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 )
+                                                                               : Rand::Get( std::numeric_limits<uint32_t>::max() );
 
     bool isBattleOver = false;
     while ( !isBattleOver ) {

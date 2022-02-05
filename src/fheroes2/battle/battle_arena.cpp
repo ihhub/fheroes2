@@ -55,9 +55,9 @@ namespace Battle
 namespace
 {
     // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
-    size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+    uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
     {
-        size_t newSeed = seed;
+        uint32_t newSeed = seed;
 
         for ( const Battle::Command & command : actions ) {
             if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
@@ -120,11 +120,6 @@ namespace
 
         return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
     }
-}
-
-bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
-{
-    return defender == ta.defender;
 }
 
 Battle::Arena * Battle::GetArena( void )
@@ -339,7 +334,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else {
             // re-calculate possible paths in case unit moved or it's a new turn
-            _pathfinder.calculate( *troop );
+            _globalAIPathfinder.calculate( *troop );
 
             // get task from player
             if ( troop->isControlRemote() )
@@ -354,7 +349,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const size_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        const uint32_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
         _randomGenerator.UpdateSeed( newSeed );
 
         const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
@@ -574,12 +569,32 @@ void Battle::Arena::TowerAction( const Tower & twr )
 {
     board.Reset();
     board.SetEnemyQuality( twr );
-    const Unit * enemy = GetEnemyMaxQuality( twr.GetColor() );
 
-    if ( enemy ) {
-        Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
-        ApplyAction( cmd );
+    // Target unit and its quality
+    std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
+
+    for ( const Cell & cell : board ) {
+        const Unit * unit = cell.GetUnit();
+
+        if ( unit == nullptr || unit->GetColor() == twr.GetColor() || ( unit->isWide() && unit->GetTailIndex() == cell.GetIndex() ) ) {
+            continue;
+        }
+
+        if ( targetInfo.first == nullptr || targetInfo.second < cell.GetQuality() ) {
+            targetInfo = { unit, cell.GetQuality() };
+        }
     }
+
+    // Normally this shouldn't happen
+    if ( targetInfo.first == nullptr ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "No target found for the tower!" );
+
+        return;
+    }
+
+    Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), targetInfo.first->GetUID() );
+
+    ApplyAction( cmd );
 }
 
 void Battle::Arena::CatapultAction( void )
@@ -636,7 +651,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
 
 Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange ) const
 {
-    return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
+    return _globalAIPathfinder.findTwoMovesOverlap( indexTo, movementRange );
 }
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
@@ -648,7 +663,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     const Cell * tail = pos.GetTail();
 
     if ( head ) {
-        const ArenaNode & headNode = _pathfinder.getNode( head->GetIndex() );
+        const BattleNode & headNode = _globalAIPathfinder.getNode( head->GetIndex() );
         if ( headNode._from != -1 ) {
             result.first = headNode._from;
             result.second = headNode._cost;
@@ -656,7 +671,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     }
 
     if ( tail ) {
-        const ArenaNode & tailNode = _pathfinder.getNode( tail->GetIndex() );
+        const BattleNode & tailNode = _globalAIPathfinder.getNode( tail->GetIndex() );
         if ( tailNode._from != -1 && tailNode._cost < result.second ) {
             result.first = tailNode._from;
             result.second = tailNode._cost;
@@ -668,17 +683,17 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
 
 uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : 65535;
+    return Board::isValidIndex( indexTo ) ? _globalAIPathfinder.getDistance( indexTo ) : 65535;
 }
 
 bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+    return Board::isValidIndex( indexTo ) && _globalAIPathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
 {
-    return _pathfinder.getAllAvailableMoves( moveRange );
+    return _globalAIPathfinder.getAllAvailableMoves( moveRange );
 }
 
 int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
@@ -690,9 +705,9 @@ int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const 
         return dstPos.GetHead()->GetIndex();
     }
 
-    const Indexes path = _pathfinder.buildPath( dst );
+    const Indexes path = _globalAIPathfinder.buildPath( dst );
 
-    // Destination cell is unreachable in principle according to the ArenaPathfinder
+    // Destination cell is unreachable in principle according to the AIBattlePathfinder
     if ( path.empty() ) {
         return -1;
     }
@@ -771,23 +786,6 @@ const Battle::Unit * Battle::Arena::GetTroopUID( u32 uid ) const
     it = std::find_if( army2->begin(), army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     return it != army2->end() ? *it : nullptr;
-}
-
-const Battle::Unit * Battle::Arena::GetEnemyMaxQuality( int my_color ) const
-{
-    const Unit * res = nullptr;
-    s32 quality = 0;
-
-    for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-        const Unit * enemy = ( *it ).GetUnit();
-
-        if ( enemy && enemy->GetColor() != my_color && ( !enemy->isWide() || enemy->GetTailIndex() != ( *it ).GetIndex() ) && quality < ( *it ).GetQuality() ) {
-            res = enemy;
-            quality = ( *it ).GetQuality();
-        }
-    }
-
-    return res;
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const

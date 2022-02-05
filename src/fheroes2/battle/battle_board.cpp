@@ -532,7 +532,7 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         Board * board = Arena::GetBoard();
         for ( const int32_t index : aroundAttacker ) {
             const Unit * unit = board->at( index ).GetUnit();
-            if ( unit != nullptr && unit->GetColor() != attacker.GetColor() ) {
+            if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
                 unitsUnderAttack.insert( unit );
             }
         }
@@ -1188,11 +1188,11 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
-        for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * aroundCell = GetCell( aroundIdx );
-            assert( aroundCell != nullptr );
+        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
+            const Cell * nearbyCell = GetCell( nearbyIdx );
+            assert( nearbyCell != nullptr );
 
-            if ( aroundCell->GetUnit() == &target ) {
+            if ( nearbyCell->GetUnit() == &target ) {
                 return true;
             }
         }
