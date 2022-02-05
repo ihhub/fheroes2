@@ -1247,6 +1247,10 @@ namespace fheroes2
                 if ( *inX > 0 && *inX < 6 ) { // 1 is to skip, 2 - 5 types of shadows
                     if ( ( x > 0 && *( inX - 1 ) == 0 ) || ( x < reducedWidth && *( inX + 1 ) == 0 ) || ( isNotTopRow && *( inX - width ) == 0 )
                          || ( isNotBottomRow && *( inX + width ) == 0 ) ) {
+#ifdef __clang_analyzer__
+                        // FIXME: apparently, a false positive from the Clang Analyzer
+                        assert( outImageY != nullptr );
+#endif
                         outImageY[x] = value;
                         outTransformY[x] = 0;
                     }
@@ -1831,6 +1835,10 @@ namespace fheroes2
 
             for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
                 if ( *transformInX == 0 ) {
+#ifdef __clang_analyzer__
+                    // FIXME: apparently, a false positive from the Clang Analyzer
+                    assert( transformOutX != nullptr );
+#endif
                     *transformOutX = transformId;
                 }
             }
