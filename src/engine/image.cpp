@@ -1829,10 +1829,12 @@ namespace fheroes2
             uint8_t * transformOutX = transformOutY;
             const uint8_t * transformInXEnd = transformInX + width;
 
-            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+            for ( ; transformInX != transformInXEnd; ++transformInX ) {
                 if ( *transformInX == 0 ) {
                     *transformOutX = transformId;
                 }
+
+                ++transformOutX;
             }
         }
 
