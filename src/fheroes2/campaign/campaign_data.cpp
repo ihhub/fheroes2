@@ -236,7 +236,7 @@ namespace
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
         campaignData.setCampaignDescription( "Roland Campaign" );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -333,7 +333,7 @@ namespace
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
         campaignData.setCampaignDescription( "Archibald Campaign" );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -402,7 +402,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -468,7 +468,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -516,7 +516,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -561,7 +561,7 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -660,9 +660,9 @@ namespace Campaign
         _campaignID = campaignID;
     }
 
-    void CampaignData::setCampaignScenarios( const std::vector<ScenarioData> & scenarios )
+    void CampaignData::setCampaignScenarios( std::vector<ScenarioData> && scenarios )
     {
-        _scenarios = scenarios;
+        _scenarios = std::move( scenarios );
     }
 
     void CampaignData::setCampaignDescription( const std::string & campaignDescription )

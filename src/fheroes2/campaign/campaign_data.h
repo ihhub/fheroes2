@@ -48,7 +48,7 @@ namespace Campaign
 
         void setCampaignID( const int campaignID );
         void setCampaignDescription( const std::string & campaignDescription );
-        void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
+        void setCampaignScenarios( std::vector<ScenarioData> && scenarios );
 
         static const CampaignData & getCampaignData( const int campaignID );
 
