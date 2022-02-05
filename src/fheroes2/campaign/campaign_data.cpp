@@ -520,8 +520,7 @@ namespace
                                                              { "VOY22.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXVOY23.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY23.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_03.HXC", scenarioName[2], scenarioDescription[2],
-                                    emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_03.HXC", scenarioName[2], scenarioDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY24.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY24.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_04.HXC", scenarioName[3], scenarioDescription[3], emptyPlayback,
