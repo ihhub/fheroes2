@@ -181,6 +181,7 @@ namespace
         scenarioDatas.reserve( scenarioCount );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
         for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::ROLAND_CAMPAIGN, i );
         }
@@ -276,6 +277,7 @@ namespace
         scenarioDatas.reserve( scenarioCount );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
         for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::ARCHIBALD_CAMPAIGN, i );
         }

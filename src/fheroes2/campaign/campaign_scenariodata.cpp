@@ -502,7 +502,7 @@ namespace Campaign
         return msg >> data._type >> data._subType >> data._amount;
     }
 
-    ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, const std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,
+    ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,
                                 const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
                                 const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition,
                                 const ScenarioLossCondition lossCondition )

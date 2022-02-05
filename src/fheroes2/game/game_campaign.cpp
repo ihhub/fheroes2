@@ -133,7 +133,7 @@ namespace
         }
     }
 
-    void DrawCampaignScenarioIcon( const int icnId, const int iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
+    void DrawCampaignScenarioIcon( const int icnId, const uint32_t iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
     {
         const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( icnId, iconIdx );
         fheroes2::Blit( icon, fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
@@ -202,7 +202,8 @@ namespace
             availableMaps.emplace_back( saveData.getCampaignID(), chosenScenarioId );
         }
         else {
-            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioInfoID() );
+            availableMaps
+                = saveData.isStarting() ? campaignData.getStartingScenarios() : Campaign::CampaignData::getScenariosAfter( saveData.getLastCompletedScenarioInfoID() );
         }
 
         bool isBetrayalScenarioNext = false;
@@ -721,7 +722,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         return fheroes2::GameMode::HIGHSCORES;
     }
 
-    const Campaign::ScenarioInfoId firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioInfo ).front();
+    const Campaign::ScenarioInfoId firstNextMap = Campaign::CampaignData::getScenariosAfter( lastCompletedScenarioInfo ).front();
     saveData.setCurrentScenarioInfoId( firstNextMap );
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -844,8 +845,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         selectableScenarios.emplace_back( campaignSaveData.getCampaignID(), chosenScenarioID );
     }
     else {
-        selectableScenarios
-            = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID() );
+        selectableScenarios = campaignSaveData.isStarting() ? campaignData.getStartingScenarios()
+                                                            : Campaign::CampaignData::getScenariosAfter( campaignSaveData.getLastCompletedScenarioInfoID() );
     }
 
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
