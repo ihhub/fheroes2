@@ -141,7 +141,7 @@ namespace
 
     void addScenarioButton( fheroes2::ButtonGroup & buttonGroup, const int buttonId, const Campaign::ScenarioInfoId & scenarioInfo,
                             const std::vector<Campaign::ScenarioInfoId> & availableMaps, const std::vector<Campaign::ScenarioInfoId> & clearedMaps,
-                            const fheroes2::Point &trackOffset, const bool archibaldLowerBetrayalBranch )
+                            const fheroes2::Point & trackOffset, const bool archibaldLowerBetrayalBranch )
     {
         const int deltaY = 42;
         const int deltaX = 37;
@@ -292,7 +292,6 @@ namespace
                 = Campaign::CampaignData::getCampaignData( isRolandCurrentCampaign ? Campaign::ROLAND_CAMPAIGN : Campaign::ARCHIBALD_CAMPAIGN );
 
             int scenarioCounter = 0;
-            
 
             for ( const Campaign::ScenarioData & scenarioData : beforeCampaignData.getAllScenarios() ) {
                 if ( scenarioData.getScenarioID() <= betrayalScenarioId || isBetrayalScenario( scenarioData.getScenarioInfoId() ) ) {
