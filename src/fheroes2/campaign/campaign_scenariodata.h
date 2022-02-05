@@ -144,6 +144,11 @@ namespace Campaign
             return _scenarioInfo.campaignId;
         }
 
+        const ScenarioInfoId & getScenarioInfoId() const
+        {
+            return _scenarioInfo;
+        }
+
         const char * getScenarioName() const;
 
         const char * getDescription() const;

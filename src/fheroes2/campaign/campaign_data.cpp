@@ -150,11 +150,13 @@ namespace
 
     Campaign::CampaignData getRolandCampaignData()
     {
-        const std::string scenarioName[10]
-            = { gettext_noop( "Force of Arms" ),      gettext_noop( "Annexation" ),   gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),
-                gettext_noop( "Turning Point" ),      gettext_noop( "Defender" ),     gettext_noop( "The Gauntlet" ),     gettext_noop( "The Crown" ),
-                gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ) };
-        const std::string scenarioDescription[10] = {
+        const int scenarioCount = 11;
+
+        const std::string scenarioName[scenarioCount]
+            = { gettext_noop( "Force of Arms" ),      gettext_noop( "Annexation" ),    gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),
+                gettext_noop( "Turning Point" ),      gettext_noop( "Defender" ),      gettext_noop( "The Gauntlet" ),     gettext_noop( "The Crown" ),
+                gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" )  };
+        const std::string scenarioDescription[scenarioCount] = {
             gettext_noop(
                 "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
                 " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
@@ -173,12 +175,14 @@ namespace
             gettext_noop(
                 "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
             gettext_noop(
-                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ) };
+                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ),
+            gettext_noop(
+                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.reserve( 10 );
+        scenarioDatas.reserve( scenarioCount );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
-        for ( int i = 0; i < 10; ++i ) {
+        for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::ROLAND_CAMPAIGN, i );
         }
 
@@ -197,12 +201,12 @@ namespace
                                     Campaign::VideoSequence{ { "GOOD04W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD04.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::ScenarioVictoryCondition::STANDARD, Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
-        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMPG04.H2C", scenarioName[3], scenarioDescription[3],
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[10] }, "CAMPG04.H2C", scenarioName[3], scenarioDescription[3],
                                     emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD05V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPG05.H2C", scenarioName[4], scenarioDescription[4],
-                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPG05.H2C", scenarioName[4],
+                                    scenarioDescription[4], emptyPlayback, emptyPlayback );
         scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPG06.H2C", scenarioName[5],
                                     scenarioDescription[5],
                                     Campaign::VideoSequence{ { "GOOD06AV.SMK", Video::VideoAction::IGNORE_VIDEO },
@@ -223,6 +227,10 @@ namespace
                                     Campaign::VideoSequence{ { "LIBRARYW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "LIBRARY.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
+        // At the end of Betrayal scenario we should start Archibald scenario.
+        scenarioDatas.emplace_back( scenarioInfo[10], std::vector<Campaign::ScenarioInfoId>{  Campaign::ScenarioInfoId( Campaign::ARCHIBALD_CAMPAIGN, 5 ) },
+                                    "CAMPG05B.H2C", scenarioName[10], scenarioDescription[10], emptyPlayback, emptyPlayback );
+
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
         campaignData.setCampaignDescription( "Roland Campaign" );
@@ -233,11 +241,13 @@ namespace
 
     Campaign::CampaignData getArchibaldCampaignData()
     {
-        const std::string scenarioName[11]
+        const int scenarioCount = 12;
+
+        const std::string scenarioName[scenarioCount]
             = { gettext_noop( "First Blood" ),   gettext_noop( "Barbarian Wars" ), gettext_noop( "Necromancers" ),  gettext_noop( "Slay the Dwarves" ),
                 gettext_noop( "Turning Point" ), gettext_noop( "Rebellion" ),      gettext_noop( "Dragon Master" ), gettext_noop( "Country Lords" ),
-                gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ) };
-        const std::string scenarioDescription[11] = {
+                gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ),    gettext_noop( "Betrayal" ) };
+        const std::string scenarioDescription[scenarioCount] = {
             gettext_noop(
                 "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
                 " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
@@ -259,12 +269,15 @@ namespace
             gettext_noop(
                 "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
             gettext_noop(
-                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
+                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ),
+            gettext_noop(
+                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+
         std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.reserve( 11 );
+        scenarioDatas.reserve( scenarioCount );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
-        for ( int i = 0; i < 11; ++i ) {
+        for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::ARCHIBALD_CAMPAIGN, i );
         }
 
@@ -278,12 +291,12 @@ namespace
                                                              { "EVIL02.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "EVIL03QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL03.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMPE03.H2C", scenarioName[2], scenarioDescription[2],
-                                    emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE03.H2C", scenarioName[2],
+                                    scenarioDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMPE04.H2C", scenarioName[3], scenarioDescription[3],
-                                    emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE04.H2C", scenarioName[3],
+                                    scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPE05.H2C", scenarioName[4], scenarioDescription[4],
@@ -309,6 +322,10 @@ namespace
                                     Campaign::VideoSequence{ { "EVIL11W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "PRISON.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } } );
+
+        // At the end of Betrayal scenario we should start Roland scenario.
+        scenarioDatas.emplace_back( scenarioInfo[11], std::vector<Campaign::ScenarioInfoId>{  Campaign::ScenarioInfoId( Campaign::ROLAND_CAMPAIGN, 5 ) },
+                                    "CAMPE05B.H2C", scenarioName[11], scenarioDescription[11], emptyPlayback, emptyPlayback );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
@@ -564,15 +581,13 @@ namespace Campaign
         return std::vector<Campaign::CampaignAwardData>();
     }
 
-    const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo ) const
+    const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo )
     {
-        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            if ( _scenarios[i].getScenarioID() == scenarioInfo.scenarioId && _scenarios[i].getCampaignId() == scenarioInfo.campaignId )
-                return _scenarios[i].getNextScenarios();
-        }
+        const CampaignData & campaignData = getCampaignData( scenarioInfo.campaignId );
+        const std::vector<ScenarioData> & scenarios = campaignData.getAllScenarios();
+        assert( scenarioInfo.scenarioId >= 0 && static_cast<size_t>( scenarioInfo.scenarioId ) < scenarios.size() );
 
-        // TODO: Should we really allow to reach this code?
-        return _scenarios[scenarioInfo.scenarioId].getNextScenarios();
+        return scenarios[scenarioInfo.scenarioId].getNextScenarios();
     }
 
     std::vector<ScenarioInfoId> CampaignData::getStartingScenarios() const
@@ -611,10 +626,18 @@ namespace Campaign
         return true;
     }
 
-    bool CampaignData::isLastScenario( const int scenarioID ) const
+    bool CampaignData::isLastScenario( const Campaign::ScenarioInfoId & scenarioInfoId ) const
     {
         assert( !_scenarios.empty() );
-        return scenarioID == _scenarios.back().getScenarioID();
+        for ( const ScenarioData & scenario : _scenarios ) {
+            if ( scenario.getScenarioInfoId() == scenarioInfoId ) {
+                if ( scenario.getNextScenarios().empty() ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     void CampaignData::setCampaignID( const int campaignID )

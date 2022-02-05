@@ -143,6 +143,7 @@ namespace Campaign
 
         msg >> data._currentScenarioInfoId.campaignId >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
 
+        data._finishedMaps.clear();
         for ( const int mapId : finisedMaps ) {
             data._finishedMaps.emplace_back( data._currentScenarioInfoId.campaignId, mapId );
         }
