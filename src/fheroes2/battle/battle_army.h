@@ -40,7 +40,8 @@ namespace Battle
     {
     public:
         Units();
-        Units( const Units &, bool filter = false );
+        Units( const Units & ) = delete;
+        Units( const Units & units, const bool filter );
         virtual ~Units() = default;
 
         Units & operator=( const Units & ) = delete;
@@ -65,6 +66,8 @@ namespace Battle
 
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;
+
+        const Units & getUnits() const;
 
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;

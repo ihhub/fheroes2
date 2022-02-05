@@ -169,8 +169,8 @@ namespace
 
     Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const bool firstStage, const int preferredColor )
     {
-        Battle::Units units1( army1, true );
-        Battle::Units units2( army2, true );
+        Battle::Units units1( army1.getUnits(), true );
+        Battle::Units units2( army2.getUnits(), true );
 
         if ( firstStage || Settings::Get().ExtBattleReverseWaitOrder() ) {
             units1.SortFastest();
@@ -196,8 +196,8 @@ namespace
         orderOfUnits.insert( orderOfUnits.end(), orderHistory.begin(), orderHistory.end() );
 
         {
-            Battle::Units units1( army1, true );
-            Battle::Units units2( army2, true );
+            Battle::Units units1( army1.getUnits(), true );
+            Battle::Units units2( army2.getUnits(), true );
 
             units1.SortFastest();
             units2.SortFastest();
@@ -214,8 +214,8 @@ namespace
         }
 
         if ( Settings::Get().ExtBattleSoftWait() ) {
-            Battle::Units units1( army1, true );
-            Battle::Units units2( army2, true );
+            Battle::Units units1( army1.getUnits(), true );
+            Battle::Units units2( army2.getUnits(), true );
 
             if ( Settings::Get().ExtBattleReverseWaitOrder() ) {
                 units1.SortFastest();

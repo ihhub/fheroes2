@@ -41,13 +41,15 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, bool filter )
+Battle::Units::Units( const Units & units, const bool filter )
     : std::vector<Unit *>()
 {
     reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
-    if ( filter )
+
+    if ( filter ) {
         erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );
+    }
 }
 
 void Battle::Units::SortSlowest()
@@ -113,6 +115,11 @@ const HeroBase * Battle::Force::GetCommander( void ) const
 HeroBase * Battle::Force::GetCommander( void )
 {
     return army.GetCommander();
+}
+
+const Battle::Units & Battle::Force::getUnits() const
+{
+    return *this;
 }
 
 int Battle::Force::GetColor( void ) const
