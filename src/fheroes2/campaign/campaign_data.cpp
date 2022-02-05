@@ -25,6 +25,8 @@
 #include "resource.h"
 #include "spell.h"
 #include "translations.h"
+
+#include <array>
 #include <cassert>
 
 namespace
@@ -152,11 +154,11 @@ namespace
     {
         const int scenarioCount = 11;
 
-        const std::string scenarioName[scenarioCount]
+        const std::array<std::string, scenarioCount> scenarioName
             = { gettext_noop( "Force of Arms" ),      gettext_noop( "Annexation" ),    gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),
                 gettext_noop( "Turning Point" ),      gettext_noop( "Defender" ),      gettext_noop( "The Gauntlet" ),     gettext_noop( "The Crown" ),
                 gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" ) };
-        const std::string scenarioDescription[scenarioCount] = {
+        const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
                 "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
                 " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
@@ -243,11 +245,11 @@ namespace
     {
         const int scenarioCount = 12;
 
-        const std::string scenarioName[scenarioCount]
+        const std::array<std::string, scenarioCount> scenarioName
             = { gettext_noop( "First Blood" ),   gettext_noop( "Barbarian Wars" ), gettext_noop( "Necromancers" ),  gettext_noop( "Slay the Dwarves" ),
                 gettext_noop( "Turning Point" ), gettext_noop( "Rebellion" ),      gettext_noop( "Dragon Master" ), gettext_noop( "Country Lords" ),
                 gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ),    gettext_noop( "Betrayal" ) };
-        const std::string scenarioDescription[scenarioCount] = {
+        const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
                 "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
                 " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
@@ -338,10 +340,12 @@ namespace
 
     Campaign::CampaignData getPriceOfLoyaltyCampaignData()
     {
-        const std::string scenarioName[8]
+        const int scenarioCount = 8;
+
+        const std::array<std::string, scenarioCount> scenarioName
             = { gettext_noop( "Uprising" ),         gettext_noop( "Island of Chaos" ), gettext_noop( "Arrow's Flight" ), gettext_noop( "The Abyss" ),
                 gettext_noop( "The Giant's Pass" ), gettext_noop( "Aurora Borealis" ), gettext_noop( "Betrayal's End" ), gettext_noop( "Corruption's Heart" ) };
-        const std::string scenarioDescription[8] = {
+        const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop( "Subdue the unruly local lords in order to provide the Empire with facilities to operate in this region." ),
             gettext_noop( "Eliminate all oposition in this area. Then the first piece of the artifact will be yours." ),
             gettext_noop(
@@ -359,7 +363,8 @@ namespace
         scenarioDatas.reserve( 8 );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
-        for ( int i = 0; i < 8; ++i ) {
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::PRICE_OF_LOYALTY_CAMPAIGN, i );
         }
 
@@ -404,10 +409,12 @@ namespace
 
     Campaign::CampaignData getDescendantsCampaignData()
     {
-        const std::string scenarioName[8]
+        const int scenarioCount = 8;
+
+        const std::array<std::string, scenarioCount> scenarioName
             = { gettext_noop( "Conquer and Unify" ), gettext_noop( "Border Towns" ), gettext_noop( "The Wayward Son" ), gettext_noop( "Crazy Uncle Ivan" ),
                 gettext_noop( "The Southern War" ),  gettext_noop( "Ivory Gates" ),  gettext_noop( "The Elven Lands" ), gettext_noop( "The Epic Battle" ) };
-        const std::string scenarioDescription[8] = {
+        const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop( "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the forefather of all descendants." ),
             gettext_noop( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
             gettext_noop(
@@ -423,7 +430,8 @@ namespace
         scenarioDatas.reserve( 8 );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
-        for ( int i = 0; i < 8; ++i ) {
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::DESCENDANTS_CAMPAIGN, i );
         }
 
@@ -467,9 +475,11 @@ namespace
 
     Campaign::CampaignData getWizardsIsleCampaignData()
     {
-        const std::string scenarioName[4]
+        const int scenarioCount = 4;
+
+        const std::array<std::string, scenarioCount> scenarioName
             = { gettext_noop( "The Shrouded Isles" ), gettext_noop( "The Eternal Scrolls" ), gettext_noop( "Power's End" ), gettext_noop( "Fount of Wizardry" ) };
-        const std::string scenarioDescription[4] = {
+        const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
                 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
             gettext_noop( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
@@ -480,7 +490,8 @@ namespace
         scenarioDatas.reserve( 4 );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
-        for ( int i = 0; i < 4; ++i ) {
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::WIZARDS_ISLE_CAMPAIGN, i );
         }
 
@@ -512,9 +523,11 @@ namespace
 
     Campaign::CampaignData getVoyageHomeCampaignData()
     {
-        const std::string scenarioName[4]
+        const int scenarioCount = 4;
+
+        const std::array<std::string, scenarioCount> scenarioName
             = { gettext_noop( "Stranded" ), gettext_noop( "Pirate Isles" ), gettext_noop( "King and Country" ), gettext_noop( "Blood is Thicker" ) };
-        const std::string scenarioDescription[4] = {
+        const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
                 "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ),
             gettext_noop( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ),
@@ -524,7 +537,8 @@ namespace
         scenarioDatas.reserve( 4 );
 
         std::vector<Campaign::ScenarioInfoId> scenarioInfo;
-        for ( int i = 0; i < 4; ++i ) {
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
             scenarioInfo.emplace_back( Campaign::VOYAGE_HOME_CAMPAIGN, i );
         }
 
