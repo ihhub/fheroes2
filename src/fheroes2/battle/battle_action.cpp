@@ -43,7 +43,7 @@
 
 namespace
 {
-    std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander )
+    std::pair<uint32_t, uint32_t> getEarthquakeDamageRange( const HeroBase * commander )
     {
         const int spellPower = commander->GetPower();
         if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
@@ -188,12 +188,11 @@ void Battle::Arena::ApplyAction( Command & cmd )
 void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 {
     const Spell spell( cmd.GetValue() );
-    HeroBase * current_commander = GetCurrentForce().GetCommander();
 
-    if ( current_commander && current_commander->HaveSpellBook() && !current_commander->Modes( Heroes::SPELLCASTED ) && current_commander->CanCastSpell( spell )
-         && spell.isCombat() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   current_commander->GetName() << ", color: " << Color::String( current_commander->GetColor() ) << ", spell: " << spell.GetName() );
+    HeroBase * commander = GetCurrentForce().GetCommander();
+
+    if ( commander && commander->HaveSpellBook() && !commander->Modes( Heroes::SPELLCASTED ) && commander->CanCastSpell( spell ) && spell.isCombat() ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, commander->GetName() << ", color: " << Color::String( commander->GetColor() ) << ", spell: " << spell.GetName() );
 
         // uniq spells action
         switch ( spell.GetID() ) {
@@ -221,8 +220,8 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
             break;
         }
 
-        current_commander->SetModes( Heroes::SPELLCASTED );
-        current_commander->SpellCasted( spell );
+        commander->SetModes( Heroes::SPELLCASTED );
+        commander->SpellCasted( spell );
 
         // save spell for "eagle eye" capability
         usage_spells.Append( spell );
@@ -930,26 +929,30 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
+    assert( elem != nullptr );
+
     if ( interface ) {
-        assert( elem != nullptr );
+        const HeroBase * commander = GetCurrentCommander();
+        assert( commander != nullptr );
+
+        interface->RedrawActionSpellCastStatus( spell, -1, commander->GetName(), {} );
         interface->RedrawActionSummonElementalSpell( *elem );
     }
 }
 
 void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
 {
-    const HeroBase * current_commander = GetCurrentCommander();
-    if ( !current_commander )
-        return;
+    const HeroBase * commander = GetCurrentCommander();
+    assert( commander != nullptr );
 
     const int32_t dst = cmd.GetValue();
 
     bool playResistSound = false;
-    TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst, &playResistSound );
+    TargetsInfo targets = GetTargetsForSpells( commander, spell, dst, &playResistSound );
     TargetsInfo resistTargets;
 
     if ( interface ) {
-        interface->RedrawActionSpellCastStatus( spell, dst, current_commander->GetName(), targets );
+        interface->RedrawActionSpellCastStatus( spell, dst, commander->GetName(), targets );
 
         for ( const auto & target : targets ) {
             if ( target.resist ) {
@@ -961,13 +964,13 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     targets.erase( std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ), targets.end() );
 
     if ( interface ) {
-        interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );
+        interface->RedrawActionSpellCastPart1( spell, dst, commander, targets );
         for ( const TargetInfo & target : resistTargets ) {
             interface->RedrawActionResistSpell( *target.defender, playResistSound );
         }
     }
 
-    TargetsApplySpell( current_commander, spell, targets );
+    TargetsApplySpell( commander, spell, targets );
 
     if ( interface )
         interface->RedrawActionSpellCastPart2( spell, targets );
@@ -986,8 +989,19 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
         if ( b->isReflect() != pos.isReflect() )
             pos.Swap();
 
-        if ( interface )
+        if ( interface ) {
+            const HeroBase * commander = GetCurrentCommander();
+            assert( commander != nullptr );
+
+            TargetInfo targetInfo;
+            targetInfo.defender = b;
+
+            TargetsInfo targetsInfo;
+            targetsInfo.push_back( targetInfo );
+
+            interface->RedrawActionSpellCastStatus( spell, src, commander->GetName(), targetsInfo );
             interface->RedrawActionTeleportSpell( *b, pos.GetHead()->GetIndex() );
+        }
 
         b->SetPosition( pos );
         b->UpdateDirection();
@@ -1001,17 +1015,29 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 
 void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 {
+    const HeroBase * commander = GetCurrentCommander();
+    assert( commander != nullptr );
+
     std::vector<int> targets = GetCastleTargets();
+
     if ( interface ) {
+        interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
         interface->RedrawActionEarthQuakeSpell( targets );
     }
 
-    const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
+    const std::pair<uint32_t, uint32_t> range = getEarthquakeDamageRange( commander );
     const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
     for ( int position : wallHexPositions ) {
-        if ( 0 != board[position].GetObject() ) {
-            board[position].SetObject( Rand::Get( range.first, range.second ) );
+        const int wallCondition = board[position].GetObject();
+
+        if ( wallCondition > 0 ) {
+            uint32_t wallDamage = Rand::Get( range.first, range.second );
+
+            if ( wallDamage > static_cast<uint32_t>( wallCondition ) ) {
+                wallDamage = wallCondition;
+            }
+
+            board[position].SetObject( wallCondition - wallDamage );
         }
     }
 
@@ -1041,17 +1067,34 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         if ( it != distances.end() ) {
             const Position pos = Position::GetPositionWhenMoved( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
-            if ( interface )
+
+            if ( interface ) {
+                const HeroBase * commander = GetCurrentCommander();
+                assert( commander != nullptr );
+
+                TargetInfo targetInfo;
+                targetInfo.defender = troop;
+
+                TargetsInfo targetsInfo;
+                targetsInfo.push_back( targetInfo );
+
+                interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
                 interface->RedrawActionMirrorImageSpell( *troop, pos );
+            }
+
             Unit * mirror = CreateMirrorImage( *troop, dst );
-            if ( mirror )
+            if ( mirror ) {
                 mirror->SetPosition( pos );
+            }
         }
         else {
-            if ( interface )
-                interface->SetStatus( _( "spell failed!" ), true );
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "new position not found!" );
+
+            if ( interface ) {
+                interface->SetStatus( _( "Spell failed!" ), true );
+            }
         }
     }
     else {
