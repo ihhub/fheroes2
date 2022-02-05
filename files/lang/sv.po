@@ -156,12 +156,6 @@ msgstr ""
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverar fiendetrupperna!"
 
-msgid "Set auto battle off"
-msgstr "Slå av autostrid"
-
-msgid "Set auto battle on"
-msgstr "Slå på autostrid"
-
 msgid "spell failed!"
 msgstr "besvärjelse misslyckades!"
 

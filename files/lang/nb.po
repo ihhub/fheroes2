@@ -154,12 +154,6 @@ msgstr "Velg antall"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverer fiendestyrken!"
 
-msgid "Set auto battle off"
-msgstr "Skru autokamp av"
-
-msgid "Set auto battle on"
-msgstr "Skru autokamp på"
-
 msgid "spell failed!"
 msgstr "trolldom mislykket!"
 
