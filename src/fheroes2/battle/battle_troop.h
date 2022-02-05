@@ -104,7 +104,7 @@ namespace Battle
         bool isTwiceAttack( void ) const;
 
         bool AllowResponse( void ) const;
-        bool isHandFighting( void ) const;
+        bool isHandFighting() const;
         bool isReflect( void ) const;
         bool isHaveDamage( void ) const;
         bool isMagicResist( const Spell &, u32 ) const;

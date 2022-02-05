@@ -1188,11 +1188,11 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
-        for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * aroundCell = GetCell( aroundIdx );
-            assert( aroundCell != nullptr );
+        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
+            const Cell * nearbyCell = GetCell( nearbyIdx );
+            assert( nearbyCell != nullptr );
 
-            if ( aroundCell->GetUnit() == &target ) {
+            if ( nearbyCell->GetUnit() == &target ) {
                 return true;
             }
         }
