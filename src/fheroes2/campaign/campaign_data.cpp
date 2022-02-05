@@ -53,6 +53,8 @@ namespace
         case 8:
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
             break;
+        default:
+            break;
         }
 
         return obtainableAwards;
@@ -78,6 +80,8 @@ namespace
             break;
         case 9:
             obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0 );
+            break;
+        default:
             break;
         }
 
@@ -107,6 +111,8 @@ namespace
             // seems that Kraeger is a custom name for Dainwin in this case
             obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
             break;
+        default:
+            break;
         }
 
         return obtainableAwards;
@@ -122,6 +128,8 @@ namespace
             break;
         case 2:
             obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SPHERE_NEGATION );
+            break;
+        default:
             break;
         }
 
@@ -144,6 +152,8 @@ namespace
             break;
         case 6:
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            break;
+        default:
             break;
         }
 
