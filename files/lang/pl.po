@@ -7703,7 +7703,7 @@ msgid "Move points: %{mp}"
 msgstr "Koszt punktów ruchu: %{mp}"
 
 msgid "Transcribe Spell Scroll"
-msgstr "Przepisywalny zwój z zaklęciem"
+msgstr "Przepisz zwój z zaklęciem"
 
 msgid "View Spells"
 msgstr "Pokaż zaklęcia"
