@@ -206,6 +206,8 @@ namespace Battle
         void Redraw();
         void RedrawPartialStart();
         void RedrawPartialFinish();
+
+        void getPendingActions( Actions & actions );
         void HumanTurn( const Unit &, Actions & );
 
         const fheroes2::Rect & GetArea( void ) const;
@@ -338,6 +340,8 @@ namespace Battle
         bool humanturn_redraw;
         u32 animation_flags_frame;
         int catapult_frame;
+
+        int _breakAutoBattleForColor;
 
         uint8_t _contourColor;
         bool _brightLandType; // used to determine current monster contour cycling colors

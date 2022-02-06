@@ -157,12 +157,6 @@ msgstr "Количество"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} убивает половину вражеского отряда!"
 
-msgid "Set auto battle off"
-msgstr "Выключить автобитву"
-
-msgid "Set auto battle on"
-msgstr "Включить автобитву"
-
 msgid "spell failed!"
 msgstr "неудачный вызов магии!"
 

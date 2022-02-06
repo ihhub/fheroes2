@@ -153,12 +153,6 @@ msgstr "Anzahl festlegen"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halbieren die feindlichen Truppen!"
 
-msgid "Set auto battle off"
-msgstr "Autokampf ausschalten"
-
-msgid "Set auto battle on"
-msgstr "Autokampf einschalten"
-
 msgid "spell failed!"
 msgstr "Zauberspruch fehlgeschlagen!"
 

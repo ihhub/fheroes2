@@ -157,12 +157,6 @@ msgstr "Podaj liczbę"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} Połowa żołnierzy wroga!"
 
-msgid "Set auto battle off"
-msgstr "Wyłącz automatyczną walkę"
-
-msgid "Set auto battle on"
-msgstr "Włącz automatyczną walkę"
-
 msgid "spell failed!"
 msgstr "czar nie udany!"
 
