@@ -1230,11 +1230,11 @@ namespace fheroes2
             return contour;
         }
 
+        assert( contour.transform() != nullptr );
+
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
         uint8_t * outTransformY = contour.transform();
-
-        assert( outImageY != nullptr );
 
         const int32_t reducedWidth = width - 1;
         const int32_t reducedHeight = height - 1;
@@ -1820,13 +1820,13 @@ namespace fheroes2
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
 
+        assert( out.transform() != nullptr );
+
         const int32_t widthOut = out.width();
 
         const uint8_t * transformInY = in.transform();
         const uint8_t * transformInYEnd = transformInY + width * height;
         uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
-
-        assert( transformOutY != nullptr );
 
         for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
             const uint8_t * transformInX = transformInY;
