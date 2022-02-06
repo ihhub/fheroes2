@@ -489,7 +489,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             actions.pop_front();
 
             if ( armies_order ) {
-                // applied action could kill or resurrect someone, or affect the speed of some unit, update units order
+                // applied action could kill someone or affect the speed of some unit, update units order
                 UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
