@@ -5205,7 +5205,7 @@ msgid "Show next hero"
 msgstr "Pokaż następnego bohatera"
 
 msgid "Blood Morale"
-msgstr "Krwi!"
+msgstr "Wysokie morale"
 
 msgid "%{morale} Morale"
 msgstr "%{morale} morale"
@@ -5282,7 +5282,7 @@ msgstr ""
 "ponownie jutro."
 
 msgid "%{spell} failed!!!"
-msgstr "Czar %{spell} nie udał się!"
+msgstr "Czar %{spell} nie udał się!!!"
 
 msgid "This spell is already in use."
 msgstr "Ten czar już został rzucony."
@@ -7310,10 +7310,9 @@ msgstr "Kapelusz czarodzieja"
 msgid "Power Ring"
 msgstr "Pierścień mocy"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
-"%{name} przywraca twemu bohaterowi dodatkowe %{count} punkty magii na turę."
+"%{name} przywraca twojemu bohaterowi dodatkowe %{count} punkty magii na turę."
 
 msgid "Ammo Cart"
 msgstr "Wóz z amunicją"
@@ -7341,37 +7340,37 @@ msgid "Endless Pouch of Sulfur"
 msgstr "Bezdenna sakiewka siarki"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr "%{name} daje ci %{count} jednostkę siarki dziennie."
+msgstr "%{name} zapewnia %{count} jednostkę siarki dziennie."
 
 msgid "Endless Vial of Mercury"
 msgstr "Bezdenna fiolka rtęci"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr "%{name} daje ci %{count} jednostkę rtęci dziennie."
+msgstr "%{name} zapewnia %{count} jednostkę rtęci dziennie."
 
 msgid "Endless Pouch of Gems"
 msgstr "Bezdenna sakiewka klejnotów"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr "%{name} daje ci %{count} jednostkę klejnotów dziennie."
+msgstr "%{name} zapewnia %{count} jednostkę klejnotów dziennie."
 
 msgid "Endless Cord of Wood"
 msgstr "Niewyczerpany stos drewna"
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr "%{name} daje ci %{count} jednostkę drewna dziennie."
+msgstr "%{name} zapewnia %{count} jednostkę drewna dziennie."
 
 msgid "Endless Cart of Ore"
 msgstr "Wiecznie pełny wóz rudy"
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr "%{name} daje ci %{count} jednostkę rudy dziennie."
+msgstr "%{name} zapewnia %{count} jednostkę rudy dziennie."
 
 msgid "Endless Pouch of Crystal"
 msgstr "Bezdenna sakiewka kryształów"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr "%{name} daje ci %{count} jednostkę kryształów dziennie."
+msgstr "%{name} zapewnia %{count} jednostkę kryształów dziennie."
 
 msgid "Spiked Helm"
 msgstr "Rogaty hełm"
@@ -7694,8 +7693,8 @@ msgid ""
 "The Spell Scroll will be consumed.\n"
 " Cost in spell points: %{sp}"
 msgstr ""
-"Czy chcesz wykorzystać swoją wiedzę magiczną aby zapisać %{spell} ze zwoju "
-"do swojej księgi czarów?\n"
+"Czy chcesz wykorzystać swoją wiedzę magiczną, aby zapisać %{spell} ze zwoju "
+"do swojej księgi zaklęć?\n"
 "Zwój zostanie wykorzystany.\n"
 "Koszt punktów magii: %{sp}"
 
@@ -8349,7 +8348,7 @@ msgid ""
 msgstr ""
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "bohaterowie: pozwól kupować księgę magii z kaplic"
+msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
 
 msgid "heroes: recruit cost depends on hero level"
 msgstr ""
