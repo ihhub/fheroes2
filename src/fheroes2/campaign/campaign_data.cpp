@@ -218,11 +218,11 @@ namespace
                                     Campaign::VideoSequence{ { "GOOD05V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPG05.H2C", scenarioName[4], scenarioDescription[4],
-                                    emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPG06.H2C", scenarioName[5],
-                                    scenarioDescription[5],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD06AV.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
+                                                             { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPG06.H2C", scenarioName[5],
+                                    scenarioDescription[5], emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD07QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8] }, "CAMPG07.H2C", scenarioName[6], scenarioDescription[6],
@@ -241,7 +241,9 @@ namespace
 
         // At the end of the Betrayal scenario we should start an Archibald scenario.
         scenarioDatas.emplace_back( scenarioInfo[10], std::vector<Campaign::ScenarioInfoId>{ Campaign::ScenarioInfoId( Campaign::ARCHIBALD_CAMPAIGN, 5 ) },
-                                    "CAMPG05B.H2C", scenarioName[10], scenarioDescription[10], emptyPlayback, emptyPlayback );
+                                    "CAMPG05B.H2C", scenarioName[10], scenarioDescription[10], emptyPlayback,
+                                    Campaign::VideoSequence{ { "EVIL06BW.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
@@ -317,11 +319,11 @@ namespace
                                                              { "SBETRAYV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPE05.H2C", scenarioName[4], scenarioDescription[4],
-                                    emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPE06.H2C", scenarioName[5],
-                                    scenarioDescription[5],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL06AW.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
+                                                             { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPE06.H2C", scenarioName[5],
+                                    scenarioDescription[5], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL07W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMPE07.H2C", scenarioName[6], scenarioDescription[6],
@@ -342,7 +344,9 @@ namespace
 
         // At the end of the Betrayal scenario we should start a Roland scenario.
         scenarioDatas.emplace_back( scenarioInfo[11], std::vector<Campaign::ScenarioInfoId>{ Campaign::ScenarioInfoId( Campaign::ROLAND_CAMPAIGN, 5 ) }, "CAMPE05B.H2C",
-                                    scenarioName[11], scenarioDescription[11], emptyPlayback, emptyPlayback );
+                                    scenarioName[11], scenarioDescription[11], emptyPlayback,
+                                    Campaign::VideoSequence{ { "GOOD06BV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
