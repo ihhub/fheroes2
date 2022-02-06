@@ -389,7 +389,7 @@ msgid "Not enough gold (%{gold})"
 msgstr "Не хватает %{gold} золота"
 
 msgid "%{name} states:"
-msgstr "Параметры %{name}:"
+msgstr "%{name} объявляет:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
