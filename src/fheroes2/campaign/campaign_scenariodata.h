@@ -54,9 +54,6 @@ namespace Campaign
     {
         ScenarioInfoId() = default;
 
-        // Make sure that we don't pass just one argument when 2 are required.
-        ScenarioInfoId( const int ) = delete;
-
         ScenarioInfoId( const int campaignId_, const int scenarioId_ )
             : campaignId( campaignId_ )
             , scenarioId( scenarioId_ )
