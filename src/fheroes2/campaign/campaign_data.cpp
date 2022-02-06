@@ -307,10 +307,14 @@ namespace
         scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE03.H2C", scenarioName[2],
                                     scenarioDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END },
+                                                             { "SBETRAYV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE04.H2C", scenarioName[3],
                                     scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END },
+                                                             { "SBETRAYV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPE05.H2C", scenarioName[4], scenarioDescription[4],
                                     emptyPlayback, emptyPlayback );
