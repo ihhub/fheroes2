@@ -5282,7 +5282,7 @@ msgstr ""
 "ponownie jutro."
 
 msgid "%{spell} failed!!!"
-msgstr "Czar nie udany!"
+msgstr "Czar %{spell} nie udał się!"
 
 msgid "This spell is already in use."
 msgstr "Ten czar już został rzucony."
