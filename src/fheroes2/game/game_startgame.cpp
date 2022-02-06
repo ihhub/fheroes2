@@ -565,7 +565,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
 
-    std::vector<Player *> sortedPlayers = conf.GetPlayers();
+    std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
     while ( res == fheroes2::GameMode::END_TURN ) {
