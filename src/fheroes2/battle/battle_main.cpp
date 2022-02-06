@@ -302,7 +302,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
     // update army
     if ( commander1 && commander1->isHeroes() ) {

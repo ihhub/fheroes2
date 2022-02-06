@@ -158,12 +158,6 @@ msgstr ""
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} metade das tropas inimigas!"
 
-msgid "Set auto battle off"
-msgstr "Desligar batalha automática"
-
-msgid "Set auto battle on"
-msgstr "Ligar batalha automática"
-
 msgid "spell failed!"
 msgstr "feitiço falhou!"
 

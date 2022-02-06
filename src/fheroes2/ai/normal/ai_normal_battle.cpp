@@ -446,7 +446,7 @@ namespace AI
     Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const
     {
         Actions actions;
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
         BattleTargetPair target;
 
         if ( currentUnit.isHandFighting() ) {
@@ -545,7 +545,7 @@ namespace AI
     BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
@@ -621,8 +621,8 @@ namespace AI
     {
         BattleTargetPair target;
 
-        const Units friendly( arena.getForce( _myColor ), true );
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         const int myHeadIndex = currentUnit.GetHeadIndex();
 

@@ -40,7 +40,8 @@ namespace Battle
     {
     public:
         Units();
-        Units( const Units &, bool filter = false );
+        Units( const Units & ) = delete;
+        Units( const Units & units, const bool filter );
         virtual ~Units() = default;
 
         Units & operator=( const Units & ) = delete;
@@ -66,6 +67,8 @@ namespace Battle
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;
 
+        const Units & getUnits() const;
+
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
         u32 GetDeadHitPoints( void ) const;
@@ -79,9 +82,6 @@ namespace Battle
 
         void NewTurn( void );
         void SyncArmyCount();
-
-        static Unit * GetCurrentUnit( const Force & army1, const Force & army2, bool part1, int preferredColor );
-        static void UpdateOrderUnits( const Force & army1, const Force & army2, const Unit * activeUnit, int preferredColor, const Units & orderHistory, Units & orders );
 
     private:
         Army & army;

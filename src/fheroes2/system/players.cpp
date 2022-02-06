@@ -376,6 +376,11 @@ int Players::GetActualColors( void ) const
     return res;
 }
 
+const std::vector<Player *> & Players::getVector() const
+{
+    return *this;
+}
+
 Player * Players::GetCurrent( void )
 {
     return Get( current_color );

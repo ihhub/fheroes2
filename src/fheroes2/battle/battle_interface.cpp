@@ -929,6 +929,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
+    , _breakAutoBattleForColor( 0 )
     , _contourColor( 110 )
     , _brightLandType( false )
     , _currentUnit( nullptr )
@@ -2146,8 +2147,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     if ( !availableAttackDirection.empty() ) {
                         int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
                         if ( currentDirection == UNKNOWN ) {
-                            // This function should never return this value.
-                            assert( 0 );
+                            // This could happen when another window has popped up and the user moved the mouse.
                             currentDirection = CENTER;
                         }
 
@@ -2253,6 +2253,15 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
     return Cursor::WAR_NONE;
 }
 
+void Battle::Interface::getPendingActions( Actions & actions )
+{
+    if ( _breakAutoBattleForColor ) {
+        actions.emplace_back( CommandType::MSG_BATTLE_AUTO, _breakAutoBattleForColor );
+
+        _breakAutoBattleForColor = 0;
+    }
+}
+
 void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
     Cursor & cursor = Cursor::Get();
@@ -2298,9 +2307,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
             HumanCastSpellTurn( b, a, msg );
         else
             HumanBattleTurn( b, a, msg );
-
-        if ( humanturn_exit )
-            cursor.SetThemes( Cursor::WAIT );
 
         // update status
         if ( msg != status.GetMessage() ) {
@@ -2650,9 +2656,10 @@ void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
     btn_auto.drawOnPress();
 
-    a.push_back( Command( CommandType::MSG_BATTLE_AUTO, b.GetColor() ) );
+    if ( arena.CanToggleAutoBattle() ) {
+        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
+    }
 
-    Cursor::Get().SetThemes( Cursor::WAIT );
     humanturn_redraw = true;
     humanturn_exit = true;
 
@@ -4975,13 +4982,13 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     }
 
     // break auto battle
-    if ( arena.CanBreakAutoBattle()
+    if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_AUTOSWITCH )
                         || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
-        arena.BreakAutoBattle();
+        _breakAutoBattleForColor = arena.GetCurrentColor();
     }
 }
 
