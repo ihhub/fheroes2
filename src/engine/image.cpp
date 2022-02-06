@@ -1230,7 +1230,7 @@ namespace fheroes2
             return contour;
         }
 
-        assert( contour.transform() != nullptr );
+        assert( !contour.empty() );
 
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
@@ -1820,7 +1820,7 @@ namespace fheroes2
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
 
-        assert( out.transform() != nullptr );
+        assert( !out.empty() );
 
         const int32_t widthOut = out.width();
 
