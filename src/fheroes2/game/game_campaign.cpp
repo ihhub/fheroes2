@@ -550,13 +550,13 @@ namespace
     {
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
-        const Campaign::ScenarioInfoId & currenScenarioInfoId = saveData.getCurrentScenarioInfoId();
+        const Campaign::ScenarioInfoId & currentScenarioInfoId = saveData.getCurrentScenarioInfoId();
 
-        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( currenScenarioInfoId.campaignId );
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( currentScenarioInfoId.campaignId );
 
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
-        assert( currenScenarioInfoId.scenarioId >= 0 && static_cast<size_t>( currenScenarioInfoId.scenarioId ) < scenarios.size() );
-        const Campaign::ScenarioData & scenario = scenarios[currenScenarioInfoId.scenarioId];
+        assert( currentScenarioInfoId.scenarioId >= 0 && static_cast<size_t>( currentScenarioInfoId.scenarioId ) < scenarios.size() );
+        const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
         if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
             AGG::ResetMixer();
@@ -748,10 +748,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
 
-    const Campaign::ScenarioInfoId & currenScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
+    const Campaign::ScenarioInfoId & currentScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
 
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
-    const Campaign::ScenarioData & scenario = scenarios[currenScenarioInfoId.scenarioId];
+    const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
@@ -850,7 +850,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     std::vector<Campaign::ScenarioInfoId> selectableScenarios;
     if ( allowToRestart ) {
-        selectableScenarios.emplace_back( currenScenarioInfoId );
+        selectableScenarios.emplace_back( currentScenarioInfoId );
     }
     else {
         selectableScenarios = campaignSaveData.isStarting() ? campaignData.getStartingScenarios()
@@ -861,11 +861,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     fheroes2::ButtonGroup selectableScenarioButtons;
 
-    const int highlightedScenarioId = allowToRestart ? currenScenarioInfoId.scenarioId : -1;
+    const int highlightedScenarioId = allowToRestart ? currentScenarioInfoId.scenarioId : -1;
     DrawCampaignScenarioIcons( selectableScenarioButtons, campaignData, top, highlightedScenarioId );
 
     for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-        if ( currenScenarioInfoId == selectableScenarios[i] )
+        if ( currentScenarioInfoId == selectableScenarios[i] )
             selectableScenarioButtons.button( i ).press();
 
         selectableScenarioButtons.button( i ).draw();
@@ -903,7 +903,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-            if ( currenScenarioInfoId != selectableScenarios[i] && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
+            if ( currentScenarioInfoId != selectableScenarios[i] && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioInfoId( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
@@ -927,11 +927,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
                 // but the army has to be set after starting the game, so first only set the race
-                SetScenarioBonus( currenScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
+                SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
 
             // Betrayal scenario eliminates all obtained awards.
-            if ( isBetrayalScenario( currenScenarioInfoId ) ) {
+            if ( isBetrayalScenario( currentScenarioInfoId ) ) {
                 campaignSaveData.removeAllAwards();
             }
 
@@ -954,13 +954,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
-                SetScenarioBonus( currenScenarioInfoId, scenarioBonus );
+                SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
             }
 
-            applyObtainedCampaignAwards( currenScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
+            applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
-            campaignSaveData.setCurrentScenarioInfoId( currenScenarioInfoId );
+            campaignSaveData.setCurrentScenarioInfoId( currentScenarioInfoId );
 
             return fheroes2::GameMode::START_GAME;
         }
