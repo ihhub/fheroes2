@@ -66,6 +66,11 @@ namespace Campaign
             return campaignId == info.campaignId && scenarioId == info.scenarioId;
         }
 
+        bool operator!=( const ScenarioInfoId & info ) const
+        {
+            return !operator==( info );
+        }
+
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data );
 

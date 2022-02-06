@@ -50,6 +50,11 @@ namespace Campaign
             return _currentScenarioInfoId.scenarioId;
         }
 
+        const ScenarioInfoId & getCurrentScenarioInfoId() const
+        {
+            return _currentScenarioInfoId;
+        }
+
         // Make sure that this is not the first scenario in the campaign. Please call isStarting to verify this.
         const ScenarioInfoId & getLastCompletedScenarioInfoID() const;
 
@@ -78,6 +83,11 @@ namespace Campaign
         void reset();
         void addDaysPassed( const uint32_t days );
         void removeCampaignAward( const int awardID );
+
+        void removeAllAwards()
+        {
+            _obtainedCampaignAwards.clear();
+        }
 
         static CampaignSaveData & Get();
 
