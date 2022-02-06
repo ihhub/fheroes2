@@ -1234,10 +1234,7 @@ namespace fheroes2
         uint8_t * outImageY = contour.image();
         uint8_t * outTransformY = contour.transform();
 
-#ifdef __clang_analyzer__
-        // FIXME: apparently, a false positive from the Clang Analyzer
         assert( outImageY != nullptr );
-#endif
 
         const int32_t reducedWidth = width - 1;
         const int32_t reducedHeight = height - 1;
@@ -1829,6 +1826,8 @@ namespace fheroes2
         const uint8_t * transformInYEnd = transformInY + width * height;
         uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
 
+        assert( transformOutY != nullptr );
+
         for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
             const uint8_t * transformInX = transformInY;
             uint8_t * transformOutX = transformOutY;
@@ -1836,10 +1835,6 @@ namespace fheroes2
 
             for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
                 if ( *transformInX == 0 ) {
-#ifdef __clang_analyzer__
-                    // FIXME: apparently, a false positive from the Clang Analyzer
-                    assert( transformOutX != nullptr );
-#endif
                     *transformOutX = transformId;
                 }
             }
