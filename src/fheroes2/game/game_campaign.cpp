@@ -917,7 +917,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) ) || restartButtonClicked ) {
             if ( restartButtonClicked
-                 && Dialog::Message( _( "Restart" ), _( "Are you sure you want to restart this scenario" ), Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+                 && Dialog::Message( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
                 continue;
             }
 
