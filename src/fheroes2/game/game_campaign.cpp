@@ -345,7 +345,7 @@ namespace
         }
     }
 
-    void drawObtainedCampaignAwards( Campaign::CampaignSaveData & campaignSaveData, const fheroes2::Point & top )
+    void drawObtainedCampaignAwards( const Campaign::CampaignSaveData & campaignSaveData, const fheroes2::Point & top )
     {
         if ( isBetrayalScenario( campaignSaveData.getCurrentScenarioInfoId() ) ) {
             return;
