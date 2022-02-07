@@ -63,7 +63,7 @@ version 0.9.12 (07 February 2022)
 version 0.9.11 (23 December 2021)
 - add popup dialog for map information
 - fix hero's path not being updated properly after new monster month event
-- show available game languages in vertical order rather than horizonal
+- show available game languages in vertical order rather than horizontal
 - fix handling of national symbols in the paths to music files on Windows
 - improve AI behavior during castle defence
 - fix pressed buttons' background
