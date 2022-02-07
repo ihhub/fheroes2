@@ -3,7 +3,7 @@ version 0.9.12 (07 February 2022)
 - fix wrong scenario order in "Voyage Home" campaign
 - add Betrayal missing for Roland and Archibald campaigns
 - fix logic for switching on and off Auto battle option
-- fix normal and retaliation attack monsters with multi-cell attack abilities
+- fix normal and retaliation attack of monsters with multi-cell attack abilities
 - fix missing logging during certain spell casts in battle
 - implement a heuristic for hiring heroes that does not allow to offer the same heroes for hire in several kingdoms at the same time, if there are enough free heroes
 - use 'r' key instead of Escape to Retreat during battle
