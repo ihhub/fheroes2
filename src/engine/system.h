@@ -23,8 +23,6 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
-#define __STDC_WANT_LIB_EXT1__ 1
-
 #include <ctime>
 
 #include "dir.h"

@@ -486,15 +486,19 @@ tm System::GetTM( const time_t time )
 {
     tm result = {};
 
-#ifdef __STDC_LIB_EXT1__
-    const tm * res = localtime_s( &time, &result );
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    errno_t res = localtime_s( &result, &time );
+
+    if ( res != 0 ) {
+        assert( 0 );
+    }
 #else
     const tm * res = localtime_r( &time, &result );
-#endif
 
     if ( res == nullptr ) {
         assert( 0 );
     }
+#endif
 
     return result;
 }
