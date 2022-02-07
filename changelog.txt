@@ -1,4 +1,7 @@
 version 0.9.12 (07 February 2022)
+- add a confirmation window for restarting a campaign scenario
+- fix wrong scenario order in "Voyage Home" campaign
+- add Betrayal missing for Roland and Archibald campaigns
 - fix logic for switching on and off Auto battle option
 - fix normal and retaliation attack monsters with multi-cell attack abilities
 - fix missing logging during certain spell casts in battle
