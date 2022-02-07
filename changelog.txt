@@ -3,7 +3,7 @@ version 0.9.12 (07 February 2022)
 - fix normal and retaliation attack monsters with multi-cell attack abilities
 - fix missing logging during certain spell casts in battle
 - implement a heuristic for hiring heroes that does not allow to offer the same heroes for hire in several kingdoms at the same time, if there are enough free heroes
-- use 'r' key instead of Escape to Retrieve during battle
+- use 'r' key instead of Escape to Retreat during battle
 - fix Hydra behavior under Berserk or Hypnotize spell effect
 - add highlighting of cells attacked by a unit capable of attacking all neighboring cells
 - fix a penetrating attack made by a wide unit from the tail cell
