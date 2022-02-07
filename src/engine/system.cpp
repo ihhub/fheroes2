@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <fstream>
 #include <map>
@@ -479,4 +480,21 @@ std::string System::FileNameToUTF8( const std::string & str )
 #else
     return str;
 #endif
+}
+
+tm System::GetTM( const time_t time )
+{
+    tm result = {};
+
+#ifdef __STDC_LIB_EXT1__
+    const tm * res = localtime_s( &time, &result );
+#else
+    const tm * res = localtime_r( &time, &result );
+#endif
+
+    if ( res == nullptr ) {
+        assert( 0 );
+    }
+
+    return result;
 }
