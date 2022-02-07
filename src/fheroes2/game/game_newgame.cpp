@@ -203,8 +203,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCampaignID( chosenCampaign );
-    campaignSaveData.setCurrentScenarioID( 0 );
+    campaignSaveData.setCurrentScenarioInfoId( { chosenCampaign, 0 } );
 
     AGG::PlayMusic( MUS::VICTORY, true, true );
 
@@ -216,8 +215,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     // TODO: Properly choose the campaign instead of this hackish way
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
-    campaignSaveData.setCurrentScenarioID( 0 );
+    campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
 
     std::array<std::unique_ptr<SMKVideoSequence>, 4> videos{ getVideo( "IVYPOL.SMK" ), getVideo( "IVYVOY.SMK" ), getVideo( "IVYWIZ.SMK" ), getVideo( "IVYDES.SMK" ) };
 
@@ -266,22 +264,22 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {
         if ( le.MouseClickLeft( activeCampaignArea[0] ) ) {
-            campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[1] ) ) {
-            campaignSaveData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::VOYAGE_HOME_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[2] ) ) {
-            campaignSaveData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::WIZARDS_ISLE_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[3] ) ) {
-            campaignSaveData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::DESCENDANTS_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
