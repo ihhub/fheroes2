@@ -314,7 +314,7 @@ namespace
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE04.H2C", scenarioName[3],
                                     scenarioDescription[3], emptyPlayback,
-                                    Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                    Campaign::VideoSequence{ { "EVIL05BV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END },
                                                              { "SBETRAYV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
