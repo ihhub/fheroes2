@@ -50,6 +50,35 @@ namespace Campaign
         LOSE_ALL_SORCERESS_VILLAGES = 1
     };
 
+    struct ScenarioInfoId
+    {
+        ScenarioInfoId() = default;
+
+        ScenarioInfoId( const int campaignId_, const int scenarioId_ )
+            : campaignId( campaignId_ )
+            , scenarioId( scenarioId_ )
+        {
+            // Do nothing.
+        }
+
+        bool operator==( const ScenarioInfoId & info ) const
+        {
+            return campaignId == info.campaignId && scenarioId == info.scenarioId;
+        }
+
+        bool operator!=( const ScenarioInfoId & info ) const
+        {
+            return !operator==( info );
+        }
+
+        friend StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data );
+        friend StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data );
+
+        int campaignId{ -1 };
+
+        int scenarioId{ -1 };
+    };
+
     struct ScenarioBonusData
     {
     public:
@@ -77,7 +106,7 @@ namespace Campaign
 
         std::string ToString() const;
 
-        static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID );
+        static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const ScenarioInfoId & scenarioInfo );
     };
 
     struct ScenarioIntroVideoInfo
@@ -92,14 +121,14 @@ namespace Campaign
     {
     public:
         ScenarioData() = delete;
-        ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
-                      const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+        ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName, const std::string & scenarioName,
+                      const std::string & description, const VideoSequence & startScenarioVideoPlayback, const VideoSequence & endScenarioVideoPlayback,
+                      const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
                       const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
-        const std::vector<int> & getNextMaps() const
+        const std::vector<ScenarioInfoId> & getNextScenarios() const
         {
-            return _nextMaps;
+            return _nextScenarios;
         }
 
         const std::vector<ScenarioBonusData> & getBonuses() const
@@ -109,7 +138,17 @@ namespace Campaign
 
         int getScenarioID() const
         {
-            return _scenarioID;
+            return _scenarioInfo.scenarioId;
+        }
+
+        int getCampaignId() const
+        {
+            return _scenarioInfo.campaignId;
+        }
+
+        const ScenarioInfoId & getScenarioInfoId() const
+        {
+            return _scenarioInfo;
         }
 
         const char * getScenarioName() const;
@@ -140,8 +179,8 @@ namespace Campaign
         Maps::FileInfo loadMap() const;
 
     private:
-        int _scenarioID;
-        std::vector<int> _nextMaps;
+        ScenarioInfoId _scenarioInfo;
+        std::vector<ScenarioInfoId> _nextScenarios;
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
         // Note: There are inconsistencies with the content of the map file in regards to the map name and description, so we'll be getting them from somewhere else
