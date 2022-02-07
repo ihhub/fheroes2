@@ -528,12 +528,13 @@ namespace
             return;
         }
 
-        const int lastCompletedScenarioID = saveData.getLastCompletedScenarioInfoID().scenarioId;
-        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
+        const Campaign::ScenarioInfoId & lastCompletedScenarioInfoId = saveData.getLastCompletedScenarioInfoID();
+
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( lastCompletedScenarioInfoId.campaignId );
 
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
-        assert( lastCompletedScenarioID >= 0 && static_cast<size_t>( lastCompletedScenarioID ) < scenarios.size() );
-        const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioID];
+        assert( lastCompletedScenarioInfoId.scenarioId >= 0 && static_cast<size_t>( lastCompletedScenarioInfoId.scenarioId ) < scenarios.size() );
+        const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioInfoId.scenarioId];
 
         if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
             AGG::ResetMixer();
