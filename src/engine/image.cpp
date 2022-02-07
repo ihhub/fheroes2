@@ -1230,6 +1230,8 @@ namespace fheroes2
             return contour;
         }
 
+        assert( !contour.empty() );
+
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
         uint8_t * outTransformY = contour.transform();
@@ -1817,6 +1819,8 @@ namespace fheroes2
         // Shadow has (-x, +y) offset.
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
+
+        assert( !out.empty() );
 
         const int32_t widthOut = out.width();
 
