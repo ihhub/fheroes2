@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14) # For descent FetchContent()
 
-project(fheroes2 VERSION 0.9.11 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.12 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12")
