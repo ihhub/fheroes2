@@ -310,9 +310,8 @@ msgstr ""
 msgid "%{name} the %{race}"
 msgstr "%{name}, %{race}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "%{name} - nie stać cię na ten budynek."
+msgstr "Kapitan, %{name}"
 
 msgid "Attack"
 msgstr "Atak"
@@ -1223,7 +1222,6 @@ msgstr "%{building} - tu rekrutuje się: %{monster}."
 msgid "Requires:"
 msgstr "Wymagania:"
 
-#, fuzzy
 msgid "Cannot build. You have already built here today."
 msgstr "Nie można budować. Już to robiono w tej turze."
 
@@ -1234,7 +1232,7 @@ msgid "Cannot build %{name} because castle is too far from water."
 msgstr "%{name} - nie można zbudować, zamek jest za daleko od wody"
 
 msgid "disable build."
-msgstr ""
+msgstr "nie można zbudować."
 
 msgid "Cannot afford %{name}."
 msgstr "%{name} - nie stać cię na ten budynek."
@@ -1861,7 +1859,7 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-"Aby korzystać z gildii magów, musisz kupić księgę czarów. W tej chwili nie "
+"Aby korzystać z gildii magów, musisz kupić księgę magii. W tej chwili nie "
 "masz jednak na nią miejsca. Spróbuj przekazać jeden ze swoich artefaktów "
 "innemu bohaterowi."
 
@@ -3424,12 +3422,12 @@ msgstr "Opcje przygody"
 msgid "Bring up the adventure options menu."
 msgstr "Pokazuje menu z opcjami przygody."
 
-#, fuzzy
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
-"Pokazuje menu z opcjami plików, pozwalając na wczytanie gry, zapisanie, itp."
+"Pokazuje menu z opcjami plików, pozwalając na: wczytanie gry, zapisanie gry "
+"rozpoczęcie nowej gry lub wyjście z bieżącej gry."
 
 msgid "File Options"
 msgstr "Opcje plików"
@@ -3785,7 +3783,7 @@ msgstr ""
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
-"Aby móc rzucać zaklęcia, musisz najpierw kupić księgę czarów za %{gold} "
+"Aby móc rzucać zaklęcia, musisz najpierw kupić księgę magii za %{gold} "
 "sztuk złota."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
@@ -4483,7 +4481,6 @@ msgstr ""
 "Przejmujesz kontrolę nad kopalnią złota. Dostarczać ci będzie %{count} sztuk "
 "złota dziennie."
 
-#, fuzzy
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
 "move further each day."
@@ -4857,7 +4854,6 @@ msgstr "\"Potrzebuję %{count} %{res}.\""
 msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
 msgstr "szepcze łkając. \"No cóż, wróć kiedy je zdobędziesz.\""
 
-#, fuzzy
 msgid ""
 "Nestled among the trees sits a blind seer. After you explain the intent of "
 "your journey, the seer activates his crystal ball, allowing you to see the "
@@ -4947,7 +4943,6 @@ msgstr[1] ""
 msgstr[2] ""
 "Sprawdza twój plecak i zauważa że posiadasz %{count} zaklętych przedmiotów."
 
-#, fuzzy
 msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
 msgid_plural ""
 "For %{gold} gold, the alchemist will remove them for you. Do you pay?"
@@ -5081,7 +5076,6 @@ msgstr ""
 "\"Mam dla ciebie zagadkę,\" mówi Sfinks. \"Jeśli odpowiesz dobrze, dam ci "
 "nagrodę. Jeśli odpowiesz źle, pożrę cię. Podejmujesz moje wyzwanie?\""
 
-#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 " \n"
@@ -5146,11 +5140,10 @@ msgstr ""
 "odpowiedź, której szukasz.\""
 
 msgid "Spell book is not present."
-msgstr ""
+msgstr "Nie posiadasz księgi magii."
 
-#, fuzzy
 msgid "The spell is not found."
-msgstr "Ten czar już został rzucony."
+msgstr "Zaklęcie nie zostało znalezione."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
@@ -5160,7 +5153,7 @@ msgstr ""
 "możesz go rzucić."
 
 msgid "Not enough move points."
-msgstr ""
+msgstr "Niewystarczająco punktów ruchu."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} (poziom %{level})"
@@ -5187,38 +5180,32 @@ msgstr "Ustaw armię w luźnej formacji"
 msgid "Set army combat formation to 'Grouped'"
 msgstr "Ustaw armię w zwartej formacji"
 
-#, fuzzy
 msgid "Exit Hero Screen"
-msgstr "Ekran bohatera"
+msgstr "Wyjście z ekranu bohatera"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr "Nie możesz zwolnić bohatera w zamku"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr ""
+msgstr "Zwolnienie %{name}, %{race}, jest zabronione w tym scenariuszu"
 
-#, fuzzy
 msgid "Dismiss %{name} the %{race}"
-msgstr "%{name}, %{race}"
+msgstr "Zwolnij bohatera: %{name}, %{race}"
 
-#, fuzzy
 msgid "Show previous hero"
-msgstr "Pokaż poprzednie miasto"
+msgstr "Pokaż poprzedniego bohatera"
 
-#, fuzzy
 msgid "Show next hero"
 msgstr "Pokaż następnego bohatera"
 
-#, fuzzy
 msgid "Blood Morale"
 msgstr "Wysokie morale"
 
-#, fuzzy
 msgid "%{morale} Morale"
-msgstr "%{morale} Morale"
+msgstr "%{morale} morale"
 
 msgid "%{luck} Luck"
-msgstr "%{luck} Szczęście"
+msgstr "%{luck} szczęście"
 
 msgid "Current Luck Modifiers:"
 msgstr "Obecne modyfikatory szczęścia:"
@@ -5288,26 +5275,21 @@ msgstr ""
 "Twój bohater jest zbyt zmęczony, by rzucić dziś to zaklęcie. Spróbuj "
 "ponownie jutro."
 
-#, fuzzy
 msgid "%{spell} failed!!!"
-msgstr "Czar nie udany!"
+msgstr "Czar %{spell} nie udał się!!!"
 
-#, fuzzy
 msgid "This spell is already in use."
 msgstr "Ten czar już został rzucony."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
 
-#, fuzzy
 msgid "This spell cannot be used on a boat."
 msgstr "Ten czar nie może być rzucony z łodzi."
 
-#, fuzzy
 msgid "This spell can be casted only nearby water."
 msgstr "Ten czar może być rzucony tylko przy wodzie."
 
-#, fuzzy
 msgid ""
 "No available towns.\n"
 "Spell Failed!!!"
@@ -5339,7 +5321,6 @@ msgstr[0] "Jedno stworzenie dołączy do nas..."
 msgstr[1] "Część tych stworzeń (%{count}) dołączy do nas..."
 msgstr[2] "Część tych stworzeń (%{count}) dołączy do nas..."
 
-#, fuzzy
 msgid ""
 "\n"
 " for a fee of %{gold} gold."
@@ -5677,7 +5658,6 @@ msgstr ""
 "Pozwala wskrzesić w postaci szkieletów %{count} procent poległych w walce "
 "stworzeń."
 
-#, fuzzy
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
@@ -6025,7 +6005,6 @@ msgstr "Duże"
 msgid "maps|Extra Large"
 msgstr "Olbrzymie"
 
-#, fuzzy
 msgid "maps|Custom Size"
 msgstr "Inny rozmiar"
 
@@ -6048,20 +6027,19 @@ msgid "Mine"
 msgstr "Kopalnia"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "WuTeKa."
 
 msgid "Next sign 50 miles."
-msgstr ""
+msgstr "Następny znak za 50 mil."
 
-#, fuzzy
 msgid "See Rock City."
-msgstr "Nadrzewne miasto"
+msgstr "Zobacz miasto Roków."
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Miejsce do wynajęcia."
 
 msgid "No object"
-msgstr ""
+msgstr "Brak obiektu"
 
 msgid "Alchemist Lab"
 msgstr "Laboratorium"
@@ -6075,7 +6053,6 @@ msgstr "Zaklęty krąg"
 msgid "Dragon City"
 msgstr "Smocze Miasto"
 
-#, fuzzy
 msgid "Lighthouse"
 msgstr "Latarnia morska"
 
@@ -6181,7 +6158,6 @@ msgstr "Wrak"
 msgid "Observation Tower"
 msgstr "Wieża obserwacyjna"
 
-#, fuzzy
 msgid "Freeman's Foundry"
 msgstr "Odlewnia"
 
@@ -6326,9 +6302,8 @@ msgstr "Zdarzenie"
 msgid "Random Monster"
 msgstr "Losowy potwór"
 
-#, fuzzy
 msgid "Random Ultimate Artifact"
-msgstr "Znajdź najpotężniejszy artefakt."
+msgstr "Losowy najpotężniejszy artefakt."
 
 msgid "Idol"
 msgstr "Bożek"
@@ -7011,7 +6986,6 @@ msgstr "Najzn. korona"
 msgid "Golden Goose"
 msgstr "Złota gęś"
 
-#, fuzzy
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} dodaje przychód w wysokości %{count} sztuk złota na turę."
 
@@ -7294,13 +7268,12 @@ msgstr "Różdżka Negacji"
 msgid "Golden Bow"
 msgstr "Złoty łuk"
 
-#, fuzzy
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
 "past obstacles (e.g. castle walls)."
 msgstr ""
 "%{name} eliminuje %{count} procent kary dla twoich oddziałów strzelających "
-"przez przeszkody (np. mury zamków)"
+"przez przeszkody (np. zamkowe mury)"
 
 msgid "Telescope"
 msgstr "Teleskop"
@@ -7331,11 +7304,9 @@ msgstr "Kapelusz czarodzieja"
 msgid "Power Ring"
 msgstr "Pierścień mocy"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
-"%{name} przywraca %{count} dodatkowych punktów mocy na turę dla twojego "
-"bohatera"
+"%{name} przywraca twojemu bohaterowi dodatkowe %{count} punkty magii na turę."
 
 msgid "Ammo Cart"
 msgstr "Wóz z amunicją"
@@ -7348,7 +7319,6 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Weksel fiskalny"
 
-#, fuzzy
 msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "%{name} kosztuje cię %{count} złota na turę."
 
@@ -7363,44 +7333,38 @@ msgstr ""
 msgid "Endless Pouch of Sulfur"
 msgstr "Bezdenna sakiewka siarki"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr "%{name} zapewnia %{count} jednostkę siarki na dzień"
+msgstr "%{name} zapewnia %{count} jednostkę siarki dziennie."
 
 msgid "Endless Vial of Mercury"
 msgstr "Bezdenna fiolka rtęci"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr "%{name} zapewnia %{count} jednostkę rtęci dziennie"
+msgstr "%{name} zapewnia %{count} jednostkę rtęci dziennie."
 
 msgid "Endless Pouch of Gems"
 msgstr "Bezdenna sakiewka klejnotów"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr "%{name} zapewnia %{count} klejnot dziennie"
+msgstr "%{name} zapewnia %{count} jednostkę klejnotów dziennie."
 
 msgid "Endless Cord of Wood"
 msgstr "Niewyczerpany stos drewna"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr "%{name} zapewnia %{count} drewna dziennie"
+msgstr "%{name} zapewnia %{count} jednostkę drewna dziennie."
 
 msgid "Endless Cart of Ore"
 msgstr "Wiecznie pełny wóz rudy"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr "%{name} zapewnia %{count} rudę dziennie"
+msgstr "%{name} zapewnia %{count} jednostkę rudy dziennie."
 
 msgid "Endless Pouch of Crystal"
 msgstr "Bezdenna sakiewka kryształów"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr "%{name} zapewnia %{count} jednostkę kryształu na dzień"
+msgstr "%{name} zapewnia %{count} jednostkę kryształów dziennie."
 
 msgid "Spiked Helm"
 msgstr "Rogaty hełm"
@@ -7538,7 +7502,6 @@ msgstr "Szpadel Nekromancji"
 msgid "The %{name} gives you increased necromancy skill."
 msgstr "%{name} zwiększa twoją umiejętność nekromancji."
 
-#, fuzzy
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
 "on the container are very old, and the artistry with which it was put "
@@ -7718,50 +7681,46 @@ msgstr ""
 "przedmiotu odkrywasz, że jest to zaklęty topór Grabarzy, zaginiony dawno "
 "temu."
 
-#, fuzzy
 msgid ""
 "Do you want to use your knowledge of magical secrets to transcribe the "
 "%{spell} Scroll into your Magic Book?\n"
 "The Spell Scroll will be consumed.\n"
 " Cost in spell points: %{sp}"
 msgstr ""
-"Czy chcesz wykorzystać swoją wiedzę magiczną aby zapisać %{spell} zwój do "
-"swojej księgi czarów ?"
+"Czy chcesz wykorzystać swoją wiedzę magiczną, aby zapisać %{spell} ze zwoju "
+"do swojej księgi zaklęć?\n"
+"Zwój zostanie wykorzystany.\n"
+"Koszt punktów magii: %{sp}"
 
-#, fuzzy
 msgid "Move points: %{mp}"
-msgstr "Ptk. ruchu"
+msgstr "Koszt punktów ruchu: %{mp}"
 
-#, fuzzy
 msgid "Transcribe Spell Scroll"
-msgstr "Zwój z zaklęciem"
+msgstr "Przepisz zwój z zaklęciem"
 
-#, fuzzy
 msgid "View Spells"
-msgstr "Pokaż wszystko"
+msgstr "Pokaż zaklęcia"
 
-#, fuzzy
 msgid "View %{name} Info"
-msgstr "Obejrzyj jednostkę (%{name})"
+msgstr "Informacje o: %{name}"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Przenieś %{name}"
 
-#, fuzzy
 msgid "Cannot move the Spellbook"
-msgstr "Nie można przenieść ostatniej jednostki"
+msgstr "Nie można przenieść księgi magii"
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Nie można wymienić tego przedmiotu."
 
 msgid "Wood"
-msgstr ""
+msgstr "Drewno"
 
 msgid "Mercury"
 msgstr "Rtęć"
 
 msgid "Ore"
-msgstr "Ruda Żelaza"
+msgstr "Ruda"
 
 msgid "Sulfur"
 msgstr "Siarka"
@@ -7773,7 +7732,7 @@ msgid "Gems"
 msgstr "Klejnoty"
 
 msgid "Gold"
-msgstr "Złoty"
+msgstr "Złoto"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -8294,9 +8253,8 @@ msgstr "Pokaż poprzednie miasto"
 msgid "View next page"
 msgstr "Obejrzyj jednostkę (%{name})"
 
-#, fuzzy
 msgid "Close Spellbook"
-msgstr "Rzuć zaklęcie"
+msgstr "Zamknij księgę magii"
 
 #, fuzzy
 msgid "View %{spell}"
@@ -8384,7 +8342,7 @@ msgid ""
 msgstr ""
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
+msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
 
 msgid "heroes: recruit cost depends on hero level"
 msgstr ""
