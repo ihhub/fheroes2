@@ -647,8 +647,6 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
     else {
-        // TextBox textbox2(_("Not room in\nthe garrison"), Font::SMALL, 100);
-        // textbox2.Blit(btnHeroes.x - 35, btnHeroes.y - 30);
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }
