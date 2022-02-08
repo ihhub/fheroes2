@@ -752,7 +752,6 @@ bool Heroes::MoveStep( bool fast )
 
 void Heroes::AngleStep( int to_direct )
 {
-    // bool check = false;
     bool clockwise = Direction::ShortDistanceClockWise( direction, to_direct );
 
     // start index
