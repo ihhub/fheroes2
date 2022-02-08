@@ -136,13 +136,13 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
         // magic attack
         if ( spell.isValid() ) {
-            const std::string name( attacker.GetName() );
-
             targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
 
             // The built-in dispel should only remove beneficial spells from the target
             if ( !targets.empty() && ( spell.GetID() != Spell::DISPEL || defender.Modes( IS_GOOD_MAGIC ) ) ) {
                 if ( interface ) {
+                    const std::string name( attacker.GetName() );
+
                     interface->RedrawActionSpellCastStatus( spell, defender.GetHeadIndex(), name, targets );
                     interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), nullptr, targets );
                 }
