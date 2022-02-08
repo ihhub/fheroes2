@@ -140,19 +140,17 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
             targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
 
-            bool validSpell = true;
-            if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
-                validSpell = false;
-
-            if ( !targets.empty() && validSpell ) {
+            // The built-in dispel should only remove beneficial spells from the target
+            if ( !targets.empty() && ( spell.GetID() != Spell::DISPEL || defender.Modes( IS_GOOD_MAGIC ) ) ) {
                 if ( interface ) {
                     interface->RedrawActionSpellCastStatus( spell, defender.GetHeadIndex(), name, targets );
                     interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), nullptr, targets );
                 }
 
-                if ( attacker == Monster::ARCHMAGE ) {
-                    if ( defender.Modes( IS_GOOD_MAGIC ) )
-                        defender.ResetModes( IS_GOOD_MAGIC );
+                if ( spell.GetID() == Spell::DISPEL ) {
+                    assert( targets.size() == 1 );
+
+                    defender.ResetModes( IS_GOOD_MAGIC );
                 }
                 else {
                     // magic attack not depends from hero
