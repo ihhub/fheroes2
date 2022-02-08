@@ -572,7 +572,6 @@ namespace AI
             }
 
             Army & army = castle->GetActualArmy();
-            // bool allow_enter = false;
 
             if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
@@ -603,7 +602,6 @@ namespace AI
                     castle->Scoute();
 
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    // allow_enter = true;
                 }
                 else
                     // wins defender
@@ -618,7 +616,6 @@ namespace AI
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
                 castle->Scoute();
-                // allow_enter = true;
             }
         }
     }
