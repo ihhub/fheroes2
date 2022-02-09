@@ -7170,7 +7170,7 @@ msgid "The %{name} increase your movement on land."
 msgstr "%{name} увеличивают Ваше передвижение по земле."
 
 msgid "Traveler's Boots of Mobility"
-msgstr "Башмаки путника"
+msgstr "Сапоги путника"
 
 msgid "Lucky Rabbit's Foot"
 msgstr "Кроличья лапка"
@@ -7185,7 +7185,7 @@ msgid "Gambler's Lucky Coin"
 msgstr "Счастливая монета"
 
 msgid "Four-Leaf Clover"
-msgstr "Клевер"
+msgstr "Четырёхлистник"
 
 msgid "The %{name} increases your movement on land and sea."
 msgstr "%{name} увеличивает Ваше передвижение по земле и воде."
@@ -7389,7 +7389,7 @@ msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr "%{name} восстанавливает %{count} очка магии в день."
 
 msgid "Ammo Cart"
-msgstr "Обоз оружия"
+msgstr "Оружейный обоз"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
 msgstr "%{name} обеспечивает бесконечными боеприпасами всех Ваших стрелков."
@@ -7552,7 +7552,7 @@ msgstr ""
 "%{name}, при сражениях на воде, увеличивает ваши удачу и мораль на %{count}."
 
 msgid "Sphere of Negation"
-msgstr "Сфера антимагии"
+msgstr "Сфера Отрицания"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
 msgstr "%{name} запрещает всем на поле боя использовать магию."
