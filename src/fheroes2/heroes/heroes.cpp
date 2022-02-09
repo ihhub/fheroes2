@@ -1307,7 +1307,6 @@ void Heroes::setDirection( int directionToSet )
         direction = directionToSet;
 }
 
-/* return route range in days */
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
@@ -1316,12 +1315,6 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
     if ( total > 0 ) {
-        // check if last step is diagonal and pre-adjust the total
-        const Route::Step lastStep = world.getPath( *this, dst ).back();
-        if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
-            total -= lastStep.GetPenalty() / 3;
-        }
-
         if ( move_point >= total )
             return 1;
 
