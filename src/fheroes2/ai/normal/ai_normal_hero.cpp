@@ -1180,7 +1180,7 @@ namespace AI
                 bool setNewMultipler = false;
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultipler > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultplier( monsterStrengthMultipliers[i] );
+                        _pathfinder.setArmyStrengthMultiplier( monsterStrengthMultipliers[i] );
                         setNewMultipler = true;
                         break;
                     }
@@ -1213,7 +1213,7 @@ namespace AI
 
                 if ( bestTargetIndex == -1 ) {
                     // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
                     break;
                 }
             }
@@ -1239,7 +1239,7 @@ namespace AI
                 ++i;
             }
 
-            _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
@@ -1250,7 +1250,7 @@ namespace AI
             }
         }
 
-        _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
 
         return allHeroesMoved;
     }

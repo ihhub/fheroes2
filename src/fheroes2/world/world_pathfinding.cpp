@@ -740,7 +740,7 @@ uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, 
     return _cache[targetIndex]._cost;
 }
 
-void AIWorldPathfinder::setArmyStrengthMultplier( const double multiplier )
+void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
 {
     if ( multiplier > 0 && std::fabs( _advantage - multiplier ) > 0.001 ) {
         _advantage = multiplier;
