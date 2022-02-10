@@ -1145,19 +1145,6 @@ bool MP2::isAbandonedMine( const MapObjectType objectType )
     return objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE;
 }
 
-bool MP2::isRemoveObject( const MapObjectType objectType )
-{
-    switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_BARRIER:
-        return true;
-    default:
-        break;
-    }
-
-    return isPickupObject( objectType );
-}
-
 bool MP2::isNeedStayFront( const MapObjectType objectType )
 {
     switch ( objectType ) {
