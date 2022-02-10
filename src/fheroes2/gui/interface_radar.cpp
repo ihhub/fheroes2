@@ -488,11 +488,6 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
     return false;
 }
 
-void Interface::Radar::ResetAreaSize( void )
-{
-    ChangeAreaSize( fheroes2::Size( RADARWIDTH, RADARWIDTH ) );
-}
-
 void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
 {
     if ( newSize.width != area.width || newSize.height != area.height ) {
