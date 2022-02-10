@@ -131,7 +131,7 @@ public:
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
     bool AllowBuyHero( const Heroes &, std::string * = nullptr ) const;
-    bool isPosition( const fheroes2::Point & ) const;
+    bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild( void ) const;
 
     u32 CountBuildings( void ) const;
