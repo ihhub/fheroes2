@@ -313,7 +313,7 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
     return sb;
 }
 
-struct MidiEvents : std::vector<MidiChunk>
+struct MidiEvents : public std::vector<MidiChunk>
 {
     uint32_t trackTempo = 0;
 
@@ -433,9 +433,6 @@ struct MidTrack
     IFFChunkHeader mtrk;
     MidiEvents events;
 
-    MidTrack()
-        : mtrk( TAG_MTRK, 0 )
-    {}
     explicit MidTrack( const XMITrack & t )
         : mtrk( TAG_MTRK, 0 )
         , events( t )
