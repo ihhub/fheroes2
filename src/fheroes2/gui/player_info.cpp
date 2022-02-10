@@ -377,7 +377,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
             }
         }
     }
-    else { // if ( le.MouseClickLeft() )
+    else {
         // select opponent
         if ( nullptr != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
             const Maps::FileInfo & fi = conf.CurrentFileInfo();

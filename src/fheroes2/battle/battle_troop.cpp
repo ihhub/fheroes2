@@ -766,9 +766,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     }
 
-    // check global
-    // if(GetArena()->DisableCastSpell(spell, msg)) return false; // disable - recursion!
-
     if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
         return false;
     if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )

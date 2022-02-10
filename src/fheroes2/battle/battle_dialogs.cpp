@@ -269,11 +269,6 @@ void Battle::DialogBattleSettings( void )
             Game::UpdateGameSpeed();
         }
 
-        // For future use
-        // else if ( le.MousePressRight( optionAreas[1] ) ) {
-        //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
-        // }
-
         bool saveShowArmyOrder = false;
         if ( le.MouseClickLeft( optionAreas[1] ) ) {
             conf.setBattleShowArmyOrder( !conf.BattleShowArmyOrder() );

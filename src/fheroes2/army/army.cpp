@@ -921,11 +921,6 @@ void Army::setFromTile( const Maps::Tiles & tile )
         ArrangeForBattle( false );
         break;
 
-        // case MP2::OBJ_ABANDONEDMINE:
-        //    at(0) = Troop(t);
-        //    ArrangeForBattle(false);
-        //    break;
-
     case MP2::OBJ_CITYDEAD:
         at( 0 )->Set( Monster::ZOMBIE, 20 );
         at( 1 )->Set( Monster::VAMPIRE_LORD, 5 );
