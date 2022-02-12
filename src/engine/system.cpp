@@ -199,31 +199,6 @@ std::string System::GetBasename( const std::string & str )
     return str;
 }
 
-std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
-{
-    std::string locname;
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    const char * clocale = std::setlocale( LC_MONETARY, nullptr );
-#elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    const char * clocale = setlocale( LC_MESSAGES, nullptr );
-#else
-    const char * clocale = std::setlocale( LC_MESSAGES, nullptr );
-#endif
-
-    if ( clocale ) {
-        locname = StringLower( clocale );
-        // 3: en_us.utf-8
-        // 2: en_us
-        // 1: en
-        if ( length < 3 ) {
-            std::vector<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
-            return list.empty() ? locname : list.front();
-        }
-    }
-
-    return locname;
-}
-
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
 {
 #if defined( _MSC_VER )

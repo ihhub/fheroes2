@@ -48,7 +48,6 @@ namespace Interface
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
         void SetHide( bool );
-        void ResetAreaSize( void );
         void QueueEventProcessing( void );
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 

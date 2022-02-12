@@ -128,7 +128,7 @@ public:
         return _advantage;
     }
 
-    void setArmyStrengthMultplier( const double multiplier );
+    void setArmyStrengthMultiplier( const double multiplier );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
