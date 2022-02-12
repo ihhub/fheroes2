@@ -21,7 +21,9 @@
 #include "ui_dialog.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "ui_button.h"
 #include "ui_text.h"
@@ -29,12 +31,40 @@
 namespace
 {
     const int32_t textOffsetY = 10;
+
+    namespace
+    {
+        void outputInTextMode( const fheroes2::TextBase & header, const fheroes2::TextBase & body, const int buttonTypes )
+        {
+            TEXT_LOG( "----------" );
+            TEXT_LOG( header.text() );
+            TEXT_LOG( '\n' );
+            TEXT_LOG( body.text() );
+
+            if ( buttonTypes & Dialog::YES ) {
+                TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." );
+            }
+            if ( buttonTypes & Dialog::NO ) {
+                TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." );
+            }
+            if ( buttonTypes & Dialog::OK ) {
+                TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." );
+            }
+            if ( buttonTypes & Dialog::CANCEL ) {
+                TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." );
+            }
+
+            TEXT_LOG( "----------" );
+        }
+    }
 }
 
 namespace fheroes2
 {
     int showMessage( const TextBase & header, const TextBase & body, const int buttons )
     {
+        outputInTextMode( header, body, buttons );
+
         // setup cursor
         const CursorRestorer cursorRestorer( buttons != 0, ::Cursor::POINTER );
 

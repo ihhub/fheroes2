@@ -156,14 +156,14 @@ int main( int argc, char ** argv )
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
-        DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
-
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
 
         InitConfigDir();
         InitDataDir();
         ReadConfigs();
+
+        TEXT_LOG( GetCaption() )
 
         // getopt
         {

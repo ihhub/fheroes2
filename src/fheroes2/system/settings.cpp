@@ -43,14 +43,14 @@
 
 namespace
 {
-    enum
+    enum : uint32_t
     {
         GLOBAL_FIRST_RUN = 0x00000001,
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
         GLOBAL_RENDER_VSYNC = 0x00000008,
-        // UNUSED = 0x00000010,
+        GLOBAL_TEXT_MODE = 0x00000010,
         // UNUSED = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
@@ -322,6 +322,16 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "text mode" ) ) {
+        if ( config.StrParams( "text mode" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_TEXT_MODE );
+            Logging::setTextMode( true );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_TEXT_MODE );
+        }
+    }
+
     BinaryLoad();
 
     if ( video_mode.width > 0 && video_mode.height > 0 ) {
@@ -443,6 +453,9 @@ std::string Settings::String() const
 
     os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable text mode to output extra information in console window" << std::endl;
+    os << "text mode = " << ( opt_global.Modes( GLOBAL_TEXT_MODE ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }

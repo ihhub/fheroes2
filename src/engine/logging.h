@@ -76,6 +76,10 @@ namespace Logging
     void InitLog();
 
     void SetDebugLevel( const int debugLevel );
+
+    void setTextMode( const bool enableTextMode );
+
+    bool isTextModeEnabled();
 }
 
 #if defined( ANDROID ) // Android has a specific logging function
@@ -124,10 +128,27 @@ namespace Logging
     {                                                                                                                                                                    \
         COUT( Logging::GetTimeString() << ": [VERBOSE]\t" << __FUNCTION__ << ":  " << x );                                                                               \
     }
+
 #define ERROR_LOG( x )                                                                                                                                                   \
     {                                                                                                                                                                    \
         COUT( Logging::GetTimeString() << ": [ERROR]\t" << __FUNCTION__ << ":  " << x );                                                                                 \
     }
+
+
+#if defined( WITH_DEBUG )
+#define TEXT_LOG( text )                                                                                                                                                 \
+    if ( Logging::isTextModeEnabled() ) {                                                                                                                                \
+        COUT( text );                                                                                                                                                    \
+    }                                                                                                                                                                    \
+    else {                                                                                                                                                               \
+        DEBUG_LOG( DBG_ALL, DBG_INFO, text )                                                                                                                             \
+    }
+#else
+#define TEXT_LOG( text )                                                                                                                                                 \
+    if ( Logging::isTextModeEnabled() ) {                                                                                                                                \
+        COUT( text );                                                                                                                                                    \
+    }
+#endif
 
 #ifdef WITH_DEBUG
 #define DEBUG_LOG( x, y, z )                                                                                                                                             \

@@ -22,13 +22,43 @@
 
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "localevent.h"
+#include "logging.h"
 #include "text.h"
 
 #include "ui_button.h"
 
+namespace
+{
+    void outputInTextMode( const std::string & header, const std::string & message, const int buttonTypes )
+    {
+        TEXT_LOG( "----------" );
+        TEXT_LOG( header );
+        TEXT_LOG( '\n' );
+        TEXT_LOG( message );
+
+        if ( buttonTypes & Dialog::YES ) {
+            TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." );
+        }
+        if ( buttonTypes & Dialog::NO ) {
+            TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." );
+        }
+        if ( buttonTypes & Dialog::OK ) {
+            TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." );
+        }
+        if ( buttonTypes & Dialog::CANCEL ) {
+            TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." );
+        }
+
+        TEXT_LOG( "----------" );
+    }
+}
+
 int Dialog::Message( const std::string & header, const std::string & message, int ft, int buttons )
 {
+    outputInTextMode( header, message, buttons );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor

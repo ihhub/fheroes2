@@ -23,6 +23,7 @@
 #include "game.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"

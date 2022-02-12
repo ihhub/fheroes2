@@ -162,6 +162,8 @@ namespace Game
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
 
+    const char * getHotKeyNameByEventId( const int eventID );
+
     void mainGameLoop( bool isFirstGameRun );
 
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
