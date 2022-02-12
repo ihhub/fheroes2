@@ -602,7 +602,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 // reset environment sounds and music theme at the beginning of the kingdom's turn
                 Game::SetCurrentMusic( MUS::UNKNOWN );
-                AGG::ResetMixer();
+                AGG::ResetAudio();
 
                 radar.SetHide( true );
                 radar.SetRedraw();
@@ -665,7 +665,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 // reset environment sounds and music theme at the end of the kingdom's turn
                 Game::SetCurrentMusic( MUS::UNKNOWN );
-                AGG::ResetMixer();
+                AGG::ResetAudio();
 
                 if ( res != fheroes2::GameMode::END_TURN ) {
                     break;

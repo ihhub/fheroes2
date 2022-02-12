@@ -611,7 +611,7 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
-void AGG::ResetMixer()
+void AGG::ResetAudio()
 {
     g_asyncSoundManager.sync();
 

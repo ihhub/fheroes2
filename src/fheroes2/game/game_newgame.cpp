@@ -175,7 +175,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
     // Reset all sound and music before playing videos
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
@@ -194,7 +194,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
-    AGG::ResetMixer();
+    AGG::ResetAudio();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
     const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 

@@ -402,7 +402,7 @@ void Game::EnvironmentSoundMixer()
 void Game::restoreSoundsForCurrentFocus()
 {
     Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
