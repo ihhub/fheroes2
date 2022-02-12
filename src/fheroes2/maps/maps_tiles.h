@@ -316,7 +316,7 @@ namespace Maps
         TilesAddon * FindFlags( void );
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( const int col, const u32 index, const bool up );
+        void CorrectFlags32( const int col, const uint8_t index, const bool up );
         void RemoveJailSprite( void );
 
         void QuantitySetVariant( int );
@@ -355,7 +355,7 @@ namespace Maps
         uint32_t uniq = 0;
         uint8_t objectTileset = 0;
         uint8_t objectIndex = 255;
-        uint8_t mp2_object = 0;
+        MP2::MapObjectType mp2_object = MP2::OBJ_ZERO;
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t fog_colors = Color::ALL;
 
