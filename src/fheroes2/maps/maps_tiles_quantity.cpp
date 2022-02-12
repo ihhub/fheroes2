@@ -1103,7 +1103,7 @@ void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
     }
     else if ( !tile.MonsterFixedCount() ) {
-        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= troopCount % 7 ) ? 1 : 0;
+        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
         tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
     }
 }
