@@ -110,7 +110,7 @@ namespace
 
     void PlayMusic( Mix_Music * mix, const bool loop )
     {
-        Music::Reset();
+        Music::Stop();
 
         int res = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
 
@@ -162,8 +162,8 @@ void Audio::Quit()
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( valid && fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
-        Music::Reset();
-        Mixer::Reset();
+        Music::Stop();
+        Mixer::Stop();
 
         valid = false;
 
@@ -357,17 +357,6 @@ void Mixer::Stop( const int channel /* = -1 */ )
     }
 }
 
-void Mixer::Reset()
-{
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
-    Music::Reset();
-
-    if ( valid ) {
-        Mix_HaltChannel( -1 );
-    }
-}
-
 bool Mixer::isPlaying( const int channel )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
@@ -454,7 +443,7 @@ void Music::Pause()
     }
 }
 
-void Music::Reset()
+void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 

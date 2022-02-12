@@ -53,7 +53,6 @@ namespace Mixer
     void Pause( const int channel = -1 );
     void Resume( const int channel = -1 );
     void Stop( const int channel = -1 );
-    void Reset();
 
     bool isPlaying( const int channel );
 }
@@ -68,7 +67,7 @@ namespace Music
     void SetFadeIn( const int f );
 
     void Pause();
-    void Reset();
+    void Stop();
 
     bool isPlaying();
 

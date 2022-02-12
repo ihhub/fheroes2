@@ -617,7 +617,8 @@ void AGG::ResetMixer()
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    Mixer::Reset();
+    Music::Stop();
+    Mixer::Stop();
 
     loop_sounds.clear();
     loop_sounds.reserve( 7 );
