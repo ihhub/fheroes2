@@ -434,15 +434,6 @@ int Music::Volume( int vol )
     return Mix_VolumeMusic( vol );
 }
 
-void Music::Pause()
-{
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
-    if ( music ) {
-        Mix_PauseMusic();
-    }
-}
-
 void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );

@@ -66,7 +66,6 @@ namespace Music
 
     void SetFadeIn( const int f );
 
-    void Pause();
     void Stop();
 
     bool isPlaying();
