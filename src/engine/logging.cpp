@@ -25,6 +25,7 @@
 #endif
 
 #include "logging.h"
+#include "system.h"
 
 namespace
 {
@@ -90,12 +91,10 @@ namespace Logging
 
     std::string GetTimeString()
     {
-        time_t raw;
-        std::time( &raw );
-        const struct tm * tmi = std::localtime( &raw );
+        const tm tmi = System::GetTM( std::time( nullptr ) );
 
         char buf[13] = {0};
-        std::strftime( buf, sizeof( buf ) - 1, "%X", tmi );
+        std::strftime( buf, sizeof( buf ) - 1, "%X", &tmi );
 
         return std::string( buf );
     }

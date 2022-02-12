@@ -23,6 +23,8 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
+#include <ctime>
+
 #include "dir.h"
 
 namespace System
@@ -51,6 +53,8 @@ namespace System
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
     std::string FileNameToUTF8( const std::string & str );
+
+    tm GetTM( const time_t time );
 }
 
 #endif
