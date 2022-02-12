@@ -771,13 +771,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
     Rand::Shuffle( tetriaryTargetTiles );
 
     // Calculate the number of monsters to be placed.
-    uint32_t monstersToBePlaced = 0;
-    if ( primaryTargetTiles.size() < static_cast<size_t>( height ) ) {
-        monstersToBePlaced = static_cast<uint32_t>( height );
+    uint32_t monstersToBePlaced = static_cast<uint32_t>( primaryTargetTiles.size() / 3 );
+    const uint32_t mapMinimum = static_cast<uint32_t>( vec_tiles.size() / 360 );
+
+    if ( monstersToBePlaced < mapMinimum ) {
+        monstersToBePlaced = mapMinimum;
     }
     else {
-        monstersToBePlaced
-            = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ), static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+        monstersToBePlaced = Rand::GetWithSeed( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, _seed );
     }
 
     // 85% of positions are for primary targets
