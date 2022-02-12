@@ -192,7 +192,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     basicInterface.RedrawFocus();
 }
 
-/* open heroes wrapper */
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
     // setup cursor
