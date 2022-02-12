@@ -122,13 +122,13 @@ void Game::DialogPlayers( int color, std::string str )
     Dialog::SpriteInfo( "", str, sign );
 }
 
-/* open castle wrapper */
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Mixer::Pause();
+    // Stop all sounds, but not the music - it will be replaced by the music of the castle
+    Mixer::Stop();
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
