@@ -401,6 +401,7 @@ void Game::EnvironmentSoundMixer()
 
 void Game::restoreSoundsForCurrentFocus()
 {
+    Game::SetCurrentMusic( MUS::UNKNOWN );
     AGG::ResetMixer();
 
     switch ( Interface::GetFocusType() ) {
