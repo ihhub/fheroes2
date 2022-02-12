@@ -151,7 +151,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
                     defender.ResetModes( IS_GOOD_MAGIC );
                 }
                 else {
-                    // magic attack not depends from hero
+                    // The unit's built-in magic attack does not depend on the hero's skills
                     TargetsApplySpell( nullptr, spell, targets );
                 }
 
