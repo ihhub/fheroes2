@@ -1074,8 +1074,15 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
     }
 
     if ( rc.isValid() ) {
+        // The Magic Garden has a special sound
+        if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
+            AGG::PlayMusic( MUS::TREEHOUSE, false );
+        }
+        else {
+            AGG::PlaySound( M82::TREASURE );
+        }
+
         const Funds funds( rc );
-        AGG::PlaySound( M82::TREASURE );
         Dialog::ResourceInfo( caption, msg, funds );
         hero.GetKingdom().AddFundsResource( funds );
 
