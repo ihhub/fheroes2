@@ -174,9 +174,6 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
     case MP2::OBJ_ANCIENTLAMP:
         return MUS::ARABIAN;
 
-    case MP2::OBJ_HILLFORT:
-        return MUS::HILLFORT;
-
     case MP2::OBJ_TREEHOUSE:
     case MP2::OBJ_TREECITY:
     case MP2::OBJ_WAGONCAMP:

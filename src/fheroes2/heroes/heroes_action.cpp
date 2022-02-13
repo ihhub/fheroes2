@@ -2509,6 +2509,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
         break;
     }
+
     case MP2::OBJ_STABLES: {
         assert( !defaultMessage.empty() );
         msg1 = defaultMessage;
@@ -2603,6 +2604,12 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() + offsetY );
             offsetX += border.width() + 4;
         }
+
+        // The Hill Fort has a special sound
+        if ( objectType == MP2::OBJ_HILLFORT ) {
+            AGG::PlayMusic( MUS::HILLFORT, false );
+        }
+
         Dialog::SpriteInfo( title, msg1, surface );
     }
     else {
