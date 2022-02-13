@@ -549,8 +549,8 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 continue;
             }
 
-            // Tile is either unreachable or guarded by monsters
-            if ( _cache[newIndex]._cost == 0 || !Maps::GetTilesUnderProtection( newIndex ).empty() ) {
+            // Tile is unreachable (may be because it is guarded by too strong army)
+            if ( _cache[newIndex]._cost == 0 ) {
                 continue;
             }
 
@@ -569,6 +569,11 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 }
 
                 tilesVisited[teleportIndex] = true;
+
+                // Teleport endpoint is unreachable (may be because it is guarded by too strong army)
+                if ( _cache[teleportIndex]._cost == 0 ) {
+                    continue;
+                }
 
                 nodesToExplore.push_back( teleportIndex );
             }
@@ -604,8 +609,8 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
             continue;
         }
 
-        // Tile is reachable and not guarded by monsters
-        if ( _cache[newIndex]._cost > 0 && Maps::GetTilesUnderProtection( newIndex ).empty() ) {
+        // Tile is reachable
+        if ( _cache[newIndex]._cost > 0 ) {
             return newIndex;
         }
     }
