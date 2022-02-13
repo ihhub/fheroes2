@@ -187,13 +187,13 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
 
     case MP2::OBJ_GAZEBO:
     case MP2::OBJ_TREEKNOWLEDGE:
-    case MP2::OBJ_WITCHSHUT:
         return MUS::EXPERIENCE;
 
     case MP2::OBJ_FORT:
     case MP2::OBJ_MERCENARYCAMP:
     case MP2::OBJ_DOCTORHUT:
     case MP2::OBJ_STANDINGSTONES:
+    case MP2::OBJ_WITCHSHUT:
         return MUS::SKILL;
 
     case MP2::OBJ_GRAVEYARD:
@@ -201,6 +201,7 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
     case MP2::OBJ_DERELICTSHIP:
     case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MAGELLANMAPS:
+    case MP2::OBJ_OBSERVATIONTOWER:
     case MP2::OBJ_WATCHTOWER:
         return MUS::WATCHTOWER;
 

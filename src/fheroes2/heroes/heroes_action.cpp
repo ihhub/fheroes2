@@ -1279,8 +1279,6 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
 {
     const Skill::Secondary & skill = world.GetTiles( dst_index ).QuantitySkill();
 
-    AGG::PlayMusic( MUS::SKILL, false );
-
     // If this assertion blows up the object is not set properly.
     assert( skill.isValid() );
 
@@ -2284,7 +2282,6 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
     default:
         return;
     }
-    AGG::PlayMusic( MUS::FromMapObject( objectType ), false );
 
     const Troop & troop = tile.QuantityTroop();
 
@@ -2377,10 +2374,6 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
-    if ( !Settings::Get().MusicMIDI() ) {
-        AGG::PlayMusic( MUS::WATCHTOWER, true );
-    }
-
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
@@ -2782,8 +2775,6 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-
-    AGG::PlayMusic( MUS::DEMONCAVE, false );
 
     const std::string header = MP2::StringObject( objectType );
     if ( Dialog::YES
