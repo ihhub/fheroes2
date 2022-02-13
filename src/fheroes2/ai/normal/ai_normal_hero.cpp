@@ -1207,6 +1207,9 @@ namespace AI
                     if ( targetIndex != -1 ) {
                         bestTargetIndex = targetIndex;
                         bestHero = heroInfo.hero;
+
+                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex );
+
                         break;
                     }
                 }
