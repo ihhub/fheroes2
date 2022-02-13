@@ -319,14 +319,16 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    if ( currentNodeIdx != _pathStart && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+    const bool isFirstNode = currentNodeIdx == _pathStart;
+
+    if ( !isFirstNode && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
     }
 
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster
-    if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
+    if ( !isFirstNode && !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
