@@ -42,7 +42,7 @@ namespace
                 return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM;
             }
         }
         return false;
@@ -123,7 +123,7 @@ namespace
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
                 }
 
                 return true;
@@ -306,7 +306,7 @@ namespace
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
@@ -367,11 +367,11 @@ namespace
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
 
         case MP2::OBJ_SIGN:
             // AI has no brains to process anything from sign messages.
@@ -1153,7 +1153,7 @@ namespace AI
         const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
 
         const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDUIM, ARMY_STRENGTH_ADVANTAGE_SMALL };
+        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDIUM, ARMY_STRENGTH_ADVANTAGE_SMALL };
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
