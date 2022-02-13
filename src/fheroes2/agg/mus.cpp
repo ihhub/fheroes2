@@ -202,7 +202,6 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
     case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MAGELLANMAPS:
     case MP2::OBJ_OBSERVATIONTOWER:
-    case MP2::OBJ_WATCHTOWER:
         return MUS::WATCHTOWER;
 
     case MP2::OBJ_XANADU:

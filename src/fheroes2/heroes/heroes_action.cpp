@@ -2195,10 +2195,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
         StringReplace( message, "%{monster}", troop.GetMultiName() );
 
-        if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_WATCHTOWER )
-            AGG::PlayMusic( MUS::WATCHTOWER, false );
-        else
-            AGG::PlaySound( M82::EXPERNCE );
+        AGG::PlaySound( M82::EXPERNCE );
 
         if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
             if ( !hero.GetArmy().CanJoinTroop( troop ) )
