@@ -367,7 +367,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     fs.seek( 0x76 );
     description = fs.toString( mapDescriptionLength );
 
-    // fill unions
+    // fill unions, see issue #5001, #4576
     if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
         int side1 = 0;
         int side2 = 0;
@@ -375,13 +375,15 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         const Colors availableColors( kingdom_colors );
 
         assert( !availableColors.empty() );
-        wins1 += Color::GetIndex( availableColors.front() );
 
+        const int numPlayersSide1 = wins1;  // 'wins1' map spec parameter means number of players in side1
+        int playerIdx = 0;  // index of a player among available players/colors
         for ( const int color : availableColors ) {
-            if ( Color::GetIndex( color ) < wins1 )
+            if ( playerIdx < numPlayersSide1 )
                 side1 |= color;
             else
                 side2 |= color;
+            playerIdx++;
         }
         FillUnions( side1, side2 );
     }
