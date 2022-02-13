@@ -432,7 +432,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     MapsIndexes teleports;
 
     // we shouldn't use teleport at the starting tile
-    if ( currentNodeIdx != _pathStart ) {
+    if ( !isFirstNode ) {
         teleports = world.GetTeleportEndPoints( currentNodeIdx );
 
         if ( teleports.empty() ) {
@@ -441,7 +441,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 
     // do not check adjacent if we're going through the teleport in the middle of the path
-    if ( isFirstNode || teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
+    if ( teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
         checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 
