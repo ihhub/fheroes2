@@ -699,20 +699,6 @@ u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape valu
     return ( shape << 14 ) | ( 0x3FFF & index );
 }
 
-Maps::Tiles::Tiles()
-    : _index( 0 )
-    , pack_sprite_index( 0 )
-    , uniq( 0 )
-    , objectTileset( 0 )
-    , objectIndex( 255 )
-    , mp2_object( MP2::OBJ_ZERO )
-    , tilePassable( DIRECTION_ALL )
-    , fog_colors( Color::ALL )
-    , quantity1( 0 )
-    , quantity2( 0 )
-    , quantity3( 0 )
-{}
-
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;

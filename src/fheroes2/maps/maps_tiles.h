@@ -101,7 +101,7 @@ namespace Maps
     class Tiles
     {
     public:
-        Tiles();
+        Tiles() = default;
 
         void Init( s32, const MP2::mp2tile_t & );
 
