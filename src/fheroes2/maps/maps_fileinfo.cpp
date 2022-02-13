@@ -376,8 +376,8 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
         assert( !availableColors.empty() );
 
-        const int numPlayersSide1 = wins1;  // 'wins1' map spec parameter means number of players in side1
-        int playerIdx = 0;  // index of a player among available players/colors
+        const int numPlayersSide1 = wins1; // 'wins1' map spec parameter means number of players in side1
+        int playerIdx = 0; // index of a player among available players/colors
         for ( const int color : availableColors ) {
             if ( playerIdx < numPlayersSide1 )
                 side1 |= color;
