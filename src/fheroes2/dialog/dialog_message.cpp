@@ -34,8 +34,10 @@ namespace
     void outputInTextMode( const std::string & header, const std::string & message, const int buttonTypes )
     {
         TEXT_LOG( "----------" );
-        TEXT_LOG( header );
-        TEXT_LOG( '\n' );
+        if ( !header.empty() ) {
+            TEXT_LOG( header );
+            TEXT_LOG( '\n' );
+        }
         TEXT_LOG( message );
 
         if ( buttonTypes & Dialog::YES ) {

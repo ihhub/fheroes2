@@ -544,4 +544,28 @@ namespace Campaign
 
         return fi;
     }
+
+    const char * getCampaignName( const int campaignId )
+    {
+        switch ( campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+            return _( "Roland" );
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            return _( "Archibald" );
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+            return _( "The Price of Loyalty" );
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            return _( "Voyage Home" );
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+            return _( "Wizard's Isle" );
+        case Campaign::DESCENDANTS_CAMPAIGN:
+            return _( "Descendants" );
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
+            break;
+        }
+
+        return "???";
+    }
 }

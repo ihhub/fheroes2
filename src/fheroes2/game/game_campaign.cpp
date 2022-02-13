@@ -33,6 +33,7 @@
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
+#include "logging.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -634,6 +635,44 @@ namespace
             break;
         }
     }
+
+    void outputCampaignScenarioInfoInTextMode( const bool allowToRestart )
+    {
+        Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int chosenCampaignID = campaignSaveData.getCampaignID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
+        const int scenarioId = campaignSaveData.getCurrentScenarioID();
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+        const Campaign::ScenarioData & scenario = scenarios[scenarioId];
+
+        TEXT_LOG( "----------" );
+        TEXT_LOG( "Scenario Information" );
+        TEXT_LOG( '\n' );
+        TEXT_LOG( "'" << Campaign::getCampaignName( chosenCampaignID ) << "' campaign, scenario " << scenarioId + 1 << ": " << scenario.getScenarioName() );
+        TEXT_LOG( "Description: " << scenario.getDescription() << "\n" );
+
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = campaignSaveData.getObtainedCampaignAwards();
+        if ( obtainedAwards.empty() ) {
+            TEXT_LOG( "Awards: None" );
+        }
+        else {
+            TEXT_LOG( "Awards:" );
+            for ( const Campaign::CampaignAwardData & award : obtainedAwards ) {
+                TEXT_LOG( "- " << award.ToString() );
+            }
+        }
+
+        if ( allowToRestart ) {
+            TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Restart scenario." );
+        }
+        else {
+            TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Start scenario." );
+        }
+
+        TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Exit this dialog." );
+
+        TEXT_LOG( "----------" );
+    }
 }
 
 bool Game::isSuccessionWarsCampaignPresent()
@@ -757,6 +796,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
     }
+
+    outputCampaignScenarioInfoInTextMode( allowToRestart );
 
     playCampaignMusic( chosenCampaignID );
 

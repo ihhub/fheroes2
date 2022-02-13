@@ -30,12 +30,30 @@
 #include "game_mainmenu_ui.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+
+namespace
+{
+    void outputLoadGameInTextMode()
+    {
+        TEXT_LOG( "----------" );
+        TEXT_LOG( "Load Game" );
+        TEXT_LOG( '\n' );
+
+        TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." );
+        TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." );
+        TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." );
+        TEXT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." );
+
+        TEXT_LOG( "----------" );
+    }
+}
 
 fheroes2::GameMode Game::LoadCampaign()
 {
@@ -115,6 +133,8 @@ fheroes2::GameMode Game::LoadMulti()
 
 fheroes2::GameMode Game::LoadGame()
 {
+    outputLoadGameInTextMode();
+
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
     fheroes2::Display & display = fheroes2::Display::instance();
