@@ -1150,7 +1150,7 @@ namespace AI
             addHeroToMove( hero, availableHeroes );
         }
 
-        const double originalMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+        const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
 
         const int monsterStrengthMultiplierCount = 2;
         const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDUIM, ARMY_STRENGTH_ADVANTAGE_SMALL };
@@ -1176,17 +1176,17 @@ namespace AI
                 }
 
                 // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
-                const double currentMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
-                bool setNewMultipler = false;
+                const double currentMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
+                bool setNewMultiplier = false;
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
-                    if ( currentMonsterStrengthMultipler > monsterStrengthMultipliers[i] ) {
+                    if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
                         _pathfinder.setArmyStrengthMultiplier( monsterStrengthMultipliers[i] );
-                        setNewMultipler = true;
+                        setNewMultiplier = true;
                         break;
                     }
                 }
 
-                if ( !setNewMultipler ) {
+                if ( !setNewMultiplier ) {
                     break;
                 }
             }
@@ -1213,7 +1213,7 @@ namespace AI
 
                 if ( bestTargetIndex == -1 ) {
                     // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
+                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
                     break;
                 }
             }
@@ -1239,7 +1239,7 @@ namespace AI
                 ++i;
             }
 
-            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
+            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
@@ -1250,7 +1250,7 @@ namespace AI
             }
         }
 
-        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
+        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
 
         return allHeroesMoved;
     }
