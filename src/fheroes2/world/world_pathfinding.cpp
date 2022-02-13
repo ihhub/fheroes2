@@ -551,7 +551,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 continue;
             }
 
-            // Tile is unreachable (may be because it is guarded by too strong army)
+            // Tile is unreachable (maybe because it is guarded by too strong an army)
             if ( _cache[newIndex]._cost == 0 ) {
                 continue;
             }
@@ -572,7 +572,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 
                 tilesVisited[teleportIndex] = true;
 
-                // Teleport endpoint is unreachable (may be because it is guarded by too strong army)
+                // Teleport endpoint is unreachable (maybe because it is guarded by too strong an army)
                 if ( _cache[teleportIndex]._cost == 0 ) {
                     continue;
                 }
