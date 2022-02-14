@@ -288,7 +288,7 @@ namespace MP2
 
     ///////////////////////////////////////////////////////////////////////////////
     // First bit indicates if you can interact with object
-    enum MapObjectType
+    enum MapObjectType : uint8_t
     {
         OBJ_ZERO = 0x00,
         OBJN_ALCHEMYLAB = 0x01,
