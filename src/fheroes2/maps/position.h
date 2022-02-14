@@ -31,6 +31,7 @@ class MapPosition
 {
 public:
     explicit MapPosition( const fheroes2::Point & = fheroes2::Point( -1, -1 ) );
+    virtual ~MapPosition() = default;
 
     const fheroes2::Point & GetCenter() const
     {
