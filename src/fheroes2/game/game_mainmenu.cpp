@@ -148,7 +148,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 {
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     Settings & conf = Settings::Get();

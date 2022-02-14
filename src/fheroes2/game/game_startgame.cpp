@@ -81,8 +81,6 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    AGG::ResetMixer( true );
-
     Interface::Basic::Get().Reset();
 
     return Interface::Basic::Get().StartGame();
@@ -122,13 +120,13 @@ void Game::DialogPlayers( int color, std::string str )
     Dialog::SpriteInfo( "", str, sign );
 }
 
-/* open castle wrapper */
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Mixer::Pause();
+    // Stop all sounds, but not the music - it will be replaced by the music of the castle
+    Mixer::Stop();
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
@@ -192,7 +190,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     basicInterface.RedrawFocus();
 }
 
-/* open heroes wrapper */
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
     // setup cursor
@@ -603,6 +600,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO,
                            world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
+                // reset environment sounds and music theme at the beginning of the kingdom's turn
+                Game::SetCurrentMusic( MUS::UNKNOWN );
+                AGG::ResetAudio();
+
                 radar.SetHide( true );
                 radar.SetRedraw();
 
@@ -618,6 +619,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
                         display.render();
+
+                        // reset the music after closing the dialog
+                        const Game::MusicRestorer musicRestorer;
+
+                        AGG::PlayMusic( MUS::NEW_MONTH, false );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -656,6 +662,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AI::Get().KingdomTurn( kingdom );
                     break;
                 }
+
+                // reset environment sounds and music theme at the end of the kingdom's turn
+                Game::SetCurrentMusic( MUS::UNKNOWN );
+                AGG::ResetAudio();
 
                 if ( res != fheroes2::GameMode::END_TURN ) {
                     break;
@@ -707,11 +717,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
-
-    // current music will be set along with the focus, reset environment sounds
-    // and terrain music theme from the previous turn
-    Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetMixer();
 
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
@@ -1133,10 +1138,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
-
-    // reset environment sounds and terrain music theme at the end of the human turn
-    Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetMixer();
 
     return res;
 }

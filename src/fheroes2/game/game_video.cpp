@@ -140,7 +140,7 @@ namespace Video
             if ( roi.empty() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                     userMadeAction = true;
-                    Mixer::Reset();
+                    Mixer::Stop();
                     break;
                 }
             }
@@ -155,7 +155,7 @@ namespace Video
                 }
 
                 if ( roiChosen ) {
-                    Mixer::Reset();
+                    Mixer::Stop();
                     break;
                 }
             }

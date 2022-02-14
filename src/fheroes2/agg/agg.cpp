@@ -117,24 +117,8 @@ namespace AGG
 
         AsyncSoundManager & operator=( const AsyncSoundManager & ) = delete;
 
-        void pushStopMusic()
-        {
-            _createThreadIfNeeded();
-
-            std::lock_guard<std::mutex> mutexLock( _mutex );
-
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
-
-            _musicTasks.emplace( -1, MUSIC_MIDI_ORIGINAL, true );
-            _runFlag = 1;
-            _workerNotification.notify_all();
-        }
-
         void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
         {
-            assert( musicId >= 0 );
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
@@ -299,12 +283,8 @@ namespace AGG
                     }
 
                     manager->_mutex.unlock();
-                    if ( musicTask.musicId >= 0 ) {
-                        PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
-                    }
-                    else {
-                        Music::Reset();
-                    }
+
+                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
                 }
                 else {
                     manager->_runFlag = 0;
@@ -631,19 +611,15 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
-void AGG::ResetMixer( bool asyncronizedCall /* = false */ )
+void AGG::ResetAudio()
 {
-    if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushStopMusic();
-        Mixer::Stop();
-    }
-    else {
-        g_asyncSoundManager.sync();
+    g_asyncSoundManager.sync();
 
-        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-        Mixer::Reset();
-    }
+    Music::Stop();
+    Mixer::Stop();
+
     loop_sounds.clear();
     loop_sounds.reserve( 7 );
 }

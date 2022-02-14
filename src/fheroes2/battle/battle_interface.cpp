@@ -1047,13 +1047,13 @@ Battle::Interface::Interface( Arena & a, s32 center )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
     status.SetLogs( listlog );
 
-    AGG::ResetMixer();
+    AGG::ResetAudio();
     AGG::PlaySound( M82::PREBATTL );
 }
 
 Battle::Interface::~Interface()
 {
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     if ( listlog )
         delete listlog;
@@ -2608,7 +2608,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
 void Battle::Interface::FadeArena( bool clearMessageLog )
 {
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     if ( clearMessageLog ) {
         status.clear();

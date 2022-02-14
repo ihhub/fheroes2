@@ -537,13 +537,13 @@ namespace
         const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioInfoId.scenarioId];
 
         if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
-            AGG::ResetMixer();
+            AGG::ResetAudio();
 
             for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
                 Video::ShowVideo( videoInfo.fileName, videoInfo.action );
             }
 
-            AGG::ResetMixer();
+            AGG::ResetAudio();
         }
     }
 
@@ -560,13 +560,13 @@ namespace
         const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
         if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
-            AGG::ResetMixer();
+            AGG::ResetAudio();
 
             for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
                 Video::ShowVideo( videoInfo.fileName, videoInfo.action );
             }
 
-            AGG::ResetMixer();
+            AGG::ResetAudio();
         }
     }
 
@@ -725,7 +725,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
         Game::ShowCredits();
 
-        AGG::ResetMixer();
+        AGG::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
         return fheroes2::GameMode::HIGHSCORES;
     }
@@ -966,7 +966,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             return fheroes2::GameMode::START_GAME;
         }
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) ) {
-            AGG::ResetMixer();
+            AGG::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();
