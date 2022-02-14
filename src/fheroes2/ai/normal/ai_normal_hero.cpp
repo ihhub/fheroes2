@@ -42,7 +42,7 @@ namespace
                 return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM;
             }
         }
         return false;
@@ -123,7 +123,7 @@ namespace
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
                 }
 
                 return true;
@@ -306,7 +306,7 @@ namespace
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
@@ -367,11 +367,11 @@ namespace
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
 
         case MP2::OBJ_SIGN:
             // AI has no brains to process anything from sign messages.
@@ -1150,10 +1150,10 @@ namespace AI
             addHeroToMove( hero, availableHeroes );
         }
 
-        const double originalMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+        const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
 
         const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDUIM, ARMY_STRENGTH_ADVANTAGE_SMALL };
+        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDIUM, ARMY_STRENGTH_ADVANTAGE_SMALL };
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1176,17 +1176,17 @@ namespace AI
                 }
 
                 // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
-                const double currentMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
-                bool setNewMultipler = false;
+                const double currentMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
+                bool setNewMultiplier = false;
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
-                    if ( currentMonsterStrengthMultipler > monsterStrengthMultipliers[i] ) {
+                    if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
                         _pathfinder.setArmyStrengthMultiplier( monsterStrengthMultipliers[i] );
-                        setNewMultipler = true;
+                        setNewMultiplier = true;
                         break;
                     }
                 }
 
-                if ( !setNewMultipler ) {
+                if ( !setNewMultiplier ) {
                     break;
                 }
             }
@@ -1207,13 +1207,16 @@ namespace AI
                     if ( targetIndex != -1 ) {
                         bestTargetIndex = targetIndex;
                         bestHero = heroInfo.hero;
+
+                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex );
+
                         break;
                     }
                 }
 
                 if ( bestTargetIndex == -1 ) {
                     // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
+                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
                     break;
                 }
             }
@@ -1239,7 +1242,7 @@ namespace AI
                 ++i;
             }
 
-            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
+            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
@@ -1250,7 +1253,7 @@ namespace AI
             }
         }
 
-        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultipler );
+        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
 
         return allHeroesMoved;
     }

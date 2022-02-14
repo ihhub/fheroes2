@@ -319,14 +319,16 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    if ( currentNodeIdx != _pathStart && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+    const bool isFirstNode = currentNodeIdx == _pathStart;
+
+    if ( !isFirstNode && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
     }
 
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster
-    if ( currentNodeIdx != _pathStart && !monsters.empty() ) {
+    if ( !isFirstNode && !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
@@ -432,7 +434,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     MapsIndexes teleports;
 
     // we shouldn't use teleport at the starting tile
-    if ( currentNodeIdx != _pathStart ) {
+    if ( !isFirstNode ) {
         teleports = world.GetTeleportEndPoints( currentNodeIdx );
 
         if ( teleports.empty() ) {
@@ -441,7 +443,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 
     // do not check adjacent if we're going through the teleport in the middle of the path
-    if ( isFirstNode || teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
+    if ( teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
         checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 
@@ -549,8 +551,8 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 continue;
             }
 
-            // Tile is either unreachable or guarded by monsters
-            if ( _cache[newIndex]._cost == 0 || !Maps::GetTilesUnderProtection( newIndex ).empty() ) {
+            // Tile is unreachable (maybe because it is guarded by too strong an army)
+            if ( _cache[newIndex]._cost == 0 ) {
                 continue;
             }
 
@@ -569,6 +571,11 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 }
 
                 tilesVisited[teleportIndex] = true;
+
+                // Teleport endpoint is unreachable (maybe because it is guarded by too strong an army)
+                if ( _cache[teleportIndex]._cost == 0 ) {
+                    continue;
+                }
 
                 nodesToExplore.push_back( teleportIndex );
             }
@@ -604,8 +611,8 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
             continue;
         }
 
-        // Tile is reachable and not guarded by monsters
-        if ( _cache[newIndex]._cost > 0 && Maps::GetTilesUnderProtection( newIndex ).empty() ) {
+        // Tile is reachable and the hero has enough army to defeat potential guards
+        if ( _cache[newIndex]._cost > 0 ) {
             return newIndex;
         }
     }
