@@ -1115,11 +1115,10 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
 
     // artifact
     if ( tile.QuantityIsValid() ) {
-        Game::PlayPickupSound();
-
         if ( hero.IsFullBagArtifacts() ) {
             u32 gold = GoldInsteadArtifact( objectType );
             const Funds funds( Resource::GOLD, gold );
+            AGG::PlaySound( M82::EXPERNCE );
             Dialog::ResourceInfo( title, _( "Treasure" ), funds, Dialog::OK );
             hero.GetKingdom().AddFundsResource( funds );
         }
