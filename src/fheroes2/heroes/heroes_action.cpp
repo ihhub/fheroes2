@@ -1078,6 +1078,10 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
             AGG::PlayMusic( MUS::TREEHOUSE, false );
         }
+        // The Lean-To has a special sound
+        else if ( objectType == MP2::OBJ_LEANTO ) {
+            AGG::PlaySound( M82::EXPERNCE );
+        }
         else {
             AGG::PlaySound( M82::TREASURE );
         }
