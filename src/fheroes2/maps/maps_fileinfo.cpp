@@ -378,10 +378,10 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
         const int numPlayersSide1 = wins1;
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition 1 parameter during map load " << filename );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename );
             return false;
         }
-        
+
         int playerIdx = 0;
         for ( const int color : availableColors ) {
             if ( playerIdx < numPlayersSide1 )
