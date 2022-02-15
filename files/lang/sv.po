@@ -6272,7 +6272,7 @@ msgstr "Tredje kretsens tempel"
 msgid "Wagon"
 msgstr "Godsvagn"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr ""
 
 msgid "Flotsam"

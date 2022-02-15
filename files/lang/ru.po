@@ -6398,7 +6398,7 @@ msgstr "Святилище 3-го круга"
 msgid "Wagon"
 msgstr "Тележка"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Навес"
 
 msgid "Flotsam"
