@@ -367,7 +367,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     fs.seek( 0x76 );
     description = fs.toString( mapDescriptionLength );
 
-    // fill unions, see issue #5001, #4576
+    // fill unions
     if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
         int side1 = 0;
         int side2 = 0;
@@ -376,14 +376,19 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
         assert( !availableColors.empty() );
 
-        const int numPlayersSide1 = wins1; // 'wins1' map spec parameter means number of players in side1
-        int playerIdx = 0; // index of a player among available players/colors
+        const int numPlayersSide1 = wins1;
+        if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition 1 parameter during map load " << filename );
+            return false;
+        }
+        
+        int playerIdx = 0;
         for ( const int color : availableColors ) {
             if ( playerIdx < numPlayersSide1 )
                 side1 |= color;
             else
                 side2 |= color;
-            playerIdx++;
+            ++playerIdx;
         }
         FillUnions( side1, side2 );
     }
