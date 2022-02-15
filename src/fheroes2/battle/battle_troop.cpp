@@ -1666,44 +1666,17 @@ int Battle::Unit::M82Wnce() const
 
 int Battle::Unit::M82Expl( void ) const
 {
-    switch ( GetID() ) {
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        return M82::LICHEXPL;
-
-    default:
-        break;
-    }
-
-    return M82::UNKNOWN;
+    return fheroes2::getMonsterData( id ).sounds.explosion;
 }
 
 int Battle::Unit::M82Tkof() const
 {
-    switch ( GetID() ) {
-    case Monster::VAMPIRE:
-    case Monster::VAMPIRE_LORD:
-        return M82::VAMPEXT1;
-
-    default:
-        break;
-    }
-
-    return M82::UNKNOWN;
+    return fheroes2::getMonsterData( id ).sounds.takeoff;
 }
 
 int Battle::Unit::M82Land() const
 {
-    switch ( GetID() ) {
-    case Monster::VAMPIRE:
-    case Monster::VAMPIRE_LORD:
-        return M82::VAMPEXT2;
-
-    default:
-        break;
-    }
-
-    return M82::UNKNOWN;
+    return fheroes2::getMonsterData( id ).sounds.landing;
 }
 
 fheroes2::Rect Battle::Unit::GetRectPosition() const
