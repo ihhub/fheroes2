@@ -453,7 +453,7 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
     case OBJ_WAGON:
         return _( "Wagon" );
     case OBJ_LEANTO:
-        return _( "Lean To" );
+        return _( "Lean-To" );
     case OBJ_FLOTSAM:
         return _( "Flotsam" );
     case OBJ_SHIPWRECKSURVIVOR:
