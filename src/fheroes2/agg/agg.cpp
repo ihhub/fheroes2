@@ -484,9 +484,12 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int s
     }
 }
 
-/* wrapper Audio::Play */
 void AGG::PlaySound( int m82, bool asyncronizedCall )
 {
+    if ( m82 == M82::UNKNOWN ) {
+        return;
+    }
+
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
     }
@@ -516,7 +519,6 @@ void AGG::PlaySoundInternally( const int m82, const int soundVolume )
     }
 }
 
-/* wrapper Audio::Play */
 void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 {
     if ( MUS::UNUSED == mus || MUS::UNKNOWN == mus ) {
