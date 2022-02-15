@@ -298,7 +298,6 @@ namespace AGG
     AsyncSoundManager g_asyncSoundManager;
 }
 
-/* read data directory */
 bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
@@ -349,7 +348,6 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
     return g_midiHeroes2AGG.read( key );
 }
 
-/* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
@@ -378,7 +376,6 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
     }
 }
 
-/* load XMI object */
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
@@ -389,7 +386,6 @@ void AGG::LoadMID( int xmi, std::vector<u8> & v )
     }
 }
 
-/* return CVT */
 const std::vector<u8> & AGG::GetWAV( int m82 )
 {
     std::vector<u8> & v = wav_cache[m82];
@@ -398,7 +394,6 @@ const std::vector<u8> & AGG::GetWAV( int m82 )
     return v;
 }
 
-/* return MID */
 const std::vector<u8> & AGG::GetMID( int xmi )
 {
     std::vector<u8> & v = mid_cache[xmi];
