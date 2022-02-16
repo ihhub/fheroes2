@@ -1,6 +1,6 @@
 # [**fheroes2**](README.md) translation guide
 
-This project uses portable object (PO) files to handle localization in various languages.
+This project uses portable object (PO) files to handle localization in various languages. The current instruction is design for Linux/MacOS users. Windows users should install [Cygwin](https://www.cygwin.com/) in order to be able to work with translations.
 
 ## Finding translatable strings in the codebase
 
