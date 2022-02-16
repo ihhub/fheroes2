@@ -209,6 +209,7 @@ int main( int argc, char ** argv )
 
         // Load palette.
         fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
+        fheroes2::Display::instance().changePalette( nullptr, true );
 
         // load BIN data
         Bin_Info::InitBinInfo();
