@@ -37,7 +37,7 @@ public:
         : uid( 0 )
         , type( v )
     {}
-    virtual ~MapObjectSimple() = default;
+    ~MapObjectSimple() override = default;
 
     int GetType( void ) const
     {
