@@ -77,19 +77,19 @@ namespace
                     case MP2::OBJ_DERELICTSHIP:
                     case MP2::OBJN_DERELICTSHIP: {
                         std::string modRobber = _( "%{object} robber" );
-                        StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
                     case MP2::OBJN_PYRAMID: {
                         std::string modRaided = _( "%{object} raided" );
-                        StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
                         break;
                     }
                     default:
-                        strs->append( _( MP2::StringObject( objectType ) ) );
+                        strs->append( MP2::StringObject( objectType ) );
                         break;
                     }
 
