@@ -286,31 +286,38 @@ void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }
 }
 
-std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
+std::list<Route::Step> PlayerWorldPathfinder::buildPath( const int targetIndex ) const
 {
+    assert( _pathStart != -1 && targetIndex != -1 );
+
     std::list<Route::Step> path;
 
-    // trace the path from end point
+    // Destination is not reachable
+    if ( _cache[targetIndex]._cost == 0 ) {
+        return path;
+    }
+
+#ifndef NDEBUG
+    std::set<int> uniqPathIndexes;
+#endif
+
     int currentNode = targetIndex;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
+
+    while ( currentNode != _pathStart ) {
+        assert( currentNode != -1 );
+
         const WorldNode & node = _cache[currentNode];
-        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
+
+        assert( node._from != -1 );
+
+        const uint32_t cost = node._cost - _cache[node._from]._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
 
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
-        else {
-            currentNode = node._from;
-        }
-    }
+        // The path should not pass through the same tile more than once
+        assert( uniqPathIndexes.insert( node._from ).second );
 
-    // Check a corner case when a path is blocked by something else and the destination is not reachable anymore.
-    if ( currentNode == -1 && path.size() == 1 ) {
-        path.clear();
+        currentNode = node._from;
     }
 
     return path;
@@ -643,12 +650,16 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
 
-std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )
+std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
 {
+    assert( _pathStart != -1 && _currentColor != Color::NONE && targetIndex != -1 );
+
     std::vector<IndexObject> result;
-    // validate that path can be created
-    if ( _pathStart == -1 || _currentColor == Color::NONE || targetIndex == -1 || _cache[targetIndex]._cost == 0 )
+
+    // Destination is not reachable
+    if ( _cache[targetIndex]._cost == 0 ) {
         return result;
+    }
 
     const Kingdom & kingdom = world.GetKingdom( _currentColor );
     const Directions & directions = Direction::All();
@@ -664,10 +675,18 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     // skip the target itself to make sure we don't double count
     uniqueIndicies.insert( targetIndex );
 
-    // trace the path from end point
+#ifndef NDEBUG
+    std::set<int> uniqPathIndexes;
+#endif
+
     int currentNode = targetIndex;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
+
+    while ( currentNode != _pathStart ) {
+        assert( currentNode != -1 );
+
         const WorldNode & node = _cache[currentNode];
+
+        assert( node._from != -1 );
 
         validateAndAdd( currentNode, node._objectID );
 
@@ -685,11 +704,8 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             }
         }
 
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
+        // The path should not pass through the same tile more than once
+        assert( uniqPathIndexes.insert( node._from ).second );
 
         currentNode = node._from;
     }
@@ -697,44 +713,50 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     return result;
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPlanningMode ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
 {
+    assert( _pathStart != -1 && targetIndex != -1 );
+
     std::list<Route::Step> path;
-    if ( _pathStart == -1 )
+
+    // Destination is not reachable
+    if ( _cache[targetIndex]._cost == 0 ) {
         return path;
+    }
 
     const bool fromWater = world.GetTiles( _pathStart ).isWater();
 
-    // trace the path from end point
+#ifndef NDEBUG
+    std::set<int> uniqPathIndexes;
+#endif
+
     int lastValidNode = targetIndex;
     int currentNode = targetIndex;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
+
+    while ( currentNode != _pathStart ) {
+        assert( currentNode != -1 );
+
         if ( isTileBlocked( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 
         const WorldNode & node = _cache[currentNode];
-        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
+
+        assert( node._from != -1 );
+
+        const uint32_t cost = node._cost - _cache[node._from]._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
 
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
-        else {
-            currentNode = node._from;
-        }
+        // The path should not pass through the same tile more than once
+        assert( uniqPathIndexes.insert( node._from ).second );
+
+        currentNode = node._from;
     }
 
-    // Check a corner case when a path is blocked by something else and the destination is not reachable anymore.
-    if ( currentNode == -1 && path.size() == 1 ) {
-        path.clear();
-    }
     // Cut the path to the last valid tile/obstacle if not in planning mode.
-    else if ( !isPlanningMode && lastValidNode != targetIndex ) {
-        path.erase( std::find_if( path.begin(), path.end(), [&lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
+    if ( !isPlanningMode && lastValidNode != targetIndex ) {
+        path.erase( std::find_if( path.begin(), path.end(), [lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
     }
 
     return path;
