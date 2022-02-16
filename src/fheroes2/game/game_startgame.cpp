@@ -600,15 +600,15 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO,
                            world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
-                // reset environment sounds and music theme at the beginning of the kingdom's turn
-                Game::SetCurrentMusic( MUS::UNKNOWN );
-                AGG::ResetAudio();
-
                 radar.SetHide( true );
                 radar.SetRedraw();
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
+                    // reset environment sounds and music theme at the beginning of the human turn
+                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    AGG::ResetAudio();
+
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         // we need to hide the world map in hot seat mode
                         conf.SetCurrentColor( -1 );
@@ -638,6 +638,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     iconsPanel.SetRedraw();
 
                     res = HumanTurn( loadedFromSave );
+
+                    // reset environment sounds and music theme at the end of the human turn
+                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    AGG::ResetAudio();
+
                     break;
 
                 // CONTROL_AI turn
@@ -660,12 +665,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     kingdom.ActionBeforeTurn();
 
                     AI::Get().KingdomTurn( kingdom );
+
                     break;
                 }
-
-                // reset environment sounds and music theme at the end of the kingdom's turn
-                Game::SetCurrentMusic( MUS::UNKNOWN );
-                AGG::ResetAudio();
 
                 if ( res != fheroes2::GameMode::END_TURN ) {
                     break;
