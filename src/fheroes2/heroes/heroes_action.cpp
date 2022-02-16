@@ -763,7 +763,7 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
-        StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
             destroy = true;
