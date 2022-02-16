@@ -173,6 +173,8 @@ namespace Battle
         int M82Move( void ) const;
         int M82Wnce( void ) const;
         int M82Expl( void ) const;
+        int M82Tkof() const;
+        int M82Land() const;
 
         fheroes2::Point GetBackPoint( void ) const;
         fheroes2::Point GetCenterPoint() const;
