@@ -15,7 +15,7 @@ and UI improvements), breathing new life into one of the most addictive turn-bas
 
 ## Download and install
 
-Please follow the [**installation guide**](INSTALL.md) to download and install fheroes2.
+Please follow the [**installation guide**](docs/INSTALL.md) to download and install fheroes2.
 
 [![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
 
