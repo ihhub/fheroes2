@@ -24,7 +24,6 @@
 #include <locale>
 #endif
 #include <algorithm>
-#include <cassert>
 #include <cstring>
 #include <map>
 
@@ -373,8 +372,10 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         int side2 = 0;
 
         const Colors availableColors( kingdom_colors );
-
-        assert( !availableColors.empty() );
+        if ( availableColors.empty() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid list of kingdom colors during map load " << filename );
+            return false;
+        }
 
         const int numPlayersSide1 = wins1;
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
