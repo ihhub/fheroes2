@@ -131,8 +131,7 @@ const char * Heroes::GetName( int heroid )
             gettext_noop( "Brother Brax" ),
             // loyalty version
             gettext_noop( "Solmyr" ), gettext_noop( "Dainwin" ), gettext_noop( "Mog" ), gettext_noop( "Uncle Ivan" ), gettext_noop( "Joseph" ),
-            gettext_noop( "Gallavant" ), _( "Elderian" ), gettext_noop( "Ceallach" ), gettext_noop( "Drakonia" ),
-            gettext_noop( "Martine" ), gettext_noop( "Jarkonas" ),
+            gettext_noop( "Gallavant" ), _( "Elderian" ), gettext_noop( "Ceallach" ), gettext_noop( "Drakonia" ), gettext_noop( "Martine" ), gettext_noop( "Jarkonas" ),
             // debug
             "Debug Hero", "Unknown" };
 
