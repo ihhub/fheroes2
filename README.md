@@ -45,7 +45,7 @@ To build the project from source please follow [**this guide**](docs/DEVELOPMENT
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ihhub/fheroes2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ihhub/fheroes2/alerts/)
 
-If you would like to help translating the project, please read the [**translation guide**](TRANSLATION.md).
+If you would like to help translating the project, please read the [**translation guide**](docs/TRANSLATION.md).
 
 ## Donation
 
