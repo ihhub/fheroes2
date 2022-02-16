@@ -4,7 +4,7 @@ This project uses portable object (PO) files to handle localization in various l
 
 ## Finding translatable strings in the codebase
 
-Translatable strings can be found in the code source as arguments to the `_` function (which is a short name for `gettext`). The string below, for example, can be translated in PO files:
+Translatable strings can be found in the source code as arguments to the `_` or `_n` functions (which are short names for `gettext` and `ngettext` functions respectively). The string below, for example, can be translated in PO files:
 
 ```cpp
 _( "Are you sure you want to quit?" )
@@ -26,7 +26,7 @@ make *.po clean
 
 ## Editing translations
 
-The PO files are located in `/files/lang`. We encourage you to use [*poedit**](https://poedit.net/) to edit translations.
+The PO files are located in `/files/lang`. We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to edit translations.
 
 ## Adding updated translation files to the builds
 
