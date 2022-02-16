@@ -5818,7 +5818,7 @@ msgstr "Tempio del Terzo Cerchio"
 msgid "Wagon"
 msgstr "Carro"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Casotto"
 
 msgid "Flotsam"

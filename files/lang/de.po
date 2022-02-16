@@ -6582,7 +6582,7 @@ msgstr "Schrein des dritten Kreises"
 msgid "Wagon"
 msgstr "Waggon"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Anbau"
 
 msgid "Flotsam"

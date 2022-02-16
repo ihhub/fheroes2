@@ -6556,7 +6556,7 @@ msgstr "Tempel av den tredje sirkelen"
 msgid "Wagon"
 msgstr "Vogn"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Gapahuk"
 
 msgid "Flotsam"

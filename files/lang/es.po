@@ -6583,7 +6583,7 @@ msgstr "Capilla del Tercer Círculo"
 msgid "Wagon"
 msgstr "Vagón"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Apoyar"
 
 msgid "Flotsam"

@@ -6320,7 +6320,7 @@ msgstr "Kaplica trzeciego kręgu"
 msgid "Wagon"
 msgstr "Wóz"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Szopa"
 
 msgid "Flotsam"
