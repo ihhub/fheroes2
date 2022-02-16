@@ -375,13 +375,20 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         const Colors availableColors( kingdom_colors );
 
         assert( !availableColors.empty() );
-        wins1 += Color::GetIndex( availableColors.front() );
 
+        const int numPlayersSide1 = wins1;
+        if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename );
+            return false;
+        }
+
+        int playerIdx = 0;
         for ( const int color : availableColors ) {
-            if ( Color::GetIndex( color ) < wins1 )
+            if ( playerIdx < numPlayersSide1 )
                 side1 |= color;
             else
                 side2 |= color;
+            ++playerIdx;
         }
         FillUnions( side1, side2 );
     }
