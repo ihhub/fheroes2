@@ -59,6 +59,7 @@ namespace AI
         EXPLORER
     };
 
+    const double ARMY_STRENGTH_ADVANTAGE_DESPERATE = 0.8;
     const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
     const double ARMY_STRENGTH_ADVANTAGE_MEDIUM = 1.5;
     const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;

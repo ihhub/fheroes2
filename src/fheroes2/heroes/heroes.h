@@ -212,6 +212,7 @@ public:
     bool isFreeman( void ) const;
     void SetFreeman( int reason );
 
+    bool isLosingGame() const;
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 

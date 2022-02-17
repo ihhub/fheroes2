@@ -919,6 +919,11 @@ bool Heroes::hasMetWithHero( int heroID ) const
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
 }
 
+bool Heroes::isLosingGame() const
+{
+    return GetKingdom().isLosingGame();
+}
+
 int Heroes::GetSpriteIndex( void ) const
 {
     return sprite_index;

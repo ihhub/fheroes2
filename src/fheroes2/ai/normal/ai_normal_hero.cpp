@@ -42,7 +42,8 @@ namespace
                 return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM;
+                const double advantage = hero.isLosingGame() ? AI::ARMY_STRENGTH_ADVANTAGE_DESPERATE : AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * advantage;
             }
         }
         return false;
@@ -371,7 +372,7 @@ namespace
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
+            return army.isStrongerThan( Army( tile ), hero.isLosingGame() ? 1.0 : AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
 
         case MP2::OBJ_SIGN:
             // AI has no brains to process anything from sign messages.
@@ -388,7 +389,7 @@ namespace
                     return false;
                 else if ( otherHeroInCastle )
                     return AIShouldVisitCastle( hero, index );
-                else if ( army.isStrongerThan( hero2->GetArmy(), AI::ARMY_STRENGTH_ADVANTAGE_SMALL ) )
+                else if ( army.isStrongerThan( hero2->GetArmy(), hero.isLosingGame() ? AI::ARMY_STRENGTH_ADVANTAGE_DESPERATE : AI::ARMY_STRENGTH_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;
@@ -587,6 +588,8 @@ namespace AI
             }
             else {
                 double value = castle->getBuildingValue() * 150.0 + 3000;
+                if ( hero.isLosingGame() )
+                    value += 15000;
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 1.25;
@@ -819,6 +822,8 @@ namespace AI
             else {
                 double value = castle->getBuildingValue() * 500.0 + 15000;
                 // If the castle is defenseless
+                if ( hero.isLosingGame() )
+                    value += 15000;
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 2.5;
                 return value;
@@ -1140,7 +1145,7 @@ namespace AI
     bool Normal::HeroesTurn( VecHeroes & heroes )
     {
         if ( heroes.empty() ) {
-            // No heroes so we idicate that all heroes moved.
+            // No heroes so we indicate that all heroes moved.
             return true;
         }
 
@@ -1180,7 +1185,7 @@ namespace AI
                 bool setNewMultiplier = false;
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultiplier( monsterStrengthMultipliers[i] );
+                        _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_STRENGTH_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
                         setNewMultiplier = true;
                         break;
                     }
