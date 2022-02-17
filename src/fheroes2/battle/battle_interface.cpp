@@ -1197,7 +1197,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawCastleMainTower( *castle );
             }
             else if ( cellRowId == 7 ) { // Redraw catapult.
-                RedrawCastle2( *castle, Arena::CATAPULT_POS );
+                RedrawCastle( *castle, Arena::CATAPULT_POS );
             }
 
             std::vector<const Unit *> deadTroopBeforeWall;
@@ -1289,7 +1289,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *movingTroopBeforeWall[i] );
             }
 
-            RedrawCastle2( *castle, wallCellId );
+            RedrawCastle( *castle, wallCellId );
 
             for ( size_t i = 0; i < deadTroopAfterWall.size(); ++i ) {
                 RedrawTroopSprite( *deadTroopAfterWall[i] );
@@ -1838,7 +1838,7 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     }
 }
 
-void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
+void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
 {
     const int castleIcnId = ICN::Get4Castle( castle.GetRace() );
 

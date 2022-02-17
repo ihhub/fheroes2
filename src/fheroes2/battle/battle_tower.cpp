@@ -127,8 +127,6 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
         return {};
     }
 
-    std::string msg;
-
     std::vector<int> towers;
     towers.push_back( TWR_CENTER );
 
@@ -140,6 +138,7 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
     const char * tmpl = _( "The %{name} fires with the strength of %{count} Archers" );
     const char * addn = _( "each with a +%{attack} bonus to their attack skill." );
 
+    std::string msg;
     for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
         Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ), 0 );
 
