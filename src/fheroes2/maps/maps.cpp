@@ -110,12 +110,13 @@ namespace
         const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
         const int directionFromMonster = Direction::Reflect( directionToMonster );
 
-        // The tile is accessible to the monster
+        // The tile is directly accessible to the monster
         if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
             return true;
         }
 
-        // The tile is not directly accessible to the monster, but he can still attack diagonally in some cases
+        // The tile is not directly accessible to the monster, but he can still attack in the diagonal direction if, when the hero moves away from the tile
+        // in question in the vertical direction and the monster moves away from his tile in the horizontal direction, they would have to meet
         if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
             return true;
         }
