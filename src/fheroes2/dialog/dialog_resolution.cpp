@@ -31,6 +31,8 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "zzlib.h"
 
 namespace
@@ -182,7 +184,18 @@ namespace Dialog
                 selectedResolution = fheroes2::Size( 0, 0 );
                 break;
             }
-            else if ( resList.isSelected() ) {
+            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+                fheroes2::Text header( _( "Cancel" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+                fheroes2::Text body( _( "Exit this menu without doing anything." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( buttonOk.area() ) ) {
+                fheroes2::Text header( _( "Okay" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+                fheroes2::Text body( _( "Click to apply selected resolution." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::showMessage( header, body, 0 );
+            }
+
+            if ( resList.isSelected() ) {
                 selectedResolution = resList.GetCurrent();
             }
 
