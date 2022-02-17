@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2021-11-07 17:16+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -753,6 +753,13 @@ msgid "Save the Dwarves"
 msgstr "Törp harcos"
 
 #, fuzzy
+msgid "The Crown"
+msgstr "\"Korona\""
+
+msgid "The Gauntlet"
+msgstr ""
+
+#, fuzzy
 msgid "Turning Point"
 msgstr "Fordulópont"
 
@@ -761,13 +768,6 @@ msgid "Corlagon's Defense"
 msgstr "Sárkány Szem"
 
 msgid "Final Justice"
-msgstr ""
-
-#, fuzzy
-msgid "The Crown"
-msgstr "\"Korona\""
-
-msgid "The Gauntlet"
 msgstr ""
 
 msgid ""
@@ -843,15 +843,9 @@ msgstr "\"Első vérig\""
 msgid "Necromancers"
 msgstr "Hullamágus"
 
-msgid "Rebellion"
-msgstr ""
-
 #, fuzzy
 msgid "Slay the Dwarves"
 msgstr "Törp harcos"
-
-msgid "Apocalypse"
-msgstr ""
 
 #, fuzzy
 msgid "Country Lords"
@@ -860,6 +854,12 @@ msgstr "Ogre Nagyúr"
 #, fuzzy
 msgid "Dragon Master"
 msgstr "\"Sárkánymester\""
+
+msgid "Rebellion"
+msgstr ""
+
+msgid "Apocalypse"
+msgstr ""
 
 #, fuzzy
 msgid "Greater Glory"
@@ -1188,59 +1188,123 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+msgid "campaignBonus|Ballista"
+msgstr ""
+
 #, fuzzy
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Black Pearl"
+msgstr "Fekete Gyöngy"
+
+#, fuzzy
+msgid "campaignBonus|Caster's Bracelet"
 msgstr "Idéző Varázslat Karkötője"
 
 #, fuzzy
-msgid "Defender Helm"
+msgid "campaignBonus|Defender Helm"
 msgstr "Védekező"
 
 #, fuzzy
-msgid "Breastplate"
+msgid "campaignBonus|Breastplate"
 msgstr "Anduran Mellvértje"
 
-msgid "Dragon Sword"
+#, fuzzy
+msgid "campaignBonus|Dragon Sword"
 msgstr "Sárkánykard"
 
-msgid "Fizbin Medal"
+msgid "campaignBonus|Fizbin Medal"
 msgstr ""
 
-msgid "Foremost Scroll"
+msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
 #, fuzzy
-msgid "Mage's Ring"
+msgid "campaignBonus|Hideous Mask"
+msgstr "Förtelmes Maszk"
+
+#, fuzzy
+msgid "campaignBonus|Mage's Ring"
 msgstr "Varázsgyűrű"
 
-msgid "Major Scroll"
+msgid "campaignBonus|Major Scroll"
 msgstr ""
 
-msgid "Minor Scroll"
+#, fuzzy
+msgid "campaignBonus|Medal of Honor"
+msgstr "Becsület Medál"
+
+#, fuzzy
+msgid "campaignBonus|Medal of Valor"
+msgstr "Vitézség Medál"
+
+#, fuzzy
+msgid "campaignBonus|Minor Scroll"
 msgstr "Kis Pergamentekercs"
 
 #, fuzzy
-msgid "Nomad Boots"
+msgid "campaignBonus|Nomad Boots"
 msgstr "Nomád"
 
-#, fuzzy
-msgid "Power Axe"
-msgstr "Erő"
+msgid "campaignBonus|Power Axe"
+msgstr ""
 
 #, fuzzy
-msgid "Stealth Shield"
+msgid "campaignBonus|Spiked Shield"
+msgstr "Tüskés Pajzs"
+
+#, fuzzy
+msgid "campaignBonus|Stealth Shield"
 msgstr "Szent Pajzs"
 
+msgid "campaignBonus|Tax Lien"
+msgstr ""
+
 #, fuzzy
-msgid "Thunder Mace"
+msgid "campaignBonus|Thunder Mace"
 msgstr "Hatalom Mennydörgő Buzogánya"
 
-msgid "Traveler's Boots"
+#, fuzzy
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Utazócsizma"
 
 #, fuzzy
-msgid "Summon Earth"
+msgid "campaignBonus|White Pearl"
+msgstr "Fehér Gyöngy"
+
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Feltámasztás"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Láncvillám"
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Tükörkép"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Varázsgyűrű"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
 msgstr "Hajó idézése"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Hősök mutatása"
 
 msgid "The %{building} produces %{monster}."
 msgstr "A(z) %{building} %{monster}-t termel."
@@ -8410,6 +8474,10 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Power Axe"
+#~ msgstr "Erő"
 
 #, fuzzy
 #~ msgid "Buy Monsters"
