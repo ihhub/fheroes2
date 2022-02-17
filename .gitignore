@@ -59,7 +59,6 @@
 *.hs
 *.smk
 *.ogg
-*.dat
 
 # build directory
 build
