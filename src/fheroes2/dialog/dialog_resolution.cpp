@@ -191,7 +191,7 @@ namespace Dialog
             }
             else if ( le.MousePressRight( buttonOk.area() ) ) {
                 fheroes2::Text header( _( "Okay" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Click to apply selected resolution." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text body( _( "Click to apply the selected resolution." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
                 fheroes2::showMessage( header, body, 0 );
             }
 
