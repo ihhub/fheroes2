@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2013-10-04 21:15+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -738,6 +738,13 @@ msgid "Save the Dwarves"
 msgstr "Uratuj krasnoludy"
 
 #, fuzzy
+msgid "The Crown"
+msgstr "Korona"
+
+msgid "The Gauntlet"
+msgstr ""
+
+#, fuzzy
 msgid "Turning Point"
 msgstr "Punkt zwrotny"
 
@@ -746,13 +753,6 @@ msgid "Corlagon's Defense"
 msgstr "Corlagon"
 
 msgid "Final Justice"
-msgstr ""
-
-#, fuzzy
-msgid "The Crown"
-msgstr "Korona"
-
-msgid "The Gauntlet"
 msgstr ""
 
 msgid ""
@@ -827,16 +827,9 @@ msgstr "Pierwsza krew"
 msgid "Necromancers"
 msgstr "Nekromanci"
 
-msgid "Rebellion"
-msgstr "Bunt"
-
 #, fuzzy
 msgid "Slay the Dwarves"
 msgstr "Krasnoludzcy wojownicy"
-
-#, fuzzy
-msgid "Apocalypse"
-msgstr "Apokalipsa"
 
 #, fuzzy
 msgid "Country Lords"
@@ -845,6 +838,13 @@ msgstr "Kraina Władców"
 #, fuzzy
 msgid "Dragon Master"
 msgstr "Władca Smoków"
+
+msgid "Rebellion"
+msgstr "Bunt"
+
+#, fuzzy
+msgid "Apocalypse"
+msgstr "Apokalipsa"
 
 #, fuzzy
 msgid "Greater Glory"
@@ -1178,50 +1178,126 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
+msgstr "Balista"
+
+#, fuzzy
+msgid "campaignBonus|Black Pearl"
+msgstr "Czarna perła"
+
+#, fuzzy
+msgid "campaignBonus|Caster's Bracelet"
 msgstr "Magiczna bransol"
 
-msgid "Defender Helm"
+#, fuzzy
+msgid "campaignBonus|Defender Helm"
 msgstr "Hełm obrońcy"
 
-msgid "Breastplate"
+#, fuzzy
+msgid "campaignBonus|Breastplate"
 msgstr "Napierśnik"
 
-msgid "Dragon Sword"
+#, fuzzy
+msgid "campaignBonus|Dragon Sword"
 msgstr "Smoczy miecz"
 
-msgid "Fizbin Medal"
+#, fuzzy
+msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin"
 
-msgid "Foremost Scroll"
+#, fuzzy
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Doskonały zwój"
 
-msgid "Mage's Ring"
+#, fuzzy
+msgid "campaignBonus|Hideous Mask"
+msgstr "Potworna maska"
+
+#, fuzzy
+msgid "campaignBonus|Mage's Ring"
 msgstr "Pierścień maga"
 
-msgid "Major Scroll"
+#, fuzzy
+msgid "campaignBonus|Major Scroll"
 msgstr "Większy zwój"
 
-msgid "Minor Scroll"
+#, fuzzy
+msgid "campaignBonus|Medal of Honor"
+msgstr "Medal Honoru"
+
+#, fuzzy
+msgid "campaignBonus|Medal of Valor"
+msgstr "Medal Męstwa"
+
+#, fuzzy
+msgid "campaignBonus|Minor Scroll"
 msgstr "Pomniejszy zwój"
 
-msgid "Nomad Boots"
+#, fuzzy
+msgid "campaignBonus|Nomad Boots"
 msgstr "Buty nomada"
 
-msgid "Power Axe"
+msgid "campaignBonus|Power Axe"
 msgstr "Potężny topór"
 
-msgid "Stealth Shield"
+#, fuzzy
+msgid "campaignBonus|Spiked Shield"
+msgstr "Rogata tarcza"
+
+#, fuzzy
+msgid "campaignBonus|Stealth Shield"
 msgstr "Maskuj. tarcza"
 
-msgid "Thunder Mace"
+msgid "campaignBonus|Tax Lien"
+msgstr "Weksel fiskalny"
+
+#, fuzzy
+msgid "campaignBonus|Thunder Mace"
 msgstr "Grzm. maczuga"
 
-msgid "Traveler's Boots"
+#, fuzzy
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Buty podróżnika"
 
-msgid "Summon Earth"
+#, fuzzy
+msgid "campaignBonus|White Pearl"
+msgstr "Biała perła"
+
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Ożywienie martwych"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Łańcuch piorunów"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Eksplozja Ognia"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Grupowa klątwa"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Grupowe przyspieszenie"
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Lustrzane odbicie"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Ożywienie"
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Stalowa skóra"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
 msgstr "Przyw. ziemi"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Pokaż bohaterów"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - tu rekrutuje się: %{monster}."
@@ -2941,7 +3017,8 @@ msgstr "Uwaga"
 msgid ""
 "This file is saved in the \"The Price of Loyalty\" version.\n"
 "Some items may be unavailable."
-msgstr "Ten plik jest zapisany w wersji \"Cena Lojalności\".\n"
+msgstr ""
+"Ten plik jest zapisany w wersji \"Cena Lojalności\".\n"
 "Niektóre elementy mogą być niedostępne."
 
 msgid "Usupported save format: "
@@ -8500,6 +8577,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Power Axe"
+#~ msgstr "Potężny topór"
 
 #~ msgid "battle: show army order"
 #~ msgstr "walka: pokaż kolejność jednostek"
