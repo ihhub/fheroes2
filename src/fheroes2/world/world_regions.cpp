@@ -166,6 +166,9 @@ void World::ComputeStaticAnalysis()
     const uint32_t extraRegionSize = 18;
     const uint32_t emptyLineFrequency = 7;
 
+    // Reset the region information for all tiles
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdateRegion( 0 ); } );
+
     // Step 1. Split map into terrain, water and ground points
     // Initialize the obstacles vector
     TileDataVector obstacles[4];
