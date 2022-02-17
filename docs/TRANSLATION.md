@@ -28,10 +28,6 @@ make *.po clean
 
 The PO files are located in `/files/lang`. We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to edit translations.
 
-## Adding updated translation files to the builds
+## Build binary translation files
 
-Once the translation files have been modified, run the command below in `/files/lang` to automatically create machine object (MO) binary files and add them to existing builds.
-
-```bash
-make all copy
-```
+Once the translation files have been modified, run the `make` command below in `/files/lang` to create machine object (MO) binary files which can be used by fheroes2 engine.
