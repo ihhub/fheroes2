@@ -390,7 +390,7 @@ namespace
         case Spell::RESURRECT:
             return _( "campaignBonus|Resurrect" );
         case Spell::STEELSKIN:
-            return _( "campaignBonus|Steel Skin" );
+            return _( "campaignBonus|Steelskin" );
         case Spell::SUMMONEELEMENT:
             return _( "campaignBonus|Summon Earth" );
         case Spell::VIEWHEROES:
