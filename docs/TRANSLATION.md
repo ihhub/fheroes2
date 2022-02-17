@@ -1,10 +1,10 @@
 # [**fheroes2**](README.md) translation guide
 
-This project uses portable object (PO) files to handle localization in various languages. The current instruction is design for Linux/MacOS users. Windows users should install [Cygwin](https://www.cygwin.com/) in order to be able to work with translations.
+This project uses portable object (PO) files to handle localization in various languages. The current instruction is designed for Linux/MacOS users. Windows users should install [Cygwin](https://www.cygwin.com/) in order to be able to work with translations.
 
 ## Finding translatable strings in the codebase
 
-Translatable strings can be found in the source code as arguments to the `_` or `_n` functions (which are short names for `gettext` and `ngettext` functions respectively). The string below, for example, can be translated in PO files:
+Translatable strings can be found in the source code as arguments to the `_` function (a short name for `gettext`), `_n` function (a short name for `ngettext`) and `gettext_noop` function used only as indicator for the future string translation. The string below, for example, can be translated in PO files:
 
 ```cpp
 _( "Are you sure you want to quit?" )
