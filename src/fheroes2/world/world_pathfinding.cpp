@@ -332,7 +332,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
         return;
     }
 
-    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+    const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster
     if ( !isFirstNode && !monsters.empty() ) {
@@ -419,7 +419,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
 
     bool isProtected = protectionCheck( currentNodeIdx );
     if ( !isProtected ) {
-        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+        const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
         for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
             if ( protectionCheck( *it ) ) {
                 isProtected = true;

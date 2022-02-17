@@ -96,6 +96,41 @@ namespace
         }
         return result;
     }
+
+    bool tileIsUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex )
+    {
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
+
+        // A pickupable object can be accessed without triggering a monster attack
+        if ( MP2::isPickupObject( tile.GetObject() ) || monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+            return false;
+        }
+
+        const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
+        const int directionFromMonster = Direction::Reflect( directionToMonster );
+
+        // The tile is accessible to the monster
+        if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
+            return true;
+        }
+
+        // The tile is not directly accessible to the monster, but he can still attack diagonally in some cases
+        if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::TOP_RIGHT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::BOTTOM_RIGHT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::BOTTOM_LEFT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 struct ComparisonDistance
@@ -398,75 +433,53 @@ Maps::Indexes Maps::GetObjectPositions( int32_t center, const MP2::MapObjectType
     return results;
 }
 
-bool MapsTileIsUnderProtection( int32_t from, int32_t index ) /* from: center, index: monster */
+bool Maps::tileIsUnderProtection( const int32_t tileIndex )
 {
-    const Maps::Tiles & tile1 = world.GetTiles( from );
-    const Maps::Tiles & tile2 = world.GetTiles( index );
-
-    if ( !MP2::isPickupObject( tile1.GetObject() ) && tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
-        const int monsterDirection = Maps::GetDirection( index, from );
-        // if monster can attack to
-        if ( ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) ) )
-            return true;
-
-        // h2 specific monster attack: BOTTOM_LEFT impassable!
-        if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-            return true;
-
-        // h2 specific monster attack: BOTTOM_RIGHT impassable!
-        if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-            return true;
-    }
-
-    return false;
+    return world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }
 
-bool Maps::TileIsUnderProtection( int32_t center )
-{
-    return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : !GetTilesUnderProtection( center ).empty();
-}
-
-Maps::Indexes Maps::GetTilesUnderProtection( int32_t center )
+Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex )
 {
     Indexes result;
-    if ( !isValidAbsIndex( center ) )
+    if ( !isValidAbsIndex( tileIndex ) )
         return result;
 
     result.reserve( 9 );
     const int width = world.w();
-    const int x = center % width;
-    const int y = center / width;
+    const int x = tileIndex % width;
+    const int y = tileIndex / width;
 
-    auto validateAndInsert = [&result, &center]( const int index ) {
-        if ( MapsTileIsUnderProtection( center, index ) )
-            result.push_back( index );
+    auto validateAndInsert = [&result, tileIndex]( const int monsterTileIndex ) {
+        if ( tileIsUnderMonsterProtection( tileIndex, monsterTileIndex ) ) {
+            result.push_back( monsterTileIndex );
+        }
     };
 
     if ( y > 0 ) {
         if ( x > 0 )
-            validateAndInsert( center - width - 1 );
+            validateAndInsert( tileIndex - width - 1 );
 
-        validateAndInsert( center - width );
+        validateAndInsert( tileIndex - width );
 
         if ( x < width - 1 )
-            validateAndInsert( center - width + 1 );
+            validateAndInsert( tileIndex - width + 1 );
     }
 
     if ( x > 0 )
-        validateAndInsert( center - 1 );
-    if ( MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() )
-        result.push_back( center );
+        validateAndInsert( tileIndex - 1 );
+    if ( MP2::OBJ_MONSTER == world.GetTiles( tileIndex ).GetObject() )
+        result.push_back( tileIndex );
     if ( x < width - 1 )
-        validateAndInsert( center + 1 );
+        validateAndInsert( tileIndex + 1 );
 
     if ( y < world.h() - 1 ) {
         if ( x > 0 )
-            validateAndInsert( center + width - 1 );
+            validateAndInsert( tileIndex + width - 1 );
 
-        validateAndInsert( center + width );
+        validateAndInsert( tileIndex + width );
 
         if ( x < width - 1 )
-            validateAndInsert( center + width + 1 );
+            validateAndInsert( tileIndex + width + 1 );
     }
 
     return result;

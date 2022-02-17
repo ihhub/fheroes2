@@ -69,8 +69,8 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
     Indexes GetFreeIndexesAroundTile( const int32_t center );
 
-    Indexes GetTilesUnderProtection( int32_t center );
-    bool TileIsUnderProtection( int32_t center );
+    bool tileIsUnderProtection( const int32_t tileIndex );
+    Indexes getMonstersProtectingTile( const int32_t tileIndex );
 
     Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );

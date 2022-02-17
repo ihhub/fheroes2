@@ -1565,7 +1565,7 @@ std::string Maps::Tiles::String( void ) const
     }
 
     default: {
-        const MapsIndexes & v = Maps::GetTilesUnderProtection( _index );
+        const MapsIndexes & v = Maps::getMonstersProtectingTile( _index );
         if ( !v.empty() ) {
             os << "protection      : ";
             for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it )
