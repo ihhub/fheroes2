@@ -498,7 +498,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         else if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
-                protection = ( Maps::tileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
+                protection = ( Maps::tileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
             }
             else {
                 protection = Maps::tileIsUnderProtection( tile.GetIndex() );

@@ -1911,8 +1911,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     }
 }
 
-/* true: if protection or has guardians */
-bool Maps::Tiles::CaptureObjectIsProtection( void ) const
+bool Maps::Tiles::isCaptureObjectProtected() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 

@@ -2140,7 +2140,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         bool capture = true;
 
         // check guardians
-        if ( tile.CaptureObjectIsProtection() ) {
+        if ( tile.isCaptureObjectProtected() ) {
             Army army( tile );
             const Monster & mons = tile.QuantityMonster();
 

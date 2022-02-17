@@ -253,7 +253,9 @@ namespace Maps
         void MonsterSetCount( u32 count );
         u32 MonsterCount( void ) const;
 
-        bool CaptureObjectIsProtection( void ) const;
+        // Checks whether the object to be captured is guarded by its own forces
+        // (castle has a hero or garrison, dwelling has creatures, etc)
+        bool isCaptureObjectProtected() const;
 
         /* object quantity operation */
         void QuantityUpdate( bool isFirstLoad = true );

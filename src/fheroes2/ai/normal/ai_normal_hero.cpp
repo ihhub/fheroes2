@@ -92,7 +92,7 @@ namespace
         case MP2::OBJ_ALCHEMYLAB:
         case MP2::OBJ_LIGHTHOUSE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.CaptureObjectIsProtection() ) {
+                if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
                     return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_SMALL );
                 }
@@ -103,7 +103,7 @@ namespace
 
         case MP2::OBJ_ABANDONEDMINE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.CaptureObjectIsProtection() ) {
+                if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
                     return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
                 }
@@ -121,7 +121,7 @@ namespace
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.CaptureObjectIsProtection() ) {
+                if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
                     return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
                 }
