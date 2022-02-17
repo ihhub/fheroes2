@@ -1051,7 +1051,7 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
         _region = newRegionID;
     }
     else {
-        _region = 0;
+        _region = REGION_NODE_BLOCKED;
     }
 }
 
