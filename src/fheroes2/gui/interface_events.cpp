@@ -402,8 +402,10 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
 
-            // The action object (e.g. Stables or Well) can alter the status of the hero
-            iconsPanel.RedrawIcons( ICON_HEROES );
+            // The action object can alter the status of the hero (e.g. Stables or Well) or
+            // move it to another location (e.g. Stone Liths or Whirlpool)
+            ResetFocus( GameFocus::HEROES );
+            RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.
             if ( hero->isAction() ) {
