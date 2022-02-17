@@ -97,7 +97,7 @@ namespace
         return result;
     }
 
-    bool tileIsUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex )
+    bool isTileUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
@@ -451,7 +451,7 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex )
     const int y = tileIndex / width;
 
     auto validateAndInsert = [&result, tileIndex]( const int monsterTileIndex ) {
-        if ( tileIsUnderMonsterProtection( tileIndex, monsterTileIndex ) ) {
+        if ( isTileUnderMonsterProtection( tileIndex, monsterTileIndex ) ) {
             result.push_back( monsterTileIndex );
         }
     };
