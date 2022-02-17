@@ -434,7 +434,7 @@ Maps::Indexes Maps::GetObjectPositions( int32_t center, const MP2::MapObjectType
     return results;
 }
 
-bool Maps::tileIsUnderProtection( const int32_t tileIndex )
+bool Maps::isTileUnderProtection( const int32_t tileIndex )
 {
     return world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }

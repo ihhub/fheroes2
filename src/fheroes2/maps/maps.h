@@ -70,7 +70,7 @@ namespace Maps
     Indexes GetFreeIndexesAroundTile( const int32_t center );
 
     // Checks if the tile is guarded by a monster
-    bool tileIsUnderProtection( const int32_t tileIndex );
+    bool isTileUnderProtection( const int32_t tileIndex );
     // Returns a list of indexes of tiles with monsters guarding the given tile
     Indexes getMonstersProtectingTile( const int32_t tileIndex );
 
