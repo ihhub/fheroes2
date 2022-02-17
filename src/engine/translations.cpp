@@ -93,6 +93,44 @@ namespace
             // р   с     т     у     ф     х     ц     ч     ш     щ     ъ     ы     ь     э     ю     я   (1251)
             0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF };
 
+    enum
+    {
+        LOCALE_EN,
+        LOCALE_AF,
+        LOCALE_AR,
+        LOCALE_BG,
+        LOCALE_CA,
+        LOCALE_CS,
+        LOCALE_DA,
+        LOCALE_DE,
+        LOCALE_EL,
+        LOCALE_ES,
+        LOCALE_ET,
+        LOCALE_EU,
+        LOCALE_FI,
+        LOCALE_FR,
+        LOCALE_GL,
+        LOCALE_HE,
+        LOCALE_HR,
+        LOCALE_HU,
+        LOCALE_ID,
+        LOCALE_IT,
+        LOCALE_LA,
+        LOCALE_LT,
+        LOCALE_LV,
+        LOCALE_MK,
+        LOCALE_NB,
+        LOCALE_NL,
+        LOCALE_PL,
+        LOCALE_PT,
+        LOCALE_RU,
+        LOCALE_SK,
+        LOCALE_SL,
+        LOCALE_SR,
+        LOCALE_SV,
+        LOCALE_TR
+    };
+
     struct chunk
     {
         u32 offset;
@@ -148,6 +186,7 @@ namespace
             , offset_strings2( 0 )
             , hash_size( 0 )
             , hash_offset( 0 )
+            , locale( LOCALE_EN )
             , nplurals( 0 )
         {}
 
@@ -260,52 +299,14 @@ namespace
             return true;
         }
     };
-}
-
-namespace Translation
-{
-    enum
-    {
-        LOCALE_EN,
-        LOCALE_AF,
-        LOCALE_AR,
-        LOCALE_BG,
-        LOCALE_CA,
-        LOCALE_CS,
-        LOCALE_DA,
-        LOCALE_DE,
-        LOCALE_EL,
-        LOCALE_ES,
-        LOCALE_ET,
-        LOCALE_EU,
-        LOCALE_FI,
-        LOCALE_FR,
-        LOCALE_GL,
-        LOCALE_HE,
-        LOCALE_HR,
-        LOCALE_HU,
-        LOCALE_ID,
-        LOCALE_IT,
-        LOCALE_LA,
-        LOCALE_LT,
-        LOCALE_LV,
-        LOCALE_MK,
-        LOCALE_NB,
-        LOCALE_NL,
-        LOCALE_PL,
-        LOCALE_PT,
-        LOCALE_RU,
-        LOCALE_SK,
-        LOCALE_SL,
-        LOCALE_SR,
-        LOCALE_SV,
-        LOCALE_TR
-    };
 
     mofile * current = nullptr;
     std::map<std::string, mofile> domains;
     char context = 0;
+}
 
+namespace Translation
+{
     void setStripContext( char strip )
     {
         context = strip;
