@@ -31,6 +31,7 @@
 #include "mp2.h"
 #include "resource.h"
 #include "skill.h"
+#include "world_regions.h"
 
 class Heroes;
 class Spell;
@@ -367,7 +368,7 @@ namespace Maps
         bool tileIsRoad = false;
 
         // This field does not persist in savegame.
-        uint32_t _region = 0;
+        uint32_t _region = REGION_NODE_BLOCKED;
 
         uint8_t _level = 0;
     };

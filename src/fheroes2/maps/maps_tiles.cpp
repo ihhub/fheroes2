@@ -1050,6 +1050,9 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
     if ( tilePassable ) {
         _region = newRegionID;
     }
+    else {
+        _region = REGION_NODE_BLOCKED;
+    }
 }
 
 u32 Maps::Tiles::GetObjectUID() const
