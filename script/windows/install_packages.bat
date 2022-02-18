@@ -49,7 +49,7 @@ del "setup_packages.bat"
 
 echo "SUCCESS! Installation is completed"
 
-if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
+if not "%CI%" == "true" (
     echo Press any key to exit...
     pause >nul
 )
@@ -58,7 +58,7 @@ exit /b
 
 :unpack_archive
 
-if "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
+if "%CI%" == "true" (
     powershell -Command "Expand-Archive -LiteralPath '%~1' -DestinationPath '%~2' -Force"
 ) else (
     powershell -Command "$shell = New-Object -ComObject 'Shell.Application'; $zip = $shell.NameSpace((Resolve-Path '%~1').Path); foreach ($item in $zip.items()) { $shell.Namespace((Resolve-Path '%~2').Path).CopyHere($item, 0x14) }"
