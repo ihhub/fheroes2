@@ -23,9 +23,6 @@ ArchitecturesInstallIn64BitMode=x64
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"
 Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
 Source: "{#BuildDir}\SDL*.dll"; DestDir: "{app}"
-#if DeployConfName == 'SDL2'
-Source: "{#BuildDir}\zlib*.dll"; DestDir: "{app}"
-#endif
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.bat"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.ps1"; DestDir: "{app}"
