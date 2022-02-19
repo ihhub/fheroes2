@@ -1,4 +1,4 @@
-name: VS2019
+name: MSVC
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
           package_name: fheroes2_windows_x64_SDL2
           release_name: Windows x64 build with SDL2 support (latest commit)
           release_tag: fheroes2-windows-x64-SDL2
-    name: VS2019 (${{ matrix.config.name }})
+    name: MSVC (${{ matrix.config.name }})
     runs-on: windows-2019
     defaults:
       run:
