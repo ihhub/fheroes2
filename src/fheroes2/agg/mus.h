@@ -2,7 +2,7 @@
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
  *   Copyright (C) 2022                                                    *
  *                                                                         *
- *   Free Heroes2 Engine:http://sourceforge.net/projects/fheroes2          *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
