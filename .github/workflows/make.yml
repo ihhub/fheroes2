@@ -55,9 +55,7 @@ jobs:
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
+    - uses: actions/checkout@v2.4.0
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
@@ -95,9 +93,7 @@ jobs:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
+    - uses: actions/checkout@v2.4.0
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -163,9 +159,7 @@ jobs:
     runs-on: ubuntu-latest
     container: devkitpro/devkita64:latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
+    - uses: actions/checkout@v2.4.0
     - name: Install dependencies
       run: |
         sudo apt-get -y update
