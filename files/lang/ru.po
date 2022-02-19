@@ -6627,10 +6627,10 @@ msgid "Elves"
 msgstr "Эльфы"
 
 msgid "Grand Elf"
-msgstr "Высокий эльф"
+msgstr "Высший эльф"
 
 msgid "Grand Elves"
-msgstr "Высокие эльфы"
+msgstr "Высшие эльфы"
 
 msgid "Druid"
 msgstr "Друид"
@@ -6681,7 +6681,7 @@ msgid "Minotaurs"
 msgstr "Минотавры"
 
 msgid "Minotaur King"
-msgstr "Царь минотавр"
+msgstr "Царь минотавров"
 
 msgid "Minotaur Kings"
 msgstr "Цари минотавров"
@@ -6735,10 +6735,10 @@ msgid "Steel Golems"
 msgstr "Стальные големы"
 
 msgid "Roc"
-msgstr "Птица рух"
+msgstr "Птица Рух"
 
 msgid "Rocs"
-msgstr "Птицы рух"
+msgstr "Птицы Рух"
 
 msgid "Mage"
 msgstr "Маг"
@@ -6774,10 +6774,10 @@ msgid "Zombies"
 msgstr "Зомби"
 
 msgid "Mutant Zombie"
-msgstr "Зомби мутант"
+msgstr "Зомби-мутант"
 
 msgid "Mutant Zombies"
-msgstr "Зомби мутанты"
+msgstr "Зомби-мутанты"
 
 msgid "Mummies"
 msgstr "Мумии"
@@ -6798,10 +6798,10 @@ msgid "Vampires"
 msgstr "Вампиры"
 
 msgid "Vampire Lord"
-msgstr "Лорд вампир"
+msgstr "Лорд вампиров"
 
 msgid "Vampire Lords"
-msgstr "Лорды вампиры"
+msgstr "Лорды вампиров"
 
 msgid "Lich"
 msgstr "Лич"
@@ -7489,7 +7489,7 @@ msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
-"%{name} увеличивает защиту от 'Армагеддона' и 'Стихийного шторма' на "
+"%{name} увеличивает защиту от 'Армагеддона' и 'Бури стихий' на "
 "%{count} процентов, но также уменьшает силу магии на 2 пункта."
 
 msgid "Battle Garb of Anduran"
@@ -8020,7 +8020,7 @@ msgid ""
 msgstr "Хаос обрушивается на боле боя, причиняя всем и вся невероятный урон."
 
 msgid "Elemental Storm"
-msgstr "Стихийный шторм"
+msgstr "Буря стихий"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
