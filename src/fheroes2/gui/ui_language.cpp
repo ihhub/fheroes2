@@ -37,8 +37,8 @@ namespace
                                                                             { 0x88774771, fheroes2::SupportedLanguage::Polish }, // GoG version
                                                                             { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
                                                                             { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian }, // Buka version
-                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Italian },
-                                                                            { 0x1CEBD099, fheroes2::SupportedLanguage::Czech } };
+                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Italian }, // ???
+                                                                            { 0x1CEBD099, fheroes2::SupportedLanguage::Czech } }; // CD Projekt
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
