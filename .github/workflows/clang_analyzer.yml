@@ -9,7 +9,7 @@ jobs:
     name: Clang Analyzer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v2
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get -y update

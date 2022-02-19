@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v3.1.0
+      uses: actions/github-script@v3
       with:
         script: |
           let artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -38,13 +38,13 @@ jobs:
         echo "pr_id=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
         echo "pr_head_repo=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
         echo "pr_head_ref=$(cat clang-tidy-result/pr-head-ref.txt)" >> "$GITHUB_ENV"
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v2
       with:
         repository: ${{ env.pr_head_repo }}
         ref: ${{ env.pr_head_ref }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v3.1.0
+      uses: actions/github-script@v3
       with:
         script: |
           let artifacts = await github.actions.listWorkflowRunArtifacts({

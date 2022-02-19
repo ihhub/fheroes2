@@ -48,14 +48,14 @@ jobs:
     env:
       APP_VERSION: 0.9.12
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v2
     - name: Install dependencies, cygwin and zip
       run: |
         cd script/windows
         ./install_packages.bat
         choco.exe install cygwin cyg-get zip -y
         cyg-get.bat make iconv gettext-devel
-    - uses: microsoft/setup-msbuild@v1.1
+    - uses: microsoft/setup-msbuild@v1
     - name: Generate build number
       run: |
         echo "fheroes2_build_version=$((GITHUB_RUN_NUMBER % 32768))" >> "$GITHUB_ENV"
