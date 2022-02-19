@@ -89,8 +89,8 @@ jobs:
     - uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: ${{ matrix.config.package_name }}.exe
-        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.exe
+        name: ${{ matrix.config.package_name }}_installer.exe
+        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe
     - uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -99,7 +99,8 @@ jobs:
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.*
+        artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe,
+                   build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
         body: ${{ github.event.commits[0].message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.config.release_name }}
