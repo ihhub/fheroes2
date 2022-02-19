@@ -184,7 +184,7 @@ namespace AI
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
         const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-        return _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
+        return !hero.isLosingGame() && _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const

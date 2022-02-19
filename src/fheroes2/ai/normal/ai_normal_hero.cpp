@@ -42,7 +42,8 @@ namespace
                 return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM;
+                const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * advantage;
             }
         }
         return false;
@@ -94,7 +95,7 @@ namespace
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_SMALL );
+                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
                 return true;
@@ -105,7 +106,7 @@ namespace
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
                 }
 
                 return true;
@@ -123,7 +124,7 @@ namespace
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
+                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_MEDIUM );
                 }
 
                 return true;
@@ -157,7 +158,7 @@ namespace
             // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
             if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
             }
 
             // other
@@ -306,7 +307,7 @@ namespace
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_ADVANTAGE_MEDIUM );
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
@@ -361,17 +362,17 @@ namespace
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
-                       && army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                       && army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
             }
             break;
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_ADVANTAGE_MEDIUM );
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDIUM );
+            return army.isStrongerThan( Army( tile ), hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM );
 
         case MP2::OBJ_SIGN:
             // AI has no brains to process anything from sign messages.
@@ -388,7 +389,7 @@ namespace
                     return false;
                 else if ( otherHeroInCastle )
                     return AIShouldVisitCastle( hero, index );
-                else if ( army.isStrongerThan( hero2->GetArmy(), AI::ARMY_STRENGTH_ADVANTAGE_SMALL ) )
+                else if ( army.isStrongerThan( hero2->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;
@@ -587,6 +588,8 @@ namespace AI
             }
             else {
                 double value = castle->getBuildingValue() * 150.0 + 3000;
+                if ( hero.isLosingGame() )
+                    value += 15000;
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 1.25;
@@ -818,6 +821,8 @@ namespace AI
             }
             else {
                 double value = castle->getBuildingValue() * 500.0 + 15000;
+                if ( hero.isLosingGame() )
+                    value += 15000;
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 2.5;
@@ -1140,7 +1145,7 @@ namespace AI
     bool Normal::HeroesTurn( VecHeroes & heroes )
     {
         if ( heroes.empty() ) {
-            // No heroes so we idicate that all heroes moved.
+            // No heroes so we indicate that all heroes moved.
             return true;
         }
 
@@ -1153,7 +1158,7 @@ namespace AI
         const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
 
         const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDIUM, ARMY_STRENGTH_ADVANTAGE_SMALL };
+        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1180,7 +1185,7 @@ namespace AI
                 bool setNewMultiplier = false;
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultiplier( monsterStrengthMultipliers[i] );
+                        _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
                         setNewMultiplier = true;
                         break;
                     }
