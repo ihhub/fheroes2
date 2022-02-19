@@ -82,7 +82,7 @@ jobs:
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
       with:
         artifacts: ${{ matrix.config.package_name }}
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.config.release_name }}
         tag: ${{ matrix.config.release_tag }}
@@ -147,7 +147,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_psv_sdl2.zip
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: PS Vita build with SDL 2.0 support (latest commit)
         tag: fheroes2-psv-sdl2_dev
@@ -183,7 +183,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_switch_sdl2.zip
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Nintendo Switch build with SDL 2.0 support (latest commit)
         tag: fheroes2-switch-sdl2_dev

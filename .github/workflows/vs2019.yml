@@ -101,7 +101,7 @@ jobs:
       with:
         artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe,
                    build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.config.release_name }}
         tag: ${{ matrix.config.release_tag }}
