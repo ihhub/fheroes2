@@ -1344,7 +1344,7 @@ msgid "Build %{name}."
 msgstr "Построить %{name}."
 
 msgid "Blackridge"
-msgstr "Блэкбридж"
+msgstr "Блэкридж"
 
 msgid "Hillstone"
 msgstr "Хилстон"
@@ -1371,7 +1371,7 @@ msgid "Greywind"
 msgstr "Грейвинд"
 
 msgid "Portsmith"
-msgstr "Портсмис"
+msgstr "Портсмит"
 
 msgid "Atlantium"
 msgstr "Атлантиум"
@@ -1392,7 +1392,7 @@ msgid "Baywatch"
 msgstr "Байвоч"
 
 msgid "Fountainhead"
-msgstr "Фонтанхейд"
+msgstr "Фонтанхед"
 
 msgid "Vertigo"
 msgstr "Вертиго"
@@ -1407,7 +1407,7 @@ msgid "Brindamoor"
 msgstr "Бриндамур"
 
 msgid "Lakeside"
-msgstr "Лэйксайт"
+msgstr "Лэйксайд"
 
 msgid "Nightshadow"
 msgstr "Найтшэдоу"
@@ -1443,7 +1443,7 @@ msgid "Blackfang"
 msgstr "Блэкфанг"
 
 msgid "New Dawn"
-msgstr "Ньюдавн"
+msgstr "Нью-Давн"
 
 msgid "Sorpigal"
 msgstr "Сорпигал"
@@ -1452,13 +1452,13 @@ msgid "Avone"
 msgstr "Авон"
 
 msgid "Big Oak"
-msgstr "Биг Оак"
+msgstr "Биг-Оук"
 
 msgid "Chandler"
 msgstr "Чандлер"
 
 msgid "Erliquin"
-msgstr "Эрликиум"
+msgstr "Эрликуин"
 
 msgid "Hampshire"
 msgstr "Хампшир"
@@ -1476,7 +1476,7 @@ msgid "South Mill"
 msgstr "Саусмил"
 
 msgid "Weed Patch"
-msgstr "Видпас"
+msgstr "Вид-Патч"
 
 msgid "Brownston"
 msgstr "Браунстон"
@@ -1491,13 +1491,13 @@ msgid "Westfork"
 msgstr "Вестфорк"
 
 msgid "Whittingham"
-msgstr "Ватингем"
+msgstr "Витингем"
 
 msgid "Cathcart"
-msgstr "Кетчкарт"
+msgstr "Кеткарт"
 
 msgid "Elk's Head"
-msgstr "Элькхеад"
+msgstr "Элькс-Хед"
 
 msgid "Roscomon"
 msgstr "Роскомон"
@@ -1509,16 +1509,16 @@ msgid "Yorksford"
 msgstr "Йорксфорд"
 
 msgid "Blackburn"
-msgstr "Блэкбурн"
+msgstr "Блэкбёрн"
 
 msgid "Blacksford"
 msgstr "Блэксфорд"
 
 msgid "Burton"
-msgstr "Буртон"
+msgstr "Бёртон"
 
 msgid "Pig's Eye"
-msgstr "Пигай"
+msgstr "Пигз-Ай"
 
 msgid "Viper's Nest"
 msgstr "Гнездо гадюк"
@@ -1527,7 +1527,7 @@ msgid "Fenton"
 msgstr "Фентон"
 
 msgid "Lankershire"
-msgstr "Ланкшир"
+msgstr "Ланкершир"
 
 msgid "Lombard"
 msgstr "Ломбард"
@@ -1539,7 +1539,7 @@ msgid "Troy"
 msgstr "Троя"
 
 msgid "Forder Oaks"
-msgstr "Фордер Оак"
+msgstr "Фордер-Оукс"
 
 msgid "Meramec"
 msgstr "Меремек"
