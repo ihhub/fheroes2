@@ -7029,97 +7029,97 @@ msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr "Книга всезнания"
+msgstr "Книга Всезнания"
 
 msgid "The %{name} increases your attack skill by %{count}."
 msgstr "%{name} увеличивает Атаку на %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr "Меч власти"
+msgstr "Меч Всевластия"
 
 msgid "The %{name} increases your defense skill by %{count}."
 msgstr "%{name} увеличивает Защиту на %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr "Защитная накидка"
+msgstr "Защитная Накидка"
 
 msgid "The %{name} increases your spell power by %{count}."
 msgstr "%{name} увеличивает Силу магии на %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr "Жезл магии"
+msgstr "Жезл Магии"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr "%{name} увеличивает вашу Атаку и Защиту на %{count}."
 
 msgid "Ultimate Shield"
-msgstr "Всемогущий щит"
+msgstr "Всемогущий Щит"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr "%{name} увеличивает вашу Силу магии и Знания на %{count}."
 
 msgid "Ultimate Staff"
-msgstr "Всемогущий посох"
+msgstr "Всемогущий Посох"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
 msgstr "%{name} увеличивает все основные параметры на %{count}."
 
 msgid "Ultimate Crown"
-msgstr "Корона всевластия"
+msgstr "Корона Всевластия"
 
 msgid "Golden Goose"
-msgstr "Золотой гусь"
+msgstr "Золотой Гусь"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} приносит каждый день по %{count} золотых."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Ожерелье тайной магии"
+msgstr "Ожерелье Тайной Магии"
 
 msgid "Caster's Bracelet of Magic"
-msgstr "Магический браслет"
+msgstr "Магический Браслет"
 
 msgid "Mage's Ring of Power"
-msgstr "Кольцо мага"
+msgstr "Кольцо Мага"
 
 msgid "Witch's Broach of Magic"
-msgstr "Брошь ведьмы"
+msgstr "Брошь Ведьмы"
 
 msgid "Medal of Valor"
-msgstr "Медаль отваги"
+msgstr "Медаль Отваги"
 
 msgid "The %{name} increases your morale."
 msgstr "%{name} увеличивает Вашу мораль."
 
 msgid "Medal of Courage"
-msgstr "Медаль мужества"
+msgstr "Медаль Мужества"
 
 msgid "Medal of Honor"
-msgstr "Медаль доблести"
+msgstr "Медаль Доблести"
 
 msgid "Medal of Distinction"
-msgstr "Медаль почёта"
+msgstr "Медаль Почёта"
 
 msgid "Fizbin of Misfortune"
-msgstr "Символ неудачи"
+msgstr "Символ Неудачи"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} снижает Вашу мораль на %{count}."
 
 msgid "Thunder Mace of Dominion"
-msgstr "Громовая палица"
+msgstr "Громовая Палица"
 
 msgid "Armored Gauntlets of Protection"
-msgstr "Защитная перчатка"
+msgstr "Защитная Перчатка"
 
 msgid "The %{name} increase your defense skill by %{count}."
 msgstr "%{name} увеличивает силу защиты на %{count}."
 
 msgid "Defender Helm of Protection"
-msgstr "Шлем защитника"
+msgstr "Шлем Защитника"
 
 msgid "Giant Flail of Dominion"
-msgstr "Гигантский цеп"
+msgstr "Гигантский Цеп"
 
 msgid "Ballista of Quickness"
 msgstr "Баллиста"
@@ -7128,61 +7128,61 @@ msgid "The %{name} lets your catapult fire twice per combat round."
 msgstr "%{name} позволяет дважды произвести выстрел из катапульты за один ход."
 
 msgid "Stealth Shield of Protection"
-msgstr "Незримый щит"
+msgstr "Незримый Щит"
 
 msgid "Dragon Sword of Dominion"
-msgstr "Драконий меч"
+msgstr "Драконий Меч"
 
 msgid "Power Axe of Dominion"
-msgstr "Топор власти"
+msgstr "Топор Власти"
 
 msgid "Divine Breastplate of Protection"
-msgstr "Божественный доспех"
+msgstr "Божественный Доспех"
 
 msgid "Minor Scroll of Knowledge"
-msgstr "Малый свиток знания"
+msgstr "Малый Свиток Знания"
 
 msgid "Major Scroll of Knowledge"
-msgstr "Большой свиток знания"
+msgstr "Большой Свиток Знания"
 
 msgid "Superior Scroll of Knowledge"
-msgstr "Могущественный свиток знания"
+msgstr "Могущественный Свиток Знания"
 
 msgid "Foremost Scroll of Knowledge"
-msgstr "Свиток высшего знания"
+msgstr "Свиток Высшего Знания"
 
 msgid "Endless Sack of Gold"
-msgstr "Бездонный мешок"
+msgstr "Бездонный Мешок"
 
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "%{name} ежедневно приносит Вам %{count} золотых."
 
 msgid "Endless Bag of Gold"
-msgstr "Бездонная сума"
+msgstr "Бездонная Сума"
 
 msgid "Endless Purse of Gold"
-msgstr "Бездонный кошель"
+msgstr "Бездонный Кошель"
 
 msgid "Nomad Boots of Mobility"
-msgstr "Башмаки кочевника"
+msgstr "Башмаки Кочевника"
 
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} увеличивают Ваше передвижение по земле."
 
 msgid "Traveler's Boots of Mobility"
-msgstr "Сапоги путника"
+msgstr "Сапоги Путника"
 
 msgid "Lucky Rabbit's Foot"
-msgstr "Кроличья лапка"
+msgstr "Кроличья Лапка"
 
 msgid "The %{name} increases your luck in combat."
 msgstr "%{name} увеличивает Вашу удачу в бою."
 
 msgid "Golden Horseshoe"
-msgstr "Золотая подкова"
+msgstr "Золотая Подкова"
 
 msgid "Gambler's Lucky Coin"
-msgstr "Счастливая монета"
+msgstr "Счастливая Монета"
 
 msgid "Four-Leaf Clover"
 msgstr "Четырёхлистник"
@@ -7200,19 +7200,19 @@ msgid "The %{name} increases your movement on sea."
 msgstr "%{name} увеличивает Ваше передвижение по воде."
 
 msgid "Evil Eye"
-msgstr "Дурной глаз"
+msgstr "Дурной Глаз"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
 msgstr "%{name} снижает стоимость заклинаний проклятия на половину."
 
 msgid "Enchanted Hourglass"
-msgstr "Зачарованные часы"
+msgstr "Зачарованные Часы"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr "%{name} увеличивает длительность всех заклинаний на %{count} ход."
 
 msgid "Gold Watch"
-msgstr "Золотые часы"
+msgstr "Золотые Часы"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
 msgstr "%{name} удваивают эффект заклинаний гипноза."
@@ -7224,28 +7224,28 @@ msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr "%{name} снижает вдвое стоимость всех заклинаний основанных на разуме."
 
 msgid "Ice Cloak"
-msgstr "Ледяная накидка"
+msgstr "Ледяная Накидка"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями холода."
 
 msgid "Fire Cloak"
-msgstr "Огненная накидка"
+msgstr "Огненная Накидка"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями огня."
 
 msgid "Lightning Helm"
-msgstr "Громовой шлем"
+msgstr "Громовой Шлем"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями молний."
 
 msgid "Evercold Icicle"
-msgstr "Нетающий лёд"
+msgstr "Нетающий Лёд"
 
 msgid ""
 "The %{name} causes your cold spells to do %{count} percent more damage to "
@@ -7253,7 +7253,7 @@ msgid ""
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний холода."
 
 msgid "Everhot Lava Rock"
-msgstr "Горячий камень"
+msgstr "Горячий Камень"
 
 msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
@@ -7261,7 +7261,7 @@ msgid ""
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний огня."
 
 msgid "Lightning Rod"
-msgstr "Жезл молний"
+msgstr "Жезл Молний"
 
 msgid ""
 "The %{name} causes your lightning spells to do %{count} percent more damage "
@@ -7269,13 +7269,13 @@ msgid ""
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний молнии."
 
 msgid "Snake-Ring"
-msgstr "Кольцо змеи"
+msgstr "Кольцо Змеи"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
 msgstr "%{name} снижает стоимость всех заклинаний благословения."
 
 msgid "Ankh"
-msgstr "Символ жизни"
+msgstr "Символ Жизни"
 
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
@@ -7283,58 +7283,58 @@ msgid ""
 msgstr "%{name} удваивает эффективность всех Ваших заклинаний оживления."
 
 msgid "Book of Elements"
-msgstr "Книга стихий"
+msgstr "Книга Стихий"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
 msgstr "%{name} удваивает эффективность всех Ваших заклинаний призыва."
 
 msgid "Elemental Ring"
-msgstr "Кольцо стихий"
+msgstr "Кольцо Стихий"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr "%{name} снижает наполовину стоимость всех Ваших заклинаний призыва."
 
 msgid "Holy Pendant"
-msgstr "Святой кулон"
+msgstr "Святой Кулон"
 
 msgid "The %{name} makes all your troops immune to curse spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям проклятия."
 
 msgid "Pendant of Free Will"
-msgstr "Подвеска свободы"
+msgstr "Подвеска Свободы"
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
 msgstr ""
 "%{name} воли делает все Ваши отряды невосприимчивыми к заклинаниям гипноза."
 
 msgid "Pendant of Life"
-msgstr "Кулон жизни"
+msgstr "Кулон Жизни"
 
 msgid "The %{name} makes all your troops immune to death spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям смерти."
 
 msgid "Serenity Pendant"
-msgstr "Подвеска покоя"
+msgstr "Подвеска Покоя"
 
 msgid "The %{name} makes all your troops immune to berserk spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинанию берсерка."
 
 msgid "Seeing-eye Pendant"
-msgstr "Всевидящий глаз"
+msgstr "Всевидящий Глаз"
 
 msgid "The %{name} makes all your troops immune to blindness spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинанию ослепления."
 
 msgid "Kinetic Pendant"
-msgstr "Кулон стремительности"
+msgstr "Кулон Стремительности"
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинанию паралича."
 
 msgid "Pendant of Death"
-msgstr "Кулон смерти"
+msgstr "Кулон Смерти"
 
 msgid "The %{name} makes all your troops immune to holy spells."
 msgstr ""
@@ -7348,7 +7348,7 @@ msgid "Wand of Negation"
 msgstr "Посох Отрицания"
 
 msgid "Golden Bow"
-msgstr "Золотой лук"
+msgstr "Золотой Лук"
 
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
@@ -7365,7 +7365,7 @@ msgid ""
 msgstr "%{name} увеличивает радиус обзора героя на %{count} клетку."
 
 msgid "Statesman's Quill"
-msgstr "Перо дипломата"
+msgstr "Перо Дипломата"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
@@ -7380,94 +7380,94 @@ msgstr ""
 "ходов."
 
 msgid "Wizard's Hat"
-msgstr "Шляпа мага"
+msgstr "Шляпа Мага"
 
 msgid "Power Ring"
-msgstr "Кольцо силы"
+msgstr "Кольцо Силы"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr "%{name} восстанавливает %{count} очка магии в день."
 
 msgid "Ammo Cart"
-msgstr "Оружейный обоз"
+msgstr "Оружейный Обоз"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
 msgstr "%{name} обеспечивает бесконечными боеприпасами всех Ваших стрелков."
 
 msgid "Tax Lien"
-msgstr "Долговая расписка"
+msgstr "Долговая Расписка"
 
 msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "%{name} стоит Вам %{count} золотых ежедневно."
 
 msgid "Hideous Mask"
-msgstr "Ужасная маска"
+msgstr "Ужасная Маска"
 
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr "%{name} не позволяет нейтральным войскам вступать в Вашу армию."
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Мешочек серы"
+msgstr "Мешочек Серы"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру серы."
 
 msgid "Endless Vial of Mercury"
-msgstr "Колба ртути"
+msgstr "Колба Ртути"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру ртути."
 
 msgid "Endless Pouch of Gems"
-msgstr "Мешочек самоцветов"
+msgstr "Мешочек Самоцветов"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру самоцветов."
 
 msgid "Endless Cord of Wood"
-msgstr "Вязанка дров"
+msgstr "Вязанка Дров"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру древесины."
 
 msgid "Endless Cart of Ore"
-msgstr "Вагонетка руды"
+msgstr "Вагонетка Руды"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру руды."
 
 msgid "Endless Pouch of Crystal"
-msgstr "Мешочек кристаллов"
+msgstr "Мешочек Кристаллов"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру кристаллов."
 
 msgid "Spiked Helm"
-msgstr "Шипованный шлем"
+msgstr "Шипованный Шлем"
 
 msgid "Spiked Shield"
-msgstr "Шипованный щит"
+msgstr "Шипованный Щит"
 
 msgid "White Pearl"
-msgstr "Белая жемчужина"
+msgstr "Белая Жемчужина"
 
 msgid "Black Pearl"
-msgstr "Чёрная жемчужина"
+msgstr "Чёрная Жемчужина"
 
 msgid "Magic Book"
-msgstr "Волшебная книга"
+msgstr "Волшебная Книга"
 
 msgid "The %{name} enables you to cast spells."
 msgstr "%{name} позволяет использовать заклинания."
 
 msgid "Spell Scroll"
-msgstr "Свиток заклинания"
+msgstr "Свиток Заклинания"
 
 msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
 msgstr "%{name} позволяет Вашему герою произносить заклинание %{spell}."
 
 msgid "Arm of the Martyr"
-msgstr "Рука мученика"
+msgstr "Рука Мученика"
 
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
@@ -7483,7 +7483,7 @@ msgid "The %{name} increases your defense by %{count}."
 msgstr "%{name} увеличивает силу защиты на %{count}."
 
 msgid "Broach of Shielding"
-msgstr "Защитная брошь"
+msgstr "Защитная Брошь"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
@@ -7493,7 +7493,7 @@ msgstr ""
 "%{count} процентов, но также уменьшает силу магии на 2 пункта."
 
 msgid "Battle Garb of Anduran"
-msgstr "Боевой доспех Андурана"
+msgstr "Боевой Доспех Андурана"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts.  It provides "
@@ -7503,7 +7503,7 @@ msgstr ""
 "и мораль ваших войск, а также даёт Вам заклинание 'Портал города'."
 
 msgid "Crystal Ball"
-msgstr "Кристальный шар"
+msgstr "Кристальный Шар"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
@@ -7513,7 +7513,7 @@ msgstr ""
 "замках, рядом с которыми стоит герой."
 
 msgid "Heart of Fire"
-msgstr "Сердце огня"
+msgstr "Сердце Огня"
 
 msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
@@ -7523,7 +7523,7 @@ msgstr ""
 "два раза увеличивает урон от магии холода."
 
 msgid "Heart of Ice"
-msgstr "Ледяное сердце"
+msgstr "Сердце Льда"
 
 msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
@@ -7536,16 +7536,16 @@ msgid "Helmet of Anduran"
 msgstr "Шлем Андурана"
 
 msgid "Holy Hammer"
-msgstr "Святой молот"
+msgstr "Святой Молот"
 
 msgid "Legendary Scepter"
-msgstr "Легендарный скипетр"
+msgstr "Легендарный Скипетр"
 
 msgid "The %{name} adds %{count} points to all attributes."
 msgstr "%{name} увеличивает все основные параметры на %{count}."
 
 msgid "Masthead"
-msgstr "Наконечник мачты"
+msgstr "Наконечник Мачты"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
@@ -7558,7 +7558,7 @@ msgid "The %{name} disables all spell casting, for both sides, in combat."
 msgstr "%{name} запрещает всем на поле боя использовать магию."
 
 msgid "Staff of Wizardry"
-msgstr "Волшебный посох"
+msgstr "Волшебный Посох"
 
 msgid "The %{name} boosts your spell power by %{count}."
 msgstr "%{name} увеличивает силу магии на %{count}."
@@ -7573,7 +7573,7 @@ msgid "Sword of Anduran"
 msgstr "Меч Андурана"
 
 msgid "Spade of Necromancy"
-msgstr "Лопата могильщика"
+msgstr "Лопата Могильщика"
 
 msgid "The %{name} gives you increased necromancy skill."
 msgstr "%{name} увеличивает навык искусства Некромантов."
@@ -7619,7 +7619,8 @@ msgid ""
 "accept."
 msgstr ""
 "Колдунья считает, что для защиты Вашей армии можно использовать магическую "
-"поддержку. Она предлагает Вам 'Брошь очарования'."
+"поддержку. Она предлагает заколдовать брошь, что Вы носите на Вашем плаще, "
+"и Вы соглашаетесь."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -7660,7 +7661,7 @@ msgid ""
 "laughter. You turn around just in time to see a Frost Giant run off into the "
 "woods and disappear."
 msgstr ""
-"Вдруг резкий холод охватывает Ваше тело. и Вы падаете с лошади. Боль "
+"Вдруг резкий холод охватывает Ваше тело, и Вы падаете с лошади. Боль "
 "утихает, Вы поднимаетесь и слышите смех. Вы успеваете обернуться как раз "
 "вовремя, чтобы увидеть Ледяного Гиганта скрывающегося в лесу."
 
