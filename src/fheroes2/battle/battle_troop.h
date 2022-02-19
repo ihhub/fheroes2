@@ -76,7 +76,7 @@ namespace Battle
     {
     public:
         Unit( const Troop &, int32_t pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
-        Unit( const Unit & ) = default;
+        Unit( const Unit & ) = delete;
 
         ~Unit() override;
 

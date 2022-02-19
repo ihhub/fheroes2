@@ -140,7 +140,7 @@ std::string Battle::Tower::GetInfo( const Castle & cstl )
 
     std::string msg;
     for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
-        Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ), 0 );
+        Tower twr( cstl, *it, Rand::DeterministicRandomGenerator( 0 ), 0 );
 
         msg.append( tmpl );
         StringReplace( msg, "%{name}", twr.GetName() );
