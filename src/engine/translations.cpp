@@ -93,7 +93,7 @@ namespace
             // р   с     т     у     ф     х     ц     ч     ш     щ     ъ     ы     ь     э     ю     я   (1251)
             0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF };
 
-    enum
+    enum class LocalType : int
     {
         LOCALE_EN,
         LOCALE_AF,
@@ -133,17 +133,22 @@ namespace
 
     struct chunk
     {
-        u32 offset;
-        u32 length;
+        uint32_t offset;
+        uint32_t length;
 
         chunk()
             : offset( 0 )
             , length( 0 )
-        {}
-        chunk( u32 off, u32 len )
+        {
+            // Do nothing.
+        }
+
+        chunk( const uint32_t off, const uint32_t len )
             : offset( off )
             , length( len )
-        {}
+        {
+            // Do nothing.
+        }
     };
 
     u32 crc32b( const char * msg )
@@ -155,7 +160,7 @@ namespace
             crc ^= static_cast<u32>( msg[index] );
 
             for ( int bit = 0; bit < 8; ++bit ) {
-                uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
+                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
                 crc = ( crc >> 1 ) ^ poly;
             }
 
@@ -172,13 +177,13 @@ namespace
         uint32_t offset_strings2;
         uint32_t hash_size;
         uint32_t hash_offset;
-        int locale;
+        LocalType locale;
         StreamBuf buf;
         std::map<u32, chunk> hash_offsets;
         std::string domain;
         std::string encoding;
         std::string plural_forms;
-        u32 nplurals;
+        uint32_t nplurals;
 
         mofile()
             : count( 0 )
@@ -186,9 +191,11 @@ namespace
             , offset_strings2( 0 )
             , hash_size( 0 )
             , hash_offset( 0 )
-            , locale( LOCALE_EN )
+            , locale( LocalType::LOCALE_EN )
             , nplurals( 0 )
-        {}
+        {
+            // Do nothing.
+        }
 
         const char * ngettext( const char * str, size_t plural )
         {
@@ -226,7 +233,8 @@ namespace
 
             if ( !sf.open( file, "rb" ) )
                 return false;
-            else {
+
+            {
                 size_t size = sf.size();
                 u32 id = 0;
                 sf >> id;
@@ -340,69 +348,69 @@ namespace Translation
         // Update locale
         current->domain = str;
         if ( str == "af" || str == "afrikaans" )
-            current->locale = LOCALE_AF;
+            current->locale = LocalType::LOCALE_AF;
         else if ( str == "ar" || str == "arabic" )
-            current->locale = LOCALE_AR;
+            current->locale = LocalType::LOCALE_AR;
         else if ( str == "bg" || str == "bulgarian" )
-            current->locale = LOCALE_BG;
+            current->locale = LocalType::LOCALE_BG;
         else if ( str == "ca" || str == "catalan" )
-            current->locale = LOCALE_CA;
+            current->locale = LocalType::LOCALE_CA;
         else if ( str == "da" || str == "danish" )
-            current->locale = LOCALE_DA;
+            current->locale = LocalType::LOCALE_DA;
         else if ( str == "de" || str == "german" )
-            current->locale = LOCALE_DE;
+            current->locale = LocalType::LOCALE_DE;
         else if ( str == "el" || str == "greek" )
-            current->locale = LOCALE_EL;
+            current->locale = LocalType::LOCALE_EL;
         else if ( str == "es" || str == "spanish" )
-            current->locale = LOCALE_ES;
+            current->locale = LocalType::LOCALE_ES;
         else if ( str == "et" || str == "estonian" )
-            current->locale = LOCALE_ET;
+            current->locale = LocalType::LOCALE_ET;
         else if ( str == "eu" || str == "basque" )
-            current->locale = LOCALE_EU;
+            current->locale = LocalType::LOCALE_EU;
         else if ( str == "fi" || str == "finnish" )
-            current->locale = LOCALE_FI;
+            current->locale = LocalType::LOCALE_FI;
         else if ( str == "fr" || str == "french" )
-            current->locale = LOCALE_FR;
+            current->locale = LocalType::LOCALE_FR;
         else if ( str == "gl" || str == "galician" )
-            current->locale = LOCALE_GL;
+            current->locale = LocalType::LOCALE_GL;
         else if ( str == "he" || str == "hebrew" )
-            current->locale = LOCALE_HE;
+            current->locale = LocalType::LOCALE_HE;
         else if ( str == "hr" || str == "croatian" )
-            current->locale = LOCALE_HR;
+            current->locale = LocalType::LOCALE_HR;
         else if ( str == "hu" || str == "hungarian" )
-            current->locale = LOCALE_HU;
+            current->locale = LocalType::LOCALE_HU;
         else if ( str == "id" || str == "indonesian" )
-            current->locale = LOCALE_ID;
+            current->locale = LocalType::LOCALE_ID;
         else if ( str == "it" || str == "italian" )
-            current->locale = LOCALE_IT;
+            current->locale = LocalType::LOCALE_IT;
         else if ( str == "la" || str == "latin" )
-            current->locale = LOCALE_LA;
+            current->locale = LocalType::LOCALE_LA;
         else if ( str == "lt" || str == "lithuanian" )
-            current->locale = LOCALE_LT;
+            current->locale = LocalType::LOCALE_LT;
         else if ( str == "lv" || str == "latvian" )
-            current->locale = LOCALE_LV;
+            current->locale = LocalType::LOCALE_LV;
         else if ( str == "mk" || str == "macedonia" )
-            current->locale = LOCALE_MK;
+            current->locale = LocalType::LOCALE_MK;
         else if ( str == "nb" || str == "norwegian" )
-            current->locale = LOCALE_NB;
+            current->locale = LocalType::LOCALE_NB;
         else if ( str == "nl" || str == "dutch" )
-            current->locale = LOCALE_NL;
+            current->locale = LocalType::LOCALE_NL;
         else if ( str == "pl" || str == "polish" )
-            current->locale = LOCALE_PL;
+            current->locale = LocalType::LOCALE_PL;
         else if ( str == "pt" || str == "portuguese" )
-            current->locale = LOCALE_PT;
+            current->locale = LocalType::LOCALE_PT;
         else if ( str == "ru" || str == "russian" )
-            current->locale = LOCALE_RU;
+            current->locale = LocalType::LOCALE_RU;
         else if ( str == "sk" || str == "slovak" )
-            current->locale = LOCALE_SK;
+            current->locale = LocalType::LOCALE_SK;
         else if ( str == "sl" || str == "slovenian" )
-            current->locale = LOCALE_SL;
+            current->locale = LocalType::LOCALE_SL;
         else if ( str == "sr" || str == "serbian" )
-            current->locale = LOCALE_SR;
+            current->locale = LocalType::LOCALE_SR;
         else if ( str == "sv" || str == "swedish" )
-            current->locale = LOCALE_SV;
+            current->locale = LocalType::LOCALE_SV;
         else if ( str == "tr" || str == "turkish" )
-            current->locale = LOCALE_TR;
+            current->locale = LocalType::LOCALE_TR;
 
         return true;
     }
@@ -427,52 +435,52 @@ namespace Translation
     {
         if ( current )
             switch ( current->locale ) {
-            case LOCALE_AF:
-            case LOCALE_EU:
-            case LOCALE_ID:
-            case LOCALE_LA:
-            case LOCALE_TR:
+            case LocalType::LOCALE_AF:
+            case LocalType::LOCALE_EU:
+            case LocalType::LOCALE_ID:
+            case LocalType::LOCALE_LA:
+            case LocalType::LOCALE_TR:
                 return current->ngettext( str, 0 );
-            case LOCALE_AR:
+            case LocalType::LOCALE_AR:
                 return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
-            case LOCALE_BG:
-            case LOCALE_DA:
-            case LOCALE_DE:
-            case LOCALE_ES:
-            case LOCALE_ET:
-            case LOCALE_FI:
-            case LOCALE_GL:
-            case LOCALE_HE:
-            case LOCALE_IT:
+            case LocalType::LOCALE_BG:
+            case LocalType::LOCALE_DA:
+            case LocalType::LOCALE_DE:
+            case LocalType::LOCALE_ES:
+            case LocalType::LOCALE_ET:
+            case LocalType::LOCALE_FI:
+            case LocalType::LOCALE_GL:
+            case LocalType::LOCALE_HE:
+            case LocalType::LOCALE_IT:
                 return current->ngettext( str, 0 );
-            case LOCALE_NL:
-            case LOCALE_SV:
+            case LocalType::LOCALE_NL:
+            case LocalType::LOCALE_SV:
                 return current->ngettext( str, ( n != 1 ) );
-            case LOCALE_SK:
+            case LocalType::LOCALE_SK:
                 return current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) );
-            case LOCALE_SL:
+            case LocalType::LOCALE_SL:
                 return current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
-            case LOCALE_SR:
+            case LocalType::LOCALE_SR:
                 return current->ngettext( str, ( n == 1                                                            ? 3
                                                  : n % 10 == 1 && n % 100 != 11                                    ? 0
                                                  : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1
                                                                                                                    : 2 ) );
-            case LOCALE_CS:
+            case LocalType::LOCALE_CS:
                 return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
-            case LOCALE_EL:
-            case LOCALE_FR:
-            case LOCALE_PT:
+            case LocalType::LOCALE_EL:
+            case LocalType::LOCALE_FR:
+            case LocalType::LOCALE_PT:
                 return current->ngettext( str, ( n > 1 ) );
-            case LOCALE_HR:
-            case LOCALE_RU:
-            case LOCALE_LT:
-            case LOCALE_LV:
+            case LocalType::LOCALE_HR:
+            case LocalType::LOCALE_RU:
+            case LocalType::LOCALE_LT:
+            case LocalType::LOCALE_LV:
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
-            case LOCALE_MK:
+            case LocalType::LOCALE_MK:
                 return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
-            case LOCALE_NB:
+            case LocalType::LOCALE_NB:
                 return current->ngettext( str, ( n != 1 ) );
-            case LOCALE_PL:
+            case LocalType::LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             default:
                 break;
@@ -485,7 +493,7 @@ namespace Translation
     {
         if ( current ) {
             // With German, lowercasing strings does more harm than good
-            if ( current->locale == LOCALE_DE )
+            if ( current->locale == LocalType::LOCALE_DE )
                 return str;
 
             // For CP1250/1251 codepages a custom lowercase LUT is implemented
