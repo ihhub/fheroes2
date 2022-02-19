@@ -442,7 +442,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
                 else {
-                    const bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+                    const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
                     return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
                                                    from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -498,16 +498,16 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         else if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
-                protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
+                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
             }
             else {
-                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+                protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
-            bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }

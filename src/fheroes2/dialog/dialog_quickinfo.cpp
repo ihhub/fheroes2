@@ -518,7 +518,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         name_object = _( "Uncharted Territory" );
     else
         // check guardians mine
-        if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.CaptureObjectIsProtection() ) {
+        if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.isCaptureObjectProtected() ) {
         name_object = ShowGuardiansInfo( tile, settings.CurrentColor() == tile.QuantityColor(), extendedScoutingOption, scoutingLevelForTile );
     }
     else

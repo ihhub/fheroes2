@@ -1568,7 +1568,7 @@ std::string Maps::Tiles::String( void ) const
     }
 
     default: {
-        const MapsIndexes & v = Maps::GetTilesUnderProtection( _index );
+        const MapsIndexes & v = Maps::getMonstersProtectingTile( _index );
         if ( !v.empty() ) {
             os << "protection      : ";
             for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it )
@@ -1914,8 +1914,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     }
 }
 
-/* true: if protection or has guardians */
-bool Maps::Tiles::CaptureObjectIsProtection( void ) const
+bool Maps::Tiles::isCaptureObjectProtected() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
