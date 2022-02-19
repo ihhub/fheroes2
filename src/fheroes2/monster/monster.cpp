@@ -219,10 +219,10 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
     // If no modified values were provided then re-calculate
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     if ( attack == -1 )
-        attack = battleStats.attack;
+        attack = GetAttack();
 
     if ( defense == -1 )
-        defense = battleStats.defense;
+        defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
     const double effectiveHP = battleStats.hp * ( ignoreRetaliation() ? 1.4 : 1 );
