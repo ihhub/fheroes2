@@ -7867,7 +7867,7 @@ msgstr ""
 "и восстанавливает %{count}*SP здоровья."
 
 msgid "Mass Cure"
-msgstr "Массовое лечение"
+msgstr "Общее лечение"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
@@ -7902,7 +7902,7 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr "Увеличивает скорость всех Ваших отрядов на %{count}."
 
 msgid "Mass Haste"
-msgstr "Массовое ускорение"
+msgstr "Общее ускорение"
 
 msgid "Slows target to half movement rate."
 msgstr "Замедляет вражеский отряд на 2 ступени."
@@ -7911,7 +7911,7 @@ msgid "spell|Slow"
 msgstr "Замедление"
 
 msgid "Mass Slow"
-msgstr "Массовое замедление"
+msgstr "Общее замедление"
 
 msgid "Slows all enemies to half movement rate."
 msgstr "Замедляет все вражеские отряды на 2 ступени."
@@ -7934,7 +7934,7 @@ msgid "Causes all of your units to inflict maximum damage."
 msgstr "Все Ваши отряды будут наносить максимальный урон противнику."
 
 msgid "Mass Bless"
-msgstr "Массовое благословение"
+msgstr "Общее благословение"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr "Магически увеличивает защиту выбранного отряда на 3."
@@ -7960,7 +7960,7 @@ msgid "Causes all enemy troops to inflict minimum damage."
 msgstr "Заставляет все вражеские отряды при атаке наносить минимальный урон."
 
 msgid "Mass Curse"
-msgstr "Массовое проклятие"
+msgstr "Общее проклятие"
 
 msgid "Damages all undead in the battle."
 msgstr "Наносит урон всей нежити, находящейся на поле боя."
@@ -7992,7 +7992,7 @@ msgstr ""
 "вредных."
 
 msgid "Mass Dispel"
-msgstr "Массовое снятие чар"
+msgstr "Общее снятие чар"
 
 msgid "Removes all magic spells from all creatures."
 msgstr ""
@@ -8136,7 +8136,7 @@ msgstr ""
 "Ваших существ."
 
 msgid "Mass Shield"
-msgstr "Массовый щит"
+msgstr "Общий щит"
 
 msgid "Summon Earth Elemental"
 msgstr "Земной элементаль"
