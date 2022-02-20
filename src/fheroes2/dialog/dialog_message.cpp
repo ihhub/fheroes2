@@ -31,9 +31,10 @@
 
 namespace
 {
-    void outputInTextMode( const std::string & header, const std::string & message, const int buttonTypes )
+    void outputInTextSupportMode( const std::string & header, const std::string & message, const int buttonTypes )
     {
-        TEXT_SUPPORT_LOG( "----------" );
+        Logging::TextSupportLogger logger;
+
         if ( !header.empty() ) {
             TEXT_SUPPORT_LOG( header );
             TEXT_SUPPORT_LOG( '\n' );
@@ -52,14 +53,12 @@ namespace
         if ( buttonTypes & Dialog::CANCEL ) {
             TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." );
         }
-
-        TEXT_SUPPORT_LOG( "----------" );
     }
 }
 
 int Dialog::Message( const std::string & header, const std::string & message, int ft, int buttons )
 {
-    outputInTextMode( header, message, buttons );
+    outputInTextSupportMode( header, message, buttons );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 

@@ -34,9 +34,9 @@ namespace
 
     namespace
     {
-        void outputInTextMode( const fheroes2::TextBase & header, const fheroes2::TextBase & body, const int buttonTypes )
+        void outputInTextSupportMode( const fheroes2::TextBase & header, const fheroes2::TextBase & body, const int buttonTypes )
         {
-            TEXT_SUPPORT_LOG( "----------" );
+            Logging::TextSupportLogger logger;
             TEXT_SUPPORT_LOG( header.text() );
             TEXT_SUPPORT_LOG( '\n' );
             TEXT_SUPPORT_LOG( body.text() );
@@ -53,8 +53,6 @@ namespace
             if ( buttonTypes & Dialog::CANCEL ) {
                 TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." );
             }
-
-            TEXT_SUPPORT_LOG( "----------" );
         }
     }
 }
@@ -63,7 +61,7 @@ namespace fheroes2
 {
     int showMessage( const TextBase & header, const TextBase & body, const int buttons )
     {
-        outputInTextMode( header, body, buttons );
+        outputInTextSupportMode( header, body, buttons );
 
         // setup cursor
         const CursorRestorer cursorRestorer( buttons != 0, ::Cursor::POINTER );

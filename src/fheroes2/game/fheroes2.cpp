@@ -163,7 +163,7 @@ int main( int argc, char ** argv )
         InitDataDir();
         ReadConfigs();
 
-        TEXT_SUPPORT_LOG( GetCaption() )
+        COUT( GetCaption() )
 
         // getopt
         {

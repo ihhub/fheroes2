@@ -46,17 +46,16 @@
 
 namespace
 {
-    void outputInTextMode( const Maps::Tiles & tile, const std::string & info )
+    void outputInTextSupportMode( const Maps::Tiles & tile, const std::string & info )
     {
         const int tileIndex = tile.GetIndex();
         const int mapWidth = world.w();
         const int x = tileIndex % mapWidth;
         const int y = tileIndex / mapWidth;
 
-        TEXT_SUPPORT_LOG( "----------" );
-        TEXT_SUPPORT_LOG( "[" << x + 1 << ", " << y + 1 << "]");
+        Logging::TextSupportLogger logger;
+        TEXT_SUPPORT_LOG( "[" << x + 1 << ", " << y + 1 << "]" );
         TEXT_SUPPORT_LOG( info );
-        TEXT_SUPPORT_LOG( "----------" );
     }
 
     class RadarUpdater
@@ -675,7 +674,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     TextBox text( name_object, Font::SMALL, 118 );
     text.Blit( pos.x + BORDERWIDTH + ( pos.width - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.height - BORDERWIDTH - text.h() ) / 2 );
 
-    outputInTextMode( tile, name_object );
+    outputInTextSupportMode( tile, name_object );
 
     display.render();
 

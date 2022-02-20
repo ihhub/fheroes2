@@ -40,9 +40,9 @@
 
 namespace
 {
-    void outputLoadGameInTextMode()
+    void outputLoadGameInTextSupportMode()
     {
-        TEXT_SUPPORT_LOG( "----------" );
+        Logging::TextSupportLogger logger;
         TEXT_SUPPORT_LOG( "Load Game" );
         TEXT_SUPPORT_LOG( '\n' );
 
@@ -50,8 +50,6 @@ namespace
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." );
-
-        TEXT_SUPPORT_LOG( "----------" );
     }
 }
 
@@ -133,7 +131,7 @@ fheroes2::GameMode Game::LoadMulti()
 
 fheroes2::GameMode Game::LoadGame()
 {
-    outputLoadGameInTextMode();
+    outputLoadGameInTextSupportMode();
 
     // Stop all sounds, but not the music
     Mixer::Stop();

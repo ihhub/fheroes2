@@ -84,9 +84,9 @@ namespace
         return video;
     }
 
-    void outputNewMenuInTextMode()
+    void outputNewMenuInTextSupportMode()
     {
-        TEXT_SUPPORT_LOG( "----------" );
+        Logging::TextSupportLogger logger;
         TEXT_SUPPORT_LOG( "New Game" );
         TEXT_SUPPORT_LOG( '\n' );
 
@@ -95,21 +95,17 @@ namespace
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to choose Multiplayer Game." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." );
-
-        TEXT_SUPPORT_LOG( "----------" );
     }
 
-    void outputNewCampaignInTextMode()
+    void outputNewCampaignInTextSupportMode()
     {
-        TEXT_SUPPORT_LOG( "----------" );
+        Logging::TextSupportLogger logger;
         TEXT_SUPPORT_LOG( "New Campaign" );
         TEXT_SUPPORT_LOG( '\n' );
 
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." );
-
-        TEXT_SUPPORT_LOG( "----------" );
     }
 }
 
@@ -159,7 +155,7 @@ fheroes2::GameMode Game::CampaignSelection()
         return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
     }
 
-    outputNewCampaignInTextMode();
+    outputNewCampaignInTextSupportMode();
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
@@ -398,7 +394,7 @@ fheroes2::GameMode Game::NewNetwork()
 
 fheroes2::GameMode Game::NewGame()
 {
-    outputNewMenuInTextMode();
+    outputNewMenuInTextSupportMode();
 
     // Stop all sounds, but not the music
     Mixer::Stop();

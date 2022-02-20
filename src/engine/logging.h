@@ -151,4 +151,29 @@ namespace Logging
 
 bool IS_DEBUG( const int name, const int level );
 
+namespace Logging
+{
+    // This class simply adds text separators when Text Support mode is enabled.
+    class TextSupportLogger
+    {
+    public:
+        TextSupportLogger()
+        {
+            if ( _isEnabled ) {
+                COUT( "----------" )
+            }
+        }
+
+        ~TextSupportLogger()
+        {
+            if ( _isEnabled ) {
+                COUT( "----------" )
+            }
+        }
+
+    private:
+        const bool _isEnabled = isTextSupportModeEnabled();
+    };
+}
+
 #endif // H2LOGGING_H

@@ -63,9 +63,9 @@ namespace
         QUIT_DEFAULT = 17
     };
 
-    void outputMainMenuInTextMode()
+    void outputMainMenuInTextSupportMode()
     {
-        TEXT_SUPPORT_LOG( "----------" );
+        Logging::TextSupportLogger logger;
         TEXT_SUPPORT_LOG( "Main Menu" );
         TEXT_SUPPORT_LOG( '\n' );
 
@@ -75,8 +75,6 @@ namespace
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CREDITS ) << " to show Credits." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." );
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Quit the game." );
-
-        TEXT_SUPPORT_LOG( "----------" );
     }
 }
 
@@ -214,7 +212,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         conf.Save( "fheroes2.cfg" );
     }
 
-    outputMainMenuInTextMode();
+    outputMainMenuInTextSupportMode();
 
     LocalEvent & le = LocalEvent::Get();
 

@@ -636,7 +636,7 @@ namespace
         }
     }
 
-    void outputCampaignScenarioInfoInTextMode( const bool allowToRestart )
+    void outputCampaignScenarioInfoInTextSupportMode( const bool allowToRestart )
     {
         Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
         const int chosenCampaignID = campaignSaveData.getCampaignID();
@@ -645,7 +645,7 @@ namespace
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
         const Campaign::ScenarioData & scenario = scenarios[scenarioId];
 
-        TEXT_SUPPORT_LOG( "----------" );
+        Logging::TextSupportLogger logger;
         TEXT_SUPPORT_LOG( "Scenario Information" );
         TEXT_SUPPORT_LOG( '\n' );
         TEXT_SUPPORT_LOG( "'" << Campaign::getCampaignName( chosenCampaignID ) << "' campaign, scenario " << scenarioId + 1 << ": " << scenario.getScenarioName() );
@@ -670,8 +670,6 @@ namespace
         }
 
         TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Exit this dialog." );
-
-        TEXT_SUPPORT_LOG( "----------" );
     }
 }
 
@@ -797,7 +795,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         playCurrentScenarioVideo();
     }
 
-    outputCampaignScenarioInfoInTextMode( allowToRestart );
+    outputCampaignScenarioInfoInTextSupportMode( allowToRestart );
 
     playCampaignMusic( chosenCampaignID );
 
