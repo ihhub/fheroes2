@@ -38,3 +38,4 @@ jobs:
       with:
         name: clang-tidy-result
         path: clang-tidy-result/
+        if-no-files-found: error

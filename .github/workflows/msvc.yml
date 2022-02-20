@@ -91,11 +91,13 @@ jobs:
       with:
         name: ${{ matrix.config.package_name }}_installer.exe
         path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe
+        if-no-files-found: error
     - uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.config.package_name }}.zip
         path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
