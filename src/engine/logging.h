@@ -166,8 +166,8 @@ namespace Logging
 
         TextSupportLogger( const TextSupportLogger & ) = delete;
         TextSupportLogger( const TextSupportLogger && ) = delete;
-        TextSupportLogger & operator=(const TextSupportLogger & ) = delete;
-        TextSupportLogger & operator=(const TextSupportLogger && ) = delete;
+        TextSupportLogger & operator=( const TextSupportLogger & ) = delete;
+        TextSupportLogger & operator=( const TextSupportLogger && ) = delete;
 
         ~TextSupportLogger()
         {
