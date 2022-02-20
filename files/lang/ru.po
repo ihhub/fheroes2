@@ -1635,7 +1635,7 @@ msgid "Adobe"
 msgstr "Глинобитный дом"
 
 msgid "Upg. Adobe"
-msgstr "Логово огров"
+msgstr "Саманный дом"
 
 msgid "Bridge"
 msgstr "Мост"
@@ -1662,10 +1662,10 @@ msgid "Upg. Cottage"
 msgstr "Хоромы"
 
 msgid "Stonehenge"
-msgstr "Стоунхендж"
+msgstr "Менгиры"
 
 msgid "Upg. Stonehenge"
-msgstr "Менгиры"
+msgstr "Стоунхендж"
 
 msgid "Fenced Meadow"
 msgstr "Огороженная лужайка"
@@ -6579,10 +6579,10 @@ msgid "Ogres"
 msgstr "Людоеды"
 
 msgid "Ogre Lord"
-msgstr "Великан людоед"
+msgstr "Свирепый людоед"
 
 msgid "Ogre Lords"
-msgstr "Великаны людоеды"
+msgstr "Свирепые людоеды"
 
 msgid "Troll"
 msgstr "Тролль"
