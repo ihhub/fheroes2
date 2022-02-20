@@ -43,13 +43,12 @@ namespace
     void outputLoadGameInTextSupportMode()
     {
         Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( "Load Game" );
-        TEXT_SUPPORT_LOG( '\n' );
+        TEXT_SUPPORT_LOG( "Load Game\n" )
 
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." );
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." );
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." );
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." );
+        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
+        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
+        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." )
+        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." )
     }
 }
 

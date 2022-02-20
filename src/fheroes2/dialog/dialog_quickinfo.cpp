@@ -54,8 +54,8 @@ namespace
         const int y = tileIndex / mapWidth;
 
         Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( "[" << x + 1 << ", " << y + 1 << "]" );
-        TEXT_SUPPORT_LOG( info );
+        TEXT_SUPPORT_LOG( "[" << x + 1 << ", " << y + 1 << "]" )
+        TEXT_SUPPORT_LOG( info )
     }
 
     class RadarUpdater
