@@ -205,8 +205,8 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 {
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
-    Mixer::Pause();
-    Music::Pause();
+    // Reset all sound and music before playing videos
+    AGG::ResetAudio();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
@@ -221,14 +221,11 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
-    // Reset all sound and music before playing videos
-    AGG::ResetMixer();
-
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
-    AGG::ResetMixer();
+    AGG::ResetAudio();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
     const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
@@ -403,8 +400,11 @@ fheroes2::GameMode Game::NewGame()
 {
     outputNewMenuInTextMode();
 
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
+
     Settings & conf = Settings::Get();
 
     // reset last save name

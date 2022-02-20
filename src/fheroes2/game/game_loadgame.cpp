@@ -135,8 +135,11 @@ fheroes2::GameMode Game::LoadGame()
 {
     outputLoadGameInTextMode();
 
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -231,7 +234,9 @@ fheroes2::GameMode Game::LoadStandard()
 
 fheroes2::GameMode Game::DisplayLoadGameDialog()
 {
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     // setup cursor

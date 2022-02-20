@@ -1016,7 +1016,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander2(), true ) : nullptr;
 
     if ( Arena::GetCastle() )
-        main_tower = fheroes2::Rect( 570, 145, 70, 70 );
+        main_tower = fheroes2::Rect( 570, 145, 70, 160 );
 
     const fheroes2::Rect & area = border.GetArea();
 
@@ -1047,13 +1047,13 @@ Battle::Interface::Interface( Arena & a, s32 center )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
     status.SetLogs( listlog );
 
-    AGG::ResetMixer();
+    AGG::ResetAudio();
     AGG::PlaySound( M82::PREBATTL );
 }
 
 Battle::Interface::~Interface()
 {
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     if ( listlog )
         delete listlog;
@@ -1197,7 +1197,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawCastleMainTower( *castle );
             }
             else if ( cellRowId == 7 ) { // Redraw catapult.
-                RedrawCastle2( *castle, Arena::CATAPULT_POS );
+                RedrawCastle( *castle, Arena::CATAPULT_POS );
             }
 
             std::vector<const Unit *> deadTroopBeforeWall;
@@ -1289,7 +1289,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *movingTroopBeforeWall[i] );
             }
 
-            RedrawCastle2( *castle, wallCellId );
+            RedrawCastle( *castle, wallCellId );
 
             for ( size_t i = 0; i < deadTroopAfterWall.size(); ++i ) {
                 RedrawTroopSprite( *deadTroopAfterWall[i] );
@@ -1773,6 +1773,45 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         fheroes2::Blit( cover, _mainSurface, cover.x(), cover.y() );
     }
 
+    const Castle * castle = Arena::GetCastle();
+    int castleBackgroundIcnId = ICN::UNKNOWN;
+
+    if ( castle != nullptr ) {
+        switch ( castle->GetRace() ) {
+        case Race::BARB:
+            castleBackgroundIcnId = ICN::CASTBKGB;
+            break;
+        case Race::KNGT:
+            castleBackgroundIcnId = ICN::CASTBKGK;
+            break;
+        case Race::NECR:
+            castleBackgroundIcnId = ICN::CASTBKGN;
+            break;
+        case Race::SORC:
+            castleBackgroundIcnId = ICN::CASTBKGS;
+            break;
+        case Race::WRLK:
+            castleBackgroundIcnId = ICN::CASTBKGW;
+            break;
+        case Race::WZRD:
+            castleBackgroundIcnId = ICN::CASTBKGZ;
+            break;
+        default:
+            // DId you add a new race? Add the appropriate logic for it.
+            assert( 0 );
+            break;
+        }
+
+        const fheroes2::Sprite & castleBackground = fheroes2::AGG::GetICN( castleBackgroundIcnId, 1 );
+        fheroes2::Blit( castleBackground, _mainSurface, castleBackground.x(), castleBackground.y() );
+
+        // moat
+        if ( castle->isBuild( BUILD_MOAT ) ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
+            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        }
+    }
+
     if ( conf.BattleShowGrid() ) { // grid
         for ( const Cell & cell : board ) {
             fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
@@ -1784,9 +1823,11 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         RedrawLowObjects( cellId );
     }
 
-    const Castle * castle = Arena::GetCastle();
-    if ( castle )
-        RedrawCastle1( *castle );
+    if ( castle != nullptr ) {
+        // top wall
+        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
+        fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
+    }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( const Cell & cell : board ) {
@@ -1797,48 +1838,7 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     }
 }
 
-void Battle::Interface::RedrawCastle1( const Castle & castle )
-{
-    int icn_castbkg = ICN::UNKNOWN;
-
-    switch ( castle.GetRace() ) {
-    default:
-    case Race::BARB:
-        icn_castbkg = ICN::CASTBKGB;
-        break;
-    case Race::KNGT:
-        icn_castbkg = ICN::CASTBKGK;
-        break;
-    case Race::NECR:
-        icn_castbkg = ICN::CASTBKGN;
-        break;
-    case Race::SORC:
-        icn_castbkg = ICN::CASTBKGS;
-        break;
-    case Race::WRLK:
-        icn_castbkg = ICN::CASTBKGW;
-        break;
-    case Race::WZRD:
-        icn_castbkg = ICN::CASTBKGZ;
-        break;
-    }
-
-    // castle cover
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn_castbkg, 1 );
-    fheroes2::Blit( sprite1, _mainSurface, sprite1.x(), sprite1.y() );
-
-    // moat
-    if ( castle.isBuild( BUILD_MOAT ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
-        fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
-    }
-
-    // top wall
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn_castbkg, castle.isFortificationBuild() ? 4 : 3 );
-    fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
-}
-
-void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
+void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
 {
     const int castleIcnId = ICN::Get4Castle( castle.GetRace() );
 
@@ -2608,7 +2608,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
 void Battle::Interface::FadeArena( bool clearMessageLog )
 {
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     if ( clearMessageLog ) {
         status.clear();
@@ -3320,6 +3320,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     // Take off animation is 30% length on average (original value)
+    AGG::PlaySound( unit.M82Tkof() );
     AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
 
     _movingUnit = nullptr;
@@ -3352,6 +3353,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     landAnim.push_back( Monster_Info::FLY_LAND );
     landAnim.push_back( Monster_Info::STATIC );
     unit.SwitchAnimation( landAnim );
+    AGG::PlaySound( unit.M82Land() );
     AnimateUnitWithDelay( unit, frameDelay );
 
     // restore

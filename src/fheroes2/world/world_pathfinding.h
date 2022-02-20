@@ -88,7 +88,7 @@ public:
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
-    std::list<Route::Step> buildPath( int targetIndex ) const;
+    std::list<Route::Step> buildPath( const int targetIndex ) const;
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
@@ -112,13 +112,13 @@ public:
 
     bool isHeroPossiblyBlockingWay( const Heroes & hero );
 
-    std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
+    std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
-    std::list<Route::Step> buildPath( int targetIndex, bool isPlanningMode = false ) const;
+    std::list<Route::Step> buildPath( const int targetIndex, const bool isPlanningMode = false ) const;
 
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
@@ -128,7 +128,7 @@ public:
         return _advantage;
     }
 
-    void setArmyStrengthMultplier( const double multiplier );
+    void setArmyStrengthMultiplier( const double multiplier );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;

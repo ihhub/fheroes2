@@ -445,7 +445,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( static_cast<MP2::MapObjectType>( mp2_object ) ) )
+    if ( MP2::isPickupObject( mp2_object ) )
         setAsEmpty();
 }
 

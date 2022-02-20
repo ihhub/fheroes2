@@ -40,9 +40,7 @@ namespace Battle
     {
     public:
         Tower( const Castle &, int, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t );
-
         Tower( const Tower & ) = delete;
-        Tower( Tower && ) = default;
 
         Tower & operator=( const Tower & ) = delete;
 

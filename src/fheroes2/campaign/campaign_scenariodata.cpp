@@ -538,11 +538,15 @@ namespace Campaign
     {
         std::string matchingFilePath;
 
-        Maps::FileInfo fi;
-        if ( tryGetMatchingFile( _fileName, matchingFilePath ) )
-            fi.ReadMP2( matchingFilePath );
+        if ( tryGetMatchingFile( _fileName, matchingFilePath ) ) {
+            Maps::FileInfo fi;
 
-        return fi;
+            if ( fi.ReadMP2( matchingFilePath ) ) {
+                return fi;
+            }
+        }
+
+        return {};
     }
 
     const char * getCampaignName( const int campaignId )

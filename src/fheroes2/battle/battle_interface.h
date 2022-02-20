@@ -256,8 +256,7 @@ namespace Battle
         void RedrawCoverStatic( const Settings & conf, const Board & board );
         void RedrawLowObjects( s32 );
         void RedrawHighObjects( s32 );
-        void RedrawCastle1( const Castle & );
-        void RedrawCastle2( const Castle &, int32_t );
+        void RedrawCastle( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );

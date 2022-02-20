@@ -184,7 +184,7 @@ namespace AI
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
         const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-        return _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
+        return !hero.isLosingGame() && _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -498,7 +498,7 @@ namespace AI
         }
         else {
             // Normal ranged attack: focus the highest value unit
-            double highestStrength = 0;
+            double highestStrength = -1;
 
             for ( const Unit * enemy : enemies ) {
                 double attackPriority = enemy->GetScoreQuality( currentUnit );
@@ -523,7 +523,7 @@ namespace AI
                     }
                 }
 
-                if ( highestStrength < attackPriority && attackPriority > 0 ) {
+                if ( highestStrength < attackPriority ) {
                     highestStrength = attackPriority;
                     target.unit = enemy;
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );

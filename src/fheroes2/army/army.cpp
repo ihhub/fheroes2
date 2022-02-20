@@ -120,7 +120,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         break;
     }
 
-    StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
     return str;
 }
 

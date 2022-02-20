@@ -6322,7 +6322,7 @@ msgstr "A Harmadik Kör szentélye"
 msgid "Wagon"
 msgstr "Szekér"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Fészer"
 
 msgid "Flotsam"

@@ -23,10 +23,11 @@
 #ifndef H2TRANSLATIONS_H
 #define H2TRANSLATIONS_H
 
+#include <string>
+
 namespace Translation
 {
     bool bindDomain( const char * domain, const char * file );
-    bool setDomain( const char * domain );
 
     // Reset any translation to the default language - English.
     void reset();
@@ -36,6 +37,8 @@ namespace Translation
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );
     const char * ngettext( const char * str, const char * plural, size_t num );
+
+    std::string StringLower( std::string str );
 }
 
 #define _( s ) Translation::gettext( s )

@@ -126,10 +126,10 @@ namespace
         return indexes;
     }
 
-    const uint8_t * PALPalette()
+    const uint8_t * PALPalette( const bool forceDefaultPaletteUpdate = false )
     {
         static std::vector<uint8_t> palette;
-        if ( palette.empty() ) {
+        if ( palette.empty() || forceDefaultPaletteUpdate ) {
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
             palette.resize( 256 * 3 );
@@ -1418,12 +1418,12 @@ namespace fheroes2
         _prevRoi = {};
     }
 
-    void Display::changePalette( const uint8_t * palette ) const
+    void Display::changePalette( const uint8_t * palette, const bool forceDefaultPaletteUpdate ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() && !forceDefaultPaletteUpdate ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPalette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPalette( forceDefaultPaletteUpdate ) : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

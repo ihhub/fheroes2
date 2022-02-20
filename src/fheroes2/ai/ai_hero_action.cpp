@@ -817,7 +817,7 @@ namespace AI
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
-            if ( tile.CaptureObjectIsProtection() ) {
+            if ( tile.isCaptureObjectProtected() ) {
                 const Troop & troop = tile.QuantityTroop();
                 Army army;
                 army.JoinTroop( troop );

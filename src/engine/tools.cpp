@@ -289,7 +289,7 @@ namespace fheroes2
         int32_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
         Point pt( pt1 );
 
-        for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
+        for ( int32_t i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
             if ( dx > dy ) {
                 pt.x < pt2.x ? ++pt.x : --pt.x;
                 ns -= dy;

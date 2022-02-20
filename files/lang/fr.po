@@ -6556,7 +6556,7 @@ msgstr "Sanctuaire du troisième cercle"
 msgid "Wagon"
 msgstr "Charrette"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Appentis"
 
 msgid "Flotsam"

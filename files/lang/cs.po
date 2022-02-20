@@ -5770,7 +5770,7 @@ msgstr ""
 msgid "Wagon"
 msgstr ""
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr ""
 
 msgid "Flotsam"
