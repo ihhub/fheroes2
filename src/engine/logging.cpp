@@ -31,7 +31,7 @@ namespace
 {
     int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
 
-    bool textMode = false;
+    bool textSupportMode = false;
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
     // Sets the Windows console codepage to the system codepage
@@ -113,14 +113,14 @@ namespace Logging
         g_debug = debugLevel;
     }
 
-    void setTextMode( const bool enableTextMode )
+    void setTextSupportMode( const bool enableTextSupportMode )
     {
-        textMode = enableTextMode;
+        textSupportMode = enableTextSupportMode;
     }
 
-    bool isTextModeEnabled()
+    bool isTextSupportModeEnabled()
     {
-        return textMode;
+        return textSupportMode;
     }
 }
 

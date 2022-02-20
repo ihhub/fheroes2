@@ -53,10 +53,10 @@ namespace
         const int x = tileIndex % mapWidth;
         const int y = tileIndex / mapWidth;
 
-        TEXT_LOG( "----------" );
-        TEXT_LOG( "[" << x + 1 << ", " << y + 1 << "]");
-        TEXT_LOG( info );
-        TEXT_LOG( "----------" );
+        TEXT_SUPPORT_LOG( "----------" );
+        TEXT_SUPPORT_LOG( "[" << x + 1 << ", " << y + 1 << "]");
+        TEXT_SUPPORT_LOG( info );
+        TEXT_SUPPORT_LOG( "----------" );
     }
 
     class RadarUpdater

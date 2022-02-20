@@ -636,7 +636,7 @@ namespace fheroes2
         for ( const Text & singleText : _texts ) {
             output += singleText.text();
         }
-        
+
         return output;
     }
 }
