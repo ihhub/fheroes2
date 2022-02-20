@@ -182,6 +182,8 @@ public:
     int GetActualColors( void ) const;
     std::string String( void ) const;
 
+    const std::vector<Player *> & getVector() const;
+
     Player * GetCurrent( void );
     const Player * GetCurrent( void ) const;
 

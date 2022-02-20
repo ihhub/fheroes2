@@ -31,7 +31,7 @@
 
 namespace
 {
-    const double fighterStrengthMultipler = 3;
+    const double fighterStrengthMultiplier = 3;
 
     void setHeroRoles( KingdomHeroes & heroes )
     {
@@ -58,7 +58,7 @@ namespace
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
-            if ( hero.first > medianStrength * fighterStrengthMultipler ) {
+            if ( hero.first > medianStrength * fighterStrengthMultiplier ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
             }
             else {

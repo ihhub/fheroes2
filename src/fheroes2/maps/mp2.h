@@ -288,7 +288,7 @@ namespace MP2
 
     ///////////////////////////////////////////////////////////////////////////////
     // First bit indicates if you can interact with object
-    enum MapObjectType
+    enum MapObjectType : uint8_t
     {
         OBJ_ZERO = 0x00,
         OBJN_ALCHEMYLAB = 0x01,
@@ -587,7 +587,6 @@ namespace MP2
     bool isArtifactObject( const MapObjectType objectType );
     bool isHeroUpgradeObject( const MapObjectType objectType );
     bool isMonsterDwelling( const MapObjectType objectType );
-    bool isRemoveObject( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
     // Returns true if this object can be safely visited by AI for fog discovery purposes.

@@ -123,39 +123,40 @@ void Battle::Tower::SetDestroy( void )
 
 std::string Battle::Tower::GetInfo( const Castle & cstl )
 {
+    if ( !cstl.isBuild( BUILD_CASTLE ) ) {
+        return {};
+    }
+
     std::vector<int> towers;
+    towers.push_back( TWR_CENTER );
+
+    if ( cstl.isBuild( BUILD_LEFTTURRET ) )
+        towers.push_back( TWR_LEFT );
+    if ( cstl.isBuild( BUILD_RIGHTTURRET ) )
+        towers.push_back( TWR_RIGHT );
+
+    const char * tmpl = _( "The %{name} fires with the strength of %{count} Archers" );
+    const char * addn = _( "each with a +%{attack} bonus to their attack skill." );
+
     std::string msg;
+    for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
+        Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ), 0 );
 
-    if ( cstl.isBuild( BUILD_CASTLE ) ) {
-        towers.push_back( TWR_CENTER );
+        msg.append( tmpl );
+        StringReplace( msg, "%{name}", twr.GetName() );
+        StringReplace( msg, "%{count}", twr.GetCount() );
 
-        if ( cstl.isBuild( BUILD_LEFTTURRET ) )
-            towers.push_back( TWR_LEFT );
-        if ( cstl.isBuild( BUILD_RIGHTTURRET ) )
-            towers.push_back( TWR_RIGHT );
-
-        const char * tmpl = _( "The %{name} fires with the strength of %{count} Archers" );
-        const char * addn = _( "each with a +%{attack} bonus to their attack skill." );
-
-        for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
-            Tower twr = Tower( cstl, *it, Rand::DeterministicRandomGenerator( 0 ), 0 );
-
-            msg.append( tmpl );
-            StringReplace( msg, "%{name}", twr.GetName() );
-            StringReplace( msg, "%{count}", twr.GetCount() );
-
-            if ( twr.GetBonus() ) {
-                msg.append( ", " );
-                msg.append( addn );
-                StringReplace( msg, "%{attack}", twr.GetBonus() );
-            }
-            else {
-                msg += '.';
-            }
-
-            if ( ( it + 1 ) != towers.end() )
-                msg.append( "\n \n" );
+        if ( twr.GetBonus() ) {
+            msg.append( ", " );
+            msg.append( addn );
+            StringReplace( msg, "%{attack}", twr.GetBonus() );
         }
+        else {
+            msg += '.';
+        }
+
+        if ( ( it + 1 ) != towers.end() )
+            msg.append( "\n \n" );
     }
 
     return msg;

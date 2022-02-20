@@ -27,7 +27,7 @@ namespace Battle
 {
     const uint16_t MAX_MOVE_COST = ARENASIZE;
 
-    /* ArenaNode, different situations
+    /* BattleNode, different situations
      * default:  from: -1, isOpen: true, cost: MAX
      * starting: from: -1, isOpen: false, cost: 0
      * passable: from: 0-98, isOpen: true, cost: 1+
@@ -35,16 +35,16 @@ namespace Battle
      * terrain:  from: -1, isOpen: false, cost: MAX
      * if tile wouldn't be reached it stays as default
      */
-    struct ArenaNode : public PathfindingNode<uint16_t>
+    struct BattleNode : public PathfindingNode<uint16_t>
     {
         bool _isOpen = true;
         bool _isLeftDirection = false;
 
-        // ArenaNode uses different default values
-        ArenaNode()
+        // BattleNode uses different default values
+        BattleNode()
             : PathfindingNode( -1, MAX_MOVE_COST, 0 )
         {}
-        ArenaNode( int node, uint16_t cost, bool isOpen, bool isLeftDirection )
+        BattleNode( int node, uint16_t cost, bool isOpen, bool isLeftDirection )
             : PathfindingNode( node, cost, 0 )
             , _isOpen( isOpen )
             , _isLeftDirection( isLeftDirection )
@@ -53,10 +53,10 @@ namespace Battle
         void resetNode() override;
     };
 
-    class ArenaPathfinder : public Pathfinder<ArenaNode>
+    class AIBattlePathfinder : public Pathfinder<BattleNode>
     {
     public:
-        ArenaPathfinder();
+        AIBattlePathfinder();
         void reset() override;
         void calculate( const Unit & unit );
         Indexes buildPath( int targetCell ) const;
@@ -65,7 +65,7 @@ namespace Battle
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
 
     private:
-        bool nodeIsPassable( const ArenaNode & node ) const;
+        bool nodeIsPassable( const BattleNode & node ) const;
 
         Position _start;
     };

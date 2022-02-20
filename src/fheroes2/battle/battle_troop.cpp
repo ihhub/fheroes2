@@ -392,15 +392,15 @@ bool Battle::Unit::canReach( const Unit & unit ) const
     return canReach( target );
 }
 
-bool Battle::Unit::isHandFighting( void ) const
+bool Battle::Unit::isHandFighting() const
 {
     if ( GetCount() && !Modes( CAP_TOWER ) ) {
-        const Indexes around = Board::GetAroundIndexes( *this );
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *this ) ) {
+            const Unit * nearbyUnit = Board::GetCell( nearbyIdx )->GetUnit();
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            const Unit * enemy = Board::GetCell( *it )->GetUnit();
-            if ( enemy && enemy->GetColor() != GetColor() )
+            if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
                 return true;
+            }
         }
     }
 
@@ -765,9 +765,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     if ( Modes( CAP_MIRROROWNER ) && spell == Spell::MIRRORIMAGE ) {
         return false;
     }
-
-    // check global
-    // if(GetArena()->DisableCastSpell(spell, msg)) return false; // disable - recursion!
 
     if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
         return false;
@@ -1669,19 +1666,17 @@ int Battle::Unit::M82Wnce() const
 
 int Battle::Unit::M82Expl( void ) const
 {
-    switch ( GetID() ) {
-    case Monster::VAMPIRE:
-    case Monster::VAMPIRE_LORD:
-        return M82::VAMPEXT1;
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        return M82::LICHEXPL;
+    return fheroes2::getMonsterData( id ).sounds.explosion;
+}
 
-    default:
-        break;
-    }
+int Battle::Unit::M82Tkof() const
+{
+    return fheroes2::getMonsterData( id ).sounds.takeoff;
+}
 
-    return M82::UNKNOWN;
+int Battle::Unit::M82Land() const
+{
+    return fheroes2::getMonsterData( id ).sounds.landing;
 }
 
 fheroes2::Rect Battle::Unit::GetRectPosition() const

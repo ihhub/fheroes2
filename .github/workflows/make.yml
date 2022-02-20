@@ -114,7 +114,7 @@ jobs:
       run: |
         git clone https://github.com/vitasdk/vdpm
         cd vdpm
-        export PATH=$VITASDK/bin:$PATH
+        export PATH="$VITASDK/bin:$PATH"
         ./bootstrap-vitasdk.sh
         ./install-all.sh
         rm -rf ~/.vitasdk-cache
@@ -128,7 +128,7 @@ jobs:
         fi
     - name: Build
       run: |
-        export PATH=$VITASDK/bin:$PATH
+        export PATH="$VITASDK/bin:$PATH"
         make -f Makefile.vita -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
@@ -172,7 +172,7 @@ jobs:
         sudo apt-get -y install gettext
     - name: Build
       run: |
-        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
         make -f Makefile.switch -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON

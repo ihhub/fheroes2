@@ -103,8 +103,6 @@ public:
     s32 gold;
 };
 
-StreamBase & operator<<( StreamBase &, const cost_t & );
-StreamBase & operator>>( StreamBase &, cost_t & );
 StreamBase & operator<<( StreamBase &, const Funds & );
 StreamBase & operator>>( StreamBase &, Funds & );
 

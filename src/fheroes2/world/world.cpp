@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <set>
 #include <tuple>
 
 #include "ai.h"
@@ -668,6 +669,19 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
+
+    // Reset RECRUIT mode for all heroes at once
+    vec_heroes.ResetModes( Heroes::RECRUIT );
+
+    // Reset recruits in all kingdoms at once
+    std::set<Heroes *> remainingRecruits = vec_kingdoms.resetRecruits();
+
+    // Restore the RECRUIT mode for the remaining recruits
+    for ( Heroes * hero : remainingRecruits ) {
+        assert( hero != nullptr );
+
+        hero->SetModes( Heroes::RECRUIT );
+    }
 }
 
 void World::NewMonth( void )
@@ -757,13 +771,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
     Rand::Shuffle( tetriaryTargetTiles );
 
     // Calculate the number of monsters to be placed.
-    uint32_t monstersToBePlaced = 0;
-    if ( primaryTargetTiles.size() < static_cast<size_t>( height ) ) {
-        monstersToBePlaced = static_cast<uint32_t>( height );
+    uint32_t monstersToBePlaced = static_cast<uint32_t>( primaryTargetTiles.size() / 3 );
+    const uint32_t mapMinimum = static_cast<uint32_t>( vec_tiles.size() / 360 );
+
+    if ( monstersToBePlaced < mapMinimum ) {
+        monstersToBePlaced = mapMinimum;
     }
     else {
-        monstersToBePlaced
-            = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ), static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+        monstersToBePlaced = Rand::GetWithSeed( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, _seed );
     }
 
     // 85% of positions are for primary targets
@@ -1406,8 +1421,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
         >> w.month;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0912_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_0912_RELEASE ) {
         Week dummyWeek;
 
         msg >> dummyWeek >> dummyWeek;

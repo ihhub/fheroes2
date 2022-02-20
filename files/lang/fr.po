@@ -154,12 +154,6 @@ msgstr "Régler le nombre"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} décime la troupe ennemie !"
 
-msgid "Set auto battle off"
-msgstr "Désactiver combat auto"
-
-msgid "Set auto battle on"
-msgstr "Activer combat auto"
-
 msgid "spell failed!"
 msgstr "sort échoué !"
 
@@ -6562,7 +6556,7 @@ msgstr "Sanctuaire du troisième cercle"
 msgid "Wagon"
 msgstr "Charrette"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Appentis"
 
 msgid "Flotsam"

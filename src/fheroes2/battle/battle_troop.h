@@ -104,7 +104,7 @@ namespace Battle
         bool isTwiceAttack( void ) const;
 
         bool AllowResponse( void ) const;
-        bool isHandFighting( void ) const;
+        bool isHandFighting() const;
         bool isReflect( void ) const;
         bool isHaveDamage( void ) const;
         bool isMagicResist( const Spell &, u32 ) const;
@@ -173,6 +173,8 @@ namespace Battle
         int M82Move( void ) const;
         int M82Wnce( void ) const;
         int M82Expl( void ) const;
+        int M82Tkof() const;
+        int M82Land() const;
 
         fheroes2::Point GetBackPoint( void ) const;
         fheroes2::Point GetCenterPoint() const;

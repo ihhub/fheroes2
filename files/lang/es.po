@@ -158,12 +158,6 @@ msgstr ""
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} mitad de las tropas enemigas!"
 
-msgid "Set auto battle off"
-msgstr "Desactivar combate automático"
-
-msgid "Set auto battle on"
-msgstr "Activar combate automático"
-
 msgid "spell failed!"
 msgstr "¡Hechizo fallido!"
 
@@ -6589,7 +6583,7 @@ msgstr "Capilla del Tercer Círculo"
 msgid "Wagon"
 msgstr "Vagón"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Apoyar"
 
 msgid "Flotsam"

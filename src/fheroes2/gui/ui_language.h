@@ -27,12 +27,13 @@ namespace fheroes2
 {
     enum class SupportedLanguage : int
     {
-        English = 0, // default language for all version of the game.
+        English = 0, // default language for all versions of the game.
         French, // GoG version
         Polish, // GoG version
         German, // GoG version
         Russian, // Buka and XXI Vek versions
-        Italian // Rare version?
+        Italian, // Rare version?
+        Czech // Local release occured in 2002 by CD Projekt
     };
 
     class LanguageSwitcher

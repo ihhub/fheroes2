@@ -50,6 +50,7 @@ namespace
         GLOBAL_PRICELOYALTY = 0x00000004,
 
         GLOBAL_RENDER_VSYNC = 0x00000008,
+
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
 
@@ -60,12 +61,10 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
+
         // UNUSED = 0x00010000,
-
-        GLOBAL_MUSIC_EXT = 0x00020000,
-        GLOBAL_MUSIC_MIDI = 0x00040000,
-        GLOBAL_MUSIC = GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
-
+        // UNUSED = 0x00020000,
+        // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
@@ -101,11 +100,11 @@ Settings::Settings()
 {
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
+
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
-    opt_global.SetModes( GLOBAL_MUSIC_EXT );
 
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -203,18 +202,12 @@ bool Settings::Read( const std::string & filename )
 
     if ( !sval.empty() ) {
         if ( sval == "original" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_ORIGINAL;
         }
         else if ( sval == "expansion" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "external" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_EXT );
             _musicType = MUSIC_EXTERNAL;
         }
     }
@@ -501,7 +494,7 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
 
     if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() ) && Translation::setDomain( language.c_str() );
+        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
     }
 
     ERROR_LOG( "Translation file " << fileName << " is not found." )
@@ -584,7 +577,7 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
 
 bool Settings::MusicMIDI() const
 {
-    return opt_global.Modes( GLOBAL_MUSIC_MIDI );
+    return _musicType == MUSIC_MIDI_ORIGINAL || _musicType == MUSIC_MIDI_EXPANSION;
 }
 
 /* return move speed */

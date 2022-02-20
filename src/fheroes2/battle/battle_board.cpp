@@ -103,7 +103,7 @@ void Battle::Board::Reset( void )
 void Battle::Board::SetPositionQuality( const Unit & b ) const
 {
     Arena * arena = GetArena();
-    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ), true );
+    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
     enemies.SortArchers();
@@ -134,9 +134,9 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
 void Battle::Board::SetEnemyQuality( const Unit & unit ) const
 {
     Arena * arena = GetArena();
-    Units enemies( arena->getEnemyForce( unit.GetColor() ), true );
+    Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
     if ( unit.Modes( SP_BERSERKER ) ) {
-        Units allies( arena->getForce( unit.GetColor() ), true );
+        Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
         enemies.insert( enemies.end(), allies.begin(), allies.end() );
     }
 
@@ -1188,11 +1188,11 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
-        for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * aroundCell = GetCell( aroundIdx );
-            assert( aroundCell != nullptr );
+        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
+            const Cell * nearbyCell = GetCell( nearbyIdx );
+            assert( nearbyCell != nullptr );
 
-            if ( aroundCell->GetUnit() == &target ) {
+            if ( nearbyCell->GetUnit() == &target ) {
                 return true;
             }
         }

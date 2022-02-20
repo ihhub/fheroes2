@@ -152,12 +152,6 @@ msgstr "Seleziona quanti"
 msgid "%{name} half the enemy troops!"
 msgstr "Le unità nemiche sono state dimezzate da %{name}!"
 
-msgid "Set auto battle off"
-msgstr ""
-
-msgid "Set auto battle on"
-msgstr ""
-
 msgid "spell failed!"
 msgstr "magia fallita!"
 
@@ -5824,7 +5818,7 @@ msgstr "Tempio del Terzo Cerchio"
 msgid "Wagon"
 msgstr "Carro"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Casotto"
 
 msgid "Flotsam"

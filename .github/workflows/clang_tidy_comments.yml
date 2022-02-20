@@ -18,7 +18,7 @@ jobs:
           let artifacts = await github.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: ${{github.event.workflow_run.id }},
+              run_id: ${{ github.event.workflow_run.id }},
           });
           let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
@@ -30,14 +30,14 @@ jobs:
               archive_format: "zip",
           });
           let fs = require("fs");
-          fs.writeFileSync("${{github.workspace}}/clang-tidy-result.zip", Buffer.from(download.data));
+          fs.writeFileSync("${{ github.workspace }}/clang-tidy-result.zip", Buffer.from(download.data));
     - name: Set environment variables
       run: |
         mkdir clang-tidy-result
         unzip clang-tidy-result.zip -d clang-tidy-result
-        echo "pr_id=$(cat clang-tidy-result/pr-id.txt)" >> $GITHUB_ENV
-        echo "pr_head_repo=$(cat clang-tidy-result/pr-head-repo.txt)" >> $GITHUB_ENV
-        echo "pr_head_ref=$(cat clang-tidy-result/pr-head-ref.txt)" >> $GITHUB_ENV
+        echo "pr_id=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
+        echo "pr_head_repo=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
+        echo "pr_head_ref=$(cat clang-tidy-result/pr-head-ref.txt)" >> "$GITHUB_ENV"
     - uses: actions/checkout@v2
       with:
         repository: ${{ env.pr_head_repo }}
@@ -50,7 +50,7 @@ jobs:
           let artifacts = await github.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: ${{github.event.workflow_run.id }},
+              run_id: ${{ github.event.workflow_run.id }},
           });
           let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
@@ -62,7 +62,7 @@ jobs:
               archive_format: "zip",
           });
           let fs = require("fs");
-          fs.writeFileSync("${{github.workspace}}/clang-tidy-result.zip", Buffer.from(download.data));
+          fs.writeFileSync("${{ github.workspace }}/clang-tidy-result.zip", Buffer.from(download.data));
     - name: Extract analysis results
       run: |
         mkdir clang-tidy-result

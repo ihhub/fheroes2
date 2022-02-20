@@ -621,7 +621,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
-    StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
+    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
@@ -647,8 +647,6 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
     else {
-        // TextBox textbox2(_("Not room in\nthe garrison"), Font::SMALL, 100);
-        // textbox2.Blit(btnHeroes.x - 35, btnHeroes.y - 30);
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }
@@ -714,7 +712,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     StringReplace( message, "%{offer}", join );
     StringReplace( message, "%{total}", troop.GetCount() );
-    StringReplace( message, "%{monster}", StringLower( troop.GetPluralName( join ) ) );
+    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetPluralName( join ) ) );
     StringReplace( message, "%{gold}", gold );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );

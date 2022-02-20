@@ -120,7 +120,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         break;
     }
 
-    StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
     return str;
 }
 
@@ -920,11 +920,6 @@ void Army::setFromTile( const Maps::Tiles & tile )
         }
         ArrangeForBattle( false );
         break;
-
-        // case MP2::OBJ_ABANDONEDMINE:
-        //    at(0) = Troop(t);
-        //    ArrangeForBattle(false);
-        //    break;
 
     case MP2::OBJ_CITYDEAD:
         at( 0 )->Set( Monster::ZOMBIE, 20 );

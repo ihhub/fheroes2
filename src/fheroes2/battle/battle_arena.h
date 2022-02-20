@@ -23,7 +23,9 @@
 #ifndef H2BATTLE_ARENA_H
 #define H2BATTLE_ARENA_H
 
+#include <cstdint>
 #include <list>
+#include <utility>
 
 #include "battle.h"
 #include "battle_board.h"
@@ -76,8 +78,8 @@ namespace Battle
         void Turns( void );
         bool BattleValid( void ) const;
 
-        bool CanBreakAutoBattle( void ) const;
-        void BreakAutoBattle( void );
+        bool AutoBattleInProgress() const;
+        bool CanToggleAutoBattle() const;
 
         u32 GetCurrentTurn( void ) const;
         Result & GetResult( void );
@@ -105,8 +107,6 @@ namespace Battle
         Unit * GetTroopUID( u32 );
         const Unit * GetTroopUID( u32 ) const;
 
-        const Unit * GetEnemyMaxQuality( int ) const;
-
         const SpellStorage & GetUsageSpells( void ) const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
@@ -124,7 +124,7 @@ namespace Battle
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & ) const;
 
-        // Returns the cell nearest to the end of the path to the cell with the given index (according to the ArenaPathfinder)
+        // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
         // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
         // with the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
@@ -218,7 +218,12 @@ namespace Battle
         void ApplyActionCatapult( Command & );
         void ApplyActionAutoBattle( Command & );
 
-        void BattleProcess( Unit &, Unit & b2, s32 = -1, int = 0 );
+        // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
+        // built-in magic, if necessary. If the given index of the target cell of the attack (dst) is negative,
+        // then an attempt will be made to calculate it automatically based on the adjacency of the unit cells.
+        // If the given direction of the attack (dir) is negative, then an attempt will be made to calculate it
+        // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
+        void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
         Unit * CreateElemental( const Spell & );
         Unit * CreateMirrorImage( Unit &, s32 );
@@ -244,7 +249,7 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
-        ArenaPathfinder _pathfinder;
+        AIBattlePathfinder _globalAIPathfinder;
         int icn_covr;
 
         u32 current_turn;

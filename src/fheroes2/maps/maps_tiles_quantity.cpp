@@ -445,7 +445,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( static_cast<MP2::MapObjectType>( mp2_object ) ) )
+    if ( MP2::isPickupObject( mp2_object ) )
         setAsEmpty();
 }
 
@@ -1097,9 +1097,13 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
 {
     const Troop & troop = tile.QuantityTroop();
+    const uint32_t troopCount = troop.GetCount();
 
-    if ( 0 == troop.GetCount() )
+    if ( troopCount == 0 ) {
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
-    else if ( !tile.MonsterFixedCount() )
-        tile.MonsterSetCount( troop.GetCount() * 8 / 7 );
+    }
+    else if ( !tile.MonsterFixedCount() ) {
+        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
+        tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
+    }
 }

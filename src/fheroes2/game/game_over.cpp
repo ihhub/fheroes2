@@ -340,7 +340,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
                 }
                 else {
-                    AGG::ResetMixer();
+                    AGG::ResetAudio();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
 
                     res = fheroes2::GameMode::HIGHSCORES;
@@ -384,7 +384,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                         DialogLoss( result );
                     }
 
-                    AGG::ResetMixer();
+                    AGG::ResetAudio();
                     Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
                     res = fheroes2::GameMode::MAIN_MENU;
@@ -395,7 +395,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     else {
         // There are no active human-controlled players left, game over
         if ( activeHumanColors == 0 ) {
-            AGG::ResetMixer();
+            AGG::ResetAudio();
             Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
             res = fheroes2::GameMode::MAIN_MENU;
@@ -436,7 +436,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             if ( multiplayerResult & GameOver::WINS ) {
                 DialogWins( multiplayerResult );
 
-                AGG::ResetMixer();
+                AGG::ResetAudio();
                 Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
 
                 res = fheroes2::GameMode::MAIN_MENU;
@@ -444,7 +444,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             else if ( multiplayerResult & GameOver::LOSS ) {
                 DialogLoss( multiplayerResult );
 
-                AGG::ResetMixer();
+                AGG::ResetAudio();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
                 res = fheroes2::GameMode::MAIN_MENU;

@@ -159,12 +159,6 @@ msgstr ""
 msgid "%{name} half the enemy troops!"
 msgstr ""
 
-msgid "Set auto battle off"
-msgstr "Automata harc kikapcsolása"
-
-msgid "Set auto battle on"
-msgstr "Automata harc bekapcsolása"
-
 msgid "spell failed!"
 msgstr ""
 
@@ -6328,7 +6322,7 @@ msgstr "A Harmadik Kör szentélye"
 msgid "Wagon"
 msgstr "Szekér"
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr "Fészer"
 
 msgid "Flotsam"

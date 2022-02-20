@@ -137,12 +137,6 @@ msgstr ""
 msgid "%{name} half the enemy troops!"
 msgstr ""
 
-msgid "Set auto battle off"
-msgstr ""
-
-msgid "Set auto battle on"
-msgstr ""
-
 msgid "spell failed!"
 msgstr ""
 
@@ -5630,7 +5624,7 @@ msgstr ""
 msgid "Wagon"
 msgstr ""
 
-msgid "Lean To"
+msgid "Lean-To"
 msgstr ""
 
 msgid "Flotsam"

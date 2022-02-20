@@ -31,6 +31,11 @@ class MapPosition
 {
 public:
     explicit MapPosition( const fheroes2::Point & = fheroes2::Point( -1, -1 ) );
+    MapPosition( const MapPosition & ) = delete;
+
+    virtual ~MapPosition() = default;
+
+    MapPosition & operator=( const MapPosition & ) = delete;
 
     const fheroes2::Point & GetCenter() const
     {
@@ -42,7 +47,7 @@ public:
     void SetCenter( const fheroes2::Point & );
     void SetIndex( const int32_t index );
 
-    bool isPosition( const fheroes2::Point & pt ) const
+    virtual bool isPosition( const fheroes2::Point & pt ) const
     {
         return pt == center;
     }

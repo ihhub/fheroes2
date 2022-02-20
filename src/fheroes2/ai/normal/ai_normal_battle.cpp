@@ -37,7 +37,9 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <map>
 #include <set>
+#include <utility>
 
 using namespace Battle;
 
@@ -182,7 +184,7 @@ namespace AI
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
         const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-        return _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
+        return !hero.isLosingGame() && _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -218,7 +220,6 @@ namespace AI
             }
 
             actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
-            actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
             return actions;
         }
 
@@ -234,7 +235,7 @@ namespace AI
 
         // Step 4. Current unit decision tree
         const size_t actionsSize = actions.size();
-        Battle::Arena::GetBoard()->SetPositionQuality( currentUnit );
+        Arena::GetBoard()->SetPositionQuality( currentUnit );
 
         if ( currentUnit.isArchers() ) {
             const Actions & archerActions = archerDecision( arena, currentUnit );
@@ -265,8 +266,10 @@ namespace AI
                 }
 
                 if ( target.unit ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                          Board::OptimalAttackTarget( currentUnit, *target.unit, reachableCell ), 0 );
+                    const int32_t optimalTargetIdx = Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell );
+
+                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), optimalTargetIdx,
+                                          Board::GetDirection( target.cell, optimalTargetIdx ) );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
@@ -443,7 +446,7 @@ namespace AI
     Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const
     {
         Actions actions;
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
         BattleTargetPair target;
 
         if ( currentUnit.isHandFighting() ) {
@@ -473,7 +476,7 @@ namespace AI
             if ( target.unit && target.cell != -1 ) {
                 // Melee attack selected target
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, -1 );
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
@@ -495,7 +498,7 @@ namespace AI
         }
         else {
             // Normal ranged attack: focus the highest value unit
-            double highestStrength = 0;
+            double highestStrength = -1;
 
             for ( const Unit * enemy : enemies ) {
                 double attackPriority = enemy->GetScoreQuality( currentUnit );
@@ -520,7 +523,7 @@ namespace AI
                     }
                 }
 
-                if ( highestStrength < attackPriority && attackPriority > 0 ) {
+                if ( highestStrength < attackPriority ) {
                     highestStrength = attackPriority;
                     target.unit = enemy;
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );
@@ -528,7 +531,7 @@ namespace AI
             }
 
             if ( target.unit ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, 0 );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " archer focusing enemy " << target.unit->GetName()
@@ -542,7 +545,7 @@ namespace AI
     BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
@@ -618,8 +621,8 @@ namespace AI
     {
         BattleTargetPair target;
 
-        const Units friendly( arena.getForce( _myColor ), true );
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         const int myHeadIndex = currentUnit.GetHeadIndex();
 
@@ -702,54 +705,108 @@ namespace AI
     Actions BattlePlanner::berserkTurn( const Arena & arena, const Unit & currentUnit ) const
     {
         assert( currentUnit.Modes( SP_BERSERKER ) );
+
         Actions actions;
 
-        Board & board = *Arena::GetBoard();
+        const std::vector<Unit *> nearestUnits = Arena::GetBoard()->GetNearestTroops( &currentUnit, {} );
+        // Normally this shouldn't happen
+        if ( nearestUnits.empty() ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetNearestTroops returned an empty result for " << currentUnit.GetName() << "!" );
+
+            return actions;
+        }
+
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
-        const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
-        if ( !nearestUnits.empty() ) {
-            for ( const Unit * targetUnit : nearestUnits ) {
-                const uint32_t targetUnitUID = targetUnit->GetUID();
-                const int32_t targetUnitHead = targetUnit->GetHeadIndex();
-                if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
+        // If the berserker is an archer, then just shoot at the nearest unit
+        if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, will shoot" );
+
+            const Unit * targetUnit = nearestUnits.front();
+            assert( targetUnit != nullptr );
+
+            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), -1, 0 );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer focusing enemy " << targetUnit->GetName() );
+
+            return actions;
+        }
+
+        BattleTargetPair targetInfo;
+        std::map<const Unit *, Indexes> aroundIndexesCache;
+
+        // First, try to find a unit nearby that can be attacked on this turn
+        for ( const Unit * nearbyUnit : nearestUnits ) {
+            assert( nearbyUnit != nullptr );
+
+            const auto cacheItemIter = aroundIndexesCache.emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
+            assert( cacheItemIter != aroundIndexesCache.end() );
+
+            for ( const int cell : cacheItemIter->second ) {
+                if ( !arena.hexIsPassable( cell ) ) {
+                    continue;
+                }
+
+                if ( Board::CanAttackUnitFromPosition( currentUnit, *nearbyUnit, cell ) ) {
+                    targetInfo.cell = cell;
+                    targetInfo.unit = nearbyUnit;
+
                     break;
                 }
-                else {
-                    int targetCell = -1;
+            }
 
-                    for ( const int cell : Board::GetAroundIndexes( *targetUnit ) ) {
-                        if ( arena.hexIsPassable( cell ) && ( targetCell == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetCell ) ) ) {
-                            targetCell = cell;
-                        }
+            if ( targetInfo.cell != -1 ) {
+                break;
+            }
+        }
+
+        // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
+        if ( targetInfo.cell == -1 ) {
+            for ( const Unit * nearbyUnit : nearestUnits ) {
+                assert( nearbyUnit != nullptr );
+
+                const auto cacheItemIter = aroundIndexesCache.find( nearbyUnit );
+                assert( cacheItemIter != aroundIndexesCache.end() );
+
+                for ( const int cell : cacheItemIter->second ) {
+                    if ( !arena.hexIsPassable( cell ) ) {
+                        continue;
                     }
 
-                    if ( targetCell != -1 ) {
-                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
-
-                        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
-
-                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
-
-                        if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
-                        }
-
-                        // Attack only if target unit is reachable and can be attacked
-                        if ( Board::CanAttackUnitFromPosition( currentUnit, *targetUnit, reachableCell ) ) {
-                            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
-
-                            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
-                        }
-
-                        break;
+                    if ( targetInfo.cell == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetInfo.cell ) ) {
+                        targetInfo.cell = cell;
                     }
                 }
             }
         }
 
-        actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnitUID );
+        // There is no reachable unit in sight, skip the turn
+        if ( targetInfo.cell == -1 ) {
+            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnitUID, true );
+
+            return actions;
+        }
+
+        const int targetCell = targetInfo.cell;
+
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell );
+
+        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
+
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
+
+        if ( currentUnit.GetHeadIndex() != reachableCell ) {
+            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+        }
+
+        if ( targetInfo.unit ) {
+            const Unit * targetUnit = targetInfo.unit;
+
+            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1 );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() );
+        }
+
         return actions;
     }
 
@@ -762,8 +819,10 @@ namespace AI
 
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
+
         // Do not end the turn if we only cast a spell
-        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::MSG_BATTLE_CAST ) )
+        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::MSG_BATTLE_CAST ) ) {
             actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
+        }
     }
 }

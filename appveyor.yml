@@ -7,9 +7,10 @@ skip_commits:
   - docs/*
 
 skip_tags: true
+skip_branch_with_pr: true
 
 # version format
-version: 0.9.11.{build}
+version: 0.9.12.{build}
 
 # Build worker image (VM template)
 image: Visual Studio 2015

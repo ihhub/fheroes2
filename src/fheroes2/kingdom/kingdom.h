@@ -22,6 +22,8 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <set>
+
 #include "castle.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
@@ -63,7 +65,7 @@ public:
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;
 
-    void appendSurrenderedHero( const Heroes & hero );
+    void appendSurrenderedHero( Heroes & hero );
 
     Heroes * GetBestHero();
 
@@ -84,6 +86,7 @@ public:
     void AddFundsResource( const Funds & );
     void OddFundsResource( const Funds & );
 
+    bool isLosingGame() const;
     u32 GetCountCastle( void ) const;
     u32 GetCountTown( void ) const;
     u32 GetCountMarketplace( void ) const;
@@ -94,7 +97,12 @@ public:
 
     uint32_t GetCountArtifacts() const;
 
+    // Returns a reference to the pair of heroes available for recruitment,
+    // updating it on the fly if necessary
     const Recruits & GetRecruits();
+    // Returns a reference to the pair of heroes available for recruitment
+    // without making any changes in it
+    Recruits & GetCurrentRecruits();
 
     const KingdomHeroes & GetHeroes( void ) const
     {
@@ -199,6 +207,10 @@ public:
     void AddCastles( const AllCastles & );
 
     void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
+
+    // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
+    // in the kingdoms
+    std::set<Heroes *> resetRecruits();
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
