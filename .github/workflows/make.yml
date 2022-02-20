@@ -87,6 +87,7 @@ jobs:
         name: ${{ matrix.config.release_name }}
         tag: ${{ matrix.config.release_tag }}
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
   build-psv:
@@ -152,6 +153,7 @@ jobs:
         name: PS Vita build with SDL 2.0 support (latest commit)
         tag: fheroes2-psv-sdl2_dev
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
   build-switch:
@@ -188,5 +190,6 @@ jobs:
         name: Nintendo Switch build with SDL 2.0 support (latest commit)
         tag: fheroes2-switch-sdl2_dev
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true

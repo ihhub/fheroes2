@@ -108,5 +108,6 @@ jobs:
         name: ${{ matrix.config.release_name }}
         tag: ${{ matrix.config.release_tag }}
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
