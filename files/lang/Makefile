@@ -25,8 +25,9 @@ fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
 	msgfmt $<.tmp -o $@
 
-# Polish version uses CP1250
+# Polish and Czech versions use CP1250
 pl.mo: pl.po
+cs.mo: cs.po
 	iconv -f utf-8 -t CP1250 $< > $<.tmp
 	LANG=pl.CP1250 LC_ALL=pl.CP1250 LC_CTYPE=pl.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
