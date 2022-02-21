@@ -18,6 +18,7 @@ target_link_libraries(engine
 	${${USE_SDL_VERSION}_MIXER_LIBRARIES}
 	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_LIBRARIES}>
 	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
+	Threads::Threads # To match the build settings of the main app
 	ZLIB::ZLIB
 	)
 export(TARGETS engine FILE EngineConfig.cmake)

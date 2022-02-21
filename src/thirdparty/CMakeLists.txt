@@ -12,5 +12,8 @@ else()
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libsmacker>
 		$<INSTALL_INTERFACE:include>
 		)
+	target_link_libraries(smacker
+		Threads::Threads # To match the build settings of the main app
+		)
 	export(TARGETS smacker FILE SmackerConfig.cmake)
 endif(USE_SYSTEM_LIBSMACKER)
