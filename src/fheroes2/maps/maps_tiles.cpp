@@ -589,6 +589,11 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
     return Tiles::isShadowSprite( ta.object, ta.index );
 }
 
+bool Maps::TilesAddon::isStream( const TilesAddon & ta ) 
+{
+    return MP2::GetICNObject( ta.object ) == ICN::STREAM;
+}
+
 bool Maps::Tiles::isShadowSprite( const int icn, const uint8_t icnIndex )
 {
     return isValidShadowSprite( icn, icnIndex );
@@ -1620,7 +1625,8 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
     }
 
     if ( objectTileset == 0 || isShadowSprite( objectTileset, objectIndex ) ) {
-        return addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+        return ( addons_level1.size() >= static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) ) )
+            || ( addons_level1.size() >= static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream ) ) );
     }
 
     return false;
