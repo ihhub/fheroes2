@@ -25,11 +25,16 @@ fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
 	msgfmt $<.tmp -o $@
 
-# Polish and Czech versions use CP1250
+# Polish versions uses CP1250
 pl.mo: pl.po
-cs.mo: cs.po
 	iconv -f utf-8 -t CP1250 $< > $<.tmp
 	LANG=pl.CP1250 LC_ALL=pl.CP1250 LC_CTYPE=pl.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+
+# Czech versions uses CP1250	
+cs.mo: cs.po
+	iconv -f utf-8 -t CP1250 $< > $<.tmp
+	LANG=cs.CP1250 LC_ALL=cs.CP1250 LC_CTYPE=cs.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)
