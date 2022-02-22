@@ -181,13 +181,94 @@ namespace
             }
         }
     }
+
+    bool isSwordAttackCursorTheme( const int theme )
+    {
+        switch ( theme ) {
+        case Cursor::SWORD_TOPRIGHT:
+        case Cursor::SWORD_RIGHT:
+        case Cursor::SWORD_BOTTOMRIGHT:
+        case Cursor::SWORD_BOTTOMLEFT:
+        case Cursor::SWORD_LEFT:
+        case Cursor::SWORD_TOPLEFT:
+        case Cursor::SWORD_TOP:
+        case Cursor::SWORD_BOTTOM:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isAttackCursorTheme( const int theme )
+    {
+        if ( isSwordAttackCursorTheme( theme ) ) {
+            return true;
+        }
+
+        switch ( theme ) {
+        case Cursor::WAR_ARROW:
+        case Cursor::WAR_BROKENARROW:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    int GetSwordCursorDirection( const int direction, const bool isWideMonster, const bool isReflected )
+    {
+        switch ( direction ) {
+        case Battle::BOTTOM_RIGHT:
+            return ( isWideMonster && isReflected ) ? Cursor::SWORD_TOP : Cursor::SWORD_TOPLEFT;
+        case Battle::BOTTOM_LEFT:
+            return ( isWideMonster && !isReflected ) ? Cursor::SWORD_TOP : Cursor::SWORD_TOPRIGHT;
+        case Battle::RIGHT:
+            return Cursor::SWORD_LEFT;
+        case Battle::TOP_RIGHT:
+            return ( isWideMonster && !isReflected ) ? Cursor::SWORD_BOTTOM :Cursor::SWORD_BOTTOMLEFT;
+        case Battle::TOP_LEFT:
+            return ( isWideMonster && isReflected ) ? Cursor::SWORD_BOTTOM : Cursor::SWORD_BOTTOMRIGHT;
+        case Battle::LEFT:
+            return Cursor::SWORD_RIGHT;
+        default:
+            break;
+        }
+        return 0;
+    }
+
+    int GetDirectionFromCursorSwordTheme( const int cursorTheme, const bool isReflected )
+    {
+        switch ( cursorTheme ) {
+        case Cursor::SWORD_TOPLEFT:
+            return Battle::BOTTOM_RIGHT;
+        case Cursor::SWORD_TOPRIGHT:
+            return Battle::BOTTOM_LEFT;
+        case Cursor::SWORD_LEFT:
+            return Battle::RIGHT;
+        case Cursor::SWORD_BOTTOMLEFT:
+            return Battle::TOP_RIGHT;
+        case Cursor::SWORD_BOTTOMRIGHT:
+            return Battle::TOP_LEFT;
+        case Cursor::SWORD_RIGHT:
+            return Battle::LEFT;
+        case Cursor::SWORD_TOP:
+            return isReflected ? Battle::BOTTOM_RIGHT : Battle::BOTTOM_LEFT;
+        case Cursor::SWORD_BOTTOM:
+            return isReflected ? Battle::TOP_LEFT : Battle::TOP_RIGHT;
+        default:
+            break;
+        }
+
+        return Battle::UNKNOWN;
+    }
 }
 
 namespace Battle
 {
     int GetIndexIndicator( const Unit & );
-    int GetSwordCursorDirection( int );
-    int GetDirectionFromCursorSword( u32 );
     int GetCursorFromSpell( int );
 
     struct CursorPosition
@@ -377,27 +458,6 @@ namespace Battle
     }
 }
 
-bool CursorAttack( u32 theme )
-{
-    switch ( theme ) {
-    case Cursor::WAR_ARROW:
-    case Cursor::WAR_BROKENARROW:
-    case Cursor::SWORD_TOPRIGHT:
-    case Cursor::SWORD_RIGHT:
-    case Cursor::SWORD_BOTTOMRIGHT:
-    case Cursor::SWORD_BOTTOMLEFT:
-    case Cursor::SWORD_LEFT:
-    case Cursor::SWORD_TOPLEFT:
-    case Cursor::SWORD_TOP:
-    case Cursor::SWORD_BOTTOM:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
 fheroes2::Image DrawHexagon( const uint8_t colorId )
 {
     const int r = 22;
@@ -533,49 +593,6 @@ int Battle::GetCursorFromSpell( int spell )
         break;
     }
     return Cursor::WAR_NONE;
-}
-
-int Battle::GetSwordCursorDirection( int dir )
-{
-    switch ( dir ) {
-    case BOTTOM_RIGHT:
-        return Cursor::SWORD_TOPLEFT;
-    case BOTTOM_LEFT:
-        return Cursor::SWORD_TOPRIGHT;
-    case RIGHT:
-        return Cursor::SWORD_LEFT;
-    case TOP_RIGHT:
-        return Cursor::SWORD_BOTTOMLEFT;
-    case TOP_LEFT:
-        return Cursor::SWORD_BOTTOMRIGHT;
-    case LEFT:
-        return Cursor::SWORD_RIGHT;
-    default:
-        break;
-    }
-    return 0;
-}
-
-int Battle::GetDirectionFromCursorSword( u32 sword )
-{
-    switch ( sword ) {
-    case Cursor::SWORD_TOPLEFT:
-        return BOTTOM_RIGHT;
-    case Cursor::SWORD_TOPRIGHT:
-        return BOTTOM_LEFT;
-    case Cursor::SWORD_LEFT:
-        return RIGHT;
-    case Cursor::SWORD_BOTTOMLEFT:
-        return TOP_RIGHT;
-    case Cursor::SWORD_BOTTOMRIGHT:
-        return TOP_LEFT;
-    case Cursor::SWORD_RIGHT:
-        return LEFT;
-    default:
-        break;
-    }
-
-    return UNKNOWN;
 }
 
 Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroBase * b, bool r )
@@ -1668,12 +1685,31 @@ void Battle::Interface::RedrawCover()
             highlightCells.emplace( pos.GetHead() );
             highlightCells.emplace( pos.GetTail() );
         }
-        else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
-                  || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
+        else if ( isSwordAttackCursorTheme( cursorType ) ) {
             highlightCells.emplace( cell );
 
             int direction = 0;
-            if ( cursorType == Cursor::SWORD_TOPLEFT ) {
+
+            if ( cursorType == Cursor::SWORD_TOP ) {
+                assert( _currentUnit->isWide() );
+                if ( _currentUnit->isReflect() ) {
+                    direction = BOTTOM_RIGHT;
+                }
+                else {
+                    direction = BOTTOM_LEFT;
+                }
+                
+            }
+            else if ( cursorType == Cursor::SWORD_BOTTOM ) {
+                assert( _currentUnit->isWide() );
+                if ( _currentUnit->isReflect() ) {
+                    direction = TOP_LEFT;
+                }
+                else {
+                    direction = TOP_RIGHT;
+                }
+            }
+            else if ( cursorType == Cursor::SWORD_TOPLEFT ) {
                 direction = BOTTOM_RIGHT;
             }
             else if ( cursorType == Cursor::SWORD_TOPRIGHT ) {
@@ -2178,7 +2214,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                             }
                         }
 
-                        const int cursor = GetSwordCursorDirection( currentDirection );
+                        const int cursor = GetSwordCursorDirection( currentDirection, _currentUnit->isWide(), _currentUnit->isReflect() );
 
                         statusMsg = _( "Attack %{monster}" );
                         StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
@@ -2522,17 +2558,18 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         const Cell * cell = Board::GetCell( index_pos );
 
         if ( cell ) {
-            if ( CursorAttack( themes ) ) {
+            if ( isAttackCursorTheme( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
                 popup.SetInfo( cell, _currentUnit, b_enemy, _interfacePosition.getPosition() );
             }
-            else
+            else {
                 popup.Reset();
+            }
 
             if ( le.MouseClickLeft() )
                 MouseLeftClickBoardAction( themes, *cell, a );
             else if ( le.MousePressRight() )
-                MousePressRightBoardAction( themes, *cell );
+                MousePressRightBoardAction( *cell );
         }
         else {
             le.MouseClickLeft();
@@ -2713,7 +2750,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     }
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
+void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
     const Unit * unitOnCell = cell.GetUnit();
 
@@ -2728,7 +2765,7 @@ void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell &
     }
 }
 
-void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a )
 {
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
@@ -2747,9 +2784,15 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         case Cursor::SWORD_RIGHT:
         case Cursor::SWORD_BOTTOMRIGHT:
         case Cursor::SWORD_BOTTOMLEFT:
-        case Cursor::SWORD_LEFT: {
+        case Cursor::SWORD_LEFT:
+        case Cursor::SWORD_TOP:
+        case Cursor::SWORD_BOTTOM:{
+            if ( themes == Cursor::SWORD_TOP || themes == Cursor::SWORD_BOTTOM ) {
+                assert( _currentUnit->isWide() );
+            }
+
             const Unit * enemy = b;
-            const int dir = GetDirectionFromCursorSword( themes );
+            const int dir = GetDirectionFromCursorSwordTheme( themes, _currentUnit->isReflect() );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
                 const int32_t move = Board::FixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );

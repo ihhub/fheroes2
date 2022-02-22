@@ -307,8 +307,8 @@ namespace Battle
         void ButtonSettingsAction( void );
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
-        void MouseLeftClickBoardAction( u32, const Cell &, Actions & );
-        void MousePressRightBoardAction( u32, const Cell & ) const;
+        void MouseLeftClickBoardAction( int, const Cell &, Actions & );
+        void MousePressRightBoardAction( const Cell & ) const;
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
