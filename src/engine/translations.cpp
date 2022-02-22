@@ -171,6 +171,8 @@ namespace
         return ~crc;
     }
 
+    const char * stripContext( const char * str );
+
     struct mofile
     {
         uint32_t count;
@@ -202,7 +204,7 @@ namespace
         {
             std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
             if ( it == hash_offsets.end() )
-                return str;
+                return stripContext( str );
 
             buf.seek( ( *it ).second.offset );
             const u8 * ptr = buf.data();
@@ -312,14 +314,6 @@ namespace
     mofile * current = nullptr;
     std::map<std::string, mofile> domains;
     char context = 0;
-}
-
-namespace Translation
-{
-    void setStripContext( char strip )
-    {
-        context = strip;
-    }
 
     const char * stripContext( const char * str )
     {
@@ -329,6 +323,14 @@ namespace Translation
         while ( *pos && *pos++ != context )
             ;
         return *pos ? pos : str;
+    }
+}
+
+namespace Translation
+{
+    void setStripContext( char strip )
+    {
+        context = strip;
     }
 
     bool bindDomain( const char * domain, const char * file )
