@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2021-11-15 17:00+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -723,6 +723,14 @@ msgstr ""
 msgid "Save the Dwarves"
 msgstr "Rädda dvärgarna"
 
+msgid "The Crown"
+msgstr "Kronan"
+
+# Gauntlet as in race.
+#, fuzzy
+msgid "The Gauntlet"
+msgstr "\"Stridshandsken\""
+
 msgid "Turning Point"
 msgstr "Vändpunkt"
 
@@ -732,14 +740,6 @@ msgstr "Draköga"
 
 msgid "Final Justice"
 msgstr ""
-
-msgid "The Crown"
-msgstr "Kronan"
-
-# Gauntlet as in race.
-#, fuzzy
-msgid "The Gauntlet"
-msgstr "\"Stridshandsken\""
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -812,22 +812,22 @@ msgstr ""
 msgid "Necromancers"
 msgstr "Svartkonstnär"
 
-msgid "Rebellion"
-msgstr ""
-
 #, fuzzy
 msgid "Slay the Dwarves"
 msgstr "\"Rädda dvärgarna\""
-
-#, fuzzy
-msgid "Apocalypse"
-msgstr "\"Apokalyps\""
 
 msgid "Country Lords"
 msgstr "Landslordar"
 
 msgid "Dragon Master"
 msgstr "Drakmästare"
+
+msgid "Rebellion"
+msgstr ""
+
+#, fuzzy
+msgid "Apocalypse"
+msgstr "\"Apokalyps\""
 
 #, fuzzy
 msgid "Greater Glory"
@@ -1163,57 +1163,121 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
 msgstr ""
 
 #, fuzzy
-msgid "Defender Helm"
+msgid "campaignBonus|Black Pearl"
+msgstr "Svart pärla"
+
+msgid "campaignBonus|Caster's Bracelet"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Defender Helm"
 msgstr "Försvarare"
 
-msgid "Breastplate"
+#, fuzzy
+msgid "campaignBonus|Breastplate"
 msgstr "Bröstharnesk"
 
 #, fuzzy
-msgid "Dragon Sword"
+msgid "campaignBonus|Dragon Sword"
 msgstr "Drakdräpare"
 
-msgid "Fizbin Medal"
+msgid "campaignBonus|Fizbin Medal"
 msgstr ""
 
-msgid "Foremost Scroll"
+#, fuzzy
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Särskild Kunskapsrulle"
 
-msgid "Mage's Ring"
+#, fuzzy
+msgid "campaignBonus|Hideous Mask"
+msgstr "Otäck mask"
+
+msgid "campaignBonus|Mage's Ring"
 msgstr ""
 
-msgid "Major Scroll"
+#, fuzzy
+msgid "campaignBonus|Major Scroll"
 msgstr "Större Kunskapsrulle"
 
-msgid "Minor Scroll"
+#, fuzzy
+msgid "campaignBonus|Medal of Honor"
+msgstr "Hedersmedalj"
+
+#, fuzzy
+msgid "campaignBonus|Medal of Valor"
+msgstr "Tapperhetens medalj"
+
+#, fuzzy
+msgid "campaignBonus|Minor Scroll"
 msgstr "Mindre Kunskapsrulle"
 
 #, fuzzy
-msgid "Nomad Boots"
+msgid "campaignBonus|Nomad Boots"
 msgstr "Nomader"
 
-#, fuzzy
-msgid "Power Axe"
-msgstr "Effekt"
-
-#, fuzzy
-msgid "Stealth Shield"
-msgstr "Ultimata skölden"
-
-#, fuzzy
-msgid "Thunder Mace"
-msgstr "Thundax"
-
-msgid "Traveler's Boots"
+msgid "campaignBonus|Power Axe"
 msgstr ""
 
 #, fuzzy
-msgid "Summon Earth"
+msgid "campaignBonus|Spiked Shield"
+msgstr "Spikad sköld"
+
+#, fuzzy
+msgid "campaignBonus|Stealth Shield"
+msgstr "Ultimata skölden"
+
+msgid "campaignBonus|Tax Lien"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Thunder Mace"
+msgstr "Thundax"
+
+msgid "campaignBonus|Traveler's Boots"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|White Pearl"
+msgstr "Vit pärla"
+
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Ge liv åt död"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr ""
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Spegelbild"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Vit pärla"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
 msgstr "Inkalla båt"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Visa hjältar"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} skapar %{monster}."
@@ -8332,6 +8396,10 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Power Axe"
+#~ msgstr "Effekt"
 
 #~ msgid "Buy Monsters"
 #~ msgstr "Köp monster"

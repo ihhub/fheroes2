@@ -24,7 +24,7 @@ CXX := arm-vita-eabi-g++
 LIBS := -lz
 
 CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(VITASDK)/arm-vita-eabi/include -O3 -mcpu=cortex-a9 -mfpu=neon -fgraphite-identity -floop-nest-optimize -fno-lto -fno-tree-slp-vectorize
-LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -Wl,-q
+LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -Wl,--no-whole-archive -Wl,-q
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 

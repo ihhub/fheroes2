@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2022-01-25 10:25+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -716,6 +716,12 @@ msgstr "Сила оружия"
 msgid "Save the Dwarves"
 msgstr "Спасите гномов"
 
+msgid "The Crown"
+msgstr "Корона"
+
+msgid "The Gauntlet"
+msgstr "Перчатка"
+
 msgid "Turning Point"
 msgstr "Переломный момент"
 
@@ -724,12 +730,6 @@ msgstr "Защита Корлагона"
 
 msgid "Final Justice"
 msgstr "Акт отчаяния"
-
-msgid "The Crown"
-msgstr "Корона"
-
-msgid "The Gauntlet"
-msgstr "Перчатка"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -833,20 +833,20 @@ msgstr "Первая кровь"
 msgid "Necromancers"
 msgstr "Некроманты"
 
-msgid "Rebellion"
-msgstr "Бунт"
-
 msgid "Slay the Dwarves"
 msgstr "Уничтожь гномов"
-
-msgid "Apocalypse"
-msgstr "Апокалипсис"
 
 msgid "Country Lords"
 msgstr "Лорды провинций"
 
 msgid "Dragon Master"
 msgstr "Повелитель драконов"
+
+msgid "Rebellion"
+msgstr "Бунт"
+
+msgid "Apocalypse"
+msgstr "Апокалипсис"
 
 msgid "Greater Glory"
 msgstr "К вящей славе"
@@ -1262,50 +1262,101 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Убийца гномов!!!!, спасайтесь кто может!\""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
+msgstr "Баллиста"
+
+msgid "campaignBonus|Black Pearl"
+msgstr "Чёр. жемчужина"
+
+msgid "campaignBonus|Caster's Bracelet"
 msgstr "Браслет"
 
-msgid "Defender Helm"
+msgid "campaignBonus|Defender Helm"
 msgstr "Шлем защитника"
 
-msgid "Breastplate"
+msgid "campaignBonus|Breastplate"
 msgstr "Доспех"
 
-msgid "Dragon Sword"
+msgid "campaignBonus|Dragon Sword"
 msgstr "Драконий меч"
 
-msgid "Fizbin Medal"
+msgid "campaignBonus|Fizbin Medal"
 msgstr "Символ неудачи"
 
-msgid "Foremost Scroll"
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Высший свиток"
 
-msgid "Mage's Ring"
+msgid "campaignBonus|Hideous Mask"
+msgstr "Ужасная маска"
+
+msgid "campaignBonus|Mage's Ring"
 msgstr "Кольцо мага"
 
-msgid "Major Scroll"
+msgid "campaignBonus|Major Scroll"
 msgstr "Большой свиток"
 
-msgid "Minor Scroll"
+msgid "campaignBonus|Medal of Honor"
+msgstr "Медаль доблести"
+
+msgid "campaignBonus|Medal of Valor"
+msgstr "Медаль отваги"
+
+msgid "campaignBonus|Minor Scroll"
 msgstr "Малый свиток"
 
-msgid "Nomad Boots"
+msgid "campaignBonus|Nomad Boots"
 msgstr "Сапоги кочевника"
 
-msgid "Power Axe"
+msgid "campaignBonus|Power Axe"
 msgstr "Топор власти"
 
-msgid "Stealth Shield"
+msgid "campaignBonus|Spiked Shield"
+msgstr "Шипованный щит"
+
+msgid "campaignBonus|Stealth Shield"
 msgstr "Незримый щит"
 
-msgid "Thunder Mace"
+msgid "campaignBonus|Tax Lien"
+msgstr "Податная"
+
+msgid "campaignBonus|Thunder Mace"
 msgstr "Громовая палица"
 
-msgid "Traveler's Boots"
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Сапоги путника"
 
-msgid "Summon Earth"
+msgid "campaignBonus|White Pearl"
+msgstr "Бел. жемчужина"
+
+msgid "campaignBonus|Animate Dead"
+msgstr "Поднять нежить"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Цепь молний"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Огненный взрыв"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Масс. проклятие"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Масс. ускорение"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Фантом"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Оживление"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Стальная кожа"
+
+msgid "campaignBonus|Summon Earth"
 msgstr "Элементаль"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Показать героев"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{monster} доступны для найма в этом строении."
@@ -8503,6 +8554,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Power Axe"
+#~ msgstr "Топор власти"
 
 #~ msgid "battle: show army order"
 #~ msgstr "битва: показывать порядок армии"

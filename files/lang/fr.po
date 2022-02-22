@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2022-01-22 22:10+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -716,6 +716,12 @@ msgstr "Force des armes"
 msgid "Save the Dwarves"
 msgstr "Sauve les Nains"
 
+msgid "The Crown"
+msgstr "La Couronne"
+
+msgid "The Gauntlet"
+msgstr "Le gantelet"
+
 msgid "Turning Point"
 msgstr "Moment Décisif"
 
@@ -724,12 +730,6 @@ msgstr "Défense de Corlagon"
 
 msgid "Final Justice"
 msgstr "Justice définitive"
-
-msgid "The Crown"
-msgstr "La Couronne"
-
-msgid "The Gauntlet"
-msgstr "Le gantelet"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -837,20 +837,20 @@ msgstr "Premier sang"
 msgid "Necromancers"
 msgstr "Nécromanciens"
 
-msgid "Rebellion"
-msgstr "Rébellion"
-
 msgid "Slay the Dwarves"
 msgstr "Massacre des Nains"
-
-msgid "Apocalypse"
-msgstr "Apocalypse"
 
 msgid "Country Lords"
 msgstr "Seigneurs du Pays"
 
 msgid "Dragon Master"
 msgstr "Maître des Dragons"
+
+msgid "Rebellion"
+msgstr "Rébellion"
+
+msgid "Apocalypse"
+msgstr "Apocalypse"
 
 msgid "Greater Glory"
 msgstr "Grande Gloire"
@@ -1281,50 +1281,125 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Le Dwarfbane!!!!, sauve qui peut.\""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
+msgstr "Baliste"
+
+#, fuzzy
+msgid "campaignBonus|Black Pearl"
+msgstr "Perle noire"
+
+#, fuzzy
+msgid "campaignBonus|Caster's Bracelet"
 msgstr "Bracelet magique"
 
-msgid "Defender Helm"
+#, fuzzy
+msgid "campaignBonus|Defender Helm"
 msgstr "Casque de Protection"
 
-msgid "Breastplate"
+#, fuzzy
+msgid "campaignBonus|Breastplate"
 msgstr "Plastron Divin"
 
-msgid "Dragon Sword"
+#, fuzzy
+msgid "campaignBonus|Dragon Sword"
 msgstr "L'épée du Dragon"
 
-msgid "Fizbin Medal"
+#, fuzzy
+msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin"
 
-msgid "Foremost Scroll"
+#, fuzzy
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Parchemin ultime"
 
-msgid "Mage's Ring"
+#, fuzzy
+msgid "campaignBonus|Hideous Mask"
+msgstr "Masque sinistre"
+
+#, fuzzy
+msgid "campaignBonus|Mage's Ring"
 msgstr "Anneau de Magicien"
 
-msgid "Major Scroll"
+#, fuzzy
+msgid "campaignBonus|Major Scroll"
 msgstr "Parchemin majeur"
 
-msgid "Minor Scroll"
+#, fuzzy
+msgid "campaignBonus|Medal of Honor"
+msgstr "Médaille d'honneur"
+
+#, fuzzy
+msgid "campaignBonus|Medal of Valor"
+msgstr "Médaille de la bravoure"
+
+#, fuzzy
+msgid "campaignBonus|Minor Scroll"
 msgstr "Parchemin Mineur"
 
-msgid "Nomad Boots"
+#, fuzzy
+msgid "campaignBonus|Nomad Boots"
 msgstr "Bottes de Nomade"
 
-msgid "Power Axe"
+msgid "campaignBonus|Power Axe"
 msgstr "Puissante Hache"
 
-msgid "Stealth Shield"
+#, fuzzy
+msgid "campaignBonus|Spiked Shield"
+msgstr "Bouclier à pointes"
+
+#, fuzzy
+msgid "campaignBonus|Stealth Shield"
 msgstr "Bouclier furtif"
 
-msgid "Thunder Mace"
+msgid "campaignBonus|Tax Lien"
+msgstr "Privilège fiscal"
+
+#, fuzzy
+msgid "campaignBonus|Thunder Mace"
 msgstr "Massue du Tonnerre"
 
-msgid "Traveler's Boots"
+#, fuzzy
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Bottes magiques"
 
-msgid "Summon Earth"
+#, fuzzy
+msgid "campaignBonus|White Pearl"
+msgstr "Perle blanche"
+
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Mort-vivant"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Foudre"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Souffle de feu"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Grande malédiction"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Célérité collective"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Miroir"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Mort-vivant"
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Chair d'acier"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
 msgstr "Invoquer Terre"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Voir Héros"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Le %{building} produit des %{monster}."
@@ -8707,6 +8782,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Power Axe"
+#~ msgstr "Puissante Hache"
 
 #~ msgid "battle: show army order"
 #~ msgstr "combat : afficher l'ordre de jeu des créatures"
