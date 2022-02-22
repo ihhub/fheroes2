@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2021-11-07 17:03+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -696,6 +696,12 @@ msgstr ""
 msgid "Save the Dwarves"
 msgstr ""
 
+msgid "The Crown"
+msgstr ""
+
+msgid "The Gauntlet"
+msgstr ""
+
 msgid "Turning Point"
 msgstr ""
 
@@ -703,12 +709,6 @@ msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "Final Justice"
-msgstr ""
-
-msgid "The Crown"
-msgstr ""
-
-msgid "The Gauntlet"
 msgstr ""
 
 msgid ""
@@ -781,19 +781,19 @@ msgstr ""
 msgid "Necromancers"
 msgstr ""
 
-msgid "Rebellion"
-msgstr ""
-
 msgid "Slay the Dwarves"
-msgstr ""
-
-msgid "Apocalypse"
 msgstr ""
 
 msgid "Country Lords"
 msgstr ""
 
 msgid "Dragon Master"
+msgstr ""
+
+msgid "Rebellion"
+msgstr ""
+
+msgid "Apocalypse"
 msgstr ""
 
 msgid "Greater Glory"
@@ -1113,51 +1113,103 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
+msgstr ""
+
+msgid "campaignBonus|Black Pearl"
+msgstr ""
+
+msgid "campaignBonus|Caster's Bracelet"
 msgstr ""
 
 #, fuzzy
-msgid "Defender Helm"
+msgid "campaignBonus|Defender Helm"
 msgstr "Obránce"
 
 #, fuzzy
-msgid "Breastplate"
+msgid "campaignBonus|Breastplate"
 msgstr "Tržiště"
 
-msgid "Dragon Sword"
+msgid "campaignBonus|Dragon Sword"
 msgstr ""
 
-msgid "Fizbin Medal"
+msgid "campaignBonus|Fizbin Medal"
 msgstr ""
 
-msgid "Foremost Scroll"
+msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
-msgid "Mage's Ring"
+msgid "campaignBonus|Hideous Mask"
 msgstr ""
 
-msgid "Major Scroll"
+msgid "campaignBonus|Mage's Ring"
 msgstr ""
 
-msgid "Minor Scroll"
+msgid "campaignBonus|Major Scroll"
 msgstr ""
 
-msgid "Nomad Boots"
+msgid "campaignBonus|Medal of Honor"
 msgstr ""
 
-msgid "Power Axe"
+msgid "campaignBonus|Medal of Valor"
 msgstr ""
 
-msgid "Stealth Shield"
+msgid "campaignBonus|Minor Scroll"
 msgstr ""
 
-msgid "Thunder Mace"
+msgid "campaignBonus|Nomad Boots"
 msgstr ""
 
-msgid "Traveler's Boots"
+msgid "campaignBonus|Power Axe"
 msgstr ""
 
-msgid "Summon Earth"
+msgid "campaignBonus|Spiked Shield"
+msgstr ""
+
+msgid "campaignBonus|Stealth Shield"
+msgstr ""
+
+msgid "campaignBonus|Tax Lien"
+msgstr ""
+
+msgid "campaignBonus|Thunder Mace"
+msgstr ""
+
+msgid "campaignBonus|Traveler's Boots"
+msgstr ""
+
+msgid "campaignBonus|White Pearl"
+msgstr ""
+
+msgid "campaignBonus|Animate Dead"
+msgstr ""
+
+msgid "campaignBonus|Chain Lightning"
+msgstr ""
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+msgid "campaignBonus|Mirror Image"
+msgstr ""
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Obránce"
+
+msgid "campaignBonus|Summon Earth"
+msgstr ""
+
+msgid "campaignBonus|View Heroes"
 msgstr ""
 
 msgid "The %{building} produces %{monster}."

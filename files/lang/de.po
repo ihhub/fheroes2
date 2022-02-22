@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2022-01-22 16:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -719,6 +719,12 @@ msgstr "Macht des Schwerts"
 msgid "Save the Dwarves"
 msgstr "Rettet die Zwerge"
 
+msgid "The Crown"
+msgstr "Die Krone"
+
+msgid "The Gauntlet"
+msgstr "Fehdehandschuh"
+
 msgid "Turning Point"
 msgstr "Wendepunkt"
 
@@ -727,12 +733,6 @@ msgstr "Corlagons Kampf"
 
 msgid "Final Justice"
 msgstr "Gerechtigkeit"
-
-msgid "The Crown"
-msgstr "Die Krone"
-
-msgid "The Gauntlet"
-msgstr "Fehdehandschuh"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -842,20 +842,20 @@ msgstr "Erstes Blut"
 msgid "Necromancers"
 msgstr "Totenbeschwörer"
 
-msgid "Rebellion"
-msgstr "Rebellion"
-
 msgid "Slay the Dwarves"
 msgstr "Schlachtet die Zwerge"
-
-msgid "Apocalypse"
-msgstr "Apocalypse"
 
 msgid "Country Lords"
 msgstr "Landesfürsten"
 
 msgid "Dragon Master"
 msgstr "Drachenmeister"
+
+msgid "Rebellion"
+msgstr "Rebellion"
+
+msgid "Apocalypse"
+msgstr "Apocalypse"
 
 msgid "Greater Glory"
 msgstr "Größte Ehre"
@@ -994,8 +994,8 @@ msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
-"Die Magierinnen im Nordosten rebellieren! Zum Wohle des Reiches müssen "
-"Sie ihren schwachen Aufstand auf Ihren Weg in die Berge niederschlagen."
+"Die Magierinnen im Nordosten rebellieren! Zum Wohle des Reiches müssen Sie "
+"ihren schwachen Aufstand auf Ihren Weg in die Berge niederschlagen."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1293,50 +1293,101 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Zwergenfluch!!!!, rennt um euer Leben.\""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
+msgstr "Ballista"
+
+msgid "campaignBonus|Black Pearl"
+msgstr "Schwarze Perle"
+
+msgid "campaignBonus|Caster's Bracelet"
 msgstr "Zauberarmband"
 
-msgid "Defender Helm"
+msgid "campaignBonus|Defender Helm"
 msgstr "Verteidigungshelm"
 
-msgid "Breastplate"
+msgid "campaignBonus|Breastplate"
 msgstr "Brustpanzer"
 
-msgid "Dragon Sword"
+msgid "campaignBonus|Dragon Sword"
 msgstr "Drachenschwert"
 
-msgid "Fizbin Medal"
+msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin des Pechs"
 
-msgid "Foremost Scroll"
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Herausragendste Schriftrolle"
 
-msgid "Mage's Ring"
+msgid "campaignBonus|Hideous Mask"
+msgstr "Scheußliche Maske"
+
+msgid "campaignBonus|Mage's Ring"
 msgstr "Ring des Magiers"
 
-msgid "Major Scroll"
+msgid "campaignBonus|Major Scroll"
 msgstr "Grosse Schriftrolle"
 
-msgid "Minor Scroll"
+msgid "campaignBonus|Medal of Honor"
+msgstr "Medaille der Ehre"
+
+msgid "campaignBonus|Medal of Valor"
+msgstr "Medaille der Tapferkeit"
+
+msgid "campaignBonus|Minor Scroll"
 msgstr "Kleine Schriftrolle"
 
-msgid "Nomad Boots"
+msgid "campaignBonus|Nomad Boots"
 msgstr "Nomadenstiefel"
 
-msgid "Power Axe"
+msgid "campaignBonus|Power Axe"
 msgstr "Power-Axt"
 
-msgid "Stealth Shield"
+msgid "campaignBonus|Spiked Shield"
+msgstr "Stachelschild"
+
+msgid "campaignBonus|Stealth Shield"
 msgstr "Tarnkappenschild"
 
-msgid "Thunder Mace"
+msgid "campaignBonus|Tax Lien"
+msgstr "Steuererklärung"
+
+msgid "campaignBonus|Thunder Mace"
 msgstr "Donnerstab"
 
-msgid "Traveler's Boots"
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Reisestiefel"
 
-msgid "Summon Earth"
+msgid "campaignBonus|White Pearl"
+msgstr "Weisse Perle"
+
+msgid "campaignBonus|Animate Dead"
+msgstr "Tote beleben"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Kettenblitzstrahl"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Feuerstoß"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Massenfluch"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Masseneile"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Spiegelbild"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Tote beleben"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Stahlhaut"
+
+msgid "campaignBonus|Summon Earth"
 msgstr "Erdwesen beschwören"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Helden anzeigen"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Der %{building} produziert %{monster}."
@@ -8737,6 +8788,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Power Axe"
+#~ msgstr "Power-Axt"
 
 #~ msgid "battle: show army order"
 #~ msgstr "Schlacht: Reihenfolge von Armeen anzeigen"
