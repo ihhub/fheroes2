@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-17 08:59+0100\n"
+"POT-Creation-Date: 2022-02-22 19:07+0100\n"
 "PO-Revision-Date: 2022-01-25 10:25+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -157,8 +157,14 @@ msgstr "Количество"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} убивает половину вражеского отряда!"
 
-msgid "spell failed!"
-msgstr "неудачный вызов магии!"
+msgid "%{name} has turned off the auto battle"
+msgstr "%{name} выключил автобитву"
+
+msgid "%{name} has turned on the auto battle"
+msgstr "%{name} включил автобитву"
+
+msgid "Spell failed!"
+msgstr "Неудачный вызов магии!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -493,9 +499,6 @@ msgstr "Спрятать журнал"
 msgid "Show logs"
 msgstr "Показать журнал"
 
-msgid "%{color} casts a spell: %{spell}"
-msgstr "%{color} использует магию: %{spell}"
-
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
 
@@ -725,6 +728,9 @@ msgstr "Перчатка"
 msgid "Turning Point"
 msgstr "Переломный момент"
 
+msgid "Betrayal"
+msgstr "Предательство"
+
 msgid "Corlagon's Defense"
 msgstr "Защита Корлагона"
 
@@ -823,6 +829,15 @@ msgid ""
 msgstr ""
 "Это последняя битва. И Вы, и Ваш враг вооружены до зубов, и все враги в "
 "союзе против Вас. Захватите Арчибальда, чтобы положить конец войне!"
+
+msgid ""
+"Switching sides leaves you with three castles against the enemy's one.  This "
+"battle will be the easiest one you will face for the rest of the war..."
+"traitor."
+msgstr ""
+"Переметнётесь на сторону противника, и окажетесь с тремя замками против "
+"одного. Эта битва будет самой лёгкой из тех, что предстоят до конца войны... "
+"изменник."
 
 msgid "Barbarian Wars"
 msgstr "Войны варваров"
@@ -1173,8 +1188,8 @@ msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
-"Найдите и победите Мартину, предводительницу пиратов, которая живёт в Пиратской "
-"бухте. Не потеряйте Галаванта, иначе Ваши поиски закончатся."
+"Найдите и победите Мартину, предводительницу пиратов, которая живёт в "
+"Пиратской бухте. Не потеряйте Галаванта, иначе Ваши поиски закончатся."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
@@ -1187,8 +1202,8 @@ msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
-"Свергните укоренившуюся монархию лорда Альберона и объявите все земли своими. "
-"Галавант не должен умереть."
+"Свергните укоренившуюся монархию лорда Альберона и объявите все земли "
+"своими. Галавант не должен умереть."
 
 msgid " bane"
 msgstr " яд"
@@ -2546,6 +2561,12 @@ msgstr "Доступно: %{count}"
 msgid "Number to buy:"
 msgstr "Нанять:"
 
+msgid "Okay"
+msgstr "Принять"
+
+msgid "Click to apply the selected resolution."
+msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
+
 msgid "MAX"
 msgstr "Максимум"
 
@@ -2752,9 +2773,6 @@ msgstr "Расширенное описание выбранной карты."
 msgid "Accept the choice made."
 msgstr "Принять изменения."
 
-msgid "Okay"
-msgstr "Принять"
-
 msgid "Experimental Game Settings"
 msgstr "Настройки игры"
 
@@ -2960,6 +2978,12 @@ msgstr "Загрузка..."
 
 msgid "and more..."
 msgstr "и т.д."
+
+msgid "Are you sure you want to restart this scenario?"
+msgstr "Вы действительно хотите начать этот сценарий сначала?"
+
+msgid "Restart"
+msgstr "Начать сначала"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Сбой загрузки сценария кампании"
@@ -3563,8 +3587,8 @@ msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
-"Открывает меню, где Вы можете загрузить, сохранить, начать новую игру или выйти "
-"из нее."
+"Открывает меню, где Вы можете загрузить, сохранить, начать новую игру или "
+"выйти из нее."
 
 msgid "File Options"
 msgstr "Настройки файла карты"
@@ -3702,6 +3726,9 @@ msgstr "Русский"
 msgid "Italian"
 msgstr "Итальянский"
 
+msgid "Czech"
+msgstr "Чешский"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -3710,12 +3737,6 @@ msgstr "%{object} грабителя"
 
 msgid "%{object} raided"
 msgstr "%{object} рейд"
-
-msgid "Ambrose"
-msgstr "Амброс"
-
-msgid "Dimitry"
-msgstr "Димитрий"
 
 msgid "Ector"
 msgstr "Эктор"
@@ -3726,32 +3747,29 @@ msgstr "Гвинет"
 msgid "Lord Kilburn"
 msgstr "Лорд Килбурн"
 
-msgid "Maximus"
-msgstr "Максимус"
-
-msgid "Ruby"
-msgstr "Руби"
-
 msgid "Sir Gallant"
 msgstr "Сэр Галант"
 
 msgid "Tyro"
 msgstr "Тиро"
 
-msgid "Atlas"
-msgstr "Атлас"
+msgid "Ambrose"
+msgstr "Амброс"
+
+msgid "Dimitry"
+msgstr "Димитрий"
+
+msgid "Maximus"
+msgstr "Максимус"
+
+msgid "Ruby"
+msgstr "Руби"
 
 msgid "Crag Hack"
 msgstr "Крэг Хэк"
 
-msgid "Ergon"
-msgstr "Эргон"
-
 msgid "Fineous"
 msgstr "Финеус"
-
-msgid "Jaclyn"
-msgstr "Жаклин"
 
 msgid "Jezebel"
 msgstr "Изабэль"
@@ -3762,23 +3780,23 @@ msgstr "Йойош"
 msgid "Thundax"
 msgstr "Тандакс"
 
+msgid "Atlas"
+msgstr "Атлас"
+
+msgid "Ergon"
+msgstr "Эргон"
+
+msgid "Jaclyn"
+msgstr "Жаклин"
+
 msgid "Tsabu"
 msgstr "Тсабу"
-
-msgid "Ariel"
-msgstr "Ариэль"
 
 msgid "Astra"
 msgstr "Астра"
 
-msgid "Carlawn"
-msgstr "Карлан"
-
 msgid "Gem"
 msgstr "Джэм"
-
-msgid "Luna"
-msgstr "Луна"
 
 msgid "Natasha"
 msgstr "Наташа"
@@ -3792,8 +3810,14 @@ msgstr "Троян"
 msgid "Vatawna"
 msgstr "Ватавна"
 
-msgid "Agar"
-msgstr "Агар"
+msgid "Ariel"
+msgstr "Ариэль"
+
+msgid "Carlawn"
+msgstr "Карлан"
+
+msgid "Luna"
+msgstr "Луна"
 
 msgid "Arie"
 msgstr "Эйри"
@@ -3804,14 +3828,17 @@ msgstr "Барок"
 msgid "Crodo"
 msgstr "Кродо"
 
-msgid "Falagar"
-msgstr "Фалагар"
-
 msgid "Kastore"
 msgstr "Кастор"
 
 msgid "Vesper"
 msgstr "Веспер"
+
+msgid "Agar"
+msgstr "Агар"
+
+msgid "Falagar"
+msgstr "Фалагар"
 
 msgid "Wrathmont"
 msgstr "Ратмонт"
@@ -3825,23 +3852,20 @@ msgstr "Флинт"
 msgid "Halon"
 msgstr "Хейлон"
 
-msgid "Mandigal"
-msgstr "Мандигал"
-
 msgid "Myra"
 msgstr "Мира"
 
 msgid "Myrini"
 msgstr "Мирини"
 
-msgid "Sarakin"
-msgstr "Саракин"
-
 msgid "Wilfrey"
 msgstr "Уилфри"
 
-msgid "Celia"
-msgstr "Целия"
+msgid "Mandigal"
+msgstr "Мандигал"
+
+msgid "Sarakin"
+msgstr "Саракин"
 
 msgid "Charity"
 msgstr "Чэрити"
@@ -3855,23 +3879,23 @@ msgstr "Рэнлу"
 msgid "Rialdo"
 msgstr "Риальдо"
 
-msgid "Roxana"
-msgstr "Роксана"
-
-msgid "Sandro"
-msgstr "Сандро"
-
 msgid "Zam"
 msgstr "Зам"
 
 msgid "Zom"
 msgstr "Зом"
 
+msgid "Celia"
+msgstr "Целия"
+
+msgid "Roxana"
+msgstr "Роксана"
+
+msgid "Sandro"
+msgstr "Сандро"
+
 msgid "Archibald"
 msgstr "Арчибальд"
-
-msgid "Brother Brax"
-msgstr "Брат Бракс"
 
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"
@@ -3885,20 +3909,11 @@ msgstr "Роланд"
 msgid "Sister Eliza"
 msgstr "Сестра Элиза"
 
-msgid "Ceallach"
-msgstr "Каллах"
+msgid "Brother Brax"
+msgstr "Брат Бракс"
 
 msgid "Dainwin"
 msgstr "Дейнвин"
-
-msgid "Drakonia"
-msgstr "Дракония"
-
-msgid "Elderian"
-msgstr "Элдериан"
-
-msgid "Gallavant"
-msgstr "Галавант"
 
 msgid "Joseph"
 msgstr "Джозеф"
@@ -3908,6 +3923,18 @@ msgstr "Моуг"
 
 msgid "Solmyr"
 msgstr "Сольмир"
+
+msgid "Ceallach"
+msgstr "Каллах"
+
+msgid "Drakonia"
+msgstr "Дракония"
+
+msgid "Elderian"
+msgstr "Элдериан"
+
+msgid "Gallavant"
+msgstr "Галавант"
 
 msgid "Jarkonas"
 msgstr "Джарконас"
@@ -4467,8 +4494,8 @@ msgid ""
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
 msgstr ""
-"Вы посетили спартанское жилище отставного ветерана. Солдат говорит Вам, что он "
-"готов отдать %{art} первому Лидеру, которого он встретит."
+"Вы посетили спартанское жилище отставного ветерана. Солдат говорит Вам, что "
+"он готов отдать %{art} первому Лидеру, которого он встретит."
 
 msgid ""
 "You've encountered a strange person with a hat and an owl on it. He tells "
@@ -4499,8 +4526,8 @@ msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
 msgstr ""
-"Осмотрительность - это лучшая черта доблести, посему Вы решили избежать сражения "
-"сегодня."
+"Осмотрительность - это лучшая черта доблести, посему Вы решили избежать "
+"сражения сегодня."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -4717,8 +4744,8 @@ msgstr ""
 "Белокаменные колонны подпирают крышу, уходящую в небеса. Едва Вы вошли "
 "внутрь, как спокойный воздух превратился в мощный поток ветра, едва не "
 "вытолкнувший Вас наружу. Воздух сгустился в едва различимые формы. Существо "
-"обратилось к Вам едва слышным шёпотом: \"Зачем ты явился? Ты пришёл сюда искать "
-"помощи сил воздуха?\""
+"обратилось к Вам едва слышным шёпотом: \"Зачем ты явился? Ты пришёл сюда "
+"искать помощи сил воздуха?\""
 
 msgid "No Fire Elementals approach you from the lava pool."
 msgstr ""
@@ -7534,8 +7561,8 @@ msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
-"%{name} увеличивает защиту от 'Армагеддона' и 'Бури стихий' на "
-"%{count} процентов, но также уменьшает силу магии на 2 пункта."
+"%{name} увеличивает защиту от 'Армагеддона' и 'Бури стихий' на %{count} "
+"процентов, но также уменьшает силу магии на 2 пункта."
 
 msgid "Battle Garb of Anduran"
 msgstr "Боевой Доспех Андурана"
@@ -7664,8 +7691,8 @@ msgid ""
 "accept."
 msgstr ""
 "Колдунья считает, что для защиты Вашей армии можно использовать магическую "
-"поддержку. Она предлагает заколдовать брошь, что Вы носите на Вашем плаще, "
-"и Вы соглашаетесь."
+"поддержку. Она предлагает заколдовать брошь, что Вы носите на Вашем плаще, и "
+"Вы соглашаетесь."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -7683,8 +7710,8 @@ msgid ""
 "Crystal Ball."
 msgstr ""
 "Вы посетили караван цыган. У них идёт пирушка, пьяные цыгане потеряли страх, "
-"и Вас вызывают: \"Докажешь, что ты танцуешь как Рама Бута, и мы наградим тебя."
-"\"\n"
+"и Вас вызывают: \"Докажешь, что ты танцуешь как Рама Бута, и мы наградим "
+"тебя.\"\n"
 "Вы решаете попробовать... Цыгане смеются над Вашими попытками, но восхищаясь "
 "Вашим мужеством, отдают Вам 'Кристальный Шар'."
 
@@ -7694,10 +7721,10 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
-"Вы поднимаетесь на вершину скалы, где сидит Огненный элементаль. Его пылающее "
-"лицо искажено от сильной боли. Затем он бросает светящийся сгусток на Вас. "
-"Вы делаете жест руками, чтобы заблокировать его, но сгусток проходит через "
-"Ваши руки и тело."
+"Вы поднимаетесь на вершину скалы, где сидит Огненный элементаль. Его "
+"пылающее лицо искажено от сильной боли. Затем он бросает светящийся сгусток "
+"на Вас. Вы делаете жест руками, чтобы заблокировать его, но сгусток проходит "
+"через Ваши руки и тело."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -7726,10 +7753,10 @@ msgid ""
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
-"Вы подъезжаете к полю боя. Паладин был смертельно ранен группой Зомби. Он просит "
-"Вас забрать его молот и закончить битву. Вы подбираете магический молот, он "
-"начинает издавать мелодичные звуки, и потом все вокруг рушится. Все Зомби "
-"уничтожены. Залитый кровью молот Вы прицепляете к своему ремню."
+"Вы подъезжаете к полю боя. Паладин был смертельно ранен группой Зомби. Он "
+"просит Вас забрать его молот и закончить битву. Вы подбираете магический "
+"молот, он начинает издавать мелодичные звуки, и потом все вокруг рушится. "
+"Все Зомби уничтожены. Залитый кровью молот Вы прицепляете к своему ремню."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -7741,8 +7768,8 @@ msgstr ""
 "На небольшом холме, Вы видите смешную сцену. Фея пытается поднять большой "
 "скипетр.\n"
 "Стараясь не рассмеяться, Вы спрашиваете: \"Возможно нужна помощь?\"\n"
-"Фея смотрит на Вас и отвечает: \"Вы думаете, это смешно? Хорошо. Забирайте его "
-"себе, а я улетаю.\""
+"Фея смотрит на Вас и отвечает: \"Вы думаете, это смешно? Хорошо. Забирайте "
+"его себе, а я улетаю.\""
 
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
@@ -7751,8 +7778,9 @@ msgid ""
 "underneath a nearby dock."
 msgstr ""
 "Старый моряк рассказал Вам историю о заколдованной шляпе, которую он "
-"использовал во время штормов. Затем он вручает Вам карту, на которой отмечено, "
-"где он спрятал её. После продолжительных поисков, Вы находите шляпу."
+"использовал во время штормов. Затем он вручает Вам карту, на которой "
+"отмечено, где он спрятал её. После продолжительных поисков, Вы находите "
+"шляпу."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
@@ -8097,8 +8125,8 @@ msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
-"Выбранный вражеский отряд переходит под Ваш полный контроль, если его здоровье "
-"не превышает %{count}*SP."
+"Выбранный вражеский отряд переходит под Ваш полный контроль, если его "
+"здоровье не превышает %{count}*SP."
 
 msgid "Cold Ray"
 msgstr "Ледяной луч"
@@ -8295,8 +8323,8 @@ msgstr "Видения"
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
-"Позволяет видеть герою (не дальше 3-х шагов) количество существ в нейтральном "
-"войске, а также их намерения."
+"Позволяет видеть герою (не дальше 3-х шагов) количество существ в "
+"нейтральном войске, а также их намерения."
 
 msgid "Haunt"
 msgstr "Запустение"
@@ -8459,8 +8487,9 @@ msgid "heroes: remember move points for retreat/surrender result"
 msgstr "герои: при бегстве запомнить MP/SP для текущего дня"
 
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr "герои: переписывание заклинаний из свитков в книгу (необходим навык "
-"Орлиный взор)"
+msgstr ""
+"герои: переписывание заклинаний из свитков в книгу (необходим навык Орлиный "
+"взор)"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
@@ -8554,6 +8583,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{color} casts a spell: %{spell}"
+#~ msgstr "%{color} использует магию: %{spell}"
 
 #~ msgid "Power Axe"
 #~ msgstr "Топор власти"
