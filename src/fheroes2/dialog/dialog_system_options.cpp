@@ -248,7 +248,7 @@ namespace
 
         drawDialog( roi );
 
-        const fheroes2::Point buttonOffset( 113 + dialogArea.x, 362 + dialogArea.y );
+        const fheroes2::Point buttonOffset( 112 + dialogArea.x, 362 + dialogArea.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
         buttonOkay.draw();
 
@@ -270,15 +270,15 @@ namespace
             bool saveSoundVolume = false;
             if ( Audio::isValid() ) {
                 if ( le.MouseClickLeft( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 10 );
+                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
                     saveMusicVolume = true;
                 }
                 else if ( le.MouseWheelUp( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( std::min( conf.MusicVolume() + 1, 9 ) );
+                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
                     saveMusicVolume = true;
                 }
                 else if ( le.MouseWheelDn( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( std::max( 0, conf.MusicVolume() - 1 ) );
+                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
                     saveMusicVolume = true;
                 }
                 if ( saveMusicVolume ) {
@@ -286,15 +286,15 @@ namespace
                 }
 
                 if ( le.MouseClickLeft( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 10 );
+                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
                     saveSoundVolume = true;
                 }
                 else if ( le.MouseWheelUp( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( std::min( conf.SoundVolume() + 1, 9 ) );
+                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
                     saveSoundVolume = true;
                 }
                 else if ( le.MouseWheelDn( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( std::max( 0, conf.SoundVolume() - 1 ) );
+                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
                     saveSoundVolume = true;
                 }
                 if ( saveSoundVolume ) {
@@ -310,7 +310,12 @@ namespace
                 if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
                     ++type;
 
+                const Game::MusicRestorer musicRestorer;
+
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
+
+                Game::SetCurrentMusic( MUS::UNKNOWN );
+
                 saveMusicType = true;
             }
 
@@ -321,11 +326,11 @@ namespace
                 saveHeroSpeed = true;
             }
             else if ( le.MouseWheelUp( heroSpeedRoi ) ) {
-                conf.SetHeroesMoveSpeed( std::min( conf.HeroesMoveSpeed() + 1, 10 ) );
+                conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() + 1 );
                 saveHeroSpeed = true;
             }
             else if ( le.MouseWheelDn( heroSpeedRoi ) ) {
-                conf.SetHeroesMoveSpeed( std::max( 1, conf.HeroesMoveSpeed() - 1 ) );
+                conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() - 1 );
                 saveHeroSpeed = true;
             }
 
@@ -336,11 +341,11 @@ namespace
                 saveAISpeed = true;
             }
             else if ( le.MouseWheelUp( aiSpeedRoi ) ) {
-                conf.SetAIMoveSpeed( std::min( conf.AIMoveSpeed() + 1, 10 ) );
+                conf.SetAIMoveSpeed( conf.AIMoveSpeed() + 1 );
                 saveAISpeed = true;
             }
             else if ( le.MouseWheelDn( aiSpeedRoi ) ) {
-                conf.SetAIMoveSpeed( std::max( 0, conf.AIMoveSpeed() - 1 ) );
+                conf.SetAIMoveSpeed( conf.AIMoveSpeed() - 1 );
                 saveAISpeed = true;
             }
 
@@ -351,15 +356,15 @@ namespace
             // set scroll speed
             bool saveScrollSpeed = false;
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( SCROLL_FAST2 > conf.ScrollSpeed() ? conf.ScrollSpeed() + 1 : SCROLL_SLOW );
+                conf.SetScrollSpeed( conf.ScrollSpeed() % SCROLL_FAST2 + 1 );
                 saveScrollSpeed = true;
             }
             else if ( le.MouseWheelUp( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( std::min( static_cast<int>( conf.ScrollSpeed() ) + 1, static_cast<int>( SCROLL_FAST2 ) ) );
+                conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
                 saveScrollSpeed = true;
             }
             else if ( le.MouseWheelDn( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( std::max( static_cast<int>( SCROLL_SLOW ), static_cast<int>( conf.ScrollSpeed() ) - 1 ) );
+                conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
                 saveScrollSpeed = true;
             }
 

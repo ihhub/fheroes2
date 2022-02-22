@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +34,13 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#ifndef BUILD_RELEASE
+#ifdef WITH_DEBUG
 #include "tools.h"
 #endif
 #include "ui_tool.h"
@@ -46,8 +48,6 @@
 
 namespace
 {
-    const char * configurationFileName = "fheroes2.cfg";
-
     std::string GetCaption()
     {
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
@@ -56,7 +56,7 @@ namespace
     int PrintHelp( const char * basename )
     {
         COUT( "Usage: " << basename << " [OPTIONS]" );
-#ifndef BUILD_RELEASE
+#ifdef WITH_DEBUG
         COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
 #endif
         COUT( "  -h\t\tprint this help message and exit" );
@@ -66,10 +66,10 @@ namespace
 
     void ReadConfigs()
     {
-        Settings & conf = Settings::Get();
-
+        const std::string configurationFileName( "fheroes2.cfg" );
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
+        Settings & conf = Settings::Get();
         if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
             LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
@@ -113,6 +113,8 @@ namespace
         DisplayInitializer()
         {
             const Settings & conf = Settings::Get();
+
+            fheroes2::engine().setVSync( conf.isVSyncEnabled() );
 
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
@@ -169,7 +171,7 @@ int main( int argc, char ** argv )
             int opt;
             while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
                 switch ( opt ) {
-#ifndef BUILD_RELEASE
+#ifdef WITH_DEBUG
                 case 'd':
                     conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
                     break;
@@ -205,6 +207,10 @@ int main( int argc, char ** argv )
         const DisplayInitializer displayInitializer;
 
         const AGG::AGGInitializer aggInitializer;
+
+        // Load palette.
+        fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
+        fheroes2::Display::instance().changePalette( nullptr, true );
 
         // load BIN data
         Bin_Info::InitBinInfo();

@@ -24,6 +24,7 @@
 #include "battle_troop.h"
 #include "heroes_base.h"
 #include "logging.h"
+#include "speed.h"
 
 using namespace Battle;
 
@@ -40,7 +41,7 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
         SpellSelection bestSpell;
@@ -52,8 +53,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.getForce( _myColor ), true );
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -86,7 +87,7 @@ namespace AI
                 continue;
 
             if ( spell.isDamage() ) {
-                checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
+                checkSelectBestSpell( spell, spellDamageValue( spell, arena, currentUnit, friendly, enemies, retreating ) );
             }
             else if ( spell.isEffectDispel() ) {
                 checkSelectBestSpell( spell, spellDispellValue( spell, friendly, enemies ) );
@@ -113,7 +114,8 @@ namespace AI
         return bestSpell;
     }
 
-    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating ) const
+    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Battle::Unit & currentUnit, const Units & friendly, const Units & enemies,
+                                                      bool retreating ) const
     {
         SpellcastOutcome bestOutcome;
         if ( !spell.isDamage() )
@@ -149,18 +151,30 @@ namespace AI
                 spellHeuristic += damageHeuristic( enemy );
             }
             for ( const Unit * unit : friendly ) {
-                spellHeuristic -= damageHeuristic( unit );
+                const double valueLost = damageHeuristic( unit );
+                // check if we're retreating and will lose current unit
+                if ( retreating && unit->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - unit->GetStrength() ) < 0.001 ) {
+                    // avoid this spell and return early
+                    return bestOutcome;
+                }
+                spellHeuristic -= valueLost;
             }
 
             bestOutcome.updateOutcome( spellHeuristic, -1 );
         }
         else {
             // Area of effect spells like Fireball
-            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
                 double spellHeuristic = 0;
                 for ( const TargetInfo & target : targets ) {
                     if ( target.defender->GetCurrentColor() == myColor ) {
-                        spellHeuristic -= damageHeuristic( target.defender );
+                        const double valueLost = damageHeuristic( target.defender );
+                        // check if we're retreating and will lose current unit
+                        if ( retreating && target.defender->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - target.defender->GetStrength() ) < 0.001 ) {
+                            // avoid this spell and return without updating the outcome
+                            return;
+                        }
+                        spellHeuristic -= valueLost;
                     }
                     else {
                         spellHeuristic += damageHeuristic( target.defender );
@@ -204,8 +218,8 @@ namespace AI
         return 1;
     }
 
-    // Compute a heuristic for Disrupting Ray usage by AI
-    double BattlePlanner::getDisruptingRayRatio( const Battle::Unit & target ) const
+    // Compute a heuristic for Disrupting Ray spell usage by AI
+    double BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & target ) const
     {
         const double targetDefense = target.GetDefense();
 
@@ -229,6 +243,52 @@ namespace AI
         return ratio;
     }
 
+    // Compute a heuristic for Slow spell usage by AI
+    double BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
+    {
+        if ( target.isArchers() || _attackingCastle ) {
+            // Slow is useless against archers or troops defending castle
+            return 0.01;
+        }
+        const int currentSpeed = target.GetSpeed( false, true );
+        const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
+        const int lostSpeed = currentSpeed - newSpeed; // usually 2
+        double ratio = 0.15 * lostSpeed;
+
+        if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
+            ratio /= 3;
+        }
+        if ( target.Modes( SP_HASTE ) ) {
+            ratio *= 2;
+        }
+        else if ( !target.isFlying() ) {
+            ratio /= ReduceEffectivenessByDistance( target );
+        }
+        return ratio;
+    }
+
+    // Compute a heuristic for Haste spell usage by AI
+    double BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) const
+    {
+        const int currentSpeed = target.GetSpeed( false, true );
+        const int newSpeed = Speed::GetHasteSpeedFromSpell( currentSpeed );
+        const int gainedSpeed = newSpeed - currentSpeed; // usually 2
+        double ratio = 0.05 * gainedSpeed;
+
+        if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
+            ratio *= 3;
+        }
+        if ( target.Modes( SP_SLOW ) ) {
+            ratio *= 2;
+        }
+        // Reduce effectiveness if we don't have to move
+        else if ( target.isArchers() || _defensiveTactics ) {
+            ratio /= 2;
+        }
+
+        return ratio;
+    }
+
     double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
     {
         const int spellID = spell.GetID();
@@ -244,7 +304,7 @@ namespace AI
         switch ( spellID ) {
         case Spell::SLOW:
         case Spell::MASSSLOW:
-            ratio = 0.3;
+            ratio = getSpellSlowRatio( target );
             break;
         case Spell::BLIND: {
             if ( targetIsLast )
@@ -275,12 +335,11 @@ namespace AI
             break;
         }
         case Spell::DISRUPTINGRAY:
-            ratio = getDisruptingRayRatio( target );
+            ratio = getSpellDisruptingRayRatio( target );
             break;
         case Spell::HASTE:
         case Spell::MASSHASTE:
-            // Haste isn't effective if target is fast already
-            ratio = target.GetSpeed() < _enemyAverageSpeed ? 0.3 : 0.1;
+            ratio = getSpellHasteRatio( target );
             break;
         case Spell::BLOODLUST:
             ratio = 0.1;
@@ -308,28 +367,7 @@ namespace AI
             return 0.0;
         }
 
-        if ( spellID == Spell::SLOW || spellID == Spell::MASSSLOW ) {
-            if ( target.Modes( SP_HASTE ) ) {
-                ratio *= 2;
-            }
-            else if ( target.isArchers() || _attackingCastle ) {
-                // Slow is useless against archers or troops defending castle
-                ratio = 0.01;
-            }
-            else if ( !target.isFlying() ) {
-                ratio /= ReduceEffectivenessByDistance( target );
-            }
-        }
-        if ( spellID == Spell::HASTE || spellID == Spell::MASSHASTE ) {
-            if ( target.Modes( SP_SLOW ) ) {
-                ratio *= 2;
-            }
-            // Reduce effectiveness if we don't have to move
-            else if ( target.isArchers() || _defensiveTactics ) {
-                ratio /= 2;
-            }
-        }
-        else if ( target.Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
+        if ( target.Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
             ratio *= 2;
         }
         else if ( target.Modes( SP_CURSE ) && ( spellID == Spell::BLESS || spellID == Spell::MASSBLESS ) ) {

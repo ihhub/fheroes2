@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "screen.h"
-#include "palette_h2.h"
+#include "image_palette.h"
 #include "tools.h"
 
 #include <SDL_version.h>
@@ -126,13 +126,15 @@ namespace
         return indexes;
     }
 
-    const uint8_t * PALPAlette()
+    const uint8_t * PALPalette( const bool forceDefaultPaletteUpdate = false )
     {
         static std::vector<uint8_t> palette;
-        if ( palette.empty() ) {
+        if ( palette.empty() || forceDefaultPaletteUpdate ) {
+            const uint8_t * gamePalette = fheroes2::getGamePalette();
+
             palette.resize( 256 * 3 );
             for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = kb_pal[i] << 2;
+                palette[i] = gamePalette[i] << 2;
             }
         }
 
@@ -179,7 +181,7 @@ namespace
         return true;
     }
 
-    const uint8_t * currentPalette = PALPAlette();
+    const uint8_t * currentPalette = PALPalette();
 
 // If SDL library is used
 #if !defined( FHEROES2_VITA )
@@ -342,10 +344,14 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
+        RenderCursor( const RenderCursor & ) = delete;
+
         ~RenderCursor() override
         {
             clear();
         }
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
 
         void show( const bool enable ) override
         {
@@ -470,6 +476,12 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
+        RenderCursor() = default;
+
+        RenderCursor( const RenderCursor & ) = delete;
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
+
         static RenderCursor * create()
         {
             return new RenderCursor;
@@ -795,6 +807,11 @@ namespace
             return new RenderEngine;
         }
 
+        void setVSync( const bool enable ) override
+        {
+            _isVSyncEnabled = enable;
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -802,6 +819,7 @@ namespace
             , _renderer( nullptr )
             , _texture( nullptr )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
+            , _isVSyncEnabled( false )
         {}
 
         void clear() override
@@ -982,8 +1000,14 @@ namespace
 
         fheroes2::Size _windowedSize;
 
+        bool _isVSyncEnabled;
+
         int renderFlags() const
         {
+            if ( _isVSyncEnabled ) {
+                return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+            }
+
             return SDL_RENDERER_ACCELERATED;
         }
 
@@ -1273,12 +1297,17 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
+        _prevRoi = {};
+
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
 
         Image::resize( width_, height_ );
+
+        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
+        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
     bool Display::isDefaultSize() const
@@ -1385,14 +1414,16 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+
+        _prevRoi = {};
     }
 
-    void Display::changePalette( const uint8_t * palette ) const
+    void Display::changePalette( const uint8_t * palette, const bool forceDefaultPaletteUpdate ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPAlette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() && !forceDefaultPaletteUpdate ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPAlette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPalette( forceDefaultPaletteUpdate ) : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

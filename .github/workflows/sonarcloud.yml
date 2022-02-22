@@ -10,7 +10,7 @@ jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) }}
+    if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
     env:
       SONAR_SCANNER_VERSION: 4.5.0.2216
     steps:
@@ -19,8 +19,8 @@ jobs:
         fetch-depth: 0
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+        sudo apt-get -y update
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
     - name: Initialize SonarCloud
       run: |
         mkdir -p ~/.sonarcloud
@@ -39,6 +39,7 @@ jobs:
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
       env:
+        DEBUG: ON
         FHEROES2_STRICT_COMPILATION: ON
         WITH_TOOLS: ON
     - name: Analyze

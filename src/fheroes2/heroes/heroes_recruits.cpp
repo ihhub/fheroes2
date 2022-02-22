@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,52 +21,136 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
+#include "game.h"
 #include "heroes_recruits.h"
-#include "heroes.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 
-Recruits::Recruits()
-    : std::pair<int, int>( Heroes::UNKNOWN, Heroes::UNKNOWN )
+Recruit::Recruit()
+    : _id( Heroes::UNKNOWN )
+    , _surrenderDay( 0 )
 {}
 
-void Recruits::Reset( void )
+Recruit::Recruit( const Heroes & hero, const uint32_t surrenderDay )
+    : _id( hero.GetID() )
+    , _surrenderDay( surrenderDay )
+{}
+
+Recruit::Recruit( const Heroes & hero )
+    : Recruit( hero, 0 )
+{}
+
+void Recruit::setSurrenderDayTmp( const uint32_t surrenderDay )
 {
-    first = Heroes::UNKNOWN;
-    second = Heroes::UNKNOWN;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
+
+    _surrenderDay = surrenderDay;
 }
 
-int Recruits::GetID1( void ) const
+Recruits::Recruits()
+    : std::pair<Recruit, Recruit>()
+{}
+
+void Recruits::Reset()
 {
-    return first;
+    first = {};
+    second = {};
 }
 
-int Recruits::GetID2( void ) const
+int Recruits::GetID1() const
 {
-    return second;
+    return first.getID();
 }
 
-Heroes * Recruits::GetHero1( void )
+int Recruits::GetID2() const
 {
-    return world.GetHeroes( first );
+    return second.getID();
 }
 
-Heroes * Recruits::GetHero2( void )
+Heroes * Recruits::GetHero1() const
 {
-    return world.GetHeroes( second );
+    return world.GetHeroes( first.getID() );
 }
 
-void Recruits::SetHero1( const Heroes * hero )
+Heroes * Recruits::GetHero2() const
 {
-    first = hero ? hero->hid : Heroes::UNKNOWN;
+    return world.GetHeroes( second.getID() );
 }
 
-void Recruits::SetHero2( const Heroes * hero )
+uint32_t Recruits::getSurrenderDayOfHero1() const
 {
-    second = hero ? hero->hid : Heroes::UNKNOWN;
+    return first.getSurrenderDay();
 }
 
-StreamBase & operator>>( StreamBase & sb, Recruits & rt )
+uint32_t Recruits::getSurrenderDayOfHero2() const
 {
-    return sb >> rt.first >> rt.second;
+    return second.getSurrenderDay();
+}
+
+void Recruits::SetHero1( Heroes * hero )
+{
+    if ( hero ) {
+        hero->SetModes( Heroes::RECRUIT );
+
+        first = Recruit( *hero );
+    }
+    else {
+        first = {};
+    }
+}
+
+void Recruits::SetHero2( Heroes * hero )
+{
+    if ( hero ) {
+        hero->SetModes( Heroes::RECRUIT );
+
+        second = Recruit( *hero );
+    }
+    else {
+        second = {};
+    }
+}
+
+void Recruits::SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
+    assert( hero != nullptr );
+
+    SetHero2( hero );
+
+    second.setSurrenderDayTmp( heroSurrenderDay );
+}
+
+void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay )
+{
+    assert( heroSurrenderDay > 0 );
+
+    hero.SetModes( Heroes::RECRUIT );
+
+    Recruit & recruit = ( first.getSurrenderDay() > second.getSurrenderDay() ? second : first );
+
+    recruit = Recruit( hero, heroSurrenderDay );
+}
+
+StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
+{
+    return msg << recruit._id << recruit._surrenderDay;
+}
+
+StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
+{
+    msg >> recruit._id;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE2_0912_RELEASE ) {
+        msg >> recruit._surrenderDay;
+    }
+    else {
+        recruit._surrenderDay = 0;
+    }
+
+    return msg;
 }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,9 +34,30 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 #include "world.h"
 
 #include <cassert>
+
+namespace
+{
+    void drawRecruitWindow( fheroes2::Image & output, const fheroes2::Point & offset, const int icnId )
+    {
+        const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icnId, 0 );
+        fheroes2::Blit( window, output, offset.x, offset.y );
+
+        const fheroes2::Rect backgroundArea( 144, 55, 120, 12 );
+
+        // Mask 'hardcoded' title to allow translation text appear.
+        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+        fheroes2::Copy( backgroundImage, 6, 59, output, offset.x + backgroundArea.x, offset.y + backgroundArea.y, backgroundArea.width / 2, backgroundArea.height );
+        fheroes2::Copy( backgroundImage, 6 + 65, 59, output, offset.x + backgroundArea.x + backgroundArea.width / 2, offset.y + backgroundArea.y,
+                        backgroundArea.width / 2, backgroundArea.height );
+
+        const fheroes2::Text text( _( "Cost per troop:" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        text.draw( offset.x + backgroundArea.x + ( backgroundArea.width - text.width() ) / 2, offset.y + backgroundArea.y + 2, output );
+    }
+}
 
 void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
                         const std::string & label )
@@ -175,7 +197,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
 
 void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available )
 {
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RECRBKG, 0 ), fheroes2::Display::instance(), pos.x, pos.y );
+    drawRecruitWindow( fheroes2::Display::instance(), { pos.x, pos.y }, ICN::RECRBKG );
 
     RedrawMonsterInfo( pos, monster, available, true );
 
@@ -212,7 +234,7 @@ u32 CalculateMax( const Monster & monster, const Kingdom & kingdom, u32 availabl
     return max;
 }
 
-Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext )
+Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -232,14 +254,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
 
-    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
+    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 + windowOffsetY );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
     const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
-    fheroes2::Blit( box, display, pos.x, pos.y );
+
+    drawRecruitWindow( display, { pos.x, pos.y }, ICN::RECRBKG );
 
     RedrawStaticInfo( pos, monster, available );
 
@@ -280,7 +303,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::ButtonSprite monsterSwitchLeft;
     fheroes2::ButtonSprite monsterSwitchRight;
 
-    if ( ext && monster0.GetDowngrade() != monster0 ) {
+    if ( allowDowngradedMonster && monster0.GetDowngrade() != monster0 ) {
         monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
         monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
 
@@ -345,7 +368,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
         bool updateCost = false;
-        if ( ext && upgrades.size() > 1 ) {
+        if ( allowDowngradedMonster && upgrades.size() > 1 ) {
             if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
@@ -504,7 +527,8 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
-    fheroes2::Blit( box, display, pos.x, pos.y );
+
+    drawRecruitWindow( display, { pos.x, pos.y }, ICN::RECR2BKG );
 
     LocalEvent & le = LocalEvent::Get();
 

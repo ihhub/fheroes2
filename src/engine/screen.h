@@ -71,6 +71,11 @@ namespace fheroes2
             return fheroes2::Size();
         }
 
+        virtual void setVSync( const bool )
+        {
+            // Do nothing.
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -140,9 +145,9 @@ namespace fheroes2
 
         void release(); // to release all allocated resources. Should be used at the end of the application
 
-        // Change whole color representation on the screen. Make sure that palette exists all the time!!!
-        // nullptr input parameters means to set to default value
-        void changePalette( const uint8_t * palette = nullptr ) const;
+        // Change the whole color representation on the screen. Make sure that palette exists all the time!!!
+        // nullptr input parameter is used to reset pallette to default one.
+        void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();

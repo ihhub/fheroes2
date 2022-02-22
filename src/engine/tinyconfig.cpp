@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of SDL++ Engine:                                                 *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,10 +57,11 @@ bool TinyConfig::Load( const std::string & cfile )
     if ( !sf.open( cfile, "rb" ) )
         return false;
 
-    std::list<std::string> rows = StringSplit( sf.toString(), "\n" );
+    std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
 
-    for ( std::list<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
+    for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
         std::string str = StringTrim( *it );
+
         if ( str.empty() || str[0] == comment )
             continue;
 

@@ -60,13 +60,14 @@ namespace
 
     void drawLanguage( const fheroes2::StandardWindow & window )
     {
-        const fheroes2::Text title( _( "Language" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-
-        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
-        const fheroes2::Text name( fheroes2::getLanguageName( currentLanguage ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
-
         const fheroes2::Rect & windowRoi = window.activeArea();
         fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+        fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
+
+        const fheroes2::Text title( _( "Language" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text name( fheroes2::getLanguageName( currentLanguage ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
         title.draw( languageRoi.x + windowRoi.x + ( languageRoi.width - title.width() ) / 2, languageRoi.y - titleOffset + windowRoi.y, display );
         name.draw( languageRoi.x + windowRoi.x + ( languageRoi.width - name.width() ) / 2, languageRoi.y + languageRoi.height + nameOffset + windowRoi.y, display );
@@ -126,18 +127,20 @@ namespace
 
         const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
         const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-
-        const fheroes2::Sprite & buttonOkayImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-
-        fheroes2::Button okayButton( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
-                                     buttonIcnId, 0, 1 );
+        const fheroes2::Sprite & buttonOkayReleased = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+        const fheroes2::Sprite & buttonOkayPressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
 
         window.render();
         drawBackground( window );
         drawLanguage( window );
         drawResolution( window );
         drawOptions( window );
+
+        fheroes2::ButtonSprite okayButton
+            = fheroes2::makeButtonWithShadow( windowRoi.x + ( windowRoi.width - buttonOkayReleased.width() ) / 2,
+                                              windowRoi.y + windowRoi.height - 6 - buttonOkayReleased.height(), buttonOkayReleased, buttonOkayPressed, display );
         okayButton.draw();
+
         display.render();
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
@@ -181,6 +184,12 @@ namespace
             else if ( le.MousePressRight( windowOptionsRoi ) ) {
                 fheroes2::Text header( _( "Settings" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
                 fheroes2::Text body( _( "Experimental game settings." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( okayButton.area() ) ) {
+                fheroes2::Text header( _( "OK" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+                fheroes2::Text body( _( "Exit this menu." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
                 fheroes2::showMessage( header, body, 0 );
             }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,6 +47,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -102,36 +104,39 @@ namespace
         // Redraw select button as the original image has a wrong position of it
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
+        fheroes2::FontType normalWhiteFont = { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+
         // text scenario
-        Text text( _( "Scenario:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 23 );
+        fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 25, display );
 
         // maps name
-        text.Set( conf.MapsName() );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 46 );
+        text.set( conf.MapsName(), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 48, display );
 
         // text game difficulty
-        text.Set( _( "Game Difficulty:" ) );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 75 );
+        text.set( _( "Game Difficulty:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 77, display );
 
         // text opponents
-        text.Set( _( "Opponents:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 181 );
+        text.set( _( "Opponents:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 183, display );
 
         // text class
-        text.Set( _( "Class:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 262 );
+        text.set( _( "Class:" ), normalWhiteFont );
+        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 264, display );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
     {
-        const uint32_t width = 65;
-        const uint32_t height = 69;
+        const uint32_t width = 77;
+        const uint32_t height = 70;
 
         for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-            const uint32_t offset = current * ( width + 12 );
-            Text text( Difficulty::String( current ), Font::SMALL );
-            text.Blit( dst.x + offset + ( width - text.w() ) / 2, dst.y + height );
+            const uint32_t offset = width * current;
+
+            fheroes2::Text text( Difficulty::String( current ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
 
@@ -316,6 +321,21 @@ namespace
                 }
                 // playersInfo
                 else if ( playersInfo.QueueEventProcessing() ) {
+                    RedrawScenarioStaticInfo( rectPanel );
+                    levelCursor.redraw();
+                    RedrawDifficultyInfo( pointDifficultyInfo );
+
+                    playersInfo.RedrawInfo();
+                    RedrawRatingInfo( rating );
+                    buttonOk.draw();
+                    buttonCancel.draw();
+                    display.render();
+                }
+            }
+            else if ( le.MouseWheelUp() || le.MouseWheelDn() ) {
+                if ( playersInfo.QueueEventProcessing() ) {
+                    playersInfo.resetSelection();
+
                     RedrawScenarioStaticInfo( rectPanel );
                     levelCursor.redraw();
                     RedrawDifficultyInfo( pointDifficultyInfo );

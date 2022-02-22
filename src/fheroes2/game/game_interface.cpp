@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,12 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game_interface.h"
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
 #include "icn.h"
 #include "maps.h"
 #include "settings.h"
@@ -55,36 +56,6 @@ void Interface::Basic::Reset()
     scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
     scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
     scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
-}
-
-Interface::GameArea & Interface::Basic::GetGameArea( void )
-{
-    return gameArea;
-}
-
-Interface::Radar & Interface::Basic::GetRadar( void )
-{
-    return radar;
-}
-
-Interface::IconsPanel & Interface::Basic::GetIconsPanel( void )
-{
-    return iconsPanel;
-}
-
-Interface::ButtonsArea & Interface::Basic::GetButtonsArea( void )
-{
-    return buttonsArea;
-}
-
-Interface::StatusWindow & Interface::Basic::GetStatusWindow( void )
-{
-    return statusWindow;
-}
-
-Interface::ControlPanel & Interface::Basic::GetControlPanel( void )
-{
-    return controlPanel;
 }
 
 void Interface::Basic::SetHideInterface( bool f )
@@ -129,45 +100,10 @@ void Interface::Basic::SetHideInterface( bool f )
     gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
 }
 
-Interface::Basic & Interface::Basic::Get( void )
+Interface::Basic & Interface::Basic::Get()
 {
     static Basic basic;
     return basic;
-}
-
-const fheroes2::Rect & Interface::Basic::GetScrollLeft( void ) const
-{
-    return scrollLeft;
-}
-
-const fheroes2::Rect & Interface::Basic::GetScrollRight( void ) const
-{
-    return scrollRight;
-}
-
-const fheroes2::Rect & Interface::Basic::GetScrollTop( void ) const
-{
-    return scrollTop;
-}
-
-const fheroes2::Rect & Interface::Basic::GetScrollBottom( void ) const
-{
-    return scrollBottom;
-}
-
-bool Interface::Basic::NeedRedraw( void ) const
-{
-    return redraw != 0;
-}
-
-void Interface::Basic::SetRedraw( int f )
-{
-    redraw |= f;
-}
-
-int Interface::Basic::GetRedrawMask() const
-{
-    return redraw;
 }
 
 void Interface::Basic::Redraw( int force )
@@ -260,7 +196,10 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( spellROI & mp ) && tile.isClearGround() && water == tile.isWater() );
+                const MP2::MapObjectType objectType = tile.GetObject( true );
+                const bool isActionObject = MP2::isActionObject( objectType );
+
+                valid = ( ( spellROI & mp ) && !isActionObject && ( tile.GetPassable() & Direction::CENTER ) != 0 && water == tile.isWater() );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )

@@ -15,7 +15,7 @@ and UI improvements), breathing new life into one of the most addictive turn-bas
 
 ## Download and install
 
-To download and install fheroes2 please follow the [**installation guide**](INSTALL.md).
+Please follow the [**installation guide**](INSTALL.md) to download and install fheroes2.
 
 [![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
 
@@ -45,6 +45,8 @@ To build the project from source please follow [**this guide**](DEVELOPMENT.md).
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ihhub/fheroes2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ihhub/fheroes2/alerts/)
 
+If you would like to help translating the project, please read the [**translation guide**](TRANSLATION.md).
+
 ## Donation
 
 We accept donations via **Patreon** or **PayPal**. All donations will be used only for the future project development as we do not
@@ -56,7 +58,7 @@ consider this project as a source of income by any means.
 ## Contacts
 
 Follow us on social networks: [**Facebook**](https://www.facebook.com/groups/fheroes2) or [**VK**](https://vk.com/fheroes2).
-We also have a [**Discord**](https://discord.gg/xF85vbZ) channel to discuss the development of the project.
+We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the development of the project.
 
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2)

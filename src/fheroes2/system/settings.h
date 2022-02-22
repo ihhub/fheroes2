@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +29,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-enum
+enum : int
 {
     SCROLL_SLOW = 1,
     SCROLL_NORMAL = 2,
@@ -52,7 +53,7 @@ public:
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
-        GAME_AUTOSAVE_ON = 0x10000200,
+        // UNUSED = 0x10000200,
         GAME_USE_FADE = 0x10000400,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
@@ -96,7 +97,7 @@ public:
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         // UNUSED = 0x30008000,
 
-        BATTLE_SHOW_ARMY_ORDER = 0x40004000,
+        // UNUSED = 0x40004000,
         BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000
@@ -149,10 +150,13 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
+    bool BattleShowArmyOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
     bool MusicMIDI() const;
     bool isShowIntro() const;
+
+    bool isVSyncEnabled() const;
 
     bool isFirstGameRun() const;
     void resetFirstGameRun();
@@ -185,7 +189,6 @@ public:
     bool ExtCastleAllowGuardians() const;
     bool ExtCastleGuildRestorePointsTurn() const;
     bool ExtBattleShowDamage() const;
-    bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
     bool ExtBattleDeterministicResult() const;
     bool ExtBattleReverseWaitOrder() const;
@@ -194,7 +197,6 @@ public:
     bool ExtGameRewriteConfirm() const;
     bool ExtGameShowSystemInfo() const;
     bool ExtGameAutosaveBeginOfDay() const;
-    bool ExtGameAutosaveOn() const;
     bool ExtGameUseFade() const;
     bool ExtGameEvilInterface() const;
     bool ExtGameHideInterface() const;
@@ -220,6 +222,7 @@ public:
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
+    void setBattleShowArmyOrder( const bool enable );
     void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
@@ -228,20 +231,60 @@ public:
 
     bool setGameLanguage( const std::string & language );
 
-    int SoundVolume() const;
-    int MusicVolume() const;
-    MusicSource MusicType() const;
+    int SoundVolume() const
+    {
+        return sound_volume;
+    }
 
-    bool IsGameType( int type ) const;
-    int GameType() const;
-    void SetGameType( int );
+    int MusicVolume() const
+    {
+        return music_volume;
+    }
+
+    MusicSource MusicType() const
+    {
+        return _musicType;
+    }
+
+    /* check game type */
+    bool IsGameType( int type ) const
+    {
+        return ( game_type & type ) != 0;
+    }
+
+    int GameType() const
+    {
+        return game_type;
+    }
+
+    /* set game type */
+    void SetGameType( int type )
+    {
+        game_type = type;
+    }
+
     bool isCampaignGameType() const;
 
-    Players & GetPlayers();
-    const Players & GetPlayers() const;
+    Players & GetPlayers()
+    {
+        return players;
+    }
 
-    int CurrentColor() const;
-    void SetCurrentColor( int );
+    const Players & GetPlayers() const
+    {
+        return players;
+    }
+
+    int CurrentColor() const
+    {
+        return players.current_color;
+    }
+
+    void SetCurrentColor( int color )
+    {
+        players.current_color = color;
+    }
+
     int PreferablyCountPlayers() const;
     void SetPreferablyCountPlayers( int );
 

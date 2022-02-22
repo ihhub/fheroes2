@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -956,6 +957,11 @@ namespace ICN
 
         MAP_TYPE_ICON,
         BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
+
+        GOOD_ARMY_BUTTON,
+        GOOD_MARKET_BUTTON,
+        EVIL_ARMY_BUTTON,
+        EVIL_MARKET_BUTTON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

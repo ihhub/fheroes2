@@ -37,39 +37,15 @@ namespace
                                                                             { 0x88774771, fheroes2::SupportedLanguage::Polish }, // GoG version
                                                                             { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
                                                                             { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian }, // Buka version
-                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Italian } };
+                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Italian }, // ???
+                                                                            { 0x1CEBD099, fheroes2::SupportedLanguage::Czech } }; // CD Projekt
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
-        = { { "pl", fheroes2::SupportedLanguage::Polish },      { "polish", fheroes2::SupportedLanguage::Polish },   { "de", fheroes2::SupportedLanguage::German },
-            { "german", fheroes2::SupportedLanguage::German },  { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
-            { "ru", fheroes2::SupportedLanguage::Russian },     { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
-            { "italian", fheroes2::SupportedLanguage::Italian } };
-
-    class LanguageSwitcher
-    {
-    public:
-        LanguageSwitcher() = delete;
-
-        LanguageSwitcher( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher( const LanguageSwitcher && ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
-
-        explicit LanguageSwitcher( const fheroes2::SupportedLanguage language )
-            : _currentLanguage( Settings::Get().getGameLanguage() )
-        {
-            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( language ) );
-        }
-
-        ~LanguageSwitcher()
-        {
-            Settings::Get().setGameLanguage( _currentLanguage );
-        }
-
-    private:
-        const std::string _currentLanguage;
-    };
+        = { { "pl", fheroes2::SupportedLanguage::Polish },       { "polish", fheroes2::SupportedLanguage::Polish },   { "de", fheroes2::SupportedLanguage::German },
+            { "german", fheroes2::SupportedLanguage::German },   { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },      { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
+            { "italian", fheroes2::SupportedLanguage::Italian }, { "cs", fheroes2::SupportedLanguage::Czech },        { "czech", fheroes2::SupportedLanguage::Czech } };
 
     fheroes2::SupportedLanguage getResourceLanguage()
     {
@@ -92,6 +68,17 @@ namespace
 
 namespace fheroes2
 {
+    LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
+        : _currentLanguage( Settings::Get().getGameLanguage() )
+    {
+        Settings::Get().setGameLanguage( getLanguageAbbreviation( language ) );
+    }
+
+    LanguageSwitcher::~LanguageSwitcher()
+    {
+        Settings::Get().setGameLanguage( _currentLanguage );
+    }
+
     std::vector<SupportedLanguage> getSupportedLanguages()
     {
         std::vector<SupportedLanguage> languages;
@@ -131,8 +118,6 @@ namespace fheroes2
 
     const char * getLanguageName( const SupportedLanguage language )
     {
-        LanguageSwitcher languageSwitcher( language );
-
         switch ( language ) {
         case SupportedLanguage::English:
             return _( "English" );
@@ -146,6 +131,8 @@ namespace fheroes2
             return _( "Russian" );
         case SupportedLanguage::Italian:
             return _( "Italian" );
+        case SupportedLanguage::Czech:
+            return _( "Czech" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -168,6 +155,8 @@ namespace fheroes2
             return "ru";
         case SupportedLanguage::Italian:
             return "it";
+        case SupportedLanguage::Czech:
+            return "cs";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );

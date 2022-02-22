@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -180,13 +181,13 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     }
 
     // draw castle sprite
-    dst_pt.x = cur_pt.x + 460;
+    dst_pt.x = cur_pt.x + 459;
     dst_pt.y = cur_pt.y + 5;
     DrawImageCastle( dst_pt );
 
     // castle name
     Text text( GetName(), Font::SMALL );
-    text.Blit( cur_pt.x + 536 - text.w() / 2, cur_pt.y + 1 );
+    text.Blit( cur_pt.x + 538 - text.w() / 2, cur_pt.y + 1 );
 
     BuildingInfo dwelling1( *this, DWELLING_MONSTER1 );
     dwelling1.SetPos( cur_pt.x + 5, cur_pt.y + 2 );
@@ -358,9 +359,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     Kingdom & kingdom = GetKingdom();
 
     Heroes * hero1 = kingdom.GetRecruits().GetHero1();
-
-    Heroes * lastLostHero = kingdom.GetLastLostHero();
-    Heroes * hero2 = lastLostHero && lastLostHero != hero1 ? lastLostHero : kingdom.GetRecruits().GetHero2();
+    Heroes * hero2 = kingdom.GetRecruits().GetHero2();
 
     std::string not_allow1_msg;
     std::string not_allow2_msg;

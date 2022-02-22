@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +32,7 @@ bool Maps::Tiles::QuantityIsValid( void ) const
     case MP2::OBJ_RESOURCE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
     case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_WATERCHEST:
     case MP2::OBJ_ABANDONEDMINE:
@@ -168,7 +169,7 @@ Artifact Maps::Tiles::QuantityArtifact( void ) const
     case MP2::OBJ_DAEMONCAVE:
     case MP2::OBJ_WATERCHEST:
     case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
         return Artifact( quantity1 );
@@ -432,7 +433,7 @@ void Maps::Tiles::QuantityReset( void )
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_WAGON:
     case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
     case MP2::OBJ_WATERCHEST:
     case MP2::OBJ_TREASURECHEST:
     case MP2::OBJ_SHIPWRECK:
@@ -445,7 +446,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( static_cast<MP2::MapObjectType>( mp2_object ) ) )
+    if ( MP2::isPickupObject( mp2_object ) )
         setAsEmpty();
 }
 
@@ -613,7 +614,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_SHIPWRECKSURVIROR: {
+    case MP2::OBJ_SHIPWRECKSURVIVOR: {
         Rand::Queue percents( 3 );
         // 55%: artifact 1
         percents.Push( 1, 55 );
@@ -1097,9 +1098,13 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
 {
     const Troop & troop = tile.QuantityTroop();
+    const uint32_t troopCount = troop.GetCount();
 
-    if ( 0 == troop.GetCount() )
+    if ( troopCount == 0 ) {
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
-    else if ( !tile.MonsterFixedCount() )
-        tile.MonsterSetCount( troop.GetCount() * 8 / 7 );
+    }
+    else if ( !tile.MonsterFixedCount() ) {
+        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
+        tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
+    }
 }

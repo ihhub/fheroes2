@@ -176,6 +176,7 @@
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
+    <ClCompile Include="src\engine\image_palette.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\logging.cpp" />
@@ -373,6 +374,7 @@
     <ClCompile Include="src\fheroes2\resource\resource.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_book.cpp" />
+    <ClCompile Include="src\fheroes2\spell\spell_info.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_storage.cpp" />
     <ClCompile Include="src\fheroes2\system\bitmodes.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
@@ -391,12 +393,12 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\image.h" />
+	<ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
-    <ClInclude Include="src\engine\palette_h2.h" />
     <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\screen.h" />
@@ -544,6 +546,7 @@
     <ClInclude Include="src\fheroes2\resource\resource.h" />
     <ClInclude Include="src\fheroes2\spell\spell.h" />
     <ClInclude Include="src\fheroes2\spell\spell_book.h" />
+    <ClInclude Include="src\fheroes2\spell\spell_info.h" />
     <ClInclude Include="src\fheroes2\spell\spell_storage.h" />
     <ClInclude Include="src\fheroes2\system\bitmodes.h" />
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />

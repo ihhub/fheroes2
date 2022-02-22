@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -285,12 +286,12 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                         else {
                             StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-                            Dialog::Message( "", str, Font::BIG, Dialog::OK );
+                            Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
                             display.render();
                         }
                     }
                     else {
-                        Dialog::SpellInfo( *spell, true );
+                        Dialog::SpellInfo( *spell, &hero, true );
                         display.render();
                     }
                 }
@@ -345,7 +346,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, false );
+                    Dialog::SpellInfo( *spell, &hero, false );
                     display.render();
                 }
             }
@@ -420,7 +421,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, true );
+                    Dialog::SpellInfo( *spell, &hero, true );
                     redraw = true;
                 }
             }
@@ -439,7 +440,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, false );
+                    Dialog::SpellInfo( *spell, &hero, false );
                     redraw = true;
                 }
             }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -131,17 +132,17 @@ namespace
             str.append( "\n \n" );
             const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
             if ( scoutingLevel == Skill::Level::NONE ) {
-                str.append( _( "guarded by " ) ).append( StringLower( Army::TroopSizeString( troop ) ) );
+                str.append( _( "guarded by " ) ).append( Translation::StringLower( Army::TroopSizeString( troop ) ) );
             }
             else {
                 str.append( _( "guarded by %{count} %{monster}" ) );
-                StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+                StringReplace( str, "%{count}", Translation::StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
             }
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-                StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
             }
             else {
-                StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
             }
         }
 
@@ -157,10 +158,10 @@ namespace
             const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
             StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-                StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
             }
             else {
-                StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
             }
 
             return str;
@@ -355,16 +356,20 @@ namespace
         return str;
     }
 
-    std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    std::string ShowBarrierInfo( const Maps::Tiles & tile )
     {
-        std::string str = BarrierColor::String( tile.QuantityColor() );
-        str += ' ';
+        std::string str = _( "%{color} Barrier" );
+        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( tile.QuantityColor() ) );
 
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        return str;
+    }
 
-        str.append( MP2::StringObject( objectType ) );
+    std::string ShowTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    {
+        std::string str = _( "%{color} Tent" );
+        StringReplace( str, "%{color}", fheroes2::getTentColorName( tile.QuantityColor() ) );
 
-        if ( MP2::OBJ_TRAVELLERTENT == objectType && kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
+        if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             str.append( "\n \n" );
             str.append( _( "(already visited)" ) );
         }
@@ -514,7 +519,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         name_object = _( "Uncharted Territory" );
     else
         // check guardians mine
-        if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.CaptureObjectIsProtection() ) {
+        if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.isCaptureObjectProtected() ) {
         name_object = ShowGuardiansInfo( tile, settings.CurrentColor() == tile.QuantityColor(), extendedScoutingOption, scoutingLevelForTile );
     }
     else
@@ -590,6 +595,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE:
+        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_AIRALTAR:
+        case MP2::OBJ_FIREALTAR:
+        case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_WATERALTAR:
             name_object = ShowDwellingInfo( tile, kingdom.isVisited( tile ), extendedScoutingOption, scoutingLevelForTile );
             break;
 
@@ -637,8 +647,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
             break;
 
         case MP2::OBJ_BARRIER:
+            name_object = ShowBarrierInfo( tile );
+            break;
+
         case MP2::OBJ_TRAVELLERTENT:
-            name_object = ShowBarrierTentInfo( tile, kingdom );
+            name_object = ShowTentInfo( tile, kingdom );
             break;
 
         default:

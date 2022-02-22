@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +35,7 @@
 #include "race.h"
 #include "settings.h"
 #include "skill_bar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
@@ -162,7 +164,14 @@ bool Battle::Only::ChangeSettings( void )
     bool allow1 = true;
     bool allow2 = true;
 
-    fheroes2::Button buttonStart( cur_pt.x + 280, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
+    // hide the shadow from the original EXIT button
+    const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
+    fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
+
+    const int icnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( icnId, 0 );
+    fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, buttonStartImage,
+                                                                         fheroes2::AGG::GetICN( icnId, 1 ), display );
     buttonStart.draw();
 
     display.render();
@@ -181,7 +190,7 @@ bool Battle::Only::ChangeSettings( void )
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
             int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
-                Dialog::Message( _( "Error" ), _( "Please select another hero." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
+                Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero1 = world.GetHeroes( hid );
@@ -194,7 +203,7 @@ bool Battle::Only::ChangeSettings( void )
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
             int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
-                Dialog::Message( _( "Error" ), _( "Please select another hero." ), int( fheroes2::FontSize::LARGE ), Dialog::OK );
+                Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero2 = world.GetHeroes( hid );

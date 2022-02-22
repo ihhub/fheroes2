@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -284,7 +285,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     else if ( IsDwelling() ) {
         description = _( "The %{building} produces %{monster}." );
         StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplace( description, "%{monster}", StringLower( Monster( castle.GetRace(), building ).GetMultiName() ) );
+        StringReplace( description, "%{monster}", Translation::StringLower( Monster( castle.GetRace(), building ).GetMultiName() ) );
     }
     else
         description = Castle::GetDescriptionBuilding( building, castle.GetRace() );
@@ -544,7 +545,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     Text text( GetName(), Font::SMALL );
     dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
-    dst_pt.y += 57;
+    dst_pt.y += 58;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = box_rt.x;
@@ -598,10 +599,10 @@ const char * GetBuildConditionDescription( int bcond )
 {
     switch ( bcond ) {
     case NOT_TODAY:
-        return _( "Cannot build. Already built here this turn." );
+        return _( "Cannot build. You have already built here today." );
 
     case NEED_CASTLE:
-        return _( "For this action it is necessary first to build a castle." );
+        return _( "For this action it is necessary to build a castle first." );
 
     default:
         break;
@@ -731,7 +732,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, f
 bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
 {
     if ( castle.isBuild( dwl.type ) ) {
-        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true ) );
+        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true, 0 ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         Dialog::Message( "", GetBuildConditionDescription( NEED_CASTLE ), Font::BIG, Dialog::OK );

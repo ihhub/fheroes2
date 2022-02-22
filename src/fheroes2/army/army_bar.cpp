@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,6 +58,16 @@ namespace
 
             Army::SwapTroops( troopFrom, troopTarget );
         }
+        else if ( !troopTarget.isValid() && troopFrom.GetCount() == 2 ) {
+            // a player splits a slot with two monsters into an empty slot; move one monster into the source slot to the target slot.
+            troopFrom.SetCount( 1 );
+            troopTarget.Set( troopFrom.GetMonster(), 1 );
+        }
+        else if ( isSameTroopType && troopFrom.isValid() && troopFrom.GetCount() == 1 && troopTarget.isValid() && troopTarget.GetCount() == 1 ) {
+            // a player splits the same troop type and both count one; move a monster from the source slot to the target slot.
+            troopFrom.Reset();
+            troopTarget.SetCount( 2 );
+        }
         else {
             uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
 
@@ -66,7 +77,6 @@ namespace
             const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
             uint32_t redistributeCount = isSameTroopType ? 1 : troopFrom.GetCount() / 2;
 
-            // if splitting to the same troop type, use this bool to turn off fast split option at the beginning of the dialog
             bool useFastSplit = !isSameTroopType;
             const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
 

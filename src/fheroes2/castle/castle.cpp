@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -54,6 +56,23 @@
 namespace
 {
     const size_t maximumCastles = 72;
+
+    const std::array<const char *, maximumCastles> defaultCastleNames
+        = { gettext_noop( "Blackridge" ),   gettext_noop( "Pinehurst" ),   gettext_noop( "Woodhaven" ),    gettext_noop( "Hillstone" ),  gettext_noop( "Whiteshield" ),
+            gettext_noop( "Bloodreign" ),   gettext_noop( "Dragontooth" ), gettext_noop( "Greywind" ),     gettext_noop( "Blackwind" ),  gettext_noop( "Portsmith" ),
+            gettext_noop( "Middle Gate" ),  gettext_noop( "Tundara" ),     gettext_noop( "Vulcania" ),     gettext_noop( "Sansobar" ),   gettext_noop( "Atlantium" ),
+            gettext_noop( "Baywatch" ),     gettext_noop( "Wildabar" ),    gettext_noop( "Fountainhead" ), gettext_noop( "Vertigo" ),    gettext_noop( "Winterkill" ),
+            gettext_noop( "Nightshadow" ),  gettext_noop( "Sandcaster" ),  gettext_noop( "Lakeside" ),     gettext_noop( "Olympus" ),    gettext_noop( "Brindamoor" ),
+            gettext_noop( "Burlock" ),      gettext_noop( "Xabran" ),      gettext_noop( "Dragadune" ),    gettext_noop( "Alamar" ),     gettext_noop( "Kalindra" ),
+            gettext_noop( "Blackfang" ),    gettext_noop( "Basenji" ),     gettext_noop( "Algary" ),       gettext_noop( "Sorpigal" ),   gettext_noop( "New Dawn" ),
+            gettext_noop( "Erliquin" ),     gettext_noop( "Avone" ),       gettext_noop( "Big Oak" ),      gettext_noop( "Hampshire" ),  gettext_noop( "Chandler" ),
+            gettext_noop( "South Mill" ),   gettext_noop( "Weed Patch" ),  gettext_noop( "Roc Haven" ),    gettext_noop( "Avalon" ),     gettext_noop( "Antioch" ),
+            gettext_noop( "Brownston" ),    gettext_noop( "Weddington" ),  gettext_noop( "Whittingham" ),  gettext_noop( "Westfork" ),   gettext_noop( "Hilltop" ),
+            gettext_noop( "Yorksford" ),    gettext_noop( "Sherman" ),     gettext_noop( "Roscomon" ),     gettext_noop( "Elk's Head" ), gettext_noop( "Cathcart" ),
+            gettext_noop( "Viper's Nest" ), gettext_noop( "Pig's Eye" ),   gettext_noop( "Blacksford" ),   gettext_noop( "Burton" ),     gettext_noop( "Blackburn" ),
+            gettext_noop( "Lankershire" ),  gettext_noop( "Lombard" ),     gettext_noop( "Timberhill" ),   gettext_noop( "Fenton" ),     gettext_noop( "Troy" ),
+            gettext_noop( "Forder Oaks" ),  gettext_noop( "Meramec" ),     gettext_noop( "Quick Silver" ), gettext_noop( "Westmoor" ),   gettext_noop( "Willow" ),
+            gettext_noop( "Sheltemburg" ),  gettext_noop( "Corackston" ) };
 }
 
 Castle::Castle()
@@ -77,8 +96,10 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     army.SetCommander( &captain );
 }
 
-void Castle::LoadFromMP2( StreamBuf st )
+void Castle::LoadFromMP2( std::vector<uint8_t> & data )
 {
+    StreamBuf st( data );
+
     switch ( st.get() ) {
     case 0:
         SetColor( Color::BLUE );
@@ -305,7 +326,7 @@ void Castle::PostLoad( void )
         building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 );
         break;
     case Race::NECR:
-        building &= ~( DWELLING_UPGRADE6 );
+        building &= ~DWELLING_UPGRADE6;
         break;
     default:
         break;
@@ -331,7 +352,7 @@ void Castle::PostLoad( void )
 
     // fix shipyard
     if ( !HaveNearlySea() )
-        building &= ~( BUILD_SHIPYARD );
+        building &= ~BUILD_SHIPYARD;
 
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
@@ -530,11 +551,16 @@ u32 * Castle::GetDwelling( u32 dw )
 
 void Castle::ActionNewWeek( void )
 {
+    // skip the first week
+    if ( world.CountWeek() < 2 ) {
+        return;
+    }
+
     const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
     if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
-        const u32 dwellings1[] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
+        const u32 dwellings1[7] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
         u32 * dw = nullptr;
 
         // simple growth
@@ -562,8 +588,8 @@ void Castle::ActionNewWeek( void )
 
         // Week Of
         if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
-            const u32 dwellings2[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                       DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+            const u32 dwellings2[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                         DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
 
             for ( u32 ii = 0; dwellings2[ii]; ++ii )
                 if ( nullptr != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
@@ -587,6 +613,11 @@ void Castle::ActionNewWeek( void )
 
 void Castle::ActionNewMonth( void )
 {
+    // skip the first month
+    if ( world.GetMonth() < 2 ) {
+        return;
+    }
+
     // population halved
     if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
         for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )
@@ -595,8 +626,8 @@ void Castle::ActionNewMonth( void )
     else
         // Month Of
         if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
-        const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                  DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+        const u32 dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                    DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
         u32 * dw = nullptr;
 
         for ( u32 ii = 0; dwellings[ii]; ++ii )
@@ -723,17 +754,6 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     // recruit
     if ( !hero->Recruit( *this ) )
         return nullptr;
-
-    // actually update available heroes to recruit
-    const Colors colors( Settings::Get().GetPlayers().GetActualColors() );
-
-    for ( const int kingdomColor : colors ) {
-        Kingdom & kingdom = world.GetKingdom( kingdomColor );
-        if ( kingdom.GetLastLostHero() == hero )
-            kingdom.ResetLastLostHero();
-
-        kingdom.GetRecruits();
-    }
 
     Kingdom & currentKingdom = GetKingdom();
     currentKingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
@@ -1218,7 +1238,7 @@ int Castle::CheckBuyBuilding( u32 build ) const
             return UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE4:
-        if ( (Race::WZRD)&race )
+        if ( Race::WZRD & race )
             return UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE5:
@@ -2255,6 +2275,26 @@ const std::string & Castle::GetName( void ) const
     return name;
 }
 
+void Castle::setName( const std::set<std::string> & usedNames )
+{
+    assert( name.empty() );
+
+    std::vector<const char *> shuffledCastleNames( defaultCastleNames.begin(), defaultCastleNames.end() );
+
+    Rand::Shuffle( shuffledCastleNames );
+
+    for ( const char * originalName : shuffledCastleNames ) {
+        const char * translatedCastleName = _( originalName );
+        if ( usedNames.count( translatedCastleName ) < 1 ) {
+            name = translatedCastleName;
+            return;
+        }
+    }
+
+    // How is it possible that we're out of castle names?
+    assert( 0 );
+}
+
 int Castle::GetControl( void ) const
 {
     /* gray towns: ai control */
@@ -2503,7 +2543,7 @@ StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 {
     msg << static_cast<u32>( castles.Size() );
 
-    for ( const auto & castle : castles )
+    for ( const Castle * castle : castles )
         msg << *castle;
 
     return msg;

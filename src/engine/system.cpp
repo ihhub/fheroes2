@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,21 +22,28 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <fstream>
+#include <map>
+#include <memory>
 
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
 
+#include "logging.h"
 #include "system.h"
 #include "tools.h"
 
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+// clang-format off
+// shellapi.h must be included after windows.h
 #include <windows.h>
 #include <shellapi.h>
+// clang-format on
 #else
 #include <dirent.h>
 #endif
@@ -98,7 +106,15 @@ int System::MakeDirectory( const std::string & path )
 
 std::string System::ConcatePath( const std::string & str1, const std::string & str2 )
 {
-    return std::string( str1 + SEPARATOR + str2 );
+    // Avoid memory allocation while concatenating string. Allocate needed size at once.
+    std::string temp;
+    temp.reserve( str1.size() + 1 + str2.size() );
+
+    temp += str1;
+    temp += SEPARATOR;
+    temp += str2;
+
+    return temp;
 }
 
 ListDirs System::GetOSSpecificDirectories()
@@ -182,31 +198,6 @@ std::string System::GetBasename( const std::string & str )
     }
 
     return str;
-}
-
-std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
-{
-    std::string locname;
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    char * clocale = std::setlocale( LC_MONETARY, nullptr );
-#elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    char * clocale = setlocale( LC_MESSAGES, nullptr );
-#else
-    char * clocale = std::setlocale( LC_MESSAGES, nullptr );
-#endif
-
-    if ( clocale ) {
-        locname = StringLower( clocale );
-        // 3: en_us.utf-8
-        // 2: en_us
-        // 1: en
-        if ( length < 3 ) {
-            std::list<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
-            return list.empty() ? locname : list.front();
-        }
-    }
-
-    return locname;
 }
 
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
@@ -360,7 +351,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
         correctedPath.append( delimiter );
 
-        struct dirent * e = readdir( d );
+        const struct dirent * e = readdir( d );
         while ( e ) {
             if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
                 correctedPath += e->d_name;
@@ -392,3 +383,98 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     return true;
 }
 #endif
+
+std::string System::FileNameToUTF8( const std::string & str )
+{
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    if ( str.empty() ) {
+        return str;
+    }
+
+    static std::map<std::string, std::string> acpToUtf8;
+
+    const auto iter = acpToUtf8.find( str );
+    if ( iter != acpToUtf8.end() ) {
+        return iter->second;
+    }
+
+    // In case of any issues, the original string will be returned, so let's put it to the cache right away
+    acpToUtf8[str] = str;
+
+    auto getLastErrorStr = []() {
+        LPTSTR msgBuf;
+
+        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0,
+                            reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
+             > 0 ) {
+            const std::string result( msgBuf );
+
+            LocalFree( msgBuf );
+
+            return result;
+        }
+
+        return std::string( "FormatMessage() failed: " ) + std::to_string( GetLastError() );
+    };
+
+    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
+    if ( wLen <= 0 ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
+
+    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
+    if ( uLen <= 0 ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::unique_ptr<char[]> uStr( new char[uLen] );
+
+    if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
+        ERROR_LOG( getLastErrorStr() );
+
+        return str;
+    }
+
+    const std::string result( uStr.get() );
+
+    // Put the final result to the cache
+    acpToUtf8[str] = result;
+
+    return result;
+#else
+    return str;
+#endif
+}
+
+tm System::GetTM( const time_t time )
+{
+    tm result = {};
+
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    errno_t res = localtime_s( &result, &time );
+
+    if ( res != 0 ) {
+        assert( 0 );
+    }
+#else
+    const tm * res = localtime_r( &time, &result );
+
+    if ( res == nullptr ) {
+        assert( 0 );
+    }
+#endif
+
+    return result;
+}

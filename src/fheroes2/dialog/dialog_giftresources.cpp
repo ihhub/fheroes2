@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,7 +59,7 @@ struct SelectRecipientsColors
     std::vector<fheroes2::Rect> positions;
 
     SelectRecipientsColors( const fheroes2::Point & pos, int senderColor )
-        : colors( Settings::Get().GetPlayers().GetColors() & ~senderColor )
+        : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
         , recipients( 0 )
     {
         positions.reserve( colors.size() );
@@ -205,7 +206,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::StandardWindow frameborder( 320, 224 );
+    const fheroes2::StandardWindow frameborder( 320, 234 );
     const fheroes2::Rect box( frameborder.activeArea() );
 
     Funds funds1( kingdom.GetFunds() );
@@ -230,9 +231,24 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     ResourceBar info2( funds2, box.x + 25, box.y + 150 );
     info2.Redraw();
 
-    fheroes2::ButtonGroup btnGroups( box, Dialog::OK | Dialog::CANCEL );
-    btnGroups.button( 0 ).disable();
-    btnGroups.draw();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
+
+    const int32_t border = 10;
+    fheroes2::ButtonGroup btnGroup;
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkSprite.height(), buttonOkSprite,
+                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
+                        Dialog::OK );
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelSprite.width(),
+                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
+                        Dialog::CANCEL );
+    btnGroup.button( 0 ).disable();
+
+    btnGroup.draw();
 
     display.render();
 
@@ -241,13 +257,15 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     // message loop
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        result = btnGroup.processEvents();
+
         if ( selector.QueueEventProcessing() ) {
             u32 new_count = Color::Count( selector.recipients );
 
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
-                btnGroups.button( 0 ).disable();
+                btnGroup.button( 0 ).disable();
             else
-                btnGroups.button( 0 ).enable();
+                btnGroup.button( 0 ).enable();
 
             if ( count != new_count ) {
                 funds1 = kingdom.GetFunds();
@@ -257,23 +275,21 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
                 count = new_count;
             }
 
-            btnGroups.draw();
+            btnGroup.draw();
             selector.Redraw();
             display.render();
         }
         else if ( info2.QueueEventProcessing( funds1, count ) ) {
             if ( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() )
-                btnGroups.button( 0 ).disable();
+                btnGroup.button( 0 ).disable();
             else
-                btnGroups.button( 0 ).enable();
+                btnGroup.button( 0 ).enable();
 
             info1.Redraw();
             info2.Redraw();
-            btnGroups.draw();
+            btnGroup.draw();
             display.render();
         }
-
-        result = btnGroups.processEvents();
     }
 
     if ( Dialog::OK == result ) {

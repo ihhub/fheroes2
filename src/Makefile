@@ -26,10 +26,10 @@ else
 CFLAGS := -O3 $(CFLAGS)
 endif
 
-CFLAGS := $(CFLAGS) -fsigned-char
+CFLAGS := $(CFLAGS) -fsigned-char -pthread
 CXXFLAGS := -std=c++11 $(CFLAGS)
-LDFLAGS := $(LDFLAGS)
-LIBS := -pthread -lz
+LDFLAGS := $(LDFLAGS) -pthread
+LIBS := -lz
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
@@ -62,10 +62,6 @@ SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
-endif
-
-ifdef RELEASE
-CFLAGS := $(CFLAGS) -DBUILD_RELEASE
 endif
 
 # platform specific flags

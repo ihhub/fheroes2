@@ -74,6 +74,11 @@ namespace fheroes2
     public:
         explicit RandomMonsterAnimation( const Monster & monster );
 
+        RandomMonsterAnimation( const RandomMonsterAnimation & ) = delete;
+        RandomMonsterAnimation( RandomMonsterAnimation && ) = default;
+
+        RandomMonsterAnimation & operator=( const RandomMonsterAnimation & ) = delete;
+
         void increment();
 
         int icnFile() const;

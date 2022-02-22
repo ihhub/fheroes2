@@ -41,7 +41,7 @@ namespace PAL
         CUSTOM
     };
 
-    std::vector<uint8_t> GetCyclingPalette( int stepId );
+    std::vector<uint8_t> GetCyclingPalette( uint32_t stepId );
     const std::vector<uint8_t> & GetPalette( const PaletteType type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }

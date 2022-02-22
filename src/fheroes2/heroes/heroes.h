@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +24,7 @@
 #ifndef H2HEROES_H
 #define H2HEROES_H
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <vector>
@@ -145,7 +147,7 @@ public:
     static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
-    enum flags_t
+    enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
         // UNUSED = 0x00000002,
@@ -153,7 +155,7 @@ public:
         ENABLEMOVE = 0x00000008,
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
-        // UNUSED = 0x00000040,
+        RECRUIT = 0x00000040, // Hero is available for recruitment in any kingdom
         JAIL = 0x00000080,
         ACTION = 0x00000100,
         SAVE_MP_POINTS = 0x00000200,
@@ -211,6 +213,7 @@ public:
     bool isFreeman( void ) const;
     void SetFreeman( int reason );
 
+    bool isLosingGame() const;
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
@@ -265,7 +268,7 @@ public:
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );
-    bool MayStillMove( const bool ignorePath ) const;
+    bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
 
@@ -289,7 +292,7 @@ public:
     int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
-    bool Recruit( int col, const fheroes2::Point & pt );
+    bool Recruit( const int col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
     void ActionNewDay( void );
@@ -298,17 +301,16 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    // Called from World::NewDay() for all heroes, hired or not
-    void ReplenishSpellPoints();
-
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
     const Route::Path & GetPath() const;
     Route::Path & GetPath();
     int GetRangeRouteDays( s32 ) const;
     void ShowPath( bool );
-    void RescanPath();
-    void RescanPathPassable();
+    // Calculates the hero's path to the tile with the dstIdx index using the pathfinder from the World global object.
+    // Recalculates the existing path if dstIdx is negative. Not applicable if you want to use a pathfinder other than
+    // PlayerWorldPathfinder.
+    void calculatePath( int32_t dstIdx );
 
     int GetDirection() const;
     void setDirection( int directionToSet );
@@ -418,6 +420,9 @@ private:
 
     uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
 
+    // Daily replenishment of spell points
+    void ReplenishSpellPoints();
+
     bool isInDeepOcean() const;
 
     enum
@@ -486,13 +491,30 @@ struct AllHeroes : public VecHeroes
 
     void Scoute( int ) const;
 
+    void ResetModes( const uint32_t modes ) const
+    {
+        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
+    }
+
+    void NewDay()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
+    }
+
+    void NewWeek()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
+    }
+
+    void NewMonth()
+    {
+        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
+    }
+
     Heroes * GetGuest( const Castle & ) const;
     Heroes * GetGuard( const Castle & ) const;
-    Heroes * GetFreeman( int race ) const;
+    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( s32 ) const;
-    Heroes * GetFreemanSpecial( int heroID ) const;
-
-    bool HaveTwoFreemans( void ) const;
 };
 
 StreamBase & operator<<( StreamBase &, const VecHeroes & );

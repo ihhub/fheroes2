@@ -31,7 +31,7 @@
 
 namespace
 {
-    const double fighterStrengthMultipler = 3;
+    const double fighterStrengthMultiplier = 3;
 
     void setHeroRoles( KingdomHeroes & heroes )
     {
@@ -58,7 +58,7 @@ namespace
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
-            if ( hero.first > medianStrength * fighterStrengthMultipler ) {
+            if ( hero.first > medianStrength * fighterStrengthMultiplier ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
@@ -232,7 +232,7 @@ namespace AI
         sortedCastleList.SortByBuildingValue();
 
         if ( ( moreTasksForHeroes && heroes.size() < static_cast<size_t>( heroLimit ) ) || heroes.empty() ) { // safe to cast as heroLimit is > 0
-            Recruits & rec = kingdom.GetRecruits();
+            const Recruits & rec = kingdom.GetRecruits();
             Castle * recruitmentCastle = nullptr;
             int lowestHeroCount = heroLimit;
 

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -103,7 +104,7 @@ void Battle::Board::Reset( void )
 void Battle::Board::SetPositionQuality( const Unit & b ) const
 {
     Arena * arena = GetArena();
-    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ), true );
+    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
     enemies.SortArchers();
@@ -134,9 +135,9 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
 void Battle::Board::SetEnemyQuality( const Unit & unit ) const
 {
     Arena * arena = GetArena();
-    Units enemies( arena->getEnemyForce( unit.GetColor() ), true );
+    Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
     if ( unit.Modes( SP_BERSERKER ) ) {
-        Units allies( arena->getForce( unit.GetColor() ), true );
+        Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
         enemies.insert( enemies.end(), allies.begin(), allies.end() );
     }
 
@@ -194,7 +195,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const Bridge * bridge = Arena::GetBridge();
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
-        for ( std::size_t i = 0; i < size(); i++ ) {
+        for ( std::size_t i = 0; i < size(); ++i ) {
             if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).setReachableForHead();
 
@@ -432,7 +433,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
         std::reverse( result.begin(), result.end() );
 
         // Set direction info for cells
-        for ( std::size_t i = 0; i < result.size(); i++ ) {
+        for ( std::size_t i = 0; i < result.size(); ++i ) {
             const int32_t cellId = result[i];
 
             Cell * headCell = GetCell( cellId );
@@ -532,7 +533,7 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         Board * board = Arena::GetBoard();
         for ( const int32_t index : aroundAttacker ) {
             const Unit * unit = board->at( index ).GetUnit();
-            if ( unit != nullptr && unit->GetColor() != attacker.GetColor() ) {
+            if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
                 unitsUnderAttack.insert( unit );
             }
         }
@@ -1188,11 +1189,11 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
-        for ( const int32_t aroundIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * aroundCell = GetCell( aroundIdx );
-            assert( aroundCell != nullptr );
+        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
+            const Cell * nearbyCell = GetCell( nearbyIdx );
+            assert( nearbyCell != nullptr );
 
-            if ( aroundCell->GetUnit() == &target ) {
+            if ( nearbyCell->GetUnit() == &target ) {
                 return true;
             }
         }

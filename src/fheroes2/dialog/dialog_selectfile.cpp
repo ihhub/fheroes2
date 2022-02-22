@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -101,7 +102,7 @@ public:
 
     void ActionListPressRight( Maps::FileInfo & info ) override
     {
-        // On some OS like Windows path contains '\' symbol. This symbol doesn't exist in the resources.
+        // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
         // To avoid this we have to replace all '\' symbols by '/' symbols.
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
@@ -133,14 +134,15 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     char shortDate[20];
     char shortHours[20];
     char shortTime[20];
-    time_t timeval = info.localtime;
 
-    std::fill( shortDate, std::end( shortDate ), 0 );
-    std::fill( shortHours, std::end( shortHours ), 0 );
-    std::fill( shortTime, std::end( shortTime ), 0 );
-    std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
-    std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
-    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
+    const tm tmi = System::GetTM( info.localtime );
+
+    std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
+    std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
+    std::fill( shortTime, std::end( shortTime ), static_cast<char>( 0 ) );
+    std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", &tmi );
+    std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", &tmi );
+    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", &tmi );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( !savname.empty() ) {

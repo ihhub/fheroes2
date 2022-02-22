@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -111,7 +112,8 @@ void Dialog::GameInfo( void )
     text.draw( pt.x + 385 - text.width(), pt.y + 436, 80, display );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
-    fheroes2::Button buttonCfg( pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
+    fheroes2::ButtonSprite buttonCfg
+        = fheroes2::makeButtonWithShadow( pt.x + 50, pt.y + 426, fheroes2::AGG::GetICN( ICN::BTNCONFIG, 0 ), fheroes2::AGG::GetICN( ICN::BTNCONFIG, 1 ), display );
 
     buttonOk.draw();
     buttonCfg.draw();

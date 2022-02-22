@@ -1,9 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
+ *   Copyright (C) 2006 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -185,7 +186,6 @@ public:
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
 
     static void SetStateDefaults( void );
-    static void SetState( u32 type, bool enable );
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
@@ -225,7 +225,11 @@ public:
 
     bool MouseCursor( const fheroes2::Rect & rt ) const;
 
-    bool KeyPress() const;
+    bool KeyPress() const
+    {
+        return modes & KEY_PRESSED;
+    }
+
     bool KeyPress( KeySym key ) const;
 
     bool KeyHold() const
@@ -261,6 +265,8 @@ public:
 private:
     LocalEvent();
 
+    static void SetState( const uint32_t type, const bool enable );
+
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
@@ -277,7 +283,7 @@ private:
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    void OnSdl2WindowEvent( const SDL_Event & event );
+    static void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 
@@ -321,7 +327,7 @@ private:
 
     enum
     {
-        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_L_DEADZONE = 4000,
         CONTROLLER_R_DEADZONE = 25000
     };
 
@@ -343,7 +349,6 @@ private:
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
 #endif

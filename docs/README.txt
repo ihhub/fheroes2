@@ -16,11 +16,9 @@ If you do not have the original Heroes of Might and Magic II game, run the
 OS and macOS. This script will download and install all the necessary files from the
 demo version of the original Heroes of Might and Magic II game.
 
-If you have a legally purchased copy of the original game, and you are using Windows,
-run the 'extract_homm2_resources.bat' file. This script will try to perform an automatic
-search for an existing installation of the original game and extract all the necessary
-resource files. If it can't find an existing installation, you will be prompted to enter
-the location of the original game manually.
+If you have a legally purchased copy of the original game, run the
+'extract_homm2_resources.bat' file for Windows or 'extract_homm2_resources.sh' for Linux
+OS and macOS. This script will extract all the necessary resource files.
 
 As an alternative to the previous step, you can manually copy the subdirectories 'ANIM',
 'DATA', 'MAPS' and 'MUSIC' (some of them may be missing depending on the version of the

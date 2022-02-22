@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <numeric>
 
@@ -119,7 +121,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         break;
     }
 
-    StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
     return str;
 }
 
@@ -235,8 +237,7 @@ const Troop * Troops::GetTroop( size_t pos ) const
 void Troops::UpgradeMonsters( const Monster & m )
 {
     for ( iterator it = begin(); it != end(); ++it ) {
-        if ( **it == m ) {
-            assert( ( *it )->isValid() );
+        if ( **it == m && ( *it )->isValid() ) {
             ( *it )->Upgrade();
         }
     }
@@ -377,13 +378,13 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from )
+void Troops::MoveTroops( const Troops & from )
 {
     if ( this == &from )
         return;
 
     size_t validTroops = 0;
-    for ( Troop * troop : from ) {
+    for ( const Troop * troop : from ) {
         if ( troop && troop->isValid() ) {
             ++validTroops;
         }
@@ -457,10 +458,10 @@ Troop * Troops::GetFirstValid( void )
     return it == end() ? nullptr : *it;
 }
 
-Troop * Troops::GetWeakestTroop( void )
+Troop * Troops::GetWeakestTroop() const
 {
-    iterator first = begin();
-    iterator last = end();
+    const_iterator first = begin();
+    const_iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -471,7 +472,7 @@ Troop * Troops::GetWeakestTroop( void )
     if ( first == end() )
         return nullptr;
 
-    iterator lowest = first;
+    const_iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
@@ -583,6 +584,52 @@ void Troops::ArrangeForBattle( bool upgrade )
     else {
         Assign( priority );
     }
+}
+
+void Troops::ArrangeForWhirlpool()
+{
+    // Make an "optimized" version first (each unit type occupies just one slot)
+    const Troops optimizedTroops = GetOptimized();
+    assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= ARMYMAXTROOPS );
+
+    // Already a full house, there is no room for further optimization
+    if ( optimizedTroops.size() == ARMYMAXTROOPS ) {
+        return;
+    }
+
+    Assign( optimizedTroops );
+
+    // Look for a troop consisting of the weakest units
+    Troop * troopOfWeakestUnits = nullptr;
+
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->Monster::GetHitPoints() > troop->Monster::GetHitPoints() ) {
+            troopOfWeakestUnits = troop;
+        }
+    }
+
+    assert( troopOfWeakestUnits != nullptr );
+    assert( troopOfWeakestUnits->GetCount() > 0 );
+
+    // There is already just one unit in this troop, let's leave it as it is
+    if ( troopOfWeakestUnits->GetCount() == 1 ) {
+        return;
+    }
+
+    // Move one unit from this troop's slot...
+    troopOfWeakestUnits->SetCount( troopOfWeakestUnits->GetCount() - 1 );
+
+    // To the separate slot
+    auto emptySlot = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
+    assert( emptySlot != end() );
+
+    ( *emptySlot )->Set( Monster( troopOfWeakestUnits->GetID() ), 1 );
 }
 
 void Troops::JoinStrongest( Troops & troops2, bool saveLast )
@@ -874,11 +921,6 @@ void Army::setFromTile( const Maps::Tiles & tile )
         }
         ArrangeForBattle( false );
         break;
-
-        // case MP2::OBJ_ABANDONEDMINE:
-        //    at(0) = Troop(t);
-        //    ArrangeForBattle(false);
-        //    break;
 
     case MP2::OBJ_CITYDEAD:
         at( 0 )->Set( Monster::ZOMBIE, 20 );
@@ -1387,7 +1429,7 @@ Monster Army::GetStrongestMonster() const
     return monster;
 }
 
-void Army::resetInvalidMonsters()
+void Army::resetInvalidMonsters() const
 {
     for ( Troop * troop : *this ) {
         if ( troop->GetID() != Monster::UNKNOWN && !troop->isValid() ) {

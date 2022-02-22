@@ -85,19 +85,21 @@ namespace AI
 
     private:
         // to be exposed later once every BattlePlanner will be re-initialized at combat start
-        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        SpellSelection selectBestSpell( Battle::Arena & arena, bool retreating ) const;
-        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
-                                           bool retreating ) const;
+        SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
+        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
+                                           const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
-        double getDisruptingRayRatio( const Battle::Unit & target ) const;
+        double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
+        double getSpellSlowRatio( const Battle::Unit & target ) const;
+        double getSpellHasteRatio( const Battle::Unit & target ) const;
         uint32_t spellDurationMultiplier( const Battle::Unit & target ) const;
 
         // turn variables that wouldn't persist
@@ -107,6 +109,7 @@ namespace AI
         double _enemyArmyStrength = 0;
         double _myShooterStr = 0;
         double _enemyShooterStr = 0;
+        double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;
         double _enemySpellStrength = 0;
         int _highestDamageExpected = 0;

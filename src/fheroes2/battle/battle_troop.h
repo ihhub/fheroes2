@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,7 +77,7 @@ namespace Battle
     {
     public:
         Unit( const Troop &, int32_t pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
-        Unit( const Unit & ) = default;
+        Unit( const Unit & ) = delete;
 
         ~Unit() override;
 
@@ -104,7 +105,7 @@ namespace Battle
         bool isTwiceAttack( void ) const;
 
         bool AllowResponse( void ) const;
-        bool isHandFighting( void ) const;
+        bool isHandFighting() const;
         bool isReflect( void ) const;
         bool isHaveDamage( void ) const;
         bool isMagicResist( const Spell &, u32 ) const;
@@ -132,7 +133,7 @@ namespace Battle
         int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
-        u32 GetSpeed( bool skip_standing_check ) const;
+        u32 GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
         int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
@@ -173,6 +174,8 @@ namespace Battle
         int M82Move( void ) const;
         int M82Wnce( void ) const;
         int M82Expl( void ) const;
+        int M82Tkof() const;
+        int M82Land() const;
 
         fheroes2::Point GetBackPoint( void ) const;
         fheroes2::Point GetCenterPoint() const;

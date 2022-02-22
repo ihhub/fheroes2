@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,11 +78,11 @@ void Castle::OpenTavern( void ) const
     box1.Blit( pos.x, dst_pt.y + s1.height() + 10 );
     box2.Blit( pos.x, dst_pt.y + s1.height() + 10 + box1.h() + 20 );
 
-    // button yes
-    const fheroes2::Sprite & s4 = fheroes2::AGG::GetICN( system, 5 );
-    fheroes2::Button buttonYes( pos.x + ( pos.width - s4.width() ) / 2, pos.y + pos.height - s4.height(), system, 5, 6 );
+    // button ok
+    const fheroes2::Sprite & s4 = fheroes2::AGG::GetICN( system, 1 );
+    fheroes2::Button buttonOk( pos.x + ( pos.width - s4.width() ) / 2, pos.y + pos.height - s4.height(), system, 1, 2 );
 
-    buttonYes.draw();
+    buttonOk.draw();
 
     display.render();
 
@@ -90,8 +91,8 @@ void Castle::OpenTavern( void ) const
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonYes.area() ) ? buttonYes.drawOnPress() : buttonYes.drawOnRelease();
-        if ( le.MouseClickLeft( buttonYes.area() ) || HotKeyCloseWindow )
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
             break;
 
         // animation

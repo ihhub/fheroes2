@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,12 +32,14 @@
 #include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
+#include "battle_tower.h"
 #include "battle_troop.h"
 #include "game_static.h"
 #include "logging.h"
 #include "monster_anim.h"
 #include "morale.h"
 #include "speed.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -221,7 +224,7 @@ std::string Battle::Unit::GetShotString( void ) const
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    const uint32_t speedValue = GetSpeed( true );
+    const uint32_t speedValue = GetSpeed( true, false );
 
     std::string output( Speed::String( speedValue ) );
     output += " (";
@@ -260,7 +263,7 @@ u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 
 u32 Battle::Unit::GetSpeed( void ) const
 {
-    return GetSpeed( false );
+    return GetSpeed( false, false );
 }
 
 int Battle::Unit::GetMorale() const
@@ -377,7 +380,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return Board::GetDistance( from, index ) <= GetSpeed( true );
+    return Board::GetDistance( from, index ) <= GetSpeed( true, false );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const
@@ -390,15 +393,15 @@ bool Battle::Unit::canReach( const Unit & unit ) const
     return canReach( target );
 }
 
-bool Battle::Unit::isHandFighting( void ) const
+bool Battle::Unit::isHandFighting() const
 {
     if ( GetCount() && !Modes( CAP_TOWER ) ) {
-        const Indexes around = Board::GetAroundIndexes( *this );
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *this ) ) {
+            const Unit * nearbyUnit = Board::GetCell( nearbyIdx )->GetUnit();
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            const Unit * enemy = Board::GetCell( *it )->GetUnit();
-            if ( enemy && enemy->GetColor() != GetColor() )
+            if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
                 return true;
+            }
         }
     }
 
@@ -466,21 +469,24 @@ void Battle::Unit::NewTurn( void )
     }
 }
 
-u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
+u32 Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
 {
-    if ( !skip_standing_check && ( !GetCount() || Modes( TR_MOVED | SP_BLIND | IS_PARALYZE_MAGIC ) ) )
+    uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
+    if ( !skipMovedCheck ) {
+        modesToCheck |= TR_MOVED;
+    }
+
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
         return Speed::STANDING;
 
     uint32_t speed = Monster::GetSpeed();
     Spell spell;
 
     if ( Modes( SP_HASTE ) ) {
-        spell = Spell::HASTE;
-        return spell.ExtraValue() ? speed + spell.ExtraValue() : Speed::GetOriginalFast( speed );
+        return Speed::GetHasteSpeedFromSpell( speed );
     }
     else if ( Modes( SP_SLOW ) ) {
-        spell = Spell::SLOW;
-        return spell.ExtraValue() ? speed - spell.ExtraValue() : Speed::GetOriginalSlow( speed );
+        return Speed::GetSlowSpeedFromSpell( speed );
     }
 
     return speed;
@@ -488,7 +494,7 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
 
 uint32_t Battle::Unit::GetMoveRange() const
 {
-    return isFlying() ? ARENASIZE : GetSpeed( false );
+    return isFlying() ? ARENASIZE : GetSpeed( false, false );
 }
 
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
@@ -760,9 +766,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     if ( Modes( CAP_MIRROROWNER ) && spell == Spell::MIRRORIMAGE ) {
         return false;
     }
-
-    // check global
-    // if(GetArena()->DisableCastSpell(spell, msg)) return false; // disable - recursion!
 
     if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
         return false;
@@ -1138,7 +1141,11 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     }
     // Otherwise heavy penalty for hiting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
-        attackerThreat *= -2;
+        const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
+        if ( !isTower ) {
+            // Calculation score quality of tower should not effect units.
+            attackerThreat *= -2;
+        }
     }
     // Finally ignore disabled units (if belong to the enemy)
     else if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) ) {
@@ -1306,6 +1313,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const HeroBase * hero, TargetInfo & target )
 {
+    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     u32 dmg = spell.Damage() * spoint;
 
     switch ( GetID() ) {
@@ -1486,17 +1494,13 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        u32 restore = spell.Resurrect() * spoint;
         // remove from graveyard
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
         }
-        // restore hp
-        uint32_t acount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
-        if ( acount )
-            restore *= acount * 2;
 
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const u32 resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Puts back the unit in the board
@@ -1556,12 +1560,13 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
 
     case Spell::DISPEL:
+    case Spell::MASSDISPEL:
         if ( !( modes & IS_MAGIC ) )
             return 100;
         break;
 
     case Spell::HYPNOTIZE:
-        if ( spell.ExtraValue() * spower < hp )
+        if ( fheroes2::getHypnorizeMonsterHPPoints( spell, spower, nullptr ) < hp )
             return 100;
         break;
 
@@ -1662,19 +1667,17 @@ int Battle::Unit::M82Wnce() const
 
 int Battle::Unit::M82Expl( void ) const
 {
-    switch ( GetID() ) {
-    case Monster::VAMPIRE:
-    case Monster::VAMPIRE_LORD:
-        return M82::VAMPEXT1;
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        return M82::LICHEXPL;
+    return fheroes2::getMonsterData( id ).sounds.explosion;
+}
 
-    default:
-        break;
-    }
+int Battle::Unit::M82Tkof() const
+{
+    return fheroes2::getMonsterData( id ).sounds.takeoff;
+}
 
-    return M82::UNKNOWN;
+int Battle::Unit::M82Land() const
+{
+    return fheroes2::getMonsterData( id ).sounds.landing;
 }
 
 fheroes2::Rect Battle::Unit::GetRectPosition() const

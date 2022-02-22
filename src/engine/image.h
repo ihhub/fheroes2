@@ -59,8 +59,15 @@ namespace fheroes2
         virtual uint8_t * image();
         virtual const uint8_t * image() const;
 
-        uint8_t * transform();
-        const uint8_t * transform() const;
+        uint8_t * transform()
+        {
+            return _data.get() + width() * height();
+        }
+
+        const uint8_t * transform() const
+        {
+            return _data.get() + width() * height();
+        }
 
         bool empty() const
         {
@@ -176,6 +183,9 @@ namespace fheroes2
         bool _isRestored;
     };
 
+    // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
+
     // Replace a particular pixel value by transparency value (transform layer value will be 1)
     void AddTransparency( Image & image, uint8_t valueToReplace );
 
@@ -210,6 +220,9 @@ namespace fheroes2
     void Copy( const Image & in, Image & out );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
+    // Copies transform the layer from in to out. Both images must be of the same size.
+    void CopyTransformLayer( const Image & in, Image & out );
+
     Image CreateBlurredImage( const Image & in, int32_t blurRadius );
 
     Sprite CreateContour( const Image & image, uint8_t value );
@@ -224,8 +237,8 @@ namespace fheroes2
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
 
-    // Every image in the array must be the same size.
-    Image ExtractCommonPattern( const std::vector<Image> & input );
+    // Every image in the array must be the same size. Make sure that pointers aren't nullptr!
+    Image ExtractCommonPattern( const std::vector<const Image *> & input );
 
     // Please use GetColorId function if you want to use an RGB value
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId );
@@ -243,6 +256,8 @@ namespace fheroes2
 
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
+
+    Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
 
     // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
@@ -267,4 +282,6 @@ namespace fheroes2
     Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut );
 
     void Transpose( const Image & in, Image & out );
+
+    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId );
 }

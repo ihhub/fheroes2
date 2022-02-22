@@ -166,6 +166,9 @@ void World::ComputeStaticAnalysis()
     const uint32_t extraRegionSize = 18;
     const uint32_t emptyLineFrequency = 7;
 
+    // Reset the region information for all tiles
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdateRegion( REGION_NODE_BLOCKED ); } );
+
     // Step 1. Split map into terrain, water and ground points
     // Initialize the obstacles vector
     TileDataVector obstacles[4];
@@ -337,13 +340,19 @@ void World::ComputeStaticAnalysis()
         for ( const MapRegionNode & node : reg._nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
 
-            // connect regions through teleporters
+            // connect regions through teleports
+            MapsIndexes exits;
+
             if ( node.mapObject == MP2::OBJ_STONELITHS ) {
-                const MapsIndexes & exits = GetTeleportEndPoints( node.index );
-                for ( const int exitIndex : exits ) {
-                    // neighbours is a set that will force the uniqness
-                    reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
-                }
+                exits = GetTeleportEndPoints( node.index );
+            }
+            else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
+                exits = GetWhirlpoolEndPoints( node.index );
+            }
+
+            for ( const int exitIndex : exits ) {
+                // neighbours is a set that will force the uniqness
+                reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
         }
     }

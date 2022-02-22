@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,6 +61,39 @@ namespace
         }
 
         return Artifact::Rand( Artifact::ART_ULTIMATE );
+    }
+
+    void fixCastleNames( const AllCastles & castles )
+    {
+        // Find castles with no names.
+        std::vector<Castle *> castleWithNoName;
+        std::set<std::string> castleNames;
+
+        for ( Castle * castle : castles ) {
+            if ( castle == nullptr ) {
+                // How do we have an empty pointer in this container?
+                assert( 0 );
+                continue;
+            }
+
+            const std::string & name = castle->GetName();
+
+            if ( name.empty() ) {
+                castleWithNoName.emplace_back( castle );
+            }
+            else {
+                castleNames.emplace( name );
+            }
+        }
+
+        if ( castleWithNoName.empty() ) {
+            return;
+        }
+
+        for ( Castle * castle : castleWithNoName ) {
+            castle->setName( castleNames );
+            castleNames.emplace( castle->GetName() );
+        }
     }
 }
 
@@ -374,7 +408,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 else {
                     Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
                     if ( castle ) {
-                        castle->LoadFromMP2( StreamBuf( pblock ) );
+                        castle->LoadFromMP2( pblock );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -396,7 +430,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
                     Castle * castle = getCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
-                        castle->LoadFromMP2( StreamBuf( pblock ) );
+                        castle->LoadFromMP2( pblock );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
                         Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
@@ -467,7 +501,7 @@ bool World::LoadMapMP2( const std::string & filename )
                             hero = vec_heroes.Get( pblock[18] );
 
                         if ( !hero || !hero->isFreeman() )
-                            hero = vec_heroes.GetFreeman( colorRace.second );
+                            hero = GetFreemanHeroes( colorRace.second );
 
                         if ( hero )
                             hero->LoadFromMP2( findobject, colorRace.first, colorRace.second, StreamBuf( pblock ) );
@@ -527,6 +561,8 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
+    fixCastleNames( vec_castles );
+
     // clear artifact flags to correctly generate random artifacts
     fheroes2::ResetArtifactStats();
 
@@ -578,7 +614,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
         case MP2::OBJ_DERELICTSHIP:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
@@ -757,5 +793,5 @@ void World::ProcessNewMap()
     vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
     vec_rumors.emplace_back( _( "An unknown force is being ressurected..." ) );
 
-    vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
+    vec_rumors.emplace_back( _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

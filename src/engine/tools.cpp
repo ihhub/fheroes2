@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,8 +32,6 @@
 #include "logging.h"
 #include "tools.h"
 
-#include <SDL.h>
-
 /* trim left right space */
 std::string StringTrim( std::string str )
 {
@@ -43,7 +42,7 @@ std::string StringTrim( std::string str )
 
     // left
     iter = str.begin();
-    while ( iter != str.end() && std::isspace( *iter ) )
+    while ( iter != str.end() && std::isspace( static_cast<unsigned char>( *iter ) ) )
         ++iter;
     if ( iter != str.begin() )
         str.erase( str.begin(), iter );
@@ -53,7 +52,7 @@ std::string StringTrim( std::string str )
 
     // right
     iter = str.end() - 1;
-    while ( iter != str.begin() && std::isspace( *iter ) )
+    while ( iter != str.begin() && std::isspace( static_cast<unsigned char>( *iter ) ) )
         --iter;
     if ( iter != str.end() - 1 )
         str.erase( iter + 1, str.end() );
@@ -64,7 +63,7 @@ std::string StringTrim( std::string str )
 /* convert to lower case */
 std::string StringLower( std::string str )
 {
-    std::transform( str.begin(), str.end(), str.begin(), ::tolower );
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
     return str;
 }
 
@@ -104,19 +103,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( std::all_of( str.begin(), str.end(), []( const char c ) { return std::isdigit( c ); } ) ) {
+    if ( std::all_of( str.begin(), str.end(), []( const unsigned char c ) { return std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && std::all_of( str.begin() + 1, str.end(), []( const char c ) { return std::isdigit( c ); } ) ) {
+              && std::all_of( str.begin() + 1, str.end(), []( const unsigned char c ) { return std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && std::all_of( str.begin() + 2, str.end(), []( const char c ) { return std::isxdigit( c ); } ) ) {
+             && std::all_of( str.begin() + 2, str.end(), []( const unsigned char c ) { return std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -163,22 +162,22 @@ void StringReplace( std::string & dst, const char * pred, int value )
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-std::list<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
 {
-    std::list<std::string> list;
+    std::vector<std::string> vec;
     size_t pos1 = 0;
     size_t pos2 = std::string::npos;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
-        list.push_back( str.substr( pos1, pos2 - pos1 ) );
+        vec.push_back( str.substr( pos1, pos2 - pos1 ) );
         pos1 = pos2 + sep.size();
     }
 
     // tail
     if ( pos1 < str.size() )
-        list.push_back( str.substr( pos1, str.size() - pos1 ) );
+        vec.push_back( str.substr( pos1, str.size() - pos1 ) );
 
-    return list;
+    return vec;
 }
 
 std::string InsertString( const std::string & src, size_t pos, const char * c )
@@ -198,40 +197,50 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
+bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
 {
-    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "wb" );
+    std::fstream file;
+    file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
 
-    if ( rw && 1 == SDL_RWwrite( rw, &data[0], static_cast<int>( data.size() ), 1 ) )
-        SDL_RWclose( rw );
-    else {
-        ERROR_LOG( SDL_GetError() );
+    if ( !file ) {
+        ERROR_LOG( "Unable to open file for writing: " << path );
         return false;
     }
+
+    file.write( reinterpret_cast<const char *>( data.data() ), static_cast<std::streamsize>( data.size() ) );
 
     return true;
 }
 
-std::vector<u8> LoadFileToMem( const std::string & file )
+std::vector<u8> LoadFileToMem( const std::string & path )
 {
-    std::vector<u8> data;
-    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
-    if ( rw == nullptr ) {
-        ERROR_LOG( SDL_GetError() );
-        return data;
+    std::fstream file;
+    file.open( path, std::fstream::in | std::fstream::binary );
+    if ( !file ) {
+        return {};
     }
 
-    const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
-    if ( length < 0 )
-        ERROR_LOG( SDL_GetError() );
-
-    if ( length > 0 ) {
-        data.resize( length );
-        SDL_RWseek( rw, 0, RW_SEEK_SET );
-        SDL_RWread( rw, &data[0], static_cast<int>( data.size() ), 1 );
+    file.seekg( 0, std::fstream::end );
+    std::streamoff length = file.tellg();
+    if ( length < 1 ) {
+        return {};
     }
 
-    SDL_RWclose( rw );
+    std::vector<uint8_t> data( length );
+
+    size_t dataToRead = static_cast<size_t>( length );
+    size_t dataAlreadyRead = 0;
+
+    const size_t blockSize = 4 * 1024 * 1024; // read by 4 MB blocks
+
+    while ( dataToRead > 0 ) {
+        size_t readSize = dataToRead > blockSize ? blockSize : dataToRead;
+
+        file.read( reinterpret_cast<char *>( data.data() + dataAlreadyRead ), static_cast<std::streamsize>( readSize ) );
+
+        dataAlreadyRead += readSize;
+        dataToRead -= readSize;
+    }
 
     return data;
 }
@@ -281,7 +290,7 @@ namespace fheroes2
         int32_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
         Point pt( pt1 );
 
-        for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
+        for ( int32_t i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
             if ( dx > dy ) {
                 pt.x < pt2.x ? ++pt.x : --pt.x;
                 ns -= dy;

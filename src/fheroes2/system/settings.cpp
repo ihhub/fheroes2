@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +50,8 @@ namespace
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
-        // UNUSED = 0x00000008,
+        GLOBAL_RENDER_VSYNC = 0x00000008,
+
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
 
@@ -60,17 +62,15 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
+
         // UNUSED = 0x00010000,
-
-        GLOBAL_MUSIC_EXT = 0x00020000,
-        GLOBAL_MUSIC_MIDI = 0x00040000,
-        GLOBAL_MUSIC = GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
-
+        // UNUSED = 0x00020000,
+        // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
-        // UNUSED = 0x00400000,
 
+        GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -99,15 +99,13 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
-    ExtSetModes( GAME_AUTOSAVE_ON );
-
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
+
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
-    opt_global.SetModes( GLOBAL_MUSIC_EXT );
 
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -186,9 +184,9 @@ bool Settings::Read( const std::string & filename )
         break;
     }
 
-#ifdef BUILD_RELEASE
+#ifndef WITH_DEBUG
     // reset devel
-    debug &= ~( DBG_DEVEL );
+    debug &= ~DBG_DEVEL;
 #endif
 
     Logging::SetDebugLevel( debug );
@@ -205,18 +203,12 @@ bool Settings::Read( const std::string & filename )
 
     if ( !sval.empty() ) {
         if ( sval == "original" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_ORIGINAL;
         }
         else if ( sval == "expansion" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "external" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_EXT );
             _musicType = MUSIC_EXTERNAL;
         }
     }
@@ -267,6 +259,10 @@ bool Settings::Read( const std::string & filename )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
+    if ( config.Exists( "battle army order" ) ) {
+        setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    }
+
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -308,6 +304,15 @@ bool Settings::Read( const std::string & filename )
         }
         else {
             opt_global.ResetModes( GLOBAL_SHOW_INTRO );
+        }
+    }
+
+    if ( config.Exists( "v-sync" ) ) {
+        if ( config.StrParams( "v-sync" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_RENDER_VSYNC );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_RENDER_VSYNC );
         }
     }
 
@@ -415,6 +420,9 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# show army order during battle: on/off" << std::endl;
+    os << "battle army order = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
 
@@ -426,6 +434,9 @@ std::string Settings::String() const
 
     os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
     os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
+    os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -462,11 +473,6 @@ int Settings::GameDifficulty() const
     return game_difficulty;
 }
 
-int Settings::CurrentColor() const
-{
-    return players.current_color;
-}
-
 const std::string & Settings::getGameLanguage() const
 {
     return _gameLanguage;
@@ -489,7 +495,7 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
 
     if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() ) && Translation::setDomain( language.c_str() );
+        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
     }
 
     ERROR_LOG( "Translation file " << fileName << " is not found." )
@@ -572,7 +578,7 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
 
 bool Settings::MusicMIDI() const
 {
-    return opt_global.Modes( GLOBAL_MUSIC_MIDI );
+    return _musicType == MUSIC_MIDI_ORIGINAL || _musicType == MUSIC_MIDI_EXPANSION;
 }
 
 /* return move speed */
@@ -595,7 +601,7 @@ int Settings::ScrollSpeed() const
     return scroll_speed;
 }
 
-/* set ai speed: 1 - 10 */
+/* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
     ai_speed = clamp( speed, 0, 10 );
@@ -633,6 +639,16 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
+void Settings::setBattleShowArmyOrder( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -646,17 +662,7 @@ void Settings::setFullScreen( const bool enable )
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
-    switch ( speed ) {
-    case SCROLL_SLOW:
-    case SCROLL_NORMAL:
-    case SCROLL_FAST1:
-    case SCROLL_FAST2:
-        scroll_speed = speed;
-        break;
-    default:
-        scroll_speed = SCROLL_NORMAL;
-        break;
-    }
+    scroll_speed = clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
@@ -721,6 +727,11 @@ bool Settings::BattleAutoSpellcast() const
     return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
+bool Settings::BattleShowArmyOrder() const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+}
+
 const fheroes2::Size & Settings::VideoMode() const
 {
     return video_mode;
@@ -738,34 +749,16 @@ void Settings::SetGameDifficulty( int d )
     game_difficulty = d;
 }
 
-void Settings::SetCurrentColor( int color )
-{
-    players.current_color = color;
-}
-
-int Settings::SoundVolume() const
-{
-    return sound_volume;
-}
-int Settings::MusicVolume() const
-{
-    return music_volume;
-}
-MusicSource Settings::MusicType() const
-{
-    return _musicType;
-}
-
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
-    sound_volume = std::min( v, 10 );
+    sound_volume = clamp( v, 0, 10 );
 }
 
 /* music volume: 0 - 10 */
 void Settings::SetMusicVolume( int v )
 {
-    music_volume = std::min( v, 10 );
+    music_volume = clamp( v, 0, 10 );
 }
 
 /* Set music type: check MusicSource enum */
@@ -774,36 +767,9 @@ void Settings::SetMusicType( int v )
     _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
 }
 
-/* check game type */
-bool Settings::IsGameType( int f ) const
-{
-    return ( game_type & f ) != 0;
-}
-
-int Settings::GameType() const
-{
-    return game_type;
-}
-
-/* set game type */
-void Settings::SetGameType( int type )
-{
-    game_type = type;
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
-}
-
-const Players & Settings::GetPlayers() const
-{
-    return players;
-}
-
-Players & Settings::GetPlayers()
-{
-    return players;
 }
 
 void Settings::SetPreferablyCountPlayers( int c )
@@ -998,23 +964,23 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::WORLD_SHOW_TERRAIN_PENALTY:
         return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: scouting skill show extended content info" );
+        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
-        return _( "world: allow set guardian to objects" );
+        return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
         return _( "world: Eagle Eye also works like Scholar in H3." );
     case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
-        return _( "world: Crystal Ball also added Identify Hero and Visions spells" );
+        return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
-        return _( "world: use unique artifacts for resource affecting" );
+        return _( "world: use unique artifacts providing resources" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
-        return _( "world: use unique artifacts for primary skills" );
+        return _( "world: use unique artifacts affecting primary skills" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
-        return _( "world: use unique artifacts for secondary skills" );
+        return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Wind/Water Mills and Magic Garden can be captured" );
+        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::WORLD_DISABLE_BARROW_MOUNDS:
         return _( "world: disable Barrow Mounds" );
     case Settings::CASTLE_ALLOW_GUARDIANS:
@@ -1024,25 +990,21 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
     case Settings::HEROES_COST_DEPENDED_FROM_LEVEL:
-        return _( "heroes: recruit cost to be dependent on hero level" );
+        return _( "heroes: recruit cost depends on hero level" );
     case Settings::HEROES_REMEMBER_POINTS_RETREAT:
         return _( "heroes: remember move points for retreat/surrender result" );
     case Settings::HEROES_TRANSCRIBING_SCROLLS:
         return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
-        return _( "heroes: in Arena can choose any of primary skills" );
-    case Settings::BATTLE_SHOW_ARMY_ORDER:
-        return _( "battle: show army order" );
+        return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
-        return _( "battle: soft wait troop" );
+        return _( "battle: allow soft wait for troops" );
     case Settings::BATTLE_REVERSE_WAIT_ORDER:
         return _( "battle: reverse wait order (fast, average, slow)" );
     case Settings::BATTLE_DETERMINISTIC_RESULT:
         return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:
         return _( "game: show system info" );
-    case Settings::GAME_AUTOSAVE_ON:
-        return _( "game: autosave on" );
     case Settings::GAME_AUTOSAVE_BEGIN_DAY:
         return _( "game: autosave will be made at the beginning of the day" );
     case Settings::GAME_USE_FADE:
@@ -1055,7 +1017,7 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: offer to continue the game afer victory condition" );
     default:
         break;
-    };
+    }
 
     return std::string();
 }
@@ -1167,11 +1129,6 @@ bool Settings::ExtHeroAllowTranscribingScroll() const
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
 }
 
-bool Settings::ExtBattleShowBattleOrder() const
-{
-    return ExtModes( BATTLE_SHOW_ARMY_ORDER );
-}
-
 bool Settings::ExtBattleSoftWait() const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
@@ -1195,11 +1152,6 @@ bool Settings::ExtGameShowSystemInfo() const
 bool Settings::ExtGameAutosaveBeginOfDay() const
 {
     return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
-}
-
-bool Settings::ExtGameAutosaveOn() const
-{
-    return ExtModes( GAME_AUTOSAVE_ON );
 }
 
 bool Settings::ExtGameUseFade() const
@@ -1334,6 +1286,11 @@ void Settings::BinaryLoad()
 bool Settings::FullScreen() const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::isVSyncEnabled() const
+{
+    return opt_global.Modes( GLOBAL_RENDER_VSYNC );
 }
 
 bool Settings::isFirstGameRun() const

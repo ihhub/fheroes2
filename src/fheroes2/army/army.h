@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -78,7 +79,7 @@ public:
     bool CanJoinTroops( const Troops & ) const;
 
     // Used only for moving full army in hero's meeting dialog.
-    void MoveTroops( Troops & from );
+    void MoveTroops( const Troops & from );
 
     void MergeTroops();
     Troops GetOptimized( void ) const;
@@ -89,11 +90,14 @@ public:
     void UpgradeTroops( const Castle & );
 
     Troop * GetFirstValid( void );
-    Troop * GetWeakestTroop( void );
+    Troop * GetWeakestTroop() const;
     const Troop * GetSlowestTroop() const;
 
     void SortStrongest();
     void ArrangeForBattle( bool = false );
+    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit
+    // to a separate slot, if possible)
+    void ArrangeForWhirlpool();
 
     void JoinStrongest( Troops &, bool );
 
@@ -187,7 +191,7 @@ public:
 
     Monster GetStrongestMonster() const;
 
-    void resetInvalidMonsters();
+    void resetInvalidMonsters() const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );

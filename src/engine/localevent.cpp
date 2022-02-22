@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1112,22 +1113,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     ResetModes( MOUSE_MOTION );
     ResetModes( MOUSE_RELEASED );
     ResetModes( MOUSE_CLICKED );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( _gameController != nullptr ) {
-        // fast map scroll with dpad
-#if defined( FHEROES2_VITA )
-        if ( !_dpadScrollActive || dpadInputActive )
-#else
-        if ( !_dpadScrollActive )
-#endif
-            ResetModes( KEY_PRESSED );
-    }
-    else {
-        ResetModes( KEY_PRESSED );
-    }
-#else
     ResetModes( KEY_PRESSED );
-#endif
 
     mouse_wm = fheroes2::Point();
 
@@ -1396,31 +1382,30 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
-        _dpadScrollActive = true;
-
-        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
-            key_value = KEY_KP4;
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
-            key_value = KEY_KP6;
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
-            key_value = KEY_KP8;
-        }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-            key_value = KEY_KP2;
-        }
-        else {
-            _dpadScrollActive = false;
-        }
-
 #if defined( FHEROES2_VITA )
-        if ( dpadInputActive && ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) ) {
-            key_value = KEY_SHIFT;
+        if ( dpadInputActive ) {
+            if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+                key_value = KEY_SHIFT;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
+                key_value = KEY_KP4;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
+                key_value = KEY_KP6;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
+                key_value = KEY_KP8;
+            }
+            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+                key_value = KEY_KP2;
+            }
             return;
         }
 #endif
-        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+            key_value = KEY_SPACE;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
             key_value = KEY_h;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
@@ -1775,11 +1760,6 @@ KeySym LocalEvent::KeyValue( void ) const
     return key_value;
 }
 
-bool LocalEvent::KeyPress( void ) const
-{
-    return modes & KEY_PRESSED;
-}
-
 bool LocalEvent::KeyPress( KeySym key ) const
 {
     return key == key_value && ( modes & KEY_PRESSED );
@@ -1819,7 +1799,7 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
     return 1;
 }
 
-void LocalEvent::SetState( u32 type, bool enable )
+void LocalEvent::SetState( const uint32_t type, const bool enable )
 {
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
 }

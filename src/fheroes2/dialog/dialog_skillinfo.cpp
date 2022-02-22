@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -78,11 +79,11 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     // small text
     text.Set( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
-    text.Blit( pos.x, pos.y + 3 );
+    text.Blit( pos.x, pos.y + 6 );
 
     text.Set( Skill::Level::StringWithBonus( hero, skill.Skill(), skill.Level() ) );
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
-    text.Blit( pos.x, pos.y + 55 );
+    text.Blit( pos.x, pos.y + 54 );
 
     LocalEvent & le = LocalEvent::Get();
 

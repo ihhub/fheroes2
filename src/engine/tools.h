@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +40,7 @@ int Sign( int );
 std::string StringTrim( std::string );
 std::string StringLower( std::string );
 
-std::list<std::string> StringSplit( const std::string &, const std::string & );
+std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
@@ -48,8 +49,8 @@ int CountBits( u32 );
 
 std::string InsertString( const std::string &, size_t, const char * );
 
-bool SaveMemToFile( const std::vector<u8> &, const std::string & );
-std::vector<u8> LoadFileToMem( const std::string & );
+bool SaveMemToFile( const std::vector<u8> & data, const std::string & path );
+std::vector<u8> LoadFileToMem( const std::string & path );
 
 // std::clamp replacement until we can use C++17
 template <typename T>
@@ -74,7 +75,7 @@ namespace fheroes2
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
     template <class T>
-    void hashCombine( std::size_t & seed, const T & v )
+    void hashCombine( uint32_t & seed, const T & v )
     {
         std::hash<T> hasher;
         seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );

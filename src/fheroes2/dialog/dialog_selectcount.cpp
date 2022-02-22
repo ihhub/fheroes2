@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,17 +39,17 @@
 
 namespace
 {
-    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t maximumValue )
+    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
-        const bool isMaxValue = ( currentValue >= maximumValue );
+        const bool isMinValue = ( currentValue <= minimumValue );
 
-        if ( isMaxValue ) {
-            minButton.show();
-            maxButton.hide();
-        }
-        else {
+        if ( isMinValue ) {
             minButton.hide();
             maxButton.show();
+        }
+        else {
+            minButton.show();
+            maxButton.hide();
         }
 
         minButton.draw();
@@ -389,7 +390,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     const fheroes2::Rect buttonArea( 5, 0, 61, 25 );
-    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMax );
+    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, min );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -434,7 +435,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             }
 
         if ( redraw_count ) {
-            SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMax );
+            SwitchMaxMinButtons( buttonMin, buttonMax, sel.getCur(), min );
             if ( !ssp.empty() )
                 ssp.hide();
             sel.Redraw();

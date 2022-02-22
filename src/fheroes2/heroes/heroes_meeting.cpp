@@ -1,24 +1,25 @@
-/****************************************************************************
+/***************************************************************************
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
+ *                                                                         *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
- *                                                                          *
- *   This program is free software; you can redistribute it and/or modify   *
- *   it under the terms of the GNU General Public License as published by   *
- *   the Free Software Foundation; either version 2 of the License, or      *
- *   (at your option) any later version.                                    *
- *                                                                          *
- *   This program is distributed in the hope that it will be useful,        *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *   GNU General Public License for more details.                           *
- *                                                                          *
- *   You should have received a copy of the GNU General Public License      *
- *   along with this program; if not, write to the                          *
- *   Free Software Foundation, Inc.,                                        *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              *
- ****************************************************************************/
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include <algorithm>
 #include <string>
@@ -43,31 +44,15 @@
 
 namespace
 {
-    void createMoveButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    fheroes2::ButtonSprite createMoveButton( const int32_t icnId, const int32_t offsetX, const int32_t offsetY, const fheroes2::Image & display )
     {
-        const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
         const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
         const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
 
-        const int32_t offsetX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
-        const int32_t width = std::min( originalReleasedImage.width(), originalPressedImage.width() );
-        const int32_t height = std::min( originalReleasedImage.height(), originalPressedImage.height() );
+        const int32_t minX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
+        const int32_t minY = std::min( originalReleasedImage.y(), originalPressedImage.y() );
 
-        fheroes2::Point extraOffset( 2, 1 );
-
-        const int32_t extendedWidth = width + extraOffset.x * 2;
-        const int32_t extendedHeight = height + extraOffset.y * 2;
-
-        fheroes2::Sprite releasedButton( extendedWidth, extendedHeight );
-        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, releasedButton, 0, 0, extendedWidth, extendedHeight );
-        fheroes2::Blit( originalReleasedImage, 0, 0, releasedButton, extraOffset.x, extraOffset.y, originalReleasedImage.width(), originalReleasedImage.height() );
-
-        fheroes2::Sprite pressedButton( extendedWidth, height + extraOffset.y * 2 );
-        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, pressedButton, 0, 0, extendedWidth, extendedHeight );
-        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, extraOffset.x, extraOffset.y + 1, originalPressedImage.width(), originalPressedImage.height() );
-
-        button.setPosition( screenOffset.x + offset.x + offsetX - extraOffset.x, screenOffset.y + offset.y - extraOffset.y );
-        button.setSprite( releasedButton, pressedButton );
+        return fheroes2::makeButtonWithShadow( offsetX + minX, offsetY + minY, originalReleasedImage, originalPressedImage, display, fheroes2::Point( -3, 3 ) );
     }
 
     void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
@@ -332,11 +317,19 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     secskill_bar2.SetPos( cur_pt.x + 353, cur_pt.y + 199 );
     secskill_bar2.Redraw();
 
+    const fheroes2::Sprite & moveButtonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+    fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
+
+    // The original resources do not have such animated buttons so we have to create those.
+    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 267, display );
+    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 290, display );
+
+    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 310, 223, 20 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 310, 223, 20 );
+
     // army
     dst_pt.x = cur_pt.x + 36;
     dst_pt.y = cur_pt.y + 267;
-
-    fheroes2::ImageRestorer armyCountBackgroundRestorer( display, cur_pt.x + 36, cur_pt.y + 310, 567, 20 );
 
     MeetingArmyBar selectArmy1( &GetArmy() );
     selectArmy1.SetColRows( 5, 1 );
@@ -376,31 +369,20 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
     selectArtifacts2.Redraw();
 
+    fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
+    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 361, display );
+    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 384, display );
+
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
 
-    buttonExit.draw();
-
-    // The original resources do not have such animated buttons so we have to create those.
-    const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
-    fheroes2::ButtonSprite moveArmyToHero2;
-    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArmyToHero1;
-    createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArtifactsToHero2;
-    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
-
-    fheroes2::ButtonSprite moveArtifactsToHero1;
-    createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
-
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
+    buttonExit.draw();
 
     display.render();
 
@@ -454,7 +436,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArtifacts2.isSelected() )
                 selectArtifacts2.ResetSelected();
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.Redraw();
             selectArmy2.Redraw();
@@ -520,7 +503,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         if ( le.MouseClickLeft( hero1Area ) ) {
             Game::OpenHeroesDialog( *this, false, false, true );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -540,7 +524,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( hero2Area ) ) {
             Game::OpenHeroesDialog( otherHero, false, false, true );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -560,7 +545,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
             otherHero.GetArmy().MoveTroops( GetArmy() );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
@@ -575,7 +561,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
             GetArmy().MoveTroops( otherHero.GetArmy() );
 
-            armyCountBackgroundRestorer.restore();
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
@@ -629,7 +616,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.ResetSelected();
 
     backPrimary.reset();
-    armyCountBackgroundRestorer.reset();
+    armyCountBackgroundRestorerLeft.reset();
+    armyCountBackgroundRestorerRight.reset();
     restorer.restore();
     display.render();
 }

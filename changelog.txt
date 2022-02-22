@@ -1,3 +1,152 @@
+version 0.9.12 (07 February 2022)
+- add a confirmation window for restarting a campaign scenario
+- fix wrong scenario order in "Voyage Home" campaign
+- add Betrayal missing for Roland and Archibald campaigns
+- fix logic for switching on and off Auto battle option
+- fix normal and retaliation attack of monsters with multi-cell attack abilities
+- fix missing logging during certain spell casts in battle
+- implement a heuristic for hiring heroes that does not allow to offer the same heroes for hire in several kingdoms at the same time, if there are enough free heroes
+- use 'r' key instead of Escape to Retreat during battle
+- fix Hydra behavior under Berserk or Hypnotize spell effect
+- add highlighting of cells attacked by a unit capable of attacking all neighboring cells
+- fix a penetrating attack made by a wide unit from the tail cell
+- fix attack cursor display during battle
+- fix cases when no monsters were spawned at the beginning of a month
+- display ? symbol instead of empty space for unrecognized symbols
+- fix crashes while rendering non-English text
+- fix rare cases of a screen being black on a startup of the application
+- make language area and campaign choice selection to cover text too
+- fix campaign text translation
+- modify army order setting
+- add German font generation
+- fix multiple issues related the hero recruitment process
+- update Russian translation
+- show monster info on right click in castle's well
+- fix cases when the last AI hero was blocking an entrance to Stone Liths
+- fix small font positioning for Polish GoG version
+- fix most of existing cases with passabilities
+- fix the display of properties for maps from the list in scenario selection dialog
+- update German translation
+- fix translation of saved default player names
+- improve the AI fog discovery logic
+- AI properly uses Whirlpools for path calculation
+- fix cases when a hero was able to create a path over another hero
+- display dead monster information during battle 
+- fix Mass Dispel usage during battle
+- update Polish translation
+- fix Russian small k per in both fonts
+- AI heroes properly calculate paths through water
+- add translation context for color and syntax flexibility to Traveller's Tent and Barrier
+- fix Knowledge spite rendering for Arena
+- fix sounds after battle cases
+- fix missing Russian letters on Switch
+- changed captain's name spelling
+- adds missing "pourcent" in description of Golden Bow
+- fix cases when a hero was able to walk on water
+- update French translation
+- show in-game only players for Gift marketplace option
+- fix glowing red pixel in Warlock's Red Tower
+- improve AI behavior during castle defence
+- fix CPU player icon's extra color column
+- show proper language name for mismatched by language save files
+- add a spell title when no enough SP window appears
+- fix a possible crash in French letters generation
+- fix usage of plural/singular translations for map's objects
+- update the logic of re-calculating the paths of heroes on the adventure map
+- add support of Buka version of Anim2 directory for video playback
+- always enable autosave
+- generate proper Russian E with 2 dots on top
+- allow translation of "Cost per troop:" text
+- update UI elements in marketplace window
+- fix a crash during AI turn when AI army has an invalid monster slot
+
+version 0.9.11 (23 December 2021)
+- add popup dialog for map information
+- fix hero's path not being updated properly after new monster month event
+- show available game languages in vertical order rather than horizontal
+- fix handling of national symbols in the paths to music files on Windows
+- improve AI behavior during castle defence
+- fix pressed buttons' background
+- fix incorrect output on console window for Windows users with non-English system language
+- add support of Russian language by default
+- update Polish translation
+- generate correct letters for French language
+- update Settings description to cover all actions
+- fix heroes meeting swap arrows
+- update PS Vita controls
+- fix crash for some systems after changing game resolution
+- add hotkey for settings in Main Menu
+- do not reset the hero's path in Sleeper mode, reset the Sleeper mode only with the beginning of the hero's movement
+- fix River being considered as a Road
+- allow to select player class using mouse wheel
+- add additional spell info for spells owned by a hero
+- fix button rendering artifacts after changing resolution
+- fix crash on Windows for some Archibald scenarios
+- always mark the entrance to the castle/town as a road, do not automatically mark the tile south of the entrance as a road
+
+version 0.9.10 (05 December 2021)
+- update background music on the fly while changing it within settings
+- fix horizontal position of town name and town icon in town construction dialog
+- improve marketplace gift button placement
+- fix vertical text position in skill icon
+- fix Summon Boat logic
+- add video playback in the Price of Loyalty campaign selection window
+- play sound for visiting Observation Tower
+- fix vertical position of building construction name
+- add missing button shadows in dialogs
+- add popup window to OK button in game settings
+- play campaign music in campaign scenario selection screen
+- fix Enter button pressed state being passed from gift dialog
+- show credits at the end of campaign
+- fix passability for Dimension Door spell
+- add V-Sync option for SDL2
+- update troops split logic change
+- properly draw battle grid
+- use the OK button instead of YES button for the Tavern window
+- add Champion image for Stables object
+- play sounds from closest surrounding objects first
+- make consistent campaign info dialog
+- add default castle's name if none is specified by editor
+- show heroes on minimap
+- update Norwegian translation
+- show available creature count for the Price of Loyalty monster objects
+- fix Witch's Hut name
+- add Italian translation
+- properly handle the day-week-month routine
+- add titles for most of dialogs from map's objects
+- always mark Artesian Spring as visited, even if the hero was not able to drink from it
+- fix movement penalty calculation algorithm
+- implement last move logic for hero movement on the map
+- update hero movement points UI upon visiting multiple objects on the map
+- fix rendering for difficulty text in scenario info dialog
+- fix AI obsession with whirlpools and being always in sea
+- load palette from AGG file
+- fix monster recruit window position for multiple places
+- fix logic for Slow and Haste spell AI usage during battle
+- add random sign messages
+- fix maximum music and sound volume
+- use correct message in marketplace for first exchange when not enough resources
+- speed up for multiple image readings and for unit rendering during battle
+- allow to change Battle Speed using mouse wheel
+- update UI elements in Well's dialog
+- if a hero on the map has the custom empty army (OG editor bug/feature), give him a minimum army (one unit of level 1)
+- add translations for Battle Only mode texts
+- set correct starting army in Archibald 7 scenario
+- fix cases when AI creature doesn't move during battle
+- fix sound effects when receiving artifacts from world map
+- add hotkey to Okay button in Campaign select window
+- fix results on instant battle when Resurrect spell was being used
+- fix cases when opposing heroes still exist on the map after defeat
+- improve AI usage of Disrupting Ray spell during battle
+- add runtime language generation
+- fix terrain music being played during battle 
+- fix water object passabilities
+- allow to use mouse wheel to change system options
+- set correct building requirements for Upgraded Jousting Arena and Upgraded Cathedral
+- update messages during battle
+- shorten artifacts names to be fit for campaign UI
+- always highlight the cell under the cursor in combat if the Shadow Cursor is enabled, even if this cell is not reachable by the current unit
+
 version 0.9.9 (05 November 2021)
 - do not leak the hotkey state from the experimental settings dialog to the scenario info dialog
 - fix Stonehenge gold cost
