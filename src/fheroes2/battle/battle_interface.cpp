@@ -228,7 +228,7 @@ namespace
         case Battle::RIGHT:
             return Cursor::SWORD_LEFT;
         case Battle::TOP_RIGHT:
-            return ( isWideMonster && !isReflected ) ? Cursor::SWORD_BOTTOM :Cursor::SWORD_BOTTOMLEFT;
+            return ( isWideMonster && !isReflected ) ? Cursor::SWORD_BOTTOM : Cursor::SWORD_BOTTOMLEFT;
         case Battle::TOP_LEFT:
             return ( isWideMonster && isReflected ) ? Cursor::SWORD_BOTTOM : Cursor::SWORD_BOTTOMRIGHT;
         case Battle::LEFT:
@@ -1698,7 +1698,6 @@ void Battle::Interface::RedrawCover()
                 else {
                     direction = BOTTOM_LEFT;
                 }
-                
             }
             else if ( cursorType == Cursor::SWORD_BOTTOM ) {
                 assert( _currentUnit->isWide() );
@@ -2786,7 +2785,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
         case Cursor::SWORD_BOTTOMLEFT:
         case Cursor::SWORD_LEFT:
         case Cursor::SWORD_TOP:
-        case Cursor::SWORD_BOTTOM:{
+        case Cursor::SWORD_BOTTOM: {
             if ( themes == Cursor::SWORD_TOP || themes == Cursor::SWORD_BOTTOM ) {
                 assert( _currentUnit->isWide() );
             }
