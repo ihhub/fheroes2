@@ -212,7 +212,7 @@ namespace AI
         if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
             if ( isCommanderCanSpellcast( arena, _commander ) ) {
                 // Cast maximum damage spell
-                const SpellSelection & bestSpell = selectBestSpell( arena, true );
+                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
 
                 if ( bestSpell.spellID != -1 ) {
                     actions.emplace_back( CommandType::MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
@@ -225,7 +225,7 @@ namespace AI
 
         // Step 3. Calculate spell heuristics
         if ( isCommanderCanSpellcast( arena, _commander ) ) {
-            const SpellSelection & bestSpell = selectBestSpell( arena, false );
+            const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, false );
 
             if ( bestSpell.spellID != -1 ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );

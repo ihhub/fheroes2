@@ -89,9 +89,9 @@ namespace AI
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        SpellSelection selectBestSpell( Battle::Arena & arena, bool retreating ) const;
-        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
-                                           bool retreating ) const;
+        SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
+        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
+                                           const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
