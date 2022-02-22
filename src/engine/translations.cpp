@@ -171,6 +171,17 @@ namespace
         return ~crc;
     }
 
+    std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
+    {
+        std::string res;
+        if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {
+            size_t pos = str.find( sep );
+            if ( pos != std::string::npos )
+                res = str.substr( pos + sep.size() );
+        }
+        return res;
+    }
+
     const char * stripContext( const char * str );
 
     struct mofile
@@ -217,17 +228,6 @@ namespace
             }
 
             return reinterpret_cast<const char *>( ptr );
-        }
-
-        std::string get_tag( const std::string & str, const std::string & tag, const std::string & sep ) const
-        {
-            std::string res;
-            if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {
-                size_t pos = str.find( sep );
-                if ( pos != std::string::npos )
-                    res = str.substr( pos + sep.size() );
-            }
-            return res;
         }
 
         bool open( const std::string & file )
@@ -281,10 +281,10 @@ namespace
 
                 for ( std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
                     if ( encoding.empty() )
-                        encoding = get_tag( *it, tag1, sep1 );
+                        encoding = getTag( *it, tag1, sep1 );
 
                     if ( plural_forms.empty() )
-                        plural_forms = get_tag( *it, tag2, sep2 );
+                        plural_forms = getTag( *it, tag2, sep2 );
                 }
             }
 
