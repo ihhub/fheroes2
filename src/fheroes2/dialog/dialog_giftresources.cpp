@@ -133,7 +133,7 @@ struct ResourceBar
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
     {
         Text text( std::to_string( count ), Font::SMALL );
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::GetIndexSprite2( type ) );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
         text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
     }
@@ -144,7 +144,7 @@ struct ResourceBar
             res = &resource;
 
         for ( size_t i = 0; i < positions.size(); ++i ) {
-            const int rs = Resource::FromIndexSprite2( static_cast<uint32_t>( i ) );
+            const int rs = Resource::getResourceTypeFromIconIndex( static_cast<uint32_t>( i ) );
             RedrawResource( rs, res->Get( rs ), positions[i].x, positions[i].y );
         }
     }
@@ -159,7 +159,7 @@ struct ResourceBar
         const s32 index = GetIndexClick();
 
         if ( index >= 0 ) {
-            int rs = Resource::FromIndexSprite2( index );
+            int rs = Resource::getResourceTypeFromIconIndex( index );
             u32 step = rs == Resource::GOLD ? 100 : 1;
 
             u32 cur = resource.Get( rs );

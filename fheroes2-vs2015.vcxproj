@@ -330,6 +330,7 @@
     <ClCompile Include="src\fheroes2\heroes\route.cpp" />
     <ClCompile Include="src\fheroes2\heroes\skill.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\color.cpp" />
+	<ClCompile Include="src\fheroes2\kingdom\experience.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\kingdom.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\kingdom_overview.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\luck.cpp" />
@@ -502,6 +503,7 @@
     <ClInclude Include="src\fheroes2\heroes\skill_static.h" />
     <ClInclude Include="src\fheroes2\image\embedded_image.h" />
     <ClInclude Include="src\fheroes2\kingdom\color.h" />
+	<ClInclude Include="src\fheroes2\kingdom\experience.h" />
     <ClInclude Include="src\fheroes2\kingdom\kingdom.h" />
     <ClInclude Include="src\fheroes2\kingdom\luck.h" />
     <ClInclude Include="src\fheroes2\kingdom\morale.h" />

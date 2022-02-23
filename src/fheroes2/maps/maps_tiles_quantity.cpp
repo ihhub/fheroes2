@@ -268,9 +268,9 @@ ResourceCount Maps::Tiles::QuantityResourceCount( void ) const
         case 1:
             return ResourceCount( Resource::GOLD, QuantityGold() );
         case 2:
-            return ResourceCount( Resource::FromIndexSprite2( QuantityExt() - 1 ), 3 );
+            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 );
         case 3:
-            return ResourceCount( Resource::FromIndexSprite2( QuantityExt() - 1 ), 5 );
+            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 5 );
         default:
             break;
         }
@@ -529,8 +529,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 QuantitySetVariant( cond );
                 QuantitySetArtifact( art );
 
-                if ( cond == 2 || cond == 3 )
-                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand( false ) ) + 1 );
+                if ( cond == 2 || cond == 3 ) {
+                    // TODO: why do we use icon ICN index instead of map ICN index?
+                    QuantitySetExt( Resource::getIconIcnIndex( Resource::Rand( false ) ) + 1 );
+                }
             }
         }
         break;
