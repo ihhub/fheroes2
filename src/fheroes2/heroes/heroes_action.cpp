@@ -895,7 +895,7 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
 
             const fheroes2::Text header( MP2::StringObject( objectType ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
             const fheroes2::Text body( _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ),
-                { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                                       { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
             fheroes2::showMessage( header, body, Dialog::OK, uiElements );
         }
@@ -1701,7 +1701,8 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
         fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                fheroes2::Text( _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, "
                                                   "\"I would give you an artifact as a reward, but you're all full.\"" ),
-                               { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                                               { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ),
+                               Dialog::OK, { &goldUI } );
 
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
     }
@@ -1798,7 +1799,8 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
 
                 fheroes2::ArtifactDialogElement artifactUI( art );
 
-                
+                fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
 
                 result = true;
             }
@@ -3188,7 +3190,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
                         artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
                         uiElements.emplace_back( artifactUI.get() );
                     }
-                    
+
                     fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                            fheroes2::Text( say, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, uiElements );
                 }

@@ -144,7 +144,7 @@ namespace fheroes2
             const int32_t emptyWidth = BOXAREA_WIDTH - currentRowElementCount * currentRowMaxElementWidth;
             const int32_t offsetBetweenElements = emptyWidth / ( currentRowElementCount + 1 );
 
-            const int32_t widthOffset = offsetBetweenElements + currentRowElementIndex * ( currentRowMaxElementWidth  + offsetBetweenElements);
+            const int32_t widthOffset = offsetBetweenElements + currentRowElementIndex * ( currentRowMaxElementWidth  + offsetBetweenElements );
             elementOffsets.emplace_back( pos.x + widthOffset + ( currentRowMaxElementWidth - element->area().width ) / 2,
                                          pos.y + elementHeight + currentRowHeight - element->area().height );
 

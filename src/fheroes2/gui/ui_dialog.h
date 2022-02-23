@@ -116,6 +116,7 @@ namespace fheroes2
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
+
     private:
         const bool _goodLuck;
     };
@@ -128,6 +129,7 @@ namespace fheroes2
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
+
     private:
         const bool _goodMorale;
     };
