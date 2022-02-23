@@ -1281,67 +1281,67 @@ msgid "campaignBonus|Ballista"
 msgstr "Баллиста"
 
 msgid "campaignBonus|Black Pearl"
-msgstr "Чёр. жемчужина"
+msgstr "Чёрн. Жемчужина"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr "Браслет"
+msgstr "Маг. Браслет"
 
 msgid "campaignBonus|Defender Helm"
-msgstr "Шлем защитника"
+msgstr "Шлем Защитника"
 
 msgid "campaignBonus|Breastplate"
-msgstr "Доспех"
+msgstr "Защитный Доспех"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr "Драконий меч"
+msgstr "Драконий Меч"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr "Символ неудачи"
+msgstr "Символ Неудачи"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr "Высший свиток"
+msgstr "Высший Свиток"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr "Ужасная маска"
+msgstr "Ужасная Маска"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr "Кольцо мага"
+msgstr "Кольцо Мага"
 
 msgid "campaignBonus|Major Scroll"
-msgstr "Большой свиток"
+msgstr "Большой Свиток"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Медаль доблести"
+msgstr "Медаль Доблести"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "Медаль отваги"
+msgstr "Медаль Отваги"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr "Малый свиток"
+msgstr "Малый Свиток"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr "Сапоги кочевника"
+msgstr "Сапоги Кочевника"
 
 msgid "campaignBonus|Power Axe"
-msgstr "Топор власти"
+msgstr "Топор Власти"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr "Шипованный щит"
+msgstr "Шипованный Щит"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr "Незримый щит"
+msgstr "Незримый Щит"
 
 msgid "campaignBonus|Tax Lien"
 msgstr "Податная"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "Громовая палица"
+msgstr "Громовая Палица"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Сапоги путника"
+msgstr "Сапоги Путника"
 
 msgid "campaignBonus|White Pearl"
-msgstr "Бел. жемчужина"
+msgstr "Бел. Жемчужина"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Поднять нежить"
