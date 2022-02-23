@@ -2719,8 +2719,8 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
             elementUI.emplace_back( artifactUI.get() );
         }
 
-        fheroes2::showMessage( fheroes2::Text("", {}), fheroes2::Text( event_maps->message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ),
-                               Dialog::OK, elementUI );
+        fheroes2::showMessage( fheroes2::Text("", {}), fheroes2::Text( event_maps->message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK,
+                               elementUI );
 
         event_maps->SetVisited( hero.GetColor() );
 
