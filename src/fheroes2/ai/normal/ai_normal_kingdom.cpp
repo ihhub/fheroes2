@@ -88,6 +88,8 @@ namespace AI
             CastleTurn( castle, underThreat );
             ReinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
         }
+
+        return recruit != nullptr;
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
@@ -254,7 +256,7 @@ namespace AI
 
         if ( availableHeroCount < heroLimit ) {
             Castle * recruitmentCastle = nullptr;
-            int lowestHeroCount = heroLimit;
+            double bestArmyAvailable = -1.0;
 
             // search for best castle to recruit hero from
             for ( Castle * castle : sortedCastleList ) {
@@ -263,30 +265,34 @@ namespace AI
                     const int mapIndex = castle->GetIndex();
 
                     // Make sure there is no hero in castle already and we're not under threat while having other heroes.
-                    if ( hero != nullptr || ( !heroes.empty() && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
+                    if ( hero != nullptr || ( availableHeroCount > 0 && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
                         continue;
 
                     const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
-                    const int heroCount = _regions[regionID].friendlyHeroCount;
+                    const int heroesInRegion = _regions[regionID].friendlyHeroCount;
+
+                    if ( heroesInRegion > 1 )
+                        continue;
+
                     const size_t neighboursCount = world.getRegion( regionID ).getNeighboursCount();
 
-                    // don't buy a second hero if castle is on locked island
-                    if ( neighboursCount == 0 && heroCount > 0 ) {
+                    // don't buy another hero if there's nothing to do or castle is on an island
+                    if ( heroesInRegion > 0 && ( !moreTasksForHeroes || ( castles.size() > 1 && neighboursCount == 0 ) ) ) {
                         continue;
                     }
 
-                    if ( recruitmentCastle == nullptr || lowestHeroCount > heroCount ) {
+                    const double availableArmy = castle->getArmyRecruitmentValue();
+
+                    if ( recruitmentCastle == nullptr || availableArmy > bestArmyAvailable ) {
                         recruitmentCastle = castle;
-                        lowestHeroCount = heroCount;
-                        if ( lowestHeroCount == 0 )
-                            break;
+                        bestArmyAvailable = availableArmy;
                     }
                 }
             }
 
             // target found, buy hero
-            if ( recruitmentCastle ) {
-                recruitHero( *recruitmentCastle, slowEarlyGame, castlesInDanger.find( recruitmentCastle->GetIndex() ) != castlesInDanger.end() );
+            if ( recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false ) ) {
+                ++availableHeroCount;
             }
         }
 

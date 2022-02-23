@@ -172,6 +172,7 @@ public:
     int getBuildingValue() const;
 
     // Used only for AI.
+    double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
     void ChangeColor( int );
@@ -250,6 +251,7 @@ private:
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
+    Troops getAvailableArmy( Funds potentialBudget ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 
