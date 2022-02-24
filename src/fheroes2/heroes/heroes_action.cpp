@@ -53,6 +53,64 @@
 #include "ui_text.h"
 #include "world.h"
 
+namespace
+{
+    void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
+    {
+        const payment_t info = ProfitConditions::FromMine( resourceType );
+        int32_t resouceCount = 0;
+
+        switch ( resourceType ) {
+        case Resource::MERCURY:
+            resouceCount = info.mercury;
+            break;
+        case Resource::WOOD:
+            resouceCount = info.wood;
+            break;
+        case Resource::ORE:
+            resouceCount = info.ore;
+            break;
+        case Resource::SULFUR:
+            resouceCount = info.sulfur;
+            break;
+        case Resource::CRYSTAL:
+            resouceCount = info.crystal;
+            break;
+        case Resource::GEMS:
+            resouceCount = info.gems;
+            break;
+        case Resource::GOLD:
+            resouceCount = info.gold;
+            break;
+        default:
+            // You're passing an invalid resource type. Check your logic!
+            assert( 0 );
+            break;
+        }
+
+        std::string perday = _( "%{count} / day" );
+        StringReplace( perday, "%{count}", resouceCount );
+
+        std::string msg = str;
+        switch ( resouceCount ) {
+        case 1:
+            StringReplace( msg, "%{count}", _( "one" ) );
+            break;
+        case 2:
+            StringReplace( msg, "%{count}", _( "two" ) );
+            break;
+        default:
+            StringReplace( msg, "%{count}", resouceCount );
+            break;
+        }
+
+        fheroes2::ResourceDialogElement resourceUI( resourceType, perday );
+
+        fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+            fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &resourceUI } );
+    }
+}
+
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
 void ActionToMonster( Heroes & hero, s32 dst_index );
@@ -105,69 +163,6 @@ void ActionToEyeMagi( const Heroes & hero, const MP2::MapObjectType objectType )
 void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-
-u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t res, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( res ) );
-    std::string msg = str;
-
-    // sprite resource with x / day test
-    fheroes2::Image sf( sprite.width() + 30, sprite.height() + 14 );
-    sf.reset();
-
-    fheroes2::Blit( sprite, sf, 15, 0 );
-
-    std::string perday = _( "%{count} / day" );
-    payment_t info = ProfitConditions::FromMine( res );
-    const s32 * current = nullptr;
-
-    switch ( res ) {
-    case Resource::MERCURY:
-        current = &info.mercury;
-        break;
-    case Resource::WOOD:
-        current = &info.wood;
-        break;
-    case Resource::ORE:
-        current = &info.ore;
-        break;
-    case Resource::SULFUR:
-        current = &info.sulfur;
-        break;
-    case Resource::CRYSTAL:
-        current = &info.crystal;
-        break;
-    case Resource::GEMS:
-        current = &info.gems;
-        break;
-    case Resource::GOLD:
-        current = &info.gold;
-        break;
-    default:
-        break;
-    }
-
-    if ( current ) {
-        StringReplace( perday, "%{count}", *current );
-
-        switch ( *current ) {
-        case 1:
-            StringReplace( msg, "%{count}", _( "one" ) );
-            break;
-        case 2:
-            StringReplace( msg, "%{count}", _( "two" ) );
-            break;
-        default:
-            StringReplace( msg, "%{count}", *current );
-            break;
-        }
-    }
-
-    Text text( perday, Font::SMALL );
-    text.Blit( ( sf.width() - text.w() ) / 2, sf.height() - 12, sf );
-
-    return Dialog::SpriteInfo( hdr, msg, sf, buttons );
-}
 
 void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
 {
@@ -1497,13 +1492,13 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
                     if ( hero.IsFullBagArtifacts() ) {
                         gold = GoldInsteadArtifact( objectType );
 
-                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                         fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                                fheroes2::Text( win, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
                     }
                     else {
-                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                         const fheroes2::ArtifactDialogElement artifactUI( art );
 
                         fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
@@ -1513,7 +1508,7 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
                     }
                 }
                 else {
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                     fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                            fheroes2::Text( win, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
@@ -1661,7 +1656,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
     if ( hero.IsFullBagArtifacts() ) {
         const u32 gold = GoldInsteadArtifact( objectType );
 
-        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
         fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                fheroes2::Text( _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, "
@@ -1882,7 +1877,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                     msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
                     StringReplace( msg, "%{gold}", gold );
 
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                     fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                            fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
@@ -1892,7 +1887,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                     StringReplace( msg, "%{gold}", gold );
                     StringReplace( msg, "%{art}", art.GetName() );
 
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
                     fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
@@ -1905,7 +1900,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                 msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
                 StringReplace( msg, "%{gold}", gold );
 
-                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                 fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                        fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
@@ -1934,7 +1929,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                 msg = _( "After scouring the area, you fall upon a hidden chest, containing the %{gold} gold pieces." );
                 StringReplace( msg, "%{gold}", gold );
 
-                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                 fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                        fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
@@ -2824,7 +2819,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                     msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
                     StringReplace( msg, "%{count}", gold );
 
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                     fheroes2::showMessage( fheroes2::Text( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                            fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
@@ -2855,7 +2850,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                 StringReplace( msg, "%{count}", gold );
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
-                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, gold );
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                 fheroes2::showMessage( fheroes2::Text( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
                                        fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &experienceUI, &goldUI } );
 

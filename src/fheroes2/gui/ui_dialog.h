@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "math_base.h"
@@ -74,7 +75,7 @@ namespace fheroes2
     class ResourceDialogElement : public DialogElement
     {
     public:
-        ResourceDialogElement( const int32_t resourceType, const int32_t quantity );
+        ResourceDialogElement( const int32_t resourceType, const std::string & text );
 
         ~ResourceDialogElement() override = default;
 
@@ -84,9 +85,8 @@ namespace fheroes2
 
     private:
         const int32_t _resourceType = 0;
-        const int32_t _quantity = 0;
-
         const uint32_t _icnIndex = 0;
+        const std::string _text;
     };
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds );

@@ -211,12 +211,12 @@ namespace fheroes2
         }
     }
 
-    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, const int32_t quantity )
+    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, const std::string & text )
         : _resourceType( resourceType )
-        , _quantity( quantity )
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
+        , _text( text )
     {
-        const Text quantityText( std::to_string( _quantity ), { FontSize::SMALL, FontColor::WHITE } );
+        const Text quantityText( _text, { FontSize::SMALL, FontColor::WHITE } );
 
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
         _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
@@ -225,7 +225,7 @@ namespace fheroes2
     void ResourceDialogElement::draw( Image & output, const Point & offset ) const
     {
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        const Text quantityText( std::to_string( _quantity ), { FontSize::SMALL, FontColor::WHITE } );
+        const Text quantityText( _text, { FontSize::SMALL, FontColor::WHITE } );
 
         const int32_t maxWidth = std::max( icn.width(), quantityText.width() );
 
@@ -250,25 +250,25 @@ namespace fheroes2
         std::vector<ResourceDialogElement> elements;
 
         if ( funds.wood > 0 ) {
-            elements.emplace_back( Resource::WOOD, funds.wood );
+            elements.emplace_back( Resource::WOOD, std::to_string( funds.wood ) );
         }
         if ( funds.mercury > 0 ) {
-            elements.emplace_back( Resource::MERCURY, funds.mercury );
+            elements.emplace_back( Resource::MERCURY, std::to_string( funds.mercury ) );
         }
         if ( funds.ore > 0 ) {
-            elements.emplace_back( Resource::ORE, funds.ore );
+            elements.emplace_back( Resource::ORE, std::to_string( funds.ore ) );
         }
         if ( funds.sulfur > 0 ) {
-            elements.emplace_back( Resource::SULFUR, funds.sulfur );
+            elements.emplace_back( Resource::SULFUR, std::to_string( funds.sulfur ) );
         }
         if ( funds.crystal > 0 ) {
-            elements.emplace_back( Resource::CRYSTAL, funds.crystal );
+            elements.emplace_back( Resource::CRYSTAL, std::to_string( funds.crystal ) );
         }
         if ( funds.gems > 0 ) {
-            elements.emplace_back( Resource::GEMS, funds.gems );
+            elements.emplace_back( Resource::GEMS, std::to_string( funds.gems ) );
         }
         if ( funds.gold > 0 ) {
-            elements.emplace_back( Resource::GOLD, funds.gold );
+            elements.emplace_back( Resource::GOLD, std::to_string( funds.gold ) );
         }
 
         return elements;
