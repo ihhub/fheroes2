@@ -18,3 +18,5 @@ jobs:
         sudo update-alternatives --install /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-12 100
     - name: Run clang-format-diff
       run: bash ./script/tools/check_code_format.sh
+    - name: Check copyright headers
+      run: bash ./script/tools/check_copyright_headers.sh
