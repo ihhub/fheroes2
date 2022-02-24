@@ -400,7 +400,6 @@ int Resource::FromIndexSprite( u32 index )
     return UNKNOWN;
 }
 
-/* return index sprite resource.icn */
 uint32_t Resource::getIconIcnIndex( const int resourceType )
 {
     switch ( resourceType ) {
@@ -419,7 +418,7 @@ uint32_t Resource::getIconIcnIndex( const int resourceType )
     case Resource::GOLD:
         return 6;
     default:
-        // You are passing not a single resource type. Fix it!
+        // You are passing not a single resource type or an invalid one. Fix it!
         assert( 0 );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
     }
