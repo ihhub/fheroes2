@@ -153,6 +153,7 @@ public:
     Army & operator=( Army && ) = delete;
     ~Army() override;
 
+    const Troops & getTroops() const;
     void Reset( bool = false ); // reset: soft or hard
     void setFromTile( const Maps::Tiles & tile );
 

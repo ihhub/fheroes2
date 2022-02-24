@@ -857,6 +857,11 @@ Army::~Army()
     clear();
 }
 
+const Troops & Army::getTroops() const
+{
+    return *this;
+}
+
 void Army::setFromTile( const Maps::Tiles & tile )
 {
     Reset();

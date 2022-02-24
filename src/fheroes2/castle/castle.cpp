@@ -462,7 +462,7 @@ int Castle::getBuildingValue() const
 
 Troops Castle::getAvailableArmy( Funds potentialBudget ) const
 {
-    Troops reinforcement( army );
+    Troops reinforcement( army.getTroops() );
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) ) {
             const Monster monster( race, GetActualDwelling( dw ) );
