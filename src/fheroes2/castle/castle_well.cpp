@@ -198,8 +198,8 @@ void Castle::OpenWell( void )
                 }
             }
             else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                                     fheroes2::Text( str, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ),
-                                                     Dialog::YES | Dialog::NO, total ) == Dialog::YES ) {
+                                                     fheroes2::Text( str, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::YES | Dialog::NO, total )
+                      == Dialog::YES ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }

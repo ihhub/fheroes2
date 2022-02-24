@@ -241,8 +241,8 @@ bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
 bool ActionResources::Action( ActionResources * act, const Heroes & hero )
 {
     if ( act && 0 < act->resources.GetValidItems() ) {
-        fheroes2::showResourceMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ),
-                                       Dialog::OK, act->resources );
+        fheroes2::showResourceMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK,
+                                       act->resources );
         hero.GetKingdom().AddFundsResource( act->resources );
         act->resources.Reset();
         return true;
