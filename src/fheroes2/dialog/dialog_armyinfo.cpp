@@ -117,6 +117,17 @@ void DrawMonsterInfo( const fheroes2::Point & dst, const Troop & troop );
 void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi );
 
+int Dialog::TroopUpgrade( const Troop & troop, const bool cannotAfford )
+{
+    const payment_t cost = troop.GetUpgradeCost();
+
+    if ( cannotAfford ) {
+        return Dialog::ResourceInfo( "", _( "You can't afford to upgrade your troops!" ), cost, Dialog::OK );
+    }
+
+    return Dialog::ResourceInfo( "", _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ), cost, Dialog::YES | Dialog::NO );
+}
+
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
     // The active size of the window is 520 by 256 pixels
@@ -217,20 +228,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
             // upgrade
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
-                if ( UPGRADE_DISABLE & flags ) {
-                    const std::string msg( _( "You can't afford to upgrade your troops!" ) );
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
-                }
-                else {
-                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
+                const bool cannotAfford = UPGRADE_DISABLE == ( UPGRADE_DISABLE & flags );
+                if ( Dialog::YES == Dialog::TroopUpgrade( troop, cannotAfford ) ) {
+                    result = Dialog::UPGRADE;
+                    break;
                 }
             }
             // dismiss

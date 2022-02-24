@@ -109,6 +109,7 @@ namespace Dialog
     Troop RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, u32 available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
+    int TroopUpgrade( const Troop & troop, const bool cannotAfford );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );

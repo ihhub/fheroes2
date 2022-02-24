@@ -28,7 +28,9 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "icn.h"
+#include "image_tool.h"
 #include "race.h"
+#include "screen.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -38,6 +40,8 @@
 
 namespace
 {
+    const int32_t upgradeButtonMargin = 2;
+
     void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget )
     {
         const Army * armyFrom = troopFrom.GetArmy();
@@ -156,6 +160,44 @@ namespace
 
         return false;
     }
+
+    fheroes2::Sprite DrawUpgradeButton( const bool pressed )
+    {
+        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::LISTBOX, pressed ? 4 : 3 );
+
+        fheroes2::Sprite result( original.width() - 4, original.height() - 3 );
+        const fheroes2::Point offset = pressed ? fheroes2::Point( 1, 3 ) : fheroes2::Point( 2, 2 );
+
+        fheroes2::Copy( original, offset.x, offset.y, result, 0, 0, result.width(), result.height() );
+        // remove black background
+        fheroes2::AddTransparency( result, 36 );
+
+        return result;
+    }
+
+    fheroes2::Sprite DrawMiniButton( const fheroes2::Sprite & original )
+    {
+        fheroes2::Sprite result( original.width() / 2, original.height() / 2 );
+        fheroes2::Resize( original, 0, 0, original.width(), original.height(), result, 0, 0, result.width(), result.height(), true );
+        return result;
+    }
+
+    const fheroes2::Sprite & GetUpgradeButton( const bool useMiniIcon, const bool pressed = false )
+    {
+        static const fheroes2::Sprite & btnReleased = DrawUpgradeButton( false );
+        static const fheroes2::Sprite & btnPressed = DrawUpgradeButton( true );
+        if ( useMiniIcon ) {
+            static const fheroes2::Sprite & btnReleasedMini = DrawMiniButton( btnReleased );
+            static const fheroes2::Sprite & btnPressedMini = DrawMiniButton( btnPressed );
+            return pressed ? btnPressedMini : btnReleasedMini;
+        }
+        return pressed ? btnPressed : btnReleased;
+    }
+
+    fheroes2::Rect getUpgradeButtonPos( const fheroes2::Sprite & upButton, const fheroes2::Rect & itemPos )
+    {
+        return { itemPos.x, itemPos.y, upButton.width() + 2 * upgradeButtonMargin, upButton.height() + 2 * upgradeButtonMargin };
+    }
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
@@ -198,6 +240,38 @@ void ArmyBar::SetArmy( Army * ptr )
 bool ArmyBar::isValid() const
 {
     return _army != nullptr;
+}
+
+fheroes2::Rect ArmyBar::GetUpgradeButtonPos( const fheroes2::Rect & itemPos ) const
+{
+    return getUpgradeButtonPos( GetUpgradeButton( use_mini_sprite ), itemPos );
+}
+
+void ArmyBar::DrawUpgadeButton( const bool pressed, const fheroes2::Rect & pos, fheroes2::Image & outputImage ) const
+{
+    const fheroes2::Sprite & upgradeButton = GetUpgradeButton( use_mini_sprite, pressed );
+    const fheroes2::Rect upButtonPos = getUpgradeButtonPos( upgradeButton, pos );
+    fheroes2::Blit( upgradeButton, outputImage, upButtonPos.x + upgradeButtonMargin, upButtonPos.y + upgradeButtonMargin );
+}
+
+bool ArmyBar::CanUpgradeNow( const ArmyTroop & troop ) const
+{
+    const Castle * castle = _army->inCastle();
+    return troop.isAllowUpgrade() && castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() );
+}
+
+bool ArmyBar::CanAffordUpgrade( const ArmyTroop & troop ) const
+{
+    return world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetUpgradeCost() );
+}
+
+void ArmyBar::UpgradeTroop( ArmyTroop & troop )
+{
+    assert( CanUpgradeNow( troop ) );
+    assert( CanAffordUpgrade( troop ) );
+
+    world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
+    troop.Upgrade();
 }
 
 void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor )
@@ -275,6 +349,10 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
             fheroes2::Blit( spmonh, dstsf, pos.x + spmonh.x(), pos.y + spmonh.y() );
         }
 
+        if ( CanUpgradeNow( troop ) ) {
+            DrawUpgadeButton( false, pos, dstsf );
+        }
+
         if ( use_mini_sprite ) {
             text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
         }
@@ -301,7 +379,7 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
     Interface::ItemsActionBar<ArmyTroop>::Redraw( dstsf );
 }
 
-bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
+bool ArmyBar::ActionBarCursor( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos )
 {
     if ( troop.isValid() && !read_only && LocalEvent::Get().MouseClickMiddle() ) {
         RedistributeTroopByOne( troop, _army );
@@ -335,8 +413,14 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
         }
     }
     else if ( troop.isValid() ) {
-        msg = _( "Select %{name}" );
-        StringReplace( msg, "%{name}", troop.GetName() );
+        if ( CanUpgradeNow( troop ) && ( GetUpgradeButtonPos( pos ) & cursor ) ) {
+            msg = _( "Upgrade %{name}" );
+            StringReplace( msg, "%{name}", troop.GetName() );
+        }
+        else {
+            msg = _( "Select %{name}" );
+            StringReplace( msg, "%{name}", troop.GetName() );
+        }
     }
 
     return false;
@@ -369,8 +453,15 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     return false;
 }
 
-bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
+bool ArmyBar::ActionBarLeftMouseSingleClick( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos )
 {
+    if ( !read_only ) {
+        // redraw upgrade button as released
+        if ( CanUpgradeNow( troop ) ) {
+            DrawUpgadeButton( false, pos, fheroes2::Display::instance() );
+        }
+    }
+
     if ( isSelected() ) {
         if ( read_only ) {
             return false; // reset cursor
@@ -411,6 +502,13 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
+            if ( CanUpgradeNow( troop ) && ( GetUpgradeButtonPos( pos ) & cursor ) ) {
+                if ( Dialog::YES == Dialog::TroopUpgrade( troop, !CanAffordUpgrade( troop ) ) ) {
+                    UpgradeTroop( troop );
+                }
+                return false;
+            }
+
             if ( IsSplitHotkeyUsed( troop, _army ) )
                 return false;
 
@@ -516,7 +614,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     return false; // reset cursor
 }
 
-bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
+bool ArmyBar::ActionBarLeftMouseDoubleClick( const fheroes2::Point & /*cursor*/, ArmyTroop & troop, const fheroes2::Rect & /*pos*/ )
 {
     if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
         ResetSelected();
@@ -528,21 +626,17 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 
     if ( &troop == troop2 ) {
         int flags = ( read_only || _army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );
-        const Castle * castle = _army->inCastle();
 
-        if ( troop.isAllowUpgrade() &&
-             // allow upgrade
-             castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() ) ) {
+        if ( CanUpgradeNow( troop ) ) {
             flags |= Dialog::UPGRADE;
 
-            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetUpgradeCost() ) )
+            if ( !CanAffordUpgrade( troop ) )
                 flags |= Dialog::UPGRADE_DISABLE;
         }
 
         switch ( Dialog::ArmyInfo( troop, flags ) ) {
         case Dialog::UPGRADE:
-            world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
-            troop.Upgrade();
+            UpgradeTroop( troop );
             break;
 
         case Dialog::DISMISS:
@@ -557,6 +651,16 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
     ResetSelected();
 
     return true;
+}
+
+bool ArmyBar::ActionBarLeftMouseHold( const fheroes2::Point & cursor, ArmyTroop & troop, const fheroes2::Rect & pos )
+{
+    if ( !read_only ) {
+        if ( CanUpgradeNow( troop ) && ( GetUpgradeButtonPos( pos ) & cursor ) ) {
+            DrawUpgadeButton( true, pos, fheroes2::Display::instance() );
+        }
+    }
+    return false;
 }
 
 bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
