@@ -274,7 +274,7 @@ namespace fheroes2
         return elements;
     }
 
-    void showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds )
+    int showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds )
     {
         const std::vector<ResourceDialogElement> elements = getResourceDialogElements( funds );
 
@@ -284,7 +284,7 @@ namespace fheroes2
             uiElements.emplace_back( &element );
         }
 
-        showMessage( header, body, buttons, uiElements );
+        return showMessage( header, body, buttons, uiElements );
     }
 
     SpellDialogElement::SpellDialogElement( const Spell & spell )

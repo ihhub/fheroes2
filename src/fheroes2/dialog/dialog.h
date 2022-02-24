@@ -102,7 +102,6 @@ namespace Dialog
     void PrimarySkillInfo( const std::string &, const std::string &, int );
     int SpriteInfo( const std::string &, const std::string &, const fheroes2::Image &, int buttons = Dialog::OK );
     int ArtifactInfo( const std::string &, const std::string &, const Artifact &, int buttons = Dialog::OK );
-    int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );

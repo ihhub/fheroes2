@@ -42,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -218,16 +219,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             // upgrade
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
-                    const std::string msg( _( "You can't afford to upgrade your troops!" ) );
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
+                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetUpgradeCost() );
                 }
                 else {
-                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
+                                                      { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
+                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetUpgradeCost() ) == Dialog::YES ) {
                         result = Dialog::UPGRADE;
                         break;
                     }

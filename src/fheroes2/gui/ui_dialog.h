@@ -91,7 +91,7 @@ namespace fheroes2
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds );
 
-    void showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds );
+    int showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds );
 
     class SpellDialogElement : public DialogElement
     {

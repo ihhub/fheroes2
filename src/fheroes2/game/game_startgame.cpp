@@ -49,6 +49,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -308,7 +310,8 @@ void ShowEventDayDialog( void )
 
     for ( const EventDate & event : events ) {
         if ( event.resource.GetValidItemsCount() ) {
-            Dialog::ResourceInfo( event.title, event.message, event.resource );
+            fheroes2::showResourceMessage( fheroes2::Text( event.title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                           fheroes2::Text( event.message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
             Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );

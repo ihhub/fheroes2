@@ -38,6 +38,7 @@
 #include "speed.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 
 namespace
@@ -196,7 +197,9 @@ void Castle::OpenWell( void )
                     Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Creatures" ), str, total, Dialog::YES | Dialog::NO ) ) {
+            else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                                     fheroes2::Text( str, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ),
+                                                     Dialog::YES | Dialog::NO, total ) == Dialog::YES ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }

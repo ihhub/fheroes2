@@ -1609,7 +1609,7 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
     bool visited = hero.isVisited( tile );
     std::string msg;
 
-    u32 exp = 0;
+    int32_t exp = 0;
 
     switch ( objectType ) {
     case MP2::OBJ_GAZEBO:
@@ -1619,6 +1619,8 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
         break;
 
     default:
+        // Are you calling this function for a new object? Add the logic above!
+        assert( 0 );
         return;
     }
 

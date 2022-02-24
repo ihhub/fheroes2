@@ -263,7 +263,6 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_recrut.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_resourceinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectfile.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectitems.cpp" />
