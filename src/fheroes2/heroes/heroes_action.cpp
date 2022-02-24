@@ -107,7 +107,7 @@ namespace
         fheroes2::ResourceDialogElement resourceUI( resourceType, perday );
 
         fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-            fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &resourceUI } );
+                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &resourceUI } );
     }
 }
 
