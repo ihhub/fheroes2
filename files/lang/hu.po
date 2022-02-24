@@ -1976,7 +1976,7 @@ msgstr ""
 "varázstárgyat átadni egy másik hősnek."
 
 #, fuzzy
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Jövedelem:"
 
 #, fuzzy

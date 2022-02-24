@@ -2048,7 +2048,7 @@ msgstr ""
 "haben derzeit keinen Platz für ein Zauberbuch. Versuchen Sie, eines Ihrer "
 "Artefakte einem anderen Helden zu übergeben."
 
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Einkommen"
 
 msgid "Exit"
