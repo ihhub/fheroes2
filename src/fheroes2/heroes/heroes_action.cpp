@@ -886,18 +886,11 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
         const Funds funds = tile.QuantityFunds();
 
         if ( objectType == MP2::OBJ_CAMPFIRE ) {
-            const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( funds );
-            std::vector<const fheroes2::DialogElement *> uiElements;
-            uiElements.reserve( resourceUiElements.size() );
-            for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
-                uiElements.emplace_back( &element );
-            }
-
             const fheroes2::Text header( MP2::StringObject( objectType ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
             const fheroes2::Text body( _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ),
                                        { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
-            fheroes2::showMessage( header, body, Dialog::OK, uiElements );
+            fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
         }
         else {
             ResourceCount rc = tile.QuantityResourceCount();
@@ -980,15 +973,8 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
 
         const Funds funds( rc );
 
-        const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( funds );
-        std::vector<const fheroes2::DialogElement *> uiElements;
-        uiElements.reserve( resourceUiElements.size() );
-        for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
-            uiElements.emplace_back( &element );
-        }
-
-        fheroes2::showMessage( fheroes2::Text( caption, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, uiElements );
+        fheroes2::showResourceMessage( fheroes2::Text( caption, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
 
@@ -1022,15 +1008,8 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
             const Funds funds( Resource::GOLD, gold );
             AGG::PlaySound( M82::EXPERNCE );
 
-            const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( funds );
-            std::vector<const fheroes2::DialogElement *> uiElements;
-            uiElements.reserve( resourceUiElements.size() );
-            for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
-                uiElements.emplace_back( &element );
-            }
-
-            fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( _( "Treasure" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, uiElements );
+            fheroes2::showResourceMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                           fheroes2::Text( _( "Treasure" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
 
             hero.GetKingdom().AddFundsResource( funds );
         }
@@ -1097,15 +1076,8 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
             message += '\n';
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
 
-            const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( funds );
-            std::vector<const fheroes2::DialogElement *> uiElements;
-            uiElements.reserve( resourceUiElements.size() );
-            for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
-                uiElements.emplace_back( &element );
-            }
-
-            fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, uiElements );
+            fheroes2::showResourceMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                           fheroes2::Text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
 
             hero.GetKingdom().AddFundsResource( funds );
         }
@@ -1135,15 +1107,8 @@ void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, 
         msg = funds.wood && funds.gold ? _( "You search through the flotsam, and find some wood and some gold." )
                                        : _( "You search through the flotsam, and find some wood." );
 
-        const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( funds );
-        std::vector<const fheroes2::DialogElement *> uiElements;
-        uiElements.reserve( resourceUiElements.size() );
-        for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
-            uiElements.emplace_back( &element );
-        }
-
-        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, uiElements );
+        fheroes2::showResourceMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
     }

@@ -40,6 +40,8 @@ namespace fheroes2
     class DialogElement
     {
     public:
+        virtual ~DialogElement() = default;
+
         virtual void draw( Image & output, const Point & offset ) const = 0;
 
         virtual void processEvents( const Point & offset ) const = 0;
@@ -59,6 +61,8 @@ namespace fheroes2
     public:
         explicit ArtifactDialogElement( const Artifact & artifact );
 
+        ~ArtifactDialogElement() override = default;
+
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
@@ -72,39 +76,35 @@ namespace fheroes2
     public:
         ResourceDialogElement( const int32_t resourceType, const int32_t quantity );
 
+        ~ResourceDialogElement() override = default;
+
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
 
     private:
-        enum
-        {
-            TEXT_OFFSET = 2
-        };
-
         const int32_t _resourceType = 0;
         const int32_t _quantity = 0;
 
-        uint32_t _icnIndex = 0;
+        const uint32_t _icnIndex = 0;
     };
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds );
+
+    void showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds );
 
     class SpellDialogElement : public DialogElement
     {
     public:
         explicit SpellDialogElement( const Spell & spell );
 
+        ~SpellDialogElement() override = default;
+
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
 
     private:
-        enum
-        {
-            TEXT_OFFSET = 2
-        };
-
         const Spell & _spell;
     };
 
@@ -112,6 +112,8 @@ namespace fheroes2
     {
     public:
         explicit LuckDialogElement( const bool goodLuck );
+
+        ~LuckDialogElement() override = default;
 
         void draw( Image & output, const Point & offset ) const override;
 
@@ -126,6 +128,8 @@ namespace fheroes2
     public:
         explicit MoraleDialogElement( const bool goodMorale );
 
+        ~MoraleDialogElement() override = default;
+
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
@@ -139,16 +143,13 @@ namespace fheroes2
     public:
         explicit ExperienceDialogElement( const int32_t experience );
 
+        ~ExperienceDialogElement() override = default;
+
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
 
     private:
-        enum
-        {
-            TEXT_OFFSET = 2
-        };
-
         const int32_t _experience;
     };
 }

@@ -43,6 +43,8 @@ namespace
 {
     const int32_t textOffsetY = 10;
     const int32_t elementOffsetX = 10;
+
+    const int32_t textOffsetFromElement = 2;
 }
 
 namespace fheroes2
@@ -217,7 +219,7 @@ namespace fheroes2
         const Text quantityText( std::to_string( _quantity ), { FontSize::SMALL, FontColor::WHITE } );
 
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        _area = { std::max( icn.width(), quantityText.width() ), icn.height() + TEXT_OFFSET + quantityText.height() };
+        _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
     }
 
     void ResourceDialogElement::draw( Image & output, const Point & offset ) const
@@ -229,7 +231,7 @@ namespace fheroes2
 
         Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
 
-        quantityText.draw( offset.x + ( maxWidth - quantityText.width() ) / 2, offset.y + icn.height() + TEXT_OFFSET, output );
+        quantityText.draw( offset.x + ( maxWidth - quantityText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
     }
 
     void ResourceDialogElement::processEvents( const Point & offset ) const
@@ -247,9 +249,6 @@ namespace fheroes2
     {
         std::vector<ResourceDialogElement> elements;
 
-        if ( funds.gold > 0 ) {
-            elements.emplace_back( Resource::GOLD, funds.gold );
-        }
         if ( funds.wood > 0 ) {
             elements.emplace_back( Resource::WOOD, funds.wood );
         }
@@ -268,8 +267,24 @@ namespace fheroes2
         if ( funds.gems > 0 ) {
             elements.emplace_back( Resource::GEMS, funds.gems );
         }
+        if ( funds.gold > 0 ) {
+            elements.emplace_back( Resource::GOLD, funds.gold );
+        }
 
         return elements;
+    }
+
+    void showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds )
+    {
+        const std::vector<ResourceDialogElement> elements = getResourceDialogElements( funds );
+
+        std::vector<const fheroes2::DialogElement *> uiElements;
+        uiElements.reserve( elements.size() );
+        for ( const fheroes2::ResourceDialogElement & element : elements ) {
+            uiElements.emplace_back( &element );
+        }
+
+        showMessage( header, body, buttons, uiElements );
     }
 
     SpellDialogElement::SpellDialogElement( const Spell & spell )
@@ -280,7 +295,7 @@ namespace fheroes2
         const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", { FontSize::SMALL, FontColor::WHITE } );
 
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
-        _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + TEXT_OFFSET + spellNameText.height() };
+        _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
     }
 
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
@@ -292,7 +307,7 @@ namespace fheroes2
 
         Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
 
-        spellNameText.draw( offset.x + ( maxWidth - spellNameText.width() ) / 2, offset.y + icn.height() + TEXT_OFFSET, output );
+        spellNameText.draw( offset.x + ( maxWidth - spellNameText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
     }
 
     void SpellDialogElement::processEvents( const Point & offset ) const
@@ -365,7 +380,7 @@ namespace fheroes2
 
         const Sprite & icn = AGG::GetICN( ICN::EXPMRL, 4 );
         if ( experience != 0 ) {
-            _area = { std::max( icn.width(), experienceText.width() ), icn.height() + TEXT_OFFSET + experienceText.height() };
+            _area = { std::max( icn.width(), experienceText.width() ), icn.height() + textOffsetFromElement + experienceText.height() };
         }
         else {
             _area = { icn.width(), icn.height() };
@@ -382,7 +397,7 @@ namespace fheroes2
 
             Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
 
-            experienceText.draw( offset.x + ( maxWidth - experienceText.width() ) / 2, offset.y + icn.height() + TEXT_OFFSET, output );
+            experienceText.draw( offset.x + ( maxWidth - experienceText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
         }
         else {
             Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );

@@ -36,6 +36,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "ui_scrollbar.h"
 #include "world.h"
 
@@ -475,8 +476,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
                 display.render();
             }
-            else if ( le.MousePressRight( rect_from ) )
-                Dialog::ResourceInfo( _( "Income" ), "", kingdom.GetIncome( INCOME_ALL ), 0 );
+            else if ( le.MousePressRight( rect_from ) ) {
+                fheroes2::showKingdomIncome( kingdom, 0 );
+            }
         }
 
         // click to
