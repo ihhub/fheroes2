@@ -1318,7 +1318,10 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
                 }
 
                 if ( valid ) {
-                    Dialog::SpellInfo( title, msg, spell, true );
+                    const fheroes2::SpellDialogElement spellUI( spell );
+                    fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &spellUI } );
+
                     hero.AppendSpellToBook( spell );
                 }
                 else {
