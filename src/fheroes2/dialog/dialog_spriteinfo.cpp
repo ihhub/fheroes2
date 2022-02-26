@@ -22,29 +22,12 @@
  ***************************************************************************/
 
 #include "agg_image.h"
-#include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
+#include "localevent.h"
 #include "text.h"
 #include "ui_button.h"
-
-int Dialog::ArtifactInfo( const std::string & hdr, const std::string & msg, const Artifact & art, int buttons )
-{
-    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-    const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-
-    fheroes2::Sprite image = border;
-    fheroes2::Blit( artifact, image, 5, 5 );
-
-    std::string ext = msg;
-    ext += '\n';
-    ext += ' ';
-    ext += '\n';
-    ext.append( art.GetDescription() );
-
-    return Dialog::SpriteInfo( hdr, ext, image, buttons );
-}
 
 int Dialog::SpriteInfo( const std::string & header, const std::string & message, const fheroes2::Image & sprite, int buttons )
 {

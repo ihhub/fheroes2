@@ -106,8 +106,8 @@ namespace
 
         fheroes2::ResourceDialogElement resourceUI( resourceType, perday );
 
-        fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &resourceUI } );
+        fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &resourceUI } );
     }
 }
 
@@ -881,9 +881,8 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
         const Funds funds = tile.QuantityFunds();
 
         if ( objectType == MP2::OBJ_CAMPFIRE ) {
-            const fheroes2::Text header( MP2::StringObject( objectType ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-            const fheroes2::Text body( _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ),
-                                       { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), fheroes2::FontType::normalWhite() );
 
             fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
         }
@@ -968,8 +967,8 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
 
         const Funds funds( rc );
 
-        fheroes2::showResourceMessage( fheroes2::Text( caption, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
+        fheroes2::showResourceMessage( fheroes2::Text( caption, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
 
@@ -1003,8 +1002,8 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
             const Funds funds( Resource::GOLD, gold );
             AGG::PlaySound( M82::EXPERNCE );
 
-            fheroes2::showResourceMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( _( "Treasure" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
+            fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( _( "Treasure" ), fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
 
             hero.GetKingdom().AddFundsResource( funds );
         }
@@ -1017,8 +1016,8 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
 
             const fheroes2::ArtifactDialogElement artifactUI( art );
 
-            fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
 
             hero.PickupArtifact( art );
         }
@@ -1059,8 +1058,8 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, { &artifactUI } );
 
                 hero.PickupArtifact( art );
             }
@@ -1071,8 +1070,8 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
             message += '\n';
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
 
-            fheroes2::showResourceMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
+            fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, funds );
 
             hero.GetKingdom().AddFundsResource( funds );
         }
@@ -1102,8 +1101,8 @@ void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, 
         msg = funds.wood && funds.gold ? _( "You search through the flotsam, and find some wood and some gold." )
                                        : _( "You search through the flotsam, and find some wood." );
 
-        fheroes2::showResourceMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, funds );
+        fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       funds );
 
         hero.GetKingdom().AddFundsResource( funds );
     }
@@ -1181,8 +1180,8 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
             hero.AppendSpellToBook( spell.GetID() );
 
             const fheroes2::SpellDialogElement spellUI( spell );
-            fheroes2::showMessage( fheroes2::Text( head, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( body, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &spellUI } );
+            fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &spellUI } );
         }
     }
 
@@ -1221,7 +1220,10 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
 
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
-            Dialog::SecondarySkillInfo( title, msg, skill, hero );
+
+            const fheroes2::SecondarySkillDialogElement secondarySkillUI( hero, skill );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( title, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &secondarySkillUI } );
         }
     }
 
@@ -1272,8 +1274,8 @@ void ActionToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType,
         AGG::PlaySound( M82::GOODLUCK );
 
         const fheroes2::LuckDialogElement luckUI( true );
-        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &luckUI } );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &luckUI } );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -1319,8 +1321,8 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
 
                 if ( valid ) {
                     const fheroes2::SpellDialogElement spellUI( spell );
-                    fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &spellUI } );
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &spellUI } );
 
                     hero.AppendSpellToBook( spell );
                 }
@@ -1341,8 +1343,8 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
             const std::string msg = _( "You come upon the pyramid of a great and ancient king.\nRoutine exploration reveals that the pyramid is completely empty." );
 
             const fheroes2::LuckDialogElement luckUI( false );
-            fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &luckUI, &luckUI } );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &luckUI, &luckUI } );
 
             hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1440,7 +1442,10 @@ void ActionToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType objectT
         // increase skill
         hero.IncreasePrimarySkill( skill );
         hero.SetVisited( dst_index );
-        Dialog::PrimarySkillInfo( title, msg, skill );
+
+        const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &primarySkillUI } );
 
         // fix double action tile
         hero.SetVisitedWideTile( dst_index, objectType );
@@ -1497,15 +1502,15 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
 
                         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                               fheroes2::Text( win, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( win, fheroes2::FontType::normalWhite() ),
+                                               Dialog::OK, { &goldUI } );
                     }
                     else {
                         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                         const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                               fheroes2::Text( win, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI, &goldUI } );
+                        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( win, fheroes2::FontType::normalWhite() ),
+                                               Dialog::OK, { &artifactUI, &goldUI } );
 
                         hero.PickupArtifact( art );
                     }
@@ -1513,8 +1518,8 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
                 else {
                     const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                    fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( win, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( win, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &goldUI } );
                 }
 
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -1535,8 +1540,8 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
             AGG::PlaySound( M82::BADMRLE );
 
             const fheroes2::MoraleDialogElement moraleUI( false );
-            fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &moraleUI } );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &moraleUI } );
         }
     }
 
@@ -1593,8 +1598,8 @@ void ActionToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
             elementUI.emplace_back( &moraleUI );
         }
 
-        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, elementUI );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               elementUI );
 
         hero.IncreaseMovePoints( move );
 
@@ -1641,8 +1646,8 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
         }
 
         const fheroes2::ExperienceDialogElement experienceUI( exp );
-        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &experienceUI } );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &experienceUI } );
 
         // visit
         hero.SetVisited( dst_index );
@@ -1663,10 +1668,9 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
 
         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
                                fheroes2::Text( _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, "
-                                                  "\"I would give you an artifact as a reward, but you're all full.\"" ),
-                                               { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ),
+                                                  "\"I would give you an artifact as a reward, but you're all full.\"" ), fheroes2::FontType::normalWhite() ),
                                Dialog::OK, { &goldUI } );
 
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -1680,8 +1684,8 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
 
         const fheroes2::ArtifactDialogElement artifactUI( art );
 
-        fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                               fheroes2::Text( str, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &artifactUI } );
 
         hero.PickupArtifact( art );
     }
@@ -1735,8 +1739,8 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             AGG::PlaySound( M82::EXPERNCE );
 
             const fheroes2::ArtifactDialogElement artifactUI( art );
-            const fheroes2::Text titleText( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-            const fheroes2::Text bodyText( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text titleText( title, fheroes2::FontType::normalYellow() );
+            const fheroes2::Text bodyText( msg, fheroes2::FontType::normalWhite() );
 
             if ( Dialog::YES == fheroes2::showMessage( titleText, bodyText, Dialog::YES | Dialog::NO, { &artifactUI } ) ) {
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
@@ -1764,8 +1768,8 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &artifactUI } );
 
                 result = true;
             }
@@ -1821,8 +1825,8 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
 
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                    fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI } );
                 }
                 else {
                     BattleLose( hero, res, true );
@@ -1843,8 +1847,8 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             AGG::PlaySound( M82::TREASURE );
 
             const fheroes2::ArtifactDialogElement artifactUI( art );
-            fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                   fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
             result = true;
         }
 
@@ -1884,8 +1888,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
                     const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                    fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                    fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &goldUI } );
                 }
                 else {
                     msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold and the %{art}." );
@@ -1895,8 +1899,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                     const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                    fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI, &goldUI } );
+                    fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI, &goldUI } );
 
                     hero.PickupArtifact( art );
                 }
@@ -1907,8 +1911,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
                 const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, { &goldUI } );
             }
         }
         else {
@@ -1936,8 +1940,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
                 const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &goldUI } );
             }
             else {
                 msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
@@ -1946,8 +1950,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                fheroes2::showMessage( fheroes2::Text( hdr, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &artifactUI } );
 
                 hero.PickupArtifact( art );
             }
@@ -2685,8 +2689,7 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
             elementUI.emplace_back( artifactUI.get() );
         }
 
-        fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( event_maps->message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK,
-                               elementUI );
+        fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( event_maps->message, fheroes2::FontType::normalWhite() ), Dialog::OK, elementUI );
 
         event_maps->SetVisited( hero.GetColor() );
 
@@ -2826,8 +2829,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
 
                     const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                    fheroes2::showMessage( fheroes2::Text( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &goldUI } );
+                    fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                                           Dialog::OK, { &goldUI } );
 
                     hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
                 }
@@ -2842,8 +2845,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                 StringReplace( msg, "%{exp}", exp );
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
-                fheroes2::showMessage( fheroes2::Text( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &experienceUI } );
+                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, { &experienceUI } );
 
                 hero.IncreaseExperience( exp );
             }
@@ -2856,8 +2859,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
                 const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-                fheroes2::showMessage( fheroes2::Text( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                       fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &experienceUI, &goldUI } );
+                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, { &experienceUI, &goldUI } );
 
                 hero.IncreaseExperience( exp );
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -2871,9 +2874,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                 if ( art.isValid() ) {
                     const fheroes2::ExperienceDialogElement experienceUI( exp );
                     const fheroes2::ArtifactDialogElement artifactUI( art );
-                    fheroes2::showMessage( fheroes2::Text( header, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( msg, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK,
-                                           { &experienceUI, &artifactUI } );
+                    fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &experienceUI, &artifactUI } );
                 }
                 hero.PickupArtifact( art );
                 hero.IncreaseExperience( exp );
@@ -3157,16 +3159,16 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
                         uiElements.emplace_back( artifactUI.get() );
                     }
 
-                    fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( say, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, uiElements );
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( say, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, uiElements );
                 }
                 else if ( art.isValid() ) {
                     AGG::PlaySound( M82::TREASURE );
 
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                    fheroes2::showMessage( fheroes2::Text( title, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } ),
-                                           fheroes2::Text( say, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK, { &artifactUI } );
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( say, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI } );
                 }
 
                 if ( art.isValid() )

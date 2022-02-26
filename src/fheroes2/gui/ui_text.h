@@ -54,6 +54,26 @@ namespace fheroes2
 
         FontSize size = FontSize::NORMAL;
         FontColor color = FontColor::WHITE;
+
+        static FontType normalWhite()
+        {
+            return { FontSize::NORMAL, FontColor::WHITE };
+        }
+
+        static FontType normalYellow()
+        {
+            return { FontSize::NORMAL, FontColor::YELLOW };
+        }
+
+        static FontType smallWhite()
+        {
+            return { FontSize::SMALL, FontColor::WHITE };
+        }
+
+        static FontType smallYellow()
+        {
+            return { FontSize::SMALL, FontColor::YELLOW };
+        }
     };
 
     class TextBase

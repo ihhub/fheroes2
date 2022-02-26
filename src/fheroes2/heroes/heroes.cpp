@@ -57,6 +57,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -985,8 +987,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
     // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
     if ( isControlHuman() ) {
-        for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-            Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
+        for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+            const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
+        }
     }
 
     return true;

@@ -42,6 +42,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -974,7 +975,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
         }
     }
     else if ( art.isValid() ) {
-        Dialog::ArtifactInfo( art.GetName(), "", art );
+        fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::OK );
     }
 
     ResetSelected();
@@ -987,10 +988,12 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
     ResetSelected();
 
     if ( art.isValid() ) {
-        if ( can_change )
+        if ( can_change ) {
             art.Reset();
-        else
-            Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
+        }
+        else {
+            fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
+        }
     }
 
     return true;

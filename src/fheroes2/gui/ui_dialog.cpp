@@ -31,6 +31,7 @@
 #include "morale.h"
 #include "resource.h"
 #include "screen.h"
+#include "skill.h"
 #include "spell.h"
 #include "tools.h"
 #include "ui_button.h"
@@ -45,6 +46,8 @@ namespace
     const int32_t elementOffsetX = 10;
 
     const int32_t textOffsetFromElement = 2;
+
+    const int32_t defaultElementPopupButtons = Dialog::ZERO;
 }
 
 namespace fheroes2
@@ -203,12 +206,17 @@ namespace fheroes2
     void ArtifactDialogElement::processEvents( const Point & offset ) const
     {
         if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
-            const Text header( _artifact.GetName(), { FontSize::NORMAL, FontColor::YELLOW } );
-            const Text description( _artifact.GetDescription(), { FontSize::NORMAL, FontColor::WHITE } );
-
             // Make sure you never pass any buttons here to avoid call stack overflow!
-            showMessage( header, description, 0, { this } );
+            showPopup( defaultElementPopupButtons );
         }
+    }
+
+    void ArtifactDialogElement::showPopup( const int buttons ) const
+    {
+        const Text header( _artifact.GetName(), FontType::normalYellow() );
+        const Text description( _artifact.GetDescription(), FontType::normalWhite() );
+
+        showMessage( header, description, buttons, { this } );
     }
 
     ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, const std::string & text )
@@ -216,7 +224,7 @@ namespace fheroes2
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( text )
     {
-        const Text quantityText( _text, { FontSize::SMALL, FontColor::WHITE } );
+        const Text quantityText( _text, FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
         _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
@@ -225,7 +233,7 @@ namespace fheroes2
     void ResourceDialogElement::draw( Image & output, const Point & offset ) const
     {
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        const Text quantityText( _text, { FontSize::SMALL, FontColor::WHITE } );
+        const Text quantityText( _text, FontType::smallWhite() );
 
         const int32_t maxWidth = std::max( icn.width(), quantityText.width() );
 
@@ -237,12 +245,17 @@ namespace fheroes2
     void ResourceDialogElement::processEvents( const Point & offset ) const
     {
         if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
-            const Text header( Resource::String( _resourceType ), { FontSize::NORMAL, FontColor::YELLOW } );
-            const Text description( Resource::getDescription(), { FontSize::NORMAL, FontColor::WHITE } );
-
             // Make sure you never pass any buttons here to avoid call stack overflow!
-            showMessage( header, description, 0 );
+            showPopup( defaultElementPopupButtons );
         }
+    }
+
+    void ResourceDialogElement::showPopup( const int buttons ) const
+    {
+        const Text header( Resource::String( _resourceType ), FontType::normalYellow() );
+        const Text description( Resource::getDescription(), FontType::normalWhite() );
+
+        showMessage( header, description, buttons );
     }
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds )
@@ -292,7 +305,7 @@ namespace fheroes2
     {
         assert( spell.isValid() );
 
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", { FontSize::SMALL, FontColor::WHITE } );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
         _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
@@ -300,7 +313,7 @@ namespace fheroes2
 
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", { FontSize::SMALL, FontColor::WHITE } );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", FontType::smallWhite() );
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
 
         const int32_t maxWidth = std::max( icn.width(), spellNameText.width() );
@@ -313,12 +326,17 @@ namespace fheroes2
     void SpellDialogElement::processEvents( const Point & offset ) const
     {
         if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
-            const Text header( _spell.GetName(), { FontSize::NORMAL, FontColor::YELLOW } );
-            const Text description( _spell.GetDescription(), { FontSize::NORMAL, FontColor::WHITE } );
-
             // Make sure you never pass any buttons here to avoid call stack overflow!
-            showMessage( header, description, 0, { this } );
+            showPopup( defaultElementPopupButtons );
         }
+    }
+
+    void SpellDialogElement::showPopup( const int buttons ) const
+    {
+        const Text header( _spell.GetName(), FontType::normalYellow() );
+        const Text description( _spell.GetDescription(), FontType::normalWhite() );
+
+        showMessage( header, description, buttons, { this } );
     }
 
     LuckDialogElement::LuckDialogElement( const bool goodLuck )
@@ -337,14 +355,19 @@ namespace fheroes2
     void LuckDialogElement::processEvents( const Point & offset ) const
     {
         if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
-            const int luckType = _goodLuck ? Luck::GOOD : Luck::BAD;
-
-            const Text header( LuckString( luckType ), { FontSize::NORMAL, FontColor::YELLOW } );
-            const Text description( Luck::Description( luckType ), { FontSize::NORMAL, FontColor::WHITE } );
-
             // Make sure you never pass any buttons here to avoid call stack overflow!
-            showMessage( header, description, 0, { this } );
+            showPopup( defaultElementPopupButtons );
         }
+    }
+
+    void LuckDialogElement::showPopup( const int buttons ) const
+    {
+        const int luckType = _goodLuck ? Luck::GOOD : Luck::BAD;
+
+        const Text header( LuckString( luckType ), FontType::normalYellow() );
+        const Text description( Luck::Description( luckType ), FontType::normalWhite() );
+
+        showMessage( header, description, buttons, { this } );
     }
 
     MoraleDialogElement::MoraleDialogElement( const bool goodMorale )
@@ -363,20 +386,25 @@ namespace fheroes2
     void MoraleDialogElement::processEvents( const Point & offset ) const
     {
         if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
-            const int moraleType = _goodMorale ? Morale::GOOD : Morale::POOR;
-
-            const Text header( MoraleString( moraleType ), { FontSize::NORMAL, FontColor::YELLOW } );
-            const Text description( Morale::Description( moraleType ), { FontSize::NORMAL, FontColor::WHITE } );
-
             // Make sure you never pass any buttons here to avoid call stack overflow!
-            showMessage( header, description, 0, { this } );
+            showPopup( defaultElementPopupButtons );
         }
+    }
+
+    void MoraleDialogElement::showPopup( const int buttons ) const
+    {
+        const int moraleType = _goodMorale ? Morale::GOOD : Morale::POOR;
+
+        const Text header( MoraleString( moraleType ), FontType::normalYellow() );
+        const Text description( Morale::Description( moraleType ), FontType::normalWhite() );
+
+        showMessage( header, description, buttons, { this } );
     }
 
     ExperienceDialogElement::ExperienceDialogElement( const int32_t experience )
         : _experience( experience )
     {
-        const Text experienceText( std::to_string( _experience ), { FontSize::SMALL, FontColor::WHITE } );
+        const Text experienceText( std::to_string( _experience ), FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::EXPMRL, 4 );
         if ( experience != 0 ) {
@@ -392,7 +420,7 @@ namespace fheroes2
         const Sprite & icn = AGG::GetICN( ICN::EXPMRL, 4 );
 
         if ( _experience != 0 ) {
-            const Text experienceText( std::to_string( _experience ), { FontSize::SMALL, FontColor::WHITE } );
+            const Text experienceText( std::to_string( _experience ), FontType::smallWhite() );
             const int32_t maxWidth = std::max( icn.width(), experienceText.width() );
 
             Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
@@ -407,11 +435,121 @@ namespace fheroes2
     void ExperienceDialogElement::processEvents( const Point & offset ) const
     {
         if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
-            const Text header( getExperienceName(), { FontSize::NORMAL, FontColor::YELLOW } );
-            const Text description( getExperienceDescription(), { FontSize::NORMAL, FontColor::WHITE } );
-
             // Make sure you never pass any buttons here to avoid call stack overflow!
-            showMessage( header, description, 0, { this } );
+            showPopup( defaultElementPopupButtons );
         }
+    }
+
+    void ExperienceDialogElement::showPopup( const int buttons ) const
+    {
+        const Text header( getExperienceName(), FontType::normalYellow() );
+        const Text description( getExperienceDescription(), FontType::normalWhite() );
+
+        showMessage( header, description, buttons, { this } );
+    }
+
+    PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, const std::string & text )
+        : _skillType( skillType )
+        , _text( text )
+    {
+        assert( skillType >= Skill::Primary::ATTACK && skillType >= Skill::Primary::KNOWLEDGE );
+
+        const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
+        _area = { background.width(), background.height() };
+    }
+
+    void PrimarySkillDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
+        Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
+
+        uint32_t icnId = 0;
+
+        switch ( _skillType ) {
+        case Skill::Primary::ATTACK:
+            icnId = 0;
+            break;
+        case Skill::Primary::DEFENSE:
+            icnId = 1;
+            break;
+        case Skill::Primary::POWER:
+            icnId = 2;
+            break;
+        case Skill::Primary::KNOWLEDGE:
+            icnId = 3;
+            break;
+        default:
+            // Are you sure you are passing the correct Primary Skill type?
+            assert( 0 );
+            break;
+        }
+
+        const Sprite & icn = AGG::GetICN( ICN::PRIMSKIL, icnId );
+        Blit( icn, 0, 0, output, offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
+
+        const Text skillName( Skill::Primary::String( _skillType ), FontType::smallWhite() );
+        skillName.draw( offset.x + ( background.width() - skillName.width() ) / 2, offset.y + 10, output );
+
+        if ( !_text.empty() ) {
+            const Text descriptionText( _text, FontType::normalWhite() );
+            descriptionText.draw( offset.x + ( background.width() - descriptionText.width() ) / 2, offset.y + 82, output );
+        }
+    }
+
+    void PrimarySkillDialogElement::processEvents( const Point & offset ) const
+    {
+        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+            // Make sure you never pass any buttons here to avoid call stack overflow!
+            showPopup( defaultElementPopupButtons );
+        }
+    }
+
+    void PrimarySkillDialogElement::showPopup( const int buttons ) const
+    {
+        const Text header( Skill::Primary::String( _skillType ), FontType::normalYellow() );
+        const Text description( Skill::Primary::StringDescription( _skillType, nullptr ), FontType::normalWhite() );
+
+        const PrimarySkillDialogElement elementUI( _skillType, std::string() );
+
+        showMessage( header, description, buttons, { &elementUI } );
+    }
+
+    SecondarySkillDialogElement::SecondarySkillDialogElement( const Heroes & hero, const Skill::Secondary & skill )
+        : _skill( skill )
+        , _hero( hero )
+    {
+        const Sprite & background = AGG::GetICN( ICN::SECSKILL, 15 );
+        _area = { background.width(), background.height() };
+    }
+
+    void SecondarySkillDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        const Sprite & background = AGG::GetICN( ICN::SECSKILL, 15 );
+        Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
+
+        const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
+        Blit( icn, 0, 0, output, offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
+
+        const Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
+        skillName.draw( offset.x + ( background.width() - skillName.width() ) / 2, offset.y + 8, output );
+
+        const Text skillDescription( Skill::Level::StringWithBonus( _hero, _skill ), FontType::smallWhite() );
+        skillDescription.draw( offset.x + ( background.width() - skillDescription.width() ) / 2, offset.y + 56, output );
+    }
+
+    void SecondarySkillDialogElement::processEvents( const Point & offset ) const
+    {
+        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+            // Make sure you never pass any buttons here to avoid call stack overflow!
+            showPopup( defaultElementPopupButtons );
+        }
+    }
+
+    void SecondarySkillDialogElement::showPopup( const int buttons ) const
+    {
+        const Text header( _skill.GetNameWithBonus( _hero ), FontType::normalYellow() );
+        const Text description( _skill.GetDescription( _hero ), FontType::normalWhite() );
+
+        showMessage( header, description, buttons, { this } );
     }
 }

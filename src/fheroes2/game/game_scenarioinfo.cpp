@@ -104,7 +104,7 @@ namespace
         // Redraw select button as the original image has a wrong position of it
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
-        fheroes2::FontType normalWhiteFont = { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+        fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
@@ -135,7 +135,7 @@ namespace
         for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
             const uint32_t offset = width * current;
 
-            fheroes2::Text text( Difficulty::String( current ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }

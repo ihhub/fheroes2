@@ -26,6 +26,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 fheroes2::Image GetBarBackgroundSprite( void )
 {
@@ -222,7 +223,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
             Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
             text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 3, dstsf );
 
-            text.Set( Skill::Level::StringWithBonus( _hero, skill.Skill(), skill.Level() ) );
+            text.Set( Skill::Level::StringWithBonus( _hero, skill ) );
             text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 51, dstsf );
         }
     }
@@ -231,7 +232,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
 bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        Dialog::SecondarySkillInfo( skill, _hero, true );
+        fheroes2::SecondarySkillDialogElement( _hero, skill ).showPopup( Dialog::OK );
         return true;
     }
     else if ( can_change ) {
@@ -249,10 +250,12 @@ bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill
 bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        if ( can_change )
+        if ( can_change ) {
             skill.Reset();
-        else
-            Dialog::SecondarySkillInfo( skill, _hero, false );
+        }
+        else {
+            fheroes2::SecondarySkillDialogElement( _hero, skill ).showPopup( Dialog::ZERO );
+        }
         return true;
     }
 

@@ -56,13 +56,13 @@ void Battle::ControlInfo::Redraw( void ) const
     fheroes2::Blit( cell, display, rtLocal.x, rtLocal.y );
     if ( result & CONTROL_HUMAN )
         fheroes2::Blit( mark, display, rtLocal.x + 3, rtLocal.y + 2 );
-    fheroes2::Text text( _( "Human" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
     text.draw( rtLocal.x + cell.width() + 5, rtLocal.y + 5, display );
 
     fheroes2::Blit( cell, display, rtAI.x, rtAI.y );
     if ( result & CONTROL_AI )
         fheroes2::Blit( mark, display, rtAI.x + 3, rtAI.y + 2 );
-    text.set( _( "AI" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
     text.draw( rtAI.x + cell.width() + 5, rtAI.y + 5, display );
 }
 
@@ -551,7 +551,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
         StringReplace( message, _( "%{race2} %{name2}" ), _( "Monsters" ) );
     }
 
-    fheroes2::Text text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
     text.draw( top.x + 320 - text.width() / 2, top.y + 29, display );
 
     // portrait
@@ -562,7 +562,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
     else {
         fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.width, rtPortrait1.height, 0 );
-        text.set( _( "N/A" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        text.set( _( "N/A" ), fheroes2::FontType::normalWhite() );
         text.draw( rtPortrait1.x + ( rtPortrait1.width - text.width() ) / 2, rtPortrait1.y + rtPortrait1.height / 2 - 8, display );
     }
 
@@ -573,7 +573,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
     else {
         fheroes2::Fill( display, rtPortrait2.x, rtPortrait2.y, rtPortrait2.width, rtPortrait2.height, 0 );
-        text.set( _( "N/A" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        text.set( _( "N/A" ), fheroes2::FontType::normalWhite() );
         text.draw( rtPortrait2.x + ( rtPortrait2.width - text.width() ) / 2, rtPortrait2.y + rtPortrait2.height / 2 - 8, display );
     }
 

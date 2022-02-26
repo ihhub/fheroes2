@@ -32,6 +32,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 
 void DialogPrimaryOnly( const std::string & name, const std::string & primary )
 {
@@ -191,18 +192,18 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
-            Dialog::SecondarySkillInfo( sec1, hero );
+            fheroes2::SecondarySkillDialogElement( hero, sec1 ).showPopup( Dialog::OK );
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
-            Dialog::SecondarySkillInfo( sec2, hero );
+            fheroes2::SecondarySkillDialogElement( hero, sec2 ).showPopup( Dialog::OK );
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
-            Dialog::SecondarySkillInfo( sec1, hero, false );
+            fheroes2::SecondarySkillDialogElement( hero, sec1 ).showPopup( Dialog::ZERO );
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
-            Dialog::SecondarySkillInfo( sec2, hero, false );
+            fheroes2::SecondarySkillDialogElement( hero, sec2 ).showPopup( Dialog::ZERO );
             display.render();
         }
         else if ( le.MousePressRight( button_hero.area() ) ) {

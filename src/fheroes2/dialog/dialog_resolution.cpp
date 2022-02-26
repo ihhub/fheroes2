@@ -185,13 +185,13 @@ namespace Dialog
                 break;
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
-                fheroes2::Text header( _( "Cancel" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Exit this menu without doing anything." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Click to apply the selected resolution." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Click to apply the selected resolution." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
             }
 

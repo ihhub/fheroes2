@@ -44,6 +44,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -599,8 +600,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();
 
                     // display captured artifact info on right click
-                    if ( le.MousePressRight( artifactArea ) )
-                        Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
+                    if ( le.MousePressRight( artifactArea ) ) {
+                        fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
+                    }
 
                     // exit
                     if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )

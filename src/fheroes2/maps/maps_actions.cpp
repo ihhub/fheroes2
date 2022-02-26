@@ -228,8 +228,10 @@ bool ActionDefault::Action( const ActionDefault * act )
 bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
 {
     if ( act && act->artifact != Artifact::UNKNOWN ) {
-        if ( !act->message.empty() )
-            Dialog::ArtifactInfo( "", act->message, act->artifact );
+        if ( !act->message.empty() ) {
+            const fheroes2::ArtifactDialogElement artifactUI( act->artifact );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+        }
         hero.PickupArtifact( act->artifact );
         act->artifact = Artifact::UNKNOWN;
         return true;
@@ -241,7 +243,7 @@ bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
 bool ActionResources::Action( ActionResources * act, const Heroes & hero )
 {
     if ( act && 0 < act->resources.GetValidItems() ) {
-        fheroes2::showResourceMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } ), Dialog::OK,
+        fheroes2::showResourceMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                        act->resources );
         hero.GetKingdom().AddFundsResource( act->resources );
         act->resources.Reset();

@@ -66,8 +66,8 @@ namespace
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
         fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
 
-        const fheroes2::Text title( _( "Language" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-        const fheroes2::Text name( fheroes2::getLanguageName( currentLanguage ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text title( _( "Language" ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text name( fheroes2::getLanguageName( currentLanguage ), fheroes2::FontType::normalWhite() );
 
         title.draw( languageRoi.x + windowRoi.x + ( languageRoi.width - title.width() ) / 2, languageRoi.y - titleOffset + windowRoi.y, display );
         name.draw( languageRoi.x + windowRoi.x + ( languageRoi.width - name.width() ) / 2, languageRoi.y + languageRoi.height + nameOffset + windowRoi.y, display );
@@ -78,11 +78,10 @@ namespace
 
     void drawResolution( const fheroes2::StandardWindow & window )
     {
-        const fheroes2::Text title( _( "Resolution" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text title( _( "Resolution" ), fheroes2::FontType::smallWhite() );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Text name( std::to_string( display.width() ) + 'x' + std::to_string( display.height() ),
-                                   { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text name( std::to_string( display.width() ) + 'x' + std::to_string( display.height() ), fheroes2::FontType::normalWhite() );
 
         const fheroes2::Rect & windowRoi = window.activeArea();
 
@@ -96,10 +95,10 @@ namespace
 
     void drawOptions( const fheroes2::StandardWindow & window )
     {
-        const fheroes2::Text title( _( "Experimental" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text title( _( "Experimental" ), fheroes2::FontType::smallWhite() );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Text name( _( "Settings" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text name( _( "Settings" ), fheroes2::FontType::normalWhite() );
 
         const fheroes2::Rect & windowRoi = window.activeArea();
 
@@ -170,26 +169,26 @@ namespace
             }
 
             if ( le.MousePressRight( windowLanguageRoi ) ) {
-                fheroes2::Text header( _( "Select Game Language" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Change language of the game." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text header( _( "Select Game Language" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Change language of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowResolutionRoi ) ) {
-                fheroes2::Text header( _( "Select Game Resolution" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Change resolution of the game." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text header( _( "Select Game Resolution" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Change resolution of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowOptionsRoi ) ) {
-                fheroes2::Text header( _( "Settings" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Experimental game settings." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text header( _( "Settings" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Experimental game settings." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
-                fheroes2::Text header( _( "OK" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-                fheroes2::Text body( _( "Exit this menu." ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                fheroes2::Text header( _( "OK" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -234,9 +233,9 @@ namespace fheroes2
 
                     currentLanguage = fheroes2::SupportedLanguage::English;
 
-                    fheroes2::Text header( _( "Attention" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+                    fheroes2::Text header( _( "Attention" ), fheroes2::FontType::normalYellow() );
                     fheroes2::Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ),
-                                         { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                                         fheroes2::FontType::normalWhite() );
 
                     fheroes2::showMessage( header, body, Dialog::OK );
                 }

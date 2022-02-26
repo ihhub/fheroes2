@@ -28,8 +28,8 @@ namespace fheroes2
 {
     void showKingdomIncome( const Kingdom & kingdom, const int buttons )
     {
-        const Text header( _( "Kingdom Income" ), { FontSize::NORMAL, FontColor::YELLOW } );
-        const Text body( _( "Kingdom Income per day." ), { FontSize::NORMAL, FontColor::WHITE } );
+        const Text header( _( "Kingdom Income" ), FontType::normalYellow() );
+        const Text body( _( "Kingdom Income per day." ), FontType::normalWhite() );
 
         showResourceMessage( header, body, buttons, kingdom.GetIncome( INCOME_ALL ) );
     }

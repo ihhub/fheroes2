@@ -23,11 +23,13 @@
 #include <string>
 #include <vector>
 
+#include "artifact.h"
 #include "math_base.h"
+#include "skill.h"
+#include "spell.h"
 
-class Artifact;
 class Funds;
-class Spell;
+class Heroes;
 
 namespace fheroes2
 {
@@ -43,14 +45,20 @@ namespace fheroes2
     public:
         virtual ~DialogElement() = default;
 
+        // Draw the element on a given image.
         virtual void draw( Image & output, const Point & offset ) const = 0;
 
+        // Process events internally. In most cases it is a right mouse click event only.
         virtual void processEvents( const Point & offset ) const = 0;
 
+        // Return the size of the element.
         Size area() const
         {
             return _area;
         }
+
+        // Display a popup window with no buttons and standard description of the element. It is usually used for a right mouse click event.
+        virtual void showPopup( const int buttons ) const = 0;
 
     protected:
         // This element must be cached to avoid heavy calculations.
@@ -68,8 +76,10 @@ namespace fheroes2
 
         void processEvents( const Point & offset ) const override;
 
+        void showPopup( const int buttons ) const override;
+
     private:
-        const Artifact & _artifact;
+        const Artifact _artifact;
     };
 
     class ResourceDialogElement : public DialogElement
@@ -82,6 +92,8 @@ namespace fheroes2
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
 
     private:
         const int32_t _resourceType = 0;
@@ -104,8 +116,10 @@ namespace fheroes2
 
         void processEvents( const Point & offset ) const override;
 
+        void showPopup( const int buttons ) const override;
+
     private:
-        const Spell & _spell;
+        const Spell _spell;
     };
 
     class LuckDialogElement : public DialogElement
@@ -118,6 +132,8 @@ namespace fheroes2
         void draw( Image & output, const Point & offset ) const override;
 
         void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
 
     private:
         const bool _goodLuck;
@@ -134,6 +150,8 @@ namespace fheroes2
 
         void processEvents( const Point & offset ) const override;
 
+        void showPopup( const int buttons ) const override;
+
     private:
         const bool _goodMorale;
     };
@@ -149,7 +167,45 @@ namespace fheroes2
 
         void processEvents( const Point & offset ) const override;
 
+        void showPopup( const int buttons ) const override;
+
     private:
         const int32_t _experience;
+    };
+
+    class PrimarySkillDialogElement : public DialogElement
+    {
+    public:
+        explicit PrimarySkillDialogElement( const int32_t skillType, const std::string & text );
+
+        ~PrimarySkillDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const int32_t _skillType;
+        const std::string _text;
+    };
+
+    class SecondarySkillDialogElement : public DialogElement
+    {
+    public:
+        explicit SecondarySkillDialogElement( const Heroes & hero, const Skill::Secondary & skill );
+
+        ~SecondarySkillDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Skill::Secondary _skill;
+        const Heroes & _hero;
     };
 }

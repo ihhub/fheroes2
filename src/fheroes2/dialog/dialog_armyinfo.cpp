@@ -219,12 +219,12 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             // upgrade
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
-                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                     fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetUpgradeCost() );
                 }
                 else {
                     const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
-                                                      { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+                                                      fheroes2::FontType::normalWhite() );
 
                     if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetUpgradeCost() ) == Dialog::YES ) {
                         result = Dialog::UPGRADE;
@@ -538,13 +538,13 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     if ( !descriptions.empty() ) {
         const int32_t descriptionWidth = 210;
         const int32_t maximumRowCount = 3;
-        const int32_t rowHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+        const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
 
         bool asSolidText = true;
         if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
             asSolidText = false;
             for ( const std::string & sentence : descriptions ) {
-                if ( fheroes2::Text( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).width() > descriptionWidth ) {
+                if ( fheroes2::Text( sentence, fheroes2::FontType::smallWhite() ).width() > descriptionWidth ) {
                     asSolidText = true;
                     break;
                 }
@@ -561,7 +561,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
                 description += sentence;
             }
 
-            const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text descriptionText( description, fheroes2::FontType::smallWhite() );
             const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
             descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
@@ -569,7 +569,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
         else {
             int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
             for ( const std::string & sentence : descriptions ) {
-                const fheroes2::Text descriptionText( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                const fheroes2::Text descriptionText( sentence, fheroes2::FontType::smallWhite() );
 
                 descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
                 ++sentenceId;

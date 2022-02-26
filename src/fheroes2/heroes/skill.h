@@ -37,6 +37,8 @@ class StreamBase;
 
 namespace Skill
 {
+    class Secondary;
+
     int GetLeadershipModifiers( int level, std::string * strs );
     int GetLuckModifiers( int level, std::string * strs );
 
@@ -54,7 +56,7 @@ namespace Skill
         };
 
         const char * String( int level );
-        std::string StringWithBonus( const Heroes & hero, int skill, int level );
+        std::string StringWithBonus( const Heroes & hero, const Secondary & skill );
     }
 
     class Secondary : public std::pair<int, int>
