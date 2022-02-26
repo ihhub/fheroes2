@@ -29,8 +29,7 @@ jobs:
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
