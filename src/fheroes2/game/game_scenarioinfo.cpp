@@ -129,11 +129,11 @@ namespace
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
     {
-        const uint32_t width = 77;
-        const uint32_t height = 70;
+        const int32_t width = 77;
+        const int32_t height = 70;
 
-        for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-            const uint32_t offset = width * current;
+        for ( int32_t current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
+            const int32_t offset = width * current;
 
             fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );

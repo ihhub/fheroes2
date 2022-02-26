@@ -449,7 +449,7 @@ namespace fheroes2
         : _skillType( skillType )
         , _text( text )
     {
-        assert( skillType >= Skill::Primary::ATTACK && skillType >= Skill::Primary::KNOWLEDGE );
+        assert( skillType >= Skill::Primary::ATTACK && skillType <= Skill::Primary::KNOWLEDGE );
 
         const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
         _area = { background.width(), background.height() };
