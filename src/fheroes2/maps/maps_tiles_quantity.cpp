@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -445,7 +446,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( static_cast<MP2::MapObjectType>( mp2_object ) ) )
+    if ( MP2::isPickupObject( mp2_object ) )
         setAsEmpty();
 }
 
@@ -1097,9 +1098,13 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
 {
     const Troop & troop = tile.QuantityTroop();
+    const uint32_t troopCount = troop.GetCount();
 
-    if ( 0 == troop.GetCount() )
+    if ( troopCount == 0 ) {
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
-    else if ( !tile.MonsterFixedCount() )
-        tile.MonsterSetCount( troop.GetCount() * 8 / 7 );
+    }
+    else if ( !tile.MonsterFixedCount() ) {
+        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
+        tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
+    }
 }

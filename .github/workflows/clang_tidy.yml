@@ -12,8 +12,6 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Install dependencies and clang-tidy
       run: |
         sudo apt-get -y update
@@ -24,7 +22,7 @@ jobs:
         sudo update-alternatives --install /usr/bin/clang-tidy-diff clang-tidy-diff /usr/bin/clang-tidy-diff-12.py 100
     - name: Prepare compile_commands.json
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Create results directory
       run: |
         mkdir clang-tidy-result
@@ -40,3 +38,4 @@ jobs:
       with:
         name: clang-tidy-result
         path: clang-tidy-result/
+        if-no-files-found: error

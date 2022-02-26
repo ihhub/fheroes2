@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <fstream>
 #include <map>
@@ -196,31 +198,6 @@ std::string System::GetBasename( const std::string & str )
     }
 
     return str;
-}
-
-std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
-{
-    std::string locname;
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    const char * clocale = std::setlocale( LC_MONETARY, nullptr );
-#elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    const char * clocale = setlocale( LC_MESSAGES, nullptr );
-#else
-    const char * clocale = std::setlocale( LC_MESSAGES, nullptr );
-#endif
-
-    if ( clocale ) {
-        locname = StringLower( clocale );
-        // 3: en_us.utf-8
-        // 2: en_us
-        // 1: en
-        if ( length < 3 ) {
-            std::vector<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
-            return list.empty() ? locname : list.front();
-        }
-    }
-
-    return locname;
 }
 
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
@@ -479,4 +456,25 @@ std::string System::FileNameToUTF8( const std::string & str )
 #else
     return str;
 #endif
+}
+
+tm System::GetTM( const time_t time )
+{
+    tm result = {};
+
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    errno_t res = localtime_s( &result, &time );
+
+    if ( res != 0 ) {
+        assert( 0 );
+    }
+#else
+    const tm * res = localtime_r( &time, &result );
+
+    if ( res == nullptr ) {
+        assert( 0 );
+    }
+#endif
+
+    return result;
 }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -110,7 +111,7 @@ namespace
 
     void PlayMusic( Mix_Music * mix, const bool loop )
     {
-        Music::Reset();
+        Music::Stop();
 
         int res = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
 
@@ -162,8 +163,8 @@ void Audio::Quit()
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( valid && fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
-        Music::Reset();
-        Mixer::Reset();
+        Music::Stop();
+        Mixer::Stop();
 
         valid = false;
 
@@ -357,17 +358,6 @@ void Mixer::Stop( const int channel /* = -1 */ )
     }
 }
 
-void Mixer::Reset()
-{
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
-    Music::Reset();
-
-    if ( valid ) {
-        Mix_HaltChannel( -1 );
-    }
-}
-
 bool Mixer::isPlaying( const int channel )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
@@ -445,16 +435,7 @@ int Music::Volume( int vol )
     return Mix_VolumeMusic( vol );
 }
 
-void Music::Pause()
-{
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
-    if ( music ) {
-        Mix_PauseMusic();
-    }
-}
-
-void Music::Reset()
+void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 

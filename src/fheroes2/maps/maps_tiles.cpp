@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -699,20 +700,6 @@ u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape valu
     return ( shape << 14 ) | ( 0x3FFF & index );
 }
 
-Maps::Tiles::Tiles()
-    : _index( 0 )
-    , pack_sprite_index( 0 )
-    , uniq( 0 )
-    , objectTileset( 0 )
-    , objectIndex( 255 )
-    , mp2_object( 0 )
-    , tilePassable( DIRECTION_ALL )
-    , fog_colors( Color::ALL )
-    , quantity1( 0 )
-    , quantity2( 0 )
-    , quantity3( 0 )
-{}
-
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
@@ -753,7 +740,7 @@ Heroes * Maps::Tiles::GetHeroes( void ) const
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
     if ( hero ) {
-        hero->SetMapsObject( static_cast<MP2::MapObjectType>( mp2_object ) );
+        hero->SetMapsObject( mp2_object );
         heroID = hero->GetID() + 1;
         SetObject( MP2::OBJ_HEROES );
     }
@@ -784,7 +771,7 @@ MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */
         return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
     }
 
-    return static_cast<MP2::MapObjectType>( mp2_object );
+    return mp2_object;
 }
 
 void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
@@ -1000,7 +987,7 @@ void Maps::Tiles::updatePassability()
                         }
                     }
                 }
-                else if ( bottomTile.mp2_object != 0 && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
+                else if ( bottomTile.mp2_object != MP2::OBJ_ZERO && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~Direction::BOTTOM;
                 }
@@ -1063,6 +1050,9 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
 {
     if ( tilePassable ) {
         _region = newRegionID;
+    }
+    else {
+        _region = REGION_NODE_BLOCKED;
     }
 }
 
@@ -1579,7 +1569,7 @@ std::string Maps::Tiles::String( void ) const
     }
 
     default: {
-        const MapsIndexes & v = Maps::GetTilesUnderProtection( _index );
+        const MapsIndexes & v = Maps::getMonstersProtectingTile( _index );
         if ( !v.empty() ) {
             os << "protection      : ";
             for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it )
@@ -1730,7 +1720,7 @@ void Maps::Tiles::removeFlags()
 
 void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
 {
-    u32 index = 0;
+    uint8_t index = 0;
 
     switch ( col ) {
     case Color::BLUE:
@@ -1817,24 +1807,29 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     }
 }
 
-void Maps::Tiles::CorrectFlags32( const int col, const u32 index, const bool up )
+void Maps::Tiles::CorrectFlags32( const int col, const uint8_t index, const bool up )
 {
     if ( col == Color::NONE ) {
         removeFlags();
         return;
     }
 
+    const uint8_t objectType = 0x38;
+
     TilesAddon * taddon = FindFlags();
 
-    // replace flag
-    if ( taddon )
+    if ( taddon ) {
+        // replace flag
         taddon->index = index;
-    else if ( up )
+    }
+    else if ( up ) {
         // or new flag
-        addons_level2.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
-    else
+        addons_level2.emplace_back( TilesAddon::UPPER, World::GetUniq(), objectType, index );
+    }
+    else {
         // or new flag
-        addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
+        addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), objectType, index );
+    }
 }
 
 void Maps::Tiles::fixTileObjectType( Tiles & tile )
@@ -1920,8 +1915,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     }
 }
 
-/* true: if protection or has guardians */
-bool Maps::Tiles::CaptureObjectIsProtection( void ) const
+bool Maps::Tiles::isCaptureObjectProtected() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
@@ -2737,14 +2731,24 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
-    return msg << tile._index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object << tile.fog_colors
-               << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._level;
+    static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
+
+    return msg << tile._index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex
+               << static_cast<uint8_t>( tile.mp2_object ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.heroID << tile.tileIsRoad
+               << tile.addons_level1 << tile.addons_level2 << tile._level;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
-        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._level;
+    msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex;
+
+    static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for reading MP2::MapObjectType object" );
+    uint8_t objectType = MP2::OBJ_ZERO;
+    msg >> objectType;
+    tile.mp2_object = static_cast<MP2::MapObjectType>( objectType );
+
+    msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
+        >> tile._level;
 
     return msg;
 }

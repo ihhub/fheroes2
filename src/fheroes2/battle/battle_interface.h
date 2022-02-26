@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +27,7 @@
 #include <string>
 
 #include "battle_animation.h"
+#include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "spell.h"
@@ -42,13 +44,16 @@ namespace fheroes2
 
 namespace Battle
 {
+    class Actions;
     class Arena;
+    class Board;
+    class Cell;
+    class Position;
+    class StatusListBox;
+    class Tower;
     class Unit;
     class Units;
-    class Tower;
-    class StatusListBox;
-    class Cell;
-    class Actions;
+
     struct TargetInfo;
     struct TargetsInfo;
 
@@ -155,6 +160,7 @@ namespace Battle
     private:
         enum ArmyColor : uint8_t
         {
+            ARMY_COLOR_BLACK = 0x00,
             ARMY_COLOR_BLUE = 0x47,
             ARMY_COLOR_GREEN = 0x67,
             ARMY_COLOR_RED = 0xbd,
@@ -201,6 +207,8 @@ namespace Battle
         void Redraw();
         void RedrawPartialStart();
         void RedrawPartialFinish();
+
+        void getPendingActions( Actions & actions );
         void HumanTurn( const Unit &, Actions & );
 
         const fheroes2::Rect & GetArea( void ) const;
@@ -212,10 +220,10 @@ namespace Battle
 
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
-        void RedrawActionAttackPart2( Unit &, TargetsInfo & );
+        void RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
-        void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
+        void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
         void RedrawActionMove( Unit &, const Indexes & );
@@ -249,8 +257,7 @@ namespace Battle
         void RedrawCoverStatic( const Settings & conf, const Board & board );
         void RedrawLowObjects( s32 );
         void RedrawHighObjects( s32 );
-        void RedrawCastle1( const Castle & );
-        void RedrawCastle2( const Castle &, int32_t );
+        void RedrawCastle( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );
@@ -263,7 +270,7 @@ namespace Battle
 
         void RedrawTroopCount( const Unit & unit );
 
-        void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = nullptr );
+        void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( const Unit & );
@@ -333,6 +340,8 @@ namespace Battle
         bool humanturn_redraw;
         u32 animation_flags_frame;
         int catapult_frame;
+
+        int _breakAutoBattleForColor;
 
         uint8_t _contourColor;
         bool _brightLandType; // used to determine current monster contour cycling colors

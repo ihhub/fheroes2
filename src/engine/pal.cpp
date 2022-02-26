@@ -140,16 +140,22 @@ namespace
     }
 }
 
-std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
+std::vector<uint8_t> PAL::GetCyclingPalette( uint32_t stepId )
 {
     std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
 
-    const std::vector<CyclingColorSet> & set = GetCyclingColors();
-    for ( std::vector<CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
-        for ( int id = 0; id < it->length; ++id ) {
-            const int lastColorID = it->length - 1;
-            const uint8_t newColorID = it->forward ? it->start + ( id + stepId ) % it->length : it->start + lastColorID - ( lastColorID + stepId - id ) % it->length;
-            palette[it->start + id] = newColorID;
+    for ( const CyclingColorSet & colorSet : GetCyclingColors() ) {
+        for ( uint32_t id = 0; id < colorSet.length; ++id ) {
+            uint32_t newColorID;
+            if ( colorSet.forward ) {
+                newColorID = colorSet.start + ( ( id + stepId ) % colorSet.length );
+            }
+            else {
+                const uint32_t lastColorID = colorSet.length - 1;
+                newColorID = colorSet.start + lastColorID - ( ( lastColorID + stepId - id ) % colorSet.length );
+            }
+
+            palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
         }
     }
 

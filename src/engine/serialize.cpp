@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +28,10 @@
 #include "logging.h"
 #include "serialize.h"
 
-#define MINCAPACITY 1024
+namespace
+{
+    const size_t minBufferCapacity = 1024;
+}
 
 void StreamBase::setconstbuf( bool f )
 {
@@ -310,8 +314,8 @@ void StreamBuf::reallocbuf( size_t sz )
     setconstbuf( false );
 
     if ( !itbeg ) {
-        if ( sz < MINCAPACITY )
-            sz = MINCAPACITY;
+        if ( sz < minBufferCapacity )
+            sz = minBufferCapacity;
 
         itbeg = new u8[sz];
         itend = itbeg + sz;
@@ -320,8 +324,8 @@ void StreamBuf::reallocbuf( size_t sz )
         reset();
     }
     else if ( sizep() < sz ) {
-        if ( sz < MINCAPACITY )
-            sz = MINCAPACITY;
+        if ( sz < minBufferCapacity )
+            sz = minBufferCapacity;
 
         u8 * ptr = new u8[sz];
 

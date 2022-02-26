@@ -20,6 +20,7 @@ Checks: >-
   readability-*,
   -readability-avoid-const-params-in-decls,
   -readability-braces-around-statements,
+  -readability-function-cognitive-complexity,
   -readability-implicit-bool-conversion,
   -readability-magic-numbers
 

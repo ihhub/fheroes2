@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -325,7 +326,7 @@ void Castle::PostLoad( void )
         building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 );
         break;
     case Race::NECR:
-        building &= ~( DWELLING_UPGRADE6 );
+        building &= ~DWELLING_UPGRADE6;
         break;
     default:
         break;
@@ -351,7 +352,7 @@ void Castle::PostLoad( void )
 
     // fix shipyard
     if ( !HaveNearlySea() )
-        building &= ~( BUILD_SHIPYARD );
+        building &= ~BUILD_SHIPYARD;
 
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
@@ -460,6 +461,32 @@ int Castle::getBuildingValue() const
     return value;
 }
 
+Troops Castle::getAvailableArmy( Funds potentialBudget ) const
+{
+    Troops reinforcement( army.getTroops() );
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t available = getMonstersInDwelling( dw );
+
+            uint32_t couldRecruit = potentialBudget.getLowestQuotient( monster.GetCost() );
+            if ( available < couldRecruit )
+                couldRecruit = available;
+
+            if ( couldRecruit > 0 ) {
+                potentialBudget -= ( monster.GetCost() * couldRecruit );
+                reinforcement.PushBack( monster, couldRecruit );
+            }
+        }
+    }
+    return reinforcement;
+}
+
+double Castle::getArmyRecruitmentValue() const
+{
+    return getAvailableArmy( GetKingdom().GetFunds() ).GetStrength();
+}
+
 double Castle::getVisitValue( const Heroes & hero ) const
 {
     double spellValue = 0;
@@ -494,23 +521,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
 
     const double upgradeStrength = futureArmy.GetStrength() - heroArmyStrength;
 
-    Troops reinforcement;
-    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t available = getMonstersInDwelling( dw );
-
-            uint32_t couldRecruit = potentialFunds.getLowestQuotient( monster.GetCost() );
-            if ( available < couldRecruit )
-                couldRecruit = available;
-
-            potentialFunds -= ( monster.GetCost() * couldRecruit );
-
-            reinforcement.PushBack( monster, couldRecruit );
-        }
-    }
-
-    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( reinforcement );
+    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( getAvailableArmy( potentialFunds ) );
 }
 
 void Castle::ActionNewDay( void )
@@ -559,7 +570,7 @@ void Castle::ActionNewWeek( void )
 
     // increase population
     if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
-        const u32 dwellings1[] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
+        const u32 dwellings1[7] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
         u32 * dw = nullptr;
 
         // simple growth
@@ -587,8 +598,8 @@ void Castle::ActionNewWeek( void )
 
         // Week Of
         if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
-            const u32 dwellings2[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                       DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+            const u32 dwellings2[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                         DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
 
             for ( u32 ii = 0; dwellings2[ii]; ++ii )
                 if ( nullptr != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
@@ -625,8 +636,8 @@ void Castle::ActionNewMonth( void )
     else
         // Month Of
         if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
-        const u32 dwellings[] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                  DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+        const u32 dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                    DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
         u32 * dw = nullptr;
 
         for ( u32 ii = 0; dwellings[ii]; ++ii )
@@ -1237,7 +1248,7 @@ int Castle::CheckBuyBuilding( u32 build ) const
             return UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE4:
-        if ( (Race::WZRD)&race )
+        if ( Race::WZRD & race )
             return UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE5:

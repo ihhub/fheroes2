@@ -31,7 +31,7 @@
 
 namespace
 {
-    const double fighterStrengthMultipler = 3;
+    const double fighterStrengthMultiplier = 3;
 
     void setHeroRoles( KingdomHeroes & heroes )
     {
@@ -58,7 +58,7 @@ namespace
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
-            if ( hero.first > medianStrength * fighterStrengthMultipler ) {
+            if ( hero.first > medianStrength * fighterStrengthMultiplier ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
@@ -70,6 +70,28 @@ namespace
 
 namespace AI
 {
+    bool Normal::recruitHero( Castle & castle, bool buyArmy, bool underThreat )
+    {
+        Kingdom & kingdom = castle.GetKingdom();
+        const Recruits & rec = kingdom.GetRecruits();
+        Heroes * recruit = nullptr;
+        Heroes * firstRecruit = rec.GetHero1();
+        Heroes * secondRecruit = rec.GetHero2();
+        if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
+            recruit = castle.RecruitHero( secondRecruit );
+        }
+        else {
+            recruit = castle.RecruitHero( firstRecruit );
+        }
+
+        if ( recruit && buyArmy ) {
+            CastleTurn( castle, underThreat );
+            ReinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
+        }
+
+        return recruit != nullptr;
+    }
+
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
         const int color = kingdom.GetColor();
@@ -92,7 +114,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
-        std::vector<std::pair<int, const Army *> > enemyArmies;
+        std::vector<std::pair<int, const Army *>> enemyArmies;
 
         const int mapSize = world.w() * world.h();
         _mapObjects.clear();
@@ -126,7 +148,7 @@ namespace AI
                     if ( !hero )
                         continue;
 
-                    if ( hero->GetColor() == color ) {
+                    if ( hero->GetColor() == color && !hero->Modes( Heroes::PATROL ) ) {
                         ++stats.friendlyHeroCount;
                     }
                     else if ( !Players::isFriends( color, hero->GetColor() ) ) {
@@ -168,11 +190,12 @@ namespace AI
 
         // Step 2. Update AI variables and recalculate resource budget
         const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
+        int32_t availableHeroCount = 0;
 
-        for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
-            if ( *it ) {
-                _combinedHeroStrength += ( *it )->GetArmy().GetStrength();
-            }
+        for ( Heroes * hero : heroes ) {
+            _combinedHeroStrength += hero->GetArmy().GetStrength();
+            if ( !hero->Modes( Heroes::PATROL ) )
+                ++availableHeroCount;
         }
 
         const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
@@ -231,10 +254,9 @@ namespace AI
         VecCastles sortedCastleList( castles );
         sortedCastleList.SortByBuildingValue();
 
-        if ( ( moreTasksForHeroes && heroes.size() < static_cast<size_t>( heroLimit ) ) || heroes.empty() ) { // safe to cast as heroLimit is > 0
-            const Recruits & rec = kingdom.GetRecruits();
+        if ( availableHeroCount < heroLimit ) {
             Castle * recruitmentCastle = nullptr;
-            int lowestHeroCount = heroLimit;
+            double bestArmyAvailable = -1.0;
 
             // search for best castle to recruit hero from
             for ( Castle * castle : sortedCastleList ) {
@@ -243,41 +265,34 @@ namespace AI
                     const int mapIndex = castle->GetIndex();
 
                     // Make sure there is no hero in castle already and we're not under threat while having other heroes.
-                    if ( hero != nullptr || ( !heroes.empty() && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
+                    if ( hero != nullptr || ( availableHeroCount > 0 && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
                         continue;
 
                     const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
-                    const int heroCount = _regions[regionID].friendlyHeroCount;
+                    const int heroesInRegion = _regions[regionID].friendlyHeroCount;
 
-                    // don't buy a second hero if castle is on locked island
-                    if ( world.getRegion( regionID ).getNeighboursCount() == 0 && heroCount > 0 )
+                    if ( heroesInRegion > 1 )
                         continue;
 
-                    if ( recruitmentCastle == nullptr || lowestHeroCount > heroCount ) {
+                    const size_t neighboursCount = world.getRegion( regionID ).getNeighboursCount();
+
+                    // don't buy another hero if there's nothing to do or castle is on an island
+                    if ( heroesInRegion > 0 && ( !moreTasksForHeroes || ( castles.size() > 1 && neighboursCount == 0 ) ) ) {
+                        continue;
+                    }
+
+                    const double availableArmy = castle->getArmyRecruitmentValue();
+
+                    if ( recruitmentCastle == nullptr || availableArmy > bestArmyAvailable ) {
                         recruitmentCastle = castle;
-                        lowestHeroCount = heroCount;
-                        if ( lowestHeroCount == 0 )
-                            break;
+                        bestArmyAvailable = availableArmy;
                     }
                 }
             }
 
             // target found, buy hero
-            if ( recruitmentCastle ) {
-                Heroes * recruit = nullptr;
-                Heroes * firstRecruit = rec.GetHero1();
-                Heroes * secondRecruit = rec.GetHero2();
-                if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
-                    recruit = recruitmentCastle->RecruitHero( secondRecruit );
-                }
-                else {
-                    recruit = recruitmentCastle->RecruitHero( firstRecruit );
-                }
-
-                if ( recruit && !slowEarlyGame ) {
-                    CastleTurn( *recruitmentCastle, castlesInDanger.find( recruitmentCastle->GetIndex() ) != castlesInDanger.end() );
-                    ReinforceHeroInCastle( *recruit, *recruitmentCastle, kingdom.GetFunds() );
-                }
+            if ( recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false ) ) {
+                ++availableHeroCount;
             }
         }
 

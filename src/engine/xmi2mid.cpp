@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -313,7 +314,7 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
     return sb;
 }
 
-struct MidiEvents : std::vector<MidiChunk>
+struct MidiEvents : public std::vector<MidiChunk>
 {
     uint32_t trackTempo = 0;
 
@@ -433,9 +434,6 @@ struct MidTrack
     IFFChunkHeader mtrk;
     MidiEvents events;
 
-    MidTrack()
-        : mtrk( TAG_MTRK, 0 )
-    {}
     explicit MidTrack( const XMITrack & t )
         : mtrk( TAG_MTRK, 0 )
         , events( t )

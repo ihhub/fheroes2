@@ -36,8 +36,8 @@ CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) -c $@.cpp $(CFLAGS)
-	$(CXX) -o $@ $@.o $(LIBS)
+	$(CXX) $(CFLAGS) -c $@.cpp
+	$(CXX) $(LDFLAGS) -o $@ $@.o $(LIBS)
 
 clean:
 	rm -f *.o *.exe $(TARGETS)

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <functional>
@@ -76,19 +78,19 @@ namespace
                     case MP2::OBJ_DERELICTSHIP:
                     case MP2::OBJN_DERELICTSHIP: {
                         std::string modRobber = _( "%{object} robber" );
-                        StringReplace( modRobber, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
                     case MP2::OBJN_PYRAMID: {
                         std::string modRaided = _( "%{object} raided" );
-                        StringReplace( modRaided, "%{object}", _( MP2::StringObject( objectType ) ) );
+                        StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
                         break;
                     }
                     default:
-                        strs->append( _( MP2::StringObject( objectType ) ) );
+                        strs->append( MP2::StringObject( objectType ) );
                         break;
                     }
 
@@ -102,30 +104,39 @@ namespace
     }
 }
 
-const char * Heroes::GetName( int id )
+const char * Heroes::GetName( int heroid )
 {
-    const char * names[]
+    assert( heroid >= 0 && heroid <= UNKNOWN );
+
+    const std::array<const char *, UNKNOWN + 1> names
         = { // knight
-            _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
+            gettext_noop( "Lord Kilburn" ), gettext_noop( "Sir Gallant" ), gettext_noop( "Ector" ), gettext_noop( "Gwenneth" ), gettext_noop( "Tyro" ),
+            gettext_noop( "Ambrose" ), gettext_noop( "Ruby" ), gettext_noop( "Maximus" ), gettext_noop( "Dimitry" ),
             // barbarian
-            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
+            gettext_noop( "Thundax" ), gettext_noop( "Fineous" ), gettext_noop( "Jojosh" ), gettext_noop( "Crag Hack" ), gettext_noop( "Jezebel" ),
+            gettext_noop( "Jaclyn" ), gettext_noop( "Ergon" ), gettext_noop( "Tsabu" ), gettext_noop( "Atlas" ),
             // sorceress
-            _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
+            gettext_noop( "Astra" ), gettext_noop( "Natasha" ), gettext_noop( "Troyan" ), gettext_noop( "Vatawna" ), gettext_noop( "Rebecca" ), gettext_noop( "Gem" ),
+            gettext_noop( "Ariel" ), gettext_noop( "Carlawn" ), gettext_noop( "Luna" ),
             // warlock
-            _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
+            gettext_noop( "Arie" ), gettext_noop( "Alamar" ), gettext_noop( "Vesper" ), gettext_noop( "Crodo" ), gettext_noop( "Barok" ), gettext_noop( "Kastore" ),
+            gettext_noop( "Agar" ), gettext_noop( "Falagar" ), gettext_noop( "Wrathmont" ),
             // wizard
-            _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
+            gettext_noop( "Myra" ), gettext_noop( "Flint" ), gettext_noop( "Dawn" ), gettext_noop( "Halon" ), gettext_noop( "Myrini" ), gettext_noop( "Wilfrey" ),
+            gettext_noop( "Sarakin" ), gettext_noop( "Kalindra" ), gettext_noop( "Mandigal" ),
             // necromant
-            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
+            gettext_noop( "Zom" ), gettext_noop( "Darlana" ), gettext_noop( "Zam" ), gettext_noop( "Ranloo" ), gettext_noop( "Charity" ), gettext_noop( "Rialdo" ),
+            gettext_noop( "Roxana" ), gettext_noop( "Sandro" ), gettext_noop( "Celia" ),
             // campains
-            _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
+            gettext_noop( "Roland" ), gettext_noop( "Lord Corlagon" ), gettext_noop( "Sister Eliza" ), gettext_noop( "Archibald" ), gettext_noop( "Lord Halton" ),
+            gettext_noop( "Brother Brax" ),
             // loyalty version
-            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
-            _( "Martine" ), _( "Jarkonas" ),
+            gettext_noop( "Solmyr" ), gettext_noop( "Dainwin" ), gettext_noop( "Mog" ), gettext_noop( "Uncle Ivan" ), gettext_noop( "Joseph" ),
+            gettext_noop( "Gallavant" ), _( "Elderian" ), gettext_noop( "Ceallach" ), gettext_noop( "Drakonia" ), gettext_noop( "Martine" ), gettext_noop( "Jarkonas" ),
             // debug
             "Debug Hero", "Unknown" };
 
-    return names[id];
+    return _( names[heroid] );
 }
 
 Heroes::Heroes()
@@ -652,6 +663,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         return false;
     }
 
+    ResetModes( RECRUIT );
     ResetModes( JAIL );
 
     SetColor( col );
@@ -906,6 +918,11 @@ void Heroes::unmarkHeroMeeting()
 bool Heroes::hasMetWithHero( int heroID ) const
 {
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
+bool Heroes::isLosingGame() const
+{
+    return GetKingdom().isLosingGame();
 }
 
 int Heroes::GetSpriteIndex( void ) const
@@ -1306,7 +1323,6 @@ void Heroes::setDirection( int directionToSet )
         direction = directionToSet;
 }
 
-/* return route range in days */
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
@@ -1315,12 +1331,6 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
     if ( total > 0 ) {
-        // check if last step is diagonal and pre-adjust the total
-        const Route::Step lastStep = world.getPath( *this, dst ).back();
-        if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
-            total -= lastStep.GetPenalty() / 3;
-        }
-
         if ( move_point >= total )
             return 1;
 
@@ -1449,34 +1459,40 @@ bool Heroes::isFreeman( void ) const
 void Heroes::SetFreeman( int reason )
 {
     if ( !isFreeman() ) {
-        bool savepoints = false;
+        // if not surrendering, reset army
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
+            army.Reset( true );
+        }
+
+        const int heroColor = GetColor();
         Kingdom & kingdom = GetKingdom();
+
+        if ( heroColor != Color::NONE ) {
+            kingdom.RemoveHeroes( this );
+        }
+        SetColor( Color::NONE );
+
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+        SetIndex( -1 );
+
+        modes = 0;
+        move_point_scale = -1;
+
+        path.Reset();
+
+        SetMove( false );
+
+        SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
             if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
-                savepoints = true;
+                SetModes( SAVE_MP_POINTS );
             }
 
-            kingdom.appendSurrenderedHero( *this );
+            if ( heroColor != Color::NONE ) {
+                kingdom.appendSurrenderedHero( *this );
+            }
         }
-
-        // if not surrendering, reset army
-        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
-            army.Reset( true );
-
-        if ( GetColor() != Color::NONE )
-            kingdom.RemoveHeroes( this );
-
-        SetColor( Color::NONE );
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
-        modes = 0;
-        SetIndex( -1 );
-        move_point_scale = -1;
-        path.Reset();
-        SetMove( false );
-        SetModes( ACTION );
-        if ( savepoints )
-            SetModes( SAVE_MP_POINTS );
     }
 }
 
@@ -1519,7 +1535,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
     if ( allowMonsterAttack ) {
         // scan for monsters around
-        const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
+        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex() );
 
         if ( !targets.empty() ) {
             SetMove( false );
@@ -1924,6 +1940,19 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
         return nullptr;
     }
 
+    // Try to avoid freeman heroes who are already available for recruitment in any kingdom
+    std::vector<int> freemanHeroesNotRecruits = freeman_heroes;
+
+    freemanHeroesNotRecruits.erase( std::remove_if( freemanHeroesNotRecruits.begin(), freemanHeroesNotRecruits.end(),
+                                                    [this]( const int heroID ) { return at( heroID )->Modes( Heroes::RECRUIT ); } ),
+                                    freemanHeroesNotRecruits.end() );
+
+    if ( !freemanHeroesNotRecruits.empty() ) {
+        return at( Rand::Get( freemanHeroesNotRecruits ) );
+    }
+
+    // There are no freeman heroes who are not yet available for recruitment, allow
+    // heroes to be available for recruitment in several kingdoms at the same time
     return at( Rand::Get( freeman_heroes ) );
 }
 
@@ -1954,7 +1983,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * skill would always be the same once the 1st one is selected.
      * */
 
-    size_t hash = world.GetMapSeed();
+    uint32_t hash = world.GetMapSeed();
     fheroes2::hashCombine( hash, hid );
     fheroes2::hashCombine( hash, _race );
     fheroes2::hashCombine( hash, attack );
@@ -1966,10 +1995,10 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
     }
 
     HeroSeedsForLevelUp seeds;
-    seeds.seedPrimarySkill = static_cast<uint32_t>( hash );
-    seeds.seedSecondaySkill1 = seeds.seedPrimarySkill + 1;
-    seeds.seedSecondaySkill2 = seeds.seedPrimarySkill + 2;
-    seeds.seedSecondaySkillRandomChoose = seeds.seedPrimarySkill + 3;
+    seeds.seedPrimarySkill = hash;
+    seeds.seedSecondaySkill1 = hash + 1;
+    seeds.seedSecondaySkill2 = hash + 2;
+    seeds.seedSecondaySkillRandomChoose = hash + 3;
     return seeds;
 }
 

@@ -85,8 +85,8 @@ namespace
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
-            if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
-                if ( newTile.type == REGION_NODE_OPEN && newTile.isWater == region._isWater ) {
+            if ( newTile.passable & GetDirectionBitmask( direction, true ) && newTile.isWater == region._isWater ) {
+                if ( newTile.type == REGION_NODE_OPEN ) {
                     newTile.type = region._id;
                     region._nodes.push_back( newTile );
                 }
@@ -165,6 +165,9 @@ void World::ComputeStaticAnalysis()
     const uint32_t castleRegionSize = 17;
     const uint32_t extraRegionSize = 18;
     const uint32_t emptyLineFrequency = 7;
+
+    // Reset the region information for all tiles
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdateRegion( REGION_NODE_BLOCKED ); } );
 
     // Step 1. Split map into terrain, water and ground points
     // Initialize the obstacles vector

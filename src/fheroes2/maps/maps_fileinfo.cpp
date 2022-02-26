@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +25,6 @@
 #include <locale>
 #endif
 #include <algorithm>
-#include <cassert>
 #include <cstring>
 #include <map>
 
@@ -373,15 +373,24 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
         int side2 = 0;
 
         const Colors availableColors( kingdom_colors );
+        if ( availableColors.empty() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid list of kingdom colors during map load " << filename );
+            return false;
+        }
 
-        assert( !availableColors.empty() );
-        wins1 += Color::GetIndex( availableColors.front() );
+        const int numPlayersSide1 = wins1;
+        if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename );
+            return false;
+        }
 
+        int playerIdx = 0;
         for ( const int color : availableColors ) {
-            if ( Color::GetIndex( color ) < wins1 )
+            if ( playerIdx < numPlayersSide1 )
                 side1 |= color;
             else
                 side2 |= color;
+            ++playerIdx;
         }
         FillUnions( side1, side2 );
     }
@@ -528,12 +537,12 @@ int Maps::FileInfo::AllowHumanColors( void ) const
 
 int Maps::FileInfo::HumanOnlyColors( void ) const
 {
-    return allow_human_colors & ~( allow_comp_colors );
+    return allow_human_colors & ~allow_comp_colors;
 }
 
 int Maps::FileInfo::ComputerOnlyColors( void ) const
 {
-    return allow_comp_colors & ~( allow_human_colors );
+    return allow_comp_colors & ~allow_human_colors;
 }
 
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
