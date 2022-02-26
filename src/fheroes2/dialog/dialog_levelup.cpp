@@ -33,6 +33,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 void DialogPrimaryOnly( const std::string & name, const std::string & primary )
 {
@@ -70,7 +71,8 @@ int DialogOneSecondary( const std::string & name, const std::string & primary, c
     Text text_level( Skill::Level::String( sec.Level() ), Font::SMALL );
     text_level.Blit( 3 + ( sprite_skill.width() - text_level.w() ) / 2, sprite_skill.height() - 12, drawSurface );
 
-    Dialog::SpriteInfo( "", message, drawSurface );
+    const fheroes2::CustomImageDialogElement imageUI( std::move( drawSurface ) );
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 
     return sec.Skill();
 }
@@ -192,18 +194,18 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
-            fheroes2::SecondarySkillDialogElement( hero, sec1 ).showPopup( Dialog::OK );
+            fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::OK );
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
-            fheroes2::SecondarySkillDialogElement( hero, sec2 ).showPopup( Dialog::OK );
+            fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::OK );
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
-            fheroes2::SecondarySkillDialogElement( hero, sec1 ).showPopup( Dialog::ZERO );
+            fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::ZERO );
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
-            fheroes2::SecondarySkillDialogElement( hero, sec2 ).showPopup( Dialog::ZERO );
+            fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
             display.render();
         }
         else if ( le.MousePressRight( button_hero.area() ) ) {

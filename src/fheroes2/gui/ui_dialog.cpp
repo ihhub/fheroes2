@@ -30,6 +30,7 @@
 #include "morale.h"
 #include "resource.h"
 #include "screen.h"
+#include "spell_info.h"
 #include "tools.h"
 #include "ui_button.h"
 #include "ui_text.h"
@@ -182,6 +183,33 @@ namespace fheroes2
         return result;
     }
 
+    CustomImageDialogElement::CustomImageDialogElement( const Image & image )
+        : _image( image )
+    {
+        _area = { _image.width(), _image.height() };
+    }
+
+    CustomImageDialogElement::CustomImageDialogElement( Image && image )
+        : _image( std::move( image ) )
+    {
+        _area = { _image.width(), _image.height() };
+    }
+
+    void CustomImageDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        Blit( _image, 0, 0, output, offset.x, offset.y, _image.width(), _image.height() );
+    }
+
+    void CustomImageDialogElement::processEvents( const Point & /* offset */ ) const
+    {
+        // No events proceed here.
+    }
+
+    void CustomImageDialogElement::showPopup( const int /* buttons */ ) const
+    {
+        assert( 0 );
+    }
+
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
@@ -297,8 +325,9 @@ namespace fheroes2
         return showMessage( header, body, buttons, uiElements );
     }
 
-    SpellDialogElement::SpellDialogElement( const Spell & spell )
+    SpellDialogElement::SpellDialogElement( const Spell & spell, const HeroBase * hero )
         : _spell( spell )
+        , _hero( hero )
     {
         assert( spell.isValid() );
 
@@ -331,7 +360,7 @@ namespace fheroes2
     void SpellDialogElement::showPopup( const int buttons ) const
     {
         const Text header( _spell.GetName(), FontType::normalYellow() );
-        const Text description( _spell.GetDescription(), FontType::normalWhite() );
+        const Text description( getSpellDescription( _spell, _hero ), FontType::normalWhite() );
 
         showMessage( header, description, buttons, { this } );
     }
@@ -511,7 +540,7 @@ namespace fheroes2
         showMessage( header, description, buttons, { &elementUI } );
     }
 
-    SecondarySkillDialogElement::SecondarySkillDialogElement( const Heroes & hero, const Skill::Secondary & skill )
+    SecondarySkillDialogElement::SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero )
         : _skill( skill )
         , _hero( hero )
     {

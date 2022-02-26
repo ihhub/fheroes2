@@ -35,6 +35,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -128,7 +129,7 @@ bool RowSpells::QueueEventProcessing( void )
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            Dialog::SpellInfo( spell, nullptr, !le.MousePressRight() );
+            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
             fheroes2::Display::instance().render();
         }
     }

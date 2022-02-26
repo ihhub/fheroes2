@@ -1179,7 +1179,7 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
             AGG::PlaySound( M82::TREASURE );
             hero.AppendSpellToBook( spell.GetID() );
 
-            const fheroes2::SpellDialogElement spellUI( spell );
+            const fheroes2::SpellDialogElement spellUI( spell, &hero );
             fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &spellUI } );
         }
@@ -1221,7 +1221,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
 
-            const fheroes2::SecondarySkillDialogElement secondarySkillUI( hero, skill );
+            const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( title, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &secondarySkillUI } );
         }
@@ -1320,7 +1320,7 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
                 }
 
                 if ( valid ) {
-                    const fheroes2::SpellDialogElement spellUI( spell );
+                    const fheroes2::SpellDialogElement spellUI( spell, &hero );
                     fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
                                            Dialog::OK, { &spellUI } );
 
@@ -2612,7 +2612,9 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             AGG::PlayMusic( MUS::HILLFORT, false );
         }
 
-        Dialog::SpriteInfo( title, msg1, surface );
+        const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg1, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &imageUI } );
     }
     else {
         Dialog::Message( title, msg2, Font::BIG, Dialog::OK );
@@ -2742,10 +2744,12 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
 
         // free
         if ( conditions ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
             msg = _(
                 "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
-            Dialog::SpriteInfo( title, msg, sprite );
+
+            const fheroes2::CustomImageDialogElement imageUI( fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ) );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &imageUI } );
         }
         else {
             const ResourceCount & rc = tile.QuantityResourceCount();
@@ -2758,7 +2762,12 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
                 msg.append( _( "(Just bury it around my roots.)" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
-                conditions = Dialog::YES == Dialog::SpriteInfo( title, msg, fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ), Dialog::YES | Dialog::NO );
+
+                const fheroes2::CustomImageDialogElement imageUI( fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ) );
+                const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
+                const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
+
+                conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &imageUI } ) == Dialog::YES );
             }
             else {
                 msg = _( "Tears brim in the eyes of the tree." );

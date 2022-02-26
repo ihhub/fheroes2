@@ -65,6 +65,30 @@ namespace fheroes2
         Size _area;
     };
 
+    // IMPORTANT!
+    // It is essential to store members by values rather than by references.
+    // This leads to more memory consumption but at the same time prevents any memory related issues.
+
+    class CustomImageDialogElement : public DialogElement
+    {
+    public:
+        explicit CustomImageDialogElement( const Image & image );
+
+        CustomImageDialogElement( Image && image );
+
+        ~CustomImageDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a custom image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Image _image;
+    };
+
     class ArtifactDialogElement : public DialogElement
     {
     public:
@@ -108,7 +132,7 @@ namespace fheroes2
     class SpellDialogElement : public DialogElement
     {
     public:
-        explicit SpellDialogElement( const Spell & spell );
+        explicit SpellDialogElement( const Spell & spell, const HeroBase * hero );
 
         ~SpellDialogElement() override = default;
 
@@ -120,6 +144,7 @@ namespace fheroes2
 
     private:
         const Spell _spell;
+        const HeroBase * _hero;
     };
 
     class LuckDialogElement : public DialogElement
@@ -194,7 +219,7 @@ namespace fheroes2
     class SecondarySkillDialogElement : public DialogElement
     {
     public:
-        explicit SecondarySkillDialogElement( const Heroes & hero, const Skill::Secondary & skill );
+        explicit SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero );
 
         ~SecondarySkillDialogElement() override = default;
 

@@ -232,7 +232,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
 bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        fheroes2::SecondarySkillDialogElement( _hero, skill ).showPopup( Dialog::OK );
+        fheroes2::SecondarySkillDialogElement( skill, _hero ).showPopup( Dialog::OK );
         return true;
     }
     else if ( can_change ) {
@@ -254,7 +254,7 @@ bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
             skill.Reset();
         }
         else {
-            fheroes2::SecondarySkillDialogElement( _hero, skill ).showPopup( Dialog::ZERO );
+            fheroes2::SecondarySkillDialogElement( skill, _hero ).showPopup( Dialog::ZERO );
         }
         return true;
     }

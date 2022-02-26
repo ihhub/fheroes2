@@ -120,7 +120,8 @@ void Game::DialogPlayers( int color, std::string str )
         break;
     }
 
-    Dialog::SpriteInfo( "", str, sign );
+    const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
