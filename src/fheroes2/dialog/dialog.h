@@ -38,12 +38,8 @@
 
 class Castle;
 class Kingdom;
-class HeroBase;
 class Heroes;
-class Artifact;
-class Spell;
 class Monster;
-class Funds;
 class Troop;
 struct CapturedObject;
 
