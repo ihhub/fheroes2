@@ -20,7 +20,6 @@
 
 #include "ui_dialog.h"
 #include "agg_image.h"
-#include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
@@ -31,8 +30,6 @@
 #include "morale.h"
 #include "resource.h"
 #include "screen.h"
-#include "skill.h"
-#include "spell.h"
 #include "tools.h"
 #include "ui_button.h"
 #include "ui_text.h"

@@ -2860,8 +2860,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
                 const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                       Dialog::OK, { &experienceUI, &goldUI } );
+                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI, &goldUI } );
 
                 hero.IncreaseExperience( exp );
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
