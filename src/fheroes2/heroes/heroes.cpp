@@ -1151,7 +1151,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
             const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
             fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::OK, { &artifactUI } );
+                                   Dialog::OK, { &artifactUI } );
         }
         return false;
     }
@@ -1162,7 +1162,8 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
         const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
         if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO, { &artifactUI } ) == Dialog::NO ) {
+                                    Dialog::YES | Dialog::NO, { &artifactUI } )
+             == Dialog::NO ) {
             return false;
         }
     }
