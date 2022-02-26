@@ -1670,7 +1670,8 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
 
         fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
                                fheroes2::Text( _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, "
-                                                  "\"I would give you an artifact as a reward, but you're all full.\"" ), fheroes2::FontType::normalWhite() ),
+                                                  "\"I would give you an artifact as a reward, but you're all full.\"" ),
+                                               fheroes2::FontType::normalWhite() ),
                                Dialog::OK, { &goldUI } );
 
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -1911,8 +1912,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
                 const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                       Dialog::OK, { &goldUI } );
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &goldUI } );
             }
         }
         else {
@@ -2830,7 +2831,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                     const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                     fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                                           Dialog::OK, { &goldUI } );
+                                           Dialog::OK, { &goldUI } );
 
                     hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
                 }
@@ -2845,8 +2846,8 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                 StringReplace( msg, "%{exp}", exp );
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
-                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                       Dialog::OK, { &experienceUI } );
+                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI } );
 
                 hero.IncreaseExperience( exp );
             }
