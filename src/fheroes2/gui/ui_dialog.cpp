@@ -202,7 +202,7 @@ namespace fheroes2
 
     void CustomImageDialogElement::processEvents( const Point & /* offset */ ) const
     {
-        // No events proceed here.
+        // No events processed here.
     }
 
     void CustomImageDialogElement::showPopup( const int /* buttons */ ) const
@@ -331,7 +331,7 @@ namespace fheroes2
     {
         assert( spell.isValid() );
 
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", FontType::smallWhite() );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + ']', FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
         _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
@@ -339,7 +339,7 @@ namespace fheroes2
 
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + "]", FontType::smallWhite() );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + ']', FontType::smallWhite() );
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
 
         const int32_t maxWidth = std::max( icn.width(), spellNameText.width() );
@@ -430,10 +430,9 @@ namespace fheroes2
     ExperienceDialogElement::ExperienceDialogElement( const int32_t experience )
         : _experience( experience )
     {
-        const Text experienceText( std::to_string( _experience ), FontType::smallWhite() );
-
         const Sprite & icn = AGG::GetICN( ICN::EXPMRL, 4 );
         if ( experience != 0 ) {
+            const Text experienceText( std::to_string( _experience ), FontType::smallWhite() );
             _area = { std::max( icn.width(), experienceText.width() ), icn.height() + textOffsetFromElement + experienceText.height() };
         }
         else {
