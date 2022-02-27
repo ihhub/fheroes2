@@ -32,6 +32,8 @@
 
 namespace
 {
+    const char contextSeparator = '|';
+
     // Character lookup table for custom tolower
     // Compatible with ASCII, custom French encoding, CP1250 and CP1251
     const std::array<unsigned char, 256> tolowerLUT
@@ -171,6 +173,25 @@ namespace
         return ~crc;
     }
 
+    std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
+    {
+        std::string res;
+        if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {
+            size_t pos = str.find( sep );
+            if ( pos != std::string::npos )
+                res = str.substr( pos + sep.size() );
+        }
+        return res;
+    }
+
+    const char * stripContext( const char * str )
+    {
+        const char * pos = str;
+        while ( *pos && *pos++ != contextSeparator )
+            ;
+        return *pos ? pos : str;
+    }
+
     struct mofile
     {
         uint32_t count;
@@ -202,7 +223,7 @@ namespace
         {
             std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
             if ( it == hash_offsets.end() )
-                return str;
+                return stripContext( str );
 
             buf.seek( ( *it ).second.offset );
             const u8 * ptr = buf.data();
@@ -215,17 +236,6 @@ namespace
             }
 
             return reinterpret_cast<const char *>( ptr );
-        }
-
-        std::string get_tag( const std::string & str, const std::string & tag, const std::string & sep ) const
-        {
-            std::string res;
-            if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {
-                size_t pos = str.find( sep );
-                if ( pos != std::string::npos )
-                    res = str.substr( pos + sep.size() );
-            }
-            return res;
         }
 
         bool open( const std::string & file )
@@ -279,10 +289,10 @@ namespace
 
                 for ( std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
                     if ( encoding.empty() )
-                        encoding = get_tag( *it, tag1, sep1 );
+                        encoding = getTag( *it, tag1, sep1 );
 
                     if ( plural_forms.empty() )
-                        plural_forms = get_tag( *it, tag2, sep2 );
+                        plural_forms = getTag( *it, tag2, sep2 );
                 }
             }
 
@@ -311,26 +321,10 @@ namespace
 
     mofile * current = nullptr;
     std::map<std::string, mofile> domains;
-    char context = 0;
 }
 
 namespace Translation
 {
-    void setStripContext( char strip )
-    {
-        context = strip;
-    }
-
-    const char * stripContext( const char * str )
-    {
-        if ( !context )
-            return str;
-        const char * pos = str;
-        while ( *pos && *pos++ != context )
-            ;
-        return *pos ? pos : str;
-    }
-
     bool bindDomain( const char * domain, const char * file )
     {
         std::string str( domain );
