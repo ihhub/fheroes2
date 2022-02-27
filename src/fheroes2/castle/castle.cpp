@@ -461,6 +461,32 @@ int Castle::getBuildingValue() const
     return value;
 }
 
+Troops Castle::getAvailableArmy( Funds potentialBudget ) const
+{
+    Troops reinforcement( army.getTroops() );
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t available = getMonstersInDwelling( dw );
+
+            uint32_t couldRecruit = potentialBudget.getLowestQuotient( monster.GetCost() );
+            if ( available < couldRecruit )
+                couldRecruit = available;
+
+            if ( couldRecruit > 0 ) {
+                potentialBudget -= ( monster.GetCost() * couldRecruit );
+                reinforcement.PushBack( monster, couldRecruit );
+            }
+        }
+    }
+    return reinforcement;
+}
+
+double Castle::getArmyRecruitmentValue() const
+{
+    return getAvailableArmy( GetKingdom().GetFunds() ).GetStrength();
+}
+
 double Castle::getVisitValue( const Heroes & hero ) const
 {
     double spellValue = 0;
@@ -495,23 +521,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
 
     const double upgradeStrength = futureArmy.GetStrength() - heroArmyStrength;
 
-    Troops reinforcement;
-    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t available = getMonstersInDwelling( dw );
-
-            uint32_t couldRecruit = potentialFunds.getLowestQuotient( monster.GetCost() );
-            if ( available < couldRecruit )
-                couldRecruit = available;
-
-            potentialFunds -= ( monster.GetCost() * couldRecruit );
-
-            reinforcement.PushBack( monster, couldRecruit );
-        }
-    }
-
-    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( reinforcement );
+    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( getAvailableArmy( potentialFunds ) );
 }
 
 void Castle::ActionNewDay( void )

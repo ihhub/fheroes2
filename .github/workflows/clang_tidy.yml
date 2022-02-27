@@ -12,8 +12,6 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Install dependencies and clang-tidy
       run: |
         sudo apt-get -y update
@@ -40,3 +38,4 @@ jobs:
       with:
         name: clang-tidy-result
         path: clang-tidy-result/
+        if-no-files-found: error

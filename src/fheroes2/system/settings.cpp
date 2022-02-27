@@ -482,8 +482,6 @@ bool Settings::setGameLanguage( const std::string & language )
 {
     fheroes2::updateAlphabet( language );
 
-    Translation::setStripContext( '|' );
-
     _gameLanguage = language;
 
     if ( _gameLanguage.empty() ) {
