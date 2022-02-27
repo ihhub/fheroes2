@@ -56,8 +56,6 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
@@ -84,11 +82,12 @@ jobs:
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
       with:
         artifacts: ${{ matrix.config.package_name }}
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.config.release_name }}
         tag: ${{ matrix.config.release_tag }}
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
   build-psv:
@@ -96,8 +95,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -114,7 +111,7 @@ jobs:
       run: |
         git clone https://github.com/vitasdk/vdpm
         cd vdpm
-        export PATH=$VITASDK/bin:$PATH
+        export PATH="$VITASDK/bin:$PATH"
         ./bootstrap-vitasdk.sh
         ./install-all.sh
         rm -rf ~/.vitasdk-cache
@@ -128,7 +125,7 @@ jobs:
         fi
     - name: Build
       run: |
-        export PATH=$VITASDK/bin:$PATH
+        export PATH="$VITASDK/bin:$PATH"
         make -f Makefile.vita -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
@@ -151,11 +148,12 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_psv_sdl2.zip
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: PS Vita build with SDL 2.0 support (latest commit)
         tag: fheroes2-psv-sdl2_dev
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
   build-switch:
@@ -164,15 +162,13 @@ jobs:
     container: devkitpro/devkita64:latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Install dependencies
       run: |
         sudo apt-get -y update
         sudo apt-get -y install gettext
     - name: Build
       run: |
-        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
         make -f Makefile.switch -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
@@ -189,10 +185,11 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_switch_sdl2.zip
-        body: ${{ github.event.commits[0].message }}
+        body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Nintendo Switch build with SDL 2.0 support (latest commit)
         tag: fheroes2-switch-sdl2_dev
         allowUpdates: true
+        artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true

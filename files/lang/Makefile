@@ -31,6 +31,12 @@ pl.mo: pl.po
 	LANG=pl.CP1250 LC_ALL=pl.CP1250 LC_CTYPE=pl.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
+# Czech version uses CP1250	
+cs.mo: cs.po
+	iconv -f utf-8 -t CP1250 $< > $<.tmp
+	LANG=cs.CP1250 LC_ALL=cs.CP1250 LC_CTYPE=cs.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)
 # Russian version from "Fargus" uses Russian keyboard layout as encoding (not supported)
 # Russian alphabet can be transliterated on Debian with `konwert UTF8-ascii/1 -o $<.tmp $<`
@@ -39,7 +45,7 @@ ru.mo: ru.po
 	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
-# German uses CP1252
+# German version uses CP1252
 de.mo: de.po
 	iconv -f utf-8 -t CP1252 $< > $<.tmp
 	LANG=de.CP1252 LC_ALL=de.CP1252 LC_CTYPE=de.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp

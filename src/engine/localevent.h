@@ -1,9 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
+ *   Copyright (C) 2006 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -185,7 +186,6 @@ public:
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
 
     static void SetStateDefaults( void );
-    static void SetState( u32 type, bool enable );
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
@@ -264,6 +264,8 @@ public:
 
 private:
     LocalEvent();
+
+    static void SetState( const uint32_t type, const bool enable );
 
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );

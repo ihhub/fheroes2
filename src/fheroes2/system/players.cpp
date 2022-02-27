@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,7 +58,7 @@ void PlayerFixMultiControl( Player * player )
         player->SetControl( CONTROL_AI );
 }
 
-void PlayerRemoveAlreadySelectedRaces( Player * player, std::vector<int> & availableRaces )
+void PlayerRemoveAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
 {
     const int raceToRemove = player->GetRace();
     availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
@@ -105,17 +106,19 @@ Player::Player( int col )
     , friends( col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
-{
-    name = GetDefaultName();
-}
+{}
 
 std::string Player::GetDefaultName() const
 {
     return Color::String( color );
 }
 
-const std::string & Player::GetName( void ) const
+std::string Player::GetName() const
 {
+    if ( name.empty() ) {
+        return GetDefaultName();
+    }
+
     return name;
 }
 
@@ -149,9 +152,14 @@ void Player::SetFriends( int f )
     friends = f;
 }
 
-void Player::SetName( const std::string & n )
+void Player::SetName( const std::string & newName )
 {
-    name = n;
+    if ( newName == GetDefaultName() ) {
+        name.clear();
+    }
+    else {
+        name = newName;
+    }
 }
 
 void Player::SetControl( int ctl )
@@ -369,6 +377,11 @@ int Players::GetActualColors( void ) const
     return res;
 }
 
+const std::vector<Player *> & Players::getVector() const
+{
+    return *this;
+}
+
 Player * Players::GetCurrent( void )
 {
     return Get( current_color );
@@ -415,7 +428,7 @@ void Players::SetStartGame( void )
     vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), [&races]( Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( const Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
     for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 

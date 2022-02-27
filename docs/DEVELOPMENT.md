@@ -25,7 +25,7 @@ Please follow the instructions below to be able to build the project from source
   * Linux: go to the directory `script/linux` and run the file `install_sdl_2_dev.sh` (default setup) or `install_sdl_1_dev.sh`.
 * If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) to the project root directory.
-* Alternatively, go to the directory `script/demo` and run the file `download_demo_version.bat`.
+* Alternatively, go to the directory `script/demo` and run the file `download_demo_version.sh`.
   This script will download a demo version of the original game, which is the minimum required for development.
 * Run the `make` command in the root directory of the project to build it with **SDL2** or `make FHEROES2_SDL1="ON"` to build it
   with **SDL1**.

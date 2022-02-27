@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +54,6 @@ namespace Mixer
     void Pause( const int channel = -1 );
     void Resume( const int channel = -1 );
     void Stop( const int channel = -1 );
-    void Reset();
 
     bool isPlaying( const int channel );
 }
@@ -67,8 +67,7 @@ namespace Music
 
     void SetFadeIn( const int f );
 
-    void Pause();
-    void Reset();
+    void Stop();
 
     bool isPlaying();
 

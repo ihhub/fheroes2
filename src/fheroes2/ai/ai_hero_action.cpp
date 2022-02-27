@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,8 +106,8 @@ namespace AI
     void AIToFlotSam( const Heroes & hero, s32 dst_index );
     void AIToObservationTower( Heroes & hero, s32 dst_index );
     void AIToMagellanMaps( Heroes & hero, s32 dst_index );
-    void AIToTeleports( Heroes & hero, s32 dst_index );
-    void AIToWhirlpools( Heroes & hero, s32 dst_index );
+    void AIToTeleports( Heroes & hero, const int32_t startIndex );
+    void AIToWhirlpools( Heroes & hero, const int32_t startIndex );
     void AIToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToExperienceObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToWitchsHut( Heroes & hero, s32 dst_index );
@@ -137,7 +138,7 @@ namespace AI
     void AIToBoat( Heroes & hero, s32 dst_index );
     void AIToCoast( Heroes & hero, s32 dst_index );
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
-    void AIWhirlpoolTroopLooseEffect( Heroes & hero );
+    void AIWhirlpoolTroopLoseEffect( Heroes & hero );
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
@@ -234,7 +235,7 @@ namespace AI
         hero.SetFreeman( reason );
     }
 
-    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
+    void HeroesAction( Heroes & hero, s32 dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
@@ -304,7 +305,7 @@ namespace AI
             AIToAbandoneMine( hero, objectType, dst_index );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             AIToShipwreckSurvivor( hero, objectType, dst_index );
             break;
 
@@ -325,13 +326,12 @@ namespace AI
             AIToMagellanMaps( hero, dst_index );
             break;
 
-            // teleports
+        // teleports
         case MP2::OBJ_STONELITHS:
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
-            if ( isDestination )
-                AIToWhirlpools( hero, dst_index );
+            AIToWhirlpools( hero, dst_index );
             break;
 
         // primary skill modification
@@ -342,7 +342,7 @@ namespace AI
             AIToPrimarySkillObject( hero, objectType, dst_index );
             break;
 
-            // experience modification
+        // experience modification
         case MP2::OBJ_GAZEBO:
             AIToExperienceObject( hero, objectType, dst_index );
             break;
@@ -352,7 +352,7 @@ namespace AI
             AIToWitchsHut( hero, dst_index );
             break;
 
-            // shrine circle
+        // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
@@ -379,7 +379,7 @@ namespace AI
             AIToObelisk( hero, tile );
             break;
 
-            // magic point
+        // magic point
         case MP2::OBJ_ARTESIANSPRING:
             AIToArtesianSpring( hero, objectType, dst_index );
             break;
@@ -387,7 +387,7 @@ namespace AI
             AIToMagicWell( hero, dst_index );
             break;
 
-            // increase skill
+        // increase skill
         case MP2::OBJ_XANADU:
             AIToXanadu( hero, dst_index );
             break;
@@ -478,12 +478,12 @@ namespace AI
             AIToAlchemistTower( hero );
             break;
 
+        // AI has no advantage or knowledge to use these objects
         case MP2::OBJ_ORACLE:
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_SIRENS:
-            // AI has no advantage or knowledge to use this object.
             break;
         default:
             assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
@@ -573,7 +573,6 @@ namespace AI
             }
 
             Army & army = castle->GetActualArmy();
-            // bool allow_enter = false;
 
             if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
@@ -604,7 +603,6 @@ namespace AI
                     castle->Scoute();
 
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    // allow_enter = true;
                 }
                 else
                     // wins defender
@@ -619,7 +617,6 @@ namespace AI
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
                 castle->Scoute();
-                // allow_enter = true;
             }
         }
     }
@@ -821,7 +818,7 @@ namespace AI
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
-            if ( tile.CaptureObjectIsProtection() ) {
+            if ( tile.isCaptureObjectProtected() ) {
                 const Troop & troop = tile.QuantityTroop();
                 Army army;
                 army.JoinTroop( troop );
@@ -894,58 +891,41 @@ namespace AI
 
     void AIToTeleports( Heroes & hero, const int32_t startIndex )
     {
-        MapsIndexes teleports = world.GetTeleportEndPoints( startIndex );
+        assert( hero.GetPath().empty() );
 
-        const Route::Path & path = hero.GetPath();
-        if ( !path.empty() ) {
-            // To avoid infinite loops we have to verify that the list of tile indexes contains at least one reachable tile.
-            // So we get the list of them and remove those which are unsuitable.
-            const int32_t endIndex = path.front().GetIndex();
-            const int32_t heroColor = hero.GetColor();
-
-            teleports.erase( std::remove_if( teleports.begin(), teleports.end(),
-                                             [endIndex, heroColor]( const int32_t index ) {
-                                                 if ( endIndex == index ) {
-                                                     return false;
-                                                 }
-                                                 const Maps::Tiles & tile = world.GetTiles( index );
-                                                 assert( tile.GetObject() != MP2::OBJ_HEROES );
-
-                                                 return !tile.isFog( heroColor );
-                                             } ),
-                             teleports.end() );
-        }
-
-        if ( teleports.empty() ) {
+        const int32_t indexTo = world.NextTeleport( startIndex );
+        if ( startIndex == indexTo ) {
             DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." );
             return;
         }
 
-        const int32_t indexTo = Rand::Get( teleports );
-        if ( startIndex == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has teleportation tile the same as starting position: " << startIndex );
-            return;
+        assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            hero.FadeOut();
         }
 
-        if ( MP2::OBJ_HEROES == world.GetTiles( indexTo ).GetObject() ) {
-            const Heroes * other_hero = world.GetTiles( indexTo ).GetHeroes();
+        hero.Move2Dest( indexTo );
+        hero.GetPath().Reset();
 
-            if ( other_hero ) {
-                AIToHeroes( hero, indexTo );
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
 
-                // lose battle
-                if ( hero.isFreeman() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero.String() + " hero dismissed, teleport action cancelled" );
-                    if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-                        hero.FadeOut();
-                    }
-                    return;
-                }
-                else if ( !other_hero->isFreeman() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN, other_hero->String() + " hero is blocking teleporter exit" );
-                    return;
-                }
-            }
+        hero.ActionNewPosition( false );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
+    }
+
+    void AIToWhirlpools( Heroes & hero, const int32_t startIndex )
+    {
+        assert( hero.GetPath().empty() );
+
+        const int32_t indexTo = world.NextWhirlpool( startIndex );
+        if ( startIndex == indexTo ) {
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool." );
+            return;
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -954,36 +934,14 @@ namespace AI
 
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
+
+        AIWhirlpoolTroopLoseEffect( hero );
+
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition( false );
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
-    }
-
-    void AIToWhirlpools( Heroes & hero, s32 index_from )
-    {
-        const int32_t index_to = world.NextWhirlpool( index_from );
-
-        if ( index_from == index_to ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "action unsuccessfully..." );
-            return;
-        }
-
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            hero.FadeOut();
-        }
-        hero.Move2Dest( index_to );
-
-        AIWhirlpoolTroopLooseEffect( hero );
-
-        hero.GetPath().Reset();
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
-        }
         hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
@@ -1724,24 +1682,31 @@ namespace AI
         }
     }
 
-    void AIWhirlpoolTroopLooseEffect( Heroes & hero )
+    void AIWhirlpoolTroopLoseEffect( Heroes & hero )
     {
-        Troop * troop = hero.GetArmy().GetWeakestTroop();
-        assert( troop );
-        if ( !troop )
+        Army & heroArmy = hero.GetArmy();
+
+        // Arrange the hero's army for the passage of the whirlpool first
+        heroArmy.ArrangeForWhirlpool();
+
+        Troop * weakestTroop = heroArmy.GetWeakestTroop();
+        assert( weakestTroop != nullptr );
+        if ( weakestTroop == nullptr ) {
             return;
+        }
 
         // Whirlpool effect affects heroes only with more than one creature in more than one slot
-        if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+        if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
             return;
         }
 
         if ( 1 == Rand::Get( 1, 3 ) ) {
-            if ( troop->GetCount() == 1 ) {
-                troop->Reset();
+            if ( weakestTroop->GetCount() == 1 ) {
+                weakestTroop->Reset();
             }
             else {
-                troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+                weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints()
+                                                                                                   - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
             }
         }
     }
@@ -1758,8 +1723,8 @@ namespace AI
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
 
-            if ( prisoner && prisoner->Recruit( hero.GetColor(), Maps::GetPoint( tileIndex ) ) ) {
-                prisoner->ResetModes( Heroes::JAIL );
+            if ( prisoner ) {
+                prisoner->Recruit( hero.GetColor(), Maps::GetPoint( tileIndex ) );
             }
         }
     }

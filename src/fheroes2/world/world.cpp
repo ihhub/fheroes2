@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +24,8 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <set>
+#include <tuple>
 
 #include "ai.h"
 #include "artifact.h"
@@ -337,8 +340,6 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
-    week_next = Week::RandomWeek( *this, false, _weekSeed );
-
     // initialize all heroes
     vec_heroes.Init();
 
@@ -378,9 +379,6 @@ void World::Reset( void )
     day = 0;
     week = 0;
     month = 0;
-
-    week_current = Week( WeekName::TORTOISE );
-    week_next = Week::RandomWeek( *this, false, _weekSeed );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -534,14 +532,9 @@ const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
     return vec_heroes.Get( center );
 }
 
-Heroes * World::GetFreemanHeroes( int race ) const
+Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.GetFreeman( race );
-}
-
-Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
-{
-    return vec_heroes.GetFreemanSpecial( heroID );
+    return vec_heroes.GetFreeman( race, heroIDToIgnore );
 }
 
 Heroes * World::FromJailHeroes( s32 index )
@@ -594,46 +587,37 @@ bool World::LastDay( void ) const
     return ( 0 == ( day % DAYOFWEEK ) );
 }
 
-bool World::LastWeek( void ) const
+bool World::FirstWeek() const
+{
+    return ( 1 == ( week % WEEKOFMONTH ) );
+}
+
+bool World::LastWeek() const
 {
     return ( 0 == ( week % WEEKOFMONTH ) );
 }
 
-const Week & World::GetWeekType( void ) const
+const Week & World::GetWeekType() const
 {
-    return week_current;
+    static auto cachedWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+    static Week cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
+
+    const auto currentWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+
+    if ( cachedWeekDependencies != currentWeekDependencies ) {
+        cachedWeekDependencies = currentWeekDependencies;
+        cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
+    }
+
+    return cachedWeek;
 }
 
-void World::pickRumor()
-{
-    if ( vec_rumors.empty() ) {
-        _rumor = nullptr;
-        assert( 0 );
-        return;
-    }
-
-    if ( vec_rumors.size() == 1 ) {
-        _rumor = &vec_rumors.front();
-        assert( 0 );
-        return;
-    }
-
-    const std::string * current = _rumor;
-    while ( current == _rumor ) {
-        // vec_rumors always contain values
-        _rumor = &Rand::Get( vec_rumors );
-    }
-}
-
-/* new day */
 void World::NewDay( void )
 {
     ++day;
 
     if ( BeginWeek() ) {
         ++week;
-
-        pickRumor();
 
         if ( BeginMonth() ) {
             ++month;
@@ -671,21 +655,10 @@ void World::NewDay( void )
 
 void World::NewWeek( void )
 {
-    // update week seed: it depends on the current day and the state of the map
-    _weekSeed = _seed;
-    fheroes2::hashCombine( _weekSeed, day );
-    for ( const Maps::Tiles & tile : vec_tiles ) {
-        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
-    }
-
-    // update week type
-    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
-    week_current = week_next;
-
     // update objects
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
-            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+            if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
                 tile.QuantityUpdate( false );
             }
         }
@@ -697,12 +670,25 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
+
+    // Reset RECRUIT mode for all heroes at once
+    vec_heroes.ResetModes( Heroes::RECRUIT );
+
+    // Reset recruits in all kingdoms at once
+    std::set<Heroes *> remainingRecruits = vec_kingdoms.resetRecruits();
+
+    // Restore the RECRUIT mode for the remaining recruits
+    for ( Heroes * hero : remainingRecruits ) {
+        assert( hero != nullptr );
+
+        hero->SetModes( Heroes::RECRUIT );
+    }
 }
 
 void World::NewMonth( void )
 {
-    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
-        MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
+    if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
+        MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
 
@@ -786,13 +772,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
     Rand::Shuffle( tetriaryTargetTiles );
 
     // Calculate the number of monsters to be placed.
-    uint32_t monstersToBePlaced = 0;
-    if ( primaryTargetTiles.size() < static_cast<size_t>( height ) ) {
-        monstersToBePlaced = static_cast<uint32_t>( height );
+    uint32_t monstersToBePlaced = static_cast<uint32_t>( primaryTargetTiles.size() / 3 );
+    const uint32_t mapMinimum = static_cast<uint32_t>( vec_tiles.size() / 360 );
+
+    if ( monstersToBePlaced < mapMinimum ) {
+        monstersToBePlaced = mapMinimum;
     }
     else {
-        monstersToBePlaced
-            = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ), static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+        monstersToBePlaced = Rand::GetWithSeed( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, _seed );
     }
 
     // 85% of positions are for primary targets
@@ -826,34 +813,38 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-const std::string & World::GetRumors( void )
+const std::string & World::GetRumors() const
 {
-    if ( !_rumor ) {
-        pickRumor();
-    }
-    return *_rumor;
+    assert( !vec_rumors.empty() );
+
+    return Rand::GetWithSeed( vec_rumors, GetWeekSeed() );
 }
 
-MapsIndexes World::GetTeleportEndPoints( s32 center ) const
+MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
-    const Maps::Tiles & entrance = GetTiles( center );
-    if ( _allTeleporters.size() > 1 && entrance.GetObject( false ) == MP2::OBJ_STONELITHS ) {
-        for ( MapsIndexes::const_iterator it = _allTeleporters.begin(); it != _allTeleporters.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.GetObject() != MP2::OBJ_HEROES
-                 && tile.isWater() == entrance.isWater() ) {
-                result.push_back( *it );
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
+
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+        return result;
+    }
+
+    // The type of destination stone liths must match the type of the source stone liths.
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
+        const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
+
+        if ( teleportIndex == index || teleportTile.GetHeroes() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+            continue;
         }
+
+        result.push_back( teleportIndex );
     }
 
     return result;
 }
 
-/* return random teleport destination */
-s32 World::NextTeleport( s32 index ) const
+int32_t World::NextTeleport( const int32_t index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
@@ -864,55 +855,40 @@ s32 World::NextTeleport( s32 index ) const
     return Rand::Get( teleports );
 }
 
-MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
+MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 {
-    if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        std::map<s32, MapsIndexes> uniq_whirlpools;
+    MapsIndexes result;
 
-        for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( tile.GetHeroes() != nullptr ) {
-                continue;
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
 
-            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
-        }
-
-        if ( 2 > uniq_whirlpools.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is empty" );
-            return MapsIndexes();
-        }
-
-        const uint32_t currentUID = GetTiles( center ).GetObjectUID();
-        MapsIndexes uniqs;
-        uniqs.reserve( uniq_whirlpools.size() );
-
-        for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-            const u32 uniq = ( *it ).first;
-            if ( uniq == currentUID )
-                continue;
-            uniqs.push_back( uniq );
-        }
-
-        return uniq_whirlpools[Rand::Get( uniqs )];
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_WHIRLPOOL ) {
+        return result;
     }
 
-    return MapsIndexes();
+    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
+        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHeroes() != nullptr ) {
+            continue;
+        }
+
+        result.push_back( whirlpoolIndex );
+    }
+
+    return result;
 }
 
-/* return random whirlpools destination */
-s32 World::NextWhirlpool( s32 index ) const
+int32_t World::NextWhirlpool( const int32_t index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
         return index;
     }
 
     return Rand::Get( whilrpools );
 }
-
-/* return message from sign */
 
 /* return count captured object */
 u32 World::CountCapturedObject( int obj, int col ) const
@@ -1091,15 +1067,6 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
 {
     if ( obj )
         map_objects.remove( obj->GetUID() );
-}
-
-void World::UpdateRecruits( Recruits & recruits ) const
-{
-    if ( vec_heroes.HaveTwoFreemans() )
-        while ( recruits.GetID1() == recruits.GetID2() )
-            recruits.SetHero2( GetFreemanHeroes() );
-    else
-        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const
@@ -1314,9 +1281,19 @@ void World::PostLoad( const bool setTilePassabilities )
         }
     }
 
-    // cache data that's accessed often
-    _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
-    _whirlpoolTiles = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
+    // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
+    _allTeleports.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+        _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
+
+    // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
+    _allWhirlpools.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true ) ) {
+        _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
 
     resetPathfinder();
     ComputeStaticAnalysis();
@@ -1325,6 +1302,15 @@ void World::PostLoad( const bool setTilePassabilities )
 uint32_t World::GetMapSeed() const
 {
     return _seed;
+}
+
+uint32_t World::GetWeekSeed() const
+{
+    uint32_t weekSeed = _seed;
+
+    fheroes2::hashCombine( weekSeed, week );
+
+    return weekSeed;
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1420,8 +1406,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t height = static_cast<uint16_t>( w.height );
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
-               << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1435,7 +1420,16 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_0912_RELEASE ) {
+        Week dummyWeek;
+
+        msg >> dummyWeek >> dummyWeek;
+    }
+
+    msg >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
@@ -1516,12 +1510,7 @@ StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_096_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_096_RELEASE ) {
-        msg >> obj.title;
-    }
+    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message >> obj.title;
 
     return msg;
 }

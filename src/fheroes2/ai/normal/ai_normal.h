@@ -85,13 +85,13 @@ namespace AI
 
     private:
         // to be exposed later once every BattlePlanner will be re-initialized at combat start
-        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        SpellSelection selectBestSpell( Battle::Arena & arena, bool retreating ) const;
-        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
-                                           bool retreating ) const;
+        SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
+        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
+                                           const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
@@ -135,6 +135,7 @@ namespace AI
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero ) override;
 
+        bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder() override;

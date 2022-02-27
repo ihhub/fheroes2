@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -193,9 +194,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
     else if ( le.MousePressRight( adventureRect ) )
         Dialog::Message( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Font::BIG );
     else if ( le.MousePressRight( fileRect ) )
-        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, alloving you to load menu, save etc." ), Font::BIG );
+        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ), Font::BIG );
     else if ( le.MousePressRight( systemRect ) )
-        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, alloving you to customize your game." ), Font::BIG );
+        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Font::BIG );
 
     return res;
 }

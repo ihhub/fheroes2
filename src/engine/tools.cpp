@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,8 +31,6 @@
 
 #include "logging.h"
 #include "tools.h"
-
-#include <SDL.h>
 
 /* trim left right space */
 std::string StringTrim( std::string str )
@@ -198,40 +197,50 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
+bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
 {
-    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "wb" );
+    std::fstream file;
+    file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
 
-    if ( rw && 1 == SDL_RWwrite( rw, &data[0], static_cast<int>( data.size() ), 1 ) )
-        SDL_RWclose( rw );
-    else {
-        ERROR_LOG( SDL_GetError() );
+    if ( !file ) {
+        ERROR_LOG( "Unable to open file for writing: " << path );
         return false;
     }
+
+    file.write( reinterpret_cast<const char *>( data.data() ), static_cast<std::streamsize>( data.size() ) );
 
     return true;
 }
 
-std::vector<u8> LoadFileToMem( const std::string & file )
+std::vector<u8> LoadFileToMem( const std::string & path )
 {
-    std::vector<u8> data;
-    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
-    if ( rw == nullptr ) {
-        ERROR_LOG( SDL_GetError() );
-        return data;
+    std::fstream file;
+    file.open( path, std::fstream::in | std::fstream::binary );
+    if ( !file ) {
+        return {};
     }
 
-    const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
-    if ( length < 0 )
-        ERROR_LOG( SDL_GetError() );
-
-    if ( length > 0 ) {
-        data.resize( length );
-        SDL_RWseek( rw, 0, RW_SEEK_SET );
-        SDL_RWread( rw, &data[0], static_cast<int>( data.size() ), 1 );
+    file.seekg( 0, std::fstream::end );
+    std::streamoff length = file.tellg();
+    if ( length < 1 ) {
+        return {};
     }
 
-    SDL_RWclose( rw );
+    std::vector<uint8_t> data( length );
+
+    size_t dataToRead = static_cast<size_t>( length );
+    size_t dataAlreadyRead = 0;
+
+    const size_t blockSize = 4 * 1024 * 1024; // read by 4 MB blocks
+
+    while ( dataToRead > 0 ) {
+        size_t readSize = dataToRead > blockSize ? blockSize : dataToRead;
+
+        file.read( reinterpret_cast<char *>( data.data() + dataAlreadyRead ), static_cast<std::streamsize>( readSize ) );
+
+        dataAlreadyRead += readSize;
+        dataToRead -= readSize;
+    }
 
     return data;
 }
@@ -281,7 +290,7 @@ namespace fheroes2
         int32_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
         Point pt( pt1 );
 
-        for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
+        for ( int32_t i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
             if ( dx > dy ) {
                 pt.x < pt2.x ? ++pt.x : --pt.x;
                 ns -= dy;

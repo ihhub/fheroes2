@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -100,7 +101,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
 void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToEyeMagi( const Heroes & hero, const MP2::MapObjectType objectType );
 void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 
 u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, u32 res, u32 buttons = Dialog::OK )
@@ -335,15 +336,18 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     }
 }
 
-static void WhirlpoolTroopLooseEffect( Heroes & hero )
+static void WhirlpoolTroopLoseEffect( Heroes & hero )
 {
-    Troop * troop = hero.GetArmy().GetWeakestTroop();
-    assert( troop );
-    if ( !troop )
+    const Army & heroArmy = hero.GetArmy();
+
+    Troop * weakestTroop = heroArmy.GetWeakestTroop();
+    assert( weakestTroop != nullptr );
+    if ( weakestTroop == nullptr ) {
         return;
+    }
 
     // Whirlpool effect affects heroes only with more than one creature in more than one slot
-    if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+    if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
         return;
     }
 
@@ -351,11 +355,12 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
         // TODO: Do we really have this dialog in-game in OG?
         Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
 
-        if ( troop->GetCount() == 1 ) {
-            troop->Reset();
+        if ( weakestTroop->GetCount() == 1 ) {
+            weakestTroop->Reset();
         }
         else {
-            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(),
+                                                                    weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
 
         Interface::Basic::Get().GetStatusWindow().SetRedraw();
@@ -369,7 +374,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const Game::MusicRestorer musicRestorer;
 
     if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex, isDestination );
+        return AI::HeroesAction( *this, tileIndex );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
@@ -459,7 +464,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToCoast( *this, tileIndex );
             break;
 
-            // resource object
+        // resource object
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
@@ -492,14 +497,14 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToFlotSam( *this, objectType, tileIndex );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             ActionToShipwreckSurvivor( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
             ActionToArtifact( *this, tileIndex );
             break;
 
-            // shrine circle
+        // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
@@ -563,7 +568,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDaemonCave( *this, objectType, tileIndex );
             break;
 
-            // teleports
+        // teleports
         case MP2::OBJ_STONELITHS:
             ActionToTeleports( *this, tileIndex );
             break;
@@ -592,7 +597,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToAbandoneMine( *this, objectType, tileIndex );
             break;
 
-            // accept army
+        // accept army
         case MP2::OBJ_WATCHTOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
@@ -606,7 +611,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDwellingJoinMonster( *this, objectType, tileIndex );
             break;
 
-            // recruit army
+        // recruit army
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREECITY:
         case MP2::OBJ_WAGONCAMP:
@@ -653,7 +658,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToSphinx( *this, objectType, tileIndex );
             break;
 
-            // loyalty version
+        // loyalty version
         case MP2::OBJ_WATERALTAR:
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
@@ -693,7 +698,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToTravellersTent( *this, objectType, tileIndex );
             break;
 
-            // object
+        // other object
         default:
             break;
         }
@@ -759,7 +764,7 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
-        StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
             destroy = true;
@@ -1070,8 +1075,19 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
     }
 
     if ( rc.isValid() ) {
+        // The Magic Garden has a special sound
+        if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
+            AGG::PlayMusic( MUS::TREEHOUSE, false );
+        }
+        // The Lean-To has a special sound
+        else if ( objectType == MP2::OBJ_LEANTO ) {
+            AGG::PlaySound( M82::EXPERNCE );
+        }
+        else {
+            AGG::PlaySound( M82::TREASURE );
+        }
+
         const Funds funds( rc );
-        AGG::PlaySound( M82::TREASURE );
         Dialog::ResourceInfo( caption, msg, funds );
         hero.GetKingdom().AddFundsResource( funds );
 
@@ -1100,11 +1116,10 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
 
     // artifact
     if ( tile.QuantityIsValid() ) {
-        Game::PlayPickupSound();
-
         if ( hero.IsFullBagArtifacts() ) {
             u32 gold = GoldInsteadArtifact( objectType );
             const Funds funds( Resource::GOLD, gold );
+            AGG::PlaySound( M82::EXPERNCE );
             Dialog::ResourceInfo( title, _( "Treasure" ), funds, Dialog::OK );
             hero.GetKingdom().AddFundsResource( funds );
         }
@@ -1274,8 +1289,6 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
 void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     const Skill::Secondary & skill = world.GetTiles( dst_index ).QuantitySkill();
-
-    AGG::PlayMusic( MUS::SKILL, false );
 
     // If this assertion blows up the object is not set properly.
     assert( skill.isValid() );
@@ -1991,19 +2004,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         return;
     }
 
-    const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
-    if ( other_hero ) {
-        ActionToHeroes( hero, index_to );
-
-        // lose battle
-        if ( hero.isFreeman() ) {
-            return;
-        }
-        else if ( !other_hero->isFreeman() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is busy..." );
-            return;
-        }
-    }
+    assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2052,7 +2053,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeIn();
 
-    WhirlpoolTroopLooseEffect( hero );
+    WhirlpoolTroopLoseEffect( hero );
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
@@ -2125,7 +2126,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( objectType );
-        body = _( "The lighthouse is now under your control, and all of your ships will now move further each turn." );
+        body = _( "The lighthouse is now under your control, and all of your ships will now move further each day." );
         break;
 
     default:
@@ -2140,7 +2141,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         bool capture = true;
 
         // check guardians
-        if ( tile.CaptureObjectIsProtection() ) {
+        if ( tile.isCaptureObjectProtected() ) {
             Army army( tile );
             const Monster & mons = tile.QuantityMonster();
 
@@ -2205,10 +2206,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
         StringReplace( message, "%{monster}", troop.GetMultiName() );
 
-        if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_WATCHTOWER )
-            AGG::PlayMusic( MUS::WATCHTOWER, false );
-        else
-            AGG::PlaySound( M82::EXPERNCE );
+        AGG::PlaySound( M82::EXPERNCE );
 
         if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
             if ( !hero.GetArmy().CanJoinTroop( troop ) )
@@ -2292,7 +2290,6 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
     default:
         return;
     }
-    AGG::PlayMusic( MUS::FromMapObject( objectType ), false );
 
     const Troop & troop = tile.QuantityTroop();
 
@@ -2385,10 +2382,6 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
-    if ( !Settings::Get().MusicMIDI() ) {
-        AGG::PlayMusic( MUS::WATCHTOWER, true );
-    }
-
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
@@ -2520,6 +2513,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
         break;
     }
+
     case MP2::OBJ_STABLES: {
         assert( !defaultMessage.empty() );
         msg1 = defaultMessage;
@@ -2614,6 +2608,12 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() + offsetY );
             offsetX += border.width() + 4;
         }
+
+        // The Hill Fort has a special sound
+        if ( objectType == MP2::OBJ_HILLFORT ) {
+            AGG::PlayMusic( MUS::HILLFORT, false );
+        }
+
         Dialog::SpriteInfo( title, msg1, surface );
     }
     else {
@@ -2778,7 +2778,7 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 {
     Dialog::Message(
         MP2::StringObject( objectType ),
-        _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
+        _( "Nestled among the trees sits a blind seer. After you explain the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
         Font::BIG, Dialog::OK );
 
     Dialog::ThievesGuild( true );
@@ -2790,8 +2790,6 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-
-    AGG::PlayMusic( MUS::DEMONCAVE, false );
 
     const std::string header = MP2::StringObject( objectType );
     if ( Dialog::YES
@@ -3044,8 +3042,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
         Heroes * prisoner = world.FromJailHeroes( dst_index );
 
         if ( prisoner ) {
-            if ( prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) ) )
-                prisoner->ResetModes( Heroes::JAIL );
+            prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
         }
     }
     else {
@@ -3119,7 +3116,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
             if ( riddle->AnswerCorrect( answer ) ) {
                 const Funds & res = riddle->resources;
                 const Artifact art = riddle->artifact;
-                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle so here's your reward. Now begone." );
+                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle so here's your reward. Now begone.\"" );
                 const u32 count = res.GetValidItemsCount();
 
                 if ( count ) {
@@ -3165,7 +3162,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
     assert( hero.GetIndex() != dst_index );

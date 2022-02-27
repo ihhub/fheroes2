@@ -24,6 +24,7 @@
 #include "color.h"
 #include "mp2.h"
 #include "pathfinding.h"
+#include "route.h"
 #include "skill.h"
 
 class IndexObject;
@@ -57,11 +58,11 @@ public:
     virtual void checkWorldSize();
 
 protected:
-    void processWorldMap( int pathStart );
-    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx );
+    void processWorldMap();
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
 
     // This method defines pathfinding rules. This has to be implemented by the derived class.
-    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx ) = 0;
+    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) = 0;
 
     // Calculates the movement penalty when moving from the src tile to the adjacent dst tile in the specified direction.
     // If the "last move" logic should be taken into account (when performing pathfinding for a real hero on the map),
@@ -87,10 +88,10 @@ public:
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
-    std::list<Route::Step> buildPath( int targetIndex ) const;
+    std::list<Route::Step> buildPath( const int targetIndex ) const;
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx ) override;
+    void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
 };
 
 class AIWorldPathfinder : public WorldPathfinder
@@ -102,22 +103,22 @@ public:
 
     void reset() override;
 
-    void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
+    void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill );
     int getFogDiscoveryTile( const Heroes & hero );
 
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
-    int getNeareastTileToMove( const Heroes & hero );
+    int getNearestTileToMove( const Heroes & hero );
 
     bool isHeroPossiblyBlockingWay( const Heroes & hero );
 
-    std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
+    std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
-    std::list<Route::Step> buildPath( int targetIndex, bool isPlanningMode = false ) const;
+    std::list<Route::Step> buildPath( const int targetIndex, const bool isPlanningMode = false ) const;
 
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
@@ -127,10 +128,10 @@ public:
         return _advantage;
     }
 
-    void setArmyStrengthMultplier( const double multiplier );
+    void setArmyStrengthMultiplier( const double multiplier );
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx ) override;
+    void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
 
     // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats.
     // If this logic should be taken into account (when performing pathfinding for a real hero on the map),

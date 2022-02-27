@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +32,7 @@
 #include "mp2.h"
 #include "resource.h"
 #include "skill.h"
+#include "world_regions.h"
 
 class Heroes;
 class Spell;
@@ -62,7 +64,8 @@ namespace Maps
 
         TilesAddon();
         TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
-        TilesAddon( const TilesAddon & ta );
+
+        TilesAddon( const TilesAddon & ) = default;
 
         ~TilesAddon() = default;
 
@@ -100,7 +103,7 @@ namespace Maps
     class Tiles
     {
     public:
-        Tiles();
+        Tiles() = default;
 
         void Init( s32, const MP2::mp2tile_t & );
 
@@ -135,7 +138,7 @@ namespace Maps
             return quantity3;
         }
 
-        int GetPassable() const;
+        uint16_t GetPassable() const;
         int GetGround() const;
         bool isWater() const;
 
@@ -252,7 +255,9 @@ namespace Maps
         void MonsterSetCount( u32 count );
         u32 MonsterCount( void ) const;
 
-        bool CaptureObjectIsProtection( void ) const;
+        // Checks whether the object to be captured is guarded by its own forces
+        // (castle has a hero or garrison, dwelling has creatures, etc)
+        bool isCaptureObjectProtected() const;
 
         /* object quantity operation */
         void QuantityUpdate( bool isFirstLoad = true );
@@ -315,7 +320,7 @@ namespace Maps
         TilesAddon * FindFlags( void );
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( const int col, const u32 index, const bool up );
+        void CorrectFlags32( const int col, const uint8_t index, const bool up );
         void RemoveJailSprite( void );
 
         void QuantitySetVariant( int );
@@ -354,7 +359,7 @@ namespace Maps
         uint32_t uniq = 0;
         uint8_t objectTileset = 0;
         uint8_t objectIndex = 255;
-        uint8_t mp2_object = 0;
+        MP2::MapObjectType mp2_object = MP2::OBJ_ZERO;
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t fog_colors = Color::ALL;
 
@@ -366,7 +371,7 @@ namespace Maps
         bool tileIsRoad = false;
 
         // This field does not persist in savegame.
-        uint32_t _region = 0;
+        uint32_t _region = REGION_NODE_BLOCKED;
 
         uint8_t _level = 0;
     };

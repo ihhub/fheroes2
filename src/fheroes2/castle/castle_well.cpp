@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -189,13 +190,13 @@ void Castle::OpenWell( void )
                     }
                 }
                 if ( isCreaturePresent ) {
-                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
+                    Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
                 }
                 else {
-                    Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
+                    Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
+            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Creatures" ), str, total, Dialog::YES | Dialog::NO ) ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }
@@ -213,6 +214,18 @@ void Castle::OpenWell( void )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER6 ) && ( le.MouseClickLeft( rectMonster6 ) || pressedHotkeyBuildingID == DWELLING_MONSTER6 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true, 0 ) );
+        else if ( ( building & DWELLING_MONSTER1 ) && le.MousePressRight( rectMonster1 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER1 ), dwelling[0] );
+        else if ( ( building & DWELLING_MONSTER2 ) && le.MousePressRight( rectMonster2 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER2 ), dwelling[1] );
+        else if ( ( building & DWELLING_MONSTER3 ) && le.MousePressRight( rectMonster3 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER3 ), dwelling[2] );
+        else if ( ( building & DWELLING_MONSTER4 ) && le.MousePressRight( rectMonster4 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER4 ), dwelling[3] );
+        else if ( ( building & DWELLING_MONSTER5 ) && le.MousePressRight( rectMonster5 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER5 ), dwelling[4] );
+        else if ( ( building & DWELLING_MONSTER6 ) && le.MousePressRight( rectMonster6 ) )
+            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER6 ), dwelling[5] );
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );

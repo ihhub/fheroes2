@@ -26,10 +26,10 @@ else
 CFLAGS := -O3 $(CFLAGS)
 endif
 
-CFLAGS := $(CFLAGS) -fsigned-char
+CFLAGS := $(CFLAGS) -fsigned-char -pthread
 CXXFLAGS := -std=c++11 $(CFLAGS)
-LDFLAGS := $(LDFLAGS)
-LIBS := -pthread -lz
+LDFLAGS := $(LDFLAGS) -pthread
+LIBS := -lz
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)

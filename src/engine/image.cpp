@@ -476,7 +476,7 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width * _height );
             std::fill( image(), image() + totalSize, value );
-            std::fill( transform(), transform() + totalSize, 0 );
+            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 0 ) );
         }
     }
 
@@ -504,8 +504,8 @@ namespace fheroes2
     {
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width * _height );
-            std::fill( image(), image() + totalSize, 0 );
-            std::fill( transform(), transform() + totalSize, 1 ); // skip all data
+            std::fill( image(), image() + totalSize, static_cast<uint8_t>( 0 ) );
+            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 1 ) ); // skip all data
         }
     }
 
@@ -1230,6 +1230,8 @@ namespace fheroes2
             return contour;
         }
 
+        assert( !contour.empty() );
+
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
         uint8_t * outTransformY = contour.transform();
@@ -1496,19 +1498,23 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    Image ExtractCommonPattern( const std::vector<Image> & input )
+    Image ExtractCommonPattern( const std::vector<const Image *> & input )
     {
         if ( input.empty() )
             return Image();
 
-        if ( input.size() == 1 )
-            return input.front();
+        assert( input.front() != nullptr );
 
-        if ( input[0].empty() )
+        if ( input.size() == 1 ) {
+            return *input.front();
+        }
+
+        if ( input[0]->empty() )
             return Image();
 
         for ( size_t i = 1; i < input.size(); ++i ) {
-            if ( input[i].width() != input[0].width() || input[i].height() != input[0].height() )
+            assert( input[i] != nullptr );
+            if ( input[i]->width() != input[0]->width() || input[i]->height() != input[0]->height() )
                 return Image();
         }
 
@@ -1516,11 +1522,11 @@ namespace fheroes2
         std::vector<const uint8_t *> transformIn( input.size() );
 
         for ( size_t i = 0; i < input.size(); ++i ) {
-            imageIn[i] = input[i].image();
-            transformIn[i] = input[i].transform();
+            imageIn[i] = input[i]->image();
+            transformIn[i] = input[i]->transform();
         }
 
-        Image out( input[0].width(), input[0].height() );
+        Image out( input[0]->width(), input[0]->height() );
         out.reset();
 
         uint8_t * imageOut = out.image();
@@ -1813,6 +1819,8 @@ namespace fheroes2
         // Shadow has (-x, +y) offset.
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
+
+        assert( !out.empty() );
 
         const int32_t widthOut = out.width();
 

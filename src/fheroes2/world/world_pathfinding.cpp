@@ -21,6 +21,7 @@
 #include <cassert>
 #include <cmath>
 #include <set>
+#include <tuple>
 
 #include "ground.h"
 #include "logging.h"
@@ -211,23 +212,23 @@ uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const 
     return movePoints - substractedMovePoints;
 }
 
-void WorldPathfinder::processWorldMap( int pathStart )
+void WorldPathfinder::processWorldMap()
 {
     // reset cache back to default value
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
+    _cache[_pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
-    nodesToExplore.push_back( pathStart );
+    nodesToExplore.push_back( _pathStart );
 
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-        processCurrentNode( nodesToExplore, pathStart, nodesToExplore[lastProcessedNode] );
+        processCurrentNode( nodesToExplore, nodesToExplore[lastProcessedNode] );
     }
 }
 
-void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
+void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
     const Directions & directions = Direction::All();
     const WorldNode & currentNode = _cache[currentNodeIdx];
@@ -235,7 +236,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
             const int newIndex = currentNodeIdx + _mapOffset[i];
-            if ( newIndex == pathStart )
+            if ( newIndex == _pathStart )
                 continue;
 
             const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
@@ -264,8 +265,9 @@ void PlayerWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
-        _currentColor = Color::NONE;
+
         _pathfindingSkill = Skill::Level::EXPERT;
+        _currentColor = Color::NONE;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
     }
@@ -273,66 +275,67 @@ void PlayerWorldPathfinder::reset()
 
 void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    const int startIndex = hero.GetIndex();
-    const int color = hero.GetColor();
-    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
-    const uint32_t remainingMovePoints = hero.GetMovePoints();
-    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
+    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints() );
 
-    if ( _pathStart != startIndex || _currentColor != color || _pathfindingSkill != skill || _remainingMovePoints != remainingMovePoints
-         || _maxMovePoints != maxMovePoints ) {
-        _pathStart = startIndex;
-        _currentColor = color;
-        _pathfindingSkill = skill;
-        _remainingMovePoints = remainingMovePoints;
-        _maxMovePoints = maxMovePoints;
+    if ( currentSettings != newSettings ) {
+        currentSettings = newSettings;
 
-        processWorldMap( startIndex );
+        processWorldMap();
     }
 }
 
-std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
+std::list<Route::Step> PlayerWorldPathfinder::buildPath( const int targetIndex ) const
 {
+    assert( _pathStart != -1 && targetIndex != -1 );
+
     std::list<Route::Step> path;
 
-    // trace the path from end point
+    // Destination is not reachable
+    if ( _cache[targetIndex]._cost == 0 ) {
+        return path;
+    }
+
+#ifndef NDEBUG
+    std::set<int> uniqPathIndexes;
+#endif
+
     int currentNode = targetIndex;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
+
+    while ( currentNode != _pathStart ) {
+        assert( currentNode != -1 );
+
         const WorldNode & node = _cache[currentNode];
-        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
+
+        assert( node._from != -1 );
+
+        const uint32_t cost = node._cost - _cache[node._from]._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
 
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
-        else {
-            currentNode = node._from;
-        }
-    }
+        // The path should not pass through the same tile more than once
+        assert( uniqPathIndexes.insert( node._from ).second );
 
-    // Check a corner case when a path is blocked by something else and the destination is not reachable anymore.
-    if ( currentNode == -1 && path.size() == 1 ) {
-        path.clear();
+        currentNode = node._from;
     }
 
     return path;
 }
 
 // Follows regular (for user's interface) passability rules
-void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
+void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    // if current tile contains a monster or a barrier, skip it
-    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER || _cache[currentNodeIdx]._objectID == MP2::OBJ_BARRIER ) {
+    const bool isFirstNode = currentNodeIdx == _pathStart;
+
+    if ( !isFirstNode && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
     }
 
-    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+    const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster
-    if ( currentNodeIdx != pathStart && !monsters.empty() ) {
+    if ( !isFirstNode && !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
@@ -352,8 +355,8 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
             }
         }
     }
-    else if ( currentNodeIdx == pathStart || !isTileBlocked( currentNodeIdx, world.GetTiles( pathStart ).isWater() ) ) {
-        checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx );
+    else {
+        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 }
 
@@ -363,54 +366,45 @@ void AIWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
-        _currentColor = Color::NONE;
-        _armyStrength = -1;
+
         _pathfindingSkill = Skill::Level::EXPERT;
+        _currentColor = Color::NONE;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
+
+        _armyStrength = -1;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    const int startIndex = hero.GetIndex();
-    const int color = hero.GetColor();
-    const double armyStrength = hero.GetArmy().GetStrength();
-    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
-    const uint32_t remainingMovePoints = hero.GetMovePoints();
-    const uint32_t maxMovePoints = hero.GetMaxMovePoints();
+    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength() );
 
-    if ( _pathStart != startIndex || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill
-         || _remainingMovePoints != remainingMovePoints || _maxMovePoints != maxMovePoints ) {
-        _pathStart = startIndex;
-        _currentColor = color;
-        _armyStrength = armyStrength;
-        _pathfindingSkill = skill;
-        _remainingMovePoints = remainingMovePoints;
-        _maxMovePoints = maxMovePoints;
+    if ( currentSettings != newSettings ) {
+        currentSettings = newSettings;
 
-        processWorldMap( startIndex );
+        processWorldMap();
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    if ( _pathStart != start || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill ) {
-        _pathStart = start;
-        _currentColor = color;
-        _armyStrength = armyStrength;
-        _pathfindingSkill = skill;
-        _remainingMovePoints = 0;
-        _maxMovePoints = 0;
+    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength );
 
-        processWorldMap( start );
+    if ( currentSettings != newSettings ) {
+        currentSettings = newSettings;
+
+        processWorldMap();
     }
 }
 
 // Overwrites base version in WorldPathfinder, using custom node passability rules
-void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx )
+void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
 {
-    const bool isFirstNode = currentNodeIdx == pathStart;
+    const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
@@ -425,7 +419,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
 
     bool isProtected = protectionCheck( currentNodeIdx );
     if ( !isProtected ) {
-        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+        const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
         for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
             if ( protectionCheck( *it ) ) {
                 isProtected = true;
@@ -435,34 +429,47 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 
     // if we can't move here, reset
-    if ( isProtected )
+    if ( isProtected ) {
         currentNode.resetNode();
+    }
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( isFirstNode || ( !isProtected && !isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
-        const MapsIndexes & teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
+        return;
+    }
 
-        // do not check adjacent if we're going through the teleport in the middle of the path
-        if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
-            checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx );
+    MapsIndexes teleports;
+
+    // we shouldn't use teleport at the starting tile
+    if ( !isFirstNode ) {
+        teleports = world.GetTeleportEndPoints( currentNodeIdx );
+
+        if ( teleports.empty() ) {
+            teleports = world.GetWhirlpoolEndPoints( currentNodeIdx );
+        }
+    }
+
+    // do not check adjacent if we're going through the teleport in the middle of the path
+    if ( teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
+        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
+    }
+
+    // special case: move through teleports
+    for ( const int teleportIdx : teleports ) {
+        if ( teleportIdx == _pathStart ) {
+            continue;
         }
 
-        // special case: move through teleporters
-        for ( const int teleportIdx : teleporters ) {
-            if ( teleportIdx == pathStart )
-                continue;
+        WorldNode & teleportNode = _cache[teleportIdx];
 
-            WorldNode & teleportNode = _cache[teleportIdx];
+        // check if move is actually faster through teleport
+        if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
+            teleportNode._from = currentNodeIdx;
+            teleportNode._cost = currentNode._cost;
+            teleportNode._objectID = world.GetTiles( teleportIdx ).GetObject();
+            teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
 
-            // check if move is actually faster through teleporter
-            if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
-                teleportNode._from = currentNodeIdx;
-                teleportNode._cost = currentNode._cost;
-                teleportNode._objectID = MP2::OBJ_STONELITHS;
-                teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
-
-                nodesToExplore.push_back( teleportIdx );
-            }
+            nodesToExplore.push_back( teleportIdx );
         }
     }
 }
@@ -501,16 +508,17 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
+
     const int start = hero.GetIndex();
+    const int scouteValue = hero.GetScoute();
 
     const Directions & directions = Direction::All();
     std::vector<bool> tilesVisited( world.getSize(), false );
     std::vector<int> nodesToExplore;
 
-    nodesToExplore.push_back( start );
     tilesVisited[start] = true;
 
-    const int scouteValue = hero.GetScoute();
+    nodesToExplore.push_back( start );
 
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
@@ -534,30 +542,61 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
         }
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
-            if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                const int newIndex = currentNodeIdx + _mapOffset[i];
-                if ( !tilesVisited[newIndex] ) {
-                    tilesVisited[newIndex] = true;
+            if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                continue;
+            }
 
-                    // Don't go onto action objects as they might be castles or dwellings with guards.
-                    if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
-                        continue;
-                    }
+            const int newIndex = currentNodeIdx + _mapOffset[i];
 
-                    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-                    if ( _cache[newIndex]._cost && monsters.empty() )
-                        nodesToExplore.push_back( newIndex );
+            if ( tilesVisited[newIndex] ) {
+                continue;
+            }
+
+            tilesVisited[newIndex] = true;
+
+            if ( !MP2::isSafeForFogDiscoveryObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+                continue;
+            }
+
+            // Tile is unreachable (maybe because it is guarded by too strong an army)
+            if ( _cache[newIndex]._cost == 0 ) {
+                continue;
+            }
+
+            nodesToExplore.push_back( newIndex );
+
+            // If there is a teleport on this tile, we should also consider the endpoints
+            MapsIndexes teleports = world.GetTeleportEndPoints( newIndex );
+
+            if ( teleports.empty() ) {
+                teleports = world.GetWhirlpoolEndPoints( newIndex );
+            }
+
+            for ( const int teleportIndex : teleports ) {
+                if ( tilesVisited[teleportIndex] ) {
+                    continue;
                 }
+
+                tilesVisited[teleportIndex] = true;
+
+                // Teleport endpoint is unreachable (maybe because it is guarded by too strong an army)
+                if ( _cache[teleportIndex]._cost == 0 ) {
+                    continue;
+                }
+
+                nodesToExplore.push_back( teleportIndex );
             }
         }
     }
+
     return -1;
 }
 
-int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
+int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
+
     const int start = hero.GetIndex();
 
     Directions directions = Direction::All();
@@ -565,22 +604,26 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
     Rand::Shuffle( directions );
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
-        if ( Maps::isValidDirection( start, directions[i] ) ) {
-            const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
-            if ( newIndex == start )
-                continue;
+        if ( !Maps::isValidDirection( start, directions[i] ) ) {
+            continue;
+        }
 
-            // Don't go onto action objects as they maybe castles or dwellings with battles.
-            if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
-                continue;
-            }
+        const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
+        if ( newIndex == start ) {
+            continue;
+        }
 
-            const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-            if ( _cache[newIndex]._cost && monsters.empty() ) {
-                return newIndex;
-            }
+        // Don't go onto action objects as they might be castles or dwellings with guards.
+        if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+            continue;
+        }
+
+        // Tile is reachable and the hero has enough army to defeat potential guards
+        if ( _cache[newIndex]._cost > 0 ) {
+            return newIndex;
         }
     }
+
     return -1;
 }
 
@@ -588,6 +631,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
+
     const int32_t start = hero.GetIndex();
 
     const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
@@ -606,12 +650,16 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
 
-std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )
+std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
 {
+    assert( _pathStart != -1 && _currentColor != Color::NONE && targetIndex != -1 );
+
     std::vector<IndexObject> result;
-    // validate that path can be created
-    if ( _pathStart == -1 || _currentColor == Color::NONE || targetIndex == -1 || _cache[targetIndex]._cost == 0 )
+
+    // Destination is not reachable
+    if ( _cache[targetIndex]._cost == 0 ) {
         return result;
+    }
 
     const Kingdom & kingdom = world.GetKingdom( _currentColor );
     const Directions & directions = Direction::All();
@@ -627,10 +675,18 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     // skip the target itself to make sure we don't double count
     uniqueIndicies.insert( targetIndex );
 
-    // trace the path from end point
+#ifndef NDEBUG
+    std::set<int> uniqPathIndexes;
+#endif
+
     int currentNode = targetIndex;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
+
+    while ( currentNode != _pathStart ) {
+        assert( currentNode != -1 );
+
         const WorldNode & node = _cache[currentNode];
+
+        assert( node._from != -1 );
 
         validateAndAdd( currentNode, node._objectID );
 
@@ -648,11 +704,8 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             }
         }
 
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
+        // The path should not pass through the same tile more than once
+        assert( uniqPathIndexes.insert( node._from ).second );
 
         currentNode = node._from;
     }
@@ -660,40 +713,50 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     return result;
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPlanningMode ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
 {
+    assert( _pathStart != -1 && targetIndex != -1 );
+
     std::list<Route::Step> path;
-    if ( _pathStart == -1 )
+
+    // Destination is not reachable
+    if ( _cache[targetIndex]._cost == 0 ) {
         return path;
+    }
 
     const bool fromWater = world.GetTiles( _pathStart ).isWater();
 
-    // trace the path from end point
+#ifndef NDEBUG
+    std::set<int> uniqPathIndexes;
+#endif
+
     int lastValidNode = targetIndex;
     int currentNode = targetIndex;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
+
+    while ( currentNode != _pathStart ) {
+        assert( currentNode != -1 );
+
         if ( isTileBlocked( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 
         const WorldNode & node = _cache[currentNode];
-        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
+
+        assert( node._from != -1 );
+
+        const uint32_t cost = node._cost - _cache[node._from]._cost;
 
         path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
 
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
-        else {
-            currentNode = node._from;
-        }
+        // The path should not pass through the same tile more than once
+        assert( uniqPathIndexes.insert( node._from ).second );
+
+        currentNode = node._from;
     }
 
-    // Cut the path to the last valid tile/obstacle if not in planning mode
+    // Cut the path to the last valid tile/obstacle if not in planning mode.
     if ( !isPlanningMode && lastValidNode != targetIndex ) {
-        path.erase( std::find_if( path.begin(), path.end(), [&lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
+        path.erase( std::find_if( path.begin(), path.end(), [lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
     }
 
     return path;
@@ -702,10 +765,11 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );
+
     return _cache[targetIndex]._cost;
 }
 
-void AIWorldPathfinder::setArmyStrengthMultplier( const double multiplier )
+void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
 {
     if ( multiplier > 0 && std::fabs( _advantage - multiplier ) > 0.001 ) {
         _advantage = multiplier;

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +24,9 @@
 #ifndef H2BATTLE_ARENA_H
 #define H2BATTLE_ARENA_H
 
+#include <cstdint>
 #include <list>
+#include <utility>
 
 #include "battle.h"
 #include "battle_board.h"
@@ -76,8 +79,8 @@ namespace Battle
         void Turns( void );
         bool BattleValid( void ) const;
 
-        bool CanBreakAutoBattle( void ) const;
-        void BreakAutoBattle( void );
+        bool AutoBattleInProgress() const;
+        bool CanToggleAutoBattle() const;
 
         u32 GetCurrentTurn( void ) const;
         Result & GetResult( void );
@@ -105,8 +108,6 @@ namespace Battle
         Unit * GetTroopUID( u32 );
         const Unit * GetTroopUID( u32 ) const;
 
-        const Unit * GetEnemyMaxQuality( int ) const;
-
         const SpellStorage & GetUsageSpells( void ) const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
@@ -124,14 +125,13 @@ namespace Battle
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & ) const;
 
-        // Returns the cell nearest to the end of the path to the cell with the given index (according to the ArenaPathfinder)
+        // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
         // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
         // with the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
         void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
@@ -201,6 +201,8 @@ namespace Battle
         void SetCastleTargetValue( int, u32 );
         void CatapultAction( void );
 
+        static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
+
         std::vector<int> GetCastleTargets( void ) const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
@@ -217,7 +219,12 @@ namespace Battle
         void ApplyActionCatapult( Command & );
         void ApplyActionAutoBattle( Command & );
 
-        void BattleProcess( Unit &, Unit & b2, s32 = -1, int = 0 );
+        // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
+        // built-in magic, if necessary. If the given index of the target cell of the attack (dst) is negative,
+        // then an attempt will be made to calculate it automatically based on the adjacency of the unit cells.
+        // If the given direction of the attack (dir) is negative, then an attempt will be made to calculate it
+        // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
+        void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
         Unit * CreateElemental( const Spell & );
         Unit * CreateMirrorImage( Unit &, s32 );
@@ -243,7 +250,7 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
-        ArenaPathfinder _pathfinder;
+        AIBattlePathfinder _globalAIPathfinder;
         int icn_covr;
 
         u32 current_turn;

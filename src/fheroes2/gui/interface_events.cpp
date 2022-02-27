@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -321,7 +322,7 @@ fheroes2::GameMode Interface::Basic::EventGameInfo()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
-        AGG::ResetMixer();
+        AGG::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
@@ -402,8 +403,10 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
 
-            // The action object (e.g. Stables or Well) can alter the status of the hero
-            iconsPanel.RedrawIcons( ICON_HEROES );
+            // The action object can alter the status of the hero (e.g. Stables or Well) or
+            // move it to another location (e.g. Stone Liths or Whirlpool)
+            ResetFocus( GameFocus::HEROES );
+            RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.
             if ( hero->isAction() ) {

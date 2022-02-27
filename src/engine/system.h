@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +24,8 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
+#include <ctime>
+
 #include "dir.h"
 
 namespace System
@@ -37,8 +40,6 @@ namespace System
     std::string GetDirname( const std::string & );
     std::string GetBasename( const std::string & );
 
-    std::string GetMessageLocale( int /* 3: en_us.utf-8, 2: en_us, 1: en */ );
-
     int GetCommandOptions( int argc, char * const argv[], const char * optstring );
     char * GetOptionsArgument( void );
 
@@ -51,6 +52,8 @@ namespace System
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
     std::string FileNameToUTF8( const std::string & str );
+
+    tm GetTM( const time_t time );
 }
 
 #endif

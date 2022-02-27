@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -174,9 +175,6 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
     case MP2::OBJ_ANCIENTLAMP:
         return MUS::ARABIAN;
 
-    case MP2::OBJ_HILLFORT:
-        return MUS::HILLFORT;
-
     case MP2::OBJ_TREEHOUSE:
     case MP2::OBJ_TREECITY:
     case MP2::OBJ_WAGONCAMP:
@@ -187,13 +185,13 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
 
     case MP2::OBJ_GAZEBO:
     case MP2::OBJ_TREEKNOWLEDGE:
-    case MP2::OBJ_WITCHSHUT:
         return MUS::EXPERIENCE;
 
     case MP2::OBJ_FORT:
     case MP2::OBJ_MERCENARYCAMP:
     case MP2::OBJ_DOCTORHUT:
     case MP2::OBJ_STANDINGSTONES:
+    case MP2::OBJ_WITCHSHUT:
         return MUS::SKILL;
 
     case MP2::OBJ_GRAVEYARD:
@@ -201,7 +199,7 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
     case MP2::OBJ_DERELICTSHIP:
     case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MAGELLANMAPS:
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_OBSERVATIONTOWER:
         return MUS::WATCHTOWER;
 
     case MP2::OBJ_XANADU:

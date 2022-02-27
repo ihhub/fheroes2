@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -174,8 +175,8 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 {
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
-    Mixer::Pause();
-    Music::Pause();
+    // Reset all sound and music before playing videos
+    AGG::ResetAudio();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
@@ -190,21 +191,17 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
-    // Reset all sound and music before playing videos
-    AGG::ResetMixer();
-
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
-    AGG::ResetMixer();
+    AGG::ResetAudio();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
     const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCampaignID( chosenCampaign );
-    campaignSaveData.setCurrentScenarioID( 0 );
+    campaignSaveData.setCurrentScenarioInfoId( { chosenCampaign, 0 } );
 
     AGG::PlayMusic( MUS::VICTORY, true, true );
 
@@ -216,8 +213,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     // TODO: Properly choose the campaign instead of this hackish way
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
-    campaignSaveData.setCurrentScenarioID( 0 );
+    campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
 
     std::array<std::unique_ptr<SMKVideoSequence>, 4> videos{ getVideo( "IVYPOL.SMK" ), getVideo( "IVYVOY.SMK" ), getVideo( "IVYWIZ.SMK" ), getVideo( "IVYDES.SMK" ) };
 
@@ -266,22 +262,22 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {
         if ( le.MouseClickLeft( activeCampaignArea[0] ) ) {
-            campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[1] ) ) {
-            campaignSaveData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::VOYAGE_HOME_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[2] ) ) {
-            campaignSaveData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::WIZARDS_ISLE_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[3] ) ) {
-            campaignSaveData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::DESCENDANTS_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
@@ -372,8 +368,11 @@ fheroes2::GameMode Game::NewNetwork()
 
 fheroes2::GameMode Game::NewGame()
 {
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
+
     Settings & conf = Settings::Get();
 
     // reset last save name

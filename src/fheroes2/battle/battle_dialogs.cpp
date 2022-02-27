@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -176,6 +177,7 @@ void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
     Text text( str, Font::SMALL );
     text.Blit( areas[0].x + ( sprite.width() - text.w() ) / 2, areas[0].y + sprite.height() + 3 );
 
+    RedrawOnOffSetting( areas[1], _( "Army Order" ), 3, conf.BattleShowArmyOrder() );
     RedrawOnOffSetting( areas[2], _( "Auto Spell Casting" ), 6, conf.BattleAutoSpellcast() );
     RedrawOnOffSetting( areas[3], _( "Grid" ), 8, conf.BattleShowGrid() );
     RedrawOnOffSetting( areas[4], _( "Shadow Movement" ), 10, conf.BattleShowMoveShadow() );
@@ -268,10 +270,14 @@ void Battle::DialogBattleSettings( void )
             Game::UpdateGameSpeed();
         }
 
-        // For future use
-        // else if ( le.MousePressRight( optionAreas[1] ) ) {
-        //     Dialog::Message( _( "Monster Info" ), _( "Toggle the monster info window, which shows information on the active and targeted monsters." ), Font::BIG );
-        // }
+        bool saveShowArmyOrder = false;
+        if ( le.MouseClickLeft( optionAreas[1] ) ) {
+            conf.setBattleShowArmyOrder( !conf.BattleShowArmyOrder() );
+            saveShowArmyOrder = true;
+        }
+        else if ( le.MousePressRight( optionAreas[1] ) ) {
+            Dialog::Message( _( "Army Order" ), _( "Toggle to display army order during the battle." ), Font::BIG );
+        }
 
         bool saveAutoSpellCast = false;
         if ( le.MouseClickLeft( optionAreas[2] ) ) {
@@ -319,7 +325,7 @@ void Battle::DialogBattleSettings( void )
             break;
         }
 
-        if ( saveSpeed || saveAutoSpellCast || saveShowGrid || saveShowMoveShadow || saveShowMouseShadow ) {
+        if ( saveSpeed || saveShowArmyOrder || saveAutoSpellCast || saveShowGrid || saveShowMoveShadow || saveShowMouseShadow ) {
             // redraw
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );

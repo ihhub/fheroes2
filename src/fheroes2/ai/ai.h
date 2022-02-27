@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,9 +60,10 @@ namespace AI
         EXPLORER
     };
 
-    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
-    const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
-    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
+    const double ARMY_ADVANTAGE_DESPERATE = 0.8;
+    const double ARMY_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_ADVANTAGE_MEDIUM = 1.5;
+    const double ARMY_ADVANTAGE_LARGE = 1.8;
 
     class Base
     {
@@ -117,7 +119,7 @@ namespace AI
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // functionality in ai_hero_action.cpp
-    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );
+    void HeroesAction( Heroes & hero, s32 dst_index );
     void HeroesMove( Heroes & hero );
 
     // functionality in ai_common.cpp

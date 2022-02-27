@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +57,7 @@ public:
     int w( size_t s, size_t c ) const;
     int h( int width ) const;
 
-    void blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() );
+    void blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
     static int charWidth( const uint8_t character, const int ft );
     static int fontHeight( const int ft );
 
@@ -188,7 +189,7 @@ int TextAscii::h( int width ) const
     return res;
 }
 
-void TextAscii::blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst )
+void TextAscii::blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
 {
     if ( _message.empty() )
         return;

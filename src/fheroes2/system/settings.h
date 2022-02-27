@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -96,7 +97,7 @@ public:
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         // UNUSED = 0x30008000,
 
-        BATTLE_SHOW_ARMY_ORDER = 0x40004000,
+        // UNUSED = 0x40004000,
         BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000
@@ -149,6 +150,7 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
+    bool BattleShowArmyOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
     bool MusicMIDI() const;
@@ -187,7 +189,6 @@ public:
     bool ExtCastleAllowGuardians() const;
     bool ExtCastleGuildRestorePointsTurn() const;
     bool ExtBattleShowDamage() const;
-    bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
     bool ExtBattleDeterministicResult() const;
     bool ExtBattleReverseWaitOrder() const;
@@ -221,6 +222,7 @@ public:
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
+    void setBattleShowArmyOrder( const bool enable );
     void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );

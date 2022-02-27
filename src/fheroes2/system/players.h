@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -119,7 +120,7 @@ public:
     void SetControl( int );
     void SetPlay( bool );
     void SetFriends( int );
-    void SetName( const std::string & );
+    void SetName( const std::string & newName );
 
     int GetControl( void ) const override;
 
@@ -139,7 +140,7 @@ public:
     }
 
     std::string GetDefaultName() const;
-    const std::string & GetName( void ) const;
+    std::string GetName() const;
 
     std::string GetPersonalityString() const;
 
@@ -181,6 +182,8 @@ public:
     int GetColors( int control = 0xFF, bool strong = false ) const;
     int GetActualColors( void ) const;
     std::string String( void ) const;
+
+    const std::vector<Player *> & getVector() const;
 
     Player * GetCurrent( void );
     const Player * GetCurrent( void ) const;

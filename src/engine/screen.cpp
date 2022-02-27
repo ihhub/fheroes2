@@ -126,10 +126,10 @@ namespace
         return indexes;
     }
 
-    const uint8_t * PALPalette()
+    const uint8_t * PALPalette( const bool forceDefaultPaletteUpdate = false )
     {
         static std::vector<uint8_t> palette;
-        if ( palette.empty() ) {
+        if ( palette.empty() || forceDefaultPaletteUpdate ) {
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
             palette.resize( 256 * 3 );
@@ -344,10 +344,14 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
+        RenderCursor( const RenderCursor & ) = delete;
+
         ~RenderCursor() override
         {
             clear();
         }
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
 
         void show( const bool enable ) override
         {
@@ -472,6 +476,12 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
+        RenderCursor() = default;
+
+        RenderCursor( const RenderCursor & ) = delete;
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
+
         static RenderCursor * create()
         {
             return new RenderCursor;
@@ -1297,7 +1307,7 @@ namespace fheroes2
         Image::resize( width_, height_ );
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
-        std::fill( transform(), transform() + width() * height(), 1 );
+        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
     bool Display::isDefaultSize() const
@@ -1408,12 +1418,12 @@ namespace fheroes2
         _prevRoi = {};
     }
 
-    void Display::changePalette( const uint8_t * palette ) const
+    void Display::changePalette( const uint8_t * palette, const bool forceDefaultPaletteUpdate ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() && !forceDefaultPaletteUpdate ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPalette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPalette( forceDefaultPaletteUpdate ) : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

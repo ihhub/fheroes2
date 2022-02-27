@@ -157,6 +157,9 @@ namespace fheroes2
         int movement;
         int wince;
         int rangeAttack;
+        int takeoff;
+        int landing;
+        int explosion;
     };
 
     struct MonsterData
