@@ -74,7 +74,7 @@ namespace fheroes2
     public:
         explicit CustomImageDialogElement( const Image & image );
 
-        CustomImageDialogElement( Image && image );
+        explicit CustomImageDialogElement( Image && image );
 
         ~CustomImageDialogElement() override = default;
 
