@@ -33,8 +33,6 @@ namespace Translation
     // Reset any translation to the default language - English.
     void reset();
 
-    void setStripContext( char strip );
-
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );
     const char * ngettext( const char * str, const char * plural, size_t num );

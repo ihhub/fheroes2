@@ -32,6 +32,8 @@
 
 namespace
 {
+    const char contextSeparator = '|';
+
     // Character lookup table for custom tolower
     // Compatible with ASCII, custom French encoding, CP1250 and CP1251
     const std::array<unsigned char, 256> tolowerLUT
@@ -182,7 +184,13 @@ namespace
         return res;
     }
 
-    const char * stripContext( const char * str );
+    const char * stripContext( const char * str )
+    {
+        const char * pos = str;
+        while ( *pos && *pos++ != contextSeparator )
+            ;
+        return *pos ? pos : str;
+    }
 
     struct mofile
     {
@@ -313,26 +321,10 @@ namespace
 
     mofile * current = nullptr;
     std::map<std::string, mofile> domains;
-    char context = 0;
-
-    const char * stripContext( const char * str )
-    {
-        if ( !context )
-            return str;
-        const char * pos = str;
-        while ( *pos && *pos++ != context )
-            ;
-        return *pos ? pos : str;
-    }
 }
 
 namespace Translation
 {
-    void setStripContext( char strip )
-    {
-        context = strip;
-    }
-
     bool bindDomain( const char * domain, const char * file )
     {
         std::string str( domain );
