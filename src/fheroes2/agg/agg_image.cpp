@@ -1554,16 +1554,16 @@ namespace fheroes2
                 return true;
             }
             case ICN::YELLOW_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_FONT );
                 return true;
             case ICN::YELLOW_SMALLFONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_FONT );
                 return true;
             case ICN::GRAY_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_FONT );
                 return true;
             case ICN::GRAY_SMALL_FONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
                 return true;
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
@@ -2703,6 +2703,8 @@ namespace fheroes2
 
                 const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
                 if ( data.size() < headerSize ) {
+                    // The important resource is absent! Make sure that you are using the correct version of the game.
+                    assert( 0 );
                     return 0;
                 }
 
@@ -2917,6 +2919,8 @@ namespace fheroes2
                 case FontColor::YELLOW:
                     return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
                 default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
                     break;
                 }
                 break;
@@ -2929,6 +2933,8 @@ namespace fheroes2
                 case FontColor::YELLOW:
                     return GetICN( ICN::YELLOW_FONT, character - 0x20 );
                 default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
                     break;
                 }
                 break;
@@ -2937,10 +2943,14 @@ namespace fheroes2
                 case FontColor::WHITE:
                     return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
                 default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
                     break;
                 }
                 break;
             default:
+                // Did you add a new font size? Add the corresponding logic for it!
+                assert( 0 );
                 break;
             }
 
