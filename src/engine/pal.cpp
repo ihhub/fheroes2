@@ -20,6 +20,7 @@
 #include "pal.h"
 
 #include <cassert>
+#include <cstring>
 
 namespace
 {
