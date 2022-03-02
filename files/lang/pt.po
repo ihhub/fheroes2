@@ -1898,7 +1898,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Renda:"
 
 #, fuzzy

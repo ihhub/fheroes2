@@ -36,6 +36,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -291,7 +292,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                         }
                     }
                     else {
-                        Dialog::SpellInfo( *spell, &hero, true );
+                        fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::OK );
                         display.render();
                     }
                 }
@@ -346,7 +347,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, &hero, false );
+                    fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::ZERO );
                     display.render();
                 }
             }
@@ -421,7 +422,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, &hero, true );
+                    fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::OK );
                     redraw = true;
                 }
             }
@@ -440,7 +441,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, &hero, false );
+                    fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::ZERO );
                     redraw = true;
                 }
             }

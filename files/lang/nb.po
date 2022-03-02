@@ -2086,7 +2086,7 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine gjenstander til en annen helt."
 
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Inntekt"
 
 msgid "Exit"

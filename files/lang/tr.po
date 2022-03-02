@@ -1788,7 +1788,7 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-msgid "Income"
+msgid "Kingdom Income"
 msgstr ""
 
 msgid "Exit"

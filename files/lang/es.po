@@ -2039,7 +2039,7 @@ msgstr ""
 "tus artefactos a otro héroe."
 
 #, fuzzy
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Ingresos:"
 
 #, fuzzy

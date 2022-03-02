@@ -38,6 +38,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -718,7 +719,7 @@ void Kingdom::openOverviewDialog()
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( rectIncome ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
+            fheroes2::showKingdomIncome( *this, 0 );
         }
 
         // Exit this dialog.
@@ -744,7 +745,7 @@ void Kingdom::openOverviewDialog()
         redraw |= listStats->QueueEventProcessing();
 
         if ( le.MouseClickLeft( rectIncome ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), Dialog::OK );
+            fheroes2::showKingdomIncome( *this, Dialog::OK );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {

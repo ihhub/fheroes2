@@ -25,6 +25,8 @@
 #include "profit.h"
 #include "race.h"
 
+#include <cassert>
+
 payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
 {
     switch ( building ) {
@@ -94,6 +96,8 @@ payment_t ProfitConditions::FromMine( int type )
     case Resource::GOLD:
         return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     default:
+        // Did you add a new type of resources? Add the logic here!
+        assert( 0 );
         break;
     }
 

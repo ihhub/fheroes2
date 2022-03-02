@@ -2061,7 +2061,7 @@ msgstr ""
 "vous n'avez actuellement pas de place pour un Grimoire. Essayez de donner un "
 "de vos artéfacts à un autre héros."
 
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Revenu"
 
 msgid "Exit"

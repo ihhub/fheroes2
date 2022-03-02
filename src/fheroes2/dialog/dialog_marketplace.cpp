@@ -36,6 +36,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "ui_scrollbar.h"
 #include "world.h"
 
@@ -245,11 +246,11 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
             StringReplace( message, "%{count}", exchange_rate );
         }
         const TextBox displayMessage( message, Font::BIG, fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
-        const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceFrom ) );
+        const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceFrom ) );
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() + 1 ) / 2 - 70;
         dst_pt.y = pos_rt.y + 115 - sprite_from.height();
         fheroes2::Blit( sprite_from, display, dst_pt.x, dst_pt.y );
-        const fheroes2::Sprite & sprite_to = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceTo ) );
+        const fheroes2::Sprite & sprite_to = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceTo ) );
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_to.width() + 1 ) / 2 + 70;
         dst_pt.y = pos_rt.y + 115 - sprite_to.height();
         fheroes2::Blit( sprite_to, display, dst_pt.x, dst_pt.y );
@@ -451,7 +452,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             const fheroes2::Rect & rect_from = rectsFrom[ii];
 
             if ( le.MouseClickLeft( rect_from ) ) {
-                resourceFrom = Resource::FromIndexSprite2( ii );
+                resourceFrom = Resource::getResourceTypeFromIconIndex( ii );
                 max_sell = fundsFrom.Get( resourceFrom );
 
                 if ( GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) ) {
@@ -475,8 +476,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
                 display.render();
             }
-            else if ( le.MousePressRight( rect_from ) )
-                Dialog::ResourceInfo( _( "Income" ), "", kingdom.GetIncome( INCOME_ALL ), 0 );
+            else if ( le.MousePressRight( rect_from ) ) {
+                fheroes2::showKingdomIncome( kingdom, 0 );
+            }
         }
 
         // click to
@@ -484,7 +486,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             const fheroes2::Rect & rect_to = rectsTo[ii];
 
             if ( le.MouseClickLeft( rect_to ) ) {
-                resourceTo = Resource::FromIndexSprite2( ii );
+                resourceTo = Resource::getResourceTypeFromIconIndex( ii );
 
                 if ( GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) ) {
                     max_buy = Resource::GOLD == resourceTo ? max_sell * GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost )

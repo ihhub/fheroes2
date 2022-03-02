@@ -57,6 +57,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -985,8 +987,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
     // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
     if ( isControlHuman() ) {
-        for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-            Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
+        for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+            const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
+        }
     }
 
     return true;
@@ -1141,28 +1146,26 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
     if ( !kingdom.AllowPayment( payment ) ) {
         if ( isControlHuman() ) {
-            const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-            fheroes2::Sprite sprite = border;
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
-
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::SpriteInfo( "", header, sprite, Dialog::OK );
+
+            const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
+            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
+                                   Dialog::OK, { &artifactUI } );
         }
         return false;
     }
 
     if ( isControlHuman() ) {
-        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        fheroes2::Sprite sprite = border;
-
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
-
         header.append( " " );
         header.append( _( "Do you wish to buy one?" ) );
 
-        if ( Dialog::NO == Dialog::SpriteInfo( GetName(), header, sprite, Dialog::YES | Dialog::NO ) )
+        const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
+        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
+                                    Dialog::YES | Dialog::NO, { &artifactUI } )
+             == Dialog::NO ) {
             return false;
+        }
     }
 
     if ( SpellBookActivate() ) {

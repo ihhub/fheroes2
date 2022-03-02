@@ -38,6 +38,8 @@
 #include "skill.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace Battle
@@ -370,7 +372,9 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{spell}", sp.GetName() );
             Game::PlayPickupSound();
-            Dialog::SpellInfo( "", msg, sp );
+
+            const fheroes2::SpellDialogElement spellUI( sp, &hero );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
         }
     }
 

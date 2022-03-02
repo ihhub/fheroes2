@@ -344,8 +344,8 @@ namespace
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
-        const fheroes2::FontType titleFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW };
-        const fheroes2::FontType nameFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
+        const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
         fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
@@ -485,8 +485,8 @@ namespace
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
-        const fheroes2::FontType titleFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW };
-        const fheroes2::FontType nameFontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
+        const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
         fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
