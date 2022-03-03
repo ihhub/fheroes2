@@ -223,7 +223,23 @@ char * System::GetOptionsArgument( void )
 
 bool System::IsFile( const std::string & name, bool writable )
 {
+    if ( name.empty() ) {
+        // An empty path cannot be a file.
+        return false;
+    }
+
 #if defined( _MSC_VER )
+    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
+        // This path doesn't exist.
+        return false;
+    }
+
+    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
+        // This is a directory.
+        return false;
+    }
+
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
 #elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
@@ -245,7 +261,23 @@ bool System::IsFile( const std::string & name, bool writable )
 
 bool System::IsDirectory( const std::string & name, bool writable )
 {
+    if ( name.empty() ) {
+        // An empty path cannot be a directory.
+        return false;
+    }
+
 #if defined( _MSC_VER )
+    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
+        // This path doesn't exist.
+        return false;
+    }
+
+    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
+        // Not a directory.
+        return false;
+    }
+
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
 #elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
