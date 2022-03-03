@@ -249,6 +249,19 @@ namespace fheroes2
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( text )
     {
+        init();
+    }
+
+    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string && text )
+        : _resourceType( resourceType )
+        , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
+        , _text( std::move( text ) )
+    {
+        init();
+    }
+
+    void ResourceDialogElement::init()
+    {
         const Text quantityText( _text, FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
@@ -477,7 +490,19 @@ namespace fheroes2
         : _skillType( skillType )
         , _text( text )
     {
-        assert( skillType >= Skill::Primary::ATTACK && skillType <= Skill::Primary::KNOWLEDGE );
+        init();
+    }
+
+    PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, std::string && text )
+        : _skillType( skillType )
+        , _text( std::move( text ) )
+    {
+        init();
+    }
+
+    void PrimarySkillDialogElement::init()
+    {
+         assert( _skillType >= Skill::Primary::ATTACK && _skillType <= Skill::Primary::KNOWLEDGE );
 
         const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
         _area = { background.width(), background.height() };

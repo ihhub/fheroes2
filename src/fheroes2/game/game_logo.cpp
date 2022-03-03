@@ -30,7 +30,7 @@ void fheroes2::showTeamInfo()
     LocalEvent & le = LocalEvent::Get();
     le.PauseCycling();
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+    Display & display = Display::instance();
 
     TextBox text( _( "fheroes2 Resurrection Team presents" ), Font::WHITE_LARGE, 500 );
     const Rect roi( ( display.width() - text.w() ) / 2, ( display.height() - text.h() ) / 2, text.w(), text.h() );
@@ -54,7 +54,7 @@ void fheroes2::showTeamInfo()
         // Subsequent frames must update only the area within the text.
         if ( Game::validateCustomAnimationDelay( animationDelay ) ) {
             Copy( textImage, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
-            fheroes2::ApplyAlpha( display, roi.x, roi.y, display, roi.x, roi.y, roi.width, roi.height, alpha );
+            ApplyAlpha( display, roi.x, roi.y, display, roi.x, roi.y, roi.width, roi.height, alpha );
             display.render( roi );
 
             alpha -= 5;

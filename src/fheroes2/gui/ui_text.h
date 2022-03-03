@@ -74,6 +74,11 @@ namespace fheroes2
         {
             return { FontSize::SMALL, FontColor::YELLOW };
         }
+
+        static FontType largeWhite()
+        {
+            return { FontSize::LARGE, FontColor::WHITE };
+        }
     };
 
     class TextBase
@@ -111,6 +116,8 @@ namespace fheroes2
 
         Text() = default;
         Text( const std::string & text, const FontType fontType );
+        Text( std::string && text, const FontType fontType );
+
         ~Text() override;
 
         int32_t width() const override;
@@ -125,6 +132,7 @@ namespace fheroes2
         bool empty() const override;
 
         void set( const std::string & text, const FontType fontType );
+        void set( std::string && text, const FontType fontType );
 
     private:
         std::string _text;
@@ -139,7 +147,7 @@ namespace fheroes2
         ~MultiFontText() override;
 
         void add( const Text & text );
-        void add( const Text && text );
+        void add( Text && text );
 
         int32_t width() const override;
         int32_t height() const override;

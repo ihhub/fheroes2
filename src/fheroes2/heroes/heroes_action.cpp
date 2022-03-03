@@ -104,10 +104,10 @@ namespace
             break;
         }
 
-        fheroes2::ResourceDialogElement resourceUI( resourceType, perday );
+        fheroes2::ResourceDialogElement resourceUI( resourceType, std::move( perday ) );
 
-        fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
-                               { &resourceUI } );
+        fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ),
+                               Dialog::OK, { &resourceUI } );
     }
 }
 

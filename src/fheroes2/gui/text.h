@@ -125,7 +125,7 @@ private:
 class TextBox : protected fheroes2::Rect
 {
 public:
-    TextBox();
+    TextBox() = delete;
     TextBox( const std::string &, int, uint32_t width_ );
     TextBox( const std::string &, int, const fheroes2::Rect & );
 
