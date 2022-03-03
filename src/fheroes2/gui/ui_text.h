@@ -117,6 +117,10 @@ namespace fheroes2
         Text() = default;
         Text( const std::string & text, const FontType fontType );
         Text( std::string && text, const FontType fontType );
+        Text( const Text & text ) = default;
+        Text( Text && text ) = default;
+        Text & operator=( const Text & text ) = default;
+        Text & operator=( Text && text ) = default;
 
         ~Text() override;
 

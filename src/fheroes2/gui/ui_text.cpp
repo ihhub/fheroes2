@@ -514,7 +514,7 @@ namespace fheroes2
     void MultiFontText::add( Text && text )
     {
         if ( !text._text.empty() ) {
-            _texts.emplace_back( text );
+            _texts.emplace_back( std::move( text ) );
         }
     }
 
