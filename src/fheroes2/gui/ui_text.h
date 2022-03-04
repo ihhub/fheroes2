@@ -54,6 +54,26 @@ namespace fheroes2
 
         FontSize size = FontSize::NORMAL;
         FontColor color = FontColor::WHITE;
+
+        static FontType normalWhite()
+        {
+            return { FontSize::NORMAL, FontColor::WHITE };
+        }
+
+        static FontType normalYellow()
+        {
+            return { FontSize::NORMAL, FontColor::YELLOW };
+        }
+
+        static FontType smallWhite()
+        {
+            return { FontSize::SMALL, FontColor::WHITE };
+        }
+
+        static FontType smallYellow()
+        {
+            return { FontSize::SMALL, FontColor::YELLOW };
+        }
     };
 
     class TextBase
@@ -71,7 +91,7 @@ namespace fheroes2
         // Returns height of a text as a multi-line text limited by width of a line.
         virtual int32_t height( const int32_t maxWidth ) const = 0;
 
-        // Returns number of multi-line text rows limited by width of a line.
+        // Returns number of multi-line text rows limited by width of a line. It can be 0 if the text is empty.
         virtual int32_t rows( const int32_t maxWidth ) const = 0;
 
         // Draw text as a single line text.

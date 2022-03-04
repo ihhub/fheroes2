@@ -41,6 +41,8 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -464,8 +466,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             // Use insert instead of std::merge to make appveyour happy
             assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &artifactUI } );
+            }
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();

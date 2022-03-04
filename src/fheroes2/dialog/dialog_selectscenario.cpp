@@ -49,18 +49,18 @@ namespace
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
 
-        fheroes2::Text header( info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( info.name, fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "Location: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "\n\nMap Type:\n" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { _( "Location: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
+        body.add( { _( "\n\nMap Type:\n" ), fheroes2::FontType::normalYellow() } );
         switch ( info._version ) {
         case GameVersion::SUCCESSION_WARS:
-            body.add( { _( "The Succession Wars" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+            body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
             break;
         case GameVersion::PRICE_OF_LOYALTY:
-            body.add( { _( "The Price of Loyalty" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+            body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
             break;
         default:
             // Did you add a new map version? Add the logic above!

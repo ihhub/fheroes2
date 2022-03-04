@@ -393,6 +393,10 @@ namespace fheroes2
 
     int32_t Text::height( const int32_t maxWidth ) const
     {
+        if ( _text.empty() ) {
+            return 0;
+        }
+
         const int32_t fontHeight = getFontHeight( _fontType.size );
 
         std::deque<Point> offsets;
@@ -403,6 +407,10 @@ namespace fheroes2
 
     int32_t Text::rows( const int32_t maxWidth ) const
     {
+        if ( _text.empty() ) {
+            return 0;
+        }
+
         const int32_t fontHeight = getFontHeight( _fontType.size );
 
         std::deque<Point> offsets;
@@ -533,12 +541,24 @@ namespace fheroes2
 
     int32_t MultiFontText::rows( const int32_t maxWidth ) const
     {
+        if ( _texts.empty() ) {
+            return 0;
+        }
+
         const int32_t maxFontHeight = height();
 
         std::deque<Point> offsets;
         for ( const Text & text : _texts ) {
+            if ( text._text.empty() ) {
+                continue;
+            }
+
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
                              offsets );
+        }
+
+        if ( offsets.empty() ) {
+            return 0;
         }
 
         return offsets.back().y / maxFontHeight + 1;

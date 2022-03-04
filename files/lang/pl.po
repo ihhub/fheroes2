@@ -1939,7 +1939,7 @@ msgstr ""
 "masz jednak na nią miejsca. Spróbuj przekazać jeden ze swoich artefaktów "
 "innemu bohaterowi."
 
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Przychód"
 
 msgid "Exit"

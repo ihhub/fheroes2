@@ -344,6 +344,13 @@ const char * Resource::String( int resource )
     return "Unknown";
 }
 
+const char * Resource::getDescription()
+{
+    return _( "There are seven resources in Heroes 2, used to build and improves castles, purchase troops and recruit heroes. Gold is the most common, required for "
+              "virtually everything. Wood and ore are used for most buildings. Gems, Mercury, Sulfur and Crystal are rare magical resources used for the most "
+              "powerful creatures and buildings." );
+}
+
 u32 Resource::GetIndexSprite( int resource )
 {
     switch ( resource ) {
@@ -393,10 +400,9 @@ int Resource::FromIndexSprite( u32 index )
     return UNKNOWN;
 }
 
-/* return index sprite resource.icn */
-u32 Resource::GetIndexSprite2( int resource )
+uint32_t Resource::getIconIcnIndex( const int resourceType )
 {
-    switch ( resource ) {
+    switch ( resourceType ) {
     case Resource::WOOD:
         return 0;
     case Resource::MERCURY:
@@ -412,13 +418,15 @@ u32 Resource::GetIndexSprite2( int resource )
     case Resource::GOLD:
         return 6;
     default:
+        // You are passing not a single resource type or an invalid one. Fix it!
+        assert( 0 );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
     }
 
     return 0;
 }
 
-int Resource::FromIndexSprite2( u32 index )
+int Resource::getResourceTypeFromIconIndex( const uint32_t index )
 {
     switch ( index ) {
     case 0:
@@ -435,8 +443,9 @@ int Resource::FromIndexSprite2( u32 index )
         return GEMS;
     case 6:
         return GOLD;
-
     default:
+        // ICN index is wrong!
+        assert( 0 );
         break;
     }
 

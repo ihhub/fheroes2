@@ -42,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "world.h"
 
 int Castle::DialogBuyHero( const Heroes * hero ) const
@@ -469,10 +470,10 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
         if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), Dialog::OK );
         }
         else if ( le.MousePressRight( resActiveArea ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), 0 );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );

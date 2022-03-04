@@ -20,9 +20,217 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
+#include "artifact.h"
+#include "math_base.h"
+#include "skill.h"
+#include "spell.h"
+
+class Funds;
+class Heroes;
+
 namespace fheroes2
 {
+    class DialogElement;
+    class Image;
     class TextBase;
 
-    int showMessage( const TextBase & header, const TextBase & body, const int buttons );
+    int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );
+
+    // An interactive UI element within a dialog.
+    class DialogElement
+    {
+    public:
+        virtual ~DialogElement() = default;
+
+        // Draw the element on a given image.
+        virtual void draw( Image & output, const Point & offset ) const = 0;
+
+        // Process events internally. In most cases it is a right mouse click event only.
+        virtual void processEvents( const Point & offset ) const = 0;
+
+        // Return the size of the element.
+        Size area() const
+        {
+            return _area;
+        }
+
+        // Display a popup window with no buttons and standard description of the element. It is usually used for a right mouse click event.
+        virtual void showPopup( const int buttons ) const = 0;
+
+    protected:
+        // This element must be cached to avoid heavy calculations.
+        Size _area;
+    };
+
+    // IMPORTANT!
+    // It is essential to store members by values rather than by references.
+    // This leads to more memory consumption but at the same time prevents any memory related issues.
+
+    class CustomImageDialogElement : public DialogElement
+    {
+    public:
+        explicit CustomImageDialogElement( const Image & image );
+
+        explicit CustomImageDialogElement( Image && image );
+
+        ~CustomImageDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a custom image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Image _image;
+    };
+
+    class ArtifactDialogElement : public DialogElement
+    {
+    public:
+        explicit ArtifactDialogElement( const Artifact & artifact );
+
+        ~ArtifactDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Artifact _artifact;
+    };
+
+    class ResourceDialogElement : public DialogElement
+    {
+    public:
+        ResourceDialogElement( const int32_t resourceType, const std::string & text );
+
+        ~ResourceDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const int32_t _resourceType = 0;
+        const uint32_t _icnIndex = 0;
+        const std::string _text;
+    };
+
+    std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds );
+
+    int showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds );
+
+    class SpellDialogElement : public DialogElement
+    {
+    public:
+        explicit SpellDialogElement( const Spell & spell, const HeroBase * hero );
+
+        ~SpellDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Spell _spell;
+        const HeroBase * _hero;
+    };
+
+    class LuckDialogElement : public DialogElement
+    {
+    public:
+        explicit LuckDialogElement( const bool goodLuck );
+
+        ~LuckDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const bool _goodLuck;
+    };
+
+    class MoraleDialogElement : public DialogElement
+    {
+    public:
+        explicit MoraleDialogElement( const bool goodMorale );
+
+        ~MoraleDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const bool _goodMorale;
+    };
+
+    class ExperienceDialogElement : public DialogElement
+    {
+    public:
+        explicit ExperienceDialogElement( const int32_t experience );
+
+        ~ExperienceDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const int32_t _experience;
+    };
+
+    class PrimarySkillDialogElement : public DialogElement
+    {
+    public:
+        explicit PrimarySkillDialogElement( const int32_t skillType, const std::string & text );
+
+        ~PrimarySkillDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const int32_t _skillType;
+        const std::string _text;
+    };
+
+    class SecondarySkillDialogElement : public DialogElement
+    {
+    public:
+        explicit SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero );
+
+        ~SecondarySkillDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Skill::Secondary _skill;
+        const Heroes & _hero;
+    };
 }

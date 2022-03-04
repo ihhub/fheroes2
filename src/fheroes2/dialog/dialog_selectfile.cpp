@@ -107,13 +107,13 @@ public:
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
 
-        fheroes2::Text header( ResizeToShortName( info.file ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "Map: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "\n\nLocation: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { info.name, fheroes2::FontType::normalWhite() } );
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }

@@ -95,12 +95,12 @@ namespace fheroes2
         buttonGroup.button( selectionId ).press();
         optionButtonGroup.draw();
 
-        const Text title( _( "Choose game language:" ), { FontSize::NORMAL, FontColor::YELLOW } );
+        const Text title( _( "Choose game language:" ), FontType::normalYellow() );
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {
             fheroes2::LanguageSwitcher languageSwitcher( languages[i] );
-            const Text languageName( getLanguageName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
+            const Text languageName( getLanguageName( languages[i] ), FontType::normalWhite() );
             languageName.draw( windowRoi.x + offsetFromBorders + selectedButtonSprite.width() + offsetFromButton,
                                windowRoi.y + 40 + languageAreaHeight * i + 2 + ( selectedButtonSprite.height() - languageName.height() ) / 2, display );
         }

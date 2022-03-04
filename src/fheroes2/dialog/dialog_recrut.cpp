@@ -54,7 +54,7 @@ namespace
         fheroes2::Copy( backgroundImage, 6 + 65, 59, output, offset.x + backgroundArea.x + backgroundArea.width / 2, offset.y + backgroundArea.y,
                         backgroundArea.width / 2, backgroundArea.height );
 
-        const fheroes2::Text text( _( "Cost per troop:" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text text( _( "Cost per troop:" ), fheroes2::FontType::smallWhite() );
         text.draw( offset.x + backgroundArea.x + ( backgroundArea.width - text.width() ) / 2, offset.y + backgroundArea.y + 2, output );
     }
 }

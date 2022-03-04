@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,33 +17,20 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2PAL_H
-#define H2PAL_H
 
-#include <cstdint>
-#include <vector>
+#include "ui_kingdom.h"
+#include "kingdom.h"
+#include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
-namespace PAL
+namespace fheroes2
 {
-    enum class PaletteType : int
+    void showKingdomIncome( const Kingdom & kingdom, const int buttons )
     {
-        STANDARD, // default
-        YELLOW_FONT,
-        WHITE_FONT,
-        GRAY_FONT,
-        RED, // for Blood Lust spell animation
-        GRAY, // for Petrify spell effect
-        BROWN,
-        TAN, // for Puzzle image generation
-        NO_CYCLE,
-        MIRROR_IMAGE,
-        DARKENING, // for disabled buttons
-        CUSTOM
-    };
+        const Text header( _( "Kingdom Income" ), FontType::normalYellow() );
+        const Text body( _( "Kingdom Income per day." ), FontType::normalWhite() );
 
-    std::vector<uint8_t> GetCyclingPalette( const uint32_t stepId );
-    const std::vector<uint8_t> & GetPalette( const PaletteType type );
-    std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
+        showResourceMessage( header, body, buttons, kingdom.GetIncome( INCOME_ALL ) );
+    }
 }
-
-#endif

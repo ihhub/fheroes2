@@ -49,6 +49,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -118,7 +120,8 @@ void Game::DialogPlayers( int color, std::string str )
         break;
     }
 
-    Dialog::SpriteInfo( "", str, sign );
+    const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
@@ -308,7 +311,8 @@ void ShowEventDayDialog( void )
 
     for ( const EventDate & event : events ) {
         if ( event.resource.GetValidItemsCount() ) {
-            Dialog::ResourceInfo( event.title, event.message, event.resource );
+            fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
             Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );

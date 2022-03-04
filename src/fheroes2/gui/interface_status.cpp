@@ -315,7 +315,7 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
     TextBox text( message, Font::SMALL, pos.width );
     text.Blit( pos.x, pos.y + 4 + oh );
 
-    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
+    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( lastResource ) );
     fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
     text.Set( std::to_string( countLastResource ), Font::SMALL, pos.width );
