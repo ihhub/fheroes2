@@ -75,6 +75,11 @@ namespace
         }
 
         do {
+            if ( data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
+                // Ignore any internal directories.
+                continue;
+            }
+
             std::string fullname = System::ConcatePath( path, data.cFileName );
 
             // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
