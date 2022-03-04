@@ -587,9 +587,9 @@ void Resource::BoxSprite::Redraw( void ) const
         const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
         const fheroes2::Sprite & res3 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 2].second );
 
-        RedrawResourceSprite( res1, fheroes2::Point( x, y ), 0, width_, offsetY, valueVsSprite[id].first );
-        RedrawResourceSprite( res2, fheroes2::Point( x, y ), 1, width_, offsetY, valueVsSprite[id + 1].first );
-        RedrawResourceSprite( res3, fheroes2::Point( x, y ), 2, width_, offsetY, valueVsSprite[id + 2].first );
+        RedrawResourceSprite( res1, { x, y }, 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, { x, y }, 1, width_, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res3, { x, y }, 2, width_, offsetY, valueVsSprite[id + 2].first );
 
         id += 3;
         offsetY += 45;
@@ -604,15 +604,15 @@ void Resource::BoxSprite::Redraw( void ) const
         const uint32_t width_ = isManyResources ? width / 3 : width / 2;
         const int32_t offsetX = isManyResources ? width_ / 2 : 0;
 
-        RedrawResourceSprite( res1, fheroes2::Point( x + offsetX, y ), 0, width_, offsetY, valueVsSprite[id].first );
-        RedrawResourceSprite( res2, fheroes2::Point( x + offsetX, y ), 1, width_, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res1, { x + offsetX, y }, 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, { x + offsetX, y }, 1, width_, offsetY, valueVsSprite[id + 1].first );
     }
     else if ( valueVsSprite.size() - id == 1 ) {
         const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
 
         const int32_t width_ = isManyResources ? width / 3 : width;
 
-        RedrawResourceSprite( res1, fheroes2::Point( x, y ), isManyResources ? 1 : 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res1, { x, y }, isManyResources ? 1 : 0, width_, offsetY, valueVsSprite[id].first );
     }
 }
 

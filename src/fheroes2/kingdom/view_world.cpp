@@ -180,7 +180,7 @@ namespace
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
                 for ( int y = 0; y < worldHeightPixels; y += blockSizeY ) {
-                    gamearea.SetCenterInPixels( fheroes2::Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
+                    gamearea.SetCenterInPixels( { x + blockSizeX / 2, y + blockSizeY / 2 } );
                     gamearea.Redraw( temporaryImg, drawingFlags );
 
                     for ( size_t i = 0; i < cachedImages.size(); ++i ) {
@@ -250,7 +250,7 @@ namespace
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
 
-        const fheroes2::Rect roiPixels = ROI.GetROIinPixels();
+        const fheroes2::Rect & roiPixels = ROI.GetROIinPixels();
 
         const int offsetX = roiPixels.x * tileSize / TILEWIDTH;
         const int offsetY = roiPixels.y * tileSize / TILEWIDTH;
@@ -448,7 +448,7 @@ bool ViewWorld::ZoomROIs::updateCenter()
 
 bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
-    const fheroes2::Rect currentRect = GetROIinPixels();
+    const fheroes2::Rect & currentRect = GetROIinPixels();
     const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
     fheroes2::Point newCenter;
 

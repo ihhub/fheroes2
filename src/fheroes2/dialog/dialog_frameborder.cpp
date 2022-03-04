@@ -66,7 +66,7 @@ int Dialog::FrameBorder::BorderHeight() const
     return border;
 }
 
-void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench )
+void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench )
 {
     restorer.restore();
 

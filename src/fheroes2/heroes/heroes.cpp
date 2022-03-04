@@ -63,6 +63,8 @@
 
 namespace
 {
+    const size_t maxHeroCount = 71;
+
     int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
     {
         int result = 0;
@@ -1756,7 +1758,7 @@ void Heroes::SetAttackedMonsterTileIndex( int idx )
 
 AllHeroes::AllHeroes()
 {
-    reserve( HEROESMAXCOUNT + 2 );
+    reserve( maxHeroCount + 2 );
 }
 
 AllHeroes::~AllHeroes()
@@ -1916,7 +1918,7 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
     }
 
     std::vector<int> freeman_heroes;
-    freeman_heroes.reserve( HEROESMAXCOUNT );
+    freeman_heroes.reserve( maxHeroCount );
 
     // First try to find a free hero of the specified race (skipping custom heroes)
     for ( int i = min; i <= max; ++i ) {

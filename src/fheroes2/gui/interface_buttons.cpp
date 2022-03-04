@@ -32,7 +32,7 @@
 #include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
 {}
 

@@ -211,7 +211,7 @@ bool Battle::Only::ChangeSettings( void )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
                 if ( player2.isControlLocal() && nullptr == cinfo2 ) {
-                    cinfo2.reset( new ControlInfo( fheroes2::Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() ) );
+                    cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, player2.GetControl() ) );
                 }
                 redraw = true;
             }
@@ -426,7 +426,7 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
 
         if ( moraleIndicator1 == nullptr ) {
             moraleIndicator1.reset( new MoraleIndicator( hero1 ) );
-            moraleIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 75 ) );
+            moraleIndicator1->SetPos( { cur_pt.x + 34, cur_pt.y + 75 } );
         }
         else {
             moraleIndicator1->SetHero( hero1 );
@@ -434,7 +434,7 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
 
         if ( luckIndicator1 == nullptr ) {
             luckIndicator1.reset( new LuckIndicator( hero1 ) );
-            luckIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 115 ) );
+            luckIndicator1->SetPos( { cur_pt.x + 34, cur_pt.y + 115 } );
         }
         else {
             luckIndicator1->SetHero( hero1 );
@@ -481,7 +481,7 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
 
         if ( moraleIndicator2 == nullptr ) {
             moraleIndicator2.reset( new MoraleIndicator( hero2 ) );
-            moraleIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 75 ) );
+            moraleIndicator2->SetPos( { cur_pt.x + 566, cur_pt.y + 75 } );
         }
         else {
             moraleIndicator2->SetHero( hero2 );
@@ -489,7 +489,7 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
 
         if ( luckIndicator2 == nullptr ) {
             luckIndicator2.reset( new LuckIndicator( hero2 ) );
-            luckIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 115 ) );
+            luckIndicator2->SetPos( { cur_pt.x + 566, cur_pt.y + 115 } );
         }
         else {
             luckIndicator2->SetHero( hero2 );
@@ -598,11 +598,11 @@ void Battle::Only::StartBattle( void )
 
     if ( hero1 ) {
         hero1->SetSpellPoints( hero1->GetMaxSpellPoints() );
-        hero1->Recruit( player1.GetColor(), fheroes2::Point( 5, 5 ) );
+        hero1->Recruit( player1.GetColor(), { 5, 5 } );
 
         if ( hero2 ) {
             hero2->SetSpellPoints( hero2->GetMaxSpellPoints() );
-            hero2->Recruit( player2.GetColor(), fheroes2::Point( 5, 6 ) );
+            hero2->Recruit( player2.GetColor(), { 5, 6 } );
         }
 
         Players::SetPlayerControl( player1.GetColor(), player1.GetControl() );
