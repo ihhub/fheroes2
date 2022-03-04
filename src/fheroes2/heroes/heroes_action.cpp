@@ -1838,8 +1838,10 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             }
         }
         else {
-            if ( Artifact::GetScenario( art ) )
-                msg = Artifact::GetScenario( art );
+            const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
+            if ( artifactDiscoveryDescription != nullptr ) {
+                msg = artifactDiscoveryDescription;
+            }
             else {
                 msg = _( "You've found the artifact: " );
                 msg += '\n';
