@@ -314,7 +314,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
@@ -324,7 +323,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMYLAB:
@@ -334,19 +332,26 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-
+            case MP2::OBJN_DRAGONCITY:
+            case MP2::OBJN_LIGHTHOUSE:
+            case MP2::OBJN_ALCHEMYLAB:
+            case MP2::OBJN_MINES:
+            case MP2::OBJN_SAWMILL:
+                if ( visibleTile || revealMines ) {
+                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                }
+                break;
             case MP2::OBJ_ARTIFACT:
                 if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             case MP2::OBJ_RESOURCE:
                 if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             default:
                 if ( visibleTile ) {
                     continue;
