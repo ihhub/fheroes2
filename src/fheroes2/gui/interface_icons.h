@@ -59,11 +59,6 @@ namespace Interface
             show = f;
         }
 
-        bool IsShow() const
-        {
-            return show;
-        }
-
         void RedrawBackground( const fheroes2::Point & ) const;
 
         void SetIconsCount( const int32_t c )
