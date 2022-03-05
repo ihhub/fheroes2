@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
     - name: Setup clang-format
       run: |
         sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-12 100
