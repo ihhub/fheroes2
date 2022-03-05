@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "world.h"
 
 int Castle::DialogBuyHero( const Heroes * hero ) const
@@ -468,10 +470,10 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
         if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), Dialog::OK );
         }
         else if ( le.MousePressRight( resActiveArea ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), 0 );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );

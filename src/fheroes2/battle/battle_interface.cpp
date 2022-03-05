@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,7 +106,7 @@ namespace
             iterationCount = 5;
 
         std::vector<std::pair<LightningPoint, LightningPoint> > lines;
-        lines.emplace_back( LightningPoint( fheroes2::Point( 0, 0 ), 5 ), LightningPoint( fheroes2::Point( distance, 0 ), 3 ) );
+        lines.emplace_back( LightningPoint( { 0, 0 }, 5 ), LightningPoint( { distance, 0 }, 3 ) );
 
         int maxOffset = distance;
 
@@ -136,7 +137,7 @@ namespace
                     offsetY = static_cast<int>( Rand::Get( 1, 10 ) ) * maxOffset / 100;
                     const int32_t x = static_cast<int32_t>( ( middle.x - oldLines[i].first.point.x ) * 0.7 ) + middle.x;
                     const int32_t y = static_cast<int32_t>( ( middle.y - oldLines[i].first.point.y ) * 0.7 ) + middle.y + ( isPositive ? offsetY : -offsetY );
-                    lines.emplace_back( middlePoint, LightningPoint( fheroes2::Point( x, y ), 1 ) );
+                    lines.emplace_back( middlePoint, LightningPoint( { x, y }, 1 ) );
                 }
             }
 
@@ -169,14 +170,14 @@ namespace
                 const int x = xOffset * offset;
                 const int y = yOffset * offset;
 
-                fheroes2::DrawLine( surface, fheroes2::Point( first.x + x, first.y + y ), fheroes2::Point( second.x + x, second.y + y ), color, roi );
+                fheroes2::DrawLine( surface, { first.x + x, first.y + y }, { second.x + x, second.y + y }, color, roi );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
+                fheroes2::DrawLine( surface, { first.x + xOffset * offset, first.y + yOffset * offset }, second, color, roi );
             }
         }
     }
@@ -208,9 +209,9 @@ namespace Battle
 
         void SetPosition( u32 px, u32 py )
         {
-            const uint32_t mx = 6;
-            const uint32_t sw = fheroes2::Display::DEFAULT_WIDTH;
-            const uint32_t sh = mx * 20;
+            const int32_t mx = 6;
+            const int32_t sw = fheroes2::Display::DEFAULT_WIDTH;
+            const int32_t sh = mx * 20;
             border.SetPosition( px, py - sh - 2, sw - 32, sh - 30 );
             const fheroes2::Rect & area = border.GetArea();
             const int32_t ax = area.x + area.width - 20;
@@ -220,10 +221,19 @@ namespace Battle
 
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.height - 11 ) );
-            SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
-                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7 ) );
+
+            const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
+
+            setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength} );
+
+            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Image scrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+
+            setScrollBarImage( scrollbarSlider );
             _scrollbar.hide();
-            SetAreaItems( fheroes2::Rect( area.x, area.y, area.width - 10, area.height ) );
+            SetAreaItems( { area.x, area.y, area.width - 10, area.height } );
             SetListContent( messages );
             _scrollbar.show();
         }
@@ -241,6 +251,14 @@ namespace Battle
             if ( !openlog ) {
                 _scrollbar.hide();
             }
+
+            const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
+            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Image scrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+            setScrollBarImage( scrollbarSlider );
+            SetCurrentVisible();
         }
 
         void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
@@ -407,14 +425,14 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( 0, l ), colorId );
-    fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( w, l ), colorId );
+    fheroes2::DrawLine( sf, { r, 0 }, { 0, l }, colorId );
+    fheroes2::DrawLine( sf, { r, 0 }, { w, l }, colorId );
 
-    fheroes2::DrawLine( sf, fheroes2::Point( 0, l + 1 ), fheroes2::Point( 0, h - l ), colorId );
-    fheroes2::DrawLine( sf, fheroes2::Point( w, l + 1 ), fheroes2::Point( w, h - l ), colorId );
+    fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
+    fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
-    fheroes2::DrawLine( sf, fheroes2::Point( r, h ), fheroes2::Point( 0, h - l ), colorId );
-    fheroes2::DrawLine( sf, fheroes2::Point( r, h ), fheroes2::Point( w, h - l ), colorId );
+    fheroes2::DrawLine( sf, { r, h }, { 0, h - l }, colorId );
+    fheroes2::DrawLine( sf, { r, h }, { w, h - l }, colorId );
 
     return sf;
 }
@@ -2295,7 +2313,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
         int32_t indexNew = -1;
-        if ( le.MouseCursor( fheroes2::Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height ) ) ) {
+        if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
             indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
         }
         if ( index_pos != indexNew ) {
@@ -2512,7 +2530,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 
         listlog->QueueEventProcessing();
     }
-    else if ( le.MouseCursor( fheroes2::Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height ) ) ) {
+    else if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
         const int themes = GetBattleCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -2881,11 +2899,11 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
         if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
             RedrawPartialStart();
             if ( isMage ) {
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 2 ), fheroes2::Point( pnt->x, pnt->y - 2 ), 0x77 );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 1 ), fheroes2::Point( pnt->x, pnt->y - 1 ), 0xB5 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y - 2 }, { pnt->x, pnt->y - 2 }, 0x77 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y - 1 }, { pnt->x, pnt->y - 1 }, 0xB5 );
                 fheroes2::DrawLine( _mainSurface, startPos, *pnt, 0xBC );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 1 ), fheroes2::Point( pnt->x, pnt->y + 1 ), 0xB5 );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 2 ), fheroes2::Point( pnt->x, pnt->y + 2 ), 0x77 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 1 }, { pnt->x, pnt->y + 1 }, 0xB5 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 2 }, { pnt->x, pnt->y + 2 }, 0x77 );
             }
             else {
                 fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
@@ -4111,7 +4129,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
                 RedrawPartialStart();
 
                 RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
-                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height ) );
+                                 { roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height } );
                 fheroes2::ApplyPalette( _mainSurface, 7 );
 
                 RedrawPartialFinish();

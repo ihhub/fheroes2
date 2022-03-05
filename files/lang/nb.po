@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2021-11-26 03:04+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
@@ -722,6 +722,12 @@ msgstr "Maktbruk"
 msgid "Save the Dwarves"
 msgstr "Til dvergenes unnsetning"
 
+msgid "The Crown"
+msgstr "Kronen"
+
+msgid "The Gauntlet"
+msgstr "Kappløpet"
+
 msgid "Turning Point"
 msgstr "Vendepunktet"
 
@@ -730,12 +736,6 @@ msgstr "Corlagon sitt forsvar"
 
 msgid "Final Justice"
 msgstr "Den siste rettferd"
-
-msgid "The Crown"
-msgstr "Kronen"
-
-msgid "The Gauntlet"
-msgstr "Kappløpet"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -839,21 +839,21 @@ msgstr "Den første bloddråpen"
 msgid "Necromancers"
 msgstr "Sortekunstnere"
 
-msgid "Rebellion"
-msgstr "Væpnet oppstand"
-
 # Slakt brukes mer om dyr på norsk.
 msgid "Slay the Dwarves"
 msgstr "Drep dvergene"
-
-msgid "Apocalypse"
-msgstr "Dommedag"
 
 msgid "Country Lords"
 msgstr "Landsherrene"
 
 msgid "Dragon Master"
 msgstr "Dragemesteren"
+
+msgid "Rebellion"
+msgstr "Væpnet oppstand"
+
+msgid "Apocalypse"
+msgstr "Dommedag"
 
 msgid "Greater Glory"
 msgstr "Heder og ære"
@@ -1281,50 +1281,128 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Dvergemorderen!!!! Flykt for livene deres!\""
 
-msgid "Caster's Bracelet"
+msgid "campaignBonus|Ballista"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Black Pearl"
+msgstr "Den sorte perlen"
+
+#, fuzzy
+msgid "campaignBonus|Caster's Bracelet"
 msgstr "Fortryller-armbånd"
 
-msgid "Defender Helm"
+#, fuzzy
+msgid "campaignBonus|Defender Helm"
 msgstr "Forsvarerhjelm"
 
-msgid "Breastplate"
+#, fuzzy
+msgid "campaignBonus|Breastplate"
 msgstr "Brystplate"
 
-msgid "Dragon Sword"
+#, fuzzy
+msgid "campaignBonus|Dragon Sword"
 msgstr "Dragesverdet"
 
-msgid "Fizbin Medal"
+#, fuzzy
+msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin-medaljen"
 
-msgid "Foremost Scroll"
+#, fuzzy
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Yprst. kunskpsrull"
 
-msgid "Mage's Ring"
+#, fuzzy
+msgid "campaignBonus|Hideous Mask"
+msgstr "Den forferdelige masken"
+
+#, fuzzy
+msgid "campaignBonus|Mage's Ring"
 msgstr "Magikerens ring"
 
-msgid "Major Scroll"
+#, fuzzy
+msgid "campaignBonus|Major Scroll"
 msgstr "Str. kunskpsrull"
 
-msgid "Minor Scroll"
+#, fuzzy
+msgid "campaignBonus|Medal of Honor"
+msgstr "Æresmedaljen"
+
+#, fuzzy
+msgid "campaignBonus|Medal of Valor"
+msgstr "Medaljen av heltemot"
+
+#, fuzzy
+msgid "campaignBonus|Minor Scroll"
 msgstr "Mindre skriftrull"
 
-msgid "Nomad Boots"
+#, fuzzy
+msgid "campaignBonus|Nomad Boots"
 msgstr "Nomadens sko"
 
-msgid "Power Axe"
-msgstr "Styrkeøks"
+msgid "campaignBonus|Power Axe"
+msgstr ""
 
-msgid "Stealth Shield"
+#, fuzzy
+msgid "campaignBonus|Spiked Shield"
+msgstr "Det piggete skjoldet"
+
+#, fuzzy
+msgid "campaignBonus|Stealth Shield"
 msgstr "Snikeskjoldet"
 
-msgid "Thunder Mace"
+msgid "campaignBonus|Tax Lien"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Thunder Mace"
 msgstr "Tordenklubben"
 
-msgid "Traveler's Boots"
+#, fuzzy
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Vandrerens sko"
 
-msgid "Summon Earth"
+#, fuzzy
+msgid "campaignBonus|White Pearl"
+msgstr "Den hvite perlen"
+
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr ""
+"Døde-\n"
+"besjelning"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Kjedelyn"
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Speilbilde"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Magikerens ring"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
 msgstr "Tilkall jord"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Vis helter"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} gir %{monster}."
@@ -2008,7 +2086,7 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine gjenstander til en annen helt."
 
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Inntekt"
 
 msgid "Exit"
@@ -8723,6 +8801,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Power Axe"
+#~ msgstr "Styrkeøks"
 
 #~ msgid "battle: show army order"
 #~ msgstr "Kamp: Vis rekkefølgen av styrkenes tur."

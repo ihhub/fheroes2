@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +38,7 @@
 #include "speed.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 
 namespace
@@ -195,7 +197,9 @@ void Castle::OpenWell( void )
                     Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Creatures" ), str, total, Dialog::YES | Dialog::NO ) ) {
+            else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), fheroes2::FontType::normalYellow() ),
+                                                     fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, total )
+                      == Dialog::YES ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }
@@ -247,7 +251,7 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
     fheroes2::Point dst_pt;
     fheroes2::Point pt;
 
-    const fheroes2::FontType statsFontType{ fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE };
+    const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
     const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
@@ -447,7 +451,7 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
             dst_pt.y = pt.y + 122;
             text.draw( dst_pt.x, dst_pt.y, display );
 
-            text.set( std::to_string( available ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.set( std::to_string( available ), fheroes2::FontType::normalYellow() );
             dst_pt.x = pt.x + 129 - text.width() / 2;
             dst_pt.y = pt.y + 120;
             text.draw( dst_pt.x, dst_pt.y, display );

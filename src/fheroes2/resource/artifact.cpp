@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +42,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -585,9 +587,209 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
     return Artifact( UNKNOWN );
 }
 
-const char * Artifact::GetScenario( const Artifact & art )
+const char * Artifact::getDiscoveryDescription( const Artifact & art )
 {
     switch ( art.GetID() ) {
+    case ARCANE_NECKLACE:
+        return _( "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with an exquisite jeweled necklace." );
+    case CASTER_BRACELET:
+        return _( "While searching through the rubble of a caved-in mine, you free a group of trapped Dwarves. Grateful, the leader gives you a golden bracelet." );
+    case MAGE_RING:
+        return _(
+            "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the creature free, he hands you a small pouch. Emptying the contents, you find a dazzling jeweled ring." );
+    case WITCHES_BROACH:
+        return _(
+            "Alongside the remains of a burnt witch lies a beautiful broach, intricately designed. Approaching the corpse with caution, you add the broach to your inventory." );
+    case MEDAL_VALOR:
+        return _( "Freeing a virtuous maiden from the clutches of an evil overlord, you are granted a Medal of Valor by the King's herald." );
+    case MEDAL_COURAGE:
+        return _(
+            "After saving a young boy from a vicious pack of Wolves, you return him to his father's manor. The grateful nobleman awards you with a Medal of Courage." );
+    case MEDAL_HONOR:
+        return _( "After freeing a princess of a neighboring kingdom from the evil clutches of despicable slavers, she awards you with a Medal of Honor." );
+    case MEDAL_DISTINCTION:
+        return _( "Ridding the countryside of the hideous Minotaur who made a sport of eating noblemen's Knights, you are honored with the Medal of Distinction." );
+    case FIZBIN_MISFORTUNE:
+        return _(
+            "You stumble upon a medal lying alongside the empty road. Adding the medal to your inventory, you become aware that you have acquired the undesirable Fizbin of Misfortune, greatly decreasing your army's morale." );
+    case THUNDER_MACE:
+        return _( "During a sudden storm, a bolt of lightning strikes a tree, splitting it. Inside the tree you find a mysterious mace." );
+    case ARMORED_GAUNTLETS:
+        return _(
+            "You encounter the infamous Black Knight!  After a grueling duel ending in a draw, the Knight, out of respect, offers you a pair of armored gauntlets." );
+    case DEFENDER_HELM:
+        return _( "A glint of golden light catches your eye. Upon further investigation, you find a golden helm hidden under a bush." );
+    case GIANT_FLAIL:
+        return _(
+            "A clumsy Giant has killed himself with his own flail. Knowing your superior skill with this weapon, you confidently remove the spectacular flail from the fallen Giant." );
+    case BALLISTA:
+        return _( "Walking through the ruins of an ancient walled city, you find the instrument of the city's destruction, an elaborately crafted ballista." );
+    case STEALTH_SHIELD:
+        return _( "A stone statue of a warrior holds a silver shield. As you remove the shield, the statue crumbles into dust." );
+    case DRAGON_SWORD:
+        return _(
+            "As you are walking along a narrow path, a nearby bush suddenly bursts into flames. Before your eyes the flames become the image of a beautiful woman. She holds out a magnificent sword to you." );
+    case POWER_AXE:
+        return _(
+            "You see a silver axe embedded deeply in the ground. After several unsuccessful attempts by your army to remove the axe, you tightly grip the handle of the axe and effortlessly pull it free." );
+    case DIVINE_BREASTPLATE:
+        return _(
+            "A gang of Rogues is sifting through the possessions of dead warriors. Scaring off the scavengers, you note the Rogues had overlooked a beautiful breastplate." );
+    case MINOR_SCROLL:
+        return _(
+            "Before you appears a levitating glass case with a scroll, perched upon a bed of crimson velvet. At your touch, the lid opens and the scroll floats into your awaiting hands." );
+    case MAJOR_SCROLL:
+        return _( "Visiting a local wiseman, you explain the intent of your journey. He reaches into a sack and withdraws a yellowed scroll and hands it to you." );
+    case SUPERIOR_SCROLL:
+        return _(
+            "You come across the remains of an ancient Druid. Bones, yellowed with age, peer from the ragged folds of her robe. Searching the robe, you discover a scroll hidden in the folds." );
+    case FOREMOST_SCROLL:
+        return _( "Mangled bones, yellowed with age, peer from the ragged folds of a dead Druid's robe. Searching the robe, you discover a scroll hidden within." );
+    case ENDLESS_SACK_GOLD:
+        return _(
+            "A little leprechaun dances gleefully around a magic sack. Seeing you approach, he stops in mid-stride. The little man screams and stamps his foot ferociously, vanishing into thin air. Remembering the old leprechaun saying 'Finders Keepers', you grab the sack and leave." );
+    case ENDLESS_BAG_GOLD:
+        return _( "A noblewoman, separated from her traveling companions, asks for your help. After escorting her home, she rewards you with a bag filled with gold." );
+    case ENDLESS_PURSE_GOLD:
+        return _(
+            "In your travels, you find a leather purse filled with gold that once belonged to a great warrior king who had the ability to transform any inanimate object into gold." );
+    case NOMAD_BOOTS_MOBILITY:
+        return _(
+            "A Nomad trader seeks protection from a tribe of Goblins. For your assistance, he gives you a finely crafted pair of boots made from the softest leather. Looking closely, you see fascinating ancient carvings engraved on the leather." );
+    case TRAVELER_BOOTS_MOBILITY:
+        return _(
+            "Discovering a pair of beautifully beaded boots made from the finest and softest leather, you thank the anonymous donor and add the boots to your inventory." );
+    case RABBIT_FOOT:
+        return _(
+            "A traveling merchant offers you a rabbit's foot, made of gleaming silver fur, for safe passage. The merchant explains the charm will increase your luck in combat." );
+    case GOLDEN_HORSESHOE:
+        return _(
+            "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set her free. Snorting and stamping her front hoof once, she gallops off. Looking down you see a golden horseshoe." );
+    case GAMBLER_LUCKY_COIN:
+        return _( "You have captured a mischievous imp who has been terrorizing the region. In exchange for his release, he rewards you with a magical coin." );
+    case FOUR_LEAF_CLOVER:
+        return _( "In the middle of a patch of dead and dry vegetation, to your surprise you find a healthy green four-leaf clover." );
+    case TRUE_COMPASS_MOBILITY:
+        return _( "An old man claiming to be an inventor asks you to try his latest invention. He then hands you a compass." );
+    case SAILORS_ASTROLABE_MOBILITY:
+        return _(
+            "An old sea captain is being tortured by Ogres. You save him, and in return he rewards you with a wondrous instrument to measure the distance of a star." );
+    case EVIL_EYE:
+        return _(
+            "While venturing into a decrepit hut you find the Skeleton of a long dead witch. Investigation of the remains reveals a glass eye rolling around inside an empty skull." );
+    case ENCHANTED_HOURGLASS:
+        return _(
+            "A surprise turn in the landscape finds you in the midst of a grisly scene:  Vultures picking at the aftermath of a terrible battle. Your cursory search of the remains turns up an enchanted hourglass." );
+    case GOLD_WATCH:
+        return _(
+            "In reward for helping his cart out of a ditch, a traveling potion salesman gives you a \"magic\" gold watch. Unbeknownst to him, the watch really is magical." );
+    case SKULLCAP:
+        return _(
+            "A brief stop at an improbable rural inn yields an exchange of money, tales, and accidentally, luggage. You find a magical skullcap in your new backpack." );
+    case ICE_CLOAK:
+        return _(
+            "Responding to the panicked cries of a damsel in distress, you discover a young woman fleeing from a hungry bear. You slay the beast in the nick of time, and the grateful Sorceress weaves a magic cloak from the bear's hide." );
+    case FIRE_CLOAK:
+        return _(
+            "You've come upon a fight between a Necromancer and a Paladin. The Necromancer blasts the Paladin with a fire bolt, bringing him to his knees. Acting quickly, you slay the evil one before the final blow. The grateful Paladin gives you the fire cloak that saved him." );
+    case LIGHTNING_HELM:
+        return _(
+            "A traveling tinker in need of supplies offers you a helm with a thunderbolt design on its top in exchange for food and water. Curious, you accept, and later find out that the helm is magical." );
+    case EVERCOLD_ICICLE:
+        return _(
+            "An icicle withstanding the full heat of the noonday sun attracts your attention. Intrigued, you break it off, and find that it does not melt in your hand." );
+    case EVERHOT_LAVA_ROCK:
+        return _(
+            "Your wanderings bring you into contact with a tribe of ape-like beings using a magical lava rock that never cools to light their fires. You take pity on them and teach them to make fire with sticks. Believing you to be a god, the apes give you their rock." );
+    case LIGHTNING_ROD:
+        return _(
+            "While waiting out a storm, a lighting bolt strikes a nearby cottage's lightning rod, which melts and falls to the ground. The tip of the rod, however, survives intact and makes your hair stand on end when you touch it. Hmm..." );
+    case SNAKE_RING:
+        return _( "You've found an oddly shaped ring on the finger of a long dead traveler. The ring looks like a snake biting its own tail." );
+    case ANKH:
+        return _(
+            "A fierce windstorm reveals the entrance to a buried tomb. Your investigation reveals that the tomb has already been looted, but the thieves overlooked an ankh on a silver chain in the dark." );
+    case BOOK_ELEMENTS:
+        return _(
+            "You come across a conjurer who begs to accompany you and your army awhile for safety. You agree, and he offers as payment a copy of the book of the elements." );
+    case ELEMENTAL_RING:
+        return _(
+            "While pausing to rest, you notice a bobcat climbing a short tree to get at a crow's nest. On impulse, you climb the tree yourself and scare off the cat. When you look in the nest, you find a collection of shiny stones and a ring." );
+    case HOLY_PENDANT:
+        return _(
+            "In your wanderings you come across a hermit living in a small, tidy hut. Impressed with your mission, he takes time out from his meditations to bless and give you a charm against curses." );
+    case PENDANT_FREE_WILL:
+        return _(
+            "Responding to cries for help, you find river Sprites making a sport of dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a magic pendant to let him go." );
+    case PENDANT_LIFE:
+        return _(
+            "A brief roadside encounter with a small caravan and a game of knucklebones wins a magic pendant. Its former owner says that it protects from Necromancers' death spells." );
+    case SERENITY_PENDANT:
+        return _(
+            "The sounds of combat draw you to the scene of a fight between an old Barbarian and an eight-headed Hydra. Your timely intervention swings the battle in favor of the man, and he rewards you with a pendant he used to use to calm his mind for battle." );
+    case SEEING_EYE_PENDANT:
+        return _(
+            "You come upon a very old woman, long blind from cataracts and dying alone. You tend to her final needs and promise a proper burial. Grateful, she gives you a magic pendant emblazoned with a stylized eye. It lets you see with your eyes closed." );
+    case KINETIC_PENDANT:
+        return _(
+            "You come across a golem wearing a glowing pendant and blocking your way. Acting on a hunch, you cut the pendant from its neck. Deprived of its power source, the golem breaks down, leaving you with the magical pendant." );
+    case PENDANT_DEATH:
+        return _(
+            "A quick and deadly battle with a Necromancer wins you his magical pendant. Later, a Wizard tells you that the pendant protects undead under your control from holy word spells." );
+    case WAND_NEGATION:
+        return _(
+            "You meet an old Wizard friend of yours traveling in the opposite direction. He presents  you with a gift:  A wand that prevents the use of the dispel magic spell on your allies." );
+    case GOLDEN_BOW:
+        return _( "A chance meeting with a famous Archer finds you in a game of knucklebones pitting his bow against your horse. You win." );
+    case TELESCOPE:
+        return _(
+            "A merchant from far away lands trades you a new invention of his people for traveling supplies. It makes distant objects appear closer, and he calls it...\n\na telescope." );
+    case STATESMAN_QUILL:
+        return _(
+            "You pause to help a diplomat with a broken axle fix his problem. In gratitude, he gives you a writing quill with magical properties which he says will \"help people see things your way\"." );
+    case WIZARD_HAT:
+        return _(
+            "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard opens a portal and rides through, getting his hat knocked off by the edge of the gate. The Griffin follows; the gate closes. You pick the hat up, dust it off, and put it on." );
+    case POWER_RING:
+        return _(
+            "You find a small tree that closely resembles the great Warlock Carnauth with a ring around one of its twigs. Scraps of clothing and rotting leather lead you to suspect that it IS Carnauth, transformed. Since you can't help him, you take the magic ring." );
+    case AMMO_CART:
+        return _( "An ammunition cart in the middle of an old battlefield catches your eye. Inspection shows it to be in good working order, so  you take it along." );
+    case TAX_LIEN:
+        return _(
+            "Your big spending habits have earned you a massive tax bill that you can't hope to pay. The tax man takes pity and agrees to only take 250 gold a day from your account for life. Check here if you want one dollar to go to the presidential campaign election fund." );
+    case HIDEOUS_MASK:
+        return _(
+            "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting Warlock, unearths his fabled mask. Trembling, you put it on and it twists your visage into an awful grimace!  Oh no!  It's actually the hideous mask of Gromluck Greene, and you are stuck with it." );
+    case ENDLESS_POUCH_SULFUR:
+        return _(
+            "You visit an alchemist who, upon seeing your army, is swayed by the righteousness of your cause. The newly loyal subject gives you his endless pouch of sulfur to help with the war effort." );
+    case ENDLESS_VIAL_MERCURY:
+        return _(
+            "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial of mercury that always has a little left on the bottom. Recognizing a treasure when you see one, you cap it and slip it in your pocket." );
+    case ENDLESS_POUCH_GEMS:
+        return _(
+            "A short rainstorm brings forth a rainbow...and you can see the end of it. Riding quickly, you seize the pot of gold you find there. The leprechaun who owns it, unable to stop you from taking it, offers an endless pouch of gems for the return of his gold. You accept." );
+    case ENDLESS_CORD_WOOD:
+        return _(
+            "Pausing to rest and light a cook fire, you pull wood out of a nearby pile of dead wood. As you keep pulling wood from the pile, you notice that it doesn't shrink. You realize to your delight that the wood is enchanted, so you take it along." );
+    case ENDLESS_CART_ORE:
+        return _(
+            "You've found a Goblin weapon smithy making weapons for use against humans. With a tremendous yell you and your army descend upon their camp and drive them away. A search finds a magic ore cart that never runs out of iron." );
+    case ENDLESS_POUCH_CRYSTAL:
+        return _(
+            "Taking shelter from a storm in a small cave,  you notice a small patch of crystal in one corner. Curious, you break a piece off and notice that the original crystal grows the lost piece back. You decide to stuff the entire patch into a pouch and take it with you." );
+    case SPIKED_HELM:
+        return _(
+            "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. You fend them off easily and the survivors flee in all directions. One of the Orcs was wearing a polished spiked helm. Figuring it will make a good souvenir, you take it." );
+    case SPIKED_SHIELD:
+        return _(
+            "You come upon a bridge spanning a dry gully. Before you can cross, a Troll steps out from under the bridge and demands payment before it will permit you to pass. You refuse, and the Troll charges, forcing you to slay it. You take its spiked shield as a trophy." );
+    case WHITE_PEARL:
+        return _( "A walk across a dry saltwater lake bed yields an unlikely prize:  A white pearl amidst shattered shells and debris." );
+    case BLACK_PEARL:
+        return _(
+            "Rumors of a Griffin of unusual size preying upon the countryside lead you to its cave lair. A quick, brutal fight dispatches the beast, and a search of its foul nest turns up a huge black pearl." );
     case SPELL_SCROLL:
         return _(
             "You find an elaborate container which houses an old vellum scroll. The runes on the container are very old, and the artistry with which it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." );
@@ -638,7 +840,6 @@ const char * Artifact::GetScenario( const Artifact & art )
     case SPADE_NECROMANCY:
         return _(
             "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." );
-
     default:
         break;
     }
@@ -973,7 +1174,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
         }
     }
     else if ( art.isValid() ) {
-        Dialog::ArtifactInfo( art.GetName(), "", art );
+        fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::OK );
     }
 
     ResetSelected();
@@ -986,10 +1187,12 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
     ResetSelected();
 
     if ( art.isValid() ) {
-        if ( can_change )
+        if ( can_change ) {
             art.Reset();
-        else
-            Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
+        }
+        else {
+            fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
+        }
     }
 
     return true;

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -103,7 +104,7 @@ namespace
         // Redraw select button as the original image has a wrong position of it
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
-        fheroes2::FontType normalWhiteFont = { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+        fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
@@ -128,13 +129,13 @@ namespace
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
     {
-        const uint32_t width = 77;
-        const uint32_t height = 70;
+        const int32_t width = 77;
+        const int32_t height = 70;
 
-        for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-            const uint32_t offset = width * current;
+        for ( int32_t current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
+            const int32_t offset = width * current;
 
-            fheroes2::Text text( Difficulty::String( current ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }

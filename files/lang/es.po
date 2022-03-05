@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 13:40+0100\n"
+"POT-Creation-Date: 2022-02-17 08:59+0100\n"
 "PO-Revision-Date: 2021-11-07 17:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -762,6 +762,14 @@ msgid "Save the Dwarves"
 msgstr "\"Salva a los Enanos\""
 
 #, fuzzy
+msgid "The Crown"
+msgstr "\"La Corona\""
+
+#, fuzzy
+msgid "The Gauntlet"
+msgstr "\"El Guantelete\""
+
+#, fuzzy
 msgid "Turning Point"
 msgstr "\"Punto de retorno\""
 
@@ -771,14 +779,6 @@ msgstr "Corlagon"
 
 msgid "Final Justice"
 msgstr ""
-
-#, fuzzy
-msgid "The Crown"
-msgstr "\"La Corona\""
-
-#, fuzzy
-msgid "The Gauntlet"
-msgstr "\"El Guantelete\""
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -853,16 +853,9 @@ msgstr "\"Primera Sangre\""
 msgid "Necromancers"
 msgstr "Nigromante"
 
-msgid "Rebellion"
-msgstr ""
-
 #, fuzzy
 msgid "Slay the Dwarves"
 msgstr "\"Da muerte a los Enanos\""
-
-#, fuzzy
-msgid "Apocalypse"
-msgstr "\"Apocalipsis\""
 
 #, fuzzy
 msgid "Country Lords"
@@ -871,6 +864,13 @@ msgstr "\"Señores del Pais\""
 #, fuzzy
 msgid "Dragon Master"
 msgstr "\"Maestro Dragón\""
+
+msgid "Rebellion"
+msgstr ""
+
+#, fuzzy
+msgid "Apocalypse"
+msgstr "\"Apocalipsis\""
 
 #, fuzzy
 msgid "Greater Glory"
@@ -1224,64 +1224,125 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
-#, fuzzy
-msgid "Caster's Bracelet"
-msgstr "Brazalete del Lanzador de la Magia"
-
-#, fuzzy
-msgid "Defender Helm"
-msgstr "Defensor"
-
-#, fuzzy
-msgid "Breastplate"
-msgstr "Peto de Anduran"
-
-#, fuzzy
-msgid "Dragon Sword"
-msgstr "Matadragones"
-
-msgid "Fizbin Medal"
+msgid "campaignBonus|Ballista"
 msgstr ""
 
 #, fuzzy
-msgid "Foremost Scroll"
+msgid "campaignBonus|Black Pearl"
+msgstr "Perla Negra"
+
+#, fuzzy
+msgid "campaignBonus|Caster's Bracelet"
+msgstr "Brazalete del Lanzador de la Magia"
+
+#, fuzzy
+msgid "campaignBonus|Defender Helm"
+msgstr "Defensor"
+
+#, fuzzy
+msgid "campaignBonus|Breastplate"
+msgstr "Peto de Anduran"
+
+#, fuzzy
+msgid "campaignBonus|Dragon Sword"
+msgstr "Matadragones"
+
+msgid "campaignBonus|Fizbin Medal"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Foremost Scroll"
 msgstr "Principal Pergamino de Conocimiento"
 
 #, fuzzy
-msgid "Mage's Ring"
+msgid "campaignBonus|Hideous Mask"
+msgstr "Máscara Horrenda"
+
+#, fuzzy
+msgid "campaignBonus|Mage's Ring"
 msgstr "Anillo del Mago del Poder"
 
 #, fuzzy
-msgid "Major Scroll"
+msgid "campaignBonus|Major Scroll"
 msgstr "Rollo Mayor del Conocimiento"
 
 #, fuzzy
-msgid "Minor Scroll"
+msgid "campaignBonus|Medal of Honor"
+msgstr "La Medalla de Honor"
+
+#, fuzzy
+msgid "campaignBonus|Medal of Valor"
+msgstr "La Medalla de Valor"
+
+#, fuzzy
+msgid "campaignBonus|Minor Scroll"
 msgstr "Pergamino Menor de Conocimiento"
 
 #, fuzzy
-msgid "Nomad Boots"
+msgid "campaignBonus|Nomad Boots"
 msgstr "Nómadas"
 
-#, fuzzy
-msgid "Power Axe"
-msgstr "Poder"
+msgid "campaignBonus|Power Axe"
+msgstr ""
 
 #, fuzzy
-msgid "Stealth Shield"
+msgid "campaignBonus|Spiked Shield"
+msgstr "Escudo Picudo"
+
+#, fuzzy
+msgid "campaignBonus|Stealth Shield"
 msgstr "El Escudo Supremo"
 
+msgid "campaignBonus|Tax Lien"
+msgstr ""
+
 #, fuzzy
-msgid "Thunder Mace"
+msgid "campaignBonus|Thunder Mace"
 msgstr "Maza del Trueno de Dominio"
 
 #, fuzzy
-msgid "Traveler's Boots"
+msgid "campaignBonus|Traveler's Boots"
 msgstr "Botas de Viajero de la Movilidad"
 
 #, fuzzy
-msgid "Summon Earth"
+msgid "campaignBonus|White Pearl"
+msgstr "Perla Blanca"
+
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Animar Muertos"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Cadena de Rayos"
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Doble Imagen"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Anillo del Mago del Poder"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
 msgstr "LLamar Barco"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Ver Heroes"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Produce: %{monster}."
@@ -1978,7 +2039,7 @@ msgstr ""
 "tus artefactos a otro héroe."
 
 #, fuzzy
-msgid "Income"
+msgid "Kingdom Income"
 msgstr "Ingresos:"
 
 #, fuzzy
@@ -8791,6 +8852,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Power Axe"
+#~ msgstr "Poder"
 
 #, fuzzy
 #~ msgid "battle: show army order"

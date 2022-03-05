@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -165,7 +166,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , can_change( change )
 {
     if ( use_mini_sprite )
-        SetBackground( fheroes2::Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
+        SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
         SetItemSize( sprite.width(), sprite.height() );

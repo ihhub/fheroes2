@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +35,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -127,7 +129,7 @@ bool RowSpells::QueueEventProcessing( void )
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            Dialog::SpellInfo( spell, nullptr, !le.MousePressRight() );
+            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
             fheroes2::Display::instance().render();
         }
     }
@@ -194,15 +196,15 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     fheroes2::Point outPos( cur_pt.x + 100 - area.x - area.width / 2, cur_pt.y + 290 - sprite.height() );
     fheroes2::Size inSize( sprite.width(), sprite.height() );
 
-    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, fheroes2::Rect( cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT ) ) ) {
+    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
         fheroes2::Blit( sprite, inPos, display, outPos, inSize );
     }
 
-    RowSpells spells5( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 5 ), *this, 5 );
-    RowSpells spells4( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 95 ), *this, 4 );
-    RowSpells spells3( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 185 ), *this, 3 );
-    RowSpells spells2( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 275 ), *this, 2 );
-    RowSpells spells1( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 365 ), *this, 1 );
+    RowSpells spells5( { cur_pt.x + 250, cur_pt.y + 5 }, *this, 5 );
+    RowSpells spells4( { cur_pt.x + 250, cur_pt.y + 95 }, *this, 4 );
+    RowSpells spells3( { cur_pt.x + 250, cur_pt.y + 185 }, *this, 3 );
+    RowSpells spells2( { cur_pt.x + 250, cur_pt.y + 275 }, *this, 2 );
+    RowSpells spells1( { cur_pt.x + 250, cur_pt.y + 365 }, *this, 1 );
 
     spells1.Redraw();
     spells2.Redraw();

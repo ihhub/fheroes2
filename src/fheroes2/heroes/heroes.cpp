@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,10 +57,14 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
 {
+    const size_t maxHeroCount = 71;
+
     int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
     {
         int result = 0;
@@ -984,8 +989,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
     // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
     if ( isControlHuman() ) {
-        for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-            Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
+        for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+            const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
+        }
     }
 
     return true;
@@ -1140,28 +1148,26 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
     if ( !kingdom.AllowPayment( payment ) ) {
         if ( isControlHuman() ) {
-            const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-            fheroes2::Sprite sprite = border;
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
-
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::SpriteInfo( "", header, sprite, Dialog::OK );
+
+            const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
+            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
+                                   Dialog::OK, { &artifactUI } );
         }
         return false;
     }
 
     if ( isControlHuman() ) {
-        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        fheroes2::Sprite sprite = border;
-
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
-
         header.append( " " );
         header.append( _( "Do you wish to buy one?" ) );
 
-        if ( Dialog::NO == Dialog::SpriteInfo( GetName(), header, sprite, Dialog::YES | Dialog::NO ) )
+        const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
+        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
+                                    Dialog::YES | Dialog::NO, { &artifactUI } )
+             == Dialog::NO ) {
             return false;
+        }
     }
 
     if ( SpellBookActivate() ) {
@@ -1752,7 +1758,7 @@ void Heroes::SetAttackedMonsterTileIndex( int idx )
 
 AllHeroes::AllHeroes()
 {
-    reserve( HEROESMAXCOUNT + 2 );
+    reserve( maxHeroCount + 2 );
 }
 
 AllHeroes::~AllHeroes()
@@ -1912,7 +1918,7 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
     }
 
     std::vector<int> freeman_heroes;
-    freeman_heroes.reserve( HEROESMAXCOUNT );
+    freeman_heroes.reserve( maxHeroCount );
 
     // First try to find a free hero of the specified race (skipping custom heroes)
     for ( int i = min; i <= max; ++i ) {

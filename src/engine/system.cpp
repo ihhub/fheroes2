@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -222,11 +223,29 @@ char * System::GetOptionsArgument( void )
 
 bool System::IsFile( const std::string & name, bool writable )
 {
+    if ( name.empty() ) {
+        // An empty path cannot be a file.
+        return false;
+    }
+
 #if defined( _MSC_VER )
+    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
+        // This path doesn't exist.
+        return false;
+    }
+
+    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
+        // This is a directory.
+        return false;
+    }
+
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
 #elif defined( ANDROID )
+    // TODO: check if it is really a file.
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #elif defined( FHEROES2_VITA )
+    // TODO: check if it is really a file.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
@@ -244,11 +263,29 @@ bool System::IsFile( const std::string & name, bool writable )
 
 bool System::IsDirectory( const std::string & name, bool writable )
 {
+    if ( name.empty() ) {
+        // An empty path cannot be a directory.
+        return false;
+    }
+
 #if defined( _MSC_VER )
+    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
+        // This path doesn't exist.
+        return false;
+    }
+
+    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
+        // Not a directory.
+        return false;
+    }
+
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
 #elif defined( ANDROID )
+    // TODO: check if it is really a directory.
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #elif defined( FHEROES2_VITA )
+    // TODO: check if it is really a directory.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;

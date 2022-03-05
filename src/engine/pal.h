@@ -28,20 +28,20 @@ namespace PAL
     enum class PaletteType : int
     {
         STANDARD, // default
-        YELLOW_TEXT,
-        WHITE_TEXT,
-        GRAY_TEXT,
-        RED, // blood lust, ...
-        GRAY, // petrify, ...
+        YELLOW_FONT,
+        WHITE_FONT,
+        GRAY_FONT,
+        RED, // for Blood Lust spell animation
+        GRAY, // for Petrify spell effect
         BROWN,
-        TAN, // puzzle
+        TAN, // for Puzzle image generation
         NO_CYCLE,
         MIRROR_IMAGE,
         DARKENING, // for disabled buttons
         CUSTOM
     };
 
-    std::vector<uint8_t> GetCyclingPalette( uint32_t stepId );
+    std::vector<uint8_t> GetCyclingPalette( const uint32_t stepId );
     const std::vector<uint8_t> & GetPalette( const PaletteType type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }

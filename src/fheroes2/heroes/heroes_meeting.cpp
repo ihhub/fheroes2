@@ -1,24 +1,25 @@
-/****************************************************************************
+/***************************************************************************
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
+ *                                                                         *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
- *                                                                          *
- *   This program is free software; you can redistribute it and/or modify   *
- *   it under the terms of the GNU General Public License as published by   *
- *   the Free Software Foundation; either version 2 of the License, or      *
- *   (at your option) any later version.                                    *
- *                                                                          *
- *   This program is distributed in the hope that it will be useful,        *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *   GNU General Public License for more details.                           *
- *                                                                          *
- *   You should have received a copy of the GNU General Public License      *
- *   along with this program; if not, write to the                          *
- *   Free Software Foundation, Inc.,                                        *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              *
- ****************************************************************************/
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include <algorithm>
 #include <string>
@@ -40,6 +41,8 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -463,8 +466,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             // Use insert instead of std::merge to make appveyour happy
             assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &artifactUI } );
+            }
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();

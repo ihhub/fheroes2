@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,18 +49,18 @@ namespace
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
 
-        fheroes2::Text header( info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( info.name, fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "Location: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "\n\nMap Type:\n" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { _( "Location: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
+        body.add( { _( "\n\nMap Type:\n" ), fheroes2::FontType::normalYellow() } );
         switch ( info._version ) {
         case GameVersion::SUCCESSION_WARS:
-            body.add( { _( "The Succession Wars" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+            body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
             break;
         case GameVersion::PRICE_OF_LOYALTY:
-            body.add( { _( "The Price of Loyalty" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+            body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
             break;
         default:
             // Did you add a new map version? Add the logic above!
@@ -346,10 +347,17 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     ScenarioListBox listbox( rt.getPosition() );
 
     listbox.RedrawBackground( rt.getPosition() );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 217 ) );
+    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 217 } );
 
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 140 ) );
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 140 } );
+
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( fheroes2::Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
     listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
@@ -399,6 +407,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( small.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( small );
                 currentPressedButton = &buttonSelectSmall;
                 currentPressedButton->press();
@@ -412,6 +425,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( medium.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( medium );
                 currentPressedButton = &buttonSelectMedium;
                 currentPressedButton->press();
@@ -425,6 +443,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( large.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( large );
                 currentPressedButton = &buttonSelectLarge;
                 currentPressedButton->press();
@@ -438,6 +461,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( xlarge.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( xlarge );
                 currentPressedButton = &buttonSelectXLarge;
                 currentPressedButton->press();
@@ -446,6 +474,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
+            const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             currentPressedButton = &buttonSelectAll;
             currentPressedButton->press();

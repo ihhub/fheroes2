@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +54,7 @@ namespace
         fheroes2::Copy( backgroundImage, 6 + 65, 59, output, offset.x + backgroundArea.x + backgroundArea.width / 2, offset.y + backgroundArea.y,
                         backgroundArea.width / 2, backgroundArea.height );
 
-        const fheroes2::Text text( _( "Cost per troop:" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text text( _( "Cost per troop:" ), fheroes2::FontType::smallWhite() );
         text.draw( offset.x + backgroundArea.x + ( backgroundArea.width - text.width() ) / 2, offset.y + backgroundArea.y + 2, output );
     }
 }

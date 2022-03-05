@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,6 +156,8 @@ const char * Skill::Primary::String( int skill )
     case KNOWLEDGE:
         return _( "Knowledge" );
     default:
+        // Are you sure that you are passing the correct skill type?
+        assert( 0 );
         break;
     }
 
@@ -222,10 +225,10 @@ const char * Skill::Level::String( int level )
     return "None";
 }
 
-std::string Skill::Level::StringWithBonus( const Heroes & hero, int skill, int level )
+std::string Skill::Level::StringWithBonus( const Heroes & hero, const Secondary & skill )
 {
-    const std::string levelStr = String( level );
-    if ( skill == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
+    const std::string levelStr = String( skill.Level() );
+    if ( skill.Skill() == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
         return levelStr + "+" + std::to_string( Skill::GetNecromancyBonus( hero ) );
     }
     return levelStr;

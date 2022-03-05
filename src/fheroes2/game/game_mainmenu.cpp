@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -195,15 +196,14 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::drawMainMenuScreen();
         }
 
-        fheroes2::Text header( _( "Please Remember" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "You can always change game resolution by clicking on the " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "door" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ),
-                    { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "F4" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "You can always change game resolution by clicking on the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "F4" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 

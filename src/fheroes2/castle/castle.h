@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,6 +173,7 @@ public:
     int getBuildingValue() const;
 
     // Used only for AI.
+    double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
     void ChangeColor( int );
@@ -250,6 +252,7 @@ private:
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
+    Troops getAvailableArmy( Funds potentialBudget ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 

@@ -1,0 +1,113 @@
+name: MSVC
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: SDL1 x86
+          platform: x86
+          build_config: Release-SDL1
+          deploy_config: SDL1
+          package_name: fheroes2_windows_x86_SDL1
+          release_name: Windows x86 build with SDL1 support (latest commit)
+          release_tag: fheroes2-windows-x86-SDL1
+        - name: SDL1 x64
+          platform: x64
+          build_config: Release-SDL1
+          deploy_config: SDL1
+          package_name: fheroes2_windows_x64_SDL1
+          release_name: Windows x64 build with SDL1 support (latest commit)
+          release_tag: fheroes2-windows-x64-SDL1
+        - name: SDL2 x86
+          platform: x86
+          build_config: Release-SDL2
+          deploy_config: SDL2
+          package_name: fheroes2_windows_x86_SDL2
+          release_name: Windows x86 build with SDL2 support (latest commit)
+          release_tag: fheroes2-windows-x86-SDL2
+        - name: SDL2 x64
+          platform: x64
+          build_config: Release-SDL2
+          deploy_config: SDL2
+          package_name: fheroes2_windows_x64_SDL2
+          release_name: Windows x64 build with SDL2 support (latest commit)
+          release_tag: fheroes2-windows-x64-SDL2
+    name: MSVC (${{ matrix.config.name }})
+    runs-on: windows-2019
+    defaults:
+      run:
+        shell: bash
+    env:
+      APP_VERSION: 0.9.12
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies, cygwin and zip
+      run: |
+        cd script/windows
+        ./install_packages.bat
+        choco.exe install cygwin cyg-get zip -y
+        cyg-get.bat make iconv gettext-devel
+    - uses: microsoft/setup-msbuild@v1
+    - name: Generate build number
+      run: |
+        echo "fheroes2_build_version=$((GITHUB_RUN_NUMBER % 32768))" >> "$GITHUB_ENV"
+    - name: Build
+      run: |
+        MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+    - name: Build tools
+      run: |
+        cd src/tools
+        MSBuild.exe extractor-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe icn2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+    - name: Generate translations
+      run: |
+        C:\tools\cygwin\bin\bash.exe -l -c ^"cd ""$GITHUB_WORKSPACE"" ^&^& make -C files/lang -j 2^"
+      shell: cmd
+    - name: Create Inno Setup package
+      run: |
+        iscc.exe script\windows\fheroes2.iss /DAppVersion="%APP_VERSION%" /DBuildDir="..\..\%BUILD_DIR%" ^
+                 /DPlatform=${{ matrix.config.platform }} /DDeployConfName=${{ matrix.config.deploy_config }}
+      shell: cmd
+      env:
+        BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
+    - name: Create ZIP package
+      run: |
+        zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\SDL*.dll "$BUILD_DIR"\\lib*.dll \
+                script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE fheroes2.key changelog.txt docs\\README.txt
+        zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d
+      env:
+        BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
+    - uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: ${{ matrix.config.package_name }}_installer.exe
+        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe
+        if-no-files-found: error
+    - uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: ${{ matrix.config.package_name }}.zip
+        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
+        if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe,
+                   build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.config.release_name }}
+        tag: ${{ matrix.config.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -106,13 +107,13 @@ public:
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
 
-        fheroes2::Text header( ResizeToShortName( info.file ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "Map: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "\n\nLocation: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { info.name, fheroes2::FontType::normalWhite() } );
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
@@ -260,9 +261,16 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     FileInfoListBox listbox( rt.getPosition() );
 
     listbox.RedrawBackground( rt.getPosition() );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
+    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 257 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( lists.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 180 } );
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 11 );
     listbox.SetAreaItems( fheroes2::Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
     listbox.SetListContent( lists );
@@ -370,6 +378,13 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 listbox.RemoveSelected();
                 if ( lists.empty() || filename.empty() )
                     buttonOk.disable();
+
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( lists.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( lists );
             }
 

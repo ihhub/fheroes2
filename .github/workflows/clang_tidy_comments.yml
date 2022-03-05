@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v3.1.0
+      uses: actions/github-script@v3
       with:
         script: |
           let artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -44,7 +44,7 @@ jobs:
         ref: ${{ env.pr_head_ref }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v3.1.0
+      uses: actions/github-script@v3
       with:
         script: |
           let artifacts = await github.actions.listWorkflowRunArtifacts({

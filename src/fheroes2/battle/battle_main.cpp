@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +38,8 @@
 #include "skill.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace Battle
@@ -369,7 +372,9 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{spell}", sp.GetName() );
             Game::PlayPickupSound();
-            Dialog::SpellInfo( "", msg, sp );
+
+            const fheroes2::SpellDialogElement spellUI( sp, &hero );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
         }
     }
 
