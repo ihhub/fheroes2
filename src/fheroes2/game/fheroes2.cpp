@@ -157,14 +157,14 @@ int main( int argc, char ** argv )
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
+        COUT( GetCaption() )
+
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
 
         InitConfigDir();
         InitDataDir();
         ReadConfigs();
-
-        COUT( GetCaption() )
 
         // getopt
         {

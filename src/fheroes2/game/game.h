@@ -71,7 +71,7 @@ namespace Game
         VIEW_MAGI_EYES = 5
     };
 
-    enum
+    enum : int32_t
     {
         EVENT_NONE,
         EVENT_BUTTON_NEWGAME,

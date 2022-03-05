@@ -103,7 +103,7 @@ namespace fheroes2
         // Returns true if here is something to draw.
         virtual bool empty() const = 0;
 
-        // Return full text.
+        // Returns full text. Multi-text class cannot return by reference hence returning by value.
         virtual std::string text() const = 0;
     };
 
