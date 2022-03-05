@@ -1257,23 +1257,25 @@ uint32_t Army::ActionToSirens() const
     for ( Troop * troop : *this ) {
         assert( troop != nullptr );
 
-        if ( troop->isValid() ) {
-            const uint32_t troopCount = troop->GetCount();
-            if ( troopCount == 1 ) {
-                // Sirens do not affect 1 troop stack.
-                continue;
-            }
-
-            // 30% of stack troops will be gone.
-            uint32_t troopToRemove = troopCount * 3 / 10;
-            if ( troopToRemove == 0 ) {
-                // At least one unit must go, even if it's more than 30%.
-                troopToRemove = 1;
-            }
-
-            troop->SetCount( troopCount - troopToRemove );
-            experience += troopToRemove * static_cast<Monster *>( troop )->GetHitPoints();
+        if ( !troop->isValid() ) {
+            continue;
         }
+
+        const uint32_t troopCount = troop->GetCount();
+        if ( troopCount == 1 ) {
+            // Sirens do not affect 1 troop stack.
+            continue;
+        }
+
+        // 30% of stack troops will be gone.
+        uint32_t troopToRemove = troopCount * 3 / 10;
+        if ( troopToRemove == 0 ) {
+            // At least one unit must go, even if it's more than 30%.
+            troopToRemove = 1;
+        }
+
+        troop->SetCount( troopCount - troopToRemove );
+        experience += troopToRemove * static_cast<Monster *>( troop )->GetHitPoints();
     }
 
     return experience;
