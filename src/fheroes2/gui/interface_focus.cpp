@@ -97,7 +97,7 @@ void Interface::Basic::ResetFocus( int priority )
         Focus & focus = player->GetFocus();
         Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-        iconsPanel.ResetIcons();
+        iconsPanel.ResetIcons( ICON_ANY );
 
         switch ( priority ) {
         case GameFocus::FIRSTHERO: {

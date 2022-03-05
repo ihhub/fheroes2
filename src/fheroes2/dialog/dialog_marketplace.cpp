@@ -134,7 +134,7 @@ public:
     explicit TradeWindowGUI( const fheroes2::Rect & rt )
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
-        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
+        , tradpostIcnId( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
         , _singlePlayer( false )
     {
         Settings & conf = Settings::Get();
@@ -142,19 +142,18 @@ public:
         back.update( rt.x - 5, rt.y + 15, rt.width + 10, 160 );
 
         buttonGift.setICNInfo( conf.ExtGameEvilInterface() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
-        buttonTrade.setICNInfo( tradpost, 15, 16 );
-        buttonLeft.setICNInfo( tradpost, 3, 4 );
-        buttonRight.setICNInfo( tradpost, 5, 6 );
+        buttonTrade.setICNInfo( tradpostIcnId, 15, 16 );
+        buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
+        buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
 
-        const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
+        const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpostIcnId, 17 );
 
         buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
         buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
-
-        _scrollbar.setImage( fheroes2::AGG::GetICN( tradpost, 2 ) );
-        _scrollbar.setArea( fheroes2::Rect( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 1 ).width() ) / 2 + 22, pos_rt.y + 131, 187, 11 ) );
+        _scrollbar.setImage( fheroes2::AGG::GetICN( tradpostIcnId, 2 ) );
+        _scrollbar.setArea( { pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpostIcnId, 1 ).width() ) / 2 + 22, pos_rt.y + 131, 187, 11 } );
         _scrollbar.hide();
 
         const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
@@ -191,7 +190,7 @@ public:
 private:
     fheroes2::Rect pos_rt;
     fheroes2::ImageRestorer back;
-    int tradpost;
+    const int tradpostIcnId;
 
     TextSprite textSell;
     TextSprite textBuy;
@@ -227,11 +226,20 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
     else {
         back.restore();
 
-        const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpost, 1 );
+        const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpostIcnId, 1 );
         fheroes2::Point dst_pt( pos_rt.x + ( pos_rt.width - bar.width() ) / 2 - 2, pos_rt.y + 128 );
         fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
-        _scrollbar.setRange( 0, ( Resource::GOLD == resourceTo ? max_sell : max_buy ) );
+        const uint32_t maximumValue = ( Resource::GOLD == resourceTo ) ? max_sell : max_buy;
+
+        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
+        const fheroes2::Image scrollbarSlider
+            = fheroes2::generateScrollbarSlider( originalSilder, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ), { 0, 0, 2, originalSilder.height() },
+                                                 { 2, 0, 8, originalSilder.height() } );
+        _scrollbar.setImage( scrollbarSlider );
+
+        _scrollbar.setRange( 0, maximumValue );
+
         const uint32_t exchange_rate = GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
         std::string message;
         if ( Resource::GOLD == resourceTo ) {
@@ -245,7 +253,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
             StringReplace( message, "%{resfrom}", Resource::String( resourceFrom ) );
             StringReplace( message, "%{count}", exchange_rate );
         }
-        const TextBox displayMessage( message, Font::BIG, fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
+        const TextBox displayMessage( message, Font::BIG, { pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 } );
         const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceFrom ) );
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() + 1 ) / 2 - 70;
         dst_pt.y = pos_rt.y + 115 - sprite_from.height();
@@ -254,7 +262,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_to.width() + 1 ) / 2 + 70;
         dst_pt.y = pos_rt.y + 115 - sprite_to.height();
         fheroes2::Blit( sprite_to, display, dst_pt.x, dst_pt.y );
-        const fheroes2::Sprite & sprite_fromto = fheroes2::AGG::GetICN( tradpost, 0 );
+        const fheroes2::Sprite & sprite_fromto = fheroes2::AGG::GetICN( tradpostIcnId, 0 );
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );

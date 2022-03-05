@@ -146,7 +146,7 @@ namespace Dialog
 
         int BorderWidth() const;
         int BorderHeight() const;
-        void SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench );
+        void SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench );
 
         bool isValid() const;
         const fheroes2::Rect & GetRect() const;

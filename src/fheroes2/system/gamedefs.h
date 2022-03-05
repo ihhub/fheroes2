@@ -36,7 +36,6 @@
 // hardcore defines: heroes
 #define HEROESMAXARTIFACT 14
 #define HEROESMAXSKILL 8
-#define HEROESMAXCOUNT 71
 
 // hardcore defines: skill
 #define MAXPRIMARYSKILL 4

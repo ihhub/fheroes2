@@ -330,7 +330,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
-    FindMissingRegions( data, fheroes2::Size( width, height ), _regions );
+    FindMissingRegions( data, { width, height }, _regions );
 
     // Step 9. Assign regions to the map tiles and finalize the data
     for ( MapRegion & reg : _regions ) {

@@ -86,7 +86,7 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : debug( 0 )
-    , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    , video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )

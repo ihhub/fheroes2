@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "ui_scrollbar.h"
+#include "pal.h"
 
 #include <cassert>
 #include <cmath>
@@ -29,11 +30,13 @@ namespace fheroes2
         : _minIndex( 0 )
         , _maxIndex( 0 )
         , _currentIndex( 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
     void Scrollbar::setImage( const Image & image )
     {
-        fheroes2::Copy( image, *this );
+        Copy( image, *this );
     }
 
     void Scrollbar::setArea( const Rect & area )
@@ -151,5 +154,116 @@ namespace fheroes2
 
             setPosition( posX - scrollbarImageMiddle, _area.y + roiHeight / 2 );
         }
+    }
+
+    Image generateScrollbarSlider( const Image & originalSlider, const bool horizonalSlider, const int32_t sliderAreaLength, const int32_t elementCountPerView,
+                                   const int32_t totalElementCount, const Rect & startSliderArea, const Rect & middleSliderArea )
+    {
+        if ( originalSlider.empty() ) {
+            // Why do you pass an empty image?
+            assert( 0 );
+            return originalSlider;
+        }
+
+        assert( sliderAreaLength > 0 && elementCountPerView > 0 );
+
+        if ( horizonalSlider ) {
+            if ( middleSliderArea.width < 1 ) {
+                // Middle area cannot be empty!
+                assert( 0 );
+                return originalSlider;
+            }
+
+            if ( sliderAreaLength < originalSlider.width() ) {
+                // The slider is bigger than the area!
+                assert( 0 );
+                return originalSlider;
+            }
+        }
+        else {
+            if ( middleSliderArea.height < 1 ) {
+                // Middle area cannot be empty!
+                assert( 0 );
+                return originalSlider;
+            }
+
+            if ( sliderAreaLength < originalSlider.height() ) {
+                // The slider is bigger than the area!
+                assert( 0 );
+                return originalSlider;
+            }
+        }
+
+        const int32_t currentSliderLength = horizonalSlider ? originalSlider.width() : originalSlider.height();
+
+        if ( sliderAreaLength * elementCountPerView < currentSliderLength * totalElementCount ) {
+            // Slider is too big.
+            return originalSlider;
+        }
+
+        const int32_t step = horizonalSlider ? middleSliderArea.width : middleSliderArea.height;
+        const int32_t middleLength = ( sliderAreaLength * elementCountPerView / std::max( elementCountPerView,  totalElementCount ) ) - currentSliderLength;
+
+        int32_t width = originalSlider.width();
+        int32_t height = originalSlider.height();
+        if ( horizonalSlider ) {
+            width += middleLength;
+        }
+        else {
+            height += middleLength;
+        }
+
+        Image output( width, height );
+        output.reset();
+
+        Copy( originalSlider, startSliderArea.x, startSliderArea.y, output, startSliderArea.x, startSliderArea.y, startSliderArea.width, startSliderArea.height );
+
+        int32_t offset = 0;
+        if ( horizonalSlider ) {
+            offset = startSliderArea.x + startSliderArea.width;
+        }
+        else {
+            offset = startSliderArea.y + startSliderArea.height;
+        }
+
+        const int32_t middleChunkCount = middleLength / step;
+        for ( int32_t i = 0; i < middleChunkCount; ++i ) {
+            if ( horizonalSlider ) {
+                Copy( originalSlider, middleSliderArea.x, middleSliderArea.y, output, offset, startSliderArea.y, middleSliderArea.width, middleSliderArea.height );
+
+                offset += middleSliderArea.width;
+            }
+            else {
+                Copy( originalSlider, middleSliderArea.x, middleSliderArea.y, output, startSliderArea.x, offset, middleSliderArea.width, middleSliderArea.height );
+
+                offset += middleSliderArea.height;
+            }
+        }
+
+        // Draw leftovers.
+        const int32_t leftover = middleLength - middleChunkCount * step;
+        if ( leftover > 0 ) {
+            if ( horizonalSlider ) {
+                Copy( originalSlider, middleSliderArea.x, middleSliderArea.y, output, offset, startSliderArea.y, leftover, middleSliderArea.height );
+
+                offset += leftover;
+            }
+            else {
+                Copy( originalSlider, middleSliderArea.x, middleSliderArea.y, output, startSliderArea.x, offset, middleSliderArea.width, leftover );
+
+                offset += leftover;
+            }
+        }
+
+        if ( horizonalSlider ) {
+            Copy( originalSlider, startSliderArea.x + startSliderArea.width, startSliderArea.y, output, offset, startSliderArea.y,
+                  originalSlider.width() - startSliderArea.width, startSliderArea.height );
+        }
+        else {
+            Copy( originalSlider, startSliderArea.x, startSliderArea.y + startSliderArea.height, output, startSliderArea.x, offset,
+                  startSliderArea.width, originalSlider.height() - startSliderArea.height );
+        }
+
+        return output;
     }
 }

@@ -240,7 +240,7 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
 
                 fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
             }
-            display.render( fheroes2::Rect( dstx, dsty, sf.width(), sf.height() ) );
+            display.render( { dstx, dsty, sf.width(), sf.height() } );
 
             if ( alpha <= 0 ) {
                 break;
