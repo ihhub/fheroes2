@@ -87,24 +87,26 @@ namespace
 
     void outputNewMenuInTextSupportMode()
     {
-        Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( "New Game\n" )
+        START_TEXT_SUPPORT_MODE
 
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to choose Multiplayer Game." )
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." )
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
+        COUT( "New Game\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to choose Multiplayer Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
     }
 
     void outputNewCampaignInTextSupportMode()
     {
-        Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( "New Campaign\n" )
+        START_TEXT_SUPPORT_MODE
 
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." )
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." )
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
+        COUT( "New Campaign\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
     }
 }
 

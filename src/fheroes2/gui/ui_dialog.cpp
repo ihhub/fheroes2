@@ -52,22 +52,23 @@ namespace
 
     void outputInTextSupportMode( const fheroes2::TextBase & header, const fheroes2::TextBase & body, const int buttonTypes )
     {
-        Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( header.text() )
-        TEXT_SUPPORT_LOG( '\n' )
-        TEXT_SUPPORT_LOG( body.text() )
+        START_TEXT_SUPPORT_MODE
+
+        COUT( header.text() )
+        COUT( '\n' )
+        COUT( body.text() )
 
         if ( buttonTypes & Dialog::YES ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
         }
         if ( buttonTypes & Dialog::NO ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
         }
         if ( buttonTypes & Dialog::OK ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
         }
         if ( buttonTypes & Dialog::CANCEL ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
         }
     }
 }

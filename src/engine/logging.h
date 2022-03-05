@@ -134,11 +134,6 @@ namespace Logging
         COUT( Logging::GetTimeString() << ": [ERROR]\t" << __FUNCTION__ << ":  " << x );                                                                                 \
     }
 
-#define TEXT_SUPPORT_LOG( text )                                                                                                                                         \
-    if ( Logging::isTextSupportModeEnabled() ) {                                                                                                                         \
-        COUT( text );                                                                                                                                                    \
-    }
-
 #ifdef WITH_DEBUG
 #define DEBUG_LOG( x, y, z )                                                                                                                                             \
     if ( IS_DEBUG( x, y ) ) {                                                                                                                                            \
@@ -153,15 +148,12 @@ bool IS_DEBUG( const int name, const int level );
 
 namespace Logging
 {
-    // This class simply adds text separators when Text Support mode is enabled.
-    class TextSupportLogger
+    // This structure simply adds text separators. It is used for Text Support Mode only.
+    struct TextSupportLogger
     {
-    public:
         TextSupportLogger()
         {
-            if ( _isEnabled ) {
-                COUT( "----------" )
-            }
+            COUT( "----------" )
         }
 
         TextSupportLogger( const TextSupportLogger & ) = delete;
@@ -171,14 +163,16 @@ namespace Logging
 
         ~TextSupportLogger()
         {
-            if ( _isEnabled ) {
-                COUT( "----------" )
-            }
+            COUT( "----------" )
         }
-
-    private:
-        const bool _isEnabled = isTextSupportModeEnabled();
     };
 }
+
+// Put this macro at the beginning of code block (eg. function) which is responsible for text support mode output.
+#define START_TEXT_SUPPORT_MODE                                                                                                                                         \
+    if ( !Logging::isTextSupportModeEnabled() ) {                                                                                                                       \
+        return;                                                                                                                                                         \
+    }                                                                                                                                                                   \
+    const Logging::TextSupportLogger _temp_logger; // The name is written on purpose to avoid name clashing within a code block.
 
 #endif // H2LOGGING_H

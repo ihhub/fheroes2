@@ -638,6 +638,8 @@ namespace
 
     void outputCampaignScenarioInfoInTextSupportMode( const bool allowToRestart )
     {
+        START_TEXT_SUPPORT_MODE
+
         Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
         const int chosenCampaignID = campaignSaveData.getCampaignID();
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
@@ -645,30 +647,29 @@ namespace
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
         const Campaign::ScenarioData & scenario = scenarios[scenarioId];
 
-        Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( "Scenario Information\n" )
-        TEXT_SUPPORT_LOG( "'" << Campaign::getCampaignName( chosenCampaignID ) << "' campaign, scenario " << scenarioId + 1 << ": " << scenario.getScenarioName() )
-        TEXT_SUPPORT_LOG( "Description: " << scenario.getDescription() << "\n" )
+        COUT( "Scenario Information\n" )
+        COUT( "'" << Campaign::getCampaignName( chosenCampaignID ) << "' campaign, scenario " << scenarioId + 1 << ": " << scenario.getScenarioName() )
+        COUT( "Description: " << scenario.getDescription() << '\n' )
 
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = campaignSaveData.getObtainedCampaignAwards();
         if ( obtainedAwards.empty() ) {
-            TEXT_SUPPORT_LOG( "Awards: None" )
+            COUT( "Awards: None" )
         }
         else {
-            TEXT_SUPPORT_LOG( "Awards:" )
+            COUT( "Awards:" )
             for ( const Campaign::CampaignAwardData & award : obtainedAwards ) {
-                TEXT_SUPPORT_LOG( "- " << award.ToString() )
+                COUT( "- " << award.ToString() )
             }
         }
 
         if ( allowToRestart ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Restart scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Restart scenario." )
         }
         else {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Start scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Start scenario." )
         }
 
-        TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Exit this dialog." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Exit this dialog." )
     }
 }
 

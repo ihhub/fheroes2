@@ -49,14 +49,15 @@ namespace
 {
     void outputInTextSupportMode( const Maps::Tiles & tile, const std::string & info )
     {
+        START_TEXT_SUPPORT_MODE
+
         const int tileIndex = tile.GetIndex();
         const int mapWidth = world.w();
         const int x = tileIndex % mapWidth;
         const int y = tileIndex / mapWidth;
 
-        Logging::TextSupportLogger logger;
-        TEXT_SUPPORT_LOG( "[" << x + 1 << ", " << y + 1 << "]" )
-        TEXT_SUPPORT_LOG( info )
+        COUT( "[" << x + 1 << ", " << y + 1 << "]" )
+        COUT( info )
     }
 
     class RadarUpdater

@@ -34,25 +34,25 @@ namespace
 {
     void outputInTextSupportMode( const std::string & header, const std::string & message, const int buttonTypes )
     {
-        Logging::TextSupportLogger logger;
+        START_TEXT_SUPPORT_MODE
 
         if ( !header.empty() ) {
-            TEXT_SUPPORT_LOG( header )
-            TEXT_SUPPORT_LOG( '\n' )
+            COUT( header )
+            COUT( '\n' )
         }
-        TEXT_SUPPORT_LOG( message )
+        COUT( message )
 
         if ( buttonTypes & Dialog::YES ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
         }
         if ( buttonTypes & Dialog::NO ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
         }
         if ( buttonTypes & Dialog::OK ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
         }
         if ( buttonTypes & Dialog::CANCEL ) {
-            TEXT_SUPPORT_LOG( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
         }
     }
 }
