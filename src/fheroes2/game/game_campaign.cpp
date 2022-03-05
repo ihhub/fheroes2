@@ -640,7 +640,7 @@ namespace
     {
         START_TEXT_SUPPORT_MODE
 
-        Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
         const int chosenCampaignID = campaignSaveData.getCampaignID();
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
         const int scenarioId = campaignSaveData.getCurrentScenarioID();
