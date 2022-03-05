@@ -172,7 +172,7 @@ public:
     int GetLuck( void ) const;
     int GetMoraleModificator( std::string * ) const;
     int GetLuckModificator( const std::string * ) const;
-    uint32_t ActionToSirens();
+    uint32_t ActionToSirens() const;
 
     const HeroBase * GetCommander( void ) const;
     HeroBase * GetCommander( void );

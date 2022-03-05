@@ -1250,7 +1250,7 @@ void Army::JoinStrongestFromArmy( Army & army2 )
     JoinStrongest( army2, save_last );
 }
 
-uint32_t Army::ActionToSirens()
+uint32_t Army::ActionToSirens() const
 {
     uint32_t experience = 0;
 
