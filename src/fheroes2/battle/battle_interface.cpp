@@ -3169,7 +3169,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
 
                 const int animationState = info.defender->GetAnimationState();
-                if ( animationState != Monster_Info::WNCE && animationState != Monster_Info::KILL ) {
+                if ( animationState == Monster_Info::WNCE ) {
+                    return false;
+                }
+
+                if ( animationState != Monster_Info::KILL ) {
                     return true;
                 }
 
