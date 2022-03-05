@@ -1769,13 +1769,15 @@ namespace AI
 
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )
     {
-        if ( !hero.isObjectTypeVisited( objectType ) ) {
-            const uint32_t experience = hero.GetArmy().ActionToSirens();
-            hero.IncreaseExperience( experience );
-
-            hero.SetVisited( objectIndex );
-
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
+        if ( hero.isObjectTypeVisited( objectType ) ) {
+            return;
         }
+
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        hero.IncreaseExperience( experience );
+
+        hero.SetVisited( objectIndex );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 }
