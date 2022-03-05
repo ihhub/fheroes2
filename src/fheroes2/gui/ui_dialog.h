@@ -109,7 +109,9 @@ namespace fheroes2
     class ResourceDialogElement : public DialogElement
     {
     public:
-        ResourceDialogElement( const int32_t resourceType, std::string text );
+        ResourceDialogElement( const int32_t resourceType, const std::string & text );
+
+        ResourceDialogElement( const int32_t resourceType, std::string && text );
 
         ~ResourceDialogElement() override = default;
 

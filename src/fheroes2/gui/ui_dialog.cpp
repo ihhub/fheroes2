@@ -244,7 +244,15 @@ namespace fheroes2
         showMessage( header, description, buttons, { this } );
     }
 
-    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string text )
+    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, const std::string & text )
+        : _resourceType( resourceType )
+        , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
+        , _text( text )
+    {
+        init();
+    }
+
+    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string && text )
         : _resourceType( resourceType )
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( std::move( text ) )
