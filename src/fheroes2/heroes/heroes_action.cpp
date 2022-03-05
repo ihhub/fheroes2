@@ -3042,19 +3042,24 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
                          Font::BIG, Dialog::OK );
     }
     else {
-        const uint32_t exp = hero.GetArmy().ActionToSirens();
-        if ( hero.GetArmy().getTotalCount() == 1 ) {
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        if ( experience == 0 ) {
             Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
                          Font::BIG, Dialog::OK );
         }
         else {
+            const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( experience ) );
+
             std::string str = _(
                 "An eerie wailing song emanates from the sirens perched upon the rocks. Many of your crew fall under its spell, and dive into the water where they drown. You are now wiser for the visit, and gain %{exp} experience." );
-            StringReplace( str, "%{exp}", exp );
+            StringReplace( str, "%{exp}", experience );
 
             AGG::PlaySound( M82::EXPERNCE );
-            Dialog::Message( title, str, Font::BIG, Dialog::OK );
-            hero.IncreaseExperience( exp );
+
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &experienceUI } );
+
+            hero.IncreaseExperience( experience );
         }
 
         hero.SetVisited( dst_index );

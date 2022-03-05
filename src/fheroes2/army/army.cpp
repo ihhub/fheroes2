@@ -1250,21 +1250,35 @@ void Army::JoinStrongestFromArmy( Army & army2 )
     JoinStrongest( army2, save_last );
 }
 
-u32 Army::ActionToSirens( void )
+uint32_t Army::ActionToSirens() const
 {
-    u32 res = 0;
+    uint32_t experience = 0;
 
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            const u32 kill = ( *it )->GetCount() * 30 / 100;
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-            if ( kill ) {
-                ( *it )->SetCount( ( *it )->GetCount() - kill );
-                res += kill * static_cast<Monster *>( *it )->GetHitPoints();
-            }
+        if ( !troop->isValid() ) {
+            continue;
         }
 
-    return res;
+        const uint32_t troopCount = troop->GetCount();
+        if ( troopCount == 1 ) {
+            // Sirens do not affect 1 troop stack.
+            continue;
+        }
+
+        // 30% of stack troops will be gone.
+        uint32_t troopToRemove = troopCount * 3 / 10;
+        if ( troopToRemove == 0 ) {
+            // At least one unit must go, even if it's more than 30%.
+            troopToRemove = 1;
+        }
+
+        troop->SetCount( troopCount - troopToRemove );
+        experience += troopToRemove * static_cast<Monster *>( troop )->GetHitPoints();
+    }
+
+    return experience;
 }
 
 bool Army::isStrongerThan( const Army & target, double safetyRatio ) const

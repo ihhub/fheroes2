@@ -142,6 +142,7 @@ namespace AI
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
+    void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex );
 
     int AISelectPrimarySkill( const Heroes & hero )
     {
@@ -483,7 +484,10 @@ namespace AI
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
+            break;
         case MP2::OBJ_SIRENS:
+            // AI must have some action even if it goes on this object by mistake.
+            AIToSirens( hero, objectType, dst_index );
             break;
         default:
             assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
@@ -1761,5 +1765,19 @@ namespace AI
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." );
+    }
+
+    void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )
+    {
+        if ( hero.isObjectTypeVisited( objectType ) ) {
+            return;
+        }
+
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        hero.IncreaseExperience( experience );
+
+        hero.SetVisited( objectIndex );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 }
