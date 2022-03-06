@@ -965,7 +965,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                    fheroes2::Text( _( "Start the selected scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "View Into" ), fheroes2::FontType::normalYellow() ),
+            fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "View Intro Video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( allowToRestart && le.MousePressRight( buttonRestart.area() ) ) {
