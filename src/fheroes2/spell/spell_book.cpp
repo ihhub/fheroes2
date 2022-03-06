@@ -173,11 +173,9 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         return Spell::NONE;
     }
 
-    if ( displayableSpells != Filter::ALL ) {
-        if ( _spellFilter != displayableSpells ) {
-            _spellFilter = displayableSpells;
-            _startSpellIndex = 0;
-        }
+    if ( displayableSpells != Filter::ALL && _spellFilter != displayableSpells ) {
+        _spellFilter = displayableSpells;
+        _startSpellIndex = 0;
     }
 
     SpellStorage displayedSpells = SetFilter( _spellFilter, &hero );
@@ -468,7 +466,8 @@ void SpellBook::Edit( const HeroBase & hero )
 
 SpellStorage SpellBook::SetFilter( const Filter filter, const HeroBase * hero ) const
 {
-    SpellStorage res( *this );
+    const SpellStorage & storage = *this;
+    SpellStorage res = storage;
 
     // add heroes spell scrolls
     if ( hero != nullptr )
