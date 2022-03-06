@@ -323,10 +323,6 @@ int32_t Text::getFitWidth( const std::string & text, const int fontId, const int
     return fitWidth;
 }
 
-TextBox::TextBox()
-    : align( ALIGN_CENTER )
-{}
-
 TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
     : align( ALIGN_CENTER )
 {
