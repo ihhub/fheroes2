@@ -368,7 +368,6 @@ namespace
             fheroes2::FadeDisplay();
         }
 
-        Game::ShowMapLoadingText();
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );
 

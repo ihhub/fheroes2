@@ -997,8 +997,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();
 
-            fheroes2::ImageRestorer restorer( display );
-            Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
@@ -1006,8 +1004,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
-
-            restorer.reset();
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
