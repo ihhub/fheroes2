@@ -65,7 +65,7 @@ public:
 
 namespace Dialog
 {
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & maps, size_t selectedId );
+    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & maps, size_t selectedId, int & selectedMapSize );
 }
 
 #endif

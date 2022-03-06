@@ -258,7 +258,7 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
     }
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, size_t selectedId )
+const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, size_t selectedId, int & selectedMapSize )
 {
     if ( all.empty() )
         return nullptr;
@@ -283,27 +283,29 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     large.reserve( all.size() );
     xlarge.reserve( all.size() );
 
-    for ( MapsFileInfoList::const_iterator cur = all.begin(); cur != all.end(); ++cur ) {
-        switch ( ( *cur ).size_w ) {
+    for ( const Maps::FileInfo & info : all ) {
+        switch ( info.size_w ) {
         case Maps::SMALL:
-            small.push_back( *cur );
+            small.push_back( info );
             break;
         case Maps::MEDIUM:
-            medium.push_back( *cur );
+            medium.push_back( info );
             break;
         case Maps::LARGE:
-            large.push_back( *cur );
+            large.push_back( info );
             break;
         case Maps::XLARGE:
-            xlarge.push_back( *cur );
+            xlarge.push_back( info );
             break;
         default:
+            // Did you add a new map size? Add the corresponding logic!
+            assert( 0 );
             continue;
         }
     }
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
-    fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+    const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
     fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.width + SHADOWWIDTH, rt.height + SHADOWWIDTH );
 
@@ -334,8 +336,32 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     fheroes2::Button buttonSelectXLarge( rt.x + 223, rt.y + 22, ICN::REQUESTS, 15, 16 );
     fheroes2::Button buttonSelectAll( rt.x + 285, rt.y + 22, ICN::REQUESTS, 17, 18 );
 
-    buttonSelectAll.press();
-    fheroes2::ButtonBase * currentPressedButton = &buttonSelectAll;
+    fheroes2::ButtonBase * currentPressedButton = nullptr;
+
+    switch ( selectedMapSize ) {
+    case Maps::SMALL:
+        buttonSelectSmall.press();
+        currentPressedButton = &buttonSelectSmall;
+        break;
+    case Maps::MEDIUM:
+        buttonSelectMedium.press();
+        currentPressedButton = &buttonSelectMedium;
+        break;
+    case Maps::LARGE:
+        buttonSelectLarge.press();
+        currentPressedButton = &buttonSelectLarge;
+        break;
+    case Maps::XLARGE:
+        buttonSelectXLarge.press();
+        currentPressedButton = &buttonSelectXLarge;
+        break;
+    default:
+        buttonSelectAll.press();
+        currentPressedButton = &buttonSelectAll;
+        break;
+    }
+
+    assert( currentPressedButton != nullptr );
 
     fheroes2::OptionButtonGroup buttonGroup;
     buttonGroup.addButton( &buttonSelectSmall );
@@ -415,6 +441,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( small );
                 currentPressedButton = &buttonSelectSmall;
                 currentPressedButton->press();
+                selectedMapSize = Maps::mapsize_t::SMALL;
             }
 
             needRedraw = true;
@@ -433,6 +460,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( medium );
                 currentPressedButton = &buttonSelectMedium;
                 currentPressedButton->press();
+                selectedMapSize = Maps::mapsize_t::MEDIUM;
             }
 
             needRedraw = true;
@@ -451,6 +479,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( large );
                 currentPressedButton = &buttonSelectLarge;
                 currentPressedButton->press();
+                selectedMapSize = Maps::mapsize_t::LARGE;
             }
 
             needRedraw = true;
@@ -469,6 +498,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( xlarge );
                 currentPressedButton = &buttonSelectXLarge;
                 currentPressedButton->press();
+                selectedMapSize = Maps::mapsize_t::XLARGE;
             }
 
             needRedraw = true;
@@ -482,6 +512,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             currentPressedButton = &buttonSelectAll;
             currentPressedButton->press();
+            selectedMapSize = Maps::mapsize_t::ZERO;
 
             needRedraw = true;
         }

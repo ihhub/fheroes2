@@ -256,6 +256,8 @@ namespace
 
         display.render();
 
+        int selectedMapType = Maps::mapsize_t::ZERO;
+
         fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
         LocalEvent & le = LocalEvent::Get();
         while ( true ) {
@@ -277,7 +279,7 @@ namespace
 
             // click select
             if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ), selectedMapType );
 
                 if ( fi ) {
                     Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
