@@ -435,6 +435,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
                 Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
             }
+            else if ( GetCaptain().isValid() && heroes.Guard() == nullptr && le.MousePressRight( rectSign1 ) ) {
+                Dialog::QuickInfo( GetCaptain(), { cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
+            }
 
             // selector troops event
             if ( ( bottomArmyBar.isValid()

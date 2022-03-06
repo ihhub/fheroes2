@@ -478,8 +478,12 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Poin
             Dialog::QuickInfo( *row.castle, _area );
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             const Heroes * hero = row.castle->GetHeroes().GuardFirst();
-            if ( hero )
+            if ( hero ) {
                 Dialog::QuickInfo( *hero, _area );
+            }
+            else if ( row.castle->isBuild( BUILD_CAPTAIN ) ) {
+                Dialog::QuickInfo( row.castle->GetCaptain(), _area );
+            }
         }
     }
 }
@@ -531,8 +535,13 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
                       + std::to_string( hero->GetKnowledge() ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
-        else {
-            row.castle->GetCaptain().PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+        else if ( row.castle->GetCaptain().isValid() ) {
+            const Captain & captain = row.castle->GetCaptain();
+            captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+            const std::string sep = "-";
+            text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
+                      + std::to_string( captain.GetKnowledge() ) );
+            text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
 
         text.Set( row.castle->GetName() );
