@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -529,7 +529,7 @@ namespace fheroes2
 
     void PrimarySkillDialogElement::init()
     {
-         assert( _skillType >= Skill::Primary::ATTACK && _skillType <= Skill::Primary::KNOWLEDGE );
+        assert( _skillType >= Skill::Primary::ATTACK && _skillType <= Skill::Primary::KNOWLEDGE );
 
         const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
         _area = { background.width(), background.height() };
