@@ -791,7 +791,7 @@ namespace Campaign
                 description += monsters.back().GetMultiName();
             }
 
-            description += _( " will never join your army." );
+            description += _( " will always run away from your army." );
             return description;
         }
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE: {
