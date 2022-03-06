@@ -782,7 +782,7 @@ namespace Campaign
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE: {
             std::vector<Monster> monsters;
-            monsters.emplace_back( Monster( _subType ) );
+            monsters.emplace_back( static_cast<int>( _subType ) );
             std::string description( monsters.back().GetMultiName() );
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
@@ -796,7 +796,7 @@ namespace Campaign
         }
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE: {
             std::vector<Monster> monsters;
-            monsters.emplace_back( Monster( _subType ) );
+            monsters.emplace_back( static_cast<int>( _subType ) );
             std::string description( monsters.back().GetMultiName() );
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
@@ -810,29 +810,29 @@ namespace Campaign
         }
         case CampaignAwardData::TYPE_GET_ARTIFACT: {
             std::string description( _( "\"%{artifact}\" artifact will be carried over the scenario." ) );
-            StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
+            StringReplace( description, "%{artifact}", Artifact( static_cast<int>( _subType ) ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES:
             return _( "The army will be carried over the scenario." );
         case CampaignAwardData::TYPE_RESOURCE_BONUS: {
             std::string description( _( "The kingdom will have additional %{resource} at the start of the scenario." ) );
-            StringReplace( description, "%{resource}", Resource::String( _subType ) );
+            StringReplace( description, "%{resource}", Resource::String( static_cast<int>( _subType ) ) );
             return description;
         }
         case CampaignAwardData::TYPE_GET_SPELL: {
             std::string description( _( "\"%{spell}\" spell will be carried over the scenario." ) );
-            StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
+            StringReplace( description, "%{spell}", Spell( static_cast<int>( _subType ) ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_HIREABLE_HERO: {
             std::string description( _( "%{hero} hero can be hired in the scenario." ) );
-            StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
+            StringReplace( description, "%{hero}", Heroes( static_cast<int>( _subType ), 0 ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
             std::string description( _( "Defeated %{hero} hero will not appear in the subsequent scenarios." ) );
-            StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
+            StringReplace( description, "%{hero}", Heroes( static_cast<int>( _subType ), 0 ).GetName() );
             return description;
         }
         default:

@@ -504,41 +504,41 @@ namespace Campaign
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT: {
             std::string description( _( "The main hero will have \"%{artifact}\" artifact at the start of the scenario." ) );
-            StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
+            StringReplace( description, "%{artifact}", Artifact( static_cast<int>( _subType ) ).GetName() );
             return description;
         }
         case ScenarioBonusData::RESOURCES: {
             std::string description( _( "The kingdom will have additional %{amount} %{resource} at the start of the scenario." ) );
             StringReplace( description, "%{amount}", std::to_string( _amount ) );
-            StringReplace( description, "%{resource}", Resource::String( _subType ) );
+            StringReplace( description, "%{resource}", Resource::String( static_cast<int>( _subType ) ) );
             return description;
         }
         case ScenarioBonusData::TROOP: {
             std::string description( _( "The main hero will have %{count} %{monster} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{monster}", Monster( _subType ).GetPluralName( _amount ) );
+            StringReplace( description, "%{monster}", Monster( static_cast<int>( _subType ) ).GetPluralName( _amount ) );
             return description;
         }
         case ScenarioBonusData::SPELL: {
             std::string description( _( "The main hero will have \"%{spell}\" spell at the start of the scenario." ) );
-            StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
+            StringReplace( description, "%{spell}", Spell( static_cast<int>( _subType ) ).GetName() );
             return description;
         }
         case ScenarioBonusData::STARTING_RACE:
         case ScenarioBonusData::STARTING_RACE_AND_ARMY: {
             std::string description( _( "The starting race of the scenario will be %{race}." ) );
-            StringReplace( description, "%{race}", Race::String( _subType ) );
+            StringReplace( description, "%{race}", Race::String( static_cast<int>( _subType ) ) );
             return description;
         }
         case ScenarioBonusData::SKILL_PRIMARY: {
             std::string description( _( "The main hero will have additional %{count} %{skill} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{skill}", Skill::Primary::String( _subType ) );
+            StringReplace( description, "%{skill}", Skill::Primary::String( static_cast<int>( _subType ) ) );
             return description;
         }
         case ScenarioBonusData::SKILL_SECONDARY: {
             std::string description( _( "The main hero will have %{skill} at the start of the scenario." ) );
-            StringReplace( description, "%{skill}", Skill::Secondary( _subType, _amount ).GetName() );
+            StringReplace( description, "%{skill}", Skill::Secondary( static_cast<int>( _subType ), static_cast<int>( _amount ) ).GetName() );
             return description;
         }
         default:
