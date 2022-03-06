@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -230,8 +230,8 @@ namespace
                                         "a1exsh\n"
                                         "Vasilenko Alexey\n"
                                         "Andrii Kurdiumov\n"
-                                        "felix642\n"
-                                        "dimag0g\n" );
+                                        "dimag0g\n"
+                                        "felix642\n" );
 
         name.Set( contributors + _( "and many other contributors!" ), Font::BIG, textWidth );
         name.Blit( 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
