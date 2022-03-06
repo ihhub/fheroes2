@@ -31,6 +31,8 @@
 #include "icn.h"
 #include "localevent.h"
 #include "maps.h"
+#include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -42,6 +44,9 @@
 
 namespace
 {
+    // This variable is used to remember the selection of map size throught the game.
+    int selectedMapSize = Maps::mapsize_t::ZERO;
+
     void mapInfo( const Maps::FileInfo & info )
     {
         // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
@@ -131,6 +136,22 @@ namespace
         Text text( "N", Font::SMALL );
         text.Blit( ( 17 - text.w() ) / 2, ( 17 - text.h() ) / 2, icon );
         return icon;
+    }
+
+    size_t GetSelectedMapId( const MapsFileInfoList & lists )
+    {
+        const Settings & conf = Settings::Get();
+
+        const std::string & mapName = conf.CurrentFileInfo().name;
+        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        size_t mapId = 0;
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
+            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
+                return mapId;
+            }
+        }
+
+        return 0;
     }
 }
 
@@ -258,13 +279,10 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
     }
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, size_t selectedId, int & selectedMapSize )
+const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 {
     if ( all.empty() )
         return nullptr;
-
-    if ( selectedId >= all.size() )
-        selectedId = 0;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -340,25 +358,37 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
 
     switch ( selectedMapSize ) {
     case Maps::SMALL:
-        buttonSelectSmall.press();
-        currentPressedButton = &buttonSelectSmall;
+        if ( !small.empty() ) {
+            buttonSelectSmall.press();
+            currentPressedButton = &buttonSelectSmall;
+        }
         break;
     case Maps::MEDIUM:
-        buttonSelectMedium.press();
-        currentPressedButton = &buttonSelectMedium;
+        if ( !medium.empty() ) {
+            buttonSelectMedium.press();
+            currentPressedButton = &buttonSelectMedium;
+        }
         break;
     case Maps::LARGE:
-        buttonSelectLarge.press();
-        currentPressedButton = &buttonSelectLarge;
+        if ( !large.empty() ) {
+            buttonSelectLarge.press();
+            currentPressedButton = &buttonSelectLarge;
+        }
         break;
     case Maps::XLARGE:
-        buttonSelectXLarge.press();
-        currentPressedButton = &buttonSelectXLarge;
+        if ( !xlarge.empty() ) {
+            buttonSelectXLarge.press();
+            currentPressedButton = &buttonSelectXLarge;
+        }
         break;
     default:
+        break;
+    }
+
+    if ( currentPressedButton == nullptr ) {
         buttonSelectAll.press();
         currentPressedButton = &buttonSelectAll;
-        break;
+        selectedMapSize = Maps::mapsize_t::ZERO;
     }
 
     assert( currentPressedButton != nullptr );
@@ -386,7 +416,32 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( fheroes2::Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
-    listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+
+    size_t selectedId = 0;
+
+    switch ( selectedMapSize ) {
+    case Maps::SMALL:
+        listbox.SetListContent( const_cast<MapsFileInfoList &>( small ) );
+        selectedId = GetSelectedMapId( small );
+        break;
+    case Maps::MEDIUM:
+        listbox.SetListContent( const_cast<MapsFileInfoList &>( medium ) );
+        selectedId = GetSelectedMapId( medium );
+        break;
+    case Maps::LARGE:
+        listbox.SetListContent( const_cast<MapsFileInfoList &>( large ) );
+        selectedId = GetSelectedMapId( large );
+        break;
+    case Maps::XLARGE:
+        listbox.SetListContent( const_cast<MapsFileInfoList &>( xlarge ) );
+        selectedId = GetSelectedMapId( xlarge );
+        break;
+    default:
+        listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+        selectedId = GetSelectedMapId( all );
+        break;
+    }
+
     listbox.SetCurrent( selectedId );
     listbox.Redraw();
 
