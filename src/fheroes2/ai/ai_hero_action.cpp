@@ -1566,9 +1566,6 @@ namespace AI
         left.markHeroMeeting( right.GetID() );
         right.markHeroMeeting( left.GetID() );
 
-        if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-            Heroes::ScholarAction( left, right );
-
         const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
 
         if ( rightToLeft )

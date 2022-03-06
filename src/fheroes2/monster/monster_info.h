@@ -80,7 +80,7 @@ namespace fheroes2
             , value( 0 )
         {}
 
-        explicit MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
+        MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )

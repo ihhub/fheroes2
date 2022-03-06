@@ -46,7 +46,7 @@ public:
 private:
     const Heroes * _hero;
     fheroes2::Image backsf;
-    bool use_mini_sprite;
+    const bool useSmallSize;
     std::vector<int> content;
     fheroes2::Point toff;
     std::string msg;

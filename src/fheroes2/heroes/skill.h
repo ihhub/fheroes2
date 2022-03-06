@@ -162,7 +162,7 @@ namespace Skill
 
         int LevelUp( int race, int level, uint32_t seed );
 
-        static const char * String( int );
+        static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
 

@@ -978,8 +978,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
-    case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
-        return _( "world: Eagle Eye also works like Scholar in H3." );
     case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
         return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
@@ -1108,11 +1106,6 @@ bool Settings::ExtWorldAllowSetGuardian() const
 bool Settings::ExtWorldArtifactCrystalBall() const
 {
     return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
-}
-
-bool Settings::ExtWorldEyeEagleAsScholar() const
-{
-    return ExtModes( WORLD_EYE_EAGLE_AS_SCHOLAR );
 }
 
 bool Settings::ExtHeroBuySpellBookFromShrine() const
