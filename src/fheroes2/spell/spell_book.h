@@ -33,6 +33,7 @@ class HeroBase;
 
 struct SpellBook : public SpellStorage
 {
+public:
     enum class Filter : int
     {
         ADVN = 0x01,
@@ -45,6 +46,11 @@ struct SpellBook : public SpellStorage
     void Edit( const HeroBase & hero );
 
     SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
+
+private:
+    mutable size_t _startSpellIndex = 0;
+
+    mutable Filter _spellFilter = Filter::ADVN;
 };
 
 #endif
