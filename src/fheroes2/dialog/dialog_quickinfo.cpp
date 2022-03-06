@@ -1018,7 +1018,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
         text.Blit( dst_pt.x, dst_pt.y );
 
         // move point
-        if ( isActiveHero) {
+        if ( isActiveHero ) {
             text.Set( std::string( _( "Move Points" ) ) + ":" );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += 12;
