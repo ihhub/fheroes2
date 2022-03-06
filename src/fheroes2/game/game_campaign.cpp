@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,8 @@
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -954,7 +956,23 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
 
-        if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) ) || restartButtonClicked ) {
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( !allowToRestart && le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Okay" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Start the selected scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "View Intro videos for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( allowToRestart && le.MousePressRight( buttonRestart.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) ) || restartButtonClicked ) {
             if ( restartButtonClicked
                  && Dialog::Message( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
                 continue;
