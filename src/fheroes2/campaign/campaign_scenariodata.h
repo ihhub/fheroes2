@@ -104,7 +104,9 @@ namespace Campaign
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
-        std::string ToString() const;
+        std::string getName() const;
+
+        std::string getDescription() const;
 
         static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const ScenarioInfoId & scenarioInfo );
     };
