@@ -341,11 +341,32 @@ namespace
         TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
-        const int textChoiceWidth = 155;
+        const int textChoiceWidth = 160;
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
-            Text choice( bonuses[i].ToString(), Font::BIG );
+            Text choice( bonuses[i].getName(), Font::BIG );
             choice.Blit( top.x + 425, top.y + 209 + 22 * static_cast<int>( i ) - choice.h() / 2, textChoiceWidth );
         }
+    }
+
+    bool displayScenarioBonusPopupWindow( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
+    {
+        const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
+        if ( bonuses.empty() ) {
+            // Nothing to process.
+            return false;
+        }
+
+        const LocalEvent & le = LocalEvent::Get();
+
+        for ( size_t i = 0; i < bonuses.size(); ++i ) {
+            if ( le.MousePressRight( { top.x + 414, top.y + 198 + 22 * static_cast<int>( i ), 200, 22 } ) ) {
+                fheroes2::showMessage( fheroes2::Text( bonuses[i].getName(), fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( bonuses[i].getDescription(), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void drawObtainedCampaignAwards( const Campaign::CampaignSaveData & campaignSaveData, const fheroes2::Point & top )
@@ -365,9 +386,9 @@ namespace
         Text award;
         for ( size_t i = 0; i < indexEnd; ++i ) {
             if ( i < 3 )
-                award.Set( obtainedAwards[i].ToString(), Font::BIG );
+                award.Set( obtainedAwards[i].getName(), Font::BIG );
             else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
-                award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
+                award.Set( awardCount == 4 ? obtainedAwards[i].getName() : std::string( _( "and more..." ) ), Font::BIG );
 
             if ( award.w() > textAwardWidth ) {
                 award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
@@ -376,6 +397,35 @@ namespace
                 award.Blit( top.x + 425 + ( textAwardWidth - award.w() ) / 2, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2 );
             }
         }
+    }
+
+    bool displayScenarioAwardsPopupWindow( const Campaign::CampaignSaveData & campaignSaveData, const fheroes2::Point & top )
+    {
+        if ( isBetrayalScenario( campaignSaveData.getCurrentScenarioInfoId() ) ) {
+            return false;
+        }
+
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = campaignSaveData.getObtainedCampaignAwards();
+        if ( obtainedAwards.empty() ) {
+            // Nothing to process.
+            return false;
+        }
+
+        const size_t awardCount = obtainedAwards.size();
+        const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
+        const int yOffset = awardCount > 3 ? 16 : 22;
+
+        const LocalEvent & le = LocalEvent::Get();
+
+        for ( size_t i = 0; i < indexEnd; ++i ) {
+            if ( le.MousePressRight( { top.x + 414, top.y + 100 - yOffset / 2 + yOffset * static_cast<int>( i ), 200, yOffset } ) ) {
+                fheroes2::showMessage( fheroes2::Text( obtainedAwards[i].getName(), fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( obtainedAwards[i].getDescription(), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
@@ -660,7 +710,7 @@ namespace
         else {
             COUT( "Awards:" )
             for ( const Campaign::CampaignAwardData & award : obtainedAwards ) {
-                COUT( "- " << award.ToString() )
+                COUT( "- " << award.getName() << " : " << award.getDescription() )
             }
         }
 
@@ -953,6 +1003,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
             return prevMode;
         }
+
+        displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
 
         const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
 
