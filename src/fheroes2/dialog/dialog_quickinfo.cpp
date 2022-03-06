@@ -874,6 +874,8 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
 
     const Heroes * activeHero = dynamic_cast<const Heroes *>( &hero );
     const Captain * activeCaptain = dynamic_cast<const Captain *>( &hero );
+    assert( activeHero != nullptr || activeCaptain != nullptr );
+
     const bool isActiveHero = ( activeHero != nullptr );
 
     // heroes name
