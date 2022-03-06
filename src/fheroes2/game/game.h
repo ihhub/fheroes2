@@ -71,7 +71,7 @@ namespace Game
         VIEW_MAGI_EYES = 5
     };
 
-    enum
+    enum : int32_t
     {
         EVENT_NONE,
         EVENT_BUTTON_NEWGAME,
@@ -157,11 +157,16 @@ namespace Game
 
         EVENT_WELL_BUY_ALL_CREATURES,
 
+        EVENT_NEW_CAMPAIGN_SUCCESSION_WARS,
+        EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY,
+
         EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
+
+    const char * getHotKeyNameByEventId( const int eventID );
 
     void mainGameLoop( bool isFirstGameRun );
 

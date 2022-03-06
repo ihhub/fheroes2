@@ -23,9 +23,11 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
+#include "game.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "luck.h"
 #include "morale.h"
 #include "resource.h"
@@ -41,17 +43,42 @@
 namespace
 {
     const int32_t textOffsetY = 10;
+
     const int32_t elementOffsetX = 10;
 
     const int32_t textOffsetFromElement = 2;
 
     const int32_t defaultElementPopupButtons = Dialog::ZERO;
+
+    void outputInTextSupportMode( const fheroes2::TextBase & header, const fheroes2::TextBase & body, const int buttonTypes )
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( header.text() )
+        COUT( '\n' )
+        COUT( body.text() )
+
+        if ( buttonTypes & Dialog::YES ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+        }
+        if ( buttonTypes & Dialog::NO ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+        }
+        if ( buttonTypes & Dialog::OK ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+        }
+        if ( buttonTypes & Dialog::CANCEL ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+        }
+    }
 }
 
 namespace fheroes2
 {
     int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements )
     {
+        outputInTextSupportMode( header, body, buttons );
+
         const bool isProperDialog = ( buttons != 0 );
 
         // setup cursor

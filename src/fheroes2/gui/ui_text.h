@@ -102,6 +102,9 @@ namespace fheroes2
 
         // Returns true if here is something to draw.
         virtual bool empty() const = 0;
+
+        // Returns full text. Multi-text class cannot return by reference hence returning by value.
+        virtual std::string text() const = 0;
     };
 
     class Text : public TextBase
@@ -125,6 +128,8 @@ namespace fheroes2
         bool empty() const override;
 
         void set( const std::string & text, const FontType fontType );
+
+        std::string text() const override;
 
     private:
         std::string _text;
@@ -151,6 +156,8 @@ namespace fheroes2
         void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const override;
 
         bool empty() const override;
+
+        std::string text() const override;
 
     private:
         std::vector<Text> _texts;

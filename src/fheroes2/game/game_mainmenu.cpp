@@ -36,6 +36,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
@@ -62,6 +63,19 @@ namespace
         CREDITS_DEFAULT = 13,
         QUIT_DEFAULT = 17
     };
+
+    void outputMainMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Main Menu\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_NEWGAME ) << " to choose New Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_LOADGAME ) << " to choose Load previously saved game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_HIGHSCORES ) << " to show High Scores." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CREDITS ) << " to show Credits." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Quit the game." )
+    }
 }
 
 void Game::mainGameLoop( bool isFirstGameRun )
@@ -196,6 +210,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         conf.resetFirstGameRun();
         conf.Save( "fheroes2.cfg" );
     }
+
+    outputMainMenuInTextSupportMode();
 
     LocalEvent & le = LocalEvent::Get();
 

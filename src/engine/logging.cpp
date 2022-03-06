@@ -31,6 +31,8 @@ namespace
 {
     int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
 
+    bool textSupportMode = false;
+
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
     // Sets the Windows console codepage to the system codepage
     class ConsoleCPSwitcher
@@ -109,6 +111,16 @@ namespace Logging
     void SetDebugLevel( const int debugLevel )
     {
         g_debug = debugLevel;
+    }
+
+    void setTextSupportMode( const bool enableTextSupportMode )
+    {
+        textSupportMode = enableTextSupportMode;
+    }
+
+    bool isTextSupportModeEnabled()
+    {
+        return textSupportMode;
     }
 }
 

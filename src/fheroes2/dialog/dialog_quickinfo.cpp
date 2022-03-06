@@ -35,6 +35,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "profit.h"
 #include "settings.h"
 #include "text.h"
@@ -46,6 +47,19 @@
 
 namespace
 {
+    void outputInTextSupportMode( const Maps::Tiles & tile, const std::string & info )
+    {
+        START_TEXT_SUPPORT_MODE
+
+        const int tileIndex = tile.GetIndex();
+        const int mapWidth = world.w();
+        const int x = tileIndex % mapWidth;
+        const int y = tileIndex / mapWidth;
+
+        COUT( "[" << x + 1 << ", " << y + 1 << "]" )
+        COUT( info )
+    }
+
     class RadarUpdater
     {
     public:
@@ -662,6 +676,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     TextBox text( name_object, Font::SMALL, 118 );
     text.Blit( pos.x + BORDERWIDTH + ( pos.width - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.height - BORDERWIDTH - text.h() ) / 2 );
 
+    outputInTextSupportMode( tile, name_object );
+
     display.render();
 
     // quick info loop
@@ -862,8 +878,10 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
         StringReplace( message, "%{name}", hero.GetName() );
         StringReplace( message, "%{level}", hero.GetLevel() );
     }
-    else
+    else {
         message = hero.GetName();
+    }
+
     text.Set( message, Font::SMALL );
     dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
     dst_pt.y = cur_rt.y;
