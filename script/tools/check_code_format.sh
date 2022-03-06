@@ -18,7 +18,9 @@
 #
 # This script assumes to be invoked at the project root directory.
 
-FILES_TO_CHECK=$(git diff --name-only HEAD^ | grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp)$")
+set -e -o pipefail
+
+FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp)$" || true))
 
 if [ -z "${FILES_TO_CHECK}" ]; then
   echo "No source code to check for formatting."
