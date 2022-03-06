@@ -347,10 +347,17 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     ScenarioListBox listbox( rt.getPosition() );
 
     listbox.RedrawBackground( rt.getPosition() );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 217 ) );
+    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 217 } );
 
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 140 ) );
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 140 } );
+
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( fheroes2::Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
     listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
@@ -400,6 +407,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( small.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( small );
                 currentPressedButton = &buttonSelectSmall;
                 currentPressedButton->press();
@@ -413,6 +425,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( medium.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( medium );
                 currentPressedButton = &buttonSelectMedium;
                 currentPressedButton->press();
@@ -426,6 +443,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( large.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( large );
                 currentPressedButton = &buttonSelectLarge;
                 currentPressedButton->press();
@@ -439,6 +461,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 currentPressedButton->drawOnPress();
             }
             else {
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( xlarge.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( xlarge );
                 currentPressedButton = &buttonSelectXLarge;
                 currentPressedButton->press();
@@ -447,6 +474,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
+            const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             currentPressedButton = &buttonSelectAll;
             currentPressedButton->press();

@@ -1323,7 +1323,7 @@ namespace fheroes2
 
     void Display::render()
     {
-        render( Rect( 0, 0, width(), height() ) );
+        render( { 0, 0, width(), height() } );
     }
 
     void Display::render( const Rect & roi )
@@ -1378,7 +1378,7 @@ namespace fheroes2
                 updateImage = ( _renderSurface == nullptr );
                 if ( updateImage ) {
                     // Pre-processing step is applied to the whole image so we forcefully render the full frame.
-                    _engine->render( *this, Rect( 0, 0, width(), height() ) );
+                    _engine->render( *this, { 0, 0, width(), height() } );
                     return;
                 }
             }

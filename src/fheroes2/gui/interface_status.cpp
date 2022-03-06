@@ -44,7 +44,7 @@ namespace
 }
 
 Interface::StatusWindow::StatusWindow( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
     , _oldState( StatusType::STATUS_UNKNOWN )

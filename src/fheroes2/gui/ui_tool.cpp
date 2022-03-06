@@ -339,7 +339,7 @@ namespace fheroes2
         Image temp;
         Copy( display, temp );
 
-        FadeDisplay( temp, fheroes2::Point( 0, 0 ), 5, delayMs );
+        FadeDisplay( temp, { 0, 0 }, 5, delayMs );
 
         Copy( temp, display ); // restore the original image
     }

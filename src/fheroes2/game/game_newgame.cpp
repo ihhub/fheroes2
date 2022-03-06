@@ -33,6 +33,7 @@
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "icn.h"
+#include "logging.h"
 #include "mus.h"
 #include "settings.h"
 #include "smk_decoder.h"
@@ -83,6 +84,30 @@ namespace
 
         return video;
     }
+
+    void outputNewMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "New Game\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to choose Multiplayer Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
+    }
+
+    void outputNewCampaignInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "New Campaign\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
+    }
 }
 
 fheroes2::GameMode Game::NewStandard()
@@ -131,6 +156,8 @@ fheroes2::GameMode Game::CampaignSelection()
         return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
     }
 
+    outputNewCampaignInTextSupportMode();
+
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
 
@@ -150,9 +177,9 @@ fheroes2::GameMode Game::CampaignSelection()
         le.MousePressLeft( buttonPriceOfLoyalty.area() ) ? buttonPriceOfLoyalty.drawOnPress() : buttonPriceOfLoyalty.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || le.KeyPress( KEY_o ) )
+        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) )
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || le.KeyPress( KEY_e ) )
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) )
             return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
@@ -368,6 +395,8 @@ fheroes2::GameMode Game::NewNetwork()
 
 fheroes2::GameMode Game::NewGame()
 {
+    outputNewMenuInTextSupportMode();
+
     // Stop all sounds, but not the music
     Mixer::Stop();
 

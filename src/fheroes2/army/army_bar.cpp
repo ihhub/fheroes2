@@ -166,7 +166,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , can_change( change )
 {
     if ( use_mini_sprite )
-        SetBackground( fheroes2::Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
+        SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
         SetItemSize( sprite.width(), sprite.height() );

@@ -500,6 +500,10 @@ namespace fheroes2
     {
         _text = std::move( text );
         _fontType = fontType;
+
+    std::string Text::text() const
+    {
+        return _text;
     }
 
     MultiFontText::~MultiFontText() = default;
@@ -657,5 +661,16 @@ namespace fheroes2
     bool MultiFontText::empty() const
     {
         return _texts.empty();
+    }
+
+    std::string MultiFontText::text() const
+    {
+        std::string output;
+
+        for ( const Text & singleText : _texts ) {
+            output += singleText.text();
+        }
+
+        return output;
     }
 }

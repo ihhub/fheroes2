@@ -33,6 +33,7 @@
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
+#include "logging.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -634,6 +635,42 @@ namespace
             break;
         }
     }
+
+    void outputCampaignScenarioInfoInTextSupportMode( const bool allowToRestart )
+    {
+        START_TEXT_SUPPORT_MODE
+
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int chosenCampaignID = campaignSaveData.getCampaignID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
+        const int scenarioId = campaignSaveData.getCurrentScenarioID();
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+        const Campaign::ScenarioData & scenario = scenarios[scenarioId];
+
+        COUT( "Scenario Information\n" )
+        COUT( "'" << Campaign::getCampaignName( chosenCampaignID ) << "' campaign, scenario " << scenarioId + 1 << ": " << scenario.getScenarioName() )
+        COUT( "Description: " << scenario.getDescription() << '\n' )
+
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = campaignSaveData.getObtainedCampaignAwards();
+        if ( obtainedAwards.empty() ) {
+            COUT( "Awards: None" )
+        }
+        else {
+            COUT( "Awards:" )
+            for ( const Campaign::CampaignAwardData & award : obtainedAwards ) {
+                COUT( "- " << award.ToString() )
+            }
+        }
+
+        if ( allowToRestart ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Restart scenario." )
+        }
+        else {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Start scenario." )
+        }
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Exit this dialog." )
+    }
 }
 
 bool Game::isSuccessionWarsCampaignPresent()
@@ -757,6 +794,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
     }
+
+    outputCampaignScenarioInfoInTextSupportMode( allowToRestart );
 
     playCampaignMusic( chosenCampaignID );
 

@@ -192,6 +192,8 @@ namespace Campaign
         VideoSequence _startScenarioVideoPlayback;
         VideoSequence _endScenarioVideoPlayback;
     };
+
+    const char * getCampaignName( const int campaignId );
 }
 
 #endif
