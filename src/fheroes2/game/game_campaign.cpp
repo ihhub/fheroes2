@@ -1004,9 +1004,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             return prevMode;
         }
 
-        if ( !displayScenarioAwardsPopupWindow( campaignSaveData, top ) ) {
-            displayScenarioBonusPopupWindow( scenario, top );
-        }
+        displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
 
         const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
 
