@@ -356,7 +356,7 @@ namespace
             return false;
         }
 
-        LocalEvent & le = LocalEvent::Get();
+        const LocalEvent & le = LocalEvent::Get();
 
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
             if ( le.MousePressRight( { top.x + 414, top.y + 198 + 22 * static_cast<int>( i ), 200, 22 } ) ) {
@@ -415,7 +415,7 @@ namespace
         const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
         const int yOffset = awardCount > 3 ? 16 : 22;
 
-        LocalEvent & le = LocalEvent::Get();
+        const LocalEvent & le = LocalEvent::Get();
 
         for ( size_t i = 0; i < indexEnd; ++i ) {
             if ( le.MousePressRight( { top.x + 414, top.y + 100 - yOffset / 2 + yOffset * static_cast<int>( i ), 200, yOffset } ) ) {
