@@ -44,9 +44,6 @@
 
 namespace
 {
-    // This variable is used to remember the selection of map size throught the game.
-    int selectedMapSize = Maps::mapsize_t::ZERO;
-
     void mapInfo( const Maps::FileInfo & info )
     {
         // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
@@ -355,6 +352,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     fheroes2::Button buttonSelectAll( rt.x + 285, rt.y + 22, ICN::REQUESTS, 17, 18 );
 
     fheroes2::ButtonBase * currentPressedButton = nullptr;
+
+    // This variable is used to remember the selection of map size throught the game.
+    static int selectedMapSize = Maps::mapsize_t::ZERO;
 
     switch ( selectedMapSize ) {
     case Maps::SMALL:
