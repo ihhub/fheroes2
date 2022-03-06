@@ -212,7 +212,6 @@ namespace Game
     u32 GetViewDistance( u32 );
     u32 GetWhirlpoolPercent( void );
     u32 SelectCountPlayers( void );
-    void ShowMapLoadingText( void );
     void PlayPickupSound( void );
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( bool update );

@@ -140,8 +140,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return fheroes2::GameMode::CANCEL;
     }
 
-    Game::ShowMapLoadingText();
-
     char major;
     char minor;
     fs >> major >> minor;
