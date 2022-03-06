@@ -287,7 +287,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Maps::FileInfo * result = nullptr;
     MapsFileInfoList small;
     MapsFileInfoList medium;
     MapsFileInfoList large;
@@ -415,7 +414,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 9 );
-    listbox.SetAreaItems( fheroes2::Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
+    listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
 
     size_t selectedId = 0;
 
@@ -475,12 +474,10 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
-            result = it != all.end() ? &( *it ) : nullptr;
-            break;
+            return ( it != all.end() ) ? &( *it ) : nullptr;
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-            result = nullptr;
-            break;
+            return nullptr;
         }
         else if ( le.MouseClickLeft( buttonSelectSmall.area() ) || le.KeyPress( KEY_s ) /*&& buttonSelectSmall.isEnabled()*/ ) {
             if ( small.empty() ) {
@@ -638,5 +635,5 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         display.render();
     }
 
-    return result;
+    return nullptr;
 }
