@@ -69,7 +69,7 @@ public:
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         // UNUSED = 0x20000080,
-        WORLD_EYE_EAGLE_AS_SCHOLAR = 0x20000100,
+        // UNUSED = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
@@ -179,7 +179,6 @@ public:
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;
     bool ExtWorldArtifactCrystalBall() const;
-    bool ExtWorldEyeEagleAsScholar() const;
     bool ExtWorldNeutralArmyDifficultyScaling() const;
     bool ExtWorldUseUniqueArtifactsRS() const;
     bool ExtWorldUseUniqueArtifactsPS() const;

@@ -312,7 +312,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
-        text.Set( _( "Attack Skill" ) + std::string( " " ), Font::SMALL );
+        text.Set( Skill::Primary::String( Skill::Primary::ATTACK ) + std::string( " " ), Font::SMALL );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y = cur_pt.y + 168;
         text.Blit( dst_pt );
@@ -321,7 +321,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Defense Skill" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -330,7 +330,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Spell Power" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::POWER ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -339,7 +339,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Knowledge" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );

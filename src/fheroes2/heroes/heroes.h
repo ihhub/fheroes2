@@ -380,8 +380,6 @@ public:
     static int GetLevelFromExperience( u32 );
     static u32 GetExperienceFromLevel( int );
 
-    static void ScholarAction( Heroes &, Heroes & );
-
     fheroes2::Point MovementDirection() const;
 
     int GetAttackedMonsterTileIndex() const;
