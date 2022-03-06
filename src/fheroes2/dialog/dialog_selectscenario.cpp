@@ -352,7 +352,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
     fheroes2::ButtonBase * currentPressedButton = nullptr;
 
-    // This variable is used to remember the selection of map size throught the game.
+    // This variable is used to remember the selection of map size through the game.
     static int selectedMapSize = Maps::mapsize_t::ZERO;
 
     switch ( selectedMapSize ) {
@@ -420,19 +420,19 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
     switch ( selectedMapSize ) {
     case Maps::SMALL:
-        listbox.SetListContent( const_cast<MapsFileInfoList &>( small ) );
+        listbox.SetListContent( small );
         selectedId = GetSelectedMapId( small );
         break;
     case Maps::MEDIUM:
-        listbox.SetListContent( const_cast<MapsFileInfoList &>( medium ) );
+        listbox.SetListContent( medium );
         selectedId = GetSelectedMapId( medium );
         break;
     case Maps::LARGE:
-        listbox.SetListContent( const_cast<MapsFileInfoList &>( large ) );
+        listbox.SetListContent( large );
         selectedId = GetSelectedMapId( large );
         break;
     case Maps::XLARGE:
-        listbox.SetListContent( const_cast<MapsFileInfoList &>( xlarge ) );
+        listbox.SetListContent( xlarge );
         selectedId = GetSelectedMapId( xlarge );
         break;
     default:
