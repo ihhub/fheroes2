@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 09:05+0100\n"
-"PO-Revision-Date: 2022-03-07 09:51+0100\n"
+"PO-Revision-Date: 2022-03-07 09:58+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -1318,125 +1318,98 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Dvergemorderen!!!! Flykt for livene deres!\""
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Ballist"
 
-#, fuzzy
 msgid "campaignBonus|Black Pearl"
 msgstr "Den sorte perlen"
 
-#, fuzzy
 msgid "campaignBonus|Caster's Bracelet"
 msgstr "Fortryller-armbånd"
 
-#, fuzzy
 msgid "campaignBonus|Defender Helm"
 msgstr "Forsvarerhjelm"
 
-#, fuzzy
 msgid "campaignBonus|Breastplate"
 msgstr "Brystplate"
 
-#, fuzzy
 msgid "campaignBonus|Dragon Sword"
 msgstr "Dragesverdet"
 
-#, fuzzy
 msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin-medaljen"
 
-#, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Yprst. kunskpsrull"
 
-#, fuzzy
 msgid "campaignBonus|Hideous Mask"
-msgstr "Den forferdelige masken"
+msgstr "Forferdelig maske"
 
-#, fuzzy
 msgid "campaignBonus|Mage's Ring"
 msgstr "Magikerens ring"
 
-#, fuzzy
 msgid "campaignBonus|Major Scroll"
 msgstr "Str. kunskpsrull"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Honor"
 msgstr "Æresmedaljen"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Valor"
 msgstr "Medaljen av heltemot"
 
-#, fuzzy
 msgid "campaignBonus|Minor Scroll"
 msgstr "Mindre skriftrull"
 
-#, fuzzy
 msgid "campaignBonus|Nomad Boots"
 msgstr "Nomadens sko"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Styrkeøks"
 
-#, fuzzy
 msgid "campaignBonus|Spiked Shield"
 msgstr "Det piggete skjoldet"
 
-#, fuzzy
 msgid "campaignBonus|Stealth Shield"
-msgstr "Snikeskjoldet"
+msgstr "Skjuleskjoldet"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Skattepant"
 
-#, fuzzy
 msgid "campaignBonus|Thunder Mace"
 msgstr "Tordenklubben"
 
-#, fuzzy
 msgid "campaignBonus|Traveler's Boots"
 msgstr "Vandrerens sko"
 
-#, fuzzy
 msgid "campaignBonus|White Pearl"
 msgstr "Den hvite perlen"
 
-#, fuzzy
 msgid "campaignBonus|Animate Dead"
-msgstr ""
-"Døde-\n"
-"besjelning"
+msgstr "Dødebesjelning"
 
-#, fuzzy
 msgid "campaignBonus|Chain Lightning"
 msgstr "Kjedelyn"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Ildsmell"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Masseforbannelse"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Massehastverk"
 
-#, fuzzy
 msgid "campaignBonus|Mirror Image"
 msgstr "Speilbilde"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Gjenopplivning"
 
-#, fuzzy
 msgid "campaignBonus|Steelskin"
-msgstr "Magikerens ring"
+msgstr "Stålhud"
 
-#, fuzzy
 msgid "campaignBonus|Summon Earth"
 msgstr "Tilkall jord"
 
-#, fuzzy
 msgid "campaignBonus|View Heroes"
 msgstr "Vis helter"
 
@@ -7432,7 +7405,7 @@ msgid "The %{name} lets your catapult fire twice per combat round."
 msgstr "%{name} lar katapulten din avfyre to ganger hver kamprunde."
 
 msgid "Stealth Shield of Protection"
-msgstr "Snikeskjoldet av beskyttelse"
+msgstr "Skjuleskjoldet av beskyttelse"
 
 msgid "Dragon Sword of Dominion"
 msgstr "Dragesverdet av Herreveldet"
