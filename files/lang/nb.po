@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 09:05+0100\n"
-"PO-Revision-Date: 2022-03-07 09:18+0100\n"
+"PO-Revision-Date: 2022-03-07 09:51+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -154,17 +154,14 @@ msgstr "Velg antall"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverer fiendestyrken!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Skader alle vandøde på slagmarken."
+msgstr "%{name} har slått av autotrekk"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Skader alle vandøde på slagmarken."
+msgstr "%{name} har slått av autotrekk"
 
-#, fuzzy
 msgid "Spell failed!"
-msgstr "trolldom mislykket!"
+msgstr "Trolldom ble mislykket!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -199,7 +196,7 @@ msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Kampoppstilling"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -321,9 +318,8 @@ msgstr ""
 msgid "%{name} the %{race}"
 msgstr "%{race}en %{name}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "Du har ikke råd til %{name}."
+msgstr "Kapteinen til %{name}"
 
 msgid "Attack"
 msgstr "Angrep"
@@ -596,7 +592,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"
 
 msgid "Break auto battle?"
-msgstr "Avbryt autokamp?"
+msgstr "Avbryt autotrekk?"
 
 msgid "Error"
 msgstr "Feil"
@@ -737,9 +733,8 @@ msgstr "Kappløpet"
 msgid "Turning Point"
 msgstr "Vendepunktet"
 
-#, fuzzy
 msgid "Betrayal"
-msgstr "Slutten på forræderiet"
+msgstr "Sviket"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagon sitt forsvar"
@@ -1486,13 +1481,11 @@ msgstr ""
 msgid "Voyage Home"
 msgstr ""
 
-#, fuzzy
 msgid "Wizard's Isle"
-msgstr "Magimesterens hatt"
+msgstr "Magimestrenes øy"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Bønder"
+msgstr "Etterkommere"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} gir %{monster}."
@@ -1500,7 +1493,6 @@ msgstr "%{building} gir %{monster}."
 msgid "Requires:"
 msgstr "Krever:"
 
-#, fuzzy
 msgid "Cannot build. You have already built here today."
 msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
 
@@ -2291,9 +2283,8 @@ msgstr "Slottsvalg"
 msgid "Not enough resources to buy creatures."
 msgstr "Ikke nok råvarer til å kjøpe krigere."
 
-#, fuzzy
 msgid "No creatures available for purchase."
-msgstr "Ingen monster tilgjengelige for verving."
+msgstr "Ingen krigere tilgjengelige for verving."
 
 msgid "Buy Creatures"
 msgstr ""
@@ -2793,23 +2784,20 @@ msgstr "Velg trolldom:"
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
 
-#, fuzzy
 msgid "Location: "
-msgstr ""
-"\n"
-"\n"
-"Plassering: "
+msgstr "Plassering: "
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Map Type:\n"
-msgstr "Brett-type"
+msgstr ""
+"\n"
+"\n"
+"Brett-type:\n"
 
-#, fuzzy
 msgid "The Succession Wars"
-msgstr "Krigen i sør"
+msgstr "Krigen om tronarvingen"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
@@ -2907,12 +2895,11 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Viser om brettet er laget for The Succession Wars eller The Price of Loyalty-"
+"Viser om brettet er laget for Tronarvingskrigen- eller Prisen for trofasthet-"
 "utgavene av spillet."
 
 msgid "Map Type"
@@ -3150,9 +3137,8 @@ msgstr "og mer..."
 msgid "Start the selected scenario."
 msgstr ""
 
-#, fuzzy
 msgid "View Intro"
-msgstr "Vis helt"
+msgstr "Vis introfilm"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
@@ -3160,13 +3146,11 @@ msgstr ""
 msgid "Restart"
 msgstr ""
 
-#, fuzzy
 msgid "Restart the current scenario."
-msgstr "Lagre det nåværende spillet."
+msgstr "Start det nåværende brettet på nytt."
 
-#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Er du sikker på at du vil bortvise denne helten?"
+msgstr "Er du sikker på at du vil begynne dette brettet på nytt?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Lasting av kampanjescenario mislykket"
@@ -3404,13 +3388,11 @@ msgstr "Rekordtavle"
 msgid "View the high scores screen."
 msgstr "Vis rekordtavleskjermen."
 
-#, fuzzy
 msgid "Change language, resolution and settings of the game."
-msgstr "Bytt spilloppløsning."
+msgstr "Endre språk, oppløsning og innstillinger til spillet."
 
-#, fuzzy
 msgid "Game Settings"
-msgstr "Innstillinger for spillet."
+msgstr "Spillinnstillinger"
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -3786,11 +3768,12 @@ msgstr "Brettinnstillinger"
 msgid "Bring up the adventure options menu."
 msgstr "Hent fram menyen for brettinnstillinger."
 
-#, fuzzy
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
-msgstr "Åpne menyen for filvalg, som lar deg laste inn, lagre osv."
+msgstr ""
+"Åpne menyen for filvalg, som lar deg laste inn et parti, lagre et parti, "
+"begynne et nytt parti eller avslutte."
 
 msgid "File Options"
 msgstr "Filvalg"
@@ -3915,9 +3898,8 @@ msgstr "Vis info om %{skill}"
 msgid "Kingdom Income"
 msgstr "Inntekt"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Inntekt"
+msgstr "Kongedømmets daglige inntekt"
 
 msgid "English"
 msgstr "Engelsk"
@@ -4727,14 +4709,12 @@ msgstr ""
 "forteller deg at han er villig til å gi gjenstanden %{art} videre til den "
 "første sanne lederen han møter."
 
-#, fuzzy
 msgid ""
 "You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
-"Du har møtt på en merkelig person med en hatt med en ugle på seg. Han "
-"forteller deg at han er villig til å gi deg gjenstanden %{art} hvis du har "
-"%{skill}"
+"Du har møtt på en snodig type med en hatt med en ugle på seg. Han forteller "
+"deg at han er villig til å gi deg gjenstanden %{art} hvis du kan %{skill}"
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -4872,13 +4852,12 @@ msgstr ""
 "Du har tatt kontrollen over ei gullgruve. Den vil forsyne deg med %{count} "
 "gullstykker hver dag."
 
-#, fuzzy
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
 "move further each day."
 msgstr ""
 "Fyrtårnet er herved under din kontroll, og alle skipene dine vil fra nå av "
-"kunne flytte seg lengre hver tur."
+"kunne flytte seg lengre hver dag."
 
 msgid "You gain control of a %{name}."
 msgstr "Du har overtatt en %{name}."
@@ -5252,15 +5231,14 @@ msgstr "\"Jeg trenger %{count} %{res}.\""
 msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
 msgstr "det visker. (snufs) \"Vel, kom tilbake når du kan betale meg.\""
 
-#, fuzzy
 msgid ""
 "Nestled among the trees sits a blind seer. After you explain the intent of "
 "your journey, the seer activates his crystal ball, allowing you to see the "
 "strengths and weaknesses of your opponents."
 msgstr ""
-"En blind spåmann er slått til rede i treet han sitter i. Etter å ha forklart "
-"han hensikten med reisen din tar spåmannen i bruk krystallkula si, som lar "
-"deg se styrkene og svakhetene til motstanderne dine."
+"En blind spåmann har slått seg til rede i et tre han sitter i. Etter å ha "
+"forklart han hensikten med reisen din, tar spåmannen fram krystallkula si, "
+"og den lar deg se styrkene og svakhetene til motstanderne dine."
 
 msgid ""
 "The entrance to the cave is dark, and a foul, sulfurous smell issues from "
@@ -5436,17 +5414,14 @@ msgstr ""
 "Mens sirenene synger deres uhyggelige sang, klarer din lille men målrettede "
 "hær å motstå fristelsen til å stupe med hodet først i sjøen."
 
-#, fuzzy
 msgid ""
 "An eerie wailing song emanates from the sirens perched upon the rocks. Many "
 "of your crew fall under its spell, and dive into the water where they drown. "
 "You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
-"Du prøver å få mannskapet ditt til å tette ørene sine med voks før sirenenes "
-"uhyggelige sang får muligheten til å lokke dem ut til en våt grav. En ulende "
-"og nifs sang kommer fra sirenene på svaberget. Flere i mannskapet ditt blir "
-"offer for forhekselsen og stuper ut i sjøen hvor de drukner. Besøket ga deg "
-"lærdom og du får %{exp} erfaringspoeng."
+"En ulende og nifs sang kommer fra sirenene på svaberget. Flere av mannskapet "
+"ditt blir offer for forhekselsen og stuper ut i sjøen hvor de drukner. "
+"Hendelsen ga deg lærdom, og du får %{exp} erfaringspoeng."
 
 msgid ""
 "In a dazzling display of daring, you break into the local jail and free the "
@@ -6114,9 +6089,8 @@ msgstr "Lilla"
 msgid "tent|Red"
 msgstr "Rød"
 
-#, fuzzy
 msgid "Experience"
-msgstr "Utprøvningsvalg"
+msgstr "Erfaringspoeng"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
@@ -7400,9 +7374,8 @@ msgstr "Den ultimate kronen"
 msgid "Golden Goose"
 msgstr "Gullgåsa"
 
-#, fuzzy
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr "%{name} håver inn en inntekt på %{count} gullstykker hver runde."
+msgstr "%{name} gir deg en ekstra inntekt på %{count} gullstykker hver dag."
 
 msgid "Arcane Necklace of Magic"
 msgstr "Det mørke magihalskjedet"
@@ -7721,9 +7694,8 @@ msgstr "Magimesterens hatt"
 msgid "Power Ring"
 msgstr "Tryllekraftsring"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
-msgstr "%{name}en fyller opp %{count} mana hver runde til helten din."
+msgstr "%{name}en fyller opp %{count} mana til helten din hver dag."
 
 msgid "Ammo Cart"
 msgstr "Ammunisjonsvogn"
@@ -7734,9 +7706,8 @@ msgstr "%{name}en forsyner de skytende styrkene dine med uendelig ammunisjon."
 msgid "Tax Lien"
 msgstr "Skattepant"
 
-#, fuzzy
 msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr "%{name}en koster deg %{count} gullstykker hver tur."
+msgstr "%{name}en koster deg %{count} gullstykker hver dag."
 
 msgid "Hideous Mask"
 msgstr "Den forferdelige masken"
@@ -7748,44 +7719,38 @@ msgstr ""
 msgid "Endless Pouch of Sulfur"
 msgstr "Den uendelige posen av svovel"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr "%{name} forsyner deg med %{count} enhet svovel hver dag."
+msgstr "%{name} gir deg %{count} enhet svovel hver dag."
 
 msgid "Endless Vial of Mercury"
 msgstr "Den uendelige kvikksølvkolben"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr "%{name} forsyner deg med %{count} enhet kvikksølv hver dag."
+msgstr "%{name} gir deg %{count} enhet kvikksølv hver dag."
 
 msgid "Endless Pouch of Gems"
 msgstr "Den uendelige edesteinsposen"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr "%{name} forsyner deg med %{count} enhet edelstein hver dag."
+msgstr "%{name} gir deg %{count} enhet edelstein hver dag."
 
 msgid "Endless Cord of Wood"
 msgstr "Den uendelige vedfavnen"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr "%{name} forsyner deg med %{count} enhet ved hver dag."
+msgstr "%{name} gir deg %{count} enheter ved hver dag."
 
 msgid "Endless Cart of Ore"
 msgstr "Den uendelige malmvogna"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr "%{name} forsyner deg med %{count} enhet malm hver dag."
+msgstr "%{name} gir deg %{count} enheter malm hver dag."
 
 msgid "Endless Pouch of Crystal"
 msgstr "Den uendelige krystallposen"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr "%{name} gir %{count} enhet krystall hver dag."
+msgstr "%{name} gir deg %{count} enhet krystall hver dag."
 
 msgid "Spiked Helm"
 msgstr "Den piggete hjelmen"
@@ -8571,9 +8536,8 @@ msgstr "Vis info om %{name}"
 msgid "Move %{name}"
 msgstr "Flytt %{name}"
 
-#, fuzzy
 msgid "Cannot move the Spellbook"
-msgstr "Kan ikke flytte siste styrke i garnisonen"
+msgstr "Trylleboken kan ikke flyttes"
 
 msgid "This item can't be traded."
 msgstr "Denne tingen kan ikke byttes."
@@ -9149,15 +9113,15 @@ msgstr "Lukk tryllebok"
 msgid "View %{spell}"
 msgstr "Vis %{spell}"
 
-#, fuzzy
 msgid "This spell does %{damage} points of damage."
-msgstr "%{spell} gjør %{damage} skadepoeng."
+msgstr "Denne trolldommen gjør %{damage} skadepoeng."
 
-#, fuzzy
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
-msgstr "Bruk %{spell} på %{monster}"
+msgstr ""
+"Denne trolldommen tilkaller\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
 msgstr ""
@@ -9174,7 +9138,7 @@ msgid ""
 msgstr ""
 
 msgid "game: always confirm for rewrite savefile"
-msgstr "Parti: Be alltid om bekreftelse ved overskrivning av lagringsfil"
+msgstr "Parti: Alltid be om bekreftelse ved overskrivning av lagringsfil"
 
 msgid "game: remember last focus"
 msgstr "Parti: Husk hvor du var sist"
@@ -9211,9 +9175,8 @@ msgstr "Verden: Bruke spesielle gjenstander for grunnferdigheter"
 msgid "world: use unique artifacts affecting secondary skills"
 msgstr "Verden: Bruk spesielle gjenstander for sideferdigheter"
 
-#, fuzzy
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget."
+msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
 
 msgid "world: disable Barrow Mounds"
 msgstr "Verden: Skru av gravhaug"
@@ -9231,9 +9194,8 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
-#, fuzzy
 msgid "heroes: recruit cost depends on hero level"
-msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten."
+msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten"
 
 msgid "heroes: remember move points for retreat/surrender result"
 msgstr "Helter: Husk flyttepoengene for tilbaketrekks-/overgivelsesresultatet"
@@ -9241,13 +9203,11 @@ msgstr "Helter: Husk flyttepoengene for tilbaketrekks-/overgivelsesresultatet"
 msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
 msgstr "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)"
 
-#, fuzzy
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene."
+msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
 
-#, fuzzy
 msgid "battle: allow soft wait for troops"
-msgstr "Kamp: Avvent styrke til rundens slutt."
+msgstr "Kamp: Avvent styrke til rundens slutt"
 
 msgid "battle: reverse wait order (fast, average, slow)"
 msgstr "Kamp: Snu opp-ned på rekkefølgen (rask, middels, sein)"
@@ -9327,7 +9287,6 @@ msgstr "Han sa til henne: Bla, bla, bla... og så sa hun: Bla, bla, bla..."
 msgid "An unknown force is being ressurected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
 
-#, fuzzy
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
