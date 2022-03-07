@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-17 08:59+0100\n"
-"PO-Revision-Date: 2021-11-26 03:04+0100\n"
+"POT-Creation-Date: 2022-03-07 09:05+0100\n"
+"PO-Revision-Date: 2022-03-07 09:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -154,7 +154,16 @@ msgstr "Velg antall"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halverer fiendestyrken!"
 
-msgid "spell failed!"
+#, fuzzy
+msgid "%{name} has turned off the auto battle"
+msgstr "Skader alle vandøde på slagmarken."
+
+#, fuzzy
+msgid "%{name} has turned on the auto battle"
+msgstr "Skader alle vandøde på slagmarken."
+
+#, fuzzy
+msgid "Spell failed!"
 msgstr "trolldom mislykket!"
 
 msgid ""
@@ -496,9 +505,6 @@ msgstr "Gjem logg"
 msgid "Show logs"
 msgstr "Vis logg"
 
-msgid "%{color} casts a spell: %{spell}"
-msgstr "%{color} bruker trolldommen: %{spell}"
-
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hopper over turen."
 
@@ -731,6 +737,10 @@ msgstr "Kappløpet"
 msgid "Turning Point"
 msgstr "Vendepunktet"
 
+#, fuzzy
+msgid "Betrayal"
+msgstr "Slutten på forræderiet"
+
 msgid "Corlagon's Defense"
 msgstr "Corlagon sitt forsvar"
 
@@ -829,6 +839,12 @@ msgid ""
 msgstr ""
 "Dette er det siste slaget. Både du og fienden er væpnet til tennene og alle "
 "er allierte mot deg. Fang Archibald for å avslutte krigen!"
+
+msgid ""
+"Switching sides leaves you with three castles against the enemy's one.  This "
+"battle will be the easiest one you will face for the rest of the war..."
+"traitor."
+msgstr ""
 
 msgid "Barbarian Wars"
 msgstr "Barbarkrigene"
@@ -1219,6 +1235,31 @@ msgstr " bonus"
 msgid " defeated"
 msgstr " slått ut"
 
+msgid " will always run away from your army."
+msgstr ""
+
+msgid " will be willing to always join your army."
+msgstr ""
+
+msgid "\"%{artifact}\" artifact will be carried over the scenario."
+msgstr ""
+
+msgid "The army will be carried over the scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will have additional %{resource} at the start of the scenario."
+msgstr ""
+
+msgid "\"%{spell}\" spell will be carried over the scenario."
+msgstr ""
+
+msgid "%{hero} hero can be hired in the scenario."
+msgstr ""
+
+msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgstr ""
+
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
 "Dvergene kjenner igjen sine allierte og slår seg med glede sammen med "
@@ -1403,6 +1444,55 @@ msgstr "Tilkall jord"
 #, fuzzy
 msgid "campaignBonus|View Heroes"
 msgstr "Vis helter"
+
+msgid ""
+"The main hero will have \"%{artifact}\" artifact at the start of the "
+"scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will have additional %{amount} %{resource} at the start of the "
+"scenario."
+msgstr ""
+
+msgid ""
+"The main hero will have %{count} %{monster} at the start of the scenario."
+msgstr ""
+
+msgid ""
+"The main hero will have \"%{spell}\" spell at the start of the scenario."
+msgstr ""
+
+msgid "The starting race of the scenario will be %{race}."
+msgstr ""
+
+msgid ""
+"The main hero will have additional %{count} %{skill} at the start of the "
+"scenario."
+msgstr ""
+
+msgid "The main hero will have %{skill} at the start of the scenario."
+msgstr ""
+
+msgid "Roland"
+msgstr "Roland"
+
+msgid "Archibald"
+msgstr "Arkibald"
+
+msgid "The Price of Loyalty"
+msgstr ""
+
+msgid "Voyage Home"
+msgstr ""
+
+#, fuzzy
+msgid "Wizard's Isle"
+msgstr "Magimesterens hatt"
+
+#, fuzzy
+msgid "Descendants"
+msgstr "Bønder"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} gir %{monster}."
@@ -2086,9 +2176,6 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine gjenstander til en annen helt."
 
-msgid "Kingdom Income"
-msgstr "Inntekt"
-
 msgid "Exit"
 msgstr "Gå ut"
 
@@ -2179,12 +2266,6 @@ msgid ""
 msgstr ""
 "\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
 "din side av slagmarken."
-
-msgid "Attack Skill"
-msgstr "Angrepsevne"
-
-msgid "Defense Skill"
-msgstr "Forsvarsevne"
 
 msgid "Spread Formation"
 msgstr "Spredd oppstilling"
@@ -2288,6 +2369,12 @@ msgstr ""
 # Avskjedige
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Er du sikker på at du vil bortvise denne troppen?"
+
+msgid "Attack Skill"
+msgstr "Angrepsevne"
+
+msgid "Defense Skill"
+msgstr "Forsvarsevne"
 
 msgid "Shots"
 msgstr "Skudd"
@@ -2605,7 +2692,7 @@ msgid "(not visited)"
 msgstr "(ikke besøkt)"
 
 msgid "%{color} Barrier"
-msgstr "%{color}farget mur"
+msgstr "%{color}farget barriere"
 
 msgid "%{color} Tent"
 msgstr "%{color}farget telt"
@@ -2645,6 +2732,12 @@ msgstr "Tilgjengelig: %{count}"
 
 msgid "Number to buy:"
 msgstr "Valgt antall:"
+
+msgid "Okay"
+msgstr "Okay"
+
+msgid "Click to apply the selected resolution."
+msgstr ""
 
 msgid "MAX"
 msgstr "MAKS"
@@ -2717,9 +2810,6 @@ msgstr "Brett-type"
 #, fuzzy
 msgid "The Succession Wars"
 msgstr "Krigen i sør"
-
-msgid "The Price of Loyalty"
-msgstr ""
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
@@ -2857,17 +2947,8 @@ msgstr "Beskrivelse av det utvalgte brettet."
 msgid "Accept the choice made."
 msgstr "Bekreft valget."
 
-msgid "Okay"
-msgstr "Okay"
-
 msgid "Experimental Game Settings"
 msgstr "Utprøvningsinnstillinger"
-
-msgid "one"
-msgstr "1"
-
-msgid "two"
-msgstr "2"
 
 msgid "off"
 msgstr "av"
@@ -3063,11 +3144,29 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Umulig"
 
-msgid "Map is loading..."
-msgstr "Brettet lastes..."
-
 msgid "and more..."
 msgstr "og mer..."
+
+msgid "Start the selected scenario."
+msgstr ""
+
+#, fuzzy
+msgid "View Intro"
+msgstr "Vis helt"
+
+msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+#, fuzzy
+msgid "Restart the current scenario."
+msgstr "Lagre det nåværende spillet."
+
+#, fuzzy
+msgid "Are you sure you want to restart this scenario?"
+msgstr "Er du sikker på at du vil bortvise denne helten?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Lasting av kampanjescenario mislykket"
@@ -3813,6 +3912,13 @@ msgstr "%{color} spiller"
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
 
+msgid "Kingdom Income"
+msgstr "Inntekt"
+
+#, fuzzy
+msgid "Kingdom Income per day."
+msgstr "Inntekt"
+
 msgid "English"
 msgstr "Engelsk"
 
@@ -3831,6 +3937,9 @@ msgstr "Russisk"
 msgid "Italian"
 msgstr "Italiensk"
 
+msgid "Czech"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -3839,12 +3948,6 @@ msgstr "%{object} ranet"
 
 msgid "%{object} raided"
 msgstr "%{object} plyndret"
-
-msgid "Ambrose"
-msgstr "Ambrose"
-
-msgid "Dimitry"
-msgstr "Dimitri"
 
 msgid "Ector"
 msgstr "Ektor"
@@ -3855,32 +3958,29 @@ msgstr "Lycke"
 msgid "Lord Kilburn"
 msgstr "Baron Kilburn"
 
-msgid "Maximus"
-msgstr "Maximus"
-
-msgid "Ruby"
-msgstr "Rubin"
-
 msgid "Sir Gallant"
 msgstr "Sir Galant"
 
 msgid "Tyro"
 msgstr "Tyros"
 
-msgid "Atlas"
-msgstr "Atlas"
+msgid "Ambrose"
+msgstr "Ambrose"
+
+msgid "Dimitry"
+msgstr "Dimitri"
+
+msgid "Maximus"
+msgstr "Maximus"
+
+msgid "Ruby"
+msgstr "Rubin"
 
 msgid "Crag Hack"
 msgstr "Kragg Haachk"
 
-msgid "Ergon"
-msgstr "Herkon"
-
 msgid "Fineous"
 msgstr "Finehas"
-
-msgid "Jaclyn"
-msgstr "Bina"
 
 msgid "Jezebel"
 msgstr "Isabell"
@@ -3891,23 +3991,23 @@ msgstr "Jojosva"
 msgid "Thundax"
 msgstr "Tordøks"
 
+msgid "Atlas"
+msgstr "Atlas"
+
+msgid "Ergon"
+msgstr "Herkon"
+
+msgid "Jaclyn"
+msgstr "Bina"
+
 msgid "Tsabu"
 msgstr "Sabu"
-
-msgid "Ariel"
-msgstr "Ariel"
 
 msgid "Astra"
 msgstr "Astri"
 
-msgid "Carlawn"
-msgstr "Karlana"
-
 msgid "Gem"
 msgstr "Edel"
-
-msgid "Luna"
-msgstr "Luna"
 
 msgid "Natasha"
 msgstr "Natalie"
@@ -3921,8 +4021,14 @@ msgstr "Trojann"
 msgid "Vatawna"
 msgstr "Vatafna"
 
-msgid "Agar"
-msgstr "Hagar"
+msgid "Ariel"
+msgstr "Ariel"
+
+msgid "Carlawn"
+msgstr "Karlana"
+
+msgid "Luna"
+msgstr "Luna"
 
 msgid "Arie"
 msgstr "Aris"
@@ -3933,14 +4039,17 @@ msgstr "Bjarg"
 msgid "Crodo"
 msgstr "Krod"
 
-msgid "Falagar"
-msgstr "Falagar"
-
 msgid "Kastore"
 msgstr "Kastor"
 
 msgid "Vesper"
 msgstr "Vesper"
+
+msgid "Agar"
+msgstr "Hagar"
+
+msgid "Falagar"
+msgstr "Falagar"
 
 msgid "Wrathmont"
 msgstr "Vredeberg"
@@ -3954,23 +4063,20 @@ msgstr "Flint"
 msgid "Halon"
 msgstr "Halon"
 
-msgid "Mandigal"
-msgstr "Mandigal"
-
 msgid "Myra"
 msgstr "Mirha"
 
 msgid "Myrini"
 msgstr "Mjirini"
 
-msgid "Sarakin"
-msgstr "Sarakinn"
-
 msgid "Wilfrey"
 msgstr "Vilfrid"
 
-msgid "Celia"
-msgstr "Celia"
+msgid "Mandigal"
+msgstr "Mandigal"
+
+msgid "Sarakin"
+msgstr "Sarakinn"
 
 msgid "Charity"
 msgstr "Karita"
@@ -3984,23 +4090,20 @@ msgstr "Rannlau"
 msgid "Rialdo"
 msgstr "Rialto"
 
-msgid "Roxana"
-msgstr "Roksana"
-
-msgid "Sandro"
-msgstr "Sandro"
-
 msgid "Zam"
 msgstr "Zamm"
 
 msgid "Zom"
 msgstr "Zomm"
 
-msgid "Archibald"
-msgstr "Arkibald"
+msgid "Celia"
+msgstr "Celia"
 
-msgid "Brother Brax"
-msgstr "Broder Brax"
+msgid "Roxana"
+msgstr "Roksana"
+
+msgid "Sandro"
+msgstr "Sandro"
 
 msgid "Lord Corlagon"
 msgstr "Baron Korlagon"
@@ -4008,26 +4111,14 @@ msgstr "Baron Korlagon"
 msgid "Lord Halton"
 msgstr "Baron Halton"
 
-msgid "Roland"
-msgstr "Roland"
-
 msgid "Sister Eliza"
 msgstr "Søster Eliza"
 
-msgid "Ceallach"
-msgstr "Ketill"
+msgid "Brother Brax"
+msgstr "Broder Brax"
 
 msgid "Dainwin"
 msgstr "Deinvinn"
-
-msgid "Drakonia"
-msgstr "Drakonia"
-
-msgid "Elderian"
-msgstr "Elderian"
-
-msgid "Gallavant"
-msgstr "Gallavant"
 
 msgid "Joseph"
 msgstr "Josef"
@@ -4037,6 +4128,18 @@ msgstr "Maug"
 
 msgid "Solmyr"
 msgstr "Solmyr"
+
+msgid "Ceallach"
+msgstr "Ketill"
+
+msgid "Drakonia"
+msgstr "Drakonia"
+
+msgid "Elderian"
+msgstr "Elderian"
+
+msgid "Gallavant"
+msgstr "Gallavant"
 
 msgid "Jarkonas"
 msgstr "Harkonas"
@@ -4060,6 +4163,12 @@ msgstr "Ønsker du å kjøpe én?"
 
 msgid "%{count} / day"
 msgstr "%{count} / dag"
+
+msgid "one"
+msgstr "1"
+
+msgid "two"
+msgstr "2"
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr "Du kan ikke verve noen akkurat nå fordi hæren din er full."
@@ -4584,9 +4693,6 @@ msgstr ""
 msgid "Do you wish to buy this artifact?"
 msgstr "Ønsker du å kjøpe denne gjenstanden?"
 
-msgid "Artifact"
-msgstr "Gjenstand"
-
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
 "leprechaun stamps his foot and ignores you."
@@ -5095,9 +5201,6 @@ msgstr ""
 "Kapteinen sukker. \"Du har ikke nok penger, hva? Du kan ikke forvente at jeg "
 "skal gi fra meg kartet gratis!\""
 
-msgid "You find %{artifact}."
-msgstr "Du finner gjenstanden: %{artifact}."
-
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
 "before. Staring at it intensely, the smooth surface suddenly changes to an "
@@ -5322,18 +5425,22 @@ msgid "The Arena guards turn you away."
 msgstr "Vokterne av arenaen avviser deg."
 
 msgid ""
+"You have your crew stop up their ears with wax before the sirens' eerie song "
+"has any chance of luring them to a watery grave."
+msgstr ""
+
+msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
 "Mens sirenene synger deres uhyggelige sang, klarer din lille men målrettede "
 "hær å motstå fristelsen til å stupe med hodet først i sjøen."
 
+#, fuzzy
 msgid ""
-"You have your crew stop up their ears with wax before the sirens' eerie song "
-"has any chance of luring them to a watery grave. An eerie wailing song "
-"emanates from the sirens perched upon the rocks. Many of your crew fall "
-"under its spell, and dive into the water where they drown. You are now wiser "
-"for the visit, and gain %{exp} experience."
+"An eerie wailing song emanates from the sirens perched upon the rocks. Many "
+"of your crew fall under its spell, and dive into the water where they drown. "
+"You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
 "Du prøver å få mannskapet ditt til å tette ørene sine med voks før sirenenes "
 "uhyggelige sang får muligheten til å lokke dem ut til en våt grav. En ulende "
@@ -5415,10 +5522,11 @@ msgid ""
 "\"Speak the key and you may pass.\"\n"
 "As you speak the magic word, the glowing barrier dissolves into nothingness."
 msgstr ""
-"En magisk mur rager foran deg og blokkerer veien. Runene på buen dens sier "
-"det følgende:\n"
+"En magisk barriere rager foran deg og blokkerer veien. Runene på buen dens "
+"sier det følgende:\n"
 "\"Uttal nøkkelordet og du vil få komme forbi.\"\n"
-"I det du roper ut det magiske ordet oppløses den skinnende muren til intet."
+"I det du roper ut det magiske ordet oppløses den glødende barrieren til "
+"intet."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -5426,7 +5534,7 @@ msgid ""
 "\"Speak the key and you may pass.\"\n"
 "You speak, and nothing happens."
 msgstr ""
-"En magisk sperre rager foran deg og blokkerer veien. Runene på buen dens "
+"En magisk barriere rager foran deg og blokkerer veien. Runene på buen dens "
 "sier,\n"
 "\"Uttal nøkkelordet og du vil få komme forbi.\"\n"
 "Du taler, men ingenting skjer."
@@ -5541,30 +5649,6 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
 
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-"%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-msgstr ""
-"%{teacher}, hvis %{level} %{scholar} kjenner mange magiske hemmeligheter, "
-"lærer %{spells1} fra %{learner}, og lærer bort %{spells2} til %{learner}."
-
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-"%{spells1} from %{learner}."
-msgstr ""
-"%{teacher}, hvis %{level} %{scholar} kjenner mange magiske hemmeligheter, "
-"lærer %{spells1} fra %{learner}."
-
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-"%{spells2} to %{learner}."
-msgstr ""
-"%{teacher}, hvis %{level} %{scholar} kjenner mange magiske hemmeligheter, "
-"lærer bort %{spells2} til %{learner}."
-
-msgid "Scholar Ability"
-msgstr "Lærdeevne"
-
 msgid "Town Portal"
 msgstr "Byportal"
 
@@ -5673,30 +5757,33 @@ msgstr "Avansert"
 msgid "skill|Expert"
 msgstr "Ekspert"
 
+msgid "Pathfinding"
+msgstr "Kartlesing"
+
 msgid "Archery"
 msgstr "Skyting"
-
-msgid "Diplomacy"
-msgstr "Megling"
-
-msgid "Leadership"
-msgstr "Lederskap"
 
 # Transport? Varelevering? Forsyninger?
 msgid "Logistics"
 msgstr "Logistikk"
 
-msgid "Navigation"
-msgstr "Skipsfart"
-
-msgid "Pathfinding"
-msgstr "Kartlesing"
-
 msgid "Scouting"
 msgstr "Speiding"
 
+msgid "Diplomacy"
+msgstr "Megling"
+
+msgid "Navigation"
+msgstr "Skipsfart"
+
+msgid "Leadership"
+msgstr "Lederskap"
+
 msgid "Wisdom"
 msgstr "Visdom"
+
+msgid "Mysticism"
+msgstr "Mystikk"
 
 msgid "Ballistics"
 msgstr "Ballistikk"
@@ -5704,15 +5791,12 @@ msgstr "Ballistikk"
 msgid "Eagle Eye"
 msgstr "Ørneblikk"
 
+msgid "Necromancy"
+msgstr "Sortekunst"
+
 # Eiendomsinvestering.
 msgid "Estates"
 msgstr "Investering"
-
-msgid "Mysticism"
-msgstr "Mystikk"
-
-msgid "Necromancy"
-msgstr "Sortekunst"
 
 msgid "Advanced Archery"
 msgstr "Avansert skyting"
@@ -6029,6 +6113,15 @@ msgstr "Lilla"
 
 msgid "tent|Red"
 msgstr "Rød"
+
+#, fuzzy
+msgid "Experience"
+msgstr "Utprøvningsvalg"
+
+msgid ""
+"Experience allows your heroes to go up levels, increasing their primary and "
+"secondary skills."
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr "Helt/Egenskaper"
@@ -6583,6 +6676,9 @@ msgstr "Råvare"
 
 msgid "Whirlpool"
 msgstr "Virvelstrøm"
+
+msgid "Artifact"
+msgstr "Gjenstand"
 
 msgid "Boat"
 msgstr "Skip"
@@ -7828,6 +7924,440 @@ msgid "The %{name} gives you increased necromancy skill."
 msgstr "%{name} forbedrer sortekunstevnen din."
 
 msgid ""
+"After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
+"an exquisite jeweled necklace."
+msgstr ""
+
+msgid ""
+"While searching through the rubble of a caved-in mine, you free a group of "
+"trapped Dwarves. Grateful, the leader gives you a golden bracelet."
+msgstr ""
+
+msgid ""
+"A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
+"creature free, he hands you a small pouch. Emptying the contents, you find a "
+"dazzling jeweled ring."
+msgstr ""
+
+msgid ""
+"Alongside the remains of a burnt witch lies a beautiful broach, intricately "
+"designed. Approaching the corpse with caution, you add the broach to your "
+"inventory."
+msgstr ""
+
+msgid ""
+"Freeing a virtuous maiden from the clutches of an evil overlord, you are "
+"granted a Medal of Valor by the King's herald."
+msgstr ""
+
+msgid ""
+"After saving a young boy from a vicious pack of Wolves, you return him to "
+"his father's manor. The grateful nobleman awards you with a Medal of Courage."
+msgstr ""
+
+msgid ""
+"After freeing a princess of a neighboring kingdom from the evil clutches of "
+"despicable slavers, she awards you with a Medal of Honor."
+msgstr ""
+
+msgid ""
+"Ridding the countryside of the hideous Minotaur who made a sport of eating "
+"noblemen's Knights, you are honored with the Medal of Distinction."
+msgstr ""
+
+msgid ""
+"You stumble upon a medal lying alongside the empty road. Adding the medal to "
+"your inventory, you become aware that you have acquired the undesirable "
+"Fizbin of Misfortune, greatly decreasing your army's morale."
+msgstr ""
+
+msgid ""
+"During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
+"Inside the tree you find a mysterious mace."
+msgstr ""
+
+msgid ""
+"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"draw, the Knight, out of respect, offers you a pair of armored gauntlets."
+msgstr ""
+
+msgid ""
+"A glint of golden light catches your eye. Upon further investigation, you "
+"find a golden helm hidden under a bush."
+msgstr ""
+
+msgid ""
+"A clumsy Giant has killed himself with his own flail. Knowing your superior "
+"skill with this weapon, you confidently remove the spectacular flail from "
+"the fallen Giant."
+msgstr ""
+
+msgid ""
+"Walking through the ruins of an ancient walled city, you find the instrument "
+"of the city's destruction, an elaborately crafted ballista."
+msgstr ""
+
+msgid ""
+"A stone statue of a warrior holds a silver shield. As you remove the shield, "
+"the statue crumbles into dust."
+msgstr ""
+
+msgid ""
+"As you are walking along a narrow path, a nearby bush suddenly bursts into "
+"flames. Before your eyes the flames become the image of a beautiful woman. "
+"She holds out a magnificent sword to you."
+msgstr ""
+
+msgid ""
+"You see a silver axe embedded deeply in the ground. After several "
+"unsuccessful attempts by your army to remove the axe, you tightly grip the "
+"handle of the axe and effortlessly pull it free."
+msgstr ""
+
+msgid ""
+"A gang of Rogues is sifting through the possessions of dead warriors. "
+"Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
+"breastplate."
+msgstr ""
+
+msgid ""
+"Before you appears a levitating glass case with a scroll, perched upon a bed "
+"of crimson velvet. At your touch, the lid opens and the scroll floats into "
+"your awaiting hands."
+msgstr ""
+
+msgid ""
+"Visiting a local wiseman, you explain the intent of your journey. He reaches "
+"into a sack and withdraws a yellowed scroll and hands it to you."
+msgstr ""
+
+msgid ""
+"You come across the remains of an ancient Druid. Bones, yellowed with age, "
+"peer from the ragged folds of her robe. Searching the robe, you discover a "
+"scroll hidden in the folds."
+msgstr ""
+
+msgid ""
+"Mangled bones, yellowed with age, peer from the ragged folds of a dead "
+"Druid's robe. Searching the robe, you discover a scroll hidden within."
+msgstr ""
+
+msgid ""
+"A little leprechaun dances gleefully around a magic sack. Seeing you "
+"approach, he stops in mid-stride. The little man screams and stamps his foot "
+"ferociously, vanishing into thin air. Remembering the old leprechaun saying "
+"'Finders Keepers', you grab the sack and leave."
+msgstr ""
+
+msgid ""
+"A noblewoman, separated from her traveling companions, asks for your help. "
+"After escorting her home, she rewards you with a bag filled with gold."
+msgstr ""
+
+msgid ""
+"In your travels, you find a leather purse filled with gold that once "
+"belonged to a great warrior king who had the ability to transform any "
+"inanimate object into gold."
+msgstr ""
+
+msgid ""
+"A Nomad trader seeks protection from a tribe of Goblins. For your "
+"assistance, he gives you a finely crafted pair of boots made from the "
+"softest leather. Looking closely, you see fascinating ancient carvings "
+"engraved on the leather."
+msgstr ""
+
+msgid ""
+"Discovering a pair of beautifully beaded boots made from the finest and "
+"softest leather, you thank the anonymous donor and add the boots to your "
+"inventory."
+msgstr ""
+
+msgid ""
+"A traveling merchant offers you a rabbit's foot, made of gleaming silver "
+"fur, for safe passage. The merchant explains the charm will increase your "
+"luck in combat."
+msgstr ""
+
+msgid ""
+"An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
+"her free. Snorting and stamping her front hoof once, she gallops off. "
+"Looking down you see a golden horseshoe."
+msgstr ""
+
+msgid ""
+"You have captured a mischievous imp who has been terrorizing the region. In "
+"exchange for his release, he rewards you with a magical coin."
+msgstr ""
+
+msgid ""
+"In the middle of a patch of dead and dry vegetation, to your surprise you "
+"find a healthy green four-leaf clover."
+msgstr ""
+
+msgid ""
+"An old man claiming to be an inventor asks you to try his latest invention. "
+"He then hands you a compass."
+msgstr ""
+
+msgid ""
+"An old sea captain is being tortured by Ogres. You save him, and in return "
+"he rewards you with a wondrous instrument to measure the distance of a star."
+msgstr ""
+
+msgid ""
+"While venturing into a decrepit hut you find the Skeleton of a long dead "
+"witch. Investigation of the remains reveals a glass eye rolling around "
+"inside an empty skull."
+msgstr ""
+
+msgid ""
+"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"Vultures picking at the aftermath of a terrible battle. Your cursory search "
+"of the remains turns up an enchanted hourglass."
+msgstr ""
+
+msgid ""
+"In reward for helping his cart out of a ditch, a traveling potion salesman "
+"gives you a \"magic\" gold watch. Unbeknownst to him, the watch really is "
+"magical."
+msgstr ""
+
+msgid ""
+"A brief stop at an improbable rural inn yields an exchange of money, tales, "
+"and accidentally, luggage. You find a magical skullcap in your new backpack."
+msgstr ""
+
+msgid ""
+"Responding to the panicked cries of a damsel in distress, you discover a "
+"young woman fleeing from a hungry bear. You slay the beast in the nick of "
+"time, and the grateful Sorceress weaves a magic cloak from the bear's hide."
+msgstr ""
+
+msgid ""
+"You've come upon a fight between a Necromancer and a Paladin. The "
+"Necromancer blasts the Paladin with a fire bolt, bringing him to his knees. "
+"Acting quickly, you slay the evil one before the final blow. The grateful "
+"Paladin gives you the fire cloak that saved him."
+msgstr ""
+
+msgid ""
+"A traveling tinker in need of supplies offers you a helm with a thunderbolt "
+"design on its top in exchange for food and water. Curious, you accept, and "
+"later find out that the helm is magical."
+msgstr ""
+
+msgid ""
+"An icicle withstanding the full heat of the noonday sun attracts your "
+"attention. Intrigued, you break it off, and find that it does not melt in "
+"your hand."
+msgstr ""
+
+msgid ""
+"Your wanderings bring you into contact with a tribe of ape-like beings using "
+"a magical lava rock that never cools to light their fires. You take pity on "
+"them and teach them to make fire with sticks. Believing you to be a god, the "
+"apes give you their rock."
+msgstr ""
+
+msgid ""
+"While waiting out a storm, a lighting bolt strikes a nearby cottage's "
+"lightning rod, which melts and falls to the ground. The tip of the rod, "
+"however, survives intact and makes your hair stand on end when you touch it. "
+"Hmm..."
+msgstr ""
+
+msgid ""
+"You've found an oddly shaped ring on the finger of a long dead traveler. The "
+"ring looks like a snake biting its own tail."
+msgstr ""
+
+msgid ""
+"A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
+"reveals that the tomb has already been looted, but the thieves overlooked an "
+"ankh on a silver chain in the dark."
+msgstr ""
+
+msgid ""
+"You come across a conjurer who begs to accompany you and your army awhile "
+"for safety. You agree, and he offers as payment a copy of the book of the "
+"elements."
+msgstr ""
+
+msgid ""
+"While pausing to rest, you notice a bobcat climbing a short tree to get at a "
+"crow's nest. On impulse, you climb the tree yourself and scare off the cat. "
+"When you look in the nest, you find a collection of shiny stones and a ring."
+msgstr ""
+
+msgid ""
+"In your wanderings you come across a hermit living in a small, tidy hut. "
+"Impressed with your mission, he takes time out from his meditations to bless "
+"and give you a charm against curses."
+msgstr ""
+
+msgid ""
+"Responding to cries for help, you find river Sprites making a sport of "
+"dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite "
+"onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a "
+"magic pendant to let him go."
+msgstr ""
+
+msgid ""
+"A brief roadside encounter with a small caravan and a game of knucklebones "
+"wins a magic pendant. Its former owner says that it protects from "
+"Necromancers' death spells."
+msgstr ""
+
+msgid ""
+"The sounds of combat draw you to the scene of a fight between an old "
+"Barbarian and an eight-headed Hydra. Your timely intervention swings the "
+"battle in favor of the man, and he rewards you with a pendant he used to use "
+"to calm his mind for battle."
+msgstr ""
+
+msgid ""
+"You come upon a very old woman, long blind from cataracts and dying alone. "
+"You tend to her final needs and promise a proper burial. Grateful, she gives "
+"you a magic pendant emblazoned with a stylized eye. It lets you see with "
+"your eyes closed."
+msgstr ""
+
+msgid ""
+"You come across a golem wearing a glowing pendant and blocking your way. "
+"Acting on a hunch, you cut the pendant from its neck. Deprived of its power "
+"source, the golem breaks down, leaving you with the magical pendant."
+msgstr ""
+
+msgid ""
+"A quick and deadly battle with a Necromancer wins you his magical pendant. "
+"Later, a Wizard tells you that the pendant protects undead under your "
+"control from holy word spells."
+msgstr ""
+
+msgid ""
+"You meet an old Wizard friend of yours traveling in the opposite direction. "
+"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"magic spell on your allies."
+msgstr ""
+
+msgid ""
+"A chance meeting with a famous Archer finds you in a game of knucklebones "
+"pitting his bow against your horse. You win."
+msgstr ""
+
+msgid ""
+"A merchant from far away lands trades you a new invention of his people for "
+"traveling supplies. It makes distant objects appear closer, and he calls "
+"it...\n"
+"\n"
+"a telescope."
+msgstr ""
+
+msgid ""
+"You pause to help a diplomat with a broken axle fix his problem. In "
+"gratitude, he gives you a writing quill with magical properties which he "
+"says will \"help people see things your way\"."
+msgstr ""
+
+msgid ""
+"You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
+"opens a portal and rides through, getting his hat knocked off by the edge of "
+"the gate. The Griffin follows; the gate closes. You pick the hat up, dust it "
+"off, and put it on."
+msgstr ""
+
+msgid ""
+"You find a small tree that closely resembles the great Warlock Carnauth with "
+"a ring around one of its twigs. Scraps of clothing and rotting leather lead "
+"you to suspect that it IS Carnauth, transformed. Since you can't help him, "
+"you take the magic ring."
+msgstr ""
+
+msgid ""
+"An ammunition cart in the middle of an old battlefield catches your eye. "
+"Inspection shows it to be in good working order, so  you take it along."
+msgstr ""
+
+msgid ""
+"Your big spending habits have earned you a massive tax bill that you can't "
+"hope to pay. The tax man takes pity and agrees to only take 250 gold a day "
+"from your account for life. Check here if you want one dollar to go to the "
+"presidential campaign election fund."
+msgstr ""
+
+msgid ""
+"Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
+"Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
+"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
+"of Gromluck Greene, and you are stuck with it."
+msgstr ""
+
+msgid ""
+"You visit an alchemist who, upon seeing your army, is swayed by the "
+"righteousness of your cause. The newly loyal subject gives you his endless "
+"pouch of sulfur to help with the war effort."
+msgstr ""
+
+msgid ""
+"A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
+"of mercury that always has a little left on the bottom. Recognizing a "
+"treasure when you see one, you cap it and slip it in your pocket."
+msgstr ""
+
+msgid ""
+"A short rainstorm brings forth a rainbow...and you can see the end of it. "
+"Riding quickly, you seize the pot of gold you find there. The leprechaun who "
+"owns it, unable to stop you from taking it, offers an endless pouch of gems "
+"for the return of his gold. You accept."
+msgstr ""
+
+msgid ""
+"Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
+"dead wood. As you keep pulling wood from the pile, you notice that it "
+"doesn't shrink. You realize to your delight that the wood is enchanted, so "
+"you take it along."
+msgstr ""
+
+msgid ""
+"You've found a Goblin weapon smithy making weapons for use against humans. "
+"With a tremendous yell you and your army descend upon their camp and drive "
+"them away. A search finds a magic ore cart that never runs out of iron."
+msgstr ""
+
+msgid ""
+"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"crystal in one corner. Curious, you break a piece off and notice that the "
+"original crystal grows the lost piece back. You decide to stuff the entire "
+"patch into a pouch and take it with you."
+msgstr ""
+
+msgid ""
+"Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
+"You fend them off easily and the survivors flee in all directions. One of "
+"the Orcs was wearing a polished spiked helm. Figuring it will make a good "
+"souvenir, you take it."
+msgstr ""
+
+msgid ""
+"You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
+"steps out from under the bridge and demands payment before it will permit "
+"you to pass. You refuse, and the Troll charges, forcing you to slay it. You "
+"take its spiked shield as a trophy."
+msgstr ""
+
+msgid ""
+"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"pearl amidst shattered shells and debris."
+msgstr ""
+
+msgid ""
+"Rumors of a Griffin of unusual size preying upon the countryside lead you to "
+"its cave lair. A quick, brutal fight dispatches the beast, and a search of "
+"its foul nest turns up a huge black pearl."
+msgstr ""
+
+msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
 "on the container are very old, and the artistry with which it was put "
 "together is stunning. As you pull the scroll out, you feel imbued with "
@@ -8068,6 +8598,14 @@ msgstr "Edelsteiner"
 
 msgid "Gold"
 msgstr "Gull"
+
+msgid ""
+"There are seven resources in Heroes 2, used to build and improves castles, "
+"purchase troops and recruit heroes. Gold is the most common, required for "
+"virtually everything. Wood and ore are used for most buildings. Gems, "
+"Mercury, Sulfur and Crystal are rare magical resources used for the most "
+"powerful creatures and buildings."
+msgstr ""
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -8654,9 +9192,6 @@ msgstr "Verden: Speiding gir deg utvidet info"
 msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
 
-msgid "world: Eagle Eye also works like Scholar in H3."
-msgstr "Verden: Ørneblikk virker som \"Scholar\" i Heroes 3."
-
 msgid "world: Crystal Ball gives Identify Hero and Visions spells"
 msgstr ""
 "Verden: Krystallkula gir også \"undersøk helt\" og \"syner\" trolldommene."
@@ -8801,6 +9336,42 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{color} casts a spell: %{spell}"
+#~ msgstr "%{color} bruker trolldommen: %{spell}"
+
+#~ msgid "Map is loading..."
+#~ msgstr "Brettet lastes..."
+
+#~ msgid "You find %{artifact}."
+#~ msgstr "Du finner gjenstanden: %{artifact}."
+
+#~ msgid ""
+#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
+#~ "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
+#~ msgstr ""
+#~ "%{teacher}, hvis %{level} %{scholar} kjenner mange magiske hemmeligheter, "
+#~ "lærer %{spells1} fra %{learner}, og lærer bort %{spells2} til %{learner}."
+
+#~ msgid ""
+#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
+#~ "%{spells1} from %{learner}."
+#~ msgstr ""
+#~ "%{teacher}, hvis %{level} %{scholar} kjenner mange magiske hemmeligheter, "
+#~ "lærer %{spells1} fra %{learner}."
+
+#~ msgid ""
+#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
+#~ "%{spells2} to %{learner}."
+#~ msgstr ""
+#~ "%{teacher}, hvis %{level} %{scholar} kjenner mange magiske hemmeligheter, "
+#~ "lærer bort %{spells2} til %{learner}."
+
+#~ msgid "Scholar Ability"
+#~ msgstr "Lærdeevne"
+
+#~ msgid "world: Eagle Eye also works like Scholar in H3."
+#~ msgstr "Verden: Ørneblikk virker som \"Scholar\" i Heroes 3."
 
 #~ msgid "Power Axe"
 #~ msgstr "Styrkeøks"
