@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 11:27+0100\n"
-"PO-Revision-Date: 2022-03-07 12:23+0100\n"
+"PO-Revision-Date: 2022-03-07 12:46+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -9317,106 +9317,3 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "%{color} casts a spell: %{spell}"
-#~ msgstr "%{color} lance un sort : %{spell}"
-
-#~ msgid "Map is loading..."
-#~ msgstr "Chargement de la carte..."
-
-#~ msgid "You find %{artifact}."
-#~ msgstr "Vous avez trouvé l'artéfact '%{artifact}'."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, dont le %{niveau} %{scholar} connaît de nombreux secrets "
-#~ "magiques, apprend %{spells1} de %{learner}, et enseigne %{spells2} à "
-#~ "%{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, dont le %{niveau} %{scholar} connaît de nombreux secrets "
-#~ "magiques, apprend %{spells1} de %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-#~ "%{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, dont le %{niveau} %{scholar} connaît de nombreux secrets "
-#~ "magiques, enseigne %{spells2} à %{learner}."
-
-#~ msgid "Scholar Ability"
-#~ msgstr "Capacité d'érudition"
-
-#~ msgid "world: Eagle Eye also works like Scholar in H3."
-#~ msgstr "monde : Oeil d'Aigle fonctionne aussi comme Érudition dans Heroes 3"
-
-#~ msgid "Power Axe"
-#~ msgstr "Puissante Hache"
-
-#~ msgid "battle: show army order"
-#~ msgstr "combat : afficher l'ordre de jeu des créatures"
-
-#~ msgid "Buy Monsters"
-#~ msgstr "Acheter créatures"
-
-#~ msgid "The %{name} provides %{count} unit of crystal/day."
-#~ msgstr "La %{name} fournit %{count} cristal par jour."
-
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] "Le %{name} prolonge la durée de tous vos sorts de %{count} tour."
-#~ msgstr[1] ""
-#~ "Le %{name} prolonge la durée de tous vos sorts de %{count} tours."
-
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] "Le %{name} augmente la durée de vos sorts de %{count} tour."
-#~ msgstr[1] "Le %{name} augmente la durée de vos sorts de %{count} tours."
-
-#~ msgid "The %{name} returns %{count} extra power point/turn to your hero."
-#~ msgid_plural ""
-#~ "The %{name} returns %{count} extra power points/turn to your hero."
-#~ msgstr[0] ""
-#~ "L'%{name} rend %{count} point de magie supplémentaires chaque tour à "
-#~ "votre héros."
-#~ msgstr[1] ""
-#~ "L'%{name} rend %{count} points de magie supplémentaires chaque tour à "
-#~ "votre héros."
-
-#~ msgid "Cannot move artifact"
-#~ msgstr "Impossible de déplacer l'artéfact"
-
-#~ msgid "game: autosave on"
-#~ msgstr "jeu : activer sauvegarde auto"
-
-#~ msgid "Monster Info"
-#~ msgstr "Informations sur la créature"
-
-#~ msgid ""
-#~ "Toggle the monster info window, which shows information on the active and "
-#~ "targeted monsters."
-#~ msgstr ""
-#~ "Afficher les fenêtres d'information concernant les créatures actives et "
-#~ "les créatures choisies."
-
-#~ msgid "Army is full"
-#~ msgstr "Le peloton a atteint sa taille maximale"
-
-#~ msgid "Join Error"
-#~ msgstr "Erreur pour rejoindre"
-
-#~ msgid "View Stats"
-#~ msgstr "Voir Stats"
-
-#~ msgid "unions: allow meeting heroes"
-#~ msgstr "alliances : rencontres des héros"
-
-#~ msgid "unions: allow castle visiting"
-#~ msgstr "alliances : visites des châteaux"
