@@ -161,7 +161,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
-    states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
@@ -189,9 +188,16 @@ void Dialog::ExtSettings( bool readonly )
     const int ah = 340;
 
     listbox.RedrawBackground( area.getPosition() );
-    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, fheroes2::Point( area.x + 295, area.y + 25 ) );
-    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( area.x + 298, area.y + 44, 10, ah - 42 ) );
+    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, { area.x + 295, area.y + 25 } );
+    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, { area.x + 295, area.y + ah + 5 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );

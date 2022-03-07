@@ -142,6 +142,7 @@ namespace AI
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
+    void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex );
 
     int AISelectPrimarySkill( const Heroes & hero )
     {
@@ -483,7 +484,10 @@ namespace AI
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
+            break;
         case MP2::OBJ_SIRENS:
+            // AI must have some action even if it goes on this object by mistake.
+            AIToSirens( hero, objectType, dst_index );
             break;
         default:
             assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
@@ -1548,7 +1552,7 @@ namespace AI
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
-            hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
+            hero.FadeIn( { offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() } );
         }
         hero.ActionNewPosition( true );
 
@@ -1561,9 +1565,6 @@ namespace AI
     {
         left.markHeroMeeting( right.GetID() );
         right.markHeroMeeting( left.GetID() );
-
-        if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-            Heroes::ScholarAction( left, right );
 
         const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
 
@@ -1620,7 +1621,7 @@ namespace AI
 
                     bool resetHeroSprite = false;
                     if ( heroAnimationFrameCount > 0 ) {
-                        gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
+                        gameArea.ShiftCenter( { heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() } );
                         gameArea.SetRedraw();
                         heroAnimationFrameCount -= Game::AIHeroAnimSkip();
                         if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
@@ -1632,7 +1633,7 @@ namespace AI
                                 ++heroAnimationSpriteId;
                         }
                         const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
-                        hero.SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
+                        hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
                     }
 
                     if ( heroAnimationFrameCount == 0 ) {
@@ -1654,7 +1655,7 @@ namespace AI
                                 heroAnimationSpriteId = hero.GetSpriteIndex();
                                 if ( Game::AIHeroAnimSkip() < 4 ) {
                                     hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero.SetOffset( fheroes2::Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
+                                    hero.SetOffset( { heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() } );
                                 }
                                 else {
                                     ++heroAnimationSpriteId;
@@ -1761,5 +1762,19 @@ namespace AI
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." );
+    }
+
+    void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )
+    {
+        if ( hero.isObjectTypeVisited( objectType ) ) {
+            return;
+        }
+
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        hero.IncreaseExperience( experience );
+
+        hero.SetVisited( objectIndex );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 }

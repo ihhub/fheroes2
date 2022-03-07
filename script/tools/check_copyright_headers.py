@@ -49,8 +49,6 @@ def main():
 
     generic_hdr_re = re.compile("^/\\*.*?\\*/", re.DOTALL)
 
-    retcode = 0
-
     for file_name in sys.argv[1:]:
         with open(file_name, "r", encoding="latin_1") as src_file:
             src = src_file.read()
@@ -68,8 +66,6 @@ def main():
                     src_is_ok = True
 
             if not src_is_ok:
-                retcode = 1
-
                 if year_re_match:
                     hdr = COPYRIGHT_HDR_TMPL.replace("{Y1}", f"{year_re_match.group(1)}") \
                                             .replace("{Y2}", f"{CURRENT_YEAR}")
@@ -89,7 +85,7 @@ def main():
                 with subprocess.Popen(["diff", "-u", file_name, file_name + ".tmp"]) as diff_proc:
                     diff_proc.wait()
 
-    return retcode
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())

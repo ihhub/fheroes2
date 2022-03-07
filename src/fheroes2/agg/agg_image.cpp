@@ -1932,7 +1932,7 @@ namespace fheroes2
                     for ( size_t i = 0; i < 62; ++i ) {
                         Sprite & modified = _icnVsSprite[id][i];
                         const Point originalOffset( modified.x(), modified.y() );
-                        Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
+                        Sprite temp = addShadow( modified, { -1, 2 }, 2 );
                         temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
 
                         const Rect area = GetActiveROI( temp, 2 );
@@ -2377,17 +2377,17 @@ namespace fheroes2
                 digits[3] = createDigit( 6, 7, fivePoints );
                 digits[4] = createDigit( 6, 7, sixPoints );
                 digits[5] = createDigit( 6, 7, sevenPoints );
-                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints ), Point( -1, -1 ) );
+                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints ), { -1, -1 } );
 
                 _icnVsSprite[id].reserve( 7 * 8 );
 
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 4 ), digits, Point( -2, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 5 ), digits, Point( 1, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 6 ), digits, Point( 0, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 7 ), digits, Point( -2, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 8 ), digits, Point( 1, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, Point( -6, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, Point( 0, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 4 ), digits, { -2, 1 } );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 5 ), digits, { 1, 1 } );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 6 ), digits, { 0, 1 } );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 7 ), digits, { -2, 1 } );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 8 ), digits, { 1, 1 } );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, { -6, 1 } );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, { 0, 1 } );
 
                 return true;
             }
@@ -2586,7 +2586,7 @@ namespace fheroes2
                     Sprite released( out.width() + 1, out.height() );
                     released.reset();
                     const uint8_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
-                    DrawLine( released, Point( 0, 3 ), Point( 0, out.height() - 1 ), color );
+                    DrawLine( released, { 0, 3 }, { 0, out.height() - 1 }, color );
                     Blit( out, released, 1, 0 );
 
                     out = std::move( released );

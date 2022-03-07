@@ -35,6 +35,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "profit.h"
 #include "settings.h"
 #include "text.h"
@@ -47,6 +48,19 @@
 
 namespace
 {
+    void outputInTextSupportMode( const Maps::Tiles & tile, const std::string & info )
+    {
+        START_TEXT_SUPPORT_MODE
+
+        const int tileIndex = tile.GetIndex();
+        const int mapWidth = world.w();
+        const int x = tileIndex % mapWidth;
+        const int y = tileIndex / mapWidth;
+
+        COUT( "[" << x + 1 << ", " << y + 1 << "]" )
+        COUT( info )
+    }
+
     class RadarUpdater
     {
     public:
@@ -663,6 +677,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     TextBox text( name_object, Font::SMALL, 118 );
     text.Blit( pos.x + BORDERWIDTH + ( pos.width - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.height - BORDERWIDTH - text.h() ) / 2 );
 
+    outputInTextSupportMode( tile, name_object );
+
     display.render();
 
     // quick info loop
@@ -827,7 +843,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
     display.render();
 }
 
-void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
@@ -854,25 +870,33 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
     std::string message;
 
     const Kingdom & kingdom = world.GetKingdom( conf.CurrentColor() );
-    const bool isFriend = hero.isFriends( conf.CurrentColor() );
+    const bool isFriend = ColorBase( hero.GetColor() ).isFriends( conf.CurrentColor() );
     const bool isUnderIdentifyHeroSpell = kingdom.Modes( Kingdom::IDENTIFYHERO );
     const bool showFullInfo = isFriend || isUnderIdentifyHeroSpell || kingdom.IsTileVisibleFromCrystalBall( hero.GetIndex() );
 
+    const Heroes * activeHero = dynamic_cast<const Heroes *>( &hero );
+    const Captain * activeCaptain = dynamic_cast<const Captain *>( &hero );
+    assert( activeHero != nullptr || activeCaptain != nullptr );
+
+    const bool isActiveHero = ( activeHero != nullptr );
+
     // heroes name
-    if ( showFullInfo ) {
+    if ( showFullInfo && isActiveHero ) {
         message = _( "%{name} (Level %{level})" );
         StringReplace( message, "%{name}", hero.GetName() );
-        StringReplace( message, "%{level}", hero.GetLevel() );
+        StringReplace( message, "%{level}", activeHero->GetLevel() );
     }
-    else
+    else {
         message = hero.GetName();
+    }
+
     text.Set( message, Font::SMALL );
     dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
     dst_pt.y = cur_rt.y;
     text.Blit( dst_pt.x, dst_pt.y );
 
     // mini port heroes
-    const fheroes2::Sprite & port = hero.GetPortrait( PORT_SMALL );
+    const fheroes2::Sprite & port = isActiveHero ? activeHero->GetPortrait( PORT_SMALL ) : activeCaptain->GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
         dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
         dst_pt.y = cur_rt.y + 13;
@@ -881,7 +905,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
 
     // luck
     if ( showFullInfo ) {
-        const s32 luck = hero.GetLuckWithModificators( nullptr );
+        const s32 luck = hero.GetLuck();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
         u32 count = ( 0 == luck ? 1 : std::abs( luck ) );
         dst_pt.x = cur_rt.x + 120;
@@ -895,7 +919,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
 
     // morale
     if ( showFullInfo ) {
-        const s32 morale = hero.GetMoraleWithModificators( nullptr );
+        const s32 morale = hero.GetMorale();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
         u32 count = ( 0 == morale ? 1 : std::abs( morale ) );
         dst_pt.x = cur_rt.x + 10;
@@ -998,14 +1022,16 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, 
         text.Blit( dst_pt.x, dst_pt.y );
 
         // move point
-        text.Set( std::string( _( "Move Points" ) ) + ":" );
-        dst_pt.x = cur_rt.x + 10;
-        dst_pt.y += 12;
-        text.Blit( dst_pt.x, dst_pt.y );
+        if ( isActiveHero ) {
+            text.Set( std::string( _( "Move Points" ) ) + ":" );
+            dst_pt.x = cur_rt.x + 10;
+            dst_pt.y += 12;
+            text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( std::to_string( hero.GetMovePoints() ) + "/" + std::to_string( hero.GetMaxMovePoints() ) );
-        dst_pt.x += 75;
-        text.Blit( dst_pt.x, dst_pt.y );
+            text.Set( std::to_string( activeHero->GetMovePoints() ) + "/" + std::to_string( activeHero->GetMaxMovePoints() ) );
+            dst_pt.x += 75;
+            text.Blit( dst_pt.x, dst_pt.y );
+        }
 
         Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
     }

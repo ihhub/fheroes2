@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,6 +74,11 @@ namespace fheroes2
         {
             return { FontSize::SMALL, FontColor::YELLOW };
         }
+
+        static FontType largeWhite()
+        {
+            return { FontSize::LARGE, FontColor::WHITE };
+        }
     };
 
     class TextBase
@@ -102,6 +107,9 @@ namespace fheroes2
 
         // Returns true if here is something to draw.
         virtual bool empty() const = 0;
+
+        // Returns full text. Multi-text class cannot return by reference hence returning by value.
+        virtual std::string text() const = 0;
     };
 
     class Text : public TextBase
@@ -111,6 +119,12 @@ namespace fheroes2
 
         Text() = default;
         Text( const std::string & text, const FontType fontType );
+        Text( std::string && text, const FontType fontType );
+        Text( const Text & text ) = default;
+        Text( Text && text ) = default;
+        Text & operator=( const Text & text ) = default;
+        Text & operator=( Text && text ) = default;
+
         ~Text() override;
 
         int32_t width() const override;
@@ -125,6 +139,9 @@ namespace fheroes2
         bool empty() const override;
 
         void set( const std::string & text, const FontType fontType );
+        void set( std::string && text, const FontType fontType );
+
+        std::string text() const override;
 
     private:
         std::string _text;
@@ -139,7 +156,7 @@ namespace fheroes2
         ~MultiFontText() override;
 
         void add( const Text & text );
-        void add( const Text && text );
+        void add( Text && text );
 
         int32_t width() const override;
         int32_t height() const override;
@@ -151,6 +168,8 @@ namespace fheroes2
         void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const override;
 
         bool empty() const override;
+
+        std::string text() const override;
 
     private:
         std::vector<Text> _texts;

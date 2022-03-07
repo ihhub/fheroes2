@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,9 +23,11 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
+#include "game.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "luck.h"
 #include "morale.h"
 #include "resource.h"
@@ -41,17 +43,42 @@
 namespace
 {
     const int32_t textOffsetY = 10;
+
     const int32_t elementOffsetX = 10;
 
     const int32_t textOffsetFromElement = 2;
 
     const int32_t defaultElementPopupButtons = Dialog::ZERO;
+
+    void outputInTextSupportMode( const fheroes2::TextBase & header, const fheroes2::TextBase & body, const int buttonTypes )
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( header.text() )
+        COUT( '\n' )
+        COUT( body.text() )
+
+        if ( buttonTypes & Dialog::YES ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+        }
+        if ( buttonTypes & Dialog::NO ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+        }
+        if ( buttonTypes & Dialog::OK ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+        }
+        if ( buttonTypes & Dialog::CANCEL ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+        }
+    }
 }
 
 namespace fheroes2
 {
     int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements )
     {
+        outputInTextSupportMode( header, body, buttons );
+
         const bool isProperDialog = ( buttons != 0 );
 
         // setup cursor
@@ -248,6 +275,19 @@ namespace fheroes2
         : _resourceType( resourceType )
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( text )
+    {
+        init();
+    }
+
+    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string && text )
+        : _resourceType( resourceType )
+        , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
+        , _text( std::move( text ) )
+    {
+        init();
+    }
+
+    void ResourceDialogElement::init()
     {
         const Text quantityText( _text, FontType::smallWhite() );
 
@@ -477,7 +517,19 @@ namespace fheroes2
         : _skillType( skillType )
         , _text( text )
     {
-        assert( skillType >= Skill::Primary::ATTACK && skillType <= Skill::Primary::KNOWLEDGE );
+        init();
+    }
+
+    PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, std::string && text )
+        : _skillType( skillType )
+        , _text( std::move( text ) )
+    {
+        init();
+    }
+
+    void PrimarySkillDialogElement::init()
+    {
+        assert( _skillType >= Skill::Primary::ATTACK && _skillType <= Skill::Primary::KNOWLEDGE );
 
         const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
         _area = { background.width(), background.height() };

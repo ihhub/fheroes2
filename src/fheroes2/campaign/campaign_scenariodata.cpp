@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -460,11 +460,8 @@ namespace Campaign
         , _amount( amount )
     {}
 
-    std::string ScenarioBonusData::ToString() const
+    std::string ScenarioBonusData::getName() const
     {
-        const std::vector<uint32_t> useAmountTypes
-            = { ScenarioBonusData::ARTIFACT, ScenarioBonusData::RESOURCES, ScenarioBonusData::TROOP, ScenarioBonusData::SKILL_PRIMARY };
-
         std::string objectName;
 
         switch ( _type ) {
@@ -492,10 +489,64 @@ namespace Campaign
             break;
         default:
             assert( 0 ); // some new bonus?
+            break;
         }
 
+        const std::vector<uint32_t> useAmountTypes
+            = { ScenarioBonusData::ARTIFACT, ScenarioBonusData::RESOURCES, ScenarioBonusData::TROOP, ScenarioBonusData::SKILL_PRIMARY };
         const bool useAmount = std::find( useAmountTypes.begin(), useAmountTypes.end(), _type ) != useAmountTypes.end() && _amount > 1;
+
         return useAmount ? std::to_string( _amount ) + " " + objectName : objectName;
+    }
+
+    std::string ScenarioBonusData::getDescription() const
+    {
+        switch ( _type ) {
+        case ScenarioBonusData::ARTIFACT: {
+            std::string description( _( "The main hero will have \"%{artifact}\" artifact at the start of the scenario." ) );
+            StringReplace( description, "%{artifact}", Artifact( static_cast<int>( _subType ) ).GetName() );
+            return description;
+        }
+        case ScenarioBonusData::RESOURCES: {
+            std::string description( _( "The kingdom will have additional %{amount} %{resource} at the start of the scenario." ) );
+            StringReplace( description, "%{amount}", std::to_string( _amount ) );
+            StringReplace( description, "%{resource}", Resource::String( static_cast<int>( _subType ) ) );
+            return description;
+        }
+        case ScenarioBonusData::TROOP: {
+            std::string description( _( "The main hero will have %{count} %{monster} at the start of the scenario." ) );
+            StringReplace( description, "%{count}", std::to_string( _amount ) );
+            StringReplace( description, "%{monster}", Monster( static_cast<int>( _subType ) ).GetPluralName( _amount ) );
+            return description;
+        }
+        case ScenarioBonusData::SPELL: {
+            std::string description( _( "The main hero will have \"%{spell}\" spell at the start of the scenario." ) );
+            StringReplace( description, "%{spell}", Spell( static_cast<int>( _subType ) ).GetName() );
+            return description;
+        }
+        case ScenarioBonusData::STARTING_RACE:
+        case ScenarioBonusData::STARTING_RACE_AND_ARMY: {
+            std::string description( _( "The starting race of the scenario will be %{race}." ) );
+            StringReplace( description, "%{race}", Race::String( static_cast<int>( _subType ) ) );
+            return description;
+        }
+        case ScenarioBonusData::SKILL_PRIMARY: {
+            std::string description( _( "The main hero will have additional %{count} %{skill} at the start of the scenario." ) );
+            StringReplace( description, "%{count}", std::to_string( _amount ) );
+            StringReplace( description, "%{skill}", Skill::Primary::String( static_cast<int>( _subType ) ) );
+            return description;
+        }
+        case ScenarioBonusData::SKILL_SECONDARY: {
+            std::string description( _( "The main hero will have %{skill} at the start of the scenario." ) );
+            StringReplace( description, "%{skill}", Skill::Secondary( static_cast<int>( _subType ), static_cast<int>( _amount ) ).GetName() );
+            return description;
+        }
+        default:
+            assert( 0 ); // some new bonus?
+            break;
+        }
+
+        return {};
     }
 
     std::vector<ScenarioBonusData> ScenarioBonusData::getCampaignBonusData( const ScenarioInfoId & scenarioInfo )
@@ -579,5 +630,29 @@ namespace Campaign
         }
 
         return {};
+    }
+
+    const char * getCampaignName( const int campaignId )
+    {
+        switch ( campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+            return _( "Roland" );
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            return _( "Archibald" );
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+            return _( "The Price of Loyalty" );
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            return _( "Voyage Home" );
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+            return _( "Wizard's Isle" );
+        case Campaign::DESCENDANTS_CAMPAIGN:
+            return _( "Descendants" );
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
+            break;
+        }
+
+        return "???";
     }
 }

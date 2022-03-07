@@ -521,11 +521,18 @@ bool ActionSpellTownPortal( Heroes & hero )
     const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
     CastleIndexListBox listbox( area, area.getPosition(), result, townIcnId, listIcnId );
 
-    listbox.SetScrollButtonUp( listIcnId, 3, 4, fheroes2::Point( area.x + 262, area.y + 45 ) );
-    listbox.SetScrollButtonDn( listIcnId, 5, 6, fheroes2::Point( area.x + 262, area.y + 190 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( listIcnId, 10 ), fheroes2::Rect( area.x + 266, area.y + 68, 14, 119 ) );
+    listbox.SetScrollButtonUp( listIcnId, 3, 4, { area.x + 262, area.y + 45 } );
+    listbox.SetScrollButtonDn( listIcnId, 5, 6, { area.x + 262, area.y + 190 } );
+    listbox.setScrollBarArea( { area.x + 266, area.y + 68, 14, 119 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( listIcnId, 10 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ), { 0, 0, originalSilder.width(), 4 },
+                                             { 0, 4, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 11, area.y + 49, 250, 160 ) );
+    listbox.SetAreaItems( { area.x + 11, area.y + 49, 250, 160 } );
     listbox.SetListContent( castles );
     listbox.Unselect();
     listbox.RedrawBackground( area.getPosition() );

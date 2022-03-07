@@ -140,9 +140,15 @@ namespace Dialog
         ResolutionList resList( roi.getPosition() );
 
         resList.RedrawBackground( roi.getPosition() );
-        resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( roi.x + 327, roi.y + 55 ) );
-        resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( roi.x + 327, roi.y + 257 ) );
-        resList.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
+        resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { roi.x + 327, roi.y + 55 } );
+        resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { roi.x + 327, roi.y + 257 } );
+
+        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+        const fheroes2::Image scrollbarSlider
+            = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( resolutions.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                 { 0, 7, originalSilder.width(), 8 } );
+        resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
+        resList.setScrollBarImage( scrollbarSlider );
         resList.SetAreaMaxItems( 11 );
         resList.SetAreaItems( fheroes2::Rect( roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 ) );
 

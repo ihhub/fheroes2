@@ -125,7 +125,7 @@ uint8_t GetPaletteIndexFromColor( int color )
 }
 
 Interface::Radar::Radar( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
+    : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
@@ -314,7 +314,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
@@ -324,7 +323,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMYLAB:
@@ -334,19 +332,28 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-
+            case MP2::OBJN_DRAGONCITY:
+            case MP2::OBJN_LIGHTHOUSE:
+            case MP2::OBJN_ALCHEMYLAB:
+            case MP2::OBJN_MINES:
+            case MP2::OBJN_SAWMILL:
+                if ( visibleTile || revealMines ) {
+                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    if ( mainTileIndex >= 0 ) {
+                        fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                    }
+                }
+                break;
             case MP2::OBJ_ARTIFACT:
                 if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             case MP2::OBJ_RESOURCE:
                 if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             default:
                 if ( visibleTile ) {
                     continue;
@@ -428,7 +435,7 @@ void Interface::Radar::QueueEventProcessing( void )
             if ( rect & pt ) {
                 fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
                 const fheroes2::Point prev( visibleROI.x, visibleROI.y );
-                gamearea.SetCenter( fheroes2::Point( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height ) );
+                gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
                     RedrawCursor();
@@ -466,13 +473,13 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                const fheroes2::Rect initROI = roi.GetROIinPixels();
+                const fheroes2::Rect & initROI = roi.GetROIinPixels();
                 const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
                 const fheroes2::Point newCoordsCenter( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height );
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    return roi.ChangeCenter( fheroes2::Point( newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH ) );
+                    return roi.ChangeCenter( { newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH } );
                 }
             }
         }

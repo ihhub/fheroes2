@@ -124,9 +124,13 @@ namespace Interface
             buttonPgDn.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollBar( const fheroes2::Image & image, const fheroes2::Rect & area )
+        void setScrollBarArea( const fheroes2::Rect & area )
         {
             _scrollbar.setArea( area );
+        }
+
+        void setScrollBarImage( const fheroes2::Image & image )
+        {
             _scrollbar.setImage( image );
         }
 

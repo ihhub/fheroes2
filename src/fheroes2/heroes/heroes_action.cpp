@@ -104,10 +104,10 @@ namespace
             break;
         }
 
-        fheroes2::ResourceDialogElement resourceUI( resourceType, perday );
+        fheroes2::ResourceDialogElement resourceUI( resourceType, std::move( perday ) );
 
-        fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
-                               { &resourceUI } );
+        fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ),
+                               Dialog::OK, { &resourceUI } );
     }
 }
 
@@ -1838,8 +1838,10 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             }
         }
         else {
-            if ( Artifact::GetScenario( art ) )
-                msg = Artifact::GetScenario( art );
+            const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
+            if ( artifactDiscoveryDescription != nullptr ) {
+                msg = artifactDiscoveryDescription;
+            }
             else {
                 msg = _( "You've found the artifact: " );
                 msg += '\n';
@@ -3036,19 +3038,31 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( hero.isObjectTypeVisited( objectType ) ) {
-        Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
+        Dialog::Message( title, _( "You have your crew stop up their ears with wax before the sirens' eerie song has any chance of luring them to a watery grave." ),
                          Font::BIG, Dialog::OK );
     }
     else {
-        u32 exp = hero.GetArmy().ActionToSirens();
-        std::string str = _(
-            "You have your crew stop up their ears with wax before the sirens' eerie song has any chance of luring them to a watery grave. An eerie wailing song emanates from the sirens perched upon the rocks. Many of your crew fall under its spell, and dive into the water where they drown. You are now wiser for the visit, and gain %{exp} experience." );
-        StringReplace( str, "%{exp}", exp );
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        if ( experience == 0 ) {
+            Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
+                         Font::BIG, Dialog::OK );
+        }
+        else {
+            const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( experience ) );
+
+            std::string str = _(
+                "An eerie wailing song emanates from the sirens perched upon the rocks. Many of your crew fall under its spell, and dive into the water where they drown. You are now wiser for the visit, and gain %{exp} experience." );
+            StringReplace( str, "%{exp}", experience );
+
+            AGG::PlaySound( M82::EXPERNCE );
+
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &experienceUI } );
+
+            hero.IncreaseExperience( experience );
+        }
 
         hero.SetVisited( dst_index );
-        AGG::PlaySound( M82::EXPERNCE );
-        Dialog::Message( title, str, Font::BIG, Dialog::OK );
-        hero.IncreaseExperience( exp );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );

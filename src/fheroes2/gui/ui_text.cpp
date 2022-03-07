@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -377,7 +377,16 @@ namespace fheroes2
     Text::Text( const std::string & text, const FontType fontType )
         : _text( text )
         , _fontType( fontType )
-    {}
+    {
+        // Do nothing.
+    }
+
+    Text::Text( std::string && text, const FontType fontType )
+        : _text( std::move( text ) )
+        , _fontType( fontType )
+    {
+        // Do nothing.
+    }
 
     Text::~Text() = default;
 
@@ -487,6 +496,17 @@ namespace fheroes2
         _fontType = fontType;
     }
 
+    void Text::set( std::string && text, const FontType fontType )
+    {
+        _text = std::move( text );
+        _fontType = fontType;
+    }
+
+    std::string Text::text() const
+    {
+        return _text;
+    }
+
     MultiFontText::~MultiFontText() = default;
 
     void MultiFontText::add( const Text & text )
@@ -496,10 +516,10 @@ namespace fheroes2
         }
     }
 
-    void MultiFontText::add( const Text && text )
+    void MultiFontText::add( Text && text )
     {
         if ( !text._text.empty() ) {
-            _texts.emplace_back( text );
+            _texts.emplace_back( std::move( text ) );
         }
     }
 
@@ -642,5 +662,16 @@ namespace fheroes2
     bool MultiFontText::empty() const
     {
         return _texts.empty();
+    }
+
+    std::string MultiFontText::text() const
+    {
+        std::string output;
+
+        for ( const Text & singleText : _texts ) {
+            output += singleText.text();
+        }
+
+        return output;
     }
 }

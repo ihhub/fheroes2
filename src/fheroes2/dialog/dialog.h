@@ -38,6 +38,7 @@
 
 class Castle;
 class Kingdom;
+class HeroBase;
 class Heroes;
 class Monster;
 class Troop;
@@ -86,7 +87,7 @@ namespace Dialog
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
     void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
-    void QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
@@ -146,7 +147,7 @@ namespace Dialog
 
         int BorderWidth() const;
         int BorderHeight() const;
-        void SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench );
+        void SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench );
 
         bool isValid() const;
         const fheroes2::Rect & GetRect() const;

@@ -31,12 +31,28 @@
 #include "game_mainmenu_ui.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+
+namespace
+{
+    void outputLoadGameInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "Load Game\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." )
+    }
+}
 
 fheroes2::GameMode Game::LoadCampaign()
 {
@@ -116,6 +132,8 @@ fheroes2::GameMode Game::LoadMulti()
 
 fheroes2::GameMode Game::LoadGame()
 {
+    outputLoadGameInTextSupportMode();
+
     // Stop all sounds, but not the music
     Mixer::Stop();
 

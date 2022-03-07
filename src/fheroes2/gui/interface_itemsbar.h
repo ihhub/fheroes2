@@ -127,7 +127,7 @@ namespace Interface
 
             for ( int32_t y = 0; y < colrows.height; ++y ) {
                 for ( int32_t x = 0; x < colrows.width; ++x ) {
-                    RedrawBackground( fheroes2::Rect( dstpt.x, dstpt.y, itemsz.width, itemsz.height ), dstsf );
+                    RedrawBackground( { dstpt.x, dstpt.y, itemsz.width, itemsz.height }, dstsf );
 
                     dstpt.x += hspace + itemsz.width;
                 }
@@ -144,7 +144,7 @@ namespace Interface
             for ( int32_t y = 0; y < colrows.height; ++y ) {
                 for ( int32_t x = 0; x < colrows.width; ++x ) {
                     if ( posItem != items.end() ) {
-                        RedrawItemIter( posItem, fheroes2::Rect( dstpt.x, dstpt.y, itemsz.width, itemsz.height ), dstsf );
+                        RedrawItemIter( posItem, { dstpt.x, dstpt.y, itemsz.width, itemsz.height }, dstsf );
 
                         ++posItem;
                     }

@@ -516,18 +516,6 @@ u32 Game::GetGameOverScores( void )
     return GetRating() * ( 200 - daysScore ) / 100;
 }
 
-void Game::ShowMapLoadingText( void )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
-    TextBox text( _( "Map is loading..." ), Font::BIG, pos.width );
-
-    // blit test
-    display.fill( 0 );
-    text.Blit( pos.x, pos.y );
-    display.render();
-}
-
 u32 Game::GetLostTownDays( void )
 {
     return GameStatic::GetGameOverLostDays();

@@ -72,22 +72,6 @@ namespace
         }
     }
 
-    size_t GetSelectedMapId( const MapsFileInfoList & lists )
-    {
-        const Settings & conf = Settings::Get();
-
-        const std::string & mapName = conf.CurrentFileInfo().name;
-        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-        size_t mapId = 0;
-        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                return mapId;
-            }
-        }
-
-        return 0;
-    }
-
     void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false )
     {
         const Settings & conf = Settings::Get();
@@ -277,7 +261,7 @@ namespace
 
             // click select
             if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+                const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
 
                 if ( fi ) {
                     Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
@@ -384,7 +368,6 @@ namespace
             fheroes2::FadeDisplay();
         }
 
-        Game::ShowMapLoadingText();
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );
 

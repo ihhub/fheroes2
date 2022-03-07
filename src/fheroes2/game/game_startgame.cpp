@@ -117,11 +117,13 @@ void Game::DialogPlayers( int color, std::string str )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
+        // Did you add a new color? Add the logic for it!
+        assert( 0 );
         break;
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
@@ -556,8 +558,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     radar.Build();
     radar.SetHide( true );
 
-    iconsPanel.ResetIcons();
-    iconsPanel.HideIcons();
+    iconsPanel.ResetIcons( ICON_ANY );
+    iconsPanel.HideIcons( ICON_ANY );
 
     statusWindow.Reset();
 
@@ -618,7 +620,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         // we need to hide the world map in hot seat mode
                         conf.SetCurrentColor( -1 );
 
-                        iconsPanel.HideIcons();
+                        iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
@@ -639,7 +641,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
-                    iconsPanel.ShowIcons();
+                    iconsPanel.ShowIcons( ICON_ANY );
                     iconsPanel.SetRedraw();
 
                     res = HumanTurn( loadedFromSave );
@@ -1013,7 +1015,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                    gameArea.ShiftCenter( { heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() } );
                     gameArea.SetRedraw();
                     heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4

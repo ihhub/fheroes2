@@ -750,7 +750,7 @@ void World::ProcessNewMap()
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
             if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
-                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
+                hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
     }
