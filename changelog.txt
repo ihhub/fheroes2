@@ -1,3 +1,55 @@
+version 0.9.13 (07 February 2022)
+- show captain quick info dialog in Kingdom Overview
+- add popup windows for campaign awards and bonuses
+- remove Map loading screen
+- add popup windows for campaign scenario dialog buttons
+- remember map size selection in New Game dialog
+- allow selecting options while restarting a campaign scenario
+- display the correct size of player-owned objects on mini-map
+- add base support for text mode
+- fix Sirens logic, AI interaction and UI
+- show missing last frame of wince animation
+- add dynamic generation of scrollbar slider
+- fix Sirens action dialogs
+- add missing artifact discovery event description
+- fix some French translations
+- fix directory and file detection on Windows
+- Kingdom Income window was changed to have Kingdom Income title and Kingdom Income per day to be more obvious for a player
+- events on land and sea now show artifact and resources in one window
+- most of objects related dialogs contain right mouse clickable icons
+- Pyramid visit outcome shows the correct horizontal position of icons and all icons are right mouse clickable
+- fix Artifact frame drawings
+- fix text if translation for a specific language was not found
+- update AI hero recruitment logic
+- allow a short name for all campaign bonus artifacts and spells
+- AI should save current unit if retreating
+- add Czech language support
+- fix monster strength heuristic regression
+- make AI more aggressive in losing situation
+- fix the logic of protecting tiles by neutral monsters
+- change music and surrounding sounds while jumping through Stone Liths
+- fix possible AI pathfinding issues while loading another scenario
+- fix battle grid and ballista info area
+- add popup dialogs for right mouse click in resolution dialog
+- fix hero name not being updated while switching languages
+- fix possible errors for translation related code
+- force to use only the original palette from the game
+- fix lowercase conversion of translations
+- AI archers should not ignore blinded units during battle
+- add missing take-off and landing sounds for Vampire and Vampire Lord
+- reset environment sounds and music theme at the beginning and at the end of the human turn only
+- fix player's allies configuration for 'Defeat the other side' victory condition
+- fix sounds of Lean-To and Skeleton objects
+- rename "Lean To" -> "Lean-To"
+- allow AI fog discovery only for teleport endpoints with reachability information
+- fix missing sounds for some objects on map
+- do not play castle's music if a terrain does not have its own music
+- fix missing sound of player's turn in Hot Seat mode
+- adjust monthly monster spawn
+- fix neutral monster growth formula
+- fix necromancer build order in castles for AI
+- allow a boat to move near the coast above the center of a town
+
 version 0.9.12 (07 February 2022)
 - add a confirmation window for restarting a campaign scenario
 - fix wrong scenario order in "Voyage Home" campaign

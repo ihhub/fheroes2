@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.12 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.13 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 cmake_policy(SET CMP0074 NEW)
