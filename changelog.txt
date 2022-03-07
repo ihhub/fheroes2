@@ -1,4 +1,9 @@
 version 0.9.13 (07 February 2022)
+- show captain quick info dialog in Kingdom Overview
+- add popup windows for campaign awards and bonuses
+- remove Map loading screen
+- add popup windows for campaign scenario dialog buttons
+- remember map size selection in New Game dialog
 - allow selecting options while restarting a campaign scenario
 - display the correct size of player-owned objects on mini-map
 - add base support for text mode
