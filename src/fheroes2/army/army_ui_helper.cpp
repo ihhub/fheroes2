@@ -51,6 +51,9 @@ void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, ui
                 const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
                 fheroes2::Text text( isScouteView ? Game::CountScoute( troop->GetCount(), drawPower, compact ) : Game::CountThievesGuild( troop->GetCount(), drawPower ),
                                      { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+
+                /*Drawing of army troops in compact form in the small info window beneath resources. 
+                Also valid for castle troops when a hero is set as guardian (experimental option).*/
                 if ( compact ) {
                     const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
                     int offset = ( chunk - monster.width() - text.width() ) / 2;
