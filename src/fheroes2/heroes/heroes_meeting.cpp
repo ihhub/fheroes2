@@ -464,7 +464,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
                 const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
+                fheroes2::showMessage( fheroes2::Text( Artifact( artifactSetData._assembledArtifactID ).GetName(), fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
                                        { &artifactUI } );
             }
 
