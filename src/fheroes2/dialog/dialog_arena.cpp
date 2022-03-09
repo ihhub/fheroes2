@@ -32,6 +32,7 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 
 void InfoSkillClear( const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
 void InfoSkillSelect( int, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
@@ -140,6 +141,18 @@ int Dialog::SelectSkillFromArena( void )
         else if ( allSkills && le.MouseClickLeft( rect4 ) ) {
             res = Skill::Primary::KNOWLEDGE;
             redraw = true;
+        }
+        else if ( le.MousePressRight( rect1 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::ATTACK, "" ).showPopup( Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rect2 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::DEFENSE, "" ).showPopup( Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rect3 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::POWER, "" ).showPopup( Dialog::ZERO );
+        }
+        else if ( allSkills && le.MousePressRight( rect4 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::KNOWLEDGE, "" ).showPopup( Dialog::ZERO );
         }
 
         if ( redraw ) {
