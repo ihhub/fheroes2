@@ -227,7 +227,7 @@ public:
     bool MouseWheelDn() const;
 
     bool MousePressLeft() const;
-    
+
     bool MousePressLeft( const fheroes2::Rect & rt ) const
     {
         return MousePressLeft() && ( rt & mouse_pl );
