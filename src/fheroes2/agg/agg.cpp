@@ -550,22 +550,40 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION ) );
 
         if ( !System::IsFile( filename ) ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
-            if ( !System::IsFile( filename ) ) {
-                filename.clear();
-            }
-        }
-
-        if ( filename.empty() ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
+            fheroes2::replaceStringEnding( filename, ".ogg", ".flac" );
+            filename = Settings::GetLastFile( prefix_music, filename );
 
             if ( !System::IsFile( filename ) ) {
-                StringReplace( filename, ".ogg", ".mp3" );
+                filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
 
                 if ( !System::IsFile( filename ) ) {
-                    DEBUG_LOG( DBG_ENGINE, DBG_WARN,
-                               "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) ) << ", skipping..." );
-                    filename.clear();
+                    fheroes2::replaceStringEnding( filename, ".ogg", ".flac" );
+                    filename = Settings::GetLastFile( prefix_music, filename );
+
+                    if ( !System::IsFile( filename ) ) {
+                        filename.clear();
+                    }
+                }
+            }
+
+            if ( filename.empty() ) {
+                filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
+
+                if ( !System::IsFile( filename ) ) {
+                    fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
+                    filename = Settings::GetLastFile( prefix_music, filename );
+
+                    if ( !System::IsFile( filename ) ) {
+                        fheroes2::replaceStringEnding( filename, ".ogg", ".flac" );
+                        filename = Settings::GetLastFile( prefix_music, filename );
+
+                        if ( !System::IsFile( filename ) ) {
+                            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                                       "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) )
+                                                           << ", skipping..." );
+                            filename.clear();
+                        }
+                    }
                 }
             }
         }
