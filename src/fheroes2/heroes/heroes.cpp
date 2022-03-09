@@ -991,8 +991,8 @@ bool Heroes::PickupArtifact( const Artifact & art )
     if ( isControlHuman() ) {
         for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
             const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                   { &artifactUI } );
+            fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
         }
     }
 
@@ -1392,7 +1392,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     }
     else {
         AGG::PlaySound( M82::NWHEROLV );
-        int result = Dialog::LevelUpSelectSkill( name, Skill::Primary::String( primary ), sec1, sec2, *this );
+        int result = Dialog::LevelUpSelectSkill( name, primary, sec1, sec2, *this );
 
         if ( Skill::Secondary::UNKNOWN != result )
             selected = result == sec2.Skill() ? sec2 : sec1;

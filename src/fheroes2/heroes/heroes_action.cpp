@@ -1222,7 +1222,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
             StringReplace( msg, "%{skill}", skill_name );
 
             const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
-            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( title, fheroes2::FontType::normalWhite() ), Dialog::OK,
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &secondarySkillUI } );
         }
     }
@@ -2765,11 +2765,13 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
 
-                const fheroes2::CustomImageDialogElement imageUI( fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ) );
+                const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience();
+
+                const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
                 const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                 const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &imageUI } ) == Dialog::YES );
+                conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
             }
             else {
                 msg = _( "Tears brim in the eyes of the tree." );
