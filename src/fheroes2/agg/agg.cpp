@@ -550,22 +550,35 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION ) );
 
         if ( !System::IsFile( filename ) ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
+            StringReplace( filename, ".ogg", ".flac" );
+
             if ( !System::IsFile( filename ) ) {
-                filename.clear();
+                filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
+                if ( !System::IsFile( filename ) ) {
+                    StringReplace( filename, ".ogg", ".flac" );
+
+                    if ( !System::IsFile( filename ) ) {
+                        filename.clear();
+                    }
+                }
             }
-        }
 
-        if ( filename.empty() ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
-
-            if ( !System::IsFile( filename ) ) {
-                StringReplace( filename, ".ogg", ".mp3" );
+            if ( filename.empty() ) {
+                filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
 
                 if ( !System::IsFile( filename ) ) {
-                    DEBUG_LOG( DBG_ENGINE, DBG_WARN,
-                               "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) ) << ", skipping..." );
-                    filename.clear();
+                    StringReplace( filename, ".ogg", ".mp3" );
+
+                    if ( !System::IsFile( filename ) ) {
+                        StringReplace( filename, ".mp3", ".flac" );
+
+                        if ( !System::IsFile( filename ) ) {
+                            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                                       "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) )
+                                                           << ", skipping..." );
+                            filename.clear();
+                        }
+                    }
                 }
             }
         }
