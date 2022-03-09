@@ -2767,7 +2767,7 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
 
                 const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience();
 
-                const fheroes2::ExperienceDialogElement experienceUI( possibleExperience );
+                const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
                 const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                 const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
