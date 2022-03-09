@@ -48,7 +48,7 @@ void DialogPrimaryOnly( const std::string & name, const int primarySkillType )
     fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &primarySkillUI } );
 }
 
-int DialogOneSecondary( Heroes & hero, const std::string & name, const int primarySkillType, const Skill::Secondary & sec )
+int DialogOneSecondary( const Heroes & hero, const std::string & name, const int primarySkillType, const Skill::Secondary & sec )
 {
     std::string message = _( "%{name} has gained a level." );
     message.append( "\n \n" );
