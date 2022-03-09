@@ -22,6 +22,11 @@
  ***************************************************************************/
 
 #include <algorithm>
+
+#if !defined( __APPLE__ ) || !defined( __MACH__ )
+#include <cassert>
+#endif
+
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
