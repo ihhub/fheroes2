@@ -227,7 +227,7 @@ public:
     int GetDay( void ) const;
     int GetWeek( void ) const;
 
-    int GetMonth() const
+    uint32_t GetMonth() const
     {
         return month;
     }
