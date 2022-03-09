@@ -417,6 +417,8 @@ namespace fheroes2
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )
     {
+        assert( originalEnding != nullptr && correctedEnding != nullptr );
+
         const size_t originalEndingSize = strlen( originalEnding );
         const size_t correctedEndingSize = strlen( correctedEnding );
         if ( output.size() < originalEndingSize ) {
