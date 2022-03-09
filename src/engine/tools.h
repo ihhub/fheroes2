@@ -90,6 +90,8 @@ namespace fheroes2
         }
         return result;
     }
+
+    void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 }
 
 #endif

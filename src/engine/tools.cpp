@@ -414,4 +414,21 @@ namespace fheroes2
 
         return ~crc;
     }
+
+    void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )
+    {
+        const size_t originalEndingSize = strlen( originalEnding );
+        const size_t correctedEndingSize = strlen( correctedEnding );
+        if ( output.size() < originalEndingSize ) {
+            // The original string is smaller than the ending.
+            return;
+        }
+
+        if ( memcmp( output.data() + output.size() - originalEndingSize, originalEnding, originalEndingSize ) != 0 ) {
+            // The string does not have the required ending.
+            return;
+        }
+
+        output.replace( output.size() - originalEndingSize, originalEndingSize, correctedEnding, correctedEndingSize );
+    }
 }
