@@ -34,14 +34,14 @@ class BuildingInfo
 public:
     BuildingInfo( const Castle & c, const building_t b );
 
-    uint32_t getBuilding( void ) const
+    uint32_t getBuilding() const
     {
         return building;
     }
 
     void SetPos( s32, s32 );
 
-    const fheroes2::Rect & GetArea( void ) const
+    const fheroes2::Rect & GetArea() const
     {
         return area;
     }

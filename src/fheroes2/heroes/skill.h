@@ -90,7 +90,7 @@ namespace Skill
         void SetLevel( int );
         void NextLevel( void );
 
-        int Level( void ) const
+        int Level() const
         {
             return second;
         }

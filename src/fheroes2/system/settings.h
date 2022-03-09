@@ -362,7 +362,7 @@ public:
         return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
     }
 
-    bool ExtGameUseFade() const
+    static bool ExtGameUseFade()
     {
         // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
         // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );

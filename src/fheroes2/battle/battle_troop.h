@@ -128,7 +128,7 @@ namespace Battle
 
         std::string String( bool more = false ) const;
 
-        u32 GetUID( void ) const
+        u32 GetUID() const
         {
             return _uid;
         }
@@ -141,7 +141,7 @@ namespace Battle
         s32 GetHeadIndex( void ) const;
         s32 GetTailIndex( void ) const;
 
-        const Position & GetPosition( void ) const
+        const Position & GetPosition() const
         {
             return position;
         }

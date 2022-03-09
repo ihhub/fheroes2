@@ -207,19 +207,19 @@ public:
     int getArtifactValue() const;
 
     // return index sprite objnarti.icn
-    u32 IndexSprite( void ) const
+    u32 IndexSprite() const
     {
         return id < UNKNOWN ? id * 2 + 1 : 0;
     }
 
     // artfx.icn
-    u32 IndexSprite32( void ) const
+    u32 IndexSprite32() const
     {
         return id;
     }
 
     // reutrn index from artifact.icn
-    u32 IndexSprite64( void ) const
+    u32 IndexSprite64() const
     {
         return id + 1;
     }
