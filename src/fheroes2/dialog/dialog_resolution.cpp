@@ -187,7 +187,7 @@ namespace Dialog
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-                selectedResolution = fheroes2::Size( 0, 0 );
+                selectedResolution = { 0, 0 };
                 break;
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {

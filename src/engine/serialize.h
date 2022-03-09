@@ -46,9 +46,20 @@ public:
 
     void setbigendian( bool );
 
-    bool isconstbuf( void ) const;
-    bool fail( void ) const;
-    bool bigendian( void ) const;
+    bool isconstbuf() const
+    {
+        return ( flags & 0x00001000 ) != 0;
+    }
+
+    bool fail() const
+    {
+        return flags & 0x00000001;
+    }
+
+    bool bigendian() const
+    {
+        return ( flags & 0x80000000 ) != 0;
+    }
 
     virtual void skip( size_t ) = 0;
 

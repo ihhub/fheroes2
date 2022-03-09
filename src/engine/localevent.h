@@ -182,23 +182,39 @@ public:
     static LocalEvent & Get( void );
     static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
-    void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
-    void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
+    void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
+    {
+        redraw_cursor_func = pf;
+    }
+
+    void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) )
+    {
+        keyboard_filter_func = pf;
+    }
 
     static void SetStateDefaults( void );
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
-    bool MouseMotion( void ) const;
+    bool MouseMotion() const
+    {
+        return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
+    }
 
-    const fheroes2::Point & GetMouseCursor( void ) const
+    const fheroes2::Point & GetMouseCursor() const
     {
         return mouse_cu;
     }
 
-    const fheroes2::Point & GetMousePressLeft( void ) const;
+    const fheroes2::Point & GetMousePressLeft() const
+    {
+        return mouse_pl;
+    }
 
-    void ResetPressLeft();
+    void ResetPressLeft()
+    {
+        mouse_pl = { -1, -1 };
+    }
 
     bool MouseClickLeft();
     bool MouseClickMiddle();
@@ -211,40 +227,79 @@ public:
     bool MouseWheelDn() const;
 
     bool MousePressLeft() const;
-    bool MousePressLeft( const fheroes2::Rect & rt ) const;
+    
+    bool MousePressLeft( const fheroes2::Rect & rt ) const
+    {
+        return MousePressLeft() && ( rt & mouse_pl );
+    }
+
     bool MousePressRight() const;
-    bool MousePressRight( const fheroes2::Rect & rt ) const;
+
+    bool MousePressRight( const fheroes2::Rect & rt ) const
+    {
+        return MousePressRight() && ( rt & mouse_pr );
+    }
 
     bool MouseReleaseLeft() const;
-    bool MouseReleaseLeft( const fheroes2::Rect & rt ) const;
+
+    bool MouseReleaseLeft( const fheroes2::Rect & rt ) const
+    {
+        return MouseReleaseLeft() && ( rt & mouse_rl );
+    }
+
     bool MouseReleaseRight() const;
-    bool MouseReleaseRight( const fheroes2::Rect & rt ) const;
 
-    bool MouseWheelUp( const fheroes2::Rect & rt ) const;
-    bool MouseWheelDn( const fheroes2::Rect & rt ) const;
+    bool MouseReleaseRight( const fheroes2::Rect & rt ) const
+    {
+        return MouseReleaseRight() && ( rt & mouse_rr );
+    }
 
-    bool MouseCursor( const fheroes2::Rect & rt ) const;
+    bool MouseWheelUp( const fheroes2::Rect & rt ) const
+    {
+        return MouseWheelUp() && ( rt & mouse_cu );
+    }
+
+    bool MouseWheelDn( const fheroes2::Rect & rt ) const
+    {
+        return MouseWheelDn() && ( rt & mouse_cu );
+    }
+
+    bool MouseCursor( const fheroes2::Rect & rt ) const
+    {
+        return rt & mouse_cu;
+    }
 
     bool KeyPress() const
     {
         return modes & KEY_PRESSED;
     }
 
-    bool KeyPress( KeySym key ) const;
+    bool KeyPress( KeySym key ) const
+    {
+        return key == key_value && ( modes & KEY_PRESSED );
+    }
 
     bool KeyHold() const
     {
         return ( modes & KEY_HOLD ) != 0;
     }
 
-    KeySym KeyValue() const;
+    KeySym KeyValue() const
+    {
+        return key_value;
+    }
+
     int KeyMod() const;
 
     void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
     void PauseCycling() const;
-    void ResumeCycling() const;
+
+    void ResumeCycling() const
+    {
+        RegisterCycling();
+    }
 
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();
@@ -301,8 +356,15 @@ private:
         KEY_HOLD = 0x0040
     };
 
-    void SetModes( flag_t );
-    void ResetModes( flag_t );
+    void SetModes( flag_t f )
+    {
+        modes |= f;
+    }
+
+    void ResetModes( flag_t f )
+    {
+        modes &= ~f;
+    }
 
     int modes;
     KeySym key_value;

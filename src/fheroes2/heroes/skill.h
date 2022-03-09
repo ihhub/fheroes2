@@ -90,10 +90,21 @@ namespace Skill
         void SetLevel( int );
         void NextLevel( void );
 
-        int Level( void ) const;
-        int Skill( void ) const;
+        int Level( void ) const
+        {
+            return second;
+        }
 
-        bool isSkill( int ) const;
+        int Skill() const
+        {
+            return first;
+        }
+
+        bool isSkill( int skill ) const
+        {
+            return skill == first;
+        }
+
         bool isValid( void ) const;
 
         std::string GetName( void ) const;

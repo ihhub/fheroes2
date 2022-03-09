@@ -32,8 +32,17 @@ public:
     UltimateArtifact();
 
     bool isPosition( const int32_t position ) const;
-    bool isFound() const;
-    void markAsFound();
+
+    bool isFound() const
+    {
+        return _isFound;
+    }
+
+    void markAsFound()
+    {
+        _isFound = true;
+    }
+
     void Set( const int32_t position, const Artifact & );
     void Reset();
 

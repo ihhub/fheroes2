@@ -57,12 +57,15 @@ const char * Battle::Tower::GetName( void ) const
         return _( "Left Turret" );
     case TWR_RIGHT:
         return _( "Right Turret" );
-
+    case TWR_CENTER:
+        return _( "Ballista" );
     default:
+        // This is not a valid Tower type!
+        assert( 0 );
         break;
     }
 
-    return _( "Ballista" );
+    return nullptr;
 }
 
 bool Battle::Tower::isValid( void ) const

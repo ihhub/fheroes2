@@ -133,35 +133,6 @@ spellstats_t spells[] = {
       gettext_noop( "Turns the affected creature into stone.  A petrified creature receives half damage from a direct attack." ) },
 };
 
-Spell::Spell( int s )
-    : id( s > STONE ? NONE : s )
-{}
-
-bool Spell::operator<( const Spell & s ) const
-{
-    return id < s.id;
-}
-
-bool Spell::operator==( const Spell & s ) const
-{
-    return s.id == id;
-}
-
-bool Spell::operator!=( const Spell & s ) const
-{
-    return s.id != id;
-}
-
-bool Spell::isValid( void ) const
-{
-    return id != Spell::NONE;
-}
-
-int Spell::GetID( void ) const
-{
-    return id;
-}
-
 const char * Spell::GetName( void ) const
 {
     return _( spells[id].name );
@@ -219,11 +190,6 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
     }
 
     return res ? res : 1;
-}
-
-bool Spell::isLevel( int lvl ) const
-{
-    return Level() == lvl;
 }
 
 int Spell::Level( void ) const
@@ -344,16 +310,6 @@ bool Spell::isCombat( void ) const
     return true;
 }
 
-bool Spell::isFire() const
-{
-    return id == FIREBALL || id == FIREBLAST;
-}
-
-bool Spell::isCold() const
-{
-    return id == COLDRAY || id == COLDRING;
-}
-
 bool Spell::isGuardianType() const
 {
     switch ( id ) {
@@ -368,16 +324,6 @@ bool Spell::isGuardianType() const
     }
 
     return false;
-}
-
-bool Spell::isAdventure( void ) const
-{
-    return !isCombat();
-}
-
-bool Spell::isDamage( void ) const
-{
-    return Damage() != 0;
 }
 
 u32 Spell::Damage( void ) const
@@ -454,16 +400,6 @@ u32 Spell::Resurrect( void ) const
     }
 
     return 0;
-}
-
-bool Spell::isRestore( void ) const
-{
-    return Restore() != 0;
-}
-
-bool Spell::isResurrect( void ) const
-{
-    return Resurrect() != 0;
 }
 
 u32 Spell::ExtraValue( void ) const

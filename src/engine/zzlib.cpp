@@ -149,7 +149,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
         std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
     }
     else {
-        std::fill( out.transform(), out.transform() + uncompressedSize, 0 );
+        std::fill( out.transform(), out.transform() + uncompressedSize, static_cast<uint8_t>( 0 ) );
     }
     return out;
 }

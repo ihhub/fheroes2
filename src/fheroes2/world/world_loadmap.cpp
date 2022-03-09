@@ -494,7 +494,7 @@ bool World::LoadMapMP2( const std::string & filename )
                         colorRace.second = kingdom.GetRace();
 
                     // check heroes max count
-                    if ( kingdom.AllowRecruitHero( false, 0 ) ) {
+                    if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
                         if ( pblock[17] && pblock[18] < Heroes::BAX )

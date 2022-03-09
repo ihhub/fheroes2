@@ -112,13 +112,31 @@ public:
         STONE
     };
 
-    Spell( int = NONE );
+    Spell( const int s = NONE )
+        : id( s > STONE ? NONE : s )
+    {
+        // Do nothing.
+    }
 
-    bool operator<( const Spell & ) const;
-    bool operator==( const Spell & ) const;
-    bool operator!=( const Spell & ) const;
+    bool operator<( const Spell & s ) const
+    {
+        return id < s.id;
+    }
 
-    int GetID( void ) const;
+    bool operator==( const Spell & s ) const
+    {
+        return s.id == id;
+    }
+
+    bool operator!=( const Spell & s ) const
+    {
+        return s.id != id;
+    }
+
+    int GetID() const
+    {
+        return id;
+    }
 
     const char * GetName( void ) const;
     const char * GetDescription( void ) const;
@@ -132,14 +150,40 @@ public:
 
     u32 ExtraValue( void ) const;
 
-    bool isValid( void ) const;
-    bool isLevel( int ) const;
+    bool isValid() const
+    {
+        return id != Spell::NONE;
+    }
+
+    bool isLevel( int lvl ) const
+    {
+        return Level() == lvl;
+    }
+
     bool isCombat( void ) const;
-    bool isAdventure( void ) const;
-    bool isDamage( void ) const;
+
+    bool isAdventure() const
+    {
+        return !isCombat();
+    }
+
+    bool isDamage() const
+    {
+        return Damage() != 0;
+    }
+
     bool isSingleTarget() const;
-    bool isRestore( void ) const;
-    bool isResurrect( void ) const;
+
+    bool isRestore() const
+    {
+        return Restore() != 0;
+    }
+
+    bool isResurrect() const
+    {
+        return Resurrect() != 0;
+    }
+
     bool isMindInfluence( void ) const;
     bool isUndeadOnly( void ) const;
     bool isALiveOnly( void ) const;
@@ -151,8 +195,16 @@ public:
     bool isApplyToEnemies( void ) const;
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
-    bool isFire() const;
-    bool isCold() const;
+
+    bool isFire() const
+    {
+        return id == FIREBALL || id == FIREBLAST;
+    }
+
+    bool isCold() const
+    {
+        return id == COLDRAY || id == COLDRING;
+    }
 
     bool isGuardianType() const;
 

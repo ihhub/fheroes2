@@ -663,7 +663,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 
     Kingdom & kingdom = world.GetKingdom( col );
 
-    if ( !kingdom.AllowRecruitHero( false, 0 ) ) {
+    if ( !kingdom.AllowRecruitHero( false ) ) {
         return false;
     }
 
@@ -760,13 +760,7 @@ void Heroes::ReplenishSpellPoints()
 
     // in castle?
     if ( castle && castle->GetLevelMageGuild() ) {
-        // restore from mage guild
-        if ( Settings::Get().ExtCastleGuildRestorePointsTurn() ) {
-            curr += maxp * GameStatic::GetMageGuildRestoreSpellPointsPercentDay( castle->GetLevelMageGuild() ) / 100;
-        }
-        else {
-            curr = maxp;
-        }
+        curr = maxp;
     }
 
     // everyday

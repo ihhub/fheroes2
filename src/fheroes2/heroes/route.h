@@ -91,22 +91,26 @@ namespace Route
         u32 GetFrontPenalty( void ) const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
-        void Show( void )
+        void Show()
         {
             hide = false;
         }
-        void Hide( void )
+
+        void Hide()
         {
             hide = true;
         }
+
         void Reset();
         void PopFront( void );
 
         bool isValid( void ) const;
+
         bool isShow( void ) const
         {
             return !hide;
         }
+
         bool hasAllowedSteps() const;
 
         std::string String( void ) const;

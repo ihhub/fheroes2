@@ -226,9 +226,22 @@ public:
     size_t getSize() const;
     int GetDay( void ) const;
     int GetWeek( void ) const;
-    int GetMonth( void ) const;
-    u32 CountDay( void ) const;
-    u32 CountWeek( void ) const;
+
+    int GetMonth() const
+    {
+        return month;
+    }
+
+    u32 CountDay() const
+    {
+        return day;
+    }
+
+    u32 CountWeek() const
+    {
+        return week;
+    }
+
     bool BeginWeek( void ) const;
     bool BeginMonth( void ) const;
     bool LastDay( void ) const;
@@ -288,9 +301,7 @@ public:
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
 private:
-    World()
-        : fheroes2::Size( 0, 0 )
-    {}
+    World() = default;
 
     void Defaults( void );
     void Reset( void );

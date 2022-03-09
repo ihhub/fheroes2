@@ -92,7 +92,7 @@ std::string Army::TroopSizeString( const Troop & troop )
     std::string str;
 
     switch ( ArmyGetSize( troop.GetCount() ) ) {
-    default:
+    case ARMY_FEW:
         str = _( "A few\n%{monster}" );
         break;
     case ARMY_SEVERAL:
@@ -119,6 +119,10 @@ std::string Army::TroopSizeString( const Troop & troop )
     case ARMY_LEGION:
         str = _( "A legion of\n%{monster}" );
         break;
+    default:
+        // Are you passing the correct value?
+        assert( 0 );
+        break;
     }
 
     StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
@@ -128,8 +132,8 @@ std::string Army::TroopSizeString( const Troop & troop )
 std::string Army::SizeString( u32 size )
 {
     switch ( ArmyGetSize( size ) ) {
-    default:
-        break;
+    case ARMY_FEW:
+        return _( "army|Few" );
     case ARMY_SEVERAL:
         return _( "army|Several" );
     case ARMY_PACK:
@@ -146,9 +150,13 @@ std::string Army::SizeString( u32 size )
         return _( "army|Zounds" );
     case ARMY_LEGION:
         return _( "army|Legion" );
+    default:
+        // Are you passing the correct value?
+        assert( 0 );
+        break;
     }
 
-    return _( "army|Few" );
+    return {};
 }
 
 Troops::Troops( const Troops & troops )
@@ -169,11 +177,6 @@ Troops::~Troops()
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete *it;
-}
-
-size_t Troops::Size( void ) const
-{
-    return size();
 }
 
 void Troops::Assign( const Troop * it1, const Troop * it2 )
@@ -1011,30 +1014,10 @@ void Army::setFromTile( const Maps::Tiles & tile )
     }
 }
 
-bool Army::isFullHouse( void ) const
-{
-    return GetCount() == size();
-}
-
-void Army::SetSpreadFormat( bool f )
-{
-    combat_format = f;
-}
-
-bool Army::isSpreadFormat( void ) const
-{
-    return combat_format;
-}
-
 int Army::GetColor( void ) const
 {
     const HeroBase * currentCommander = GetCommander();
     return currentCommander != nullptr ? currentCommander->GetColor() : color;
-}
-
-void Army::SetColor( int cl )
-{
-    color = cl;
 }
 
 int Army::GetLuck( void ) const
@@ -1194,11 +1177,6 @@ void Army::Reset( bool soft )
             JoinTroop( mons1, 1 );
         }
     }
-}
-
-void Army::SetCommander( HeroBase * c )
-{
-    commander = c;
 }
 
 HeroBase * Army::GetCommander( void )

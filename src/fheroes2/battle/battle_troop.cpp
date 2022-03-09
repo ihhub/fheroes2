@@ -277,36 +277,6 @@ int Battle::Unit::GetMorale() const
     return armyTroopMorale;
 }
 
-bool Battle::Unit::isUID( u32 v ) const
-{
-    return _uid == v;
-}
-
-u32 Battle::Unit::GetUID( void ) const
-{
-    return _uid;
-}
-
-Battle::Unit * Battle::Unit::GetMirror()
-{
-    return mirror;
-}
-
-void Battle::Unit::SetMirror( Unit * ptr )
-{
-    mirror = ptr;
-}
-
-u32 Battle::Unit::GetShots( void ) const
-{
-    return shots;
-}
-
-const Battle::Position & Battle::Unit::GetPosition( void ) const
-{
-    return position;
-}
-
 s32 Battle::Unit::GetHeadIndex( void ) const
 {
     return position.GetHead() ? position.GetHead()->GetIndex() : -1;
@@ -358,11 +328,6 @@ bool Battle::Unit::isFlying( void ) const
 bool Battle::Unit::isValid( void ) const
 {
     return GetCount() != 0;
-}
-
-bool Battle::Unit::isReflect( void ) const
-{
-    return reflect;
 }
 
 bool Battle::Unit::OutOfWalls( void ) const
@@ -417,19 +382,9 @@ bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
                           || ( b.isWide() && Board::isNearIndexes( a.GetTailIndex(), b.GetTailIndex() ) ) ) ) );
 }
 
-int Battle::Unit::GetAnimationState() const
-{
-    return animation.getCurrentState();
-}
-
 bool Battle::Unit::isIdling() const
 {
     return GetAnimationState() == Monster_Info::IDLE;
-}
-
-bool Battle::Unit::checkIdleDelay()
-{
-    return idleTimer.checkDelay();
 }
 
 void Battle::Unit::NewTurn( void )
@@ -1599,31 +1554,6 @@ bool Battle::Unit::isHaveDamage( void ) const
     return hp < count0 * Monster::GetHitPoints();
 }
 
-int Battle::Unit::GetFrame( void ) const
-{
-    return animation.getFrame();
-}
-
-void Battle::Unit::SetCustomAlpha( uint32_t alpha )
-{
-    customAlphaMask = alpha;
-}
-
-uint32_t Battle::Unit::GetCustomAlpha() const
-{
-    return customAlphaMask;
-}
-
-void Battle::Unit::IncreaseAnimFrame( bool loop )
-{
-    animation.playAnimation( loop );
-}
-
-bool Battle::Unit::isFinishAnimFrame( void ) const
-{
-    return animation.isLastFrame();
-}
-
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
     animation.switchAnimation( rule, reverse );
@@ -1680,11 +1610,6 @@ int Battle::Unit::M82Land() const
     return fheroes2::getMonsterData( id ).sounds.landing;
 }
 
-fheroes2::Rect Battle::Unit::GetRectPosition() const
-{
-    return position.GetRect();
-}
-
 fheroes2::Point Battle::Unit::GetBackPoint() const
 {
     const fheroes2::Rect & rt = position.GetRect();
@@ -1704,11 +1629,6 @@ fheroes2::Point Battle::Unit::GetCenterPoint() const
 fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
-}
-
-int Battle::Unit::GetArmyColor( void ) const
-{
-    return ArmyTroop::GetColor();
 }
 
 int Battle::Unit::GetColor( void ) const

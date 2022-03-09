@@ -888,8 +888,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARROWMOUNDS:
-        if ( !Settings::Get().ExtWorldDisableBarrowMounds() )
-            UpdateDwellingPopulation( *this, isFirstLoad );
+        UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
     default:
