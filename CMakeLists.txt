@@ -8,6 +8,10 @@ cmake_policy(SET CMP0074 NEW)
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+if(MACOS_APP_BUNDLE AND NOT APPLE)
+	message(SEND_ERROR "macOS bundles are only valid on macOS")
+endif(MACOS_APP_BUNDLE AND NOT APPLE)
+
 #
 # Compile-time options
 #
@@ -72,22 +76,24 @@ endif(NOT WIN32)
 #
 # Installation of auxiliary files
 #
-install(
-	FILES fheroes2.key
-	DESTINATION ${CONFIGURE_FHEROES2_DATA}
-	)
+if(NOT MACOS_APP_BUNDLE)
+	install(
+		FILES fheroes2.key
+		DESTINATION ${CONFIGURE_FHEROES2_DATA}
+		)
 
-install(
-	DIRECTORY files/data/
-	DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
-	FILES_MATCHING
-	PATTERN *.h2d
-	)
+	install(
+		DIRECTORY files/data/
+		DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
+		FILES_MATCHING
+		PATTERN *.h2d
+		)
 
-install(
-	FILES docs/README.txt LICENSE changelog.txt
-	DESTINATION ${CMAKE_INSTALL_DOCDIR}
-	)
+	install(
+		FILES docs/README.txt LICENSE changelog.txt
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}
+		)
+endif(NOT MACOS_APP_BUNDLE)
 
 if(GET_HOMM2_DEMO)
 	include(FetchContent)
@@ -117,21 +123,24 @@ if(WIN32)
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 		)
 else(WIN32)
-	install(
-		DIRECTORY files/lang/
-		DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/lang
-		FILES_MATCHING
-		PATTERN *.mo
-		)
+	if(NOT MACOS_APP_BUNDLE)
+		install(
+			DIRECTORY files/lang/
+			DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/lang
+			FILES_MATCHING
+			PATTERN *.mo
+			)
 
-	install(
-		FILES script/demo/download_demo_version.sh
-		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
-		)
-	install(
-		FILES script/homm2/extract_homm2_resources.sh
-		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-		DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
-		)
+		install(
+			FILES script/demo/download_demo_version.sh
+			PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+			)
+
+		install(
+			FILES script/homm2/extract_homm2_resources.sh
+			PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
+			)
+	endif(NOT MACOS_APP_BUNDLE)
 endif(WIN32)
