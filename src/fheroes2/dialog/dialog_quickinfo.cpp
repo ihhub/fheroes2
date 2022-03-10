@@ -709,11 +709,9 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
 
     cur_rt = fheroes2::Rect( cur_rt.x + 22, cur_rt.y + 9, 192, 154 );
     fheroes2::Point dst_pt;
-    fheroes2::Text text;
-    const fheroes2::FontType smallWhiteFont{ fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE };
 
     // castle name
-    text.set( castle.GetName(), smallWhiteFont );
+    fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
     dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
     dst_pt.y = cur_rt.y + 3;
     text.draw( dst_pt.x, dst_pt.y, display );
@@ -784,7 +782,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
     // show guardian
     if ( isGuardianVisible ) {
         // hero name
-        text.set( guardian->GetName(), smallWhiteFont );
+        text.set( guardian->GetName(), fheroes2::FontType::smallWhite() );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y += castleIcon.height() + 5;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -798,7 +796,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
         }
     }
     else {
-        text.set( _( "Defenders:" ), smallWhiteFont );
+        text.set( _( "Defenders:" ), fheroes2::FontType::smallWhite() );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y += castleIcon.height() + 2;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -808,7 +806,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
 
     // draw defenders
     if ( count == 0 ) {
-        text.set( _( "None" ), smallWhiteFont );
+        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y += 47;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -822,7 +820,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
         Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
     else {
-        text.set( _( "Unknown" ), smallWhiteFont );
+        text.set( _( "Unknown" ), fheroes2::FontType::smallWhite() );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y += 47;
         text.draw( dst_pt.x, dst_pt.y, display );
