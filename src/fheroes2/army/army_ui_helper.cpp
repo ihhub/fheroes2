@@ -55,7 +55,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, 
         }
         const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
         fheroes2::Text text( isScouteView ? Game::CountScoute( troop->GetCount(), drawPower, compact ) : Game::CountThievesGuild( troop->GetCount(), drawPower ),
-                             fheroes2::FontType::smallWhite()  );
+                             fheroes2::FontType::smallWhite() );
 
         // This is drawing of army troops in compact form in the small info window beneath resources,
         // as well as for castle troops when a hero is set as guardian (:experimental option).
