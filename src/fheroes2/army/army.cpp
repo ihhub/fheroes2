@@ -1271,12 +1271,10 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-/* draw MONS32 sprite in line, first valid = 0, count = 0 */
+//draw MONS32 sprite in line, first valid = 0, count = 0
 void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {
-    fheroes2::Image & output = fheroes2::Display::instance();
-
-    fheroes2::DrawMons32Line( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, output );
+    fheroes2::drawMiniMonsters( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, fheroes2::Display::instance() );
 }
 
 void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact, bool isScouteView )
@@ -1288,15 +1286,15 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
     fheroes2::Image & output = fheroes2::Display::instance();
 
     if ( count < 3 ) {
-        fheroes2::DrawMons32Line( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView, output );
+        fheroes2::drawMiniMonsters( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView, output );
     }
     else {
         const int firstLineTroopCount = 2;
         const int secondLineTroopCount = count - firstLineTroopCount;
         const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
 
-        fheroes2::DrawMons32Line( troops, posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView, output );
-        fheroes2::DrawMons32Line( troops, posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView, output );
+        fheroes2::drawMiniMonsters( troops, posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView, output );
+        fheroes2::drawMiniMonsters( troops, posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView, output );
     }
 }
 
