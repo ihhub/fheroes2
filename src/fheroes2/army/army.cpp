@@ -1271,7 +1271,7 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-//draw MONS32 sprite in line, first valid = 0, count = 0
+// draw MONS32 sprite in line, first valid = 0, count = 0
 void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {
     fheroes2::drawMiniMonsters( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, fheroes2::Display::instance() );
