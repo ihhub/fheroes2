@@ -28,7 +28,7 @@
 #include "screen.h"
 #include "ui_text.h"
 
-void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
+void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
                                bool isScouteView, Image & output )
 {
     if ( !troops.isValid() ) {
@@ -46,32 +46,33 @@ void fheroes2::DrawMons32Line( const Troops & troops, int32_t cx, int32_t cy, ui
 
     for ( size_t slot = 0; slot <= troops.Size(); ++slot ) {
         const Troop * troop = troops.GetTroop( slot );
-        if ( troop && troop->isValid() ) {
-            if ( 0 == first && count ) {
-                const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
-                fheroes2::Text text( isScouteView ? Game::CountScoute( troop->GetCount(), drawPower, compact ) : Game::CountThievesGuild( troop->GetCount(), drawPower ),
-                                     { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-
-                /*This is drawing of army troops in compact form in the small info window beneath resources,
-                as well as for castle troops when a hero is set as guardian (:experimental option).*/
-                if ( compact ) {
-                    const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
-                    int offset = ( chunk - monster.width() - text.width() ) / 2;
-                    if ( offset < 0 )
-                        offset = 0;
-                    fheroes2::Blit( monster, output, cx + offset, cy + offsetY + monster.y() );
-                    text.draw( cx + chunk - text.width() - offset, cy + 23, output );
-                }
-                else {
-                    const int offsetY = 28 - monster.height();
-                    fheroes2::Blit( monster, output, cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
-                    text.draw( cx - text.width() / 2, cy + 29, output );
-                }
-                cx += chunk;
-                --count;
-            }
-            else
-                --first;
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
         }
+        if ( first != 0 || count == 0 ) {
+            --first;
+            continue;
+        }
+        const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
+        fheroes2::Text text( isScouteView ? Game::CountScoute( troop->GetCount(), drawPower, compact ) : Game::CountThievesGuild( troop->GetCount(), drawPower ),
+                                fheroes2::FontType::smallWhite()  );
+
+        //This is drawing of army troops in compact form in the small info window beneath resources,
+        //as well as for castle troops when a hero is set as guardian (:experimental option).
+        if ( compact ) {
+            const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
+            int offset = ( chunk - monster.width() - text.width() ) / 2;
+            if ( offset < 0 )
+                offset = 0;
+            fheroes2::Blit( monster, output, cx + offset, cy + offsetY + monster.y() );
+            text.draw( cx + chunk - text.width() - offset, cy + 23, output );
+        }
+        else {
+            const int offsetY = 28 - monster.height();
+            fheroes2::Blit( monster, output, cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
+            text.draw( cx - text.width() / 2, cy + 29, output );
+        }
+        cx += chunk;
+        --count;
     }
 }
