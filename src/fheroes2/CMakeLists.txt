@@ -13,10 +13,7 @@ get_filename_component(CONFIGURE_FHEROES2_DATA_ABSOLUTE
 if(MACOS_APP_BUNDLE)
 	set(fheroes2Icon "${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns")
 	set_source_files_properties(${fheroes2Icon} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-	file(GLOB TRANSLATION_DATA "${CMAKE_CURRENT_SOURCE_DIR}/../../files/lang/*.mo")
 	add_executable(fheroes2 MACOSX_BUNDLE ${fheroes2Icon} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
-
-	set_source_files_properties(${TRANSLATION_DATA} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources/translations")
 
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME "${MACOSX_BUNDLE_BUNDLE_NAME}")
