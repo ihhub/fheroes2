@@ -261,7 +261,7 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 
     const int dayOfWeek = world.GetDay();
     const int weekOfMonth = world.GetWeek();
-    const int month = world.GetMonth();
+    const uint32_t month = world.GetMonth();
     const int icnType = Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON;
     uint32_t icnId = dayOfWeek > 1 ? 0 : ( ( weekOfMonth - 1 ) % 4 ) + 1;
     if ( dayOfWeek == 1 && weekOfMonth == 1 && month == 1 ) { // special case
@@ -271,13 +271,13 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
-    StringReplace( message, "%{month}", world.GetMonth() );
-    StringReplace( message, "%{week}", world.GetWeek() );
+    StringReplace( message, "%{month}", month );
+    StringReplace( message, "%{week}", weekOfMonth );
     Text text( message, Font::SMALL );
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 30 + oh );
 
     message = _( "Day: %{day}" );
-    StringReplace( message, "%{day}", world.GetDay() );
+    StringReplace( message, "%{day}", dayOfWeek );
     text.Set( message, Font::BIG );
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 46 + oh );
 }

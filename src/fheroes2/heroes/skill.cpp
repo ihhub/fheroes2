@@ -284,21 +284,6 @@ void Skill::Secondary::NextLevel( void )
     }
 }
 
-int Skill::Secondary::Skill( void ) const
-{
-    return first;
-}
-
-int Skill::Secondary::Level( void ) const
-{
-    return second;
-}
-
-bool Skill::Secondary::isSkill( int skill ) const
-{
-    return skill == first;
-}
-
 bool Skill::Secondary::isValid( void ) const
 {
     return Skill() != UNKNOWN && Level() != Level::NONE;

@@ -510,9 +510,9 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
     return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
-bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
+bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
-    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero( level ) ) );
+    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
 }
 
 void Kingdom::ApplyPlayWithStartingHero( void )
@@ -557,7 +557,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             first = castles.front();
 
         Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
-        if ( hero && AllowRecruitHero( false, 0 ) )
+        if ( hero && AllowRecruitHero( false ) )
             hero->Recruit( *first );
     }
 }

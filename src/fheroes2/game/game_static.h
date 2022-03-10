@@ -50,7 +50,6 @@ namespace GameStatic
     u32 GetCastleGrownMonthOf( void );
 
     u32 GetHeroesRestoreSpellPointsPerDay( void );
-    u32 GetMageGuildRestoreSpellPointsPercentDay( int level );
 
     s32 ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 

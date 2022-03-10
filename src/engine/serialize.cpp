@@ -41,16 +41,6 @@ void StreamBase::setconstbuf( bool f )
         flags &= ~0x00001000;
 }
 
-bool StreamBase::isconstbuf( void ) const
-{
-    return ( flags & 0x00001000 ) != 0;
-}
-
-bool StreamBase::bigendian( void ) const
-{
-    return ( flags & 0x80000000 ) != 0;
-}
-
 void StreamBase::setbigendian( bool f )
 {
     if ( f )
@@ -65,11 +55,6 @@ void StreamBase::setfail( bool f )
         flags |= 0x00000001;
     else
         flags &= ~0x00000001;
-}
-
-bool StreamBase::fail( void ) const
-{
-    return flags & 0x00000001;
 }
 
 u16 StreamBase::get16()

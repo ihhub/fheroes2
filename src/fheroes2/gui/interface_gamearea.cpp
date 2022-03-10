@@ -99,7 +99,7 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     }
 
     // adding 1 extra tile for both axes in case of drawing tiles partially near sides
-    _visibleTileCount = fheroes2::Size( ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 );
+    _visibleTileCount = { ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 };
 
     _setCenterToTile( fheroes2::Point( world.w() / 2, world.h() / 2 ) );
 }

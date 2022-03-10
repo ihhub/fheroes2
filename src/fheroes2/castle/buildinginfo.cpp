@@ -319,20 +319,10 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     }
 }
 
-uint32_t BuildingInfo::getBuilding( void ) const
-{
-    return building;
-}
-
 void BuildingInfo::SetPos( s32 x, s32 y )
 {
     area.x = x;
     area.y = y;
-}
-
-const fheroes2::Rect & BuildingInfo::GetArea( void ) const
-{
-    return area;
 }
 
 bool BuildingInfo::IsDwelling( void ) const

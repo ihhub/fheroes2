@@ -3075,7 +3075,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
     const Kingdom & kingdom = hero.GetKingdom();
     const std::string title( MP2::StringObject( objectType ) );
 
-    if ( kingdom.AllowRecruitHero( false, 0 ) ) {
+    if ( kingdom.AllowRecruitHero( false ) ) {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         AGG::PlaySound( M82::EXPERNCE );
         Dialog::Message(

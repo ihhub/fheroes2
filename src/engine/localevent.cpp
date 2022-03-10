@@ -485,21 +485,6 @@ void LocalEvent::CloseVirtualKeyboard()
 #endif
 }
 
-const fheroes2::Point & LocalEvent::GetMousePressLeft( void ) const
-{
-    return mouse_pl;
-}
-
-void LocalEvent::SetModes( flag_t f )
-{
-    modes |= f;
-}
-
-void LocalEvent::ResetModes( flag_t f )
-{
-    modes &= ~f;
-}
-
 const char * KeySymGetName( KeySym sym )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1073,11 +1058,6 @@ void LocalEvent::PauseCycling() const
     fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
-void LocalEvent::ResumeCycling() const
-{
-    RegisterCycling();
-}
-
 LocalEvent & LocalEvent::GetClean()
 {
     LocalEvent & le = Get();
@@ -1502,11 +1482,6 @@ void LocalEvent::ProcessControllerAxisMotion()
 }
 #endif
 
-bool LocalEvent::MouseMotion( void ) const
-{
-    return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
-}
-
 bool LocalEvent::MousePressLeft( void ) const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
@@ -1709,70 +1684,9 @@ bool LocalEvent::MouseWheelDn( void ) const
 #endif
 }
 
-bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
-{
-    return MousePressLeft() && ( rt & mouse_pl );
-}
-
-bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
-{
-    return MousePressRight() && ( rt & mouse_pr );
-}
-
-bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseLeft() && ( rt & mouse_rl );
-}
-
-bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseRight() && ( rt & mouse_rr );
-}
-
-void LocalEvent::ResetPressLeft( void )
-{
-    mouse_pl.x = -1;
-    mouse_pl.y = -1;
-}
-
-bool LocalEvent::MouseWheelUp( const fheroes2::Rect & rt ) const
-{
-    return MouseWheelUp() && ( rt & mouse_cu );
-}
-
-bool LocalEvent::MouseWheelDn( const fheroes2::Rect & rt ) const
-{
-    return MouseWheelDn() && ( rt & mouse_cu );
-}
-
-bool LocalEvent::MouseCursor( const fheroes2::Rect & rt ) const
-{
-    return rt & mouse_cu;
-}
-
 int LocalEvent::KeyMod( void ) const
 {
     return SDL_GetModState();
-}
-
-KeySym LocalEvent::KeyValue( void ) const
-{
-    return key_value;
-}
-
-bool LocalEvent::KeyPress( KeySym key ) const
-{
-    return key == key_value && ( modes & KEY_PRESSED );
-}
-
-void LocalEvent::SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
-{
-    redraw_cursor_func = pf;
-}
-
-void LocalEvent::SetGlobalFilterKeysEvents( void ( *pf )( int, int ) )
-{
-    keyboard_filter_func = pf;
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

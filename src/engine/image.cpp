@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1117,7 +1117,7 @@ namespace fheroes2
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
-                std::fill( transformOutY, transformOutY + width, 0 );
+                std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
             }
         }
         else {
@@ -1156,7 +1156,7 @@ namespace fheroes2
             blurRadius = height;
 
         Image out( width, height );
-        std::fill( out.transform(), out.transform() + width * height, 0 );
+        std::fill( out.transform(), out.transform() + width * height, static_cast<uint8_t>( 0 ) );
 
         uint8_t * imageOutY = out.image();
         const uint8_t * imageIn = in.image();
@@ -1577,7 +1577,7 @@ namespace fheroes2
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
             std::fill( imageY, imageY + width, colorId );
-            std::fill( transformY, transformY + width, 0 );
+            std::fill( transformY, transformY + width, static_cast<uint8_t>( 0 ) );
         }
     }
 
@@ -1593,7 +1593,7 @@ namespace fheroes2
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-            std::fill( imageY, imageY + width, 0 );
+            std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );
             std::fill( transformY, transformY + width, tranformId );
         }
     }

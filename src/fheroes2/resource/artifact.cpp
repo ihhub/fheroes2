@@ -193,11 +193,6 @@ namespace
     } };
 }
 
-Artifact::Artifact( int art )
-    : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
-    , ext( 0 )
-{}
-
 bool Artifact::operator==( const Spell & spell ) const
 {
     switch ( id ) {
@@ -215,21 +210,6 @@ bool Artifact::operator==( const Spell & spell ) const
     }
 
     return false;
-}
-
-bool Artifact::operator==( const Artifact & art ) const
-{
-    return id == art.id;
-}
-
-bool Artifact::operator!=( const Artifact & art ) const
-{
-    return id != art.id;
-}
-
-int Artifact::GetID( void ) const
-{
-    return id;
 }
 
 const char * Artifact::GetName( void ) const
@@ -308,11 +288,6 @@ bool Artifact::isUltimate( void ) const
     }
 
     return false;
-}
-
-bool Artifact::isValid( void ) const
-{
-    return id != UNKNOWN;
 }
 
 int Artifact::LoyaltyLevel( void ) const
@@ -486,22 +461,6 @@ int Artifact::getArtifactValue() const
     return 0;
 }
 
-/* return index sprite objnarti.icn */
-u32 Artifact::IndexSprite( void ) const
-{
-    return id < UNKNOWN ? id * 2 + 1 : 0;
-}
-
-u32 Artifact::IndexSprite32( void ) const
-{
-    return id;
-}
-
-u32 Artifact::IndexSprite64( void ) const
-{
-    return id + 1;
-}
-
 int Artifact::GetSpell( void ) const
 {
     return id == SPELL_SCROLL ? ext : Spell::NONE;
@@ -534,12 +493,6 @@ void Artifact::SetSpell( int v )
         ext = v;
         break;
     }
-}
-
-void Artifact::Reset( void )
-{
-    id = UNKNOWN;
-    ext = 0;
 }
 
 /* get rand all artifact */

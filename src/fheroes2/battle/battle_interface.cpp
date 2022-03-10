@@ -653,16 +653,6 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     pos.height = sprite.height();
 }
 
-const HeroBase * Battle::OpponentSprite::GetHero( void ) const
-{
-    return base;
-}
-
-fheroes2::Point Battle::OpponentSprite::Offset() const
-{
-    return _offset;
-}
-
 void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
 {
     _currentAnim.playAnimation( loop );
@@ -672,16 +662,6 @@ void Battle::OpponentSprite::SetAnimation( int rule )
 {
     _animationType = rule;
     _currentAnim = getHeroAnimation( base, rule );
-}
-
-bool Battle::OpponentSprite::isFinishFrame( void ) const
-{
-    return _currentAnim.isLastFrame();
-}
-
-const fheroes2::Rect & Battle::OpponentSprite::GetArea( void ) const
-{
-    return pos;
 }
 
 fheroes2::Point Battle::OpponentSprite::GetCastPosition( void ) const
@@ -797,11 +777,6 @@ void Battle::Status::Redraw( void ) const
         bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
     if ( bar2.Size() )
         bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
-}
-
-const std::string & Battle::Status::GetMessage( void ) const
-{
-    return message;
 }
 
 void Battle::Status::clear()
@@ -1084,11 +1059,6 @@ Battle::Interface::~Interface()
 void Battle::Interface::SetArmiesOrder( const Units * units )
 {
     armies_order.Set( GetArea(), units, arena.GetArmyColor2() );
-}
-
-const fheroes2::Rect & Battle::Interface::GetArea( void ) const
-{
-    return _surfaceInnerArea;
 }
 
 fheroes2::Point Battle::Interface::GetMouseCursor() const

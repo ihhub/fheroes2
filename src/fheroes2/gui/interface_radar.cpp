@@ -450,11 +450,11 @@ void Interface::Radar::QueueEventProcessing( void )
 
             if ( le.MouseWheelUp() ) {
                 if ( rect.width != world.w() || rect.height != world.h() )
-                    newSize = fheroes2::Size( world.w(), world.h() );
+                    newSize = { world.w(), world.h() };
             }
             else if ( le.MouseWheelDn() ) {
                 if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
-                    newSize = fheroes2::Size( RADARWIDTH, RADARWIDTH );
+                    newSize = { RADARWIDTH, RADARWIDTH };
             }
 
             ChangeAreaSize( newSize );

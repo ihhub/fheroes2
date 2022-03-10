@@ -54,7 +54,10 @@ public:
     void PushBack( const Monster &, u32 );
     void PopBack( void );
 
-    size_t Size( void ) const;
+    size_t Size() const
+    {
+        return size();
+    }
 
     Troop * GetTroop( size_t );
     const Troop * GetTroop( size_t ) const;
@@ -166,7 +169,10 @@ public:
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
-    void SetColor( int );
+    void SetColor( int cl )
+    {
+        color = cl;
+    }
 
     int GetMorale( void ) const;
     int GetLuck( void ) const;
@@ -176,7 +182,11 @@ public:
 
     const HeroBase * GetCommander( void ) const;
     HeroBase * GetCommander( void );
-    void SetCommander( HeroBase * );
+
+    void SetCommander( HeroBase * c )
+    {
+        commander = c;
+    }
 
     const Castle * inCastle( void ) const;
 
@@ -184,10 +194,21 @@ public:
 
     void JoinStrongestFromArmy( Army & );
 
-    void SetSpreadFormat( bool );
-    bool isSpreadFormat( void ) const;
+    void SetSpreadFormat( bool f )
+    {
+        combat_format = f;
+    }
 
-    bool isFullHouse( void ) const;
+    bool isSpreadFormat() const
+    {
+        return combat_format;
+    }
+
+    bool isFullHouse() const
+    {
+        return GetCount() == size();
+    }
+
     bool SaveLastTroop( void ) const;
 
     Monster GetStrongestMonster() const;
