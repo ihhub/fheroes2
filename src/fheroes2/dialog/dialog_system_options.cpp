@@ -415,7 +415,7 @@ namespace
             else if ( le.MousePressRight( battleResolveRoi ) )
                 Dialog::Message( _( "Battles" ), _( "Toggle instant battle mode." ), Font::BIG );
             else if ( le.MousePressRight( buttonOkay.area() ) )
-                Dialog::Message( _( "OK" ), _( "Exit this menu." ), Font::BIG );
+                Dialog::Message( _( "Okay" ), _( "Exit this menu." ), Font::BIG );
 
             if ( saveMusicVolume || saveSoundVolume || saveMusicType || saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
                 // redraw

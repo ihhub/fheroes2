@@ -2178,9 +2178,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr ""
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Attention"
 msgstr "animace"
@@ -2590,7 +2587,7 @@ msgid "Accept the choice made."
 msgstr ""
 
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 msgid "Experimental Game Settings"
 msgstr ""
