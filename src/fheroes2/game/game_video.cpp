@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ namespace
         fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
     }
 
-    void playAudio( const std::vector<std::vector<uint8_t> > & audioChannels )
+    void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             assert( !audio.empty() );
@@ -86,7 +86,7 @@ namespace Video
         if ( video.frameCount() < 1 ) // nothing to show
             return 0;
 
-        const std::vector<std::vector<uint8_t> > & audioChannels = video.getAudioChannels();
+        const std::vector<std::vector<uint8_t>> & audioChannels = video.getAudioChannels();
         const bool hasAudio = Audio::isValid() && !audioChannels.empty();
         if ( action == VideoAction::IGNORE_VIDEO ) {
             // Since no video is rendered play audio if available.
