@@ -967,7 +967,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
     fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
     hero.PortraitRedraw( pos_rt.x + 60, pos_rt.y + 38, PORT_BIG, display );
 
-    std::string str = _( "%{name} states:" );
+    std::string str = hero.isCaptain() ? _( "Captain of %{name} states:" ) : _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );
     Text text( str, Font::BIG );
     text.Blit( pos_rt.x + 320 - text.w() / 2, pos_rt.y + 30 );
