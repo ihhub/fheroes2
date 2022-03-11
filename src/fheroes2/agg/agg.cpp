@@ -620,7 +620,7 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         }
 
         if ( filename.empty() ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << mus << " track." );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << mus << " track." )
         }
         else {
             Music::Play( filename, loop );
@@ -628,7 +628,7 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
 
             Game::SetCurrentMusic( mus );
 
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::OGG_MUSIC_TYPE::MAPPED, ".ogg" ) );
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::OGG_MUSIC_TYPE::MAPPED, ".ogg" ) )
         }
     }
 
