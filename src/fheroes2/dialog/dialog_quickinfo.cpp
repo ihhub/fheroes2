@@ -1031,7 +1031,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
             text.Blit( dst_pt.x, dst_pt.y );
         }
 
-        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
+        Army::drawMiniMonsLine( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
     }
     else {
         // show limited
