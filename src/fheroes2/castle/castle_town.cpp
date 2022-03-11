@@ -82,7 +82,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     TextBox heroDescriptionText( str, Font::BIG, BOXAREA_WIDTH );
 
-    Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
 
     Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().height, true );
     const fheroes2::Rect & box_rt = box.GetArea();
@@ -113,7 +113,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    if ( !AllowBuyHero( *hero ) ) {
+    if ( !AllowBuyHero() ) {
         button1.disable();
     }
 
@@ -364,8 +364,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
     std::string not_allow1_msg;
     std::string not_allow2_msg;
-    const bool allow_buy_hero1 = hero1 ? AllowBuyHero( *hero1, &not_allow1_msg ) : false;
-    const bool allow_buy_hero2 = hero2 ? AllowBuyHero( *hero2, &not_allow2_msg ) : false;
+    const bool allow_buy_hero1 = hero1 ? AllowBuyHero( &not_allow1_msg ) : false;
+    const bool allow_buy_hero2 = hero2 ? AllowBuyHero( &not_allow2_msg ) : false;
 
     // first hero
     dst_pt.x = cur_pt.x + 443;

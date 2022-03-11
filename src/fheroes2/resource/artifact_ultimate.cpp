@@ -55,16 +55,6 @@ const Artifact & UltimateArtifact::GetArtifact() const
     return *this;
 }
 
-bool UltimateArtifact::isFound() const
-{
-    return _isFound;
-}
-
-void UltimateArtifact::markAsFound()
-{
-    _isFound = true;
-}
-
 bool UltimateArtifact::isPosition( const int32_t position ) const
 {
     return 0 <= _index && position == _index;

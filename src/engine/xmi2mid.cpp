@@ -361,7 +361,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                         ++ptr; // skip 0xFF
                         const uint8_t metaType = *( ptr++ );
                         const uint8_t metaLength = *( ptr++ );
-                        emplace_back( delta, 0xFF, metaType, ptr, metaLength );
+                        emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
                         // Tempo switch
                         if ( metaType == 0x51 && metaLength == 3 ) {
                             // 24bit big endian

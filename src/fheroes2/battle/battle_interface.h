@@ -91,15 +91,31 @@ namespace Battle
     public:
         OpponentSprite( const fheroes2::Rect &, const HeroBase *, bool );
 
-        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea() const
+        {
+            return pos;
+        }
+
         fheroes2::Point GetCastPosition() const;
         void Redraw( fheroes2::Image & dst ) const;
         void Update();
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
-        bool isFinishFrame( void ) const;
-        const HeroBase * GetHero( void ) const;
-        fheroes2::Point Offset() const;
+
+        bool isFinishFrame() const
+        {
+            return _currentAnim.isLastFrame();
+        }
+
+        const HeroBase * GetHero() const
+        {
+            return base;
+        }
+
+        fheroes2::Point Offset() const
+        {
+            return _offset;
+        }
 
         enum
         {
@@ -135,7 +151,11 @@ namespace Battle
 
         void SetMessage( const std::string & message, bool top = false );
         void Redraw( void ) const;
-        const std::string & GetMessage( void ) const;
+
+        const std::string & GetMessage() const
+        {
+            return message;
+        }
 
         void clear();
 
@@ -211,7 +231,11 @@ namespace Battle
         void getPendingActions( Actions & actions );
         void HumanTurn( const Unit &, Actions & );
 
-        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea() const
+        {
+            return _surfaceInnerArea;
+        }
+
         fheroes2::Point GetMouseCursor() const;
 
         void SetStatus( const std::string &, bool = false );

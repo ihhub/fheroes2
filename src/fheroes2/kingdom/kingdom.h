@@ -61,7 +61,7 @@ public:
     bool isPlay( void ) const;
     bool isLoss( void ) const;
     bool AllowPayment( const Funds & ) const;
-    bool AllowRecruitHero( bool check_payment, int level ) const;
+    bool AllowRecruitHero( bool check_payment ) const;
 
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;

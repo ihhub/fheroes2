@@ -368,16 +368,6 @@ void Castle::PostLoad( void )
                ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
 }
 
-Captain & Castle::GetCaptain( void )
-{
-    return captain;
-}
-
-const Captain & Castle::GetCaptain( void ) const
-{
-    return captain;
-}
-
 bool Castle::isCastle( void ) const
 {
     return ( building & BUILD_CASTLE ) != 0;
@@ -675,11 +665,6 @@ int Castle::GetLevelMageGuild( void ) const
     return 0;
 }
 
-const MageGuild & Castle::GetMageGuild( void ) const
-{
-    return mageguild;
-}
-
 bool Castle::HaveLibraryCapability( void ) const
 {
     return race == Race::WZRD;
@@ -710,7 +695,7 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
     return fheroes2::getBuildingDescription( race, static_cast<building_t>( build ) );
 }
 
-bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
+bool Castle::AllowBuyHero( std::string * msg ) const
 {
     CastleHeroes heroes = world.GetHeroes( *this );
 
@@ -731,13 +716,13 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
     }
 
     const Kingdom & myKingdom = GetKingdom();
-    if ( !myKingdom.AllowRecruitHero( false, hero.GetLevel() ) ) {
+    if ( !myKingdom.AllowRecruitHero( false ) ) {
         if ( msg )
             *msg = _( "Cannot recruit - you have too many Heroes." );
         return false;
     }
 
-    if ( !myKingdom.AllowRecruitHero( true, hero.GetLevel() ) ) {
+    if ( !myKingdom.AllowRecruitHero( true ) ) {
         if ( msg )
             *msg = _( "Cannot afford a Hero" );
         return false;
@@ -748,7 +733,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 
 Heroes * Castle::RecruitHero( Heroes * hero )
 {
-    if ( !hero || !AllowBuyHero( *hero ) )
+    if ( !hero || !AllowBuyHero() )
         return nullptr;
 
     CastleHeroes heroes = world.GetHeroes( *this );
@@ -766,7 +751,7 @@ Heroes * Castle::RecruitHero( Heroes * hero )
         return nullptr;
 
     Kingdom & currentKingdom = GetKingdom();
-    currentKingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
+    currentKingdom.OddFundsResource( PaymentConditions::RecruitHero() );
 
     // update spell book
     if ( GetLevelMageGuild() )
@@ -2275,16 +2260,6 @@ bool Castle::BuyBoat( void ) const
     return true;
 }
 
-int Castle::GetRace( void ) const
-{
-    return race;
-}
-
-const std::string & Castle::GetName( void ) const
-{
-    return name;
-}
-
 void Castle::setName( const std::set<std::string> & usedNames )
 {
     assert( name.empty() );
@@ -2309,11 +2284,6 @@ int Castle::GetControl( void ) const
 {
     /* gray towns: ai control */
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
-}
-
-bool Castle::isBuild( u32 bd ) const
-{
-    return ( building & bd ) != 0;
 }
 
 bool Castle::isNecromancyShrineBuild( void ) const

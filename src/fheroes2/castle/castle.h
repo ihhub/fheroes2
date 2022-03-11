@@ -124,14 +124,21 @@ public:
 
     void LoadFromMP2( std::vector<uint8_t> & data );
 
-    Captain & GetCaptain( void );
-    const Captain & GetCaptain( void ) const;
+    Captain & GetCaptain()
+    {
+        return captain;
+    }
+
+    const Captain & GetCaptain() const
+    {
+        return captain;
+    }
 
     bool isCastle( void ) const;
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = nullptr ) const;
+    bool AllowBuyHero( std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild( void ) const;
 
@@ -140,9 +147,15 @@ public:
     Heroes * RecruitHero( Heroes * );
     CastleHeroes GetHeroes( void ) const;
 
-    int GetRace( void ) const;
+    int GetRace() const
+    {
+        return race;
+    }
 
-    const std::string & GetName() const;
+    const std::string & GetName() const
+    {
+        return name;
+    }
 
     // This method must be called only at the time of map loading and only for castles with empty names.
     void setName( const std::set<std::string> & usedNames );
@@ -150,7 +163,12 @@ public:
     int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
-    const MageGuild & GetMageGuild( void ) const;
+
+    const MageGuild & GetMageGuild() const
+    {
+        return mageguild;
+    }
+
     bool HaveLibraryCapability( void ) const;
     bool isLibraryBuild( void ) const;
     void MageGuildEducateHero( HeroBase & ) const;
@@ -196,7 +214,12 @@ public:
     int GetLuckModificator( std::string * ) const;
 
     bool AllowBuyBuilding( u32 ) const;
-    bool isBuild( u32 bd ) const;
+
+    bool isBuild( u32 bd ) const
+    {
+        return ( building & bd ) != 0;
+    }
+
     bool BuyBuilding( u32 );
     bool AllowBuyBoat( void ) const;
     bool BuyBoat( void ) const;

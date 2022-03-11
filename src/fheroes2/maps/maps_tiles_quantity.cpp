@@ -246,6 +246,8 @@ u32 Maps::Tiles::QuantityGold( void ) const
         case 1:
             return 1000;
         case 2:
+        case 4:
+            // Case 4 gives 2000 gold and an artifact.
             return 2000;
         case 3:
             return 5000;
@@ -888,8 +890,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARROWMOUNDS:
-        if ( !Settings::Get().ExtWorldDisableBarrowMounds() )
-            UpdateDwellingPopulation( *this, isFirstLoad );
+        UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
     default:
