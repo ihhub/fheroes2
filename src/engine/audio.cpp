@@ -133,8 +133,8 @@ void Audio::Init()
         const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
         const int initializedFlags = Mix_Init( initializationFlags );
         if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Expected music initialization flags as " << initializationFlags << " but received "
-                       << ( initializedFlags & initializationFlags ) )
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
+                       "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
         }
 #endif
         hardware.freq = 22050;
