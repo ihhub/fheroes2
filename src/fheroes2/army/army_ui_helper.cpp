@@ -57,7 +57,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, 
         fheroes2::Text text( isScouteView ? Game::CountScoute( troop->GetCount(), drawPower, compact ) : Game::CountThievesGuild( troop->GetCount(), drawPower ),
                              fheroes2::FontType::smallWhite() );
 
-        // This is drawing of army troops in compact form in the small info window beneath resources,
+        // This is the drawing of army troops in compact form in the small info window beneath resources,
         // as well as for castle troops when a hero is set as guardian (:experimental option).
         if ( compact ) {
             const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
