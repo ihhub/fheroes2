@@ -46,6 +46,67 @@
 #include "xmi.h"
 #include "zzlib.h"
 
+namespace
+{
+    const std::string externalMusicDirectory( "music" );
+
+    std::vector<std::string> getMusicDirectories()
+    {
+        std::vector<std::string> directories;
+        for ( const std::string & dir : Settings::GetRootDirs() ) {
+            std::string fullDirectoryPath = System::ConcatePath( dir, externalMusicDirectory );
+            if ( System::IsDirectory( fullDirectoryPath ) ) {
+                directories.emplace_back( std::move( fullDirectoryPath ) );
+            }
+        }
+
+        return directories;
+    }
+
+    std::string getExternalMusicFile( const int musicTrackId, const MUS::OGG_MUSIC_TYPE musicType, const std::vector<std::string> & directories )
+    {
+        if ( directories.empty() ) {
+            // Nothing to search.
+            return {};
+        }
+
+        // Instead of relying some generic functions we want to have maximum performance as I/O operations are the slowest.
+        std::vector<std::string> possibleFilenames;
+        possibleFilenames.reserve( directories.size() );
+
+        for ( const std::string & dir : directories ) {
+            possibleFilenames.emplace_back( System::ConcatePath( dir, MUS::getFileName( musicTrackId, musicType, ".ogg" ) ) );
+        }
+
+        // Search for OGG files.
+        for ( const std::string & filename : possibleFilenames ) {
+            if ( System::IsFile( filename ) ) {
+                return filename;
+            }
+        }
+
+        // None of OGG files found. Try MP3 files.
+        for ( std::string & filename : possibleFilenames ) {
+            fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
+
+            if ( System::IsFile( filename ) ) {
+                return filename;
+            }
+        }
+
+        // No luck with even MP3. Try with FLAC.
+        for ( std::string & filename : possibleFilenames ) {
+            fheroes2::replaceStringEnding( filename, ".mp3", ".flac" );
+            if ( System::IsFile( filename ) ) {
+                return filename;
+            }
+        }
+
+        // Looks like music file does not exist.
+        return {};
+    }
+}
+
 namespace AGG
 {
     struct loop_sound_t
@@ -547,54 +608,28 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
     bool isSongFound = false;
 
     if ( musicType == MUSIC_EXTERNAL ) {
-        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION ) );
+        const std::vector<std::string> & musicDirectories = getMusicDirectories();
 
-        if ( !System::IsFile( filename ) ) {
-            fheroes2::replaceStringEnding( filename, ".ogg", ".flac" );
-            filename = Settings::GetLastFile( prefix_music, filename );
-
-            if ( !System::IsFile( filename ) ) {
-                filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
-
-                if ( !System::IsFile( filename ) ) {
-                    fheroes2::replaceStringEnding( filename, ".ogg", ".flac" );
-                    filename = Settings::GetLastFile( prefix_music, filename );
-
-                    if ( !System::IsFile( filename ) ) {
-                        filename.clear();
-                    }
-                }
-            }
-
-            if ( filename.empty() ) {
-                filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
-
-                if ( !System::IsFile( filename ) ) {
-                    fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
-                    filename = Settings::GetLastFile( prefix_music, filename );
-
-                    if ( !System::IsFile( filename ) ) {
-                        fheroes2::replaceStringEnding( filename, ".ogg", ".flac" );
-                        filename = Settings::GetLastFile( prefix_music, filename );
-
-                        if ( !System::IsFile( filename ) ) {
-                            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
-                                       "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) )
-                                                           << ", skipping..." );
-                            filename.clear();
-                        }
-                    }
-                }
-            }
+        std::string filename = getExternalMusicFile( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION, musicDirectories );
+        if ( filename.empty() ) {
+            filename = getExternalMusicFile( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION, musicDirectories );
         }
 
-        if ( !filename.empty() ) {
+        if ( filename.empty() ) {
+            filename = getExternalMusicFile( mus, MUS::OGG_MUSIC_TYPE::MAPPED, musicDirectories );
+        }
+
+        if ( filename.empty() ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << mus << " track." );
+        }
+        else {
             Music::Play( filename, loop );
             isSongFound = true;
 
             Game::SetCurrentMusic( mus );
+
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::OGG_MUSIC_TYPE::MAPPED, ".ogg" ) );
         }
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
 
     if ( !isSongFound ) {

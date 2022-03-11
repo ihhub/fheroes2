@@ -29,7 +29,7 @@
 
 namespace MUS
 {
-    enum
+    enum : int
     {
         UNUSED,
         DATATRACK,
@@ -86,13 +86,13 @@ namespace MUS
         WIN_VERSION
     };
 
-    std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType );
+    std::string getFileName( const int musicTrackId, const OGG_MUSIC_TYPE musicType, const char * fileExtension );
 
     int FromGround( int );
     int FromRace( int );
     int FromMapObject( const MP2::MapObjectType objectType );
 
-    int GetBattleRandom( void );
+    int GetBattleRandom();
 }
 
 #endif
