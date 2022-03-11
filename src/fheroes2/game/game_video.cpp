@@ -30,8 +30,6 @@
 #include "system.h"
 #include "ui_tool.h"
 
-#include <cassert>
-
 namespace
 {
     // Anim2 directory is used in Russian Buka version of the game.
@@ -46,8 +44,9 @@ namespace
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
-            assert( !audio.empty() );
-            Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ), -1, false );
+            if ( !audio.empty() ) {
+                Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ), -1, false );
+            }
         }
     }
 }
