@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,11 @@ namespace fheroes2
             // Avoid C4592 warning in Visual Studio.
         }
 
-        bool isGood() const;
+        bool isGood() const
+        {
+            return !_stream.fail() && !_files.empty();
+        }
+
         bool open( const std::string & fileName );
         std::vector<uint8_t> read( const std::string & fileName );
 
