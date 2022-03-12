@@ -79,7 +79,7 @@ if(NOT WIN32)
 			COMMAND mkdir -p "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations"
 			COMMAND cp *.mo "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations"
 			DEPENDS translations
-			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/lang
+			WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/lang"
 			)
 	endif(MACOS_APP_BUNDLE)
 endif(NOT WIN32)
@@ -104,6 +104,15 @@ if(NOT MACOS_APP_BUNDLE)
 		FILES docs/README.txt LICENSE changelog.txt
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}
 		)
+else(NOT MACOS_APP_BUNDLE)
+	add_custom_target(
+	install_h2d_files
+	ALL
+	COMMAND mkdir -p "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
+	COMMAND cp *.h2d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
+	DEPENDS fheroes2
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/data"
+	)
 endif(NOT MACOS_APP_BUNDLE)
 
 if(GET_HOMM2_DEMO)

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,8 @@
 #include "settings.h"
 #include "system.h"
 
+#include "logging.h"
+
 namespace
 {
     bool isInitialized = false;
@@ -36,7 +38,11 @@ namespace
 
         isInitialized = true;
 
+#if defined( MACOS_APP_BUNDLE )
+        ListFiles files = Settings::FindFiles( "h2d", ".h2d", false );
+#else
         ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
+#endif
         if ( files.empty() ) {
             return;
         }
