@@ -40,7 +40,7 @@ void UltimateArtifact::Set( const int32_t position, const Artifact & a )
     _index = position;
     _isFound = false;
 
-    // Since artifact cannot be places closer than 9 tiles from any edge and puzzle screen is 14 x 14 tiles it's absolutely safe to put offset within [-2; +2] range.
+    // Since artifact cannot be placed closer than 9 tiles from any edge and puzzle screen is 14 x 14 tiles it's absolutely safe to put offset within [-2; +2] range.
     _offset.x = Rand::Get( 0, 4 ) - 2;
     _offset.y = Rand::Get( 0, 4 ) - 2;
 }

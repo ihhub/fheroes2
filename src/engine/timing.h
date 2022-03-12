@@ -50,6 +50,11 @@ namespace fheroes2
 
         void setDelay( const uint64_t delayMs );
 
+        uint64_t getDelay() const
+        {
+            return _delayMs;
+        }
+
         bool isPassed() const;
         bool isPassed( const uint64_t delayMs ) const;
 

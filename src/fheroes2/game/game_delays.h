@@ -85,6 +85,9 @@ namespace Game
     bool isDelayNeeded( const std::vector<Game::DelayType> & delayTypes );
 
     bool isCustomDelayNeeded( const uint64_t delayMs );
+
+    // Custom delay must never be called in this function.
+    uint64_t getAnimationDelayValue( const DelayType delayType );
 }
 
 #endif

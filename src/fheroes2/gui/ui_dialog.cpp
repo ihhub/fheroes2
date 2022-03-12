@@ -24,6 +24,7 @@
 #include "dialog.h"
 #include "experience.h"
 #include "game.h"
+#include "game_delays.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "localevent.h"
@@ -86,7 +87,12 @@ namespace fheroes2
 
         const int32_t headerHeight = header.empty() ? 0 : header.height( BOXAREA_WIDTH ) + textOffsetY;
 
-        const int overallTextHeight = textOffsetY + headerHeight + body.height( BOXAREA_WIDTH );
+        int overallTextHeight = headerHeight;
+
+        const int32_t bodyTextHeight = body.height( BOXAREA_WIDTH );
+        if ( bodyTextHeight > 0 ) {
+            overallTextHeight += bodyTextHeight + textOffsetY;
+        }
 
         std::vector<int32_t> rowElementIndex;
         std::vector<int32_t> rowHeight;
@@ -132,7 +138,7 @@ namespace fheroes2
 
         if ( !rowHeight.empty() ) {
             // UI elements are offset from the dialog body.
-            if ( body.height( BOXAREA_WIDTH ) > 0 ) {
+            if ( bodyTextHeight > 0 ) {
                 elementHeight += textOffsetY;
             }
             elementHeight += textOffsetY;
@@ -147,7 +153,7 @@ namespace fheroes2
         body.draw( pos.x, pos.y + textOffsetY + headerHeight, BOXAREA_WIDTH, display );
 
         elementHeight = overallTextHeight + textOffsetY;
-        if ( body.height( BOXAREA_WIDTH ) > 0 ) {
+        if ( bodyTextHeight > 0 ) {
             elementHeight += textOffsetY;
         }
 
@@ -191,7 +197,9 @@ namespace fheroes2
         int result = Dialog::ZERO;
         LocalEvent & le = LocalEvent::Get();
 
-        while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        bool delayInEventHandling = true;
+
+        while ( result == Dialog::ZERO && le.HandleEvents( delayInEventHandling ) ) {
             if ( !buttons && !le.MousePressRight() ) {
                 break;
             }
@@ -205,9 +213,44 @@ namespace fheroes2
             }
 
             result = group.processEvents();
+
+            delayInEventHandling = true;
+            elementId = 0;
+            for ( const DialogElement * element : elements ) {
+                if ( element->update( display, elementOffsets[elementId] ) ) {
+                    delayInEventHandling = false;
+                }
+                ++elementId;
+            }
+
+            if ( !delayInEventHandling ) {
+                display.render();
+            }
         }
 
         return result;
+    }
+
+    TextDialogElement::TextDialogElement( const std::shared_ptr<TextBase> & text )
+        : _text( text )
+    {
+        // Text always occupies the whole width of the dialog.
+        _area = { BOXAREA_WIDTH, _text->height( BOXAREA_WIDTH ) };
+    }
+
+    void TextDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        _text->draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+    }
+
+    void TextDialogElement::processEvents( const Point & /* offset */ ) const
+    {
+        // No events processed here.
+    }
+
+    void TextDialogElement::showPopup( const int /* buttons */ ) const
+    {
+        assert( 0 );
     }
 
     CustomImageDialogElement::CustomImageDialogElement( const Image & image )
@@ -628,5 +671,64 @@ namespace fheroes2
         const Text description( _skill.GetDescription( _hero ), FontType::normalWhite() );
 
         showMessage( header, description, buttons, { this } );
+    }
+
+    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndecies, const uint64_t delay )
+        : _icnId( icnId )
+        , _backgroundIndecies( backgroundIndecies )
+        , _delay( delay )
+        , _currentIndex( 0 )
+    {
+        assert( !_backgroundIndecies.empty() );
+
+        assert( _delay > 0 );
+
+        for ( const uint32_t index : _backgroundIndecies ) {
+            const Sprite & image = AGG::GetICN( _icnId, index );
+            _area.width = std::max( _area.width, image.width() );
+            _area.height = std::max( _area.height, image.height() );
+
+            _internalOffset = { ( _area.width - image.width() ) / 2, ( _area.height - image.height() ) / 2 };
+        }
+    }
+
+    void DynamicImageDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        if ( _currentIndex == 0 ) {
+            // Since this is the first time to draw we have to draw the background.
+            for ( const uint32_t index : _backgroundIndecies ) {
+                const Sprite & image = AGG::GetICN( _icnId, index );
+                Blit( image, 0, 0, output, offset.x + ( _area.width - image.width() ) / 2, offset.y + ( _area.height - image.height() ) / 2, image.width(),
+                      image.height() );
+            }
+        }
+
+        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, 0, _currentIndex );
+        ++_currentIndex;
+
+        const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
+
+        Blit( animationImage, 0, 0, output, offset.x + _internalOffset.x + animationImage.x(), offset.y + _internalOffset.y + animationImage.y(), animationImage.width(),
+              animationImage.height() );
+    }
+
+    void DynamicImageDialogElement::processEvents( const Point & /* offset */ ) const
+    {
+        // No events processed here.
+    }
+
+    void DynamicImageDialogElement::showPopup( const int /* buttons */ ) const
+    {
+        assert( 0 );
+    }
+
+    bool DynamicImageDialogElement::update( Image & output, const Point & offset ) const
+    {
+        if ( Game::validateCustomAnimationDelay( _delay ) ) {
+            draw( output, offset );
+            return true;
+        }
+
+        return false;
     }
 }
