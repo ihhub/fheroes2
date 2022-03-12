@@ -526,8 +526,7 @@ ListDirs Settings::GetRootDirs()
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( mainBundle );
     if ( !CFURLGetFileSystemRepresentation( resourcesURL, TRUE, (UInt8 *)resourcePath, PATH_MAX ) ) {
-        // TODO: Log an error here
-        assert( 0 );
+        ERROR_LOG( "Unable to get app bundle path" );
     }
     CFRelease( resourcesURL );
 
