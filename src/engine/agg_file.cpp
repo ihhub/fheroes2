@@ -24,11 +24,6 @@
 
 namespace fheroes2
 {
-    bool AGGFile::isGood() const
-    {
-        return !_stream.fail() && !_files.empty();
-    }
-
     bool AGGFile::open( const std::string & fileName )
     {
         if ( !_stream.open( fileName, "rb" ) )

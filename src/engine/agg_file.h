@@ -37,7 +37,11 @@ namespace fheroes2
             // Avoid C4592 warning in Visual Studio.
         }
 
-        bool isGood() const;
+        bool isGood() const
+        {
+            return !_stream.fail() && !_files.empty();
+        }
+
         bool open( const std::string & fileName );
         std::vector<uint8_t> read( const std::string & fileName );
 
