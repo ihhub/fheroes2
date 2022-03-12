@@ -14,6 +14,8 @@ if(MACOS_APP_BUNDLE)
 	set(fheroes2Icon "${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns")
 	set_source_files_properties(${fheroes2Icon} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 	add_executable(fheroes2 MACOSX_BUNDLE ${fheroes2Icon} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
+	target_compile_definitions(fheroes2 PRIVATE MACOS_APP_BUNDLE=1)
+	target_link_libraries(fheroes2 "-framework CoreFoundation")
 
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME "${MACOSX_BUNDLE_BUNDLE_NAME}")

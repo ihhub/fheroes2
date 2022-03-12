@@ -1,9 +1,18 @@
 file(GLOB_RECURSE LIBENGINE_SOURCES CONFIGURE_DEPENDS *.cpp)
 
 add_library(engine STATIC ${LIBENGINE_SOURCES})
+
+if(MACOS_APP_BUNDLE)
+target_compile_definitions(engine PRIVATE
+	$<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
+	MACOS_APP_BUNDLE=1
+	)
+else(MACOS_APP_BUNDLE)
 target_compile_definitions(engine PRIVATE
 	$<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
 	)
+endif(MACOS_APP_BUNDLE)
+
 target_include_directories(engine PUBLIC
 	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_INCLUDE_DIR}>
 	${${USE_SDL_VERSION}_MIXER_INCLUDE_DIR}
