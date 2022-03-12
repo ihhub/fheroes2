@@ -624,7 +624,7 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
 
             Game::SetCurrentMusic( mus );
 
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, nullptr ) )
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
             return;
         }
@@ -649,13 +649,6 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         }
     }
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
-}
-
-// This exists to avoid exposing AGG::ReadChunk
-std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
-{
-    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, frm_file );
-    return AGG::ReadChunk( frm_file );
 }
 
 void AGG::ResetAudio()

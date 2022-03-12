@@ -97,7 +97,7 @@ namespace MUS
 {
     std::string getFileName( const int musicTrackId, const EXTERNAL_MUSIC_TYPE musicType, const char * fileExtension )
     {
-        // fileExtension can be nullptr to debug purposes.
+        assert( fileExtension != nullptr );
 
         if ( musicTrackId <= UNUSED || musicTrackId > UNKNOWN ) {
             // You are passing an invalid music track ID!
