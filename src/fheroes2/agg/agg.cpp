@@ -75,28 +75,28 @@ namespace
         possibleFilenames.reserve( directories.size() );
 
         for ( const std::string & dir : directories ) {
-            possibleFilenames.emplace_back( System::ConcatePath( dir, MUS::getFileName( musicTrackId, musicType, ".ogg" ) ) );
+            possibleFilenames.emplace_back( System::ConcatePath( dir, MUS::getFileName( musicTrackId, musicType, ".flac" ) ) );
         }
 
-        // Search for OGG files.
+        // Search for FLAC files as they have the best audio quality.
         for ( const std::string & filename : possibleFilenames ) {
             if ( System::IsFile( filename ) ) {
                 return filename;
             }
         }
 
-        // None of OGG files found. Try MP3 files.
+        // None of FLAC files found. Try OGG files.
         for ( std::string & filename : possibleFilenames ) {
-            fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
+            fheroes2::replaceStringEnding( filename, ".flac", ".ogg" );
 
             if ( System::IsFile( filename ) ) {
                 return filename;
             }
         }
 
-        // No luck with even MP3. Try with FLAC.
+        // No luck with even OGG. Try with MP3.
         for ( std::string & filename : possibleFilenames ) {
-            fheroes2::replaceStringEnding( filename, ".mp3", ".flac" );
+            fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
 
             if ( System::IsFile( filename ) ) {
                 return filename;
