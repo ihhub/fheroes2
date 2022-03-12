@@ -117,6 +117,14 @@ namespace Logging
         osss << x << std::endl;                                                                                                                                          \
         sceClibPrintf( osss.str().c_str() );                                                                                                                             \
     }
+#elif defined( MACOS_APP_BUNDLE )
+#include <syslog.h>
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        std::ostringstream logMessage;                                                                                                                                   \
+        logMessage << x;                                                                                                                                                 \
+        syslog( LOG_WARNING, "fheroes2_log: %s", logMessage.str().c_str() );                                                                                             \
+    }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \

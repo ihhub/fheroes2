@@ -24,6 +24,10 @@
 #include <windows.h>
 #endif
 
+#if defined( MACOS_APP_BUNDLE )
+#include <syslog.h>
+#endif
+
 #include "logging.h"
 #include "system.h"
 
@@ -105,6 +109,9 @@ namespace Logging
     {
 #if defined( __SWITCH__ ) // Platforms which log to file
         logFile.open( "fheroes2.log", std::ofstream::out );
+#elif defined( MACOS_APP_BUNDLE )
+        openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
+        setlogmask( LOG_UPTO( LOG_WARNING ) );
 #endif
     }
 
