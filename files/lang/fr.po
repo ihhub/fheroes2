@@ -2398,9 +2398,6 @@ msgstr "Changer la résolution du jeu."
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Attention"
 msgstr "Attention"
 

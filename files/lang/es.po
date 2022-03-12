@@ -2397,9 +2397,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Attention"
 msgstr "\"Anexión\""
@@ -2839,7 +2836,7 @@ msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 #, fuzzy
 msgid "Experimental Game Settings"

@@ -2333,9 +2333,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "FHeroes2 játék beállítások."
 
-msgid "OK"
-msgstr "Ok"
-
 #, fuzzy
 msgid "Attention"
 msgstr "animáció"
@@ -2762,7 +2759,7 @@ msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
 msgid "Okay"
-msgstr ""
+msgstr "Ok"
 
 #, fuzzy
 msgid "Experimental Game Settings"

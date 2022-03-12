@@ -2249,9 +2249,6 @@ msgstr "Mudar a resolução do jogo."
 msgid "Experimental game settings."
 msgstr "Configurações experimentais do jogo."
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Attention"
 msgstr "animação"
@@ -2688,7 +2685,7 @@ msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."
 
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 msgid "Experimental Game Settings"
 msgstr ""
