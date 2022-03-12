@@ -522,15 +522,14 @@ ListDirs Settings::GetRootDirs()
 #if defined( MACOS_APP_BUNDLE )
     // macOS app bundle Resources directory
     char resourcePath[PATH_MAX];
-    
+
     CFBundleRef mainBundle = CFBundleGetMainBundle();
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
-    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)resourcePath, PATH_MAX))
-    {
-        //TODO: Log an error here
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( mainBundle );
+    if ( !CFURLGetFileSystemRepresentation( resourcesURL, TRUE, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        // TODO: Log an error here
         assert( 0 );
     }
-    CFRelease(resourcesURL);
+    CFRelease( resourcesURL );
 
     dirs.push_back( resourcePath );
 #endif
