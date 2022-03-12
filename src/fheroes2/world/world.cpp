@@ -803,7 +803,7 @@ std::string World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _rumors.size() ) + standardRumorCount;
-    const uint32_t chosenRumorId = Rand::GetWithSeed( 0,  totalRumorCount - 1, GetWeekSeed() );
+    const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
     switch ( chosenRumorId ) {
     case 0: {
@@ -839,7 +839,8 @@ std::string World::getCurrentRumor() const
             }
         }
         else if ( width / 3 > artifactPos.x ) {
-            StringReplace( rumor, "%{name}", _( "south-west" ) ); }
+            StringReplace( rumor, "%{name}", _( "south-west" ) );
+        }
         else if ( 2 * width / 3 > artifactPos.x ) {
             StringReplace( rumor, "%{name}", _( "south" ) );
         }
