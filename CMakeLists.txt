@@ -113,6 +113,14 @@ else(NOT MACOS_APP_BUNDLE)
 	DEPENDS fheroes2
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/data"
 	)
+
+	add_custom_target(
+	install_key_file
+	ALL
+	COMMAND cp fheroes2.key "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources"
+	DEPENDS fheroes2
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	)
 endif(NOT MACOS_APP_BUNDLE)
 
 if(GET_HOMM2_DEMO)
