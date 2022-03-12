@@ -362,10 +362,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         }
         else if ( le.MousePressRight( buttonOk.area() ) ) {
             if ( isEditing ) {
-                Dialog::Message( _( "OK" ), _( "Click to save the current game." ), Font::BIG );
+                Dialog::Message( _( "Okay" ), _( "Click to save the current game." ), Font::BIG );
             }
             else {
-                Dialog::Message( _( "OK" ), _( "Click to load a previously saved game." ), Font::BIG );
+                Dialog::Message( _( "Okay" ), _( "Click to load a previously saved game." ), Font::BIG );
             }
         }
 

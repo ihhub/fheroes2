@@ -2098,9 +2098,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr ""
 
-msgid "OK"
-msgstr ""
-
 msgid "Attention"
 msgstr ""
 

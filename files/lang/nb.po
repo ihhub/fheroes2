@@ -2427,9 +2427,6 @@ msgstr "Bytt spilloppløsning."
 msgid "Experimental game settings."
 msgstr "Innstillinger for utprøvningsvalg."
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Attention"
 msgstr "Advarsel"
 

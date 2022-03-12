@@ -42,7 +42,7 @@ namespace PaymentConditions
     payment_t BuyBuilding( int race, u32 build );
     payment_t BuyBoat( void );
     payment_t BuySpellBook( int shrine = 0 );
-    payment_t RecruitHero( int level );
+    payment_t RecruitHero();
     payment_t ForAlchemist();
 }
 

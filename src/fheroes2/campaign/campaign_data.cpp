@@ -674,11 +674,6 @@ namespace Campaign
         return false;
     }
 
-    void CampaignData::setCampaignID( const int campaignID )
-    {
-        _campaignID = campaignID;
-    }
-
     void CampaignData::setCampaignScenarios( std::vector<ScenarioData> && scenarios )
     {
         _scenarios = std::move( scenarios );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,7 +48,7 @@ namespace
     fheroes2::Size GetNearestResolution( int width, int height, const std::vector<fheroes2::Size> & resolutions )
     {
         if ( resolutions.empty() )
-            return fheroes2::Size( width, height );
+            return { width, height };
 
         if ( width < 1 )
             width = 1;
@@ -517,7 +517,7 @@ namespace
 
         fheroes2::Size getCurrentScreenResolution() const override
         {
-            return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+            return { VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT };
         }
 
         std::vector<fheroes2::Size> getAvailableResolutions() const override
@@ -543,7 +543,7 @@ namespace
             , _palettedTexturePointer( nullptr )
         {}
 
-        enum
+        enum : int32_t
         {
             VITA_FULLSCREEN_WIDTH = 960,
             VITA_FULLSCREEN_HEIGHT = 544,

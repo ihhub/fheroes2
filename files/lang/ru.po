@@ -2329,9 +2329,6 @@ msgstr "Изменить разрешение экрана."
 msgid "Experimental game settings."
 msgstr "Вы можете настроить игру по своему усмотрению."
 
-msgid "OK"
-msgstr "Принять"
-
 msgid "Attention"
 msgstr "Внимание"
 

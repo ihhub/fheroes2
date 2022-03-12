@@ -654,7 +654,8 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
     const u32 count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
     if ( count ) {
-        tile.SetQuantity3( spell.GetID() );
+        assert( spell.GetID() >= 0 && spell.GetID() <= 255 );
+        tile.SetQuantity3( static_cast<uint8_t>( spell.GetID() ) );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );

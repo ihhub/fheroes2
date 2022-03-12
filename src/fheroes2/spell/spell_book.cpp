@@ -71,7 +71,7 @@ namespace
             maximumHeight = bookmarkCloseOffset.y + bookmark_clos.height();
         }
 
-        return fheroes2::Size( bookPage.width() * 2, maximumHeight );
+        return { bookPage.width() * 2, maximumHeight };
     }
 
     void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,

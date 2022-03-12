@@ -51,24 +51,9 @@ payment_t PaymentConditions::BuySpellBook( int shrine )
     return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::RecruitHero( int level )
+payment_t PaymentConditions::RecruitHero()
 {
-    payment_t result( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
-
-    // level price
-    if ( Settings::Get().ExtHeroRecruitCostDependedFromLevel() && level > 1 ) {
-        const payment_t perLevel( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
-
-        result.gold += ( level - 1 ) * perLevel.gold;
-        result.wood += ( level - 1 ) * perLevel.wood;
-        result.mercury += ( level - 1 ) * perLevel.mercury;
-        result.ore += ( level - 1 ) * perLevel.ore;
-        result.sulfur += ( level - 1 ) * perLevel.sulfur;
-        result.crystal += ( level - 1 ) * perLevel.crystal;
-        result.gems += ( level - 1 ) * perLevel.gems;
-    }
-
-    return result;
+    return payment_t( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
 }
 
 payment_t PaymentConditions::ForAlchemist()

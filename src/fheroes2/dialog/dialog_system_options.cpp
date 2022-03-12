@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -415,7 +415,7 @@ namespace
             else if ( le.MousePressRight( battleResolveRoi ) )
                 Dialog::Message( _( "Battles" ), _( "Toggle instant battle mode." ), Font::BIG );
             else if ( le.MousePressRight( buttonOkay.area() ) )
-                Dialog::Message( _( "OK" ), _( "Exit this menu." ), Font::BIG );
+                Dialog::Message( _( "Okay" ), _( "Exit this menu." ), Font::BIG );
 
             if ( saveMusicVolume || saveSoundVolume || saveMusicType || saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
                 // redraw

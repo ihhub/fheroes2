@@ -2275,9 +2275,6 @@ msgstr "Zmień rozdzielczość gry."
 msgid "Experimental game settings."
 msgstr "Eksperymentalne ustawienia gry."
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Attention"
 msgstr "Uwaga"
 

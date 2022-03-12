@@ -346,7 +346,7 @@ namespace
                                  _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                                  Font::BIG );
                 else if ( le.MousePressRight( buttonOk.area() ) )
-                    Dialog::Message( _( "OK" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
+                    Dialog::Message( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
                 else if ( le.MousePressRight( buttonCancel.area() ) )
                     Dialog::Message( _( "Cancel" ), _( "Click to return to the main menu." ), Font::BIG );
                 else

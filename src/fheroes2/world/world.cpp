@@ -557,21 +557,6 @@ int World::GetWeek( void ) const
     return LastWeek() ? WEEKOFMONTH : week % WEEKOFMONTH;
 }
 
-int World::GetMonth( void ) const
-{
-    return month;
-}
-
-u32 World::CountDay( void ) const
-{
-    return day;
-}
-
-u32 World::CountWeek( void ) const
-{
-    return week;
-}
-
 bool World::BeginWeek( void ) const
 {
     return 1 == ( day % DAYOFWEEK );
