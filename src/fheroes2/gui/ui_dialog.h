@@ -281,7 +281,7 @@ namespace fheroes2
         // Never call this method as a dynamic image has nothing to popup.
         void showPopup( const int buttons ) const override;
 
-        virtual bool update( Image & output, const Point & offset ) const;
+        bool update( Image & output, const Point & offset ) const override;
 
     private:
         const int _icnId;
