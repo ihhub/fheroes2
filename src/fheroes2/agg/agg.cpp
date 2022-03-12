@@ -63,7 +63,7 @@ namespace
         return directories;
     }
 
-    std::string getExternalMusicFile( const int musicTrackId, const MUS::OGG_MUSIC_TYPE musicType, const std::vector<std::string> & directories )
+    std::string getExternalMusicFile( const int musicTrackId, const MUS::EXTERNAL_MUSIC_TYPE musicType, const std::vector<std::string> & directories )
     {
         if ( directories.empty() ) {
             // Nothing to search.
@@ -97,6 +97,7 @@ namespace
         // No luck with even MP3. Try with FLAC.
         for ( std::string & filename : possibleFilenames ) {
             fheroes2::replaceStringEnding( filename, ".mp3", ".flac" );
+
             if ( System::IsFile( filename ) ) {
                 return filename;
             }
@@ -603,20 +604,16 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         return;
     }
 
-    const std::string prefix_music( "music" );
-
-    bool isSongFound = false;
-
     if ( musicType == MUSIC_EXTERNAL ) {
         const std::vector<std::string> & musicDirectories = getMusicDirectories();
 
-        std::string filename = getExternalMusicFile( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION, musicDirectories );
+        std::string filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION, musicDirectories );
         if ( filename.empty() ) {
-            filename = getExternalMusicFile( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION, musicDirectories );
+            filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION, musicDirectories );
         }
 
         if ( filename.empty() ) {
-            filename = getExternalMusicFile( mus, MUS::OGG_MUSIC_TYPE::MAPPED, musicDirectories );
+            filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, musicDirectories );
         }
 
         if ( filename.empty() ) {
@@ -624,35 +621,34 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         }
         else {
             Music::Play( filename, loop );
-            isSongFound = true;
 
             Game::SetCurrentMusic( mus );
 
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::OGG_MUSIC_TYPE::MAPPED, ".ogg" ) )
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, nullptr ) )
+
+            return;
         }
     }
 
-    if ( !isSongFound ) {
-        // Check if music needs to be pulled from HEROES2X
-        int xmi = XMI::UNKNOWN;
-        if ( musicType == MUSIC_MIDI_EXPANSION ) {
-            xmi = XMI::FromMUS( mus, g_midiHeroes2xAGG.isGood() );
-        }
-
-        if ( XMI::UNKNOWN == xmi ) {
-            xmi = XMI::FromMUS( mus, false );
-        }
-
-        if ( XMI::UNKNOWN != xmi ) {
-            const std::vector<u8> & v = GetMID( xmi );
-            if ( !v.empty() ) {
-                Music::Play( v, loop );
-
-                Game::SetCurrentMusic( mus );
-            }
-        }
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
+    // Check if music needs to be pulled from HEROES2X
+    int xmi = XMI::UNKNOWN;
+    if ( musicType == MUSIC_MIDI_EXPANSION ) {
+        xmi = XMI::FromMUS( mus, g_midiHeroes2xAGG.isGood() );
     }
+
+    if ( XMI::UNKNOWN == xmi ) {
+        xmi = XMI::FromMUS( mus, false );
+    }
+
+    if ( XMI::UNKNOWN != xmi ) {
+        const std::vector<u8> & v = GetMID( xmi );
+        if ( !v.empty() ) {
+            Music::Play( v, loop );
+
+            Game::SetCurrentMusic( mus );
+        }
+    }
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
 }
 
 // This exists to avoid exposing AGG::ReadChunk

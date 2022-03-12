@@ -95,9 +95,9 @@ namespace
 
 namespace MUS
 {
-    std::string getFileName( const int musicTrackId, const OGG_MUSIC_TYPE musicType, const char * fileExtension )
+    std::string getFileName( const int musicTrackId, const EXTERNAL_MUSIC_TYPE musicType, const char * fileExtension )
     {
-        assert( fileExtension != nullptr );
+        // fileExtension can be nullptr to debug purposes.
 
         if ( musicTrackId <= UNUSED || musicTrackId > UNKNOWN ) {
             // You are passing an invalid music track ID!
@@ -105,7 +105,7 @@ namespace MUS
             return {};
         }
 
-        if ( musicType == OGG_MUSIC_TYPE::MAPPED ) {
+        if ( musicType == EXTERNAL_MUSIC_TYPE::MAPPED ) {
             std::string output;
             addTrackId( output, musicTrackId );
             output += ' ';
@@ -115,7 +115,7 @@ namespace MUS
             return output;
         }
 
-        if ( musicType == OGG_MUSIC_TYPE::DOS_VERSION ) {
+        if ( musicType == EXTERNAL_MUSIC_TYPE::DOS_VERSION ) {
             std::string output( "homm2_" );
 
             // GOG version format, data track was ignored there so 02 becomes 01
@@ -124,7 +124,7 @@ namespace MUS
             return output;
         }
 
-        if ( musicType == OGG_MUSIC_TYPE::WIN_VERSION ) {
+        if ( musicType == EXTERNAL_MUSIC_TYPE::WIN_VERSION ) {
             std::string output( "Track" );
             addTrackId( output, musicTrackId );
             output += fileExtension;
