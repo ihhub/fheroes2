@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <iomanip>
 #include <string>
 
@@ -33,6 +34,12 @@
 
 namespace
 {
+    struct MusMapItem
+    {
+        int type;
+        const char * string;
+    };
+
     void addTrackId( std::string & output, const int musicTrackId )
     {
         if ( musicTrackId < 10 ) {
@@ -42,55 +49,51 @@ namespace
         output += std::to_string( musicTrackId );
     }
 
-    const struct
-    {
-        int type;
-        const char * string;
-    } musmap[] = { { MUS::UNUSED, "" },
-                   { MUS::DATATRACK, "" },
-                   { MUS::BATTLE1, "Battle 1" },
-                   { MUS::BATTLE2, "Battle 2" },
-                   { MUS::BATTLE3, "Battle 3" },
-                   { MUS::SORCERESS, "Sorceress Castle" },
-                   { MUS::WARLOCK, "Warlock Castle" },
-                   { MUS::NECROMANCER, "Necromancer Castle" },
-                   { MUS::KNIGHT, "Knight Castle" },
-                   { MUS::BARBARIAN, "Barbarian Castle" },
-                   { MUS::WIZARD, "Wizard Castle" },
-                   { MUS::LAVA, "Lava Theme" },
-                   { MUS::WASTELAND, "Wasteland Theme" },
-                   { MUS::DESERT, "Desert Theme" },
-                   { MUS::SNOW, "Snow Theme" },
-                   { MUS::SWAMP, "Swamp Theme" },
-                   { MUS::OCEAN, "Ocean Theme" },
-                   { MUS::DIRT, "Dirt Theme" },
-                   { MUS::GRASS, "Grass Theme" },
-                   { MUS::LOSTGAME, "Lost Game" },
-                   { MUS::NEW_WEEK, "New Week" },
-                   { MUS::NEW_MONTH, "New Month" },
-                   { MUS::ARCHIBALD_CAMPAIGN_SCREEN, "Archibald Campaign" },
-                   { MUS::PUZZLE, "Map Puzzle" },
-                   { MUS::ROLAND_CAMPAIGN_SCREEN, "Roland Campaign" },
-                   { MUS::CARAVANS, "25" },
-                   { MUS::CARAVANS_2, "26" },
-                   { MUS::CARAVANS_3, "27" },
-                   { MUS::COMPUTER_TURN, "AI Turn" },
-                   { MUS::BATTLEWIN, "Battle Won" },
-                   { MUS::BATTLELOSE, "Battle Lost" },
-                   { MUS::DUNGEON, "Dungeon" },
-                   { MUS::WATERSPRING, "Waterspring" },
-                   { MUS::ARABIAN, "Arabian" },
-                   { MUS::HILLFORT, "Hillfort" },
-                   { MUS::TREEHOUSE, "Treehouse" },
-                   { MUS::DEMONCAVE, "Demoncave" },
-                   { MUS::EXPERIENCE, "Experience" },
-                   { MUS::SKILL, "Skill" },
-                   { MUS::WATCHTOWER, "Watchtower" },
-                   { MUS::XANADU, "Xanadu" },
-                   { MUS::ULTIMATE_ARTIFACT, "Ultimate Artifact" },
-                   { MUS::MAINMENU, "Main Menu" },
-                   { MUS::VICTORY, "Scenario Victory" },
-                   { MUS::UNKNOWN, "UNKNOWN" } };
+    const std::array<MusMapItem, 45> musmap = { { { MUS::UNUSED, "" },
+                                                  { MUS::DATATRACK, "" },
+                                                  { MUS::BATTLE1, "Battle 1" },
+                                                  { MUS::BATTLE2, "Battle 2" },
+                                                  { MUS::BATTLE3, "Battle 3" },
+                                                  { MUS::SORCERESS, "Sorceress Castle" },
+                                                  { MUS::WARLOCK, "Warlock Castle" },
+                                                  { MUS::NECROMANCER, "Necromancer Castle" },
+                                                  { MUS::KNIGHT, "Knight Castle" },
+                                                  { MUS::BARBARIAN, "Barbarian Castle" },
+                                                  { MUS::WIZARD, "Wizard Castle" },
+                                                  { MUS::LAVA, "Lava Theme" },
+                                                  { MUS::WASTELAND, "Wasteland Theme" },
+                                                  { MUS::DESERT, "Desert Theme" },
+                                                  { MUS::SNOW, "Snow Theme" },
+                                                  { MUS::SWAMP, "Swamp Theme" },
+                                                  { MUS::OCEAN, "Ocean Theme" },
+                                                  { MUS::DIRT, "Dirt Theme" },
+                                                  { MUS::GRASS, "Grass Theme" },
+                                                  { MUS::LOSTGAME, "Lost Game" },
+                                                  { MUS::NEW_WEEK, "New Week" },
+                                                  { MUS::NEW_MONTH, "New Month" },
+                                                  { MUS::ARCHIBALD_CAMPAIGN_SCREEN, "Archibald Campaign" },
+                                                  { MUS::PUZZLE, "Map Puzzle" },
+                                                  { MUS::ROLAND_CAMPAIGN_SCREEN, "Roland Campaign" },
+                                                  { MUS::CARAVANS, "25" },
+                                                  { MUS::CARAVANS_2, "26" },
+                                                  { MUS::CARAVANS_3, "27" },
+                                                  { MUS::COMPUTER_TURN, "AI Turn" },
+                                                  { MUS::BATTLEWIN, "Battle Won" },
+                                                  { MUS::BATTLELOSE, "Battle Lost" },
+                                                  { MUS::DUNGEON, "Dungeon" },
+                                                  { MUS::WATERSPRING, "Waterspring" },
+                                                  { MUS::ARABIAN, "Arabian" },
+                                                  { MUS::HILLFORT, "Hillfort" },
+                                                  { MUS::TREEHOUSE, "Treehouse" },
+                                                  { MUS::DEMONCAVE, "Demoncave" },
+                                                  { MUS::EXPERIENCE, "Experience" },
+                                                  { MUS::SKILL, "Skill" },
+                                                  { MUS::WATCHTOWER, "Watchtower" },
+                                                  { MUS::XANADU, "Xanadu" },
+                                                  { MUS::ULTIMATE_ARTIFACT, "Ultimate Artifact" },
+                                                  { MUS::MAINMENU, "Main Menu" },
+                                                  { MUS::VICTORY, "Scenario Victory" },
+                                                  { MUS::UNKNOWN, "UNKNOWN" } } };
 }
 
 namespace MUS

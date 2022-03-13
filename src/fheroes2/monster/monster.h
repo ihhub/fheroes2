@@ -157,7 +157,7 @@ public:
 
     u32 GetDamageMin( void ) const;
     u32 GetDamageMax( void ) const;
-    u32 GetShots( void ) const;
+    virtual uint32_t GetShots() const;
     u32 GetHitPoints( void ) const;
     u32 GetSpeed( void ) const;
     u32 GetGrown( void ) const;

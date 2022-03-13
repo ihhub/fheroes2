@@ -191,7 +191,7 @@ u32 Monster::GetDamageMax() const
     return fheroes2::getMonsterData( id ).battleStats.damageMax;
 }
 
-u32 Monster::GetShots() const
+uint32_t Monster::GetShots() const
 {
     return fheroes2::getMonsterData( id ).battleStats.shots;
 }
