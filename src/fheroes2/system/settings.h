@@ -29,6 +29,12 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
+#if defined( MACOS_APP_BUNDLE )
+#define FHEROES2_CONFIG_FILE_NAME "com.horns.and.hoovers.fheroes2.plist"
+#else
+#define FHEROES2_CONFIG_FILE_NAME "fheroes2.cfg"
+#endif
+
 enum : int
 {
     SCROLL_SLOW = 1,

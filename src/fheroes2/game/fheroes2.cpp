@@ -66,7 +66,7 @@ namespace
 
     void ReadConfigs()
     {
-        const std::string configurationFileName( "fheroes2.cfg" );
+        const std::string configurationFileName( FHEROES2_CONFIG_FILE_NAME );
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
         Settings & conf = Settings::Get();

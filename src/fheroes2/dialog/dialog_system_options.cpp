@@ -493,7 +493,7 @@ namespace fheroes2
                 break;
             }
             case DialogAction::SaveConfiguration:
-                Settings::Get().Save( "fheroes2.cfg" );
+                Settings::Get().Save( FHEROES2_CONFIG_FILE_NAME );
                 return;
             default:
                 break;
@@ -501,7 +501,7 @@ namespace fheroes2
         }
 
         if ( saveConfiguration ) {
-            Settings::Get().Save( "fheroes2.cfg" );
+            Settings::Get().Save( FHEROES2_CONFIG_FILE_NAME );
         }
     }
 }
