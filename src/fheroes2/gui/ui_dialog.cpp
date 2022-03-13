@@ -673,17 +673,15 @@ namespace fheroes2
         showMessage( header, description, buttons, { this } );
     }
 
-    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndecies, const uint64_t delay )
+    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay )
         : _icnId( icnId )
-        , _backgroundIndecies( backgroundIndecies )
+        , _backgroundIndices( backgroundIndices )
         , _delay( delay )
         , _currentIndex( 0 )
     {
-        assert( !_backgroundIndecies.empty() );
+        assert( !_backgroundIndices.empty() && _delay > 0 );
 
-        assert( _delay > 0 );
-
-        for ( const uint32_t index : _backgroundIndecies ) {
+        for ( const uint32_t index : _backgroundIndices ) {
             const Sprite & image = AGG::GetICN( _icnId, index );
             _area.width = std::max( _area.width, image.width() );
             _area.height = std::max( _area.height, image.height() );
@@ -696,7 +694,7 @@ namespace fheroes2
     {
         if ( _currentIndex == 0 ) {
             // Since this is the first time to draw we have to draw the background.
-            for ( const uint32_t index : _backgroundIndecies ) {
+            for ( const uint32_t index : _backgroundIndices ) {
                 const Sprite & image = AGG::GetICN( _icnId, index );
                 Blit( image, 0, 0, output, offset.x + ( _area.width - image.width() ) / 2, offset.y + ( _area.height - image.height() ) / 2, image.width(),
                       image.height() );

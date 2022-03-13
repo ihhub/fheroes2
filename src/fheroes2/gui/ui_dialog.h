@@ -286,7 +286,7 @@ namespace fheroes2
     private:
         const int _icnId;
 
-        const std::vector<uint32_t> _backgroundIndecies;
+        const std::vector<uint32_t> _backgroundIndices;
 
         const uint64_t _delay;
 

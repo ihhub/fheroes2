@@ -8774,7 +8774,7 @@ msgstr "Ein Schwarzer Drache kann es jederzeit mit einem Titanen aufnehmen."
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
 
 msgid ""

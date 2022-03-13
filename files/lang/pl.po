@@ -8515,7 +8515,7 @@ msgstr ""
 "On powiedział: Yada yada yada... ona odpowiedziała: Blah, blah, blah..."
 
 #, fuzzy
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana..."
 
 msgid ""

@@ -862,7 +862,7 @@ std::string World::getCurrentRumor() const
     case 7:
         return _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." );
     case 8:
-        return _( "An unknown force is being ressurected..." );
+        return _( "An unknown force is being resurrected..." );
     case 9:
         return _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" );
     default:

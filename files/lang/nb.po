@@ -8786,7 +8786,7 @@ msgstr "En svartdrage klarer å slå ut en titan en hvilken som helst dag i uka.
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Han sa til henne: Bla, bla, bla... og så sa hun: Bla, bla, bla..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
 
 #, fuzzy
