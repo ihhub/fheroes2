@@ -89,7 +89,7 @@ namespace
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
             const uint32_t spellCost = spell.SpellPoint( &hero );
-            const bool isAvailable = heroSpellPoints >= spellCost;
+            const bool isAvailable = hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             int vertOffset = 49 - icon.height();
