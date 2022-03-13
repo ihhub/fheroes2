@@ -550,8 +550,8 @@ bool World::LoadMapMP2( const std::string & filename )
             // add rumors
             else if ( MP2::SIZEOFMP2RUMOR - 1 < pblock.size() ) {
                 if ( pblock[8] ) {
-                    vec_rumors.push_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
-                    DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << vec_rumors.back() );
+                    _rumors.emplace_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << _rumors.back() );
                 }
             }
         }
@@ -754,44 +754,4 @@ void World::ProcessNewMap()
             }
         }
     }
-
-    vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );
-    StringReplace( vec_rumors.back(), "%{name}", ultimate_artifact.GetName() );
-
-    vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
-
-    if ( height / 3 > ultimate_pos.y ) {
-        if ( width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
-        else if ( 2 * width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
-        else
-            StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
-    }
-    else if ( 2 * height / 3 > ultimate_pos.y ) {
-        if ( width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
-        else if ( 2 * width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
-        else
-            StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
-    }
-    else {
-        if ( width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
-        else if ( 2 * width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
-        else
-            StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );
-    }
-
-    vec_rumors.emplace_back( _( "The truth is out there." ) );
-    vec_rumors.emplace_back( _( "The dark side is stronger." ) );
-    vec_rumors.emplace_back( _( "The end of the world is near." ) );
-    vec_rumors.emplace_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
-    vec_rumors.emplace_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
-    vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
-    vec_rumors.emplace_back( _( "An unknown force is being ressurected..." ) );
-
-    vec_rumors.emplace_back( _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

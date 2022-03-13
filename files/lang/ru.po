@@ -2411,7 +2411,7 @@ msgstr "Установить охрану"
 msgid "Your army too big!"
 msgstr "Ваша армия слишком большая!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
 msgid "%{name} has gained a level."
@@ -8538,7 +8538,7 @@ msgstr "Чёрный Дракон победит Титана в любой де
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Он сказал ей: Бе бе бе...  а потом она сказала: Бла, бла, бла..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
 
 msgid ""

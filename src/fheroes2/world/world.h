@@ -148,7 +148,6 @@ struct EventDate
 StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
-using Rumors = std::list<std::string>;
 using EventsDate = std::list<EventDate>;
 using MapsTiles = std::vector<Maps::Tiles>;
 
@@ -254,7 +253,7 @@ public:
     void NewWeek( void );
     void NewMonth( void );
 
-    const std::string & GetRumors() const;
+    std::string getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
@@ -319,7 +318,7 @@ private:
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
-    Rumors vec_rumors;
+    std::vector<std::string> _rumors;
     EventsDate vec_eventsday;
 
     // index, object, color

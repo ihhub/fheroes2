@@ -171,7 +171,7 @@ namespace Battle
         u32 GetDead( void ) const;
         u32 GetHitPoints( void ) const;
 
-        u32 GetShots() const
+        uint32_t GetShots() const override
         {
             return shots;
         }

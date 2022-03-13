@@ -2355,7 +2355,7 @@ msgstr "Ustaw strażnika"
 msgid "Your army too big!"
 msgstr "Twoja armia jest za duża!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Zmień język gry:"
 
 msgid "%{name} has gained a level."
@@ -8515,7 +8515,7 @@ msgstr ""
 "On powiedział: Yada yada yada... ona odpowiedziała: Blah, blah, blah..."
 
 #, fuzzy
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana..."
 
 msgid ""
