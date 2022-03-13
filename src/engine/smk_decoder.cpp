@@ -60,7 +60,6 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     _height = static_cast<int32_t>( height );
 
     smk_info_audio( _videoFile, &trackMask, channel, audioBitDepth, audioRate );
-    smk_enable_video( _videoFile, 1 );
 
     if ( usf > 0 )
         _fps = 1000000.0 / usf;
