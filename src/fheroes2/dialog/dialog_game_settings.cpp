@@ -222,11 +222,10 @@ namespace fheroes2
             case SelectedWindow::Language: {
                 Settings & conf = Settings::Get();
 
-                SupportedLanguage currentLanguage = getLanguageFromAbbreviation( conf.getGameLanguage() );
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, currentLanguage );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 }
                 else {
                     assert( supportedLanguages.front() == SupportedLanguage::English );
