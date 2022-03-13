@@ -81,8 +81,10 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
             const unsigned long length = smk_get_audio_size( _videoFile, i );
+            if ( length == 0 ) {
+                continue;
+            }
             const uint8_t * data = smk_get_audio( _videoFile, i );
-            soundBuffer[i].reserve( soundBuffer[i].size() + length );
             soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
         }
     }
@@ -93,8 +95,10 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
         for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
             if ( trackMask & ( 1 << i ) ) {
                 const unsigned long length = smk_get_audio_size( _videoFile, i );
+                if ( length == 0 ) {
+                    continue;
+                }
                 const uint8_t * data = smk_get_audio( _videoFile, i );
-                soundBuffer[i].reserve( soundBuffer[i].size() + length );
                 soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
             }
         }
