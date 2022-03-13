@@ -38,14 +38,18 @@ namespace
                                                                             { 0xDB10FFD8, fheroes2::SupportedLanguage::Russian }, // XXI Vek version
                                                                             { 0xD5CF8AF3, fheroes2::SupportedLanguage::Russian }, // Buka version
                                                                             { 0x219B3124, fheroes2::SupportedLanguage::Italian }, // ???
+                                                                            { 0x219B3124, fheroes2::SupportedLanguage::Norwegian }, // ???
                                                                             { 0x1CEBD099, fheroes2::SupportedLanguage::Czech } }; // CD Projekt
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
-        = { { "pl", fheroes2::SupportedLanguage::Polish },       { "polish", fheroes2::SupportedLanguage::Polish },   { "de", fheroes2::SupportedLanguage::German },
-            { "german", fheroes2::SupportedLanguage::German },   { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
-            { "ru", fheroes2::SupportedLanguage::Russian },      { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
-            { "italian", fheroes2::SupportedLanguage::Italian }, { "cs", fheroes2::SupportedLanguage::Czech },        { "czech", fheroes2::SupportedLanguage::Czech } };
+        = { { "pl", fheroes2::SupportedLanguage::Polish },    { "polish", fheroes2::SupportedLanguage::Polish },
+            { "de", fheroes2::SupportedLanguage::German },    { "german", fheroes2::SupportedLanguage::German },
+            { "fr", fheroes2::SupportedLanguage::French },    { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },   { "russian", fheroes2::SupportedLanguage::Russian },
+            { "it", fheroes2::SupportedLanguage::Italian },   { "italian", fheroes2::SupportedLanguage::Italian },
+            { "cs", fheroes2::SupportedLanguage::Czech },     { "czech", fheroes2::SupportedLanguage::Czech },
+            { "nb", fheroes2::SupportedLanguage::Norwegian }, { "norwegian", fheroes2::SupportedLanguage::Norwegian } };
 
     fheroes2::SupportedLanguage getResourceLanguage()
     {
@@ -88,8 +92,10 @@ namespace fheroes2
             languages.emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French, SupportedLanguage::Polish, SupportedLanguage::German, SupportedLanguage::Russian,
-                                                             SupportedLanguage::Italian };
+        const std::set<SupportedLanguage> possibleLanguages
+        {
+            SupportedLanguage::French, SupportedLanguage::Polish, SupportedLanguage::German, SupportedLanguage::Russian, SupportedLanguage::Italian, SupportedLanguage::Norwegian
+        };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && AGG::isAlphabetSupported( language ) ) {
@@ -133,6 +139,8 @@ namespace fheroes2
             return _( "Italian" );
         case SupportedLanguage::Czech:
             return _( "Czech" );
+        case SupportedLanguage::Norwegian:
+            return _( "Norwegian" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -157,6 +165,8 @@ namespace fheroes2
             return "it";
         case SupportedLanguage::Czech:
             return "cs";
+        case SupportedLanguage::Norwegian:
+            return "nb";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
