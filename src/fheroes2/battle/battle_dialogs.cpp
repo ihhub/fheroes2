@@ -969,8 +969,9 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     std::string str = hero.isCaptain() ? _( "Captain of %{name} states:" ) : _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );
+
     Text text( str, Font::BIG );
-    text.Blit( pos_rt.x + 320 - text.w() / 2, pos_rt.y + 30 );
+    text.Blit( pos_rt.x + 312 - text.w() / 2, pos_rt.y + 30 );
 
     str = _( "\"I will accept your surrender and grant you and your troops safe passage for the price of %{price} gold.\"" );
     StringReplace( str, "%{price}", cost );
