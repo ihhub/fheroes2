@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,6 +49,11 @@ namespace fheroes2
         explicit TimeDelay( const uint64_t delayMs );
 
         void setDelay( const uint64_t delayMs );
+
+        uint64_t getDelay() const
+        {
+            return _delayMs;
+        }
 
         bool isPassed() const;
         bool isPassed( const uint64_t delayMs ) const;

@@ -8837,7 +8837,7 @@ msgstr ""
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr ""
 
 #, fuzzy
