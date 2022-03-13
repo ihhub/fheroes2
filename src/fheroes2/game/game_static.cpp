@@ -122,9 +122,6 @@ namespace Skill
 
 namespace GameStatic
 {
-    /* town, castle, heroes, artifact_telescope, object_observation_tower, object_magi_eyes */
-    const std::array<uint8_t, 6> overview_distance = { 4, 5, 4, 1, 20, 9 };
-
     // world
     u32 uniq = 0;
 }
