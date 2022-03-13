@@ -2470,7 +2470,7 @@ msgstr "Wache setzen"
 msgid "Your army too big!"
 msgstr "Ihre Armee ist zu groß!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Spielsprache wählen:"
 
 msgid "%{name} has gained a level."

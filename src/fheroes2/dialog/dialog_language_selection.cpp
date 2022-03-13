@@ -86,7 +86,7 @@ namespace
         buttonGroup.button( selectionId ).press();
         optionButtonGroup.draw();
 
-        const fheroes2::Text title( _( "Choose game language:" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( _( "Select Game Language:" ), fheroes2::FontType::normalYellow() );
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {

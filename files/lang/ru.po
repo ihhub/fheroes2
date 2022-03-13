@@ -2411,7 +2411,7 @@ msgstr "Установить охрану"
 msgid "Your army too big!"
 msgstr "Ваша армия слишком большая!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
 msgid "%{name} has gained a level."

@@ -2243,7 +2243,7 @@ msgstr ""
 msgid "Your army too big!"
 msgstr "Jūsų armija per didelė!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."
