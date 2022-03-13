@@ -2512,7 +2512,7 @@ msgstr "Plasser vokter"
 msgid "Your army too big!"
 msgstr "Hæren din er for stor!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Velg spillets språk:"
 
 msgid "%{name} has gained a level."

@@ -2267,7 +2267,7 @@ msgstr ""
 msgid "Your army too big!"
 msgstr "Il tuo esercito è troppo grande"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Scegli la lingua del gioco:"
 
 msgid "%{name} has gained a level."

@@ -2172,7 +2172,7 @@ msgstr ""
 msgid "Your army too big!"
 msgstr ""
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."

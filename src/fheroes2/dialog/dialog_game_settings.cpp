@@ -202,7 +202,7 @@ namespace fheroes2
 {
     void openGameSettings()
     {
-        fheroes2::drawMainMenuScreen();
+        drawMainMenuScreen();
 
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
@@ -216,31 +216,28 @@ namespace fheroes2
                     // force interface to reset area and positions
                     Interface::Basic::Get().Reset();
                 }
-                fheroes2::drawMainMenuScreen();
+                drawMainMenuScreen();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Language: {
                 Settings & conf = Settings::Get();
 
-                fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
-                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+                const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 }
                 else {
-                    assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );
+                    assert( supportedLanguages.front() == SupportedLanguage::English );
 
-                    currentLanguage = fheroes2::SupportedLanguage::English;
+                    conf.setGameLanguage( getLanguageAbbreviation( SupportedLanguage::English ) );
 
-                    fheroes2::Text header( _( "Attention" ), fheroes2::FontType::normalYellow() );
-                    fheroes2::Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ),
-                                         fheroes2::FontType::normalWhite() );
+                    Text header( _( "Attention" ), FontType::normalYellow() );
+                    Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ), FontType::normalWhite() );
 
-                    fheroes2::showMessage( header, body, Dialog::OK );
+                    showMessage( header, body, Dialog::OK );
                 }
 
-                conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
                 Settings::Get().Save( "fheroes2.cfg" );
 
                 windowType = SelectedWindow::Configuration;

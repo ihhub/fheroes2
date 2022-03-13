@@ -2371,7 +2371,7 @@ msgstr "Ange beskyddare"
 msgid "Your army too big!"
 msgstr "Din armé är för stor!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."

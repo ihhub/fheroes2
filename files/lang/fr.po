@@ -2480,7 +2480,7 @@ msgstr "Assigner Gardien"
 msgid "Your army too big!"
 msgstr "Votre armée est trop grande !"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
 msgid "%{name} has gained a level."
