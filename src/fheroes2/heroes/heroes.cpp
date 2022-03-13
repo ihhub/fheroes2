@@ -1285,8 +1285,7 @@ void Heroes::Scoute( const int tileIndex ) const
 int Heroes::GetScoute( void ) const
 {
     return static_cast<int>( artifactCount( Artifact::TELESCOPE ) * GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::TELESCOPE )
-                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES )
-                             + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
+                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const

@@ -1721,7 +1721,6 @@ void LocalEvent::SetState( const uint32_t type, const bool enable )
 #else
     SDL_EventState( static_cast<uint8_t>( type ), enable ? SDL_ENABLE : SDL_IGNORE );
 #endif
-    
 }
 
 void LocalEvent::SetStateDefaults( void )
