@@ -270,7 +270,7 @@ namespace fheroes2
     class DynamicImageDialogElement : public DialogElement
     {
     public:
-        explicit DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndecies, const uint64_t delay );
+        explicit DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay );
 
         ~DynamicImageDialogElement() override = default;
 
