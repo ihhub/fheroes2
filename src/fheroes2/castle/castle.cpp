@@ -1311,7 +1311,7 @@ bool Castle::BuyBuilding( u32 build )
     case BUILD_CASTLE:
         building &= ~BUILD_TENT;
         Maps::UpdateCastleSprite( GetCenter(), race );
-        Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
+        Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
         break;
 
     case BUILD_MAGEGUILD1:
@@ -2313,7 +2313,7 @@ u32 Castle::GetGrownMonthOf( void )
 
 void Castle::Scoute( void ) const
 {
-    Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
+    Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
 
 void Castle::JoinRNDArmy( void )

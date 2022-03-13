@@ -521,11 +521,6 @@ u32 Game::GetLostTownDays( void )
     return GameStatic::GetGameOverLostDays();
 }
 
-u32 Game::GetViewDistance( u32 d )
-{
-    return GameStatic::GetOverViewDistance( d );
-}
-
 u32 Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();

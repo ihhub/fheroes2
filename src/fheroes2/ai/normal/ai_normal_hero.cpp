@@ -22,6 +22,7 @@
 
 #include "ai_normal.h"
 #include "game.h"
+#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -166,7 +167,8 @@ namespace
         }
 
         case MP2::OBJ_OBSERVATIONTOWER:
-            return Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() ) > 0;
+            return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ),
+                                                      hero.GetColor() ) > 0;
 
         case MP2::OBJ_OBELISK:
             return !hero.isVisited( tile, Visit::GLOBAL );
@@ -662,7 +664,9 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
-            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index,
+                                                                             GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ),
+                                                                             hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
@@ -762,7 +766,7 @@ namespace AI
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
-            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
             for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                 fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
@@ -895,7 +899,9 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
-            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index,
+                                                                             GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ),
+                                                                             hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
@@ -995,7 +1001,7 @@ namespace AI
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
-            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
             for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                 fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );

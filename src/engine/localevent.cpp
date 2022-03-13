@@ -1715,7 +1715,13 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 
 void LocalEvent::SetState( const uint32_t type, const bool enable )
 {
+    // SDL 1 and SDL 2 have different input argument types for event state.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
+#else
+    SDL_EventState( static_cast<uint8_t>( type ), enable ? SDL_ENABLE : SDL_IGNORE );
+#endif
+    
 }
 
 void LocalEvent::SetStateDefaults( void )
