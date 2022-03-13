@@ -475,7 +475,8 @@ bool ActionSpellTownGate( Heroes & hero )
         assert( 0 );
         return false;
     }
-    else if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+
+    if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
         // The nearest town occupation must be checked before casting this spell. Something is wrong with the logic!
         assert( 0 );
         return false;
