@@ -553,7 +553,9 @@ namespace fheroes2
         const Text header( getExperienceName(), FontType::normalYellow() );
         const Text description( getExperienceDescription(), FontType::normalWhite() );
 
-        showMessage( header, description, buttons, { this } );
+        const ExperienceDialogElement experienceUI( 0 );
+
+        showMessage( header, description, buttons, { &experienceUI } );
     }
 
     PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, const std::string & text )
