@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/zsh
 
 set -e
 
@@ -20,26 +20,17 @@ function echo_stage {
     echo
 }
 
+PLATFORM_NAME="$(uname 2> /dev/null)"
+if [[ "${PLATFORM_NAME}" != "Darwin" ]]; then
+    echo_red "This script must be run on a macOS host"
+    exit 1
+fi
+
 echo_green "This script will extract and copy game resources from the original Heroes of Might and Magic II distribution"
 
 echo_stage "[1/3] determining destination directory"
 
-DEST_PATH=""
-
-if [[ -f fheroes2 && -x fheroes2 ]]; then
-    DEST_PATH="."
-elif [[ -d ../../src ]]; then
-    # Special hack for developers running this script from the source tree
-    DEST_PATH="../.."
-fi
-
-if [[ -z "$DEST_PATH" || ! -d "$DEST_PATH" || ! -w "$DEST_PATH" ]]; then
-    if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
-        DEST_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
-    else
-        DEST_PATH="$HOME/.fheroes2"
-    fi
-fi
+DEST_PATH="${XDG_CONFIG_HOME:-$HOME/Library/Application Support}/fheroes2"
 
 echo_green "Destination directory: $DEST_PATH"
 
@@ -48,7 +39,7 @@ echo_stage "[2/3] determining HoMM2 directory"
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
 else
-    read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
+    read "HOMM2_PATH?Please enter the full path to the HoMM2 directory (e.g. /Users/user/GOG Games/HoMM 2 Gold): "
 fi
 
 if [[ ! -f "$HOMM2_PATH/HEROES2.EXE" || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
