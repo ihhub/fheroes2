@@ -124,9 +124,11 @@ public:
 
 #if defined( MACOS_APP_BUNDLE )
     CFPropertyListRef GetConfigFilePayload() const;
+    CFPropertyListRef ConfigPlist() const;
 #else
     std::string GetConfigFilePayload() const;
 #endif
+    std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
 
     const Maps::FileInfo & CurrentFileInfo() const

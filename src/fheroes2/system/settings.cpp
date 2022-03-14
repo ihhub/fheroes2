@@ -432,9 +432,17 @@ bool Settings::Save( const std::string & filename ) const
 
 #if defined( MACOS_APP_BUNDLE )
 CFPropertyListRef Settings::GetConfigFilePayload() const
+{
+    return ConfigPlist();
+}
 #else
 std::string Settings::GetConfigFilePayload() const
+{
+    return String();
+}
 #endif
+
+CFPropertyListRef Settings::ConfigPlist() const
 {
     std::ostringstream os;
 
@@ -449,7 +457,6 @@ std::string Settings::GetConfigFilePayload() const
         musicType = "original";
     }
 
-#if defined( MACOS_APP_BUNDLE )
     CFMutableDictionaryRef configDict = CFDictionaryCreateMutable( kCFAllocatorDefault, NULL, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
 
     os << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height();
@@ -541,7 +548,23 @@ std::string Settings::GetConfigFilePayload() const
     os.str( "" );
 
     return configDict;
-#else
+}
+
+std::string Settings::String() const
+{
+    std::ostringstream os;
+
+    std::string musicType;
+    if ( MusicType() == MUSIC_EXTERNAL ) {
+        musicType = "external";
+    }
+    else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
+        musicType = "expansion";
+    }
+    else {
+        musicType = "original";
+    }
+
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
@@ -611,7 +634,6 @@ std::string Settings::GetConfigFilePayload() const
     os << "text support mode = " << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
     return os.str();
-#endif
 }
 
 /* read maps info */
