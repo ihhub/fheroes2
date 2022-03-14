@@ -435,12 +435,6 @@ CFPropertyListRef Settings::GetConfigFilePayload() const
 {
     return ConfigPlist();
 }
-#else
-std::string Settings::GetConfigFilePayload() const
-{
-    return String();
-}
-#endif
 
 CFPropertyListRef Settings::ConfigPlist() const
 {
@@ -549,6 +543,12 @@ CFPropertyListRef Settings::ConfigPlist() const
 
     return configDict;
 }
+#else
+std::string Settings::GetConfigFilePayload() const
+{
+    return String();
+}
+#endif
 
 std::string Settings::String() const
 {
