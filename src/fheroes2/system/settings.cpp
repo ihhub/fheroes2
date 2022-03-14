@@ -369,7 +369,6 @@ bool Settings::Save( const std::string & filename ) const
 
 #if defined( MACOS_APP_BUNDLE )
     CFPropertyListRef propertyList = GetConfigFilePayload();
-    SInt32 errorCode;
 
     if ( !propertyList ) {
         ERROR_LOG( "Error creating config property list" );
@@ -389,22 +388,27 @@ bool Settings::Save( const std::string & filename ) const
         return false;
     }
 
-    CFDataRef configDataRef = CFPropertyListCreateXMLData( kCFAllocatorDefault, propertyList );
+    CFWriteStreamRef fileStream = CFWriteStreamCreateWithFile( kCFAllocatorDefault, fileURL );
 
-    if ( !CFURLWriteDataAndPropertiesToResource( fileURL, configDataRef, NULL, &errorCode ) ) {
-        ERROR_LOG( "Unable to write config file." );
+    CFRelease( fileURL );
 
-        if ( configDataRef ) {
-            CFRelease( configDataRef );
-        }
-
-        CFRelease( fileURL );
+    if ( !fileStream ) {
+        ERROR_LOG( "Unable to create stream to write config plist" );
         CFRelease( propertyList );
         return false;
     }
 
-    CFRelease( configDataRef );
-    CFRelease( fileURL );
+    if ( !CFWriteStreamOpen( fileStream ) ) {
+        ERROR_LOG( "Unable to open config plist for writing" );
+        CFRelease( fileStream );
+        CFRelease( propertyList );
+    }
+
+    CFPropertyListWrite( propertyList, fileStream, kCFPropertyListXMLFormat_v1_0, 0, NULL );
+
+    CFWriteStreamClose( fileStream );
+
+    CFRelease( fileStream );
     CFRelease( propertyList );
 #else
 
