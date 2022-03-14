@@ -58,37 +58,12 @@ TinyConfig::TinyConfig( char sep, char com )
 
 bool TinyConfig::Load( const std::string & cfile )
 {
-#if !defined( MACOS_APP_BUNDLE )
-    StreamFile sf;
-    if ( !sf.open( cfile, "rb" ) )
-        return false;
-
-    std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
-
-    for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
-        std::string str = StringTrim( *it );
-
-        if ( str.empty() || str[0] == comment )
-            continue;
-
-        size_t pos = str.find( separator );
-        if ( std::string::npos != pos ) {
-            std::string left( str.substr( 0, pos ) );
-            std::string right( str.substr( pos + 1, str.length() - pos - 1 ) );
-
-            left = StringTrim( left );
-            right = StringTrim( right );
-
-            emplace( ModifyKey( left ), right );
-        }
-    }
-#else
+#if defined( MACOS_APP_BUNDLE )
     CFDataRef resourceData = NULL;
-    CFPropertyListRef propertyList;
-    CFDictionaryRef propertyListDictionary;
-    CFStringRef configFileCFString, errorString;
-    CFURLRef fileURL;
-    SInt32 errorCode;
+    CFPropertyListRef propertyList = NULL;
+    CFDictionaryRef propertyListDictionary = NULL;
+    CFStringRef configFileCFString = NULL;
+    CFURLRef fileURL = NULL;
 
     configFileCFString = CFStringCreateWithCString( kCFAllocatorDefault, cfile.c_str(), kCFStringEncodingUTF8 );
 
@@ -96,15 +71,45 @@ bool TinyConfig::Load( const std::string & cfile )
 
     CFRelease( configFileCFString );
 
-    if ( !CFURLCreateDataAndPropertiesFromResource( kCFAllocatorDefault, fileURL, &resourceData, NULL, NULL, &errorCode ) ) {
-        ERROR_LOG( "Unable to create CFURL to access config plist" );
-        CFRelease( fileURL );
+    CFReadStreamRef streamRef = CFReadStreamCreateWithFile( kCFAllocatorDefault, fileURL );
+    CFRelease( fileURL );
+
+    if ( !streamRef ) {
+        ERROR_LOG( "Unable to create stream reference for reading config plist" );
         return false;
     }
 
-    CFRelease( fileURL );
+    if ( !CFReadStreamOpen( streamRef ) ) {
+        CFRelease( streamRef );
+        ERROR_LOG( "Unable to open stream reference for reading config plist" );
+        return false;
+    }
 
-    propertyList = CFPropertyListCreateFromXMLData( kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, &errorString );
+    if ( !CFReadStreamHasBytesAvailable( streamRef ) ) {
+        CFRelease( streamRef );
+        ERROR_LOG( "No data to read from config plist" );
+        return false;
+    }
+
+    CFIndex bytesRead = 0;
+    UInt8 fallbackBuffer[1048576];
+    const UInt8 * dataBytes = CFReadStreamGetBuffer( streamRef, 0, &bytesRead );
+    if ( !dataBytes ) {
+        bytesRead = CFReadStreamRead( streamRef, fallbackBuffer, sizeof( fallbackBuffer ) );
+        dataBytes = fallbackBuffer;
+    }
+
+    resourceData = CFDataCreate( kCFAllocatorDefault, dataBytes, bytesRead );
+
+    CFReadStreamClose( streamRef );
+    CFRelease( streamRef );
+
+    if ( !resourceData ) {
+        ERROR_LOG( "Unable to read data from config plist" );
+        return false;
+    }
+
+    propertyList = static_cast<CFPropertyListRef>( CFPropertyListCreateWithData( kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, NULL, NULL ) );
 
     if ( resourceData ) {
         CFRelease( resourceData );
@@ -112,12 +117,10 @@ bool TinyConfig::Load( const std::string & cfile )
     else {
         ERROR_LOG( "Unable to fetch config resource data" );
         CFRelease( fileURL );
-        CFRelease( errorString );
         return false;
     }
 
     if ( !propertyList ) {
-        ERROR_LOG( "Unable to process config plist" );
         return false;
     }
 
@@ -155,6 +158,30 @@ bool TinyConfig::Load( const std::string & cfile )
     free( values );
 
     CFRelease( propertyList );
+#else
+    StreamFile sf;
+    if ( !sf.open( cfile, "rb" ) )
+        return false;
+
+    std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
+
+    for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
+        std::string str = StringTrim( *it );
+
+        if ( str.empty() || str[0] == comment )
+            continue;
+
+        size_t pos = str.find( separator );
+        if ( std::string::npos != pos ) {
+            std::string left( str.substr( 0, pos ) );
+            std::string right( str.substr( pos + 1, str.length() - pos - 1 ) );
+
+            left = StringTrim( left );
+            right = StringTrim( right );
+
+            emplace( ModifyKey( left ), right );
+        }
+    }
 #endif
 
     return true;
