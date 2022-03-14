@@ -29,12 +29,6 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-#if defined( MACOS_APP_BUNDLE )
-#define FHEROES2_CONFIG_FILE_NAME "com.horns.and.hoovers.fheroes2.plist"
-#else
-#define FHEROES2_CONFIG_FILE_NAME "fheroes2.cfg"
-#endif
-
 enum : int
 {
     SCROLL_SLOW = 1,
@@ -53,6 +47,12 @@ enum MusicSource
 class Settings
 {
 public:
+#if defined( MACOS_APP_BUNDLE )
+    static constexpr const char * FHEROES2_CONFIG_FILE_NAME = "com.horns.and.hoovers.fheroes2.plist";
+#else
+    static constexpr const char * FHEROES2_CONFIG_FILE_NAME = "fheroes2.cfg";
+#endif
+
     enum : uint32_t
     {
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,

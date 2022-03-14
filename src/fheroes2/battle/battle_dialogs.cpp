@@ -337,7 +337,7 @@ void Battle::DialogBattleSettings( void )
     }
 
     if ( saveConfiguration ) {
-        conf.Save( FHEROES2_CONFIG_FILE_NAME );
+        conf.Save( Settings::FHEROES2_CONFIG_FILE_NAME );
     }
 }
 
