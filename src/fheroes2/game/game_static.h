@@ -38,9 +38,18 @@ namespace Skill
 
 namespace GameStatic
 {
+    enum class FogDiscoveryType : int32_t
+    {
+        CASTLE,
+        HEROES,
+        TELESCOPE,
+        OBSERVATION_TOWER,
+        MAGI_EYES
+    };
+
     u32 GetLostOnWhirlpoolPercent( void );
     u32 GetGameOverLostDays( void );
-    u32 GetOverViewDistance( u32 );
+    uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
     u32 GetKingdomMaxHeroes( void );
 
