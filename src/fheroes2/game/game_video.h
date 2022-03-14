@@ -28,7 +28,8 @@
 
 namespace Video
 {
-    bool isVideoFile( const std::string & fileName, std::string & path );
+    // Returns true if the file exists.
+    bool getVideoFilePath( const std::string & fileName, std::string & path );
 
     // Returns 0 by default if roi is empty
     int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );

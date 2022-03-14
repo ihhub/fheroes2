@@ -915,13 +915,11 @@ namespace
                 flags |= SDL_WINDOW_RESIZABLE;
             }
 
-            _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
             if ( _window == nullptr ) {
                 clear();
                 return false;
             }
-
-            SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
             _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             if ( _renderer == nullptr ) {
