@@ -122,7 +122,11 @@ public:
     bool Read( const std::string & );
     bool Save( const std::string & ) const;
 
-    std::string String() const;
+#if defined( MACOS_APP_BUNDLE )
+    CFPropertyListRef GetConfigFilePayload() const;
+#else
+    std::string GetConfigFilePayload() const;
+#endif
     void SetCurrentFileInfo( const Maps::FileInfo & );
 
     const Maps::FileInfo & CurrentFileInfo() const
@@ -595,7 +599,6 @@ protected:
     void PostLoad();
 
 #if defined( MACOS_APP_BUNDLE )
-    CFPropertyListRef generateConfigDictionary() const;
     void setConfigDictionaryValue( CFMutableDictionaryRef configDict, std::string key, std::string value ) const;
 #endif
 
