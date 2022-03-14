@@ -24,6 +24,10 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
+#if defined( MACOS_APP_BUNDLE )
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 #include "bitmodes.h"
 #include "dir.h"
 #include "maps_fileinfo.h"
@@ -589,6 +593,11 @@ public:
 
 protected:
     void PostLoad();
+
+#if defined( MACOS_APP_BUNDLE )
+    CFPropertyListRef generateConfigDictionary() const;
+    void setConfigDictionaryValue( CFMutableDictionaryRef configDict, std::string key, std::string value ) const;
+#endif
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Settings & );

@@ -24,6 +24,11 @@
 #include <algorithm>
 #include <cctype>
 
+#if defined( MACOS_APP_BUNDLE )
+#include "logging.h"
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 #include "serialize.h"
 #include "tinyconfig.h"
 #include "tools.h"
@@ -53,6 +58,7 @@ TinyConfig::TinyConfig( char sep, char com )
 
 bool TinyConfig::Load( const std::string & cfile )
 {
+#if !defined( MACOS_APP_BUNDLE )
     StreamFile sf;
     if ( !sf.open( cfile, "rb" ) )
         return false;
@@ -76,6 +82,80 @@ bool TinyConfig::Load( const std::string & cfile )
             emplace( ModifyKey( left ), right );
         }
     }
+#else
+    CFDataRef resourceData = NULL;
+    CFPropertyListRef propertyList;
+    CFDictionaryRef propertyListDictionary;
+    CFStringRef configFileCFString, errorString;
+    CFURLRef fileURL;
+    SInt32 errorCode;
+
+    configFileCFString = CFStringCreateWithCString( kCFAllocatorDefault, cfile.c_str(), kCFStringEncodingUTF8 );
+
+    fileURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, configFileCFString, kCFURLPOSIXPathStyle, false );
+
+    CFRelease( configFileCFString );
+
+    if ( !CFURLCreateDataAndPropertiesFromResource( kCFAllocatorDefault, fileURL, &resourceData, NULL, NULL, &errorCode ) ) {
+        ERROR_LOG( "Unable to create CFURL to access config plist" );
+        CFRelease( fileURL );
+        return false;
+    }
+
+    CFRelease( fileURL );
+
+    propertyList = CFPropertyListCreateFromXMLData( kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, &errorString );
+
+    if ( resourceData ) {
+        CFRelease( resourceData );
+    }
+    else {
+        ERROR_LOG( "Unable to fetch config resource data" );
+        CFRelease( fileURL );
+        CFRelease( errorString );
+        return false;
+    }
+
+    if ( !propertyList ) {
+        ERROR_LOG( "Unable to process config plist" );
+        return false;
+    }
+
+    propertyListDictionary = static_cast<CFDictionaryRef>( propertyList );
+    CFIndex numKeys = CFDictionaryGetCount( propertyListDictionary );
+
+    const void ** keys = (const void **)malloc( sizeof( void * ) * numKeys );
+    const void ** values = (const void **)malloc( sizeof( void * ) * numKeys );
+    char keyBuf[2048];
+    char valBuf[2048];
+
+    CFDictionaryGetKeysAndValues( propertyListDictionary, keys, values );
+
+    for ( CFIndex i = 0; i < numKeys; i++ ) {
+        if ( !CFStringGetCString( static_cast<CFStringRef>( keys[i] ), keyBuf, 2048, kCFStringEncodingUTF8 ) ) {
+            ERROR_LOG( "Error converting config key to string" );
+            free( keys );
+            free( values );
+            return false;
+        }
+        if ( !CFStringGetCString( static_cast<CFStringRef>( values[i] ), valBuf, 2048, kCFStringEncodingUTF8 ) ) {
+            ERROR_LOG( "Error converting config value to string" );
+            free( keys );
+            free( values );
+            return false;
+        }
+
+        std::string keyString = std::string( keyBuf );
+        std::string valueString = std::string( valBuf );
+
+        emplace( ModifyKey( keyString ), valueString );
+    }
+
+    free( keys );
+    free( values );
+
+    CFRelease( propertyList );
+#endif
 
     return true;
 }

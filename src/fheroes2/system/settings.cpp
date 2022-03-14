@@ -350,10 +350,172 @@ void Settings::PostLoad()
     }
 }
 
+#if defined( MACOS_APP_BUNDLE )
+CFPropertyListRef Settings::generateConfigDictionary() const
+{
+    CFMutableDictionaryRef configDict;
+    std::ostringstream valueStream;
+
+    std::string musicType;
+    if ( MusicType() == MUSIC_EXTERNAL ) {
+        musicType = "external";
+    }
+    else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
+        musicType = "expansion";
+    }
+    else {
+        musicType = "original";
+    }
+
+    configDict = CFDictionaryCreateMutable( kCFAllocatorDefault, NULL, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
+
+    valueStream << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height();
+    setConfigDictionaryValue( configDict, "videomode", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << musicType;
+    setConfigDictionaryValue( configDict, "music", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << sound_volume;
+    setConfigDictionaryValue( configDict, "sound volume", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << music_volume;
+    setConfigDictionaryValue( configDict, "music volume", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "fullscreen", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << debug;
+    setConfigDictionaryValue( configDict, "debug", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << heroes_speed;
+    setConfigDictionaryValue( configDict, "heroes speed", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ai_speed;
+    setConfigDictionaryValue( configDict, "ai speed", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << battle_speed;
+    setConfigDictionaryValue( configDict, "battle speed", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << scroll_speed;
+    setConfigDictionaryValue( configDict, "scroll speed", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "battle grid", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "battle shadow movement", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "battle shadow cursor", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "auto resolve battles", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "auto spell casting", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "battle army order", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << _gameLanguage;
+    setConfigDictionaryValue( configDict, "lang", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << _controllerPointerSpeed;
+    setConfigDictionaryValue( configDict, "controller pointer speed", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "first time game run", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "show game intro", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "v-sync", valueStream.str() );
+    valueStream.str( "" );
+
+    valueStream << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" );
+    setConfigDictionaryValue( configDict, "text support mode", valueStream.str() );
+    valueStream.str( "" );
+
+    return configDict;
+}
+
+void Settings::setConfigDictionaryValue( CFMutableDictionaryRef configDict, std::string key, std::string value ) const
+{
+    CFStringRef cfKey, cfValue;
+
+    cfKey = CFStringCreateWithCString( kCFAllocatorDefault, key.c_str(), kCFStringEncodingUTF8 );
+    cfValue = CFStringCreateWithCString( kCFAllocatorDefault, value.c_str(), kCFStringEncodingUTF8 );
+
+    CFDictionarySetValue( configDict, cfKey, cfValue );
+}
+#endif
+
 bool Settings::Save( const std::string & filename ) const
 {
     if ( filename.empty() )
         return false;
+
+#if defined( MACOS_APP_BUNDLE )
+    CFPropertyListRef propertyList = generateConfigDictionary();
+    SInt32 errorCode;
+
+    if ( !propertyList ) {
+        ERROR_LOG( "Error creating config property list" );
+        return false;
+    }
+
+    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
+    CFStringRef cfCfgFilename = CFStringCreateWithCString( kCFAllocatorDefault, cfgFilename.c_str(), kCFStringEncodingUTF8 );
+
+    CFURLRef fileURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, cfCfgFilename, kCFURLPOSIXPathStyle, false );
+
+    CFRelease( cfCfgFilename );
+
+    if ( !fileURL ) {
+        ERROR_LOG( "Unable to get file reference to write config." );
+        CFRelease( propertyList );
+        return false;
+    }
+
+    CFDataRef configDataRef = CFPropertyListCreateXMLData( kCFAllocatorDefault, propertyList );
+
+    if ( !CFURLWriteDataAndPropertiesToResource( fileURL, configDataRef, NULL, &errorCode ) ) {
+        ERROR_LOG( "Unable to write config file." );
+
+        if ( configDataRef ) {
+            CFRelease( configDataRef );
+        }
+
+        CFRelease( fileURL );
+        CFRelease( propertyList );
+        return false;
+    }
+
+    CFRelease( configDataRef );
+    CFRelease( fileURL );
+    CFRelease( propertyList );
+#else
 
     std::fstream file;
 #if defined( FHEROES2_VITA )
@@ -368,6 +530,7 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
+#endif
 
     return true;
 }
