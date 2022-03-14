@@ -122,113 +122,89 @@ namespace Skill
 
 namespace GameStatic
 {
-    u8 whirlpool_lost_percent = 50;
-
-    /* town, castle, heroes, artifact_telescope, object_observation_tower, object_magi_eyes */
-    std::array<uint8_t, 6> overview_distance = { 4, 5, 4, 1, 20, 9 };
-
-    u8 gameover_lost_days = 7;
-
-    // kingdom
-    u8 kingdom_max_heroes = 8;
-
-    // castle
-    u8 castle_grown_well = 2;
-    u8 castle_grown_wel2 = 8;
-    u8 castle_grown_week_of = 5;
-    u8 castle_grown_month_of = 100;
-
-    // heroes
-    u8 heroes_spell_points_day = 1;
-
-    // spells
-    u16 spell_dd_distance = 0;
-    u16 spell_dd_sp = 0;
-    u16 spell_dd_hp = 0;
-
-    // monsters
-    float monsterUpgradeRatio = 1.0f;
-
-    // visit objects mod: OBJ_BUOY, OBJ_OASIS, OBJ_WATERINGHOLE, OBJ_TEMPLE, OBJ_GRAVEYARD, OBJ_DERELICTSHIP,
-    // OBJ_SHIPWRECK, OBJ_MERMAID, OBJ_FAERIERING, OBJ_FOUNTAIN, OBJ_IDOL, OBJ_PYRAMID
-    int8_t objects_mod[] = {1, 1, 1, 2, -1, -1, -1, 1, 1, 1, 1, -2};
-
     // world
     u32 uniq = 0;
 }
 
-u32 GameStatic::GetLostOnWhirlpoolPercent( void )
+u32 GameStatic::GetLostOnWhirlpoolPercent()
 {
-    return whirlpool_lost_percent;
+    return 50;
 }
 
-u32 GameStatic::GetOverViewDistance( u32 d )
+uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
 {
-    return d >= overview_distance.size() ? 0 : overview_distance[d];
+    switch ( type ) {
+    case FogDiscoveryType::CASTLE:
+        return 5;
+    case FogDiscoveryType::HEROES:
+        return 4;
+    case FogDiscoveryType::TELESCOPE:
+        return 1;
+    case FogDiscoveryType::OBSERVATION_TOWER:
+        return 20;
+    case FogDiscoveryType::MAGI_EYES:
+        return 9;
+    default:
+        break;
+    }
+
+    return 0;
 }
 
-u32 GameStatic::GetGameOverLostDays( void )
+u32 GameStatic::GetGameOverLostDays()
 {
-    return gameover_lost_days;
+    return 7;
 }
 
-u32 GameStatic::GetHeroesRestoreSpellPointsPerDay( void )
+u32 GameStatic::GetHeroesRestoreSpellPointsPerDay()
 {
-    return heroes_spell_points_day;
+    return 1;
 }
 
-u32 GameStatic::GetKingdomMaxHeroes( void )
+u32 GameStatic::GetKingdomMaxHeroes()
 {
-    return kingdom_max_heroes;
+    return 8;
 }
 
-u32 GameStatic::GetCastleGrownWell( void )
+u32 GameStatic::GetCastleGrownWell()
 {
-    return castle_grown_well;
+    return 2;
 }
 
-u32 GameStatic::GetCastleGrownWel2( void )
+u32 GameStatic::GetCastleGrownWel2()
 {
-    return castle_grown_wel2;
+    return 8;
 }
 
-u32 GameStatic::GetCastleGrownWeekOf( void )
+u32 GameStatic::GetCastleGrownWeekOf()
 {
-    return castle_grown_week_of;
+    return 5;
 }
 
-u32 GameStatic::GetCastleGrownMonthOf( void )
+u32 GameStatic::GetCastleGrownMonthOf()
 {
-    return castle_grown_month_of;
+    return 100;
 }
 
 s32 GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
-        return objects_mod[0];
     case MP2::OBJ_OASIS:
-        return objects_mod[1];
     case MP2::OBJ_WATERINGHOLE:
-        return objects_mod[2];
-    case MP2::OBJ_TEMPLE:
-        return objects_mod[3];
-    case MP2::OBJ_GRAVEYARD:
-        return objects_mod[4];
-    case MP2::OBJ_DERELICTSHIP:
-        return objects_mod[5];
-    case MP2::OBJ_SHIPWRECK:
-        return objects_mod[6];
     case MP2::OBJ_MERMAID:
-        return objects_mod[7];
     case MP2::OBJ_FAERIERING:
-        return objects_mod[8];
     case MP2::OBJ_FOUNTAIN:
-        return objects_mod[9];
     case MP2::OBJ_IDOL:
-        return objects_mod[10];
+        return 1;
+    case MP2::OBJ_TEMPLE:
+        return 2;
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_SHIPWRECK:
+        return -1;
     case MP2::OBJ_PYRAMID:
-        return objects_mod[11];
+        return -2;
     default:
         break;
     }
