@@ -106,21 +106,29 @@ if(NOT MACOS_APP_BUNDLE)
 		)
 else(NOT MACOS_APP_BUNDLE)
 	add_custom_target(
-	install_h2d_files
-	ALL
-	COMMAND mkdir -p "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
-	COMMAND cp *.h2d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
-	DEPENDS fheroes2
-	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/data"
-	)
+		install_h2d_files
+		ALL
+		COMMAND mkdir -p "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
+		COMMAND cp *.h2d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
+		DEPENDS fheroes2
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/data"
+		)
 
 	add_custom_target(
-	install_key_file
-	ALL
-	COMMAND cp fheroes2.key "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources"
-	DEPENDS fheroes2
-	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	)
+		install_key_file
+		ALL
+		COMMAND cp fheroes2.key "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources"
+		DEPENDS fheroes2
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		)
+
+	add_custom_target(
+		run_dylibbundler
+		ALL
+		COMMAND dylibbundler -od -b -x "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME}" -d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs"
+		DEPENDS fheroes2
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		)
 endif(NOT MACOS_APP_BUNDLE)
 
 if(GET_HOMM2_DEMO)

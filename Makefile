@@ -49,6 +49,7 @@ else
 	@cp ./files/data/*.h2d "src/dist/${TARGET}.app/Contents/Resources/h2d"
 	@sed -e "s/\$${MACOSX\_BUNDLE\_EXECUTABLE\_NAME}/${TARGET}/" -e "s/\$${MACOSX\_BUNDLE\_ICON\_FILE}/fheroes2.icns/" -e "s/\$${MACOSX\_BUNDLE\_GUI\_IDENTIFIER}/com.horns.and.hoovers.${TARGET}/" -e "s/\$${MACOSX\_BUNDLE\_BUNDLE\_NAME}/${TARGET}/" -e "s/\$${MACOSX\_BUNDLE\_BUNDLE\_VERSION}/${PROJECT_VERSION}/" -e "s/\$${MACOSX\_BUNDLE\_SHORT\_VERSION\_STRING}/${PROJECT_VERSION}/" ./src/resources/Info.plist.in > "src/dist/${TARGET}.app/Contents/Info.plist"
 	@mv "src/dist/${TARGET}" "src/dist/${TARGET}.app/Contents/MacOS"
+	@dylibbundler -od -b -x "src/dist/${TARGET}.app/Contents/MacOS/${TARGET}" -d "src/dist/${TARGET}.app/Contents/libs"
 	@cp -R "src/dist/${TARGET}.app" .
 endif
 
