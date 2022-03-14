@@ -1400,8 +1400,7 @@ namespace
             fheroes2::updateShadow( font[255 - 32], { -1, 1 }, 2 );
         }
     }
-    void generateItalianAlphabet() {
-    }
+    void generateItalianAlphabet() {}
 
     void generateAlphabet( const fheroes2::SupportedLanguage language )
     {
