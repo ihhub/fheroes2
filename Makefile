@@ -25,8 +25,11 @@
 # FHEROES2_IMAGE_SUPPORT: build with SDL image support
 # WITH_TOOLS: build tools
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
+# MACOS_APP_BUNDLE: Create a Mac app bundle (only valid when building on macOS)
 #
 # -DCONFIGURE_FHEROES2_DATA: system fheroes2 game dir
+
+PROJECT_VERSION := 0.9.13
 
 TARGET	:= fheroes2
 
@@ -34,8 +37,22 @@ TARGET	:= fheroes2
 
 all:
 	$(MAKE) -C src
+ifndef MACOS_APP_BUNDLE
 	@cp src/dist/$(TARGET) .
+else
+	@mkdir -p "src/dist/${TARGET}.app/Contents/Resources/translations"
+	@mkdir -p "src/dist/${TARGET}.app/Contents/Resources/h2d"
+	@mkdir -p "src/dist/${TARGET}.app/Contents/MacOS"
+	@cp ./fheroes2.key "src/dist/${TARGET}.app/Contents/Resources"
+	@cp ./src/resources/fheroes2.icns "src/dist/${TARGET}.app/Contents/Resources"
+	@cp ./files/lang/*.mo "src/dist/${TARGET}.app/Contents/Resources/translations"
+	@cp ./files/data/*.h2d "src/dist/${TARGET}.app/Contents/Resources/h2d"
+	@sed -e "s/\$${MACOSX\_BUNDLE\_EXECUTABLE\_NAME}/${TARGET}/" -e "s/\$${MACOSX\_BUNDLE\_ICON\_FILE}/fheroes2.icns/" -e "s/\$${MACOSX\_BUNDLE\_GUI\_IDENTIFIER}/com.horns.and.hoovers.${TARGET}/" -e "s/\$${MACOSX\_BUNDLE\_BUNDLE\_NAME}/${TARGET}/" -e "s/\$${MACOSX\_BUNDLE\_BUNDLE\_VERSION}/${PROJECT_VERSION}/" -e "s/\$${MACOSX\_BUNDLE\_SHORT\_VERSION\_STRING}/${PROJECT_VERSION}/" ./src/resources/Info.plist.in > "src/dist/${TARGET}.app/Contents/Info.plist"
+	@mv "src/dist/${TARGET}" "src/dist/${TARGET}.app/Contents/MacOS"
+	@cp -R "src/dist/${TARGET}.app" .
+endif
 
 clean:
 	$(MAKE) -C src clean
 	@rm -f ./$(TARGET)
+	@rm -rf ./${TARGET}.app

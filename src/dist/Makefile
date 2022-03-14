@@ -73,3 +73,4 @@ include $(wildcard *.d)
 
 clean:
 	rm -f *.pot *.pot~ *.o *.d *.exe $(TARGET) $(RES)
+	rm -rf *.app
