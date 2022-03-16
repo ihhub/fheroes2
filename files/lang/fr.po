@@ -160,9 +160,8 @@ msgstr "%{name} a désactivé le combat auto"
 msgid "%{name} has turned on the auto battle"
 msgstr "%{name} a activé le combat auto"
 
-#, fuzzy
 msgid "Spell failed!"
-msgstr "sort échoué !"
+msgstr "Sort échoué !"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -1455,7 +1454,6 @@ msgstr ""
 "Le royaume bénéficiera de %{amount} %{resource} supplémentaire(s) au début "
 "du scénario."
 
-#, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Le héros principal recevra %{count} %{monster} au début du scénario."
@@ -1489,9 +1487,8 @@ msgstr "The Price of Loyalty"
 msgid "Voyage Home"
 msgstr ""
 
-#, fuzzy
 msgid "Wizard's Isle"
-msgstr "Chapeau du sorcier"
+msgstr "L'île du sorcier"
 
 msgid "Descendants"
 msgstr "Descendants"
@@ -3121,18 +3118,16 @@ msgid "View Intro"
 msgstr "Voir l'intro"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr ""
+msgstr "Voir la vidéo d'introduction du scénario actuel."
 
 msgid "Restart"
-msgstr "Redémarrer"
+msgstr "Recommencer"
 
-#, fuzzy
 msgid "Restart the current scenario."
-msgstr "Enregistrer le jeu en cours."
+msgstr "Recommencer le scénario actuel."
 
-#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Êtes vous sûr de vouloir renvoyer ce héros ?"
+msgstr "Êtes vous sûr de vouloir recommencer ce scénario ?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Échec du chargement du scénario de campagne"
@@ -5430,6 +5425,8 @@ msgid ""
 "You have your crew stop up their ears with wax before the sirens' eerie song "
 "has any chance of luring them to a watery grave."
 msgstr ""
+"Vous demandez à votre équipage de se boucher les oreilles avec de la cire avant que le chant sinistre des sirènes "
+"n'ait la moindre chance de les attirer vers une mort certaine."
 
 msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
