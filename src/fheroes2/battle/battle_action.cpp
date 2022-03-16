@@ -107,6 +107,9 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         }
     }
 
+    // UNKNOWN attack direction is only allowed for archers
+    assert( Unit::isHandFighting( attacker, defender ) ? dir > UNKNOWN : dir == UNKNOWN );
+
     // This is a direct attack, update the direction for both the attacker and the defender
     if ( dir ) {
         if ( !attacker.isWide() || !Board::isNearIndexes( attacker.GetHeadIndex(), dst ) ) {
