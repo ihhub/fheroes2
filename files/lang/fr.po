@@ -3121,7 +3121,7 @@ msgid "View Intro videos for the current state of the campaign."
 msgstr ""
 
 msgid "Restart"
-msgstr ""
+msgstr "Redémarrer"
 
 #, fuzzy
 msgid "Restart the current scenario."
