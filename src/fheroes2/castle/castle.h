@@ -181,7 +181,9 @@ public:
     Army & GetActualArmy( void );
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
     u32 getMonstersInDwelling( u32 ) const;
-    u32 GetActualDwelling( u32 ) const;
+
+    // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
+    uint32_t GetActualDwelling( const uint32_t buildId ) const;
 
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
