@@ -156,7 +156,7 @@ msgstr "%{name} décime la troupe ennemie !"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Inflige des dégâts à tous les morts-vivants du champ de bataille."
+msgstr "%{name} a désactivé le combat auto"
 
 #, fuzzy
 msgid "%{name} has turned on the auto battle"
