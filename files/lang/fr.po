@@ -154,13 +154,11 @@ msgstr "Régler le nombre"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} décime la troupe ennemie !"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} a désactivé le combat auto"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Inflige des dégâts à tous les morts-vivants du champ de bataille."
+msgstr "%{name} a activé le combat auto"
 
 #, fuzzy
 msgid "Spell failed!"
@@ -731,9 +729,8 @@ msgstr "Le gantelet"
 msgid "Turning Point"
 msgstr "Moment Décisif"
 
-#, fuzzy
 msgid "Betrayal"
-msgstr "Fin de la trahison"
+msgstr "Trahison"
 
 msgid "Corlagon's Defense"
 msgstr "Défense de Corlagon"
@@ -843,6 +840,9 @@ msgid ""
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Changer de camp vous laisse avec trois châteaux contre un seul pour l'ennemi."
+"Cette bataille sera la plus facile que vous aurez à mener jusqu'à la fin de "
+"la guerre...traitre." 
 
 msgid "Barbarian Wars"
 msgstr "Guerres Barbares"
@@ -1239,16 +1239,16 @@ msgid " defeated"
 msgstr " vaincu"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " fuiront toujours face à votre armée."
 
 msgid " will be willing to always join your army."
-msgstr ""
+msgstr " vondront toujours se joindre à votre armée."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "L'artefact \"%{artifact}\" sera conservé dans le scénario suivant."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "L'armée sera conservée dans le scénario suivant."
 
 msgid ""
 "The kingdom will have additional %{resource} at the start of the scenario."
@@ -1258,10 +1258,10 @@ msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr ""
 
 msgid "%{hero} hero can be hired in the scenario."
-msgstr ""
+msgstr "Le héros %{hero} peut être recruté dans ce scénario."
 
 msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "Le héros vaincu %{hero} n'apparaîtra pas dans les scénarios suivants.
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1446,31 +1446,39 @@ msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr ""
+"Le héros principal recevra l'artefact \"%{artifact}\" au début du "
+"scénario."
 
 msgid ""
 "The kingdom will have additional %{amount} %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Le royaume bénéficiera de %{amount} %{resource} supplémentaire(s) au début du "
+"scénario."
 
 #, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "Ce sort invoque %{count} %{monster} pour garder la mine."
+msgstr ""
+"Le héros principal recevra %{count} %{monster} au début du scénario."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
 msgstr ""
+"Le héros principal recevra le sort \"%{spell}\" au début du scénario."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "La faction de départ sur ce scenario sera %{race}."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"Le héros principal recevra %{count} %{skill} supplémentaire(s) au début du "
+"scénario."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "Le héros principal recevra %{skill} au début du scénario."
 
 msgid "Roland"
 msgstr "Roland"
@@ -1488,9 +1496,8 @@ msgstr ""
 msgid "Wizard's Isle"
 msgstr "Chapeau du sorcier"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Paysans"
+msgstr "Descendants"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Le %{building} produit des %{monster}."
@@ -2706,7 +2713,7 @@ msgid "Okay"
 msgstr "OK"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Cliquez pour valider la résolution choisie."
 
 msgid "MAX"
 msgstr "MAX"
@@ -3111,11 +3118,10 @@ msgid "and more..."
 msgstr "et plus encore..."
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Démarrer le scénario sélectionné."
 
-#, fuzzy
 msgid "View Intro"
-msgstr "Voir le héros"
+msgstr "Voir l'intro"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
@@ -3880,11 +3886,10 @@ msgid "View %{skill} Info"
 msgstr "Voir les infos de %{skill}"
 
 msgid "Kingdom Income"
-msgstr "Revenu"
+msgstr "Revenu du royaume"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Revenu"
+msgstr "Revenu du royaume par jour."
 
 msgid "English"
 msgstr "Anglais"
@@ -3905,7 +3910,7 @@ msgid "Italian"
 msgstr " Italien"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tchèque"
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -6128,14 +6133,15 @@ msgstr "violette"
 msgid "tent|Red"
 msgstr "rouge"
 
-#, fuzzy
 msgid "Experience"
-msgstr "Expérimental"
+msgstr "Expérience"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
+"L'expérience permet à vos héros de monter de niveau, d'améliorer leurs "
+"capacités primaires et secondaires."
 
 msgid "Hero/Stats"
 msgstr "Héros/Stats"
