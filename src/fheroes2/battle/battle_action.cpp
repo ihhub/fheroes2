@@ -67,22 +67,29 @@ namespace
 
 void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst /* = -1 */, int dir /* = -1 */ )
 {
-    if ( dst < 0 ) {
-        // The defender's head cell is near the attacker
-        if ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetHeadIndex() )
-             || ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetHeadIndex() ) ) ) {
-            dst = defender.GetHeadIndex();
+    auto calculateDst = []( const Unit & attackingUnit, const Unit & defendingUnit ) {
+        // The defender's head cell is near the attacker's head cell
+        if ( Board::isNearIndexes( attackingUnit.GetHeadIndex(), defendingUnit.GetHeadIndex() ) ) {
+            return defendingUnit.GetHeadIndex();
         }
-        // The defender's tail cell is near the attacker
-        else if ( defender.isWide()
-                  && ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetTailIndex() )
-                       || ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetTailIndex() ) ) ) ) {
-            dst = defender.GetTailIndex();
+        // The defender's tail cell is near the attacker's head cell
+        if ( defendingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetHeadIndex(), defendingUnit.GetTailIndex() ) ) {
+            return defendingUnit.GetTailIndex();
+        }
+        // The defender's head cell is near the attacker's tail cell
+        if ( attackingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetTailIndex(), defendingUnit.GetHeadIndex() ) ) {
+            return defendingUnit.GetHeadIndex();
+        }
+        // The defender's tail cell is near the attacker's tail cell
+        if ( attackingUnit.isWide() && defendingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetTailIndex(), defendingUnit.GetTailIndex() ) ) {
+            return defendingUnit.GetTailIndex();
         }
         // Units don't stand next to each other, this is most likely a shot
-        else {
-            dst = defender.GetHeadIndex();
-        }
+        return defendingUnit.GetHeadIndex();
+    };
+
+    if ( dst < 0 ) {
+        dst = calculateDst( attacker, defender );
     }
 
     if ( dir < 0 ) {
@@ -100,19 +107,19 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         }
     }
 
+    // This is a direct attack, update the direction for both the attacker and the defender
     if ( dir ) {
-        if ( attacker.isWide() ) {
-            if ( !Board::isNearIndexes( attacker.GetHeadIndex(), dst ) )
-                attacker.UpdateDirection( board[dst].GetPos() );
-            if ( defender.AllowResponse() )
-                defender.UpdateDirection( board[attacker.GetHeadIndex()].GetPos() );
-        }
-        else {
+        if ( !attacker.isWide() || !Board::isNearIndexes( attacker.GetHeadIndex(), dst ) ) {
             attacker.UpdateDirection( board[dst].GetPos() );
-            if ( defender.AllowResponse() )
-                defender.UpdateDirection( board[attacker.GetHeadIndex()].GetPos() );
+        }
+
+        const int32_t responseDst = calculateDst( defender, attacker );
+
+        if ( defender.AllowResponse() && ( !defender.isWide() || !Board::isNearIndexes( defender.GetHeadIndex(), responseDst ) ) ) {
+            defender.UpdateDirection( board[responseDst].GetPos() );
         }
     }
+    // This is a shot, update the direction for the attacker only
     else {
         attacker.UpdateDirection( board[dst].GetPos() );
     }
@@ -121,9 +128,6 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     attacker.SetRandomLuck();
 
     TargetsInfo targets = GetTargetsForDamage( attacker, defender, dst, dir );
-
-    if ( Board::isReflectDirection( dir ) != attacker.isReflect() )
-        attacker.UpdateDirection( board[dst].GetPos() );
 
     if ( interface )
         interface->RedrawActionAttackPart1( attacker, defender, targets );
