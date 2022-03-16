@@ -115,7 +115,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
         const int32_t responseDst = calculateDst( defender, attacker );
 
-        if ( defender.AllowResponse() && ( !defender.isWide() || !Board::isNearIndexes( defender.GetHeadIndex(), responseDst ) ) ) {
+        if ( !attacker.ignoreRetaliation() && defender.AllowResponse() && ( !defender.isWide() || !Board::isNearIndexes( defender.GetHeadIndex(), responseDst ) ) ) {
             defender.UpdateDirection( board[responseDst].GetPos() );
         }
     }
