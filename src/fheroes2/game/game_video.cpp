@@ -53,15 +53,16 @@ namespace
 
 namespace Video
 {
-    bool isVideoFile( const std::string & fileName, std::string & path )
+    bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
-        std::string temp;
+        std::string fullPath;
 
-        for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            ListFiles files = Settings::FindFiles( videoDir[i], fileName, true );
-            for ( std::string & name : files ) {
-                if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
-                    path.swap( name );
+        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+            for ( const std::string & localDir : videoDir ) {
+                fullPath = System::ConcatePath( rootDir, localDir );
+                fullPath = System::ConcatePath( fullPath, fileName );
+                if ( System::IsFile( fullPath ) ) {
+                    path.swap( fullPath );
                     return true;
                 }
             }
@@ -76,8 +77,9 @@ namespace Video
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::string videoPath;
-        if ( !isVideoFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
-            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
+        if ( !getVideoFilePath( fileName, videoPath ) ) {
+            // File doesn't exist, so no need to even try to load it.
+            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " video file does not exist." );
             return 0;
         }
 
