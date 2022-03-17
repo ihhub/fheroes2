@@ -1403,8 +1403,8 @@ namespace
         }
     }
 
-    void generateItalianAlphabet() {
-        
+    void generateItalianAlphabet()
+    {
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             _icnVsSprite[icnId].resize( 96 );
