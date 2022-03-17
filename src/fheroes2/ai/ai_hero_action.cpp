@@ -32,6 +32,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
@@ -873,7 +874,7 @@ namespace AI
 
     void AIToObservationTower( Heroes & hero, s32 dst_index )
     {
-        Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+        Maps::ClearFog( dst_index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
         hero.SetVisited( dst_index, Visit::GLOBAL );
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1736,7 +1737,7 @@ namespace AI
             hero.SetVisited( tileIndex, Visit::GLOBAL );
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             for ( const int32_t index : eyeMagiIndexes ) {
-                Maps::ClearFog( index, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
+                Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
             }
         }
     }
