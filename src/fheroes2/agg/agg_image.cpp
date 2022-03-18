@@ -1571,7 +1571,7 @@ namespace fheroes2
 
         void generateICNLanguage( int id )
         {
-            fheroes2::SupportedLanguage language = fheroes2::getResourceLanguage();
+            const fheroes2::SupportedLanguage language = fheroes2::getResourceLanguage();
             
             switch ( language ) {
             case fheroes2::SupportedLanguage::German:
