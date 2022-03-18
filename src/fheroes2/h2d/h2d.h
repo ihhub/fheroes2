@@ -28,6 +28,16 @@ namespace fheroes2
 
     namespace h2d
     {
+        class H2DInitializer
+        {
+        public:
+            H2DInitializer();
+            H2DInitializer( const H2DInitializer & ) = delete;
+            H2DInitializer & operator=( const H2DInitializer & ) = delete;
+
+            ~H2DInitializer() = default;
+        };
+
         bool readImage( const std::string & name, Sprite & image );
     }
 }

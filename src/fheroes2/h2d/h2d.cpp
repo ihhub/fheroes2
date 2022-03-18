@@ -23,29 +23,28 @@
 #include "settings.h"
 #include "system.h"
 
+#include <stdexcept>
+
 namespace
 {
-    bool isInitialized = false;
     fheroes2::H2RReader reader;
 
-    void initialize()
+    bool getH2DFilePath( const std::string & fileName, std::string & path )
     {
-        if ( isInitialized ) {
-            return;
-        }
+        std::string fullPath;
 
-        isInitialized = true;
+        const std::string internalDirectory( System::ConcatePath( "files", "data" ) );
 
-        ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
-        if ( files.empty() ) {
-            return;
-        }
-
-        for ( const std::string & fileName : files ) {
-            if ( reader.open( fileName ) ) {
-                return;
+        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+            fullPath = System::ConcatePath( rootDir, internalDirectory );
+            fullPath = System::ConcatePath( fullPath, fileName );
+            if ( System::IsFile( fullPath ) ) {
+                path.swap( fullPath );
+                return true;
             }
         }
+
+        return false;
     }
 }
 
@@ -53,11 +52,20 @@ namespace fheroes2
 {
     namespace h2d
     {
+        H2DInitializer::H2DInitializer()
+        {
+            std::string filePath;
+            if ( !getH2DFilePath( "resurrection.h2d", filePath ) ) {
+                throw std::logic_error( "No H2D data files found." );
+            }
+
+            if ( reader.open( filePath ) ) {
+                throw std::logic_error( "Cannot open H2D file." );
+            }
+        }
+
         bool readImage( const std::string & name, Sprite & image )
         {
-            // Initialize only when it's requested.
-            initialize();
-
             return readImageFromH2D( reader, name, image );
         }
     }
