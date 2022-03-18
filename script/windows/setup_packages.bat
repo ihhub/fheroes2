@@ -28,7 +28,6 @@ xcopy /Y /Q "temp\sdl_mixer\SDL_mixer-1.2.12\lib\x64\libvorbis-0.dll"     "sdl\l
 xcopy /Y /Q "temp\sdl_mixer\SDL_mixer-1.2.12\lib\x64\libvorbisfile-3.dll" "sdl\lib\x64"
 xcopy /Y /Q "temp\sdl_mixer\SDL_mixer-1.2.12\lib\x64\libFLAC-8.dll"       "sdl\lib\x64"
 
-
 xcopy /Y /s /Q "temp\sdl_mixer\SDL2_mixer-2.0.4\include"                  "sdl2\include"
 xcopy /Y /Q "temp\sdl_mixer\SDL2_mixer-2.0.4\lib\x86\SDL2_mixer.dll"      "sdl2\lib\x86"
 xcopy /Y /Q "temp\sdl_mixer\SDL2_mixer-2.0.4\lib\x86\SDL2_mixer.lib"      "sdl2\lib\x86"
