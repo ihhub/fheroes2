@@ -956,9 +956,9 @@ int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
 
 bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
-    const HeroBase * hero1 = getEnemyCommander( color );
-    const HeroBase * hero2 = getCommander( color );
-    return hero1 && hero1->isHeroes() && hero2 && hero2->isHeroes() && !world.GetKingdom( hero2->GetColor() ).GetCastles().empty();
+    const HeroBase * hero = getCommander( color );
+    const HeroBase * enemyHero = getEnemyCommander( color );
+    return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() ) && !world.GetKingdom( hero->GetColor() ).GetCastles().empty();
 }
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const

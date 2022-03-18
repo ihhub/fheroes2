@@ -195,7 +195,7 @@ int main( int argc, char ** argv )
         const fheroes2::CoreInitializer coreInitializer( coreComponents );
 
         if ( Audio::isValid() ) {
-            Mixer::SetChannels( 16 );
+            Mixer::SetChannels( 32 );
             Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
 
             Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );

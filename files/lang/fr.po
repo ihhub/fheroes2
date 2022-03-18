@@ -2398,9 +2398,6 @@ msgstr "Changer la résolution du jeu."
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Attention"
 msgstr "Attention"
 
@@ -2483,7 +2480,7 @@ msgstr "Assigner Gardien"
 msgid "Your army too big!"
 msgstr "Votre armée est trop grande !"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
 msgid "%{name} has gained a level."
@@ -8770,7 +8767,7 @@ msgstr "Un Dragon Noir éliminera un Titan n'importe quel jour de la semaine."
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
 
 msgid ""

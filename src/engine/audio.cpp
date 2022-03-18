@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <mutex>
 #include <numeric>
 
@@ -130,7 +131,12 @@ void Audio::Init()
 
     if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        Mix_Init( MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD );
+        const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+        const int initializedFlags = Mix_Init( initializationFlags );
+        if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                       "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
+        }
 #endif
         hardware.freq = 22050;
         hardware.format = AUDIO_S16;
@@ -146,7 +152,11 @@ void Audio::Init()
             int channels = 0;
 
             Mix_QuerySpec( &hardware.freq, &hardware.format, &channels );
-            hardware.channels = channels;
+
+            // If this assertion blows up it means that SDL doesn't work properly.
+            assert( channels >= 0 && channels < 256 );
+
+            hardware.channels = static_cast<uint8_t>( channels );
 
             valid = true;
         }

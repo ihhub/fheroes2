@@ -474,14 +474,6 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
     return false;
 }
 
-bool HeroBase::CanTeachSpell( const Spell & spell ) const
-{
-    const int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
-
-    return ( ( 4 == spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
-             || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
-}
-
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
 {
     const int wisdom = GetLevelSkill( Skill::Secondary::WISDOM );

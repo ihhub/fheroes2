@@ -2290,9 +2290,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Spelinställningar för FHeroes2."
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Attention"
 msgstr "\"Tillägg\""
@@ -2374,7 +2371,7 @@ msgstr "Ange beskyddare"
 msgid "Your army too big!"
 msgstr "Din armé är för stor!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -2717,7 +2714,7 @@ msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 #, fuzzy
 msgid "Experimental Game Settings"
@@ -8384,7 +8381,7 @@ msgstr ""
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr ""
 
 #, fuzzy

@@ -40,8 +40,6 @@ namespace AGG
         ~AGGInitializer();
     };
 
-    std::vector<uint8_t> LoadBINFRM( const char * frm_file );
-
     void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );

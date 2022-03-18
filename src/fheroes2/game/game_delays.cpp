@@ -93,7 +93,7 @@ void Game::AnimateDelaysInitialize()
     delays[SCROLL_START_DELAY].setDelay( 20 );
     delays[MAIN_MENU_DELAY].setDelay( 250 );
     delays[MAPS_DELAY].setDelay( 250 );
-    delays[CASTLE_TAVERN_DELAY].setDelay( 200 );
+    delays[CASTLE_TAVERN_DELAY].setDelay( 75 );
     delays[CASTLE_AROUND_DELAY].setDelay( 200 );
     delays[CASTLE_BUYHERO_DELAY].setDelay( 130 );
     delays[CASTLE_BUILD_DELAY].setDelay( 130 );
@@ -214,4 +214,10 @@ bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
 bool Game::isCustomDelayNeeded( const uint64_t delayMs )
 {
     return !delays[Game::DelayType::CUSTOM_DELAY].isPassed( delayMs );
+}
+
+uint64_t Game::getAnimationDelayValue( const DelayType delayType )
+{
+    assert( delayType != Game::DelayType::CUSTOM_DELAY );
+    return delays[delayType].getDelay();
 }

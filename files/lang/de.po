@@ -2388,9 +2388,6 @@ msgstr "Auflösung des Spiels ändern."
 msgid "Experimental game settings."
 msgstr "Experimentelle Spieleinstellungen."
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Attention"
 msgstr "Achtung"
 
@@ -2473,7 +2470,7 @@ msgstr "Wache setzen"
 msgid "Your army too big!"
 msgstr "Ihre Armee ist zu groß!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Spielsprache wählen:"
 
 msgid "%{name} has gained a level."
@@ -8777,7 +8774,7 @@ msgstr "Ein Schwarzer Drache kann es jederzeit mit einem Titanen aufnehmen."
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
 
 msgid ""

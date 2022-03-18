@@ -2333,9 +2333,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "FHeroes2 játék beállítások."
 
-msgid "OK"
-msgstr "Ok"
-
 #, fuzzy
 msgid "Attention"
 msgstr "animáció"
@@ -2421,7 +2418,7 @@ msgstr ""
 msgid "Your army too big!"
 msgstr "A sereged túl nagy!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -2762,7 +2759,7 @@ msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
 msgid "Okay"
-msgstr ""
+msgstr "Ok"
 
 #, fuzzy
 msgid "Experimental Game Settings"
@@ -8456,7 +8453,7 @@ msgstr ""
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr ""
 
 #, fuzzy

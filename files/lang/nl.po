@@ -2102,9 +2102,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr ""
 
-msgid "OK"
-msgstr ""
-
 msgid "Attention"
 msgstr ""
 
@@ -2175,7 +2172,7 @@ msgstr ""
 msgid "Your army too big!"
 msgstr ""
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -7609,7 +7606,7 @@ msgstr ""
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr ""
 
 msgid ""

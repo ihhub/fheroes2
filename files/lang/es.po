@@ -2397,9 +2397,6 @@ msgstr ""
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Attention"
 msgstr "\"Anexión\""
@@ -2483,7 +2480,7 @@ msgstr "Establecer Guardián"
 msgid "Your army too big!"
 msgstr "¡Tu ejército es demasiado grande!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -2839,7 +2836,7 @@ msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 #, fuzzy
 msgid "Experimental Game Settings"
@@ -8840,7 +8837,7 @@ msgstr ""
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr ""
 
 #, fuzzy

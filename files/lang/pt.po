@@ -2249,9 +2249,6 @@ msgstr "Mudar a resolução do jogo."
 msgid "Experimental game settings."
 msgstr "Configurações experimentais do jogo."
 
-msgid "OK"
-msgstr "OK"
-
 #, fuzzy
 msgid "Attention"
 msgstr "animação"
@@ -2337,7 +2334,7 @@ msgstr "Selecione o Guardião"
 msgid "Your army too big!"
 msgstr "Sua arma é muito grande!"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Escolha o idioma do jogo:"
 
 msgid "%{name} has gained a level."
@@ -2688,7 +2685,7 @@ msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."
 
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 msgid "Experimental Game Settings"
 msgstr ""
@@ -8100,7 +8097,7 @@ msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 "Ele disse à ela: Yada yada yada... e então ela disse: Blah, blah, blah..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
 
 msgid ""
