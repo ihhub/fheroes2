@@ -154,8 +154,7 @@ namespace
         {
             const fheroes2::ScreenPaletteRestorer screenRestorer;
 
-            try
-            {
+            try {
                 _aggInitializer.reset( new AGG::AGGInitializer );
 
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
