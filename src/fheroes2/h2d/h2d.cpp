@@ -59,7 +59,7 @@ namespace fheroes2
                 throw std::logic_error( "No H2D data files found." );
             }
 
-            if ( reader.open( filePath ) ) {
+            if ( !reader.open( filePath ) ) {
                 throw std::logic_error( "Cannot open H2D file." );
             }
         }
