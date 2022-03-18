@@ -376,19 +376,34 @@ namespace
         const int32_t widthOut = out.width();
 
         const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
         uint8_t * imageOutY = out.image() + outY * widthOut + outX;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
-        for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
-            const uint8_t * imageInX = imageInY;
-            const uint8_t * transformInX = transformInY;
-            uint8_t * imageOutX = imageOutY;
-            const uint8_t * imageInXEnd = imageInX + width;
+        if ( in.singleLayer() ) {
+            // All pixels in a single layer image do not have any transform values so there is no need to check for them.
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
+                const uint8_t * imageInX = imageInY;
+                uint8_t * imageOutX = imageOutY;
+                const uint8_t * imageInXEnd = imageInX + width;
 
-            for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
-                if ( *transformInX == 0 ) { // only modify pixels with data
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
                     *imageOutX = palette[*imageInX];
+                }
+            }
+        }
+        else {
+            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
+
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
+                const uint8_t * imageInX = imageInY;
+                const uint8_t * transformInX = transformInY;
+                uint8_t * imageOutX = imageOutY;
+                const uint8_t * imageInXEnd = imageInX + width;
+
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
+                    if ( *transformInX == 0 ) { // only modify pixels with data
+                        *imageOutX = palette[*imageInX];
+                    }
                 }
             }
         }
