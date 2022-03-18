@@ -1485,7 +1485,7 @@ msgid "The Price of Loyalty"
 msgstr "The Price of Loyalty"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Le voyage de retour"
 
 msgid "Wizard's Isle"
 msgstr "L'île du sorcier"
