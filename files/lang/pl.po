@@ -195,7 +195,7 @@ msgid "Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Kolejność jednostek"
 
 msgid "Auto Spell Casting"
 msgstr "Auto. czary"
@@ -219,7 +219,8 @@ msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory"
+"w czasie walki."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -473,9 +474,7 @@ msgid "Skip this unit"
 msgstr "Pomiń tę jednostkę"
 
 msgid "Skip"
-msgstr ""
-"Powoduje pominięcie aktualnej jednostki. Traci ona swoją turę i może ruszyć "
-"się ponownie dopiero w następnej rundzie."
+msgstr "Pomiń"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
@@ -1765,8 +1764,8 @@ msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
-"W Koloseum pokazywane są przedstawienia dla oddziałów obrońców, co o dwa "
-"punkty zwiększa ich morale w walce."
+"W Koloseum pokazywane są przedstawienia dla oddziałów obrońców, "
+"co zwiększa ich morale w walce o dwa punkty."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
 msgstr "Sterta śmieci zwiększa przyrost Goblinów o %{count} tygodniowo."
@@ -2415,7 +2414,7 @@ msgid "n/a"
 msgstr "nd."
 
 msgid "guarded by "
-msgstr ""
+msgstr "strzeżone przez "
 
 msgid "guarded by %{count} %{monster}"
 msgstr "Strażnicy: %{monster} (%{count})"
@@ -7919,9 +7918,8 @@ msgstr "Wszyscy przeciwnicy mają o połowę zmniejszony ruch."
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr "Oślepia wybraną jednostkę nie pozwalając jej na ruch."
 
-#, fuzzy
 msgid "spell|Blind"
-msgstr "Spowolnienie"
+msgstr "Oślepienie"
 
 msgid "Bless"
 msgstr "Błogosławieństwo"
@@ -8295,68 +8293,61 @@ msgstr "Ustawienie strażnika wody"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Wzywa żywiołaki wody, które pilnują kopalni przed wrogimi armiami."
 
-#, fuzzy
 msgid "Petrification"
-msgstr "Fortyfikacje"
+msgstr "Petryfikacja"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
-msgstr ""
+msgstr "Zmienia dotknięte stworzenie w kamień. Skamieniała jednostka otrzymuje"
+"połowę obrażeń z ataku wręcz."
 
 msgid "No spell to cast."
 msgstr "Brak zaklęć."
 
-#, fuzzy
 msgid "Your hero has %{point} spell points remaining."
-msgstr "Twój bohater ma jeszcze %{point} pkt. magii"
+msgstr "Twój bohater ma jeszcze %{point} pkt. magii."
 
-#, fuzzy
 msgid "View Adventure Spells"
-msgstr "Opcje przygody"
+msgstr "Obejrzyj zaklęcia podróżne"
 
-#, fuzzy
 msgid "View Combat Spells"
-msgstr "Rzuć zaklęcie"
+msgstr "Obejrzyj zaklęcia bojowe"
 
-#, fuzzy
 msgid "View previous page"
-msgstr "Pokaż poprzednie miasto"
+msgstr "Obejrzyj poprzednią stronę"
 
-#, fuzzy
 msgid "View next page"
-msgstr "Obejrzyj jednostkę (%{name})"
+msgstr "Obejrzyj następną stronę"
 
 msgid "Close Spellbook"
 msgstr "Zamknij księgę magii"
 
-#, fuzzy
 msgid "View %{spell}"
-msgstr "Obejrzyj jednostkę (%{name})"
+msgstr "Obejrzyj zaklęcie %{spell}"
 
-#, fuzzy
 msgid "This spell does %{damage} points of damage."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń."
 
-#, fuzzy
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
-msgstr "Rzuć zaklęcie: %{spell} na: %{monster}"
+msgstr "Ten czar przywoła %{count} %{monster}"
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Ten czar przywróci %{hp} punktów życia."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Ten czar przywoła %{count} %{monster} do pilnowania kopalni."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Najbliższym miastem jest %{town}."
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
+msgstr "Zaklęcie kontroluje do\n"
+"%{hp} punktów życia."
 
 msgid "game: always confirm for rewrite savefile"
 msgstr "gra: zawsze potwierdzaj nadpisanie zapisu stanu gry"
@@ -8364,14 +8355,12 @@ msgstr "gra: zawsze potwierdzaj nadpisanie zapisu stanu gry"
 msgid "game: remember last focus"
 msgstr ""
 
-#, fuzzy
 msgid "battle: show damage info"
-msgstr "game: pokaż informacje o uszkodzeniach w bitwie"
+msgstr "walka: pokaż informacje o obrażeniach"
 
 msgid "world: show terrain penalty"
-msgstr ""
+msgstr "świat: pokaż karę za poruszanie się po trudnym terenie"
 
-#, fuzzy
 msgid "world: Scouting skill shows extended content info"
 msgstr ""
 "świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
