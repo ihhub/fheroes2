@@ -30,7 +30,7 @@
 #include <map>
 #include <set>
 
-namespace fheroes2
+namespace
 {
     const std::map<uint32_t, fheroes2::SupportedLanguage> languageCRC32 = { { 0x406967B9, fheroes2::SupportedLanguage::French }, // GoG version
                                                                             { 0x04745D1D, fheroes2::SupportedLanguage::German }, // GoG version
@@ -45,7 +45,10 @@ namespace fheroes2
             { "german", fheroes2::SupportedLanguage::German },  { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
             { "ru", fheroes2::SupportedLanguage::Russian },     { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
             { "italian", fheroes2::SupportedLanguage::Italian } };
+}
 
+namespace fheroes2
+{
     fheroes2::SupportedLanguage getResourceLanguage()
     {
         const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
