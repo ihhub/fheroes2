@@ -34,6 +34,7 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "h2d.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
@@ -145,6 +146,45 @@ namespace
             fheroes2::Display::instance().release();
         }
     };
+
+    class DataInitializer
+    {
+    public:
+        DataInitializer()
+        {
+            const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+            try {
+                _aggInitializer.reset( new AGG::AGGInitializer );
+
+                _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+            }
+            catch ( ... ) {
+                fheroes2::Display & display = fheroes2::Display::instance();
+                const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+                display.fill( 0 );
+                fheroes2::Resize( image, display );
+
+                display.render();
+
+                LocalEvent & le = LocalEvent::Get();
+                while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+                    // Do nothing.
+                }
+
+                throw;
+            }
+        }
+
+        DataInitializer( const DataInitializer & ) = delete;
+        DataInitializer & operator=( const DataInitializer & ) = delete;
+        ~DataInitializer() = default;
+
+    private:
+        std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
+        std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
+    };
 }
 
 #if defined( _MSC_VER )
@@ -206,7 +246,7 @@ int main( int argc, char ** argv )
 
         const DisplayInitializer displayInitializer;
 
-        const AGG::AGGInitializer aggInitializer;
+        const DataInitializer dataInitializer;
 
         // Load palette.
         fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
