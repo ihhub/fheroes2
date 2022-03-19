@@ -30,6 +30,7 @@ CFLAGS := $(CFLAGS) -fsigned-char -pthread
 CXXFLAGS := -std=c++11 $(CFLAGS)
 LDFLAGS := $(LDFLAGS) -pthread
 LIBS := -lz
+PKG_CONFIG ?= pkg-config
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
@@ -52,15 +53,18 @@ endif
 ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
 else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
+SDL_LIBS  := $(SDL_LIBS)  $(shell $(PKG_CONFIG) --libs   SDL2_mixer)
+SDL_FLAGS := $(SDL_FLAGS) $(shell $(PKG_CONFIG) --cflags SDL2_mixer)
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT
 CFLAGS := $(CFLAGS) -DFHEROES2_IMAGE_SUPPORT $(shell libpng-config --cflags)
+LIBS := $(LIBS) $(shell libpng-config --libs)
 ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
+SDL_LIBS := $(SDL_LIBS) -lSDL_image
 else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
+SDL_LIBS  := $(SDL_LIBS)  $(shell $(PKG_CONFIG) --libs   SDL2_image)
+SDL_FLAGS := $(SDL_FLAGS) $(shell $(PKG_CONFIG) --cflags SDL2_image)
 endif
 endif
 
