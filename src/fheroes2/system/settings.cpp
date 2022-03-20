@@ -534,7 +534,7 @@ ListDirs Settings::GetRootDirs()
     char resourcePath[PATH_MAX];
 
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
-    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, (UInt8 *)resourcePath, PATH_MAX ) ) {
+    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX ) ) {
         dirs.push_back( resourcePath );
     }
     else {
