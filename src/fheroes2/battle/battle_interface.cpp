@@ -51,6 +51,8 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -2529,8 +2531,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
-            if ( le.MouseClickLeft( status ) )
+            if ( le.MouseClickLeft( status ) ) {
                 listlog->SetOpenLog( !listlog->isOpenLog() );
+            }
+            else if ( le.MousePressRight( status ) ) {
+                fheroes2::showMessage( fheroes2::Text( _( "Message Bar" ), fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( _( "Shows the results of individual monster's actions." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            }
         }
         cursor.SetThemes( Cursor::WAR_POINTER );
     }

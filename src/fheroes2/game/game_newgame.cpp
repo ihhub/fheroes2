@@ -73,7 +73,7 @@ namespace
     std::unique_ptr<SMKVideoSequence> getVideo( const std::string & fileName )
     {
         std::string videoPath;
-        if ( !Video::isVideoFile( fileName, videoPath ) ) {
+        if ( !Video::getVideoFilePath( fileName, videoPath ) ) {
             return nullptr;
         }
 
@@ -214,9 +214,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
 
-    std::vector<fheroes2::Rect> campaignRoi;
-    campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
-    campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
+    const std::vector<fheroes2::Rect> campaignRoi{ { 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 }, { 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 } };
 
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 

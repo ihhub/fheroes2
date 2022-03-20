@@ -23,35 +23,31 @@
 #include "settings.h"
 #include "system.h"
 
-#include "logging.h"
+#include <stdexcept>
 
 namespace
 {
-    bool isInitialized = false;
     fheroes2::H2RReader reader;
 
-    void initialize()
+    bool getH2DFilePath( const std::string & fileName, std::string & path )
     {
-        if ( isInitialized ) {
-            return;
-        }
-
-        isInitialized = true;
+        std::string fullPath;
 
 #if defined( MACOS_APP_BUNDLE )
-        ListFiles files = Settings::FindFiles( "h2d", ".h2d", false );
+        const std::string internalDirectory( "h2d" );
 #else
-        ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
+        const std::string internalDirectory( System::ConcatePath( "files", "data" ) );
 #endif
-        if ( files.empty() ) {
-            return;
-        }
-
-        for ( const std::string & fileName : files ) {
-            if ( reader.open( fileName ) ) {
-                return;
+        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+            fullPath = System::ConcatePath( rootDir, internalDirectory );
+            fullPath = System::ConcatePath( fullPath, fileName );
+            if ( System::IsFile( fullPath ) ) {
+                path.swap( fullPath );
+                return true;
             }
         }
+
+        return false;
     }
 }
 
@@ -59,11 +55,20 @@ namespace fheroes2
 {
     namespace h2d
     {
+        H2DInitializer::H2DInitializer()
+        {
+            std::string filePath;
+            if ( !getH2DFilePath( "resurrection.h2d", filePath ) ) {
+                throw std::logic_error( "No H2D data files found." );
+            }
+
+            if ( !reader.open( filePath ) ) {
+                throw std::logic_error( "Cannot open H2D file." );
+            }
+        }
+
         bool readImage( const std::string & name, Sprite & image )
         {
-            // Initialize only when it's requested.
-            initialize();
-
             return readImageFromH2D( reader, name, image );
         }
     }
