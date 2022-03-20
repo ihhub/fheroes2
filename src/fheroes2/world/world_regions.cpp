@@ -355,5 +355,13 @@ void World::ComputeStaticAnalysis()
                 reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
         }
+
+        // Fix missing references
+        for ( uint32_t adjacent : reg._neighbours ) {
+            std::set<uint32_t> & otherList = _regions[adjacent]._neighbours;
+            if ( otherList.find( reg._id ) == otherList.end() ) {
+                otherList.insert( reg._id );
+            }
+        }
     }
 }

@@ -33,11 +33,16 @@ namespace AI
 {
     struct RegionStats
     {
+        bool evaluated = false;
         double highestThreat = -1;
         double averageMonster = -1;
-        int friendlyHeroCount = 0;
+        int friendlyHeroes = 0;
+        int friendlyCastles = 0;
+        int enemyCastles = 0;
         int monsterCount = 0;
         int fogCount = 0;
+        int safetyFactor = 0;
+        int spellLevel = 2;
         std::vector<IndexObject> validObjects;
     };
 
@@ -136,6 +141,7 @@ namespace AI
         void HeroesActionComplete( Heroes & hero ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
+        void evaluateRegionSafety();
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder() override;

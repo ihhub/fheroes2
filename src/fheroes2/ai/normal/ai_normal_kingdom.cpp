@@ -92,11 +92,81 @@ namespace AI
         return recruit != nullptr;
     }
 
+    void Normal::evaluateRegionSafety()
+    {
+        std::vector<std::pair<size_t, int>> regionsToCheck;
+        size_t lastPositive = 0;
+        for ( size_t regionID = 0; regionID < _regions.size(); ++regionID ) {
+            RegionStats & stats = _regions[regionID];
+
+            if ( ( stats.friendlyCastles && stats.enemyCastles ) || ( stats.highestThreat > 0 && !stats.enemyCastles ) ) {
+                // contested space OR enemy heroes invaded our region
+                // TODO: assess army strength to get more accurate reading
+                stats.safetyFactor = -50;
+                stats.evaluated = true;
+                regionsToCheck.emplace_back( regionID, -50 );
+            }
+            else if ( stats.enemyCastles ) {
+                // straight up enemy territory
+                stats.safetyFactor = -100;
+                stats.evaluated = true;
+                regionsToCheck.emplace_back( regionID, -100 );
+            }
+            else if ( stats.friendlyCastles ) {
+                // our protected castle
+                stats.safetyFactor = 100;
+                stats.evaluated = true;
+                regionsToCheck.emplace_back( regionID, 100 );
+                ++lastPositive;
+            }
+            else {
+                stats.safetyFactor = 0;
+                stats.evaluated = false;
+            }
+        }
+        std::sort( regionsToCheck.begin(), regionsToCheck.end(), []( const auto & x, const auto & y ) { return x.second > y.second; } );
+
+        size_t currentEntry = 0;
+        size_t batchStart = 0;
+        size_t batchEnd = lastPositive + 1;
+        while ( currentEntry < regionsToCheck.size() ) {
+            const MapRegion & region = world.getRegion( regionsToCheck[currentEntry].first );
+
+            for ( uint32_t secondaryID : region._neighbours ) {
+                RegionStats & adjacentStats = _regions[secondaryID];
+                if ( !adjacentStats.evaluated ) {
+                    adjacentStats.evaluated = true;
+                    regionsToCheck.emplace_back( secondaryID, adjacentStats.safetyFactor );
+                }
+
+                if ( adjacentStats.safetyFactor != 0 ) {
+                    // losing precision due to integer division is intentional here, values should be reduced to 0 eventually
+                    regionsToCheck[currentEntry].second += adjacentStats.safetyFactor / static_cast<int>( region.getNeighboursCount() );
+                }
+            }
+            // no neighbours means it is an island; they are usually safer (or more dangerous to explore) due to boat movement penalties
+            if ( region.getNeighboursCount() == 0 )
+                regionsToCheck[currentEntry].second *= 1.5;
+
+            if ( currentEntry == batchEnd - 1 ) {
+                // Apply the calculated value in batches
+                for ( size_t idx = batchStart; idx < batchEnd; ++idx ) {
+                    const size_t regionID = regionsToCheck[idx].first;
+                    _regions[regionID].safetyFactor = regionsToCheck[idx].second;
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, "Region " << regionID << " safety factor is " << _regions[regionID].safetyFactor );
+                }
+                batchStart = batchEnd;
+                batchEnd = regionsToCheck.size();
+            }
+            ++currentEntry;
+        }
+    }
+
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
-        const int color = kingdom.GetColor();
+        const int myColor = kingdom.GetColor();
 
-        if ( kingdom.isLoss() || color == Color::NONE ) {
+        if ( kingdom.isLoss() || myColor == Color::NONE ) {
             kingdom.LossPostActions();
             return;
         }
@@ -110,7 +180,7 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( color ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
+        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
@@ -123,10 +193,7 @@ namespace AI
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
-            const MP2::MapObjectType objectType = tile.GetObject();
-
-            if ( !kingdom.isValidKingdomObject( tile, objectType ) )
-                continue;
+            MP2::MapObjectType objectType = tile.GetObject();
 
             const uint32_t regionID = tile.GetRegion();
             if ( regionID >= _regions.size() ) {
@@ -139,7 +206,7 @@ namespace AI
             if ( objectType != MP2::OBJ_COAST )
                 stats.validObjects.emplace_back( idx, objectType );
 
-            if ( !tile.isFog( color ) ) {
+            if ( !tile.isFog( myColor ) ) {
                 _mapObjects.emplace_back( idx, objectType );
 
                 const int tileColor = tile.QuantityColor();
@@ -148,10 +215,14 @@ namespace AI
                     if ( !hero )
                         continue;
 
-                    if ( hero->GetColor() == color && !hero->Modes( Heroes::PATROL ) ) {
-                        ++stats.friendlyHeroCount;
+                    if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
+                        ++stats.friendlyHeroes;
+
+                        const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
+                        if ( wisdomLevel + 2 > stats.spellLevel )
+                            stats.spellLevel = wisdomLevel + 2;
                     }
-                    else if ( !Players::isFriends( color, hero->GetColor() ) ) {
+                    else if ( !Players::isFriends( myColor, hero->GetColor() ) ) {
                         const Army & heroArmy = hero->GetArmy();
                         enemyArmies.emplace_back( idx, &heroArmy );
 
@@ -160,18 +231,28 @@ namespace AI
                             stats.highestThreat = heroThreat;
                         }
                     }
+                    // check object underneath the hero as well (maybe a castle)
+                    objectType = tile.GetObject( false );
                 }
-                else if ( objectType == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
-                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
-                    if ( !castle )
-                        continue;
 
-                    const Army & castleArmy = castle->GetArmy();
-                    enemyArmies.emplace_back( idx, &castleArmy );
+                if ( objectType == MP2::OBJ_CASTLE ) {
+                    if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
+                        ++stats.friendlyCastles;
+                    }
+                    else if ( tileColor != Color::NONE ) {
+                        ++stats.enemyCastles;
 
-                    const double castleThreat = castleArmy.GetStrength();
-                    if ( stats.highestThreat < castleThreat ) {
-                        stats.highestThreat = castleThreat;
+                        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
+                        if ( !castle )
+                            continue;
+
+                        const Army & castleArmy = castle->GetArmy();
+                        enemyArmies.emplace_back( idx, &castleArmy );
+
+                        const double castleThreat = castleArmy.GetStrength();
+                        if ( stats.highestThreat < castleThreat ) {
+                            stats.highestThreat = castleThreat;
+                        }
                     }
                 }
                 else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -184,7 +265,9 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << _mapObjects.size() << " valid objects" );
+        evaluateRegionSafety();
+
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" );
 
         status.RedrawTurnProgress( 1 );
 
@@ -219,7 +302,7 @@ namespace AI
 
                     const double attackerThreat = attackerStrength - defenders;
                     if ( attackerThreat > 0 ) {
-                        const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
+                        const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, myColor, attackerStrength );
                         if ( dist && dist < threatDistanceLimit ) {
                             // castle is under threat
                             castlesInDanger.insert( castleIndex );
@@ -269,7 +352,7 @@ namespace AI
                         continue;
 
                     const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
-                    const int heroesInRegion = _regions[regionID].friendlyHeroCount;
+                    const int heroesInRegion = _regions[regionID].friendlyHeroes;
 
                     if ( heroesInRegion > 1 )
                         continue;
@@ -307,6 +390,8 @@ namespace AI
 
         // sync up castle list (if conquered new ones during the turn)
         if ( castles.size() != sortedCastleList.size() ) {
+            evaluateRegionSafety();
+
             sortedCastleList = castles;
             sortedCastleList.SortByBuildingValue();
         }
