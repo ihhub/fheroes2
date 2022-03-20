@@ -121,11 +121,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
             // Attacker should attack either from his head cell or from his tail cell, otherwise something strange happens
             assert( attackSrc == attackingUnit.GetHeadIndex() || attackSrc == attackingUnit.GetTailIndex() );
 
-            if ( attackSrc == attackingUnit.GetHeadIndex() ) {
-                return true;
-            }
-
-            return false;
+            return attackSrc == attackingUnit.GetHeadIndex();
         };
 
         if ( attacker.isWide() ) {
