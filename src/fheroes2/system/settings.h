@@ -47,7 +47,7 @@ enum MusicSource
 class Settings
 {
 public:
-    static constexpr const char * FHEROES2_CONFIG_FILE_NAME = "fheroes2.cfg";
+    static constexpr const char * configFileName = "fheroes2.cfg";
 
     enum : uint32_t
     {
