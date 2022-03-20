@@ -24,11 +24,6 @@
 #include <algorithm>
 #include <cctype>
 
-#if defined( MACOS_APP_BUNDLE )
-#include "logging.h"
-#include <CoreFoundation/CoreFoundation.h>
-#endif
-
 #include "serialize.h"
 #include "tinyconfig.h"
 #include "tools.h"
@@ -58,107 +53,6 @@ TinyConfig::TinyConfig( char sep, char com )
 
 bool TinyConfig::Load( const std::string & cfile )
 {
-#if defined( MACOS_APP_BUNDLE )
-    CFDataRef resourceData = NULL;
-    CFPropertyListRef propertyList = NULL;
-    CFDictionaryRef propertyListDictionary = NULL;
-    CFStringRef configFileCFString = NULL;
-    CFURLRef fileURL = NULL;
-
-    configFileCFString = CFStringCreateWithCString( kCFAllocatorDefault, cfile.c_str(), kCFStringEncodingUTF8 );
-
-    fileURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, configFileCFString, kCFURLPOSIXPathStyle, false );
-
-    CFRelease( configFileCFString );
-
-    CFReadStreamRef streamRef = CFReadStreamCreateWithFile( kCFAllocatorDefault, fileURL );
-    CFRelease( fileURL );
-
-    if ( !streamRef ) {
-        ERROR_LOG( "Unable to create stream reference for reading config plist" );
-        return false;
-    }
-
-    if ( !CFReadStreamOpen( streamRef ) ) {
-        CFRelease( streamRef );
-        ERROR_LOG( "Unable to open stream reference for reading config plist" );
-        return false;
-    }
-
-    if ( !CFReadStreamHasBytesAvailable( streamRef ) ) {
-        CFRelease( streamRef );
-        ERROR_LOG( "No data to read from config plist" );
-        return false;
-    }
-
-    CFIndex bytesRead = 0;
-    UInt8 fallbackBuffer[1048576];
-    const UInt8 * dataBytes = CFReadStreamGetBuffer( streamRef, 0, &bytesRead );
-    if ( !dataBytes ) {
-        bytesRead = CFReadStreamRead( streamRef, fallbackBuffer, sizeof( fallbackBuffer ) );
-        dataBytes = fallbackBuffer;
-    }
-
-    resourceData = CFDataCreate( kCFAllocatorDefault, dataBytes, bytesRead );
-
-    CFReadStreamClose( streamRef );
-    CFRelease( streamRef );
-
-    if ( !resourceData ) {
-        ERROR_LOG( "Unable to read data from config plist" );
-        return false;
-    }
-
-    propertyList = static_cast<CFPropertyListRef>( CFPropertyListCreateWithData( kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, NULL, NULL ) );
-
-    if ( resourceData ) {
-        CFRelease( resourceData );
-    }
-    else {
-        ERROR_LOG( "Unable to fetch config resource data" );
-        CFRelease( fileURL );
-        return false;
-    }
-
-    if ( !propertyList ) {
-        return false;
-    }
-
-    propertyListDictionary = static_cast<CFDictionaryRef>( propertyList );
-    CFIndex numKeys = CFDictionaryGetCount( propertyListDictionary );
-
-    const void ** keys = (const void **)malloc( sizeof( void * ) * numKeys );
-    const void ** values = (const void **)malloc( sizeof( void * ) * numKeys );
-    char keyBuf[2048];
-    char valBuf[2048];
-
-    CFDictionaryGetKeysAndValues( propertyListDictionary, keys, values );
-
-    for ( CFIndex i = 0; i < numKeys; i++ ) {
-        if ( !CFStringGetCString( static_cast<CFStringRef>( keys[i] ), keyBuf, 2048, kCFStringEncodingUTF8 ) ) {
-            ERROR_LOG( "Error converting config key to string" );
-            free( keys );
-            free( values );
-            return false;
-        }
-        if ( !CFStringGetCString( static_cast<CFStringRef>( values[i] ), valBuf, 2048, kCFStringEncodingUTF8 ) ) {
-            ERROR_LOG( "Error converting config value to string" );
-            free( keys );
-            free( values );
-            return false;
-        }
-
-        std::string keyString = std::string( keyBuf );
-        std::string valueString = std::string( valBuf );
-
-        emplace( ModifyKey( keyString ), valueString );
-    }
-
-    free( keys );
-    free( values );
-
-    CFRelease( propertyList );
-#else
     StreamFile sf;
     if ( !sf.open( cfile, "rb" ) )
         return false;
@@ -182,7 +76,6 @@ bool TinyConfig::Load( const std::string & cfile )
             emplace( ModifyKey( left ), right );
         }
     }
-#endif
 
     return true;
 }

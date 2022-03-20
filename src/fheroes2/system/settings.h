@@ -24,10 +24,6 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
-#if defined( MACOS_APP_BUNDLE )
-#include <CoreFoundation/CoreFoundation.h>
-#endif
-
 #include "bitmodes.h"
 #include "dir.h"
 #include "maps_fileinfo.h"
@@ -51,11 +47,7 @@ enum MusicSource
 class Settings
 {
 public:
-#if defined( MACOS_APP_BUNDLE )
-    static constexpr const char * FHEROES2_CONFIG_FILE_NAME = "com.horns.and.hoovers.fheroes2.plist";
-#else
     static constexpr const char * FHEROES2_CONFIG_FILE_NAME = "fheroes2.cfg";
-#endif
 
     enum : uint32_t
     {
@@ -122,12 +114,7 @@ public:
     bool Read( const std::string & );
     bool Save( const std::string & ) const;
 
-#if defined( MACOS_APP_BUNDLE )
-    CFPropertyListRef GetConfigFilePayload() const;
-    CFPropertyListRef ConfigPlist() const;
-#else
     std::string GetConfigFilePayload() const;
-#endif
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
 
@@ -599,10 +586,6 @@ public:
 
 protected:
     void PostLoad();
-
-#if defined( MACOS_APP_BUNDLE )
-    void setConfigDictionaryValue( CFMutableDictionaryRef configDict, std::string key, std::string value ) const;
-#endif
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Settings & );

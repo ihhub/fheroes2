@@ -350,67 +350,10 @@ void Settings::PostLoad()
     }
 }
 
-#if defined( MACOS_APP_BUNDLE )
-void Settings::setConfigDictionaryValue( CFMutableDictionaryRef configDict, std::string key, std::string value ) const
-{
-    CFStringRef cfKey, cfValue;
-
-    cfKey = CFStringCreateWithCString( kCFAllocatorDefault, key.c_str(), kCFStringEncodingUTF8 );
-    cfValue = CFStringCreateWithCString( kCFAllocatorDefault, value.c_str(), kCFStringEncodingUTF8 );
-
-    CFDictionarySetValue( configDict, cfKey, cfValue );
-}
-#endif
-
 bool Settings::Save( const std::string & filename ) const
 {
     if ( filename.empty() )
         return false;
-
-#if defined( MACOS_APP_BUNDLE )
-    CFPropertyListRef propertyList = GetConfigFilePayload();
-
-    if ( !propertyList ) {
-        ERROR_LOG( "Error creating config property list" );
-        return false;
-    }
-
-    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
-    CFStringRef cfCfgFilename = CFStringCreateWithCString( kCFAllocatorDefault, cfgFilename.c_str(), kCFStringEncodingUTF8 );
-
-    CFURLRef fileURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, cfCfgFilename, kCFURLPOSIXPathStyle, false );
-
-    CFRelease( cfCfgFilename );
-
-    if ( !fileURL ) {
-        ERROR_LOG( "Unable to get file reference to write config." );
-        CFRelease( propertyList );
-        return false;
-    }
-
-    CFWriteStreamRef fileStream = CFWriteStreamCreateWithFile( kCFAllocatorDefault, fileURL );
-
-    CFRelease( fileURL );
-
-    if ( !fileStream ) {
-        ERROR_LOG( "Unable to create stream to write config plist" );
-        CFRelease( propertyList );
-        return false;
-    }
-
-    if ( !CFWriteStreamOpen( fileStream ) ) {
-        ERROR_LOG( "Unable to open config plist for writing" );
-        CFRelease( fileStream );
-        CFRelease( propertyList );
-    }
-
-    CFPropertyListWrite( propertyList, fileStream, kCFPropertyListXMLFormat_v1_0, 0, NULL );
-
-    CFWriteStreamClose( fileStream );
-
-    CFRelease( fileStream );
-    CFRelease( propertyList );
-#else
 
     std::fstream file;
 #if defined( FHEROES2_VITA )
@@ -425,130 +368,14 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = GetConfigFilePayload();
     file.write( data.data(), data.size() );
-#endif
 
     return true;
 }
 
-#if defined( MACOS_APP_BUNDLE )
-CFPropertyListRef Settings::GetConfigFilePayload() const
-{
-    return ConfigPlist();
-}
-
-CFPropertyListRef Settings::ConfigPlist() const
-{
-    std::ostringstream os;
-
-    std::string musicType;
-    if ( MusicType() == MUSIC_EXTERNAL ) {
-        musicType = "external";
-    }
-    else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
-        musicType = "expansion";
-    }
-    else {
-        musicType = "original";
-    }
-
-    CFMutableDictionaryRef configDict = CFDictionaryCreateMutable( kCFAllocatorDefault, NULL, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
-
-    os << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height();
-    setConfigDictionaryValue( configDict, "videomode", os.str() );
-    os.str( "" );
-
-    os << musicType;
-    setConfigDictionaryValue( configDict, "music", os.str() );
-    os.str( "" );
-
-    os << sound_volume;
-    setConfigDictionaryValue( configDict, "sound volume", os.str() );
-    os.str( "" );
-
-    os << music_volume;
-    setConfigDictionaryValue( configDict, "music volume", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "fullscreen", os.str() );
-    os.str( "" );
-
-    os << debug;
-    setConfigDictionaryValue( configDict, "debug", os.str() );
-    os.str( "" );
-
-    os << heroes_speed;
-    setConfigDictionaryValue( configDict, "heroes speed", os.str() );
-    os.str( "" );
-
-    os << ai_speed;
-    setConfigDictionaryValue( configDict, "ai speed", os.str() );
-    os.str( "" );
-
-    os << battle_speed;
-    setConfigDictionaryValue( configDict, "battle speed", os.str() );
-    os.str( "" );
-
-    os << scroll_speed;
-    setConfigDictionaryValue( configDict, "scroll speed", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "battle grid", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "battle shadow movement", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "battle shadow cursor", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "auto resolve battles", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "auto spell casting", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "battle army order", os.str() );
-    os.str( "" );
-
-    os << _gameLanguage;
-    setConfigDictionaryValue( configDict, "lang", os.str() );
-    os.str( "" );
-
-    os << _controllerPointerSpeed;
-    setConfigDictionaryValue( configDict, "controller pointer speed", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "first time game run", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "show game intro", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "v-sync", os.str() );
-    os.str( "" );
-
-    os << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" );
-    setConfigDictionaryValue( configDict, "text support mode", os.str() );
-    os.str( "" );
-
-    return configDict;
-}
-#else
 std::string Settings::GetConfigFilePayload() const
 {
     return String();
 }
-#endif
 
 std::string Settings::String() const
 {
