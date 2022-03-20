@@ -26,7 +26,9 @@ echo_stage "[1/4] determining destination directory"
 
 DEST_PATH=""
 
-if [[ -f fheroes2 && -x fheroes2 ]]; then
+if [[ ! -z "$1" ]]; then
+    DEST_PATH="$1"
+elif [[ -f fheroes2 && -x fheroes2 ]]; then
     DEST_PATH="."
 elif [[ -d ../../src ]]; then
     # Special hack for developers running this script from the source tree
@@ -36,7 +38,7 @@ fi
 if [[ -z "$DEST_PATH" || ! -d "$DEST_PATH" || ! -w "$DEST_PATH" ]]; then
     if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
         DEST_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
-    else
+    elif [[ -z "$1" ]]; then
         DEST_PATH="$HOME/.fheroes2"
     fi
 fi
