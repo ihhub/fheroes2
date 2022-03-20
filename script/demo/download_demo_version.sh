@@ -34,11 +34,8 @@ elif [[ -d ../../src ]]; then
 fi
 
 if [[ -z "$DEST_PATH" || ! -d "$DEST_PATH" || ! -w "$DEST_PATH" ]]; then
-    PLATFORM_NAME="$(uname 2> /dev/null)"
-    if [[ "${PLATFORM_NAME}" == "Linux" ]]; then
+    if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
         DEST_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
-    elif [[ "${PLATFORM_NAME}" == "Darwin" ]]; then
-        DEST_PATH="${XDG_CONFIG_HOME:-$HOME/Library/Application Support}/fheroes2"
     else
         DEST_PATH="$HOME/.fheroes2"
     fi
