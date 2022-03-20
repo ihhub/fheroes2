@@ -19,6 +19,7 @@ Precompiled binaries of the release version are currently available for the foll
   * [**MacPorts**](#macports)
   * [**Homebrew**](#homebrew-mac)
   * [**macOS ZIP archive**](#macos-zip-archive)
+  * [**macOS native app**](#macos-native-app)
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
   * [**Homebrew**](#homebrew-linux)
@@ -107,7 +108,7 @@ If you are using [**Homebrew**](https://brew.sh/), you can install the game by r
 brew install fheroes2
 ```
 
-<a name="mac-app-bundle"></a>
+<a name="macos-native-app"></a>
 ### macOS native app
 
 * Download the source and compile with the `-DMACOS_APP_BUNDLE=1` option (if using cmake) or `MACOS_APP_BUNDLE=1` environment variable (if using GNU make).
