@@ -533,14 +533,14 @@ ListDirs Settings::GetRootDirs()
     // macOS app bundle Resources directory
     char resourcePath[PATH_MAX];
 
-    CFBundleRef mainBundle = CFBundleGetMainBundle();
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( mainBundle );
-    if ( !CFURLGetFileSystemRepresentation( resourcesURL, TRUE, (UInt8 *)resourcePath, PATH_MAX ) ) {
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
+    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        dirs.push_back( resourcePath );
+    }
+    else {
         ERROR_LOG( "Unable to get app bundle path" );
     }
     CFRelease( resourcesURL );
-
-    dirs.push_back( resourcePath );
 #endif
 
     return dirs;

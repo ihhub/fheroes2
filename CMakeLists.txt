@@ -87,24 +87,7 @@ endif(NOT WIN32)
 #
 # Installation of auxiliary files
 #
-if(NOT MACOS_APP_BUNDLE)
-	install(
-		FILES fheroes2.key
-		DESTINATION ${CONFIGURE_FHEROES2_DATA}
-		)
-
-	install(
-		DIRECTORY files/data/
-		DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
-		FILES_MATCHING
-		PATTERN *.h2d
-		)
-
-	install(
-		FILES docs/README.txt LICENSE changelog.txt
-		DESTINATION ${CMAKE_INSTALL_DOCDIR}
-		)
-else(NOT MACOS_APP_BUNDLE)
+if(MACOS_APP_BUNDLE)
 	add_custom_target(
 		install_h2d_files
 		ALL
@@ -129,7 +112,24 @@ else(NOT MACOS_APP_BUNDLE)
 		DEPENDS fheroes2
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 		)
-endif(NOT MACOS_APP_BUNDLE)
+else(MACOS_APP_BUNDLE)
+	install(
+		FILES fheroes2.key
+		DESTINATION ${CONFIGURE_FHEROES2_DATA}
+		)
+
+	install(
+		DIRECTORY files/data/
+		DESTINATION ${CONFIGURE_FHEROES2_DATA}/files/data
+		FILES_MATCHING
+		PATTERN *.h2d
+		)
+
+	install(
+		FILES docs/README.txt LICENSE changelog.txt
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}
+		)
+endif(MACOS_APP_BUNDLE)
 
 if(GET_HOMM2_DEMO)
 	include(FetchContent)
