@@ -366,15 +366,10 @@ bool Settings::Save( const std::string & filename ) const
     if ( !file )
         return false;
 
-    const std::string & data = GetConfigFilePayload();
+    const std::string & data = String();
     file.write( data.data(), data.size() );
 
     return true;
-}
-
-std::string Settings::GetConfigFilePayload() const
-{
-    return String();
 }
 
 std::string Settings::String() const

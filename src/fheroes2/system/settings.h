@@ -114,7 +114,6 @@ public:
     bool Read( const std::string & );
     bool Save( const std::string & ) const;
 
-    std::string GetConfigFilePayload() const;
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
 
