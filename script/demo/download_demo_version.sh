@@ -26,7 +26,7 @@ echo_stage "[1/4] determining destination directory"
 
 DEST_PATH=""
 
-if [[ ! -z "$1" ]]; then
+if [[ -n "$1" ]]; then
     DEST_PATH="$1"
 elif [[ -f fheroes2 && -x fheroes2 ]]; then
     DEST_PATH="."
