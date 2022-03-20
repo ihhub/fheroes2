@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -147,7 +147,7 @@ namespace AI
             }
             // no neighbours means it is an island; they are usually safer (or more dangerous to explore) due to boat movement penalties
             if ( region.getNeighboursCount() == 0 )
-                regionsToCheck[currentEntry].second *= 1.5;
+                regionsToCheck[currentEntry].second = regionsToCheck[currentEntry].second * 3 / 2;
 
             if ( currentEntry == batchEnd - 1 ) {
                 // Apply the calculated value in batches
