@@ -158,7 +158,8 @@ namespace AI
         }
 
         if ( castle.GetLevelMageGuild() < spellLevel && safetyFactor > 0 ) {
-            static const std::vector<BuildOrder> magicGuildUpgrades = { { BUILD_MAGEGUILD2, 2 }, { BUILD_MAGEGUILD3, 2 }, { BUILD_MAGEGUILD4, 1 }, { BUILD_MAGEGUILD5, 1 } };
+            static const std::vector<BuildOrder> magicGuildUpgrades
+                = { { BUILD_MAGEGUILD2, 2 }, { BUILD_MAGEGUILD3, 2 }, { BUILD_MAGEGUILD4, 1 }, { BUILD_MAGEGUILD5, 1 } };
             if ( Build( castle, magicGuildUpgrades ) ) {
                 return true;
             }

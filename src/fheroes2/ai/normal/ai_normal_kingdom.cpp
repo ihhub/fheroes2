@@ -124,7 +124,8 @@ namespace AI
                 stats.evaluated = false;
             }
         }
-        std::sort( regionsToCheck.begin(), regionsToCheck.end(), []( const auto & x, const auto & y ) { return x.second > y.second; } );
+        std::sort( regionsToCheck.begin(), regionsToCheck.end(),
+                   []( const std::pair<size_t, int> & left, const std::pair<size_t, int> & right ) { return left.second > right.second; } );
 
         size_t currentEntry = 0;
         size_t batchStart = 0;
