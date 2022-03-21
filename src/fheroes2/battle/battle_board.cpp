@@ -208,7 +208,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
     else {
         // Set passable cells.
         for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
-            GetPath( unit, Position::GetPositionWhenMoved( unit, idx ), false );
+            GetPath( unit, Position::GetPosition( unit, idx ), false );
         }
     }
 }
@@ -407,8 +407,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
     const bool isWideUnit = unit.isWide();
 
     // Check if destination is valid
-    if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
-        ERROR_LOG( "Invalid destination for unit " + unit.String() );
+    if ( destination.GetHead() == nullptr || ( isWideUnit && destination.GetTail() == nullptr ) ) {
         return result;
     }
 
@@ -526,7 +525,9 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
     }
 
     if ( attacker.isAllAdjacentCellsAttack() ) {
-        Position position = Position::GetPositionWhenMoved( attacker, from );
+        Position position = Position::GetPosition( attacker, from );
+        assert( position.GetHead() != nullptr && ( !attacker.isWide() || position.GetTail() != nullptr ) );
+
         Indexes aroundAttacker = GetAroundIndexes( position );
 
         std::set<const Unit *> unitsUnderAttack;

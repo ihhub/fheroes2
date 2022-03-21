@@ -108,8 +108,10 @@ namespace Battle
         bool isReflect( void ) const;
         bool contains( int cellIndex ) const;
 
-        // Returns the position that the given unit would occupy after moving to the given index
-        static Position GetPositionWhenMoved( const Unit & unit, const int32_t dst );
+        // Returns the position that the given unit would occupy after moving to the
+        // given index (without taking into account the cell passability information)
+        // or an empty Position object if the given index is unreachable
+        static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for the current unit (to which the current
         // passability information relates) which corresponds to the given index or

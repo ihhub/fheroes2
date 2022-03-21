@@ -357,13 +357,16 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
-        Position pos2;
         const s32 head = b->GetHeadIndex();
-        Position pos1 = Position::GetPositionWhenMoved( *b, dst );
+
+        Position pos1 = Position::GetPosition( *b, dst );
+        assert( pos1.GetHead() != nullptr && ( !b->isWide() || pos1.GetTail() != nullptr ) );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 )
                                << ")" );
+
+        Position pos2;
 
         if ( b->isFlying() ) {
             b->UpdateDirection( pos1.GetRect() );
@@ -1058,9 +1061,8 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     const Spell spell( Spell::TELEPORT );
 
     if ( b ) {
-        Position pos = Position::GetPositionWhenMoved( *b, dst );
-        if ( b->isReflect() != pos.isReflect() )
-            pos.Swap();
+        Position pos = Position::GetPosition( *b, dst );
+        assert( pos.GetHead() != nullptr && ( !b->isWide() || pos.GetTail() != nullptr ) );
 
         if ( interface ) {
             const HeroBase * commander = GetCurrentCommander();
@@ -1077,12 +1079,11 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
         }
 
         b->SetPosition( pos );
-        b->UpdateDirection();
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "spell: " << spell.GetName() << ", src: " << src << ", dst: " << dst );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "spell: " << spell.GetName() << " false" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "spell: " << spell.GetName() << " failed" );
     }
 }
 
@@ -1138,7 +1139,9 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         Indexes::const_iterator it
             = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
         if ( it != distances.end() ) {
-            const Position pos = Position::GetPositionWhenMoved( *troop, *it );
+            const Position pos = Position::GetPosition( *troop, *it );
+            assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
+
             const s32 dst = pos.GetHead()->GetIndex();
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
@@ -1171,6 +1174,6 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         }
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "spell: " << Spell( Spell::MIRRORIMAGE ).GetName() << " false" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "spell: " << Spell( Spell::MIRRORIMAGE ).GetName() << " failed" );
     }
 }

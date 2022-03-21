@@ -84,27 +84,54 @@ fheroes2::Rect Battle::Position::GetRect( void ) const
     return fheroes2::Rect();
 }
 
-Battle::Position Battle::Position::GetPositionWhenMoved( const Unit & unit, const int32_t dst )
+Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t dst )
 {
     Position result;
 
-    result.first = Board::GetCell( dst );
+    if ( unit.isWide() ) {
+        auto checkCells = [&unit]( Cell * headCell, Cell * tailCell ) {
+            Position res;
 
-    if ( result.first && unit.isWide() ) {
-        result.second = Board::GetCell( dst, unit.isReflect() ? RIGHT : LEFT );
-
-        if ( !result.second || ( result.second != unit.GetPosition().GetHead() && !result.second->isPassable1( true ) ) ) {
-            result.second = Board::GetCell( dst, unit.isReflect() ? LEFT : RIGHT );
-
-            if ( !result.second )
-                result.second = Board::GetCell( dst, unit.isReflect() ? RIGHT : LEFT );
-
-            if ( result.second ) {
-                std::swap( result.first, result.second );
+            if ( headCell == nullptr || ( !unit.GetPosition().contains( headCell->GetIndex() ) && !headCell->isPassable1( true ) ) ) {
+                return res;
             }
-            else {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "nullptr pointer, " << unit.String() << ", dst: " << dst );
+
+            if ( tailCell == nullptr || ( !unit.GetPosition().contains( tailCell->GetIndex() ) && !tailCell->isPassable1( true ) ) ) {
+                return res;
             }
+
+            res.first = headCell;
+            res.second = tailCell;
+
+            return res;
+        };
+
+        const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+
+        if ( Board::isValidDirection( dst, tailDirection ) ) {
+            Cell * headCell = Board::GetCell( dst );
+            Cell * tailCell = Board::GetCell( Board::GetIndexDirection( dst, tailDirection ) );
+
+            result = checkCells( headCell, tailCell );
+        }
+
+        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
+            // Try opposite direction
+            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+
+            if ( Board::isValidDirection( dst, headDirection ) ) {
+                Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
+                Cell * tailCell = Board::GetCell( dst );
+
+                result = checkCells( headCell, tailCell );
+            }
+        }
+    }
+    else {
+        Cell * headCell = Board::GetCell( dst );
+
+        if ( headCell != nullptr && ( unit.GetPosition().contains( headCell->GetIndex() ) || headCell->isPassable1( true ) ) ) {
+            result.first = headCell;
         }
     }
 
