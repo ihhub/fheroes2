@@ -174,9 +174,6 @@ namespace AI
 
     void Normal::CastleTurn( Castle & castle, bool defensive )
     {
-        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
-        const RegionStats & stats = _regions[regionID];
-
         if ( defensive ) {
             Build( castle, GetDefensiveStructures() );
 
@@ -184,6 +181,9 @@ namespace AI
             OptimizeTroopsOrder( castle.GetArmy() );
         }
         else {
+            const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+            const RegionStats & stats = _regions[regionID];
+
             CastleDevelopment( castle, stats.safetyFactor, stats.spellLevel );
         }
     }

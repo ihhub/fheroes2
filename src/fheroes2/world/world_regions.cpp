@@ -358,10 +358,7 @@ void World::ComputeStaticAnalysis()
 
         // Fix missing references
         for ( uint32_t adjacent : reg._neighbours ) {
-            std::set<uint32_t> & otherList = _regions[adjacent]._neighbours;
-            if ( otherList.find( reg._id ) == otherList.end() ) {
-                otherList.insert( reg._id );
-            }
+            _regions[adjacent]._neighbours.insert( reg._id );
         }
     }
 }
