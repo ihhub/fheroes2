@@ -359,26 +359,26 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     if ( b && b->isValid() && cell && cell->isPassableForUnit( *b, false ) ) {
         const s32 head = b->GetHeadIndex();
 
-        Position pos1 = Position::GetPosition( *b, dst );
-        assert( pos1.GetHead() != nullptr && ( !b->isWide() || pos1.GetTail() != nullptr ) );
+        Position pos = Position::GetPosition( *b, dst );
+        assert( pos.GetHead() != nullptr && ( !b->isWide() || pos.GetTail() != nullptr ) );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 )
+                   b->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos.GetTail()->GetIndex() : -1 )
                                << ")" );
 
-        Position pos2;
+        Position finalPos;
 
         if ( b->isFlying() ) {
-            b->UpdateDirection( pos1.GetRect() );
-            if ( b->isReflect() != pos1.isReflect() )
-                pos1.Swap();
+            b->UpdateDirection( pos.GetRect() );
+            if ( b->isReflect() != pos.isReflect() )
+                pos.Swap();
 
             if ( interface ) {
-                interface->RedrawActionFly( *b, pos1 );
+                interface->RedrawActionFly( *b, pos );
             }
             else if ( bridge ) {
-                const int32_t dstHead = pos1.GetHead()->GetIndex();
-                const int32_t dstTail = b->isWide() ? pos1.GetTail()->GetIndex() : -1;
+                const int32_t dstHead = pos.GetHead()->GetIndex();
+                const int32_t dstTail = b->isWide() ? pos.GetTail()->GetIndex() : -1;
 
                 // open the bridge if the unit should land on it
                 if ( bridge->NeedDown( *b, dstHead ) ) {
@@ -388,7 +388,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                     bridge->Action( *b, dstTail );
                 }
 
-                b->SetPosition( pos1 );
+                b->SetPosition( pos );
 
                 // check for possible bridge close action, after unit's end of movement
                 if ( bridge->AllowUp() ) {
@@ -396,10 +396,10 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 }
             }
 
-            pos2 = pos1;
+            finalPos = pos;
         }
         else {
-            const Indexes path = GetPath( *b, pos1 );
+            const Indexes path = GetPath( *b, pos );
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -440,13 +440,14 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 const s32 dst1 = path.back();
                 const s32 dst2 = 1 < path.size() ? path[path.size() - 2] : head;
 
-                pos2.Set( dst1, b->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
+                finalPos.Set( dst1, b->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
             }
-            else
-                pos2.Set( path.back(), false, b->isReflect() );
+            else {
+                finalPos.Set( path.back(), false, b->isReflect() );
+            }
         }
 
-        b->SetPosition( pos2 );
+        b->SetPosition( finalPos );
         b->UpdateDirection();
     }
     else {
@@ -1058,10 +1059,10 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     const int32_t dst = cmd.GetValue();
 
     Unit * b = GetTroopBoard( src );
-    const Spell spell( Spell::TELEPORT );
+    const Cell * cell = Board::GetCell( dst );
 
-    if ( b ) {
-        Position pos = Position::GetPosition( *b, dst );
+    if ( b && b->isValid() && cell && cell->isPassableForUnit( *b, false ) ) {
+        const Position pos = Position::GetPosition( *b, dst );
         assert( pos.GetHead() != nullptr && ( !b->isWide() || pos.GetTail() != nullptr ) );
 
         if ( interface ) {
@@ -1074,16 +1075,19 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
             TargetsInfo targetsInfo;
             targetsInfo.push_back( targetInfo );
 
-            interface->RedrawActionSpellCastStatus( spell, src, commander->GetName(), targetsInfo );
+            interface->RedrawActionSpellCastStatus( Spell( Spell::TELEPORT ), src, commander->GetName(), targetsInfo );
             interface->RedrawActionTeleportSpell( *b, pos.GetHead()->GetIndex() );
         }
 
         b->SetPosition( pos );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "spell: " << spell.GetName() << ", src: " << src << ", dst: " << dst );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "src: " << src << ", dst: " << dst );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "spell: " << spell.GetName() << " failed" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                   "incorrect param"
+                       << ": "
+                       << "src: " << src << ", dst: " << dst );
     }
 }
 
@@ -1128,7 +1132,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
     const int32_t who = cmd.GetValue();
     Unit * troop = GetTroopBoard( who );
 
-    if ( troop != nullptr ) {
+    if ( troop && troop->isValid() ) {
         Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
 
         const int32_t centerIndex = troop->GetHeadIndex();
@@ -1174,6 +1178,9 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         }
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "spell: " << Spell( Spell::MIRRORIMAGE ).GetName() << " failed" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                   "incorrect param"
+                       << ": "
+                       << "who: " << who );
     }
 }
