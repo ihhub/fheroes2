@@ -88,23 +88,25 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         return defendingUnit.GetHeadIndex();
     };
 
+    auto calculateDir = []( const Unit & attackingUnit, const int32_t attackDst ) -> int {
+        // The target cell of the attack is near the attacker's head cell
+        if ( Board::isNearIndexes( attackingUnit.GetHeadIndex(), attackDst ) ) {
+            return Board::GetDirection( attackingUnit.GetHeadIndex(), attackDst );
+        }
+        // The target cell of the attack is near the attacker's tail cell
+        if ( attackingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetTailIndex(), attackDst ) ) {
+            return Board::GetDirection( attackingUnit.GetTailIndex(), attackDst );
+        }
+        // Units don't stand next to each other, this is most likely a shot
+        return UNKNOWN;
+    };
+
     if ( dst < 0 ) {
         dst = calculateDst( attacker, defender );
     }
 
     if ( dir < 0 ) {
-        // The target cell of the attack is near the attacker's head cell
-        if ( Board::isNearIndexes( attacker.GetHeadIndex(), dst ) ) {
-            dir = Board::GetDirection( attacker.GetHeadIndex(), dst );
-        }
-        // The target cell of the attack is near the attacker's tail cell
-        else if ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), dst ) ) {
-            dir = Board::GetDirection( attacker.GetTailIndex(), dst );
-        }
-        // Units don't stand next to each other, this is most likely a shot
-        else {
-            dir = UNKNOWN;
-        }
+        dir = calculateDir( attacker, dst );
     }
 
     // UNKNOWN attack direction is only allowed for archers
@@ -112,14 +114,37 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
     // This is a direct attack, update the direction for both the attacker and the defender
     if ( dir ) {
-        if ( !attacker.isWide() || !Board::isNearIndexes( attacker.GetHeadIndex(), dst ) ) {
+        auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackDst, const int attackDir ) {
+            assert( attackingUnit.isWide() );
+
+            const int32_t attackSrc = Board::GetIndexDirection( attackDst, Board::GetReflectDirection( attackDir ) );
+            // Attacker should attack either from his head cell or from his tail cell, otherwise something strange happens
+            assert( attackSrc == attackingUnit.GetHeadIndex() || attackSrc == attackingUnit.GetTailIndex() );
+
+            return attackSrc == attackingUnit.GetHeadIndex();
+        };
+
+        if ( attacker.isWide() ) {
+            if ( !directionIsValidForAttack( attacker, dst, dir ) ) {
+                attacker.SetReflection( !attacker.isReflect() );
+            }
+        }
+        else {
             attacker.UpdateDirection( board[dst].GetPos() );
         }
 
-        const int32_t responseDst = calculateDst( defender, attacker );
+        if ( !attacker.ignoreRetaliation() && defender.AllowResponse() ) {
+            const int32_t responseDst = calculateDst( defender, attacker );
+            const int responseDir = calculateDir( defender, responseDst );
 
-        if ( !attacker.ignoreRetaliation() && defender.AllowResponse() && ( !defender.isWide() || !Board::isNearIndexes( defender.GetHeadIndex(), responseDst ) ) ) {
-            defender.UpdateDirection( board[responseDst].GetPos() );
+            if ( defender.isWide() ) {
+                if ( !directionIsValidForAttack( defender, responseDst, responseDir ) ) {
+                    defender.SetReflection( !defender.isReflect() );
+                }
+            }
+            else {
+                defender.UpdateDirection( board[responseDst].GetPos() );
+            }
         }
     }
     // This is a shot, update the direction for the attacker only
