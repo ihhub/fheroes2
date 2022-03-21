@@ -167,8 +167,8 @@ namespace Battle
                 const int32_t idx = it->GetIndex();
                 BattleNode & node = _cache[idx];
 
-                // isPassable3 checks if there's space for unit tail (for wide units)
-                if ( it->isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
+                // isPassableForUnit checks if there's space for unit tail (for wide units)
+                if ( it->isPassableForUnit( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
                     node._isOpen = true;
                     node._from = pathStart;
                     node._cost = Battle::Board::GetDistance( pathStart, idx );
@@ -222,8 +222,8 @@ namespace Battle
                     const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
                     const Cell * tailCell = ( unitIsWide && !_start.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
 
-                    // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
-                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) )
+                    // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable( false ) instead of isPassableFromAdjacent
+                    if ( headCell->isPassable( false ) && ( !tailCell || tailCell->isPassable( true ) )
                          && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit ) ) ) {
                         const uint32_t cost = previousNode._cost;
                         BattleNode & node = _cache[newNode];

@@ -70,9 +70,14 @@ namespace Battle
         bool isReachableForHead() const;
         bool isReachableForTail() const;
 
-        bool isPassable4( const Unit &, const Cell & ) const;
-        bool isPassable3( const Unit &, bool check_reflect ) const;
-        bool isPassable1( bool check_troop ) const;
+        // Checks that the cell is passable for the given unit located in a certain adjacent cell
+        bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
+        // Checks that the cell is passable for the given unit, with an option to disable the use
+        // of this cell for the unit's tail
+        bool isPassableForUnit( const Unit & unit, const bool disableTail ) const;
+        // Checks that the cell is passable, i.e. does not contain an obstacle or unit (optional)
+        bool isPassable( const bool checkForUnit ) const;
+
         bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
         s32 GetIndex( void ) const;
@@ -109,9 +114,11 @@ namespace Battle
         bool contains( int cellIndex ) const;
 
         // Returns the position that the given unit would occupy after moving to the
-        // given index (without taking into account the cell passability information)
-        // or an empty Position object if the given index is unreachable
-        static Position GetPosition( const Unit & unit, const int32_t dst );
+        // cell with the given index (without taking into account the cell passability
+        // information), considering also an opposite cell direction (if allowed), i.e.
+        // when cell with the given index will be used for the unit's tail, or an empty
+        // Position object if the given index is unreachable
+        static Position GetPosition( const Unit & unit, const int32_t dst, const bool tryOpposite = true );
 
         // Returns the reachable position for the current unit (to which the current
         // passability information relates) which corresponds to the given index or

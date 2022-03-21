@@ -356,7 +356,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     Battle::Unit * b = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
 
-    if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
+    if ( b && b->isValid() && cell && cell->isPassableForUnit( *b, false ) ) {
         const s32 head = b->GetHeadIndex();
 
         Position pos1 = Position::GetPosition( *b, dst );

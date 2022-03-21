@@ -1731,7 +1731,7 @@ void Battle::Interface::RedrawCover()
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
         for ( const Cell * highlightCell : highlightCells ) {
-            bool isApplicable = highlightCell->isPassable1( false );
+            bool isApplicable = highlightCell->isPassable( false );
 
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
@@ -2217,7 +2217,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
             assert( unitToTeleport != nullptr );
 
-            if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
+            if ( !b_stats && cell->isPassableForUnit( *unitToTeleport, false ) ) {
                 statusMsg = _( "Teleport here" );
                 return Cursor::SP_TELEPORT;
             }
