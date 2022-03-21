@@ -123,7 +123,7 @@ namespace Battle
         // Returns the reachable position for the current unit (to which the current
         // passability information relates) which corresponds to the given index or
         // an empty Position object if the given index is unreachable
-        static Position GetReachable( const Unit & currentUnit, const int32_t dst );
+        static Position GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst = true );
 
         fheroes2::Rect GetRect( void ) const;
         Cell * GetHead( void );

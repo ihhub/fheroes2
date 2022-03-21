@@ -139,7 +139,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
     return result;
 }
 
-Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const int32_t dst )
+Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst /* = true */ )
 {
     Position result;
 
@@ -155,24 +155,36 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
             return res;
         };
 
-        const int tailDirection = currentUnit.isReflect() ? RIGHT : LEFT;
+        auto tryHead = [&currentUnit, dst, &checkCells]() -> Position {
+            const int tailDirection = currentUnit.isReflect() ? RIGHT : LEFT;
 
-        if ( Board::isValidDirection( dst, tailDirection ) ) {
-            Cell * headCell = Board::GetCell( dst );
-            Cell * tailCell = Board::GetCell( Board::GetIndexDirection( dst, tailDirection ) );
+            if ( Board::isValidDirection( dst, tailDirection ) ) {
+                Cell * headCell = Board::GetCell( dst );
+                Cell * tailCell = Board::GetCell( Board::GetIndexDirection( dst, tailDirection ) );
 
-            result = checkCells( headCell, tailCell );
-        }
+                return checkCells( headCell, tailCell );
+            }
 
-        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
+            return {};
+        };
+
+        auto tryTail = [&currentUnit, dst, &checkCells]() -> Position {
             const int headDirection = currentUnit.isReflect() ? LEFT : RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
                 Cell * tailCell = Board::GetCell( dst );
 
-                result = checkCells( headCell, tailCell );
+                return checkCells( headCell, tailCell );
             }
+
+            return {};
+        };
+
+        result = tryHeadFirst ? tryHead() : tryTail();
+
+        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
+            result = tryHeadFirst ? tryTail() : tryHead();
         }
     }
     else {
