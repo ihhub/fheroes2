@@ -198,9 +198,10 @@ public:
 
     void ChangeColor( int );
 
-    void ActionNewDay( void );
-    void ActionNewWeek( void );
-    void ActionNewMonth( void );
+    void ActionNewDay();
+    void ActionNewWeek();
+    void ActionNewMonth();
+
     void ActionPreBattle( void );
     void ActionAfterBattle( bool attacker_wins );
 
