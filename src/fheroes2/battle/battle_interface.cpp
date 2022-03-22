@@ -2742,7 +2742,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
-    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst, const bool tryHeadFirst = true ) {
+    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst, const bool tryHeadFirst ) {
         // Only wide units may need this fixup
         if ( !unit.isWide() ) {
             return dst;
@@ -2759,7 +2759,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) ) );
+            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) ) );
             a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
