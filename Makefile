@@ -33,13 +33,16 @@ PROJECT_VERSION := 0.9.13
 
 TARGET	:= fheroes2
 
-.PHONY: all clean
+.PHONY: all bundle clean
 
 all:
 	$(MAKE) -C src
 ifndef MACOS_APP_BUNDLE
 	@cp src/dist/$(TARGET) .
-else
+endif
+
+bundle:
+ifdef MACOS_APP_BUNDLE
 	@mkdir -p "src/dist/${TARGET}.app/Contents/Resources/translations"
 	@mkdir -p "src/dist/${TARGET}.app/Contents/Resources/h2d"
 	@mkdir -p "src/dist/${TARGET}.app/Contents/MacOS"
