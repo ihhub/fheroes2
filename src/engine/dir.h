@@ -35,9 +35,4 @@ struct ListFiles : public std::list<std::string>
     void FindFileInDir( const std::string & path, const std::string & fileName, bool sensitive );
 };
 
-struct ListDirs : public std::list<std::string>
-{
-    void Append( const std::list<std::string> & );
-};
-
 #endif

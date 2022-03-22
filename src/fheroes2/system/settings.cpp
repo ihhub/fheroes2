@@ -500,9 +500,12 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-ListDirs Settings::GetRootDirs()
+const std::set<std::string> & Settings::GetRootDirs()
 {
-    ListDirs dirs;
+    static std::set<std::string> dirs;
+    if ( !dirs.empty() ) {
+        return dirs;
+    }
 
     // from build
 #ifdef CONFIGURE_FHEROES2_DATA
@@ -510,24 +513,29 @@ ListDirs Settings::GetRootDirs()
 #endif
 
     // from env
-    if ( getenv( "FHEROES2_DATA" ) )
-        dirs.push_back( getenv( "FHEROES2_DATA" ) );
+    const char * dataEnvPath = getenv( "FHEROES2_DATA" );
+    if ( dataEnvPath != nullptr ) {
+        dirs.emplace( dataEnvPath );
+    }
 
     // from app path
-    dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
+    dirs.emplace( System::GetDirname( Settings::Get().path_program ) );
 
     // os-specific directories
-    dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+#if defined( FHEROES2_VITA )
+    dirs.emplace( "ux0:app/FHOMM0002" );
+#endif
 
     // user config directory
     const std::string & config = System::GetConfigDirectory( "fheroes2" );
     if ( !config.empty() )
-        dirs.push_back( config );
+        dirs.emplace( config );
 
     // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
     const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
-        dirs.push_back( data );
+    if ( !data.empty() ) {
+        dirs.emplace( data );
+    }
 
 #if defined( MACOS_APP_BUNDLE )
     // macOS app bundle Resources directory
@@ -535,7 +543,7 @@ ListDirs Settings::GetRootDirs()
 
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
     if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX ) ) {
-        dirs.push_back( resourcePath );
+        dirs.emplace( resourcePath );
     }
     else {
         ERROR_LOG( "Unable to get app bundle path" );
@@ -564,6 +572,22 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
     }
 
     return res;
+}
+
+bool Settings::findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath )
+{
+    std::string tempPath;
+
+    for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+        tempPath = System::ConcatePath( rootDir, internalDirectory );
+        tempPath = System::ConcatePath( tempPath, fileName );
+        if ( System::IsFile( tempPath ) ) {
+            fullPath.swap( tempPath );
+            return true;
+        }
+    }
+
+    return false;
 }
 
 std::string Settings::GetLastFile( const std::string & prefix, const std::string & name )
