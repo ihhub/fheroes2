@@ -46,7 +46,7 @@ jobs:
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
           os: macos-10.15
-          dependencies: sdl sdl_mixer sdl_image
+          dependencies: sdl sdl_mixer sdl_image dylibbundler
           env: { FHEROES2_SDL1: ON, MACOS_APP_BUNDLE: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
         - name: macOS SDL2
           os: macos-10.15
@@ -58,7 +58,7 @@ jobs:
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
           os: macos-10.15
-          dependencies: sdl2 sdl2_mixer sdl2_image
+          dependencies: sdl2 sdl2_mixer sdl2_image dylibbundler
           env: { MACOS_APP_BUNDLE: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
