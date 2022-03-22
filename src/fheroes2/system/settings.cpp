@@ -519,16 +519,6 @@ ListDirs Settings::GetRootDirs()
     // os-specific directories
     dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
 
-    // user config directory
-    const std::string & config = System::GetConfigDirectory( "fheroes2" );
-    if ( !config.empty() )
-        dirs.push_back( config );
-
-    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
-    const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
-        dirs.push_back( data );
-
 #if defined( MACOS_APP_BUNDLE )
     // macOS app bundle Resources directory
     char resourcePath[PATH_MAX];
@@ -542,6 +532,16 @@ ListDirs Settings::GetRootDirs()
     }
     CFRelease( resourcesURL );
 #endif
+
+    // user config directory
+    const std::string & config = System::GetConfigDirectory( "fheroes2" );
+    if ( !config.empty() )
+        dirs.push_back( config );
+
+    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
+    const std::string & data = System::GetDataDirectory( "fheroes2" );
+    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
+        dirs.push_back( data );
 
     return dirs;
 }
