@@ -55,6 +55,11 @@ namespace Battle
     {
     public:
         explicit Cell( int32_t );
+        Cell( const Cell & ) = delete;
+        Cell( Cell && ) = default;
+
+        Cell & operator=( const Cell & ) = delete;
+        Cell & operator=( Cell && ) = delete;
 
         void ResetQuality( void );
         void resetReachability();

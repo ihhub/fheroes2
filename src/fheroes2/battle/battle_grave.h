@@ -46,6 +46,9 @@ namespace Battle
     {
     public:
         Graveyard() = default;
+        Graveyard( const Graveyard & ) = delete;
+
+        Graveyard & operator=( const Graveyard & ) = delete;
 
         Indexes GetClosedCells( void ) const;
         void AddTroop( const Unit & );

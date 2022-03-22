@@ -39,14 +39,13 @@ namespace fheroes2
     class LanguageSwitcher
     {
     public:
-        LanguageSwitcher() = delete;
-
-        LanguageSwitcher( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher( const LanguageSwitcher && ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
-
         explicit LanguageSwitcher( const SupportedLanguage language );
+        LanguageSwitcher( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher( LanguageSwitcher && ) = delete;
+
+        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher & operator=( LanguageSwitcher && ) = delete;
+
         ~LanguageSwitcher();
 
     private:

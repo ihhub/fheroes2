@@ -44,6 +44,10 @@ namespace Battle
             , rtAI( pt.x + 75, pt.y, 24, 24 )
         {}
 
+        ControlInfo( const ControlInfo & ) = delete;
+
+        ControlInfo & operator=( const ControlInfo & ) = delete;
+
         void Redraw( void ) const;
 
         int result;
@@ -56,6 +60,9 @@ namespace Battle
     {
     public:
         Only();
+        Only( const Only & ) = delete;
+
+        Only & operator=( const Only & ) = delete;
 
         bool ChangeSettings( void );
         void RedrawBaseInfo( const fheroes2::Point & ) const;

@@ -40,6 +40,12 @@ struct WorldNode : public PathfindingNode<MP2::MapObjectType>
         , _remainingMovePoints( remainingMovePoints )
     {}
 
+    WorldNode( const WorldNode & ) = delete;
+    WorldNode( WorldNode && ) = default;
+
+    WorldNode & operator=( const WorldNode & ) = delete;
+    WorldNode & operator=( WorldNode && ) = default;
+
     void resetNode() override
     {
         PathfindingNode::resetNode();
@@ -53,6 +59,9 @@ class WorldPathfinder : public Pathfinder<WorldNode>
 {
 public:
     WorldPathfinder() = default;
+    WorldPathfinder( const WorldPathfinder & ) = delete;
+
+    WorldPathfinder & operator=( const WorldPathfinder & ) = delete;
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
@@ -84,6 +93,9 @@ class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() = default;
+    PlayerWorldPathfinder( const PlayerWorldPathfinder & ) = delete;
+
+    PlayerWorldPathfinder & operator=( const PlayerWorldPathfinder & ) = delete;
 
     void reset() override;
 
@@ -100,6 +112,10 @@ public:
     explicit AIWorldPathfinder( double advantage )
         : _advantage( advantage )
     {}
+
+    AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
+
+    AIWorldPathfinder & operator=( const AIWorldPathfinder & ) = delete;
 
     void reset() override;
 

@@ -44,10 +44,13 @@ struct ListActions : public std::list<ActionSimple *>
 {
     ListActions() = default;
     ListActions( const ListActions & other ) = default;
-    ListActions & operator=( const ListActions & other ) = delete;
-    ListActions( const ListActions && other ) = delete;
-    ListActions & operator=( const ListActions && other ) = delete;
+    ListActions( ListActions && other ) = delete;
+
     ~ListActions();
+
+    ListActions & operator=( const ListActions & other ) = delete;
+    ListActions & operator=( ListActions && other ) = delete;
+
     void clear( void );
 };
 
@@ -55,10 +58,13 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
 {
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
-    MapObjects & operator=( const MapObjects & other ) = delete;
-    MapObjects( const MapObjects && other ) = delete;
-    MapObjects & operator=( const MapObjects && other ) = delete;
+    MapObjects( MapObjects && other ) = delete;
+
     ~MapObjects();
+
+    MapObjects & operator=( const MapObjects & other ) = delete;
+    MapObjects & operator=( MapObjects && other ) = delete;
+
     void clear( void );
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const fheroes2::Point & );
@@ -155,13 +161,15 @@ class World : protected fheroes2::Size
 {
 public:
     World( const World & other ) = delete;
-    World & operator=( const World & other ) = delete;
-    World( const World && other ) = delete;
-    World & operator=( const World && other ) = delete;
+    World( World && other ) = delete;
+
     ~World()
     {
         Reset();
     }
+
+    World & operator=( const World & other ) = delete;
+    World & operator=( World && other ) = delete;
 
     bool LoadMapMP2( const std::string & );
 

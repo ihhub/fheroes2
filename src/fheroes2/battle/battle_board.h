@@ -54,6 +54,9 @@ namespace Battle
     {
     public:
         Board();
+        Board( const Board & ) = delete;
+
+        Board & operator=( const Board & ) = delete;
 
         void Reset( void );
 

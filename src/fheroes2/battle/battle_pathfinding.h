@@ -44,11 +44,19 @@ namespace Battle
         BattleNode()
             : PathfindingNode( -1, MAX_MOVE_COST, 0 )
         {}
+
         BattleNode( int node, uint16_t cost, bool isOpen, bool isLeftDirection )
             : PathfindingNode( node, cost, 0 )
             , _isOpen( isOpen )
             , _isLeftDirection( isLeftDirection )
         {}
+
+        BattleNode( const BattleNode & ) = delete;
+        BattleNode( BattleNode && ) = default;
+
+        BattleNode & operator=( const BattleNode & ) = delete;
+        BattleNode & operator=( BattleNode && ) = delete;
+
         // Override the base version of the call to use proper values
         void resetNode() override;
     };
@@ -57,6 +65,10 @@ namespace Battle
     {
     public:
         AIBattlePathfinder();
+        AIBattlePathfinder( const AIBattlePathfinder & ) = delete;
+
+        AIBattlePathfinder & operator=( const AIBattlePathfinder & ) = delete;
+
         void reset() override;
         void calculate( const Unit & unit );
         Indexes buildPath( int targetCell ) const;

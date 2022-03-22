@@ -90,6 +90,9 @@ namespace Battle
     {
     public:
         OpponentSprite( const fheroes2::Rect &, const HeroBase *, bool );
+        OpponentSprite( const OpponentSprite & ) = delete;
+
+        OpponentSprite & operator=( const OpponentSprite & ) = delete;
 
         const fheroes2::Rect & GetArea() const
         {
@@ -142,6 +145,9 @@ namespace Battle
     {
     public:
         Status();
+        Status( const Status & ) = delete;
+
+        Status & operator=( const Status & ) = delete;
 
         void SetPosition( s32, s32 );
         void SetLogs( StatusListBox * logs )
@@ -172,6 +178,9 @@ namespace Battle
     {
     public:
         ArmiesOrder();
+        ArmiesOrder( const ArmiesOrder & ) = delete;
+
+        ArmiesOrder & operator=( const ArmiesOrder & ) = delete;
 
         void Set( const fheroes2::Rect &, const Units *, int );
         void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
@@ -205,6 +214,9 @@ namespace Battle
     {
     public:
         PopupDamageInfo();
+        PopupDamageInfo( const PopupDamageInfo & ) = delete;
+
+        PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
         void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const fheroes2::Point & offset );
         void Reset();
@@ -221,7 +233,11 @@ namespace Battle
     {
     public:
         Interface( Arena &, s32 );
+        Interface( const Interface & ) = delete;
+
         ~Interface();
+
+        Interface & operator=( const Interface & ) = delete;
 
         void fullRedraw(); // only at the start of the battle
         void Redraw();
