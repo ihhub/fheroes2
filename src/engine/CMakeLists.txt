@@ -14,6 +14,7 @@ target_include_directories(engine PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>
 	)
+
 target_link_libraries(engine
 	smacker
 	${${USE_SDL_VERSION}MAIN_LIBRARY}
@@ -24,4 +25,5 @@ target_link_libraries(engine
 	Threads::Threads # To match the build settings of the main app
 	ZLIB::ZLIB
 	)
+
 export(TARGETS engine FILE EngineConfig.cmake)
