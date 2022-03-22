@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -134,7 +134,7 @@ namespace AI
         return false;
     }
 
-    bool CastleDevelopment( Castle & castle )
+    bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
         if ( !castle.isBuild( BUILD_WELL ) && world.LastDay() ) {
             // return right away - if you can't buy Well you can't buy anything else
@@ -157,6 +157,14 @@ namespace AI
             return true;
         }
 
+        if ( castle.GetLevelMageGuild() < spellLevel && safetyFactor > 0 ) {
+            static const std::vector<BuildOrder> magicGuildUpgrades
+                = { { BUILD_MAGEGUILD2, 2 }, { BUILD_MAGEGUILD3, 2 }, { BUILD_MAGEGUILD4, 1 }, { BUILD_MAGEGUILD5, 1 } };
+            if ( Build( castle, magicGuildUpgrades ) ) {
+                return true;
+            }
+        }
+
         // Call internally checks if it's valid (space/resources) to buy one
         if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) )
             castle.BuyBoat();
@@ -173,7 +181,10 @@ namespace AI
             OptimizeTroopsOrder( castle.GetArmy() );
         }
         else {
-            CastleDevelopment( castle );
+            const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+            const RegionStats & stats = _regions[regionID];
+
+            CastleDevelopment( castle, stats.safetyFactor, stats.spellLevel );
         }
     }
 }

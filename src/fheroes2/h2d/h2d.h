@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +28,16 @@ namespace fheroes2
 
     namespace h2d
     {
+        class H2DInitializer
+        {
+        public:
+            H2DInitializer();
+            H2DInitializer( const H2DInitializer & ) = delete;
+            H2DInitializer & operator=( const H2DInitializer & ) = delete;
+
+            ~H2DInitializer() = default;
+        };
+
         bool readImage( const std::string & name, Sprite & image );
     }
 }

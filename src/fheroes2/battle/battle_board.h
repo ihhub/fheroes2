@@ -79,7 +79,6 @@ namespace Battle
         static bool isMoatIndex( s32 index, const Unit & b );
         static bool isBridgeIndex( s32 index, const Unit & b );
         static bool isOutOfWallsIndex( s32 );
-        static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
         static bool isNegativeDistance( s32 index1, s32 index2 );
         static int DistanceFromOriginX( int32_t index, bool reflect );

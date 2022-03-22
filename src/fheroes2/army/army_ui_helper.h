@@ -18,55 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "h2d.h"
-#include "h2d_file.h"
-#include "settings.h"
-#include "system.h"
+#pragma once
 
-#include <stdexcept>
+#include <cstdint>
 
-namespace
-{
-    fheroes2::H2RReader reader;
-
-    bool getH2DFilePath( const std::string & fileName, std::string & path )
-    {
-        std::string fullPath;
-
-        const std::string internalDirectory( System::ConcatePath( "files", "data" ) );
-
-        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
-            fullPath = System::ConcatePath( rootDir, internalDirectory );
-            fullPath = System::ConcatePath( fullPath, fileName );
-            if ( System::IsFile( fullPath ) ) {
-                path.swap( fullPath );
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
+class Troops;
 
 namespace fheroes2
 {
-    namespace h2d
-    {
-        H2DInitializer::H2DInitializer()
-        {
-            std::string filePath;
-            if ( !getH2DFilePath( "resurrection.h2d", filePath ) ) {
-                throw std::logic_error( "No H2D data files found." );
-            }
+    class Image;
 
-            if ( !reader.open( filePath ) ) {
-                throw std::logic_error( "Cannot open H2D file." );
-            }
-        }
-
-        bool readImage( const std::string & name, Sprite & image )
-        {
-            return readImageFromH2D( reader, name, image );
-        }
-    }
+    void drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
+                           bool isScouteView, Image & output );
 }

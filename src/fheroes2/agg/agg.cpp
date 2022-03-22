@@ -392,7 +392,9 @@ bool AGG::ReadDataDir( void )
 std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 {
     if ( heroes2x_agg.isGood() ) {
-        const std::vector<uint8_t> & buf = heroes2x_agg.read( key );
+        // Make sure that the below container is not const and not a reference
+        // so returning it from the function will invoke a move constructor instead of copy constructor.
+        std::vector<uint8_t> buf = heroes2x_agg.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -403,7 +405,9 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ignoreExpansion )
 {
     if ( !ignoreExpansion && g_midiHeroes2xAGG.isGood() ) {
-        const std::vector<uint8_t> & buf = g_midiHeroes2xAGG.read( key );
+        // Make sure that the below container is not const and not a reference
+        // so returning it from the function will invoke a move constructor instead of copy constructor.
+        std::vector<uint8_t> buf = g_midiHeroes2xAGG.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -670,19 +674,7 @@ AGG::AGGInitializer::AGGInitializer()
         return;
     }
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-    display.fill( 0 );
-    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-        // Do nothing.
-    }
-
-    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "No data files found." );
-    throw std::logic_error( "No data files found." );
+    throw std::logic_error( "No AGG data files found." );
 }
 
 AGG::AGGInitializer::~AGGInitializer()
