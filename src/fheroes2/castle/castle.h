@@ -120,7 +120,10 @@ public:
 
     Castle();
     Castle( s32, s32, int rs );
+    Castle( const Castle & ) = delete;
     ~Castle() override = default;
+
+    Castle & operator=( const Castle & ) = delete;
 
     void LoadFromMP2( std::vector<uint8_t> & data );
 
@@ -374,7 +377,7 @@ class AllCastles
 {
 public:
     AllCastles();
-    AllCastles( AllCastles & ) = delete;
+    AllCastles( const AllCastles & ) = delete;
 
     ~AllCastles();
 
