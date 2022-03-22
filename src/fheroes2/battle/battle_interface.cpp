@@ -1698,7 +1698,8 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ), preferAttackFromHead( *_currentUnit, cursorType ) );
+            const Position pos
+                = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ), preferAttackFromHead( *_currentUnit, cursorType ) );
 
             assert( pos.GetHead() != nullptr );
 
