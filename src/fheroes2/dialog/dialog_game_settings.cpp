@@ -212,7 +212,7 @@ namespace fheroes2
                 break;
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
-                    Settings::Get().Save( "fheroes2.cfg" );
+                    Settings::Get().Save( Settings::configFileName );
                     // force interface to reset area and positions
                     Interface::Basic::Get().Reset();
                 }
@@ -238,7 +238,7 @@ namespace fheroes2
                     showMessage( header, body, Dialog::OK );
                 }
 
-                Settings::Get().Save( "fheroes2.cfg" );
+                Settings::Get().Save( Settings::configFileName );
 
                 windowType = SelectedWindow::Configuration;
                 break;

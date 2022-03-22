@@ -470,6 +470,6 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 
         Settings & conf = Settings::Get();
         conf.setFullScreen( fheroes2::engine().isFullScreen() );
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
 }
