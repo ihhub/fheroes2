@@ -1251,10 +1251,11 @@ msgstr "L'armée sera conservée dans le scénario suivant."
 
 msgid ""
 "The kingdom will have additional %{resource} at the start of the scenario."
-msgstr ""
+msgstr""
+"Le royaume obtiendra des ressources supplémentaires en %{resource} au début du scénario."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Le sort \"%{spell}\" sera conservé dans le scénario suivant."
 
 msgid "%{hero} hero can be hired in the scenario."
 msgstr "Le héros %{hero} peut être recruté dans ce scénario."
@@ -7946,6 +7947,8 @@ msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
 "granted a Medal of Valor by the King's herald."
 msgstr ""
+"En libérant une jeune femme vertueuse des griffes d'un seigneur maléfique, vous êtes "
+"récompensé de la médaille de bravoure par le hérault du roi."
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
