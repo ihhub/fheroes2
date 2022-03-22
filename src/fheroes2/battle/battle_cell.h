@@ -114,10 +114,8 @@ namespace Battle
 
         // Returns the position that the given unit would occupy after moving to the
         // cell with the given index (without taking into account the cell passability
-        // information), considering also an opposite cell direction (if allowed), i.e.
-        // when cell with the given index will be used for the unit's tail, or an empty
-        // Position object if the given index is unreachable
-        static Position GetPosition( const Unit & unit, const int32_t dst, const bool tryOpposite = true );
+        // information) or an empty Position object if the given index is unreachable
+        static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for the current unit (to which the current
         // passability information relates) which corresponds to the given index or

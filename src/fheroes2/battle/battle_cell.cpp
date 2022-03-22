@@ -86,7 +86,7 @@ fheroes2::Rect Battle::Position::GetRect( void ) const
     return fheroes2::Rect();
 }
 
-Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t dst, const bool tryOpposite /* = true */ )
+Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t dst )
 {
     Position result;
 
@@ -117,7 +117,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
             result = checkCells( headCell, tailCell );
         }
 
-        if ( tryOpposite && ( result.GetHead() == nullptr || result.GetTail() == nullptr ) ) {
+        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
             const int headDirection = unit.isReflect() ? LEFT : RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
