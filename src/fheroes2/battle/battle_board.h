@@ -106,11 +106,6 @@ namespace Battle
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
-        // Handles the situation when the cell with the given index is specified as the target cell for the movement of
-        // the current unit (to which the current passability information relates), this cell is located on the border
-        // of the cell space reachable for this unit and it should be the tail cell of this unit
-        static int32_t FixupDestinationCell( const Unit & currentUnit, const int32_t dst );
-
     private:
         void SetCobjObject( const int icn, const int32_t dst );
 

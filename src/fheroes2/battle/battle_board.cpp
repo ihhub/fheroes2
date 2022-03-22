@@ -1234,21 +1234,6 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     return result;
 }
 
-int32_t Battle::Board::FixupDestinationCell( const Unit & currentUnit, const int32_t dst )
-{
-    // Only wide units may need this fixup
-    if ( !currentUnit.isWide() ) {
-        return dst;
-    }
-
-    const Position pos = Position::GetReachable( currentUnit, dst );
-
-    assert( pos.GetHead() != nullptr );
-    assert( pos.GetTail() != nullptr );
-
-    return pos.GetHead()->GetIndex();
-}
-
 std::string Battle::Board::GetMoatInfo( void )
 {
     std::string msg = _( "The Moat reduces by -%{count} the defense skill of any unit and slows to half movement rate." );
