@@ -117,7 +117,7 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
         const Indexes around = GetAroundIndexes( *unit );
         for ( const int32_t index : around ) {
             Cell * cell2 = GetCell( index );
-            if ( !cell2 || !cell2->isPassableForUnit( b, false ) )
+            if ( !cell2 || !cell2->isPassableForUnit( b ) )
                 continue;
 
             const int32_t quality = cell2->GetQuality();
@@ -196,7 +196,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); ++i ) {
-            if ( at( i ).isPassableForUnit( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
+            if ( at( i ).isPassableForUnit( unit ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).setReachableForHead();
 
                 if ( unit.isWide() ) {
@@ -1110,7 +1110,7 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
         return false;
     }
 
-    if ( !cell->isPassableForUnit( *troop, false ) ) {
+    if ( !cell->isPassableForUnit( *troop ) ) {
         return false;
     }
 

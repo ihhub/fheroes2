@@ -72,10 +72,9 @@ namespace Battle
 
         // Checks that the cell is passable for the given unit located in a certain adjacent cell
         bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
-        // Checks that the cell is passable for the given unit, with an option to disable the use
-        // of this cell for the unit's tail
-        bool isPassableForUnit( const Unit & unit, const bool disableTail ) const;
-        // Checks that the cell is passable, i.e. does not contain an obstacle or unit (optional)
+        // Checks that the cell is passable for the given unit, i.e. unit can occupy it with his head or tail
+        bool isPassableForUnit( const Unit & unit ) const;
+        // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
         bool isPassable( const bool checkForUnit ) const;
 
         bool isPositionIncludePoint( const fheroes2::Point & ) const;

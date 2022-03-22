@@ -356,7 +356,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     Battle::Unit * b = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
 
-    if ( b && b->isValid() && cell && cell->isPassableForUnit( *b, false ) ) {
+    if ( b && b->isValid() && cell && cell->isPassableForUnit( *b ) ) {
         const s32 head = b->GetHeadIndex();
 
         Position pos = Position::GetPosition( *b, dst );
@@ -1061,7 +1061,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     Unit * b = GetTroopBoard( src );
     const Cell * cell = Board::GetCell( dst );
 
-    if ( b && b->isValid() && cell && cell->isPassableForUnit( *b, false ) ) {
+    if ( b && b->isValid() && cell && cell->isPassableForUnit( *b ) ) {
         const Position pos = Position::GetPosition( *b, dst );
         assert( pos.GetHead() != nullptr && ( !b->isWide() || pos.GetTail() != nullptr ) );
 

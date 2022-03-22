@@ -359,9 +359,9 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
     return isPassable( true );
 }
 
-bool Battle::Cell::isPassableForUnit( const Unit & unit, const bool disableTail ) const
+bool Battle::Cell::isPassableForUnit( const Unit & unit ) const
 {
-    const Position unitPos = Position::GetPosition( unit, index, !disableTail );
+    const Position unitPos = Position::GetPosition( unit, index );
 
     return unitPos.GetHead() != nullptr && ( !unit.isWide() || unitPos.GetTail() != nullptr );
 }

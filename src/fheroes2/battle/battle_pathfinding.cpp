@@ -168,7 +168,7 @@ namespace Battle
                 BattleNode & node = _cache[idx];
 
                 // isPassableForUnit checks if there's space for unit tail (for wide units)
-                if ( it->isPassableForUnit( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
+                if ( it->isPassableForUnit( unit ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
                     node._isOpen = true;
                     node._from = pathStart;
                     node._cost = Battle::Board::GetDistance( pathStart, idx );
