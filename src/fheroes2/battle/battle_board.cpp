@@ -526,7 +526,12 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
 
     if ( attacker.isAllAdjacentCellsAttack() ) {
         Position position = Position::GetPosition( attacker, from );
-        assert( position.GetHead() != nullptr && ( !attacker.isWide() || position.GetTail() != nullptr ) );
+
+        if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from );
+
+            return 0;
+        }
 
         Indexes aroundAttacker = GetAroundIndexes( position );
 
