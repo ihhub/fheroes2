@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -610,8 +611,10 @@ void Castle::ActionNewWeek()
         }
     }
 
-    // Monthly population growth bonuses and fines should be calculated taking the weekly growth into account
-    if ( world.BeginMonth() && world.GetMonth() > 1 ) {
+    // Monthly population growth bonuses should be calculated taking the weekly growth into account
+    if ( world.BeginMonth() ) {
+        assert( world.GetMonth() > 1 );
+
         // population halved
         if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
             for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii ) {
