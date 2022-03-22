@@ -125,7 +125,6 @@ make MACOS_APP_BUNDLE=ON bundle
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to `~/Library/Application Support/fheroes2`.
-  Please note that the directories will need to be renamed to lowercase names (`anim`, `data`, `maps`, and `music`).
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the `download_demo_version_for_app_bundle.sh` script supplied in `script/demo` directory.
