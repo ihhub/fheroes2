@@ -39,8 +39,8 @@ jobs:
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
       env:
-        FHEROES2_WITH_DEBUG: ON
         FHEROES2_STRICT_COMPILATION: ON
+        FHEROES2_WITH_DEBUG: ON
         FHEROES2_WITH_TOOLS: ON
     - name: Analyze
       run: |

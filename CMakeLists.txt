@@ -15,11 +15,13 @@ set(SDL_VERSIONS SDL SDL2)
 set(USE_SDL_VERSION SDL2 CACHE STRING "SDL version")
 set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "fheroes2 data directory")
 
+option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
+
+option(ENABLE_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
 option(ENABLE_IMAGE "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_TOOLS "Enable additional tools" OFF)
+
 option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
-option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
-option(FHEROES2_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
 
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
