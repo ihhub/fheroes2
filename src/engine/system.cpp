@@ -70,6 +70,11 @@ namespace
         return "ux0:data/fheroes2";
 #elif defined( __SWITCH__ )
         return "/switch/fheroes2";
+#elif defined( MACOS_APP_BUNDLE )
+        if ( getenv( "HOME" ) )
+            return System::ConcatePath( System::ConcatePath( getenv( "HOME" ), "Library/Preferences" ), prog );
+
+        return std::string();
 #endif
 
         if ( getenv( "HOME" ) )
@@ -158,6 +163,12 @@ std::string System::GetDataDirectory( const std::string & prog )
     const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
         return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
+    }
+
+    return std::string();
+#elif defined( MACOS_APP_BUNDLE )
+    if ( getenv( "HOME" ) ) {
+        return System::ConcatePath( System::ConcatePath( getenv( "HOME" ), "Library/Application Support" ), prog );
     }
 
     return std::string();

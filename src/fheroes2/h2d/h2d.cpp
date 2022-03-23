@@ -33,8 +33,11 @@ namespace
     {
         std::string fullPath;
 
+#if defined( MACOS_APP_BUNDLE )
+        const std::string internalDirectory( "h2d" );
+#else
         const std::string internalDirectory( System::ConcatePath( "files", "data" ) );
-
+#endif
         for ( const std::string & rootDir : Settings::GetRootDirs() ) {
             fullPath = System::ConcatePath( rootDir, internalDirectory );
             fullPath = System::ConcatePath( fullPath, fileName );

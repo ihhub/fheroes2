@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,7 @@
 #include <SDL_video.h>
 #endif
 
-#if defined( FHEROES2_IMAGE_SUPPORT )
+#if defined( WITH_IMAGE )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #define FHEROES2_ENABLE_PNG 1
 #include <SDL_image.h>

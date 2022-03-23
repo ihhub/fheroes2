@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -514,13 +515,6 @@ double Castle::getVisitValue( const Heroes & hero ) const
     return spellValue + upgradeStrength + futureArmy.getReinforcementValue( getAvailableArmy( potentialFunds ) );
 }
 
-void Castle::ActionNewDay( void )
-{
-    EducateHeroes();
-
-    SetModes( ALLOWBUILD );
-}
-
 u32 * Castle::GetDwelling( u32 dw )
 {
     if ( isBuild( dw ) )
@@ -549,7 +543,14 @@ u32 * Castle::GetDwelling( u32 dw )
     return nullptr;
 }
 
-void Castle::ActionNewWeek( void )
+void Castle::ActionNewDay()
+{
+    EducateHeroes();
+
+    SetModes( ALLOWBUILD );
+}
+
+void Castle::ActionNewWeek()
 {
     // skip the first week
     if ( world.CountWeek() < 2 ) {
@@ -609,46 +610,44 @@ void Castle::ActionNewWeek( void )
                 JoinRNDArmy();
         }
     }
-}
 
-void Castle::ActionNewMonth( void )
-{
-    // skip the first month
-    if ( world.GetMonth() < 2 ) {
-        return;
-    }
+    // Monthly population growth bonuses should be calculated taking the weekly growth into account
+    if ( world.BeginMonth() ) {
+        assert( world.GetMonth() > 1 );
 
-    // population halved
-    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
-        for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )
-            dwelling[ii] /= 2;
-    }
-    else
+        // population halved
+        if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
+            for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii ) {
+                dwelling[ii] /= 2;
+            }
+        }
         // Month Of
-        if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
-        const u32 dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                    DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
-        u32 * dw = nullptr;
+        else if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
+            const u32 dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                        DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+            u32 * dw = nullptr;
 
-        for ( u32 ii = 0; dwellings[ii]; ++ii )
-            if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
-                const Monster mons( race, dwellings[ii] );
-                if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                    *dw += *dw * GetGrownMonthOf() / 100;
-                    break;
+            for ( u32 ii = 0; dwellings[ii]; ++ii ) {
+                if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
+                    const Monster mons( race, dwellings[ii] );
+                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
+                        *dw += *dw * GetGrownMonthOf() / 100;
+                        break;
+                    }
                 }
             }
+        }
     }
 }
 
-// change castle color
+void Castle::ActionNewMonth() {}
+
 void Castle::ChangeColor( int cl )
 {
     SetColor( cl );
     army.SetColor( cl );
 }
 
-// return mage guild level
 int Castle::GetLevelMageGuild( void ) const
 {
     if ( building & BUILD_MAGEGUILD5 )

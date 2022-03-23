@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,10 @@
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
 #include <windows.h>
+#endif
+
+#if defined( MACOS_APP_BUNDLE )
+#include <syslog.h>
 #endif
 
 #include "logging.h"
@@ -105,6 +109,9 @@ namespace Logging
     {
 #if defined( __SWITCH__ ) // Platforms which log to file
         logFile.open( "fheroes2.log", std::ofstream::out );
+#elif defined( MACOS_APP_BUNDLE )
+        openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
+        setlogmask( LOG_UPTO( LOG_WARNING ) );
 #endif
     }
 

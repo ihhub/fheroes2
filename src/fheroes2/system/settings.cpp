@@ -25,6 +25,10 @@
 #include <cstdlib>
 #include <fstream>
 
+#if defined( MACOS_APP_BUNDLE )
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
@@ -476,7 +480,11 @@ bool Settings::setGameLanguage( const std::string & language )
     }
 
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
+#if defined( MACOS_APP_BUNDLE )
+    const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
+#else
     const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+#endif
 
     if ( !translations.empty() ) {
         return Translation::bindDomain( language.c_str(), translations.back().c_str() );
@@ -497,8 +505,8 @@ ListDirs Settings::GetRootDirs()
     ListDirs dirs;
 
     // from build
-#ifdef CONFIGURE_FHEROES2_DATA
-    dirs.push_back( EXPANDDEF( CONFIGURE_FHEROES2_DATA ) );
+#ifdef FHEROES2_DATA
+    dirs.push_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
     // from env
@@ -510,6 +518,20 @@ ListDirs Settings::GetRootDirs()
 
     // os-specific directories
     dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+
+#if defined( MACOS_APP_BUNDLE )
+    // macOS app bundle Resources directory
+    char resourcePath[PATH_MAX];
+
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
+    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX ) ) {
+        dirs.push_back( resourcePath );
+    }
+    else {
+        ERROR_LOG( "Unable to get app bundle path" );
+    }
+    CFRelease( resourcesURL );
+#endif
 
     // user config directory
     const std::string & config = System::GetConfigDirectory( "fheroes2" );

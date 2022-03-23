@@ -392,7 +392,9 @@ bool AGG::ReadDataDir( void )
 std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 {
     if ( heroes2x_agg.isGood() ) {
-        const std::vector<uint8_t> & buf = heroes2x_agg.read( key );
+        // Make sure that the below container is not const and not a reference
+        // so returning it from the function will invoke a move constructor instead of copy constructor.
+        std::vector<uint8_t> buf = heroes2x_agg.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -403,7 +405,9 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ignoreExpansion )
 {
     if ( !ignoreExpansion && g_midiHeroes2xAGG.isGood() ) {
-        const std::vector<uint8_t> & buf = g_midiHeroes2xAGG.read( key );
+        // Make sure that the below container is not const and not a reference
+        // so returning it from the function will invoke a move constructor instead of copy constructor.
+        std::vector<uint8_t> buf = g_midiHeroes2xAGG.read( key );
         if ( !buf.empty() )
             return buf;
     }
