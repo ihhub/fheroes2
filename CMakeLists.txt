@@ -12,18 +12,16 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # Compile-time options
 #
 set(SDL_VERSIONS SDL SDL2)
-set(USE_SDL_VERSION SDL2 CACHE STRING "SDL version")
-set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "fheroes2 data directory")
 
-option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
-
-option(ENABLE_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
+option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of the bundled version" OFF)
+option(ENABLE_STRICT_COMPILATION "Enable strict compilation mode (turns warnings into errors)" OFF)
 option(ENABLE_IMAGE "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_TOOLS "Enable additional tools" OFF)
-
 option(MACOS_APP_BUNDLE "Create a Mac app bundle (only valid when building on macOS)" OFF)
+option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" OFF)
 
-option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
+set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
+set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "Built-in path to the fheroes2 data directory")
 
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 

@@ -20,13 +20,14 @@
 
 # Options:
 #
-# FHEROES2_STRICT_COMPILATION: build with strict compilation option (turns warnings into errors)
+# FHEROES2_SDL1: build with SDL1 instead of SDL2 (which is used by default)
+# FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
 # FHEROES2_WITH_DEBUG: build in debug mode
-# FHEROES2_WITH_IMAGE: build with SDL image support
-# FHEROES2_WITH_TOOLS: build tools
+# FHEROES2_WITH_IMAGE: build with SDL/SDL2 Image support (requires libpng)
+# FHEROES2_WITH_TOOLS: build additional tools
 # FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
 #
-# -DFHEROES2_DATA: fheroes2 data directory
+# -DFHEROES2_DATA: set the built-in path to the fheroes2 data directory
 
 PROJECT_VERSION := 0.9.13
 
