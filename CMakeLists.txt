@@ -21,6 +21,8 @@ option(ENABLE_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
 option(ENABLE_IMAGE "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_TOOLS "Enable additional tools" OFF)
 
+option(MACOS_APP_BUNDLE "Create a Mac app bundle (only valid when building on macOS)" OFF)
+
 option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
 
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
