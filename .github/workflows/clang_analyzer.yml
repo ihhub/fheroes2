@@ -22,7 +22,7 @@ jobs:
       env:
         FHEROES2_WITH_DEBUG: ON
         FHEROES2_STRICT_COMPILATION: ON
-        WITH_TOOLS: ON
+        FHEROES2_WITH_TOOLS: ON
     - uses: actions/upload-artifact@v2
       if: ${{ failure() }}
       with:

@@ -104,7 +104,7 @@ all:
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
-ifdef WITH_TOOLS
+ifdef FHEROES2_WITH_TOOLS
 	$(MAKE) -C tools
 endif
 	$(MAKE) -C dist pot
