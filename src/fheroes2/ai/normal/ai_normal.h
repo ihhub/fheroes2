@@ -24,6 +24,10 @@
 #include "ai.h"
 #include "world_pathfinding.h"
 
+#include <set>
+
+struct KingdomCastles;
+
 namespace Battle
 {
     class Units;
@@ -44,6 +48,22 @@ namespace AI
         int safetyFactor = 0;
         int spellLevel = 2;
         std::vector<IndexObject> validObjects;
+    };
+
+    struct AICastle
+    {
+        Castle * castle = nullptr;
+        bool underThreat = false;
+        int safetyFactor = 0;
+        int buildingValue = 0;
+        AICastle( Castle * inCastle, bool inThreat, int inSafety, int inValue )
+            : castle( inCastle )
+            , underThreat( inThreat )
+            , safetyFactor( inSafety )
+            , buildingValue( inValue )
+        {
+            assert( castle != nullptr );
+        }
     };
 
     struct BattleTargetPair
@@ -142,6 +162,9 @@ namespace AI
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void evaluateRegionSafety();
+        std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
+        std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
+
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder() override;

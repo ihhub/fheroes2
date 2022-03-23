@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -487,7 +487,7 @@ namespace AI
 
                     const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
 
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell );
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Nearest reachable cell is " << reachableCell );
 
                     if ( currentUnit.GetHeadIndex() != reachableCell ) {
                         actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
